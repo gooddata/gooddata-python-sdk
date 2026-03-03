@@ -1,4 +1,4 @@
-# TestLlmProviderDefinitionRequestProviderConfig
+# ListLlmProviderModelsRequestProviderConfig
 
 
 ## Properties

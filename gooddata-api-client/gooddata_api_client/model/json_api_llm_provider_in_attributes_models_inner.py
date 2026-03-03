@@ -64,6 +64,7 @@ class JsonApiLlmProviderInAttributesModelsInner(ModelNormal):
             'AMAZON': "AMAZON",
             'GOOGLE': "GOOGLE",
             'COHERE': "COHERE",
+            'UNKNOWN': "UNKNOWN",
         },
     }
 

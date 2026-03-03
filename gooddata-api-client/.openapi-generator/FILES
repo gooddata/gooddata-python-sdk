@@ -384,6 +384,7 @@ docs/GeographicDataApi.md
 docs/GetAiLakeOperation200Response.md
 docs/GetImageExport202ResponseInner.md
 docs/GetQualityIssuesResponse.md
+docs/GetServiceStatusResponse.md
 docs/GrainIdentifier.md
 docs/GrantedPermission.md
 docs/GranularitiesFormatting.md
@@ -1014,6 +1015,9 @@ docs/ListDatabaseInstancesResponse.md
 docs/ListKnowledgeDocumentsResponseDto.md
 docs/ListLinks.md
 docs/ListLinksAllOf.md
+docs/ListLlmProviderModelsRequest.md
+docs/ListLlmProviderModelsRequestProviderConfig.md
+docs/ListLlmProviderModelsResponse.md
 docs/ListServicesResponse.md
 docs/LlmModel.md
 docs/LlmProviderAuth.md
@@ -1193,8 +1197,8 @@ docs/TabularExportRequest.md
 docs/TestConnectionApi.md
 docs/TestDefinitionRequest.md
 docs/TestDestinationRequest.md
+docs/TestLlmProviderByIdRequest.md
 docs/TestLlmProviderDefinitionRequest.md
-docs/TestLlmProviderDefinitionRequestProviderConfig.md
 docs/TestLlmProviderResponse.md
 docs/TestNotification.md
 docs/TestNotificationAllOf.md
@@ -1207,6 +1211,8 @@ docs/TotalDimension.md
 docs/TotalExecutionResultHeader.md
 docs/TotalResultHeader.md
 docs/TranslationsApi.md
+docs/TrendingObjectItem.md
+docs/TrendingObjectsResult.md
 docs/TriggerAutomationRequest.md
 docs/TriggerQualityIssuesCalculationResponse.md
 docs/UpsertKnowledgeDocumentRequestDto.md
@@ -1708,6 +1714,7 @@ gooddata_api_client/model/geo_collection_identifier.py
 gooddata_api_client/model/get_ai_lake_operation200_response.py
 gooddata_api_client/model/get_image_export202_response_inner.py
 gooddata_api_client/model/get_quality_issues_response.py
+gooddata_api_client/model/get_service_status_response.py
 gooddata_api_client/model/grain_identifier.py
 gooddata_api_client/model/granted_permission.py
 gooddata_api_client/model/granularities_formatting.py
@@ -2328,6 +2335,9 @@ gooddata_api_client/model/list_database_instances_response.py
 gooddata_api_client/model/list_knowledge_documents_response_dto.py
 gooddata_api_client/model/list_links.py
 gooddata_api_client/model/list_links_all_of.py
+gooddata_api_client/model/list_llm_provider_models_request.py
+gooddata_api_client/model/list_llm_provider_models_request_provider_config.py
+gooddata_api_client/model/list_llm_provider_models_response.py
 gooddata_api_client/model/list_services_response.py
 gooddata_api_client/model/llm_model.py
 gooddata_api_client/model/llm_provider_auth.py
@@ -2487,8 +2497,8 @@ gooddata_api_client/model/table_warning.py
 gooddata_api_client/model/tabular_export_request.py
 gooddata_api_client/model/test_definition_request.py
 gooddata_api_client/model/test_destination_request.py
+gooddata_api_client/model/test_llm_provider_by_id_request.py
 gooddata_api_client/model/test_llm_provider_definition_request.py
-gooddata_api_client/model/test_llm_provider_definition_request_provider_config.py
 gooddata_api_client/model/test_llm_provider_response.py
 gooddata_api_client/model/test_notification.py
 gooddata_api_client/model/test_notification_all_of.py
@@ -2500,6 +2510,8 @@ gooddata_api_client/model/total.py
 gooddata_api_client/model/total_dimension.py
 gooddata_api_client/model/total_execution_result_header.py
 gooddata_api_client/model/total_result_header.py
+gooddata_api_client/model/trending_object_item.py
+gooddata_api_client/model/trending_objects_result.py
 gooddata_api_client/model/trigger_automation_request.py
 gooddata_api_client/model/trigger_quality_issues_calculation_response.py
 gooddata_api_client/model/upsert_knowledge_document_request_dto.py

@@ -5938,9 +5938,9 @@
               },
               "emptyValueHandling": {
                 "enum": [
-                  "INCLUDE",
-                  "EXCLUDE",
-                  "ONLY"
+                  "include",
+                  "exclude",
+                  "only"
                 ],
                 "type": "string"
               },
@@ -9061,6 +9061,7 @@
               "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
               "MAX_ZOOM_LEVEL",
               "SORT_CASE_SENSITIVE",
+              "SORT_COLLATION",
               "METRIC_FORMAT_OVERRIDE",
               "ENABLE_AI_ON_DATA",
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -20746,7 +20747,8 @@
                         "MISTRAL",
                         "AMAZON",
                         "GOOGLE",
-                        "COHERE"
+                        "COHERE",
+                        "UNKNOWN"
                       ],
                       "type": "string"
                     },
@@ -20855,7 +20857,8 @@
                         "MISTRAL",
                         "AMAZON",
                         "GOOGLE",
-                        "COHERE"
+                        "COHERE",
+                        "UNKNOWN"
                       ],
                       "type": "string"
                     },
@@ -21004,7 +21007,8 @@
                         "MISTRAL",
                         "AMAZON",
                         "GOOGLE",
-                        "COHERE"
+                        "COHERE",
+                        "UNKNOWN"
                       ],
                       "type": "string"
                     },
@@ -23179,6 +23183,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -23278,6 +23283,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -23417,6 +23423,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -24922,6 +24929,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -25021,6 +25029,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -27276,6 +27285,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -27375,6 +27385,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -27540,6 +27551,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -27639,6 +27651,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -29132,6 +29145,7 @@
               "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
               "MAX_ZOOM_LEVEL",
               "SORT_CASE_SENSITIVE",
+              "SORT_COLLATION",
               "METRIC_FORMAT_OVERRIDE",
               "ENABLE_AI_ON_DATA",
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",

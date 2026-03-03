@@ -1,6 +1,6 @@
 # LlmProviderConfig
 
-Provider configuration to test.
+Provider configuration overrides.
 
 ## Properties
 Name | Type | Description | Notes

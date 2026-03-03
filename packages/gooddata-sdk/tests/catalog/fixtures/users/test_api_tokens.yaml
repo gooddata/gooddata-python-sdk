@@ -97,7 +97,7 @@ interactions:
         string:
           data:
             attributes:
-              bearerToken: ZGVtbzp0ZXN0X3Rva2VuOjV1eXBzMGpLZjUxRXplS3psREFuNkkxTVpSYzVBVnZ2
+              bearerToken: ZGVtbzp0ZXN0X3Rva2VuOjRnNDhiU3UzRnoyN3oyYlM2TFp3OVI0V3lFSEFuRE44
             id: test_token
             type: apiToken
           links:

@@ -146,7 +146,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: eade9edee77e4a2059b1fb6d59d2ace8
+          traceId: 0e7b4130ded74c7fd2ebba2ad6196acd
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/organizationSettings?page=0&size=500

@@ -20,11 +20,14 @@ Method | HTTP request | Description
 [**generate_title**](SmartFunctionsApi.md#generate_title) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateTitle | Generate Title for Analytics Object
 [**get_quality_issues**](SmartFunctionsApi.md#get_quality_issues) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues | Get Quality Issues
 [**get_quality_issues_calculation_status**](SmartFunctionsApi.md#get_quality_issues_calculation_status) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues/status/{processId} | Get Quality Issues Calculation Status
+[**list_llm_provider_models**](SmartFunctionsApi.md#list_llm_provider_models) | **POST** /api/v1/actions/ai/llmProvider/listModels | List LLM Provider Models
+[**list_llm_provider_models_by_id**](SmartFunctionsApi.md#list_llm_provider_models_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/listModels | List LLM Provider Models By Id
 [**memory_created_by_users**](SmartFunctionsApi.md#memory_created_by_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory/createdBy | Get AI Memory CreatedBy Users
 [**resolve_llm_endpoints**](SmartFunctionsApi.md#resolve_llm_endpoints) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints | Get Active LLM Endpoints for this workspace
 [**tags**](SmartFunctionsApi.md#tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags | Get Analytics Catalog Tags
 [**test_llm_provider**](SmartFunctionsApi.md#test_llm_provider) | **POST** /api/v1/actions/ai/llmProvider/test | Test LLM Provider
 [**test_llm_provider_by_id**](SmartFunctionsApi.md#test_llm_provider_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/test | Test LLM Provider By Id
+[**trending_objects**](SmartFunctionsApi.md#trending_objects) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/trendingObjects | Get Trending Analytics Catalog Objects
 [**trigger_quality_issues_calculation**](SmartFunctionsApi.md#trigger_quality_issues_calculation) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck | Trigger Quality Issues Calculation
 [**validate_llm_endpoint**](SmartFunctionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint
 [**validate_llm_endpoint_by_id**](SmartFunctionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id
@@ -1318,6 +1321,143 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **list_llm_provider_models**
+> ListLlmProviderModelsResponse list_llm_provider_models(list_llm_provider_models_request)
+
+List LLM Provider Models
+
+Lists models available on an LLM provider with a full definition.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import smart_functions_api
+from gooddata_api_client.model.list_llm_provider_models_request import ListLlmProviderModelsRequest
+from gooddata_api_client.model.list_llm_provider_models_response import ListLlmProviderModelsResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
+    list_llm_provider_models_request = ListLlmProviderModelsRequest(
+        provider_config=ListLlmProviderModelsRequestProviderConfig(None),
+    ) # ListLlmProviderModelsRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # List LLM Provider Models
+        api_response = api_instance.list_llm_provider_models(list_llm_provider_models_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling SmartFunctionsApi->list_llm_provider_models: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **list_llm_provider_models_request** | [**ListLlmProviderModelsRequest**](ListLlmProviderModelsRequest.md)|  |
+
+### Return type
+
+[**ListLlmProviderModelsResponse**](ListLlmProviderModelsResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_llm_provider_models_by_id**
+> ListLlmProviderModelsResponse list_llm_provider_models_by_id(llm_provider_id)
+
+List LLM Provider Models By Id
+
+Lists models available on an existing LLM provider by its ID.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import smart_functions_api
+from gooddata_api_client.model.list_llm_provider_models_response import ListLlmProviderModelsResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
+    llm_provider_id = "llmProviderId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # List LLM Provider Models By Id
+        api_response = api_instance.list_llm_provider_models_by_id(llm_provider_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling SmartFunctionsApi->list_llm_provider_models_by_id: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **llm_provider_id** | **str**|  |
+
+### Return type
+
+[**ListLlmProviderModelsResponse**](ListLlmProviderModelsResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **memory_created_by_users**
 > MemoryItemCreatedByUsers memory_created_by_users(workspace_id)
 
@@ -1554,7 +1694,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="id_example",
             ),
         ],
-        provider_config=TestLlmProviderDefinitionRequestProviderConfig(None),
+        provider_config=ListLlmProviderModelsRequestProviderConfig(None),
     ) # TestLlmProviderDefinitionRequest | 
 
     # example passing only required values which don't have defaults set
@@ -1610,6 +1750,7 @@ import time
 import gooddata_api_client
 from gooddata_api_client.api import smart_functions_api
 from gooddata_api_client.model.test_llm_provider_response import TestLlmProviderResponse
+from gooddata_api_client.model.test_llm_provider_by_id_request import TestLlmProviderByIdRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1623,11 +1764,29 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = smart_functions_api.SmartFunctionsApi(api_client)
     llm_provider_id = "llmProviderId_example" # str | 
+    test_llm_provider_by_id_request = TestLlmProviderByIdRequest(
+        models=[
+            LlmModel(
+                family="OPENAI",
+                id="id_example",
+            ),
+        ],
+        provider_config=ListLlmProviderModelsRequestProviderConfig(None),
+    ) # TestLlmProviderByIdRequest |  (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Test LLM Provider By Id
         api_response = api_instance.test_llm_provider_by_id(llm_provider_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling SmartFunctionsApi->test_llm_provider_by_id: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Test LLM Provider By Id
+        api_response = api_instance.test_llm_provider_by_id(llm_provider_id, test_llm_provider_by_id_request=test_llm_provider_by_id_request)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling SmartFunctionsApi->test_llm_provider_by_id: %s\n" % e)
@@ -1639,10 +1798,78 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **llm_provider_id** | **str**|  |
+ **test_llm_provider_by_id_request** | [**TestLlmProviderByIdRequest**](TestLlmProviderByIdRequest.md)|  | [optional]
 
 ### Return type
 
 [**TestLlmProviderResponse**](TestLlmProviderResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **trending_objects**
+> TrendingObjectsResult trending_objects(workspace_id)
+
+Get Trending Analytics Catalog Objects
+
+Returns a list of trending objects for this workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import smart_functions_api
+from gooddata_api_client.model.trending_objects_result import TrendingObjectsResult
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = smart_functions_api.SmartFunctionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Trending Analytics Catalog Objects
+        api_response = api_instance.trending_objects(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling SmartFunctionsApi->trending_objects: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+
+### Return type
+
+[**TrendingObjectsResult**](TrendingObjectsResult.md)
 
 ### Authorization
 
