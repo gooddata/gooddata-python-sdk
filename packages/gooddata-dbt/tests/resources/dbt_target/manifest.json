@@ -1860,6 +1860,25 @@
           "data_type": null,
           "quote": null,
           "tags": []
+        },
+        "country": {
+          "name": "country",
+          "description": "",
+          "meta": {
+            "gooddata": {
+              "ldm_type": "label",
+              "label_type": "GEO_AREA",
+              "attribute_column": "code",
+              "geo_area_config": {
+                "collection": {
+                  "id": "countries"
+                }
+              }
+            }
+          },
+          "data_type": null,
+          "quote": null,
+          "tags": []
         }
       },
       "meta": {

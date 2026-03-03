@@ -3,7 +3,6 @@ import os
 import platform
 import socket
 import sys
-from typing import Optional
 
 from opentelemetry import trace
 from opentelemetry.sdk.resources import (
@@ -111,7 +110,7 @@ def _create_resource(config: OtelConfig) -> Resource:
     )
 
 
-def initialize_otel_tracing(config: Optional[OtelConfig]) -> None:
+def initialize_otel_tracing(config: OtelConfig | None) -> None:
     """
     Initializes OpenTelemetry tracing according to the provided `config`:
 

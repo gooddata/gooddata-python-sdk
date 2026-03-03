@@ -2,7 +2,7 @@
 import argparse
 import sys
 import traceback
-from typing import Optional, TypeVar
+from typing import TypeVar
 
 from dynaconf import ValidationError
 
@@ -85,7 +85,7 @@ def _create_server(args: argparse.Namespace) -> GoodDataFlightServer:
 
 # not really needed to be global, keeping it here so that instance of server is reachable
 # easily from the debugger
-_SERVER: Optional[GoodDataFlightServer] = None
+_SERVER: GoodDataFlightServer | None = None
 
 
 def server_cli() -> None:

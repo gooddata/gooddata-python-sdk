@@ -1,12 +1,11 @@
 #  (C) 2024 GoodData Corporation
 import time
-from typing import Optional
 
 import pyarrow
 from gooddata_flexconnect.function.function import FlexConnectFunction
 from gooddata_flight_server import ArrowData
 
-_DATA: Optional[pyarrow.Table] = None
+_DATA: pyarrow.Table | None = None
 
 
 class _LongRunningFun(FlexConnectFunction):
@@ -22,7 +21,7 @@ class _LongRunningFun(FlexConnectFunction):
     def call(
         self,
         parameters: dict,
-        columns: Optional[tuple[str, ...]],
+        columns: tuple[str, ...] | None,
         headers: dict[str, list[str]],
     ) -> ArrowData:
         # sleep is intentionally setup to be longer than the deadline for

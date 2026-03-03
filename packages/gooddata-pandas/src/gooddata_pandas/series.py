@@ -1,7 +1,7 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Callable, Optional, Union
+from typing import Callable, Union
 
 import pandas
 from gooddata_sdk import Attribute, Execution, Filter, GoodDataSdk, ObjId, SimpleMetric
@@ -27,10 +27,10 @@ class SeriesFactory:
         self,
         index_by: IndexDef,
         data_by: Union[SimpleMetric, str, ObjId, Attribute],
-        filter_by: Optional[Union[Filter, list[Filter]]] = None,
-        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        filter_by: Union[Filter, list[Filter]] | None = None,
+        on_execution_submitted: Callable[[Execution], None] | None = None,
         is_cancellable: bool = False,
-        result_page_len: Optional[int] = None,
+        result_page_len: int | None = None,
     ) -> pandas.Series:
         """Creates pandas Series from data points calculated from a single `data_by`.
 
@@ -94,11 +94,11 @@ class SeriesFactory:
     def not_indexed(
         self,
         data_by: Union[SimpleMetric, str, ObjId, Attribute],
-        granularity: Optional[Union[list[LabelItemDef], IndexDef]] = None,
-        filter_by: Optional[Union[Filter, list[Filter]]] = None,
-        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        granularity: Union[list[LabelItemDef], IndexDef] | None = None,
+        filter_by: Union[Filter, list[Filter]] | None = None,
+        on_execution_submitted: Callable[[Execution], None] | None = None,
         is_cancellable: bool = False,
-        result_page_len: Optional[int] = None,
+        result_page_len: int | None = None,
     ) -> pandas.Series:
         """
         Creates a pandas.Series from data points calculated from a single `data_by` without constructing an index.
@@ -136,7 +136,7 @@ class SeriesFactory:
         """
 
         if isinstance(granularity, list):
-            _index: Optional[IndexDef] = {str(idx): label for idx, label in enumerate(granularity)}
+            _index: IndexDef | None = {str(idx): label for idx, label in enumerate(granularity)}
         else:
             _index = granularity
 
