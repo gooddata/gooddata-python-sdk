@@ -3,7 +3,7 @@ import threading
 import time
 from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import Any, Callable, Generic, Optional, TypeVar
+from typing import Any, Callable, Generic, TypeVar
 
 import structlog
 from readerwriterlock import rwlock
@@ -153,7 +153,7 @@ class TemporalContainer(Generic[T]):
         if self._thread.is_alive():
             self._thread.start()
 
-    def get_entry(self, entry_id: str) -> Optional[T]:
+    def get_entry(self, entry_id: str) -> T | None:
         """
         :param entry_id: entry identifier
         :return: entry or None if not found
@@ -185,7 +185,7 @@ class TemporalContainer(Generic[T]):
         self._entry_evict_fun(entry.value)
         return True
 
-    def pop_entry(self, entry_id: str) -> Optional[T]:
+    def pop_entry(self, entry_id: str) -> T | None:
         """
         Pops an entry out of the container. This will take the entry out and will not
         run the eviction function.

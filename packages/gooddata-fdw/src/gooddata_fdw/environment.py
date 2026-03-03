@@ -14,7 +14,7 @@ as usual to prevent some wicked behavior on mis-configured PostgreSQL.
 
 from __future__ import annotations
 
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 try:
     import multicorn
@@ -88,12 +88,12 @@ except ImportError as e:
             schema: str,
             srv_options: dict[str, str],
             options: dict[str, str],
-            restriction_type: Optional[str],
+            restriction_type: str | None,
             restricts: list[str],
         ) -> list[TableDefinition]:
             return NotImplemented
 
-        def execute(self, quals: list[Qual], columns: list[str], sortkeys: Optional[list[Any]] = None):
+        def execute(self, quals: list[Qual], columns: list[str], sortkeys: list[Any] | None = None):
             pass
 
     ForeignDataWrapper = ForeignDataWrapperStub

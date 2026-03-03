@@ -1,5 +1,4 @@
 # (C) 2023 GoodData Corporation
-from typing import Optional
 
 import attr
 import attrs
@@ -37,8 +36,8 @@ class GoodDataConfigProduct(Base):
     name: str
     environment_setup_id: str
     model_ids: list[str] = attr.field(factory=list)
-    localization: Optional[GoodDataConfigLocalization] = None
-    skip_tests: Optional[list[str]] = None
+    localization: GoodDataConfigLocalization | None = None
+    skip_tests: list[str] | None = None
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
@@ -49,7 +48,7 @@ class GoodDataConfigOrganization(Base):
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class GoodDataGlobalConfig(Base):
-    test_visualizations_parallelism: Optional[int] = 1
+    test_visualizations_parallelism: int | None = 1
 
 
 @attrs.define(auto_attribs=True, kw_only=True)

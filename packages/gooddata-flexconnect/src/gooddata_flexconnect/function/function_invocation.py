@@ -1,6 +1,6 @@
 #  (C) 2025 GoodData Corporation
 from dataclasses import dataclass
-from typing import Optional, Union
+from typing import Union
 
 import orjson
 import pyarrow.flight
@@ -46,7 +46,7 @@ class SubmitInvocation:
     Parameters to pass to the FlexConnect function.
     """
 
-    columns: Optional[tuple[str, ...]]
+    columns: tuple[str, ...] | None
     """
     Columns to get from the FlexConnect function result.
     This may be used for column trimming by the function: the function must return at least those columns.

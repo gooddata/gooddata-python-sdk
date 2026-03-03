@@ -1,7 +1,6 @@
 # (C) 2023 GoodData Corporation
 import json
 import re
-from typing import Optional
 
 import attrs
 from gooddata_sdk import CatalogDeclarativeMetric, CatalogDeclarativeModel
@@ -26,8 +25,8 @@ DBT_TO_GD_FILTER_OPERATORS = {
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelMetaGoodDataMetricProps(Base):
-    model_id: Optional[str] = None
-    format: Optional[str] = None
+    model_id: str | None = None
+    format: str | None = None
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
@@ -49,11 +48,11 @@ class DbtModelMetric(DbtModelBase):
     model: str
     calculation_method: str
     expression: str
-    filters: Optional[list[DbtModelMetricFilter]] = None
+    filters: list[DbtModelMetricFilter] | None = None
 
 
 class DbtModelMetrics:
-    def __init__(self, model_ids: Optional[list[str]], ldm: CatalogDeclarativeModel) -> None:
+    def __init__(self, model_ids: list[str] | None, ldm: CatalogDeclarativeModel) -> None:
         self.model_ids = model_ids
         self.ldm = ldm
         with open(DBT_PATH_TO_MANIFEST) as fp:
@@ -104,7 +103,7 @@ class DbtModelMetrics:
         else:
             raise Exception(f"Unsupported entity type {table_name=} {expression_entity=}")
 
-    def make_entity_id(self, table_name: str, token: str) -> Optional[str]:
+    def make_entity_id(self, table_name: str, token: str) -> str | None:
         entity_type = self.get_entity_type(table_name, token)
         if not entity_type:
             return None
@@ -125,7 +124,7 @@ class DbtModelMetrics:
             result_tokens.append(entity_id or token)
         return " ".join(result_tokens)
 
-    def make_gooddata_filter(self, table_name: str, dbt_filters: Optional[list[DbtModelMetricFilter]] = None) -> str:
+    def make_gooddata_filter(self, table_name: str, dbt_filters: list[DbtModelMetricFilter] | None = None) -> str:
         # TODO - Quite naive implementation
         #    e.g. missing polishing of values (e.g. SQL vs MAQL enclosers)
         gd_maql_filters = []
