@@ -21,6 +21,7 @@ class GoodDataLabelType(Enum):
     HYPERLINK = "HYPERLINK"
     GEO_LATITUDE = "GEO_LATITUDE"
     GEO_LONGITUDE = "GEO_LONGITUDE"
+    GEO_AREA = "GEO_AREA"
 
 
 class GoodDataSortDirection(Enum):

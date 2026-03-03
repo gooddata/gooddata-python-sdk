@@ -1868,7 +1868,12 @@
             "gooddata": {
               "ldm_type": "label",
               "label_type": "GEO_AREA",
-              "attribute_column": "code"
+              "attribute_column": "code",
+              "geo_area_config": {
+                "collection": {
+                  "id": "countries"
+                }
+              }
             }
           },
           "data_type": null,

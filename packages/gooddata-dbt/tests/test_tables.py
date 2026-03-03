@@ -77,3 +77,7 @@ def test_make_ldm_geo_area():
     assert label_types["latitude_origin"] == "GEO_LATITUDE"
     assert label_types["longitude_origin"] == "GEO_LONGITUDE"
     assert label_types["country_origin"] == "GEO_AREA"
+    # Verify geo_area_config is propagated
+    country_label = next(lbl for lbl in labels if lbl.id == "country_origin")
+    assert country_label.geo_area_config is not None
+    assert country_label.geo_area_config.collection.id == "countries"
