@@ -7,6 +7,9 @@ from typing import Union
 
 import attrs
 from gooddata_sdk import CatalogDeclarativeColumn, CatalogDeclarativeTable, CatalogDeclarativeTables
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset import (
+    CatalogGeoAreaConfig,
+)
 from gooddata_sdk.utils import safeget
 
 from gooddata_dbt.dbt.base import (
@@ -40,7 +43,7 @@ class DbtModelMetaGoodDataColumnProps(Base):
     sort_column: str | None = None
     sort_direction: GoodDataSortDirection | None = None
     default_view: bool | None = None
-    geo_area_config: dict[str, dict[str, str]] | None = None
+    geo_area_config: CatalogGeoAreaConfig | None = None
 
     @property
     def gooddata_ref_table_ldm_id(self) -> str | None:
@@ -403,7 +406,7 @@ class DbtModelTables:
                     "tags": [table.gooddata_ldm_title] + column.tags,
                 }
                 if column.meta.gooddata.geo_area_config is not None:
-                    label_dict["geo_area_config"] = column.meta.gooddata.geo_area_config
+                    label_dict["geo_area_config"] = column.meta.gooddata.geo_area_config.to_dict()
                 labels.append(label_dict)
                 if column.meta.gooddata.default_view:
                     default_view = {
