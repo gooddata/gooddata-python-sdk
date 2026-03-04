@@ -36,7 +36,7 @@ echo "Removing master's latest directory"
 rm -rf "${content_dir:?}/latest"
 
 # 4. Find the highest numbered version and promote it to "latest"
-highest_version=$(ls -1 "./$content_dir/" | grep -E '^[0-9]+$' | sort -V | tail -n 1)
+highest_version=$(ls -1 "./$content_dir/" | grep -E '^[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
 
 if [ -n "$highest_version" ]; then
     echo "Promoting version $highest_version to /latest"
