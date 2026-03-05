@@ -103,6 +103,19 @@ from gooddata_sdk.catalog.organization.entity_model.llm_endpoint import (
     CatalogLlmEndpoint,
     CatalogLlmEndpointDocument,
 )
+from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
+    CatalogAwsBedrockProviderConfig,
+    CatalogAzureFoundryApiKeyAuth,
+    CatalogAzureFoundryProviderConfig,
+    CatalogBedrockAccessKeyAuth,
+    CatalogLlmProvider,
+    CatalogLlmProviderDocument,
+    CatalogLlmProviderModel,
+    CatalogLlmProviderPatch,
+    CatalogLlmProviderPatchDocument,
+    CatalogOpenAiApiKeyAuth,
+    CatalogOpenAiProviderConfig,
+)
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
 from gooddata_sdk.catalog.organization.layout.export_template import (
