@@ -1,0 +1,19 @@
+{#- Replicates the api-ref-module shortcode -#}
+<div class="python-api-ref">
+<table class="gd-docs-parameters-block">
+<thead>
+<tr>
+<th>Type</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody>
+{%- for entry in entries %}
+<tr>
+<td>{{ entry.kind }}</td>
+<td>{{ entry.name_link }} </td>
+</tr>
+{%- endfor %}
+</tbody>
+</table>
+</div>

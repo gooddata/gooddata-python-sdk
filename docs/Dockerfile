@@ -7,8 +7,8 @@ RUN apt-get update && apt-get install -y git make curl
 # Copy only dependency manifests and package source before installing.
 COPY scripts/script-requirements.txt /scripts/script-requirements.txt
 COPY gooddata-api-client /gooddata-api-client
-COPY packages/gooddata-sdk /gooddata-sdk
-COPY packages/gooddata-pandas /gooddata-pandas
+COPY packages/gooddata-sdk /packages/gooddata-sdk
+COPY packages/gooddata-pandas /packages/gooddata-pandas
 
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r /scripts/script-requirements.txt
@@ -21,9 +21,7 @@ WORKDIR /docs
 
 RUN python json_builder.py && \
     python python_ref_builder.py api_spec.toml data.json latest content/en && \
-    mkdir versioned_docs/latest && \
-    mv -f data.json ./versioned_docs/latest/data.json && \
-    mv -f content/en/latest/links.json ./versioned_docs/latest/links.json
+    rm -f data.json
 
 FROM node:20.18.0-bookworm-slim
 
@@ -37,9 +35,9 @@ COPY --from=builder /docs /docs
 
 WORKDIR /docs
 
-# Use BuildKit cache mounts so npm/Go package downloads survive layer rebuilds
+# npm cache mount speeds up rebuilds; Go modules are stored in the image
+# layer so Hugo can resolve them at runtime.
 RUN --mount=type=cache,target=/root/.npm \
-    --mount=type=cache,target=/root/go/pkg/mod \
     npm install && \
     hugo mod get
 
