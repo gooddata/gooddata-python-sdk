@@ -35,8 +35,8 @@ class RefHolder:
     """ """
 
     url: str
-    packages: []
-    directory: str
+    packages: list[str] = attr.Factory(list)
+    directory: str = ""
 
 
 @define
@@ -416,8 +416,6 @@ def create_file_structure(data: dict, root: Path, url_root: str):
         with page.file_path.open("w") as f:
             spec.render_template_to_file(template, f)
 
-    return links
-
 
 def change_json_root(data: dict, json_start_paths: list[str] | None) -> dict:
     """Change the root of the JSON data to the specified path.
@@ -441,7 +439,7 @@ def change_json_root(data: dict, json_start_paths: list[str] | None) -> dict:
     return new_json
 
 
-def parse_toml(toml_path: str, version: str, root_directory: str) -> [RefHolder]:
+def parse_toml(toml_path: str, version: str, root_directory: str) -> list[RefHolder]:
     references = []
     # In case of missing toml_file, we need a default for the api-references
     if not os.path.exists(toml_path):
@@ -471,15 +469,11 @@ def main():
     args = parser.parse_args()
 
     references = parse_toml(args.toml_file, args.version, args.root_directory)
-    links = {}
     for ref in references:
         print(f"Parsing: {ref.url}")
         data = read_json_file(args.json_file)
         data = change_json_root(data, ref.packages)
-        links.update(create_file_structure(data, Path(ref.directory), url_root=ref.url))
-    with open(f"{args.root_directory}/{args.version}/links.json", "w") as f:
-        json.dump(links, f, indent=4)
-    print("Dumping the links.json")
+        create_file_structure(data, Path(ref.directory), url_root=ref.url)
 
 
 if __name__ == "__main__":
