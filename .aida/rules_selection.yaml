@@ -1,0 +1,15 @@
+# (C) 2026 GoodData Corporation
+# AIDA rules selection
+#
+# Shared repository defaults for selecting embedded and repo-owned rules.
+# Users can add local overrides in `.aida/rules_selection.local.yaml`.
+version: 1
+defaults:
+  embedded: core_only
+  repo: all
+include:
+    - source: embedded
+      path: profiles/languages/python/**
+exclude: []
+presets: {}
+use_presets: []
