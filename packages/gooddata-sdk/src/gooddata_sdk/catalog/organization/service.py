@@ -29,6 +29,12 @@ from gooddata_sdk.catalog.organization.entity_model.llm_endpoint import (
     CatalogLlmEndpointPatch,
     CatalogLlmEndpointPatchDocument,
 )
+from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
+    CatalogLlmProvider,
+    CatalogLlmProviderDocument,
+    CatalogLlmProviderPatch,
+    CatalogLlmProviderPatchDocument,
+)
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
 from gooddata_sdk.catalog.organization.layout.identity_provider import CatalogDeclarativeIdentityProvider
 from gooddata_sdk.catalog.organization.layout.notification_channel import CatalogDeclarativeNotificationChannel
@@ -639,6 +645,92 @@ class CatalogOrganizationService(CatalogServiceBase):
             id: LLM endpoint identifier
         """
         self._entities_api.delete_entity_llm_endpoints(id, _check_return_type=False)
+
+    def get_llm_provider(self, id: str) -> CatalogLlmProvider:
+        """Get LLM provider by ID.
+
+        Args:
+            id: LLM provider identifier
+
+        Returns:
+            CatalogLlmProvider: Retrieved LLM provider
+        """
+        response = self._entities_api.get_entity_llm_providers(id, _check_return_type=False)
+        return CatalogLlmProvider.from_api(response.data)
+
+    def list_llm_providers(
+        self,
+        filter: str | None = None,
+        page: int | None = None,
+        size: int | None = None,
+        sort: list[str] | None = None,
+        meta_include: list[str] | None = None,
+    ) -> list[CatalogLlmProvider]:
+        """List all LLM providers.
+
+        Args:
+            filter: Optional filter string
+            page: Zero-based page index (0..N)
+            size: The size of the page to be returned
+            sort: Sorting criteria in the format: property,(asc|desc). Multiple sort criteria are supported.
+            meta_include: Include Meta objects
+
+        Returns:
+            list[CatalogLlmProvider]: List of LLM providers
+        """
+        kwargs: dict[str, Any] = {}
+        if filter is not None:
+            kwargs["filter"] = filter
+        if page is not None:
+            kwargs["page"] = page
+        if size is not None:
+            kwargs["size"] = size
+        if sort is not None:
+            kwargs["sort"] = sort
+        if meta_include is not None:
+            kwargs["meta_include"] = meta_include
+        kwargs["_check_return_type"] = False
+
+        response = self._entities_api.get_all_entities_llm_providers(**kwargs)
+        return [CatalogLlmProvider.from_api(provider) for provider in response.data]
+
+    def create_llm_provider(self, llm_provider: CatalogLlmProvider) -> CatalogLlmProvider:
+        """Create a new LLM provider.
+
+        Args:
+            llm_provider: LLM provider object to create
+
+        Returns:
+            CatalogLlmProvider: Created LLM provider
+        """
+        llm_provider_document = CatalogLlmProviderDocument(data=llm_provider)
+        response = self._entities_api.create_entity_llm_providers(
+            json_api_llm_provider_in_document=llm_provider_document.to_api(), _check_return_type=False
+        )
+        return CatalogLlmProvider.from_api(response.data)
+
+    def update_llm_provider(self, llm_provider_patch: CatalogLlmProviderPatch) -> CatalogLlmProvider:
+        """Update an existing LLM provider using PATCH semantics.
+
+        Args:
+            llm_provider_patch: LLM provider patch object with fields to update
+
+        Returns:
+            CatalogLlmProvider: Updated LLM provider
+        """
+        llm_provider_patch_document = CatalogLlmProviderPatchDocument(data=llm_provider_patch)
+        response = self._entities_api.patch_entity_llm_providers(
+            llm_provider_patch.id, llm_provider_patch_document.to_api(), _check_return_type=False
+        )
+        return CatalogLlmProvider.from_api(response.data)
+
+    def delete_llm_provider(self, id: str) -> None:
+        """Delete an LLM provider.
+
+        Args:
+            id: LLM provider identifier
+        """
+        self._entities_api.delete_entity_llm_providers(id, _check_return_type=False)
 
     # Layout APIs
 
