@@ -5,4 +5,4 @@ superheading: "PARENT."
 weight: 100
 ---
 
-{{< api-ref "PATH" >}}
+CONTENT

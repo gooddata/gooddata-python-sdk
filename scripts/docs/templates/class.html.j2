@@ -1,0 +1,57 @@
+{#- Replicates the api-ref-class shortcode -#}
+<div class="python-ref">
+{{ object_partial }}
+<h2> Properties </h2>
+{%- if properties %}
+<table class="gd-docs-parameters-block">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+{%- for prop in properties %}
+<tr>
+<td>
+{{ prop.name_link }}
+</td>
+{%- if prop.description %}
+<td>{{ prop.description }}</td>
+{%- else %}
+<td><i>None</i></td>
+{%- endif %}
+</tr>
+{%- endfor %}
+</tbody>
+</table>
+{%- else %}
+<i> None </i>
+{%- endif %}
+<h2>Methods</h2>
+{%- if methods %}
+<table class="gd-docs-parameters-block">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+{%- for method in methods %}
+<tr>
+<td>{{ method.name_link }}({{ method.signature }})
+</td>
+{%- if method.description %}
+<td>{{ method.description }}</td>
+{%- else %}
+<td><i>None</i></td>
+{%- endif %}
+</tr>
+{%- endfor %}
+</tbody>
+</table>
+{%- else %}
+<i> None </i>
+{%- endif %}
+</div>
