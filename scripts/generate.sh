@@ -119,9 +119,10 @@ highest_version=$(ls -v1 ./versioned_docs/ | grep -E '^[0-9]+.[0-9]+$' | sort -V
 echo "Moving ${highest_version} to /latest"
 mv -f ./versioned_docs/$highest_version ./versioned_docs/latest
 
-# Replace "/${highest_version}/" with "/latest/" using sed
-sed "s|${highest_version}|latest|g" ./versioned_docs/latest/links.json > temp.json
-
-mv temp.json ./versioned_docs/latest/links.json
+# Replace "/${highest_version}/" with "/latest/" in links.json (if it exists)
+if [ -f "./versioned_docs/latest/links.json" ]; then
+    sed "s|${highest_version}|latest|g" ./versioned_docs/latest/links.json > temp.json
+    mv temp.json ./versioned_docs/latest/links.json
+fi
 
 popd
