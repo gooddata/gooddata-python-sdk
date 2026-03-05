@@ -1383,9 +1383,9 @@
               },
               "emptyValueHandling": {
                 "enum": [
-                  "INCLUDE",
-                  "EXCLUDE",
-                  "ONLY"
+                  "include",
+                  "exclude",
+                  "only"
                 ],
                 "type": "string"
               },

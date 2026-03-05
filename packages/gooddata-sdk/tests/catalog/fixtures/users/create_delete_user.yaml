@@ -56,7 +56,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiRhNzhmZjA0Zi0xYjU1LTQwY2MtODQ0OS1jMmQzNGE4MGVjMzkSBWxvY2Fs
+                authenticationId: CiQyMWFlZmQ0NC05OWUzLTRkNzctYTljYS0wMmRlM2ZlMDMyOGYSBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -70,7 +70,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQxNzQyNzBmZC0wZjlkLTRkMTctYjU5Ni01OThhNzkzMDU3ODkSBWxvY2Fs
+                authenticationId: CiQ4NWViNTc4OS1hNTU4LTRlNTktOWJkZS1kNjViOGIxYzVkZWISBWxvY2Fs
               id: demo2
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2
@@ -141,7 +141,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 30520e29be2971de33a559438b57fc3c
+          traceId: 20d1c4f0c13fde8635110eb4a27712f3
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/users
@@ -327,7 +327,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiRhNzhmZjA0Zi0xYjU1LTQwY2MtODQ0OS1jMmQzNGE4MGVjMzkSBWxvY2Fs
+                authenticationId: CiQyMWFlZmQ0NC05OWUzLTRkNzctYTljYS0wMmRlM2ZlMDMyOGYSBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -341,7 +341,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQxNzQyNzBmZC0wZjlkLTRkMTctYjU5Ni01OThhNzkzMDU3ODkSBWxvY2Fs
+                authenticationId: CiQ4NWViNTc4OS1hNTU4LTRlNTktOWJkZS1kNjViOGIxYzVkZWISBWxvY2Fs
               id: demo2
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2
@@ -418,96 +418,3 @@ interactions:
           - '0'
       body:
         string: ''
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1302'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            - attributes: {}
-              id: admin
-              links:
-                self: http://localhost:3000/api/v1/entities/users/admin
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              type: user
-            - attributes:
-                authenticationId: CiRhNzhmZjA0Zi0xYjU1LTQwY2MtODQ0OS1jMmQzNGE4MGVjMzkSBWxvY2Fs
-                firstname: Demo
-                lastname: User
-                email: demo@example.com
-              id: demo
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              type: user
-            - attributes:
-                authenticationId: CiQxNzQyNzBmZC0wZjlkLTRkMTctYjU5Ni01OThhNzkzMDU3ODkSBWxvY2Fs
-              id: demo2
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo2
-              relationships:
-                userGroups:
-                  data:
-                    - id: demoGroup
-                      type: userGroup
-              type: user
-          included:
-            - attributes: {}
-              id: adminGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
-              type: userGroup
-            - attributes:
-                name: demo group
-              id: demoGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
-              type: userGroup
-          links:
-            self: http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/users?include=userGroups&page=1&size=500

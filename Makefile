@@ -82,6 +82,18 @@ test:
 	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C packages/$${project} test || RESULT=$$?; done; \
 	exit $$RESULT
 
+.PHONY: test-staging
+test-staging:
+	$(MAKE) -C packages/gooddata-sdk test-staging TOKEN=$(TOKEN)
+
+.PHONY: clean-staging
+clean-staging:
+	cd packages/tests-support && STAGING=1 TOKEN="$(TOKEN)" python clean_staging.py
+
+.PHONY: load-staging
+load-staging:
+	cd packages/tests-support && STAGING=1 TOKEN="$(TOKEN)" python upload_demo_layout.py
+
 .PHONY: release
 release:
 	if [ -z "$(VERSION)" ]; then echo "Usage: 'make release VERSION=X.Y.Z'"; false; else \

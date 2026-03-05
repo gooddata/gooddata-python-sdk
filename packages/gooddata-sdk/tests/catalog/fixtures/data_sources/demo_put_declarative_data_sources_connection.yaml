@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '401'
+          - '359'
         Content-Type:
           - application/json
         DATE: &id001
@@ -45,8 +45,7 @@ interactions:
       body:
         string:
           dataSources:
-            - alternativeDataSourceId: ds-put-abc-id
-              authenticationType: USERNAME_PASSWORD
+            - authenticationType: USERNAME_PASSWORD
               id: demo-test-ds
               name: demo-test-ds
               permissions:
@@ -90,7 +89,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '82'
+          - '81'
         Content-Type:
           - application/json
         DATE: *id001
@@ -113,7 +112,7 @@ interactions:
         string:
           queryDurationMillis:
             createCacheTable: 0
-            simpleSelect: 13
+            simpleSelect: 8
           successful: true
   - request:
       method: PUT
@@ -136,7 +135,6 @@ interactions:
                   type: userGroup
                 name: USE
             authenticationType: USERNAME_PASSWORD
-            alternativeDataSourceId: ds-put-abc-id
             password: passw0rd
       headers:
         Accept-Encoding:
@@ -193,7 +191,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '401'
+          - '359'
         Content-Type:
           - application/json
         DATE: *id001
@@ -215,8 +213,7 @@ interactions:
       body:
         string:
           dataSources:
-            - alternativeDataSourceId: ds-put-abc-id
-              authenticationType: USERNAME_PASSWORD
+            - authenticationType: USERNAME_PASSWORD
               id: demo-test-ds
               name: demo-test-ds
               permissions:

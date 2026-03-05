@@ -6201,8 +6201,8 @@
             "$ref": "#/components/schemas/AzureFoundryProviderAuth"
           },
           "endpoint": {
-            "description": "Azure AI inference endpoint URL.",
-            "example": "https://my-resource.services.ai.azure.com/models",
+            "description": "Azure OpenAI endpoint URL.",
+            "example": "https://my-resource.openai.azure.com",
             "maxLength": 255,
             "type": "string"
           },
@@ -7510,9 +7510,9 @@
               },
               "emptyValueHandling": {
                 "enum": [
-                  "INCLUDE",
-                  "EXCLUDE",
-                  "ONLY"
+                  "include",
+                  "exclude",
+                  "only"
                 ],
                 "type": "string"
               },
@@ -10874,6 +10874,7 @@
               "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
               "MAX_ZOOM_LEVEL",
               "SORT_CASE_SENSITIVE",
+              "SORT_COLLATION",
               "METRIC_FORMAT_OVERRIDE",
               "ENABLE_AI_ON_DATA",
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -13329,6 +13330,18 @@
         },
         "required": [
           "issues",
+          "status"
+        ],
+        "type": "object"
+      },
+      "GetServiceStatusResponse": {
+        "description": "Status of an AI Lake service",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/JsonNode"
+          }
+        },
+        "required": [
           "status"
         ],
         "type": "object"
@@ -23567,7 +23580,8 @@
                         "MISTRAL",
                         "AMAZON",
                         "GOOGLE",
-                        "COHERE"
+                        "COHERE",
+                        "UNKNOWN"
                       ],
                       "type": "string"
                     },
@@ -23676,7 +23690,8 @@
                         "MISTRAL",
                         "AMAZON",
                         "GOOGLE",
-                        "COHERE"
+                        "COHERE",
+                        "UNKNOWN"
                       ],
                       "type": "string"
                     },
@@ -23825,7 +23840,8 @@
                         "MISTRAL",
                         "AMAZON",
                         "GOOGLE",
-                        "COHERE"
+                        "COHERE",
+                        "UNKNOWN"
                       ],
                       "type": "string"
                     },
@@ -26000,6 +26016,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -26099,6 +26116,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -26238,6 +26256,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -27743,6 +27762,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -27842,6 +27862,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -30097,6 +30118,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -30196,6 +30218,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -30361,6 +30384,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -30460,6 +30484,7 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -30821,6 +30846,52 @@
           }
         ]
       },
+      "ListLlmProviderModelsRequest": {
+        "properties": {
+          "providerConfig": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+              },
+              {
+                "$ref": "#/components/schemas/AzureFoundryProviderConfig"
+              },
+              {
+                "$ref": "#/components/schemas/OpenAIProviderConfig"
+              }
+            ]
+          }
+        },
+        "required": [
+          "providerConfig"
+        ],
+        "type": "object"
+      },
+      "ListLlmProviderModelsResponse": {
+        "properties": {
+          "message": {
+            "description": "Message about the listing result.",
+            "type": "string"
+          },
+          "models": {
+            "description": "Available models on the provider.",
+            "items": {
+              "$ref": "#/components/schemas/LlmModel"
+            },
+            "type": "array"
+          },
+          "success": {
+            "description": "Whether the model listing succeeded.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "message",
+          "models",
+          "success"
+        ],
+        "type": "object"
+      },
       "ListServicesResponse": {
         "description": "Paged response for listing AI Lake services",
         "properties": {
@@ -30854,7 +30925,8 @@
               "MISTRAL",
               "AMAZON",
               "GOOGLE",
-              "COHERE"
+              "COHERE",
+              "UNKNOWN"
             ],
             "type": "string"
           },
@@ -30882,7 +30954,7 @@
         "type": "object"
       },
       "LlmProviderConfig": {
-        "description": "Provider configuration to test.",
+        "description": "Provider configuration overrides.",
         "oneOf": [
           {
             "$ref": "#/components/schemas/AwsBedrockProviderConfig"
@@ -31578,10 +31650,9 @@
             "$ref": "#/components/schemas/OpenAiProviderAuth"
           },
           "baseUrl": {
-            "default": "https://api.openai.com",
+            "default": "https://api.openai.com/v1",
             "description": "Custom base URL for OpenAI API.",
             "maxLength": 255,
-            "nullable": true,
             "type": "string"
           },
           "organization": {
@@ -33143,6 +33214,7 @@
               "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
               "MAX_ZOOM_LEVEL",
               "SORT_CASE_SENSITIVE",
+              "SORT_COLLATION",
               "METRIC_FORMAT_OVERRIDE",
               "ENABLE_AI_ON_DATA",
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
@@ -34663,6 +34735,31 @@
         ],
         "type": "object"
       },
+      "TestLlmProviderByIdRequest": {
+        "properties": {
+          "models": {
+            "description": "Models overrides.",
+            "items": {
+              "$ref": "#/components/schemas/LlmModel"
+            },
+            "type": "array"
+          },
+          "providerConfig": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+              },
+              {
+                "$ref": "#/components/schemas/AzureFoundryProviderConfig"
+              },
+              {
+                "$ref": "#/components/schemas/OpenAIProviderConfig"
+              }
+            ]
+          }
+        },
+        "type": "object"
+      },
       "TestLlmProviderDefinitionRequest": {
         "properties": {
           "models": {
@@ -34930,6 +35027,112 @@
         },
         "required": [
           "function"
+        ],
+        "type": "object"
+      },
+      "TrendingObjectItem": {
+        "description": "Trending analytics catalog objects",
+        "properties": {
+          "createdAt": {
+            "description": "Timestamp when object was created.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "createdBy": {
+            "description": "ID of the user who created the object.",
+            "type": "string"
+          },
+          "datasetId": {
+            "description": "ID of the associated dataset, if applicable.",
+            "type": "string"
+          },
+          "datasetTitle": {
+            "description": "Title of the associated dataset, if applicable.",
+            "type": "string"
+          },
+          "datasetType": {
+            "description": "Type of the associated dataset, if applicable.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Object description.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Object ID.",
+            "type": "string"
+          },
+          "isHidden": {
+            "description": "If true, this object is hidden from AI search results by default.",
+            "type": "boolean"
+          },
+          "isHiddenFromKda": {
+            "description": "If true, this object is hidden from KDA.",
+            "type": "boolean"
+          },
+          "metricType": {
+            "description": "Type of the metric (e.g. MAQL), if applicable.",
+            "type": "string"
+          },
+          "modifiedAt": {
+            "description": "Timestamp when object was last modified.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "description": "ID of the user who last modified the object.",
+            "type": "string"
+          },
+          "tags": {
+            "items": {
+              "description": "Tags assigned to the object.",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": {
+            "description": "Object title.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type, e.g. dashboard, visualization, metric.",
+            "type": "string"
+          },
+          "usageCount": {
+            "description": "Number of times this object has been used/referenced.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "visualizationUrl": {
+            "description": "URL of the visualization, if applicable.",
+            "type": "string"
+          },
+          "workspaceId": {
+            "description": "Workspace ID the object belongs to.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "tags",
+          "title",
+          "type",
+          "usageCount",
+          "workspaceId"
+        ],
+        "type": "object"
+      },
+      "TrendingObjectsResult": {
+        "properties": {
+          "objects": {
+            "items": {
+              "$ref": "#/components/schemas/TrendingObjectItem"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "objects"
         ],
         "type": "object"
       },
@@ -36406,6 +36609,39 @@
         ]
       }
     },
+    "/api/v1/actions/ai/llmProvider/listModels": {
+      "post": {
+        "description": "Lists models available on an LLM provider with a full definition. For Azure AI Foundry providers, the model family will be set to UNKNOWN because the endpoint does not expose the family.",
+        "operationId": "listLlmProviderModels",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListLlmProviderModelsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListLlmProviderModelsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "List LLM Provider Models",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/ai/llmProvider/test": {
       "post": {
         "description": "Tests LLM provider connectivity with a full definition.",
@@ -36439,6 +36675,39 @@
         ]
       }
     },
+    "/api/v1/actions/ai/llmProvider/{llmProviderId}/listModels": {
+      "post": {
+        "description": "Lists models available on an existing LLM provider by its ID. For Azure AI Foundry providers, the model family will be set to UNKNOWN because the endpoint does not expose the family.",
+        "operationId": "listLlmProviderModelsById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "llmProviderId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListLlmProviderModelsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "List LLM Provider Models By Id",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/ai/llmProvider/{llmProviderId}/test": {
       "post": {
         "description": "Tests an existing LLM provider connectivity by its ID.",
@@ -36453,6 +36722,15 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestLlmProviderByIdRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "content": {
@@ -38338,6 +38616,41 @@
           }
         },
         "summary": "Get Analytics Catalog Tags",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/trendingObjects": {
+      "get": {
+        "description": "Returns a list of trending objects for this workspace",
+        "operationId": "trendingObjects",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingObjectsResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get Trending Analytics Catalog Objects",
         "tags": [
           "Smart Functions",
           "actions"
@@ -42976,6 +43289,44 @@
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to run AI Lake service commands.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/services/{serviceId}/status": {
+      "get": {
+        "description": "(BETA) Returns the status of a service in the organization's AI Lake. The status is controller-specific (e.g., available commands, readiness).",
+        "operationId": "getAiLakeServiceStatus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "serviceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetServiceStatusResponse"
+                }
+              }
+            },
+            "description": "AI Lake service status successfully retrieved"
+          }
+        },
+        "summary": "(BETA) Get AI Lake service status",
+        "tags": [
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to get AI Lake service status.",
           "permissions": [
             "MANAGE"
           ]

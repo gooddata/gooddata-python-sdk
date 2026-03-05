@@ -105,7 +105,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: d61e83e698c733efd8f092e18379bea6
+          traceId: 244fd5468e9c404b43bcc621b0a5a586
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -452,60 +452,3 @@ interactions:
           - '0'
       body:
         string: ''
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/entities/dataSources?page=0&size=500
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '491'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            - attributes:
-                url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
-                username: postgres
-                authenticationType: USERNAME_PASSWORD
-                type: POSTGRESQL
-                name: demo-test-ds
-                schema: demo
-              id: demo-test-ds
-              links:
-                self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
-              type: dataSource
-          links:
-            self: http://localhost:3000/api/v1/entities/dataSources?page=0&size=500
-            next: http://localhost:3000/api/v1/entities/dataSources?page=1&size=500

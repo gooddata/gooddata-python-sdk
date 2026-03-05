@@ -106,6 +106,7 @@ Class | Method | HTTP request | Description
 *AILakeApi* | [**deprovision_ai_lake_database_instance**](docs/AILakeApi.md#deprovision_ai_lake_database_instance) | **DELETE** /api/v1/ailake/database/instances/{instanceId} | (BETA) Delete an existing AILake Database instance
 *AILakeApi* | [**get_ai_lake_database_instance**](docs/AILakeApi.md#get_ai_lake_database_instance) | **GET** /api/v1/ailake/database/instances/{instanceId} | (BETA) Get the specified AILake Database instance
 *AILakeApi* | [**get_ai_lake_operation**](docs/AILakeApi.md#get_ai_lake_operation) | **GET** /api/v1/ailake/operations/{operationId} | (BETA) Get Long Running Operation details
+*AILakeApi* | [**get_ai_lake_service_status**](docs/AILakeApi.md#get_ai_lake_service_status) | **GET** /api/v1/ailake/services/{serviceId}/status | (BETA) Get AI Lake service status
 *AILakeApi* | [**list_ai_lake_database_instances**](docs/AILakeApi.md#list_ai_lake_database_instances) | **GET** /api/v1/ailake/database/instances | (BETA) List AI Lake Database instances
 *AILakeApi* | [**list_ai_lake_services**](docs/AILakeApi.md#list_ai_lake_services) | **GET** /api/v1/ailake/services | (BETA) List AI Lake services
 *AILakeApi* | [**provision_ai_lake_database_instance**](docs/AILakeApi.md#provision_ai_lake_database_instance) | **POST** /api/v1/ailake/database/instances | (BETA) Create a new AILake Database instance
@@ -416,11 +417,14 @@ Class | Method | HTTP request | Description
 *SmartFunctionsApi* | [**generate_title**](docs/SmartFunctionsApi.md#generate_title) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateTitle | Generate Title for Analytics Object
 *SmartFunctionsApi* | [**get_quality_issues**](docs/SmartFunctionsApi.md#get_quality_issues) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues | Get Quality Issues
 *SmartFunctionsApi* | [**get_quality_issues_calculation_status**](docs/SmartFunctionsApi.md#get_quality_issues_calculation_status) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues/status/{processId} | Get Quality Issues Calculation Status
+*SmartFunctionsApi* | [**list_llm_provider_models**](docs/SmartFunctionsApi.md#list_llm_provider_models) | **POST** /api/v1/actions/ai/llmProvider/listModels | List LLM Provider Models
+*SmartFunctionsApi* | [**list_llm_provider_models_by_id**](docs/SmartFunctionsApi.md#list_llm_provider_models_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/listModels | List LLM Provider Models By Id
 *SmartFunctionsApi* | [**memory_created_by_users**](docs/SmartFunctionsApi.md#memory_created_by_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory/createdBy | Get AI Memory CreatedBy Users
 *SmartFunctionsApi* | [**resolve_llm_endpoints**](docs/SmartFunctionsApi.md#resolve_llm_endpoints) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints | Get Active LLM Endpoints for this workspace
 *SmartFunctionsApi* | [**tags**](docs/SmartFunctionsApi.md#tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags | Get Analytics Catalog Tags
 *SmartFunctionsApi* | [**test_llm_provider**](docs/SmartFunctionsApi.md#test_llm_provider) | **POST** /api/v1/actions/ai/llmProvider/test | Test LLM Provider
 *SmartFunctionsApi* | [**test_llm_provider_by_id**](docs/SmartFunctionsApi.md#test_llm_provider_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/test | Test LLM Provider By Id
+*SmartFunctionsApi* | [**trending_objects**](docs/SmartFunctionsApi.md#trending_objects) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/trendingObjects | Get Trending Analytics Catalog Objects
 *SmartFunctionsApi* | [**trigger_quality_issues_calculation**](docs/SmartFunctionsApi.md#trigger_quality_issues_calculation) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck | Trigger Quality Issues Calculation
 *SmartFunctionsApi* | [**validate_llm_endpoint**](docs/SmartFunctionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint
 *SmartFunctionsApi* | [**validate_llm_endpoint_by_id**](docs/SmartFunctionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id
@@ -577,6 +581,8 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**key_driver_analysis**](docs/ActionsApi.md#key_driver_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers | (EXPERIMENTAL) Compute key driver analysis
 *ActionsApi* | [**key_driver_analysis_result**](docs/ActionsApi.md#key_driver_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId} | (EXPERIMENTAL) Get key driver analysis result
 *ActionsApi* | [**list_documents**](docs/ActionsApi.md#list_documents) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents | 
+*ActionsApi* | [**list_llm_provider_models**](docs/ActionsApi.md#list_llm_provider_models) | **POST** /api/v1/actions/ai/llmProvider/listModels | List LLM Provider Models
+*ActionsApi* | [**list_llm_provider_models_by_id**](docs/ActionsApi.md#list_llm_provider_models_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/listModels | List LLM Provider Models By Id
 *ActionsApi* | [**list_workspace_user_groups**](docs/ActionsApi.md#list_workspace_user_groups) | **GET** /api/v1/actions/workspaces/{workspaceId}/userGroups | 
 *ActionsApi* | [**list_workspace_users**](docs/ActionsApi.md#list_workspace_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/users | 
 *ActionsApi* | [**manage_dashboard_permissions**](docs/ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
@@ -618,6 +624,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**test_llm_provider**](docs/ActionsApi.md#test_llm_provider) | **POST** /api/v1/actions/ai/llmProvider/test | Test LLM Provider
 *ActionsApi* | [**test_llm_provider_by_id**](docs/ActionsApi.md#test_llm_provider_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/test | Test LLM Provider By Id
 *ActionsApi* | [**test_notification_channel**](docs/ActionsApi.md#test_notification_channel) | **POST** /api/v1/actions/notificationChannels/test | Test notification channel.
+*ActionsApi* | [**trending_objects**](docs/ActionsApi.md#trending_objects) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/trendingObjects | Get Trending Analytics Catalog Objects
 *ActionsApi* | [**trigger_automation**](docs/ActionsApi.md#trigger_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/trigger | Trigger automation.
 *ActionsApi* | [**trigger_existing_automation**](docs/ActionsApi.md#trigger_existing_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/trigger | Trigger existing automation.
 *ActionsApi* | [**trigger_quality_issues_calculation**](docs/ActionsApi.md#trigger_quality_issues_calculation) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck | Trigger Quality Issues Calculation
@@ -1527,6 +1534,7 @@ Class | Method | HTTP request | Description
  - [GetAiLakeOperation200Response](docs/GetAiLakeOperation200Response.md)
  - [GetImageExport202ResponseInner](docs/GetImageExport202ResponseInner.md)
  - [GetQualityIssuesResponse](docs/GetQualityIssuesResponse.md)
+ - [GetServiceStatusResponse](docs/GetServiceStatusResponse.md)
  - [GrainIdentifier](docs/GrainIdentifier.md)
  - [GrantedPermission](docs/GrantedPermission.md)
  - [GranularitiesFormatting](docs/GranularitiesFormatting.md)
@@ -2147,6 +2155,9 @@ Class | Method | HTTP request | Description
  - [ListKnowledgeDocumentsResponseDto](docs/ListKnowledgeDocumentsResponseDto.md)
  - [ListLinks](docs/ListLinks.md)
  - [ListLinksAllOf](docs/ListLinksAllOf.md)
+ - [ListLlmProviderModelsRequest](docs/ListLlmProviderModelsRequest.md)
+ - [ListLlmProviderModelsRequestProviderConfig](docs/ListLlmProviderModelsRequestProviderConfig.md)
+ - [ListLlmProviderModelsResponse](docs/ListLlmProviderModelsResponse.md)
  - [ListServicesResponse](docs/ListServicesResponse.md)
  - [LlmModel](docs/LlmModel.md)
  - [LlmProviderAuth](docs/LlmProviderAuth.md)
@@ -2306,8 +2317,8 @@ Class | Method | HTTP request | Description
  - [TabularExportRequest](docs/TabularExportRequest.md)
  - [TestDefinitionRequest](docs/TestDefinitionRequest.md)
  - [TestDestinationRequest](docs/TestDestinationRequest.md)
+ - [TestLlmProviderByIdRequest](docs/TestLlmProviderByIdRequest.md)
  - [TestLlmProviderDefinitionRequest](docs/TestLlmProviderDefinitionRequest.md)
- - [TestLlmProviderDefinitionRequestProviderConfig](docs/TestLlmProviderDefinitionRequestProviderConfig.md)
  - [TestLlmProviderResponse](docs/TestLlmProviderResponse.md)
  - [TestNotification](docs/TestNotification.md)
  - [TestNotificationAllOf](docs/TestNotificationAllOf.md)
@@ -2319,6 +2330,8 @@ Class | Method | HTTP request | Description
  - [TotalDimension](docs/TotalDimension.md)
  - [TotalExecutionResultHeader](docs/TotalExecutionResultHeader.md)
  - [TotalResultHeader](docs/TotalResultHeader.md)
+ - [TrendingObjectItem](docs/TrendingObjectItem.md)
+ - [TrendingObjectsResult](docs/TrendingObjectsResult.md)
  - [TriggerAutomationRequest](docs/TriggerAutomationRequest.md)
  - [TriggerQualityIssuesCalculationResponse](docs/TriggerQualityIssuesCalculationResponse.md)
  - [UpsertKnowledgeDocumentRequestDto](docs/UpsertKnowledgeDocumentRequestDto.md)

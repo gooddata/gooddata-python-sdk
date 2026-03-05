@@ -292,6 +292,42 @@ docker compose --profile fdw up -d
 
 This starts a PostgreSQL instance with the gooddata-fdw extension on port 2543.
 
+## Run staging tests
+
+Staging tests run against a shared GoodData staging environment instead of a local docker-compose stack.
+They are useful for validating changes against a real deployment.
+
+### Triggers
+
+The staging tests workflow (`.github/workflows/staging-tests.yaml`) can be triggered in three ways:
+
+1. **Label** — Add the `test-staging` label to a PR targeting `master` or `rel/**`.
+2. **PR comment** — Post `/test-staging` as a comment on a PR.
+3. **Manual dispatch** — Trigger from the Actions tab with optional `test_envs` and `test_filter` inputs.
+
+Only one staging test run executes at a time (concurrency group `staging-tests`, non-cancelling).
+
+### Running staging tests locally
+
+You need a staging API token (`TOKEN`). The workflow uses the `PYTHON_SDK_STG_API_KEY` secret; locally you
+pass it via the `TOKEN=` make argument:
+
+```bash
+# 1. Clean the staging workspace (removes previous test data)
+make clean-staging TOKEN=<your-staging-token>
+
+# 2. Load the demo layout into staging
+make load-staging TOKEN=<your-staging-token>
+
+# 3. Run the tests
+make test-staging TOKEN=<your-staging-token>
+
+# Optionally limit python version and test filter:
+make test-staging TOKEN=<your-staging-token> TEST_ENVS=py312 ADD_ARGS="-k test_catalog"
+```
+
+The token is passed as a CLI argument (`--gd-test-token`) to pytest, **not** as an environment variable.
+
 ## Run continuous integration tests
 Tests in pull request (PR) are executed using docker. The following is done to make test environment as close
 to reproducible as possible:
