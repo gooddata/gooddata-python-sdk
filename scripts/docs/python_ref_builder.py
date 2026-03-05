@@ -175,25 +175,19 @@ def _object_partial_context(obj_data: dict, path: list[str], resolver: LinkResol
             ctx["long_description"] = resolver.all_links(ds.get("long_description", "") or "")
 
         # Parameters
-        if ds:
-            params = ds.get("params")
-            if params and len(params) > 0:
-                ctx["params"] = [
-                    {
-                        "name": p["arg_name"],
-                        "type": resolver.type_link(p.get("type_name", "")),
-                        "description": resolver.all_links(p.get("description", "") or ""),
-                    }
-                    for p in params
-                ]
-            elif obj_data.get("signature", {}).get("params") and len(obj_data["signature"]["params"]) > 0:
-                ctx["sig_params"] = [
-                    {"name": sp[0], "type": resolver.type_link(sp[1])} for sp in obj_data["signature"]["params"]
-                ]
-        elif obj_data.get("signature", {}).get("params") and len(obj_data["signature"]["params"]) > 0:
-            ctx["sig_params"] = [
-                {"name": sp[0], "type": resolver.type_link(sp[1])} for sp in obj_data["signature"]["params"]
+        sig_params = obj_data.get("signature", {}).get("params") or []
+        doc_params = ds.get("params") if ds else None
+        if doc_params and len(doc_params) > 0:
+            ctx["params"] = [
+                {
+                    "name": p["arg_name"],
+                    "type": resolver.type_link(p.get("type_name", "")),
+                    "description": resolver.all_links(p.get("description", "") or ""),
+                }
+                for p in doc_params
             ]
+        elif sig_params:
+            ctx["sig_params"] = [{"name": sp[0], "type": resolver.type_link(sp[1])} for sp in sig_params]
 
         # Returns
         if ds:
