@@ -44,6 +44,22 @@ jobs:
       - name: pep8 and formatting check
         run: |
           make format
+  docs-scripts-tests:
+    runs-on: ubuntu-latest
+    if: ${{inputs.changed-python-modules == 'true'}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up python 3.14
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: 3.14
+      - name: Install dependencies
+        run: |
+          uv sync --locked
+      - name: Test docs scripts
+        run: |
+          make test-docs-scripts
   types-check:
     runs-on: ubuntu-latest
     if: ${{inputs.changed-python-modules == 'true'}}

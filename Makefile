@@ -108,6 +108,10 @@ remove-cassettes:
 	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C packages/$${project} $@ || RESULT=$$?; done; \
 	exit $$RESULT
 
+.PHONY: test-docs-scripts
+test-docs-scripts:
+	uv run pytest scripts/docs/tests/ -v
+
 .PHONY: new-docs
 new-docs:
 	cd docs; \
