@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '491'
+          - '533'
         Content-Type:
           - application/json
         DATE: &id001
@@ -49,6 +49,7 @@ interactions:
                 url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
+                alternativeDataSourceId: ds-put-abc-id
                 type: POSTGRESQL
                 name: demo-test-ds
                 schema: demo
@@ -105,7 +106,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 60407820de27612a84e894b12de55654
+          traceId: ee3e99796da9ee4b1a6076e3d3b4ecce
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources

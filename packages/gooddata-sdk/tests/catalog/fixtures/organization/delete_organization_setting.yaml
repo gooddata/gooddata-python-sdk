@@ -146,7 +146,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 2b1203c882f80a83e7307d1a7587e4b1
+          traceId: f43a63b0ce32a7ee8a5bf8c62c3244f0
   - request:
       method: DELETE
       uri: http://localhost:3000/api/v1/entities/organizationSettings/test_setting

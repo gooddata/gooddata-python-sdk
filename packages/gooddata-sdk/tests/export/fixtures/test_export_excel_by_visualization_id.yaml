@@ -118,7 +118,7 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2026-03-05 15:20
+              createdAt: 2026-03-06 13:53
             id: customers_trend
             meta:
               origin:
@@ -165,7 +165,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-03-05 15:20
+                createdAt: 2026-03-06 13:53
               id: amount_of_active_customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
@@ -175,7 +175,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-03-05 15:20
+                createdAt: 2026-03-06 13:53
               id: revenue_per_customer
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
@@ -240,10 +240,10 @@ interactions:
           - '0'
       body:
         string:
-          exportResult: 17dfef8efaf7621c32c465e9bde05a91b864b6a1
+          exportResult: 0b42791403123b13888e6ca78f3d339bee1f6fc1
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/17dfef8efaf7621c32c465e9bde05a91b864b6a1
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/0b42791403123b13888e6ca78f3d339bee1f6fc1
       body: null
       headers:
         Accept:
@@ -284,7 +284,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/17dfef8efaf7621c32c465e9bde05a91b864b6a1
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/0b42791403123b13888e6ca78f3d339bee1f6fc1
       body: null
       headers:
         Accept:
@@ -325,7 +325,130 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/17dfef8efaf7621c32c465e9bde05a91b864b6a1
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/0b42791403123b13888e6ca78f3d339bee1f6fc1
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 202
+        message: Accepted
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - '0'
+      body:
+        string: ''
+  - request:
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/0b42791403123b13888e6ca78f3d339bee1f6fc1
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 202
+        message: Accepted
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - '0'
+      body:
+        string: ''
+  - request:
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/0b42791403123b13888e6ca78f3d339bee1f6fc1
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 202
+        message: Accepted
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - '0'
+      body:
+        string: ''
+  - request:
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/0b42791403123b13888e6ca78f3d339bee1f6fc1
       body: null
       headers:
         Accept:
@@ -449,12 +572,12 @@ interactions:
           t1A06yalI3Lc6aDZpuoahv3/8OTjrph8zh4PFoLc88wirtb0tUfBxtupcM5Hbd1scd1b+1GbwuED
           ZV/QuKnw2WK+HfADiD6aT5QIEvFSqyy/+eYQdG5pxmWs/tkxahGC1op4X+TwqTm7scLZZ4t7c2d7
           Bl97Z7vaXi5RWzvI5KulP5748D7I3oGD0oQpWbxNegBHze7sLwPgYy9It/4GUEsDBBQAAAAIAAAA
-          PwAqbodlJQEAAFACAAARAAAAZG9jUHJvcHMvY29yZS54bWydks1qwzAQhO99CqO7LdkmoRW2A23J
-          qYFCU1p6E9LGEbV+kNQ6efsqTuIk4FOPq5n9dnZRtdipLvkF56XRNcozghLQ3Aip2xq9r5fpPUp8
-          YFqwzmio0R48WjR3FbeUGwevzlhwQYJPIkh7ym2NtiFYirHnW1DMZ9Gho7gxTrEQS9diy/g3awEX
-          hMyxgsAECwwfgKkdieiEFHxE2h/XDQDBMXSgQAeP8yzHF28Ap/xkw6BcOZUMewuT1rM4undejsa+
-          77O+HKwxf44/Vy9vw6qp1IdTcUBNJTjlDlgwrqnwdREP1zEfVvHEGwnicR/1ibfTIsc+EEkMQI9x
-          z8pH+fS8XqKmIMU8JWVKZut8RgtCZw9fh5E3/RegOg35N/EMOOa+/QTNH1BLAwQUAAAACAAAAD8A
+          PwBX9fW9JQEAAFACAAARAAAAZG9jUHJvcHMvY29yZS54bWydkstOwzAQRfd8ReR94qSBgqwklQB1
+          RSUkgkDsLHvaWsQP2Ya0f4+bV1spK5bje+fMnZGL1UE20S9YJ7QqUZakKALFNBdqV6L3eh0/oMh5
+          qjhttIISHcGhVXVTMEOYtvBqtQHrBbgogJQjzJRo770hGDu2B0ldEhwqiFttJfWhtDtsKPumO8CL
+          NF1iCZ5y6ik+AWMzEdGA5GxCmh/bdADOMDQgQXmHsyTDZ68HK91sQ6dcOKXwRwOz1lGc3AcnJmPb
+          tkmbd9aQP8Ofm5e3btVYqNOpGKCq4IwwC9RrWxX4sgiHa6jzm3DirQD+eAz6zNuwSN8HPAoBSB93
+          VD7yp+d6japFuljGaR6nyzrLyV1Obu+/TiOv+s9AOQz5N3EE9LmvP0H1B1BLAwQUAAAACAAAAD8A
           ssAyR34BAAAZAwAAEAAAAGRvY1Byb3BzL2FwcC54bWydUsFO6zAQvPMVke/UaYXQU+UYoQLiwNOr
           1ABn42waC8e2vNuofV+Pk6ohBU7kNDs7Gk92V9zsW5t1ENF4V7D5LGcZOO0r47YFey4fLv+wDEm5
           SlnvoGAHQHYjL8Q6+gCRDGCWHBwWrCEKS85RN9AqnKW2S53ax1ZRKuOW+7o2Gu683rXgiC/y/JrD
@@ -471,6 +594,6 @@ interactions:
           AQIUAxQAAAAIAAAAPwDtxIIjugAAAAQBAAAUAAAAAAAAAAAAAACAgRYIAAB4bC9zaGFyZWRTdHJp
           bmdzLnhtbFBLAQIUAxQAAAAIAAAAPwCvZpxJ7wIAALANAAANAAAAAAAAAAAAAACAgQIJAAB4bC9z
           dHlsZXMueG1sUEsBAhQDFAAAAAgAAAA/ABj6RlSwBQAAUhsAABMAAAAAAAAAAAAAAICBHAwAAHhs
-          L3RoZW1lL3RoZW1lMS54bWxQSwECFAMUAAAACAAAAD8AKm6HZSUBAABQAgAAEQAAAAAAAAAAAAAA
+          L3RoZW1lL3RoZW1lMS54bWxQSwECFAMUAAAACAAAAD8AV/X1vSUBAABQAgAAEQAAAAAAAAAAAAAA
           gIH9EQAAZG9jUHJvcHMvY29yZS54bWxQSwECFAMUAAAACAAAAD8AssAyR34BAAAZAwAAEAAAAAAA
           AAAAAAAAgIFREwAAZG9jUHJvcHMvYXBwLnhtbFBLBQYAAAAACgAKAIACAAD9FAAAAAA=

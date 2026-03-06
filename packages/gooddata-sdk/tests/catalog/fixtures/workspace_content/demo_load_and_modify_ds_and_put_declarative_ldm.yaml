@@ -44,7 +44,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: d7baddef533fc1b0f8212118dc108678
+          traceId: 1ead8aaa54b9dfd33ebc9850002fa354
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -529,7 +529,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '491'
+          - '533'
         Content-Type:
           - application/json
         DATE: *id001
@@ -555,6 +555,7 @@ interactions:
                 url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
+                alternativeDataSourceId: ds-put-abc-id
                 type: POSTGRESQL
                 name: demo-test-ds
                 schema: demo
@@ -983,7 +984,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '491'
+          - '533'
         Content-Type:
           - application/json
         DATE: *id001
@@ -1009,6 +1010,7 @@ interactions:
                 url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
+                alternativeDataSourceId: ds-put-abc-id
                 type: POSTGRESQL
                 name: demo-test-ds
                 schema: demo

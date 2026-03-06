@@ -56,7 +56,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQyMWFlZmQ0NC05OWUzLTRkNzctYTljYS0wMmRlM2ZlMDMyOGYSBWxvY2Fs
+                authenticationId: CiQ0ODhkODhkNi1hZDQ2LTRiMzQtYmQ4Ni1iMWFmZGVjYjUyMDkSBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -70,7 +70,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQ4NWViNTc4OS1hNTU4LTRlNTktOWJkZS1kNjViOGIxYzVkZWISBWxvY2Fs
+                authenticationId: CiRjOTVhNDA1Zi1iODRiLTRkZjItOTUyNi00YjQ4N2VmOTA0MjESBWxvY2Fs
               id: demo2
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2

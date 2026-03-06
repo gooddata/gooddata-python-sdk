@@ -144,7 +144,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: f578a067c9594c268bdb3174c04d244b
+          traceId: fddd8a21b30f8b832ce5223ab6f0def8
   - request:
       method: DELETE
       uri: http://localhost:3000/api/v1/entities/cspDirectives/font-src

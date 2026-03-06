@@ -8,6 +8,7 @@
       "url": "jdbc:postgresql://postgres:5432/tiger?sslmode=prefer",
       "username": "postgres",
       "password": "passw0rd",
+      "alternativeDataSourceId": "ds-put-abc-id",
       "permissions": [
         {
           "assignee": {
