@@ -43,12 +43,6 @@ def pytest_addoption(parser):
         default=str(default_config_path),
         help="Absolut path to test configuration",
     )
-    parser.addoption(
-        "--gd-test-token",
-        action="store",
-        default="",
-        help="API token for staging tests",
-    )
 
 
 @pytest.fixture(scope="session")
@@ -57,10 +51,11 @@ def test_config(request):
     with open(config_path) as f:
         config = yaml.safe_load(f)
 
-    # Override token from CLI argument (staging tests pass it via --gd-test-token)
-    cli_token = request.config.getoption("--gd-test-token")
-    if cli_token:
-        config["token"] = cli_token
+    # Override token from TOKEN env var (set by make test-staging TOKEN=...)
+    if config.get("staging", False):
+        env_token = os.environ.get("TOKEN")
+        if env_token:
+            config["token"] = env_token
 
     return config
 
@@ -179,10 +174,26 @@ _STAGING_PATCH_FILES = [
 ]
 
 
-def _patch_file_for_staging(file_path: Path) -> str | None:
-    """Replace local JDBC URL/username with staging values. Returns original content for restore."""
+_STAGING_BACKUP_SUFFIX = ".staging-backup"
+
+
+def _backup_path(file_path: Path) -> Path:
+    return file_path.with_suffix(file_path.suffix + _STAGING_BACKUP_SUFFIX)
+
+
+def _restore_from_backup(file_path: Path) -> None:
+    """Restore a file from its backup (left over from a previous interrupted run)."""
+    backup = _backup_path(file_path)
+    if backup.exists():
+        file_path.write_text(backup.read_text())
+        backup.unlink()
+        logger.info(f"Restored from stale backup: {file_path}")
+
+
+def _patch_file_for_staging(file_path: Path) -> bool:
+    """Replace local JDBC URL/username with staging values. Writes backup to disk for crash safety."""
     if not file_path.exists():
-        return None
+        return False
     original = file_path.read_text()
     patched = original.replace(_LOCAL_DS_URL, _STAGING_DS_URL).replace(
         f"username: {_LOCAL_DS_USERNAME}", f"username: {_STAGING_DS_USERNAME}"
@@ -190,9 +201,20 @@ def _patch_file_for_staging(file_path: Path) -> str | None:
     # Also handle JSON format (username as a JSON field)
     patched = patched.replace(f'"username": "{_LOCAL_DS_USERNAME}"', f'"username": "{_STAGING_DS_USERNAME}"')
     if patched != original:
+        _backup_path(file_path).write_text(original)
         file_path.write_text(patched)
         logger.info(f"Patched for staging: {file_path}")
-    return original
+        return True
+    return False
+
+
+def _restore_patched_file(file_path: Path) -> None:
+    """Restore a file from its backup and remove the backup."""
+    backup = _backup_path(file_path)
+    if backup.exists():
+        file_path.write_text(backup.read_text())
+        backup.unlink()
+        logger.info(f"Restored original: {file_path}")
 
 
 def _find_gooddata_layouts_dirs() -> list[Path]:
@@ -236,8 +258,12 @@ def staging_patch_fixtures(test_config, staging_preflight):
     - Copies gooddata_layouts/default/ -> gooddata_layouts/<org_id>/ so the SDK
       can find layout files (it uses the org ID as the directory name)
 
-    Restores everything on teardown (regardless of test outcome).
+    Uses on-disk backups so that interrupted runs self-heal on the next start.
     """
+    # Always restore leftover backups from a previous interrupted run
+    for fpath in _STAGING_PATCH_FILES:
+        _restore_from_backup(fpath)
+
     if not test_config.get("staging", False):
         yield
         return
@@ -245,12 +271,8 @@ def staging_patch_fixtures(test_config, staging_preflight):
     import shutil
 
     # 1. Patch JDBC connection strings in fixture files
-    originals: dict[Path, str] = {}
-    for fpath in _STAGING_PATCH_FILES:
-        original = _patch_file_for_staging(fpath)
-        if original is not None:
-            originals[fpath] = original
-    logger.info(f"Patched {len(originals)} fixture files for staging")
+    patched_files = [fpath for fpath in _STAGING_PATCH_FILES if _patch_file_for_staging(fpath)]
+    logger.info(f"Patched {len(patched_files)} fixture files for staging")
 
     # 2. Copy layout dirs (gooddata_layouts/default -> gooddata_layouts/<org_id>)
     from gooddata_sdk import GoodDataSdk
@@ -262,10 +284,9 @@ def staging_patch_fixtures(test_config, staging_preflight):
 
     yield
 
-    # Restore file contents
-    for fpath, content in originals.items():
-        fpath.write_text(content)
-        logger.info(f"Restored original: {fpath}")
+    # Restore patched files from backups
+    for fpath in patched_files:
+        _restore_patched_file(fpath)
 
     # Remove copied directories
     for d in copied_dirs:

@@ -13,7 +13,7 @@ on:
       test_envs:
         description: 'Tox test environments to run (e.g. py312)'
         required: false
-        default: 'py312'
+        default: 'py314'
       test_filter:
         description: 'Pytest filter expression (-k flag)'
         required: false
@@ -52,20 +52,25 @@ jobs:
       - name: Set up Python
         uses: astral-sh/setup-uv@v6
         with:
-          python-version: '3.12'
+          python-version: '3.14'
 
       - name: Install dependencies
         run: uv sync --all-groups --locked
 
       - name: Clean staging environment
-        run: make clean-staging TOKEN=${{ secrets.PYTHON_SDK_STG_API_KEY }}
+        run: make clean-staging
+        env:
+          TOKEN: ${{ secrets.PYTHON_SDK_STG_API_KEY }}
 
       - name: Load staging environment
-        run: make load-staging TOKEN=${{ secrets.PYTHON_SDK_STG_API_KEY }}
+        run: make load-staging
+        env:
+          TOKEN: ${{ secrets.PYTHON_SDK_STG_API_KEY }}
 
       - name: Run staging tests
         run: |
           make test-staging \
-            TOKEN=${{ secrets.PYTHON_SDK_STG_API_KEY }} \
-            TEST_ENVS=${{ github.event.inputs.test_envs || 'py312' }} \
+            TEST_ENVS=${{ github.event.inputs.test_envs || 'py314' }} \
             ADD_ARGS="${{ github.event.inputs.test_filter && format('-k {0}', github.event.inputs.test_filter) || '' }}"
+        env:
+          TOKEN: ${{ secrets.PYTHON_SDK_STG_API_KEY }}

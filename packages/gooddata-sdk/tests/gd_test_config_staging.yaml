@@ -1,6 +1,6 @@
 # (C) 2024 GoodData Corporation
 # Staging test configuration.
-# Token is passed via make test-staging TOKEN=... (see conftest.py).
+# Token is passed via TOKEN env var from make test-staging TOKEN=... (see conftest.py).
 staging: true
 host: "https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com"
 token: ""
