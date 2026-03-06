@@ -40,6 +40,7 @@ jobs:
             python-modules:
               - '.docker/**'
               - 'packages/**'
+              - 'scripts/docs/**'
               - '*.mk'
               - 'Makefile'
               - Dockerfile
