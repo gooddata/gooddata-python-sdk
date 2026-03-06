@@ -126,7 +126,7 @@ jobs:
         working-directory: ./docs
         env:
           HUGO_ENV: production
-        run: hugo --minify --baseURL https://www.gooddata.com/docs/python-sdk
+        run: hugo --minify
       - name: Publish (draft)
         uses: netlify/actions/cli@master
         with:

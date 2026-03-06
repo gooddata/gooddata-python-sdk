@@ -104,8 +104,8 @@ for branch in "${branches_to_process[@]}" ; do
               rm -rf api_spec.toml
             fi
             python3 ../scripts/docs/json_builder.py
-            mv -f data.json ./versioned_docs/"$target_section"/
-            python3 ../scripts/docs/python_ref_builder.py api_spec.toml ./versioned_docs/"$target_section"/data.json "$target_section" versioned_docs
+            python3 ../scripts/docs/python_ref_builder.py api_spec.toml data.json "$target_section" versioned_docs
+            rm -f data.json
         fi
     fi
 done
@@ -118,11 +118,5 @@ rm -rf "${content_dir}/latest"
 highest_version=$(ls -v1 ./versioned_docs/ | grep -E '^[0-9]+.[0-9]+$' | sort -V | tail -n 1)
 echo "Moving ${highest_version} to /latest"
 mv -f ./versioned_docs/$highest_version ./versioned_docs/latest
-
-# Replace "/${highest_version}/" with "/latest/" in links.json (if it exists)
-if [ -f "./versioned_docs/latest/links.json" ]; then
-    sed "s|${highest_version}|latest|g" ./versioned_docs/latest/links.json > temp.json
-    mv temp.json ./versioned_docs/latest/links.json
-fi
 
 popd

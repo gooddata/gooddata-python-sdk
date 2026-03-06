@@ -55,11 +55,13 @@ if git cat-file -e "$API_GEN_FILE" 2>/dev/null; then
 
     # Generate API introspection data from this version's SDK
     python3 ../scripts/docs/json_builder.py
-    mv -f data.json "$content_dir/$section/"
 
     # Generate API reference markdown files
     python3 ../scripts/docs/python_ref_builder.py api_spec.toml \
-        "./$content_dir/$section/data.json" "$section" "$content_dir"
+        data.json "$section" "$content_dir"
+
+    # Clean up intermediate file (no longer needed after pre-rendering)
+    rm -f data.json
 else
     echo "No json_builder.py on $branch, skipping API ref generation"
 fi

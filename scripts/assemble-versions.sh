@@ -42,11 +42,7 @@ if [ -n "$highest_version" ]; then
     echo "Promoting version $highest_version to /latest"
     mv -f "./$content_dir/$highest_version" "./$content_dir/latest"
 
-    # Update version references in links.json
-    if [ -f "./$content_dir/latest/links.json" ]; then
-        sed "s|${highest_version}|latest|g" "./$content_dir/latest/links.json" > temp_links.json
-        mv temp_links.json "./$content_dir/latest/links.json"
-    fi
+
 else
     echo "WARNING: No numbered version directory found to promote to latest"
 fi
