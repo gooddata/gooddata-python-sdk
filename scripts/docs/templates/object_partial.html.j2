@@ -1,0 +1,101 @@
+{#- Replicates api-ref-object-partial.html -#}
+{#- NOTE: the original Hugo template has a bug — the CSS class condition compares
+    against " function" (with leading space), so it never matches. We replicate
+    the resulting output: the class is always "python-ref  python-ref-class ". -#}
+<div class="python-ref  python-ref-class ">
+{%- if kind == "function" %}
+{%- if not is_property %}
+<p><code>{{ name }}({{ signature }}) -> {{ return_link }}</code></p>
+{%- else %}
+<p><code>{{ name }} -> {{ return_link }}</code></p>
+{%- endif %}
+{%- if docstring %}
+<div class="python-ref-description">
+<p> {{ short_description }}</p>
+<p> {{ long_description }}</p>
+</div>
+{%- endif %}
+{%- if not is_property %}
+<h4> Parameters </h4>
+{%- if params %}
+<table class="gd-docs-parameters-block">
+<thead>
+<tr>
+<th>name</th>
+<th>type</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+{%- for p in params %}
+<tr>
+<td> {{ p.name }}</td>
+<td> {{ p.type }}</td>
+<td> {{ p.description }}
+</td>
+</tr>
+{%- endfor %}
+</tbody>
+</table>
+{%- elif sig_params %}
+<table class="gd-docs-parameters-block">
+<thead>
+<tr>
+<th>name</th>
+<th>type</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+{%- for p in sig_params %}
+<tr>
+<td> {{ p.name }}</td>
+<td> {{ p.type }}</td>
+<td><i> None </i></td>
+</tr>
+{%- endfor %}
+</tbody>
+</table>
+{%- else %}
+<i> None </i>
+{%- endif %}
+{%- endif %}
+<h4> Returns </h4>
+{%- if returns == "no_docs" %}
+<i> No docs </i>
+{%- elif returns == "none" %}
+<i> None </i>
+{%- elif returns %}
+<table class="gd-docs-parameters-block">
+<thead>
+<tr>
+<th>type</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+{{ returns.type }}
+</td>
+<td>
+{%- if returns.description %}
+{{ returns.description }}
+{%- else %}
+<i> None </i>
+{%- endif %}
+</td>
+</tr>
+</tbody>
+</table>
+{%- endif %}
+{%- elif kind == "class" %}
+<h1> {{ parent_name }}.{{ class_name }} </h1>
+{%- if docstring %}
+<div class="python-ref-description">
+<p> {{ short_description }}</p>
+<p> {{ long_description }}</p>
+</div>
+{%- endif %}
+{%- endif %}
+</div>
