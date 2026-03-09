@@ -3,6 +3,7 @@
 #
 # Define how changed paths map to validation domains.
 # See `.aida/validation_policy.yaml` for mapping domains to pipelines.
+version: 1
 domains:
   - id: python-package
     description: Any workspace Python package under packages/*
