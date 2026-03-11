@@ -51,7 +51,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRhNzhmZjA0Zi0xYjU1LTQwY2MtODQ0OS1jMmQzNGE4MGVjMzkSBWxvY2Fs
+            - authId: CiQyMjUyMzlmOS02NzliLTQ2ODUtYjg1ZS1lYjlhYTk4OWY2YzISBWxvY2Fs
               email: demo@example.com
               firstname: Demo
               id: demo
@@ -61,7 +61,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQxNzQyNzBmZC0wZjlkLTRkMTctYjU5Ni01OThhNzkzMDU3ODkSBWxvY2Fs
+            - authId: CiQwZjI2YzVkMS0zZDhlLTQ0N2ItYWJkNS1kNzE2NjRmODQxYzMSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -117,7 +117,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRhNzhmZjA0Zi0xYjU1LTQwY2MtODQ0OS1jMmQzNGE4MGVjMzkSBWxvY2Fs
+            - authId: CiQyMjUyMzlmOS02NzliLTQ2ODUtYjg1ZS1lYjlhYTk4OWY2YzISBWxvY2Fs
               email: demo@example.com
               firstname: Demo
               id: demo
@@ -127,7 +127,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQxNzQyNzBmZC0wZjlkLTRkMTctYjU5Ni01OThhNzkzMDU3ODkSBWxvY2Fs
+            - authId: CiQwZjI2YzVkMS0zZDhlLTQ0N2ItYWJkNS1kNzE2NjRmODQxYzMSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []

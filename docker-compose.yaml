@@ -478,6 +478,8 @@ services:
     environment:
       AFM_EXEC_SERVICE_HOST: afm-exec-api
       AFM_EXEC_SERVICE_PORT: 9000
+      GEN_AI_HTTP_HOST: localhost
+      GEN_AI_HTTP_PORT: 8989
       AUTH_SERVICE_HOST: auth-service
       AUTH_SERVICE_PORT: 9050
       AUTOMATION_HOST: automation
@@ -500,6 +502,8 @@ services:
       MCP_SERVER_PORT: 9200
       GRPC_METADATA_HOST: metadata-api
       GRPC_METADATA_PORT: 6572
+      GRPC_MDSINK_HOST: gateway-md-sink
+      GRPC_MDSINK_PORT: 6574
       GATEWAY_ORGANIZATION_RESOLVER_TYPE: GRPC_WITH_DB_VALIDATION
       GATEWAY_R2DBC_URL: 'r2dbc:postgresql://postgres:5432/gw?reWriteBatchedInserts=true'
       GATEWAY_DB_USERNAME: postgres
