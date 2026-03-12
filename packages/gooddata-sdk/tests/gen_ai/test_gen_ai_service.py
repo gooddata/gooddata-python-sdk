@@ -81,7 +81,7 @@ def test_list_conversation_items(service: GenAiService) -> None:
 
 
 def test_send_message(service: GenAiService) -> None:
-    sse_data = "data: {\"role\": \"assistant\"}\n\n"
+    sse_data = 'data: {"role": "assistant"}\n\n'
     mock_resp = MagicMock()
     mock_resp.raise_for_status = MagicMock()
     mock_resp.iter_content.return_value = iter([sse_data])

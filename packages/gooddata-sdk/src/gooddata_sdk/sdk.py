@@ -91,9 +91,7 @@ class GoodDataSdk:
         self._catalog_permission = CatalogPermissionService(self._client)
         self._export = ExportService(self._client)
         self._gen_ai = (
-            GenAiService(self._client.gen_ai_host, self._client.token)
-            if self._client.gen_ai_host is not None
-            else None
+            GenAiService(self._client.gen_ai_host, self._client.token) if self._client.gen_ai_host is not None else None
         )
 
     @property

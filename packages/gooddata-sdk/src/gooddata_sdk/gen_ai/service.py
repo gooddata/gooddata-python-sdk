@@ -115,9 +115,7 @@ class GenAiService:
         response.raise_for_status()
         return response.json()
 
-    def send_message(
-        self, workspace_id: str, conversation_id: str, request: dict[str, Any]
-    ) -> Iterator[Any]:
+    def send_message(self, workspace_id: str, conversation_id: str, request: dict[str, Any]) -> Iterator[Any]:
         """Send a message to a conversation and stream SSE response.
 
         Args:
