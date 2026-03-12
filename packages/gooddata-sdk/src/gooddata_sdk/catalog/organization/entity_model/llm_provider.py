@@ -84,7 +84,7 @@ class CatalogOpenAiProviderConfig(Base):
     """OpenAI provider configuration."""
 
     auth: CatalogOpenAiAuth | None = None
-    base_url: str | None = None
+    base_url: str = "https://api.openai.com/v1"
     organization: str | None = None
     type: str = "OPENAI"
 
@@ -177,7 +177,7 @@ def _provider_config_from_api(data: dict[str, Any]) -> CatalogLlmProviderConfig:
     # Default: OpenAI
     return CatalogOpenAiProviderConfig(
         auth=_openai_auth_from_api(auth_data) if auth_data is not None else None,
-        base_url=safeget(data, ["baseUrl"]),
+        base_url=safeget(data, ["baseUrl"]) or "https://api.openai.com/v1",
         organization=safeget(data, ["organization"]),
     )
 
