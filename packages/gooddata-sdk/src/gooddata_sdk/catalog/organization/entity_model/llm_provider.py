@@ -312,8 +312,8 @@ class CatalogLlmProviderPatch(Base):
 
 @define(kw_only=True)
 class CatalogLlmProviderAttributes(Base):
-    models: list[CatalogLlmProviderModel]
-    provider_config: CatalogLlmProviderConfig
+    models: list[CatalogLlmProviderModel] | None = None
+    provider_config: CatalogLlmProviderConfig | None = None
     name: str | None = None
     description: str | None = None
     default_model_id: str | None = None
