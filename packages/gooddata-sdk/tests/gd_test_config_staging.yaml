@@ -1,0 +1,32 @@
+# (C) 2024 GoodData Corporation
+# Staging test configuration.
+# Token is passed via TOKEN env var from make test-staging TOKEN=... (see conftest.py).
+staging: true
+host: "https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com"
+token: ""
+workspace: "demo"
+workspace_name: "Demo"
+workspace_with_parent: "demo_west"
+workspace_with_parent_name: "Demo West"
+header_host: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
+data_source: "demo-test-ds"
+data_source2: "demo-bigquery-ds"
+workspace_test: "demo_testing"
+test_user: "demo2"
+test_user_group: "demoGroup"
+test_new_user: "newUser"
+test_new_user_group: "newUserGroup"
+test_new_user_data_filter: "newUserDataFilter"
+demo_user: "demo"
+admin_user_group: "adminGroup"
+bigquery_token: "dummy-bigquery-token"
+bigquery_token_file: ""
+visualization_id: "customers_trend"
+visualization_name: "Customers Trend"
+databricks_client_secret: "dummy-databricks-secret"
+databricks_token: "dummy-databricks-token"
+# Staging PostgreSQL connection (used by fixture patching in conftest.py)
+# Local Docker uses postgres:5432 with user=postgres
+# Staging k8s uses cnpg-cluster-pooler:5432 with user=tiger
+staging_ds_url: "jdbc:postgresql://cnpg-cluster-pooler:5432/tiger?sslmode=prefer"
+staging_ds_username: "tiger"

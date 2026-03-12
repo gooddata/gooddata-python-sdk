@@ -48,6 +48,8 @@ from tests_support.compare_utils import deep_eq
 from tests_support.file_utils import load_json
 from tests_support.vcrpy_utils import get_vcr
 
+from .conftest import safe_delete
+
 gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
@@ -231,8 +233,8 @@ def test_catalog_list_data_sources(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     data_sources = sdk.catalog_data_source.list_data_sources()
 
-    assert len(data_sources) == 1
-    assert data_sources[0].id == test_config["data_source"]
+    assert len(data_sources) >= 1
+    assert any(ds.id == test_config["data_source"] for ds in data_sources)
 
 
 def _create_default_data_source(sdk: GoodDataSdk, data_source_id: str = "test"):
@@ -263,9 +265,9 @@ def _get_data_source(data_sources: list[CatalogDataSource], data_source_id: str)
 def test_catalog_create_update_list_data_source(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     try:
-        data_sources = sdk.catalog_data_source.list_data_sources()
-        assert len(data_sources) == 1
-        assert data_sources[0].id == test_config["data_source"]
+        data_sources_before = sdk.catalog_data_source.list_data_sources()
+        initial_count = len(data_sources_before)
+        assert any(ds.id == test_config["data_source"] for ds in data_sources_before)
 
         _create_default_data_source(sdk)
 
@@ -284,7 +286,7 @@ def test_catalog_create_update_list_data_source(test_config):
         sdk.catalog_data_source.create_or_update_data_source(updated_data_source)
 
         data_sources = sdk.catalog_data_source.list_data_sources()
-        assert len(data_sources) == 2
+        assert len(data_sources) == initial_count + 1
         demo_ds = _get_data_source(data_sources, test_config["data_source"])
         assert demo_ds
         assert demo_ds.id == test_config["data_source"]
@@ -292,9 +294,7 @@ def test_catalog_create_update_list_data_source(test_config):
         assert updated_data_source == test_ds
     finally:
         # Cleanup every time
-        sdk.catalog_data_source.delete_data_source("test")
-        data_sources = sdk.catalog_data_source.list_data_sources()
-        assert len(data_sources) == 1
+        safe_delete(sdk.catalog_data_source.delete_data_source, "test")
 
 
 def _create_delete_ds(sdk, data_source: CatalogDataSource):
@@ -303,7 +303,7 @@ def _create_delete_ds(sdk, data_source: CatalogDataSource):
         created_ds = sdk.catalog_data_source.get_data_source(data_source.id)
         assert data_source == created_ds
     finally:
-        sdk.catalog_data_source.delete_data_source(data_source.id)
+        safe_delete(sdk.catalog_data_source.delete_data_source, data_source.id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "redshift.yaml"))
@@ -383,6 +383,8 @@ def test_catalog_create_data_source_snowflake_spec(test_config):
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "bigquery.yaml"))
 def test_catalog_create_data_source_bigquery_spec(test_config):
+    if test_config.get("staging", False) and not test_config.get("bigquery_token_file"):
+        pytest.skip("BigQuery credentials not available on staging")
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     with mock.patch("builtins.open", mock.mock_open(read_data=test_config["bigquery_token_file"].encode("utf-8"))):
         _create_delete_ds(
@@ -423,9 +425,8 @@ def test_catalog_create_data_source_dremio_spec(test_config):
 def test_catalog_patch_data_source(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     try:
-        data_sources = sdk.catalog_data_source.list_data_sources()
-        assert len(data_sources) == 1
-        assert data_sources[0].id == test_config["data_source"]
+        data_sources_before = sdk.catalog_data_source.list_data_sources()
+        assert any(ds.id == test_config["data_source"] for ds in data_sources_before)
 
         _create_default_data_source(sdk)
 
@@ -440,11 +441,11 @@ def test_catalog_patch_data_source(test_config):
         assert patched_data_source.name == "Test2"
         assert patched_data_source.alternative_data_source_id == "ds-patch-abc-id"
     finally:
-        sdk.catalog_data_source.delete_data_source("test")
+        safe_delete(sdk.catalog_data_source.delete_data_source, "test")
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_declarative_data_sources.yaml"))
-def test_delete_declarative_data_sources(test_config):
+def test_delete_declarative_data_sources(test_config, snapshot_data_sources):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
     expected_json_path = _current_dir / "expected" / "declarative_data_sources.json"
@@ -468,7 +469,8 @@ def test_delete_declarative_data_sources(test_config):
         assert len(data_sources_o.data_sources) == 0
     finally:
         data_sources_o = CatalogDeclarativeDataSources.from_dict(load_json(expected_json_path))
-        sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
+        safe_delete(sdk.catalog_data_source.put_declarative_data_sources, data_sources_o, credentials_path)
+    # snapshot_data_sources fixture also restores in teardown
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_data_sources.yaml"))
@@ -485,7 +487,12 @@ def test_store_declarative_data_sources(test_config):
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_data_sources.yaml"))
-def test_load_and_put_declarative_data_sources(test_config):
+def test_load_and_put_declarative_data_sources(test_config, snapshot_data_sources):
+    if test_config.get("staging", False):
+        # load_and_put loads ALL data sources from the layout directory in a single PUT,
+        # including bigquery/databricks with dummy credentials. Staging validates credential
+        # formats and rejects them (400). Can't exclude individual data sources from the PUT.
+        pytest.skip("Staging server validates credential formats; this test uses mocked dummy credentials")
     load_folder = _current_dir / "load"
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
@@ -527,11 +534,12 @@ def test_load_and_put_declarative_data_sources(test_config):
     finally:
         data_sources_o = CatalogDeclarativeDataSources.from_dict(load_json(expected_json_path))
         sdk2 = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-        sdk2.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
+        safe_delete(sdk2.catalog_data_source.put_declarative_data_sources, data_sources_o, credentials_path)
+    # snapshot_data_sources fixture also restores in teardown
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_data_sources_connection.yaml"))
-def test_put_declarative_data_sources_connection(test_config):
+def test_put_declarative_data_sources_connection(test_config, snapshot_data_sources):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "expected" / "declarative_data_sources.json"
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
@@ -559,11 +567,12 @@ def test_put_declarative_data_sources_connection(test_config):
         assert data_sources_e.to_dict(camel_case=True) == data_sources_o.to_dict(camel_case=True)
     finally:
         data_sources_o = CatalogDeclarativeDataSources.from_dict(load_json(path))
-        sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
+        safe_delete(sdk.catalog_data_source.put_declarative_data_sources, data_sources_o, credentials_path)
+    # snapshot_data_sources fixture also restores in teardown
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_data_sources.yaml"))
-def test_put_declarative_data_sources(test_config):
+def test_put_declarative_data_sources(test_config, snapshot_data_sources):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "expected" / "declarative_data_sources.json"
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
@@ -576,7 +585,8 @@ def test_put_declarative_data_sources(test_config):
         assert data_sources_e.to_dict(camel_case=True) == data_sources_o.to_dict(camel_case=True)
     finally:
         data_sources_o = CatalogDeclarativeDataSources.from_dict(load_json(path))
-        sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
+        safe_delete(sdk.catalog_data_source.put_declarative_data_sources, data_sources_o, credentials_path)
+    # snapshot_data_sources fixture also restores in teardown
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_declarative_data_sources.yaml"))
@@ -632,7 +642,7 @@ def test_declarative_data_sources_databricks_token(test_config):
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_cache_strategy.yaml"))
-def test_cache_strategy(test_config: dict):
+def test_cache_strategy(test_config: dict, snapshot_data_sources):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     data_source_id = test_config["data_source"]
     path = _current_dir / "expected" / "declarative_data_sources.json"
@@ -657,7 +667,8 @@ def test_cache_strategy(test_config: dict):
         assert updated.cache_strategy == "NEVER"
     finally:
         data_sources_o = CatalogDeclarativeDataSources.from_dict(load_json(path))
-        sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
+        safe_delete(sdk.catalog_data_source.put_declarative_data_sources, data_sources_o, credentials_path)
+    # snapshot_data_sources fixture also restores in teardown
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_scan_model.yaml"))

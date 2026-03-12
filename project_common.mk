@@ -66,6 +66,11 @@ test-ci:
 	TEST_CI_PROJECT=$(CURR_DIR_BASE_NAME) $(MAKE) -C ../.. -f ci_tests.mk test-ci
 
 
+.PHONY: test-staging
+test-staging:
+	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required. Usage: make test-staging TOKEN=<api-token>" && exit 1)
+	TOKEN=$(TOKEN) STAGING=1 uv run tox -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) -- --gd-test-config=tests/gd_test_config_staging.yaml $(LOCAL_ADD_ARGS)
+
 # this is effective for gooddata-sdk only now - it should be part of test fixtures
 # remove this target once implemented in pytest global fixture
 .PHONY: remove-store-data
