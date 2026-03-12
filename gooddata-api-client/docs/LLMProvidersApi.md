@@ -353,7 +353,7 @@ with gooddata_api_client.ApiClient() as api_client:
     id = "/6bUUGjjNSwg0_bs" # str | 
     json_api_llm_provider_patch_document = JsonApiLlmProviderPatchDocument(
         data=JsonApiLlmProviderPatch(
-            attributes=JsonApiLlmProviderPatchAttributes(
+            attributes=JsonApiLlmProviderInAttributes(
                 default_model_id="default_model_id_example",
                 description="description_example",
                 models=[

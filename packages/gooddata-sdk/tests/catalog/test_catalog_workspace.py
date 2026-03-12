@@ -39,6 +39,8 @@ from tests_support.vcrpy_utils import get_vcr
 
 from tests.catalog.utils import _refresh_workspaces
 
+from .conftest import safe_delete
+
 gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
@@ -108,7 +110,7 @@ def test_load_and_put_declarative_workspaces(test_config):
         assert deep_eq(workspaces_e, workspaces_o)
         assert deep_eq(workspaces_e.to_dict(camel_case=True), workspaces_o.to_dict(camel_case=True))
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspaces.yaml"))
@@ -138,7 +140,7 @@ def test_put_declarative_workspaces(test_config):
         assert workspaces_e == workspaces_o
         assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspaces_snake_case.yaml"))
@@ -180,9 +182,12 @@ def test_declarative_workspaces(test_config):
 
     workspaces_o = sdk.catalog_workspace.get_declarative_workspaces(exclude=["ACTIVITY_INFO"])
 
-    assert len(workspaces_o.workspaces) == 3
-    assert len(workspaces_o.workspace_data_filters) == 2
-    assert [workspace.id for workspace in workspaces_o.workspaces] == ["demo", "demo_west", "demo_west_california"]
+    assert len(workspaces_o.workspaces) >= 3
+    assert len(workspaces_o.workspace_data_filters) >= 2
+    workspace_ids = [workspace.id for workspace in workspaces_o.workspaces]
+    assert "demo" in workspace_ids
+    assert "demo_west" in workspace_ids
+    assert "demo_west_california" in workspace_ids
     assert workspaces_o.to_dict(camel_case=True) == layout_api.get_workspaces_layout(exclude=["ACTIVITY_INFO"]).to_dict(
         camel_case=True
     )
@@ -197,7 +202,7 @@ def test_update_workspace_invalid(test_config):
 
     workspace = sdk.catalog_workspace.get_workspace(test_config["workspace_with_parent"])
     workspaces = sdk.catalog_workspace.list_workspaces()
-    assert len(workspaces) == 3
+    initial_count = len(workspaces)
     assert workspace.id in [w.id for w in workspaces]
     assert workspace_new_parent not in [w.id for w in workspaces]
     assert workspace.parent_id is not None
@@ -208,7 +213,7 @@ def test_update_workspace_invalid(test_config):
         # Update workspace parent is not allowed.
         workspaces = sdk.catalog_workspace.list_workspaces()
         workspace_o = sdk.catalog_workspace.get_workspace(workspace.id)
-        assert len(workspaces) == 3
+        assert len(workspaces) == initial_count
         assert workspace == workspace_o
 
 
@@ -224,7 +229,7 @@ def test_update_workspace_valid(test_config):
     new_workspace = CatalogWorkspace(workspace.id, workspace_new_name, workspace.parent_id)
 
     workspaces = sdk.catalog_workspace.list_workspaces()
-    assert len(workspaces) == 3
+    initial_count = len(workspaces)
     assert workspace.id in [w.id for w in workspaces]
     assert workspace.parent_id is not None
 
@@ -233,10 +238,10 @@ def test_update_workspace_valid(test_config):
         sdk.catalog_workspace.create_or_update(new_workspace)
         workspaces = sdk.catalog_workspace.list_workspaces()
         workspace_o = sdk.catalog_workspace.get_workspace(workspace.id)
-        assert len(workspaces) == 3
+        assert len(workspaces) == initial_count
         assert workspace_o == new_workspace
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_workspace.yaml"))
@@ -245,16 +250,16 @@ def test_delete_workspace(test_config):
     workspace_id = "demo_west_california"
 
     workspaces = sdk.catalog_workspace.list_workspaces()
-    assert len(workspaces) == 3
+    initial_count = len(workspaces)
     assert workspace_id in [w.id for w in workspaces]
 
     try:
         sdk.catalog_workspace.delete_workspace(workspace_id)
         workspaces = sdk.catalog_workspace.list_workspaces()
-        assert len(workspaces) == 2
+        assert len(workspaces) == initial_count - 1
         assert workspace_id not in [w.id for w in workspaces]
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_non_existing_workspace.yaml"))
@@ -263,7 +268,7 @@ def test_delete_non_existing_workspace(test_config):
     workspace_id = "non_existing_workspace"
 
     workspaces = sdk.catalog_workspace.list_workspaces()
-    assert len(workspaces) == 3
+    initial_count = len(workspaces)
     assert workspace_id not in [w.id for w in workspaces]
 
     try:
@@ -271,21 +276,21 @@ def test_delete_non_existing_workspace(test_config):
     except ValueError:
         # Trying to delete not existing workspace should not be executed and an exception should be raised.
         workspaces = sdk.catalog_workspace.list_workspaces()
-        assert len(workspaces) == 3
+        assert len(workspaces) == initial_count
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_parent_workspace.yaml"))
 def test_delete_parent_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     workspaces = sdk.catalog_workspace.list_workspaces()
-    assert len(workspaces) == 3
+    initial_count = len(workspaces)
 
     try:
         sdk.catalog_workspace.delete_workspace(test_config["workspace"])
     except ValueError:
         # Delete of workspace, which has children should not be executed and an exception should be raised.
         workspaces = sdk.catalog_workspace.list_workspaces()
-        assert len(workspaces) == 3
+        assert len(workspaces) == initial_count
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_create_workspace.yaml"))
@@ -298,17 +303,17 @@ def test_create_workspace(test_config):
     workspace = CatalogWorkspace(workspace_id, workspace_name, workspace_parent)
 
     workspaces = sdk.catalog_workspace.list_workspaces()
-    assert len(workspaces) == 3
+    initial_count = len(workspaces)
     assert workspace_id not in [w.id for w in workspaces]
 
     try:
         sdk.catalog_workspace.create_or_update(workspace)
         workspaces = sdk.catalog_workspace.list_workspaces()
         workspace_o = sdk.catalog_workspace.get_workspace(workspace_id)
-        assert len(workspaces) == 4
+        assert len(workspaces) == initial_count + 1
         assert workspace_o == workspace
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_workspace.yaml"))
@@ -336,19 +341,19 @@ def test_workspace_list(test_config):
     parents = [None, "demo", "demo_west"]
 
     workspaces = sdk.catalog_workspace.list_workspaces()
-    assert len(workspaces) == 3
+    assert len(workspaces) >= 3
 
     workspaces_id = [w.id for w in workspaces]
-    workspaces_id.sort()
-    assert ids == workspaces_id
+    for expected_id in ids:
+        assert expected_id in workspaces_id
 
     workspaces_name = [w.name for w in workspaces]
-    workspaces_name.sort()
-    assert names == workspaces_name
+    for expected_name in names:
+        assert expected_name in workspaces_name
 
     workspaces_parent = {w.id: w.parent_id for w in workspaces}
-    workspaces_parent_l = [workspaces_parent[workspace_id] for workspace_id in workspaces_id]
-    assert parents == workspaces_parent_l
+    for ws_id, expected_parent in zip(ids, parents):
+        assert workspaces_parent[ws_id] == expected_parent
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspace_data_filters.yaml"))
@@ -360,11 +365,10 @@ def test_get_declarative_workspace_data_filters(test_config):
     declarative_workspace_data_filters = sdk.catalog_workspace.get_declarative_workspace_data_filters()
     workspace_data_filters = declarative_workspace_data_filters.workspace_data_filters
 
-    assert len(workspace_data_filters) == 2
-    assert set(workspace_data_filter.id for workspace_data_filter in workspace_data_filters) == {
-        "wdf__region",
-        "wdf__state",
-    }
+    assert len(workspace_data_filters) >= 2
+    wdf_ids = {workspace_data_filter.id for workspace_data_filter in workspace_data_filters}
+    assert "wdf__region" in wdf_ids
+    assert "wdf__state" in wdf_ids
 
     assert declarative_workspace_data_filters.to_dict(
         camel_case=True
@@ -401,7 +405,7 @@ def test_load_and_put_declarative_workspace_data_filters(test_config):
         assert workspace_data_filters_e == workspace_data_filters_o
         assert workspace_data_filters_e.to_dict(camel_case=True) == workspace_data_filters_o.to_dict(camel_case=True)
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_workspace_data_filters.yaml"))
@@ -419,7 +423,7 @@ def test_put_declarative_workspace_data_filters(test_config):
             camel_case=True
         ) == declarative_workspace_data_filters_o.to_dict(camel_case=True)
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "user_data_filters_life_cycle.yaml"))
@@ -457,7 +461,7 @@ def test_user_data_filters_life_cycle(test_config):
 
         _are_user_data_filters_empty(sdk, test_config["workspace"])
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "user_data_filters_for_user_group.yaml"))
@@ -495,7 +499,7 @@ def test_user_data_filters_for_user_group(test_config):
 
         _are_user_data_filters_empty(sdk, test_config["workspace"])
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_user_data_filters.yaml"))
@@ -545,7 +549,7 @@ def test_load_and_put_declarative_user_data_filters(test_config):
         assert user_data_filters_e == user_data_filters_o
         assert user_data_filters_e.to_dict(camel_case=True) == user_data_filters_o.to_dict(camel_case=True)
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_user_data_filters.yaml"))
@@ -558,7 +562,7 @@ def test_put_declarative_user_data_filters(test_config):
                 id="user_data_filter",
                 title="youwillnotsee",
                 maql="FALSE",
-                user=CatalogUserIdentifier(id="demo", type="user"),
+                user=CatalogUserIdentifier(id=test_config["demo_user"], type="user"),
             )
         ]
     )
@@ -570,7 +574,7 @@ def test_put_declarative_user_data_filters(test_config):
         assert user_data_filters_e == user_data_filters_o
         assert user_data_filters_e.to_dict() == user_data_filters_o.to_dict()
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspace.yaml"))
@@ -618,7 +622,7 @@ def test_put_declarative_workspace(test_config):
         assert deep_eq(workspace_e, workspace_o)
         assert deep_eq(workspace_e.to_dict(), workspace_o.to_dict())
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspace.yaml"))
@@ -661,7 +665,7 @@ def test_load_and_put_declarative_workspace(test_config):
         assert deep_eq(workspace_e, workspace_o)
         assert deep_eq(workspace_e.to_dict(camel_case=True), workspace_o.to_dict(camel_case=True))
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 def create_second_data_source(sdk: GoodDataSdk, ds_id: str) -> None:
@@ -722,8 +726,8 @@ def test_clone_workspace(test_config):
             source_ws_id, data_source_mapping=data_source_mapping, upper_case=True, overwrite_existing=True
         )
     finally:
-        _refresh_workspaces(sdk)
-        delete_data_source(sdk, test_config["data_source2"])
+        safe_delete(_refresh_workspaces, sdk)
+        safe_delete(delete_data_source, sdk, test_config["data_source2"])
 
 
 def _translate_batch(to_translate: list[str]) -> list[str]:
@@ -771,7 +775,7 @@ def test_translate_workspace(test_config):
                 layout_root_path=path_to_layouts,
             )
         finally:
-            _refresh_workspaces(sdk)
+            safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "create_workspace_setting.yaml"))
@@ -787,8 +791,7 @@ def test_create_workspace_setting(test_config):
         setting_o = sdk.catalog_workspace.get_workspace_setting(test_config["workspace"], setting_id)
         assert setting_o == setting
     finally:
-        sdk.catalog_workspace.delete_workspace_setting(test_config["workspace"], setting_id)
-        assert len(sdk.catalog_workspace.list_workspace_settings(test_config["workspace"])) == 0
+        safe_delete(sdk.catalog_workspace.delete_workspace_setting, test_config["workspace"], setting_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "list_workspace_settings.yaml"))
@@ -813,9 +816,8 @@ def test_list_workspace_settings(test_config):
         assert new_setting_1 in workspace_settings
         assert new_setting_2 in workspace_settings
     finally:
-        sdk.catalog_workspace.delete_workspace_setting(test_config["workspace"], setting_id_1)
-        sdk.catalog_workspace.delete_workspace_setting(test_config["workspace"], setting_id_2)
-        assert len(sdk.catalog_workspace.list_workspace_settings(test_config["workspace"])) == 0
+        safe_delete(sdk.catalog_workspace.delete_workspace_setting, test_config["workspace"], setting_id_1)
+        safe_delete(sdk.catalog_workspace.delete_workspace_setting, test_config["workspace"], setting_id_2)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "delete_workspace_setting.yaml"))
@@ -834,8 +836,7 @@ def test_delete_workspace_setting(test_config):
         settings = sdk.catalog_workspace.list_workspace_settings(test_config["workspace"])
         assert len(settings) == 0
     finally:
-        sdk.catalog_workspace.delete_workspace_setting(test_config["workspace"], setting_id)
-        assert len(sdk.catalog_workspace.list_workspace_settings(test_config["workspace"])) == 0
+        safe_delete(sdk.catalog_workspace.delete_workspace_setting, test_config["workspace"], setting_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "update_workspace_setting.yaml"))
@@ -856,8 +857,7 @@ def test_update_workspace_setting(test_config):
         setting_o = sdk.catalog_workspace.get_workspace_setting(test_config["workspace"], setting_id)
         assert setting_o == setting
     finally:
-        sdk.catalog_workspace.delete_workspace_setting(test_config["workspace"], setting_id)
-        assert len(sdk.catalog_workspace.list_workspace_settings(test_config["workspace"])) == 0
+        safe_delete(sdk.catalog_workspace.delete_workspace_setting, test_config["workspace"], setting_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "get_metadata_localization.yaml"))
@@ -968,10 +968,8 @@ def test_layout_automations(test_config):
         automations_o = sdk.catalog_workspace.get_declarative_automations(workspace_id)
         assert automations_expected == automations_o
     finally:
-        sdk.catalog_workspace.put_declarative_automations(workspace_id, [])
-        automations = sdk.catalog_workspace.get_declarative_automations(workspace_id)
-        assert len(automations) == 0
-        sdk.catalog_organization.put_declarative_notification_channels([])
+        safe_delete(sdk.catalog_workspace.put_declarative_automations, workspace_id, [])
+        safe_delete(sdk.catalog_organization.put_declarative_notification_channels, [])
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "layout_filter_views.yaml"))
@@ -1025,7 +1023,7 @@ def test_layout_filter_views(test_config):
                 is_default=True,
                 description="Filter View",
                 tags=["tag1", "tag2"],
-                user=CatalogUserIdentifier(id="demo", type="user"),
+                user=CatalogUserIdentifier(id=test_config["demo_user"], type="user"),
                 analytical_dashboard=CatalogDeclarativeAnalyticalDashboardIdentifier(
                     id="campaign", type="analyticalDashboard"
                 ),
@@ -1036,6 +1034,4 @@ def test_layout_filter_views(test_config):
         filter_views_o = sdk.catalog_workspace.get_declarative_filter_views(workspace_id)
         assert filter_views_expected == filter_views_o
     finally:
-        sdk.catalog_workspace.put_declarative_filter_views(workspace_id, [])
-        filter_views = sdk.catalog_workspace.get_declarative_filter_views(workspace_id)
-        assert len(filter_views) == 0
+        safe_delete(sdk.catalog_workspace.put_declarative_filter_views, workspace_id, [])

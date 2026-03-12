@@ -29,6 +29,7 @@ from gooddata_sdk.utils import recreate_directory
 from tests_support.compare_utils import deep_eq
 from tests_support.vcrpy_utils import get_vcr
 
+from tests.catalog.conftest import safe_delete
 from tests.catalog.utils import _refresh_workspaces
 
 gd_vcr = get_vcr()
@@ -114,7 +115,7 @@ def test_load_and_put_declarative_ldm(test_config):
         assert deep_eq(ldm_e, ldm_o)
         assert deep_eq(ldm_e.to_api().to_dict(), ldm_o.to_api().to_dict())
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_modify_ds_and_put_declarative_ldm.yaml"))
@@ -149,7 +150,7 @@ def test_load_and_modify_ds_and_put_declarative_ldm(test_config):
         ds_o = list(set([d.data_source_table_id.data_source_id for d in ldm_o.ldm.datasets if d.data_source_table_id]))
         assert ds_o == [test_config["data_source"]]
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_ldm_and_modify_tables_columns_case.yaml"))
@@ -218,7 +219,7 @@ def test_load_and_put_declarative_analytics_model(test_config):
         assert deep_eq(analytics_model_e, analytics_model_o)
         assert deep_eq(analytics_model_e.to_api().to_dict(), analytics_model_o.to_api().to_dict())
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_analytics_model.yaml"))
@@ -235,7 +236,7 @@ def test_put_declarative_analytics_model(test_config):
         assert deep_eq(analytics_model_e, analytics_model_o)
         assert deep_eq(analytics_model_e.to_api().to_dict(), analytics_model_o.to_api().to_dict())
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_ldm.yaml"))
@@ -254,7 +255,7 @@ def test_put_declarative_ldm(test_config):
         assert deep_eq(ldm_e, ldm_o)
         assert deep_eq(ldm_e.to_api().to_dict(), ldm_o.to_api().to_dict())
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_analytics_model.yaml"))
@@ -477,7 +478,7 @@ def test_explicit_workspace_data_filter(test_config):
         )
         assert len(dataset.workspace_data_filter_references) == 1
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "export_definition_analytics_layout.yaml"))
@@ -500,4 +501,4 @@ def test_export_definition_analytics_layout(test_config):
         )
         assert deep_eq(analytics_o.analytics.export_definitions, analytics_e.analytics.export_definitions)
     finally:
-        _refresh_workspaces(sdk)
+        safe_delete(_refresh_workspaces, sdk)

@@ -146,14 +146,12 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 146642f7681b6421598e6253cb99c391
+          traceId: 6cda07ef0d4e7e33ec29b64fb8987ac5
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/entities/organizationSettings?page=0&size=500
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/organizationSettings/test_setting
       body: null
       headers:
-        Accept:
-          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -162,15 +160,13 @@ interactions:
           - XMLHttpRequest
     response:
       status:
-        code: 200
-        message: OK
+        code: 204
+        message: No Content
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '189'
         Content-Type:
-          - application/json
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -188,54 +184,4 @@ interactions:
         X-Xss-Protection:
           - '0'
       body:
-        string:
-          data: []
-          links:
-            self: http://localhost:3000/api/v1/entities/organizationSettings?page=0&size=500
-            next: http://localhost:3000/api/v1/entities/organizationSettings?page=1&size=500
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/entities/organizationSettings?page=0&size=500
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '189'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
-      body:
-        string:
-          data: []
-          links:
-            self: http://localhost:3000/api/v1/entities/organizationSettings?page=0&size=500
-            next: http://localhost:3000/api/v1/entities/organizationSettings?page=1&size=500
+        string: ''

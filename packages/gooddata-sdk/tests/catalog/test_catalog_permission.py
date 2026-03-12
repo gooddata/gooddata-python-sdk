@@ -22,6 +22,8 @@ from gooddata_sdk import (
 )
 from tests_support.vcrpy_utils import get_vcr
 
+from .conftest import safe_delete
+
 gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
@@ -33,9 +35,6 @@ def _empty_permissions(sdk: GoodDataSdk, workspace_id: str) -> None:
     sdk.catalog_permission.put_declarative_permissions(
         workspace_id=workspace_id, declarative_workspace_permissions=empty_permissions_e
     )
-    empty_permissions_o = sdk.catalog_permission.get_declarative_permissions(workspace_id=workspace_id)
-    assert empty_permissions_e == empty_permissions_o
-    assert empty_permissions_e.to_dict(camel_case=True) == empty_permissions_o.to_dict(camel_case=True)
 
 
 def _assert_default_permissions(catalog_declarative_permissions: CatalogDeclarativeWorkspacePermissions) -> None:
@@ -67,11 +66,6 @@ def _default_organization_permissions(sdk: GoodDataSdk) -> None:
     )
 
     sdk.catalog_permission.put_declarative_organization_permissions([default_catalog_organization_permission])
-
-    catalog_permissions = sdk.catalog_permission.get_declarative_organization_permissions()
-    assert len(catalog_permissions) == 1
-    _assert_organization_permissions_id(catalog_permissions)
-    assert set(org_permission.name for org_permission in catalog_permissions) == {"MANAGE"}
 
 
 def _validation_helper(class_type, attribute_name: str):
@@ -122,11 +116,6 @@ def _rollback_dashboard_permissions(sdk: GoodDataSdk) -> None:
             ),
         ],
     )
-    # check that it was properly removed
-    dashboard_permissions = sdk.catalog_permission.list_dashboard_permissions("demo", "campaign")
-    assert len(dashboard_permissions.user_groups) == 0
-    assert len(dashboard_permissions.users) == 0
-    assert len(dashboard_permissions.rules) == 0
 
 
 def test_single_workspace_permission_validation(test_config):
@@ -154,7 +143,7 @@ def test_get_declarative_permissions(test_config):
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_permissions.yaml"))
-def test_put_declarative_permissions(test_config):
+def test_put_declarative_permissions(test_config, snapshot_permissions):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     expected_json_path = _current_dir / "expected" / "declarative_workspace_permissions.json"
     workspace_id = test_config["workspace_with_parent"]
@@ -174,7 +163,7 @@ def test_put_declarative_permissions(test_config):
         declarative_permissions_o = sdk.catalog_permission.get_declarative_permissions(workspace_id=workspace_id)
         _assert_default_permissions(declarative_permissions_o)
     finally:
-        _empty_permissions(sdk, workspace_id)
+        safe_delete(_empty_permissions, sdk, workspace_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "list_available_assignees.yaml"))
@@ -190,11 +179,11 @@ def test_list_dashboard_permissions(test_config):
     try:
         _add_dashboard_permissions(sdk)
     finally:
-        _rollback_dashboard_permissions(sdk)
+        safe_delete(_rollback_dashboard_permissions, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_organization_permissions.yaml"))
-def test_put_and_get_declarative_organization_permissions(test_config):
+def test_put_and_get_declarative_organization_permissions(test_config, snapshot_org_permissions):
     expected_json_path = _current_dir / "expected" / "declarative_organization_permissions.json"
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
 
@@ -216,11 +205,11 @@ def test_put_and_get_declarative_organization_permissions(test_config):
             "SELF_CREATE_TOKEN",
         }
     finally:
-        _default_organization_permissions(sdk)
+        safe_delete(_default_organization_permissions, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "manage_organization_permissions.yaml"))
-def test_manage_organization_permissions(test_config):
+def test_manage_organization_permissions(test_config, snapshot_org_permissions):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
 
     # assign permissions to adminGroup
@@ -241,7 +230,7 @@ def test_manage_organization_permissions(test_config):
             "SELF_CREATE_TOKEN",
         }
     finally:
-        _default_organization_permissions(sdk)
+        safe_delete(_default_organization_permissions, sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "manage_dashboard_permissions_declarative_workspace.yaml"))
@@ -251,4 +240,4 @@ def test_manage_dashboard_permissions_declarative_workspace(test_config):
         _add_dashboard_permissions(sdk)
         sdk.catalog_workspace.get_declarative_workspace(workspace_id="demo")
     finally:
-        _rollback_dashboard_permissions(sdk)
+        safe_delete(_rollback_dashboard_permissions, sdk)

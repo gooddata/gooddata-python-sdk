@@ -6,7 +6,7 @@ Configuration for Azure Foundry provider.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **auth** | [**AzureFoundryProviderAuth**](AzureFoundryProviderAuth.md) |  | 
-**endpoint** | **str** | Azure AI inference endpoint URL. | 
+**endpoint** | **str** | Azure OpenAI endpoint URL. | 
 **type** | **str** | Provider type. | defaults to "AZURE_FOUNDRY"
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

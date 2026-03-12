@@ -60,6 +60,12 @@ class Settings(ModelNormal):
     """
 
     allowed_values = {
+        ('grand_totals_position',): {
+            'PINNEDBOTTOM': "pinnedBottom",
+            'PINNEDTOP': "pinnedTop",
+            'BOTTOM': "bottom",
+            'TOP': "top",
+        },
         ('page_orientation',): {
             'PORTRAIT': "PORTRAIT",
             'LANDSCAPE': "LANDSCAPE",
@@ -106,6 +112,7 @@ class Settings(ModelNormal):
         return {
             'delimiter': (str,),  # noqa: E501
             'export_info': (bool,),  # noqa: E501
+            'grand_totals_position': (str,),  # noqa: E501
             'merge_headers': (bool,),  # noqa: E501
             'page_orientation': (str,),  # noqa: E501
             'page_size': (str,),  # noqa: E501
@@ -124,6 +131,7 @@ class Settings(ModelNormal):
     attribute_map = {
         'delimiter': 'delimiter',  # noqa: E501
         'export_info': 'exportInfo',  # noqa: E501
+        'grand_totals_position': 'grandTotalsPosition',  # noqa: E501
         'merge_headers': 'mergeHeaders',  # noqa: E501
         'page_orientation': 'pageOrientation',  # noqa: E501
         'page_size': 'pageSize',  # noqa: E501
@@ -177,6 +185,7 @@ class Settings(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             delimiter (str): Set column delimiter. (CSV). [optional]  # noqa: E501
             export_info (bool): If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF). [optional] if omitted the server will use the default value of False  # noqa: E501
+            grand_totals_position (str): Grand totals position. Takes precedence over position specified in visualization.. [optional]  # noqa: E501
             merge_headers (bool): Merge equal headers in neighbouring cells. (XLSX). [optional]  # noqa: E501
             page_orientation (str): Set page orientation. (PDF). [optional] if omitted the server will use the default value of "PORTRAIT"  # noqa: E501
             page_size (str): Set page size. (PDF). [optional] if omitted the server will use the default value of "A4"  # noqa: E501
@@ -272,6 +281,7 @@ class Settings(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             delimiter (str): Set column delimiter. (CSV). [optional]  # noqa: E501
             export_info (bool): If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF). [optional] if omitted the server will use the default value of False  # noqa: E501
+            grand_totals_position (str): Grand totals position. Takes precedence over position specified in visualization.. [optional]  # noqa: E501
             merge_headers (bool): Merge equal headers in neighbouring cells. (XLSX). [optional]  # noqa: E501
             page_orientation (str): Set page orientation. (PDF). [optional] if omitted the server will use the default value of "PORTRAIT"  # noqa: E501
             page_size (str): Set page size. (PDF). [optional] if omitted the server will use the default value of "A4"  # noqa: E501

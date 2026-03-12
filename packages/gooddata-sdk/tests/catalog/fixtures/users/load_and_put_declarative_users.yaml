@@ -51,7 +51,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQyMjUyMzlmOS02NzliLTQ2ODUtYjg1ZS1lYjlhYTk4OWY2YzISBWxvY2Fs
+            - authId: CiQ0NGY5Y2QxNy1hYmYzLTRhZjctOGVhMi0wOGI0MTVkOWU0NDMSBWxvY2Fs
               email: demo@example.com
               firstname: Demo
               id: demo
@@ -61,7 +61,7 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQwZjI2YzVkMS0zZDhlLTQ0N2ItYWJkNS1kNzE2NjRmODQxYzMSBWxvY2Fs
+            - authId: CiQyZjk1MDEzYS1kY2FjLTQwMjgtYTM0Ny1iOGYyNjNhOGI2MzMSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -122,7 +122,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQyMjUyMzlmOS02NzliLTQ2ODUtYjg1ZS1lYjlhYTk4OWY2YzISBWxvY2Fs
+                authenticationId: CiQ0NGY5Y2QxNy1hYmYzLTRhZjctOGVhMi0wOGI0MTVkOWU0NDMSBWxvY2Fs
                 firstname: Demo
                 lastname: User
                 email: demo@example.com
@@ -136,7 +136,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQwZjI2YzVkMS0zZDhlLTQ0N2ItYWJkNS1kNzE2NjRmODQxYzMSBWxvY2Fs
+                authenticationId: CiQyZjk1MDEzYS1kY2FjLTQwMjgtYTM0Ny1iOGYyNjNhOGI2MzMSBWxvY2Fs
               id: demo2
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2
@@ -399,14 +399,14 @@ interactions:
             email: demo@example.com
             firstname: Demo
             lastname: User
-            authId: CiQyMjUyMzlmOS02NzliLTQ2ODUtYjg1ZS1lYjlhYTk4OWY2YzISBWxvY2Fs
+            authId: CiQ0NGY5Y2QxNy1hYmYzLTRhZjctOGVhMi0wOGI0MTVkOWU0NDMSBWxvY2Fs
             userGroups:
               - id: adminGroup
                 type: userGroup
             settings: []
             permissions: []
           - id: demo2
-            authId: CiQwZjI2YzVkMS0zZDhlLTQ0N2ItYWJkNS1kNzE2NjRmODQxYzMSBWxvY2Fs
+            authId: CiQyZjk1MDEzYS1kY2FjLTQwMjgtYTM0Ny1iOGYyNjNhOGI2MzMSBWxvY2Fs
             userGroups:
               - id: demoGroup
                 type: userGroup

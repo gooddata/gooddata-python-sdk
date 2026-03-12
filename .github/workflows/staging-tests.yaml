@@ -1,0 +1,76 @@
+name: Staging tests
+
+on:
+  pull_request:
+    types: [labeled]
+    branches:
+      - master
+      - 'rel/**'
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      test_envs:
+        description: 'Tox test environments to run (e.g. py312)'
+        required: false
+        default: 'py314'
+      test_filter:
+        description: 'Pytest filter expression (-k flag)'
+        required: false
+        default: ''
+
+concurrency:
+  group: staging-tests
+  cancel-in-progress: false
+
+jobs:
+  staging-tests:
+    name: Staging tests
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && github.event.label.name == 'test-staging') ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '/test-staging'))
+    runs-on:
+      group: infra1-runners-arc
+      labels: runners-small
+    steps:
+      - name: Get PR head SHA (comment trigger)
+        if: github.event_name == 'issue_comment'
+        id: pr
+        run: |
+          PR_DATA=$(gh api repos/${{ github.repository }}/pulls/${{ github.event.issue.number }})
+          echo "sha=$(echo "$PR_DATA" | jq -r .head.sha)" >> "$GITHUB_OUTPUT"
+          echo "ref=$(echo "$PR_DATA" | jq -r .head.ref)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pr.outputs.sha || github.event.pull_request.head.sha || github.sha }}
+
+      - name: Set up Python
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.14'
+
+      - name: Install dependencies
+        run: uv sync --group test --locked
+
+      - name: Clean staging environment
+        run: make clean-staging
+        env:
+          TOKEN: ${{ secrets.PYTHON_SDK_STG_API_KEY }}
+
+      - name: Load staging environment
+        run: make load-staging
+        env:
+          TOKEN: ${{ secrets.PYTHON_SDK_STG_API_KEY }}
+
+      - name: Run staging tests
+        run: |
+          make test-staging \
+            TEST_ENVS=${{ github.event.inputs.test_envs || 'py314' }} \
+            ADD_ARGS="${{ github.event.inputs.test_filter && format('-k {0}', github.event.inputs.test_filter) || '' }}"
+        env:
+          TOKEN: ${{ secrets.PYTHON_SDK_STG_API_KEY }}

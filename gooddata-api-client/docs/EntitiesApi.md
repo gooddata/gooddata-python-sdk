@@ -11,7 +11,7 @@ Method | HTTP request | Description
 [**create_entity_color_palettes**](EntitiesApi.md#create_entity_color_palettes) | **POST** /api/v1/entities/colorPalettes | Post Color Pallettes
 [**create_entity_csp_directives**](EntitiesApi.md#create_entity_csp_directives) | **POST** /api/v1/entities/cspDirectives | Post CSP Directives
 [**create_entity_custom_application_settings**](EntitiesApi.md#create_entity_custom_application_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | Post Custom Application Settings
-[**create_entity_custom_geo_collections**](EntitiesApi.md#create_entity_custom_geo_collections) | **POST** /api/v1/entities/customGeoCollections | 
+[**create_entity_custom_geo_collections**](EntitiesApi.md#create_entity_custom_geo_collections) | **POST** /api/v1/entities/customGeoCollections | Post Custom Geo Collections
 [**create_entity_dashboard_plugins**](EntitiesApi.md#create_entity_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | Post Plugins
 [**create_entity_data_sources**](EntitiesApi.md#create_entity_data_sources) | **POST** /api/v1/entities/dataSources | Post Data Sources
 [**create_entity_export_definitions**](EntitiesApi.md#create_entity_export_definitions) | **POST** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | Post Export Definitions
@@ -44,7 +44,7 @@ Method | HTTP request | Description
 [**delete_entity_color_palettes**](EntitiesApi.md#delete_entity_color_palettes) | **DELETE** /api/v1/entities/colorPalettes/{id} | Delete a Color Pallette
 [**delete_entity_csp_directives**](EntitiesApi.md#delete_entity_csp_directives) | **DELETE** /api/v1/entities/cspDirectives/{id} | Delete CSP Directives
 [**delete_entity_custom_application_settings**](EntitiesApi.md#delete_entity_custom_application_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Delete a Custom Application Setting
-[**delete_entity_custom_geo_collections**](EntitiesApi.md#delete_entity_custom_geo_collections) | **DELETE** /api/v1/entities/customGeoCollections/{id} | 
+[**delete_entity_custom_geo_collections**](EntitiesApi.md#delete_entity_custom_geo_collections) | **DELETE** /api/v1/entities/customGeoCollections/{id} | Delete Custom Geo Collection
 [**delete_entity_dashboard_plugins**](EntitiesApi.md#delete_entity_dashboard_plugins) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Delete a Plugin
 [**delete_entity_data_sources**](EntitiesApi.md#delete_entity_data_sources) | **DELETE** /api/v1/entities/dataSources/{id} | Delete Data Source entity
 [**delete_entity_export_definitions**](EntitiesApi.md#delete_entity_export_definitions) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Delete an Export Definition
@@ -80,7 +80,7 @@ Method | HTTP request | Description
 [**get_all_entities_color_palettes**](EntitiesApi.md#get_all_entities_color_palettes) | **GET** /api/v1/entities/colorPalettes | Get all Color Pallettes
 [**get_all_entities_csp_directives**](EntitiesApi.md#get_all_entities_csp_directives) | **GET** /api/v1/entities/cspDirectives | Get CSP Directives
 [**get_all_entities_custom_application_settings**](EntitiesApi.md#get_all_entities_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | Get all Custom Application Settings
-[**get_all_entities_custom_geo_collections**](EntitiesApi.md#get_all_entities_custom_geo_collections) | **GET** /api/v1/entities/customGeoCollections | 
+[**get_all_entities_custom_geo_collections**](EntitiesApi.md#get_all_entities_custom_geo_collections) | **GET** /api/v1/entities/customGeoCollections | Get all Custom Geo Collections
 [**get_all_entities_dashboard_plugins**](EntitiesApi.md#get_all_entities_dashboard_plugins) | **GET** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | Get all Plugins
 [**get_all_entities_data_source_identifiers**](EntitiesApi.md#get_all_entities_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers | Get all Data Source Identifiers
 [**get_all_entities_data_sources**](EntitiesApi.md#get_all_entities_data_sources) | **GET** /api/v1/entities/dataSources | Get Data Source entities
@@ -125,7 +125,7 @@ Method | HTTP request | Description
 [**get_entity_cookie_security_configurations**](EntitiesApi.md#get_entity_cookie_security_configurations) | **GET** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Get CookieSecurityConfiguration
 [**get_entity_csp_directives**](EntitiesApi.md#get_entity_csp_directives) | **GET** /api/v1/entities/cspDirectives/{id} | Get CSP Directives
 [**get_entity_custom_application_settings**](EntitiesApi.md#get_entity_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Get a Custom Application Setting
-[**get_entity_custom_geo_collections**](EntitiesApi.md#get_entity_custom_geo_collections) | **GET** /api/v1/entities/customGeoCollections/{id} | 
+[**get_entity_custom_geo_collections**](EntitiesApi.md#get_entity_custom_geo_collections) | **GET** /api/v1/entities/customGeoCollections/{id} | Get Custom Geo Collection
 [**get_entity_dashboard_plugins**](EntitiesApi.md#get_entity_dashboard_plugins) | **GET** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Get a Plugin
 [**get_entity_data_source_identifiers**](EntitiesApi.md#get_entity_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers/{id} | Get Data Source Identifier
 [**get_entity_data_sources**](EntitiesApi.md#get_entity_data_sources) | **GET** /api/v1/entities/dataSources/{id} | Get Data Source entity
@@ -168,7 +168,7 @@ Method | HTTP request | Description
 [**patch_entity_cookie_security_configurations**](EntitiesApi.md#patch_entity_cookie_security_configurations) | **PATCH** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Patch CookieSecurityConfiguration
 [**patch_entity_csp_directives**](EntitiesApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | Patch CSP Directives
 [**patch_entity_custom_application_settings**](EntitiesApi.md#patch_entity_custom_application_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Patch a Custom Application Setting
-[**patch_entity_custom_geo_collections**](EntitiesApi.md#patch_entity_custom_geo_collections) | **PATCH** /api/v1/entities/customGeoCollections/{id} | 
+[**patch_entity_custom_geo_collections**](EntitiesApi.md#patch_entity_custom_geo_collections) | **PATCH** /api/v1/entities/customGeoCollections/{id} | Patch Custom Geo Collection
 [**patch_entity_dashboard_plugins**](EntitiesApi.md#patch_entity_dashboard_plugins) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Patch a Plugin
 [**patch_entity_data_sources**](EntitiesApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | Patch Data Source entity
 [**patch_entity_datasets**](EntitiesApi.md#patch_entity_datasets) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Patch a Dataset (beta)
@@ -198,27 +198,27 @@ Method | HTTP request | Description
 [**patch_entity_workspace_settings**](EntitiesApi.md#patch_entity_workspace_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Patch a Setting for Workspace
 [**patch_entity_workspaces**](EntitiesApi.md#patch_entity_workspaces) | **PATCH** /api/v1/entities/workspaces/{id} | Patch Workspace entity
 [**search_entities_aggregated_facts**](EntitiesApi.md#search_entities_aggregated_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/search | Search request for AggregatedFact
-[**search_entities_analytical_dashboards**](EntitiesApi.md#search_entities_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/search | Search request for AnalyticalDashboard
-[**search_entities_attribute_hierarchies**](EntitiesApi.md#search_entities_attribute_hierarchies) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/search | Search request for AttributeHierarchy
-[**search_entities_attributes**](EntitiesApi.md#search_entities_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributes/search | Search request for Attribute
+[**search_entities_analytical_dashboards**](EntitiesApi.md#search_entities_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/search | The search endpoint (beta)
+[**search_entities_attribute_hierarchies**](EntitiesApi.md#search_entities_attribute_hierarchies) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/search | The search endpoint (beta)
+[**search_entities_attributes**](EntitiesApi.md#search_entities_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributes/search | The search endpoint (beta)
 [**search_entities_automation_results**](EntitiesApi.md#search_entities_automation_results) | **POST** /api/v1/entities/workspaces/{workspaceId}/automationResults/search | Search request for AutomationResult
-[**search_entities_automations**](EntitiesApi.md#search_entities_automations) | **POST** /api/v1/entities/workspaces/{workspaceId}/automations/search | Search request for Automation
-[**search_entities_custom_application_settings**](EntitiesApi.md#search_entities_custom_application_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/search | Search request for CustomApplicationSetting
-[**search_entities_dashboard_plugins**](EntitiesApi.md#search_entities_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/search | Search request for DashboardPlugin
-[**search_entities_datasets**](EntitiesApi.md#search_entities_datasets) | **POST** /api/v1/entities/workspaces/{workspaceId}/datasets/search | Search request for Dataset
-[**search_entities_export_definitions**](EntitiesApi.md#search_entities_export_definitions) | **POST** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/search | Search request for ExportDefinition
-[**search_entities_facts**](EntitiesApi.md#search_entities_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/facts/search | Search request for Fact
-[**search_entities_filter_contexts**](EntitiesApi.md#search_entities_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts/search | Search request for FilterContext
-[**search_entities_filter_views**](EntitiesApi.md#search_entities_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews/search | Search request for FilterView
-[**search_entities_knowledge_recommendations**](EntitiesApi.md#search_entities_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/search | 
-[**search_entities_labels**](EntitiesApi.md#search_entities_labels) | **POST** /api/v1/entities/workspaces/{workspaceId}/labels/search | Search request for Label
+[**search_entities_automations**](EntitiesApi.md#search_entities_automations) | **POST** /api/v1/entities/workspaces/{workspaceId}/automations/search | The search endpoint (beta)
+[**search_entities_custom_application_settings**](EntitiesApi.md#search_entities_custom_application_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/search | The search endpoint (beta)
+[**search_entities_dashboard_plugins**](EntitiesApi.md#search_entities_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/search | The search endpoint (beta)
+[**search_entities_datasets**](EntitiesApi.md#search_entities_datasets) | **POST** /api/v1/entities/workspaces/{workspaceId}/datasets/search | The search endpoint (beta)
+[**search_entities_export_definitions**](EntitiesApi.md#search_entities_export_definitions) | **POST** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/search | The search endpoint (beta)
+[**search_entities_facts**](EntitiesApi.md#search_entities_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/facts/search | The search endpoint (beta)
+[**search_entities_filter_contexts**](EntitiesApi.md#search_entities_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts/search | The search endpoint (beta)
+[**search_entities_filter_views**](EntitiesApi.md#search_entities_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews/search | The search endpoint (beta)
+[**search_entities_knowledge_recommendations**](EntitiesApi.md#search_entities_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/search | The search endpoint (beta)
+[**search_entities_labels**](EntitiesApi.md#search_entities_labels) | **POST** /api/v1/entities/workspaces/{workspaceId}/labels/search | The search endpoint (beta)
 [**search_entities_memory_items**](EntitiesApi.md#search_entities_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems/search | Search request for MemoryItem
-[**search_entities_metrics**](EntitiesApi.md#search_entities_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics/search | Search request for Metric
-[**search_entities_user_data_filters**](EntitiesApi.md#search_entities_user_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/search | Search request for UserDataFilter
-[**search_entities_visualization_objects**](EntitiesApi.md#search_entities_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/search | Search request for VisualizationObject
-[**search_entities_workspace_data_filter_settings**](EntitiesApi.md#search_entities_workspace_data_filter_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/search | Search request for WorkspaceDataFilterSetting
-[**search_entities_workspace_data_filters**](EntitiesApi.md#search_entities_workspace_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/search | Search request for WorkspaceDataFilter
-[**search_entities_workspace_settings**](EntitiesApi.md#search_entities_workspace_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/search | 
+[**search_entities_metrics**](EntitiesApi.md#search_entities_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics/search | The search endpoint (beta)
+[**search_entities_user_data_filters**](EntitiesApi.md#search_entities_user_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/search | The search endpoint (beta)
+[**search_entities_visualization_objects**](EntitiesApi.md#search_entities_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/search | The search endpoint (beta)
+[**search_entities_workspace_data_filter_settings**](EntitiesApi.md#search_entities_workspace_data_filter_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/search | The search endpoint (beta)
+[**search_entities_workspace_data_filters**](EntitiesApi.md#search_entities_workspace_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/search | The search endpoint (beta)
+[**search_entities_workspace_settings**](EntitiesApi.md#search_entities_workspace_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/search | The search endpoint (beta)
 [**update_entity_analytical_dashboards**](EntitiesApi.md#update_entity_analytical_dashboards) | **PUT** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Put Dashboards
 [**update_entity_attribute_hierarchies**](EntitiesApi.md#update_entity_attribute_hierarchies) | **PUT** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Put an Attribute Hierarchy
 [**update_entity_automations**](EntitiesApi.md#update_entity_automations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Put an Automation
@@ -226,7 +226,7 @@ Method | HTTP request | Description
 [**update_entity_cookie_security_configurations**](EntitiesApi.md#update_entity_cookie_security_configurations) | **PUT** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Put CookieSecurityConfiguration
 [**update_entity_csp_directives**](EntitiesApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | Put CSP Directives
 [**update_entity_custom_application_settings**](EntitiesApi.md#update_entity_custom_application_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Put a Custom Application Setting
-[**update_entity_custom_geo_collections**](EntitiesApi.md#update_entity_custom_geo_collections) | **PUT** /api/v1/entities/customGeoCollections/{id} | 
+[**update_entity_custom_geo_collections**](EntitiesApi.md#update_entity_custom_geo_collections) | **PUT** /api/v1/entities/customGeoCollections/{id} | Put Custom Geo Collection
 [**update_entity_dashboard_plugins**](EntitiesApi.md#update_entity_dashboard_plugins) | **PUT** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Put a Plugin
 [**update_entity_data_sources**](EntitiesApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | Put Data Source entity
 [**update_entity_export_definitions**](EntitiesApi.md#update_entity_export_definitions) | **PUT** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Put an Export Definition
@@ -757,6 +757,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             settings=Settings(
                                 delimiter="U",
                                 export_info=True,
+                                grand_totals_position="pinnedBottom",
                                 merge_headers=True,
                                 page_orientation="PORTRAIT",
                                 page_size="A4",
@@ -1128,7 +1129,7 @@ No authorization required
 # **create_entity_custom_geo_collections**
 > JsonApiCustomGeoCollectionOutDocument create_entity_custom_geo_collections(json_api_custom_geo_collection_in_document)
 
-
+Post Custom Geo Collections
 
 ### Example
 
@@ -1164,6 +1165,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post Custom Geo Collections
         api_response = api_instance.create_entity_custom_geo_collections(json_api_custom_geo_collection_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -4160,7 +4162,7 @@ No authorization required
 # **delete_entity_custom_geo_collections**
 > delete_entity_custom_geo_collections(id)
 
-
+Delete Custom Geo Collection
 
 ### Example
 
@@ -4186,6 +4188,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete Custom Geo Collection
         api_instance.delete_entity_custom_geo_collections(id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_custom_geo_collections: %s\n" % e)
@@ -4193,6 +4196,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete Custom Geo Collection
         api_instance.delete_entity_custom_geo_collections(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_custom_geo_collections: %s\n" % e)
@@ -6984,7 +6988,7 @@ No authorization required
 # **get_all_entities_custom_geo_collections**
 > JsonApiCustomGeoCollectionOutList get_all_entities_custom_geo_collections()
 
-
+Get all Custom Geo Collections
 
 ### Example
 
@@ -7019,6 +7023,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Custom Geo Collections
         api_response = api_instance.get_all_entities_custom_geo_collections(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -10808,7 +10813,7 @@ No authorization required
 # **get_entity_custom_geo_collections**
 > JsonApiCustomGeoCollectionOutDocument get_entity_custom_geo_collections(id)
 
-
+Get Custom Geo Collection
 
 ### Example
 
@@ -10835,6 +10840,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get Custom Geo Collection
         api_response = api_instance.get_entity_custom_geo_collections(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -10843,6 +10849,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Custom Geo Collection
         api_response = api_instance.get_entity_custom_geo_collections(id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -14201,6 +14208,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             settings=Settings(
                                 delimiter="U",
                                 export_info=True,
+                                grand_totals_position="pinnedBottom",
                                 merge_headers=True,
                                 page_orientation="PORTRAIT",
                                 page_size="A4",
@@ -14685,7 +14693,7 @@ No authorization required
 # **patch_entity_custom_geo_collections**
 > JsonApiCustomGeoCollectionOutDocument patch_entity_custom_geo_collections(id, json_api_custom_geo_collection_patch_document)
 
-
+Patch Custom Geo Collection
 
 ### Example
 
@@ -14723,6 +14731,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch Custom Geo Collection
         api_response = api_instance.patch_entity_custom_geo_collections(id, json_api_custom_geo_collection_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -14731,6 +14740,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch Custom Geo Collection
         api_response = api_instance.patch_entity_custom_geo_collections(id, json_api_custom_geo_collection_patch_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -16163,7 +16173,7 @@ with gooddata_api_client.ApiClient() as api_client:
     id = "/6bUUGjjNSwg0_bs" # str | 
     json_api_llm_provider_patch_document = JsonApiLlmProviderPatchDocument(
         data=JsonApiLlmProviderPatch(
-            attributes=JsonApiLlmProviderPatchAttributes(
+            attributes=JsonApiLlmProviderInAttributes(
                 default_model_id="default_model_id_example",
                 description="description_example",
                 models=[
@@ -17737,7 +17747,7 @@ No authorization required
 # **search_entities_analytical_dashboards**
 > JsonApiAnalyticalDashboardOutList search_entities_analytical_dashboards(workspace_id, entity_search_body)
 
-Search request for AnalyticalDashboard
+The search endpoint (beta)
 
 ### Example
 
@@ -17785,7 +17795,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for AnalyticalDashboard
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_analytical_dashboards(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -17794,7 +17804,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for AnalyticalDashboard
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_analytical_dashboards(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -17836,7 +17846,7 @@ No authorization required
 # **search_entities_attribute_hierarchies**
 > JsonApiAttributeHierarchyOutList search_entities_attribute_hierarchies(workspace_id, entity_search_body)
 
-Search request for AttributeHierarchy
+The search endpoint (beta)
 
 ### Example
 
@@ -17884,7 +17894,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for AttributeHierarchy
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_attribute_hierarchies(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -17893,7 +17903,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for AttributeHierarchy
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_attribute_hierarchies(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -17935,7 +17945,7 @@ No authorization required
 # **search_entities_attributes**
 > JsonApiAttributeOutList search_entities_attributes(workspace_id, entity_search_body)
 
-Search request for Attribute
+The search endpoint (beta)
 
 ### Example
 
@@ -17983,7 +17993,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for Attribute
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_attributes(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -17992,7 +18002,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for Attribute
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_attributes(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18133,7 +18143,7 @@ No authorization required
 # **search_entities_automations**
 > JsonApiAutomationOutList search_entities_automations(workspace_id, entity_search_body)
 
-Search request for Automation
+The search endpoint (beta)
 
 ### Example
 
@@ -18181,7 +18191,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for Automation
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_automations(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18190,7 +18200,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for Automation
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_automations(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18232,7 +18242,7 @@ No authorization required
 # **search_entities_custom_application_settings**
 > JsonApiCustomApplicationSettingOutList search_entities_custom_application_settings(workspace_id, entity_search_body)
 
-Search request for CustomApplicationSetting
+The search endpoint (beta)
 
 ### Example
 
@@ -18280,7 +18290,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for CustomApplicationSetting
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_custom_application_settings(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18289,7 +18299,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for CustomApplicationSetting
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_custom_application_settings(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18331,7 +18341,7 @@ No authorization required
 # **search_entities_dashboard_plugins**
 > JsonApiDashboardPluginOutList search_entities_dashboard_plugins(workspace_id, entity_search_body)
 
-Search request for DashboardPlugin
+The search endpoint (beta)
 
 ### Example
 
@@ -18379,7 +18389,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for DashboardPlugin
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_dashboard_plugins(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18388,7 +18398,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for DashboardPlugin
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_dashboard_plugins(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18430,7 +18440,7 @@ No authorization required
 # **search_entities_datasets**
 > JsonApiDatasetOutList search_entities_datasets(workspace_id, entity_search_body)
 
-Search request for Dataset
+The search endpoint (beta)
 
 ### Example
 
@@ -18478,7 +18488,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for Dataset
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_datasets(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18487,7 +18497,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for Dataset
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_datasets(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18529,7 +18539,7 @@ No authorization required
 # **search_entities_export_definitions**
 > JsonApiExportDefinitionOutList search_entities_export_definitions(workspace_id, entity_search_body)
 
-Search request for ExportDefinition
+The search endpoint (beta)
 
 ### Example
 
@@ -18577,7 +18587,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for ExportDefinition
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_export_definitions(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18586,7 +18596,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for ExportDefinition
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_export_definitions(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18628,7 +18638,7 @@ No authorization required
 # **search_entities_facts**
 > JsonApiFactOutList search_entities_facts(workspace_id, entity_search_body)
 
-Search request for Fact
+The search endpoint (beta)
 
 ### Example
 
@@ -18676,7 +18686,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for Fact
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_facts(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18685,7 +18695,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for Fact
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_facts(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18727,7 +18737,7 @@ No authorization required
 # **search_entities_filter_contexts**
 > JsonApiFilterContextOutList search_entities_filter_contexts(workspace_id, entity_search_body)
 
-Search request for FilterContext
+The search endpoint (beta)
 
 ### Example
 
@@ -18775,7 +18785,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for FilterContext
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_filter_contexts(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18784,7 +18794,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for FilterContext
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_filter_contexts(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18826,7 +18836,7 @@ No authorization required
 # **search_entities_filter_views**
 > JsonApiFilterViewOutList search_entities_filter_views(workspace_id, entity_search_body)
 
-Search request for FilterView
+The search endpoint (beta)
 
 ### Example
 
@@ -18874,7 +18884,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for FilterView
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_filter_views(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18883,7 +18893,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for FilterView
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_filter_views(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18925,7 +18935,7 @@ No authorization required
 # **search_entities_knowledge_recommendations**
 > JsonApiKnowledgeRecommendationOutList search_entities_knowledge_recommendations(workspace_id, entity_search_body)
 
-
+The search endpoint (beta)
 
 ### Example
 
@@ -18973,6 +18983,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_knowledge_recommendations(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18981,6 +18992,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_knowledge_recommendations(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19022,7 +19034,7 @@ No authorization required
 # **search_entities_labels**
 > JsonApiLabelOutList search_entities_labels(workspace_id, entity_search_body)
 
-Search request for Label
+The search endpoint (beta)
 
 ### Example
 
@@ -19070,7 +19082,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for Label
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_labels(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19079,7 +19091,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for Label
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_labels(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19220,7 +19232,7 @@ No authorization required
 # **search_entities_metrics**
 > JsonApiMetricOutList search_entities_metrics(workspace_id, entity_search_body)
 
-Search request for Metric
+The search endpoint (beta)
 
 ### Example
 
@@ -19268,7 +19280,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for Metric
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_metrics(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19277,7 +19289,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for Metric
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_metrics(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19319,7 +19331,7 @@ No authorization required
 # **search_entities_user_data_filters**
 > JsonApiUserDataFilterOutList search_entities_user_data_filters(workspace_id, entity_search_body)
 
-Search request for UserDataFilter
+The search endpoint (beta)
 
 ### Example
 
@@ -19367,7 +19379,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for UserDataFilter
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_user_data_filters(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19376,7 +19388,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for UserDataFilter
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_user_data_filters(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19418,7 +19430,7 @@ No authorization required
 # **search_entities_visualization_objects**
 > JsonApiVisualizationObjectOutList search_entities_visualization_objects(workspace_id, entity_search_body)
 
-Search request for VisualizationObject
+The search endpoint (beta)
 
 ### Example
 
@@ -19466,7 +19478,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for VisualizationObject
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_visualization_objects(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19475,7 +19487,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for VisualizationObject
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_visualization_objects(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19517,7 +19529,7 @@ No authorization required
 # **search_entities_workspace_data_filter_settings**
 > JsonApiWorkspaceDataFilterSettingOutList search_entities_workspace_data_filter_settings(workspace_id, entity_search_body)
 
-Search request for WorkspaceDataFilterSetting
+The search endpoint (beta)
 
 ### Example
 
@@ -19565,7 +19577,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for WorkspaceDataFilterSetting
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_workspace_data_filter_settings(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19574,7 +19586,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for WorkspaceDataFilterSetting
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_workspace_data_filter_settings(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19616,7 +19628,7 @@ No authorization required
 # **search_entities_workspace_data_filters**
 > JsonApiWorkspaceDataFilterOutList search_entities_workspace_data_filters(workspace_id, entity_search_body)
 
-Search request for WorkspaceDataFilter
+The search endpoint (beta)
 
 ### Example
 
@@ -19664,7 +19676,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for WorkspaceDataFilter
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_workspace_data_filters(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19673,7 +19685,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for WorkspaceDataFilter
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_workspace_data_filters(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19715,7 +19727,7 @@ No authorization required
 # **search_entities_workspace_settings**
 > JsonApiWorkspaceSettingOutList search_entities_workspace_settings(workspace_id, entity_search_body)
 
-
+The search endpoint (beta)
 
 ### Example
 
@@ -19763,6 +19775,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_workspace_settings(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19771,6 +19784,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_workspace_settings(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -20239,6 +20253,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             settings=Settings(
                                 delimiter="U",
                                 export_info=True,
+                                grand_totals_position="pinnedBottom",
                                 merge_headers=True,
                                 page_orientation="PORTRAIT",
                                 page_size="A4",
@@ -20723,7 +20738,7 @@ No authorization required
 # **update_entity_custom_geo_collections**
 > JsonApiCustomGeoCollectionOutDocument update_entity_custom_geo_collections(id, json_api_custom_geo_collection_in_document)
 
-
+Put Custom Geo Collection
 
 ### Example
 
@@ -20761,6 +20776,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put Custom Geo Collection
         api_response = api_instance.update_entity_custom_geo_collections(id, json_api_custom_geo_collection_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -20769,6 +20785,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put Custom Geo Collection
         api_response = api_instance.update_entity_custom_geo_collections(id, json_api_custom_geo_collection_in_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

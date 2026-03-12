@@ -96,9 +96,9 @@ class JsonApiLlmProviderOut(ModelNormal):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiLlmProviderInAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'attributes': (JsonApiLlmProviderInAttributes,),  # noqa: E501
         }
 
     @cached_property
@@ -107,9 +107,9 @@ class JsonApiLlmProviderOut(ModelNormal):
 
 
     attribute_map = {
-        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'attributes': 'attributes',  # noqa: E501
     }
 
     read_only_vars = {
@@ -119,11 +119,10 @@ class JsonApiLlmProviderOut(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, attributes, id, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, *args, **kwargs):  # noqa: E501
         """JsonApiLlmProviderOut - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiLlmProviderInAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -158,6 +157,7 @@ class JsonApiLlmProviderOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiLlmProviderInAttributes): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "llmProvider")
@@ -190,7 +190,6 @@ class JsonApiLlmProviderOut(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.attributes = attributes
         self.id = id
         self.type = type
         for var_name, var_value in kwargs.items():
@@ -213,11 +212,10 @@ class JsonApiLlmProviderOut(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, attributes, id, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, *args, **kwargs):  # noqa: E501
         """JsonApiLlmProviderOut - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiLlmProviderInAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -252,6 +250,7 @@ class JsonApiLlmProviderOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiLlmProviderInAttributes): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "llmProvider")
@@ -282,7 +281,6 @@ class JsonApiLlmProviderOut(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.attributes = attributes
         self.id = id
         self.type = type
         for var_name, var_value in kwargs.items():

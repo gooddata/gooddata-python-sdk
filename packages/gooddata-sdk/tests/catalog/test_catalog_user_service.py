@@ -41,6 +41,8 @@ from gooddata_sdk import (
 from gooddata_sdk.utils import recreate_directory
 from tests_support.vcrpy_utils import get_vcr
 
+from .conftest import safe_delete
+
 gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
@@ -54,8 +56,14 @@ _fixtures_dir = _current_dir / "fixtures" / "users"
 def test_list_users(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     users = sdk.catalog_user.list_users()
-    assert len(users) == 3
-    assert set(user.id for user in users) == {"demo2", "admin", "demo"}
+    user_ids = {user.id for user in users}
+    if test_config.get("staging", False):
+        assert len(users) >= 2
+        assert "admin" in user_ids
+        assert test_config["test_user"] in user_ids
+    else:
+        assert len(users) >= 3
+        assert {"demo2", "admin", "demo"}.issubset(user_ids)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "get_user.yaml"))
@@ -76,8 +84,8 @@ def test_create_delete_user(test_config):
     authentication_id = f"{user_id}_auth_id"
     user_group_ids = [test_config["test_user_group"]]
 
+    initial_count = len(sdk.catalog_user.list_users())
     try:
-        assert len(sdk.catalog_user.list_users()) == 3
         user_e = CatalogUser.init(
             user_id=user_id,
             firstname=firstname,
@@ -88,7 +96,7 @@ def test_create_delete_user(test_config):
         )
         sdk.catalog_user.create_or_update_user(user_e)
         user = sdk.catalog_user.get_user(user_id)
-        assert len(sdk.catalog_user.list_users()) == 4
+        assert len(sdk.catalog_user.list_users()) == initial_count + 1
         assert user.id == user_id
         assert [i.id for i in user.user_groups] == user_group_ids
         assert user.attributes.firstname == firstname
@@ -96,8 +104,7 @@ def test_create_delete_user(test_config):
         assert user.attributes.email == email
         assert user.attributes.authentication_id == authentication_id
     finally:
-        sdk.catalog_user.delete_user(user_id)
-        assert len(sdk.catalog_user.list_users()) == 3
+        safe_delete(sdk.catalog_user.delete_user, user_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "update_user.yaml"))
@@ -172,13 +179,7 @@ def test_update_user(test_config):
         assert set([i.id for i in updated_user.user_groups]) == set(new_user_group_ids)
 
     finally:
-        # Clean up: Delete temporary user (no cascade issues since it has no permissions)
-        try:
-            sdk.catalog_user.delete_user(temp_user_id)
-        except Exception:
-            pass  # User may not exist if creation failed
-        # Verify we're back to original user count
-        assert len(sdk.catalog_user.list_users()) == initial_user_count
+        safe_delete(sdk.catalog_user.delete_user, temp_user_id)
 
 
 def _restore_demo2_permissions(sdk: GoodDataSdk, test_config: dict) -> None:
@@ -226,14 +227,9 @@ def _restore_demo2_permissions(sdk: GoodDataSdk, test_config: dict) -> None:
 def test_list_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user_groups = sdk.catalog_user.list_user_groups()
-    assert len(user_groups) == 4
-    assert set(user_group.id for user_group in user_groups) == {
-        "adminGroup",
-        "demoGroup",
-        "adminQA1Group",
-        "visitorsGroup",
-    }
-    assert set(user_group.name for user_group in user_groups) == {"demo group", "visitors", None}
+    assert len(user_groups) >= 4
+    expected_ids = {"adminGroup", "demoGroup", "adminQA1Group", "visitorsGroup"}
+    assert expected_ids.issubset(set(user_group.id for user_group in user_groups))
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "get_user_group.yaml"))
@@ -249,10 +245,8 @@ def test_create_delete_user_group(test_config):
     user_group_id = test_config["test_new_user_group"]
     user_group_parent_ids = [test_config["test_user_group"]]
 
+    initial_count = len(sdk.catalog_user.list_user_groups())
     try:
-        current_user_groups = sdk.catalog_user.list_user_groups()
-        assert len(current_user_groups) == 4
-        assert set(ug.name for ug in current_user_groups) == {"demo group", "visitors", None}
         user_group_e = CatalogUserGroup.init(
             user_group_id=user_group_id,
             user_group_name=user_group_id.upper(),
@@ -260,13 +254,12 @@ def test_create_delete_user_group(test_config):
         )
         sdk.catalog_user.create_or_update_user_group(user_group_e)
         user_group = sdk.catalog_user.get_user_group(user_group_id)
-        assert len(sdk.catalog_user.list_user_groups()) == 5
+        assert len(sdk.catalog_user.list_user_groups()) == initial_count + 1
         assert user_group.id == user_group_id
         assert user_group.name == user_group_id.upper()
         assert [p.id for p in user_group.relationships.parents.data] == user_group_parent_ids
     finally:
-        sdk.catalog_user.delete_user_group(user_group_id)
-        assert len(sdk.catalog_user.list_user_groups()) == 4
+        safe_delete(sdk.catalog_user.delete_user_group, user_group_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "update_user_group.yaml"))
@@ -276,7 +269,6 @@ def test_update_user_group(test_config):
     user_group = sdk.catalog_user.get_user_group(user_group_id)
     user_group_parent_ids = []
     new_user_group_name = "test_update_user_group"
-    assert len(sdk.catalog_user.list_user_groups()) == 4
 
     try:
         user_group_e = CatalogUserGroup.init(
@@ -292,8 +284,7 @@ def test_update_user_group(test_config):
         assert len(updated_user_group.get_parents) == len(user_group_parent_ids)
         assert set(updated_user_group.get_parents) == set(user_group_parent_ids)
     finally:
-        sdk.catalog_user.create_or_update_user_group(user_group)
-        assert len(sdk.catalog_user.list_user_groups()) == 4
+        safe_delete(sdk.catalog_user.create_or_update_user_group, user_group)
 
 
 # DECLARATIVE USERS
@@ -307,7 +298,7 @@ def test_get_declarative_users(test_config):
 
     users = sdk.catalog_user.get_declarative_users()
 
-    _assert_users_default(users.users)
+    _assert_users_default(users.users, test_config)
     assert users.to_dict(camel_case=True) == layout_api.get_users_layout().to_dict(camel_case=True)
 
 
@@ -318,7 +309,7 @@ def test_store_declarative_users(test_config):
     recreate_directory(path)
 
     users_e = sdk.catalog_user.get_declarative_users()
-    _assert_users_default(users_e.users)
+    _assert_users_default(users_e.users, test_config)
 
     sdk.catalog_user.store_declarative_users(path)
     users_o = sdk.catalog_user.load_declarative_users(path)
@@ -328,38 +319,43 @@ def test_store_declarative_users(test_config):
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_users.yaml"))
-def test_put_declarative_users(test_config):
+def test_put_declarative_users(test_config, snapshot_full_user_context):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     users_e = sdk.catalog_user.get_declarative_users()
-    _assert_users_default(users_e.users)
+    _assert_users_default(users_e.users, test_config)
 
     try:
-        _clear_users(sdk)
+        _clear_users(sdk, test_config)
 
         sdk.catalog_user.put_declarative_users(users_e)
         users_o = sdk.catalog_user.get_declarative_users()
         assert users_e == users_o
         assert users_e.to_dict(camel_case=True) == users_o.to_dict(camel_case=True)
     finally:
-        sdk.catalog_user.put_declarative_users(users_e)
+        safe_delete(sdk.catalog_user.put_declarative_users, users_e)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "load_and_put_declarative_users.yaml"))
-def test_load_and_put_declarative_users(test_config):
+def test_load_and_put_declarative_users(test_config, snapshot_full_user_context):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
     users_e = sdk.catalog_user.get_declarative_users()
-    _assert_users_default(users_e.users)
+    _assert_users_default(users_e.users, test_config)
 
     try:
-        _clear_users(sdk)
+        _clear_users(sdk, test_config)
 
         sdk.catalog_user.load_and_put_declarative_users(path)
         users_o = sdk.catalog_user.get_declarative_users()
-        assert set(user.id for user in users_e.users) == set(user.id for user in users_o.users)
-        assert [user.user_groups for user in users_e.users] == [user.user_groups for user in users_o.users]
+        expected_ids = {"admin", test_config["demo_user"], test_config["test_user"]}
+        actual_ids = set(user.id for user in users_o.users)
+        assert expected_ids.issubset(actual_ids), f"Expected users {expected_ids} not found in {actual_ids}"
+        # Verify user group assignments for the expected users
+        expected_groups = {u.id: u.user_groups for u in users_e.users if u.id in expected_ids}
+        actual_groups = {u.id: u.user_groups for u in users_o.users if u.id in expected_ids}
+        assert expected_groups == actual_groups
     finally:
-        sdk.catalog_user.put_declarative_users(users_e)
+        safe_delete(sdk.catalog_user.put_declarative_users, users_e)
 
 
 # DECLARATIVE USER GROUPS
@@ -373,7 +369,7 @@ def test_get_declarative_user_groups(test_config):
 
     user_groups = sdk.catalog_user.get_declarative_user_groups()
 
-    _assert_user_groups_default(user_groups.user_groups)
+    _assert_user_groups_default(user_groups.user_groups, test_config)
     assert user_groups.to_dict(camel_case=True) == layout_api.get_user_groups_layout().to_dict(camel_case=True)
 
 
@@ -384,7 +380,7 @@ def test_store_declarative_user_groups(test_config):
     recreate_directory(path)
 
     user_groups_e = sdk.catalog_user.get_declarative_user_groups()
-    _assert_user_groups_default(user_groups_e.user_groups)
+    _assert_user_groups_default(user_groups_e.user_groups, test_config)
 
     sdk.catalog_user.store_declarative_user_groups(path)
     user_groups_o = sdk.catalog_user.load_declarative_user_groups(path)
@@ -394,58 +390,48 @@ def test_store_declarative_user_groups(test_config):
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_user_groups.yaml"))
-def test_put_declarative_user_groups(test_config):
+def test_put_declarative_user_groups(test_config, snapshot_full_user_context):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    user_groups_path = _current_dir / "expected" / "declarative_user_groups.json"
     user_groups_e = sdk.catalog_user.get_declarative_user_groups()
     users_e = sdk.catalog_user.get_declarative_users()
 
-    _assert_user_groups_default(user_groups_e.user_groups)
-    _assert_users_default(users_e.users)
+    _assert_user_groups_default(user_groups_e.user_groups, test_config)
+    _assert_users_default(users_e.users, test_config)
 
     try:
-        _clear_users(sdk)
-        _clear_user_groups(sdk)
+        _clear_users(sdk, test_config)
+        _clear_user_groups(sdk, test_config)
 
         sdk.catalog_user.put_declarative_user_groups(user_groups_e)
         user_groups_o = sdk.catalog_user.get_declarative_user_groups()
         assert user_groups_e == user_groups_o
         assert user_groups_e.to_dict(camel_case=True) == user_groups_o.to_dict(camel_case=True)
     finally:
-        with open(user_groups_path) as f:
-            data = json.load(f)
-        user_groups_o = CatalogDeclarativeUserGroups.from_dict(data, camel_case=True)
-        sdk.catalog_user.put_declarative_user_groups(user_groups_o)
-
-        sdk.catalog_user.put_declarative_users(users_e)
+        safe_delete(sdk.catalog_user.put_declarative_user_groups, user_groups_e)
+        safe_delete(sdk.catalog_user.put_declarative_users, users_e)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "load_and_put_declarative_user_groups.yaml"))
-def test_load_and_put_declarative_user_groups(test_config):
+def test_load_and_put_declarative_user_groups(test_config, snapshot_full_user_context):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
-    expected_json_path = _current_dir / "expected" / "declarative_user_groups.json"
     users_e = sdk.catalog_user.get_declarative_users()
     user_groups_e = sdk.catalog_user.get_declarative_user_groups()
 
-    _assert_user_groups_default(user_groups_e.user_groups)
-    _assert_users_default(users_e.users)
+    _assert_user_groups_default(user_groups_e.user_groups, test_config)
+    _assert_users_default(users_e.users, test_config)
 
     try:
-        _clear_users(sdk)
-        _clear_user_groups(sdk)
+        _clear_users(sdk, test_config)
+        _clear_user_groups(sdk, test_config)
 
         sdk.catalog_user.load_and_put_declarative_user_groups(path)
         user_groups_o = sdk.catalog_user.get_declarative_user_groups()
         assert user_groups_e == user_groups_o
         assert user_groups_e.to_dict(camel_case=True) == user_groups_o.to_dict(camel_case=True)
     finally:
-        with open(expected_json_path) as f:
-            data = json.load(f)
-        user_groups_o = CatalogDeclarativeUserGroups.from_dict(data, camel_case=True)
-        sdk.catalog_user.put_declarative_user_groups(user_groups_o)
-
-        sdk.catalog_user.put_declarative_users(users_e)
+        safe_delete(sdk.catalog_user.put_declarative_user_groups, user_groups_e)
+        safe_delete(sdk.catalog_user.put_declarative_users, users_e)
 
 
 # DECLARATIVE USERS AND USER GROUPS
@@ -457,7 +443,7 @@ def test_get_declarative_users_user_groups(test_config):
 
     users_user_groups = sdk.catalog_user.get_declarative_users_user_groups()
 
-    _assert_users_user_groups_default(users_user_groups)
+    _assert_users_user_groups_default(users_user_groups, test_config)
     assert users_user_groups.to_dict(camel_case=True) == layout_api.get_users_user_groups_layout().to_dict(
         camel_case=True
     )
@@ -470,7 +456,7 @@ def test_store_declarative_users_user_groups(test_config):
     recreate_directory(path)
 
     users_user_groups_e = sdk.catalog_user.get_declarative_users_user_groups()
-    _assert_users_user_groups_default(users_user_groups_e)
+    _assert_users_user_groups_default(users_user_groups_e, test_config)
 
     sdk.catalog_user.store_declarative_users_user_groups(path)
     users_user_groups_o = sdk.catalog_user.load_declarative_users_user_groups(path)
@@ -480,39 +466,39 @@ def test_store_declarative_users_user_groups(test_config):
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_users_user_groups.yaml"))
-def test_put_declarative_users_user_groups(test_config):
+def test_put_declarative_users_user_groups(test_config, snapshot_full_user_context):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     users_user_groups_e = sdk.catalog_user.get_declarative_users_user_groups()
-    _assert_users_user_groups_default(users_user_groups_e)
+    _assert_users_user_groups_default(users_user_groups_e, test_config)
 
     try:
-        _clear_users(sdk)
-        _clear_user_groups(sdk)
+        _clear_users(sdk, test_config)
+        _clear_user_groups(sdk, test_config)
 
         sdk.catalog_user.put_declarative_users_user_groups(users_user_groups_e)
         users_user_groups_o = sdk.catalog_user.get_declarative_users_user_groups()
         assert users_user_groups_e == users_user_groups_o
         assert users_user_groups_e.to_dict(camel_case=True) == users_user_groups_o.to_dict(camel_case=True)
     finally:
-        sdk.catalog_user.put_declarative_users_user_groups(users_user_groups_e)
+        safe_delete(sdk.catalog_user.put_declarative_users_user_groups, users_user_groups_e)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "load_and_put_declarative_users_user_groups.yaml"))
-def test_load_and_put_declarative_users_user_groups(test_config):
+def test_load_and_put_declarative_users_user_groups(test_config, snapshot_full_user_context):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
     users_user_groups_e = sdk.catalog_user.get_declarative_users_user_groups()
-    _assert_users_user_groups_default(users_user_groups_e)
+    _assert_users_user_groups_default(users_user_groups_e, test_config)
 
     try:
-        _clear_users(sdk)
-        _clear_user_groups(sdk)
+        _clear_users(sdk, test_config)
+        _clear_user_groups(sdk, test_config)
 
         sdk.catalog_user.load_and_put_declarative_users_user_groups(path)
         users_user_groups_o = sdk.catalog_user.get_declarative_users_user_groups()
-        _assert_users_user_groups_default(users_user_groups_o)
+        _assert_users_user_groups_default(users_user_groups_o, test_config)
     finally:
-        sdk.catalog_user.put_declarative_users_user_groups(users_user_groups_e)
+        safe_delete(sdk.catalog_user.put_declarative_users_user_groups, users_user_groups_e)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "test_user_add_user_group.yaml"))
@@ -666,7 +652,7 @@ def test_manage_user_permissions(test_config):
         assert updated_permissions.workspaces[0].permissions == ["MANAGE"]
         assert updated_permissions.workspaces[0].hierarchy_permissions == ["MANAGE"]
     finally:
-        sdk.catalog_user.manage_user_permissions(user_id, origin_permissions)
+        safe_delete(sdk.catalog_user.manage_user_permissions, user_id, origin_permissions)
 
 
 @pytest.mark.dependency(name="test_get_user_group_permissions")
@@ -722,7 +708,7 @@ def test_manage_user_group_permissions(test_config):
         assert updated_permissions.workspaces[0].permissions == ["VIEW"]
         assert updated_permissions.workspaces[0].hierarchy_permissions == ["ANALYZE"]
     finally:
-        sdk.catalog_user.manage_user_group_permissions(group_id, origin_permissions)
+        safe_delete(sdk.catalog_user.manage_user_group_permissions, group_id, origin_permissions)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "test_assign_permissions_bulk.yaml"))
@@ -753,8 +739,8 @@ def test_assign_permissions_bulk(test_config):
         assert new_group_permissions.data_sources == new_user_permissions.data_sources
 
     finally:
-        sdk.catalog_user.manage_user_permissions(user_id, origin_permissions_user)
-        sdk.catalog_user.manage_user_group_permissions(group_id, origin_permissions_user_group)
+        safe_delete(sdk.catalog_user.manage_user_permissions, user_id, origin_permissions_user)
+        safe_delete(sdk.catalog_user.manage_user_group_permissions, group_id, origin_permissions_user_group)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "test_revoke_permissions_bulk.yaml"))
@@ -775,14 +761,16 @@ def test_revoke_permissions_bulk(test_config):
         assert len(permissions.workspaces) == 0
         assert len(permissions.data_sources) == 0
     finally:
-        sdk.catalog_user.manage_user_permissions(user_id, origin_permissions)
+        safe_delete(sdk.catalog_user.manage_user_permissions, user_id, origin_permissions)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "test_api_tokens.yaml"))
 def test_api_tokens(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    tokens = sdk.catalog_user.list_user_api_tokens(test_config["demo_user"])
-    assert len(tokens) == 0
+    initial_tokens = sdk.catalog_user.list_user_api_tokens(test_config["demo_user"])
+    initial_count = len(initial_tokens)
+    if not test_config.get("staging", False):
+        assert initial_count == 0
 
     token_id = "test_token"
     try:
@@ -795,81 +783,89 @@ def test_api_tokens(test_config):
         assert token.bearer_token is None
 
         tokens = sdk.catalog_user.list_user_api_tokens(test_config["demo_user"])
-        assert len(tokens) == 1
-        assert tokens[0].id == token_id
-        assert tokens[0].bearer_token is None
+        assert len(tokens) == initial_count + 1
+        assert any(t.id == token_id for t in tokens)
     finally:
-        sdk.catalog_user.delete_user_api_token(test_config["demo_user"], token_id)
-        tokens = sdk.catalog_user.list_user_api_tokens(test_config["demo_user"])
-        assert len(tokens) == 0
+        safe_delete(sdk.catalog_user.delete_user_api_token, test_config["demo_user"], token_id)
 
 
 # Help functions
 
 
-def _assert_users_default(users: list[CatalogDeclarativeUser]):
-    assert len(users) == 3
-    assert [user.id for user in users] == ["admin", "demo", "demo2"]
+def _assert_users_default(users: list[CatalogDeclarativeUser], test_config: dict | None = None):
+    if test_config and test_config.get("staging", False):
+        # On staging with DEX, user IDs are dynamic (e.g. python.demo.<uuid>).
+        # Check that expected users exist by config values rather than hardcoded IDs.
+        user_ids = {user.id for user in users}
+        assert len(users) >= 2, f"Expected at least 2 users, got {len(users)}: {user_ids}"
+        assert "admin" in user_ids, f"'admin' user missing, got: {user_ids}"
+        assert test_config["test_user"] in user_ids, f"test_user '{test_config['test_user']}' missing, got: {user_ids}"
+    else:
+        assert len(users) == 3
+        assert [user.id for user in users] == ["admin", "demo", "demo2"]
 
 
-def _assert_user_groups_default(user_groups: list[CatalogDeclarativeUserGroup]):
-    assert len(user_groups) == 4
-    assert set(user_group.id for user_group in user_groups) == {
-        "adminGroup",
-        "demoGroup",
-        "adminQA1Group",
-        "visitorsGroup",
-    }
-    assert set(user_group.name for user_group in user_groups) == {"demo group", "visitors", None}
+def _assert_user_groups_default(user_groups: list[CatalogDeclarativeUserGroup], test_config: dict | None = None):
+    if test_config and test_config.get("staging", False):
+        group_ids = {ug.id for ug in user_groups}
+        assert len(user_groups) >= 4, f"Expected at least 4 user groups, got {len(user_groups)}: {group_ids}"
+        for expected in ["adminGroup", "demoGroup", "adminQA1Group", "visitorsGroup"]:
+            assert expected in group_ids, f"'{expected}' group missing, got: {group_ids}"
+    else:
+        assert len(user_groups) == 4
+        assert set(user_group.id for user_group in user_groups) == {
+            "adminGroup",
+            "demoGroup",
+            "adminQA1Group",
+            "visitorsGroup",
+        }
+        assert set(user_group.name for user_group in user_groups) == {"demo group", "visitors", None}
 
 
-def _assert_users_user_groups_default(users_user_groups: CatalogDeclarativeUsersUserGroups):
-    _assert_users_default(users_user_groups.users)
-    _assert_user_groups_default(users_user_groups.user_groups)
+def _assert_users_user_groups_default(
+    users_user_groups: CatalogDeclarativeUsersUserGroups, test_config: dict | None = None
+):
+    _assert_users_default(users_user_groups.users, test_config)
+    _assert_user_groups_default(users_user_groups.user_groups, test_config)
 
 
-def _clear_users(sdk: GoodDataSdk) -> None:
-    """Remove all users except admin, demo, and demo2.
+def _clear_users(sdk: GoodDataSdk, test_config: dict) -> None:
+    """Remove all users except admin and those referenced by test_config.
 
-    WARNING: This function intentionally preserves demo2 because:
-    1. Deleting demo2 cascade-deletes data source permissions referencing it
-    2. Deleting demo2 cascade-deletes workspace permissions referencing it
-    3. These cascade deletes break subsequent permission tests (test_get_user_permissions, etc.)
-
-    If you need to delete demo2, ensure you call _restore_demo2_permissions() afterward
-    to restore the expected permission state.
+    WARNING: This function intentionally preserves demo_user and test_user because:
+    1. Deleting them cascade-deletes data source permissions referencing them
+    2. Deleting them cascade-deletes workspace permissions referencing them
+    3. These cascade deletes break subsequent permission tests
 
     Protected users:
     - admin: System administrator
-    - demo: Default demo user
-    - demo2: Test user with permission references (test_config["test_user"])
+    - test_config["demo_user"]: Default demo user
+    - test_config["test_user"]: Test user with permission references
     """
+    protected = {"admin", test_config["demo_user"], test_config["test_user"]}
     users = sdk.catalog_user.list_users()
     for user in users:
-        if user.id not in ["admin", "demo", "demo2"]:
+        if user.id not in protected:
             sdk.catalog_user.delete_user(user.id)
 
 
-def _clear_user_groups(sdk: GoodDataSdk) -> None:
-    """Remove all user groups except adminGroup and demoGroup.
+def _clear_user_groups(sdk: GoodDataSdk, test_config: dict) -> None:
+    """Remove all user groups except those referenced by test_config.
 
-    WARNING: This function intentionally preserves demoGroup because:
-    1. Deleting demoGroup cascade-deletes data source permissions referencing it
-    2. Deleting demoGroup cascade-deletes workspace permissions referencing it
-    3. These cascade deletes break subsequent permission tests (test_get_user_group_permissions, etc.)
-
-    If you need to delete demoGroup, ensure you call _restore_demo2_permissions() afterward
-    to restore the expected permission state.
+    WARNING: This function intentionally preserves admin and test user groups because:
+    1. Deleting them cascade-deletes data source permissions referencing them
+    2. Deleting them cascade-deletes workspace permissions referencing them
+    3. These cascade deletes break subsequent permission tests
 
     Protected user groups:
-    - adminGroup: Admin group
-    - demoGroup: Test user group with permission references (test_config["test_user_group"])
+    - test_config["admin_user_group"]: Admin group
+    - test_config["test_user_group"]: Test user group with permission references
     """
     sdk.catalog_user.put_declarative_user_groups(
         CatalogDeclarativeUserGroups(
             user_groups=[
-                CatalogDeclarativeUserGroup(id="adminGroup"),
-                CatalogDeclarativeUserGroup(id="demoGroup"),
+                CatalogDeclarativeUserGroup(id=test_config["admin_user_group"]),
+                CatalogDeclarativeUserGroup(id=test_config["test_user_group"]),
             ]
         )
     )

@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **delimiter** | **str** | Set column delimiter. (CSV) | [optional] 
 **export_info** | **bool** | If true, the export will contain the information about the export – exported date, filters, etc. Works only with &#x60;visualizationObject&#x60;. (XLSX, PDF) | [optional]  if omitted the server will use the default value of False
+**grand_totals_position** | **str** | Grand totals position. Takes precedence over position specified in visualization. | [optional] 
 **merge_headers** | **bool** | Merge equal headers in neighbouring cells. (XLSX) | [optional] 
 **page_orientation** | **str** | Set page orientation. (PDF) | [optional]  if omitted the server will use the default value of "PORTRAIT"
 **page_size** | **str** | Set page size. (PDF) | [optional]  if omitted the server will use the default value of "A4"

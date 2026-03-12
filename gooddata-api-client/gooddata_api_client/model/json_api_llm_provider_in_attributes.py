@@ -99,11 +99,11 @@ class JsonApiLlmProviderInAttributes(ModelNormal):
         """
         lazy_import()
         return {
-            'models': ([JsonApiLlmProviderInAttributesModelsInner], none_type,),  # noqa: E501
-            'provider_config': (JsonApiLlmProviderInAttributesProviderConfig,),  # noqa: E501
             'default_model_id': (str, none_type,),  # noqa: E501
             'description': (str, none_type,),  # noqa: E501
+            'models': ([JsonApiLlmProviderInAttributesModelsInner], none_type,),  # noqa: E501
             'name': (str, none_type,),  # noqa: E501
+            'provider_config': (JsonApiLlmProviderInAttributesProviderConfig,),  # noqa: E501
         }
 
     @cached_property
@@ -112,11 +112,11 @@ class JsonApiLlmProviderInAttributes(ModelNormal):
 
 
     attribute_map = {
-        'models': 'models',  # noqa: E501
-        'provider_config': 'providerConfig',  # noqa: E501
         'default_model_id': 'defaultModelId',  # noqa: E501
         'description': 'description',  # noqa: E501
+        'models': 'models',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'provider_config': 'providerConfig',  # noqa: E501
     }
 
     read_only_vars = {
@@ -126,12 +126,8 @@ class JsonApiLlmProviderInAttributes(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, models, provider_config, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """JsonApiLlmProviderInAttributes - a model defined in OpenAPI
-
-        Args:
-            models ([JsonApiLlmProviderInAttributesModelsInner], none_type): List of LLM models available for this provider.
-            provider_config (JsonApiLlmProviderInAttributesProviderConfig):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -164,9 +160,11 @@ class JsonApiLlmProviderInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            default_model_id (str, none_type): ID of the default model to use from the models list.. [optional]  # noqa: E501
+            default_model_id (str, none_type): Required ID of the default model to use from the models list.. [optional]  # noqa: E501
             description (str, none_type): Description of the LLM Provider.. [optional]  # noqa: E501
+            models ([JsonApiLlmProviderInAttributesModelsInner], none_type): List of LLM models available for this provider.. [optional]  # noqa: E501
             name (str, none_type): [optional]  # noqa: E501
+            provider_config (JsonApiLlmProviderInAttributesProviderConfig): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -198,8 +196,6 @@ class JsonApiLlmProviderInAttributes(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.models = models
-        self.provider_config = provider_config
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -220,12 +216,8 @@ class JsonApiLlmProviderInAttributes(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, models, provider_config, *args, **kwargs):  # noqa: E501
+    def __init__(self, *args, **kwargs):  # noqa: E501
         """JsonApiLlmProviderInAttributes - a model defined in OpenAPI
-
-        Args:
-            models ([JsonApiLlmProviderInAttributesModelsInner], none_type): List of LLM models available for this provider.
-            provider_config (JsonApiLlmProviderInAttributesProviderConfig):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -258,9 +250,11 @@ class JsonApiLlmProviderInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            default_model_id (str, none_type): ID of the default model to use from the models list.. [optional]  # noqa: E501
+            default_model_id (str, none_type): Required ID of the default model to use from the models list.. [optional]  # noqa: E501
             description (str, none_type): Description of the LLM Provider.. [optional]  # noqa: E501
+            models ([JsonApiLlmProviderInAttributesModelsInner], none_type): List of LLM models available for this provider.. [optional]  # noqa: E501
             name (str, none_type): [optional]  # noqa: E501
+            provider_config (JsonApiLlmProviderInAttributesProviderConfig): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -290,8 +284,6 @@ class JsonApiLlmProviderInAttributes(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.models = models
-        self.provider_config = provider_config
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

@@ -20509,7 +20509,7 @@ class EntitiesApi(object):
         json_api_custom_geo_collection_in_document,
         **kwargs
     ):
-        """create_entity_custom_geo_collections  # noqa: E501
+        """Post Custom Geo Collections  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -23328,7 +23328,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_custom_geo_collections  # noqa: E501
+        """Delete Custom Geo Collection  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -26416,7 +26416,7 @@ class EntitiesApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_custom_geo_collections  # noqa: E501
+        """Get all Custom Geo Collections  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -30289,7 +30289,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_custom_geo_collections  # noqa: E501
+        """Get Custom Geo Collection  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -34034,7 +34034,7 @@ class EntitiesApi(object):
         json_api_custom_geo_collection_patch_document,
         **kwargs
     ):
-        """patch_entity_custom_geo_collections  # noqa: E501
+        """Patch Custom Geo Collection  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -36728,7 +36728,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for AnalyticalDashboard  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -36816,7 +36816,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for AttributeHierarchy  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -36904,7 +36904,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for Attribute  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -37080,7 +37080,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for Automation  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -37168,7 +37168,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for CustomApplicationSetting  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -37256,7 +37256,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for DashboardPlugin  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -37344,7 +37344,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for Dataset  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -37432,7 +37432,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for ExportDefinition  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -37520,7 +37520,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for Fact  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -37608,7 +37608,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for FilterContext  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -37696,7 +37696,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for FilterView  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -37784,7 +37784,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """search_entities_knowledge_recommendations  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -37872,7 +37872,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for Label  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -38048,7 +38048,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for Metric  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -38136,7 +38136,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for UserDataFilter  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -38224,7 +38224,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for VisualizationObject  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -38312,7 +38312,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for WorkspaceDataFilterSetting  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -38400,7 +38400,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for WorkspaceDataFilter  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -38488,7 +38488,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """search_entities_workspace_settings  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -39205,7 +39205,7 @@ class EntitiesApi(object):
         json_api_custom_geo_collection_in_document,
         **kwargs
     ):
-        """update_entity_custom_geo_collections  # noqa: E501
+        """Put Custom Geo Collection  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
