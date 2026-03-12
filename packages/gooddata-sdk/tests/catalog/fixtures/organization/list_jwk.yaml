@@ -3,6 +3,53 @@ version: 1
 interactions:
   - request:
       method: GET
+      uri: http://localhost:3000/api/v1/entities/jwks?page=0&size=500
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '157'
+        Content-Type:
+          - application/json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - '0'
+      body:
+        string:
+          data: []
+          links:
+            self: http://localhost:3000/api/v1/entities/jwks?page=0&size=500
+            next: http://localhost:3000/api/v1/entities/jwks?page=1&size=500
+  - request:
+      method: GET
       uri: http://localhost:3000/api/v1/entities/jwks/demoJwk1
       body: null
       headers:
@@ -25,8 +72,7 @@ interactions:
           - '172'
         Content-Type:
           - application/problem+json
-        DATE: &id001
-          - PLACEHOLDER
+        DATE: *id001
         Expires:
           - '0'
         Pragma:
@@ -48,7 +94,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: b17fd012e5b3b8f7b8bc0c9b13ba360e
+          traceId: bc8aebd5faa8c115ffddfca055d58514
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/jwks
@@ -169,7 +215,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 9fce0d3e9276b26d8aec1d1f530c52b1
+          traceId: 87eb46f0d82935510e0e5bee1acafba8
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/jwks
@@ -396,49 +442,3 @@ interactions:
           - '0'
       body:
         string: ''
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/entities/jwks?page=0&size=500
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '157'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
-      body:
-        string:
-          data: []
-          links:
-            self: http://localhost:3000/api/v1/entities/jwks?page=0&size=500
-            next: http://localhost:3000/api/v1/entities/jwks?page=1&size=500

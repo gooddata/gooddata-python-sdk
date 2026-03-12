@@ -46,7 +46,7 @@ interactions:
         string:
           data:
             attributes:
-              authenticationId: CiQwZjI2YzVkMS0zZDhlLTQ0N2ItYWJkNS1kNzE2NjRmODQxYzMSBWxvY2Fs
+              authenticationId: CiQyZjk1MDEzYS1kY2FjLTQwMjgtYTM0Ny1iOGYyNjNhOGI2MzMSBWxvY2Fs
             id: demo2
             relationships:
               userGroups:
