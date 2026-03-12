@@ -1,5 +1,5 @@
 # (C) 2023 GoodData Corporation
-from typing import Literal
+from typing import Literal, Optional
 
 from attrs import define
 from gooddata_api_client.model.custom_label import CustomLabel as ApiCustomLabel
@@ -11,6 +11,8 @@ from gooddata_api_client.model.tabular_export_request import TabularExportReques
 from gooddata_api_client.model.visual_export_request import VisualExportRequest as VisualExportRequestApi
 
 from gooddata_sdk.catalog.base import Base
+
+GrandTotalsPosition = Literal["pinnedBottom", "pinnedTop", "bottom", "top"]
 
 
 @define(kw_only=True)
@@ -46,6 +48,7 @@ class ExportCustomOverride(Base):
 class ExportSettings(Base):
     merge_headers: bool
     show_filters: bool
+    grand_totals_position: Optional[GrandTotalsPosition] = None
 
     @staticmethod
     def client_class() -> type[ApiSettings]:
