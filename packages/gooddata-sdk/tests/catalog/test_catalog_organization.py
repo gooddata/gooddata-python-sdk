@@ -9,6 +9,8 @@ from gooddata_sdk import (
     CatalogDeclarativeNotificationChannel,
     CatalogJwk,
     CatalogLlmEndpoint,
+    CatalogLlmProvider,
+    CatalogLlmProviderPatch,
     CatalogOrganization,
     CatalogOrganizationSetting,
     CatalogRsaSpecification,
@@ -554,6 +556,21 @@ def test_delete_llm_endpoint(test_config):
             sdk.catalog_organization.delete_llm_endpoint("endpoint1")
         except NotFoundException:
             pass
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "patch_llm_provider.yaml"))
+def test_patch_llm_provider_name_only(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    provider_id = "openai-provider"
+    patched_name = "Patched OpenAI Provider"
+
+    llm_provider_patch = CatalogLlmProviderPatch.init(id=provider_id, name=patched_name)
+    updated_provider = sdk.catalog_organization.update_llm_provider(llm_provider_patch)
+
+    assert isinstance(updated_provider, CatalogLlmProvider)
+    assert updated_provider.id == provider_id
+    assert updated_provider.attributes.name == patched_name
 
 
 #
