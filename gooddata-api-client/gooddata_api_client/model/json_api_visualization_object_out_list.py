@@ -32,11 +32,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_list_meta import JsonApiAggregatedFactOutListMeta
-    from gooddata_api_client.model.json_api_metric_out_includes import JsonApiMetricOutIncludes
+    from gooddata_api_client.model.json_api_visualization_object_out_includes import JsonApiVisualizationObjectOutIncludes
     from gooddata_api_client.model.json_api_visualization_object_out_with_links import JsonApiVisualizationObjectOutWithLinks
     from gooddata_api_client.model.list_links import ListLinks
     globals()['JsonApiAggregatedFactOutListMeta'] = JsonApiAggregatedFactOutListMeta
-    globals()['JsonApiMetricOutIncludes'] = JsonApiMetricOutIncludes
+    globals()['JsonApiVisualizationObjectOutIncludes'] = JsonApiVisualizationObjectOutIncludes
     globals()['JsonApiVisualizationObjectOutWithLinks'] = JsonApiVisualizationObjectOutWithLinks
     globals()['ListLinks'] = ListLinks
 
@@ -99,7 +99,7 @@ class JsonApiVisualizationObjectOutList(ModelNormal):
         lazy_import()
         return {
             'data': ([JsonApiVisualizationObjectOutWithLinks],),  # noqa: E501
-            'included': ([JsonApiMetricOutIncludes],),  # noqa: E501
+            'included': ([JsonApiVisualizationObjectOutIncludes],),  # noqa: E501
             'links': (ListLinks,),  # noqa: E501
             'meta': (JsonApiAggregatedFactOutListMeta,),  # noqa: E501
         }
@@ -160,7 +160,7 @@ class JsonApiVisualizationObjectOutList(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            included ([JsonApiMetricOutIncludes]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiVisualizationObjectOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ListLinks): [optional]  # noqa: E501
             meta (JsonApiAggregatedFactOutListMeta): [optional]  # noqa: E501
         """
@@ -252,7 +252,7 @@ class JsonApiVisualizationObjectOutList(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            included ([JsonApiMetricOutIncludes]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiVisualizationObjectOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ListLinks): [optional]  # noqa: E501
             meta (JsonApiAggregatedFactOutListMeta): [optional]  # noqa: E501
         """

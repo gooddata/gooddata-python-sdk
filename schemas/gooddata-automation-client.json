@@ -1383,9 +1383,9 @@
               },
               "emptyValueHandling": {
                 "enum": [
-                  "INCLUDE",
-                  "EXCLUDE",
-                  "ONLY"
+                  "include",
+                  "exclude",
+                  "only"
                 ],
                 "type": "string"
               },
@@ -2988,6 +2988,16 @@
             "description": "If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF)",
             "example": true,
             "type": "boolean"
+          },
+          "grandTotalsPosition": {
+            "description": "Grand totals position. Takes precedence over position specified in visualization.",
+            "enum": [
+              "pinnedBottom",
+              "pinnedTop",
+              "bottom",
+              "top"
+            ],
+            "type": "string"
           },
           "mergeHeaders": {
             "description": "Merge equal headers in neighbouring cells. (XLSX)",

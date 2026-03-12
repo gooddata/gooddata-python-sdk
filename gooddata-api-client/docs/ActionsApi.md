@@ -65,6 +65,8 @@ Method | HTTP request | Description
 [**key_driver_analysis**](ActionsApi.md#key_driver_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers | (EXPERIMENTAL) Compute key driver analysis
 [**key_driver_analysis_result**](ActionsApi.md#key_driver_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId} | (EXPERIMENTAL) Get key driver analysis result
 [**list_documents**](ActionsApi.md#list_documents) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents | 
+[**list_llm_provider_models**](ActionsApi.md#list_llm_provider_models) | **POST** /api/v1/actions/ai/llmProvider/listModels | List LLM Provider Models
+[**list_llm_provider_models_by_id**](ActionsApi.md#list_llm_provider_models_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/listModels | List LLM Provider Models By Id
 [**list_workspace_user_groups**](ActionsApi.md#list_workspace_user_groups) | **GET** /api/v1/actions/workspaces/{workspaceId}/userGroups | 
 [**list_workspace_users**](ActionsApi.md#list_workspace_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/users | 
 [**manage_dashboard_permissions**](ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
@@ -106,6 +108,7 @@ Method | HTTP request | Description
 [**test_llm_provider**](ActionsApi.md#test_llm_provider) | **POST** /api/v1/actions/ai/llmProvider/test | Test LLM Provider
 [**test_llm_provider_by_id**](ActionsApi.md#test_llm_provider_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/test | Test LLM Provider By Id
 [**test_notification_channel**](ActionsApi.md#test_notification_channel) | **POST** /api/v1/actions/notificationChannels/test | Test notification channel.
+[**trending_objects**](ActionsApi.md#trending_objects) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/trendingObjects | Get Trending Analytics Catalog Objects
 [**trigger_automation**](ActionsApi.md#trigger_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/trigger | Trigger automation.
 [**trigger_existing_automation**](ActionsApi.md#trigger_existing_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/trigger | Trigger existing automation.
 [**trigger_quality_issues_calculation**](ActionsApi.md#trigger_quality_issues_calculation) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck | Trigger Quality Issues Calculation
@@ -177,6 +180,28 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="id_example",
                 type="type_example",
                 workspace_id="workspace_id_example",
+            ),
+            referenced_objects=[
+                ObjectReferenceGroup(
+                    context=ObjectReference(
+                        id="id_example",
+                        type="WIDGET",
+                    ),
+                    objects=[
+                        ObjectReference(
+                            id="id_example",
+                            type="WIDGET",
+                        ),
+                    ],
+                ),
+            ],
+            view=UIContext(
+                dashboard=DashboardContext(
+                    id="id_example",
+                    widgets=[
+                        DashboardContextWidgetsInner(None),
+                    ],
+                ),
             ),
         ),
     ) # ChatRequest | 
@@ -354,6 +379,28 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="id_example",
                 type="type_example",
                 workspace_id="workspace_id_example",
+            ),
+            referenced_objects=[
+                ObjectReferenceGroup(
+                    context=ObjectReference(
+                        id="id_example",
+                        type="WIDGET",
+                    ),
+                    objects=[
+                        ObjectReference(
+                            id="id_example",
+                            type="WIDGET",
+                        ),
+                    ],
+                ),
+            ],
+            view=UIContext(
+                dashboard=DashboardContext(
+                    id="id_example",
+                    widgets=[
+                        DashboardContextWidgetsInner(None),
+                    ],
+                ),
             ),
         ),
     ) # ChatRequest | 
@@ -2578,6 +2625,7 @@ with gooddata_api_client.ApiClient() as api_client:
         settings=Settings(
             delimiter="U",
             export_info=True,
+            grand_totals_position="pinnedBottom",
             merge_headers=True,
             page_orientation="PORTRAIT",
             page_size="A4",
@@ -5171,6 +5219,8 @@ with gooddata_api_client.ApiClient() as api_client:
     size = 50 # int |  (optional) if omitted the server will use the default value of 50
     page_token = "pageToken_example" # str |  (optional)
     meta_include = "metaInclude_example" # str |  (optional)
+    state = "state_example" # str |  (optional)
+    query = "query_example" # str |  (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -5182,7 +5232,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.list_documents(workspace_id, scopes=scopes, size=size, page_token=page_token, meta_include=meta_include)
+        api_response = api_instance.list_documents(workspace_id, scopes=scopes, size=size, page_token=page_token, meta_include=meta_include, state=state, query=query)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->list_documents: %s\n" % e)
@@ -5198,10 +5248,149 @@ Name | Type | Description  | Notes
  **size** | **int**|  | [optional] if omitted the server will use the default value of 50
  **page_token** | **str**|  | [optional]
  **meta_include** | **str**|  | [optional]
+ **state** | **str**|  | [optional]
+ **query** | **str**|  | [optional]
 
 ### Return type
 
 [**ListKnowledgeDocumentsResponseDto**](ListKnowledgeDocumentsResponseDto.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_llm_provider_models**
+> ListLlmProviderModelsResponse list_llm_provider_models(list_llm_provider_models_request)
+
+List LLM Provider Models
+
+Lists models available on an LLM provider with a full definition. For Azure AI Foundry providers, the model family will be set to UNKNOWN because the endpoint does not expose the family.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.list_llm_provider_models_request import ListLlmProviderModelsRequest
+from gooddata_api_client.model.list_llm_provider_models_response import ListLlmProviderModelsResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    list_llm_provider_models_request = ListLlmProviderModelsRequest(
+        provider_config=ListLlmProviderModelsRequestProviderConfig(None),
+    ) # ListLlmProviderModelsRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # List LLM Provider Models
+        api_response = api_instance.list_llm_provider_models(list_llm_provider_models_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->list_llm_provider_models: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **list_llm_provider_models_request** | [**ListLlmProviderModelsRequest**](ListLlmProviderModelsRequest.md)|  |
+
+### Return type
+
+[**ListLlmProviderModelsResponse**](ListLlmProviderModelsResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_llm_provider_models_by_id**
+> ListLlmProviderModelsResponse list_llm_provider_models_by_id(llm_provider_id)
+
+List LLM Provider Models By Id
+
+Lists models available on an existing LLM provider by its ID. For Azure AI Foundry providers, the model family will be set to UNKNOWN because the endpoint does not expose the family.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.list_llm_provider_models_response import ListLlmProviderModelsResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    llm_provider_id = "llmProviderId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # List LLM Provider Models By Id
+        api_response = api_instance.list_llm_provider_models_by_id(llm_provider_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->list_llm_provider_models_by_id: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **llm_provider_id** | **str**|  |
+
+### Return type
+
+[**ListLlmProviderModelsResponse**](ListLlmProviderModelsResponse.md)
 
 ### Authorization
 
@@ -7107,7 +7296,7 @@ No authorization required
 
 Get a single execution result
 
-Gets a single execution result.
+Gets a single execution result. Note that the Arrow File and Arrow Stream content types are currently in BETA.
 
 ### Example
 
@@ -7131,6 +7320,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     result_id = "a9b28f9dc55f37ea9f4a5fb0c76895923591e781" # str | Result ID
+    x_gdc_cancel_token = "X-GDC-CANCEL-TOKEN_example" # str |  (optional)
     offset = [
         offset=1,10,
     ] # [int] | Request page with these offsets. Format is offset=1,2,3,... - one offset for each dimensions in ResultSpec from originating AFM. (optional) if omitted the server will use the default value of []
@@ -7140,7 +7330,6 @@ with gooddata_api_client.ApiClient() as api_client:
     excluded_total_dimensions = [
         "excludedTotalDimensions=dim_0,dim_1",
     ] # [str] | Identifiers of the dimensions where grand total data should not be returned for this request. A grand total will not be returned if all of its totalDimensions are in excludedTotalDimensions. (optional) if omitted the server will use the default value of []
-    x_gdc_cancel_token = "X-GDC-CANCEL-TOKEN_example" # str |  (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -7154,7 +7343,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # Get a single execution result
-        api_response = api_instance.retrieve_result(workspace_id, result_id, offset=offset, limit=limit, excluded_total_dimensions=excluded_total_dimensions, x_gdc_cancel_token=x_gdc_cancel_token)
+        api_response = api_instance.retrieve_result(workspace_id, result_id, x_gdc_cancel_token=x_gdc_cancel_token, offset=offset, limit=limit, excluded_total_dimensions=excluded_total_dimensions)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->retrieve_result: %s\n" % e)
@@ -7167,10 +7356,10 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**| Workspace identifier |
  **result_id** | **str**| Result ID |
+ **x_gdc_cancel_token** | **str**|  | [optional]
  **offset** | **[int]**| Request page with these offsets. Format is offset&#x3D;1,2,3,... - one offset for each dimensions in ResultSpec from originating AFM. | [optional] if omitted the server will use the default value of []
  **limit** | **[int]**| Return only this number of items. Format is limit&#x3D;1,2,3,... - one limit for each dimensions in ResultSpec from originating AFM. | [optional] if omitted the server will use the default value of []
  **excluded_total_dimensions** | **[str]**| Identifiers of the dimensions where grand total data should not be returned for this request. A grand total will not be returned if all of its totalDimensions are in excludedTotalDimensions. | [optional] if omitted the server will use the default value of []
- **x_gdc_cancel_token** | **str**|  | [optional]
 
 ### Return type
 
@@ -7183,7 +7372,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: application/json, application/vnd.apache.arrow.file, application/vnd.apache.arrow.stream
 
 
 ### HTTP response details
@@ -8113,7 +8302,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="id_example",
             ),
         ],
-        provider_config=TestLlmProviderDefinitionRequestProviderConfig(None),
+        provider_config=ListLlmProviderModelsRequestProviderConfig(None),
     ) # TestLlmProviderDefinitionRequest | 
 
     # example passing only required values which don't have defaults set
@@ -8169,6 +8358,7 @@ import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
 from gooddata_api_client.model.test_llm_provider_response import TestLlmProviderResponse
+from gooddata_api_client.model.test_llm_provider_by_id_request import TestLlmProviderByIdRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -8182,11 +8372,29 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     llm_provider_id = "llmProviderId_example" # str | 
+    test_llm_provider_by_id_request = TestLlmProviderByIdRequest(
+        models=[
+            LlmModel(
+                family="OPENAI",
+                id="id_example",
+            ),
+        ],
+        provider_config=ListLlmProviderModelsRequestProviderConfig(None),
+    ) # TestLlmProviderByIdRequest |  (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Test LLM Provider By Id
         api_response = api_instance.test_llm_provider_by_id(llm_provider_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->test_llm_provider_by_id: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Test LLM Provider By Id
+        api_response = api_instance.test_llm_provider_by_id(llm_provider_id, test_llm_provider_by_id_request=test_llm_provider_by_id_request)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->test_llm_provider_by_id: %s\n" % e)
@@ -8198,6 +8406,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **llm_provider_id** | **str**|  |
+ **test_llm_provider_by_id_request** | [**TestLlmProviderByIdRequest**](TestLlmProviderByIdRequest.md)|  | [optional]
 
 ### Return type
 
@@ -8209,7 +8418,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 
@@ -8293,6 +8502,73 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | The result of the test of a notification channel connection. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **trending_objects**
+> TrendingObjectsResult trending_objects(workspace_id)
+
+Get Trending Analytics Catalog Objects
+
+Returns a list of trending objects for this workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.trending_objects_result import TrendingObjectsResult
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Trending Analytics Catalog Objects
+        api_response = api_instance.trending_objects(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->trending_objects: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+
+### Return type
+
+[**TrendingObjectsResult**](TrendingObjectsResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -8534,6 +8810,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         settings=Settings(
                             delimiter="U",
                             export_info=True,
+                            grand_totals_position="pinnedBottom",
                             merge_headers=True,
                             page_orientation="PORTRAIT",
                             page_size="A4",

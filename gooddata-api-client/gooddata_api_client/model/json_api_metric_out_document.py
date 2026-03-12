@@ -32,10 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_metric_out import JsonApiMetricOut
-    from gooddata_api_client.model.json_api_metric_out_includes import JsonApiMetricOutIncludes
+    from gooddata_api_client.model.json_api_visualization_object_out_includes import JsonApiVisualizationObjectOutIncludes
     from gooddata_api_client.model.object_links import ObjectLinks
     globals()['JsonApiMetricOut'] = JsonApiMetricOut
-    globals()['JsonApiMetricOutIncludes'] = JsonApiMetricOutIncludes
+    globals()['JsonApiVisualizationObjectOutIncludes'] = JsonApiVisualizationObjectOutIncludes
     globals()['ObjectLinks'] = ObjectLinks
 
 
@@ -95,7 +95,7 @@ class JsonApiMetricOutDocument(ModelNormal):
         lazy_import()
         return {
             'data': (JsonApiMetricOut,),  # noqa: E501
-            'included': ([JsonApiMetricOutIncludes],),  # noqa: E501
+            'included': ([JsonApiVisualizationObjectOutIncludes],),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -154,7 +154,7 @@ class JsonApiMetricOutDocument(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            included ([JsonApiMetricOutIncludes]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiVisualizationObjectOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -245,7 +245,7 @@ class JsonApiMetricOutDocument(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            included ([JsonApiMetricOutIncludes]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiVisualizationObjectOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 

@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**get_all_entities_attributes**](AttributesApi.md#get_all_entities_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributes | Get all Attributes
 [**get_entity_attributes**](AttributesApi.md#get_entity_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributes/{objectId} | Get an Attribute
 [**patch_entity_attributes**](AttributesApi.md#patch_entity_attributes) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/attributes/{objectId} | Patch an Attribute (beta)
-[**search_entities_attributes**](AttributesApi.md#search_entities_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributes/search | Search request for Attribute
+[**search_entities_attributes**](AttributesApi.md#search_entities_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributes/search | The search endpoint (beta)
 
 
 # **get_all_entities_attributes**
@@ -299,7 +299,7 @@ No authorization required
 # **search_entities_attributes**
 > JsonApiAttributeOutList search_entities_attributes(workspace_id, entity_search_body)
 
-Search request for Attribute
+The search endpoint (beta)
 
 ### Example
 
@@ -347,7 +347,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for Attribute
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_attributes(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -356,7 +356,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for Attribute
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_attributes(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

@@ -839,6 +839,7 @@
                   "GEO_LONGITUDE",
                   "GEO_LATITUDE",
                   "GEO_AREA",
+                  "GEO_ICON",
                   "IMAGE"
                 ],
                 "type": "string"
@@ -1066,8 +1067,8 @@
             "$ref": "#/components/schemas/AzureFoundryProviderAuth"
           },
           "endpoint": {
-            "description": "Azure AI inference endpoint URL.",
-            "example": "https://my-resource.services.ai.azure.com/models",
+            "description": "Azure OpenAI endpoint URL.",
+            "example": "https://my-resource.openai.azure.com",
             "maxLength": 255,
             "type": "string"
           },
@@ -1994,6 +1995,37 @@
           "objects",
           "reasoning",
           "suggestions"
+        ],
+        "type": "object"
+      },
+      "DashboardContext": {
+        "description": "Dashboard the user is currently viewing.",
+        "properties": {
+          "id": {
+            "description": "Dashboard object ID.",
+            "type": "string"
+          },
+          "widgets": {
+            "description": "Widgets currently visible on the dashboard.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/InsightWidgetDescriptor"
+                },
+                {
+                  "$ref": "#/components/schemas/RichTextWidgetDescriptor"
+                },
+                {
+                  "$ref": "#/components/schemas/VisualizationSwitcherWidgetDescriptor"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "widgets"
         ],
         "type": "object"
       },
@@ -3075,6 +3107,18 @@
         ],
         "type": "object"
       },
+      "GetServiceStatusResponse": {
+        "description": "Status of an AI Lake service",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/JsonNode"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "type": "object"
+      },
       "HeaderGroup": {
         "description": "Contains the information specific for a group of headers. These groups correlate to attributes and metric groups.",
         "properties": {
@@ -3139,6 +3183,41 @@
         ],
         "type": "object"
       },
+      "InsightWidgetDescriptor": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/WidgetDescriptor"
+          },
+          {
+            "properties": {
+              "resultId": {
+                "description": "Signed result ID for this widget's cached execution result.",
+                "type": "string"
+              },
+              "title": {
+                "description": "Widget title as displayed on the dashboard.",
+                "type": "string"
+              },
+              "visualizationId": {
+                "description": "Visualization object ID referenced by this insight widget.",
+                "type": "string"
+              },
+              "widgetId": {
+                "description": "Widget object ID.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Insight widget displaying a visualization.",
+        "required": [
+          "title",
+          "visualizationId",
+          "widgetId"
+        ],
+        "type": "object"
+      },
       "JsonNode": {
         "description": "The payload to pass to the command",
         "nullable": true,
@@ -3193,6 +3272,7 @@
               "GEO_LONGITUDE",
               "GEO_LATITUDE",
               "GEO_AREA",
+              "GEO_ICON",
               "IMAGE"
             ],
             "type": "string"
@@ -3403,6 +3483,52 @@
         ],
         "type": "object"
       },
+      "ListLlmProviderModelsRequest": {
+        "properties": {
+          "providerConfig": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+              },
+              {
+                "$ref": "#/components/schemas/AzureFoundryProviderConfig"
+              },
+              {
+                "$ref": "#/components/schemas/OpenAIProviderConfig"
+              }
+            ]
+          }
+        },
+        "required": [
+          "providerConfig"
+        ],
+        "type": "object"
+      },
+      "ListLlmProviderModelsResponse": {
+        "properties": {
+          "message": {
+            "description": "Message about the listing result.",
+            "type": "string"
+          },
+          "models": {
+            "description": "Available models on the provider.",
+            "items": {
+              "$ref": "#/components/schemas/LlmModel"
+            },
+            "type": "array"
+          },
+          "success": {
+            "description": "Whether the model listing succeeded.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "message",
+          "models",
+          "success"
+        ],
+        "type": "object"
+      },
       "ListServicesResponse": {
         "description": "Paged response for listing AI Lake services",
         "properties": {
@@ -3436,7 +3562,8 @@
               "MISTRAL",
               "AMAZON",
               "GOOGLE",
-              "COHERE"
+              "COHERE",
+              "UNKNOWN"
             ],
             "type": "string"
           },
@@ -3453,7 +3580,7 @@
         "type": "object"
       },
       "LlmProviderConfig": {
-        "description": "Provider configuration to test.",
+        "description": "Provider configuration overrides.",
         "oneOf": [
           {
             "$ref": "#/components/schemas/AwsBedrockProviderConfig"
@@ -3865,6 +3992,47 @@
         ],
         "type": "object"
       },
+      "ObjectReference": {
+        "properties": {
+          "id": {
+            "description": "Object identifier (e.g. widget ID, metric ID).",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type of the referenced object.",
+            "enum": [
+              "WIDGET",
+              "METRIC",
+              "ATTRIBUTE",
+              "DASHBOARD"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "ObjectReferenceGroup": {
+        "properties": {
+          "context": {
+            "$ref": "#/components/schemas/ObjectReference"
+          },
+          "objects": {
+            "description": "Objects the user explicitly referenced within this context.",
+            "items": {
+              "$ref": "#/components/schemas/ObjectReference"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "objects"
+        ],
+        "type": "object"
+      },
       "OpenAIProviderConfig": {
         "description": "Configuration for OpenAI provider.",
         "properties": {
@@ -3872,10 +4040,9 @@
             "$ref": "#/components/schemas/OpenAiProviderAuth"
           },
           "baseUrl": {
-            "default": "https://api.openai.com",
+            "default": "https://api.openai.com/v1",
             "description": "Custom base URL for OpenAI API.",
             "maxLength": 255,
-            "nullable": true,
             "type": "string"
           },
           "organization": {
@@ -4832,6 +4999,32 @@
         ],
         "type": "object"
       },
+      "RichTextWidgetDescriptor": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/WidgetDescriptor"
+          },
+          {
+            "properties": {
+              "title": {
+                "description": "Widget title as displayed on the dashboard.",
+                "type": "string"
+              },
+              "widgetId": {
+                "description": "Widget object ID.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Rich text widget displaying static content. Has no execution result.",
+        "required": [
+          "title",
+          "widgetId"
+        ],
+        "type": "object"
+      },
       "RouteResult": {
         "description": "Question -> Use Case routing. May contain final answer is a special use case is not required.",
         "properties": {
@@ -5404,6 +5597,31 @@
         ],
         "type": "object"
       },
+      "TestLlmProviderByIdRequest": {
+        "properties": {
+          "models": {
+            "description": "Models overrides.",
+            "items": {
+              "$ref": "#/components/schemas/LlmModel"
+            },
+            "type": "array"
+          },
+          "providerConfig": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+              },
+              {
+                "$ref": "#/components/schemas/AzureFoundryProviderConfig"
+              },
+              {
+                "$ref": "#/components/schemas/OpenAIProviderConfig"
+              }
+            ]
+          }
+        },
+        "type": "object"
+      },
       "TestLlmProviderDefinitionRequest": {
         "properties": {
           "models": {
@@ -5560,6 +5778,112 @@
         ],
         "type": "object"
       },
+      "TrendingObjectItem": {
+        "description": "Trending analytics catalog objects",
+        "properties": {
+          "createdAt": {
+            "description": "Timestamp when object was created.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "createdBy": {
+            "description": "ID of the user who created the object.",
+            "type": "string"
+          },
+          "datasetId": {
+            "description": "ID of the associated dataset, if applicable.",
+            "type": "string"
+          },
+          "datasetTitle": {
+            "description": "Title of the associated dataset, if applicable.",
+            "type": "string"
+          },
+          "datasetType": {
+            "description": "Type of the associated dataset, if applicable.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Object description.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Object ID.",
+            "type": "string"
+          },
+          "isHidden": {
+            "description": "If true, this object is hidden from AI search results by default.",
+            "type": "boolean"
+          },
+          "isHiddenFromKda": {
+            "description": "If true, this object is hidden from KDA.",
+            "type": "boolean"
+          },
+          "metricType": {
+            "description": "Type of the metric (e.g. MAQL), if applicable.",
+            "type": "string"
+          },
+          "modifiedAt": {
+            "description": "Timestamp when object was last modified.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "description": "ID of the user who last modified the object.",
+            "type": "string"
+          },
+          "tags": {
+            "items": {
+              "description": "Tags assigned to the object.",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": {
+            "description": "Object title.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type, e.g. dashboard, visualization, metric.",
+            "type": "string"
+          },
+          "usageCount": {
+            "description": "Number of times this object has been used/referenced.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "visualizationUrl": {
+            "description": "URL of the visualization, if applicable.",
+            "type": "string"
+          },
+          "workspaceId": {
+            "description": "Workspace ID the object belongs to.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "tags",
+          "title",
+          "type",
+          "usageCount",
+          "workspaceId"
+        ],
+        "type": "object"
+      },
+      "TrendingObjectsResult": {
+        "properties": {
+          "objects": {
+            "items": {
+              "$ref": "#/components/schemas/TrendingObjectItem"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "objects"
+        ],
+        "type": "object"
+      },
       "TriggerQualityIssuesCalculationResponse": {
         "properties": {
           "processId": {
@@ -5582,6 +5906,15 @@
           "processId",
           "status"
         ],
+        "type": "object"
+      },
+      "UIContext": {
+        "description": "Ambient UI state: what the user is currently looking at (dashboard, visible widgets).",
+        "properties": {
+          "dashboard": {
+            "$ref": "#/components/schemas/DashboardContext"
+          }
+        },
         "type": "object"
       },
       "Unit": {
@@ -5643,14 +5976,24 @@
         "type": "object"
       },
       "UserContext": {
-        "description": "User context, which can affect the behavior of the underlying AI features.",
+        "description": "User context with ambient UI state (view) and explicitly referenced objects.",
         "properties": {
           "activeObject": {
             "$ref": "#/components/schemas/ActiveObjectIdentification"
+          },
+          "referencedObjects": {
+            "description": "Groups of explicitly referenced objects, each optionally scoped by a context (e.g. a dashboard context with widget references).",
+            "items": {
+              "$ref": "#/components/schemas/ObjectReferenceGroup"
+            },
+            "type": "array"
+          },
+          "view": {
+            "$ref": "#/components/schemas/UIContext"
           }
         },
         "required": [
-          "activeObject"
+          "referencedObjects"
         ],
         "type": "object"
       },
@@ -5762,6 +6105,49 @@
         },
         "type": "object"
       },
+      "VisualizationSwitcherWidgetDescriptor": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/WidgetDescriptor"
+          },
+          {
+            "properties": {
+              "activeVisualizationId": {
+                "description": "ID of the currently active visualization in the switcher.",
+                "type": "string"
+              },
+              "resultId": {
+                "description": "Signed result ID for the currently active visualization's execution result.",
+                "type": "string"
+              },
+              "title": {
+                "description": "Widget title as displayed on the dashboard.",
+                "type": "string"
+              },
+              "visualizationIds": {
+                "description": "IDs of all visualizations available in the switcher.",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "widgetId": {
+                "description": "Widget object ID.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Visualization switcher widget allowing users to toggle between multiple visualizations.",
+        "required": [
+          "activeVisualizationId",
+          "title",
+          "visualizationIds",
+          "widgetId"
+        ],
+        "type": "object"
+      },
       "WhatIfMeasureAdjustmentConfig": {
         "description": "Measure adjustments for this scenario",
         "properties": {
@@ -5824,6 +6210,34 @@
         "required": [
           "adjustments",
           "label"
+        ],
+        "type": "object"
+      },
+      "WidgetDescriptor": {
+        "description": "Descriptor for a widget on the dashboard.",
+        "discriminator": {
+          "mapping": {
+            "insight": "#/components/schemas/InsightWidgetDescriptor",
+            "richText": "#/components/schemas/RichTextWidgetDescriptor",
+            "visualizationSwitcher": "#/components/schemas/VisualizationSwitcherWidgetDescriptor"
+          },
+          "propertyName": "widgetType"
+        },
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "widgetId": {
+            "type": "string"
+          },
+          "widgetType": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "widgetId",
+          "widgetType"
         ],
         "type": "object"
       }
@@ -5910,6 +6324,39 @@
         ]
       }
     },
+    "/api/v1/actions/ai/llmProvider/listModels": {
+      "post": {
+        "description": "Lists models available on an LLM provider with a full definition. For Azure AI Foundry providers, the model family will be set to UNKNOWN because the endpoint does not expose the family.",
+        "operationId": "listLlmProviderModels",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListLlmProviderModelsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListLlmProviderModelsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "List LLM Provider Models",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/ai/llmProvider/test": {
       "post": {
         "description": "Tests LLM provider connectivity with a full definition.",
@@ -5943,6 +6390,39 @@
         ]
       }
     },
+    "/api/v1/actions/ai/llmProvider/{llmProviderId}/listModels": {
+      "post": {
+        "description": "Lists models available on an existing LLM provider by its ID. For Azure AI Foundry providers, the model family will be set to UNKNOWN because the endpoint does not expose the family.",
+        "operationId": "listLlmProviderModelsById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "llmProviderId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListLlmProviderModelsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "List LLM Provider Models By Id",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/ai/llmProvider/{llmProviderId}/test": {
       "post": {
         "description": "Tests an existing LLM provider connectivity by its ID.",
@@ -5957,6 +6437,15 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestLlmProviderByIdRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "content": {
@@ -6130,6 +6619,41 @@
           }
         },
         "summary": "Get Analytics Catalog Tags",
+        "tags": [
+          "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/trendingObjects": {
+      "get": {
+        "description": "Returns a list of trending objects for this workspace",
+        "operationId": "trendingObjects",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingObjectsResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get Trending Analytics Catalog Objects",
         "tags": [
           "Smart Functions",
           "actions"
@@ -6468,6 +6992,22 @@
           {
             "in": "query",
             "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "query",
             "required": false,
             "schema": {
               "type": "string"
@@ -7120,7 +7660,7 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}": {
       "get": {
-        "description": "Gets a single execution result.",
+        "description": "Gets a single execution result. Note that the Arrow File and Arrow Stream content types are currently in BETA.",
         "operationId": "retrieveResult",
         "parameters": [
           {
@@ -7139,6 +7679,14 @@
             "in": "path",
             "name": "resultId",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-CANCEL-TOKEN",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -7192,14 +7740,6 @@
               "type": "array"
             },
             "style": "form"
-          },
-          {
-            "in": "header",
-            "name": "X-GDC-CANCEL-TOKEN",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -7209,7 +7749,9 @@
                 "schema": {
                   "$ref": "#/components/schemas/ExecutionResult"
                 }
-              }
+              },
+              "application/vnd.apache.arrow.file": {},
+              "application/vnd.apache.arrow.stream": {}
             },
             "description": "Execution result was found and returned."
           }
@@ -8573,6 +9115,44 @@
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to run AI Lake service commands.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/services/{serviceId}/status": {
+      "get": {
+        "description": "(BETA) Returns the status of a service in the organization's AI Lake. The status is controller-specific (e.g., available commands, readiness).",
+        "operationId": "getAiLakeServiceStatus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "serviceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetServiceStatusResponse"
+                }
+              }
+            },
+            "description": "AI Lake service status successfully retrieved"
+          }
+        },
+        "summary": "(BETA) Get AI Lake service status",
+        "tags": [
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to get AI Lake service status.",
           "permissions": [
             "MANAGE"
           ]

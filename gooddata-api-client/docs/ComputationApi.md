@@ -1414,7 +1414,7 @@ No authorization required
 
 Get a single execution result
 
-Gets a single execution result.
+Gets a single execution result. Note that the Arrow File and Arrow Stream content types are currently in BETA.
 
 ### Example
 
@@ -1438,6 +1438,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = computation_api.ComputationApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     result_id = "a9b28f9dc55f37ea9f4a5fb0c76895923591e781" # str | Result ID
+    x_gdc_cancel_token = "X-GDC-CANCEL-TOKEN_example" # str |  (optional)
     offset = [
         offset=1,10,
     ] # [int] | Request page with these offsets. Format is offset=1,2,3,... - one offset for each dimensions in ResultSpec from originating AFM. (optional) if omitted the server will use the default value of []
@@ -1447,7 +1448,6 @@ with gooddata_api_client.ApiClient() as api_client:
     excluded_total_dimensions = [
         "excludedTotalDimensions=dim_0,dim_1",
     ] # [str] | Identifiers of the dimensions where grand total data should not be returned for this request. A grand total will not be returned if all of its totalDimensions are in excludedTotalDimensions. (optional) if omitted the server will use the default value of []
-    x_gdc_cancel_token = "X-GDC-CANCEL-TOKEN_example" # str |  (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -1461,7 +1461,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # Get a single execution result
-        api_response = api_instance.retrieve_result(workspace_id, result_id, offset=offset, limit=limit, excluded_total_dimensions=excluded_total_dimensions, x_gdc_cancel_token=x_gdc_cancel_token)
+        api_response = api_instance.retrieve_result(workspace_id, result_id, x_gdc_cancel_token=x_gdc_cancel_token, offset=offset, limit=limit, excluded_total_dimensions=excluded_total_dimensions)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ComputationApi->retrieve_result: %s\n" % e)
@@ -1474,10 +1474,10 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**| Workspace identifier |
  **result_id** | **str**| Result ID |
+ **x_gdc_cancel_token** | **str**|  | [optional]
  **offset** | **[int]**| Request page with these offsets. Format is offset&#x3D;1,2,3,... - one offset for each dimensions in ResultSpec from originating AFM. | [optional] if omitted the server will use the default value of []
  **limit** | **[int]**| Return only this number of items. Format is limit&#x3D;1,2,3,... - one limit for each dimensions in ResultSpec from originating AFM. | [optional] if omitted the server will use the default value of []
  **excluded_total_dimensions** | **[str]**| Identifiers of the dimensions where grand total data should not be returned for this request. A grand total will not be returned if all of its totalDimensions are in excludedTotalDimensions. | [optional] if omitted the server will use the default value of []
- **x_gdc_cancel_token** | **str**|  | [optional]
 
 ### Return type
 
@@ -1490,7 +1490,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: application/json, application/vnd.apache.arrow.file, application/vnd.apache.arrow.stream
 
 
 ### HTTP response details

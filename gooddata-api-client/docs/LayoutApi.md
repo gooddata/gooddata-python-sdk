@@ -2911,6 +2911,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         settings=Settings(
                             delimiter="U",
                             export_info=True,
+                            grand_totals_position="pinnedBottom",
                             merge_headers=True,
                             page_orientation="PORTRAIT",
                             page_size="A4",
@@ -4337,6 +4338,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     settings=Settings(
                                         delimiter="U",
                                         export_info=True,
+                                        grand_totals_position="pinnedBottom",
                                         merge_headers=True,
                                         page_orientation="PORTRAIT",
                                         page_size="A4",
@@ -5652,6 +5654,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     settings=Settings(
                                         delimiter="U",
                                         export_info=True,
+                                        grand_totals_position="pinnedBottom",
                                         merge_headers=True,
                                         page_orientation="PORTRAIT",
                                         page_size="A4",

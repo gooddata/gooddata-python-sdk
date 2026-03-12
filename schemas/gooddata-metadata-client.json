@@ -5479,8 +5479,8 @@
             "$ref": "#/components/schemas/AzureFoundryProviderAuth"
           },
           "endpoint": {
-            "description": "Azure AI inference endpoint URL.",
-            "example": "https://my-resource.services.ai.azure.com/models",
+            "description": "Azure OpenAI endpoint URL.",
+            "example": "https://my-resource.openai.azure.com",
             "maxLength": 255,
             "type": "string"
           },
@@ -5574,6 +5574,7 @@
               "GEO_LONGITUDE",
               "GEO_LATITUDE",
               "GEO_AREA",
+              "GEO_ICON",
               "IMAGE"
             ],
             "example": "HYPERLINK",
@@ -5938,9 +5939,9 @@
               },
               "emptyValueHandling": {
                 "enum": [
-                  "INCLUDE",
-                  "EXCLUDE",
-                  "ONLY"
+                  "include",
+                  "exclude",
+                  "only"
                 ],
                 "type": "string"
               },
@@ -8275,6 +8276,7 @@
               "GEO_LONGITUDE",
               "GEO_LATITUDE",
               "GEO_AREA",
+              "GEO_ICON",
               "IMAGE"
             ],
             "type": "string"
@@ -9061,10 +9063,10 @@
               "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
               "MAX_ZOOM_LEVEL",
               "SORT_CASE_SENSITIVE",
+              "SORT_COLLATION",
               "METRIC_FORMAT_OVERRIDE",
               "ENABLE_AI_ON_DATA",
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
-              "ENABLE_NULL_JOINS",
               "EXPORT_CSV_CUSTOM_DELIMITER",
               "ENABLE_QUERY_TAGS",
               "RESTRICT_BASE_UI",
@@ -20238,6 +20240,7 @@
                   "GEO_LONGITUDE",
                   "GEO_LATITUDE",
                   "GEO_AREA",
+                  "GEO_ICON",
                   "IMAGE"
                 ],
                 "type": "string"
@@ -20721,7 +20724,7 @@
           "attributes": {
             "properties": {
               "defaultModelId": {
-                "description": "ID of the default model to use from the models list.",
+                "description": "Required ID of the default model to use from the models list.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
@@ -20746,7 +20749,8 @@
                         "MISTRAL",
                         "AMAZON",
                         "GOOGLE",
-                        "COHERE"
+                        "COHERE",
+                        "UNKNOWN"
                       ],
                       "type": "string"
                     },
@@ -20772,6 +20776,7 @@
               },
               "providerConfig": {
                 "description": "Provider-specific configuration including authentication.",
+                "nullable": true,
                 "oneOf": [
                   {
                     "$ref": "#/components/schemas/AwsBedrockProviderConfig"
@@ -20785,10 +20790,6 @@
                 ]
               }
             },
-            "required": [
-              "models",
-              "providerConfig"
-            ],
             "type": "object"
           },
           "id": {
@@ -20807,7 +20808,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -20830,7 +20830,7 @@
           "attributes": {
             "properties": {
               "defaultModelId": {
-                "description": "ID of the default model to use from the models list.",
+                "description": "Required ID of the default model to use from the models list.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
@@ -20855,7 +20855,8 @@
                         "MISTRAL",
                         "AMAZON",
                         "GOOGLE",
-                        "COHERE"
+                        "COHERE",
+                        "UNKNOWN"
                       ],
                       "type": "string"
                     },
@@ -20881,6 +20882,7 @@
               },
               "providerConfig": {
                 "description": "Provider-specific configuration including authentication.",
+                "nullable": true,
                 "oneOf": [
                   {
                     "$ref": "#/components/schemas/AwsBedrockProviderConfig"
@@ -20894,10 +20896,6 @@
                 ]
               }
             },
-            "required": [
-              "models",
-              "providerConfig"
-            ],
             "type": "object"
           },
           "id": {
@@ -20916,7 +20914,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -20979,7 +20976,7 @@
           "attributes": {
             "properties": {
               "defaultModelId": {
-                "description": "ID of the default model to use from the models list.",
+                "description": "Required ID of the default model to use from the models list.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
@@ -21004,7 +21001,8 @@
                         "MISTRAL",
                         "AMAZON",
                         "GOOGLE",
-                        "COHERE"
+                        "COHERE",
+                        "UNKNOWN"
                       ],
                       "type": "string"
                     },
@@ -21030,6 +21028,7 @@
               },
               "providerConfig": {
                 "description": "Provider-specific configuration including authentication.",
+                "nullable": true,
                 "oneOf": [
                   {
                     "$ref": "#/components/schemas/AwsBedrockProviderConfig"
@@ -21061,7 +21060,6 @@
           }
         },
         "required": [
-          "attributes",
           "id",
           "type"
         ],
@@ -21899,7 +21897,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiMetricOutIncludes"
+              "$ref": "#/components/schemas/JsonApiVisualizationObjectOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -21912,28 +21910,6 @@
           "data"
         ],
         "type": "object"
-      },
-      "JsonApiMetricOutIncludes": {
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
-          },
-          {
-            "$ref": "#/components/schemas/JsonApiFactOutWithLinks"
-          },
-          {
-            "$ref": "#/components/schemas/JsonApiAttributeOutWithLinks"
-          },
-          {
-            "$ref": "#/components/schemas/JsonApiLabelOutWithLinks"
-          },
-          {
-            "$ref": "#/components/schemas/JsonApiMetricOutWithLinks"
-          },
-          {
-            "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
-          }
-        ]
       },
       "JsonApiMetricOutList": {
         "description": "A JSON:API document with a list of resources",
@@ -21948,7 +21924,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiMetricOutIncludes"
+              "$ref": "#/components/schemas/JsonApiVisualizationObjectOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -23179,10 +23155,10 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
-                  "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
                   "RESTRICT_BASE_UI",
@@ -23278,10 +23254,10 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
-                  "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
                   "RESTRICT_BASE_UI",
@@ -23417,10 +23393,10 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
-                  "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
                   "RESTRICT_BASE_UI",
@@ -24922,10 +24898,10 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
-                  "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
                   "RESTRICT_BASE_UI",
@@ -25021,10 +24997,10 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
-                  "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
                   "RESTRICT_BASE_UI",
@@ -25444,7 +25420,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiMetricOutIncludes"
+              "$ref": "#/components/schemas/JsonApiVisualizationObjectOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -25457,6 +25433,28 @@
           "data"
         ],
         "type": "object"
+      },
+      "JsonApiVisualizationObjectOutIncludes": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiFactOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiAttributeOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiLabelOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiMetricOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
+          }
+        ]
       },
       "JsonApiVisualizationObjectOutList": {
         "description": "A JSON:API document with a list of resources",
@@ -25471,7 +25469,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiMetricOutIncludes"
+              "$ref": "#/components/schemas/JsonApiVisualizationObjectOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -27276,10 +27274,10 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
-                  "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
                   "RESTRICT_BASE_UI",
@@ -27375,10 +27373,10 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
-                  "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
                   "RESTRICT_BASE_UI",
@@ -27540,10 +27538,10 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
-                  "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
                   "RESTRICT_BASE_UI",
@@ -27639,10 +27637,10 @@
                   "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
                   "MAX_ZOOM_LEVEL",
                   "SORT_CASE_SENSITIVE",
+                  "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
-                  "ENABLE_NULL_JOINS",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
                   "RESTRICT_BASE_UI",
@@ -28050,10 +28048,9 @@
             "$ref": "#/components/schemas/OpenAiProviderAuth"
           },
           "baseUrl": {
-            "default": "https://api.openai.com",
+            "default": "https://api.openai.com/v1",
             "description": "Custom base URL for OpenAI API.",
             "maxLength": 255,
-            "nullable": true,
             "type": "string"
           },
           "organization": {
@@ -29132,10 +29129,10 @@
               "EXPORT_RESULT_POLLING_TIMEOUT_SECONDS",
               "MAX_ZOOM_LEVEL",
               "SORT_CASE_SENSITIVE",
+              "SORT_COLLATION",
               "METRIC_FORMAT_OVERRIDE",
               "ENABLE_AI_ON_DATA",
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
-              "ENABLE_NULL_JOINS",
               "EXPORT_CSV_CUSTOM_DELIMITER",
               "ENABLE_QUERY_TAGS",
               "RESTRICT_BASE_UI",
@@ -29311,6 +29308,16 @@
             "description": "If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF)",
             "example": true,
             "type": "boolean"
+          },
+          "grandTotalsPosition": {
+            "description": "Grand totals position. Takes precedence over position specified in visualization.",
+            "enum": [
+              "pinnedBottom",
+              "pinnedTop",
+              "bottom",
+              "top"
+            ],
+            "type": "string"
           },
           "mergeHeaders": {
             "description": "Merge equal headers in neighbouring cells. (XLSX)",
@@ -32856,7 +32863,7 @@
         "tags": [
           "Cookie Security Configuration",
           "entities",
-          "organization-controller"
+          "cookie-security-configuration-controller"
         ]
       },
       "patch": {
@@ -32911,7 +32918,7 @@
         "tags": [
           "Cookie Security Configuration",
           "entities",
-          "organization-controller"
+          "cookie-security-configuration-controller"
         ]
       },
       "put": {
@@ -32966,7 +32973,7 @@
         "tags": [
           "Cookie Security Configuration",
           "entities",
-          "organization-controller"
+          "cookie-security-configuration-controller"
         ]
       }
     },
@@ -33054,7 +33061,7 @@
         "tags": [
           "Organization - Entity APIs",
           "entities",
-          "organization-controller"
+          "organization-entity-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains permissions required to manipulate the Organization.",
@@ -33139,7 +33146,7 @@
         "tags": [
           "Organization - Entity APIs",
           "entities",
-          "organization-controller"
+          "organization-entity-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains permissions required to manipulate the Organization.",
@@ -33224,7 +33231,7 @@
         "tags": [
           "Organization - Entity APIs",
           "entities",
-          "organization-controller"
+          "organization-entity-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains permissions required to manipulate the Organization.",
@@ -33908,10 +33915,11 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Custom Geo Collections",
         "tags": [
           "Geographic Data",
           "entities",
-          "organization-model-controller"
+          "custom-geo-collection-controller"
         ]
       },
       "post": {
@@ -33948,10 +33956,11 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Custom Geo Collections",
         "tags": [
           "Geographic Data",
           "entities",
-          "organization-model-controller"
+          "custom-geo-collection-controller"
         ]
       }
     },
@@ -33977,10 +33986,11 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete Custom Geo Collection",
         "tags": [
           "Geographic Data",
           "entities",
-          "organization-model-controller"
+          "custom-geo-collection-controller"
         ]
       },
       "get": {
@@ -34016,10 +34026,11 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get Custom Geo Collection",
         "tags": [
           "Geographic Data",
           "entities",
-          "organization-model-controller"
+          "custom-geo-collection-controller"
         ]
       },
       "patch": {
@@ -34070,10 +34081,11 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch Custom Geo Collection",
         "tags": [
           "Geographic Data",
           "entities",
-          "organization-model-controller"
+          "custom-geo-collection-controller"
         ]
       },
       "put": {
@@ -34124,10 +34136,11 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put Custom Geo Collection",
         "tags": [
           "Geographic Data",
           "entities",
-          "organization-model-controller"
+          "custom-geo-collection-controller"
         ]
       }
     },
@@ -34346,7 +34359,7 @@
         "tags": [
           "Data Source - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "data-source-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -34418,7 +34431,7 @@
         "tags": [
           "Data Source - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "data-source-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -34455,7 +34468,7 @@
         "tags": [
           "Data Source - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "data-source-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -34524,7 +34537,7 @@
         "tags": [
           "Data Source - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "data-source-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -34586,7 +34599,7 @@
         "tags": [
           "Data Source - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "data-source-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -34648,7 +34661,7 @@
         "tags": [
           "Data Source - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "data-source-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -35445,7 +35458,7 @@
         "tags": [
           "JWKS",
           "entities",
-          "organization-model-controller"
+          "jwk-controller"
         ]
       },
       "post": {
@@ -35487,7 +35500,7 @@
         "tags": [
           "JWKS",
           "entities",
-          "organization-model-controller"
+          "jwk-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -35524,7 +35537,7 @@
         "tags": [
           "JWKS",
           "entities",
-          "organization-model-controller"
+          "jwk-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -35571,7 +35584,7 @@
         "tags": [
           "JWKS",
           "entities",
-          "organization-model-controller"
+          "jwk-controller"
         ]
       },
       "patch": {
@@ -35627,7 +35640,7 @@
         "tags": [
           "JWKS",
           "entities",
-          "organization-model-controller"
+          "jwk-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -35689,7 +35702,7 @@
         "tags": [
           "JWKS",
           "entities",
-          "organization-model-controller"
+          "jwk-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -38533,7 +38546,7 @@
         "tags": [
           "API tokens",
           "entities",
-          "user-model-controller"
+          "api-token-controller"
         ]
       },
       "post": {
@@ -38584,7 +38597,7 @@
         "tags": [
           "API tokens",
           "entities",
-          "user-model-controller"
+          "api-token-controller"
         ]
       }
     },
@@ -38622,7 +38635,7 @@
         "tags": [
           "API tokens",
           "entities",
-          "user-model-controller"
+          "api-token-controller"
         ]
       },
       "get": {
@@ -38670,7 +38683,7 @@
         "tags": [
           "API tokens",
           "entities",
-          "user-model-controller"
+          "api-token-controller"
         ]
       }
     },
@@ -38748,7 +38761,7 @@
         "tags": [
           "User Settings",
           "entities",
-          "user-model-controller"
+          "user-setting-controller"
         ]
       },
       "post": {
@@ -38799,7 +38812,7 @@
         "tags": [
           "User Settings",
           "entities",
-          "user-model-controller"
+          "user-setting-controller"
         ]
       }
     },
@@ -38837,7 +38850,7 @@
         "tags": [
           "User Settings",
           "entities",
-          "user-model-controller"
+          "user-setting-controller"
         ]
       },
       "get": {
@@ -38885,7 +38898,7 @@
         "tags": [
           "User Settings",
           "entities",
-          "user-model-controller"
+          "user-setting-controller"
         ]
       },
       "put": {
@@ -38948,7 +38961,7 @@
         "tags": [
           "User Settings",
           "entities",
-          "user-model-controller"
+          "user-setting-controller"
         ]
       }
     },
@@ -39875,7 +39888,7 @@
         "tags": [
           "Dashboards",
           "entities",
-          "workspace-object-controller"
+          "analytical-dashboard-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -39985,7 +39998,7 @@
         "tags": [
           "Dashboards",
           "entities",
-          "workspace-object-controller"
+          "analytical-dashboard-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -40060,11 +40073,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for AnalyticalDashboard",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Dashboards",
           "entities",
-          "workspace-object-controller"
+          "analytical-dashboard-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -40113,7 +40126,7 @@
         "tags": [
           "Dashboards",
           "entities",
-          "workspace-object-controller"
+          "analytical-dashboard-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -40234,7 +40247,7 @@
         "tags": [
           "Dashboards",
           "entities",
-          "workspace-object-controller"
+          "analytical-dashboard-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -40337,7 +40350,7 @@
         "tags": [
           "Dashboards",
           "entities",
-          "workspace-object-controller"
+          "analytical-dashboard-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -40440,7 +40453,7 @@
         "tags": [
           "Dashboards",
           "entities",
-          "workspace-object-controller"
+          "analytical-dashboard-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -40571,7 +40584,7 @@
         "tags": [
           "Attribute Hierarchies",
           "entities",
-          "workspace-object-controller"
+          "attribute-hierarchy-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -40672,7 +40685,7 @@
         "tags": [
           "Attribute Hierarchies",
           "entities",
-          "workspace-object-controller"
+          "attribute-hierarchy-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -40747,11 +40760,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for AttributeHierarchy",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Attribute Hierarchies",
           "entities",
-          "workspace-object-controller"
+          "attribute-hierarchy-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -40800,7 +40813,7 @@
         "tags": [
           "Attribute Hierarchies",
           "entities",
-          "workspace-object-controller"
+          "attribute-hierarchy-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -40912,7 +40925,7 @@
         "tags": [
           "Attribute Hierarchies",
           "entities",
-          "workspace-object-controller"
+          "attribute-hierarchy-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -41008,7 +41021,7 @@
         "tags": [
           "Attribute Hierarchies",
           "entities",
-          "workspace-object-controller"
+          "attribute-hierarchy-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -41104,7 +41117,7 @@
         "tags": [
           "Attribute Hierarchies",
           "entities",
-          "workspace-object-controller"
+          "attribute-hierarchy-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -41236,8 +41249,14 @@
         "tags": [
           "Attributes",
           "entities",
-          "workspace-object-controller"
-        ]
+          "attribute-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/attributes/search": {
@@ -41305,12 +41324,18 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for Attribute",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Attributes",
           "entities",
-          "workspace-object-controller"
-        ]
+          "attribute-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/attributes/{objectId}": {
@@ -41418,8 +41443,14 @@
         "tags": [
           "Attributes",
           "entities",
-          "workspace-object-controller"
-        ]
+          "attribute-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       },
       "patch": {
         "operationId": "patchEntity@Attributes",
@@ -41509,8 +41540,14 @@
         "tags": [
           "Attributes",
           "entities",
-          "workspace-object-controller"
-        ]
+          "attribute-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/automationResults/search": {
@@ -41714,7 +41751,7 @@
         "tags": [
           "Automations",
           "entities",
-          "workspace-object-controller"
+          "automation-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -41822,7 +41859,7 @@
         "tags": [
           "Automations",
           "entities",
-          "workspace-object-controller"
+          "automation-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -41897,11 +41934,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for Automation",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Automations",
           "entities",
-          "workspace-object-controller"
+          "automation-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -41950,7 +41987,7 @@
         "tags": [
           "Automations",
           "entities",
-          "workspace-object-controller"
+          "automation-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -42069,7 +42106,7 @@
         "tags": [
           "Automations",
           "entities",
-          "workspace-object-controller"
+          "automation-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -42172,7 +42209,7 @@
         "tags": [
           "Automations",
           "entities",
-          "workspace-object-controller"
+          "automation-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -42275,7 +42312,7 @@
         "tags": [
           "Automations",
           "entities",
-          "workspace-object-controller"
+          "automation-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -42384,7 +42421,7 @@
         "tags": [
           "Workspaces - Settings",
           "entities",
-          "workspace-object-controller"
+          "custom-application-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -42463,7 +42500,7 @@
         "tags": [
           "Workspaces - Settings",
           "entities",
-          "workspace-object-controller"
+          "custom-application-setting-controller"
         ]
       }
     },
@@ -42532,11 +42569,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for CustomApplicationSetting",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Workspaces - Settings",
           "entities",
-          "workspace-object-controller"
+          "custom-application-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -42585,7 +42622,7 @@
         "tags": [
           "Workspaces - Settings",
           "entities",
-          "workspace-object-controller"
+          "custom-application-setting-controller"
         ]
       },
       "get": {
@@ -42669,7 +42706,7 @@
         "tags": [
           "Workspaces - Settings",
           "entities",
-          "workspace-object-controller"
+          "custom-application-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -42743,7 +42780,7 @@
         "tags": [
           "Workspaces - Settings",
           "entities",
-          "workspace-object-controller"
+          "custom-application-setting-controller"
         ]
       },
       "put": {
@@ -42811,7 +42848,7 @@
         "tags": [
           "Workspaces - Settings",
           "entities",
-          "workspace-object-controller"
+          "custom-application-setting-controller"
         ]
       }
     },
@@ -42935,7 +42972,7 @@
         "tags": [
           "Plugins",
           "entities",
-          "workspace-object-controller"
+          "dashboard-plugin-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -43035,7 +43072,7 @@
         "tags": [
           "Plugins",
           "entities",
-          "workspace-object-controller"
+          "dashboard-plugin-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -43110,11 +43147,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for DashboardPlugin",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Plugins",
           "entities",
-          "workspace-object-controller"
+          "dashboard-plugin-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -43163,7 +43200,7 @@
         "tags": [
           "Plugins",
           "entities",
-          "workspace-object-controller"
+          "dashboard-plugin-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -43274,7 +43311,7 @@
         "tags": [
           "Plugins",
           "entities",
-          "workspace-object-controller"
+          "dashboard-plugin-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -43369,7 +43406,7 @@
         "tags": [
           "Plugins",
           "entities",
-          "workspace-object-controller"
+          "dashboard-plugin-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -43464,7 +43501,7 @@
         "tags": [
           "Plugins",
           "entities",
-          "workspace-object-controller"
+          "dashboard-plugin-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -43597,8 +43634,14 @@
         "tags": [
           "Datasets",
           "entities",
-          "workspace-object-controller"
-        ]
+          "dataset-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/datasets/search": {
@@ -43666,12 +43709,18 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for Dataset",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Datasets",
           "entities",
-          "workspace-object-controller"
-        ]
+          "dataset-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/datasets/{objectId}": {
@@ -43780,8 +43829,14 @@
         "tags": [
           "Datasets",
           "entities",
-          "workspace-object-controller"
-        ]
+          "dataset-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       },
       "patch": {
         "operationId": "patchEntity@Datasets",
@@ -43872,8 +43927,14 @@
         "tags": [
           "Datasets",
           "entities",
-          "workspace-object-controller"
-        ]
+          "dataset-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/exportDefinitions": {
@@ -44002,7 +44063,7 @@
         "tags": [
           "Export Definitions",
           "entities",
-          "workspace-object-controller"
+          "export-definition-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -44108,7 +44169,7 @@
         "tags": [
           "Export Definitions",
           "entities",
-          "workspace-object-controller"
+          "export-definition-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -44183,11 +44244,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for ExportDefinition",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Export Definitions",
           "entities",
-          "workspace-object-controller"
+          "export-definition-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -44236,7 +44297,7 @@
         "tags": [
           "Export Definitions",
           "entities",
-          "workspace-object-controller"
+          "export-definition-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -44353,7 +44414,7 @@
         "tags": [
           "Export Definitions",
           "entities",
-          "workspace-object-controller"
+          "export-definition-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -44454,7 +44515,7 @@
         "tags": [
           "Export Definitions",
           "entities",
-          "workspace-object-controller"
+          "export-definition-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -44555,7 +44616,7 @@
         "tags": [
           "Export Definitions",
           "entities",
-          "workspace-object-controller"
+          "export-definition-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -44684,7 +44745,7 @@
         "tags": [
           "Facts",
           "entities",
-          "workspace-object-controller"
+          "fact-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -44759,11 +44820,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for Fact",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Facts",
           "entities",
-          "workspace-object-controller"
+          "fact-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -44875,7 +44936,7 @@
         "tags": [
           "Facts",
           "entities",
-          "workspace-object-controller"
+          "fact-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -44969,7 +45030,7 @@
         "tags": [
           "Facts",
           "entities",
-          "workspace-object-controller"
+          "fact-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -45099,7 +45160,7 @@
         "tags": [
           "Filter Context",
           "entities",
-          "workspace-object-controller"
+          "filter-context-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -45199,7 +45260,7 @@
         "tags": [
           "Filter Context",
           "entities",
-          "workspace-object-controller"
+          "filter-context-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -45274,11 +45335,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for FilterContext",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Filter Context",
           "entities",
-          "workspace-object-controller"
+          "filter-context-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -45327,7 +45388,7 @@
         "tags": [
           "Filter Context",
           "entities",
-          "workspace-object-controller"
+          "filter-context-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -45438,7 +45499,7 @@
         "tags": [
           "Filter Context",
           "entities",
-          "workspace-object-controller"
+          "filter-context-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -45533,7 +45594,7 @@
         "tags": [
           "Filter Context",
           "entities",
-          "workspace-object-controller"
+          "filter-context-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -45628,7 +45689,7 @@
         "tags": [
           "Filter Context",
           "entities",
-          "workspace-object-controller"
+          "filter-context-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -45758,7 +45819,7 @@
         "tags": [
           "Filter Views",
           "entities",
-          "workspace-object-controller"
+          "filter-view-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -45837,7 +45898,7 @@
         "tags": [
           "Filter Views",
           "entities",
-          "workspace-object-controller"
+          "filter-view-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage Filter Views",
@@ -45912,11 +45973,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for FilterView",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Filter Views",
           "entities",
-          "workspace-object-controller"
+          "filter-view-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -45965,7 +46026,7 @@
         "tags": [
           "Filter Views",
           "entities",
-          "workspace-object-controller"
+          "filter-view-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage Filter Views",
@@ -46055,7 +46116,7 @@
         "tags": [
           "Filter Views",
           "entities",
-          "workspace-object-controller"
+          "filter-view-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -46151,7 +46212,7 @@
         "tags": [
           "Filter Views",
           "entities",
-          "workspace-object-controller"
+          "filter-view-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage Filter Views",
@@ -46247,7 +46308,7 @@
         "tags": [
           "Filter Views",
           "entities",
-          "workspace-object-controller"
+          "filter-view-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage Filter Views",
@@ -46540,6 +46601,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "The search endpoint (beta)",
         "tags": [
           "AI",
           "entities",
@@ -46991,7 +47053,7 @@
         "tags": [
           "Labels",
           "entities",
-          "workspace-object-controller"
+          "label-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -47066,11 +47128,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for Label",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Labels",
           "entities",
-          "workspace-object-controller"
+          "label-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -47182,7 +47244,7 @@
         "tags": [
           "Labels",
           "entities",
-          "workspace-object-controller"
+          "label-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -47276,7 +47338,7 @@
         "tags": [
           "Labels",
           "entities",
-          "workspace-object-controller"
+          "label-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -48023,7 +48085,7 @@
         "tags": [
           "Metrics",
           "entities",
-          "workspace-object-controller"
+          "metric-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -48129,7 +48191,7 @@
         "tags": [
           "Metrics",
           "entities",
-          "workspace-object-controller"
+          "metric-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -48204,11 +48266,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for Metric",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Metrics",
           "entities",
-          "workspace-object-controller"
+          "metric-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -48257,7 +48319,7 @@
         "tags": [
           "Metrics",
           "entities",
-          "workspace-object-controller"
+          "metric-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -48374,7 +48436,7 @@
         "tags": [
           "Metrics",
           "entities",
-          "workspace-object-controller"
+          "metric-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -48475,7 +48537,7 @@
         "tags": [
           "Metrics",
           "entities",
-          "workspace-object-controller"
+          "metric-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -48576,7 +48638,7 @@
         "tags": [
           "Metrics",
           "entities",
-          "workspace-object-controller"
+          "metric-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -48712,8 +48774,14 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
-        ]
+          "user-data-filter-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       },
       "post": {
         "operationId": "createEntity@UserDataFilters",
@@ -48812,8 +48880,14 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
-        ]
+          "user-data-filter-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/userDataFilters/search": {
@@ -48881,12 +48955,18 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for UserDataFilter",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
-        ]
+          "user-data-filter-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId}": {
@@ -48928,8 +49008,14 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
-        ]
+          "user-data-filter-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "get": {
         "operationId": "getEntity@UserDataFilters",
@@ -49039,8 +49125,14 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
-        ]
+          "user-data-filter-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       },
       "patch": {
         "operationId": "patchEntity@UserDataFilters",
@@ -49134,8 +49226,14 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
-        ]
+          "user-data-filter-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "put": {
         "operationId": "updateEntity@UserDataFilters",
@@ -49229,8 +49327,14 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
-        ]
+          "user-data-filter-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/visualizationObjects": {
@@ -49359,7 +49463,7 @@
         "tags": [
           "Visualization Object",
           "entities",
-          "workspace-object-controller"
+          "visualization-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -49465,7 +49569,7 @@
         "tags": [
           "Visualization Object",
           "entities",
-          "workspace-object-controller"
+          "visualization-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -49540,11 +49644,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for VisualizationObject",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Visualization Object",
           "entities",
-          "workspace-object-controller"
+          "visualization-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -49593,7 +49697,7 @@
         "tags": [
           "Visualization Object",
           "entities",
-          "workspace-object-controller"
+          "visualization-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -49710,7 +49814,7 @@
         "tags": [
           "Visualization Object",
           "entities",
-          "workspace-object-controller"
+          "visualization-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -49811,7 +49915,7 @@
         "tags": [
           "Visualization Object",
           "entities",
-          "workspace-object-controller"
+          "visualization-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -49912,7 +50016,7 @@
         "tags": [
           "Visualization Object",
           "entities",
-          "workspace-object-controller"
+          "visualization-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -50041,7 +50145,7 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
+          "workspace-data-filter-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -50140,7 +50244,7 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
+          "workspace-data-filter-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
@@ -50215,11 +50319,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for WorkspaceDataFilterSetting",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
+          "workspace-data-filter-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -50268,7 +50372,7 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
+          "workspace-data-filter-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
@@ -50378,7 +50482,7 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
+          "workspace-data-filter-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -50472,7 +50576,7 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
+          "workspace-data-filter-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
@@ -50566,7 +50670,7 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
+          "workspace-data-filter-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
@@ -50695,7 +50799,7 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
+          "workspace-data-filter-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -50794,7 +50898,7 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
+          "workspace-data-filter-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
@@ -50869,11 +50973,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for WorkspaceDataFilter",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
+          "workspace-data-filter-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -50922,7 +51026,7 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
+          "workspace-data-filter-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
@@ -51032,7 +51136,7 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
+          "workspace-data-filter-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -51126,7 +51230,7 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
+          "workspace-data-filter-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
@@ -51220,7 +51324,7 @@
         "tags": [
           "Data Filters",
           "entities",
-          "workspace-object-controller"
+          "workspace-data-filter-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
@@ -51329,7 +51433,7 @@
         "tags": [
           "Workspaces - Settings",
           "entities",
-          "workspace-object-controller"
+          "workspace-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -51408,7 +51512,7 @@
         "tags": [
           "Workspaces - Settings",
           "entities",
-          "workspace-object-controller"
+          "workspace-setting-controller"
         ]
       }
     },
@@ -51477,10 +51581,11 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Workspaces - Settings",
           "entities",
-          "workspace-object-controller"
+          "workspace-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -51529,7 +51634,7 @@
         "tags": [
           "Workspaces - Settings",
           "entities",
-          "workspace-object-controller"
+          "workspace-setting-controller"
         ]
       },
       "get": {
@@ -51613,7 +51718,7 @@
         "tags": [
           "Workspaces - Settings",
           "entities",
-          "workspace-object-controller"
+          "workspace-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -51687,7 +51792,7 @@
         "tags": [
           "Workspaces - Settings",
           "entities",
-          "workspace-object-controller"
+          "workspace-setting-controller"
         ]
       },
       "put": {
@@ -51755,7 +51860,7 @@
         "tags": [
           "Workspaces - Settings",
           "entities",
-          "workspace-object-controller"
+          "workspace-setting-controller"
         ]
       }
     },

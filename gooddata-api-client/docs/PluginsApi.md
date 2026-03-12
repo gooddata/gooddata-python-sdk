@@ -9,7 +9,7 @@ Method | HTTP request | Description
 [**get_all_entities_dashboard_plugins**](PluginsApi.md#get_all_entities_dashboard_plugins) | **GET** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | Get all Plugins
 [**get_entity_dashboard_plugins**](PluginsApi.md#get_entity_dashboard_plugins) | **GET** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Get a Plugin
 [**patch_entity_dashboard_plugins**](PluginsApi.md#patch_entity_dashboard_plugins) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Patch a Plugin
-[**search_entities_dashboard_plugins**](PluginsApi.md#search_entities_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/search | Search request for DashboardPlugin
+[**search_entities_dashboard_plugins**](PluginsApi.md#search_entities_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/search | The search endpoint (beta)
 [**update_entity_dashboard_plugins**](PluginsApi.md#update_entity_dashboard_plugins) | **PUT** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Put a Plugin
 
 
@@ -473,7 +473,7 @@ No authorization required
 # **search_entities_dashboard_plugins**
 > JsonApiDashboardPluginOutList search_entities_dashboard_plugins(workspace_id, entity_search_body)
 
-Search request for DashboardPlugin
+The search endpoint (beta)
 
 ### Example
 
@@ -521,7 +521,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for DashboardPlugin
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_dashboard_plugins(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -530,7 +530,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for DashboardPlugin
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_dashboard_plugins(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

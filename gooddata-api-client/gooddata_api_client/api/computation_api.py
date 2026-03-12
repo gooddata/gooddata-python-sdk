@@ -1031,10 +1031,10 @@ class ComputationApi(object):
                 'all': [
                     'workspace_id',
                     'result_id',
+                    'x_gdc_cancel_token',
                     'offset',
                     'limit',
                     'excluded_total_dimensions',
-                    'x_gdc_cancel_token',
                 ],
                 'required': [
                     'workspace_id',
@@ -1064,30 +1064,30 @@ class ComputationApi(object):
                         (str,),
                     'result_id':
                         (str,),
+                    'x_gdc_cancel_token':
+                        (str,),
                     'offset':
                         ([int],),
                     'limit':
                         ([int],),
                     'excluded_total_dimensions':
                         ([str],),
-                    'x_gdc_cancel_token':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'result_id': 'resultId',
+                    'x_gdc_cancel_token': 'X-GDC-CANCEL-TOKEN',
                     'offset': 'offset',
                     'limit': 'limit',
                     'excluded_total_dimensions': 'excludedTotalDimensions',
-                    'x_gdc_cancel_token': 'X-GDC-CANCEL-TOKEN',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'result_id': 'path',
+                    'x_gdc_cancel_token': 'header',
                     'offset': 'query',
                     'limit': 'query',
                     'excluded_total_dimensions': 'query',
-                    'x_gdc_cancel_token': 'header',
                 },
                 'collection_format_map': {
                     'offset': 'csv',
@@ -1097,7 +1097,9 @@ class ComputationApi(object):
             },
             headers_map={
                 'accept': [
-                    'application/json'
+                    'application/json',
+                    'application/vnd.apache.arrow.file',
+                    'application/vnd.apache.arrow.stream'
                 ],
                 'content_type': [],
             },
@@ -2342,7 +2344,7 @@ class ComputationApi(object):
     ):
         """Get a single execution result  # noqa: E501
 
-        Gets a single execution result.  # noqa: E501
+        Gets a single execution result. Note that the Arrow File and Arrow Stream content types are currently in BETA.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -2354,10 +2356,10 @@ class ComputationApi(object):
             result_id (str): Result ID
 
         Keyword Args:
+            x_gdc_cancel_token (str): [optional]
             offset ([int]): Request page with these offsets. Format is offset=1,2,3,... - one offset for each dimensions in ResultSpec from originating AFM.. [optional] if omitted the server will use the default value of []
             limit ([int]): Return only this number of items. Format is limit=1,2,3,... - one limit for each dimensions in ResultSpec from originating AFM.. [optional] if omitted the server will use the default value of []
             excluded_total_dimensions ([str]): Identifiers of the dimensions where grand total data should not be returned for this request. A grand total will not be returned if all of its totalDimensions are in excludedTotalDimensions.. [optional] if omitted the server will use the default value of []
-            x_gdc_cancel_token (str): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
