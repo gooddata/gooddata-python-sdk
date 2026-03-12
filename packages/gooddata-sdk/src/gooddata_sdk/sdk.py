@@ -12,6 +12,7 @@ from gooddata_sdk.catalog.workspace.content_service import CatalogWorkspaceConte
 from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceService
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.service import ComputeService
+from gooddata_sdk.gen_ai.service import GenAiService
 from gooddata_sdk.support import SupportService
 from gooddata_sdk.table import TableService
 from gooddata_sdk.utils import PROFILES_FILE_PATH, profile_content
@@ -48,6 +49,7 @@ class GoodDataSdk:
         *,
         ssl_ca_cert: str | None = None,
         executions_cancellable: bool = False,
+        gen_ai_host: str | None = None,
         **custom_headers_: str | None,
     ) -> GoodDataSdk:
         """
@@ -65,6 +67,7 @@ class GoodDataSdk:
             extra_user_agent=extra_user_agent_,
             executions_cancellable=executions_cancellable,
             ssl_ca_cert=ssl_ca_cert,
+            gen_ai_host=gen_ai_host,
         )
         return cls(client)
 
@@ -87,6 +90,11 @@ class GoodDataSdk:
         self._support = SupportService(self._client)
         self._catalog_permission = CatalogPermissionService(self._client)
         self._export = ExportService(self._client)
+        self._gen_ai = (
+            GenAiService(self._client.gen_ai_host, self._client.token)
+            if self._client.gen_ai_host is not None
+            else None
+        )
 
     @property
     def catalog_workspace(self) -> CatalogWorkspaceService:
@@ -131,6 +139,10 @@ class GoodDataSdk:
     @property
     def export(self) -> ExportService:
         return self._export
+
+    @property
+    def gen_ai(self) -> GenAiService | None:
+        return self._gen_ai
 
     @property
     def client(self) -> GoodDataApiClient:

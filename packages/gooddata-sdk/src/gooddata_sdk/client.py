@@ -26,6 +26,7 @@ class GoodDataApiClient:
         extra_user_agent: str | None = None,
         executions_cancellable: bool = False,
         ssl_ca_cert: str | None = None,
+        gen_ai_host: str | None = None,
     ) -> None:
         """Take url, token for connecting to GoodData.CN.
 
@@ -71,6 +72,7 @@ class GoodDataApiClient:
         self._actions_api = apis.ActionsApi(self._api_client)
         self._user_management_api = apis.UserManagementApi(self._api_client)
         self._executions_cancellable = executions_cancellable
+        self._gen_ai_host = gen_ai_host
 
     def _do_post_request(
         self,
@@ -156,3 +158,11 @@ class GoodDataApiClient:
     @property
     def executions_cancellable(self) -> bool:
         return self._executions_cancellable
+
+    @property
+    def gen_ai_host(self) -> str | None:
+        return self._gen_ai_host
+
+    @property
+    def token(self) -> str:
+        return self._token
