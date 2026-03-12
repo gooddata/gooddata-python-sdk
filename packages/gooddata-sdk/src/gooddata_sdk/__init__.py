@@ -290,6 +290,7 @@ from gooddata_sdk.compute.model.metric import (
     SimpleMetric,
 )
 from gooddata_sdk.compute.service import ComputeService
+from gooddata_sdk.gen_ai.service import GenAiService
 from gooddata_sdk.sdk import GoodDataSdk
 from gooddata_sdk.table import ExecutionTable, TableService
 from gooddata_sdk.utils import SideLoads
