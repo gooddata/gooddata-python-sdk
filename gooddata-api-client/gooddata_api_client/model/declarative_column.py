@@ -71,7 +71,7 @@ class DeclarativeColumn(ModelNormal):
         ('name',): {
             'max_length': 255,
             'regex': {
-                'pattern': r'^[^]*$',  # noqa: E501
+                'pattern': r'^[^\x00]*$',  # noqa: E501
             },
         },
         ('description',): {
