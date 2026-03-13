@@ -296,3 +296,25 @@ class MotherDuckAttributes(DatabaseAttributes):
 class CatalogDataSourceMotherDuck(CatalogDataSource):
     _URL_TMPL: ClassVar[str] = "jdbc:duckdb:md:{db_name}"
     type: str = "MOTHERDUCK"
+
+
+class _NoCredentials(Credentials):
+    """Placeholder credentials for data sources that do not require authentication."""
+
+    def to_api_args(self) -> dict[str, Any]:
+        return {}
+
+    @classmethod
+    def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
+        return True
+
+    @classmethod
+    def from_api(cls, entity: dict[str, Any]) -> _NoCredentials:
+        return cls()
+
+
+@define(kw_only=True, eq=False)
+class CatalogDataSourceGdStorage(CatalogDataSource):
+    type: str = "GDSTORAGE"
+    schema: str = ""
+    credentials: Credentials = field(factory=_NoCredentials, repr=False)
