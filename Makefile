@@ -66,6 +66,7 @@ download:
 	$(call download_client,scan)
 	$(call download_client,"export")
 	$(call download_client,automation)
+	$(call download_client,result)
 
 .PHONY: type-check
 type-check:

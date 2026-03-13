@@ -32,10 +32,13 @@ from gooddata_api_client.model.afm_valid_objects_query import AfmValidObjectsQue
 from gooddata_api_client.model.afm_valid_objects_response import AfmValidObjectsResponse
 from gooddata_api_client.model.analytics_catalog_created_by import AnalyticsCatalogCreatedBy
 from gooddata_api_client.model.analytics_catalog_tags import AnalyticsCatalogTags
+from gooddata_api_client.model.analyze_csv_request import AnalyzeCsvRequest
+from gooddata_api_client.model.analyze_csv_response import AnalyzeCsvResponse
 from gooddata_api_client.model.anomaly_detection_request import AnomalyDetectionRequest
 from gooddata_api_client.model.anomaly_detection_result import AnomalyDetectionResult
 from gooddata_api_client.model.api_entitlement import ApiEntitlement
 from gooddata_api_client.model.available_assignees import AvailableAssignees
+from gooddata_api_client.model.cache_usage_data import CacheUsageData
 from gooddata_api_client.model.change_analysis_request import ChangeAnalysisRequest
 from gooddata_api_client.model.change_analysis_response import ChangeAnalysisResponse
 from gooddata_api_client.model.change_analysis_result import ChangeAnalysisResult
@@ -48,6 +51,8 @@ from gooddata_api_client.model.clustering_request import ClusteringRequest
 from gooddata_api_client.model.clustering_result import ClusteringResult
 from gooddata_api_client.model.column_statistics_request import ColumnStatisticsRequest
 from gooddata_api_client.model.column_statistics_response import ColumnStatisticsResponse
+from gooddata_api_client.model.convert_geo_file_request import ConvertGeoFileRequest
+from gooddata_api_client.model.convert_geo_file_response import ConvertGeoFileResponse
 from gooddata_api_client.model.create_knowledge_document_request_dto import CreateKnowledgeDocumentRequestDto
 from gooddata_api_client.model.create_knowledge_document_response_dto import CreateKnowledgeDocumentResponseDto
 from gooddata_api_client.model.dashboard_permissions import DashboardPermissions
@@ -55,6 +60,7 @@ from gooddata_api_client.model.dashboard_tabular_export_request import Dashboard
 from gooddata_api_client.model.data_source_permission_assignment import DataSourcePermissionAssignment
 from gooddata_api_client.model.data_source_schemata import DataSourceSchemata
 from gooddata_api_client.model.declarative_model import DeclarativeModel
+from gooddata_api_client.model.delete_files_request import DeleteFilesRequest
 from gooddata_api_client.model.delete_knowledge_document_response_dto import DeleteKnowledgeDocumentResponseDto
 from gooddata_api_client.model.dependent_entities_request import DependentEntitiesRequest
 from gooddata_api_client.model.dependent_entities_response import DependentEntitiesResponse
@@ -65,6 +71,7 @@ from gooddata_api_client.model.execution_result import ExecutionResult
 from gooddata_api_client.model.export_response import ExportResponse
 from gooddata_api_client.model.forecast_request import ForecastRequest
 from gooddata_api_client.model.forecast_result import ForecastResult
+from gooddata_api_client.model.gd_storage_file import GdStorageFile
 from gooddata_api_client.model.generate_description_request import GenerateDescriptionRequest
 from gooddata_api_client.model.generate_description_response import GenerateDescriptionResponse
 from gooddata_api_client.model.generate_ldm_request import GenerateLdmRequest
@@ -75,6 +82,10 @@ from gooddata_api_client.model.get_quality_issues_response import GetQualityIssu
 from gooddata_api_client.model.hierarchy_object_identification import HierarchyObjectIdentification
 from gooddata_api_client.model.identifier_duplications import IdentifierDuplications
 from gooddata_api_client.model.image_export_request import ImageExportRequest
+from gooddata_api_client.model.import_csv_request import ImportCsvRequest
+from gooddata_api_client.model.import_csv_response import ImportCsvResponse
+from gooddata_api_client.model.import_geo_collection_request import ImportGeoCollectionRequest
+from gooddata_api_client.model.import_geo_collection_response import ImportGeoCollectionResponse
 from gooddata_api_client.model.key_drivers_request import KeyDriversRequest
 from gooddata_api_client.model.key_drivers_response import KeyDriversResponse
 from gooddata_api_client.model.key_drivers_result import KeyDriversResult
@@ -94,6 +105,8 @@ from gooddata_api_client.model.platform_usage import PlatformUsage
 from gooddata_api_client.model.platform_usage_request import PlatformUsageRequest
 from gooddata_api_client.model.quality_issues_calculation_status_response import QualityIssuesCalculationStatusResponse
 from gooddata_api_client.model.raw_export_request import RawExportRequest
+from gooddata_api_client.model.read_csv_file_manifests_request import ReadCsvFileManifestsRequest
+from gooddata_api_client.model.read_csv_file_manifests_response import ReadCsvFileManifestsResponse
 from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
 from gooddata_api_client.model.resolved_llm_endpoints import ResolvedLlmEndpoints
 from gooddata_api_client.model.resolved_setting import ResolvedSetting
@@ -118,6 +131,8 @@ from gooddata_api_client.model.test_request import TestRequest
 from gooddata_api_client.model.test_response import TestResponse
 from gooddata_api_client.model.trigger_automation_request import TriggerAutomationRequest
 from gooddata_api_client.model.trigger_quality_issues_calculation_response import TriggerQualityIssuesCalculationResponse
+from gooddata_api_client.model.upload_file_response import UploadFileResponse
+from gooddata_api_client.model.upload_geo_collection_file_response import UploadGeoCollectionFileResponse
 from gooddata_api_client.model.upsert_knowledge_document_request_dto import UpsertKnowledgeDocumentRequestDto
 from gooddata_api_client.model.upsert_knowledge_document_response_dto import UpsertKnowledgeDocumentResponseDto
 from gooddata_api_client.model.validate_llm_endpoint_by_id_request import ValidateLLMEndpointByIdRequest
@@ -489,6 +504,56 @@ class ActionsApi(object):
                     'application/json'
                 ],
                 'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.analyze_csv_endpoint = _Endpoint(
+            settings={
+                'response_type': ([AnalyzeCsvResponse],),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/fileStorage/staging/analyzeCsv',
+                'operation_id': 'analyze_csv',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'analyze_csv_request',
+                ],
+                'required': [
+                    'analyze_csv_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'analyze_csv_request':
+                        (AnalyzeCsvRequest,),
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                    'analyze_csv_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
             },
             api_client=api_client
         )
@@ -1137,6 +1202,48 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.collect_cache_usage_endpoint = _Endpoint(
+            settings={
+                'response_type': (CacheUsageData,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/collectCacheUsage',
+                'operation_id': 'collect_cache_usage',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.column_statistics_endpoint = _Endpoint(
             settings={
                 'response_type': (ColumnStatisticsResponse,),
@@ -1475,6 +1582,56 @@ class ActionsApi(object):
             headers_map={
                 'accept': [
                     'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.convert_geo_file_endpoint = _Endpoint(
+            settings={
+                'response_type': (ConvertGeoFileResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/customGeoCollection/convert',
+                'operation_id': 'convert_geo_file',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'convert_geo_file_request',
+                ],
+                'required': [
+                    'convert_geo_file_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'convert_geo_file_request':
+                        (ConvertGeoFileRequest,),
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                    'convert_geo_file_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    '*/*'
                 ],
                 'content_type': [
                     'application/json'
@@ -1953,6 +2110,57 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.custom_geo_collection_staging_upload_endpoint = _Endpoint(
+            settings={
+                'response_type': (UploadGeoCollectionFileResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/customGeoCollection/staging/upload',
+                'operation_id': 'custom_geo_collection_staging_upload',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'file',
+                ],
+                'required': [
+                    'file',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'file':
+                        (file_type,),
+                },
+                'attribute_map': {
+                    'file': 'file',
+                },
+                'location_map': {
+                    'file': 'form',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    '*/*'
+                ],
+                'content_type': [
+                    'multipart/form-data'
+                ]
+            },
+            api_client=api_client
+        )
         self.dashboard_permissions_endpoint = _Endpoint(
             settings={
                 'response_type': (DashboardPermissions,),
@@ -2067,6 +2275,60 @@ class ActionsApi(object):
                     'application/json'
                 ],
                 'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.delete_files_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/fileStorage/dataSources/{dataSourceId}/deleteFiles',
+                'operation_id': 'delete_files',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'data_source_id',
+                    'delete_files_request',
+                ],
+                'required': [
+                    'data_source_id',
+                    'delete_files_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'data_source_id':
+                        (str,),
+                    'delete_files_request':
+                        (DeleteFilesRequest,),
+                },
+                'attribute_map': {
+                    'data_source_id': 'dataSourceId',
+                },
+                'location_map': {
+                    'data_source_id': 'path',
+                    'delete_files_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
             },
             api_client=api_client
         )
@@ -3567,6 +3829,118 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.import_csv_endpoint = _Endpoint(
+            settings={
+                'response_type': ([ImportCsvResponse],),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/fileStorage/dataSources/{dataSourceId}/importCsv',
+                'operation_id': 'import_csv',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'data_source_id',
+                    'import_csv_request',
+                ],
+                'required': [
+                    'data_source_id',
+                    'import_csv_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'data_source_id':
+                        (str,),
+                    'import_csv_request':
+                        (ImportCsvRequest,),
+                },
+                'attribute_map': {
+                    'data_source_id': 'dataSourceId',
+                },
+                'location_map': {
+                    'data_source_id': 'path',
+                    'import_csv_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.import_custom_geo_collection_endpoint = _Endpoint(
+            settings={
+                'response_type': (ImportGeoCollectionResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/customGeoCollection/{collectionId}/import',
+                'operation_id': 'import_custom_geo_collection',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'collection_id',
+                    'import_geo_collection_request',
+                ],
+                'required': [
+                    'collection_id',
+                    'import_geo_collection_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'collection_id':
+                        (str,),
+                    'import_geo_collection_request':
+                        (ImportGeoCollectionRequest,),
+                },
+                'attribute_map': {
+                    'collection_id': 'collectionId',
+                },
+                'location_map': {
+                    'collection_id': 'path',
+                    'import_geo_collection_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    '*/*'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
         self.inherited_entity_conflicts_endpoint = _Endpoint(
             settings={
                 'response_type': ([IdentifierDuplications],),
@@ -3872,6 +4246,55 @@ class ActionsApi(object):
                 },
                 'collection_format_map': {
                     'scopes': 'multi',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.list_files_endpoint = _Endpoint(
+            settings={
+                'response_type': ([GdStorageFile],),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/fileStorage/dataSources/{dataSourceId}/listFiles',
+                'operation_id': 'list_files',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'data_source_id',
+                ],
+                'required': [
+                    'data_source_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'data_source_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'data_source_id': 'dataSourceId',
+                },
+                'location_map': {
+                    'data_source_id': 'path',
+                },
+                'collection_format_map': {
                 }
             },
             headers_map={
@@ -4911,6 +5334,62 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.read_csv_file_manifests_endpoint = _Endpoint(
+            settings={
+                'response_type': ([ReadCsvFileManifestsResponse],),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/fileStorage/dataSources/{dataSourceId}/readCsvFileManifests',
+                'operation_id': 'read_csv_file_manifests',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'data_source_id',
+                    'read_csv_file_manifests_request',
+                ],
+                'required': [
+                    'data_source_id',
+                    'read_csv_file_manifests_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'data_source_id':
+                        (str,),
+                    'read_csv_file_manifests_request':
+                        (ReadCsvFileManifestsRequest,),
+                },
+                'attribute_map': {
+                    'data_source_id': 'dataSourceId',
+                },
+                'location_map': {
+                    'data_source_id': 'path',
+                    'read_csv_file_manifests_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
         self.register_upload_notification_endpoint = _Endpoint(
             settings={
                 'response_type': None,
@@ -5719,6 +6198,57 @@ class ActionsApi(object):
                 'accept': [],
                 'content_type': [
                     'application/xml'
+                ]
+            },
+            api_client=api_client
+        )
+        self.staging_upload_endpoint = _Endpoint(
+            settings={
+                'response_type': (UploadFileResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/fileStorage/staging/upload',
+                'operation_id': 'staging_upload',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'file',
+                ],
+                'required': [
+                    'file',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'file':
+                        (file_type,),
+                },
+                'attribute_map': {
+                    'file': 'file',
+                },
+                'location_map': {
+                    'file': 'form',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'multipart/form-data'
                 ]
             },
             api_client=api_client
@@ -7444,6 +7974,89 @@ class ActionsApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.all_platform_usage_endpoint.call_with_http_info(**kwargs)
 
+    def analyze_csv(
+        self,
+        analyze_csv_request,
+        **kwargs
+    ):
+        """Analyze CSV  # noqa: E501
+
+        Analyzes CSV files at the given locations  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.analyze_csv(analyze_csv_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            analyze_csv_request (AnalyzeCsvRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            [AnalyzeCsvResponse]
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['analyze_csv_request'] = \
+            analyze_csv_request
+        return self.analyze_csv_endpoint.call_with_http_info(**kwargs)
+
     def anomaly_detection(
         self,
         workspace_id,
@@ -8327,6 +8940,84 @@ class ActionsApi(object):
             result_id
         return self.clustering_result_endpoint.call_with_http_info(**kwargs)
 
+    def collect_cache_usage(
+        self,
+        **kwargs
+    ):
+        """Collect data about the current cache usage  # noqa: E501
+
+        Get the detailed data about how much cache your organization is currently using, broken down by individual workspaces.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.collect_cache_usage(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            CacheUsageData
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        return self.collect_cache_usage_endpoint.call_with_http_info(**kwargs)
+
     def column_statistics(
         self,
         data_source_id,
@@ -8766,6 +9457,89 @@ class ActionsApi(object):
         kwargs['afm_valid_objects_query'] = \
             afm_valid_objects_query
         return self.compute_valid_objects_endpoint.call_with_http_info(**kwargs)
+
+    def convert_geo_file(
+        self,
+        convert_geo_file_request,
+        **kwargs
+    ):
+        """Convert a geo file to GeoParquet format  # noqa: E501
+
+        Converts a geo file from the staging area to GeoParquet format. Supported source formats: GeoJSON (.geojson, .json), ESRI Shapefile (.zip). If the source file is already in GeoParquet format, the same location is returned without conversion.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.convert_geo_file(convert_geo_file_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            convert_geo_file_request (ConvertGeoFileRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ConvertGeoFileResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['convert_geo_file_request'] = \
+            convert_geo_file_request
+        return self.convert_geo_file_endpoint.call_with_http_info(**kwargs)
 
     def create_dashboard_export_request(
         self,
@@ -9464,6 +10238,89 @@ class ActionsApi(object):
             workspace_id
         return self.created_by_endpoint.call_with_http_info(**kwargs)
 
+    def custom_geo_collection_staging_upload(
+        self,
+        file,
+        **kwargs
+    ):
+        """Upload a geo collection file to the staging area  # noqa: E501
+
+        Provides a location for uploading staging files for custom geo collections. Supported file types: GeoParquet (.parquet), GeoJSON (.geojson, .json), ESRI Shapefile (.zip). Maximum file size: 100 MB.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.custom_geo_collection_staging_upload(file, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            file (file_type): The geo collection file to upload. Supported formats: GeoParquet (.parquet), GeoJSON (.geojson, .json), ESRI Shapefile (.zip).
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            UploadGeoCollectionFileResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['file'] = \
+            file
+        return self.custom_geo_collection_staging_upload_endpoint.call_with_http_info(**kwargs)
+
     def dashboard_permissions(
         self,
         workspace_id,
@@ -9635,6 +10492,93 @@ class ActionsApi(object):
         kwargs['filename'] = \
             filename
         return self.delete_document_endpoint.call_with_http_info(**kwargs)
+
+    def delete_files(
+        self,
+        data_source_id,
+        delete_files_request,
+        **kwargs
+    ):
+        """Delete datasource files  # noqa: E501
+
+        Delete the files in the given data source.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.delete_files(data_source_id, delete_files_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            data_source_id (str):
+            delete_files_request (DeleteFilesRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['data_source_id'] = \
+            data_source_id
+        kwargs['delete_files_request'] = \
+            delete_files_request
+        return self.delete_files_endpoint.call_with_http_info(**kwargs)
 
     def delete_organization_automations(
         self,
@@ -11792,6 +12736,180 @@ class ActionsApi(object):
             workspace_id
         return self.get_translation_tags_endpoint.call_with_http_info(**kwargs)
 
+    def import_csv(
+        self,
+        data_source_id,
+        import_csv_request,
+        **kwargs
+    ):
+        """Import CSV  # noqa: E501
+
+        Import the CSV files at the given locations in the staging area to the final location.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.import_csv(data_source_id, import_csv_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            data_source_id (str):
+            import_csv_request (ImportCsvRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            [ImportCsvResponse]
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['data_source_id'] = \
+            data_source_id
+        kwargs['import_csv_request'] = \
+            import_csv_request
+        return self.import_csv_endpoint.call_with_http_info(**kwargs)
+
+    def import_custom_geo_collection(
+        self,
+        collection_id,
+        import_geo_collection_request,
+        **kwargs
+    ):
+        """Import custom geo collection  # noqa: E501
+
+        Import a geo collection file from the staging area to be available for use. The file must be in GeoParquet format (use the convert endpoint first for other formats). Validates file size (max 100 MB), organization storage quota (max 1 GB total), and GeoParquet schema (requires id, geometry, and bbox columns).  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.import_custom_geo_collection(collection_id, import_geo_collection_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            collection_id (str):
+            import_geo_collection_request (ImportGeoCollectionRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ImportGeoCollectionResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['collection_id'] = \
+            collection_id
+        kwargs['import_geo_collection_request'] = \
+            import_geo_collection_request
+        return self.import_custom_geo_collection_endpoint.call_with_http_info(**kwargs)
+
     def inherited_entity_conflicts(
         self,
         workspace_id,
@@ -12220,6 +13338,89 @@ class ActionsApi(object):
         kwargs['workspace_id'] = \
             workspace_id
         return self.list_documents_endpoint.call_with_http_info(**kwargs)
+
+    def list_files(
+        self,
+        data_source_id,
+        **kwargs
+    ):
+        """List datasource files  # noqa: E501
+
+        List all the files in the given data source.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.list_files(data_source_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            data_source_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            [GdStorageFile]
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['data_source_id'] = \
+            data_source_id
+        return self.list_files_endpoint.call_with_http_info(**kwargs)
 
     def list_workspace_user_groups(
         self,
@@ -13823,6 +15024,93 @@ class ActionsApi(object):
             workspace_automation_management_bulk_request
         return self.pause_workspace_automations_endpoint.call_with_http_info(**kwargs)
 
+    def read_csv_file_manifests(
+        self,
+        data_source_id,
+        read_csv_file_manifests_request,
+        **kwargs
+    ):
+        """Read CSV file manifests  # noqa: E501
+
+        Read the manifests of the CSV files in the given data source.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.read_csv_file_manifests(data_source_id, read_csv_file_manifests_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            data_source_id (str):
+            read_csv_file_manifests_request (ReadCsvFileManifestsRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            [ReadCsvFileManifestsResponse]
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['data_source_id'] = \
+            data_source_id
+        kwargs['read_csv_file_manifests_request'] = \
+            read_csv_file_manifests_request
+        return self.read_csv_file_manifests_endpoint.call_with_http_info(**kwargs)
+
     def register_upload_notification(
         self,
         data_source_id,
@@ -15014,6 +16302,89 @@ class ActionsApi(object):
         kwargs['xliff'] = \
             xliff
         return self.set_translations_endpoint.call_with_http_info(**kwargs)
+
+    def staging_upload(
+        self,
+        file,
+        **kwargs
+    ):
+        """Upload a file to the staging area  # noqa: E501
+
+        Provides a location for uploading staging files.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.staging_upload(file, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            file (file_type): The file to upload.
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            UploadFileResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['file'] = \
+            file
+        return self.staging_upload_endpoint.call_with_http_info(**kwargs)
 
     def switch_active_identity_provider(
         self,
