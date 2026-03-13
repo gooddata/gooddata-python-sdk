@@ -29,6 +29,7 @@ from gooddata_sdk.catalog.data_source.entity_model.data_source import (
     CatalogDataSource,
     CatalogDataSourceBigQuery,
     CatalogDataSourceDatabricks,
+    CatalogDataSourceGdStorage,
     CatalogDataSourceGreenplum,
     CatalogDataSourceMariaDb,
     CatalogDataSourceMotherDuck,

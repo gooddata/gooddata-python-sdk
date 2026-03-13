@@ -37,6 +37,14 @@ See [Connect Data](https://www.gooddata.com/docs/cloud/connect-data/) to learn h
 * [scan_schemata](./scan_schemata/)
 * [scan_sql](./scan_sql/)
 
+### CSV Upload Methods
+
+* [staging_upload](./staging_upload/)
+* [analyze_csv](./analyze_csv/)
+* [import_csv](./import_csv/)
+* [delete_csv_files](./delete_csv_files/)
+* [upload_csv](./upload_csv/)
+
 
 ## Example
 
