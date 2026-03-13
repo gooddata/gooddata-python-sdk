@@ -170,6 +170,7 @@ Class | Method | HTTP request | Description
 *CSPDirectivesApi* | [**get_entity_csp_directives**](docs/CSPDirectivesApi.md#get_entity_csp_directives) | **GET** /api/v1/entities/cspDirectives/{id} | Get CSP Directives
 *CSPDirectivesApi* | [**patch_entity_csp_directives**](docs/CSPDirectivesApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | Patch CSP Directives
 *CSPDirectivesApi* | [**update_entity_csp_directives**](docs/CSPDirectivesApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | Put CSP Directives
+*CacheUsageApi* | [**collect_cache_usage**](docs/CacheUsageApi.md#collect_cache_usage) | **GET** /api/v1/actions/collectCacheUsage | Collect data about the current cache usage
 *CertificationApi* | [**set_certification**](docs/CertificationApi.md#set_certification) | **POST** /api/v1/actions/workspaces/{workspaceId}/setCertification | Set Certification
 *ComputationApi* | [**cancel_executions**](docs/ComputationApi.md#cancel_executions) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel | Applies all the given cancel tokens.
 *ComputationApi* | [**change_analysis**](docs/ComputationApi.md#change_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis | Compute change analysis
@@ -229,6 +230,12 @@ Class | Method | HTTP request | Description
 *DataSourceEntityAPIsApi* | [**get_entity_data_sources**](docs/DataSourceEntityAPIsApi.md#get_entity_data_sources) | **GET** /api/v1/entities/dataSources/{id} | Get Data Source entity
 *DataSourceEntityAPIsApi* | [**patch_entity_data_sources**](docs/DataSourceEntityAPIsApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | Patch Data Source entity
 *DataSourceEntityAPIsApi* | [**update_entity_data_sources**](docs/DataSourceEntityAPIsApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | Put Data Source entity
+*DataSourceFilesAnalysisApi* | [**analyze_csv**](docs/DataSourceFilesAnalysisApi.md#analyze_csv) | **POST** /api/v1/actions/fileStorage/staging/analyzeCsv | Analyze CSV
+*DataSourceFilesDeletionApi* | [**delete_files**](docs/DataSourceFilesDeletionApi.md#delete_files) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/deleteFiles | Delete datasource files
+*DataSourceFilesImportApi* | [**import_csv**](docs/DataSourceFilesImportApi.md#import_csv) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/importCsv | Import CSV
+*DataSourceFilesListingApi* | [**list_files**](docs/DataSourceFilesListingApi.md#list_files) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/listFiles | List datasource files
+*DataSourceFilesManifestReadApi* | [**read_csv_file_manifests**](docs/DataSourceFilesManifestReadApi.md#read_csv_file_manifests) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/readCsvFileManifests | Read CSV file manifests
+*DataSourceStagingLocationApi* | [**staging_upload**](docs/DataSourceStagingLocationApi.md#staging_upload) | **POST** /api/v1/actions/fileStorage/staging/upload | Upload a file to the staging area
 *DatasetsApi* | [**get_all_entities_datasets**](docs/DatasetsApi.md#get_all_entities_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets | Get all Datasets
 *DatasetsApi* | [**get_entity_datasets**](docs/DatasetsApi.md#get_entity_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Get a Dataset
 *DatasetsApi* | [**patch_entity_datasets**](docs/DatasetsApi.md#patch_entity_datasets) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Patch a Dataset (beta)
@@ -353,6 +360,8 @@ Class | Method | HTTP request | Description
 *NotificationChannelsApi* | [**test_existing_notification_channel**](docs/NotificationChannelsApi.md#test_existing_notification_channel) | **POST** /api/v1/actions/notificationChannels/{notificationChannelId}/test | Test existing notification channel.
 *NotificationChannelsApi* | [**test_notification_channel**](docs/NotificationChannelsApi.md#test_notification_channel) | **POST** /api/v1/actions/notificationChannels/test | Test notification channel.
 *NotificationChannelsApi* | [**update_entity_notification_channels**](docs/NotificationChannelsApi.md#update_entity_notification_channels) | **PUT** /api/v1/entities/notificationChannels/{id} | Put Notification Channel entity
+*OGCAPIFeaturesApi* | [**get_collection_items**](docs/OGCAPIFeaturesApi.md#get_collection_items) | **GET** /api/v1/location/collections/{collectionId}/items | Get collection features
+*OGCAPIFeaturesApi* | [**get_custom_collection_items**](docs/OGCAPIFeaturesApi.md#get_custom_collection_items) | **GET** /api/v1/location/custom/collections/{collectionId}/items | Get custom collection features
 *OptionsApi* | [**get_all_options**](docs/OptionsApi.md#get_all_options) | **GET** /api/v1/options | Links for all configuration options
 *OrganizationApi* | [**switch_active_identity_provider**](docs/OrganizationApi.md#switch_active_identity_provider) | **POST** /api/v1/actions/organization/switchActiveIdentityProvider | Switch Active Identity Provider
 *OrganizationDeclarativeAPIsApi* | [**get_custom_geo_collections_layout**](docs/OrganizationDeclarativeAPIsApi.md#get_custom_geo_collections_layout) | **GET** /api/v1/layout/customGeoCollections | Get all custom geo collections layout
@@ -522,6 +531,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**ai_chat_usage**](docs/ActionsApi.md#ai_chat_usage) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/chatUsage | Get Chat Usage
 *ActionsApi* | [**ai_search**](docs/ActionsApi.md#ai_search) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/search | (BETA) Semantic Search in Metadata
 *ActionsApi* | [**all_platform_usage**](docs/ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
+*ActionsApi* | [**analyze_csv**](docs/ActionsApi.md#analyze_csv) | **POST** /api/v1/actions/fileStorage/staging/analyzeCsv | Analyze CSV
 *ActionsApi* | [**anomaly_detection**](docs/ActionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
 *ActionsApi* | [**anomaly_detection_result**](docs/ActionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 *ActionsApi* | [**available_assignees**](docs/ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
@@ -532,11 +542,13 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**clean_translations**](docs/ActionsApi.md#clean_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/clean | Cleans up translations.
 *ActionsApi* | [**clustering**](docs/ActionsApi.md#clustering) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/{resultId} | (EXPERIMENTAL) Smart functions - Clustering
 *ActionsApi* | [**clustering_result**](docs/ActionsApi.md#clustering_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/result/{resultId} | (EXPERIMENTAL) Smart functions - Clustering Result
+*ActionsApi* | [**collect_cache_usage**](docs/ActionsApi.md#collect_cache_usage) | **GET** /api/v1/actions/collectCacheUsage | Collect data about the current cache usage
 *ActionsApi* | [**column_statistics**](docs/ActionsApi.md#column_statistics) | **POST** /api/v1/actions/dataSources/{dataSourceId}/computeColumnStatistics | (EXPERIMENTAL) Compute column statistics
 *ActionsApi* | [**compute_label_elements_post**](docs/ActionsApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 *ActionsApi* | [**compute_report**](docs/ActionsApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 *ActionsApi* | [**compute_valid_descendants**](docs/ActionsApi.md#compute_valid_descendants) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants | (BETA) Valid descendants
 *ActionsApi* | [**compute_valid_objects**](docs/ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
+*ActionsApi* | [**convert_geo_file**](docs/ActionsApi.md#convert_geo_file) | **POST** /api/v1/actions/customGeoCollection/convert | Convert a geo file to GeoParquet format
 *ActionsApi* | [**create_dashboard_export_request**](docs/ActionsApi.md#create_dashboard_export_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/export/tabular | (EXPERIMENTAL) Create dashboard tabular export request
 *ActionsApi* | [**create_document**](docs/ActionsApi.md#create_document) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents | 
 *ActionsApi* | [**create_image_export**](docs/ActionsApi.md#create_image_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/image | (EXPERIMENTAL) Create image export request
@@ -545,8 +557,10 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**create_slides_export**](docs/ActionsApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
 *ActionsApi* | [**create_tabular_export**](docs/ActionsApi.md#create_tabular_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/tabular | Create tabular export request
 *ActionsApi* | [**created_by**](docs/ActionsApi.md#created_by) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy | Get Analytics Catalog CreatedBy Users
+*ActionsApi* | [**custom_geo_collection_staging_upload**](docs/ActionsApi.md#custom_geo_collection_staging_upload) | **POST** /api/v1/actions/customGeoCollection/staging/upload | Upload a geo collection file to the staging area
 *ActionsApi* | [**dashboard_permissions**](docs/ActionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
 *ActionsApi* | [**delete_document**](docs/ActionsApi.md#delete_document) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents/{filename} | 
+*ActionsApi* | [**delete_files**](docs/ActionsApi.md#delete_files) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/deleteFiles | Delete datasource files
 *ActionsApi* | [**delete_organization_automations**](docs/ActionsApi.md#delete_organization_automations) | **POST** /api/v1/actions/organization/automations/delete | Delete selected automations across all workspaces
 *ActionsApi* | [**delete_workspace_automations**](docs/ActionsApi.md#delete_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/delete | Delete selected automations in the workspace
 *ActionsApi* | [**explain_afm**](docs/ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
@@ -572,11 +586,14 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_slides_export_metadata**](docs/ActionsApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 *ActionsApi* | [**get_tabular_export**](docs/ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 *ActionsApi* | [**get_translation_tags**](docs/ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
+*ActionsApi* | [**import_csv**](docs/ActionsApi.md#import_csv) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/importCsv | Import CSV
+*ActionsApi* | [**import_custom_geo_collection**](docs/ActionsApi.md#import_custom_geo_collection) | **POST** /api/v1/actions/customGeoCollection/{collectionId}/import | Import custom geo collection
 *ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 *ActionsApi* | [**inherited_entity_prefixes**](docs/ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
 *ActionsApi* | [**key_driver_analysis**](docs/ActionsApi.md#key_driver_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers | (EXPERIMENTAL) Compute key driver analysis
 *ActionsApi* | [**key_driver_analysis_result**](docs/ActionsApi.md#key_driver_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId} | (EXPERIMENTAL) Get key driver analysis result
 *ActionsApi* | [**list_documents**](docs/ActionsApi.md#list_documents) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents | 
+*ActionsApi* | [**list_files**](docs/ActionsApi.md#list_files) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/listFiles | List datasource files
 *ActionsApi* | [**list_workspace_user_groups**](docs/ActionsApi.md#list_workspace_user_groups) | **GET** /api/v1/actions/workspaces/{workspaceId}/userGroups | 
 *ActionsApi* | [**list_workspace_users**](docs/ActionsApi.md#list_workspace_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/users | 
 *ActionsApi* | [**manage_dashboard_permissions**](docs/ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
@@ -596,6 +613,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**patch_document**](docs/ActionsApi.md#patch_document) | **PATCH** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents/{filename} | 
 *ActionsApi* | [**pause_organization_automations**](docs/ActionsApi.md#pause_organization_automations) | **POST** /api/v1/actions/organization/automations/pause | Pause selected automations across all workspaces
 *ActionsApi* | [**pause_workspace_automations**](docs/ActionsApi.md#pause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/pause | Pause selected automations in the workspace
+*ActionsApi* | [**read_csv_file_manifests**](docs/ActionsApi.md#read_csv_file_manifests) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/readCsvFileManifests | Read CSV file manifests
 *ActionsApi* | [**register_upload_notification**](docs/ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 *ActionsApi* | [**resolve_all_entitlements**](docs/ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 *ActionsApi* | [**resolve_all_settings_without_workspace**](docs/ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
@@ -610,6 +628,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**search_knowledge**](docs/ActionsApi.md#search_knowledge) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/search | 
 *ActionsApi* | [**set_certification**](docs/ActionsApi.md#set_certification) | **POST** /api/v1/actions/workspaces/{workspaceId}/setCertification | Set Certification
 *ActionsApi* | [**set_translations**](docs/ActionsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
+*ActionsApi* | [**staging_upload**](docs/ActionsApi.md#staging_upload) | **POST** /api/v1/actions/fileStorage/staging/upload | Upload a file to the staging area
 *ActionsApi* | [**switch_active_identity_provider**](docs/ActionsApi.md#switch_active_identity_provider) | **POST** /api/v1/actions/organization/switchActiveIdentityProvider | Switch Active Identity Provider
 *ActionsApi* | [**tags**](docs/ActionsApi.md#tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags | Get Analytics Catalog Tags
 *ActionsApi* | [**test_data_source**](docs/ActionsApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
@@ -1259,6 +1278,12 @@ Class | Method | HTTP request | Description
  - [AnalyticsCatalogCreatedBy](docs/AnalyticsCatalogCreatedBy.md)
  - [AnalyticsCatalogTags](docs/AnalyticsCatalogTags.md)
  - [AnalyticsCatalogUser](docs/AnalyticsCatalogUser.md)
+ - [AnalyzeCsvRequest](docs/AnalyzeCsvRequest.md)
+ - [AnalyzeCsvRequestItem](docs/AnalyzeCsvRequestItem.md)
+ - [AnalyzeCsvRequestItemConfig](docs/AnalyzeCsvRequestItemConfig.md)
+ - [AnalyzeCsvResponse](docs/AnalyzeCsvResponse.md)
+ - [AnalyzeCsvResponseColumn](docs/AnalyzeCsvResponseColumn.md)
+ - [AnalyzeCsvResponseConfig](docs/AnalyzeCsvResponseConfig.md)
  - [AnomalyDetection](docs/AnomalyDetection.md)
  - [AnomalyDetectionConfig](docs/AnomalyDetectionConfig.md)
  - [AnomalyDetectionRequest](docs/AnomalyDetectionRequest.md)
@@ -1311,6 +1336,8 @@ Class | Method | HTTP request | Description
  - [AzureFoundryProviderConfig](docs/AzureFoundryProviderConfig.md)
  - [BedrockProviderAuth](docs/BedrockProviderAuth.md)
  - [BoundedFilter](docs/BoundedFilter.md)
+ - [CacheRemovalInterval](docs/CacheRemovalInterval.md)
+ - [CacheUsageData](docs/CacheUsageData.md)
  - [ChangeAnalysisParams](docs/ChangeAnalysisParams.md)
  - [ChangeAnalysisParamsFiltersInner](docs/ChangeAnalysisParamsFiltersInner.md)
  - [ChangeAnalysisRequest](docs/ChangeAnalysisRequest.md)
@@ -1342,12 +1369,19 @@ Class | Method | HTTP request | Description
  - [CompoundMeasureValueFilter](docs/CompoundMeasureValueFilter.md)
  - [CompoundMeasureValueFilterCompoundMeasureValueFilter](docs/CompoundMeasureValueFilterCompoundMeasureValueFilter.md)
  - [ContentSlideTemplate](docs/ContentSlideTemplate.md)
+ - [ConvertGeoFileRequest](docs/ConvertGeoFileRequest.md)
+ - [ConvertGeoFileResponse](docs/ConvertGeoFileResponse.md)
  - [CoverSlideTemplate](docs/CoverSlideTemplate.md)
  - [CreateKnowledgeDocumentRequestDto](docs/CreateKnowledgeDocumentRequestDto.md)
  - [CreateKnowledgeDocumentResponseDto](docs/CreateKnowledgeDocumentResponseDto.md)
  - [CreatedVisualization](docs/CreatedVisualization.md)
  - [CreatedVisualizationFiltersInner](docs/CreatedVisualizationFiltersInner.md)
  - [CreatedVisualizations](docs/CreatedVisualizations.md)
+ - [CsvConvertOptions](docs/CsvConvertOptions.md)
+ - [CsvConvertOptionsColumnType](docs/CsvConvertOptionsColumnType.md)
+ - [CsvManifestBody](docs/CsvManifestBody.md)
+ - [CsvParseOptions](docs/CsvParseOptions.md)
+ - [CsvReadOptions](docs/CsvReadOptions.md)
  - [CustomLabel](docs/CustomLabel.md)
  - [CustomMetric](docs/CustomMetric.md)
  - [CustomOverride](docs/CustomOverride.md)
@@ -1468,6 +1502,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeWorkspaces](docs/DeclarativeWorkspaces.md)
  - [DefaultSmtp](docs/DefaultSmtp.md)
  - [DefaultSmtpAllOf](docs/DefaultSmtpAllOf.md)
+ - [DeleteFilesRequest](docs/DeleteFilesRequest.md)
  - [DeleteKnowledgeDocumentResponseDto](docs/DeleteKnowledgeDocumentResponseDto.md)
  - [DependentEntitiesGraph](docs/DependentEntitiesGraph.md)
  - [DependentEntitiesNode](docs/DependentEntitiesNode.md)
@@ -1517,6 +1552,7 @@ Class | Method | HTTP request | Description
  - [Frequency](docs/Frequency.md)
  - [FrequencyBucket](docs/FrequencyBucket.md)
  - [FrequencyProperties](docs/FrequencyProperties.md)
+ - [GdStorageFile](docs/GdStorageFile.md)
  - [GenerateDescriptionRequest](docs/GenerateDescriptionRequest.md)
  - [GenerateDescriptionResponse](docs/GenerateDescriptionResponse.md)
  - [GenerateLdmRequest](docs/GenerateLdmRequest.md)
@@ -1524,6 +1560,9 @@ Class | Method | HTTP request | Description
  - [GenerateTitleResponse](docs/GenerateTitleResponse.md)
  - [GeoAreaConfig](docs/GeoAreaConfig.md)
  - [GeoCollectionIdentifier](docs/GeoCollectionIdentifier.md)
+ - [GeoJsonFeature](docs/GeoJsonFeature.md)
+ - [GeoJsonFeatureCollection](docs/GeoJsonFeatureCollection.md)
+ - [GeoJsonGeometry](docs/GeoJsonGeometry.md)
  - [GetAiLakeOperation200Response](docs/GetAiLakeOperation200Response.md)
  - [GetImageExport202ResponseInner](docs/GetImageExport202ResponseInner.md)
  - [GetQualityIssuesResponse](docs/GetQualityIssuesResponse.md)
@@ -1539,6 +1578,13 @@ Class | Method | HTTP request | Description
  - [IdentifierRef](docs/IdentifierRef.md)
  - [IdentifierRefIdentifier](docs/IdentifierRefIdentifier.md)
  - [ImageExportRequest](docs/ImageExportRequest.md)
+ - [ImportCsvRequest](docs/ImportCsvRequest.md)
+ - [ImportCsvRequestTable](docs/ImportCsvRequestTable.md)
+ - [ImportCsvRequestTableSource](docs/ImportCsvRequestTableSource.md)
+ - [ImportCsvRequestTableSourceConfig](docs/ImportCsvRequestTableSourceConfig.md)
+ - [ImportCsvResponse](docs/ImportCsvResponse.md)
+ - [ImportGeoCollectionRequest](docs/ImportGeoCollectionRequest.md)
+ - [ImportGeoCollectionResponse](docs/ImportGeoCollectionResponse.md)
  - [InPlatform](docs/InPlatform.md)
  - [InPlatformAllOf](docs/InPlatformAllOf.md)
  - [InlineFilterDefinition](docs/InlineFilterDefinition.md)
@@ -2194,6 +2240,9 @@ Class | Method | HTTP request | Description
  - [OperationError](docs/OperationError.md)
  - [OrganizationAutomationIdentifier](docs/OrganizationAutomationIdentifier.md)
  - [OrganizationAutomationManagementBulkRequest](docs/OrganizationAutomationManagementBulkRequest.md)
+ - [OrganizationCacheSettings](docs/OrganizationCacheSettings.md)
+ - [OrganizationCacheUsage](docs/OrganizationCacheUsage.md)
+ - [OrganizationCurrentCacheUsage](docs/OrganizationCurrentCacheUsage.md)
  - [OrganizationPermissionAssignment](docs/OrganizationPermissionAssignment.md)
  - [OutlierDetectionRequest](docs/OutlierDetectionRequest.md)
  - [OutlierDetectionResponse](docs/OutlierDetectionResponse.md)
@@ -2240,6 +2289,9 @@ Class | Method | HTTP request | Description
  - [RawCustomOverride](docs/RawCustomOverride.md)
  - [RawExportAutomationRequest](docs/RawExportAutomationRequest.md)
  - [RawExportRequest](docs/RawExportRequest.md)
+ - [ReadCsvFileManifestsRequest](docs/ReadCsvFileManifestsRequest.md)
+ - [ReadCsvFileManifestsRequestItem](docs/ReadCsvFileManifestsRequestItem.md)
+ - [ReadCsvFileManifestsResponse](docs/ReadCsvFileManifestsResponse.md)
  - [Reasoning](docs/Reasoning.md)
  - [ReasoningStep](docs/ReasoningStep.md)
  - [ReferenceIdentifier](docs/ReferenceIdentifier.md)
@@ -2321,6 +2373,8 @@ Class | Method | HTTP request | Description
  - [TotalResultHeader](docs/TotalResultHeader.md)
  - [TriggerAutomationRequest](docs/TriggerAutomationRequest.md)
  - [TriggerQualityIssuesCalculationResponse](docs/TriggerQualityIssuesCalculationResponse.md)
+ - [UploadFileResponse](docs/UploadFileResponse.md)
+ - [UploadGeoCollectionFileResponse](docs/UploadGeoCollectionFileResponse.md)
  - [UpsertKnowledgeDocumentRequestDto](docs/UpsertKnowledgeDocumentRequestDto.md)
  - [UpsertKnowledgeDocumentResponseDto](docs/UpsertKnowledgeDocumentResponseDto.md)
  - [UserAssignee](docs/UserAssignee.md)
@@ -2358,6 +2412,9 @@ Class | Method | HTTP request | Description
  - [WidgetSlidesTemplate](docs/WidgetSlidesTemplate.md)
  - [WorkspaceAutomationIdentifier](docs/WorkspaceAutomationIdentifier.md)
  - [WorkspaceAutomationManagementBulkRequest](docs/WorkspaceAutomationManagementBulkRequest.md)
+ - [WorkspaceCacheSettings](docs/WorkspaceCacheSettings.md)
+ - [WorkspaceCacheUsage](docs/WorkspaceCacheUsage.md)
+ - [WorkspaceCurrentCacheUsage](docs/WorkspaceCurrentCacheUsage.md)
  - [WorkspaceDataSource](docs/WorkspaceDataSource.md)
  - [WorkspaceIdentifier](docs/WorkspaceIdentifier.md)
  - [WorkspacePermissionAssignment](docs/WorkspacePermissionAssignment.md)

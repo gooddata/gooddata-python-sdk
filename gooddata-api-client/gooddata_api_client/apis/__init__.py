@@ -26,6 +26,7 @@ from gooddata_api_client.api.attributes_api import AttributesApi
 from gooddata_api_client.api.automations_api import AutomationsApi
 from gooddata_api_client.api.available_drivers_api import AvailableDriversApi
 from gooddata_api_client.api.csp_directives_api import CSPDirectivesApi
+from gooddata_api_client.api.cache_usage_api import CacheUsageApi
 from gooddata_api_client.api.certification_api import CertificationApi
 from gooddata_api_client.api.computation_api import ComputationApi
 from gooddata_api_client.api.cookie_security_configuration_api import CookieSecurityConfigurationApi
@@ -33,6 +34,12 @@ from gooddata_api_client.api.dashboards_api import DashboardsApi
 from gooddata_api_client.api.data_filters_api import DataFiltersApi
 from gooddata_api_client.api.data_source_declarative_apis_api import DataSourceDeclarativeAPIsApi
 from gooddata_api_client.api.data_source_entity_apis_api import DataSourceEntityAPIsApi
+from gooddata_api_client.api.data_source_files_analysis_api import DataSourceFilesAnalysisApi
+from gooddata_api_client.api.data_source_files_deletion_api import DataSourceFilesDeletionApi
+from gooddata_api_client.api.data_source_files_import_api import DataSourceFilesImportApi
+from gooddata_api_client.api.data_source_files_listing_api import DataSourceFilesListingApi
+from gooddata_api_client.api.data_source_files_manifest_read_api import DataSourceFilesManifestReadApi
+from gooddata_api_client.api.data_source_staging_location_api import DataSourceStagingLocationApi
 from gooddata_api_client.api.datasets_api import DatasetsApi
 from gooddata_api_client.api.dependency_graph_api import DependencyGraphApi
 from gooddata_api_client.api.entitlement_api import EntitlementApi
@@ -57,6 +64,7 @@ from gooddata_api_client.api.metadata_check_api import MetadataCheckApi
 from gooddata_api_client.api.metadata_sync_api import MetadataSyncApi
 from gooddata_api_client.api.metrics_api import MetricsApi
 from gooddata_api_client.api.notification_channels_api import NotificationChannelsApi
+from gooddata_api_client.api.ogcapi_features_api import OGCAPIFeaturesApi
 from gooddata_api_client.api.options_api import OptionsApi
 from gooddata_api_client.api.organization_api import OrganizationApi
 from gooddata_api_client.api.organization_declarative_apis_api import OrganizationDeclarativeAPIsApi

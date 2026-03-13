@@ -10,6 +10,7 @@ Method | HTTP request | Description
 [**ai_chat_usage**](ActionsApi.md#ai_chat_usage) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/chatUsage | Get Chat Usage
 [**ai_search**](ActionsApi.md#ai_search) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/search | (BETA) Semantic Search in Metadata
 [**all_platform_usage**](ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
+[**analyze_csv**](ActionsApi.md#analyze_csv) | **POST** /api/v1/actions/fileStorage/staging/analyzeCsv | Analyze CSV
 [**anomaly_detection**](ActionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
 [**anomaly_detection_result**](ActionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 [**available_assignees**](ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
@@ -20,11 +21,13 @@ Method | HTTP request | Description
 [**clean_translations**](ActionsApi.md#clean_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/clean | Cleans up translations.
 [**clustering**](ActionsApi.md#clustering) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/{resultId} | (EXPERIMENTAL) Smart functions - Clustering
 [**clustering_result**](ActionsApi.md#clustering_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/result/{resultId} | (EXPERIMENTAL) Smart functions - Clustering Result
+[**collect_cache_usage**](ActionsApi.md#collect_cache_usage) | **GET** /api/v1/actions/collectCacheUsage | Collect data about the current cache usage
 [**column_statistics**](ActionsApi.md#column_statistics) | **POST** /api/v1/actions/dataSources/{dataSourceId}/computeColumnStatistics | (EXPERIMENTAL) Compute column statistics
 [**compute_label_elements_post**](ActionsApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 [**compute_report**](ActionsApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 [**compute_valid_descendants**](ActionsApi.md#compute_valid_descendants) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants | (BETA) Valid descendants
 [**compute_valid_objects**](ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
+[**convert_geo_file**](ActionsApi.md#convert_geo_file) | **POST** /api/v1/actions/customGeoCollection/convert | Convert a geo file to GeoParquet format
 [**create_dashboard_export_request**](ActionsApi.md#create_dashboard_export_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/export/tabular | (EXPERIMENTAL) Create dashboard tabular export request
 [**create_document**](ActionsApi.md#create_document) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents | 
 [**create_image_export**](ActionsApi.md#create_image_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/image | (EXPERIMENTAL) Create image export request
@@ -33,8 +36,10 @@ Method | HTTP request | Description
 [**create_slides_export**](ActionsApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
 [**create_tabular_export**](ActionsApi.md#create_tabular_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/tabular | Create tabular export request
 [**created_by**](ActionsApi.md#created_by) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy | Get Analytics Catalog CreatedBy Users
+[**custom_geo_collection_staging_upload**](ActionsApi.md#custom_geo_collection_staging_upload) | **POST** /api/v1/actions/customGeoCollection/staging/upload | Upload a geo collection file to the staging area
 [**dashboard_permissions**](ActionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
 [**delete_document**](ActionsApi.md#delete_document) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents/{filename} | 
+[**delete_files**](ActionsApi.md#delete_files) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/deleteFiles | Delete datasource files
 [**delete_organization_automations**](ActionsApi.md#delete_organization_automations) | **POST** /api/v1/actions/organization/automations/delete | Delete selected automations across all workspaces
 [**delete_workspace_automations**](ActionsApi.md#delete_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/delete | Delete selected automations in the workspace
 [**explain_afm**](ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
@@ -60,11 +65,14 @@ Method | HTTP request | Description
 [**get_slides_export_metadata**](ActionsApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 [**get_tabular_export**](ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 [**get_translation_tags**](ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
+[**import_csv**](ActionsApi.md#import_csv) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/importCsv | Import CSV
+[**import_custom_geo_collection**](ActionsApi.md#import_custom_geo_collection) | **POST** /api/v1/actions/customGeoCollection/{collectionId}/import | Import custom geo collection
 [**inherited_entity_conflicts**](ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 [**inherited_entity_prefixes**](ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
 [**key_driver_analysis**](ActionsApi.md#key_driver_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers | (EXPERIMENTAL) Compute key driver analysis
 [**key_driver_analysis_result**](ActionsApi.md#key_driver_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId} | (EXPERIMENTAL) Get key driver analysis result
 [**list_documents**](ActionsApi.md#list_documents) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents | 
+[**list_files**](ActionsApi.md#list_files) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/listFiles | List datasource files
 [**list_workspace_user_groups**](ActionsApi.md#list_workspace_user_groups) | **GET** /api/v1/actions/workspaces/{workspaceId}/userGroups | 
 [**list_workspace_users**](ActionsApi.md#list_workspace_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/users | 
 [**manage_dashboard_permissions**](ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
@@ -84,6 +92,7 @@ Method | HTTP request | Description
 [**patch_document**](ActionsApi.md#patch_document) | **PATCH** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents/{filename} | 
 [**pause_organization_automations**](ActionsApi.md#pause_organization_automations) | **POST** /api/v1/actions/organization/automations/pause | Pause selected automations across all workspaces
 [**pause_workspace_automations**](ActionsApi.md#pause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/pause | Pause selected automations in the workspace
+[**read_csv_file_manifests**](ActionsApi.md#read_csv_file_manifests) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/readCsvFileManifests | Read CSV file manifests
 [**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 [**resolve_all_entitlements**](ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 [**resolve_all_settings_without_workspace**](ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
@@ -98,6 +107,7 @@ Method | HTTP request | Description
 [**search_knowledge**](ActionsApi.md#search_knowledge) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/search | 
 [**set_certification**](ActionsApi.md#set_certification) | **POST** /api/v1/actions/workspaces/{workspaceId}/setCertification | Set Certification
 [**set_translations**](ActionsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
+[**staging_upload**](ActionsApi.md#staging_upload) | **POST** /api/v1/actions/fileStorage/staging/upload | Upload a file to the staging area
 [**switch_active_identity_provider**](ActionsApi.md#switch_active_identity_provider) | **POST** /api/v1/actions/organization/switchActiveIdentityProvider | Switch Active Identity Provider
 [**tags**](ActionsApi.md#tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags | Get Analytics Catalog Tags
 [**test_data_source**](ActionsApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
@@ -618,6 +628,88 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **analyze_csv**
+> [AnalyzeCsvResponse] analyze_csv(analyze_csv_request)
+
+Analyze CSV
+
+Analyzes CSV files at the given locations
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.analyze_csv_response import AnalyzeCsvResponse
+from gooddata_api_client.model.analyze_csv_request import AnalyzeCsvRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    analyze_csv_request = AnalyzeCsvRequest(
+        analyze_requests=[
+            AnalyzeCsvRequestItem(
+                config=AnalyzeCsvRequestItemConfig(
+                    delimiters=[
+                        "delimiters_example",
+                    ],
+                    header_detect_max_rows=1,
+                    header_row_count=1,
+                    result_rows=1,
+                ),
+                location="location_example",
+            ),
+        ],
+    ) # AnalyzeCsvRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Analyze CSV
+        api_response = api_instance.analyze_csv(analyze_csv_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->analyze_csv: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **analyze_csv_request** | [**AnalyzeCsvRequest**](AnalyzeCsvRequest.md)|  |
+
+### Return type
+
+[**[AnalyzeCsvResponse]**](AnalyzeCsvResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful analysis. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1425,6 +1517,69 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **collect_cache_usage**
+> CacheUsageData collect_cache_usage()
+
+Collect data about the current cache usage
+
+Get the detailed data about how much cache your organization is currently using, broken down by individual workspaces.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.cache_usage_data import CacheUsageData
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Collect data about the current cache usage
+        api_response = api_instance.collect_cache_usage()
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->collect_cache_usage: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**CacheUsageData**](CacheUsageData.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **column_statistics**
 > ColumnStatisticsResponse column_statistics(data_source_id, column_statistics_request)
 
@@ -1965,6 +2120,77 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | List of attributes, facts and metrics valid with respect to given AFM. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **convert_geo_file**
+> ConvertGeoFileResponse convert_geo_file(convert_geo_file_request)
+
+Convert a geo file to GeoParquet format
+
+Converts a geo file from the staging area to GeoParquet format. Supported source formats: GeoJSON (.geojson, .json), ESRI Shapefile (.zip). If the source file is already in GeoParquet format, the same location is returned without conversion.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.convert_geo_file_response import ConvertGeoFileResponse
+from gooddata_api_client.model.convert_geo_file_request import ConvertGeoFileRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    convert_geo_file_request = ConvertGeoFileRequest(
+        location="location_example",
+    ) # ConvertGeoFileRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Convert a geo file to GeoParquet format
+        api_response = api_instance.convert_geo_file(convert_geo_file_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->convert_geo_file: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **convert_geo_file_request** | [**ConvertGeoFileRequest**](ConvertGeoFileRequest.md)|  |
+
+### Return type
+
+[**ConvertGeoFileResponse**](ConvertGeoFileResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: */*
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Conversion was successful. |  -  |
+**400** | Invalid request or unsupported file format. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2709,6 +2935,73 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **custom_geo_collection_staging_upload**
+> UploadGeoCollectionFileResponse custom_geo_collection_staging_upload(file)
+
+Upload a geo collection file to the staging area
+
+Provides a location for uploading staging files for custom geo collections. Supported file types: GeoParquet (.parquet), GeoJSON (.geojson, .json), ESRI Shapefile (.zip). Maximum file size: 100 MB.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.upload_geo_collection_file_response import UploadGeoCollectionFileResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    file = open('/path/to/file', 'rb') # file_type | The geo collection file to upload. Supported formats: GeoParquet (.parquet), GeoJSON (.geojson, .json), ESRI Shapefile (.zip).
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Upload a geo collection file to the staging area
+        api_response = api_instance.custom_geo_collection_staging_upload(file)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->custom_geo_collection_staging_upload: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **file** | **file_type**| The geo collection file to upload. Supported formats: GeoParquet (.parquet), GeoJSON (.geojson, .json), ESRI Shapefile (.zip). |
+
+### Return type
+
+[**UploadGeoCollectionFileResponse**](UploadGeoCollectionFileResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
+ - **Accept**: */*
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Upload was successful. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **dashboard_permissions**
 > DashboardPermissions dashboard_permissions(workspace_id, dashboard_id)
 
@@ -2839,6 +3132,78 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_files**
+> delete_files(data_source_id, delete_files_request)
+
+Delete datasource files
+
+Delete the files in the given data source.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.delete_files_request import DeleteFilesRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+    delete_files_request = DeleteFilesRequest(
+        file_names=[
+            "file_names_example",
+        ],
+    ) # DeleteFilesRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete datasource files
+        api_instance.delete_files(data_source_id, delete_files_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->delete_files: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+ **delete_files_request** | [**DeleteFilesRequest**](DeleteFilesRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successful deletion. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -4831,6 +5196,212 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **import_csv**
+> [ImportCsvResponse] import_csv(data_source_id, import_csv_request)
+
+Import CSV
+
+Import the CSV files at the given locations in the staging area to the final location.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.import_csv_request import ImportCsvRequest
+from gooddata_api_client.model.import_csv_response import ImportCsvResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+    import_csv_request = ImportCsvRequest(
+        tables=[
+            ImportCsvRequestTable(
+                name="name_example",
+                source=ImportCsvRequestTableSource(
+                    config=ImportCsvRequestTableSourceConfig(
+                        column_date_formats={
+                            "key": "key_example",
+                        },
+                        convert_options=CsvConvertOptions(
+                            auto_dict_encode=True,
+                            auto_dict_max_cardinality=1,
+                            check_utf8=True,
+                            column_types=[
+                                CsvConvertOptionsColumnType(
+                                    name="name_example",
+                                    nullable=True,
+                                    type="type_example",
+                                ),
+                            ],
+                            decimal_point="decimal_point_example",
+                            false_values=[
+                                "false_values_example",
+                            ],
+                            include_columns=[
+                                "include_columns_example",
+                            ],
+                            include_missing_columns=True,
+                            null_values=[
+                                "null_values_example",
+                            ],
+                            quoted_strings_can_be_null=True,
+                            strings_can_be_null=True,
+                            timestamp_parsers=[
+                                "timestamp_parsers_example",
+                            ],
+                            true_values=[
+                                "true_values_example",
+                            ],
+                        ),
+                        parse_options=CsvParseOptions(
+                            delimiter="delimiter_example",
+                            double_quote=True,
+                            escape_char={},
+                            ignore_empty_lines=True,
+                            newlines_in_values=True,
+                            quote_char={},
+                        ),
+                        read_options=CsvReadOptions(
+                            auto_generate_column_names=True,
+                            block_size=1,
+                            column_names=[
+                                "column_names_example",
+                            ],
+                            encoding="encoding_example",
+                            skip_rows=1,
+                            skip_rows_after_names=1,
+                            use_threads=True,
+                        ),
+                    ),
+                    location="location_example",
+                ),
+            ),
+        ],
+    ) # ImportCsvRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Import CSV
+        api_response = api_instance.import_csv(data_source_id, import_csv_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->import_csv: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+ **import_csv_request** | [**ImportCsvRequest**](ImportCsvRequest.md)|  |
+
+### Return type
+
+[**[ImportCsvResponse]**](ImportCsvResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful import. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **import_custom_geo_collection**
+> ImportGeoCollectionResponse import_custom_geo_collection(collection_id, import_geo_collection_request)
+
+Import custom geo collection
+
+Import a geo collection file from the staging area to be available for use. The file must be in GeoParquet format (use the convert endpoint first for other formats). Validates file size (max 100 MB), organization storage quota (max 1 GB total), and GeoParquet schema (requires id, geometry, and bbox columns).
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.import_geo_collection_response import ImportGeoCollectionResponse
+from gooddata_api_client.model.import_geo_collection_request import ImportGeoCollectionRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    collection_id = "collectionId_example" # str | 
+    import_geo_collection_request = ImportGeoCollectionRequest(
+        location="location_example",
+    ) # ImportGeoCollectionRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Import custom geo collection
+        api_response = api_instance.import_custom_geo_collection(collection_id, import_geo_collection_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->import_custom_geo_collection: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **collection_id** | **str**|  |
+ **import_geo_collection_request** | [**ImportGeoCollectionRequest**](ImportGeoCollectionRequest.md)|  |
+
+### Return type
+
+[**ImportGeoCollectionResponse**](ImportGeoCollectionResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: */*
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful import. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **inherited_entity_conflicts**
 > [IdentifierDuplications] inherited_entity_conflicts(workspace_id)
 
@@ -5218,6 +5789,73 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_files**
+> [GdStorageFile] list_files(data_source_id)
+
+List datasource files
+
+List all the files in the given data source.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.gd_storage_file import GdStorageFile
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # List datasource files
+        api_response = api_instance.list_files(data_source_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->list_files: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+
+### Return type
+
+[**[GdStorageFile]**](GdStorageFile.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful listing. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -6617,6 +7255,83 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **read_csv_file_manifests**
+> [ReadCsvFileManifestsResponse] read_csv_file_manifests(data_source_id, read_csv_file_manifests_request)
+
+Read CSV file manifests
+
+Read the manifests of the CSV files in the given data source.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.read_csv_file_manifests_response import ReadCsvFileManifestsResponse
+from gooddata_api_client.model.read_csv_file_manifests_request import ReadCsvFileManifestsRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+    read_csv_file_manifests_request = ReadCsvFileManifestsRequest(
+        manifest_requests=[
+            ReadCsvFileManifestsRequestItem(
+                file_name="file_name_example",
+                version=1,
+            ),
+        ],
+    ) # ReadCsvFileManifestsRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Read CSV file manifests
+        api_response = api_instance.read_csv_file_manifests(data_source_id, read_csv_file_manifests_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->read_csv_file_manifests: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+ **read_csv_file_manifests_request** | [**ReadCsvFileManifestsRequest**](ReadCsvFileManifestsRequest.md)|  |
+
+### Return type
+
+[**[ReadCsvFileManifestsResponse]**](ReadCsvFileManifestsResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful listing. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **register_upload_notification**
 > register_upload_notification(data_source_id)
 
@@ -7683,6 +8398,73 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | Translations were successfully set. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **staging_upload**
+> UploadFileResponse staging_upload(file)
+
+Upload a file to the staging area
+
+Provides a location for uploading staging files.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.upload_file_response import UploadFileResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    file = open('/path/to/file', 'rb') # file_type | The file to upload.
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Upload a file to the staging area
+        api_response = api_instance.staging_upload(file)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->staging_upload: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **file** | **file_type**| The file to upload. |
+
+### Return type
+
+[**UploadFileResponse**](UploadFileResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Upload was successful. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
