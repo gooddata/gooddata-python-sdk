@@ -6,6 +6,14 @@ from pathlib import Path
 from typing import Any, Union
 
 from gooddata_api_client.exceptions import NotFoundException
+from gooddata_api_client.model.analyze_csv_request import AnalyzeCsvRequest
+from gooddata_api_client.model.analyze_csv_request_item import AnalyzeCsvRequestItem
+from gooddata_api_client.model.analyze_csv_response import AnalyzeCsvResponse
+from gooddata_api_client.model.delete_files_request import DeleteFilesRequest
+from gooddata_api_client.model.import_csv_request import ImportCsvRequest
+from gooddata_api_client.model.import_csv_request_table import ImportCsvRequestTable
+from gooddata_api_client.model.import_csv_request_table_source import ImportCsvRequestTableSource
+from gooddata_api_client.model.import_csv_request_table_source_config import ImportCsvRequestTableSourceConfig
 
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.action_model.requests.ldm_request import (
@@ -503,6 +511,108 @@ class CatalogDataSourceService(CatalogServiceBase):
             for k, v in errors.items():
                 message.append(f"Test connection for data source id {k} ended with the following error {v}.")
             raise ValueError("\n".join(message))
+
+    def staging_upload(self, csv_file: Path) -> str:
+        """Upload a CSV file to the staging area.
+
+        Args:
+            csv_file (Path):
+                Path to the CSV file to upload.
+
+        Returns:
+            str:
+                Location string referencing the uploaded file in staging.
+        """
+        with open(csv_file, "rb") as f:
+            response = self._actions_api.staging_upload(file=f)
+        return response["location"]
+
+    def analyze_csv(self, location: str) -> AnalyzeCsvResponse:
+        """Analyze an uploaded CSV file in the staging area.
+
+        Returns column metadata, detected types, and a config object
+        that can be passed directly to import_csv.
+
+        Args:
+            location (str):
+                Location string returned by staging_upload.
+
+        Returns:
+            AnalyzeCsvResponse:
+                Analysis result with columns, preview data, and config.
+        """
+        request = AnalyzeCsvRequest(analyze_requests=[AnalyzeCsvRequestItem(location=location)])
+        responses = self._actions_api.analyze_csv(request, _check_return_type=False)
+        return responses[0]
+
+    def import_csv(
+        self,
+        data_source_id: str,
+        table_name: str,
+        location: str,
+        config: dict[str, Any] | None = None,
+    ) -> None:
+        """Import a CSV file from staging into a GDSTORAGE data source.
+
+        Args:
+            data_source_id (str):
+                Data source identification string.
+            table_name (str):
+                Name for the table to create or replace.
+            location (str):
+                Location string returned by staging_upload.
+            config (Optional[dict[str, Any]]):
+                Source config dict, typically from analyze_csv response.
+                Passed as ImportCsvRequestTableSourceConfig kwargs.
+
+        Returns:
+            None
+        """
+        source_kwargs: dict[str, Any] = {"location": location}
+        if config:
+            source_kwargs["config"] = ImportCsvRequestTableSourceConfig(**config)
+        source = ImportCsvRequestTableSource(**source_kwargs)
+        table = ImportCsvRequestTable(name=table_name, source=source)
+        request = ImportCsvRequest(tables=[table])
+        self._actions_api.import_csv(data_source_id, request)
+
+    def delete_csv_files(self, data_source_id: str, file_names: list[str]) -> None:
+        """Delete files from a GDSTORAGE data source.
+
+        Args:
+            data_source_id (str):
+                Data source identification string.
+            file_names (list[str]):
+                List of file names to delete.
+
+        Returns:
+            None
+        """
+        request = DeleteFilesRequest(file_names=file_names)
+        self._actions_api.delete_files(data_source_id, request)
+
+    def upload_csv(self, data_source_id: str, csv_file: Path, table_name: str) -> None:
+        """Upload a CSV file and import it into a GDSTORAGE data source.
+
+        Convenience method that orchestrates the full flow:
+        staging_upload → analyze_csv → import_csv → register_upload_notification.
+
+        Args:
+            data_source_id (str):
+                Data source identification string for a GDSTORAGE data source.
+            csv_file (Path):
+                Path to the CSV file to upload.
+            table_name (str):
+                Name for the table to create or replace in the data source.
+
+        Returns:
+            None
+        """
+        location = self.staging_upload(csv_file)
+        analysis = self.analyze_csv(location)
+        config = analysis.to_dict().get("config")
+        self.import_csv(data_source_id, table_name, location, config=config)
+        self.register_upload_notification(data_source_id)
 
     # Help methods are listed below
 
