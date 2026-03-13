@@ -735,18 +735,14 @@ name = "gooddata-api-client"
 version = "1.61.0"
 source = { editable = "gooddata-api-client" }
 dependencies = [
-    { name = "pydantic" },
     { name = "python-dateutil" },
-    { name = "typing-extensions" },
     { name = "urllib3" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "pydantic", specifier = ">=2" },
-    { name = "python-dateutil", specifier = ">=2.8.2" },
-    { name = "typing-extensions", specifier = ">=4.7.1" },
-    { name = "urllib3", specifier = ">=2.1.0,<3.0.0" },
+    { name = "python-dateutil" },
+    { name = "urllib3", specifier = ">=2.6.1" },
 ]
 
 [[package]]
