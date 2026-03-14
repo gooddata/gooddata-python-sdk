@@ -1,4 +1,4 @@
-# (C) 2024 GoodData Corporation
+# (C) 2026 GoodData Corporation
 from __future__ import annotations
 
 import functools

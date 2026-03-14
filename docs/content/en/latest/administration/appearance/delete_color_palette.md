@@ -9,18 +9,17 @@ weight: 240
 
 Delete a color palette.
 
-## Parameters
+{{% parameters-block title="Parameters" %}}
+{{< parameter p_name="color_palette_id" p_type="string" >}}
+Color palette identification string e.g. "my_palette"
+{{< /parameter >}}
+{{% /parameters-block %}}
 
-| parameter |	type | description |
-| -- | -- | -- |
-| color_palette_id | str | Color palette identification string e.g. "my_palette" |
+{{% parameters-block title="Returns" None="yes"%}}
+{{% /parameters-block %}}
 
-## Returns
-
-_None_
-
-## Raises
-
-| type | description |
-| -- | -- |
-| ValueError | Color palette does not exist. |
+{{% parameters-block title="Raises" %}}
+{{< parameter p_type="Value Error" >}}
+Color palette does not exist.
+{{< /parameter >}}
+{{% /parameters-block %}}
