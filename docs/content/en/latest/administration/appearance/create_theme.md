@@ -9,12 +9,11 @@ weight: 120
 
 Create a new theme.
 
-## Parameters
+{{% parameters-block title="Parameters" %}}
+{{< parameter p_name="theme" p_type="CatalogTheme" >}}
+A catalog theme object to be created.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
-| parameter |	type | description |
-| -- | -- | -- |
-| theme | CatalogTheme | A catalog theme object to be created. |
-
-## Returns
-
-_None_
+{{% parameters-block title="Returns" None="yes"%}}
+{{% /parameters-block %}}

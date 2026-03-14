@@ -9,14 +9,14 @@ weight: 210
 
 Get an individual color palette.
 
-## Parameters
+{{% parameters-block title="Parameters" %}}
+{{< parameter p_name="color_palette_id" p_type="string" >}}
+Color palette identification string e.g. "my_palette"
+{{< /parameter >}}
+{{% /parameters-block %}}
 
-| parameter |	type | description |
-| -- | -- | -- |
-| color_palette_id | str | Color palette identification string e.g. "my_palette" |
-
-## Returns
-
-| type |	description |
-| -- | -- |
-| CatalogColorPalette	| Catalog color palette object containing structure of the color palette. |
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="CatalogColorPalette" >}}
+Catalog color palette object containing structure of the color palette.
+{{< /parameter >}}
+{{% /parameters-block %}}
