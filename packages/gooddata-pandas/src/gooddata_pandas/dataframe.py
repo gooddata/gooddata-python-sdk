@@ -60,7 +60,8 @@ class DataFrameFactory:
     """
 
     def __init__(self, sdk: GoodDataSdk, workspace_id: str) -> None:
-        """
+        """Create a new DataFrameFactory.
+
         Args:
             sdk (GoodDataSdk): GoodData SDK instance.
             workspace_id (str): Workspace identifier.

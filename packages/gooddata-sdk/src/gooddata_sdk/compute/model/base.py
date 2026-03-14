@@ -87,11 +87,14 @@ class Filter(ExecModelEntity):
         raise NotImplementedError()
 
     def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
-        """
-        Description of the filter as it's visible for customer in UI.
+        """Description of the filter as it's visible for customer in UI.
 
-        :param labels: Dict of labels in a form of `id: label`. Measures and attributes are expected to be here.
-        :param format_locale: Locale ICU format to use for dates formatting in the description (ie. "en-US" or "cs-CZ")
-        :return: Filter's human-readable description
+        Args:
+            labels: Dict of labels in a form of ``id: label``. Measures and attributes are expected to be here.
+            format_locale: Locale ICU format to use for dates formatting in the description
+                (ie. "en-US" or "cs-CZ")
+
+        Returns:
+            Filter's human-readable description
         """
         raise NotImplementedError()

@@ -191,13 +191,17 @@ class CatalogWorkspaceService(CatalogServiceBase):
         return [CatalogWorkspaceSetting.from_api(ws) for ws in workspace_settings]
 
     def resolve_all_workspace_settings(self, workspace_id: str) -> dict:
-        """
-        Resolves values for all settings in a workspace by current user, workspace, organization, or default settings
-        and return them as a dictionary. Proper parsing is up to the caller.
+        """Resolve values for all settings in a workspace.
+
+        Resolves by current user, workspace, organization, or default settings
+        and returns them as a dictionary. Proper parsing is up to the caller.
         TODO: long-term we should return a proper entity object.
 
-        :param workspace_id: Workspace ID
-        :return: Dict of settings
+        Args:
+            workspace_id: Workspace ID
+
+        Returns:
+            Dict of settings
         """
         # note: in case some settings were recently added and the API client was not regenerated it can fail on
         #       invalid value when validating allowed types on the client side before request is sent to the server
@@ -211,14 +215,18 @@ class CatalogWorkspaceService(CatalogServiceBase):
         return {setting["type"]: setting for setting in resolved_workspace_settings}
 
     def resolve_workspace_settings(self, workspace_id: str, settings: list) -> dict:
-        """
-        Resolves values for given settings in a workspace by current user, workspace, organization, or default settings
-        and return them as a dictionary. Proper parsing is up to the caller.
+        """Resolve values for given settings in a workspace.
+
+        Resolves by current user, workspace, organization, or default settings
+        and returns them as a dictionary. Proper parsing is up to the caller.
         TODO: long-term we should return a proper entity object.
 
-        :param workspace_id: Workspace ID
-        :param settings: List of settings to resolve
-        :return: Dict of settings
+        Args:
+            workspace_id: Workspace ID
+            settings: List of settings to resolve
+
+        Returns:
+            Dict of settings
         """
         resolved_workspace_settings = [
             setting.to_dict()
