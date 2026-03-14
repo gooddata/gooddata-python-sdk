@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from gooddata_sdk.catalog.appearance.service import CatalogAppearanceService
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from gooddata_sdk.catalog.export.service import ExportService
 from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
@@ -76,6 +77,7 @@ class GoodDataSdk:
         """
         self._client = client
 
+        self._catalog_appearance = CatalogAppearanceService(self._client)
         self._catalog_workspace = CatalogWorkspaceService(self._client)
         self._catalog_workspace_content = CatalogWorkspaceContentService(self._client)
         self._catalog_data_source = CatalogDataSourceService(self._client)
@@ -87,6 +89,10 @@ class GoodDataSdk:
         self._support = SupportService(self._client)
         self._catalog_permission = CatalogPermissionService(self._client)
         self._export = ExportService(self._client)
+
+    @property
+    def catalog_appearance(self) -> CatalogAppearanceService:
+        return self._catalog_appearance
 
     @property
     def catalog_workspace(self) -> CatalogWorkspaceService:
