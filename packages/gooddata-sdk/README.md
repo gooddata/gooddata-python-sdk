@@ -9,6 +9,7 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 * Catalog User Service
 * Catalog Permission Service
 * Catalog Organization Service
+* Catalog Appearance Service
 * Visualizations Service
 * Compute Service
 * Table Service
