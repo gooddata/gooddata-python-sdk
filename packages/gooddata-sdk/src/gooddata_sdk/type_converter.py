@@ -119,10 +119,10 @@ class TypeConverterRegistry:
     """
 
     def __init__(self, type_name: str):
-        """
-        Initialize instance with type for which instance is going to be responsible
+        """Initialize instance with type for which instance is going to be responsible.
 
-        :param type_name: type name
+        Args:
+            type_name: type name
         """
         self._type_name = type_name
         self._converters: dict[str, Converter] = {}
@@ -160,10 +160,10 @@ class TypeConverterRegistry:
         self._converters[sub_type] = converter
 
     def _register_default(self, converter: Converter) -> None:
-        """
-        Register default converter instance for the type. Default type can be registered only once.
+        """Register default converter instance for the type. Default type can be registered only once.
 
-        :param converter: converter instance
+        Args:
+            converter: converter instance
         """
         if self._default_converter:
             reg_converter_type = self._default_converter.__class__.__name__

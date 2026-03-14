@@ -38,37 +38,26 @@ class SeriesFactory:
         of the index labels. The elements of the index labels will be used to construct simple or hierarchical index.
 
         Args:
-            index_by (IndexDef): label to index by; specify either:
-
-            - string with id: ``some_label_id``,
-            - object identifier: ``ObjId(id='some_label_id', type='label')``,
-            - string representation of object identifier: ``label/some_label_id``
-            - or an Attribute object used in the compute model: ``Attribute(local_id=..., label='some_label_id')``
-            - dict containing mapping of index name to label to use for indexing (in one of the ways listed above)
-
-            data_by (Union[SimpleMetric, str, ObjId, Attribute]): label, fact or metric to that will provide data
-              (metric values or label elements); specify either:
-
-            - object identifier: ``ObjId(id='some_id', type='<type>')`` - where type is either ``label``, ``fact``
-              or ``metric``
-            - string representation of object identifier: ``<type>/some_id`` - where type is either ``label``, ``fact``
-              or ``metric``
-            - Attribute object used in the compute model: ``Attribute(local_id=..., label='some_label_id')``
-            - SimpleMetric object used in the compute model: ``SimpleMetric(local_id=..., item=..., aggregation=...)``
-
-            filter_by (Optional[Union[Filter, list[Filter]]]): optionally specify filter to apply during computation on
-            the server, reference to filtering column can be one of:
-
-            - string reference to index key
-            - object identifier in string form
-            - object identifier: ``ObjId(id='some_label_id', type='<type>')``
-            - Attribute or Metric depending on type of filter
-
+            index_by (IndexDef): label to index by; specify either
+                a string with id (``some_label_id``),
+                an object identifier (``ObjId(id='some_label_id', type='label')``),
+                a string representation of object identifier (``label/some_label_id``),
+                an Attribute object used in the compute model
+                (``Attribute(local_id=..., label='some_label_id')``),
+                or a dict containing mapping of index name to label to use for indexing.
+            data_by (Union[SimpleMetric, str, ObjId, Attribute]): label, fact or metric that will provide data
+                (metric values or label elements); specify either an object identifier
+                (``ObjId(id='some_id', type='<type>')``), a string representation
+                (``<type>/some_id``), an Attribute object, or a SimpleMetric object.
+            filter_by (Optional[Union[Filter, list[Filter]]]): optionally specify filter to apply during
+                computation on the server, reference to filtering column can be a string reference to
+                index key, object identifier in string form,
+                ``ObjId(id='some_label_id', type='<type>')``,
+                or Attribute/Metric depending on type of filter.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
-
-            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
-
+            is_cancellable (bool, optional): Whether the execution should be cancelled when the connection
+                is interrupted.
             result_page_len (Optional[int]): Optional page size for result pagination.
                 Defaults to 1000. Larger values can improve performance for large result sets.
 
