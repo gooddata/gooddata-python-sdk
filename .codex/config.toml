@@ -1,4 +1,5 @@
 # (C) 2026 GoodData Corporation
+
 [mcp_servers.aida]
 command = "aida-mcp"
 args = []
