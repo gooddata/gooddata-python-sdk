@@ -1,0 +1,8 @@
+# (C) 2026 GoodData Corporation
+{type}{repository_part}: {title}
+
+{body}
+
+{co_authored_by}
+{ticket}
+{risk}
