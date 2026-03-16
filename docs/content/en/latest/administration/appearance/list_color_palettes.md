@@ -3,6 +3,7 @@ title: "list_color_palettes"
 linkTitle: "list_color_palettes"
 superheading: "catalog_appearance."
 weight: 200
+api_ref: "CatalogAppearanceService.list_color_palettes"
 ---
 
 ``list_color_palettes( ) -> list[CatalogColorPalette]``

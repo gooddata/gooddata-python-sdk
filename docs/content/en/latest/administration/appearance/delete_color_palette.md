@@ -3,6 +3,7 @@ title: "delete_color_palette"
 linkTitle: "delete_color_palette"
 superheading: "catalog_appearance."
 weight: 240
+api_ref: "CatalogAppearanceService.delete_color_palette"
 ---
 
 ``delete_color_palette( color_palette_id: str ) -> None``

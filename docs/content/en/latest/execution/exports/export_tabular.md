@@ -3,6 +3,7 @@ title: "export_tabular"
 linkTitle: "export_tabular"
 weight: 110
 superheading: "export."
+api_ref: "ExportService.export_tabular"
 ---
 
 ``export_tabular(workspace_id: str,

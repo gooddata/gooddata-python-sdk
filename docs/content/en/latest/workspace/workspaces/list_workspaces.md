@@ -3,6 +3,7 @@ title: "list_workspaces"
 linkTitle: "list_workspaces"
 weight: 40
 superheading: "catalog_workspace."
+api_ref: "CatalogWorkspaceService.list_workspaces"
 ---
 
 

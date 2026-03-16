@@ -3,6 +3,7 @@ title: "update_color_palette"
 linkTitle: "update_color_palette"
 superheading: "catalog_appearance."
 weight: 230
+api_ref: "CatalogAppearanceService.update_color_palette"
 ---
 
 ``update_color_palette( color_palette: CatalogColorPalette ) -> None``

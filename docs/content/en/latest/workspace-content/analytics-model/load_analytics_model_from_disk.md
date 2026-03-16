@@ -3,6 +3,7 @@ title: "load_analytics_model_from_disk"
 linkTitle: "load_analytics_model_from_disk"
 weight: 132
 superheading: "catalog_workspace_content."
+api_ref: "CatalogWorkspaceContentService.load_analytics_model_from_disk"
 ---
 
 ``load_analytics_model_from_disk(path: Path = Path.cwd())``

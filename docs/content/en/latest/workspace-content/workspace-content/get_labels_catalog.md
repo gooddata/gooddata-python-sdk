@@ -3,6 +3,7 @@ title: "get_labels_catalog"
 linkTitle: "get_labels_catalog"
 weight: 60
 superheading: "catalog_workspace_content."
+api_ref: "CatalogWorkspaceContentService.get_labels_catalog"
 ---
 
 

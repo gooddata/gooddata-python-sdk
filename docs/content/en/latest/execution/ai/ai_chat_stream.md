@@ -3,6 +3,7 @@ title: "ai_chat_stream"
 linkTitle: "ai_chat_stream"
 weight: 93
 superheading: "compute."
+api_ref: "ComputeService.ai_chat_stream"
 ---
 
 ``ai_chat_stream(workspace_id: str, question: str) -> Iterator[Any]``

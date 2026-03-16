@@ -4,6 +4,7 @@ linkTitle: "manage_organization_permissions"
 weight: 20
 no_list: true
 superheading: "catalog_permission."
+api_ref: "CatalogPermissionService.manage_organization_permissions"
 ---
 
 

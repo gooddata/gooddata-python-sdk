@@ -3,6 +3,7 @@ title: "get_dependent_entities_graph_from_entry_points"
 linkTitle: "get_dependent_entities_graph_f..."
 weight: 100
 superheading: "catalog_workspace_content."
+api_ref: "CatalogWorkspaceContentService.get_dependent_entities_graph_from_entry_points"
 ---
 
 

@@ -40,9 +40,10 @@ echo "Extracting docs from $branch for section $section (src=$src_section)"
 git archive "$branch" "content/en/$src_section" | tar xf - -C "$content_dir/$section" \
     --strip-components=3 "content/en/$src_section"
 
-# Generate API reference if json_builder.py exists on the branch
-API_GEN_FILE="$branch:scripts/docs/json_builder.py"
-if git cat-file -e "$API_GEN_FILE" 2>/dev/null; then
+# Generate API reference if griffe_builder.py (or legacy json_builder.py) exists on the branch
+GRIFFE_GEN_FILE="$branch:scripts/docs/griffe_builder.py"
+LEGACY_GEN_FILE="$branch:scripts/docs/json_builder.py"
+if git cat-file -e "$GRIFFE_GEN_FILE" 2>/dev/null || git cat-file -e "$LEGACY_GEN_FILE" 2>/dev/null; then
     echo "Generating API ref for section $section..."
 
     # Get api_spec.toml from the branch
@@ -53,17 +54,36 @@ if git cat-file -e "$API_GEN_FILE" 2>/dev/null; then
         rm -f api_spec.toml
     fi
 
-    # Generate API introspection data from this version's SDK
-    python3 ../scripts/docs/json_builder.py
+    # Generate API introspection data — prefer griffe (static analysis, no imports needed)
+    if git cat-file -e "$GRIFFE_GEN_FILE" 2>/dev/null; then
+        echo "Using griffe_builder.py (static analysis)"
+        python3 ../scripts/docs/griffe_builder.py \
+            --search-path ../packages/gooddata-sdk/src \
+            --search-path ../packages/gooddata-pandas/src \
+            --output data.json \
+            gooddata_sdk gooddata_pandas
+    else
+        echo "Falling back to json_builder.py (runtime introspection)"
+        python3 ../scripts/docs/json_builder.py
+    fi
 
-    # Generate API reference markdown files
+    # Generate API reference markdown files and export links for method page renderer
     python3 ../scripts/docs/python_ref_builder.py api_spec.toml \
-        data.json "$section" "$content_dir"
+        data.json "$section" "$content_dir" \
+        --export-links links.json
 
-    # Clean up intermediate file (no longer needed after pre-rendering)
-    rm -f data.json
+    # Pre-render method pages with api_ref directives
+    if git cat-file -e "$branch:scripts/docs/method_page_renderer.py" 2>/dev/null; then
+        echo "Pre-rendering method pages for section $section..."
+        python3 ../scripts/docs/method_page_renderer.py \
+            data.json "$content_dir/$section" \
+            --links-json links.json
+    fi
+
+    # Clean up intermediate files (no longer needed after pre-rendering)
+    rm -f data.json links.json
 else
-    echo "No json_builder.py on $branch, skipping API ref generation"
+    echo "No json_builder.py or griffe_builder.py on $branch, skipping API ref generation"
 fi
 
 echo "Done: section $section from $branch"

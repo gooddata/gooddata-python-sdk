@@ -4,6 +4,7 @@ linkTitle: "list_user_api_tokens"
 weight: 10
 no_list: true
 superheading: "catalog_user."
+api_ref: "CatalogUserService.list_user_api_tokens"
 ---
 
 

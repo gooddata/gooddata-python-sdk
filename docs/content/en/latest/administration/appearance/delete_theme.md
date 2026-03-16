@@ -3,6 +3,7 @@ title: "delete_theme"
 linkTitle: "delete_theme"
 superheading: "catalog_appearance."
 weight: 140
+api_ref: "CatalogAppearanceService.delete_theme"
 ---
 
 ``delete_theme( theme_id: str ) -> None``

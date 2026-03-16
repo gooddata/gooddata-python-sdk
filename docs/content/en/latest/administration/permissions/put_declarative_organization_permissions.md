@@ -4,6 +4,7 @@ linkTitle: "put_declarative_organization_permissions"
 weight: 20
 no_list: true
 superheading: "catalog_permission."
+api_ref: "CatalogPermissionService.put_declarative_organization_permissions"
 ---
 
 

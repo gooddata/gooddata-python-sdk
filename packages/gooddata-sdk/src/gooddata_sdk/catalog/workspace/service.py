@@ -131,7 +131,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         self._entities_api.delete_entity_workspaces(workspace_id)
 
     def list_workspaces(self) -> list[CatalogWorkspace]:
-        """Returns a list of all workspaces in current organization
+        """Returns a list of all workspaces in current organization.
 
         Returns:
             list[CatalogWorkspace]: List of workspaces in the current organization.
@@ -288,6 +288,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         Args:
             layout_root_path (Path, optional):
                 Path to the root of the layout directory. Defaults to Path.cwd().
+
         Returns:
             CatalogDeclarativeWorkspaces:
                 Declarative Workspaces Object
@@ -347,6 +348,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
             standalone_copy (bool):
                 If true, then workspace data filter references will be removed from LDM.
                 Note that first, the copy is made so we do not interfere with the original input.
+
         Returns:
             None
         """
@@ -533,6 +535,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         Translation YAML files are created for each language containing pairs of source and target texts.
         If translation is not requested, source and target texts are identical. Users must translate it manually
         We recommend to translate using a third party service and polish the result manually.
+
         Args:
             workspace_id: ID of source workspace which we clone and translate all texts in it
             to_lang: ISO lang name (IETF BCP 47)
@@ -1042,9 +1045,6 @@ class CatalogWorkspaceService(CatalogServiceBase):
     def get_declarative_workspace_data_filters(self) -> CatalogDeclarativeWorkspaceDataFilters:
         """Retrieve a workspace data filers layout.
 
-        Args:
-            None
-
         Returns:
             CatalogDeclarativeWorkspaceDataFilters:
                 Object containing List of declarative workspace data filters.
@@ -1308,6 +1308,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 Workspace identification string e.g. "demo"
             automations (list[CatalogDeclarativeAutomation]):
                 List of declarative automations.
+
         Returns:
             None
         """

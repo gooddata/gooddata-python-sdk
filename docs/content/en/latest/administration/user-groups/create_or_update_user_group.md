@@ -4,6 +4,7 @@ linkTitle: "create_or_update_user_group"
 weight: 50
 no_list: true
 superheading: "catalog_user."
+api_ref: "CatalogUserService.create_or_update_user_group"
 ---
 
 

@@ -4,6 +4,7 @@ linkTitle: "revoke_permissions_bulk"
 weight: 10
 no_list: true
 superheading: "catalog_user."
+api_ref: "CatalogUserService.revoke_permissions_bulk"
 ---
 
 

@@ -3,6 +3,7 @@ title: "store_declarative_data_sources"
 linkTitle: "store_declarative_data_sources"
 weight: 90
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.store_declarative_data_sources"
 ---
 
 ``store_declarative_data_sources(layout_root_path: Path = Path.cwd())``

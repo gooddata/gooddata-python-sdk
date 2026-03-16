@@ -3,6 +3,7 @@ title: "store_ldm_to_disk"
 linkTitle: "store_ldm_to_disk"
 weight: 100
 superheading: "catalog_workspace_content."
+api_ref: "CatalogWorkspaceContentService.store_ldm_to_disk"
 ---
 
 

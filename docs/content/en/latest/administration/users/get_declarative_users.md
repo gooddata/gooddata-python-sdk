@@ -4,6 +4,7 @@ linkTitle: "get_declarative_users"
 weight: 90
 no_list: true
 superheading: "catalog_user."
+api_ref: "CatalogUserService.get_declarative_users"
 ---
 
 

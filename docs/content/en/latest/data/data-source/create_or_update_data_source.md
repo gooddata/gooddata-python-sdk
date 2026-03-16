@@ -3,6 +3,7 @@ title: "create_or_update_data_source"
 linkTitle: "create_or_update_data_source"
 weight: 10
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.create_or_update_data_source"
 ---
 
 

@@ -90,9 +90,9 @@ for branch in "${branches_to_process[@]}" ; do
         git archive "$branch" "content/en/$src_section" | tar xf - -C "$content_dir/$target_section" \
             --strip-components=$strip_count "content/en/$src_section"
     fi
-    API_GEN_FILE="$branch:scripts/docs/json_builder.py"
-    if git cat-file -e $API_GEN_FILE; then
-        echo "$API_GEN_FILE exists."
+    GRIFFE_GEN_FILE="$branch:scripts/docs/griffe_builder.py"
+    LEGACY_GEN_FILE="$branch:scripts/docs/json_builder.py"
+    if git cat-file -e "$GRIFFE_GEN_FILE" 2>/dev/null || git cat-file -e "$LEGACY_GEN_FILE" 2>/dev/null; then
         echo "Generating API ref..."
         if [ "$target_section" == "" ] ; then
             echo "Skipping master api ref"
@@ -103,9 +103,25 @@ for branch in "${branches_to_process[@]}" ; do
               echo "removing the API_spec"
               rm -rf api_spec.toml
             fi
-            python3 ../scripts/docs/json_builder.py
-            python3 ../scripts/docs/python_ref_builder.py api_spec.toml data.json "$target_section" versioned_docs
-            rm -f data.json
+            # Prefer griffe (static analysis, no imports needed)
+            if git cat-file -e "$GRIFFE_GEN_FILE" 2>/dev/null; then
+                python3 ../scripts/docs/griffe_builder.py \
+                    --search-path ../packages/gooddata-sdk/src \
+                    --search-path ../packages/gooddata-pandas/src \
+                    --output data.json \
+                    gooddata_sdk gooddata_pandas
+            else
+                python3 ../scripts/docs/json_builder.py
+            fi
+            python3 ../scripts/docs/python_ref_builder.py api_spec.toml data.json "$target_section" versioned_docs \
+                --export-links links.json
+            # Pre-render method pages with api_ref directives
+            if git cat-file -e "$branch:scripts/docs/method_page_renderer.py" 2>/dev/null; then
+                python3 ../scripts/docs/method_page_renderer.py \
+                    data.json "versioned_docs/$target_section" \
+                    --links-json links.json
+            fi
+            rm -f data.json links.json
         fi
     fi
 done
