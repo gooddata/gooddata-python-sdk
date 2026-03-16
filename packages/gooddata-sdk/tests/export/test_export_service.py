@@ -6,6 +6,8 @@
 import os
 from pathlib import Path
 
+import pytest
+
 from gooddata_sdk import (
     Attribute,
     ExecutionDefinition,
@@ -13,7 +15,9 @@ from gooddata_sdk import (
     ExportCustomMetric,
     ExportCustomOverride,
     ExportRequest,
+    ExportSettings,
     GoodDataSdk,
+    GrandTotalsPosition,
     ObjId,
     SimpleMetric,
     TableDimension,
@@ -87,6 +91,19 @@ def _tabular_by_visualization_id_base(test_config, export_format: str):
         workspace_id=workspace_id, visualization_id=visualization_id, file_format=export_format, store_path=_exports_dir
     )
     _validate_clean(goal_path)
+
+
+@pytest.mark.parametrize(
+    "grand_totals_position",
+    [None, "pinnedBottom", "pinnedTop", "bottom", "top"],
+)
+def test_export_settings_grand_totals_position(grand_totals_position: GrandTotalsPosition | None):
+    settings = ExportSettings(
+        merge_headers=True,
+        show_filters=False,
+        grand_totals_position=grand_totals_position,
+    )
+    assert settings.grand_totals_position == grand_totals_position
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "test_export_csv.yaml"))
