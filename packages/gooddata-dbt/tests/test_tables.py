@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from typing import Union
 
+from gooddata_dbt.dbt.base import GoodDataLabelType
 from gooddata_dbt.dbt.tables import DbtModelTables
 from gooddata_sdk import CatalogDeclarativeModel, CatalogDeclarativeTables
 
@@ -49,6 +50,11 @@ def test_make_ldm():
     assert ldm.ldm is not None
     assert len(ldm.ldm.datasets) == 4
     assert len(ldm.ldm.date_instances) == 4
+
+
+def test_geo_icon_label_type():
+    """Test that GEO_ICON is a valid GoodDataLabelType enum value."""
+    assert GoodDataLabelType.GEO_ICON.value == "GEO_ICON"
 
 
 FAA_MODEL_ID = "faa"
