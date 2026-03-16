@@ -9,12 +9,11 @@ weight: 220
 
 Create a new color palette.
 
-## Parameters
+{{% parameters-block title="Parameters" %}}
+{{< parameter p_name="color_palette" p_type="CatalogColorPalette" >}}
+A catalog color palette object to be created.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
-| parameter |	type | description |
-| -- | -- | -- |
-| color_palette | CatalogColorPalette | A catalog color palette object to be created. |
-
-## Returns
-
-_None_
+{{% parameters-block title="Returns" None="yes"%}}
+{{% /parameters-block %}}

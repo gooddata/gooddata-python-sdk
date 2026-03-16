@@ -9,12 +9,11 @@ weight: 100
 
 Returns a list of all themes in the current organization.
 
-## Parameters
+{{% parameters-block title="Parameters" None="yes"%}}
+{{% /parameters-block %}}
 
-_None_
-
-## Returns
-
-| type |	description |
-| -- | -- |
-| list[CatalogTheme]	| List of themes in the current organization. |
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="list[CatalogTheme]" >}}
+List of themes in the current organization.
+{{< /parameter >}}
+{{% /parameters-block %}}
