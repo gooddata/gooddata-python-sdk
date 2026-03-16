@@ -9,18 +9,17 @@ weight: 230
 
 Update a color palette.
 
-## Parameters
+{{% parameters-block title="Parameters" %}}
+{{< parameter p_name="color_palette" p_type="CatalogColorPalette" >}}
+A catalog color palette object to be updated.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
-| parameter |	type | description |
-| -- | -- | -- |
-| color_palette | CatalogColorPalette | A catalog color palette object to be updated. |
+{{% parameters-block title="Returns" None="yes"%}}
+{{% /parameters-block %}}
 
-## Returns
-
-_None_
-
-## Raises
-
-| type | description |
-| -- | -- |
-| ValueError | Color palette does not exist. |
+{{% parameters-block title="Raises" %}}
+{{< parameter p_type="Value Error" >}}
+Color palette does not exist.
+{{< /parameter >}}
+{{% /parameters-block %}}

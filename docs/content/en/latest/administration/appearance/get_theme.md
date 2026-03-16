@@ -9,14 +9,14 @@ weight: 110
 
 Get an individual theme.
 
-## Parameters
+{{% parameters-block title="Parameters" %}}
+{{< parameter p_name="theme_id" p_type="string" >}}
+Theme identification string e.g. "my_dark_theme"
+{{< /parameter >}}
+{{% /parameters-block %}}
 
-| parameter |	type | description |
-| -- | -- | -- |
-| theme_id | str | Theme identification string e.g. "my_dark_theme" |
-
-## Returns
-
-| type |	description |
-| -- | -- |
-| CatalogTheme	| Catalog theme object containing structure of the theme. |
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="CatalogTheme" >}}
+Catalog theme object containing structure of the theme.
+{{< /parameter >}}
+{{% /parameters-block %}}

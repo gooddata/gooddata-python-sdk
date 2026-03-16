@@ -1,1 +1,1 @@
-# (C) 2024 GoodData Corporation
+# (C) 2026 GoodData Corporation

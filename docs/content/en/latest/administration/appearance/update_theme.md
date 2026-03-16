@@ -9,18 +9,17 @@ weight: 130
 
 Update a theme.
 
-## Parameters
+{{% parameters-block title="Parameters" %}}
+{{< parameter p_name="theme" p_type="CatalogTheme" >}}
+A catalog theme object to be updated.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
-| parameter |	type | description |
-| -- | -- | -- |
-| theme | CatalogTheme | A catalog theme object to be updated. |
+{{% parameters-block title="Returns" None="yes"%}}
+{{% /parameters-block %}}
 
-## Returns
-
-_None_
-
-## Raises
-
-| type | description |
-| -- | -- |
-| ValueError | Theme does not exist. |
+{{% parameters-block title="Raises" %}}
+{{< parameter p_type="Value Error" >}}
+Theme does not exist.
+{{< /parameter >}}
+{{% /parameters-block %}}

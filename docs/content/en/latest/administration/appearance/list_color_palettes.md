@@ -9,12 +9,11 @@ weight: 200
 
 Returns a list of all color palettes in the current organization.
 
-## Parameters
+{{% parameters-block title="Parameters" None="yes"%}}
+{{% /parameters-block %}}
 
-_None_
-
-## Returns
-
-| type |	description |
-| -- | -- |
-| list[CatalogColorPalette]	| List of color palettes in the current organization. |
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="list[CatalogColorPalette]" >}}
+List of color palettes in the current organization.
+{{< /parameter >}}
+{{% /parameters-block %}}
