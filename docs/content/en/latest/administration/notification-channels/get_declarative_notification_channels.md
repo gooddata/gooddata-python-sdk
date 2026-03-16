@@ -4,6 +4,7 @@ linkTitle: "get_declarative_notification_channels..."
 weight: 190
 no_list: true
 superheading: "catalog_organization."
+api_ref: "CatalogOrganizationService.get_declarative_notification_channels"
 ---
 
 

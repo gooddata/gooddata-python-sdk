@@ -230,7 +230,7 @@ class ExecutionDefinitionBuilder:
 
         Args:
             filter_by (Optional[Union[Filter, list[Filter]]]): A filter or a list of filters to be applied to the
-            execution definition. If it's not provided or None, then the current filter configuration is used.
+                execution definition. If it's not provided or None, then the current filter configuration is used.
 
         Returns:
             ExecutionDefinition: An ExecutionDefinition instance containing attributes, metrics, filters,

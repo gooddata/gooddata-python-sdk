@@ -3,6 +3,7 @@ title: "export_tabular_by_visualization_id"
 linkTitle: "export_tabular_by_visualization_id"
 weight: 110
 superheading: "export."
+api_ref: "ExportService.export_tabular_by_visualization_id"
 ---
 
 ``export_tabular_by_visualization_id(

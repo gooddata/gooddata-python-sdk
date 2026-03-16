@@ -3,6 +3,7 @@ title: "create_theme"
 linkTitle: "create_theme"
 superheading: "catalog_appearance."
 weight: 120
+api_ref: "CatalogAppearanceService.create_theme"
 ---
 
 ``create_theme( theme: CatalogTheme ) -> None``

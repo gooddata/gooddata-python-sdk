@@ -4,6 +4,7 @@ linkTitle: "store_declarative_users"
 weight: 110
 no_list: true
 superheading: "catalog_user."
+api_ref: "CatalogUserService.store_declarative_users"
 ---
 
 

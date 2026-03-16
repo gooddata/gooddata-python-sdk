@@ -3,6 +3,7 @@ title: "get_dependent_entities_graph"
 linkTitle: "get_dependent_entities_graph"
 weight: 90
 superheading: "catalog_workspace_content."
+api_ref: "CatalogWorkspaceContentService.get_dependent_entities_graph"
 ---
 
 

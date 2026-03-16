@@ -300,7 +300,7 @@ def read_json_file(file_path: str) -> dict:
         return json.load(json_file)
 
 
-def create_file_structure(data: dict, root: Path, url_root: str):
+def create_file_structure(data: dict, root: Path, url_root: str) -> dict[str, dict]:
     """Create file structure based on JSON data using a two-pass approach.
 
     Pass 1 — walk the data tree, build the ``links`` dict and collect page
@@ -311,6 +311,9 @@ def create_file_structure(data: dict, root: Path, url_root: str):
         data (dict): JSON data representing the object.
         root (Path): Path to the root directory.
         url_root (str): URL root path for the API reference.
+
+    Returns:
+        dict[str, dict]: The links dictionary mapping type names to URL paths.
     """
     links: dict[str, dict] = {}
     pages: list[_PageSpec] = []
@@ -323,8 +326,6 @@ def create_file_structure(data: dict, root: Path, url_root: str):
         for name, obj in data_root.items():
             if not isinstance(obj, dict):
                 continue
-            if name in links:
-                continue
 
             kind = obj.get("kind", None)
             obj_module_import_path = module_import_path + f".{name}" if module_import_path != "" else name
@@ -332,36 +333,38 @@ def create_file_structure(data: dict, root: Path, url_root: str):
                 obj_module_import_path = obj_module_import_path.replace(".functions", "")
 
             if kind == "module":
-                (dir_root / name).mkdir(exist_ok=True)
-                links[name] = {"path": f"{api_ref_root}/{name}".lower(), "kind": "function"}
-                pages.append(
-                    _PageSpec(
-                        kind="module",
-                        name=name,
-                        parent_name="",
-                        import_path=obj_module_import_path,
-                        file_path=dir_root / name / "_index.md",
-                        data=obj,
+                if name not in links:
+                    (dir_root / name).mkdir(exist_ok=True)
+                    links[name] = {"path": f"{api_ref_root}/{name}".lower(), "kind": "function"}
+                    pages.append(
+                        _PageSpec(
+                            kind="module",
+                            name=name,
+                            parent_name="",
+                            import_path=obj_module_import_path,
+                            file_path=dir_root / name / "_index.md",
+                            data=obj,
+                        )
                     )
-                )
 
             elif kind == "class":
-                (dir_root / name).mkdir(exist_ok=True)
-                links[name] = {"path": f"{api_ref_root}/{name}".lower(), "kind": "class"}
-                pages.append(
-                    _PageSpec(
-                        kind="class",
-                        name=name,
-                        parent_name=module_import_path.split(".")[-1],
-                        import_path=obj_module_import_path,
-                        file_path=dir_root / name / "_index.md",
-                        data=obj,
+                if name not in links:
+                    (dir_root / name).mkdir(exist_ok=True)
+                    links[name] = {"path": f"{api_ref_root}/{name}".lower(), "kind": "class"}
+                    pages.append(
+                        _PageSpec(
+                            kind="class",
+                            name=name,
+                            parent_name=module_import_path.split(".")[-1],
+                            import_path=obj_module_import_path,
+                            file_path=dir_root / name / "_index.md",
+                            data=obj,
+                        )
                     )
-                )
 
             elif name == "functions":
                 for func_name in obj:
-                    if func_name.startswith("_"):
+                    if func_name.startswith("_") or func_name in links:
                         continue
                     links[func_name] = {
                         "path": f"{api_ref_root}/{func_name}".lower(),
@@ -409,6 +412,8 @@ def create_file_structure(data: dict, root: Path, url_root: str):
 
         with page.file_path.open("w") as f:
             spec.render_template_to_file(template, f)
+
+    return links
 
 
 def change_json_root(data: dict, json_start_paths: list[str] | None) -> dict:
@@ -459,15 +464,23 @@ def main():
     parser.add_argument("json_file", metavar="FILE", help="Paths to json data file", default="data.json")
     parser.add_argument("version", metavar="str", help="Current Version", default="latest")
     parser.add_argument("root_directory", metavar="str", help="Current Version", default="versioned_docs")
+    parser.add_argument("--export-links", metavar="FILE", help="Export links dict as JSON for method_page_renderer")
 
     args = parser.parse_args()
 
+    all_links: dict[str, dict] = {}
     references = parse_toml(args.toml_file, args.version, args.root_directory)
     for ref in references:
         print(f"Parsing: {ref.url}")
         data = read_json_file(args.json_file)
         data = change_json_root(data, ref.packages)
-        create_file_structure(data, Path(ref.directory), url_root=ref.url)
+        links = create_file_structure(data, Path(ref.directory), url_root=ref.url)
+        all_links.update(links)
+
+    if args.export_links:
+        with open(args.export_links, "w") as f:
+            json.dump(all_links, f)
+        print(f"Exported {len(all_links)} links to {args.export_links}")
 
 
 if __name__ == "__main__":

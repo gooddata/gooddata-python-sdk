@@ -3,6 +3,7 @@ title: "generate_logical_model"
 linkTitle: "generate_logical_model"
 weight: 170
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.generate_logical_model"
 ---
 
 

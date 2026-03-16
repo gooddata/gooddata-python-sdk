@@ -130,9 +130,6 @@ class CatalogDataSourceService(CatalogServiceBase):
     def list_data_sources(self) -> list[CatalogDataSource]:
         """Lists all data sources.
 
-        Args:
-            None
-
         Returns:
             list[CatalogDataSource]:
                 List of all Data Sources in the whole organization.
@@ -148,9 +145,6 @@ class CatalogDataSourceService(CatalogServiceBase):
 
     def get_declarative_data_sources(self) -> CatalogDeclarativeDataSources:
         """Retrieve all data sources.
-
-        Args:
-            None
 
         Returns:
             CatalogDeclarativeDataSources:

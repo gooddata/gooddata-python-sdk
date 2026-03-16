@@ -3,6 +3,7 @@ title: "list_themes"
 linkTitle: "list_themes"
 superheading: "catalog_appearance."
 weight: 100
+api_ref: "CatalogAppearanceService.list_themes"
 ---
 
 ``list_themes( ) -> list[CatalogTheme]``

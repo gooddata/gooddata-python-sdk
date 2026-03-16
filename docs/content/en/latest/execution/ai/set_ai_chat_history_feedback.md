@@ -3,6 +3,7 @@ title: "set_ai_chat_history_feedback"
 linkTitle: "set_ai_chat_history_feedback"
 weight: 101
 superheading: "compute."
+api_ref: "ComputeService.set_ai_chat_history_feedback"
 ---
 ``set_ai_chat_history_feedback(workspace_id: str, interaction_id: str, user_feedback: str, chat_history_interaction_id: str, thread_id_suffix: str = "") -> None``
 

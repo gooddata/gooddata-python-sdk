@@ -3,6 +3,7 @@ title: "scan_pdm_and_generate_logical_model"
 linkTitle: "scan_pdm_and_generate_logical_model"
 weight: 190
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.scan_pdm_and_generate_logical_model"
 ---
 
 ``scan_pdm_and_generate_logical_model(data_source_id: str, generate_ldm_request: Optional[CatalogGenerateLdmRequest] = None, scan_request: CatalogScanModelRequest = CatalogScanModelRequest(), report_warnings: bool = False) -> tuple[CatalogDeclarativeModel, CatalogScanResultPdm]``

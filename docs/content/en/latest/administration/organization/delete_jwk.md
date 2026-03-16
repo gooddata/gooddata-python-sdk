@@ -3,6 +3,7 @@ title: "delete_jwk"
 linkTitle: "delete_jwk"
 superheading: "catalog_organization."
 weight: 100
+api_ref: "CatalogOrganizationService.delete_jwk"
 ---
 
 ``delete_jwk( jwk_id: str ) -> None``

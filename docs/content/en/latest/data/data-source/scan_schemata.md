@@ -3,6 +3,7 @@ title: "scan_schemata"
 linkTitle: "scan_schemata"
 weight: 210
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.scan_schemata"
 ---
 
 

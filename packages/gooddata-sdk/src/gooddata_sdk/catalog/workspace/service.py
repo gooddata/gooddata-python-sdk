@@ -131,7 +131,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         self._entities_api.delete_entity_workspaces(workspace_id)
 
     def list_workspaces(self) -> list[CatalogWorkspace]:
-        """Returns a list of all workspaces in current organization
+        """Returns a list of all workspaces in current organization.
 
         Returns:
             list[CatalogWorkspace]: List of workspaces in the current organization.
@@ -191,13 +191,17 @@ class CatalogWorkspaceService(CatalogServiceBase):
         return [CatalogWorkspaceSetting.from_api(ws) for ws in workspace_settings]
 
     def resolve_all_workspace_settings(self, workspace_id: str) -> dict:
-        """
-        Resolves values for all settings in a workspace by current user, workspace, organization, or default settings
-        and return them as a dictionary. Proper parsing is up to the caller.
+        """Resolve values for all settings in a workspace.
+
+        Resolves by current user, workspace, organization, or default settings
+        and returns them as a dictionary. Proper parsing is up to the caller.
         TODO: long-term we should return a proper entity object.
 
-        :param workspace_id: Workspace ID
-        :return: Dict of settings
+        Args:
+            workspace_id: Workspace ID
+
+        Returns:
+            Dict of settings
         """
         # note: in case some settings were recently added and the API client was not regenerated it can fail on
         #       invalid value when validating allowed types on the client side before request is sent to the server
@@ -211,14 +215,18 @@ class CatalogWorkspaceService(CatalogServiceBase):
         return {setting["type"]: setting for setting in resolved_workspace_settings}
 
     def resolve_workspace_settings(self, workspace_id: str, settings: list) -> dict:
-        """
-        Resolves values for given settings in a workspace by current user, workspace, organization, or default settings
-        and return them as a dictionary. Proper parsing is up to the caller.
+        """Resolve values for given settings in a workspace.
+
+        Resolves by current user, workspace, organization, or default settings
+        and returns them as a dictionary. Proper parsing is up to the caller.
         TODO: long-term we should return a proper entity object.
 
-        :param workspace_id: Workspace ID
-        :param settings: List of settings to resolve
-        :return: Dict of settings
+        Args:
+            workspace_id: Workspace ID
+            settings: List of settings to resolve
+
+        Returns:
+            Dict of settings
         """
         resolved_workspace_settings = [
             setting.to_dict()
@@ -280,6 +288,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         Args:
             layout_root_path (Path, optional):
                 Path to the root of the layout directory. Defaults to Path.cwd().
+
         Returns:
             CatalogDeclarativeWorkspaces:
                 Declarative Workspaces Object
@@ -339,6 +348,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
             standalone_copy (bool):
                 If true, then workspace data filter references will be removed from LDM.
                 Note that first, the copy is made so we do not interfere with the original input.
+
         Returns:
             None
         """
@@ -525,6 +535,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         Translation YAML files are created for each language containing pairs of source and target texts.
         If translation is not requested, source and target texts are identical. Users must translate it manually
         We recommend to translate using a third party service and polish the result manually.
+
         Args:
             workspace_id: ID of source workspace which we clone and translate all texts in it
             to_lang: ISO lang name (IETF BCP 47)
@@ -1034,9 +1045,6 @@ class CatalogWorkspaceService(CatalogServiceBase):
     def get_declarative_workspace_data_filters(self) -> CatalogDeclarativeWorkspaceDataFilters:
         """Retrieve a workspace data filers layout.
 
-        Args:
-            None
-
         Returns:
             CatalogDeclarativeWorkspaceDataFilters:
                 Object containing List of declarative workspace data filters.
@@ -1300,6 +1308,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 Workspace identification string e.g. "demo"
             automations (list[CatalogDeclarativeAutomation]):
                 List of declarative automations.
+
         Returns:
             None
         """

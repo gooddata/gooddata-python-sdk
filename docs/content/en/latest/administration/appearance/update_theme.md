@@ -3,6 +3,7 @@ title: "update_theme"
 linkTitle: "update_theme"
 superheading: "catalog_appearance."
 weight: 130
+api_ref: "CatalogAppearanceService.update_theme"
 ---
 
 ``update_theme( theme: CatalogTheme ) -> None``

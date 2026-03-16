@@ -3,6 +3,7 @@ title: "scan_data_source"
 linkTitle: "scan_data_source"
 weight: 190
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.scan_data_source"
 ---
 
 ``scan_data_source(data_source_id: str, scan_request: CatalogScanModelRequest = CatalogScanModelRequest(), report_warnings: bool = False)``

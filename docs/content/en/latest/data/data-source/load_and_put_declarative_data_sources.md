@@ -3,6 +3,7 @@ title: "load_and_put_declarative_data_sources"
 linkTitle: "load_and_put_declarative_data..."
 weight: 110
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.load_and_put_declarative_data_sources"
 ---
 
 

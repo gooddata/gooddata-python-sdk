@@ -3,6 +3,7 @@ title: "reset_ai_chat_history"
 linkTitle: "reset_ai_chat_history"
 weight: 97
 superheading: "compute."
+api_ref: "ComputeService.reset_ai_chat_history"
 ---
 
 ``reset_ai_chat_history(workspace_id: str) -> None``

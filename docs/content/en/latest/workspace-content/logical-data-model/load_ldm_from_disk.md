@@ -3,6 +3,7 @@ title: "load_ldm_from_disk"
 linkTitle: "load_ldm_from_disk"
 weight: 101
 superheading: "catalog_workspace_content."
+api_ref: "CatalogWorkspaceContentService.load_ldm_from_disk"
 ---
 
 ``load_ldm_from_disk( path: Path = Path.cwd())``

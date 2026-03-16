@@ -3,6 +3,7 @@ title: "put_declarative_analytics_model"
 linkTitle: "put_declarative_analytics_model"
 weight: 120
 superheading: "catalog_workspace_content."
+api_ref: "CatalogWorkspaceContentService.put_declarative_analytics_model"
 ---
 
 ``put_declarative_analytics_model(workspace_id: str, analytics_model: CatalogDeclarativeAnalytics)``

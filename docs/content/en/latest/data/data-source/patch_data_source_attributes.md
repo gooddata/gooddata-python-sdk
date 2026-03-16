@@ -3,6 +3,7 @@ title: "patch_data_source_attributes"
 linkTitle: "patch_data_source_attributes"
 weight: 40
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.patch_data_source_attributes"
 ---
 
 

@@ -4,6 +4,7 @@ linkTitle: "delete_user_group"
 weight: 70
 no_list: true
 superheading: "catalog_user."
+api_ref: "CatalogUserService.delete_user_group"
 ---
 
 

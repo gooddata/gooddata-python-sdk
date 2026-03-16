@@ -4,6 +4,7 @@ linkTitle: "manage_user_group_permissions"
 weight: 10
 no_list: true
 superheading: "catalog_user."
+api_ref: "CatalogUserService.manage_user_group_permissions"
 ---
 
 

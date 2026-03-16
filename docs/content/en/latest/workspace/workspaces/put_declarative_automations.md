@@ -3,6 +3,7 @@ title: "put_declarative_automations"
 linkTitle: "put_declarative_automations"
 weight: 50
 superheading: "catalog_workspace."
+api_ref: "CatalogWorkspaceService.put_declarative_automations"
 ---
 
 ``put_declarative_automations(workspace_id: str, automations: list[CatalogDeclarativeAutomation])``

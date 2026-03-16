@@ -3,6 +3,7 @@ title: "store_pdm_to_disk"
 linkTitle: "store_pdm_to_disk"
 weight: 140
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.store_pdm_to_disk"
 ---
 
 

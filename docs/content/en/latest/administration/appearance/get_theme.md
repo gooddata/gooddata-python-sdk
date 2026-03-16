@@ -3,6 +3,7 @@ title: "get_theme"
 linkTitle: "get_theme"
 superheading: "catalog_appearance."
 weight: 110
+api_ref: "CatalogAppearanceService.get_theme"
 ---
 
 ``get_theme( theme_id: str ) -> CatalogTheme``

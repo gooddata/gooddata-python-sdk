@@ -3,6 +3,7 @@ title: "load_declarative_workspace_data_filters"
 linkTitle: "load_declarative_workspace_data_..."
 weight: 170
 superheading: "catalog_workspace."
+api_ref: "CatalogWorkspaceService.load_declarative_workspace_data_filters"
 ---
 
 

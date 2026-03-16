@@ -3,6 +3,7 @@ title: "put_declarative_workspaces"
 linkTitle: "put_declarative_workspaces"
 weight: 60
 superheading: "catalog_workspace."
+api_ref: "CatalogWorkspaceService.put_declarative_workspaces"
 ---
 
 ``put_declarative_workspaces(workspace: CatalogDeclarativeWorkspaces)``

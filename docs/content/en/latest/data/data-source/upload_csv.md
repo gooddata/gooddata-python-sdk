@@ -3,6 +3,7 @@ title: "upload_csv"
 linkTitle: "upload_csv"
 weight: 194
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.upload_csv"
 ---
 
 

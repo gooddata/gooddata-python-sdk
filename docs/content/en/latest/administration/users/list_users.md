@@ -4,6 +4,7 @@ linkTitle: "list_users"
 weight: 40
 no_list: true
 superheading: "catalog_user."
+api_ref: "CatalogUserService.list_users"
 ---
 
 

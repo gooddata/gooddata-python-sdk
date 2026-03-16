@@ -43,10 +43,13 @@ class ComputeToSdkConverter:
 
     @staticmethod
     def convert_attribute(attribute_dict: dict[str, Any]) -> Attribute:
-        """
-        Converts attribute dictionary to the SDK Compute model.
-        :param attribute_dict: the attribute dictionary to convert
-        :return: the converted attribute
+        """Convert attribute dictionary to the SDK Compute model.
+
+        Args:
+            attribute_dict: the attribute dictionary to convert
+
+        Returns:
+            the converted attribute
         """
         return Attribute(
             local_id=attribute_dict["localIdentifier"],
@@ -56,10 +59,13 @@ class ComputeToSdkConverter:
 
     @staticmethod
     def convert_filter(filter_dict: dict[str, Any]) -> Filter:
-        """
-        Converts filter dictionary to the SDK Compute model.
-        :param filter_dict: the filter dictionary to convert
-        :return: the converted filter
+        """Convert filter dictionary to the SDK Compute model.
+
+        Args:
+            filter_dict: the filter dictionary to convert
+
+        Returns:
+            the converted filter
         """
         if "positiveAttributeFilter" in filter_dict:
             f = filter_dict["positiveAttributeFilter"]
@@ -186,10 +192,13 @@ class ComputeToSdkConverter:
 
     @staticmethod
     def convert_metric(metric_dict: dict[str, Any]) -> Metric:
-        """
-        Converts metric dictionary to the SDK Compute model.
-        :param metric_dict: the metric dictionary to convert
-        :return: the converted metric
+        """Convert metric dictionary to the SDK Compute model.
+
+        Args:
+            metric_dict: the metric dictionary to convert
+
+        Returns:
+            the converted metric
         """
         definition = metric_dict["definition"]
         local_id = metric_dict["localIdentifier"]

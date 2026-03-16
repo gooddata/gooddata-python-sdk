@@ -3,6 +3,7 @@ title: "get_metadata_localization"
 linkTitle: "get_metadata_localization"
 weight: 52
 superheading: "catalog_workspace."
+api_ref: "CatalogWorkspaceService.get_metadata_localization"
 ---
 
 ``get_metadata_localization(workspace_id: str, target_language: str) -> bytes``

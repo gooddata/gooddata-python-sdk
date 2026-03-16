@@ -48,8 +48,10 @@ type = [
 test = [
     # Common test dependencies used across all workspace packages
     "pytest~=8.3.4",
-    # Required by scripts/docs/ tests (python_ref_builder uses toml)
+    # Required by scripts/docs/ tests
     "toml~=0.10.2",
+    "griffe>=1.0",
+    "docstring_parser~=0.15",
     "pytest-cov~=6.0.0",
     "pytest-json-report==1.5.0",
     # Additional test dependencies used by multiple packages

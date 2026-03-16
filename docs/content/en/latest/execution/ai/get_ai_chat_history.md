@@ -3,6 +3,7 @@ title: "ai_chat"
 linkTitle: "ai_chat"
 weight: 96
 superheading: "compute."
+api_ref: "ComputeService.ai_chat"
 ---
 
 ``ai_chat(workspace_id: str, question: str) -> ChatResult``

@@ -3,6 +3,7 @@ title: "sync_metadata"
 linkTitle: "sync_metadata"
 weight: 100
 superheading: "compute."
+api_ref: "ComputeService.sync_metadata"
 ---
 
 ``sync_metadata(workspace_id: str, async_req: bool = False) -> None``

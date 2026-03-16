@@ -3,6 +3,7 @@ title: "save_metadata_locale_to_disk"
 linkTitle: "save_metadata_locale_to_disk"
 weight: 56
 superheading: "catalog_workspace."
+api_ref: "CatalogWorkspaceService.save_metadata_locale_to_disk"
 ---
 
 ``save_metadata_locale_to_disk(workspace_id: str, target_language: str, file_path: Path) -> None``
