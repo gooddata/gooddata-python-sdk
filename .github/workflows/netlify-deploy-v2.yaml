@@ -67,6 +67,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r scripts/script-requirements.txt
+          # json_builder.py (legacy fallback for branches without griffe_builder.py)
+          # imports gooddata_sdk and gooddata_pandas at runtime, so they must be installed.
+          pip install -e gooddata-api-client/ -e packages/gooddata-sdk/ -e packages/gooddata-pandas/
       - name: Generate version docs
         if: steps.cache.outputs.cache-hit != 'true'
         run: bash scripts/generate-single-version.sh "origin/${{ matrix.version.branch }}" "${{ matrix.version.section }}"
