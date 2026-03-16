@@ -299,6 +299,16 @@ from gooddata_sdk.compute.model.metric import (
     PopDatesetMetric,
     SimpleMetric,
 )
+from gooddata_api_client.model.dashboard_context import DashboardContext
+from gooddata_api_client.model.insight_widget_descriptor import InsightWidgetDescriptor
+from gooddata_api_client.model.object_reference import ObjectReference
+from gooddata_api_client.model.object_reference_group import ObjectReferenceGroup
+from gooddata_api_client.model.rich_text_widget_descriptor import RichTextWidgetDescriptor
+from gooddata_api_client.model.tool_call_event_result import ToolCallEventResult
+from gooddata_api_client.model.ui_context import UIContext
+from gooddata_api_client.model.user_context import UserContext
+from gooddata_api_client.model.visualization_switcher_widget_descriptor import VisualizationSwitcherWidgetDescriptor
+from gooddata_api_client.model.widget_descriptor import WidgetDescriptor
 from gooddata_sdk.compute.service import ComputeService
 from gooddata_sdk.sdk import GoodDataSdk
 from gooddata_sdk.table import ExecutionTable, TableService

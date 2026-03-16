@@ -2,7 +2,8 @@
 from pathlib import Path
 
 import pytest
-from gooddata_sdk import CatalogWorkspace
+from gooddata_api_client.model.user_context import UserContext
+from gooddata_sdk import CatalogWorkspace, DashboardContext, ObjectReference, ObjectReferenceGroup, UIContext
 from gooddata_sdk.sdk import GoodDataSdk
 from tests_support.vcrpy_utils import get_vcr
 
@@ -212,6 +213,54 @@ def test_ai_chat_stream(test_config):
         _setup_test_workspace(sdk, test_workspace_id, path)
         buffer = {}
         for chunk in sdk.compute.ai_chat_stream(test_workspace_id, question):
+            buffer = {**buffer, **chunk}
+        assert buffer is not None
+    finally:
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "ai_chat_with_user_context.yaml"))
+def test_ai_chat_with_user_context(test_config):
+    """Test AI chat with user_context containing UIContext (DashboardContext)."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    dashboard_context = DashboardContext(id="dashboard_id", widgets=[])
+    ui_context = UIContext(dashboard=dashboard_context)
+    user_context = UserContext(view=ui_context)
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        response = sdk.compute.ai_chat(
+            test_workspace_id,
+            "Create a visualization for total revenue",
+            user_context=user_context,
+        )
+        assert hasattr(response, "routing")
+        assert hasattr(response, "chat_history_interaction_id")
+    finally:
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
+        sdk.compute.reset_ai_chat_history(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "ai_chat_stream_with_user_context.yaml"))
+def test_ai_chat_stream_with_user_context(test_config):
+    """Test AI chat stream with user_context containing referencedObjects."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    obj_ref = ObjectReference(type="METRIC", id="some_metric_id")
+    ref_group = ObjectReferenceGroup(objects=[obj_ref])
+    user_context = UserContext(referenced_objects=[ref_group])
+
+    question = "What is the total revenue for the year 2024?"
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        buffer = {}
+        for chunk in sdk.compute.ai_chat_stream(test_workspace_id, question, user_context=user_context):
             buffer = {**buffer, **chunk}
         assert buffer is not None
     finally:
