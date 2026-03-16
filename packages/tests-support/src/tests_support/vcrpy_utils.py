@@ -12,7 +12,7 @@ import yaml
 from vcr.record_mode import RecordMode
 
 VCR_MATCH_ON = ("method", "scheme", "host", "port", "path", "query", "body")
-NON_STATIC_HEADERS = ["DATE", "X-GDC-TRACE-ID"]
+NON_STATIC_HEADERS = ["DATE", "X-GDC-CANCEL-TOKEN", "X-GDC-TRACE-ID"]
 HEADERS_STR = "headers"
 PLACEHOLDER = ["PLACEHOLDER"]
 
@@ -76,7 +76,7 @@ class CustomSerializerYaml:
                 except (JSONDecodeError, UnicodeDecodeError):
                     # these exceptions are expected while getting file content
                     continue
-        return yaml.dump(cassette_dict, Dumper=IndentDumper, sort_keys=False)
+        return yaml.dump(cassette_dict, Dumper=IndentDumper, sort_keys=True)
 
 
 def custom_before_request(request, headers_str: str = HEADERS_STR):
