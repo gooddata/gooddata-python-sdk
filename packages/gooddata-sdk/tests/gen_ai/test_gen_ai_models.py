@@ -1,5 +1,6 @@
 # (C) 2024 GoodData Corporation
 """Unit tests for gen-ai catalog model classes."""
+
 from __future__ import annotations
 
 import pytest
@@ -141,9 +142,7 @@ class TestCatalogGenAiAllowedRelationshipType:
         assert "allowOrphans" not in d
 
     def test_as_api_dict_with_allow_orphans(self):
-        obj = CatalogGenAiAllowedRelationshipType(
-            source_type="dataset", target_type="metric", allow_orphans=False
-        )
+        obj = CatalogGenAiAllowedRelationshipType(source_type="dataset", target_type="metric", allow_orphans=False)
         d = obj.as_api_dict()
         assert d == {"sourceType": "dataset", "targetType": "metric", "allowOrphans": False}
 

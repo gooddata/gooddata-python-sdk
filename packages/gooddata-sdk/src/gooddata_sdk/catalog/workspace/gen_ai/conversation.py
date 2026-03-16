@@ -1,5 +1,6 @@
 # (C) 2024 GoodData Corporation
 """Catalog model classes for the gen-ai conversation HTTP API."""
+
 from __future__ import annotations
 
 from typing import Any

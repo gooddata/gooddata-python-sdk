@@ -1,5 +1,6 @@
 # (C) 2024 GoodData Corporation
 """Service wrapper for the gen-ai conversation HTTP API."""
+
 from __future__ import annotations
 
 import json
@@ -119,9 +120,7 @@ class CatalogGenAiService:
         url = self._url(_CONVERSATION_PATH, workspace_id=workspace_id, conversation_id=conversation_id)
         self._delete(url)
 
-    def list_conversation_items(
-        self, workspace_id: str, conversation_id: str
-    ) -> list[CatalogConversationItem]:
+    def list_conversation_items(self, workspace_id: str, conversation_id: str) -> list[CatalogConversationItem]:
         """List all items in a conversation.
 
         Wraps GET /api/v1/ai/workspaces/{workspace_id}/chat/conversations/{conversation_id}/items.
