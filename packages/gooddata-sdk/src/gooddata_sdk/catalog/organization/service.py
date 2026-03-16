@@ -35,6 +35,7 @@ from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
     CatalogLlmProviderPatch,
     CatalogLlmProviderPatchDocument,
 )
+from gooddata_sdk.catalog.organization.entity_model.resolved_llm_provider import CatalogResolvedLlms
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
 from gooddata_sdk.catalog.organization.layout.identity_provider import CatalogDeclarativeIdentityProvider
 from gooddata_sdk.catalog.organization.layout.notification_channel import CatalogDeclarativeNotificationChannel
@@ -731,6 +732,18 @@ class CatalogOrganizationService(CatalogServiceBase):
             id: LLM provider identifier
         """
         self._entities_api.delete_entity_llm_providers(id, _check_return_type=False)
+
+    def resolve_llm_providers(self, workspace_id: str) -> CatalogResolvedLlms:
+        """Resolve active LLM providers for a workspace.
+
+        Args:
+            workspace_id: Workspace identifier
+
+        Returns:
+            CatalogResolvedLlms: Resolved LLMs for the workspace
+        """
+        response = self._actions_api.resolve_llm_providers(workspace_id, _check_return_type=False)
+        return CatalogResolvedLlms.from_api(response)
 
     # Layout APIs
 

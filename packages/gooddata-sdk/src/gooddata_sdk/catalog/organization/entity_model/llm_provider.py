@@ -236,18 +236,18 @@ class CatalogLlmProvider(Base):
         id: str,
         models: list[CatalogLlmProviderModel],
         provider_config: CatalogLlmProviderConfig,
+        default_model_id: str,
         name: str | None = None,
         description: str | None = None,
-        default_model_id: str | None = None,
     ) -> CatalogLlmProvider:
         return cls(
             id=id,
             attributes=CatalogLlmProviderAttributes(
                 models=models,
                 provider_config=provider_config,
+                default_model_id=default_model_id,
                 name=name,
                 description=description,
-                default_model_id=default_model_id,
             ),
         )
 
@@ -314,9 +314,9 @@ class CatalogLlmProviderPatch(Base):
 class CatalogLlmProviderAttributes(Base):
     models: list[CatalogLlmProviderModel]
     provider_config: CatalogLlmProviderConfig
+    default_model_id: str
     name: str | None = None
     description: str | None = None
-    default_model_id: str | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiLlmProviderInAttributes]:

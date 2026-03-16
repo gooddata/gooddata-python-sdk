@@ -11,6 +11,8 @@ from gooddata_sdk import (
     CatalogLlmEndpoint,
     CatalogOrganization,
     CatalogOrganizationSetting,
+    CatalogResolvedLlmProvider,
+    CatalogResolvedLlms,
     CatalogRsaSpecification,
     CatalogWebhook,
     GoodDataSdk,
@@ -554,6 +556,18 @@ def test_delete_llm_endpoint(test_config):
             sdk.catalog_organization.delete_llm_endpoint("endpoint1")
         except NotFoundException:
             pass
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "resolve_llm_providers.yaml"))
+def test_resolve_llm_providers(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    workspace_id = test_config["workspace_id"]
+    result = sdk.catalog_organization.resolve_llm_providers(workspace_id)
+    assert isinstance(result, CatalogResolvedLlms)
+    assert result.data is not None
+    assert len(result.data) > 0
+    assert all(isinstance(item, CatalogResolvedLlmProvider) for item in result.data)
 
 
 #
