@@ -3,6 +3,7 @@ title: "get_color_palette"
 linkTitle: "get_color_palette"
 superheading: "catalog_appearance."
 weight: 210
+api_ref: "CatalogAppearanceService.get_color_palette"
 ---
 
 ``get_color_palette( color_palette_id: str ) -> CatalogColorPalette``

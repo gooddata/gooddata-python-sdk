@@ -3,6 +3,7 @@ title: "delete_csv_files"
 linkTitle: "delete_csv_files"
 weight: 193
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.delete_csv_files"
 ---
 
 

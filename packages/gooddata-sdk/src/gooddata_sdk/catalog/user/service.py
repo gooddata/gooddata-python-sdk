@@ -75,9 +75,6 @@ class CatalogUserService(CatalogServiceBase):
     def list_users(self) -> list[CatalogUser]:
         """Get a list of all existing users.
 
-        Args:
-            None
-
         Returns:
             list[CatalogUser]:
                 List of all Users as User entity objects.
@@ -143,9 +140,6 @@ class CatalogUserService(CatalogServiceBase):
     def list_user_groups(self) -> list[CatalogUserGroup]:
         """Get a list of all existing user groups.
 
-        Args:
-            None
-
         Returns:
             list[CatalogUserGroup]:
                 List of all User groups as UserGroup entity object.
@@ -162,9 +156,6 @@ class CatalogUserService(CatalogServiceBase):
 
     def get_declarative_users(self) -> CatalogDeclarativeUsers:
         """Retrieve all users in a declarative form.
-
-        Args:
-            None
 
         Returns:
             CatalogDeclarativeUsers:
@@ -230,9 +221,6 @@ class CatalogUserService(CatalogServiceBase):
     def get_declarative_user_groups(self) -> CatalogDeclarativeUserGroups:
         """Retrieve all user groups in a declarative form.
 
-
-        Args:
-            None
 
         Returns:
             CatalogDeclarativeUserGroups:
@@ -301,9 +289,6 @@ class CatalogUserService(CatalogServiceBase):
     def get_declarative_users_user_groups(self) -> CatalogDeclarativeUsersUserGroups:
         """Retrieves all users and user groups in a declarative form.
 
-
-        Args:
-            None
 
         Returns:
             CatalogDeclarativeUsersUserGroups:

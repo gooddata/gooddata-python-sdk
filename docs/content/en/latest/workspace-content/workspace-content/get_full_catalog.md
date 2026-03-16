@@ -3,6 +3,7 @@ title: "get_full_catalog"
 linkTitle: "get_full_catalog"
 weight: 20
 superheading: "catalog_workspace_content."
+api_ref: "CatalogWorkspaceContentService.get_full_catalog"
 ---
 
 

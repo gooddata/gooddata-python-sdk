@@ -3,6 +3,7 @@ title: "for_items"
 linkTitle: "for_items"
 weight: 11
 superheading: "tables."
+api_ref: "TableService.for_items"
 ---
 
 

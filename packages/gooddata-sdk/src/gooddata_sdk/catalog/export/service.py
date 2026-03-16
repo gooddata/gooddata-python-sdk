@@ -21,6 +21,7 @@ from gooddata_sdk.visualization import VisualizationService
 class ExportService(CatalogServiceBase):
     """
     ExportService provides the ability to export PDF and Tabular data from GoodData Dashboards.
+
     Attributes:
         _entities_api:
             A reference to the entities_api of GoodDataApiClient instance.
@@ -47,6 +48,7 @@ class ExportService(CatalogServiceBase):
         super().__init__(api_client)
         """
         Initializes the ExportService with the GoodDataApiClient instance.
+
         Args:
             api_client (GoodDataApiClient): An instance of the GoodData API Client.
         """
@@ -62,6 +64,7 @@ class ExportService(CatalogServiceBase):
     ) -> bytes:
         """
         Get the exported content from a server as bytes.
+
         Args:
             workspace_id (str):
                 The workspace ID for which content is to be exported.
@@ -75,8 +78,10 @@ class ExportService(CatalogServiceBase):
                 Initial time in seconds to wait between retries. Defaults to 0.2.
             max_retry (float, optional):
                 Maximum time in seconds to wait between retries. Defaults to 5.0.
+
         Returns:
             bytes: The exported content as bytes.
+
         Raises:
             ValueError: If the server is not able to return a response or if the input values are invalid.
         """
@@ -107,11 +112,13 @@ class ExportService(CatalogServiceBase):
     ) -> str:
         """
         Creates an export of the requested type (PDF or Tabular) in the specified Workspace.
+
         Args:
             workspace_id (str): The ID of the target Workspace.
             request (Union[PdfExportRequest, TabularExportRequest]):
                 A request object specifying the type of export (PDF or Tabular) to be created.
             create_func (Callable): The function used to create the export.
+
         Returns:
             str: The export result from the response object.
         """
@@ -127,6 +134,7 @@ class ExportService(CatalogServiceBase):
                 The ID of the target Workspace.
             dashboard_id (str):
                 The ID of the target Dashboard.
+
         Returns:
             bool: Returns true, if the dashboard exists.
 
@@ -152,6 +160,7 @@ class ExportService(CatalogServiceBase):
     ) -> None:
         """
         Common method to export content from a workspace.
+
         Args:
             workspace_id (str):
                 The ID of the workspace to export from.
@@ -169,6 +178,7 @@ class ExportService(CatalogServiceBase):
                 The time interval to retry checking for exported content (in seconds). Defaults to 0.2.
             max_retry (float, optional):
                 The maximum number of retries to check for exported content. Defaults to 5.0.
+
         Returns:
             None
         """
@@ -190,6 +200,7 @@ class ExportService(CatalogServiceBase):
     ) -> None:
         """
         Export a PDF of the specified GoodData Dashboard and save it to the specified file path.
+
         Args:
             workspace_id (str):
                 The ID of the GoodData Workspace.
@@ -236,6 +247,7 @@ class ExportService(CatalogServiceBase):
     ) -> None:
         """
         Export Tabular (CSV, XLSX) data from the specified GoodData Dashboard report, saved to the specified file path.
+
         Args:
             workspace_id (str):
                 The ID of the GoodData Workspace.

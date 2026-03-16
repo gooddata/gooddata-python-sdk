@@ -3,6 +3,7 @@ title: "create_or_update_jwk"
 linkTitle: "create_or_update_jwk"
 superheading: "catalog_organization."
 weight: 100
+api_ref: "CatalogOrganizationService.create_or_update_jwk"
 ---
 
 ``create_or_update_jwk( jwk: CatalogJwk ) -> None``

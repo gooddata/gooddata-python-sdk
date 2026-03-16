@@ -3,6 +3,7 @@ title: "test_data_sources_connection"
 linkTitle: "test_data_sources_connection"
 weight: 220
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.test_data_sources_connection"
 ---
 
 

@@ -3,6 +3,7 @@ title: "analyze_csv"
 linkTitle: "analyze_csv"
 weight: 191
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.analyze_csv"
 ---
 
 

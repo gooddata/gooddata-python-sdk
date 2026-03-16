@@ -3,6 +3,7 @@ title: "store_analytics_model_to_disk"
 linkTitle: "store_analytics_model_to_disk"
 weight: 131
 superheading: "catalog_workspace_content."
+api_ref: "CatalogWorkspaceContentService.store_analytics_model_to_disk"
 ---
 
 ``store_analytics_model_to_disk(workspace_id: str, path: Path = Path.cwd(), exclude: Optional[list[str]] = None, sort: bool = False)``

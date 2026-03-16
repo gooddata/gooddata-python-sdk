@@ -3,6 +3,7 @@ title: "get_declarative_analytics_model"
 linkTitle: "get_declarative_analytics_model"
 weight: 110
 superheading: "catalog_workspace_content."
+api_ref: "CatalogWorkspaceContentService.get_declarative_analytics_model"
 ---
 
 ``get_declarative_analytics_model(workspace_id: str, exclude: Optional[list[str]])``

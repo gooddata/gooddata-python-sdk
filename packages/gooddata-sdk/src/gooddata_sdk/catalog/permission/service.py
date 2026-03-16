@@ -59,6 +59,7 @@ class CatalogPermissionService(CatalogServiceBase):
                 Workspace identification string. e.g. "demo"
             dashboard_id (str):
                 Dashboard identification string. e.g. "campaign"
+
         Returns:
             CatalogAvailableAssignees:
                 Object containing users and user groups
@@ -76,6 +77,7 @@ class CatalogPermissionService(CatalogServiceBase):
                 Workspace identification string. e.g. "demo"
             dashboard_id (str):
                 Dashboard identification string. e.g. "campaign"
+
         Returns:
             CatalogDashboardPermissions:
                 Object containing users and user groups and granted dashboard permissions
@@ -103,6 +105,7 @@ class CatalogPermissionService(CatalogServiceBase):
             permissions_for_assignee ([Union[CatalogPermissionsForAssignee, CatalogPermissionsForAssigneeRule]]):
                 Object containing a List of permission assignments. An empty list of permissions in the assignment
                 removes existing dashboard permissions.
+
         Returns:
             None
         """
@@ -115,9 +118,6 @@ class CatalogPermissionService(CatalogServiceBase):
 
     def get_declarative_organization_permissions(self) -> list[CatalogDeclarativeOrganizationPermission]:
         """Get a list of all declarative organization permissions.
-
-        Args:
-            None
 
         Returns:
             list[CatalogDeclarativeOrganizationPermission]:
@@ -155,6 +155,7 @@ class CatalogPermissionService(CatalogServiceBase):
             organization_permission_assignments ([CatalogOrganizationPermissionAssignment]):
                 Object containing List of users and user group and desired organization permissions. Set empty list
                 permissions for user/user group means remove organization permissions.
+
         Returns:
             None
         """

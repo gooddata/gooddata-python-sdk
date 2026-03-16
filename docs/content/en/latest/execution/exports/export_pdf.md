@@ -3,6 +3,7 @@ title: "export_pdf"
 linkTitle: "export_pdf"
 weight: 110
 superheading: "export."
+api_ref: "ExportService.export_pdf"
 ---
 
 ``export_pdf(workspace_id: str,

@@ -4,6 +4,7 @@ linkTitle: "manage_dashboard_permissions"
 weight: 15
 no_list: true
 superheading: "catalog_permission."
+api_ref: "CatalogPermissionService.manage_dashboard_permissions"
 ---
 
 

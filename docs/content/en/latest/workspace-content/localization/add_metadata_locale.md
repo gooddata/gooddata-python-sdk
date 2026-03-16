@@ -3,6 +3,7 @@ title: "add_metadata_locale"
 linkTitle: "add_metadata_locale"
 weight: 25
 superheading: "catalog_workspace."
+api_ref: "CatalogWorkspaceService.add_metadata_locale"
 ---
 
 ``add_metadata_locale(workspace_id: str, target_language: str, translator_func: Callable, set_locale: bool = True) -> None``

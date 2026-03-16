@@ -3,6 +3,7 @@ title: "delete_data_source"
 linkTitle: "delete_data_source"
 weight: 30
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.delete_data_source"
 ---
 
 

@@ -4,6 +4,7 @@ linkTitle: "load_and_put_declarative_user_g..."
 weight: 180
 no_list: true
 superheading: "catalog_user."
+api_ref: "CatalogUserService.load_and_put_declarative_user_groups"
 ---
 
 

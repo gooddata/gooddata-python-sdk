@@ -3,6 +3,7 @@ title: "load_pdm_from_disk"
 linkTitle: "load_pdm_from_disk"
 weight: 140
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.load_pdm_from_disk"
 ---
 
 ``load_pdm_from_disk(path: Path = Path.cwd())``

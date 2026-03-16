@@ -3,6 +3,7 @@ title: "delete_workspace"
 linkTitle: "delete_workspace"
 weight: 30
 superheading: "catalog_workspace."
+api_ref: "CatalogWorkspaceService.delete_workspace"
 ---
 
 

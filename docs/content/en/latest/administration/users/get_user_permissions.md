@@ -4,6 +4,7 @@ linkTitle: "get_user_permissions"
 weight: 10
 no_list: true
 superheading: "catalog_user."
+api_ref: "CatalogUserService.get_user_permissions"
 ---
 
 

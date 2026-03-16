@@ -3,6 +3,7 @@ title: "set_metadata_locale_from_disk"
 linkTitle: "set_metadata_locale_from_disk"
 weight: 57
 superheading: "catalog_workspace."
+api_ref: "CatalogWorkspaceService.set_metadata_locale_from_disk"
 ---
 
 ``set_metadata_locale_from_disk(workspace_id: str, file_path: Path) -> None``

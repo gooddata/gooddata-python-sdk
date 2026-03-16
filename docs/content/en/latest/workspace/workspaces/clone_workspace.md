@@ -3,6 +3,7 @@ title: "clone_workspace"
 linkTitle: "clone_workspace"
 weight: 21
 superheading: "catalog_workspace."
+api_ref: "CatalogWorkspaceService.clone_workspace"
 ---
 
 
