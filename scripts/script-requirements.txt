@@ -1,3 +1,5 @@
+attrs>=23.1.0
+cattrs>=23.1.0
 docstring_parser~=0.15
 griffe>=1.0
 jinja2~=3.1
