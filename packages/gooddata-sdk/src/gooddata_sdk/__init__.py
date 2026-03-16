@@ -184,6 +184,19 @@ from gooddata_sdk.catalog.user.management_model.management import (
 )
 from gooddata_sdk.catalog.validate_by_item import CatalogValidateByItem
 from gooddata_sdk.catalog.workspace.content_service import CatalogWorkspaceContent, CatalogWorkspaceContentService
+from gooddata_sdk.catalog.workspace.gen_ai.conversation import (
+    CatalogConversation,
+    CatalogConversationFeedback,
+    CatalogConversationItem,
+    CatalogConversationItemContent,
+    CatalogConversationTurnResponse,
+    CatalogGenAiAllowedRelationshipType,
+    CatalogSendMessageOptions,
+    CatalogSendMessageSearchOptions,
+    GenAiFeedbackType,
+    GenAiObjectType,
+)
+from gooddata_sdk.catalog.workspace.gen_ai.service import CatalogGenAiService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
     CatalogDeclarativeAnalytics,
     CatalogDeclarativeMemoryItem,

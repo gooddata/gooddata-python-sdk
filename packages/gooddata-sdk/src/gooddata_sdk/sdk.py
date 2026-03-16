@@ -10,6 +10,7 @@ from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
 from gooddata_sdk.catalog.permission.service import CatalogPermissionService
 from gooddata_sdk.catalog.user.service import CatalogUserService
 from gooddata_sdk.catalog.workspace.content_service import CatalogWorkspaceContentService
+from gooddata_sdk.catalog.workspace.gen_ai.service import CatalogGenAiService
 from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceService
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.service import ComputeService
@@ -89,6 +90,7 @@ class GoodDataSdk:
         self._support = SupportService(self._client)
         self._catalog_permission = CatalogPermissionService(self._client)
         self._export = ExportService(self._client)
+        self._catalog_gen_ai = CatalogGenAiService(self._client)
 
     @property
     def catalog_appearance(self) -> CatalogAppearanceService:
@@ -137,6 +139,10 @@ class GoodDataSdk:
     @property
     def export(self) -> ExportService:
         return self._export
+
+    @property
+    def catalog_gen_ai(self) -> CatalogGenAiService:
+        return self._catalog_gen_ai
 
     @property
     def client(self) -> GoodDataApiClient:
