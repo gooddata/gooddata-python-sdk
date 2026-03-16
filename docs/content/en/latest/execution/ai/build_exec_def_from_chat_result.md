@@ -3,6 +3,7 @@ title: "build_exec_def_from_chat_result"
 linkTitle: "build_exec_def_from_chat_result"
 weight: 95
 superheading: "compute."
+api_ref: "ComputeService.build_exec_def_from_chat_result"
 ---
 
 ``build_exec_def_from_chat_result(chat_result: ChatResult) -> ExecutionDefinition``

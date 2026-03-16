@@ -3,6 +3,7 @@ title: "register_upload_notification"
 linkTitle: "register_upload_notification"
 weight: 180
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.register_upload_notification"
 ---
 
 

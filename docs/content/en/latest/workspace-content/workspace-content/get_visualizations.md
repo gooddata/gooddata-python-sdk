@@ -3,6 +3,7 @@ title: "get_visualizations"
 linkTitle: "get_visualizations"
 weight: 15
 superheading: "visualizations."
+api_ref: "VisualizationService.get_visualizations"
 ---
 
 ``get_visualizations(workspace_id: str)``

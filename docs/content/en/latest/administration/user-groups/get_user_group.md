@@ -4,6 +4,7 @@ linkTitle: "get_user_group"
 weight: 60
 no_list: true
 superheading: "catalog_user."
+api_ref: "CatalogUserService.get_user_group"
 ---
 
 

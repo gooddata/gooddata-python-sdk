@@ -3,6 +3,7 @@ title: "staging_upload"
 linkTitle: "staging_upload"
 weight: 190
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.staging_upload"
 ---
 
 

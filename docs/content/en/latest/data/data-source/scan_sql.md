@@ -3,6 +3,7 @@ title: "scan_sql"
 linkTitle: "scan_sql"
 weight: 210
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.scan_sql"
 ---
 
 

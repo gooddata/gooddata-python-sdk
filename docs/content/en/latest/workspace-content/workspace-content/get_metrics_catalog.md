@@ -3,6 +3,7 @@ title: "get_metrics_catalog"
 linkTitle: "get_metrics_catalog"
 weight: 30
 superheading: "catalog_workspace_content."
+api_ref: "CatalogWorkspaceContentService.get_metrics_catalog"
 ---
 
 

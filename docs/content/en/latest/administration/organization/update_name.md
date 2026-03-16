@@ -4,6 +4,7 @@ linkTitle: "update_name"
 weight: 10
 no_list: true
 superheading: "catalog_organization."
+api_ref: "CatalogOrganizationService.update_name"
 ---
 
 

@@ -3,6 +3,7 @@ title: "list_jwks"
 linkTitle: "list_jwks"
 superheading: "catalog_organization."
 weight: 100
+api_ref: "CatalogOrganizationService.list_jwks"
 ---
 
 ``list_jwks( ) -> List[CatalogJwk]``

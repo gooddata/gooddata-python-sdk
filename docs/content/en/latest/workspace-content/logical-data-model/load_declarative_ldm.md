@@ -3,6 +3,7 @@ title: "load_declarative_ldm"
 linkTitle: "load_declarative_ldm"
 weight: 110
 superheading: "catalog_workspace_content."
+api_ref: "CatalogWorkspaceContentService.load_declarative_ldm"
 ---
 
 

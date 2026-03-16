@@ -3,6 +3,7 @@ title: "import_csv"
 linkTitle: "import_csv"
 weight: 192
 superheading: "catalog_data_source."
+api_ref: "CatalogDataSourceService.import_csv"
 ---
 
 

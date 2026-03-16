@@ -3,6 +3,7 @@ title: "create_or_update"
 linkTitle: "create_or_update"
 weight: 10
 superheading: "catalog_workspace."
+api_ref: "CatalogWorkspaceService.create_or_update"
 ---
 
 ``create_or_update(workspace: CatalogWorkspace)``

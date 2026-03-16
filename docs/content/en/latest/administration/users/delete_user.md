@@ -4,6 +4,7 @@ linkTitle: "delete_user"
 weight: 30
 no_list: true
 superheading: "catalog_user."
+api_ref: "CatalogUserService.delete_user"
 ---
 
 

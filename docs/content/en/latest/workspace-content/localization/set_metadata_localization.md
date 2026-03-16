@@ -3,6 +3,7 @@ title: "set_metadata_localization"
 linkTitle: "set_metadata_localization"
 weight: 53
 superheading: "catalog_workspace."
+api_ref: "CatalogWorkspaceService.set_metadata_localization"
 ---
 
 ``set_metadata_localization(workspace_id: str, encoded_xml: bytes) -> None``

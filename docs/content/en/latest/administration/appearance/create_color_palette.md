@@ -3,6 +3,7 @@ title: "create_color_palette"
 linkTitle: "create_color_palette"
 superheading: "catalog_appearance."
 weight: 220
+api_ref: "CatalogAppearanceService.create_color_palette"
 ---
 
 ``create_color_palette( color_palette: CatalogColorPalette ) -> None``

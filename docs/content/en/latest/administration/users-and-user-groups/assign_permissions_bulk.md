@@ -4,6 +4,7 @@ linkTitle: "assign_permissions_bulk"
 weight: 10
 no_list: true
 superheading: "catalog_user."
+api_ref: "CatalogUserService.assign_permissions_bulk"
 ---
 
 

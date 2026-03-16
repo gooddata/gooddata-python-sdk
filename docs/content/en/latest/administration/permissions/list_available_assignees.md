@@ -4,6 +4,7 @@ linkTitle: "list_available_assignees"
 weight: 17
 no_list: true
 superheading: "catalog_permission."
+api_ref: "CatalogPermissionService.list_available_assignees"
 ---
 
 

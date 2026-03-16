@@ -3,6 +3,7 @@ title: "search_ai"
 linkTitle: "search_ai"
 weight: 98
 superheading: "compute."
+api_ref: "ComputeService.search_ai"
 ---
 
 ``search_ai(

@@ -3,6 +3,7 @@ title: "get_facts_catalog"
 linkTitle: "get_facts_catalog"
 weight: 40
 superheading: "catalog_workspace_content."
+api_ref: "CatalogWorkspaceContentService.get_facts_catalog"
 ---
 
 

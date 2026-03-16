@@ -3,6 +3,7 @@ title: "store_declarative_analytics_model"
 linkTitle: "store_declarative_analytics_model"
 weight: 130
 superheading: "catalog_workspace_content."
+api_ref: "CatalogWorkspaceContentService.store_declarative_analytics_model"
 ---
 
 
