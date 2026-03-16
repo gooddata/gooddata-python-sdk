@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Union
+from typing import Any, Literal, Union
 
 from attrs import define, field
 from attrs.setters import frozen as frozen_attr
@@ -17,6 +17,8 @@ from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
 
 logger = logging.getLogger(__name__)
+
+ArrowFormat = Literal["application/vnd.apache.arrow.file", "application/vnd.apache.arrow.stream"]
 
 
 @define
@@ -372,6 +374,29 @@ class BareExecutionResponse:
             )
         return ExecutionResult(execution_result)
 
+    def read_result_binary(
+        self,
+        accept: ArrowFormat = "application/vnd.apache.arrow.file",
+    ) -> bytes:
+        """
+        Reads the execution result in Apache Arrow IPC binary format.
+
+        Args:
+            accept: Arrow format to request; either 'application/vnd.apache.arrow.file'
+                (Arrow IPC File format, default) or 'application/vnd.apache.arrow.stream'
+                (Arrow IPC Stream format).
+        Returns:
+            Raw bytes of the Arrow IPC response from the /binary endpoint.
+        """
+        response = self._actions_api.retrieve_result_binary(
+            workspace_id=self._workspace_id,
+            result_id=self.result_id,
+            accept_content_types=[accept],
+            _check_return_type=False,
+            _preload_content=False,
+        )
+        return response.data
+
     def cancel(self) -> None:
         """
         Cancels the execution backing this execution result.
@@ -463,6 +488,22 @@ class Execution:
         timeout: Union[int, float, tuple] | None = None,
     ) -> ExecutionResult:
         return self.bare_exec_response.read_result(limit, offset, timeout)
+
+    def read_result_binary(
+        self,
+        accept: ArrowFormat = "application/vnd.apache.arrow.file",
+    ) -> bytes:
+        """
+        Reads the execution result in Apache Arrow IPC binary format.
+
+        Args:
+            accept: Arrow format to request; either 'application/vnd.apache.arrow.file'
+                (Arrow IPC File format, default) or 'application/vnd.apache.arrow.stream'
+                (Arrow IPC Stream format).
+        Returns:
+            Raw bytes of the Arrow IPC response.
+        """
+        return self.bare_exec_response.read_result_binary(accept)
 
     def cancel(self) -> None:
         """

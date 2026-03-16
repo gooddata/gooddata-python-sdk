@@ -18,6 +18,7 @@ from gooddata_api_client.model.search_result import SearchResult
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.execution import (
+    ArrowFormat,
     Execution,
     ExecutionDefinition,
     ResultCacheMetadata,
@@ -72,6 +73,33 @@ class ComputeService:
             if exec_def.is_cancellable or self._api_client.executions_cancellable
             else None,
         )
+
+    def retrieve_result_binary(
+        self,
+        workspace_id: str,
+        result_id: str,
+        accept: ArrowFormat = "application/vnd.apache.arrow.file",
+    ) -> bytes:
+        """
+        Gets execution result in Apache Arrow IPC binary format from GoodData workspace.
+
+        Args:
+            workspace_id (str): workspace identifier
+            result_id (str): execution result ID
+            accept (ArrowFormat): Arrow format to request; either
+                'application/vnd.apache.arrow.file' (default) or
+                'application/vnd.apache.arrow.stream'.
+        Returns:
+            bytes: Raw Arrow IPC bytes.
+        """
+        response = self._actions_api.retrieve_result_binary(
+            workspace_id=workspace_id,
+            result_id=result_id,
+            accept_content_types=[accept],
+            _check_return_type=False,
+            _preload_content=False,
+        )
+        return response.data
 
     def retrieve_result_cache_metadata(self, workspace_id: str, result_id: str) -> ResultCacheMetadata:
         """
