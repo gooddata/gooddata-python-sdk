@@ -184,6 +184,103 @@ def _wrap_for_columns(idx: Optional[pandas.Index]) -> Optional[pandas.Index]:
     return pandas.Index([(v,) for v in idx])
 
 
+def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[list[int]]:
+    """
+    Compute row_totals_indexes compatible with DataFrameMetadata from an Arrow table.
+
+    Returns a list with one inner list per header column in the output-row dimension,
+    matching the JSON-path DataFrameMetadata.row_totals_indexes format (one slot per
+    dimension header, including the measureGroup placeholder which always → []).
+
+    Non-transposed case (Arrow rows = output rows):
+        Every Arrow row with __row_type != 0 is a total row; it appears in the
+        total-indexes list for every attribute-level header in the row dimension.
+
+    Transposed / metrics-only case (Arrow fields = output rows):
+        Total rows are grand_total_N fields.  A field is total at level j only when
+        j >= len(gdc["label_values"]), i.e. that label level is being aggregated.
+    """
+    schema_meta = {k.decode(): json.loads(v) for k, v in table.schema.metadata.items()}
+    xtab_meta = schema_meta["x-gdc-xtab-v1"]
+    is_transposed = schema_meta["x-gdc-view-v1"]["isTransposed"]
+
+    row_label_refs: list[str] = xtab_meta["computedShape"]["rows"]
+    col_label_refs: list[str] = xtab_meta["computedShape"]["cols"]
+    label_ref_to_id = _label_ref_to_id_map(xtab_meta)
+    id_to_ref = {v: k for k, v in label_ref_to_id.items()}
+
+    use_field_rows = is_transposed or not row_label_refs
+    output_row_refs = col_label_refs if use_field_rows else row_label_refs
+    output_row_ref_set = set(output_row_refs)
+
+    # Find which execution dimension contains the output-row attribute refs.
+    # Use attributeHeader["label"]["id"] (GoodData label object ID) which matches
+    # the labelId values in the Arrow labelMetadata — not localIdentifier, which is
+    # the user-given alias and may differ.
+    def _label_ids_in_dim(dim: dict) -> set:
+        return {h["attributeHeader"]["label"]["id"] for h in dim.get("headers", []) if "attributeHeader" in h}
+
+    if output_row_refs:
+        ref_label_ids = {label_ref_to_id[r] for r in output_row_refs}
+        row_dim = next(
+            (dim for dim in execution_dims if ref_label_ids <= _label_ids_in_dim(dim)),
+            execution_dims[0] if execution_dims else {},
+        )
+    else:
+        # Metrics-only: the dimension containing measureGroupHeaders is the output-row dim.
+        row_dim = next(
+            (dim for dim in execution_dims if any("measureGroupHeaders" in h for h in dim.get("headers", []))),
+            execution_dims[0] if execution_dims else {},
+        )
+
+    if use_field_rows:
+        # Output rows are the data fields in schema order.
+        all_data_fields = [
+            f for f in table.schema if f.name.startswith("metric_group_") or f.name.startswith("grand_total_")
+        ]
+
+        result: list[list[int]] = []
+        attr_level = 0  # position within output_row_refs
+        for header in row_dim.get("headers", []):
+            if "measureGroupHeaders" in header:
+                result.append([])
+            else:
+                label_id = header["attributeHeader"]["label"]["id"]
+                ref = id_to_ref.get(label_id)
+                if ref is None or ref not in output_row_ref_set:
+                    result.append([])
+                else:
+                    j = attr_level
+                    total_idxs = [
+                        k
+                        for k, f in enumerate(all_data_fields)
+                        if json.loads(f.metadata[b"gdc"])["type"] == "total"
+                        and j >= len(json.loads(f.metadata[b"gdc"]).get("label_values", []))
+                    ]
+                    result.append(total_idxs)
+                    attr_level += 1
+        return result
+
+    else:
+        # Output rows are Arrow rows; every total row (row_type != 0) is listed
+        # in the total-indexes for every attribute level.
+        row_types = table.column("__row_type").to_pylist()
+        total_row_idxs = [i for i, rt in enumerate(row_types) if rt != 0]
+
+        result = []
+        for header in row_dim.get("headers", []):
+            if "measureGroupHeaders" in header:
+                result.append([])
+            else:
+                label_id = header["attributeHeader"]["label"]["id"]
+                ref = id_to_ref.get(label_id)
+                if ref is None or ref not in output_row_ref_set:
+                    result.append([])
+                else:
+                    result.append(total_row_idxs)
+        return result
+
+
 def convert_arrow_table_to_dataframe(table: pa.Table) -> pandas.DataFrame:
     """
     Convert a pyarrow Table returned by the GoodData /binary execution endpoint

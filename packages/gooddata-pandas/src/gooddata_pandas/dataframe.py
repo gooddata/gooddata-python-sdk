@@ -51,6 +51,9 @@ class DataFrameFactory:
         - for_exec_def(self, exec_def: ExecutionDefinition, label_overrides: Optional[LabelOverrides] = None,
             result_size_dimensions_limits: ResultSizeDimensions = (), result_size_bytes_limit: Optional[int] = None,
             page_size: int = _DEFAULT_PAGE_SIZE,) -> Tuple[pandas.DataFrame, DataFrameMetadata]:
+        - for_exec_def_arrow(self, exec_def: ExecutionDefinition,
+            on_execution_submitted: Optional[Callable[[Execution], None]] = None)
+            -> Tuple[pandas.DataFrame, DataFrameMetadata]:
         - for_exec_result_id(self, result_id: str, label_overrides: Optional[LabelOverrides] = None,
             result_cache_metadata: Optional[ResultCacheMetadata] = None,
             result_size_dimensions_limits: ResultSizeDimensions = (),
@@ -380,12 +383,19 @@ class DataFrameFactory:
         self,
         exec_def: ExecutionDefinition,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
-    ) -> pandas.DataFrame:
+    ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a DataFrame from an execution definition using the Arrow IPC binary format.
 
         Compared to for_exec_def(), this skips the page-by-page JSON deserialization and
         converts the result in one shot via pyarrow, which is significantly faster for large results.
+
+        Returns the same ``(DataFrame, DataFrameMetadata)`` tuple as :meth:`for_exec_def` so that
+        callers can switch between the two paths without changing their code.
+
+        ``DataFrameMetadata.primary_labels_from_index`` and
+        ``DataFrameMetadata.primary_labels_from_columns`` are always empty dicts because the
+        Arrow path does not support the ``use_primary_labels_in_attributes`` feature.
 
         Requires pyarrow to be installed (pip install pyarrow).
 
@@ -395,17 +405,30 @@ class DataFrameFactory:
                 the execution is submitted to the backend.
 
         Returns:
-            pandas.DataFrame
+            Tuple[pandas.DataFrame, DataFrameMetadata]
 
         """
-        from gooddata_pandas.arrow_convertor import convert_arrow_table_to_dataframe
+        from gooddata_pandas.arrow_convertor import (
+            compute_row_totals_indexes,
+            convert_arrow_table_to_dataframe,
+        )
 
         execution = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
 
         if on_execution_submitted is not None:
             on_execution_submitted(execution)
 
-        return convert_arrow_table_to_dataframe(execution.bare_exec_response.read_result_arrow())
+        exec_response = execution.bare_exec_response
+        table = exec_response.read_result_arrow()
+        df = convert_arrow_table_to_dataframe(table)
+        row_totals_indexes = compute_row_totals_indexes(table, exec_response.dimensions)
+        metadata = DataFrameMetadata(
+            row_totals_indexes=row_totals_indexes,
+            execution_response=exec_response,
+            primary_labels_from_index={},
+            primary_labels_from_columns={},
+        )
+        return df, metadata
 
     def for_exec_result_id(
         self,
