@@ -71,6 +71,7 @@ class GoodDataApiClient:
         self._actions_api = apis.ActionsApi(self._api_client)
         self._user_management_api = apis.UserManagementApi(self._api_client)
         self._appearance_api = apis.AppearanceApi(self._api_client)
+        self._smart_functions_api = apis.SmartFunctionsApi(self._api_client)
         self._executions_cancellable = executions_cancellable
 
     def _do_post_request(
@@ -157,6 +158,10 @@ class GoodDataApiClient:
     @property
     def appearance_api(self) -> apis.AppearanceApi:
         return self._appearance_api
+
+    @property
+    def smart_functions_api(self) -> apis.SmartFunctionsApi:
+        return self._smart_functions_api
 
     @property
     def executions_cancellable(self) -> bool:
