@@ -29,11 +29,25 @@ def _make_mock_item(
     item.workspace_id = workspace_id
     item.tags = tags or []
     # optional fields not set
-    item.configure_mock(**{attr: None for attr in [
-        "created_at", "created_by", "dataset_id", "dataset_title",
-        "dataset_type", "description", "is_hidden", "is_hidden_from_kda",
-        "metric_type", "modified_at", "modified_by", "visualization_url",
-    ]})
+    item.configure_mock(
+        **{
+            attr: None
+            for attr in [
+                "created_at",
+                "created_by",
+                "dataset_id",
+                "dataset_title",
+                "dataset_type",
+                "description",
+                "is_hidden",
+                "is_hidden_from_kda",
+                "metric_type",
+                "modified_at",
+                "modified_by",
+                "visualization_url",
+            ]
+        }
+    )
     return item
 
 
