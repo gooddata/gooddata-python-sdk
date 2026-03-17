@@ -118,9 +118,7 @@ class TestComputeServiceKnowledgeDocuments:
 
         result = service.list_knowledge_documents("workspace1")
 
-        service._actions_api.list_documents.assert_called_once_with(
-            "workspace1", _check_return_type=False
-        )
+        service._actions_api.list_documents.assert_called_once_with("workspace1", _check_return_type=False)
         assert isinstance(result, CatalogListKnowledgeDocumentsResponse)
 
     def test_list_knowledge_documents_with_pagination_params(self):
@@ -128,9 +126,7 @@ class TestComputeServiceKnowledgeDocuments:
         mock_response = {"documents": [], "total_count": 50, "next_page_token": "tok"}
         service._actions_api.list_documents.return_value = mock_response
 
-        result = service.list_knowledge_documents(
-            "workspace1", size=10, page_token="prev_tok", meta_include="page"
-        )
+        result = service.list_knowledge_documents("workspace1", size=10, page_token="prev_tok", meta_include="page")
 
         service._actions_api.list_documents.assert_called_once_with(
             "workspace1",
