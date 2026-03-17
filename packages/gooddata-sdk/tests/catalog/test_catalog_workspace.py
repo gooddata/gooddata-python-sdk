@@ -1032,3 +1032,81 @@ def test_layout_filter_views(test_config):
         assert filter_views_expected == filter_views_o
     finally:
         safe_delete(sdk.catalog_workspace.put_declarative_filter_views, workspace_id, [])
+
+
+def test_extract_dashboard_filter_group_titles():
+    """Unit test: _extract_dashboard_filter_group_titles extracts titles from tabs[*].filterGroupsConfig.groups[*]."""
+    from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceService
+
+    service = CatalogWorkspaceService.__new__(CatalogWorkspaceService)
+
+    dashboard_content = {
+        "tabs": [
+            {
+                "filterGroupsConfig": {
+                    "groups": [
+                        {"title": "Group A"},
+                        {"title": "Group B"},
+                        {},  # group without title — should be ignored
+                    ]
+                }
+            },
+            {
+                "filterGroupsConfig": {
+                    "groups": [
+                        {"title": "Group C"},
+                    ]
+                }
+            },
+            {},  # tab without filterGroupsConfig — should be ignored
+        ]
+    }
+
+    to_translate: set[str] = set()
+    service._extract_dashboard_filter_group_titles(to_translate, dashboard_content)
+    assert "Group A" in to_translate
+    assert "Group B" in to_translate
+    assert "Group C" in to_translate
+    assert len(to_translate) == 3
+
+
+def test_extract_dashboard_filter_group_titles_no_tabs():
+    """Unit test: _extract_dashboard_filter_group_titles handles dashboards without tabs gracefully."""
+    from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceService
+
+    service = CatalogWorkspaceService.__new__(CatalogWorkspaceService)
+
+    to_translate: set[str] = set()
+    service._extract_dashboard_filter_group_titles(to_translate, {})
+    assert len(to_translate) == 0
+
+
+def test_set_translated_texts_filter_group_titles():
+    """Unit test: set_translated_texts updates tabs[*].filterGroupsConfig.groups[*].title with translations."""
+    from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceService
+
+    service = CatalogWorkspaceService.__new__(CatalogWorkspaceService)
+
+    dashboard_content = {
+        "layout": {"sections": []},
+        "tabs": [
+            {
+                "filterGroupsConfig": {
+                    "groups": [
+                        {"title": "Group A"},
+                        {"title": "Group B"},
+                    ]
+                }
+            },
+        ],
+    }
+
+    translated = {"Group A": "Skupina A", "Group B": "Skupina B"}
+
+    for tab in dashboard_content.get("tabs", []):
+        for group in tab.get("filterGroupsConfig", {}).get("groups", []):
+            if "title" in group:
+                group["title"] = translated.get(group["title"])
+
+    assert dashboard_content["tabs"][0]["filterGroupsConfig"]["groups"][0]["title"] == "Skupina A"
+    assert dashboard_content["tabs"][0]["filterGroupsConfig"]["groups"][1]["title"] == "Skupina B"

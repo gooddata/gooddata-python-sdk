@@ -744,6 +744,20 @@ class CatalogWorkspaceService(CatalogServiceBase):
             explicit_date_filter_title = date_filter_config.get("config", {}).get("filterName")
             self.add_title_description(to_translate, explicit_date_filter_title, None)
 
+    def _extract_dashboard_filter_group_titles(self, to_translate: set[str], dashboard_content: dict) -> None:
+        """Extract filter group titles from dashboard tabs for translation.
+
+        Handles the path $.tabs[*].filterGroupsConfig.groups[*].title as introduced in CB-127.
+
+        Args:
+            to_translate: Set to collect translatable strings
+            dashboard_content: Dashboard content dictionary containing tab configurations
+        """
+        for tab in dashboard_content.get("tabs", []):
+            for group in tab.get("filterGroupsConfig", {}).get("groups", []):
+                title = group.get("title")
+                self.add_title_description(to_translate, title, None)
+
     def get_texts_to_translate(
         self,
         workspace: CatalogWorkspace,
@@ -783,6 +797,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 self.add_title_description(to_translate, dashboard.title, dashboard.description)
                 # Extract date filter titles for translation
                 self._extract_dashboard_date_filter_titles(to_translate, dashboard.content)
+                # Extract filter group titles from tabs for translation (CB-127)
+                self._extract_dashboard_filter_group_titles(to_translate, dashboard.content)
                 for section in dashboard.content["layout"]["sections"]:
                     for item in section["items"]:
                         widget = item["widget"]
@@ -862,6 +878,11 @@ class CatalogWorkspaceService(CatalogServiceBase):
                             section["header"]["title"] = translated.get(section["header"]["title"])
                         if "description" in section["header"]:
                             section["header"]["description"] = translated.get(section["header"]["description"])
+                # Translate filter group titles in tabs (CB-127)
+                for tab in dashboard.content.get("tabs", []):
+                    for group in tab.get("filterGroupsConfig", {}).get("groups", []):
+                        if "title" in group:
+                            group["title"] = translated.get(group["title"])
 
     @staticmethod
     def _add_target_tags(xliff_content: str, translate_func: Callable) -> bytes:
