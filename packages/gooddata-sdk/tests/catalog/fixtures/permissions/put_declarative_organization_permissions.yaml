@@ -13,6 +13,10 @@ interactions:
             id: adminGroup
             type: userGroup
           name: SELF_CREATE_TOKEN
+        - assignee:
+            id: adminGroup
+            type: userGroup
+          name: BASE_UI_ACCESS
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -69,7 +73,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '148'
+          - '223'
         Content-Type:
           - application/json
         DATE: *id001
@@ -98,6 +102,10 @@ interactions:
               id: adminGroup
               type: userGroup
             name: SELF_CREATE_TOKEN
+          - assignee:
+              id: adminGroup
+              type: userGroup
+            name: BASE_UI_ACCESS
   - request:
       method: PUT
       uri: http://localhost:3000/api/v1/layout/organization/permissions

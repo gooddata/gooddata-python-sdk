@@ -211,11 +211,12 @@ def test_put_and_get_declarative_organization_permissions(test_config, snapshot_
         sdk.catalog_permission.put_declarative_organization_permissions(declarative_organization_permissions)
 
         catalog_declarative_permissions_after_put = sdk.catalog_permission.get_declarative_organization_permissions()
-        assert len(catalog_declarative_permissions_after_put) == 2
+        assert len(catalog_declarative_permissions_after_put) == 3
         _assert_organization_permissions_id(catalog_declarative_permissions_after_put)
         assert set(org_permission.name for org_permission in catalog_declarative_permissions_after_put) == {
             "MANAGE",
             "SELF_CREATE_TOKEN",
+            "BASE_UI_ACCESS",
         }
     finally:
         safe_delete(_default_organization_permissions, sdk)
@@ -231,16 +232,17 @@ def test_manage_organization_permissions(test_config, snapshot_org_permissions):
             [
                 CatalogOrganizationPermissionAssignment(
                     assignee_identifier=CatalogAssigneeIdentifier(id="adminGroup", type="userGroup"),
-                    permissions=["MANAGE", "SELF_CREATE_TOKEN"],
+                    permissions=["MANAGE", "SELF_CREATE_TOKEN", "BASE_UI_ACCESS"],
                 )
             ],
         )
 
         catalog_declarative_permissions_initial = sdk.catalog_permission.get_declarative_organization_permissions()
-        assert len(catalog_declarative_permissions_initial) == 2
+        assert len(catalog_declarative_permissions_initial) == 3
         assert set(org_permission.name for org_permission in catalog_declarative_permissions_initial) == {
             "MANAGE",
             "SELF_CREATE_TOKEN",
+            "BASE_UI_ACCESS",
         }
     finally:
         safe_delete(_default_organization_permissions, sdk)
