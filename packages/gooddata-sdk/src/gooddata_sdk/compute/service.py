@@ -280,6 +280,7 @@ class ComputeService:
         object_types: list[str] | None = None,
         relevant_score_threshold: float | None = None,
         title_to_descriptor_ratio: float | None = None,
+        enable_hybrid_search: bool | None = None,
     ) -> SearchResult:
         """
         Search for metadata objects using similarity search.
@@ -293,6 +294,8 @@ class ComputeService:
                 "label", "date", "dataset", "visualization" and "dashboard". Defaults to None.
             relevant_score_threshold (Optional[float]): minimum relevance score threshold for results. Defaults to None.
             title_to_descriptor_ratio (Optional[float]): ratio of title score to descriptor score. Defaults to None.
+            enable_hybrid_search (Optional[bool]): enable hybrid search combining vector similarity and keyword matching
+                using RRF fusion. Defaults to None (server default: False).
 
         Returns:
             SearchResult: Search results
@@ -311,6 +314,8 @@ class ComputeService:
             search_params["relevant_score_threshold"] = relevant_score_threshold
         if title_to_descriptor_ratio is not None:
             search_params["title_to_descriptor_ratio"] = title_to_descriptor_ratio
+        if enable_hybrid_search is not None:
+            search_params["enable_hybrid_search"] = enable_hybrid_search
         search_request = SearchRequest(question=question, **search_params)
         response = self._actions_api.ai_search(workspace_id, search_request, _check_return_type=False)
         return response

@@ -77,6 +77,7 @@ def test_search_ai_full_params(test_config):
             object_types=["metric", "attribute", "fact"],
             relevant_score_threshold=0.5,
             title_to_descriptor_ratio=0.7,
+            enable_hybrid_search=True,
         )
 
         # Verify the results
