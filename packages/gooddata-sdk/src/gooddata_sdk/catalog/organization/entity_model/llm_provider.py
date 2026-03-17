@@ -253,16 +253,20 @@ class CatalogLlmProvider(Base):
     @classmethod
     def from_api(cls, entity: dict[str, Any]) -> CatalogLlmProvider:
         ea = entity["attributes"]
-        raw_models = safeget(ea, ["models"]) or []
-        models = [
-            CatalogLlmProviderModel(
-                id=safeget(m, ["id"]),
-                family=safeget(m, ["family"]),
-            )
-            for m in raw_models
-        ]
-        raw_config = safeget(ea, ["providerConfig"]) or {}
-        provider_config = _provider_config_from_api(raw_config)
+        raw_models = safeget(ea, ["models"])
+        models = (
+            [
+                CatalogLlmProviderModel(
+                    id=safeget(m, ["id"]),
+                    family=safeget(m, ["family"]),
+                )
+                for m in raw_models
+            ]
+            if raw_models is not None
+            else None
+        )
+        raw_config = safeget(ea, ["providerConfig"])
+        provider_config = _provider_config_from_api(raw_config) if raw_config is not None else None
         return cls(
             id=entity["id"],
             attributes=CatalogLlmProviderAttributes(
@@ -311,8 +315,8 @@ class CatalogLlmProviderPatch(Base):
 
 @define(kw_only=True)
 class CatalogLlmProviderAttributes(Base):
-    models: list[CatalogLlmProviderModel]
-    provider_config: CatalogLlmProviderConfig
+    models: list[CatalogLlmProviderModel] | None = None
+    provider_config: CatalogLlmProviderConfig | None = None
     name: str | None = None
     description: str | None = None
     default_model_id: str | None = None
