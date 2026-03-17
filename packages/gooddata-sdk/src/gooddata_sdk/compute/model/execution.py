@@ -4,12 +4,15 @@ from __future__ import annotations
 import logging
 from typing import Any, Union
 
+import pyarrow
+from attr.setters import frozen as frozen_attr
 from attrs import define, field
 from attrs.setters import frozen as frozen_attr
 from gooddata_api_client import models
 from gooddata_api_client.model.afm import AFM
 from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
 from gooddata_api_client.model.result_spec import ResultSpec
+from pyarrow import ipc
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
@@ -371,6 +374,27 @@ class BareExecutionResponse:
                 ),
             )
         return ExecutionResult(execution_result)
+
+    def read_result_arrow(self) -> pyarrow.Table:
+        """
+        Reads the full execution result as a pyarrow Table.
+
+        The binary endpoint returns the complete result in one shot (no paging).
+        Requires pyarrow to be installed.
+        """
+
+        response = self._actions_api.retrieve_result_binary(
+            workspace_id=self._workspace_id,
+            result_id=self.result_id,
+            _preload_content=False,
+            **({"x_gdc_cancel_token": self.cancel_token} if self.cancel_token else {}),
+        )
+        try:
+            raw = response.read()
+        finally:
+            response.release_conn()
+
+        return ipc.open_stream(raw).read_all()
 
     def cancel(self) -> None:
         """

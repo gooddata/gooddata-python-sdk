@@ -376,6 +376,37 @@ class DataFrameFactory:
             grand_totals_position=grand_totals_position,
         )
 
+    def for_exec_def_arrow(
+        self,
+        exec_def: ExecutionDefinition,
+        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+    ) -> pandas.DataFrame:
+        """
+        Creates a DataFrame from an execution definition using the Arrow IPC binary format.
+
+        Compared to for_exec_def(), this skips the page-by-page JSON deserialization and
+        converts the result in one shot via pyarrow, which is significantly faster for large results.
+
+        Requires pyarrow to be installed (pip install pyarrow).
+
+        Args:
+            exec_def (ExecutionDefinition): Execution definition.
+            on_execution_submitted (Optional[Callable[[Execution], None]]): Callback fired after
+                the execution is submitted to the backend.
+
+        Returns:
+            pandas.DataFrame
+
+        TODO: MultiIndex columns/rows — for_exec_def() builds MultiIndex from dimension headers;
+              the Arrow response encodes headers differently, so that mapping needs to be worked out.
+        """
+        execution = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
+
+        if on_execution_submitted is not None:
+            on_execution_submitted(execution)
+
+        return execution.bare_exec_response.read_result_arrow().to_pandas()
+
     def for_exec_result_id(
         self,
         result_id: str,
