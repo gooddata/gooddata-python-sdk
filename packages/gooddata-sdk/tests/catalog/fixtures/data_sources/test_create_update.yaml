@@ -22,7 +22,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '491'
+          - '533'
         Content-Type:
           - application/json
         DATE: &id001
@@ -49,8 +49,9 @@ interactions:
                 url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
-                name: demo-test-ds
+                alternativeDataSourceId: ds-put-abc-id
                 type: POSTGRESQL
+                name: demo-test-ds
                 schema: demo
               id: demo-test-ds
               links:
@@ -105,7 +106,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 77efccf11b01c7c07784bb752d01c36f
+          traceId: 25586a77424cc9d248e14e613a6f4ee6
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -165,8 +166,8 @@ interactions:
               url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              name: Test
               type: POSTGRESQL
+              name: Test
               schema: demo
             id: test
             type: dataSource
@@ -219,8 +220,8 @@ interactions:
               url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              name: Test
               type: POSTGRESQL
+              name: Test
               schema: demo
             id: test
             type: dataSource
@@ -273,8 +274,8 @@ interactions:
               url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              name: Test
               type: POSTGRESQL
+              name: Test
               schema: demo
             id: test
             type: dataSource
@@ -339,8 +340,8 @@ interactions:
               url: jdbc:postgresql://localhost:5432/demo?autosave=false&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              name: Test2
               type: POSTGRESQL
+              name: Test2
               schema: demo
             id: test
             type: dataSource
@@ -367,7 +368,7 @@ interactions:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '804'
+          - '846'
         Content-Type:
           - application/json
         DATE: *id001
@@ -393,8 +394,9 @@ interactions:
                 url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
                 username: postgres
                 authenticationType: USERNAME_PASSWORD
-                name: demo-test-ds
+                alternativeDataSourceId: ds-put-abc-id
                 type: POSTGRESQL
+                name: demo-test-ds
                 schema: demo
               id: demo-test-ds
               links:
@@ -404,8 +406,8 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo?autosave=false&sslmode=prefer
                 username: demouser
                 authenticationType: USERNAME_PASSWORD
-                name: Test2
                 type: POSTGRESQL
+                name: Test2
                 schema: demo
               id: test
               links:
@@ -452,60 +454,3 @@ interactions:
           - '0'
       body:
         string: ''
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/entities/dataSources?page=0&size=500
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '491'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            - attributes:
-                url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
-                username: postgres
-                authenticationType: USERNAME_PASSWORD
-                name: demo-test-ds
-                type: POSTGRESQL
-                schema: demo
-              id: demo-test-ds
-              links:
-                self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
-              type: dataSource
-          links:
-            self: http://localhost:3000/api/v1/entities/dataSources?page=0&size=500
-            next: http://localhost:3000/api/v1/entities/dataSources?page=1&size=500

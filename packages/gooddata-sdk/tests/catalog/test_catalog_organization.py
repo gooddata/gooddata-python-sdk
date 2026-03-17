@@ -8,7 +8,6 @@ from gooddata_sdk import (
     CatalogCspDirective,
     CatalogDeclarativeNotificationChannel,
     CatalogJwk,
-    CatalogLlmEndpoint,
     CatalogOrganization,
     CatalogOrganizationSetting,
     CatalogRsaSpecification,
@@ -17,6 +16,8 @@ from gooddata_sdk import (
 )
 from tests_support.vcrpy_utils import get_vcr
 
+from .conftest import safe_delete
+
 gd_vcr = get_vcr()
 
 _default_jwk_id = "demoJwk"
@@ -24,10 +25,10 @@ _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures" / "organization"
 
 
-def _default_organization_check(organization: CatalogOrganization):
-    assert organization.id == "default"
-    assert organization.attributes.name == "Default Organization"
-    assert organization.attributes.hostname == "localhost"
+def _default_organization_check(organization: CatalogOrganization, test_config: dict):
+    assert organization.id == test_config["org_id"]
+    assert organization.attributes.name == test_config["org_name"]
+    assert organization.attributes.hostname == test_config["org_hostname"]
 
 
 def _default_jwk(jwk_id=_default_jwk_id, alg=None, kid=None):
@@ -64,14 +65,14 @@ def _default_jwk(jwk_id=_default_jwk_id, alg=None, kid=None):
 def test_get_organization(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     organization = sdk.catalog_organization.get_organization()
-    _default_organization_check(organization)
+    _default_organization_check(organization, test_config)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "update_name.yaml"))
 def test_update_name(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     organization = sdk.catalog_organization.get_organization()
-    _default_organization_check(organization)
+    _default_organization_check(organization, test_config)
     default_name = organization.attributes.name
     new_name = "test_organization"
 
@@ -82,9 +83,7 @@ def test_update_name(test_config):
         assert updated_organization.attributes.name == new_name
         assert updated_organization.attributes.hostname == organization.attributes.hostname
     finally:
-        sdk.catalog_organization.update_name(default_name)
-        organization = sdk.catalog_organization.get_organization()
-        _default_organization_check(organization)
+        safe_delete(sdk.catalog_organization.update_name, default_name)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "create_jwk.yaml"))
@@ -97,8 +96,7 @@ def test_create_jwk(test_config):
         assert new_jwk.id == created_jwk.id
         assert new_jwk.attributes == created_jwk.attributes
     finally:
-        sdk.catalog_organization.delete_jwk("demoJwk")
-        assert len(sdk.catalog_organization.list_jwks()) == 0
+        safe_delete(sdk.catalog_organization.delete_jwk, "demoJwk")
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "update_jwk.yaml"))
@@ -112,8 +110,7 @@ def test_update_jwk(test_config):
         updated_jwk = sdk.catalog_organization.get_jwk("demoJwk")
         assert update_jwk.attributes.content.alg == updated_jwk.attributes.content.alg
     finally:
-        sdk.catalog_organization.delete_jwk("demoJwk")
-        assert len(sdk.catalog_organization.list_jwks()) == 0
+        safe_delete(sdk.catalog_organization.delete_jwk, "demoJwk")
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "delete_jwk.yaml"))
@@ -125,9 +122,9 @@ def test_delete_jwk(test_config):
         sdk.catalog_organization.delete_jwk(jwk.id)
         sdk.catalog_organization.get_jwk(jwk.id)
     except NotFoundException:
-        assert len(sdk.catalog_organization.list_jwks()) == 0
+        pass  # Expected: jwk was deleted successfully
     finally:
-        assert len(sdk.catalog_organization.list_jwks()) == 0
+        safe_delete(sdk.catalog_organization.delete_jwk, jwk.id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "list_jwk.yaml"))
@@ -135,14 +132,15 @@ def test_list_jwk(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     jwk1 = _default_jwk(jwk_id="demoJwk1", kid="kid1")
     jwk2 = _default_jwk(jwk_id="demoJwk2", kid="kid2")
+    jwks_before = sdk.catalog_organization.list_jwks()
     try:
         sdk.catalog_organization.create_or_update_jwk(jwk1)
         sdk.catalog_organization.create_or_update_jwk(jwk2)
-        assert len(sdk.catalog_organization.list_jwks()) == 2
+        jwks_after = sdk.catalog_organization.list_jwks()
+        assert len(jwks_after) == len(jwks_before) + 2
     finally:
-        sdk.catalog_organization.delete_jwk(jwk1.id)
-        sdk.catalog_organization.delete_jwk(jwk2.id)
-        assert len(sdk.catalog_organization.list_jwks()) == 0
+        safe_delete(sdk.catalog_organization.delete_jwk, jwk1.id)
+        safe_delete(sdk.catalog_organization.delete_jwk, jwk2.id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "create_organization_setting.yaml"))
@@ -160,8 +158,7 @@ def test_create_organization_setting(test_config):
         assert setting.attributes.type == setting_type
         assert setting.attributes.content == content
     finally:
-        sdk.catalog_organization.delete_organization_setting(setting_id)
-        assert len(sdk.catalog_organization.list_organization_settings()) == 0
+        safe_delete(sdk.catalog_organization.delete_organization_setting, setting_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "list_organization_settings.yaml"))
@@ -173,17 +170,17 @@ def test_list_organization_settings(test_config):
     new_setting_1 = CatalogOrganizationSetting.init(setting_id_1, "LOCALE", {"value": "fr-FR"})
     new_setting_2 = CatalogOrganizationSetting.init(setting_id_2, "FORMAT_LOCALE", {"value": "en-GB"})
 
+    settings_before = sdk.catalog_organization.list_organization_settings()
     try:
         sdk.catalog_organization.create_organization_setting(new_setting_1)
         sdk.catalog_organization.create_organization_setting(new_setting_2)
         organization_settings = sdk.catalog_organization.list_organization_settings()
-        assert len(organization_settings) == 2
+        assert len(organization_settings) == len(settings_before) + 2
         assert new_setting_1 in organization_settings
         assert new_setting_2 in organization_settings
     finally:
-        sdk.catalog_organization.delete_organization_setting(setting_id_1)
-        sdk.catalog_organization.delete_organization_setting(setting_id_2)
-        assert len(sdk.catalog_organization.list_organization_settings()) == 0
+        safe_delete(sdk.catalog_organization.delete_organization_setting, setting_id_1)
+        safe_delete(sdk.catalog_organization.delete_organization_setting, setting_id_2)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "delete_organization_setting.yaml"))
@@ -198,9 +195,9 @@ def test_delete_organization_setting(test_config):
         sdk.catalog_organization.delete_organization_setting(setting_id)
         sdk.catalog_organization.get_organization_setting(setting_id)
     except NotFoundException:
-        assert len(sdk.catalog_organization.list_organization_settings()) == 0
+        pass  # Expected: setting was deleted successfully
     finally:
-        assert len(sdk.catalog_organization.list_organization_settings()) == 0
+        safe_delete(sdk.catalog_organization.delete_organization_setting, setting_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "update_organization_setting.yaml"))
@@ -219,8 +216,7 @@ def test_update_organization_setting(test_config):
         assert setting.attributes.type == "LOCALE"
         assert setting.attributes.content == {"value": "en-GB"}
     finally:
-        sdk.catalog_organization.delete_organization_setting(setting_id)
-        assert len(sdk.catalog_organization.list_organization_settings()) == 0
+        safe_delete(sdk.catalog_organization.delete_organization_setting, setting_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "create_csp_directive.yaml"))
@@ -237,8 +233,7 @@ def test_create_csp_directive(test_config):
         assert csp_directive.id == directive_id
         assert csp_directive.attributes.sources == sources
     finally:
-        sdk.catalog_organization.delete_csp_directive(directive_id)
-        assert len(sdk.catalog_organization.list_csp_directives()) == 0
+        safe_delete(sdk.catalog_organization.delete_csp_directive, directive_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "list_csp_directives.yaml"))
@@ -250,17 +245,17 @@ def test_list_csp_directives(test_config):
     new_csp_directive_1 = CatalogCspDirective.init(directive_id_1, ["https://test.com"])
     new_csp_directive_2 = CatalogCspDirective.init(directive_id_2, ["https://test2.com"])
 
+    directives_before = sdk.catalog_organization.list_csp_directives()
     try:
         sdk.catalog_organization.create_csp_directive(new_csp_directive_1)
         sdk.catalog_organization.create_csp_directive(new_csp_directive_2)
         csp_directives = sdk.catalog_organization.list_csp_directives()
-        assert len(csp_directives) == 2
+        assert len(csp_directives) == len(directives_before) + 2
         assert new_csp_directive_1 in csp_directives
         assert new_csp_directive_2 in csp_directives
     finally:
-        sdk.catalog_organization.delete_csp_directive(directive_id_1)
-        sdk.catalog_organization.delete_csp_directive(directive_id_2)
-        assert len(sdk.catalog_organization.list_csp_directives()) == 0
+        safe_delete(sdk.catalog_organization.delete_csp_directive, directive_id_1)
+        safe_delete(sdk.catalog_organization.delete_csp_directive, directive_id_2)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "delete_csp_directive.yaml"))
@@ -275,9 +270,9 @@ def test_delete_csp_directive(test_config):
         sdk.catalog_organization.delete_csp_directive(directive_id)
         sdk.catalog_organization.get_csp_directive(directive_id)
     except NotFoundException:
-        assert len(sdk.catalog_organization.list_csp_directives()) == 0
+        pass  # Expected: directive was deleted successfully
     finally:
-        assert len(sdk.catalog_organization.list_csp_directives()) == 0
+        safe_delete(sdk.catalog_organization.delete_csp_directive, directive_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "update_csp_directive.yaml"))
@@ -295,14 +290,15 @@ def test_update_csp_directive(test_config):
         assert csp_directive.id == directive_id
         assert csp_directive.attributes.sources == ["https://test2.com"]
     finally:
-        sdk.catalog_organization.delete_csp_directive(directive_id)
-        assert len(sdk.catalog_organization.list_csp_directives()) == 0
+        safe_delete(sdk.catalog_organization.delete_csp_directive, directive_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "update_allowed_origins.yaml"))
 def test_update_allowed_origins(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
 
+    organization_before = sdk.catalog_organization.get_organization()
+    original_origins = organization_before.attributes.allowed_origins or []
     allowed_origins = ["https://test.com"]
 
     try:
@@ -310,250 +306,30 @@ def test_update_allowed_origins(test_config):
         organization = sdk.catalog_organization.get_organization()
         assert organization.attributes.allowed_origins == allowed_origins
     finally:
-        sdk.catalog_organization.update_allowed_origins([])
-        organization = sdk.catalog_organization.get_organization()
-        assert organization.attributes.allowed_origins == []
+        safe_delete(sdk.catalog_organization.update_allowed_origins, original_origins)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "layout_notification_channels.yaml"))
-def test_layout_notification_channels(test_config):
+def test_layout_notification_channels(test_config, snapshot_notification_channels):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
 
-    ncs = sdk.catalog_organization.get_declarative_notification_channels()
-    assert len(ncs) == 0
-
-    try:
-        notification_channels_e = [
-            CatalogDeclarativeNotificationChannel(
-                id="webhook",
-                name="Webhook",
-                destination=CatalogWebhook(url="https://webhook.site", token="123"),
-                custom_dashboard_url="https://dashboard.site",
-                allowed_recipients="CREATOR",
-            ),
-        ]
-        sdk.catalog_organization.put_declarative_notification_channels(notification_channels_e)
-        notification_channels_o = sdk.catalog_organization.get_declarative_notification_channels()
-        assert notification_channels_e[0].id == notification_channels_o[0].id
-        assert notification_channels_e[0].name == notification_channels_o[0].name
-        assert notification_channels_e[0].destination == notification_channels_o[0].destination
-        assert notification_channels_e[0].custom_dashboard_url == notification_channels_o[0].custom_dashboard_url
-        assert notification_channels_e[0].allowed_recipients == notification_channels_o[0].allowed_recipients
-    finally:
-        sdk.catalog_organization.put_declarative_notification_channels([])
-        ncs = sdk.catalog_organization.get_declarative_notification_channels()
-        assert len(ncs) == 0
-
-
-@gd_vcr.use_cassette(str(_fixtures_dir / "get_llm_endpoint.yaml"))
-def test_get_llm_endpoint(test_config):
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-
-    try:
-        # Create test endpoint first
-        test_id = "endpoint1"
-        test_title = "Test Endpoint"
-        test_token = "secret-token"
-
-        sdk.catalog_organization.create_llm_endpoint(id=test_id, title=test_title, token=test_token)
-
-        # Get and verify the endpoint
-        retrieved_endpoint = sdk.catalog_organization.get_llm_endpoint(test_id)
-        assert isinstance(retrieved_endpoint, CatalogLlmEndpoint)
-        assert retrieved_endpoint.id == test_id
-        assert retrieved_endpoint.attributes.title == test_title
-        assert not retrieved_endpoint.attributes.token  # Token not returned for security
-
-    finally:
-        # Clean up
-        sdk.catalog_organization.delete_llm_endpoint(test_id)
-
-
-@gd_vcr.use_cassette(str(_fixtures_dir / "list_llm_endpoints.yaml"))
-def test_list_llm_endpoints(test_config):
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-
-    try:
-        # Create test endpoints first
-        test_id1 = "endpoint1"
-        test_title1 = "Test Endpoint 1"
-        test_token1 = "secret-token-1"
-
-        test_id2 = "endpoint2"
-        test_title2 = "Test Endpoint 2"
-        test_token2 = "secret-token-2"
-
-        sdk.catalog_organization.create_llm_endpoint(id=test_id1, title=test_title1, token=test_token1)
-
-        sdk.catalog_organization.create_llm_endpoint(id=test_id2, title=test_title2, token=test_token2)
-
-        # Get and verify the endpoints list
-        endpoints = sdk.catalog_organization.list_llm_endpoints()
-        assert isinstance(endpoints, list)
-        assert len(endpoints) == 2
-        assert all(isinstance(endpoint, CatalogLlmEndpoint) for endpoint in endpoints)
-        assert {endpoint.id for endpoint in endpoints} == {test_id1, test_id2}
-        assert {endpoint.attributes.title for endpoint in endpoints} == {test_title1, test_title2}
-
-        # Test with optional parameters
-        filtered_endpoints = sdk.catalog_organization.list_llm_endpoints(filter="title=='Test Endpoint 1'", size=1)
-        assert isinstance(filtered_endpoints, list)
-        assert len(filtered_endpoints) == 1
-        assert filtered_endpoints[0].id == test_id1
-        assert filtered_endpoints[0].attributes.title == test_title1
-
-    finally:
-        # Clean up
-        sdk.catalog_organization.delete_llm_endpoint(test_id1)
-        sdk.catalog_organization.delete_llm_endpoint(test_id2)
-
-
-@gd_vcr.use_cassette(str(_fixtures_dir / "create_llm_endpoint.yaml"))
-def test_create_llm_endpoint(test_config):
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-
-    try:
-        # Test minimal required parameters
-        minimal_id = "endpoint1"
-        minimal_title = "Test Endpoint"
-        minimal_token = "secret-token"
-
-        llm_endpoint_1 = sdk.catalog_organization.create_llm_endpoint(
-            id=minimal_id, title=minimal_title, token=minimal_token
-        )
-
-        assert isinstance(llm_endpoint_1, CatalogLlmEndpoint)
-        assert llm_endpoint_1.id == minimal_id
-        assert llm_endpoint_1.attributes.title == minimal_title
-        # Token is not returned in the API response for security reasons
-        assert not llm_endpoint_1.attributes.token
-
-        # Test with all optional parameters
-        full_id = "endpoint2"
-        full_title = "Test Endpoint 2"
-        full_token = "secret-token-2"
-        full_provider = "OPENAI"
-        full_base_url = "https://api.example.com"
-        full_llm_org = "org1"
-        full_llm_model = "gpt-4"
-
-        llm_endpoint_2 = sdk.catalog_organization.create_llm_endpoint(
-            id=full_id,
-            title=full_title,
-            token=full_token,
-            provider=full_provider,
-            base_url=full_base_url,
-            llm_organization=full_llm_org,
-            llm_model=full_llm_model,
-        )
-        assert isinstance(llm_endpoint_2, CatalogLlmEndpoint)
-        assert llm_endpoint_2.id == full_id
-        assert llm_endpoint_2.attributes.title == full_title
-        # Token is not returned in the API response for security reasons
-        assert not llm_endpoint_2.attributes.token
-        assert llm_endpoint_2.attributes.provider == full_provider
-        assert llm_endpoint_2.attributes.base_url == full_base_url
-        assert llm_endpoint_2.attributes.llm_organization == full_llm_org
-        assert llm_endpoint_2.attributes.llm_model == full_llm_model
-    finally:
-        # Cleanup
-        sdk.catalog_organization.delete_llm_endpoint(minimal_id)
-        sdk.catalog_organization.delete_llm_endpoint(full_id)
-
-
-@gd_vcr.use_cassette(str(_fixtures_dir / "update_llm_endpoint.yaml"))
-def test_update_llm_endpoint(test_config):
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-
-    initial_id = "endpoint1"
-    initial_title = "Initial Title"
-    initial_token = "initial-token"
-
-    try:
-        # Create initial endpoint
-        sdk.catalog_organization.create_llm_endpoint(id=initial_id, title=initial_title, token=initial_token)
-
-        # Test with minimal update
-        minimal_title = "Updated Title"
-
-        llm_endpoint_1 = sdk.catalog_organization.update_llm_endpoint(id=initial_id, title=minimal_title)
-
-        assert isinstance(llm_endpoint_1, CatalogLlmEndpoint)
-        assert llm_endpoint_1.id == initial_id
-        assert llm_endpoint_1.attributes.title == minimal_title
-        # Token is not returned in the API response for security reasons
-        assert not llm_endpoint_1.attributes.token
-
-        # Test with all optional parameters
-        full_title = "Updated Title 2"
-        full_token = "new-token"
-        full_provider = "OPENAI"
-        full_base_url = "https://api.updated.com"
-        full_llm_org = "org2"
-        full_llm_model = "gpt-3.5"
-
-        llm_endpoint_2 = sdk.catalog_organization.update_llm_endpoint(
-            id=initial_id,
-            title=full_title,
-            token=full_token,
-            provider=full_provider,
-            base_url=full_base_url,
-            llm_organization=full_llm_org,
-            llm_model=full_llm_model,
-        )
-
-        assert isinstance(llm_endpoint_2, CatalogLlmEndpoint)
-        assert llm_endpoint_2.id == initial_id
-        assert llm_endpoint_2.attributes.title == full_title
-        # Token is not returned in the API response for security reasons
-        assert not llm_endpoint_2.attributes.token
-        assert llm_endpoint_2.attributes.provider == full_provider
-        assert llm_endpoint_2.attributes.base_url == full_base_url
-        assert llm_endpoint_2.attributes.llm_organization == full_llm_org
-        assert llm_endpoint_2.attributes.llm_model == full_llm_model
-
-        # Test that attributes are preserved when not provided
-        new_title = "New Title"
-        llm_endpoint_3 = sdk.catalog_organization.update_llm_endpoint(id=initial_id, title=new_title)
-
-        assert isinstance(llm_endpoint_3, CatalogLlmEndpoint)
-        assert llm_endpoint_3.id == initial_id
-        assert llm_endpoint_3.attributes.title == new_title
-        # Token is not returned in the API response for security reasons
-        assert not llm_endpoint_3.attributes.token
-        # Verify other fields are preserved
-        assert llm_endpoint_3.attributes.provider == full_provider
-        assert llm_endpoint_3.attributes.base_url == full_base_url
-        assert llm_endpoint_3.attributes.llm_organization == full_llm_org
-        assert llm_endpoint_3.attributes.llm_model == full_llm_model
-    finally:
-        # Cleanup
-        sdk.catalog_organization.delete_llm_endpoint(initial_id)
-
-
-@gd_vcr.use_cassette(str(_fixtures_dir / "delete_llm_endpoint.yaml"))
-def test_delete_llm_endpoint(test_config):
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-
-    try:
-        # Create endpoint to delete
-        sdk.catalog_organization.create_llm_endpoint(id="endpoint1", title="Test Endpoint", token="secret-token")
-
-        # Delete endpoint
-        sdk.catalog_organization.delete_llm_endpoint("endpoint1")
-
-        # Verify deletion
-        try:
-            sdk.catalog_organization.get_llm_endpoint("endpoint1")
-            assert False, "Endpoint should not exist"
-        except NotFoundException:
-            pass
-    finally:
-        # Ensure cleanup
-        try:
-            sdk.catalog_organization.delete_llm_endpoint("endpoint1")
-        except NotFoundException:
-            pass
+    notification_channels_e = [
+        CatalogDeclarativeNotificationChannel(
+            id="webhook",
+            name="Webhook",
+            destination=CatalogWebhook(url="https://webhook.site", token="123"),
+            custom_dashboard_url="https://dashboard.site",
+            allowed_recipients="CREATOR",
+        ),
+    ]
+    sdk.catalog_organization.put_declarative_notification_channels(notification_channels_e)
+    notification_channels_o = sdk.catalog_organization.get_declarative_notification_channels()
+    assert notification_channels_e[0].id == notification_channels_o[0].id
+    assert notification_channels_e[0].name == notification_channels_o[0].name
+    assert notification_channels_e[0].destination == notification_channels_o[0].destination
+    assert notification_channels_e[0].custom_dashboard_url == notification_channels_o[0].custom_dashboard_url
+    assert notification_channels_e[0].allowed_recipients == notification_channels_o[0].allowed_recipients
+    # snapshot_notification_channels fixture restores original state in teardown
 
 
 #

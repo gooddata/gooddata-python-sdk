@@ -5,7 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_entity_llm_endpoints**](LLMEndpointsApi.md#create_entity_llm_endpoints) | **POST** /api/v1/entities/llmEndpoints | Post LLM endpoint entities
-[**delete_entity_llm_endpoints**](LLMEndpointsApi.md#delete_entity_llm_endpoints) | **DELETE** /api/v1/entities/llmEndpoints/{id} | 
+[**delete_entity_llm_endpoints**](LLMEndpointsApi.md#delete_entity_llm_endpoints) | **DELETE** /api/v1/entities/llmEndpoints/{id} | Delete LLM endpoint entity
 [**get_all_entities_llm_endpoints**](LLMEndpointsApi.md#get_all_entities_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints | Get all LLM endpoint entities
 [**get_entity_llm_endpoints**](LLMEndpointsApi.md#get_entity_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints/{id} | Get LLM endpoint entity
 [**patch_entity_llm_endpoints**](LLMEndpointsApi.md#patch_entity_llm_endpoints) | **PATCH** /api/v1/entities/llmEndpoints/{id} | Patch LLM endpoint entity
@@ -16,6 +16,8 @@ Method | HTTP request | Description
 > JsonApiLlmEndpointOutDocument create_entity_llm_endpoints(json_api_llm_endpoint_in_document)
 
 Post LLM endpoint entities
+
+Will be soon removed and replaced by LlmProvider.
 
 ### Example
 
@@ -94,7 +96,9 @@ No authorization required
 # **delete_entity_llm_endpoints**
 > delete_entity_llm_endpoints(id)
 
+Delete LLM endpoint entity
 
+Will be soon removed and replaced by LlmProvider.
 
 ### Example
 
@@ -120,6 +124,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete LLM endpoint entity
         api_instance.delete_entity_llm_endpoints(id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling LLMEndpointsApi->delete_entity_llm_endpoints: %s\n" % e)
@@ -127,6 +132,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete LLM endpoint entity
         api_instance.delete_entity_llm_endpoints(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling LLMEndpointsApi->delete_entity_llm_endpoints: %s\n" % e)
@@ -166,6 +172,8 @@ No authorization required
 > JsonApiLlmEndpointOutList get_all_entities_llm_endpoints()
 
 Get all LLM endpoint entities
+
+Will be soon removed and replaced by LlmProvider.
 
 ### Example
 
@@ -245,6 +253,8 @@ No authorization required
 
 Get LLM endpoint entity
 
+Will be soon removed and replaced by LlmProvider.
+
 ### Example
 
 
@@ -320,6 +330,8 @@ No authorization required
 > JsonApiLlmEndpointOutDocument patch_entity_llm_endpoints(id, json_api_llm_endpoint_patch_document)
 
 Patch LLM endpoint entity
+
+Will be soon removed and replaced by LlmProvider.
 
 ### Example
 
@@ -412,6 +424,8 @@ No authorization required
 > JsonApiLlmEndpointOutDocument update_entity_llm_endpoints(id, json_api_llm_endpoint_in_document)
 
 PUT LLM endpoint entity
+
+Will be soon removed and replaced by LlmProvider.
 
 ### Example
 

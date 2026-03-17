@@ -33,26 +33,26 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
     from gooddata_api_client.model.json_api_analytical_dashboard_out_with_links import JsonApiAnalyticalDashboardOutWithLinks
-    from gooddata_api_client.model.json_api_dashboard_plugin_out_attributes import JsonApiDashboardPluginOutAttributes
-    from gooddata_api_client.model.json_api_dashboard_plugin_out_relationships import JsonApiDashboardPluginOutRelationships
     from gooddata_api_client.model.json_api_dashboard_plugin_out_with_links import JsonApiDashboardPluginOutWithLinks
     from gooddata_api_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
     from gooddata_api_client.model.json_api_filter_context_out_with_links import JsonApiFilterContextOutWithLinks
     from gooddata_api_client.model.json_api_label_out_with_links import JsonApiLabelOutWithLinks
+    from gooddata_api_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
     from gooddata_api_client.model.json_api_metric_out_with_links import JsonApiMetricOutWithLinks
     from gooddata_api_client.model.json_api_user_identifier_out_with_links import JsonApiUserIdentifierOutWithLinks
+    from gooddata_api_client.model.json_api_visualization_object_out_attributes import JsonApiVisualizationObjectOutAttributes
     from gooddata_api_client.model.json_api_visualization_object_out_with_links import JsonApiVisualizationObjectOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
     globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
     globals()['JsonApiAnalyticalDashboardOutWithLinks'] = JsonApiAnalyticalDashboardOutWithLinks
-    globals()['JsonApiDashboardPluginOutAttributes'] = JsonApiDashboardPluginOutAttributes
-    globals()['JsonApiDashboardPluginOutRelationships'] = JsonApiDashboardPluginOutRelationships
     globals()['JsonApiDashboardPluginOutWithLinks'] = JsonApiDashboardPluginOutWithLinks
     globals()['JsonApiDatasetOutWithLinks'] = JsonApiDatasetOutWithLinks
     globals()['JsonApiFilterContextOutWithLinks'] = JsonApiFilterContextOutWithLinks
     globals()['JsonApiLabelOutWithLinks'] = JsonApiLabelOutWithLinks
+    globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
     globals()['JsonApiMetricOutWithLinks'] = JsonApiMetricOutWithLinks
     globals()['JsonApiUserIdentifierOutWithLinks'] = JsonApiUserIdentifierOutWithLinks
+    globals()['JsonApiVisualizationObjectOutAttributes'] = JsonApiVisualizationObjectOutAttributes
     globals()['JsonApiVisualizationObjectOutWithLinks'] = JsonApiVisualizationObjectOutWithLinks
     globals()['ObjectLinks'] = ObjectLinks
 
@@ -83,7 +83,7 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
 
     allowed_values = {
         ('type',): {
-            'DASHBOARDPLUGIN': "dashboardPlugin",
+            'VISUALIZATIONOBJECT': "visualizationObject",
         },
     }
 
@@ -118,10 +118,10 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
         """
         lazy_import()
         return {
-            'links': (ObjectLinks,),  # noqa: E501
             'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
-            'relationships': (JsonApiDashboardPluginOutRelationships,),  # noqa: E501
-            'attributes': (JsonApiDashboardPluginOutAttributes,),  # noqa: E501
+            'relationships': (JsonApiMetricOutRelationships,),  # noqa: E501
+            'links': (ObjectLinks,),  # noqa: E501
+            'attributes': (JsonApiVisualizationObjectOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
@@ -132,9 +132,9 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
 
 
     attribute_map = {
-        'links': 'links',  # noqa: E501
         'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
+        'links': 'links',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
@@ -179,12 +179,12 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            links (ObjectLinks): [optional]  # noqa: E501
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiDashboardPluginOutRelationships): [optional]  # noqa: E501
-            attributes (JsonApiDashboardPluginOutAttributes): [optional]  # noqa: E501
+            relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
+            links (ObjectLinks): [optional]  # noqa: E501
+            attributes (JsonApiVisualizationObjectOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "dashboardPlugin"  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "visualizationObject"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -288,12 +288,12 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            links (ObjectLinks): [optional]  # noqa: E501
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiDashboardPluginOutRelationships): [optional]  # noqa: E501
-            attributes (JsonApiDashboardPluginOutAttributes): [optional]  # noqa: E501
+            relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
+            links (ObjectLinks): [optional]  # noqa: E501
+            attributes (JsonApiVisualizationObjectOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "dashboardPlugin"  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "visualizationObject"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -50,7 +50,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
             },
         ),
-        delimiter="U",
+        delimiter="-",
         execution=AFM(
             attributes=[
                 AttributeItem(

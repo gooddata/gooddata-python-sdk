@@ -76,7 +76,7 @@ class RawExportRequest(ModelNormal):
             'max_length': 1,
             'min_length': 1,
             'regex': {
-                'pattern': r'^[^\r\n"]$',  # noqa: E501
+                'pattern': r'^[\t !#$%&()*+\-.,\/:;<=>?@\[\\\]^_{|}~]$',  # noqa: E501
             },
         },
     }

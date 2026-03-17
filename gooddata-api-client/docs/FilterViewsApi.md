@@ -10,7 +10,7 @@ Method | HTTP request | Description
 [**get_entity_filter_views**](FilterViewsApi.md#get_entity_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Get Filter view
 [**get_filter_views**](FilterViewsApi.md#get_filter_views) | **GET** /api/v1/layout/workspaces/{workspaceId}/filterViews | Get filter views
 [**patch_entity_filter_views**](FilterViewsApi.md#patch_entity_filter_views) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Patch Filter view
-[**search_entities_filter_views**](FilterViewsApi.md#search_entities_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews/search | Search request for FilterView
+[**search_entities_filter_views**](FilterViewsApi.md#search_entities_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews/search | The search endpoint (beta)
 [**set_filter_views**](FilterViewsApi.md#set_filter_views) | **PUT** /api/v1/layout/workspaces/{workspaceId}/filterViews | Set filter views
 [**update_entity_filter_views**](FilterViewsApi.md#update_entity_filter_views) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Put Filter views
 
@@ -565,7 +565,7 @@ No authorization required
 # **search_entities_filter_views**
 > JsonApiFilterViewOutList search_entities_filter_views(workspace_id, entity_search_body)
 
-Search request for FilterView
+The search endpoint (beta)
 
 ### Example
 
@@ -613,7 +613,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for FilterView
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_filter_views(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -622,7 +622,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for FilterView
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_filter_views(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

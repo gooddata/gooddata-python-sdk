@@ -109,10 +109,6 @@ from gooddata_sdk.catalog.organization.entity_model.jwk import (
     CatalogJwkDocument,
     CatalogRsaSpecification,
 )
-from gooddata_sdk.catalog.organization.entity_model.llm_endpoint import (
-    CatalogLlmEndpoint,
-    CatalogLlmEndpointDocument,
-)
 from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
     CatalogAwsBedrockProviderConfig,
     CatalogAzureFoundryApiKeyAuth,

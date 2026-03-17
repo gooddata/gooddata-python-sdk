@@ -31,16 +31,16 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_out_attributes import JsonApiAnalyticalDashboardOutAttributes
-    from gooddata_api_client.model.json_api_analytical_dashboard_out_meta import JsonApiAnalyticalDashboardOutMeta
-    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships import JsonApiAnalyticalDashboardOutRelationships
+    from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
     from gooddata_api_client.model.json_api_analytical_dashboard_out_with_links import JsonApiAnalyticalDashboardOutWithLinks
+    from gooddata_api_client.model.json_api_metric_out_attributes import JsonApiMetricOutAttributes
+    from gooddata_api_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
     from gooddata_api_client.model.json_api_metric_out_with_links import JsonApiMetricOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
-    globals()['JsonApiAnalyticalDashboardOutAttributes'] = JsonApiAnalyticalDashboardOutAttributes
-    globals()['JsonApiAnalyticalDashboardOutMeta'] = JsonApiAnalyticalDashboardOutMeta
-    globals()['JsonApiAnalyticalDashboardOutRelationships'] = JsonApiAnalyticalDashboardOutRelationships
+    globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
     globals()['JsonApiAnalyticalDashboardOutWithLinks'] = JsonApiAnalyticalDashboardOutWithLinks
+    globals()['JsonApiMetricOutAttributes'] = JsonApiMetricOutAttributes
+    globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
     globals()['JsonApiMetricOutWithLinks'] = JsonApiMetricOutWithLinks
     globals()['ObjectLinks'] = ObjectLinks
 
@@ -71,7 +71,7 @@ class JsonApiKnowledgeRecommendationOutIncludes(ModelComposed):
 
     allowed_values = {
         ('type',): {
-            'ANALYTICALDASHBOARD': "analyticalDashboard",
+            'METRIC': "metric",
         },
     }
 
@@ -106,10 +106,10 @@ class JsonApiKnowledgeRecommendationOutIncludes(ModelComposed):
         """
         lazy_import()
         return {
-            'meta': (JsonApiAnalyticalDashboardOutMeta,),  # noqa: E501
-            'relationships': (JsonApiAnalyticalDashboardOutRelationships,),  # noqa: E501
+            'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
+            'relationships': (JsonApiMetricOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
-            'attributes': (JsonApiAnalyticalDashboardOutAttributes,),  # noqa: E501
+            'attributes': (JsonApiMetricOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
@@ -167,12 +167,12 @@ class JsonApiKnowledgeRecommendationOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            meta (JsonApiAnalyticalDashboardOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiAnalyticalDashboardOutRelationships): [optional]  # noqa: E501
+            meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
+            relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            attributes (JsonApiAnalyticalDashboardOutAttributes): [optional]  # noqa: E501
+            attributes (JsonApiMetricOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "analyticalDashboard"  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "metric"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -276,12 +276,12 @@ class JsonApiKnowledgeRecommendationOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            meta (JsonApiAnalyticalDashboardOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiAnalyticalDashboardOutRelationships): [optional]  # noqa: E501
+            meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
+            relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            attributes (JsonApiAnalyticalDashboardOutAttributes): [optional]  # noqa: E501
+            attributes (JsonApiMetricOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "analyticalDashboard"  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "metric"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

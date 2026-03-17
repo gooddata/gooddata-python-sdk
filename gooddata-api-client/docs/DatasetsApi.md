@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**get_all_entities_datasets**](DatasetsApi.md#get_all_entities_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets | Get all Datasets
 [**get_entity_datasets**](DatasetsApi.md#get_entity_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Get a Dataset
 [**patch_entity_datasets**](DatasetsApi.md#patch_entity_datasets) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Patch a Dataset (beta)
-[**search_entities_datasets**](DatasetsApi.md#search_entities_datasets) | **POST** /api/v1/entities/workspaces/{workspaceId}/datasets/search | Search request for Dataset
+[**search_entities_datasets**](DatasetsApi.md#search_entities_datasets) | **POST** /api/v1/entities/workspaces/{workspaceId}/datasets/search | The search endpoint (beta)
 
 
 # **get_all_entities_datasets**
@@ -294,7 +294,7 @@ No authorization required
 # **search_entities_datasets**
 > JsonApiDatasetOutList search_entities_datasets(workspace_id, entity_search_body)
 
-Search request for Dataset
+The search endpoint (beta)
 
 ### Example
 
@@ -342,7 +342,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for Dataset
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_datasets(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -351,7 +351,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for Dataset
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_datasets(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

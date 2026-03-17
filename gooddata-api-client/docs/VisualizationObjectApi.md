@@ -9,7 +9,7 @@ Method | HTTP request | Description
 [**get_all_entities_visualization_objects**](VisualizationObjectApi.md#get_all_entities_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | Get all Visualization Objects
 [**get_entity_visualization_objects**](VisualizationObjectApi.md#get_entity_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Get a Visualization Object
 [**patch_entity_visualization_objects**](VisualizationObjectApi.md#patch_entity_visualization_objects) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Patch a Visualization Object
-[**search_entities_visualization_objects**](VisualizationObjectApi.md#search_entities_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/search | Search request for VisualizationObject
+[**search_entities_visualization_objects**](VisualizationObjectApi.md#search_entities_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/search | The search endpoint (beta)
 [**update_entity_visualization_objects**](VisualizationObjectApi.md#update_entity_visualization_objects) | **PUT** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Put a Visualization Object
 
 
@@ -475,7 +475,7 @@ No authorization required
 # **search_entities_visualization_objects**
 > JsonApiVisualizationObjectOutList search_entities_visualization_objects(workspace_id, entity_search_body)
 
-Search request for VisualizationObject
+The search endpoint (beta)
 
 ### Example
 
@@ -523,7 +523,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for VisualizationObject
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_visualization_objects(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -532,7 +532,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for VisualizationObject
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_visualization_objects(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

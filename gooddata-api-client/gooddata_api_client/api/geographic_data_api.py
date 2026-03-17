@@ -439,7 +439,7 @@ class GeographicDataApi(object):
         json_api_custom_geo_collection_in_document,
         **kwargs
     ):
-        """create_entity_custom_geo_collections  # noqa: E501
+        """Post Custom Geo Collections  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -521,7 +521,7 @@ class GeographicDataApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_custom_geo_collections  # noqa: E501
+        """Delete Custom Geo Collection  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -603,7 +603,7 @@ class GeographicDataApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_custom_geo_collections  # noqa: E501
+        """Get all Custom Geo Collections  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -686,7 +686,7 @@ class GeographicDataApi(object):
         id,
         **kwargs
     ):
-        """get_entity_custom_geo_collections  # noqa: E501
+        """Get Custom Geo Collection  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -770,7 +770,7 @@ class GeographicDataApi(object):
         json_api_custom_geo_collection_patch_document,
         **kwargs
     ):
-        """patch_entity_custom_geo_collections  # noqa: E501
+        """Patch Custom Geo Collection  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -857,7 +857,7 @@ class GeographicDataApi(object):
         json_api_custom_geo_collection_in_document,
         **kwargs
     ):
-        """update_entity_custom_geo_collections  # noqa: E501
+        """Put Custom Geo Collection  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

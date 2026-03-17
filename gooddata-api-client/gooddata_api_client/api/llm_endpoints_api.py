@@ -441,6 +441,7 @@ class LLMEndpointsApi(object):
     ):
         """Post LLM endpoint entities  # noqa: E501
 
+        Will be soon removed and replaced by LlmProvider.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -521,8 +522,9 @@ class LLMEndpointsApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_llm_endpoints  # noqa: E501
+        """Delete LLM endpoint entity  # noqa: E501
 
+        Will be soon removed and replaced by LlmProvider.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -605,6 +607,7 @@ class LLMEndpointsApi(object):
     ):
         """Get all LLM endpoint entities  # noqa: E501
 
+        Will be soon removed and replaced by LlmProvider.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -688,6 +691,7 @@ class LLMEndpointsApi(object):
     ):
         """Get LLM endpoint entity  # noqa: E501
 
+        Will be soon removed and replaced by LlmProvider.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -772,6 +776,7 @@ class LLMEndpointsApi(object):
     ):
         """Patch LLM endpoint entity  # noqa: E501
 
+        Will be soon removed and replaced by LlmProvider.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -859,6 +864,7 @@ class LLMEndpointsApi(object):
     ):
         """PUT LLM endpoint entity  # noqa: E501
 
+        Will be soon removed and replaced by LlmProvider.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
