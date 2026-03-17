@@ -80,6 +80,20 @@ from gooddata_sdk.catalog.export.request import (
     VisualExportRequest,
 )
 from gooddata_sdk.catalog.filter_by import CatalogFilterBy
+from gooddata_sdk.catalog.knowledge.entity_model.knowledge import (
+    CatalogCreateKnowledgeDocumentRequest,
+    CatalogCreateKnowledgeDocumentResponse,
+    CatalogDeleteKnowledgeDocumentResponse,
+    CatalogKnowledgeDocumentMetadata,
+    CatalogKnowledgeSearchResult,
+    CatalogListKnowledgeDocumentsResponse,
+    CatalogPatchKnowledgeDocumentRequest,
+    CatalogSearchKnowledgeResponse,
+    CatalogSearchStatistics,
+    CatalogUpsertKnowledgeDocumentRequest,
+    CatalogUpsertKnowledgeDocumentResponse,
+)
+from gooddata_sdk.catalog.knowledge.service import CatalogKnowledgeService
 from gooddata_sdk.catalog.identifier import (
     CatalogAssigneeIdentifier,
     CatalogDatasetWorkspaceDataFilterIdentifier,
