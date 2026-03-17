@@ -215,16 +215,16 @@ interactions:
           id="dataset.customers"><unit id="dataset.customers.title"><segment><source>Customers</source></segment></unit><unit
           id="dataset.customers.description"><segment><source>Customers</source></segment></unit><unit
           id="dataset.customers.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="dataset.date"><unit id="dataset.date.title"><segment><source>Date</source></segment></unit><unit
+          id="dataset.date.description"><segment><source></source></segment></unit><unit
+          id="dataset.date.tags"><segment><source>Date</source></segment></unit></group><group
           id="dataset.order_lines"><unit id="dataset.order_lines.title"><segment><source>Order
           lines</source></segment></unit><unit id="dataset.order_lines.description"><segment><source>Order
           lines</source></segment></unit><unit id="dataset.order_lines.tags"><segment><source>Order
           lines</source></segment></unit></group><group id="dataset.products"><unit
           id="dataset.products.title"><segment><source>Products</source></segment></unit><unit
           id="dataset.products.description"><segment><source>Products</source></segment></unit><unit
-          id="dataset.products.tags"><segment><source>Products</source></segment></unit></group><group
-          id="dataset.date"><unit id="dataset.date.title"><segment><source>Date</source></segment></unit><unit
-          id="dataset.date.description"><segment><source></source></segment></unit><unit
-          id="dataset.date.tags"><segment><source>Date</source></segment></unit></group></group><group
+          id="dataset.products.tags"><segment><source>Products</source></segment></unit></group></group><group
           id="fact"><group id="fact.budget"><unit id="fact.budget.title"><segment><source>Budget</source></segment></unit><unit
           id="fact.budget.description"><segment><source>Budget</source></segment></unit><unit
           id="fact.budget.tags"><segment><source>Campaign channels</source></segment></unit></group><group
@@ -328,9 +328,7 @@ interactions:
           id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
           Revenue from Top 10 Products</source></segment></unit></group><group id="metric.percent_revenue_in_category"><unit
           id="metric.percent_revenue_in_category.title"><segment><source>% Revenue
-          in Category</source></segment></unit></group><group id="metric.total_revenue-no_filters"><unit
-          id="metric.total_revenue-no_filters.title"><segment><source>Total Revenue
-          (No Filters)</source></segment></unit></group><group id="metric.percent_revenue_per_product"><unit
+          in Category</source></segment></unit></group><group id="metric.percent_revenue_per_product"><unit
           id="metric.percent_revenue_per_product.title"><segment><source>% Revenue
           per Product</source></segment></unit></group><group id="metric.revenue"><unit
           id="metric.revenue.title"><segment><source>Revenue</source></segment></unit><unit
@@ -348,9 +346,10 @@ interactions:
           id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
           / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
-          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group></group><group
-          id="visualizationObject"><group id="visualizationObject.campaign_spend"><unit
-          id="visualizationObject.campaign_spend.title"><segment><source>Campaign
+          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
+          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+          Revenue (No Filters)</source></segment></unit></group></group><group id="visualizationObject"><group
+          id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
           which is a hash combining the JSON path and the source text's value. Since
@@ -676,16 +675,16 @@ interactions:
           id="dataset.customers"><unit id="dataset.customers.title"><segment><source>Customers</source></segment></unit><unit
           id="dataset.customers.description"><segment><source>Customers</source></segment></unit><unit
           id="dataset.customers.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="dataset.date"><unit id="dataset.date.title"><segment><source>Date</source></segment></unit><unit
+          id="dataset.date.description"><segment><source></source></segment></unit><unit
+          id="dataset.date.tags"><segment><source>Date</source></segment></unit></group><group
           id="dataset.order_lines"><unit id="dataset.order_lines.title"><segment><source>Order
           lines</source></segment></unit><unit id="dataset.order_lines.description"><segment><source>Order
           lines</source></segment></unit><unit id="dataset.order_lines.tags"><segment><source>Order
           lines</source></segment></unit></group><group id="dataset.products"><unit
           id="dataset.products.title"><segment><source>Products</source></segment></unit><unit
           id="dataset.products.description"><segment><source>Products</source></segment></unit><unit
-          id="dataset.products.tags"><segment><source>Products</source></segment></unit></group><group
-          id="dataset.date"><unit id="dataset.date.title"><segment><source>Date</source></segment></unit><unit
-          id="dataset.date.description"><segment><source></source></segment></unit><unit
-          id="dataset.date.tags"><segment><source>Date</source></segment></unit></group></group><group
+          id="dataset.products.tags"><segment><source>Products</source></segment></unit></group></group><group
           id="fact"><group id="fact.budget"><unit id="fact.budget.title"><segment><source>Budget</source></segment></unit><unit
           id="fact.budget.description"><segment><source>Budget</source></segment></unit><unit
           id="fact.budget.tags"><segment><source>Campaign channels</source></segment></unit></group><group
@@ -789,9 +788,7 @@ interactions:
           id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
           Revenue from Top 10 Products</source></segment></unit></group><group id="metric.percent_revenue_in_category"><unit
           id="metric.percent_revenue_in_category.title"><segment><source>% Revenue
-          in Category</source></segment></unit></group><group id="metric.total_revenue-no_filters"><unit
-          id="metric.total_revenue-no_filters.title"><segment><source>Total Revenue
-          (No Filters)</source></segment></unit></group><group id="metric.percent_revenue_per_product"><unit
+          in Category</source></segment></unit></group><group id="metric.percent_revenue_per_product"><unit
           id="metric.percent_revenue_per_product.title"><segment><source>% Revenue
           per Product</source></segment></unit></group><group id="metric.revenue"><unit
           id="metric.revenue.title"><segment><source>Revenue</source></segment></unit><unit
@@ -809,9 +806,10 @@ interactions:
           id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
           / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
-          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group></group><group
-          id="visualizationObject"><group id="visualizationObject.campaign_spend"><unit
-          id="visualizationObject.campaign_spend.title"><segment><source>Campaign
+          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
+          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+          Revenue (No Filters)</source></segment></unit></group></group><group id="visualizationObject"><group
+          id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
           which is a hash combining the JSON path and the source text's value. Since
@@ -1124,15 +1122,15 @@ interactions:
         id="dataset.customers"><unit id="dataset.customers.title"><segment><source>Customers</source><target>Customers.</target></segment></unit><unit
         id="dataset.customers.description"><segment><source>Customers</source><target>Customers.</target></segment></unit><unit
         id="dataset.customers.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+        id="dataset.date"><unit id="dataset.date.title"><segment><source>Date</source><target>Date.</target></segment></unit><unit
+        id="dataset.date.description"><segment><source /></segment></unit><unit id="dataset.date.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
         id="dataset.order_lines"><unit id="dataset.order_lines.title"><segment><source>Order
         lines</source><target>Order lines.</target></segment></unit><unit id="dataset.order_lines.description"><segment><source>Order
         lines</source><target>Order lines.</target></segment></unit><unit id="dataset.order_lines.tags"><segment><source>Order
         lines</source><target>Order lines.</target></segment></unit></group><group
         id="dataset.products"><unit id="dataset.products.title"><segment><source>Products</source><target>Products.</target></segment></unit><unit
         id="dataset.products.description"><segment><source>Products</source><target>Products.</target></segment></unit><unit
-        id="dataset.products.tags"><segment><source>Products</source><target>Products.</target></segment></unit></group><group
-        id="dataset.date"><unit id="dataset.date.title"><segment><source>Date</source><target>Date.</target></segment></unit><unit
-        id="dataset.date.description"><segment><source /></segment></unit><unit id="dataset.date.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group></group><group
+        id="dataset.products.tags"><segment><source>Products</source><target>Products.</target></segment></unit></group></group><group
         id="fact"><group id="fact.budget"><unit id="fact.budget.title"><segment><source>Budget</source><target>Budget.</target></segment></unit><unit
         id="fact.budget.description"><segment><source>Budget</source><target>Budget.</target></segment></unit><unit
         id="fact.budget.tags"><segment><source>Campaign channels</source><target>Campaign
@@ -1247,8 +1245,6 @@ interactions:
         Revenue from Top 10 Products</source><target>% Revenue from Top 10 Products.</target></segment></unit></group><group
         id="metric.percent_revenue_in_category"><unit id="metric.percent_revenue_in_category.title"><segment><source>%
         Revenue in Category</source><target>% Revenue in Category.</target></segment></unit></group><group
-        id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-        Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group><group
         id="metric.percent_revenue_per_product"><unit id="metric.percent_revenue_per_product.title"><segment><source>%
         Revenue per Product</source><target>% Revenue per Product.</target></segment></unit></group><group
         id="metric.revenue"><unit id="metric.revenue.title"><segment><source>Revenue</source><target>Revenue.</target></segment></unit><unit
@@ -1270,7 +1266,9 @@ interactions:
         id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
         / Top 10%</source><target>Revenue / Top 10%.</target></segment></unit></group><group
         id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
-        Revenue</source><target>Total Revenue.</target></segment></unit></group></group><group
+        Revenue</source><target>Total Revenue.</target></segment></unit></group><group
+        id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+        Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group></group><group
         id="visualizationObject"><group id="visualizationObject.campaign_spend"><unit
         id="visualizationObject.campaign_spend.title"><segment><source>Campaign Spend</source><target>Campaign
         Spend.</target></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
@@ -1673,16 +1671,16 @@ interactions:
           id="dataset.customers"><unit id="dataset.customers.title"><segment><source>Customers</source><target>Customers.</target></segment></unit><unit
           id="dataset.customers.description"><segment><source>Customers</source><target>Customers.</target></segment></unit><unit
           id="dataset.customers.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+          id="dataset.date"><unit id="dataset.date.title"><segment><source>Date</source><target>Date.</target></segment></unit><unit
+          id="dataset.date.description"><segment><source></source></segment></unit><unit
+          id="dataset.date.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
           id="dataset.order_lines"><unit id="dataset.order_lines.title"><segment><source>Order
           lines</source><target>Order lines.</target></segment></unit><unit id="dataset.order_lines.description"><segment><source>Order
           lines</source><target>Order lines.</target></segment></unit><unit id="dataset.order_lines.tags"><segment><source>Order
           lines</source><target>Order lines.</target></segment></unit></group><group
           id="dataset.products"><unit id="dataset.products.title"><segment><source>Products</source><target>Products.</target></segment></unit><unit
           id="dataset.products.description"><segment><source>Products</source><target>Products.</target></segment></unit><unit
-          id="dataset.products.tags"><segment><source>Products</source><target>Products.</target></segment></unit></group><group
-          id="dataset.date"><unit id="dataset.date.title"><segment><source>Date</source><target>Date.</target></segment></unit><unit
-          id="dataset.date.description"><segment><source></source></segment></unit><unit
-          id="dataset.date.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group></group><group
+          id="dataset.products.tags"><segment><source>Products</source><target>Products.</target></segment></unit></group></group><group
           id="fact"><group id="fact.budget"><unit id="fact.budget.title"><segment><source>Budget</source><target>Budget.</target></segment></unit><unit
           id="fact.budget.description"><segment><source>Budget</source><target>Budget.</target></segment></unit><unit
           id="fact.budget.tags"><segment><source>Campaign channels</source><target>Campaign
@@ -1800,8 +1798,6 @@ interactions:
           Revenue from Top 10 Products</source><target>% Revenue from Top 10 Products.</target></segment></unit></group><group
           id="metric.percent_revenue_in_category"><unit id="metric.percent_revenue_in_category.title"><segment><source>%
           Revenue in Category</source><target>% Revenue in Category.</target></segment></unit></group><group
-          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
-          Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group><group
           id="metric.percent_revenue_per_product"><unit id="metric.percent_revenue_per_product.title"><segment><source>%
           Revenue per Product</source><target>% Revenue per Product.</target></segment></unit></group><group
           id="metric.revenue"><unit id="metric.revenue.title"><segment><source>Revenue</source><target>Revenue.</target></segment></unit><unit
@@ -1823,7 +1819,9 @@ interactions:
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
           / Top 10%</source><target>Revenue / Top 10%.</target></segment></unit></group><group
           id="metric.total_revenue"><unit id="metric.total_revenue.title"><segment><source>Total
-          Revenue</source><target>Total Revenue.</target></segment></unit></group></group><group
+          Revenue</source><target>Total Revenue.</target></segment></unit></group><group
+          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+          Revenue (No Filters)</source><target>Total Revenue (No Filters).</target></segment></unit></group></group><group
           id="visualizationObject"><group id="visualizationObject.campaign_spend"><unit
           id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source><target>Campaign Spend.</target></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
@@ -2209,16 +2207,16 @@ interactions:
           id="dataset.customers"><unit id="dataset.customers.title"><segment><source>Customers</source></segment></unit><unit
           id="dataset.customers.description"><segment><source>Customers</source></segment></unit><unit
           id="dataset.customers.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="dataset.date"><unit id="dataset.date.title"><segment><source>Date</source></segment></unit><unit
+          id="dataset.date.description"><segment><source></source></segment></unit><unit
+          id="dataset.date.tags"><segment><source>Date</source></segment></unit></group><group
           id="dataset.order_lines"><unit id="dataset.order_lines.title"><segment><source>Order
           lines</source></segment></unit><unit id="dataset.order_lines.description"><segment><source>Order
           lines</source></segment></unit><unit id="dataset.order_lines.tags"><segment><source>Order
           lines</source></segment></unit></group><group id="dataset.products"><unit
           id="dataset.products.title"><segment><source>Products</source></segment></unit><unit
           id="dataset.products.description"><segment><source>Products</source></segment></unit><unit
-          id="dataset.products.tags"><segment><source>Products</source></segment></unit></group><group
-          id="dataset.date"><unit id="dataset.date.title"><segment><source>Date</source></segment></unit><unit
-          id="dataset.date.description"><segment><source></source></segment></unit><unit
-          id="dataset.date.tags"><segment><source>Date</source></segment></unit></group></group><group
+          id="dataset.products.tags"><segment><source>Products</source></segment></unit></group></group><group
           id="fact"><group id="fact.budget"><unit id="fact.budget.title"><segment><source>Budget</source></segment></unit><unit
           id="fact.budget.description"><segment><source>Budget</source></segment></unit><unit
           id="fact.budget.tags"><segment><source>Campaign channels</source></segment></unit></group><group
@@ -2322,9 +2320,7 @@ interactions:
           id="metric.percent_revenue_from_top_10_products.title"><segment><source>%
           Revenue from Top 10 Products</source></segment></unit></group><group id="metric.percent_revenue_in_category"><unit
           id="metric.percent_revenue_in_category.title"><segment><source>% Revenue
-          in Category</source></segment></unit></group><group id="metric.total_revenue-no_filters"><unit
-          id="metric.total_revenue-no_filters.title"><segment><source>Total Revenue
-          (No Filters)</source></segment></unit></group><group id="metric.percent_revenue_per_product"><unit
+          in Category</source></segment></unit></group><group id="metric.percent_revenue_per_product"><unit
           id="metric.percent_revenue_per_product.title"><segment><source>% Revenue
           per Product</source></segment></unit></group><group id="metric.revenue"><unit
           id="metric.revenue.title"><segment><source>Revenue</source></segment></unit><unit
@@ -2342,9 +2338,10 @@ interactions:
           id="metric.revenue_top_10.title"><segment><source>Revenue / Top 10</source></segment></unit></group><group
           id="metric.revenue_top_10_percent"><unit id="metric.revenue_top_10_percent.title"><segment><source>Revenue
           / Top 10%</source></segment></unit></group><group id="metric.total_revenue"><unit
-          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group></group><group
-          id="visualizationObject"><group id="visualizationObject.campaign_spend"><unit
-          id="visualizationObject.campaign_spend.title"><segment><source>Campaign
+          id="metric.total_revenue.title"><segment><source>Total Revenue</source></segment></unit></group><group
+          id="metric.total_revenue-no_filters"><unit id="metric.total_revenue-no_filters.title"><segment><source>Total
+          Revenue (No Filters)</source></segment></unit></group></group><group id="visualizationObject"><group
+          id="visualizationObject.campaign_spend"><unit id="visualizationObject.campaign_spend.title"><segment><source>Campaign
           Spend</source></segment></unit><unit id="visualizationObject.campaign_spend.free-form"><notes><note
           appliesTo="source">Free-form translations are marked by the 'id' attribute,
           which is a hash combining the JSON path and the source text's value. Since

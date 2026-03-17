@@ -233,48 +233,6 @@ interactions:
       body:
         string: ''
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo/automations
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '2'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
-      body:
-        string: []
-  - request:
       method: PUT
       uri: http://localhost:3000/api/v1/layout/notificationChannels
       body:

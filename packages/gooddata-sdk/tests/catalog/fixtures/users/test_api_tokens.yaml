@@ -97,7 +97,7 @@ interactions:
         string:
           data:
             attributes:
-              bearerToken: ZGVtbzp0ZXN0X3Rva2VuOjRRUDBOell3czhSVGxhRzZDZ3NWM0NwWWtvZFRHaHNh
+              bearerToken: ZGVtbzp0ZXN0X3Rva2VuOk5PYWJvenRoWVE4eWx5Vkx4dWVjcmV2eDc1TnBSaXM5
             id: test_token
             type: apiToken
           links:
@@ -239,49 +239,3 @@ interactions:
           - '0'
       body:
         string: ''
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/entities/users/demo/apiTokens?page=0&size=500
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '189'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
-      body:
-        string:
-          data: []
-          links:
-            self: http://localhost:3000/api/v1/entities/users/demo/apiTokens?page=0&size=500
-            next: http://localhost:3000/api/v1/entities/users/demo/apiTokens?page=1&size=500
