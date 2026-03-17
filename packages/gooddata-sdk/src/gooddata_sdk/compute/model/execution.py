@@ -4,6 +4,7 @@ from __future__ import annotations
 import logging
 from typing import Any, Union
 
+import gooddata_api_client.models as afm_models
 from attrs import define, field
 from attrs.setters import frozen as frozen_attr
 from gooddata_api_client import models
@@ -13,6 +14,7 @@ from gooddata_api_client.model.result_spec import ResultSpec
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
+from gooddata_sdk.compute.model.base import ObjId
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
 
@@ -53,6 +55,29 @@ class TableDimension:
     """sorting defined for the given table dimension"""
 
 
+@define
+class MetricDefinitionOverride:
+    """(EXPERIMENTAL) Override for a catalog metric definition."""
+
+    item: ObjId
+    """identifier of the catalog metric whose definition to override"""
+
+    maql: str
+    """MAQL definition to use instead of the stored catalog metric definition"""
+
+    def as_api_model(self) -> afm_models.MetricDefinitionOverride:
+        return afm_models.MetricDefinitionOverride(
+            definition=afm_models.InlineMeasureDefinition(
+                inline=afm_models.InlineMeasureDefinitionInline(maql=self.maql)
+            ),
+            item=afm_models.AfmObjectIdentifierCore(
+                identifier=afm_models.AfmObjectIdentifierCoreIdentifier(id=self.item.id, type=self.item.type),
+                _check_type=False,
+            ),
+            _check_type=False,
+        )
+
+
 class ExecutionDefinition:
     def __init__(
         self,
@@ -62,6 +87,7 @@ class ExecutionDefinition:
         dimensions: list[TableDimension],
         totals: list[TotalDefinition] | None = None,
         is_cancellable: bool = False,
+        measure_definition_overrides: list[MetricDefinitionOverride] | None = None,
     ) -> None:
         self._attributes = attributes or []
         self._metrics = metrics or []
@@ -69,6 +95,7 @@ class ExecutionDefinition:
         self._dimensions = [dim for dim in dimensions if dim.item_ids is not None]
         self._totals = totals
         self._is_cancellable = is_cancellable
+        self._measure_definition_overrides = measure_definition_overrides
 
     @property
     def attributes(self) -> list[Attribute]:
@@ -104,6 +131,10 @@ class ExecutionDefinition:
     @property
     def is_cancellable(self) -> bool:
         return self._is_cancellable
+
+    @property
+    def measure_definition_overrides(self) -> list[MetricDefinitionOverride] | None:
+        return self._measure_definition_overrides
 
     def _create_value_sort_key(self, sort_key: dict) -> models.SortKey:
         sort_key_value = sort_key["value"]
@@ -199,7 +230,12 @@ class ExecutionDefinition:
         return models.ResultSpec(dimensions=dimensions, totals=totals)
 
     def as_api_model(self) -> models.AfmExecution:
-        execution = compute_model_to_api_model(attributes=self.attributes, metrics=self.metrics, filters=self.filters)
+        execution = compute_model_to_api_model(
+            attributes=self.attributes,
+            metrics=self.metrics,
+            filters=self.filters,
+            measure_definition_overrides=self.measure_definition_overrides,
+        )
         result_spec = self._create_result_spec()
 
         return models.AfmExecution(execution=execution, result_spec=result_spec)
@@ -528,6 +564,7 @@ def compute_model_to_api_model(
     attributes: list[Attribute] | None = None,
     metrics: list[Metric] | None = None,
     filters: list[Filter] | None = None,
+    measure_definition_overrides: list[MetricDefinitionOverride] | None = None,
 ) -> models.AFM:
     """
     Transforms categorized execution model entities (attributes, metrics, facts) into an API model
@@ -536,9 +573,14 @@ def compute_model_to_api_model(
     :param attributes: optionally specify list of attributes
     :param metrics: optionally specify list of metrics
     :param filters: optionally specify list of filters
+    :param measure_definition_overrides: optionally specify list of metric definition overrides
     """
+    kwargs: dict[str, Any] = {}
+    if measure_definition_overrides is not None:
+        kwargs["measure_definition_overrides"] = [o.as_api_model() for o in measure_definition_overrides]
     return models.AFM(
         attributes=[a.as_api_model() for a in attributes] if attributes is not None else [],
         measures=[m.as_api_model() for m in metrics] if metrics is not None else [],
         filters=[f.as_api_model() for f in filters if not f.is_noop()] if filters is not None else [],
+        **kwargs,
     )

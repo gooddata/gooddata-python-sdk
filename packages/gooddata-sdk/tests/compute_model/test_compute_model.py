@@ -7,7 +7,7 @@ import os
 import pytest
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import Filter, ObjId
-from gooddata_sdk.compute.model.execution import compute_model_to_api_model
+from gooddata_sdk.compute.model.execution import MetricDefinitionOverride, compute_model_to_api_model
 from gooddata_sdk.compute.model.filter import AbsoluteDateFilter, AllTimeDateFilter, PositiveAttributeFilter
 from gooddata_sdk.compute.model.metric import (
     Metric,
@@ -104,3 +104,41 @@ def test_attribute_filters_to_api_model(
         json.dumps(afm.to_dict(), indent=4, sort_keys=True),
         _scenario_to_snapshot_name(scenario),
     )
+
+
+def test_metric_definition_override_serialization():
+    override = MetricDefinitionOverride(
+        item=ObjId(id="my_metric", type="metric"),
+        maql="SELECT SUM({fact/revenue}) WHERE {label/region} = 'US'",
+    )
+    api_model = override.as_api_model()
+    result = api_model.to_dict()
+
+    assert result["definition"]["inline"]["maql"] == "SELECT SUM({fact/revenue}) WHERE {label/region} = 'US'"
+    assert result["item"]["identifier"]["id"] == "my_metric"
+    assert result["item"]["identifier"]["type"] == "metric"
+
+
+def test_compute_model_to_api_model_with_definition_overrides():
+    override = MetricDefinitionOverride(
+        item=ObjId(id="my_metric", type="metric"),
+        maql="SELECT SUM({fact/revenue})",
+    )
+    afm = compute_model_to_api_model(
+        metrics=[_simple_metric],
+        measure_definition_overrides=[override],
+    )
+    afm_dict = afm.to_dict()
+
+    assert "measure_definition_overrides" in afm_dict
+    overrides_list = afm_dict["measure_definition_overrides"]
+    assert len(overrides_list) == 1
+    assert overrides_list[0]["item"]["identifier"]["id"] == "my_metric"
+    assert overrides_list[0]["definition"]["inline"]["maql"] == "SELECT SUM({fact/revenue})"
+
+
+def test_compute_model_to_api_model_without_definition_overrides():
+    afm = compute_model_to_api_model(metrics=[_simple_metric])
+    afm_dict = afm.to_dict()
+
+    assert "measure_definition_overrides" not in afm_dict
