@@ -76,6 +76,7 @@ from gooddata_sdk.catalog.export.request import (
     ExportCustomOverride,
     ExportRequest,
     ExportSettings,
+    GrandTotalsPosition,
     SlidesExportRequest,
     VisualExportRequest,
 )
