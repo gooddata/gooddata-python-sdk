@@ -70,6 +70,16 @@ from gooddata_sdk.catalog.entity import (
     TokenCredentialsFromEnvVar,
     TokenCredentialsFromFile,
 )
+from gooddata_sdk.catalog.knowledge.declarative_model.knowledge_document import (
+    CatalogCreateKnowledgeDocumentRequest,
+    CatalogCreateKnowledgeDocumentResponse,
+    CatalogDeleteKnowledgeDocumentResponse,
+    CatalogKnowledgeDocumentMetadata,
+    CatalogListKnowledgeDocumentsResponse,
+    CatalogUpsertKnowledgeDocumentRequest,
+    CatalogUpsertKnowledgeDocumentResponse,
+)
+from gooddata_sdk.catalog.knowledge.service import CatalogKnowledgeService
 from gooddata_sdk.catalog.export.request import (
     ExportCustomLabel,
     ExportCustomMetric,
