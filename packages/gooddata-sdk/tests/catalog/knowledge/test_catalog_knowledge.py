@@ -82,9 +82,7 @@ def test_get_document(test_config):
 def test_patch_document(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     patch_request = CatalogPatchKnowledgeDocumentRequest(title="Updated Title")
-    result = sdk.catalog_knowledge.patch_document(
-        workspace_id=_WORKSPACE_ID, filename=_FILENAME, request=patch_request
-    )
+    result = sdk.catalog_knowledge.patch_document(workspace_id=_WORKSPACE_ID, filename=_FILENAME, request=patch_request)
     assert result is not None
     assert result.filename == _FILENAME
 
