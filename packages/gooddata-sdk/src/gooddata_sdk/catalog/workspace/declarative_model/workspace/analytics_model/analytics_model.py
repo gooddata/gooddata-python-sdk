@@ -264,6 +264,10 @@ class CatalogDeclarativeAnalyticalDashboard(CatalogAnalyticsBase):
         ]
         | None
     ) = None
+    certification: str | None = None
+    certification_message: str | None = None
+    certified_at: str | None = None
+    certified_by: str | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeAnalyticalDashboard]:
@@ -314,6 +318,11 @@ class CatalogDeclarativeFilterContext(CatalogAnalyticsBase):
 
 @define(kw_only=True)
 class CatalogDeclarativeMetric(CatalogAnalyticsBase):
+    certification: str | None = None
+    certification_message: str | None = None
+    certified_at: str | None = None
+    certified_by: str | None = None
+
     @staticmethod
     def client_class() -> type[DeclarativeMetric]:
         return DeclarativeMetric
@@ -321,6 +330,11 @@ class CatalogDeclarativeMetric(CatalogAnalyticsBase):
 
 @define(kw_only=True)
 class CatalogDeclarativeVisualizationObject(CatalogAnalyticsBase):
+    certification: str | None = None
+    certification_message: str | None = None
+    certified_at: str | None = None
+    certified_by: str | None = None
+
     @staticmethod
     def client_class() -> type[DeclarativeVisualizationObject]:
         return DeclarativeVisualizationObject

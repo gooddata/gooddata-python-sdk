@@ -16,6 +16,7 @@ from gooddata_sdk.catalog.base import Base
 @define(kw_only=True)
 class CatalogDependentEntitiesRequest(Base):
     identifiers: list[CatalogEntityIdentifier] = field(factory=list)
+    relation: str | None = None
 
     @staticmethod
     def client_class() -> builtins.type[DependentEntitiesRequest]:

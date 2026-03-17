@@ -4,10 +4,11 @@ from __future__ import annotations
 import copy
 import functools
 from pathlib import Path
-from typing import Literal, Union, cast
+from typing import Any, Literal, Union, cast
 
 import gooddata_api_client.models as afm_models
 from gooddata_api_client.model.elements_request import ElementsRequest
+from gooddata_api_client.model.set_certification_request import SetCertificationRequest
 
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
@@ -247,6 +248,43 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             self._actions_api.get_dependent_entities_graph_from_entry_points(
                 workspace_id=workspace_id, dependent_entities_request=dependent_entities_request.to_api()
             )
+        )
+
+    def set_certification(
+        self,
+        workspace_id: str,
+        entity_id: str,
+        entity_type: str,
+        certification: str | None = None,
+        certification_message: str | None = None,
+    ) -> None:
+        """Set certification status for an analytics entity (metric, visualization object, or analytical dashboard).
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+            entity_id (str):
+                ID of the entity to certify.
+            entity_type (str):
+                Type of the entity. One of: "metric", "visualizationObject", "analyticalDashboard"
+            certification (str | None):
+                Certification status. Use "CERTIFIED" to certify, or None to remove certification.
+            certification_message (str | None):
+                Optional message to attach to the certification.
+
+        Returns:
+            None
+        """
+        kwargs: dict[str, Any] = {}
+        if certification is not None:
+            kwargs["status"] = certification
+        if certification_message is not None:
+            kwargs["message"] = certification_message
+        request = SetCertificationRequest(id=entity_id, type=entity_type, _check_type=False, **kwargs)
+        self._actions_api.set_certification(
+            workspace_id=workspace_id,
+            set_certification_request=request,
+            _check_return_type=False,
         )
 
     # Declarative methods for logical data model

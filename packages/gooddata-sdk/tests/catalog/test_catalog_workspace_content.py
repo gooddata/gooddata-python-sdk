@@ -362,6 +362,49 @@ def test_get_dependent_entities_graph_from_entry_points(test_config):
     assert len(response.graph.nodes) == 3
 
 
+def test_dependent_entities_request_relation_field():
+    """Unit test verifying that CatalogDependentEntitiesRequest serializes the relation field correctly."""
+    request_with_relation = CatalogDependentEntitiesRequest(
+        identifiers=[CatalogEntityIdentifier(id="my_metric", type="metric")],
+        relation="DEPENDENCIES",
+    )
+    assert request_with_relation.relation == "DEPENDENCIES"
+    api_dict = request_with_relation.to_api().to_dict()
+    assert api_dict.get("relation") == "DEPENDENCIES"
+
+    request_default = CatalogDependentEntitiesRequest(
+        identifiers=[CatalogEntityIdentifier(id="my_metric", type="metric")],
+    )
+    assert request_default.relation is None
+    api_dict_default = request_default.to_api().to_dict()
+    assert "relation" not in api_dict_default
+
+
+def test_set_certification_calls_api():
+    """Unit test verifying that set_certification forwards parameters to the actions API."""
+    from gooddata_sdk.catalog.workspace.content_service import CatalogWorkspaceContentService
+
+    mock_actions_api = MagicMock()
+    service = MagicMock(spec=CatalogWorkspaceContentService)
+    service._actions_api = mock_actions_api
+    CatalogWorkspaceContentService.set_certification(
+        service,
+        workspace_id="demo",
+        entity_id="my_metric",
+        entity_type="metric",
+        certification="CERTIFIED",
+        certification_message="Approved",
+    )
+    mock_actions_api.set_certification.assert_called_once()
+    call_kwargs = mock_actions_api.set_certification.call_args
+    assert call_kwargs.kwargs["workspace_id"] == "demo"
+    request = call_kwargs.kwargs["set_certification_request"]
+    assert request["id"] == "my_metric"
+    assert request["type"] == "metric"
+    assert request["status"] == "CERTIFIED"
+    assert request["message"] == "Approved"
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "ldm_store_load.yaml"))
 def test_ldm_store_load(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
