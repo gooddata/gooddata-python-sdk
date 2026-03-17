@@ -397,15 +397,15 @@ class DataFrameFactory:
         Returns:
             pandas.DataFrame
 
-        TODO: MultiIndex columns/rows — for_exec_def() builds MultiIndex from dimension headers;
-              the Arrow response encodes headers differently, so that mapping needs to be worked out.
         """
+        from gooddata_pandas.arrow_convertor import convert_arrow_table_to_dataframe
+
         execution = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
 
         if on_execution_submitted is not None:
             on_execution_submitted(execution)
 
-        return execution.bare_exec_response.read_result_arrow().to_pandas()
+        return convert_arrow_table_to_dataframe(execution.bare_exec_response.read_result_arrow())
 
     def for_exec_result_id(
         self,
