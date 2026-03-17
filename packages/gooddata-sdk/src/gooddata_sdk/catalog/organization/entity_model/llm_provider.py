@@ -15,7 +15,6 @@ from gooddata_api_client.model.json_api_llm_provider_in_attributes_models_inner 
 )
 from gooddata_api_client.model.json_api_llm_provider_in_document import JsonApiLlmProviderInDocument
 from gooddata_api_client.model.json_api_llm_provider_patch import JsonApiLlmProviderPatch
-from gooddata_api_client.model.json_api_llm_provider_patch_attributes import JsonApiLlmProviderPatchAttributes
 from gooddata_api_client.model.json_api_llm_provider_patch_document import JsonApiLlmProviderPatchDocument
 from gooddata_api_client.model.open_ai_provider_auth import OpenAiProviderAuth
 from gooddata_api_client.model.open_ai_provider_config import OpenAIProviderConfig
@@ -332,5 +331,5 @@ class CatalogLlmProviderPatchAttributes(Base):
     default_model_id: str | None = None
 
     @staticmethod
-    def client_class() -> type[JsonApiLlmProviderPatchAttributes]:
-        return JsonApiLlmProviderPatchAttributes
+    def client_class() -> type[JsonApiLlmProviderInAttributes]:
+        return JsonApiLlmProviderInAttributes

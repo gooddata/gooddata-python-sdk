@@ -1,11 +1,14 @@
 # (C) 2022 GoodData Corporation
-host: "http://localhost:3000"
-token: "YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"
+#
+# Unified test configuration.
+# Environment is selected via GD_TEST_ENV env var (default: local).
+# Shared values are at the top level, environment-specific overrides in "environments:".
+
+# --- Shared values (same for all environments) ---
 workspace: "demo"
 workspace_name: "Demo"
 workspace_with_parent: "demo_west"
 workspace_with_parent_name: "Demo West"
-header_host: localhost
 data_source: "demo-test-ds"
 data_source2: "demo-bigquery-ds"
 workspace_test: "demo_testing"
@@ -16,9 +19,38 @@ test_new_user_group: "newUserGroup"
 test_new_user_data_filter: "newUserDataFilter"
 demo_user: "demo"
 admin_user_group: "adminGroup"
-bigquery_token: "eyJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsICJwcm9qZWN0X2lkIjogIlBST0pFQ1RfSUQiLCAicHJpdmF0ZV9rZXlfaWQiOiAiS0VZX0lEIiwgInByaXZhdGVfa2V5IjogIi0tLS0tQkVHSU4gUFJJVkFURSBLRVktLS0tLVxuUFJJVkFURV9LRVlcbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS1cbiIsICJjbGllbnRfZW1haWwiOiAiU0VSVklDRV9BQ0NPVU5UX0VNQUlMIiwgImNsaWVudF9pZCI6ICJDTElFTlRfSUQiLCAiYXV0aF91cmkiOiAiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tL28vb2F1dGgyL2F1dGgiLCAidG9rZW5fdXJpIjogImh0dHBzOi8vYWNjb3VudHMuZ29vZ2xlLmNvbS9vL29hdXRoMi90b2tlbiIsICJhdXRoX3Byb3ZpZGVyX3g1MDlfY2VydF91cmwiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vb2F1dGgyL3YxL2NlcnRzIiwgImNsaWVudF94NTA5X2NlcnRfdXJsIjogImh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL3JvYm90L3YxL21ldGFkYXRhL3g1MDkvU0VSVklDRV9BQ0NPVU5UX0VNQUlMIn0="
-bigquery_token_file: '{"type": "service_account", "project_id": "PROJECT_ID", "private_key_id": "KEY_ID", "private_key": "-----BEGIN PRIVATE KEY-----\\nPRIVATE_KEY\\n-----END PRIVATE KEY-----\\n", "client_email": "SERVICE_ACCOUNT_EMAIL", "client_id": "CLIENT_ID", "auth_uri": "https://accounts.google.com/o/oauth2/auth", "token_uri": "https://accounts.google.com/o/oauth2/token", "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/SERVICE_ACCOUNT_EMAIL"}'
 visualization_id: "customers_trend"
 visualization_name: "Customers Trend"
-databricks_client_secret: "databricks-client-secret"
-databricks_token: "databricks-token"
+
+# --- Environment-specific overrides ---
+environments:
+  local:
+    host: "http://localhost:3000"
+    token: "YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"
+    header_host: localhost
+    org_id: "default"
+    org_name: "Default Organization"
+    org_hostname: "localhost"
+    ds_url: "jdbc:postgresql://postgres:5432/tiger?sslmode=prefer"
+    ds_username: "postgres"
+    ds_password: "passw0rd"
+    bigquery_token: "eyJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsICJwcm9qZWN0X2lkIjogIlBST0pFQ1RfSUQiLCAicHJpdmF0ZV9rZXlfaWQiOiAiS0VZX0lEIiwgInByaXZhdGVfa2V5IjogIi0tLS0tQkVHSU4gUFJJVkFURSBLRVktLS0tLVxuUFJJVkFURV9LRVlcbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS1cbiIsICJjbGllbnRfZW1haWwiOiAiU0VSVklDRV9BQ0NPVU5UX0VNQUlMIiwgImNsaWVudF9pZCI6ICJDTElFTlRfSUQiLCAiYXV0aF91cmkiOiAiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tL28vb2F1dGgyL2F1dGgiLCAidG9rZW5fdXJpIjogImh0dHBzOi8vYWNjb3VudHMuZ29vZ2xlLmNvbS9vL29hdXRoMi90b2tlbiIsICJhdXRoX3Byb3ZpZGVyX3g1MDlfY2VydF91cmwiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vb2F1dGgyL3YxL2NlcnRzIiwgImNsaWVudF94NTA5X2NlcnRfdXJsIjogImh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL3JvYm90L3YxL21ldGFkYXRhL3g1MDkvU0VSVklDRV9BQ0NPVU5UX0VNQUlMIn0="
+    bigquery_token_file: '{"type": "service_account", "project_id": "PROJECT_ID", "private_key_id": "KEY_ID", "private_key": "-----BEGIN PRIVATE KEY-----\\nPRIVATE_KEY\\n-----END PRIVATE KEY-----\\n", "client_email": "SERVICE_ACCOUNT_EMAIL", "client_id": "CLIENT_ID", "auth_uri": "https://accounts.google.com/o/oauth2/auth", "token_uri": "https://accounts.google.com/o/oauth2/token", "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/SERVICE_ACCOUNT_EMAIL"}'
+    databricks_client_secret: "databricks-client-secret"
+    databricks_token: "databricks-token"
+
+  staging:
+    staging: true
+    host: "https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com"
+    token: ""  # overridden from TOKEN env var
+    header_host: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
+    org_id: "python-sdk-dex"
+    org_name: "Python SDK Dex"
+    org_hostname: "python-sdk-dex.dev-latest.stg11.panther.intgdc.com"
+    ds_url: "jdbc:postgresql://cnpg-cluster-pooler:5432/tiger?sslmode=prefer"
+    ds_username: "tiger"
+    ds_password: "passw0rd"  # overridden from DS_PASSWORD env var
+    bigquery_token: "dummy-bigquery-token"
+    bigquery_token_file: ""
+    databricks_client_secret: "dummy-databricks-secret"
+    databricks_token: "dummy-databricks-token"
