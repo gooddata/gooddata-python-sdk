@@ -24,6 +24,7 @@ from gooddata_api_client.models import (
 from gooddata_api_client.models import NegativeAttributeFilterNegativeAttributeFilter as NegativeAttributeFilterBody
 from gooddata_api_client.models import PositiveAttributeFilterPositiveAttributeFilter as PositiveAttributeFilterBody
 from gooddata_api_client.models import RangeMeasureValueFilterRangeMeasureValueFilter as RangeMeasureValueFilterBody
+from gooddata_api_client.models import MatchAttributeFilterMatchAttributeFilter as MatchAttributeFilterBody
 from gooddata_api_client.models import RankingFilterRankingFilter as RankingFilterBody
 from gooddata_api_client.models import RelativeDateFilterRelativeDateFilter as RelativeDateFilterBody
 
@@ -77,6 +78,8 @@ ComparisonOperator: TypeAlias = Literal[
 RangeOperator: TypeAlias = Literal["BETWEEN", "NOT_BETWEEN"]
 
 EmptyValueHandling: TypeAlias = Literal["INCLUDE", "EXCLUDE", "ONLY"]
+
+AttributeFilterMatchType: TypeAlias = Literal["STARTS_WITH", "ENDS_WITH", "CONTAINS"]
 
 
 def _extract_id_or_local_id(val: Union[ObjId, Attribute, Metric, str]) -> Union[ObjId, str]:
@@ -150,6 +153,87 @@ class NegativeAttributeFilter(AttributeFilter):
         label_id = self.label.id if isinstance(self.label, ObjId) else self.label
         values = "All except " + ", ".join(self.values) if len(self.values) else "All"
         return f"{labels.get(label_id, label_id)}: {values}"
+
+
+class MatchAttributeFilter(Filter):
+    def __init__(
+        self,
+        label: Union[ObjId, str, Attribute],
+        literal: str,
+        match_type: AttributeFilterMatchType,
+        negate: bool = False,
+        case_sensitive: bool = True,
+        local_identifier: str | None = None,
+        apply_on_result: bool | None = None,
+    ) -> None:
+        super().__init__()
+
+        if match_type not in ("STARTS_WITH", "ENDS_WITH", "CONTAINS"):
+            raise ValueError(
+                f"Invalid match attribute filter match type '{match_type}'. "
+                "It is expected to be one of: STARTS_WITH, ENDS_WITH, CONTAINS"
+            )
+
+        self._label = _extract_id_or_local_id(label)
+        self._literal = literal
+        self._match_type = match_type
+        self._negate = negate
+        self._case_sensitive = case_sensitive
+        self._local_identifier = local_identifier
+        self._apply_on_result = apply_on_result
+
+    @property
+    def label(self) -> Union[ObjId, str]:
+        return self._label
+
+    @property
+    def literal(self) -> str:
+        return self._literal
+
+    @property
+    def match_type(self) -> AttributeFilterMatchType:
+        return self._match_type
+
+    @property
+    def negate(self) -> bool:
+        return self._negate
+
+    @property
+    def case_sensitive(self) -> bool:
+        return self._case_sensitive
+
+    @property
+    def local_identifier(self) -> str | None:
+        return self._local_identifier
+
+    @property
+    def apply_on_result(self) -> bool | None:
+        return self._apply_on_result
+
+    def is_noop(self) -> bool:
+        return False
+
+    def as_api_model(self) -> afm_models.MatchAttributeFilter:
+        label_id = _to_identifier(self._label)
+        body_params: dict[str, Any] = {
+            "label": label_id,
+            "literal": self._literal,
+            "match_type": self._match_type,
+            "negate": self._negate,
+            "case_sensitive": self._case_sensitive,
+            "_check_type": False,
+        }
+        if self._local_identifier is not None:
+            body_params["local_identifier"] = self._local_identifier
+        if self._apply_on_result is not None:
+            body_params["apply_on_result"] = self._apply_on_result
+        body = MatchAttributeFilterBody(**body_params)
+        return afm_models.MatchAttributeFilter(body, _check_type=False)
+
+    def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
+        label_id = self._label.id if isinstance(self._label, ObjId) else self._label
+        negate_str = "not " if self._negate else ""
+        return f"{labels.get(label_id, label_id)}: {negate_str}{self._match_type.lower()} {self._literal}"
 
 
 _GRANULARITY: set[str] = {

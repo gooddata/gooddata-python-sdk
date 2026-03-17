@@ -8,6 +8,7 @@ from gooddata_sdk import (
     CompoundMetricValueFilter,
     ComputeToSdkConverter,
     InlineFilter,
+    MatchAttributeFilter,
     MetricValueComparisonCondition,
     MetricValueFilter,
     MetricValueRangeCondition,
@@ -263,6 +264,66 @@ def test_ranking_filter_with_dimensionality_conversion():
     assert result.dimensionality[0] == "attribute1.localId"
     assert result.operator == "TOP"
     assert result.value == 5
+
+
+def test_match_attribute_filter_conversion():
+    filter_dict = json.loads(
+        """
+        {
+          "matchAttributeFilter": {
+            "label": {
+              "identifier": { "id": "attribute1", "type": "label" }
+            },
+            "literal": "foo",
+            "matchType": "STARTS_WITH",
+            "negate": false,
+            "caseSensitive": true
+          }
+        }
+        """
+    )
+
+    result = ComputeToSdkConverter.convert_filter(filter_dict)
+
+    assert isinstance(result, MatchAttributeFilter)
+    assert result.label.id == "attribute1"
+    assert result.literal == "foo"
+    assert result.match_type == "STARTS_WITH"
+    assert result.negate is False
+    assert result.case_sensitive is True
+    assert result.local_identifier is None
+    assert result.apply_on_result is None
+
+
+def test_match_attribute_filter_conversion_with_optional_fields():
+    filter_dict = json.loads(
+        """
+        {
+          "matchAttributeFilter": {
+            "label": {
+              "identifier": { "id": "attribute2", "type": "label" }
+            },
+            "literal": "bar",
+            "matchType": "CONTAINS",
+            "negate": true,
+            "caseSensitive": false,
+            "localIdentifier": "my_filter",
+            "applyOnResult": true
+          }
+        }
+        """
+    )
+
+    result = ComputeToSdkConverter.convert_filter(filter_dict)
+
+    assert isinstance(result, MatchAttributeFilter)
+    assert result.label.id == "attribute2"
+    assert result.literal == "bar"
+    assert result.match_type == "CONTAINS"
+    assert result.negate is True
+    assert result.case_sensitive is False
+    assert result.local_identifier == "my_filter"
+    assert result.apply_on_result is True
 
 
 def test_inline_filter():

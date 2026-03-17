@@ -5,7 +5,7 @@ import json
 import os
 
 import pytest
-from gooddata_sdk import NegativeAttributeFilter, ObjId, PositiveAttributeFilter
+from gooddata_sdk import MatchAttributeFilter, NegativeAttributeFilter, ObjId, PositiveAttributeFilter
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -76,3 +76,55 @@ def test_empty_positive_filter_is_not_noop():
     f = PositiveAttributeFilter(label="test")
 
     assert f.is_noop() is False
+
+
+def test_match_attribute_filter_starts_with():
+    f = MatchAttributeFilter(label="local_id", literal="foo", match_type="STARTS_WITH")
+    model = f.as_api_model()
+    d = model.to_dict()
+    inner = d["match_attribute_filter"]
+    assert inner["label"] == {"local_identifier": "local_id"}
+    assert inner["literal"] == "foo"
+    assert inner["match_type"] == "STARTS_WITH"
+    assert inner["negate"] is False
+    assert inner["case_sensitive"] is True
+
+
+def test_match_attribute_filter_ends_with_obj_id():
+    f = MatchAttributeFilter(
+        label=ObjId(type="label", id="label.id"),
+        literal="bar",
+        match_type="ENDS_WITH",
+    )
+    model = f.as_api_model()
+    d = model.to_dict()
+    inner = d["match_attribute_filter"]
+    assert inner["label"] == {"identifier": {"id": "label.id", "type": "label"}}
+    assert inner["literal"] == "bar"
+    assert inner["match_type"] == "ENDS_WITH"
+
+
+def test_match_attribute_filter_contains_negate_case_insensitive():
+    f = MatchAttributeFilter(
+        label="local_id",
+        literal="baz",
+        match_type="CONTAINS",
+        negate=True,
+        case_sensitive=False,
+    )
+    model = f.as_api_model()
+    d = model.to_dict()
+    inner = d["match_attribute_filter"]
+    assert inner["match_type"] == "CONTAINS"
+    assert inner["negate"] is True
+    assert inner["case_sensitive"] is False
+
+
+def test_match_attribute_filter_is_not_noop():
+    f = MatchAttributeFilter(label="local_id", literal="x", match_type="STARTS_WITH")
+    assert f.is_noop() is False
+
+
+def test_match_attribute_filter_invalid_match_type():
+    with pytest.raises(ValueError, match="STARTS_WITH"):
+        MatchAttributeFilter(label="local_id", literal="x", match_type="INVALID")
