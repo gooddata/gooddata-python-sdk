@@ -561,3 +561,79 @@ def test_layout_notification_channels(test_config, snapshot_notification_channel
 #         sdk.catalog_organization.put_declarative_identity_providers([])
 #         idps = sdk.catalog_organization.get_declarative_identity_providers()
 #         assert len(idps) == 0
+
+
+# --- Unit tests for LLM provider action request/response models ---
+
+
+def test_catalog_test_llm_provider_response_from_api():
+    from gooddata_sdk import CatalogTestLlmProviderResponse
+
+    data = {
+        "success": True,
+        "message": "Connection successful",
+        "modelResults": [
+            {"modelId": "gpt-4o", "success": True, "message": None},
+            {"modelId": "gpt-4o-mini", "success": False, "message": "Quota exceeded"},
+        ],
+    }
+    response = CatalogTestLlmProviderResponse.from_api(data)
+    assert response.success is True
+    assert response.message == "Connection successful"
+    assert response.model_results is not None
+    assert len(response.model_results) == 2
+    assert response.model_results[0].model_id == "gpt-4o"
+    assert response.model_results[0].success is True
+    assert response.model_results[1].model_id == "gpt-4o-mini"
+    assert response.model_results[1].success is False
+    assert response.model_results[1].message == "Quota exceeded"
+
+
+def test_catalog_test_llm_provider_definition_request_to_api():
+    from gooddata_sdk import CatalogOpenAiApiKeyAuth, CatalogOpenAiProviderConfig, CatalogTestLlmProviderDefinitionRequest
+    from gooddata_sdk.catalog.organization.entity_model.llm_provider import CatalogLlmProviderModel
+
+    config = CatalogOpenAiProviderConfig(
+        auth=CatalogOpenAiApiKeyAuth(api_key="sk-test"),
+        base_url="https://api.openai.com",
+    )
+    models = [CatalogLlmProviderModel(id="gpt-4o", family="GPT")]
+    request = CatalogTestLlmProviderDefinitionRequest(provider_config=config, models=models)
+    api_obj = request.to_api()
+    assert api_obj is not None
+
+
+def test_catalog_test_llm_provider_by_id_request_to_api_no_overrides():
+    from gooddata_sdk import CatalogTestLlmProviderByIdRequest
+
+    request = CatalogTestLlmProviderByIdRequest()
+    api_obj = request.to_api()
+    assert api_obj is not None
+
+
+def test_catalog_list_llm_provider_models_request_to_api():
+    from gooddata_sdk import CatalogListLlmProviderModelsRequest, CatalogOpenAiProviderConfig
+
+    config = CatalogOpenAiProviderConfig(base_url="https://api.openai.com")
+    request = CatalogListLlmProviderModelsRequest(provider_config=config)
+    api_obj = request.to_api()
+    assert api_obj is not None
+
+
+def test_catalog_list_llm_provider_models_response_from_api():
+    from gooddata_sdk import CatalogListLlmProviderModelsResponse
+
+    data = {
+        "success": True,
+        "message": None,
+        "models": [
+            {"id": "gpt-4o", "family": "GPT"},
+            {"id": "gpt-4o-mini", "family": "GPT"},
+        ],
+    }
+    response = CatalogListLlmProviderModelsResponse.from_api(data)
+    assert response.success is True
+    assert response.models is not None
+    assert len(response.models) == 2
+    assert response.models[0].id == "gpt-4o"
+    assert response.models[0].family == "GPT"

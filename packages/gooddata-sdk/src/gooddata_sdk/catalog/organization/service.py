@@ -24,10 +24,15 @@ from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspD
 from gooddata_sdk.catalog.organization.entity_model.identity_provider import CatalogIdentityProvider
 from gooddata_sdk.catalog.organization.entity_model.jwk import CatalogJwk, CatalogJwkDocument
 from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
+    CatalogListLlmProviderModelsRequest,
+    CatalogListLlmProviderModelsResponse,
     CatalogLlmProvider,
     CatalogLlmProviderDocument,
     CatalogLlmProviderPatch,
     CatalogLlmProviderPatchDocument,
+    CatalogTestLlmProviderByIdRequest,
+    CatalogTestLlmProviderDefinitionRequest,
+    CatalogTestLlmProviderResponse,
 )
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
 from gooddata_sdk.catalog.organization.layout.identity_provider import CatalogDeclarativeIdentityProvider
@@ -583,6 +588,76 @@ class CatalogOrganizationService(CatalogServiceBase):
             id: LLM provider identifier
         """
         self._entities_api.delete_entity_llm_providers(id, _check_return_type=False)
+
+    def test_llm_provider(
+        self, request: CatalogTestLlmProviderDefinitionRequest
+    ) -> CatalogTestLlmProviderResponse:
+        """Test LLM provider connectivity with a full definition.
+
+        Args:
+            request: Test request with provider config and optional models
+
+        Returns:
+            CatalogTestLlmProviderResponse: Test result
+        """
+        response = self._actions_api.test_llm_provider(
+            request.to_api(), _check_return_type=False
+        )
+        return CatalogTestLlmProviderResponse.from_api(response)
+
+    def test_llm_provider_by_id(
+        self,
+        llm_provider_id: str,
+        request: CatalogTestLlmProviderByIdRequest | None = None,
+    ) -> CatalogTestLlmProviderResponse:
+        """Test an existing LLM provider connectivity by its ID.
+
+        Args:
+            llm_provider_id: LLM provider identifier
+            request: Optional override request body
+
+        Returns:
+            CatalogTestLlmProviderResponse: Test result
+        """
+        kwargs: dict[str, Any] = {"_check_return_type": False}
+        if request is not None:
+            kwargs["test_llm_provider_by_id_request"] = request.to_api()
+        response = self._actions_api.test_llm_provider_by_id(llm_provider_id, **kwargs)
+        return CatalogTestLlmProviderResponse.from_api(response)
+
+    def list_llm_provider_models(
+        self, request: CatalogListLlmProviderModelsRequest
+    ) -> CatalogListLlmProviderModelsResponse:
+        """List models available on an LLM provider with a full definition.
+
+        Args:
+            request: Request with provider config
+
+        Returns:
+            CatalogListLlmProviderModelsResponse: Available models
+        """
+        response = self._actions_api.list_llm_provider_models(
+            request.to_api(), _check_return_type=False
+        )
+        return CatalogListLlmProviderModelsResponse.from_api(response)
+
+    def list_llm_provider_models_by_id(
+        self,
+        llm_provider_id: str,
+        request: CatalogListLlmProviderModelsRequest | None = None,
+    ) -> CatalogListLlmProviderModelsResponse:
+        """List models available on an existing LLM provider by its ID.
+
+        Args:
+            llm_provider_id: LLM provider identifier
+            request: Optional request body (not used by the API but kept for symmetry)
+
+        Returns:
+            CatalogListLlmProviderModelsResponse: Available models
+        """
+        kwargs: dict[str, Any] = {"_check_return_type": False}
+        response = self._actions_api.list_llm_provider_models_by_id(llm_provider_id, **kwargs)
+        return CatalogListLlmProviderModelsResponse.from_api(response)
 
     # Layout APIs
 

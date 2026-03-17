@@ -37,6 +37,11 @@ from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
     CatalogUserDataFilter,
     CatalogUserDataFilterDocument,
 )
+from gooddata_sdk.catalog.workspace.entity_model.analytics_catalog import (
+    CatalogGenerateTitleRequest,
+    CatalogGenerateTitleResponse,
+)
+from gooddata_sdk.catalog.workspace.entity_model.llm_resolved import CatalogResolvedLlms
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.utils import (
@@ -1485,3 +1490,32 @@ class CatalogWorkspaceService(CatalogServiceBase):
             self.layout_organization_folder(layout_root_path)
         )
         self.put_declarative_filter_views(workspace_id, declarative_filter_views)
+
+    def resolve_llm_providers(self, workspace_id: str) -> CatalogResolvedLlms:
+        """Resolve active LLM configuration for the given workspace.
+
+        Args:
+            workspace_id: Workspace identifier
+
+        Returns:
+            CatalogResolvedLlms: Resolved LLM providers or endpoints for this workspace
+        """
+        response = self._actions_api.resolve_llm_providers(workspace_id, _check_return_type=False)
+        return CatalogResolvedLlms.from_api(response)
+
+    def generate_title(
+        self, workspace_id: str, request: CatalogGenerateTitleRequest
+    ) -> CatalogGenerateTitleResponse:
+        """Generate a title for the specified analytics object.
+
+        Args:
+            workspace_id: Workspace identifier
+            request: Generate title request with object_id and object_type
+
+        Returns:
+            CatalogGenerateTitleResponse: Generated title and optional note
+        """
+        response = self._actions_api.generate_title(
+            workspace_id, request.to_api(), _check_return_type=False
+        )
+        return CatalogGenerateTitleResponse.from_api(response)

@@ -16,8 +16,13 @@ from gooddata_api_client.model.json_api_llm_provider_in_attributes_models_inner 
 from gooddata_api_client.model.json_api_llm_provider_in_document import JsonApiLlmProviderInDocument
 from gooddata_api_client.model.json_api_llm_provider_patch import JsonApiLlmProviderPatch
 from gooddata_api_client.model.json_api_llm_provider_patch_document import JsonApiLlmProviderPatchDocument
+from gooddata_api_client.model.list_llm_provider_models_request import ListLlmProviderModelsRequest
+from gooddata_api_client.model.list_llm_provider_models_response import ListLlmProviderModelsResponse
 from gooddata_api_client.model.open_ai_provider_auth import OpenAiProviderAuth
 from gooddata_api_client.model.open_ai_provider_config import OpenAIProviderConfig
+from gooddata_api_client.model.test_llm_provider_by_id_request import TestLlmProviderByIdRequest
+from gooddata_api_client.model.test_llm_provider_definition_request import TestLlmProviderDefinitionRequest
+from gooddata_api_client.model.test_llm_provider_response import TestLlmProviderResponse
 
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.utils import safeget
@@ -333,3 +338,136 @@ class CatalogLlmProviderPatchAttributes(Base):
     @staticmethod
     def client_class() -> type[JsonApiLlmProviderInAttributes]:
         return JsonApiLlmProviderInAttributes
+
+
+# --- Action request/response model types ---
+
+
+@define(kw_only=True)
+class CatalogModelTestResult(Base):
+    """Result for a single model connectivity test."""
+
+    model_id: str
+    success: bool
+    message: str | None = None
+
+    @staticmethod
+    def client_class() -> type:
+        raise NotImplementedError()
+
+    @classmethod
+    def from_api(cls, data: dict[str, Any]) -> CatalogModelTestResult:
+        return cls(
+            model_id=safeget(data, ["modelId"]) or "",
+            success=safeget(data, ["success"]) or False,
+            message=safeget(data, ["message"]),
+        )
+
+
+@define(kw_only=True)
+class CatalogTestLlmProviderResponse(Base):
+    """Response from test LLM provider endpoint."""
+
+    success: bool
+    message: str | None = None
+    model_results: list[CatalogModelTestResult] | None = None
+
+    @staticmethod
+    def client_class() -> type[TestLlmProviderResponse]:
+        return TestLlmProviderResponse
+
+    @classmethod
+    def from_api(cls, data: dict[str, Any]) -> CatalogTestLlmProviderResponse:
+        raw_model_results = safeget(data, ["modelResults"]) or []
+        model_results = [CatalogModelTestResult.from_api(r) for r in raw_model_results]
+        return cls(
+            success=safeget(data, ["success"]) or False,
+            message=safeget(data, ["message"]),
+            model_results=model_results if model_results else None,
+        )
+
+
+@define(kw_only=True)
+class CatalogTestLlmProviderDefinitionRequest(Base):
+    """Request for testing LLM provider connectivity with a full definition."""
+
+    provider_config: CatalogLlmProviderConfig
+    models: list[CatalogLlmProviderModel] | None = None
+
+    @staticmethod
+    def client_class() -> type[TestLlmProviderDefinitionRequest]:
+        return TestLlmProviderDefinitionRequest
+
+    def to_api(self) -> TestLlmProviderDefinitionRequest:
+        kwargs: dict[str, Any] = {}
+        if self.models is not None:
+            kwargs["models"] = [m.to_api() for m in self.models]
+        return TestLlmProviderDefinitionRequest(
+            provider_config=self.provider_config.to_api(),
+            **kwargs,
+        )
+
+
+@define(kw_only=True)
+class CatalogTestLlmProviderByIdRequest(Base):
+    """Request for testing an existing LLM provider by ID with optional overrides."""
+
+    provider_config: CatalogLlmProviderConfig | None = None
+    models: list[CatalogLlmProviderModel] | None = None
+
+    @staticmethod
+    def client_class() -> type[TestLlmProviderByIdRequest]:
+        return TestLlmProviderByIdRequest
+
+    def to_api(self) -> TestLlmProviderByIdRequest:
+        kwargs: dict[str, Any] = {}
+        if self.provider_config is not None:
+            kwargs["provider_config"] = self.provider_config.to_api()
+        if self.models is not None:
+            kwargs["models"] = [m.to_api() for m in self.models]
+        return TestLlmProviderByIdRequest(**kwargs)
+
+
+@define(kw_only=True)
+class CatalogListLlmProviderModelsRequest(Base):
+    """Request for listing models available on an LLM provider."""
+
+    provider_config: CatalogLlmProviderConfig
+
+    @staticmethod
+    def client_class() -> type[ListLlmProviderModelsRequest]:
+        return ListLlmProviderModelsRequest
+
+    def to_api(self) -> ListLlmProviderModelsRequest:
+        return ListLlmProviderModelsRequest(
+            provider_config=self.provider_config.to_api(),
+        )
+
+
+@define(kw_only=True)
+class CatalogListLlmProviderModelsResponse(Base):
+    """Response from list LLM provider models endpoint."""
+
+    success: bool
+    models: list[CatalogLlmProviderModel] | None = None
+    message: str | None = None
+
+    @staticmethod
+    def client_class() -> type[ListLlmProviderModelsResponse]:
+        return ListLlmProviderModelsResponse
+
+    @classmethod
+    def from_api(cls, data: dict[str, Any]) -> CatalogListLlmProviderModelsResponse:
+        raw_models = safeget(data, ["models"]) or []
+        models = [
+            CatalogLlmProviderModel(
+                id=safeget(m, ["id"]) or "",
+                family=safeget(m, ["family"]) or "",
+            )
+            for m in raw_models
+        ]
+        return cls(
+            success=safeget(data, ["success"]) or False,
+            models=models if models else None,
+            message=safeget(data, ["message"]),
+        )

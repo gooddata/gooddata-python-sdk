@@ -1032,3 +1032,66 @@ def test_layout_filter_views(test_config):
         assert filter_views_expected == filter_views_o
     finally:
         safe_delete(sdk.catalog_workspace.put_declarative_filter_views, workspace_id, [])
+
+
+# --- Unit tests for workspace LLM resolved and analytics catalog models ---
+
+
+def test_catalog_resolved_llm_provider_from_api():
+    from gooddata_sdk import CatalogResolvedLlmProvider
+
+    data = {
+        "id": "openai-provider",
+        "title": "OpenAI Provider",
+        "models": [
+            {"id": "gpt-4o", "family": "GPT"},
+        ],
+    }
+    provider = CatalogResolvedLlmProvider.from_api(data)
+    assert provider.id == "openai-provider"
+    assert provider.title == "OpenAI Provider"
+    assert provider.models is not None
+    assert len(provider.models) == 1
+    assert provider.models[0].id == "gpt-4o"
+
+
+def test_catalog_resolved_llm_endpoint_from_api():
+    from gooddata_sdk import CatalogResolvedLlmEndpoint
+
+    data = {"id": "legacy-endpoint", "title": "Legacy Endpoint"}
+    endpoint = CatalogResolvedLlmEndpoint.from_api(data)
+    assert endpoint.id == "legacy-endpoint"
+    assert endpoint.title == "Legacy Endpoint"
+
+
+def test_catalog_resolved_llms_dispatches_on_type():
+    from gooddata_sdk import CatalogResolvedLlmEndpoint, CatalogResolvedLlmProvider, CatalogResolvedLlms
+
+    data = {
+        "data": [
+            {"id": "provider-1", "title": "Provider 1", "models": [{"id": "gpt-4o", "family": "GPT"}]},
+            {"id": "endpoint-1", "title": "Endpoint 1"},
+        ]
+    }
+    resolved = CatalogResolvedLlms.from_api(data)
+    assert resolved.data is not None
+    assert len(resolved.data) == 2
+    assert isinstance(resolved.data[0], CatalogResolvedLlmProvider)
+    assert isinstance(resolved.data[1], CatalogResolvedLlmEndpoint)
+
+
+def test_catalog_generate_title_request_to_api():
+    from gooddata_sdk import CatalogGenerateTitleRequest
+
+    request = CatalogGenerateTitleRequest(object_id="vis-123", object_type="Visualization")
+    api_obj = request.to_api()
+    assert api_obj is not None
+
+
+def test_catalog_generate_title_response_from_api():
+    from gooddata_sdk import CatalogGenerateTitleResponse
+
+    data = {"title": "Monthly Revenue", "note": None}
+    response = CatalogGenerateTitleResponse.from_api(data)
+    assert response.title == "Monthly Revenue"
+    assert response.note is None

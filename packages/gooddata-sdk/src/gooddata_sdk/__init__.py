@@ -114,6 +114,8 @@ from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
     CatalogAzureFoundryApiKeyAuth,
     CatalogAzureFoundryProviderConfig,
     CatalogBedrockAccessKeyAuth,
+    CatalogListLlmProviderModelsRequest,
+    CatalogListLlmProviderModelsResponse,
     CatalogLlmProvider,
     CatalogLlmProviderDocument,
     CatalogLlmProviderModel,
@@ -121,6 +123,9 @@ from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
     CatalogLlmProviderPatchDocument,
     CatalogOpenAiApiKeyAuth,
     CatalogOpenAiProviderConfig,
+    CatalogTestLlmProviderByIdRequest,
+    CatalogTestLlmProviderDefinitionRequest,
+    CatalogTestLlmProviderResponse,
 )
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
@@ -248,6 +253,15 @@ from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
     CatalogUserDataFilter,
     CatalogUserDataFilterAttributes,
     CatalogUserDataFilterRelationships,
+)
+from gooddata_sdk.catalog.workspace.entity_model.analytics_catalog import (
+    CatalogGenerateTitleRequest,
+    CatalogGenerateTitleResponse,
+)
+from gooddata_sdk.catalog.workspace.entity_model.llm_resolved import (
+    CatalogResolvedLlmEndpoint,
+    CatalogResolvedLlmProvider,
+    CatalogResolvedLlms,
 )
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.client import GoodDataApiClient
