@@ -42,10 +42,7 @@ class ClusteringConfig:
         )
 
     def __repr__(self) -> str:
-        return (
-            f"ClusteringConfig(number_of_clusters={self.number_of_clusters!r}, "
-            f"threshold={self.threshold!r})"
-        )
+        return f"ClusteringConfig(number_of_clusters={self.number_of_clusters!r}, threshold={self.threshold!r})"
 
 
 class AnomalyDetectionConfig:
