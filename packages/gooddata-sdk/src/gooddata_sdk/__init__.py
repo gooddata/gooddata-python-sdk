@@ -7,6 +7,11 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 import logging
 
 from gooddata_sdk._version import __version__
+from gooddata_sdk.catalog.knowledge.model.knowledge_document import (
+    CatalogKnowledgeDocumentMetadata,
+    CatalogListKnowledgeDocumentsResponse,
+    CatalogPatchKnowledgeDocumentRequest,
+)
 from gooddata_sdk.catalog.appearance.entity_model.color_palette import (
     CatalogColorPalette,
     CatalogColorPaletteAttributes,

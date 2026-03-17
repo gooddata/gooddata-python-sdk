@@ -16,6 +16,10 @@ from gooddata_api_client.model.saved_visualization import SavedVisualization
 from gooddata_api_client.model.search_request import SearchRequest
 from gooddata_api_client.model.search_result import SearchResult
 
+from gooddata_sdk.catalog.knowledge.model.knowledge_document import (
+    CatalogListKnowledgeDocumentsResponse,
+    CatalogPatchKnowledgeDocumentRequest,
+)
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.execution import (
     Execution,
@@ -350,3 +354,55 @@ class ComputeService:
             None
         """
         self._actions_api.metadata_sync(workspace_id, async_req=async_req, _check_return_type=False)
+
+    def list_knowledge_documents(
+        self,
+        workspace_id: str,
+        *,
+        size: int | None = None,
+        page_token: str | None = None,
+        meta_include: str | None = None,
+    ) -> CatalogListKnowledgeDocumentsResponse:
+        """
+        List knowledge documents in a GoodData workspace with optional cursor-based pagination.
+
+        Args:
+            workspace_id (str): workspace identifier
+            size (int, optional): number of documents per page. Defaults to server default (50).
+            page_token (str, optional): opaque cursor for fetching the next page.
+            meta_include (str, optional): set to 'page' to include totalCount in response.
+        Returns:
+            CatalogListKnowledgeDocumentsResponse: list response with documents and optional pagination info
+        """
+        kwargs: dict[str, Any] = {}
+        if size is not None:
+            kwargs["size"] = size
+        if page_token is not None:
+            kwargs["page_token"] = page_token
+        if meta_include is not None:
+            kwargs["meta_include"] = meta_include
+        response = self._actions_api.list_documents(workspace_id, _check_return_type=False, **kwargs)
+        return CatalogListKnowledgeDocumentsResponse.from_api(response)
+
+    def patch_knowledge_document(
+        self,
+        workspace_id: str,
+        filename: str,
+        patch_request: CatalogPatchKnowledgeDocumentRequest,
+    ) -> None:
+        """
+        Patch (partially update) a knowledge document in a GoodData workspace.
+
+        Args:
+            workspace_id (str): workspace identifier
+            filename (str): filename of the knowledge document to patch
+            patch_request (CatalogPatchKnowledgeDocumentRequest): patch fields (is_disabled, title, scopes)
+        Returns:
+            None
+        """
+        self._actions_api.patch_document(
+            workspace_id,
+            filename,
+            patch_request.as_api_model(),
+            _check_return_type=False,
+        )
