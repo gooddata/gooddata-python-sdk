@@ -609,6 +609,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         sort_order: Literal["ASC", "DESC"] | None = None,
         offset: int | None = None,
         limit: int | None = None,
+        x_gdc_correlation: str | None = None,
     ) -> list[str]:
         """
         Get existing values for a label.
@@ -641,6 +642,9 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
                 Optional parameter specifying the offset for the returned values.
             limit (Optional[int]):
                 Optional parameter specifying the limit for the returned values.
+            x_gdc_correlation (Optional[str]):
+                Optional correlation header value (x-gdc-correlation) forwarded to the backend
+                for query tagging and debugging purposes.
         Returns:
             list of label values
         """
@@ -679,6 +683,8 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             paging_params["offset"] = offset
         if limit is not None:
             paging_params["limit"] = limit
+        if x_gdc_correlation is not None:
+            paging_params["x_gdc_correlation"] = x_gdc_correlation
 
         # TODO - fix return type of Paging.next in Backend + add support for this API to SDK
         values = self._actions_api.compute_label_elements_post(

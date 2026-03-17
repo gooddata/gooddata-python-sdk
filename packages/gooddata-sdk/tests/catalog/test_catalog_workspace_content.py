@@ -446,6 +446,23 @@ def test_label_elements(test_config):
     assert label_values == ["Delivered"]
 
 
+def test_get_label_elements_forwards_x_gdc_correlation():
+    mock_api_client = MagicMock()
+    mock_api_client.actions_api.compute_label_elements_post.return_value = {"elements": []}
+    from gooddata_sdk.catalog.workspace.content_service import CatalogWorkspaceContentService
+
+    service = CatalogWorkspaceContentService(mock_api_client)
+
+    service.get_label_elements(
+        "workspace_id",
+        "order_status",
+        x_gdc_correlation="dashboard-id:widget-id",
+    )
+
+    call_kwargs = mock_api_client.actions_api.compute_label_elements_post.call_args
+    assert call_kwargs[1].get("x_gdc_correlation") == "dashboard-id:widget-id"
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "explicit_workspace_data_filter.yaml"))
 def test_explicit_workspace_data_filter(test_config):
     """
