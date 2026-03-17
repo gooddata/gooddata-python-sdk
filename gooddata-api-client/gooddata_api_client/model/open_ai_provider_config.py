@@ -99,7 +99,7 @@ class OpenAIProviderConfig(ModelNormal):
         return {
             'auth': (OpenAiProviderAuth,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'base_url': (str, none_type,),  # noqa: E501
+            'base_url': (str,),  # noqa: E501
             'organization': (str, none_type,),  # noqa: E501
         }
 
@@ -160,7 +160,7 @@ class OpenAIProviderConfig(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            base_url (str, none_type): Custom base URL for OpenAI API.. [optional] if omitted the server will use the default value of "https://api.openai.com"  # noqa: E501
+            base_url (str): Custom base URL for OpenAI API.. [optional] if omitted the server will use the default value of "https://api.openai.com/v1"  # noqa: E501
             organization (str, none_type): OpenAI organization ID.. [optional]  # noqa: E501
         """
 
@@ -254,7 +254,7 @@ class OpenAIProviderConfig(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            base_url (str, none_type): Custom base URL for OpenAI API.. [optional] if omitted the server will use the default value of "https://api.openai.com"  # noqa: E501
+            base_url (str): Custom base URL for OpenAI API.. [optional] if omitted the server will use the default value of "https://api.openai.com/v1"  # noqa: E501
             organization (str, none_type): OpenAI organization ID.. [optional]  # noqa: E501
         """
 

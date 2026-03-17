@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**get_all_entities_labels**](LabelsApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | Get all Labels
 [**get_entity_labels**](LabelsApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Get a Label
 [**patch_entity_labels**](LabelsApi.md#patch_entity_labels) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Patch a Label (beta)
-[**search_entities_labels**](LabelsApi.md#search_entities_labels) | **POST** /api/v1/entities/workspaces/{workspaceId}/labels/search | Search request for Label
+[**search_entities_labels**](LabelsApi.md#search_entities_labels) | **POST** /api/v1/entities/workspaces/{workspaceId}/labels/search | The search endpoint (beta)
 
 
 # **get_all_entities_labels**
@@ -294,7 +294,7 @@ No authorization required
 # **search_entities_labels**
 > JsonApiLabelOutList search_entities_labels(workspace_id, entity_search_body)
 
-Search request for Label
+The search endpoint (beta)
 
 ### Example
 
@@ -342,7 +342,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for Label
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_labels(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -351,7 +351,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for Label
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_labels(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

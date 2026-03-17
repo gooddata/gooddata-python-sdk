@@ -88,6 +88,21 @@ test:
 	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C packages/$${project} test || RESULT=$$?; done; \
 	exit $$RESULT
 
+.PHONY: test-staging
+test-staging:
+	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required. Usage: make test-staging TOKEN=<api-token>" && exit 1)
+	$(MAKE) -C packages/gooddata-sdk test-staging TOKEN=$(TOKEN)
+
+.PHONY: clean-staging
+clean-staging:
+	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required. Usage: make clean-staging TOKEN=<api-token>" && exit 1)
+	cd packages/tests-support && STAGING=1 TOKEN="$(TOKEN)" python clean_staging.py
+
+.PHONY: load-staging
+load-staging:
+	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required. Usage: make load-staging TOKEN=<api-token>" && exit 1)
+	cd packages/tests-support && STAGING=1 TOKEN="$(TOKEN)" python upload_demo_layout.py
+
 .PHONY: release
 release:
 	if [ -z "$(VERSION)" ]; then echo "Usage: 'make release VERSION=X.Y.Z'"; false; else \

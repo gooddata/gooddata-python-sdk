@@ -64,6 +64,7 @@ class LlmModel(ModelNormal):
             'AMAZON': "AMAZON",
             'GOOGLE': "GOOGLE",
             'COHERE': "COHERE",
+            'UNKNOWN': "UNKNOWN",
         },
     }
 

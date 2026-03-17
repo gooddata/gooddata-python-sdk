@@ -64,18 +64,6 @@ interactions:
                   type: dataset
               - - id: customer_id
                   type: attribute
-                - id: percent_revenue_from_top_10_customers
-                  type: metric
-              - - id: customer_id
-                  type: attribute
-                - id: revenue_per_customer
-                  type: metric
-              - - id: customer_id
-                  type: attribute
-                - id: customers
-                  type: dataset
-              - - id: customer_id
-                  type: attribute
                 - id: amount_of_top_customers
                   type: metric
               - - id: customer_id
@@ -84,7 +72,19 @@ interactions:
                   type: metric
               - - id: customer_id
                   type: attribute
+                - id: customers
+                  type: dataset
+              - - id: customer_id
+                  type: attribute
                 - id: percent_revenue_from_top_10_percent_customers
+                  type: metric
+              - - id: customer_id
+                  type: attribute
+                - id: percent_revenue_from_top_10_customers
+                  type: metric
+              - - id: customer_id
+                  type: attribute
+                - id: revenue_per_customer
                   type: metric
               - - id: customer_name
                   type: attribute
@@ -108,20 +108,20 @@ interactions:
                   type: dataset
               - - id: date.year
                   type: attribute
-                - id: product_revenue_comparison-over_previous_period
-                  type: visualizationObject
+                - id: date
+                  type: dataset
               - - id: date.year
                   type: attribute
-                - id: date
+                - id: product_revenue_comparison-over_previous_period
+                  type: visualizationObject
+              - - id: order_id
+                  type: attribute
+                - id: order_lines
                   type: dataset
               - - id: order_id
                   type: attribute
                 - id: amount_of_orders
                   type: metric
-              - - id: order_id
-                  type: attribute
-                - id: order_lines
-                  type: dataset
               - - id: order_line_id
                   type: attribute
                 - id: order_lines
@@ -136,16 +136,16 @@ interactions:
                   type: dataset
               - - id: product_id
                   type: attribute
+                - id: percent_revenue_from_top_10_products
+                  type: metric
+              - - id: product_id
+                  type: attribute
                 - id: percent_revenue_per_product
                   type: metric
               - - id: product_id
                   type: attribute
                 - id: products
                   type: dataset
-              - - id: product_id
-                  type: attribute
-                - id: percent_revenue_from_top_10_products
-                  type: metric
               - - id: product_id
                   type: attribute
                 - id: percent_revenue_from_top_10_percent_products
@@ -156,12 +156,12 @@ interactions:
                   type: dataset
               - - id: products.category
                   type: attribute
-                - id: percent_revenue_in_category
-                  type: metric
-              - - id: products.category
-                  type: attribute
                 - id: products
                   type: dataset
+              - - id: products.category
+                  type: attribute
+                - id: percent_revenue_in_category
+                  type: metric
               - - id: region
                   type: attribute
                 - id: customers
@@ -184,24 +184,16 @@ interactions:
                   type: dataset
               - - id: campaigns
                   type: dataset
-                - id: campaign_channels
+                - id: order_lines
                   type: dataset
               - - id: campaigns
                   type: dataset
-                - id: order_lines
+                - id: campaign_channels
                   type: dataset
               - - id: customers
                   type: dataset
                 - id: order_lines
                   type: dataset
-              - - id: date
-                  type: dataset
-                - id: customers_trend
-                  type: visualizationObject
-              - - id: date
-                  type: dataset
-                - id: revenue_trend
-                  type: visualizationObject
               - - id: date
                   type: dataset
                 - id: percentage_of_customers_by_region
@@ -212,12 +204,20 @@ interactions:
                   type: visualizationObject
               - - id: date
                   type: dataset
-                - id: revenue_by_category_trend
+                - id: customers_trend
                   type: visualizationObject
               - - id: date
                   type: dataset
                 - id: order_lines
                   type: dataset
+              - - id: date
+                  type: dataset
+                - id: revenue_trend
+                  type: visualizationObject
+              - - id: date
+                  type: dataset
+                - id: revenue_by_category_trend
+                  type: visualizationObject
               - - id: date
                   type: dataset
                 - id: product_and_category
@@ -256,44 +256,44 @@ interactions:
                   type: dataset
               - - id: spend
                   type: fact
-                - id: campaign_channels
-                  type: dataset
-              - - id: spend
-                  type: fact
                 - id: campaign_spend
                   type: metric
+              - - id: spend
+                  type: fact
+                - id: campaign_channels
+                  type: dataset
               - - id: campaign_channel_id
                   type: label
                 - id: campaign_channel_id
                   type: attribute
               - - id: campaign_channels.category
                   type: label
-                - id: campaign_channels.category
-                  type: attribute
-              - - id: campaign_channels.category
-                  type: label
                 - id: campaign_spend
                   type: visualizationObject
+              - - id: campaign_channels.category
+                  type: label
+                - id: campaign_channels.category
+                  type: attribute
               - - id: campaign_id
                   type: label
                 - id: campaign_id
                   type: attribute
               - - id: campaign_name
                   type: label
+                - id: campaign_spend
+                  type: visualizationObject
+              - - id: campaign_name
+                  type: label
                 - id: campaign_name
                   type: attribute
               - - id: campaign_name
                   type: label
-                - id: campaign_spend
+                - id: revenue_per_usd_vs_spend_by_campaign
                   type: visualizationObject
               - - id: campaign_name
                   type: label
                 - id: campaign_name_filter
                   type: filterContext
-              - - id: campaign_name
-                  type: label
-                - id: revenue_per_usd_vs_spend_by_campaign
-                  type: visualizationObject
               - - id: customer_id
                   type: label
                 - id: customer_id
@@ -304,15 +304,15 @@ interactions:
                   type: visualizationObject
               - - id: customer_name
                   type: label
+                - id: top_10_customers
+                  type: visualizationObject
+              - - id: customer_name
+                  type: label
                 - id: customer_name
                   type: attribute
               - - id: customer_name
                   type: label
                 - id: percent_revenue_per_product_by_customer_and_category
-                  type: visualizationObject
-              - - id: customer_name
-                  type: label
-                - id: top_10_customers
                   type: visualizationObject
               - - id: date.day
                   type: label
@@ -320,15 +320,11 @@ interactions:
                   type: attribute
               - - id: date.month
                   type: label
-                - id: customers_trend
-                  type: visualizationObject
-              - - id: date.month
-                  type: label
-                - id: revenue_trend
-                  type: visualizationObject
-              - - id: date.month
-                  type: label
                 - id: percentage_of_customers_by_region
+                  type: visualizationObject
+              - - id: date.month
+                  type: label
+                - id: customers_trend
                   type: visualizationObject
               - - id: date.month
                   type: label
@@ -338,6 +334,10 @@ interactions:
                   type: label
                 - id: date.month
                   type: attribute
+              - - id: date.month
+                  type: label
+                - id: revenue_trend
+                  type: visualizationObject
               - - id: date.quarter
                   type: label
                 - id: date.quarter
@@ -364,12 +364,12 @@ interactions:
                   type: attribute
               - - id: order_status
                   type: label
-                - id: amount_of_valid_orders
-                  type: metric
-              - - id: order_status
-                  type: label
                 - id: order_status
                   type: attribute
+              - - id: order_status
+                  type: label
+                - id: amount_of_valid_orders
+                  type: metric
               - - id: order_status
                   type: label
                 - id: revenue
@@ -380,7 +380,7 @@ interactions:
                   type: attribute
               - - id: product_name
                   type: label
-                - id: revenue_by_product
+                - id: product_revenue_comparison-over_previous_period
                   type: visualizationObject
               - - id: product_name
                   type: label
@@ -388,23 +388,15 @@ interactions:
                   type: attribute
               - - id: product_name
                   type: label
-                - id: product_revenue_comparison-over_previous_period
-                  type: visualizationObject
-              - - id: product_name
-                  type: label
-                - id: product_breakdown
-                  type: visualizationObject
-              - - id: product_name
-                  type: label
-                - id: top_10_products
-                  type: visualizationObject
-              - - id: product_name
-                  type: label
-                - id: product_categories_pie_chart
-                  type: visualizationObject
-              - - id: product_name
-                  type: label
                 - id: revenue_and_quantity_by_product_and_category
+                  type: visualizationObject
+              - - id: product_name
+                  type: label
+                - id: product_saleability
+                  type: visualizationObject
+              - - id: product_name
+                  type: label
+                - id: revenue_by_product
                   type: visualizationObject
               - - id: product_name
                   type: label
@@ -412,7 +404,19 @@ interactions:
                   type: visualizationObject
               - - id: product_name
                   type: label
-                - id: product_saleability
+                - id: product_breakdown
+                  type: visualizationObject
+              - - id: product_name
+                  type: label
+                - id: product_categories_pie_chart
+                  type: visualizationObject
+              - - id: product_name
+                  type: label
+                - id: top_10_products
+                  type: visualizationObject
+              - - id: products.category
+                  type: label
+                - id: product_revenue_comparison-over_previous_period
                   type: visualizationObject
               - - id: products.category
                   type: label
@@ -420,11 +424,27 @@ interactions:
                   type: metric
               - - id: products.category
                   type: label
-                - id: product_revenue_comparison-over_previous_period
+                - id: revenue_and_quantity_by_product_and_category
+                  type: visualizationObject
+              - - id: products.category
+                  type: label
+                - id: revenue-electronic
+                  type: metric
+              - - id: products.category
+                  type: label
+                - id: revenue-outdoor
+                  type: metric
+              - - id: products.category
+                  type: label
+                - id: percent_revenue_per_product_by_customer_and_category
                   type: visualizationObject
               - - id: products.category
                   type: label
                 - id: product_breakdown
+                  type: visualizationObject
+              - - id: products.category
+                  type: label
+                - id: product_categories_pie_chart
                   type: visualizationObject
               - - id: products.category
                   type: label
@@ -436,40 +456,20 @@ interactions:
                   type: visualizationObject
               - - id: products.category
                   type: label
-                - id: revenue-outdoor
-                  type: metric
+                - id: products.category
+                  type: attribute
               - - id: products.category
                   type: label
                 - id: revenue-clothing
                   type: metric
-              - - id: products.category
-                  type: label
-                - id: product_categories_pie_chart
-                  type: visualizationObject
-              - - id: products.category
-                  type: label
-                - id: revenue-electronic
-                  type: metric
-              - - id: products.category
-                  type: label
-                - id: revenue_and_quantity_by_product_and_category
-                  type: visualizationObject
-              - - id: products.category
-                  type: label
-                - id: percent_revenue_per_product_by_customer_and_category
-                  type: visualizationObject
-              - - id: products.category
-                  type: label
-                - id: products.category
-                  type: attribute
-              - - id: region
-                  type: label
-                - id: region
-                  type: attribute
               - - id: region
                   type: label
                 - id: percentage_of_customers_by_region
                   type: visualizationObject
+              - - id: region
+                  type: label
+                - id: region
+                  type: attribute
               - - id: region
                   type: label
                 - id: region_filter
@@ -484,44 +484,44 @@ interactions:
                   type: visualizationObject
               - - id: type
                   type: label
-                - id: type
-                  type: attribute
-              - - id: type
-                  type: label
                 - id: campaign_spend
                   type: visualizationObject
+              - - id: type
+                  type: label
+                - id: type
+                  type: attribute
               - - id: amount_of_active_customers
                   type: metric
-                - id: customers_trend
-                  type: visualizationObject
+                - id: amount_of_top_customers
+                  type: metric
               - - id: amount_of_active_customers
                   type: metric
                 - id: percentage_of_customers_by_region
                   type: visualizationObject
               - - id: amount_of_active_customers
                   type: metric
-                - id: amount_of_top_customers
-                  type: metric
+                - id: customers_trend
+                  type: visualizationObject
               - - id: amount_of_orders
                   type: metric
-                - id: amount_of_valid_orders
-                  type: metric
+                - id: product_saleability
+                  type: visualizationObject
               - - id: amount_of_orders
                   type: metric
                 - id: revenue_trend
                   type: visualizationObject
               - - id: amount_of_orders
                   type: metric
-                - id: product_saleability
-                  type: visualizationObject
-              - - id: campaign_spend
-                  type: metric
-                - id: revenue_per_dollar_spent
+                - id: amount_of_valid_orders
                   type: metric
               - - id: campaign_spend
                   type: metric
                 - id: campaign_spend
                   type: visualizationObject
+              - - id: campaign_spend
+                  type: metric
+                - id: revenue_per_dollar_spent
+                  type: metric
               - - id: campaign_spend
                   type: metric
                 - id: revenue_per_usd_vs_spend_by_campaign
@@ -540,7 +540,11 @@ interactions:
                   type: visualizationObject
               - - id: revenue
                   type: metric
-                - id: revenue-home
+                - id: amount_of_top_customers
+                  type: metric
+              - - id: revenue
+                  type: metric
+                - id: revenue_top_10_percent
                   type: metric
               - - id: revenue
                   type: metric
@@ -548,39 +552,15 @@ interactions:
                   type: visualizationObject
               - - id: revenue
                   type: metric
-                - id: revenue-outdoor
+                - id: percent_revenue_from_top_10_percent_customers
                   type: metric
               - - id: revenue
                   type: metric
-                - id: percent_revenue_from_top_10_percent_products
+                - id: percent_revenue_per_product
                   type: metric
               - - id: revenue
                   type: metric
-                - id: revenue-clothing
-                  type: metric
-              - - id: revenue
-                  type: metric
-                - id: percent_revenue_in_category
-                  type: metric
-              - - id: revenue
-                  type: metric
-                - id: total_revenue
-                  type: metric
-              - - id: revenue
-                  type: metric
-                - id: percent_revenue_per_product_by_customer_and_category
-                  type: visualizationObject
-              - - id: revenue
-                  type: metric
-                - id: percent_revenue_from_top_10_customers
-                  type: metric
-              - - id: revenue
-                  type: metric
-                - id: revenue_per_dollar_spent
-                  type: metric
-              - - id: revenue
-                  type: metric
-                - id: percent_revenue_from_top_10_products
+                - id: percent_revenue
                   type: metric
               - - id: revenue
                   type: metric
@@ -588,8 +568,56 @@ interactions:
                   type: visualizationObject
               - - id: revenue
                   type: metric
+                - id: revenue-electronic
+                  type: metric
+              - - id: revenue
+                  type: metric
+                - id: revenue_per_customer
+                  type: metric
+              - - id: revenue
+                  type: metric
+                - id: percent_revenue_in_category
+                  type: metric
+              - - id: revenue
+                  type: metric
+                - id: percent_revenue_from_top_10_products
+                  type: metric
+              - - id: revenue
+                  type: metric
+                - id: product_categories_pie_chart
+                  type: visualizationObject
+              - - id: revenue
+                  type: metric
+                - id: revenue_per_dollar_spent
+                  type: metric
+              - - id: revenue
+                  type: metric
                 - id: revenue_top_10
                   type: metric
+              - - id: revenue
+                  type: metric
+                - id: total_revenue
+                  type: metric
+              - - id: revenue
+                  type: metric
+                - id: percent_revenue_from_top_10_customers
+                  type: metric
+              - - id: revenue
+                  type: metric
+                - id: revenue-clothing
+                  type: metric
+              - - id: revenue
+                  type: metric
+                - id: revenue-home
+                  type: metric
+              - - id: revenue
+                  type: metric
+                - id: percent_revenue_from_top_10_percent_products
+                  type: metric
+              - - id: revenue
+                  type: metric
+                - id: revenue_and_quantity_by_product_and_category
+                  type: visualizationObject
               - - id: revenue
                   type: metric
                 - id: revenue_by_product
@@ -600,8 +628,12 @@ interactions:
                   type: visualizationObject
               - - id: revenue
                   type: metric
-                - id: percent_revenue_per_product
+                - id: revenue-outdoor
                   type: metric
+              - - id: revenue
+                  type: metric
+                - id: percent_revenue_per_product_by_customer_and_category
+                  type: visualizationObject
               - - id: revenue
                   type: metric
                 - id: product_breakdown
@@ -610,38 +642,6 @@ interactions:
                   type: metric
                 - id: revenue_by_category_trend
                   type: visualizationObject
-              - - id: revenue
-                  type: metric
-                - id: revenue_per_customer
-                  type: metric
-              - - id: revenue
-                  type: metric
-                - id: amount_of_top_customers
-                  type: metric
-              - - id: revenue
-                  type: metric
-                - id: percent_revenue
-                  type: metric
-              - - id: revenue
-                  type: metric
-                - id: revenue_top_10_percent
-                  type: metric
-              - - id: revenue
-                  type: metric
-                - id: product_categories_pie_chart
-                  type: visualizationObject
-              - - id: revenue
-                  type: metric
-                - id: revenue-electronic
-                  type: metric
-              - - id: revenue
-                  type: metric
-                - id: revenue_and_quantity_by_product_and_category
-                  type: visualizationObject
-              - - id: revenue
-                  type: metric
-                - id: percent_revenue_from_top_10_percent_customers
-                  type: metric
               - - id: revenue_per_customer
                   type: metric
                 - id: customers_trend
@@ -652,7 +652,7 @@ interactions:
                   type: visualizationObject
               - - id: revenue_top_10
                   type: metric
-                - id: percent_revenue_from_top_10_customers
+                - id: percent_revenue_from_top_10_products
                   type: metric
               - - id: revenue_top_10
                   type: metric
@@ -660,12 +660,12 @@ interactions:
                   type: visualizationObject
               - - id: revenue_top_10
                   type: metric
-                - id: percent_revenue_from_top_10_products
-                  type: metric
-              - - id: revenue_top_10
-                  type: metric
                 - id: top_10_customers
                   type: visualizationObject
+              - - id: revenue_top_10
+                  type: metric
+                - id: percent_revenue_from_top_10_customers
+                  type: metric
               - - id: revenue_top_10_percent
                   type: metric
                 - id: percent_revenue_from_top_10_percent_products
@@ -676,11 +676,11 @@ interactions:
                   type: metric
               - - id: total_revenue
                   type: metric
-                - id: percent_revenue
+                - id: total_revenue-no_filters
                   type: metric
               - - id: total_revenue
                   type: metric
-                - id: total_revenue-no_filters
+                - id: percent_revenue
                   type: metric
               - - id: campaign_spend
                   type: visualizationObject

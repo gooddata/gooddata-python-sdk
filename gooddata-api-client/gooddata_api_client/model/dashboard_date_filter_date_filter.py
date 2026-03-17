@@ -97,9 +97,9 @@ class DashboardDateFilterDateFilter(ModelNormal):
             'ABSOLUTE': "absolute",
         },
         ('empty_value_handling',): {
-            'INCLUDE': "INCLUDE",
-            'EXCLUDE': "EXCLUDE",
-            'ONLY': "ONLY",
+            'INCLUDE': "include",
+            'EXCLUDE': "exclude",
+            'ONLY': "only",
         },
     }
 

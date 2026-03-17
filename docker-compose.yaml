@@ -504,6 +504,8 @@ services:
       GRPC_METADATA_PORT: 6572
       GRPC_MDSINK_HOST: gateway-md-sink
       GRPC_MDSINK_PORT: 6574
+      GRPC_FORGE_HOST: gateway-md-sink
+      GRPC_FORGE_PORT: 6574
       GATEWAY_ORGANIZATION_RESOLVER_TYPE: GRPC_WITH_DB_VALIDATION
       GATEWAY_R2DBC_URL: 'r2dbc:postgresql://postgres:5432/gw?reWriteBatchedInserts=true'
       GATEWAY_DB_USERNAME: postgres
@@ -1064,6 +1066,7 @@ services:
       FIXTURES_DIR: "/app/fixtures"
     volumes:
       - ./packages/tests-support/fixtures:/app/fixtures:ro
+      - ./packages/gooddata-sdk/tests/gd_test_config.yaml:/app/gd_test_config.yaml:ro
       - ./packages/tests-support/upload_demo_layout.py:/app/upload_demo_layout.py:ro
     entrypoint: ["/bin/sh", "-c"]
     command:

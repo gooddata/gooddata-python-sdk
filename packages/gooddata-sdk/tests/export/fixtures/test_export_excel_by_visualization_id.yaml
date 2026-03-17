@@ -118,7 +118,7 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2026-03-11 10:04
+              createdAt: 2026-03-17 08:24
             id: customers_trend
             meta:
               origin:
@@ -165,7 +165,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-03-11 10:04
+                createdAt: 2026-03-17 08:24
               id: amount_of_active_customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
@@ -175,7 +175,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-03-11 10:04
+                createdAt: 2026-03-17 08:24
               id: revenue_per_customer
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
@@ -240,10 +240,10 @@ interactions:
           - '0'
       body:
         string:
-          exportResult: 563340250604606b8496e373ed75e320b144155d
+          exportResult: 95b0e888b1878bfb6d52bfe25276b9628d72d0e6
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/563340250604606b8496e373ed75e320b144155d
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/95b0e888b1878bfb6d52bfe25276b9628d72d0e6
       body: null
       headers:
         Accept:
@@ -284,7 +284,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/563340250604606b8496e373ed75e320b144155d
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/95b0e888b1878bfb6d52bfe25276b9628d72d0e6
       body: null
       headers:
         Accept:
@@ -325,7 +325,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/563340250604606b8496e373ed75e320b144155d
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/95b0e888b1878bfb6d52bfe25276b9628d72d0e6
       body: null
       headers:
         Accept:
@@ -366,7 +366,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/563340250604606b8496e373ed75e320b144155d
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/95b0e888b1878bfb6d52bfe25276b9628d72d0e6
       body: null
       headers:
         Accept:
@@ -407,7 +407,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/563340250604606b8496e373ed75e320b144155d
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/95b0e888b1878bfb6d52bfe25276b9628d72d0e6
       body: null
       headers:
         Accept:
@@ -448,7 +448,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/563340250604606b8496e373ed75e320b144155d
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/95b0e888b1878bfb6d52bfe25276b9628d72d0e6
       body: null
       headers:
         Accept:
@@ -470,7 +470,7 @@ interactions:
         Content-Disposition:
           - attachment; filename="=?UTF-8?Q?Customers_Trend.xlsx?="; filename*=UTF-8''Customers%20Trend.xlsx
         Content-Length:
-          - '6035'
+          - '6036'
         Content-Type:
           - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
         DATE: *id001
@@ -572,28 +572,28 @@ interactions:
           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
-          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
+          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

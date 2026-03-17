@@ -16,7 +16,7 @@ Method | HTTP request | Description
 [**pause_organization_automations**](AutomationsApi.md#pause_organization_automations) | **POST** /api/v1/actions/organization/automations/pause | Pause selected automations across all workspaces
 [**pause_workspace_automations**](AutomationsApi.md#pause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/pause | Pause selected automations in the workspace
 [**search_entities_automation_results**](AutomationsApi.md#search_entities_automation_results) | **POST** /api/v1/entities/workspaces/{workspaceId}/automationResults/search | Search request for AutomationResult
-[**search_entities_automations**](AutomationsApi.md#search_entities_automations) | **POST** /api/v1/entities/workspaces/{workspaceId}/automations/search | Search request for Automation
+[**search_entities_automations**](AutomationsApi.md#search_entities_automations) | **POST** /api/v1/entities/workspaces/{workspaceId}/automations/search | The search endpoint (beta)
 [**set_automations**](AutomationsApi.md#set_automations) | **PUT** /api/v1/layout/workspaces/{workspaceId}/automations | Set automations
 [**trigger_automation**](AutomationsApi.md#trigger_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/trigger | Trigger automation.
 [**trigger_existing_automation**](AutomationsApi.md#trigger_existing_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/{automationId}/trigger | Trigger existing automation.
@@ -158,7 +158,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 },
                             ),
-                            delimiter="U",
+                            delimiter="-",
                             execution=AFM(
                                 attributes=[
                                     AttributeItem(
@@ -258,8 +258,9 @@ with gooddata_api_client.ApiClient() as api_client:
                             metadata=JsonNode(),
                             related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             settings=Settings(
-                                delimiter="U",
+                                delimiter="-",
                                 export_info=True,
+                                grand_totals_position="pinnedBottom",
                                 merge_headers=True,
                                 page_orientation="PORTRAIT",
                                 page_size="A4",
@@ -1078,7 +1079,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 },
                             ),
-                            delimiter="U",
+                            delimiter="-",
                             execution=AFM(
                                 attributes=[
                                     AttributeItem(
@@ -1178,8 +1179,9 @@ with gooddata_api_client.ApiClient() as api_client:
                             metadata=JsonNode(),
                             related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             settings=Settings(
-                                delimiter="U",
+                                delimiter="-",
                                 export_info=True,
+                                grand_totals_position="pinnedBottom",
                                 merge_headers=True,
                                 page_orientation="PORTRAIT",
                                 page_size="A4",
@@ -1549,7 +1551,7 @@ No authorization required
 # **search_entities_automations**
 > JsonApiAutomationOutList search_entities_automations(workspace_id, entity_search_body)
 
-Search request for Automation
+The search endpoint (beta)
 
 ### Example
 
@@ -1597,7 +1599,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for Automation
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_automations(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1606,7 +1608,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for Automation
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_automations(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1799,7 +1801,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                             },
                         ),
-                        delimiter="U",
+                        delimiter="-",
                         execution=AFM(
                             attributes=[
                                 AttributeItem(
@@ -1905,8 +1907,9 @@ with gooddata_api_client.ApiClient() as api_client:
                         metadata=JsonNode(),
                         related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                         settings=Settings(
-                            delimiter="U",
+                            delimiter="-",
                             export_info=True,
+                            grand_totals_position="pinnedBottom",
                             merge_headers=True,
                             page_orientation="PORTRAIT",
                             page_size="A4",
@@ -2123,7 +2126,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                             },
                         ),
-                        delimiter="U",
+                        delimiter="-",
                         execution=AFM(
                             attributes=[
                                 AttributeItem(
@@ -2223,8 +2226,9 @@ with gooddata_api_client.ApiClient() as api_client:
                         metadata=JsonNode(),
                         related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                         settings=Settings(
-                            delimiter="U",
+                            delimiter="-",
                             export_info=True,
+                            grand_totals_position="pinnedBottom",
                             merge_headers=True,
                             page_orientation="PORTRAIT",
                             page_size="A4",
@@ -2972,7 +2976,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 },
                             ),
-                            delimiter="U",
+                            delimiter="-",
                             execution=AFM(
                                 attributes=[
                                     AttributeItem(
@@ -3072,8 +3076,9 @@ with gooddata_api_client.ApiClient() as api_client:
                             metadata=JsonNode(),
                             related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             settings=Settings(
-                                delimiter="U",
+                                delimiter="-",
                                 export_info=True,
+                                grand_totals_position="pinnedBottom",
                                 merge_headers=True,
                                 page_orientation="PORTRAIT",
                                 page_size="A4",
