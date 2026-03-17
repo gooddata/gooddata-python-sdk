@@ -489,11 +489,6 @@ def test_store_declarative_data_sources(test_config):
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_data_sources.yaml"))
 def test_load_and_put_declarative_data_sources(test_config, snapshot_data_sources):
-    if test_config.get("staging", False):
-        # load_and_put loads ALL data sources from the layout directory in a single PUT,
-        # including bigquery/databricks with dummy credentials. Staging validates credential
-        # formats and rejects them (400). Can't exclude individual data sources from the PUT.
-        pytest.skip("Staging server validates credential formats; this test uses mocked dummy credentials")
     load_folder = _current_dir / "load"
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
