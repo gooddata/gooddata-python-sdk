@@ -589,9 +589,7 @@ class CatalogOrganizationService(CatalogServiceBase):
         """
         self._entities_api.delete_entity_llm_providers(id, _check_return_type=False)
 
-    def test_llm_provider(
-        self, request: CatalogTestLlmProviderDefinitionRequest
-    ) -> CatalogTestLlmProviderResponse:
+    def test_llm_provider(self, request: CatalogTestLlmProviderDefinitionRequest) -> CatalogTestLlmProviderResponse:
         """Test LLM provider connectivity with a full definition.
 
         Args:
@@ -600,9 +598,7 @@ class CatalogOrganizationService(CatalogServiceBase):
         Returns:
             CatalogTestLlmProviderResponse: Test result
         """
-        response = self._actions_api.test_llm_provider(
-            request.to_api(), _check_return_type=False
-        )
+        response = self._actions_api.test_llm_provider(request.to_api(), _check_return_type=False)
         return CatalogTestLlmProviderResponse.from_api(response)
 
     def test_llm_provider_by_id(
@@ -636,9 +632,7 @@ class CatalogOrganizationService(CatalogServiceBase):
         Returns:
             CatalogListLlmProviderModelsResponse: Available models
         """
-        response = self._actions_api.list_llm_provider_models(
-            request.to_api(), _check_return_type=False
-        )
+        response = self._actions_api.list_llm_provider_models(request.to_api(), _check_return_type=False)
         return CatalogListLlmProviderModelsResponse.from_api(response)
 
     def list_llm_provider_models_by_id(

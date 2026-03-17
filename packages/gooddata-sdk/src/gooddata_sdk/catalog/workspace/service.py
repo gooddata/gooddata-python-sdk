@@ -1503,9 +1503,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         response = self._actions_api.resolve_llm_providers(workspace_id, _check_return_type=False)
         return CatalogResolvedLlms.from_api(response)
 
-    def generate_title(
-        self, workspace_id: str, request: CatalogGenerateTitleRequest
-    ) -> CatalogGenerateTitleResponse:
+    def generate_title(self, workspace_id: str, request: CatalogGenerateTitleRequest) -> CatalogGenerateTitleResponse:
         """Generate a title for the specified analytics object.
 
         Args:
@@ -1515,7 +1513,5 @@ class CatalogWorkspaceService(CatalogServiceBase):
         Returns:
             CatalogGenerateTitleResponse: Generated title and optional note
         """
-        response = self._actions_api.generate_title(
-            workspace_id, request.to_api(), _check_return_type=False
-        )
+        response = self._actions_api.generate_title(workspace_id, request.to_api(), _check_return_type=False)
         return CatalogGenerateTitleResponse.from_api(response)

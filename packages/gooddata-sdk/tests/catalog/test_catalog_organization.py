@@ -590,7 +590,11 @@ def test_catalog_test_llm_provider_response_from_api():
 
 
 def test_catalog_test_llm_provider_definition_request_to_api():
-    from gooddata_sdk import CatalogOpenAiApiKeyAuth, CatalogOpenAiProviderConfig, CatalogTestLlmProviderDefinitionRequest
+    from gooddata_sdk import (
+        CatalogOpenAiApiKeyAuth,
+        CatalogOpenAiProviderConfig,
+        CatalogTestLlmProviderDefinitionRequest,
+    )
     from gooddata_sdk.catalog.organization.entity_model.llm_provider import CatalogLlmProviderModel
 
     config = CatalogOpenAiProviderConfig(
