@@ -1,0 +1,159 @@
+{
+  "result_id": "b18770546d0c68ebb98977715330e74bc288fc8e:fa754b08b892de84419bd9fb61752ff6a99a09b4e94087ed9c0e0520d8fad370",
+  "row_totals_indexes": [
+    [],
+    []
+  ],
+  "primary_labels_from_index": {
+    "0": {
+      "Alabama": "Alabama",
+      "Alaska": "Alaska",
+      "Arizona": "Arizona",
+      "Arkansas": "Arkansas",
+      "California": "California",
+      "Colorado": "Colorado",
+      "Connecticut": "Connecticut",
+      "Delaware": "Delaware",
+      "District of Columbia": "District of Columbia",
+      "Florida": "Florida",
+      "Georgia": "Georgia",
+      "Hawaii": "Hawaii",
+      "Idaho": "Idaho",
+      "Illinois": "Illinois",
+      "Indiana": "Indiana",
+      "Iowa": "Iowa",
+      "Kansas": "Kansas",
+      "Kentucky": "Kentucky",
+      "Louisiana": "Louisiana",
+      "Maryland": "Maryland",
+      "Massachusetts": "Massachusetts",
+      "Michigan": "Michigan",
+      "Minnesota": "Minnesota",
+      "Mississippi": "Mississippi",
+      "Missouri": "Missouri",
+      "Montana": "Montana",
+      "Nebraska": "Nebraska",
+      "Nevada": "Nevada",
+      "New Hampshire": "New Hampshire",
+      "New Jersey": "New Jersey",
+      "New Mexico": "New Mexico",
+      "New York": "New York",
+      "North Carolina": "North Carolina",
+      "North Dakota": "North Dakota",
+      "Ohio": "Ohio",
+      "Oklahoma": "Oklahoma",
+      "Oregon": "Oregon",
+      "Pennsylvania": "Pennsylvania",
+      "Rhode Island": "Rhode Island",
+      "South Carolina": "South Carolina",
+      "South Dakota": "South Dakota",
+      "Tennessee": "Tennessee",
+      "Texas": "Texas",
+      "Utah": "Utah",
+      "Virginia": "Virginia",
+      "Washington": "Washington",
+      "West Virginia": "West Virginia",
+      "Wisconsin": "Wisconsin"
+    },
+    "1": {
+      "South": "South",
+      "West": "West",
+      "Northeast": "Northeast",
+      "Midwest": "Midwest",
+      "Unknown": "Unknown"
+    }
+  },
+  "primary_labels_from_columns": {
+    "0": {
+      "Clothing": "Clothing",
+      "Electronics": "Electronics",
+      "Home": "Home",
+      "Outdoor": "Outdoor"
+    }
+  },
+  "dimensions": [
+    {
+      "headers": [
+        {
+          "attributeHeader": {
+            "localIdentifier": "state",
+            "label": {
+              "id": "state",
+              "type": "label"
+            },
+            "labelName": "State",
+            "attribute": {
+              "id": "state",
+              "type": "attribute"
+            },
+            "attributeName": "State",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "state",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        },
+        {
+          "attributeHeader": {
+            "localIdentifier": "region",
+            "label": {
+              "id": "region",
+              "type": "label"
+            },
+            "labelName": "Region",
+            "attribute": {
+              "id": "region",
+              "type": "attribute"
+            },
+            "attributeName": "Region",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "region",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        }
+      ]
+    },
+    {
+      "headers": [
+        {
+          "attributeHeader": {
+            "localIdentifier": "product_category",
+            "label": {
+              "id": "products.category",
+              "type": "label"
+            },
+            "labelName": "Category",
+            "attribute": {
+              "id": "products.category",
+              "type": "attribute"
+            },
+            "attributeName": "Category",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "products.category",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        },
+        {
+          "measureGroupHeaders": [
+            {
+              "localIdentifier": "price"
+            },
+            {
+              "localIdentifier": "order_amount",
+              "format": "$#,##0",
+              "name": "Order Amount"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
