@@ -9,7 +9,7 @@ Method | HTTP request | Description
 [**get_all_entities_analytical_dashboards**](DashboardsApi.md#get_all_entities_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | Get all Dashboards
 [**get_entity_analytical_dashboards**](DashboardsApi.md#get_entity_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Get a Dashboard
 [**patch_entity_analytical_dashboards**](DashboardsApi.md#patch_entity_analytical_dashboards) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Patch a Dashboard
-[**search_entities_analytical_dashboards**](DashboardsApi.md#search_entities_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/search | Search request for AnalyticalDashboard
+[**search_entities_analytical_dashboards**](DashboardsApi.md#search_entities_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/search | The search endpoint (beta)
 [**update_entity_analytical_dashboards**](DashboardsApi.md#update_entity_analytical_dashboards) | **PUT** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Put Dashboards
 
 
@@ -475,7 +475,7 @@ No authorization required
 # **search_entities_analytical_dashboards**
 > JsonApiAnalyticalDashboardOutList search_entities_analytical_dashboards(workspace_id, entity_search_body)
 
-Search request for AnalyticalDashboard
+The search endpoint (beta)
 
 ### Example
 
@@ -523,7 +523,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for AnalyticalDashboard
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_analytical_dashboards(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -532,7 +532,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for AnalyticalDashboard
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_analytical_dashboards(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

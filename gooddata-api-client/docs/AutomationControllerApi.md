@@ -141,7 +141,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 },
                             ),
-                            delimiter="U",
+                            delimiter="-",
                             execution=AFM(
                                 attributes=[
                                     AttributeItem(
@@ -241,7 +241,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             metadata=JsonNode(),
                             related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             settings=Settings(
-                                delimiter="U",
+                                delimiter="-",
                                 export_info=True,
                                 grand_totals_position="pinnedBottom",
                                 merge_headers=True,
@@ -757,7 +757,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 },
                             ),
-                            delimiter="U",
+                            delimiter="-",
                             execution=AFM(
                                 attributes=[
                                     AttributeItem(
@@ -857,7 +857,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             metadata=JsonNode(),
                             related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             settings=Settings(
-                                delimiter="U",
+                                delimiter="-",
                                 export_info=True,
                                 grand_totals_position="pinnedBottom",
                                 merge_headers=True,
@@ -1212,7 +1212,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 },
                             ),
-                            delimiter="U",
+                            delimiter="-",
                             execution=AFM(
                                 attributes=[
                                     AttributeItem(
@@ -1312,7 +1312,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             metadata=JsonNode(),
                             related_dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             settings=Settings(
-                                delimiter="U",
+                                delimiter="-",
                                 export_info=True,
                                 grand_totals_position="pinnedBottom",
                                 merge_headers=True,

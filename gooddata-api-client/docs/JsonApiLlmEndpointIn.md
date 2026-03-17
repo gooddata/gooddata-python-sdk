@@ -1,6 +1,6 @@
 # JsonApiLlmEndpointIn
 
-JSON:API representation of llmEndpoint entity.
+Will be soon removed and replaced by LlmProvider.
 
 ## Properties
 Name | Type | Description | Notes

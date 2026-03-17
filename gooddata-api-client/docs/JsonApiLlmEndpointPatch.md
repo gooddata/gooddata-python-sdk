@@ -1,6 +1,6 @@
 # JsonApiLlmEndpointPatch
 
-JSON:API representation of patching llmEndpoint entity.
+Will be soon removed and replaced by LlmProvider.
 
 ## Properties
 Name | Type | Description | Notes

@@ -9,7 +9,7 @@ Method | HTTP request | Description
 [**get_all_entities_filter_contexts**](FilterContextApi.md#get_all_entities_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Get all Filter Context
 [**get_entity_filter_contexts**](FilterContextApi.md#get_entity_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Get a Filter Context
 [**patch_entity_filter_contexts**](FilterContextApi.md#patch_entity_filter_contexts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Patch a Filter Context
-[**search_entities_filter_contexts**](FilterContextApi.md#search_entities_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts/search | Search request for FilterContext
+[**search_entities_filter_contexts**](FilterContextApi.md#search_entities_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts/search | The search endpoint (beta)
 [**update_entity_filter_contexts**](FilterContextApi.md#update_entity_filter_contexts) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Put a Filter Context
 
 
@@ -473,7 +473,7 @@ No authorization required
 # **search_entities_filter_contexts**
 > JsonApiFilterContextOutList search_entities_filter_contexts(workspace_id, entity_search_body)
 
-Search request for FilterContext
+The search endpoint (beta)
 
 ### Example
 
@@ -521,7 +521,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for FilterContext
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_filter_contexts(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -530,7 +530,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for FilterContext
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_filter_contexts(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

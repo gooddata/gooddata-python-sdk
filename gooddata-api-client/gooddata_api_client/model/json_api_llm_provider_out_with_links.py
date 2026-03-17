@@ -102,9 +102,9 @@ class JsonApiLlmProviderOutWithLinks(ModelComposed):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiLlmProviderInAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'attributes': (JsonApiLlmProviderInAttributes,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -114,9 +114,9 @@ class JsonApiLlmProviderOutWithLinks(ModelComposed):
 
 
     attribute_map = {
-        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'attributes': 'attributes',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
 
@@ -129,7 +129,6 @@ class JsonApiLlmProviderOutWithLinks(ModelComposed):
         """JsonApiLlmProviderOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            attributes (JsonApiLlmProviderInAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "llmProvider", must be one of ["llmProvider", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -162,6 +161,7 @@ class JsonApiLlmProviderOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiLlmProviderInAttributes): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -237,7 +237,6 @@ class JsonApiLlmProviderOutWithLinks(ModelComposed):
         """JsonApiLlmProviderOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            attributes (JsonApiLlmProviderInAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "llmProvider", must be one of ["llmProvider", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -270,6 +269,7 @@ class JsonApiLlmProviderOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiLlmProviderInAttributes): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 

@@ -4,18 +4,18 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_entity_custom_geo_collections**](GeographicDataApi.md#create_entity_custom_geo_collections) | **POST** /api/v1/entities/customGeoCollections | 
-[**delete_entity_custom_geo_collections**](GeographicDataApi.md#delete_entity_custom_geo_collections) | **DELETE** /api/v1/entities/customGeoCollections/{id} | 
-[**get_all_entities_custom_geo_collections**](GeographicDataApi.md#get_all_entities_custom_geo_collections) | **GET** /api/v1/entities/customGeoCollections | 
-[**get_entity_custom_geo_collections**](GeographicDataApi.md#get_entity_custom_geo_collections) | **GET** /api/v1/entities/customGeoCollections/{id} | 
-[**patch_entity_custom_geo_collections**](GeographicDataApi.md#patch_entity_custom_geo_collections) | **PATCH** /api/v1/entities/customGeoCollections/{id} | 
-[**update_entity_custom_geo_collections**](GeographicDataApi.md#update_entity_custom_geo_collections) | **PUT** /api/v1/entities/customGeoCollections/{id} | 
+[**create_entity_custom_geo_collections**](GeographicDataApi.md#create_entity_custom_geo_collections) | **POST** /api/v1/entities/customGeoCollections | Post Custom Geo Collections
+[**delete_entity_custom_geo_collections**](GeographicDataApi.md#delete_entity_custom_geo_collections) | **DELETE** /api/v1/entities/customGeoCollections/{id} | Delete Custom Geo Collection
+[**get_all_entities_custom_geo_collections**](GeographicDataApi.md#get_all_entities_custom_geo_collections) | **GET** /api/v1/entities/customGeoCollections | Get all Custom Geo Collections
+[**get_entity_custom_geo_collections**](GeographicDataApi.md#get_entity_custom_geo_collections) | **GET** /api/v1/entities/customGeoCollections/{id} | Get Custom Geo Collection
+[**patch_entity_custom_geo_collections**](GeographicDataApi.md#patch_entity_custom_geo_collections) | **PATCH** /api/v1/entities/customGeoCollections/{id} | Patch Custom Geo Collection
+[**update_entity_custom_geo_collections**](GeographicDataApi.md#update_entity_custom_geo_collections) | **PUT** /api/v1/entities/customGeoCollections/{id} | Put Custom Geo Collection
 
 
 # **create_entity_custom_geo_collections**
 > JsonApiCustomGeoCollectionOutDocument create_entity_custom_geo_collections(json_api_custom_geo_collection_in_document)
 
-
+Post Custom Geo Collections
 
 ### Example
 
@@ -51,6 +51,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post Custom Geo Collections
         api_response = api_instance.create_entity_custom_geo_collections(json_api_custom_geo_collection_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -89,7 +90,7 @@ No authorization required
 # **delete_entity_custom_geo_collections**
 > delete_entity_custom_geo_collections(id)
 
-
+Delete Custom Geo Collection
 
 ### Example
 
@@ -115,6 +116,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete Custom Geo Collection
         api_instance.delete_entity_custom_geo_collections(id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling GeographicDataApi->delete_entity_custom_geo_collections: %s\n" % e)
@@ -122,6 +124,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete Custom Geo Collection
         api_instance.delete_entity_custom_geo_collections(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling GeographicDataApi->delete_entity_custom_geo_collections: %s\n" % e)
@@ -160,7 +163,7 @@ No authorization required
 # **get_all_entities_custom_geo_collections**
 > JsonApiCustomGeoCollectionOutList get_all_entities_custom_geo_collections()
 
-
+Get all Custom Geo Collections
 
 ### Example
 
@@ -195,6 +198,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Custom Geo Collections
         api_response = api_instance.get_all_entities_custom_geo_collections(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -237,7 +241,7 @@ No authorization required
 # **get_entity_custom_geo_collections**
 > JsonApiCustomGeoCollectionOutDocument get_entity_custom_geo_collections(id)
 
-
+Get Custom Geo Collection
 
 ### Example
 
@@ -264,6 +268,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get Custom Geo Collection
         api_response = api_instance.get_entity_custom_geo_collections(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -272,6 +277,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Custom Geo Collection
         api_response = api_instance.get_entity_custom_geo_collections(id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -311,7 +317,7 @@ No authorization required
 # **patch_entity_custom_geo_collections**
 > JsonApiCustomGeoCollectionOutDocument patch_entity_custom_geo_collections(id, json_api_custom_geo_collection_patch_document)
 
-
+Patch Custom Geo Collection
 
 ### Example
 
@@ -349,6 +355,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch Custom Geo Collection
         api_response = api_instance.patch_entity_custom_geo_collections(id, json_api_custom_geo_collection_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -357,6 +364,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch Custom Geo Collection
         api_response = api_instance.patch_entity_custom_geo_collections(id, json_api_custom_geo_collection_patch_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -397,7 +405,7 @@ No authorization required
 # **update_entity_custom_geo_collections**
 > JsonApiCustomGeoCollectionOutDocument update_entity_custom_geo_collections(id, json_api_custom_geo_collection_in_document)
 
-
+Put Custom Geo Collection
 
 ### Example
 
@@ -435,6 +443,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put Custom Geo Collection
         api_response = api_instance.update_entity_custom_geo_collections(id, json_api_custom_geo_collection_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -443,6 +452,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put Custom Geo Collection
         api_response = api_instance.update_entity_custom_geo_collections(id, json_api_custom_geo_collection_in_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

@@ -70,9 +70,6 @@ class DeclarativeColumn(ModelNormal):
     validations = {
         ('name',): {
             'max_length': 255,
-            'regex': {
-                'pattern': r'^[^\x00]*$',  # noqa: E501
-            },
         },
         ('description',): {
             'max_length': 10000,

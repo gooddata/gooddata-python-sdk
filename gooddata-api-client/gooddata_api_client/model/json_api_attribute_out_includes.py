@@ -32,17 +32,17 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
-    from gooddata_api_client.model.json_api_attribute_hierarchy_out_attributes import JsonApiAttributeHierarchyOutAttributes
-    from gooddata_api_client.model.json_api_attribute_hierarchy_out_relationships import JsonApiAttributeHierarchyOutRelationships
     from gooddata_api_client.model.json_api_attribute_hierarchy_out_with_links import JsonApiAttributeHierarchyOutWithLinks
     from gooddata_api_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
+    from gooddata_api_client.model.json_api_label_out_attributes import JsonApiLabelOutAttributes
+    from gooddata_api_client.model.json_api_label_out_relationships import JsonApiLabelOutRelationships
     from gooddata_api_client.model.json_api_label_out_with_links import JsonApiLabelOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
     globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
-    globals()['JsonApiAttributeHierarchyOutAttributes'] = JsonApiAttributeHierarchyOutAttributes
-    globals()['JsonApiAttributeHierarchyOutRelationships'] = JsonApiAttributeHierarchyOutRelationships
     globals()['JsonApiAttributeHierarchyOutWithLinks'] = JsonApiAttributeHierarchyOutWithLinks
     globals()['JsonApiDatasetOutWithLinks'] = JsonApiDatasetOutWithLinks
+    globals()['JsonApiLabelOutAttributes'] = JsonApiLabelOutAttributes
+    globals()['JsonApiLabelOutRelationships'] = JsonApiLabelOutRelationships
     globals()['JsonApiLabelOutWithLinks'] = JsonApiLabelOutWithLinks
     globals()['ObjectLinks'] = ObjectLinks
 
@@ -73,7 +73,7 @@ class JsonApiAttributeOutIncludes(ModelComposed):
 
     allowed_values = {
         ('type',): {
-            'ATTRIBUTEHIERARCHY': "attributeHierarchy",
+            'LABEL': "label",
         },
     }
 
@@ -109,9 +109,9 @@ class JsonApiAttributeOutIncludes(ModelComposed):
         lazy_import()
         return {
             'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
-            'relationships': (JsonApiAttributeHierarchyOutRelationships,),  # noqa: E501
+            'relationships': (JsonApiLabelOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
-            'attributes': (JsonApiAttributeHierarchyOutAttributes,),  # noqa: E501
+            'attributes': (JsonApiLabelOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
@@ -170,11 +170,11 @@ class JsonApiAttributeOutIncludes(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiAttributeHierarchyOutRelationships): [optional]  # noqa: E501
+            relationships (JsonApiLabelOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            attributes (JsonApiAttributeHierarchyOutAttributes): [optional]  # noqa: E501
+            attributes (JsonApiLabelOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "attributeHierarchy"  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "label"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -279,11 +279,11 @@ class JsonApiAttributeOutIncludes(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiAttributeHierarchyOutRelationships): [optional]  # noqa: E501
+            relationships (JsonApiLabelOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            attributes (JsonApiAttributeHierarchyOutAttributes): [optional]  # noqa: E501
+            attributes (JsonApiLabelOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "attributeHierarchy"  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "label"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

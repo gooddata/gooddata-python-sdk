@@ -91,6 +91,8 @@ from gooddata_api_client.model.key_drivers_response import KeyDriversResponse
 from gooddata_api_client.model.key_drivers_result import KeyDriversResult
 from gooddata_api_client.model.knowledge_document_metadata_dto import KnowledgeDocumentMetadataDto
 from gooddata_api_client.model.list_knowledge_documents_response_dto import ListKnowledgeDocumentsResponseDto
+from gooddata_api_client.model.list_llm_provider_models_request import ListLlmProviderModelsRequest
+from gooddata_api_client.model.list_llm_provider_models_response import ListLlmProviderModelsResponse
 from gooddata_api_client.model.locale_request import LocaleRequest
 from gooddata_api_client.model.manage_dashboard_permissions_request_inner import ManageDashboardPermissionsRequestInner
 from gooddata_api_client.model.memory_item_created_by_users import MemoryItemCreatedByUsers
@@ -109,6 +111,7 @@ from gooddata_api_client.model.read_csv_file_manifests_request import ReadCsvFil
 from gooddata_api_client.model.read_csv_file_manifests_response import ReadCsvFileManifestsResponse
 from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
 from gooddata_api_client.model.resolved_llm_endpoints import ResolvedLlmEndpoints
+from gooddata_api_client.model.resolved_llms import ResolvedLlms
 from gooddata_api_client.model.resolved_setting import ResolvedSetting
 from gooddata_api_client.model.result_cache_metadata import ResultCacheMetadata
 from gooddata_api_client.model.scan_request import ScanRequest
@@ -125,10 +128,12 @@ from gooddata_api_client.model.switch_identity_provider_request import SwitchIde
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
 from gooddata_api_client.model.test_definition_request import TestDefinitionRequest
 from gooddata_api_client.model.test_destination_request import TestDestinationRequest
+from gooddata_api_client.model.test_llm_provider_by_id_request import TestLlmProviderByIdRequest
 from gooddata_api_client.model.test_llm_provider_definition_request import TestLlmProviderDefinitionRequest
 from gooddata_api_client.model.test_llm_provider_response import TestLlmProviderResponse
 from gooddata_api_client.model.test_request import TestRequest
 from gooddata_api_client.model.test_response import TestResponse
+from gooddata_api_client.model.trending_objects_result import TrendingObjectsResult
 from gooddata_api_client.model.trigger_automation_request import TriggerAutomationRequest
 from gooddata_api_client.model.trigger_quality_issues_calculation_response import TriggerQualityIssuesCalculationResponse
 from gooddata_api_client.model.upload_file_response import UploadFileResponse
@@ -4195,6 +4200,8 @@ class ActionsApi(object):
                     'size',
                     'page_token',
                     'meta_include',
+                    'state',
+                    'query',
                 ],
                 'required': [
                     'workspace_id',
@@ -4229,6 +4236,10 @@ class ActionsApi(object):
                         (str,),
                     'meta_include':
                         (str,),
+                    'state':
+                        (str,),
+                    'query':
+                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -4236,6 +4247,8 @@ class ActionsApi(object):
                     'size': 'size',
                     'page_token': 'pageToken',
                     'meta_include': 'metaInclude',
+                    'state': 'state',
+                    'query': 'query',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -4243,6 +4256,8 @@ class ActionsApi(object):
                     'size': 'query',
                     'page_token': 'query',
                     'meta_include': 'query',
+                    'state': 'query',
+                    'query': 'query',
                 },
                 'collection_format_map': {
                     'scopes': 'multi',
@@ -4293,6 +4308,105 @@ class ActionsApi(object):
                 },
                 'location_map': {
                     'data_source_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.list_llm_provider_models_endpoint = _Endpoint(
+            settings={
+                'response_type': (ListLlmProviderModelsResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/ai/llmProvider/listModels',
+                'operation_id': 'list_llm_provider_models',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'list_llm_provider_models_request',
+                ],
+                'required': [
+                    'list_llm_provider_models_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'list_llm_provider_models_request':
+                        (ListLlmProviderModelsRequest,),
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                    'list_llm_provider_models_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.list_llm_provider_models_by_id_endpoint = _Endpoint(
+            settings={
+                'response_type': (ListLlmProviderModelsResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/ai/llmProvider/{llmProviderId}/listModels',
+                'operation_id': 'list_llm_provider_models_by_id',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'llm_provider_id',
+                ],
+                'required': [
+                    'llm_provider_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'llm_provider_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'llm_provider_id': 'llmProviderId',
+                },
+                'location_map': {
+                    'llm_provider_id': 'path',
                 },
                 'collection_format_map': {
                 }
@@ -5582,6 +5696,62 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.resolve_llm_providers_endpoint = _Endpoint(
+            settings={
+                'response_type': (ResolvedLlms,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmProviders',
+                'operation_id': 'resolve_llm_providers',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'workspace_id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('workspace_id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.resolve_requested_entitlements_endpoint = _Endpoint(
             settings={
                 'response_type': ([ApiEntitlement],),
@@ -5829,6 +5999,74 @@ class ActionsApi(object):
             headers_map={
                 'accept': [
                     'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.retrieve_result_binary_endpoint = _Endpoint(
+            settings={
+                'response_type': (file_type,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/binary',
+                'operation_id': 'retrieve_result_binary',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'result_id',
+                    'x_gdc_cancel_token',
+                ],
+                'required': [
+                    'workspace_id',
+                    'result_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'workspace_id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('workspace_id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'result_id':
+                        (str,),
+                    'x_gdc_cancel_token':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'result_id': 'resultId',
+                    'x_gdc_cancel_token': 'X-GDC-CANCEL-TOKEN',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'result_id': 'path',
+                    'x_gdc_cancel_token': 'header',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.apache.arrow.file',
+                    'application/vnd.apache.arrow.stream'
                 ],
                 'content_type': [],
             },
@@ -6587,6 +6825,7 @@ class ActionsApi(object):
             params_map={
                 'all': [
                     'llm_provider_id',
+                    'test_llm_provider_by_id_request',
                 ],
                 'required': [
                     'llm_provider_id',
@@ -6606,12 +6845,15 @@ class ActionsApi(object):
                 'openapi_types': {
                     'llm_provider_id':
                         (str,),
+                    'test_llm_provider_by_id_request':
+                        (TestLlmProviderByIdRequest,),
                 },
                 'attribute_map': {
                     'llm_provider_id': 'llmProviderId',
                 },
                 'location_map': {
                     'llm_provider_id': 'path',
+                    'test_llm_provider_by_id_request': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -6620,7 +6862,9 @@ class ActionsApi(object):
                 'accept': [
                     'application/json'
                 ],
-                'content_type': [],
+                'content_type': [
+                    'application/json'
+                ]
             },
             api_client=api_client
         )
@@ -6671,6 +6915,62 @@ class ActionsApi(object):
                 'content_type': [
                     'application/json'
                 ]
+            },
+            api_client=api_client
+        )
+        self.trending_objects_endpoint = _Endpoint(
+            settings={
+                'response_type': (TrendingObjectsResult,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/trendingObjects',
+                'operation_id': 'trending_objects',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'workspace_id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('workspace_id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
             },
             api_client=api_client
         )
@@ -13274,6 +13574,8 @@ class ActionsApi(object):
             size (int): [optional] if omitted the server will use the default value of 50
             page_token (str): [optional]
             meta_include (str): [optional]
+            state (str): [optional]
+            query (str): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -13421,6 +13723,172 @@ class ActionsApi(object):
         kwargs['data_source_id'] = \
             data_source_id
         return self.list_files_endpoint.call_with_http_info(**kwargs)
+
+    def list_llm_provider_models(
+        self,
+        list_llm_provider_models_request,
+        **kwargs
+    ):
+        """List LLM Provider Models  # noqa: E501
+
+        Lists models available on an LLM provider with a full definition. For Azure AI Foundry providers, the model family will be set to UNKNOWN because the endpoint does not expose the family.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.list_llm_provider_models(list_llm_provider_models_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            list_llm_provider_models_request (ListLlmProviderModelsRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ListLlmProviderModelsResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['list_llm_provider_models_request'] = \
+            list_llm_provider_models_request
+        return self.list_llm_provider_models_endpoint.call_with_http_info(**kwargs)
+
+    def list_llm_provider_models_by_id(
+        self,
+        llm_provider_id,
+        **kwargs
+    ):
+        """List LLM Provider Models By Id  # noqa: E501
+
+        Lists models available on an existing LLM provider by its ID. For Azure AI Foundry providers, the model family will be set to UNKNOWN because the endpoint does not expose the family.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.list_llm_provider_models_by_id(llm_provider_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            llm_provider_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ListLlmProviderModelsResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['llm_provider_id'] = \
+            llm_provider_id
+        return self.list_llm_provider_models_by_id_endpoint.call_with_http_info(**kwargs)
 
     def list_workspace_user_groups(
         self,
@@ -15358,7 +15826,7 @@ class ActionsApi(object):
     ):
         """Get Active LLM Endpoints for this workspace  # noqa: E501
 
-        Returns a list of available LLM Endpoints  # noqa: E501
+        Will be soon removed and replaced by LlmProvider-based resolution.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -15433,6 +15901,89 @@ class ActionsApi(object):
         kwargs['workspace_id'] = \
             workspace_id
         return self.resolve_llm_endpoints_endpoint.call_with_http_info(**kwargs)
+
+    def resolve_llm_providers(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """Get Active LLM configuration for this workspace  # noqa: E501
+
+        Resolves the active LLM configuration for the given workspace. When the ENABLE_LLM_ENDPOINT_REPLACEMENT feature flag is enabled, returns LLM Providers with their associated models. Otherwise, falls back to the legacy LLM Endpoints.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.resolve_llm_providers(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str): Workspace identifier
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ResolvedLlms
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.resolve_llm_providers_endpoint.call_with_http_info(**kwargs)
 
     def resolve_requested_entitlements(
         self,
@@ -15778,6 +16329,94 @@ class ActionsApi(object):
         kwargs['result_id'] = \
             result_id
         return self.retrieve_result_endpoint.call_with_http_info(**kwargs)
+
+    def retrieve_result_binary(
+        self,
+        workspace_id,
+        result_id,
+        **kwargs
+    ):
+        """(BETA) Get a single execution result in Apache Arrow File or Stream format  # noqa: E501
+
+        (BETA) Gets a single execution result as an Apache Arrow IPC File or Stream format.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.retrieve_result_binary(workspace_id, result_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str): Workspace identifier
+            result_id (str): Result ID
+
+        Keyword Args:
+            x_gdc_cancel_token (str): [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            file_type
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['result_id'] = \
+            result_id
+        return self.retrieve_result_binary_endpoint.call_with_http_info(**kwargs)
 
     def retrieve_translations(
         self,
@@ -16907,6 +17546,7 @@ class ActionsApi(object):
             llm_provider_id (str):
 
         Keyword Args:
+            test_llm_provider_by_id_request (TestLlmProviderByIdRequest): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -17054,6 +17694,89 @@ class ActionsApi(object):
         kwargs['test_destination_request'] = \
             test_destination_request
         return self.test_notification_channel_endpoint.call_with_http_info(**kwargs)
+
+    def trending_objects(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """Get Trending Analytics Catalog Objects  # noqa: E501
+
+        Returns a list of trending objects for this workspace  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.trending_objects(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str): Workspace identifier
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            TrendingObjectsResult
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.trending_objects_endpoint.call_with_http_info(**kwargs)
 
     def trigger_automation(
         self,
@@ -17986,7 +18709,7 @@ class ActionsApi(object):
     ):
         """Validate LLM Endpoint  # noqa: E501
 
-        Validates LLM endpoint with provided parameters.  # noqa: E501
+        Will be soon removed and replaced by testLlmProvider.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -18069,7 +18792,7 @@ class ActionsApi(object):
     ):
         """Validate LLM Endpoint By Id  # noqa: E501
 
-        Validates existing LLM endpoint with provided parameters and updates it if they are valid.  # noqa: E501
+        Will be soon removed and replaced by testLlmProviderById.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

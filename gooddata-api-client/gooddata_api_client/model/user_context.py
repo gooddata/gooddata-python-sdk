@@ -32,7 +32,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.active_object_identification import ActiveObjectIdentification
+    from gooddata_api_client.model.object_reference_group import ObjectReferenceGroup
+    from gooddata_api_client.model.ui_context import UIContext
     globals()['ActiveObjectIdentification'] = ActiveObjectIdentification
+    globals()['ObjectReferenceGroup'] = ObjectReferenceGroup
+    globals()['UIContext'] = UIContext
 
 
 class UserContext(ModelNormal):
@@ -89,6 +93,8 @@ class UserContext(ModelNormal):
         lazy_import()
         return {
             'active_object': (ActiveObjectIdentification,),  # noqa: E501
+            'referenced_objects': ([ObjectReferenceGroup],),  # noqa: E501
+            'view': (UIContext,),  # noqa: E501
         }
 
     @cached_property
@@ -98,6 +104,8 @@ class UserContext(ModelNormal):
 
     attribute_map = {
         'active_object': 'activeObject',  # noqa: E501
+        'referenced_objects': 'referencedObjects',  # noqa: E501
+        'view': 'view',  # noqa: E501
     }
 
     read_only_vars = {
@@ -107,11 +115,8 @@ class UserContext(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, active_object, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """UserContext - a model defined in OpenAPI
-
-        Args:
-            active_object (ActiveObjectIdentification):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -144,6 +149,9 @@ class UserContext(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            active_object (ActiveObjectIdentification): [optional]  # noqa: E501
+            referenced_objects ([ObjectReferenceGroup]): Groups of explicitly referenced objects, each optionally scoped by a context (e.g. a dashboard context with widget references).. [optional]  # noqa: E501
+            view (UIContext): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -175,7 +183,6 @@ class UserContext(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.active_object = active_object
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -196,11 +203,8 @@ class UserContext(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, active_object, *args, **kwargs):  # noqa: E501
+    def __init__(self, *args, **kwargs):  # noqa: E501
         """UserContext - a model defined in OpenAPI
-
-        Args:
-            active_object (ActiveObjectIdentification):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -233,6 +237,9 @@ class UserContext(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            active_object (ActiveObjectIdentification): [optional]  # noqa: E501
+            referenced_objects ([ObjectReferenceGroup]): Groups of explicitly referenced objects, each optionally scoped by a context (e.g. a dashboard context with widget references).. [optional]  # noqa: E501
+            view (UIContext): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -262,7 +269,6 @@ class UserContext(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.active_object = active_object
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

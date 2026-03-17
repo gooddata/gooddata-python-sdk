@@ -1129,7 +1129,7 @@ class VisualizationObjectApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for VisualizationObject  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

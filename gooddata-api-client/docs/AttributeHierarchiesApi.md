@@ -9,7 +9,7 @@ Method | HTTP request | Description
 [**get_all_entities_attribute_hierarchies**](AttributeHierarchiesApi.md#get_all_entities_attribute_hierarchies) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies | Get all Attribute Hierarchies
 [**get_entity_attribute_hierarchies**](AttributeHierarchiesApi.md#get_entity_attribute_hierarchies) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Get an Attribute Hierarchy
 [**patch_entity_attribute_hierarchies**](AttributeHierarchiesApi.md#patch_entity_attribute_hierarchies) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Patch an Attribute Hierarchy
-[**search_entities_attribute_hierarchies**](AttributeHierarchiesApi.md#search_entities_attribute_hierarchies) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/search | Search request for AttributeHierarchy
+[**search_entities_attribute_hierarchies**](AttributeHierarchiesApi.md#search_entities_attribute_hierarchies) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/search | The search endpoint (beta)
 [**update_entity_attribute_hierarchies**](AttributeHierarchiesApi.md#update_entity_attribute_hierarchies) | **PUT** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Put an Attribute Hierarchy
 
 
@@ -473,7 +473,7 @@ No authorization required
 # **search_entities_attribute_hierarchies**
 > JsonApiAttributeHierarchyOutList search_entities_attribute_hierarchies(workspace_id, entity_search_body)
 
-Search request for AttributeHierarchy
+The search endpoint (beta)
 
 ### Example
 
@@ -521,7 +521,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for AttributeHierarchy
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_attribute_hierarchies(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -530,7 +530,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for AttributeHierarchy
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_attribute_hierarchies(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

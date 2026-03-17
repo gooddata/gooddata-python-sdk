@@ -33,23 +33,23 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
     from gooddata_api_client.model.json_api_attribute_out_with_links import JsonApiAttributeOutWithLinks
-    from gooddata_api_client.model.json_api_dataset_out_attributes import JsonApiDatasetOutAttributes
-    from gooddata_api_client.model.json_api_dataset_out_relationships import JsonApiDatasetOutRelationships
     from gooddata_api_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
     from gooddata_api_client.model.json_api_fact_out_with_links import JsonApiFactOutWithLinks
     from gooddata_api_client.model.json_api_label_out_with_links import JsonApiLabelOutWithLinks
     from gooddata_api_client.model.json_api_metric_out_with_links import JsonApiMetricOutWithLinks
+    from gooddata_api_client.model.json_api_user_group_in_attributes import JsonApiUserGroupInAttributes
+    from gooddata_api_client.model.json_api_user_group_in_relationships import JsonApiUserGroupInRelationships
     from gooddata_api_client.model.json_api_user_group_out_with_links import JsonApiUserGroupOutWithLinks
     from gooddata_api_client.model.json_api_user_out_with_links import JsonApiUserOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
     globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
     globals()['JsonApiAttributeOutWithLinks'] = JsonApiAttributeOutWithLinks
-    globals()['JsonApiDatasetOutAttributes'] = JsonApiDatasetOutAttributes
-    globals()['JsonApiDatasetOutRelationships'] = JsonApiDatasetOutRelationships
     globals()['JsonApiDatasetOutWithLinks'] = JsonApiDatasetOutWithLinks
     globals()['JsonApiFactOutWithLinks'] = JsonApiFactOutWithLinks
     globals()['JsonApiLabelOutWithLinks'] = JsonApiLabelOutWithLinks
     globals()['JsonApiMetricOutWithLinks'] = JsonApiMetricOutWithLinks
+    globals()['JsonApiUserGroupInAttributes'] = JsonApiUserGroupInAttributes
+    globals()['JsonApiUserGroupInRelationships'] = JsonApiUserGroupInRelationships
     globals()['JsonApiUserGroupOutWithLinks'] = JsonApiUserGroupOutWithLinks
     globals()['JsonApiUserOutWithLinks'] = JsonApiUserOutWithLinks
     globals()['ObjectLinks'] = ObjectLinks
@@ -81,7 +81,7 @@ class JsonApiUserDataFilterOutIncludes(ModelComposed):
 
     allowed_values = {
         ('type',): {
-            'DATASET': "dataset",
+            'USERGROUP': "userGroup",
         },
     }
 
@@ -116,10 +116,10 @@ class JsonApiUserDataFilterOutIncludes(ModelComposed):
         """
         lazy_import()
         return {
-            'relationships': (JsonApiDatasetOutRelationships,),  # noqa: E501
-            'links': (ObjectLinks,),  # noqa: E501
             'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
-            'attributes': (JsonApiDatasetOutAttributes,),  # noqa: E501
+            'relationships': (JsonApiUserGroupInRelationships,),  # noqa: E501
+            'links': (ObjectLinks,),  # noqa: E501
+            'attributes': (JsonApiUserGroupInAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
@@ -130,9 +130,9 @@ class JsonApiUserDataFilterOutIncludes(ModelComposed):
 
 
     attribute_map = {
+        'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
-        'meta': 'meta',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
@@ -177,12 +177,12 @@ class JsonApiUserDataFilterOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            relationships (JsonApiDatasetOutRelationships): [optional]  # noqa: E501
-            links (ObjectLinks): [optional]  # noqa: E501
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            attributes (JsonApiDatasetOutAttributes): [optional]  # noqa: E501
+            relationships (JsonApiUserGroupInRelationships): [optional]  # noqa: E501
+            links (ObjectLinks): [optional]  # noqa: E501
+            attributes (JsonApiUserGroupInAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "dataset"  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "userGroup"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -286,12 +286,12 @@ class JsonApiUserDataFilterOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            relationships (JsonApiDatasetOutRelationships): [optional]  # noqa: E501
-            links (ObjectLinks): [optional]  # noqa: E501
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            attributes (JsonApiDatasetOutAttributes): [optional]  # noqa: E501
+            relationships (JsonApiUserGroupInRelationships): [optional]  # noqa: E501
+            links (ObjectLinks): [optional]  # noqa: E501
+            attributes (JsonApiUserGroupInAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "dataset"  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "userGroup"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

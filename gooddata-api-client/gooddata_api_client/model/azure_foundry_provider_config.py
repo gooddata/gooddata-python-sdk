@@ -122,7 +122,7 @@ class AzureFoundryProviderConfig(ModelNormal):
 
         Args:
             auth (AzureFoundryProviderAuth):
-            endpoint (str): Azure AI inference endpoint URL.
+            endpoint (str): Azure OpenAI endpoint URL.
 
         Keyword Args:
             type (str): Provider type.. defaults to "AZURE_FOUNDRY", must be one of ["AZURE_FOUNDRY", ]  # noqa: E501
@@ -216,7 +216,7 @@ class AzureFoundryProviderConfig(ModelNormal):
 
         Args:
             auth (AzureFoundryProviderAuth):
-            endpoint (str): Azure AI inference endpoint URL.
+            endpoint (str): Azure OpenAI endpoint URL.
 
         Keyword Args:
             type (str): Provider type.. defaults to "AZURE_FOUNDRY", must be one of ["AZURE_FOUNDRY", ]  # noqa: E501
