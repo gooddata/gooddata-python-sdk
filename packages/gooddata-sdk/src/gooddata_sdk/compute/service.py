@@ -23,6 +23,7 @@ from gooddata_sdk.compute.model.execution import (
     ResultCacheMetadata,
     TableDimension,
 )
+from gooddata_sdk.compute.model.visualization_config import VisualizationConfig
 from gooddata_sdk.compute.visualization_to_sdk_converter import VisualizationToSdkConverter
 
 logger = logging.getLogger(__name__)
@@ -134,6 +135,23 @@ class ComputeService:
             attributes=attributes,
             is_cancellable=is_cancellable,
         )
+
+    def extract_visualization_config(self, chat_result: ChatResult) -> VisualizationConfig | None:
+        """
+        Extract VisualizationConfig from a ChatResult returned by ai_chat().
+
+        Args:
+            chat_result: ChatResult object as returned by ai_chat()
+        Returns:
+            VisualizationConfig if the first created visualization has a config, None otherwise
+        """
+        objects = chat_result.created_visualizations.get("objects", [])
+        if not objects:
+            return None
+        config_data = objects[0].get("config")
+        if config_data is None:
+            return None
+        return VisualizationConfig.from_dict(config_data)
 
     def ai_chat(self, workspace_id: str, question: str) -> ChatResult:
         """
