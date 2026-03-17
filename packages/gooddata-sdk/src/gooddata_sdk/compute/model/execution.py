@@ -372,6 +372,26 @@ class BareExecutionResponse:
             )
         return ExecutionResult(execution_result)
 
+    def read_result_binary(
+        self,
+        x_gdc_cancel_token: str | None = None,
+    ) -> Any:
+        """
+        Reads the execution result in Apache Arrow IPC binary format.
+
+        Note: This is a BETA endpoint. Unlike read_result(), it does not support paging parameters.
+        """
+        kwargs: dict[str, Any] = {"_check_return_type": False}
+        if x_gdc_cancel_token is not None:
+            kwargs["x_gdc_cancel_token"] = x_gdc_cancel_token
+        elif self.cancel_token is not None:
+            kwargs["x_gdc_cancel_token"] = self.cancel_token
+        return self._actions_api.retrieve_result_binary(
+            workspace_id=self._workspace_id,
+            result_id=self.result_id,
+            **kwargs,
+        )
+
     def cancel(self) -> None:
         """
         Cancels the execution backing this execution result.
@@ -463,6 +483,17 @@ class Execution:
         timeout: Union[int, float, tuple] | None = None,
     ) -> ExecutionResult:
         return self.bare_exec_response.read_result(limit, offset, timeout)
+
+    def read_result_binary(
+        self,
+        x_gdc_cancel_token: str | None = None,
+    ) -> Any:
+        """
+        Reads the execution result in Apache Arrow IPC binary format.
+
+        Note: This is a BETA endpoint. Unlike read_result(), it does not support paging parameters.
+        """
+        return self.bare_exec_response.read_result_binary(x_gdc_cancel_token=x_gdc_cancel_token)
 
     def cancel(self) -> None:
         """
