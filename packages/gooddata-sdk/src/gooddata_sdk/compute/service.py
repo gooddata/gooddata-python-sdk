@@ -332,9 +332,7 @@ class ComputeService:
         Returns:
             ConversationResponseListDto: List of conversation responses with optional feedback
         """
-        response = self._actions_api.get_conversation_responses(
-            workspace_id, conversation_id, _check_return_type=False
-        )
+        response = self._actions_api.get_conversation_responses(workspace_id, conversation_id, _check_return_type=False)
         return response
 
     def set_conversation_response_feedback(
