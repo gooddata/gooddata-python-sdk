@@ -219,6 +219,65 @@ def test_ai_chat_stream(test_config):
         sdk.compute.reset_ai_chat_history(test_workspace_id)
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "get_conversation_responses.yaml"))
+def test_get_conversation_responses(test_config):
+    """Test get conversation responses."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        conversation_id = "test-conversation-id"
+        response = sdk.compute.get_conversation_responses(test_workspace_id, conversation_id)
+        assert response is not None
+        assert hasattr(response, "responses")
+    finally:
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "set_conversation_response_feedback.yaml"))
+def test_set_conversation_response_feedback(test_config):
+    """Test set conversation response feedback."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        conversation_id = "test-conversation-id"
+        response_id = "test-response-id"
+        result = sdk.compute.set_conversation_response_feedback(
+            test_workspace_id, conversation_id, response_id, "POSITIVE"
+        )
+        assert result is None
+    finally:
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "set_conversation_response_feedback_with_text.yaml"))
+def test_set_conversation_response_feedback_with_text(test_config):
+    """Test set conversation response feedback with text."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        conversation_id = "test-conversation-id"
+        response_id = "test-response-id"
+        result = sdk.compute.set_conversation_response_feedback(
+            test_workspace_id,
+            conversation_id,
+            response_id,
+            "NEGATIVE",
+            feedback_text="The response was not helpful.",
+        )
+        assert result is None
+    finally:
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "build_exec_def_from_chat_result.yaml"))
 def test_build_exec_def_from_chat_result(test_config):
     """Test build execution definition from chat result."""

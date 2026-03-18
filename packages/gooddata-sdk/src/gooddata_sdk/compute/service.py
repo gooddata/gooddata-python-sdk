@@ -12,6 +12,9 @@ from gooddata_api_client.model.chat_history_request import ChatHistoryRequest
 from gooddata_api_client.model.chat_history_result import ChatHistoryResult
 from gooddata_api_client.model.chat_request import ChatRequest
 from gooddata_api_client.model.chat_result import ChatResult
+from gooddata_api_client.model.conversation_response_list_dto import ConversationResponseListDto
+from gooddata_api_client.model.response_feedback_dto import ResponseFeedbackDto
+from gooddata_api_client.model.response_feedback_request import ResponseFeedbackRequest
 from gooddata_api_client.model.saved_visualization import SavedVisualization
 from gooddata_api_client.model.search_request import SearchRequest
 from gooddata_api_client.model.search_result import SearchResult
@@ -314,6 +317,52 @@ class ComputeService:
         search_request = SearchRequest(question=question, **search_params)
         response = self._actions_api.ai_search(workspace_id, search_request, _check_return_type=False)
         return response
+
+    def get_conversation_responses(
+        self,
+        workspace_id: str,
+        conversation_id: str,
+    ) -> ConversationResponseListDto:
+        """
+        Get responses for a specific conversation.
+
+        Args:
+            workspace_id (str): workspace identifier
+            conversation_id (str): conversation identifier
+        Returns:
+            ConversationResponseListDto: List of conversation responses with optional feedback
+        """
+        response = self._actions_api.get_conversation_responses(
+            workspace_id, conversation_id, _check_return_type=False
+        )
+        return response
+
+    def set_conversation_response_feedback(
+        self,
+        workspace_id: str,
+        conversation_id: str,
+        response_id: str,
+        feedback_type: str,
+        feedback_text: str | None = None,
+    ) -> None:
+        """
+        Submit feedback for a specific conversation response.
+
+        Args:
+            workspace_id (str): workspace identifier
+            conversation_id (str): conversation identifier
+            response_id (str): response identifier to provide feedback for
+            feedback_type (str): feedback type ("POSITIVE" or "NEGATIVE")
+            feedback_text (str | None): optional feedback text. Defaults to None.
+        """
+        kwargs: dict[str, Any] = {}
+        if feedback_text is not None:
+            kwargs["text"] = feedback_text
+        feedback_dto = ResponseFeedbackDto(type=feedback_type, _check_type=False, **kwargs)
+        feedback_request = ResponseFeedbackRequest(feedback=feedback_dto, _check_type=False)
+        self._actions_api.patch_conversation_response(
+            workspace_id, conversation_id, response_id, feedback_request, _check_return_type=False
+        )
 
     def cancel_executions(self, executions: dict[str, dict[str, str]]) -> None:
         """
