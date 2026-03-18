@@ -1,0 +1,63 @@
+# =============================================================================
+# SDK Review Relay
+#
+# Minimal relay that forwards pull_request_review events to gdc-nas,
+# where the actual review-fix logic runs. Only fires for [AUTO] PRs
+# created by the SDK sync pipeline.
+#
+# SECRETS
+# -------
+# TOKEN_GITHUB_YENKINS_ADMIN — PAT with repo scope on gdc-nas
+#                               (needed for repository_dispatch)
+# =============================================================================
+name: SDK Review Relay
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  relay:
+    name: "Forward review to gdc-nas"
+    if: >-
+      (github.event.review.state == 'changes_requested'
+        || (github.event.review.state == 'commented' && github.event.review.body))
+      && github.event.pull_request.user.login == 'yenkins-admin'
+      && startsWith(github.event.pull_request.head.ref, 'feature/auto-P')
+      && github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Dispatch to gdc-nas
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
+          REVIEW_BODY: ${{ github.event.review.body }}
+        run: |
+          # Build JSON payload safely (review_body may contain quotes/newlines)
+          jq -nc \
+            --arg pr_number "${{ github.event.pull_request.number }}" \
+            --arg pr_branch "${{ github.event.pull_request.head.ref }}" \
+            --arg pr_author "${{ github.event.pull_request.user.login }}" \
+            --arg reviewer "${{ github.event.review.user.login }}" \
+            --arg review_id "${{ github.event.review.id }}" \
+            --arg review_state "${{ github.event.review.state }}" \
+            --arg review_body "$REVIEW_BODY" \
+            '{
+              event_type: "sdk-review-submitted",
+              client_payload: {
+                pr_number: $pr_number,
+                pr_branch: $pr_branch,
+                pr_author: $pr_author,
+                reviewer: $reviewer,
+                review_id: $review_id,
+                review_state: $review_state,
+                review_body: $review_body
+              }
+            }' | gh api "repos/gooddata/gdc-nas/dispatches" \
+              --method POST \
+              --input -
+
+          echo "## Dispatched to gdc-nas" >> "$GITHUB_STEP_SUMMARY"
+          echo "- PR: #${{ github.event.pull_request.number }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Reviewer: ${{ github.event.review.user.login }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- State: ${{ github.event.review.state }}" >> "$GITHUB_STEP_SUMMARY"
