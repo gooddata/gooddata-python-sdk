@@ -1494,7 +1494,7 @@
   "servers": [
     {
       "description": "Generated server url",
-      "url": "http://localhost:3000"
+      "url": "https://internal-testing.staging.stg11.panther.intgdc.com"
     },
     {
       "description": "GoodData.CN endpoint",

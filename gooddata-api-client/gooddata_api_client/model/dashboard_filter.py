@@ -31,14 +31,22 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.dashboard_arbitrary_attribute_filter import DashboardArbitraryAttributeFilter
+    from gooddata_api_client.model.dashboard_arbitrary_attribute_filter_arbitrary_attribute_filter import DashboardArbitraryAttributeFilterArbitraryAttributeFilter
     from gooddata_api_client.model.dashboard_attribute_filter import DashboardAttributeFilter
     from gooddata_api_client.model.dashboard_attribute_filter_attribute_filter import DashboardAttributeFilterAttributeFilter
     from gooddata_api_client.model.dashboard_date_filter import DashboardDateFilter
     from gooddata_api_client.model.dashboard_date_filter_date_filter import DashboardDateFilterDateFilter
+    from gooddata_api_client.model.dashboard_match_attribute_filter import DashboardMatchAttributeFilter
+    from gooddata_api_client.model.dashboard_match_attribute_filter_match_attribute_filter import DashboardMatchAttributeFilterMatchAttributeFilter
+    globals()['DashboardArbitraryAttributeFilter'] = DashboardArbitraryAttributeFilter
+    globals()['DashboardArbitraryAttributeFilterArbitraryAttributeFilter'] = DashboardArbitraryAttributeFilterArbitraryAttributeFilter
     globals()['DashboardAttributeFilter'] = DashboardAttributeFilter
     globals()['DashboardAttributeFilterAttributeFilter'] = DashboardAttributeFilterAttributeFilter
     globals()['DashboardDateFilter'] = DashboardDateFilter
     globals()['DashboardDateFilterDateFilter'] = DashboardDateFilterDateFilter
+    globals()['DashboardMatchAttributeFilter'] = DashboardMatchAttributeFilter
+    globals()['DashboardMatchAttributeFilterMatchAttributeFilter'] = DashboardMatchAttributeFilterMatchAttributeFilter
 
 
 class DashboardFilter(ModelComposed):
@@ -96,6 +104,8 @@ class DashboardFilter(ModelComposed):
         return {
             'attribute_filter': (DashboardAttributeFilterAttributeFilter,),  # noqa: E501
             'date_filter': (DashboardDateFilterDateFilter,),  # noqa: E501
+            'arbitrary_attribute_filter': (DashboardArbitraryAttributeFilterArbitraryAttributeFilter,),  # noqa: E501
+            'match_attribute_filter': (DashboardMatchAttributeFilterMatchAttributeFilter,),  # noqa: E501
         }
 
     @cached_property
@@ -106,6 +116,8 @@ class DashboardFilter(ModelComposed):
     attribute_map = {
         'attribute_filter': 'attributeFilter',  # noqa: E501
         'date_filter': 'dateFilter',  # noqa: E501
+        'arbitrary_attribute_filter': 'arbitraryAttributeFilter',  # noqa: E501
+        'match_attribute_filter': 'matchAttributeFilter',  # noqa: E501
     }
 
     read_only_vars = {
@@ -149,6 +161,8 @@ class DashboardFilter(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             attribute_filter (DashboardAttributeFilterAttributeFilter): [optional]  # noqa: E501
             date_filter (DashboardDateFilterDateFilter): [optional]  # noqa: E501
+            arbitrary_attribute_filter (DashboardArbitraryAttributeFilterArbitraryAttributeFilter): [optional]  # noqa: E501
+            match_attribute_filter (DashboardMatchAttributeFilterMatchAttributeFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -254,6 +268,8 @@ class DashboardFilter(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             attribute_filter (DashboardAttributeFilterAttributeFilter): [optional]  # noqa: E501
             date_filter (DashboardDateFilterDateFilter): [optional]  # noqa: E501
+            arbitrary_attribute_filter (DashboardArbitraryAttributeFilterArbitraryAttributeFilter): [optional]  # noqa: E501
+            match_attribute_filter (DashboardMatchAttributeFilterMatchAttributeFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -325,7 +341,9 @@ class DashboardFilter(ModelComposed):
           'allOf': [
           ],
           'oneOf': [
+              DashboardArbitraryAttributeFilter,
               DashboardAttributeFilter,
               DashboardDateFilter,
+              DashboardMatchAttributeFilter,
           ],
         }

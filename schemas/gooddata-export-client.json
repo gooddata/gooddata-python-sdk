@@ -763,6 +763,54 @@
         },
         "type": "object"
       },
+      "DashboardArbitraryAttributeFilter": {
+        "properties": {
+          "arbitraryAttributeFilter": {
+            "properties": {
+              "displayForm": {
+                "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "filterElementsBy": {
+                "items": {
+                  "$ref": "#/components/schemas/AttributeFilterParent"
+                },
+                "type": "array"
+              },
+              "filterElementsByDate": {
+                "items": {
+                  "$ref": "#/components/schemas/AttributeFilterByDate"
+                },
+                "type": "array"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "negativeSelection": {
+                "type": "boolean"
+              },
+              "title": {
+                "type": "string"
+              },
+              "values": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "displayForm",
+              "negativeSelection",
+              "values"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "arbitraryAttributeFilter"
+        ],
+        "type": "object"
+      },
       "DashboardAttributeFilter": {
         "properties": {
           "attributeFilter": {
@@ -962,7 +1010,59 @@
           },
           {
             "$ref": "#/components/schemas/DashboardDateFilter"
+          },
+          {
+            "$ref": "#/components/schemas/DashboardArbitraryAttributeFilter"
+          },
+          {
+            "$ref": "#/components/schemas/DashboardMatchAttributeFilter"
           }
+        ],
+        "type": "object"
+      },
+      "DashboardMatchAttributeFilter": {
+        "properties": {
+          "matchAttributeFilter": {
+            "properties": {
+              "caseSensitive": {
+                "type": "boolean"
+              },
+              "displayForm": {
+                "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "literal": {
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "negativeSelection": {
+                "type": "boolean"
+              },
+              "operator": {
+                "enum": [
+                  "contains",
+                  "startsWith",
+                  "endsWith"
+                ],
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "caseSensitive",
+              "displayForm",
+              "literal",
+              "negativeSelection",
+              "operator"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "matchAttributeFilter"
         ],
         "type": "object"
       },

@@ -80,6 +80,7 @@ class JsonApiLabelOutAttributes(ModelNormal):
             'GEO_AREA': "GEO_AREA",
             'GEO_ICON': "GEO_ICON",
             'IMAGE': "IMAGE",
+            'HYPERLOGLOG': "HYPERLOGLOG",
         },
     }
 
