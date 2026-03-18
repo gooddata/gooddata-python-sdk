@@ -1,8 +1,11 @@
 # (C) 2024 GoodData Corporation
+from __future__ import annotations
+
 import builtins
 from typing import Any
 
 from attrs import define, field
+from gooddata_api_client.model.automation_alert import AutomationAlert
 from gooddata_api_client.model.automation_schedule import AutomationSchedule
 from gooddata_api_client.model.automation_tabular_export import AutomationTabularExport
 from gooddata_api_client.model.automation_visual_export import AutomationVisualExport
@@ -19,6 +22,16 @@ from gooddata_sdk.catalog.identifier import (
     CatalogUserIdentifier,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.base import CatalogAnalyticsBaseMeta
+
+
+@define(kw_only=True)
+class CatalogAutomationAlert(Base):
+    trigger: str | None = None
+    interval: str | None = None
+
+    @staticmethod
+    def client_class() -> builtins.type[AutomationAlert]:
+        return AutomationAlert
 
 
 @define(kw_only=True)
@@ -65,6 +78,7 @@ class CatalogDeclarativeAutomation(CatalogAnalyticsBaseMeta):
     schedule: CatalogAutomationSchedule | None = None
     tabular_exports: list[CatalogAutomationTabularExport] | None = None
     visual_exports: list[CatalogAutomationVisualExport] | None = None
+    alert: CatalogAutomationAlert | None = None
 
     @staticmethod
     def client_class() -> builtins.type[DeclarativeAutomation]:

@@ -191,6 +191,7 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
     CatalogDeclarativeExportDefinitionRequestPayload,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.automation import (
+    CatalogAutomationAlert,
     CatalogAutomationSchedule,
     CatalogDeclarativeAutomation,
 )

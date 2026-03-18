@@ -8,6 +8,7 @@ from xml.etree import ElementTree as ET
 import yaml
 from gooddata_sdk import (
     BasicCredentials,
+    CatalogAutomationAlert,
     CatalogAutomationSchedule,
     CatalogDataSourcePostgres,
     CatalogDeclarativeAutomation,
@@ -1032,3 +1033,30 @@ def test_layout_filter_views(test_config):
         assert filter_views_expected == filter_views_o
     finally:
         safe_delete(sdk.catalog_workspace.put_declarative_filter_views, workspace_id, [])
+
+
+def test_catalog_automation_alert_serialization():
+    alert = CatalogAutomationAlert(trigger="ONCE_PER_INTERVAL", interval="DAY")
+    api_model = alert.to_api()
+    result = CatalogAutomationAlert.from_api(api_model.to_dict(camel_case=False))
+    assert result.trigger == "ONCE_PER_INTERVAL"
+    assert result.interval == "DAY"
+
+
+def test_catalog_automation_alert_defaults():
+    alert = CatalogAutomationAlert()
+    assert alert.trigger is None
+    assert alert.interval is None
+
+
+def test_catalog_declarative_automation_with_alert():
+    automation = CatalogDeclarativeAutomation(
+        id="test-automation",
+        title="Test Automation",
+        alert=CatalogAutomationAlert(trigger="ONCE_PER_INTERVAL", interval="WEEK"),
+    )
+    api_model = automation.to_api()
+    result = CatalogDeclarativeAutomation.from_api(api_model.to_dict(camel_case=False))
+    assert result.alert is not None
+    assert result.alert.trigger == "ONCE_PER_INTERVAL"
+    assert result.alert.interval == "WEEK"
