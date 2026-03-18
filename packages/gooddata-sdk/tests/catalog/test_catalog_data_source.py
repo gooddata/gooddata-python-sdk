@@ -11,6 +11,7 @@ from gooddata_api_client.model.json_api_data_source_in_attributes import JsonApi
 from gooddata_sdk import (
     BasicCredentials,
     CatalogDataSource,
+    CatalogDataSourceAiLakehouse,
     CatalogDataSourceBigQuery,
     CatalogDataSourceDatabricks,
     CatalogDataSourceMariaDb,
@@ -892,3 +893,30 @@ def test_jdbc_urls_creation(
         ),
     )
     assert data_source.url == url
+
+
+def test_ai_lakehouse_data_source_construction():
+    """CatalogDataSourceAiLakehouse can be constructed with only id and name.
+
+    The backend strips url, token, schema, and parameters for AI Lakehouse data sources,
+    so the wrapper class does not require those fields.
+    """
+    ds = CatalogDataSourceAiLakehouse(id="ailakehouse-ds", name="AI Lakehouse")
+    assert ds.type == "AILAKEHOUSE"
+    assert ds.id == "ailakehouse-ds"
+    assert ds.name == "AI Lakehouse"
+    assert ds.schema == ""
+    assert ds.url is None
+    assert ds.parameters is None
+
+
+def test_ai_lakehouse_data_source_to_api():
+    """CatalogDataSourceAiLakehouse serializes correctly — no credential fields leaked."""
+    ds = CatalogDataSourceAiLakehouse(id="ailakehouse-ds", name="AI Lakehouse")
+    api_doc = ds.to_api()
+    attrs = api_doc.data.attributes
+    assert attrs.type == "AILAKEHOUSE"
+    assert attrs.name == "AI Lakehouse"
+    # url and schema are empty/None — not set on the API model
+    assert not getattr(attrs, "url", None)
+    assert not getattr(attrs, "token", None)

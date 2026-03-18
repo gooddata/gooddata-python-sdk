@@ -318,3 +318,17 @@ class CatalogDataSourceGdStorage(CatalogDataSource):
     type: str = "GDSTORAGE"
     schema: str = ""
     credentials: Credentials = field(factory=_NoCredentials, repr=False)
+
+
+@define(kw_only=True, eq=False)
+class CatalogDataSourceAiLakehouse(CatalogDataSource):
+    """AI Lakehouse data source.
+
+    Note: The backend does not expose connection details (url, token, schema, parameters)
+    for AI Lakehouse data sources — these fields are stripped on the server side.
+    Only id, name, type, cache_strategy, and permissions are preserved.
+    """
+
+    type: str = "AILAKEHOUSE"
+    schema: str = ""
+    credentials: Credentials = field(factory=_NoCredentials, repr=False)
