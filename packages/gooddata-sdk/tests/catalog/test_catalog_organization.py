@@ -591,9 +591,7 @@ def test_resolve_llm_providers_returns_provider():
     service = CatalogOrganizationService(mock_client)
     result = service.resolve_llm_providers("demo-workspace")
 
-    mock_client.actions_api.resolve_llm_providers.assert_called_once_with(
-        "demo-workspace", _check_return_type=False
-    )
+    mock_client.actions_api.resolve_llm_providers.assert_called_once_with("demo-workspace", _check_return_type=False)
     assert isinstance(result, CatalogResolvedLlms)
     assert isinstance(result.data, CatalogResolvedLlmProvider)
     assert result.data.id == "my-provider"
