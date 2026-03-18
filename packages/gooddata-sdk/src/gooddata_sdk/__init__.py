@@ -278,6 +278,7 @@ from gooddata_sdk.compute.model.filter import (
     CompoundMetricValueFilter,
     Filter,
     InlineFilter,
+    MatchAttributeFilter,
     MetricValueComparisonCondition,
     MetricValueFilter,
     MetricValueRangeCondition,

@@ -21,6 +21,7 @@ from gooddata_api_client.models import (
 from gooddata_api_client.models import (
     CompoundMeasureValueFilterCompoundMeasureValueFilter as CompoundMeasureValueFilterBody,
 )
+from gooddata_api_client.models import MatchAttributeFilterMatchAttributeFilter as MatchAttributeFilterBody
 from gooddata_api_client.models import NegativeAttributeFilterNegativeAttributeFilter as NegativeAttributeFilterBody
 from gooddata_api_client.models import PositiveAttributeFilterPositiveAttributeFilter as PositiveAttributeFilterBody
 from gooddata_api_client.models import RangeMeasureValueFilterRangeMeasureValueFilter as RangeMeasureValueFilterBody
@@ -150,6 +151,109 @@ class NegativeAttributeFilter(AttributeFilter):
         label_id = self.label.id if isinstance(self.label, ObjId) else self.label
         values = "All except " + ", ".join(self.values) if len(self.values) else "All"
         return f"{labels.get(label_id, label_id)}: {values}"
+
+
+# mapping between the allowed match operators and their human-readable descriptions
+_ATTRIBUTE_MATCH_OPERATORS: dict[str, str] = {
+    "STARTS_WITH": "starts with",
+    "ENDS_WITH": "ends with",
+    "CONTAINS": "contains",
+}
+
+
+class MatchAttributeFilter(Filter):
+    def __init__(
+        self,
+        label: Union[ObjId, str, Attribute],
+        literal: str,
+        match_type: str,
+        negate: bool = False,
+        case_sensitive: bool = False,
+    ) -> None:
+        super().__init__()
+
+        self._label = _extract_id_or_local_id(label)
+        self._literal = literal
+
+        if match_type not in _ATTRIBUTE_MATCH_OPERATORS:
+            raise ValueError(
+                f"Match type must be one of {', '.join(_ATTRIBUTE_MATCH_OPERATORS.keys())}, got: {match_type}"
+            )
+
+        self._match_type = match_type
+        self._negate = negate
+        self._case_sensitive = case_sensitive
+
+    @property
+    def label(self) -> Union[ObjId, str]:
+        return self._label
+
+    @label.setter
+    def label(self, label: Union[ObjId, str]) -> None:
+        self._label = label
+
+    @property
+    def literal(self) -> str:
+        return self._literal
+
+    @literal.setter
+    def literal(self, literal: str) -> None:
+        self._literal = literal
+
+    @property
+    def match_type(self) -> str:
+        return self._match_type
+
+    @match_type.setter
+    def match_type(self, match_type: str) -> None:
+        self._match_type = match_type
+
+    @property
+    def negate(self) -> bool:
+        return self._negate
+
+    @negate.setter
+    def negate(self, negate: bool) -> None:
+        self._negate = negate
+
+    @property
+    def case_sensitive(self) -> bool:
+        return self._case_sensitive
+
+    @case_sensitive.setter
+    def case_sensitive(self, case_sensitive: bool) -> None:
+        self._case_sensitive = case_sensitive
+
+    def is_noop(self) -> bool:
+        return (not self._negate) and (not self._literal)
+
+    def as_api_model(self) -> afm_models.MatchAttributeFilter:
+        label_id = _to_identifier(self._label)
+        body = MatchAttributeFilterBody(
+            label=label_id,
+            literal=self._literal,
+            match_type=self._match_type,
+            negate=self._negate,
+            case_sensitive=self._case_sensitive,
+        )
+        return afm_models.MatchAttributeFilter(body)
+
+    def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
+        label_id = self.label.id if isinstance(self.label, ObjId) else self.label
+        prefix = "not " if self._negate else ""
+        return (
+            f"{labels.get(label_id, label_id)}: {prefix}{_ATTRIBUTE_MATCH_OPERATORS[self._match_type]} {self.literal}"
+        )
+
+    def __eq__(self, other: object) -> bool:
+        return (
+            isinstance(other, MatchAttributeFilter)
+            and self._label == other._label
+            and self._literal == other._literal
+            and self._match_type == other._match_type
+            and self._negate == other._negate
+            and self._case_sensitive == other._case_sensitive
+        )
 
 
 _GRANULARITY: set[str] = {
@@ -557,7 +661,7 @@ class MetricValueFilter(Filter):
     def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
         metric_id = self.metric.id if isinstance(self.metric, ObjId) else self.metric
         if self.operator in ["BETWEEN", "NOT_BETWEEN"] and len(self.values) == 2:
-            not_between = "not" if self.operator == "NOT_BETWEEN" else ""
+            not_between = "not " if self.operator == "NOT_BETWEEN" else ""
             values = cast(tuple[float, float], self.values)
             return f"{labels.get(metric_id, metric_id)}: {not_between}between {values[0]} - {values[1]}"
         else:
