@@ -290,7 +290,7 @@ class ComputeService:
             deep_search (bool): turn on deep search - if true, content of complex objects will be searched as well
             limit (Optional[int]): maximum number of results to return. Defaults to None.
             object_types (Optional[list[str]]): list of object types to search for. Enum items: "attribute", "metric", "fact",
-                "label", "date", "dataset", "visualization" and "dashboard". Defaults to None.
+                "label", "date", "dataset", "visualization", "dashboard", "date_attribute" and "filter_context". Defaults to None.
             relevant_score_threshold (Optional[float]): minimum relevance score threshold for results. Defaults to None.
             title_to_descriptor_ratio (Optional[float]): ratio of title score to descriptor score. Defaults to None.
 

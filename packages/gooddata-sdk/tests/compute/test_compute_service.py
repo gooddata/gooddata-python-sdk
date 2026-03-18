@@ -238,3 +238,23 @@ def test_build_exec_def_from_chat_result(test_config):
     finally:
         sdk.catalog_workspace.delete_workspace(test_workspace_id)
         sdk.compute.reset_ai_chat_history(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "ai_search_filter_context.yaml"))
+def test_search_ai_filter_context_object_type(test_config):
+    """Test AI search with filter_context object type."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        result = sdk.compute.search_ai(
+            workspace_id=test_workspace_id,
+            question="filter context",
+            object_types=["filter_context"],
+        )
+        assert result is not None
+        assert hasattr(result, "results")
+    finally:
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
