@@ -318,3 +318,10 @@ class CatalogDataSourceGdStorage(CatalogDataSource):
     type: str = "GDSTORAGE"
     schema: str = ""
     credentials: Credentials = field(factory=_NoCredentials, repr=False)
+
+
+@define(kw_only=True, eq=False)
+class CatalogDataSourceAiLakehouse(CatalogDataSource):
+    type: str = "AILAKEHOUSE"
+    schema: str = ""
+    credentials: Credentials = field(factory=_NoCredentials, repr=False)

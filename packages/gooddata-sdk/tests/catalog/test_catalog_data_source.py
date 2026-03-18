@@ -11,6 +11,7 @@ from gooddata_api_client.model.json_api_data_source_in_attributes import JsonApi
 from gooddata_sdk import (
     BasicCredentials,
     CatalogDataSource,
+    CatalogDataSourceAiLakehouse,
     CatalogDataSourceBigQuery,
     CatalogDataSourceDatabricks,
     CatalogDataSourceMariaDb,
@@ -892,3 +893,26 @@ def test_jdbc_urls_creation(
         ),
     )
     assert data_source.url == url
+
+
+def test_ailakehouse_datasource_instantiation():
+    ds = CatalogDataSourceAiLakehouse(id="ailakehouse-1", name="AI Lakehouse")
+    assert ds.id == "ailakehouse-1"
+    assert ds.name == "AI Lakehouse"
+    assert ds.type == "AILAKEHOUSE"
+    assert ds.schema == ""
+    assert ds.url is None
+
+
+def test_ailakehouse_datasource_from_api():
+    entity = {
+        "id": "ailakehouse-1",
+        "attributes": {
+            "name": "AI Lakehouse",
+            "type": "AILAKEHOUSE",
+            "schema": "",
+        },
+    }
+    ds = CatalogDataSourceAiLakehouse.from_api(entity)
+    assert ds.id == "ailakehouse-1"
+    assert ds.type == "AILAKEHOUSE"
