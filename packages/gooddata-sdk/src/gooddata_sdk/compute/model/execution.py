@@ -372,6 +372,21 @@ class BareExecutionResponse:
             )
         return ExecutionResult(execution_result)
 
+    def read_result_binary(self) -> bytes:
+        """
+        Reads execution result in binary Apache Arrow format.
+
+        The server performs content negotiation based on the Accept header and returns
+        either Apache Arrow IPC File or Stream format.
+        """
+        response = self._actions_api.retrieve_result_binary(
+            workspace_id=self._workspace_id,
+            result_id=self.result_id,
+            _check_return_type=False,
+            _preload_content=False,
+        )
+        return response.data
+
     def cancel(self) -> None:
         """
         Cancels the execution backing this execution result.
@@ -463,6 +478,12 @@ class Execution:
         timeout: Union[int, float, tuple] | None = None,
     ) -> ExecutionResult:
         return self.bare_exec_response.read_result(limit, offset, timeout)
+
+    def read_result_binary(self) -> bytes:
+        """
+        Reads execution result in binary Apache Arrow format.
+        """
+        return self.bare_exec_response.read_result_binary()
 
     def cancel(self) -> None:
         """
