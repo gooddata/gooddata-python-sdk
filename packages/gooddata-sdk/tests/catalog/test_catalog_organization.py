@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import (
@@ -11,9 +12,12 @@ from gooddata_sdk import (
     CatalogOrganization,
     CatalogOrganizationSetting,
     CatalogRsaSpecification,
+    CatalogResolvedLlmProvider,
+    CatalogResolvedLlms,
     CatalogWebhook,
     GoodDataSdk,
 )
+from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
 from tests_support.vcrpy_utils import get_vcr
 
 from .conftest import safe_delete
@@ -561,3 +565,55 @@ def test_layout_notification_channels(test_config, snapshot_notification_channel
 #         sdk.catalog_organization.put_declarative_identity_providers([])
 #         idps = sdk.catalog_organization.get_declarative_identity_providers()
 #         assert len(idps) == 0
+
+
+def test_resolve_llm_providers_returns_provider():
+    """Unit test: resolve_llm_providers wraps API response into CatalogResolvedLlms."""
+    mock_client = MagicMock()
+
+    # Build a fake LlmModel-like object
+    mock_model = MagicMock()
+    mock_model.id = "gpt-4o"
+    mock_model.family = "OPENAI"
+
+    # Build a fake ResolvedLlmProvider-like API response object
+    mock_data = MagicMock()
+    mock_data.id = "my-provider"
+    mock_data.title = "My Provider"
+    mock_data.models = [mock_model]
+
+    # Build a fake ResolvedLlms-like API response object
+    mock_response = MagicMock()
+    mock_response.data = mock_data
+
+    mock_client.actions_api.resolve_llm_providers.return_value = mock_response
+
+    service = CatalogOrganizationService(mock_client)
+    result = service.resolve_llm_providers("demo-workspace")
+
+    mock_client.actions_api.resolve_llm_providers.assert_called_once_with(
+        "demo-workspace", _check_return_type=False
+    )
+    assert isinstance(result, CatalogResolvedLlms)
+    assert isinstance(result.data, CatalogResolvedLlmProvider)
+    assert result.data.id == "my-provider"
+    assert result.data.title == "My Provider"
+    assert len(result.data.models) == 1
+    assert result.data.models[0].id == "gpt-4o"
+    assert result.data.models[0].family == "OPENAI"
+
+
+def test_resolve_llm_providers_returns_none_data():
+    """Unit test: resolve_llm_providers returns CatalogResolvedLlms with data=None when no provider."""
+    mock_client = MagicMock()
+
+    mock_response = MagicMock()
+    mock_response.data = None
+
+    mock_client.actions_api.resolve_llm_providers.return_value = mock_response
+
+    service = CatalogOrganizationService(mock_client)
+    result = service.resolve_llm_providers("demo-workspace")
+
+    assert isinstance(result, CatalogResolvedLlms)
+    assert result.data is None

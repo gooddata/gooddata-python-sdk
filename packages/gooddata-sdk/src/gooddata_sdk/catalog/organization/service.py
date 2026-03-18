@@ -29,6 +29,7 @@ from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
     CatalogLlmProviderPatch,
     CatalogLlmProviderPatchDocument,
 )
+from gooddata_sdk.catalog.organization.entity_model.resolved_llm_provider import CatalogResolvedLlms
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
 from gooddata_sdk.catalog.organization.layout.identity_provider import CatalogDeclarativeIdentityProvider
 from gooddata_sdk.catalog.organization.layout.notification_channel import CatalogDeclarativeNotificationChannel
@@ -583,6 +584,22 @@ class CatalogOrganizationService(CatalogServiceBase):
             id: LLM provider identifier
         """
         self._entities_api.delete_entity_llm_providers(id, _check_return_type=False)
+
+    def resolve_llm_providers(self, workspace_id: str) -> CatalogResolvedLlms:
+        """Resolve the active LLM configuration for a workspace.
+
+        When the ENABLE_LLM_ENDPOINT_REPLACEMENT feature flag is enabled, returns LLM
+        Providers with their associated models. Otherwise, falls back to the legacy
+        LLM Endpoints.
+
+        Args:
+            workspace_id: Workspace identifier
+
+        Returns:
+            CatalogResolvedLlms: Resolved LLMs containing the active provider or endpoint.
+        """
+        response = self._actions_api.resolve_llm_providers(workspace_id, _check_return_type=False)
+        return CatalogResolvedLlms.from_api_model(response)
 
     # Layout APIs
 
