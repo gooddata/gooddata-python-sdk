@@ -54,31 +54,27 @@ if git cat-file -e "$GRIFFE_GEN_FILE" 2>/dev/null || git cat-file -e "$LEGACY_GE
         rm -f api_spec.toml
     fi
 
-    # Generate API introspection data — prefer griffe (static analysis, no imports needed)
-    if git cat-file -e "$GRIFFE_GEN_FILE" 2>/dev/null; then
-        echo "Using griffe_builder.py (static analysis)"
-        python3 ../scripts/docs/griffe_builder.py \
-            --search-path ../packages/gooddata-sdk/src \
-            --search-path ../packages/gooddata-pandas/src \
-            --output data.json \
-            gooddata_sdk gooddata_pandas
-    else
-        echo "Falling back to json_builder.py (runtime introspection)"
-        python3 ../scripts/docs/json_builder.py
-    fi
+    # Generate API introspection data using griffe (static analysis, no imports needed).
+    # Always use the current branch's griffe_builder.py — it works on any branch's
+    # source code via --search-path and doesn't require the SDK packages to be installed.
+    python3 ../scripts/docs/griffe_builder.py \
+        --search-path ../packages/gooddata-sdk/src \
+        --search-path ../packages/gooddata-pandas/src \
+        --output data.json \
+        gooddata_sdk gooddata_pandas
 
     # Generate API reference markdown files and export links for method page renderer
     python3 ../scripts/docs/python_ref_builder.py api_spec.toml \
         data.json "$section" "$content_dir" \
         --export-links links.json
 
-    # Pre-render method pages with api_ref directives
-    if git cat-file -e "$branch:scripts/docs/method_page_renderer.py" 2>/dev/null; then
-        echo "Pre-rendering method pages for section $section..."
-        python3 ../scripts/docs/method_page_renderer.py \
-            data.json "$content_dir/$section" \
-            --links-json links.json
-    fi
+    # Pre-render method pages with api_ref directives.
+    # Always use the current branch's renderer — old branches have Hugo shortcodes
+    # (parameters-block, parameter) whose templates were removed.
+    echo "Pre-rendering method pages for section $section..."
+    python3 ../scripts/docs/method_page_renderer.py \
+        data.json "$content_dir/$section" \
+        --links-json links.json
 
     # Clean up intermediate files (no longer needed after pre-rendering)
     rm -f data.json links.json

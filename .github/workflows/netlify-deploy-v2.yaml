@@ -44,7 +44,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: docs/versioned_docs/${{ matrix.version.section }}
-          key: version-docs-${{ hashFiles('scripts/docs/*.py', 'scripts/docs/templates/**', 'docs/*_template.md') }}-${{ matrix.version.section }}-${{ steps.sha.outputs.sha }}
+          key: version-docs-${{ hashFiles('scripts/docs/*.py', 'scripts/docs/templates/**', 'docs/*_template.md', 'docs/layouts/shortcodes/**') }}-${{ matrix.version.section }}-${{ steps.sha.outputs.sha }}
       - name: Checkout
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v4
@@ -67,9 +67,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r scripts/script-requirements.txt
-          # json_builder.py (legacy fallback for branches without griffe_builder.py)
-          # imports gooddata_sdk and gooddata_pandas at runtime, so they must be installed.
-          pip install -e gooddata-api-client/ -e packages/gooddata-sdk/ -e packages/gooddata-pandas/
       - name: Generate version docs
         if: steps.cache.outputs.cache-hit != 'true'
         run: bash scripts/generate-single-version.sh "origin/${{ matrix.version.branch }}" "${{ matrix.version.section }}"

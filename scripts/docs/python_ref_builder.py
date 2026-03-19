@@ -242,12 +242,14 @@ def render_class_html(class_data: dict, parent_name: str, import_path: str, reso
             continue
         fds = fdata.get("docstring_parsed")
         desc = resolver.all_links(fds.get("short_description", "")) if fds else ""
+        # Link to the method's own child page (relative), not the global links dict
+        local_link = f'<a href="{fname.lower()}/">{fname}</a>'
         if fdata.get("is_property"):
-            properties.append({"name_link": resolver.type_link(fname), "description": desc})
+            properties.append({"name_link": local_link, "description": desc})
         else:
             methods.append(
                 {
-                    "name_link": resolver.type_link(fname),
+                    "name_link": local_link,
                     "signature": _function_signature(fdata),
                     "description": desc,
                 }
@@ -263,7 +265,9 @@ def render_module_html(module_data: dict, resolver: LinkResolver) -> str:
     for obj_name, obj_data in module_data.items():
         if obj_name == "kind" or not isinstance(obj_data, dict):
             continue
-        entries.append({"kind": obj_data.get("kind", ""), "name_link": resolver.type_link(obj_name)})
+        # Link to the child page (relative), not the global links dict
+        local_link = f'<a href="{obj_name.lower()}/">{obj_name}</a>'
+        entries.append({"kind": obj_data.get("kind", ""), "name_link": local_link})
     return _MODULE_TPL.render(entries=entries)
 
 
@@ -333,34 +337,34 @@ def create_file_structure(data: dict, root: Path, url_root: str) -> dict[str, di
                 obj_module_import_path = obj_module_import_path.replace(".functions", "")
 
             if kind == "module":
+                (dir_root / name).mkdir(exist_ok=True)
                 if name not in links:
-                    (dir_root / name).mkdir(exist_ok=True)
                     links[name] = {"path": f"{api_ref_root}/{name}".lower(), "kind": "function"}
-                    pages.append(
-                        _PageSpec(
-                            kind="module",
-                            name=name,
-                            parent_name="",
-                            import_path=obj_module_import_path,
-                            file_path=dir_root / name / "_index.md",
-                            data=obj,
-                        )
+                pages.append(
+                    _PageSpec(
+                        kind="module",
+                        name=name,
+                        parent_name="",
+                        import_path=obj_module_import_path,
+                        file_path=dir_root / name / "_index.md",
+                        data=obj,
                     )
+                )
 
             elif kind == "class":
+                (dir_root / name).mkdir(exist_ok=True)
                 if name not in links:
-                    (dir_root / name).mkdir(exist_ok=True)
                     links[name] = {"path": f"{api_ref_root}/{name}".lower(), "kind": "class"}
-                    pages.append(
-                        _PageSpec(
-                            kind="class",
-                            name=name,
-                            parent_name=module_import_path.split(".")[-1],
-                            import_path=obj_module_import_path,
-                            file_path=dir_root / name / "_index.md",
-                            data=obj,
-                        )
+                pages.append(
+                    _PageSpec(
+                        kind="class",
+                        name=name,
+                        parent_name=module_import_path.split(".")[-1],
+                        import_path=obj_module_import_path,
+                        file_path=dir_root / name / "_index.md",
+                        data=obj,
                     )
+                )
 
             elif name == "functions":
                 for func_name in obj:
