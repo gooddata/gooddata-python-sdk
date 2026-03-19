@@ -208,8 +208,6 @@ class CatalogDeclarativeReference(Base):
     source_columns: list[str] | None = None
     source_column_data_types: list[str] | None = None
     sources: list[CatalogDeclarativeReferenceSource] | None = None
-    is_nullable: bool | None = None
-    null_value: str | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeReference]:
@@ -231,6 +229,8 @@ class CatalogDeclarativeReferenceSource(Base):
     column: str
     target: CatalogGrainIdentifier
     data_type: str | None = None
+    is_nullable: bool | None = None
+    null_value: str | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeReferenceSource]:
