@@ -112,6 +112,7 @@ interactions:
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: campaign_id
                           type: attribute
@@ -321,6 +322,7 @@ interactions:
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: campaign_id
                           type: attribute
@@ -331,6 +333,7 @@ interactions:
                     sources:
                       - column: customer_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: customer_id
                           type: attribute
@@ -341,6 +344,7 @@ interactions:
                     sources:
                       - column: date
                         dataType: DATE
+                        isNullable: true
                         target:
                           id: date
                           type: date
@@ -351,6 +355,7 @@ interactions:
                     sources:
                       - column: product_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: product_id
                           type: attribute
