@@ -33,11 +33,11 @@ jobs:
         component: ${{ fromJSON(needs.matrix-components.outputs.components) }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ inputs.BRANCH_NAME }}
       - name: Install uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@v7
       - name: Install dependencies
         run: |
           uv sync --only-group release --locked
@@ -52,7 +52,7 @@ jobs:
           fi
           uv build --out-dir dist
       - name: Upload ${{ matrix.component }} artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: dist-${{ matrix.component }}
           path: ${{ matrix.component == 'gooddata-api-client' && format('{0}/dist', matrix.component) || format('packages/{0}/dist', matrix.component) }}
@@ -71,7 +71,7 @@ jobs:
         component: ${{ fromJSON(needs.matrix-components.outputs.components) }}
     steps:
       - name: Download ${{ matrix.component }} artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: dist-${{ matrix.component }}
           path: dist

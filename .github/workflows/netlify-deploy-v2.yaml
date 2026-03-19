@@ -10,7 +10,7 @@ jobs:
       matrix: ${{ steps.versions.outputs.matrix }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Fetch remote refs
         run: git fetch origin
       - name: Discover versions
@@ -41,13 +41,13 @@ jobs:
           echo "Branch ${{ matrix.version.branch }} -> section ${{ matrix.version.section }} (SHA: $SHA)"
       - name: Cache version docs
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: docs/versioned_docs/${{ matrix.version.section }}
           key: version-docs-${{ hashFiles('scripts/docs/*.py', 'scripts/docs/templates/**', 'docs/*_template.md', 'docs/layouts/shortcodes/**') }}-${{ matrix.version.section }}-${{ steps.sha.outputs.sha }}
       - name: Checkout
         if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Fetch target branch
         if: steps.cache.outputs.cache-hit != 'true'
         run: git fetch origin ${{ matrix.version.branch }}
@@ -57,7 +57,7 @@ jobs:
           git checkout origin/${{ matrix.version.branch }} -- gooddata-api-client/ packages/gooddata-sdk/ packages/gooddata-pandas/
       - name: Setup Python
         if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version-file: ".python-version"
           cache: 'pip'
@@ -71,7 +71,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: bash scripts/generate-single-version.sh "origin/${{ matrix.version.branch }}" "${{ matrix.version.section }}"
       - name: Upload version artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: version-${{ matrix.version.section }}
           path: docs/versioned_docs/${{ matrix.version.section }}
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: recursive
       - name: Setup GO
@@ -92,7 +92,7 @@ jobs:
           go-version: '>=1.20.1'
           cache: false
       - name: Cache Go modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/go/pkg/mod
           key: go-mod-${{ hashFiles('docs/go.sum') }}
@@ -109,7 +109,7 @@ jobs:
         working-directory: ./docs
         run: npm ci
       - name: Download version artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           pattern: version-*
           path: docs/versioned_docs-raw/
@@ -117,7 +117,7 @@ jobs:
         working-directory: ./docs
         run: bash ../scripts/assemble-versions.sh
       - name: Cache Hugo resources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: docs/resources/_gen
           key: hugo-resources-${{ hashFiles('docs/go.sum', 'docs/config/**') }}

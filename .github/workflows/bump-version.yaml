@@ -25,12 +25,12 @@ jobs:
         new_version: ${{ steps.bump.outputs.new_version }}
       steps:
         - name: Checkout
-          uses: actions/checkout@v4
+          uses: actions/checkout@v5
           with:
             token: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }} # needed to push to the protected branch
 
         - name: Install uv
-          uses: astral-sh/setup-uv@v6
+          uses: astral-sh/setup-uv@v7
 
         - name: Install dependencies
           run: |
@@ -80,7 +80,7 @@ jobs:
 #      runs-on: ubuntu-latest
 #      steps:
 #        - name: Checkout
-#          uses: actions/checkout@v4
+#          uses: actions/checkout@v5
 #        - name: Push new tag – v${{ needs.bump-version.outputs.new_version }}
 #          run: |
 #            git config user.name GitHub Actions

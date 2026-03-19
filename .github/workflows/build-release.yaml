@@ -38,9 +38,9 @@ jobs:
         component: ${{ fromJSON(needs.matrix-components.outputs.components) }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install uv
-      uses: astral-sh/setup-uv@v6
+      uses: astral-sh/setup-uv@v7
     - name: Build ${{ matrix.component }}
       run: |
           if [ "${{ matrix.component }}" = "gooddata-api-client" ]; then
@@ -50,7 +50,7 @@ jobs:
           fi
           uv build --out-dir dist
     - name: Persist ${{ matrix.component }} artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: artifacts_${{ matrix.component }}
         path: |
@@ -64,7 +64,7 @@ jobs:
       contents: write
     steps:
       - name: Obtain artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: dist/
       - name: Generate changelog
@@ -100,7 +100,7 @@ jobs:
         component: ${{ fromJSON(needs.matrix-components.outputs.components) }}
     steps:
       - name: Obtain ${{ matrix.component }} artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: artifacts_${{ matrix.component }}
           path: dist/${{ matrix.component }}
