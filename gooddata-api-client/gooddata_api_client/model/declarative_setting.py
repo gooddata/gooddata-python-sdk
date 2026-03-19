@@ -72,6 +72,7 @@ class DeclarativeSetting(ModelNormal):
             'METADATA_LOCALE': "METADATA_LOCALE",
             'FORMAT_LOCALE': "FORMAT_LOCALE",
             'MAPBOX_TOKEN': "MAPBOX_TOKEN",
+            'GEO_ICON_SHEET': "GEO_ICON_SHEET",
             'AG_GRID_TOKEN': "AG_GRID_TOKEN",
             'WEEK_START': "WEEK_START",
             'FISCAL_YEAR': "FISCAL_YEAR",

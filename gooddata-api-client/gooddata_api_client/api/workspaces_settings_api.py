@@ -211,7 +211,6 @@ class WorkspacesSettingsApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -234,18 +233,14 @@ class WorkspacesSettingsApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -269,7 +264,6 @@ class WorkspacesSettingsApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -292,18 +286,14 @@ class WorkspacesSettingsApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -1425,7 +1415,6 @@ class WorkspacesSettingsApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -1512,7 +1501,6 @@ class WorkspacesSettingsApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

@@ -15,6 +15,7 @@ from gooddata_sdk.compute.model.filter import (
     AllTimeDateFilter,
     BoundedFilter,
     Filter,
+    MatchAttributeFilter,
     MetricValueFilter,
     NegativeAttributeFilter,
     PositiveAttributeFilter,
@@ -78,6 +79,12 @@ _ARITHMETIC_CONVERSION = {
     "multiplication": "MULTIPLICATION",
     "ratio": "RATIO",
     "change": "CHANGE",
+}
+
+_MATCH_OPERATOR_CONVERSION = {
+    "contains": "CONTAINS",
+    "startsWith": "STARTS_WITH",
+    "endsWith": "ENDS_WITH",
 }
 
 
@@ -178,6 +185,15 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
         not_in_values = f["notIn"]["values"] if "values" in f["notIn"] else f["notIn"]["uris"]
 
         return NegativeAttributeFilter(label=ref_extract(f["displayForm"]), values=not_in_values)
+    elif "matchAttributeFilter" in filter_obj:
+        f = filter_obj["matchAttributeFilter"]
+        return MatchAttributeFilter(
+            label=ref_extract(f["label"]),
+            match_type=_MATCH_OPERATOR_CONVERSION[f["operator"]],
+            literal=f["literal"],
+            negate=f.get("negativeSelection", False),
+            case_sensitive=f.get("caseSensitive", False),
+        )
     elif "relativeDateFilter" in filter_obj:
         f = filter_obj["relativeDateFilter"]
 

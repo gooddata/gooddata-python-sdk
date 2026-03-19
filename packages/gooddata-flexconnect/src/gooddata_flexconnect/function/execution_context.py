@@ -177,6 +177,38 @@ class ExecutionContextNegativeAttributeFilter:
 
 
 @dataclass
+class ExecutionContextMatchAttributeFilter:
+    """
+    Information about the match attribute filter.
+    """
+
+    label_identifier: str
+    """
+    Identifier of the label used.
+    """
+
+    literal: str
+    """
+    Value to filter by.
+    """
+
+    match_type: str
+    """
+    Match type of the filter.
+    """
+
+    negate: bool
+    """
+    Whether the filter should keep values NOT matching the literal.
+    """
+
+    case_sensitive: bool
+    """
+    Whether the matching should be made in a case-sensitive way.
+    """
+
+
+@dataclass
 class ExecutionContextRelativeDateFilter:
     """
     Information about the relative date filter.
@@ -228,6 +260,7 @@ class ExecutionContextAbsoluteDateFilter:
 ExecutionContextFilter: TypeAlias = Union[
     ExecutionContextPositiveAttributeFilter,
     ExecutionContextNegativeAttributeFilter,
+    ExecutionContextMatchAttributeFilter,
     ExecutionContextRelativeDateFilter,
     ExecutionContextAbsoluteDateFilter,
 ]
@@ -563,6 +596,15 @@ def _dict_to_filter(d: dict) -> ExecutionContextFilter:
 
     if filter_type == "negativeAttributeFilter":
         return ExecutionContextNegativeAttributeFilter(label_identifier=d["labelIdentifier"], values=d["values"])
+
+    if filter_type == "matchAttributeFilter":
+        return ExecutionContextMatchAttributeFilter(
+            label_identifier=d["labelIdentifier"],
+            literal=d["literal"],
+            match_type=d["matchType"],
+            negate=d.get("negate", False),
+            case_sensitive=d.get("caseSensitive", False),
+        )
 
     if filter_type == "relativeDateFilter":
         return ExecutionContextRelativeDateFilter(
