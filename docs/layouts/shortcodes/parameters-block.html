@@ -1,0 +1,20 @@
+{{ $partitle := .Get "title"}}
+<h4>{{$partitle}}</h4>
+{{ with .Get `None`}}
+<i>None</i>
+{{else}}
+<table class="gd-docs-parameters-block">
+<thead>
+<tr>
+{{ if eq  $partitle "Parameters"}}
+<th>name</th>
+{{end}}
+<th>type</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+{{.Inner}}
+</tbody>
+</table>
+{{end}}
