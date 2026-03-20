@@ -2,9 +2,11 @@
 from __future__ import annotations
 
 import json
-from typing import Optional
+from typing import Callable, Optional
 
 import pandas
+
+from gooddata_pandas._arrow_types import TypesMapper
 
 try:
     import pyarrow as pa
@@ -12,6 +14,31 @@ except ImportError as _exc:
     raise ImportError(
         "pyarrow is required for Arrow support. Install it with: pip install gooddata-pandas[arrow]"
     ) from _exc
+
+# Strings-only mapper: Arrow-backed StringDtype for both string variants.
+# Memory and speed win on string columns; all other types stay as default
+# (float64, object) — fully backward compatible with the JSON execution path.
+_ARROW_STRINGS_MAPPER: dict = {
+    pa.string(): pandas.StringDtype("pyarrow"),
+    pa.large_string(): pandas.StringDtype("pyarrow"),
+}
+
+# Full nullable-type mapper: also maps integer and boolean Arrow types to their
+# pandas nullable equivalents.  NOT the default — nullable integer dtypes are
+# not backward compatible with the JSON path which produces float64 for all
+# numeric columns (with NaN for nulls).
+_FULL_TYPES_MAPPER: dict = {
+    **_ARROW_STRINGS_MAPPER,
+    pa.int8(): pandas.Int8Dtype(),
+    pa.int16(): pandas.Int16Dtype(),
+    pa.int32(): pandas.Int32Dtype(),
+    pa.int64(): pandas.Int64Dtype(),
+    pa.uint8(): pandas.UInt8Dtype(),
+    pa.uint16(): pandas.UInt16Dtype(),
+    pa.uint32(): pandas.UInt32Dtype(),
+    pa.uint64(): pandas.UInt64Dtype(),
+    pa.bool_(): pandas.BooleanDtype(),
+}
 
 
 def _label_ref_to_id_map(xtab_meta: dict) -> dict[str, str]:
@@ -44,6 +71,7 @@ def _build_inline_index(
     label_ref_to_id: dict[str, str],
     model_meta: dict,
     xtab_meta: dict,
+    resolved_mapper: Optional[Callable] = None,
 ) -> Optional[pandas.Index]:
     """
     Build the pandas index from Arrow row attribute columns.
@@ -110,11 +138,15 @@ def _build_inline_index(
 
     names = [_label_title(lid, model_meta) for lid in col_ids]
 
+    # Apply resolved_mapper to the string arrays if provided.
+    string_dtype = resolved_mapper(pa.string()) if resolved_mapper else None
+    typed_arrays = [pandas.array(arr, dtype=string_dtype) for arr in arrays] if string_dtype else arrays
+
     # A single-level MultiIndex is indistinguishable from a flat Index for the
     # JSON-path output, so return a plain Index in that case.
     if len(col_ids) == 1:
-        return pandas.Index(arrays[0], name=names[0])
-    return pandas.MultiIndex.from_arrays(arrays, names=names)
+        return pandas.Index(typed_arrays[0], name=names[0])
+    return pandas.MultiIndex.from_arrays(typed_arrays, names=names)
 
 
 def _build_field_index(
@@ -282,7 +314,12 @@ def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[li
         return result
 
 
-def convert_arrow_table_to_dataframe(table: pa.Table) -> pandas.DataFrame:
+def convert_arrow_table_to_dataframe(
+    table: pa.Table,
+    self_destruct: bool = False,
+    types_mapper: TypesMapper = TypesMapper.DEFAULT,
+    custom_mapping: Optional[dict] = None,
+) -> pandas.DataFrame:
     """
     Convert a pyarrow Table returned by the GoodData /binary execution endpoint
     into a pandas DataFrame matching the output of the JSON-based execution path.
@@ -321,6 +358,17 @@ def convert_arrow_table_to_dataframe(table: pa.Table) -> pandas.DataFrame:
     When there are no row attribute labels (inline_index is None) the field
     dimension always becomes the output rows regardless of isTransposed.
     """
+    if types_mapper is TypesMapper.DEFAULT:
+        resolved_mapper: Optional[Callable] = None
+    elif types_mapper is TypesMapper.ARROW_STRINGS:
+        resolved_mapper = _ARROW_STRINGS_MAPPER.get
+    elif types_mapper is TypesMapper.CUSTOM:
+        if custom_mapping is None:
+            raise ValueError("custom_mapping must be provided when types_mapper=TypesMapper.CUSTOM")
+        resolved_mapper = custom_mapping.get
+    else:
+        raise ValueError("Unknown types_mapper value")
+
     schema_meta = {k.decode(): json.loads(v) for k, v in table.schema.metadata.items()}
     xtab_meta = schema_meta["x-gdc-xtab-v1"]
     model_meta = schema_meta["x-gdc-model-v1"]
@@ -337,7 +385,9 @@ def convert_arrow_table_to_dataframe(table: pa.Table) -> pandas.DataFrame:
 
     data_field_names = [f.name for f in all_data_fields]
     data_matrix = (
-        table.select(data_field_names).to_pandas().to_numpy(dtype=float, na_value=float("nan"))
+        table.select(data_field_names)
+        .to_pandas(self_destruct=self_destruct, types_mapper=resolved_mapper)
+        .to_numpy(dtype=float, na_value=float("nan"))
     )  # shape: (n_arrow_rows, n_data_cols)
 
     # computedShape.rows  → label refs for Arrow row attribute columns
@@ -345,7 +395,7 @@ def convert_arrow_table_to_dataframe(table: pa.Table) -> pandas.DataFrame:
     row_label_refs: list[str] = xtab_meta["computedShape"]["rows"]
     col_label_refs: list[str] = xtab_meta["computedShape"]["cols"]
 
-    inline_index = _build_inline_index(table, row_label_refs, label_ref_to_id, model_meta, xtab_meta)
+    inline_index = _build_inline_index(table, row_label_refs, label_ref_to_id, model_meta, xtab_meta, resolved_mapper)
     field_index = _build_field_index(all_data_fields, col_label_refs, label_ref_to_id, model_meta, xtab_meta)
 
     # When there are no row attribute labels (inline_index is None) the server

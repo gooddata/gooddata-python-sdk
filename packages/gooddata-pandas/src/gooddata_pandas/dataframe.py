@@ -16,7 +16,16 @@ from gooddata_sdk import (
     ResultSizeDimensions,
 )
 
+from gooddata_pandas._arrow_types import TypesMapper
 from gooddata_pandas.data_access import compute_and_extract
+
+try:
+    from gooddata_pandas.arrow_convertor import compute_row_totals_indexes, convert_arrow_table_to_dataframe
+
+    _ARROW_AVAILABLE = True
+except ImportError:
+    _ARROW_AVAILABLE = False
+
 from gooddata_pandas.result_convertor import (
     _DEFAULT_PAGE_SIZE,
     DataFrameMetadata,
@@ -383,6 +392,9 @@ class DataFrameFactory:
         self,
         exec_def: ExecutionDefinition,
         on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        self_destruct: bool = False,
+        types_mapper: TypesMapper = TypesMapper.DEFAULT,
+        custom_mapping: Optional[dict] = None,
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a DataFrame from an execution definition using the Arrow IPC binary format.
@@ -397,21 +409,32 @@ class DataFrameFactory:
         ``DataFrameMetadata.primary_labels_from_columns`` are always empty dicts because the
         Arrow path does not support the ``use_primary_labels_in_attributes`` feature.
 
-        Requires pyarrow to be installed (pip install pyarrow).
+        Requires pyarrow to be installed (pip install gooddata-pandas[arrow]).
 
         Args:
             exec_def (ExecutionDefinition): Execution definition.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback fired after
                 the execution is submitted to the backend.
+            self_destruct (bool): If True, Arrow buffers are freed during conversion, reducing
+                peak native memory at the cost of not being able to reuse the table.
+            types_mapper (TypesMapper): Controls how Arrow types are mapped to pandas dtypes.
+                ``TypesMapper.DEFAULT`` (default) — no mapping; produces float64 and object
+                    strings, identical to the JSON execution path.
+                ``TypesMapper.ARROW_STRINGS`` — strings use Arrow-backed StringDtype (lower
+                    memory, faster); all numeric types unchanged.
+                ``TypesMapper.CUSTOM`` — uses ``custom_mapping`` dict; raises ValueError if
+                    ``custom_mapping`` is not provided.
+            custom_mapping (Optional[dict]): Arrow type → pandas dtype mapping dict.
+                Only used when ``types_mapper=TypesMapper.CUSTOM``, ignored otherwise.
 
         Returns:
             Tuple[pandas.DataFrame, DataFrameMetadata]
 
         """
-        from gooddata_pandas.arrow_convertor import (
-            compute_row_totals_indexes,
-            convert_arrow_table_to_dataframe,
-        )
+        if not _ARROW_AVAILABLE:
+            raise ImportError(
+                "pyarrow is required to use for_exec_def_arrow(). Install it with: pip install gooddata-pandas[arrow]"
+            )
 
         execution = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
 
@@ -420,7 +443,9 @@ class DataFrameFactory:
 
         exec_response = execution.bare_exec_response
         table = exec_response.read_result_arrow()
-        df = convert_arrow_table_to_dataframe(table)
+        df = convert_arrow_table_to_dataframe(
+            table, self_destruct=self_destruct, types_mapper=types_mapper, custom_mapping=custom_mapping
+        )
         row_totals_indexes = compute_row_totals_indexes(table, exec_response.dimensions)
         metadata = DataFrameMetadata(
             row_totals_indexes=row_totals_indexes,

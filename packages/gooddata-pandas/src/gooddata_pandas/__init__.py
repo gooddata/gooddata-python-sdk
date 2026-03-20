@@ -1,5 +1,6 @@
 # (C) 2021 GoodData Corporation
 
+from gooddata_pandas._arrow_types import TypesMapper
 from gooddata_pandas._version import __version__
 from gooddata_pandas.dataframe import DataFrameFactory
 from gooddata_pandas.good_pandas import GoodPandas
