@@ -4,9 +4,14 @@ from __future__ import annotations
 import json
 from typing import Optional
 
-import numpy
 import pandas
-import pyarrow as pa
+
+try:
+    import pyarrow as pa
+except ImportError as _exc:
+    raise ImportError(
+        "pyarrow is required for Arrow support. Install it with: pip install gooddata-pandas[arrow]"
+    ) from _exc
 
 
 def _label_ref_to_id_map(xtab_meta: dict) -> dict[str, str]:
@@ -68,24 +73,21 @@ def _build_inline_index(
                 total_ref_vals = table.column(field.name).to_pylist()
                 break
 
-    def _agg_for_row(i: int) -> Optional[str]:
-        refs = total_ref_vals[i]
-        if refs:
-            key = f"t{refs[0]}"
-            entry = totals_meta.get(key, {})
-            agg = entry.get("aggregation")
-            if agg:
-                return agg.upper()
-        return None
+    # Precompute per-row aggregation name and kept-label set for total rows.
+    agg_for_row: list[Optional[str]] = [None] * table.num_rows
+    kept_labels_for_row: list[frozenset] = [frozenset()] * table.num_rows
+    for i, rt in enumerate(row_types):
+        if rt == 0:
+            continue
 
-    def _kept_row_labels_for_row(i: int) -> frozenset:
-        """Label refs that are kept as real values (not aggregated) in total row i."""
         refs = total_ref_vals[i]
-        if refs:
-            key = f"t{refs[0]}"
-            entry = totals_meta.get(key, {})
-            return frozenset(entry.get("rowLabels", []))
-        return frozenset()
+        if not refs:
+            continue
+        key = f"t{refs[0]}"
+        entry = totals_meta.get(key, {})
+        agg = entry.get("aggregation")
+        agg_for_row[i] = agg.upper() if agg else None
+        kept_labels_for_row[i] = frozenset(entry.get("rowLabels", []))
 
     arrays: list[list] = []
     for ref, lid in zip(row_label_refs, col_ids):
@@ -93,13 +95,12 @@ def _build_inline_index(
         processed = []
         for i, v in enumerate(values):
             if row_types[i] != 0 and isinstance(v, str):
-                if ref in _kept_row_labels_for_row(i):
+                if ref in kept_labels_for_row[i]:
                     # Outer label kept as real attribute value in a subtotal row.
                     processed.append(v)
                 elif v == "":
                     # Aggregated level left empty by the server — fill with agg name.
-                    agg = _agg_for_row(i)
-                    processed.append(agg if agg else v)
+                    processed.append(agg_for_row[i] if agg_for_row[i] else v)
                 else:
                     # Aggregation function marker (e.g. 'sum') — uppercase it.
                     processed.append(v.upper())
@@ -254,8 +255,8 @@ def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[li
                     total_idxs = [
                         k
                         for k, f in enumerate(all_data_fields)
-                        if json.loads(f.metadata[b"gdc"])["type"] == "total"
-                        and j >= len(json.loads(f.metadata[b"gdc"]).get("label_values", []))
+                        if (gdc := json.loads(f.metadata[b"gdc"]))["type"] == "total"
+                        and j >= len(gdc.get("label_values", []))
                     ]
                     result.append(total_idxs)
                     attr_level += 1
@@ -334,8 +335,9 @@ def convert_arrow_table_to_dataframe(table: pa.Table) -> pandas.DataFrame:
         f for f in table.schema if f.name.startswith("metric_group_") or f.name.startswith("grand_total_")
     ]
 
-    data_matrix = numpy.column_stack(
-        [table.column(f.name).to_pylist() for f in all_data_fields]
+    data_field_names = [f.name for f in all_data_fields]
+    data_matrix = (
+        table.select(data_field_names).to_pandas().to_numpy(dtype=float, na_value=float("nan"))
     )  # shape: (n_arrow_rows, n_data_cols)
 
     # computedShape.rows  → label refs for Arrow row attribute columns
