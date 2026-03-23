@@ -217,6 +217,8 @@ docs/CustomGeoCollectionControllerApi.md
 docs/CustomLabel.md
 docs/CustomMetric.md
 docs/CustomOverride.md
+docs/DashboardArbitraryAttributeFilter.md
+docs/DashboardArbitraryAttributeFilterArbitraryAttributeFilter.md
 docs/DashboardAttributeFilter.md
 docs/DashboardAttributeFilterAttributeFilter.md
 docs/DashboardContext.md
@@ -225,10 +227,14 @@ docs/DashboardDateFilter.md
 docs/DashboardDateFilterDateFilter.md
 docs/DashboardExportSettings.md
 docs/DashboardFilter.md
+docs/DashboardMatchAttributeFilter.md
+docs/DashboardMatchAttributeFilterMatchAttributeFilter.md
 docs/DashboardPermissions.md
 docs/DashboardPermissionsAssignment.md
 docs/DashboardPluginControllerApi.md
 docs/DashboardSlidesTemplate.md
+docs/DashboardSummaryRequestDto.md
+docs/DashboardSummaryResponseDto.md
 docs/DashboardTabularExportRequest.md
 docs/DashboardTabularExportRequestV2.md
 docs/DashboardsApi.md
@@ -396,6 +402,7 @@ docs/FactIdentifier.md
 docs/FactsApi.md
 docs/FailedOperation.md
 docs/FailedOperationAllOf.md
+docs/FeedbackRequestDto.md
 docs/File.md
 docs/Filter.md
 docs/FilterBy.md
@@ -1057,6 +1064,8 @@ docs/KeyDriversRequest.md
 docs/KeyDriversResponse.md
 docs/KeyDriversResult.md
 docs/KnowledgeDocumentMetadataDto.md
+docs/KnowledgeRecommendationsRequestDto.md
+docs/KnowledgeRecommendationsResponseDto.md
 docs/KnowledgeSearchResultDto.md
 docs/LDMDeclarativeAPIsApi.md
 docs/LLMEndpointsApi.md
@@ -1343,6 +1352,9 @@ docs/WhatIfScenarioConfig.md
 docs/WhatIfScenarioItem.md
 docs/WidgetDescriptor.md
 docs/WidgetSlidesTemplate.md
+docs/WorkflowDashboardSummaryRequestDto.md
+docs/WorkflowDashboardSummaryResponseDto.md
+docs/WorkflowStatusResponseDto.md
 docs/WorkspaceAutomationIdentifier.md
 docs/WorkspaceAutomationManagementBulkRequest.md
 docs/WorkspaceCacheSettings.md
@@ -1671,6 +1683,8 @@ gooddata_api_client/model/csv_read_options.py
 gooddata_api_client/model/custom_label.py
 gooddata_api_client/model/custom_metric.py
 gooddata_api_client/model/custom_override.py
+gooddata_api_client/model/dashboard_arbitrary_attribute_filter.py
+gooddata_api_client/model/dashboard_arbitrary_attribute_filter_arbitrary_attribute_filter.py
 gooddata_api_client/model/dashboard_attribute_filter.py
 gooddata_api_client/model/dashboard_attribute_filter_attribute_filter.py
 gooddata_api_client/model/dashboard_context.py
@@ -1679,9 +1693,13 @@ gooddata_api_client/model/dashboard_date_filter.py
 gooddata_api_client/model/dashboard_date_filter_date_filter.py
 gooddata_api_client/model/dashboard_export_settings.py
 gooddata_api_client/model/dashboard_filter.py
+gooddata_api_client/model/dashboard_match_attribute_filter.py
+gooddata_api_client/model/dashboard_match_attribute_filter_match_attribute_filter.py
 gooddata_api_client/model/dashboard_permissions.py
 gooddata_api_client/model/dashboard_permissions_assignment.py
 gooddata_api_client/model/dashboard_slides_template.py
+gooddata_api_client/model/dashboard_summary_request_dto.py
+gooddata_api_client/model/dashboard_summary_response_dto.py
 gooddata_api_client/model/dashboard_tabular_export_request.py
 gooddata_api_client/model/dashboard_tabular_export_request_v2.py
 gooddata_api_client/model/data_column_locator.py
@@ -1828,6 +1846,7 @@ gooddata_api_client/model/export_result.py
 gooddata_api_client/model/fact_identifier.py
 gooddata_api_client/model/failed_operation.py
 gooddata_api_client/model/failed_operation_all_of.py
+gooddata_api_client/model/feedback_request_dto.py
 gooddata_api_client/model/file.py
 gooddata_api_client/model/filter.py
 gooddata_api_client/model/filter_by.py
@@ -2477,6 +2496,8 @@ gooddata_api_client/model/key_drivers_request.py
 gooddata_api_client/model/key_drivers_response.py
 gooddata_api_client/model/key_drivers_result.py
 gooddata_api_client/model/knowledge_document_metadata_dto.py
+gooddata_api_client/model/knowledge_recommendations_request_dto.py
+gooddata_api_client/model/knowledge_recommendations_response_dto.py
 gooddata_api_client/model/knowledge_search_result_dto.py
 gooddata_api_client/model/label_identifier.py
 gooddata_api_client/model/list_database_instances_response.py
@@ -2720,6 +2741,9 @@ gooddata_api_client/model/what_if_scenario_config.py
 gooddata_api_client/model/what_if_scenario_item.py
 gooddata_api_client/model/widget_descriptor.py
 gooddata_api_client/model/widget_slides_template.py
+gooddata_api_client/model/workflow_dashboard_summary_request_dto.py
+gooddata_api_client/model/workflow_dashboard_summary_response_dto.py
+gooddata_api_client/model/workflow_status_response_dto.py
 gooddata_api_client/model/workspace_automation_identifier.py
 gooddata_api_client/model/workspace_automation_management_bulk_request.py
 gooddata_api_client/model/workspace_cache_settings.py

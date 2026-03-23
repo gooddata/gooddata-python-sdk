@@ -840,7 +840,8 @@
                   "GEO_LATITUDE",
                   "GEO_AREA",
                   "GEO_ICON",
-                  "IMAGE"
+                  "IMAGE",
+                  "HYPERLOGLOG"
                 ],
                 "type": "string"
               }
@@ -2036,6 +2037,64 @@
         ],
         "type": "object"
       },
+      "DashboardSummaryRequestDto": {
+        "properties": {
+          "aiModel": {
+            "type": "string"
+          },
+          "customUserPrompt": {
+            "type": "string"
+          },
+          "dashboardId": {
+            "type": "string"
+          },
+          "dryRun": {
+            "type": "boolean"
+          },
+          "gooddataHost": {
+            "type": "string"
+          },
+          "gooddataToken": {
+            "type": "string"
+          },
+          "keyMetricIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "referenceQuarter": {
+            "type": "string"
+          },
+          "temperature": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "dashboardId"
+        ],
+        "type": "object"
+      },
+      "DashboardSummaryResponseDto": {
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "runId",
+          "status"
+        ],
+        "type": "object"
+      },
       "DataColumnLocator": {
         "description": "Mapping from dimension items (either 'localIdentifier' from 'AttributeItem', or \"measureGroup\") to their respective values. This effectively specifies the path (location) of the data column used for sorting. Therefore values for all dimension items must be specified.",
         "example": {
@@ -2783,6 +2842,21 @@
         ],
         "type": "object"
       },
+      "FeedbackRequestDto": {
+        "properties": {
+          "sentiment": {
+            "enum": [
+              "POSITIVE",
+              "NEGATIVE"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "sentiment"
+        ],
+        "type": "object"
+      },
       "Filter": {
         "description": "List of filters to be applied to the new visualization",
         "type": "object"
@@ -3280,7 +3354,8 @@
               "GEO_LATITUDE",
               "GEO_AREA",
               "GEO_ICON",
-              "IMAGE"
+              "IMAGE",
+              "HYPERLOGLOG"
             ],
             "type": "string"
           }
@@ -3394,6 +3469,97 @@
           "scopes",
           "updatedAt",
           "updatedBy"
+        ],
+        "type": "object"
+      },
+      "KnowledgeRecommendationsRequestDto": {
+        "properties": {
+          "aiModel": {
+            "type": "string"
+          },
+          "analyticalDashboardId": {
+            "type": "string"
+          },
+          "analyzedValue": {
+            "format": "double",
+            "type": "number"
+          },
+          "comparisonType": {
+            "enum": [
+              "MONTH",
+              "QUARTER",
+              "YEAR"
+            ],
+            "type": "string"
+          },
+          "direction": {
+            "enum": [
+              "INCREASED",
+              "DECREASED"
+            ],
+            "type": "string"
+          },
+          "dryRun": {
+            "type": "boolean"
+          },
+          "gooddataHost": {
+            "type": "string"
+          },
+          "gooddataToken": {
+            "type": "string"
+          },
+          "limit": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "maxTokens": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "metricId": {
+            "type": "string"
+          },
+          "minScore": {
+            "format": "double",
+            "type": "number"
+          },
+          "referenceValue": {
+            "format": "double",
+            "type": "number"
+          },
+          "temperature": {
+            "format": "double",
+            "type": "number"
+          },
+          "widgetId": {
+            "type": "string"
+          },
+          "widgetName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "comparisonType",
+          "metricId"
+        ],
+        "type": "object"
+      },
+      "KnowledgeRecommendationsResponseDto": {
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "runId",
+          "status"
         ],
         "type": "object"
       },
@@ -6340,6 +6506,79 @@
           "widgetType"
         ],
         "type": "object"
+      },
+      "WorkflowDashboardSummaryRequestDto": {
+        "properties": {
+          "customUserPrompt": {
+            "type": "string"
+          },
+          "dashboardId": {
+            "type": "string"
+          },
+          "keyMetricIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "referenceQuarter": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "dashboardId"
+        ],
+        "type": "object"
+      },
+      "WorkflowDashboardSummaryResponseDto": {
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "runId",
+          "status"
+        ],
+        "type": "object"
+      },
+      "WorkflowStatusResponseDto": {
+        "properties": {
+          "currentPhase": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "runId",
+          "status"
+        ],
+        "type": "object"
       }
     }
   },
@@ -6563,6 +6802,226 @@
         "summary": "Test LLM Provider By Id",
         "tags": [
           "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/agent/dashboardSummary": {
+      "post": {
+        "operationId": "generateDashboardSummary_1",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DashboardSummaryRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummaryResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/agent/knowledgeRecommendations": {
+      "post": {
+        "operationId": "generateKnowledgeRecommendations",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KnowledgeRecommendationsRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KnowledgeRecommendationsResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/agent/{runId}/cancel": {
+      "post": {
+        "operationId": "cancelWorkflow_1",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/agent/{runId}/feedback": {
+      "post": {
+        "operationId": "userFeedback",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/agent/{runId}/status": {
+      "get": {
+        "operationId": "getWorkflowStatus_1",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowStatusResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
           "actions"
         ]
       }
@@ -7557,6 +8016,131 @@
         "summary": "(BETA) Semantic Search in Metadata",
         "tags": [
           "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/dashboardSummary": {
+      "post": {
+        "operationId": "generateDashboardSummary",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkflowDashboardSummaryRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowDashboardSummaryResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/cancel": {
+      "post": {
+        "operationId": "cancelWorkflow",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/status": {
+      "get": {
+        "operationId": "getWorkflowStatus",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowStatusResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
           "actions"
         ]
       }

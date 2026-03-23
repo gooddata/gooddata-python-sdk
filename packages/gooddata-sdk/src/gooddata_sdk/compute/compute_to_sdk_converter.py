@@ -10,6 +10,7 @@ from gooddata_sdk.compute.model.filter import (
     CompoundMetricValueFilter,
     Filter,
     InlineFilter,
+    MatchAttributeFilter,
     MetricValueComparisonCondition,
     MetricValueFilter,
     MetricValueRangeCondition,
@@ -74,6 +75,16 @@ class ComputeToSdkConverter:
         if "negativeAttributeFilter" in filter_dict:
             f = filter_dict["negativeAttributeFilter"]
             return NegativeAttributeFilter(label=ref_extract(f["label"]), values=f["notIn"]["values"])
+
+        if "matchAttributeFilter" in filter_dict:
+            f = filter_dict["matchAttributeFilter"]
+            return MatchAttributeFilter(
+                label=ref_extract(f["label"]),
+                match_type=f["matchType"],
+                literal=f["literal"],
+                case_sensitive=f.get("caseSensitive", False),
+                negate=f.get("negate", False),
+            )
 
         if "relativeDateFilter" in filter_dict:
             f = filter_dict["relativeDateFilter"]

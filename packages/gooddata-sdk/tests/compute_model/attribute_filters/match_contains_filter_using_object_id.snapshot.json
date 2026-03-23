@@ -1,0 +1,14 @@
+{
+    "match_attribute_filter": {
+        "case_sensitive": false,
+        "label": {
+            "identifier": {
+                "id": "label.id",
+                "type": "label"
+            }
+        },
+        "literal": "bar",
+        "match_type": "CONTAINS",
+        "negate": false
+    }
+}

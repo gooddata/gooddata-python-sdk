@@ -17,6 +17,12 @@ from jsonschema.exceptions import ValidationError
             "values": ["id1", "id2", "id3", None],
         },
         {
+            "filterType": "matchAttributeFilter",
+            "labelIdentifier": "attribute1",
+            "literal": "foo",
+            "matchType": "CONTAINS",
+        },
+        {
             "filterType": "relativeDateFilter",
             "from": -5,
             "to": 0,
@@ -42,6 +48,15 @@ def test_valid_filter_schema(value, get_validator):
         {"filterType": "negativeAttributeFilter", "labelIdentifier": "attribute1"},  # missing values
         {"filterType": "relativeDateFilter", "from": -5, "to": 0, "granularity": "DAY"},  # missing datasetIdentifier
         {"filterType": "absoluteDateFilter", "from": "2021-01-01", "to": "2021-12-31"},  # missing datasetIdentifier
+        # missing match type
+        {"filterType": "matchAttributeFilter", "labelIdentifier": "attribute1", "literal": "foo"},
+        # invalid match type
+        {
+            "filterType": "matchAttributeFilter",
+            "labelIdentifier": "attribute1",
+            "literal": "foo",
+            "matchType": "INVALID",
+        },
     ],
 )
 def test_invalid_filter_schema(value, get_validator):

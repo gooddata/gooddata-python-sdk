@@ -114,20 +114,11 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = user_settings_api.UserSettingsApi(api_client)
     user_id = "userId_example" # str | 
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "content==JsonNodeValue;type==SettingTypeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Delete a setting for a user
         api_instance.delete_entity_user_settings(user_id, id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling UserSettingsApi->delete_entity_user_settings: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete a setting for a user
-        api_instance.delete_entity_user_settings(user_id, id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling UserSettingsApi->delete_entity_user_settings: %s\n" % e)
 ```
@@ -139,7 +130,6 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **user_id** | **str**|  |
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 

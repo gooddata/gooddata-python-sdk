@@ -5894,7 +5894,8 @@
                   "GEO_LATITUDE",
                   "GEO_AREA",
                   "GEO_ICON",
-                  "IMAGE"
+                  "IMAGE",
+                  "HYPERLOGLOG"
                 ],
                 "type": "string"
               }
@@ -7036,7 +7037,8 @@
               "GEO_LATITUDE",
               "GEO_AREA",
               "GEO_ICON",
-              "IMAGE"
+              "IMAGE",
+              "HYPERLOGLOG"
             ],
             "example": "HYPERLINK",
             "type": "string"
@@ -7855,6 +7857,54 @@
         },
         "type": "object"
       },
+      "DashboardArbitraryAttributeFilter": {
+        "properties": {
+          "arbitraryAttributeFilter": {
+            "properties": {
+              "displayForm": {
+                "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "filterElementsBy": {
+                "items": {
+                  "$ref": "#/components/schemas/AttributeFilterParent"
+                },
+                "type": "array"
+              },
+              "filterElementsByDate": {
+                "items": {
+                  "$ref": "#/components/schemas/AttributeFilterByDate"
+                },
+                "type": "array"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "negativeSelection": {
+                "type": "boolean"
+              },
+              "title": {
+                "type": "string"
+              },
+              "values": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "displayForm",
+              "negativeSelection",
+              "values"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "arbitraryAttributeFilter"
+        ],
+        "type": "object"
+      },
       "DashboardAttributeFilter": {
         "properties": {
           "attributeFilter": {
@@ -8085,7 +8135,59 @@
           },
           {
             "$ref": "#/components/schemas/DashboardDateFilter"
+          },
+          {
+            "$ref": "#/components/schemas/DashboardArbitraryAttributeFilter"
+          },
+          {
+            "$ref": "#/components/schemas/DashboardMatchAttributeFilter"
           }
+        ],
+        "type": "object"
+      },
+      "DashboardMatchAttributeFilter": {
+        "properties": {
+          "matchAttributeFilter": {
+            "properties": {
+              "caseSensitive": {
+                "type": "boolean"
+              },
+              "displayForm": {
+                "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "literal": {
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "negativeSelection": {
+                "type": "boolean"
+              },
+              "operator": {
+                "enum": [
+                  "contains",
+                  "startsWith",
+                  "endsWith"
+                ],
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "caseSensitive",
+              "displayForm",
+              "literal",
+              "negativeSelection",
+              "operator"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "matchAttributeFilter"
         ],
         "type": "object"
       },
@@ -8175,6 +8277,64 @@
         },
         "required": [
           "appliedOn"
+        ],
+        "type": "object"
+      },
+      "DashboardSummaryRequestDto": {
+        "properties": {
+          "aiModel": {
+            "type": "string"
+          },
+          "customUserPrompt": {
+            "type": "string"
+          },
+          "dashboardId": {
+            "type": "string"
+          },
+          "dryRun": {
+            "type": "boolean"
+          },
+          "gooddataHost": {
+            "type": "string"
+          },
+          "gooddataToken": {
+            "type": "string"
+          },
+          "keyMetricIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "referenceQuarter": {
+            "type": "string"
+          },
+          "temperature": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "dashboardId"
+        ],
+        "type": "object"
+      },
+      "DashboardSummaryResponseDto": {
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "runId",
+          "status"
         ],
         "type": "object"
       },
@@ -10538,7 +10698,8 @@
               "GEO_LATITUDE",
               "GEO_AREA",
               "GEO_ICON",
-              "IMAGE"
+              "IMAGE",
+              "HYPERLOGLOG"
             ],
             "type": "string"
           }
@@ -11294,6 +11455,7 @@
               "METADATA_LOCALE",
               "FORMAT_LOCALE",
               "MAPBOX_TOKEN",
+              "GEO_ICON_SHEET",
               "AG_GRID_TOKEN",
               "WEEK_START",
               "FISCAL_YEAR",
@@ -13253,6 +13415,21 @@
           "error",
           "id",
           "kind"
+        ],
+        "type": "object"
+      },
+      "FeedbackRequestDto": {
+        "properties": {
+          "sentiment": {
+            "enum": [
+              "POSITIVE",
+              "NEGATIVE"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "sentiment"
         ],
         "type": "object"
       },
@@ -23793,7 +23970,8 @@
                   "GEO_LATITUDE",
                   "GEO_AREA",
                   "GEO_ICON",
-                  "IMAGE"
+                  "IMAGE",
+                  "HYPERLOGLOG"
                 ],
                 "type": "string"
               }
@@ -26705,6 +26883,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -26804,6 +26983,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -26943,6 +27123,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -28448,6 +28629,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -28547,6 +28729,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -30802,6 +30985,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -30901,6 +31085,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -31066,6 +31251,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -31165,6 +31351,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -31306,7 +31493,8 @@
               "GEO_LATITUDE",
               "GEO_AREA",
               "GEO_ICON",
-              "IMAGE"
+              "IMAGE",
+              "HYPERLOGLOG"
             ],
             "type": "string"
           }
@@ -31420,6 +31608,97 @@
           "scopes",
           "updatedAt",
           "updatedBy"
+        ],
+        "type": "object"
+      },
+      "KnowledgeRecommendationsRequestDto": {
+        "properties": {
+          "aiModel": {
+            "type": "string"
+          },
+          "analyticalDashboardId": {
+            "type": "string"
+          },
+          "analyzedValue": {
+            "format": "double",
+            "type": "number"
+          },
+          "comparisonType": {
+            "enum": [
+              "MONTH",
+              "QUARTER",
+              "YEAR"
+            ],
+            "type": "string"
+          },
+          "direction": {
+            "enum": [
+              "INCREASED",
+              "DECREASED"
+            ],
+            "type": "string"
+          },
+          "dryRun": {
+            "type": "boolean"
+          },
+          "gooddataHost": {
+            "type": "string"
+          },
+          "gooddataToken": {
+            "type": "string"
+          },
+          "limit": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "maxTokens": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "metricId": {
+            "type": "string"
+          },
+          "minScore": {
+            "format": "double",
+            "type": "number"
+          },
+          "referenceValue": {
+            "format": "double",
+            "type": "number"
+          },
+          "temperature": {
+            "format": "double",
+            "type": "number"
+          },
+          "widgetId": {
+            "type": "string"
+          },
+          "widgetName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "comparisonType",
+          "metricId"
+        ],
+        "type": "object"
+      },
+      "KnowledgeRecommendationsResponseDto": {
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "runId",
+          "status"
         ],
         "type": "object"
       },
@@ -34129,6 +34408,7 @@
               "METADATA_LOCALE",
               "FORMAT_LOCALE",
               "MAPBOX_TOKEN",
+              "GEO_ICON_SHEET",
               "AG_GRID_TOKEN",
               "WEEK_START",
               "FISCAL_YEAR",
@@ -37230,6 +37510,79 @@
         ],
         "type": "object"
       },
+      "WorkflowDashboardSummaryRequestDto": {
+        "properties": {
+          "customUserPrompt": {
+            "type": "string"
+          },
+          "dashboardId": {
+            "type": "string"
+          },
+          "keyMetricIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "referenceQuarter": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "dashboardId"
+        ],
+        "type": "object"
+      },
+      "WorkflowDashboardSummaryResponseDto": {
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "runId",
+          "status"
+        ],
+        "type": "object"
+      },
+      "WorkflowStatusResponseDto": {
+        "properties": {
+          "currentPhase": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "runId",
+          "status"
+        ],
+        "type": "object"
+      },
       "WorkspaceAutomationIdentifier": {
         "properties": {
           "id": {
@@ -40100,6 +40453,226 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/agent/dashboardSummary": {
+      "post": {
+        "operationId": "generateDashboardSummary_1",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DashboardSummaryRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummaryResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/agent/knowledgeRecommendations": {
+      "post": {
+        "operationId": "generateKnowledgeRecommendations",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KnowledgeRecommendationsRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KnowledgeRecommendationsResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/agent/{runId}/cancel": {
+      "post": {
+        "operationId": "cancelWorkflow_1",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/agent/{runId}/feedback": {
+      "post": {
+        "operationId": "userFeedback",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/agent/{runId}/status": {
+      "get": {
+        "operationId": "getWorkflowStatus_1",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowStatusResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy": {
       "get": {
         "description": "Returns a list of Users who created any object for this workspace",
@@ -41090,6 +41663,131 @@
         "summary": "(BETA) Semantic Search in Metadata",
         "tags": [
           "Smart Functions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/dashboardSummary": {
+      "post": {
+        "operationId": "generateDashboardSummary",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkflowDashboardSummaryRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowDashboardSummaryResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/cancel": {
+      "post": {
+        "operationId": "cancelWorkflow",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/status": {
+      "get": {
+        "operationId": "getWorkflowStatus",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowStatusResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
           "actions"
         ]
       }
@@ -46234,15 +46932,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "name==someString;description==someString",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -46712,15 +47401,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "name==someString;type==DatabaseTypeValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -47781,15 +48461,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "content==JwkSpecificationValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -50892,15 +51563,6 @@
           },
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "bearerToken==someString",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -51107,15 +51769,6 @@
           },
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "content==JsonNodeValue;type==SettingTypeValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -52383,15 +53036,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -53067,15 +53711,6 @@
             "in": "path",
             "name": "objectId",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
-            "in": "query",
-            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -54244,15 +54879,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -54879,15 +55505,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "applicationName==someString;content==JsonNodeValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -55454,15 +56071,6 @@
             "in": "path",
             "name": "objectId",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
-            "in": "query",
-            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -56554,15 +57162,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -57645,15 +58244,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -58280,15 +58870,6 @@
             "in": "path",
             "name": "objectId",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;analyticalDashboard.id==321;user.id==321",
-            "in": "query",
-            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -60576,15 +61157,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -61262,15 +61834,6 @@
             "in": "path",
             "name": "objectId",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;user.id==321;userGroup.id==321",
-            "in": "query",
-            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -61954,15 +62517,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -62629,15 +63183,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;workspaceDataFilter.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -63283,15 +63828,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -63888,15 +64424,6 @@
             "in": "path",
             "name": "objectId",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "content==JsonNodeValue;type==SettingTypeValue",
-            "in": "query",
-            "name": "filter",
             "schema": {
               "type": "string"
             }

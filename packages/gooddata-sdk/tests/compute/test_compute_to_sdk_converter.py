@@ -8,6 +8,7 @@ from gooddata_sdk import (
     CompoundMetricValueFilter,
     ComputeToSdkConverter,
     InlineFilter,
+    MatchAttributeFilter,
     MetricValueComparisonCondition,
     MetricValueFilter,
     MetricValueRangeCondition,
@@ -86,6 +87,60 @@ def test_negative_attribute_filter_conversion():
     assert isinstance(result, NegativeAttributeFilter)
     assert result.label.id == "attribute1"
     assert result.values == ["val1", "val2"]
+
+
+def test_match_attribute_filter_conversion():
+    filter_dict = json.loads(
+        """
+        {
+          "matchAttributeFilter": {
+            "label": {
+              "identifier": { "id": "attribute1", "type": "label" }
+            },
+            "matchType": "CONTAINS",
+            "literal": "search term",
+            "caseSensitive": false,
+            "negate": false
+          }
+        }
+        """
+    )
+
+    result = ComputeToSdkConverter.convert_filter(filter_dict)
+
+    assert isinstance(result, MatchAttributeFilter)
+    assert result.label.id == "attribute1"
+    assert result.match_type == "CONTAINS"
+    assert result.literal == "search term"
+    assert result.case_sensitive is False
+    assert result.negate is False
+
+
+def test_match_attribute_filter_negated_case_sensitive():
+    filter_dict = json.loads(
+        """
+        {
+          "matchAttributeFilter": {
+            "label": {
+              "identifier": { "id": "product_name", "type": "label" }
+            },
+            "matchType": "STARTS_WITH",
+            "literal": "Premium",
+            "caseSensitive": true,
+            "negate": true
+          }
+        }
+        """
+    )
+
+    result = ComputeToSdkConverter.convert_filter(filter_dict)
+
+    assert isinstance(result, MatchAttributeFilter)
+    assert result.label.id == "product_name"
+    assert result.match_type == "STARTS_WITH"
+    assert result.literal == "Premium"
+    assert result.case_sensitive is True
+    assert result.negate is True
 
 
 def test_relative_date_filter_conversion():
