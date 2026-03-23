@@ -50,7 +50,7 @@ jobs:
           fi
           uv build --out-dir dist
     - name: Persist ${{ matrix.component }} artifacts
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: artifacts_${{ matrix.component }}
         path: |
@@ -64,7 +64,7 @@ jobs:
       contents: write
     steps:
       - name: Obtain artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           path: dist/
       - name: Generate changelog
@@ -100,7 +100,7 @@ jobs:
         component: ${{ fromJSON(needs.matrix-components.outputs.components) }}
     steps:
       - name: Obtain ${{ matrix.component }} artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: artifacts_${{ matrix.component }}
           path: dist/${{ matrix.component }}
