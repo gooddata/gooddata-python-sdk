@@ -71,7 +71,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: bash scripts/generate-single-version.sh "origin/${{ matrix.version.branch }}" "${{ matrix.version.section }}"
       - name: Upload version artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: version-${{ matrix.version.section }}
           path: docs/versioned_docs/${{ matrix.version.section }}
@@ -87,7 +87,7 @@ jobs:
         with:
           submodules: recursive
       - name: Setup GO
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: '>=1.20.1'
           cache: false
@@ -98,7 +98,7 @@ jobs:
           key: go-mod-${{ hashFiles('docs/go.sum') }}
           restore-keys: go-mod-
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 20
           cache: 'npm'
@@ -109,7 +109,7 @@ jobs:
         working-directory: ./docs
         run: npm ci
       - name: Download version artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           pattern: version-*
           path: docs/versioned_docs-raw/

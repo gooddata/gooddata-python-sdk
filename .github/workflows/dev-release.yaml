@@ -52,7 +52,7 @@ jobs:
           fi
           uv build --out-dir dist
       - name: Upload ${{ matrix.component }} artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: dist-${{ matrix.component }}
           path: ${{ matrix.component == 'gooddata-api-client' && format('{0}/dist', matrix.component) || format('packages/{0}/dist', matrix.component) }}
@@ -71,7 +71,7 @@ jobs:
         component: ${{ fromJSON(needs.matrix-components.outputs.components) }}
     steps:
       - name: Download ${{ matrix.component }} artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dist-${{ matrix.component }}
           path: dist
