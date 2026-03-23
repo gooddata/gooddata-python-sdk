@@ -65,6 +65,7 @@ class ColumnOverride(ModelNormal):
             'GEO_AREA': "GEO_AREA",
             'GEO_ICON': "GEO_ICON",
             'IMAGE': "IMAGE",
+            'HYPERLOGLOG': "HYPERLOGLOG",
         },
         ('ldm_type_override',): {
             'FACT': "FACT",

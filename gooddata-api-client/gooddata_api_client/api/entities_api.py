@@ -2615,7 +2615,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -2638,18 +2637,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -2673,7 +2668,6 @@ class EntitiesApi(object):
                 'all': [
                     'user_id',
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'user_id',
@@ -2703,18 +2697,14 @@ class EntitiesApi(object):
                         (str,),
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'user_id': 'userId',
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'user_id': 'path',
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -2738,7 +2728,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -2761,18 +2750,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -2796,7 +2781,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -2819,18 +2803,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -2972,7 +2952,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -2995,18 +2974,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3029,7 +3004,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -3056,16 +3030,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3089,7 +3059,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -3112,18 +3081,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3146,7 +3111,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -3173,16 +3137,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3206,7 +3166,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -3229,18 +3188,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3323,7 +3278,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -3346,18 +3300,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3381,7 +3331,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -3404,18 +3353,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3497,7 +3442,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -3524,16 +3468,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3791,7 +3731,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -3814,18 +3753,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -4026,7 +3961,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -4049,18 +3983,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -4143,7 +4073,6 @@ class EntitiesApi(object):
                 'all': [
                     'user_id',
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'user_id',
@@ -4173,18 +4102,14 @@ class EntitiesApi(object):
                         (str,),
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'user_id': 'userId',
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'user_id': 'path',
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -4267,7 +4192,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -4290,18 +4214,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -4325,7 +4245,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -4348,18 +4267,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -4383,7 +4298,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -4406,18 +4320,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -4441,7 +4351,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -4464,18 +4373,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -22741,7 +22646,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -22828,7 +22732,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -22915,7 +22818,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -23002,7 +22904,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -23256,7 +23157,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -23341,7 +23241,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -23426,7 +23325,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -23512,7 +23410,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -23597,7 +23494,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -23767,7 +23663,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -23854,7 +23749,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -24023,7 +23917,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -24449,7 +24342,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -24785,7 +24677,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -24956,7 +24847,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -25127,7 +25017,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -25214,7 +25103,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -25301,7 +25189,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -25388,7 +25275,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

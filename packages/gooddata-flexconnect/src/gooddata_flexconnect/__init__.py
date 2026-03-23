@@ -11,6 +11,7 @@ from gooddata_flexconnect.function.execution_context import (
     ExecutionContextAttribute,
     ExecutionContextAttributeSorting,
     ExecutionContextFilter,
+    ExecutionContextMatchAttributeFilter,
     ExecutionContextNegativeAttributeFilter,
     ExecutionContextPositiveAttributeFilter,
     ExecutionContextRelativeDateFilter,

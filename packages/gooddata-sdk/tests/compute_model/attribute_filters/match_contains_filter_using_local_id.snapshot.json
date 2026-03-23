@@ -1,0 +1,11 @@
+{
+    "match_attribute_filter": {
+        "case_sensitive": false,
+        "label": {
+            "local_identifier": "local_id"
+        },
+        "literal": "foo",
+        "match_type": "CONTAINS",
+        "negate": false
+    }
+}

@@ -542,6 +542,8 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**anomaly_detection_result**](docs/ActionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 *ActionsApi* | [**available_assignees**](docs/ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 *ActionsApi* | [**cancel_executions**](docs/ActionsApi.md#cancel_executions) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel | Applies all the given cancel tokens.
+*ActionsApi* | [**cancel_workflow**](docs/ActionsApi.md#cancel_workflow) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/cancel | 
+*ActionsApi* | [**cancel_workflow1**](docs/ActionsApi.md#cancel_workflow1) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/agent/{runId}/cancel | 
 *ActionsApi* | [**change_analysis**](docs/ActionsApi.md#change_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis | Compute change analysis
 *ActionsApi* | [**change_analysis_result**](docs/ActionsApi.md#change_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis/result/{resultId} | Get change analysis result
 *ActionsApi* | [**check_entity_overrides**](docs/ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
@@ -572,7 +574,10 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**explain_afm**](docs/ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
 *ActionsApi* | [**forecast**](docs/ActionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
 *ActionsApi* | [**forecast_result**](docs/ActionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
+*ActionsApi* | [**generate_dashboard_summary**](docs/ActionsApi.md#generate_dashboard_summary) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/dashboardSummary | 
+*ActionsApi* | [**generate_dashboard_summary1**](docs/ActionsApi.md#generate_dashboard_summary1) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/agent/dashboardSummary | 
 *ActionsApi* | [**generate_description**](docs/ActionsApi.md#generate_description) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateDescription | Generate Description for Analytics Object
+*ActionsApi* | [**generate_knowledge_recommendations**](docs/ActionsApi.md#generate_knowledge_recommendations) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/agent/knowledgeRecommendations | 
 *ActionsApi* | [**generate_logical_model**](docs/ActionsApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
 *ActionsApi* | [**generate_logical_model_aac**](docs/ActionsApi.md#generate_logical_model_aac) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModelAac | Generate logical data model in AAC format from physical data model (PDM)
 *ActionsApi* | [**generate_title**](docs/ActionsApi.md#generate_title) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateTitle | Generate Title for Analytics Object
@@ -592,6 +597,8 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_slides_export_metadata**](docs/ActionsApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 *ActionsApi* | [**get_tabular_export**](docs/ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 *ActionsApi* | [**get_translation_tags**](docs/ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
+*ActionsApi* | [**get_workflow_status**](docs/ActionsApi.md#get_workflow_status) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/status | 
+*ActionsApi* | [**get_workflow_status1**](docs/ActionsApi.md#get_workflow_status1) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/agent/{runId}/status | 
 *ActionsApi* | [**import_csv**](docs/ActionsApi.md#import_csv) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/importCsv | Import CSV
 *ActionsApi* | [**import_custom_geo_collection**](docs/ActionsApi.md#import_custom_geo_collection) | **POST** /api/v1/actions/customGeoCollection/{collectionId}/import | Import custom geo collection
 *ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
@@ -659,6 +666,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**unsubscribe_selected_workspace_automations**](docs/ActionsApi.md#unsubscribe_selected_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from selected automations in the workspace
 *ActionsApi* | [**unsubscribe_workspace_automations**](docs/ActionsApi.md#unsubscribe_workspace_automations) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from all automations in the workspace
 *ActionsApi* | [**upsert_document**](docs/ActionsApi.md#upsert_document) | **PUT** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents | 
+*ActionsApi* | [**user_feedback**](docs/ActionsApi.md#user_feedback) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/agent/{runId}/feedback | 
 *ActionsApi* | [**validate_llm_endpoint**](docs/ActionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint
 *ActionsApi* | [**validate_llm_endpoint_by_id**](docs/ActionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id
 *ActionsApi* | [**workspace_resolve_all_settings**](docs/ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
@@ -1396,6 +1404,8 @@ Class | Method | HTTP request | Description
  - [CustomLabel](docs/CustomLabel.md)
  - [CustomMetric](docs/CustomMetric.md)
  - [CustomOverride](docs/CustomOverride.md)
+ - [DashboardArbitraryAttributeFilter](docs/DashboardArbitraryAttributeFilter.md)
+ - [DashboardArbitraryAttributeFilterArbitraryAttributeFilter](docs/DashboardArbitraryAttributeFilterArbitraryAttributeFilter.md)
  - [DashboardAttributeFilter](docs/DashboardAttributeFilter.md)
  - [DashboardAttributeFilterAttributeFilter](docs/DashboardAttributeFilterAttributeFilter.md)
  - [DashboardContext](docs/DashboardContext.md)
@@ -1404,9 +1414,13 @@ Class | Method | HTTP request | Description
  - [DashboardDateFilterDateFilter](docs/DashboardDateFilterDateFilter.md)
  - [DashboardExportSettings](docs/DashboardExportSettings.md)
  - [DashboardFilter](docs/DashboardFilter.md)
+ - [DashboardMatchAttributeFilter](docs/DashboardMatchAttributeFilter.md)
+ - [DashboardMatchAttributeFilterMatchAttributeFilter](docs/DashboardMatchAttributeFilterMatchAttributeFilter.md)
  - [DashboardPermissions](docs/DashboardPermissions.md)
  - [DashboardPermissionsAssignment](docs/DashboardPermissionsAssignment.md)
  - [DashboardSlidesTemplate](docs/DashboardSlidesTemplate.md)
+ - [DashboardSummaryRequestDto](docs/DashboardSummaryRequestDto.md)
+ - [DashboardSummaryResponseDto](docs/DashboardSummaryResponseDto.md)
  - [DashboardTabularExportRequest](docs/DashboardTabularExportRequest.md)
  - [DashboardTabularExportRequestV2](docs/DashboardTabularExportRequestV2.md)
  - [DataColumnLocator](docs/DataColumnLocator.md)
@@ -1553,6 +1567,7 @@ Class | Method | HTTP request | Description
  - [FactIdentifier](docs/FactIdentifier.md)
  - [FailedOperation](docs/FailedOperation.md)
  - [FailedOperationAllOf](docs/FailedOperationAllOf.md)
+ - [FeedbackRequestDto](docs/FeedbackRequestDto.md)
  - [File](docs/File.md)
  - [Filter](docs/Filter.md)
  - [FilterBy](docs/FilterBy.md)
@@ -2202,6 +2217,8 @@ Class | Method | HTTP request | Description
  - [KeyDriversResponse](docs/KeyDriversResponse.md)
  - [KeyDriversResult](docs/KeyDriversResult.md)
  - [KnowledgeDocumentMetadataDto](docs/KnowledgeDocumentMetadataDto.md)
+ - [KnowledgeRecommendationsRequestDto](docs/KnowledgeRecommendationsRequestDto.md)
+ - [KnowledgeRecommendationsResponseDto](docs/KnowledgeRecommendationsResponseDto.md)
  - [KnowledgeSearchResultDto](docs/KnowledgeSearchResultDto.md)
  - [LabelIdentifier](docs/LabelIdentifier.md)
  - [ListDatabaseInstancesResponse](docs/ListDatabaseInstancesResponse.md)
@@ -2445,6 +2462,9 @@ Class | Method | HTTP request | Description
  - [WhatIfScenarioItem](docs/WhatIfScenarioItem.md)
  - [WidgetDescriptor](docs/WidgetDescriptor.md)
  - [WidgetSlidesTemplate](docs/WidgetSlidesTemplate.md)
+ - [WorkflowDashboardSummaryRequestDto](docs/WorkflowDashboardSummaryRequestDto.md)
+ - [WorkflowDashboardSummaryResponseDto](docs/WorkflowDashboardSummaryResponseDto.md)
+ - [WorkflowStatusResponseDto](docs/WorkflowStatusResponseDto.md)
  - [WorkspaceAutomationIdentifier](docs/WorkspaceAutomationIdentifier.md)
  - [WorkspaceAutomationManagementBulkRequest](docs/WorkspaceAutomationManagementBulkRequest.md)
  - [WorkspaceCacheSettings](docs/WorkspaceCacheSettings.md)

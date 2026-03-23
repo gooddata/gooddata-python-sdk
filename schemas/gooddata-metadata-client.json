@@ -5575,7 +5575,8 @@
               "GEO_LATITUDE",
               "GEO_AREA",
               "GEO_ICON",
-              "IMAGE"
+              "IMAGE",
+              "HYPERLOGLOG"
             ],
             "example": "HYPERLINK",
             "type": "string"
@@ -5866,6 +5867,54 @@
         },
         "type": "object"
       },
+      "DashboardArbitraryAttributeFilter": {
+        "properties": {
+          "arbitraryAttributeFilter": {
+            "properties": {
+              "displayForm": {
+                "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "filterElementsBy": {
+                "items": {
+                  "$ref": "#/components/schemas/AttributeFilterParent"
+                },
+                "type": "array"
+              },
+              "filterElementsByDate": {
+                "items": {
+                  "$ref": "#/components/schemas/AttributeFilterByDate"
+                },
+                "type": "array"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "negativeSelection": {
+                "type": "boolean"
+              },
+              "title": {
+                "type": "string"
+              },
+              "values": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "displayForm",
+              "negativeSelection",
+              "values"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "arbitraryAttributeFilter"
+        ],
+        "type": "object"
+      },
       "DashboardAttributeFilter": {
         "properties": {
           "attributeFilter": {
@@ -6065,7 +6114,59 @@
           },
           {
             "$ref": "#/components/schemas/DashboardDateFilter"
+          },
+          {
+            "$ref": "#/components/schemas/DashboardArbitraryAttributeFilter"
+          },
+          {
+            "$ref": "#/components/schemas/DashboardMatchAttributeFilter"
           }
+        ],
+        "type": "object"
+      },
+      "DashboardMatchAttributeFilter": {
+        "properties": {
+          "matchAttributeFilter": {
+            "properties": {
+              "caseSensitive": {
+                "type": "boolean"
+              },
+              "displayForm": {
+                "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "literal": {
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "negativeSelection": {
+                "type": "boolean"
+              },
+              "operator": {
+                "enum": [
+                  "contains",
+                  "startsWith",
+                  "endsWith"
+                ],
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "caseSensitive",
+              "displayForm",
+              "literal",
+              "negativeSelection",
+              "operator"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "matchAttributeFilter"
         ],
         "type": "object"
       },
@@ -8277,7 +8378,8 @@
               "GEO_LATITUDE",
               "GEO_AREA",
               "GEO_ICON",
-              "IMAGE"
+              "IMAGE",
+              "HYPERLOGLOG"
             ],
             "type": "string"
           }
@@ -9033,6 +9135,7 @@
               "METADATA_LOCALE",
               "FORMAT_LOCALE",
               "MAPBOX_TOKEN",
+              "GEO_ICON_SHEET",
               "AG_GRID_TOKEN",
               "WEEK_START",
               "FISCAL_YEAR",
@@ -20241,7 +20344,8 @@
                   "GEO_LATITUDE",
                   "GEO_AREA",
                   "GEO_ICON",
-                  "IMAGE"
+                  "IMAGE",
+                  "HYPERLOGLOG"
                 ],
                 "type": "string"
               }
@@ -23153,6 +23257,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -23252,6 +23357,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -23391,6 +23497,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -24896,6 +25003,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -24995,6 +25103,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -27250,6 +27359,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -27349,6 +27459,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -27514,6 +27625,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -27613,6 +27725,7 @@
                   "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
+                  "GEO_ICON_SHEET",
                   "AG_GRID_TOKEN",
                   "WEEK_START",
                   "FISCAL_YEAR",
@@ -29105,6 +29218,7 @@
               "METADATA_LOCALE",
               "FORMAT_LOCALE",
               "MAPBOX_TOKEN",
+              "GEO_ICON_SHEET",
               "AG_GRID_TOKEN",
               "WEEK_START",
               "FISCAL_YEAR",
@@ -33976,15 +34090,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "name==someString;description==someString",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -34454,15 +34559,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "name==someString;type==DatabaseTypeValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -35523,15 +35619,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "content==JwkSpecificationValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -38634,15 +38721,6 @@
           },
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "bearerToken==someString",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -38849,15 +38927,6 @@
           },
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "content==JsonNodeValue;type==SettingTypeValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -40125,15 +40194,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -40809,15 +40869,6 @@
             "in": "path",
             "name": "objectId",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
-            "in": "query",
-            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -41986,15 +42037,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -42621,15 +42663,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "applicationName==someString;content==JsonNodeValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -43196,15 +43229,6 @@
             "in": "path",
             "name": "objectId",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
-            "in": "query",
-            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -44296,15 +44320,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -45387,15 +45402,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -46022,15 +46028,6 @@
             "in": "path",
             "name": "objectId",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;analyticalDashboard.id==321;user.id==321",
-            "in": "query",
-            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -48318,15 +48315,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -49004,15 +48992,6 @@
             "in": "path",
             "name": "objectId",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;user.id==321;userGroup.id==321",
-            "in": "query",
-            "name": "filter",
             "schema": {
               "type": "string"
             }
@@ -49696,15 +49675,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -50371,15 +50341,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;workspaceDataFilter.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -51025,15 +50986,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -51630,15 +51582,6 @@
             "in": "path",
             "name": "objectId",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "content==JsonNodeValue;type==SettingTypeValue",
-            "in": "query",
-            "name": "filter",
             "schema": {
               "type": "string"
             }

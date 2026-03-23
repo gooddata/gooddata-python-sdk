@@ -8,6 +8,7 @@ from gooddata_sdk.compute.model.filter import (
     AllTimeDateFilter,
     BoundedFilter,
     Filter,
+    MatchAttributeFilter,
     NegativeAttributeFilter,
     PositiveAttributeFilter,
     RelativeDateFilter,
@@ -43,6 +44,10 @@ class VisualizationToSdkConverter:
             - using: str - The identifier of the attribute/dataset to filter on
             - include: list[str] (optional) - Values to include in positive filter
             - exclude: list[str] (optional) - Values to exclude in negative filter
+            - literal: str (optional) - Literal value for match attribute filter
+            - matchType: str (optional) - Match type (STARTS_WITH, ENDS_WITH, CONTAINS)
+            - negate: bool (optional) - Whether to negate the match
+            - caseSensitive: bool (optional) - Whether match is case-sensitive
             - from: str (optional) - Start date/shift for date filters
             - to: str (optional) - End date/shift for date filters
             - granularity: str (optional) - Time granularity for relative date filters
@@ -50,6 +55,7 @@ class VisualizationToSdkConverter:
             Filter: One of:
                 - PositiveAttributeFilter: When include values specified
                 - NegativeAttributeFilter: When exclude values specified
+                - MatchAttributeFilter: When literal and matchType specified
                 - RelativeDateFilter: When granularity and from/to shifts specified
                 - AbsoluteDateFilter: When from/to dates specified
                 - AllTimeDateFilter: When no date range specified
@@ -61,10 +67,21 @@ class VisualizationToSdkConverter:
         _to = filter_dict.get("to")
         granularity = filter_dict.get("granularity")
 
+        literal = filter_dict.get("literal")
+        match_type = filter_dict.get("matchType")
+
         if include is not None:
             return PositiveAttributeFilter(label=ObjId(using, "label"), values=include)
         elif exclude is not None:
             return NegativeAttributeFilter(label=ObjId(using, "label"), values=exclude)
+        elif literal is not None and match_type is not None:
+            return MatchAttributeFilter(
+                label=ObjId(using, "label"),
+                match_type=match_type,
+                literal=literal,
+                negate=filter_dict.get("negate", False),
+                case_sensitive=filter_dict.get("caseSensitive", False),
+            )
         elif granularity is not None and _from is not None and _to is not None:
             bounded_filter = None
             if "boundedFilter" in filter_dict:

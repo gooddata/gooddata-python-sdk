@@ -1,0 +1,46 @@
+{
+    "attributes": [
+        {
+            "label": {
+                "identifier": {
+                    "id": "label.opportunity.id.name",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "a_label.opportunity.id.name"
+        }
+    ],
+    "filters": [
+        {
+            "match_attribute_filter": {
+                "case_sensitive": true,
+                "label": {
+                    "identifier": {
+                        "id": "label.opportunity.id.name",
+                        "type": "label"
+                    }
+                },
+                "literal": "search term",
+                "match_type": "CONTAINS",
+                "negate": false
+            }
+        }
+    ],
+    "measures": [
+        {
+            "definition": {
+                "measure": {
+                    "compute_ratio": false,
+                    "filters": [],
+                    "item": {
+                        "identifier": {
+                            "id": "aangOxLSeztu",
+                            "type": "metric"
+                        }
+                    }
+                }
+            },
+            "local_identifier": "m_aangOxLSeztu"
+        }
+    ]
+}

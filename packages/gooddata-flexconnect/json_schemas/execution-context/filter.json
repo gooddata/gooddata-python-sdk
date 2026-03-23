@@ -61,6 +61,44 @@
         },
         {
             "type": "object",
+            "description": "Filter for matching label values using a literal string pattern.",
+            "properties": {
+                "filterType": {
+                    "const": "matchAttributeFilter"
+                },
+                "labelIdentifier": {
+                    "type": "string",
+                    "description": "Identifier of the label used."
+                },
+                "matchType": {
+                    "type": "string",
+                    "enum": ["CONTAINS", "STARTS_WITH", "ENDS_WITH"],
+                    "description": "The type of string match to apply."
+                },
+                "literal": {
+                    "type": "string",
+                    "description": "The literal value to match against."
+                },
+                "negate": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether to negate the match."
+                },
+                "caseSensitive": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether the match is case-sensitive."
+                }
+            },
+            "required": [
+                "filterType",
+                "labelIdentifier",
+                "matchType",
+                "literal"
+            ]
+        },
+        {
+            "type": "object",
             "description": "Filter for relative date ranges.",
             "properties": {
                 "filterType": {
