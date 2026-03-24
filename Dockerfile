@@ -1,6 +1,6 @@
 # (C) 2021 GoodData Corporation
 ARG PY_TAG
-FROM ghcr.io/astral-sh/uv:0.10 AS uv
+FROM ghcr.io/astral-sh/uv:0.11 AS uv
 FROM python:${PY_TAG}
 
 ARG PY_TAG
