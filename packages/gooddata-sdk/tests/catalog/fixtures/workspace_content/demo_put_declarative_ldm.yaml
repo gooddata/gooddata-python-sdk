@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/test_put_declarative_ldm?include=workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/test_put_declarative_ldm?include=workspaces
       body: null
       headers:
         Accept:
@@ -19,24 +19,39 @@ interactions:
         code: 404
         message: Not Found
       headers:
+        Cache-Control:
+          - max-age=5, private
+        Connection:
+          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
-          - application/json
+          - application/problem+json
         DATE: &id001
           - PLACEHOLDER
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-XSS-Protection:
+          - '0'
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: b5773e23f2196644d006005bd0a20cda
+          traceId: 7fb9c334f1b07bd75cbb9643ab6ced93
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/entities/workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces
       body:
         data:
           id: test_put_declarative_ldm
@@ -61,8 +76,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '203'
+          - '240'
         Content-Type:
           - application/json
         DATE: *id001
@@ -72,6 +89,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -79,7 +98,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -89,10 +108,10 @@ interactions:
             id: test_put_declarative_ldm
             type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/test_put_declarative_ldm
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/test_put_declarative_ldm
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo/logicalModel
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/logicalModel
       body: null
       headers:
         Accept:
@@ -110,8 +129,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '7019'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -121,14 +142,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -499,7 +525,7 @@ interactions:
                 title: Date
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaces/test_put_declarative_ldm/logicalModel
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/test_put_declarative_ldm/logicalModel
       body:
         ldm:
           datasets:
@@ -876,6 +902,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -883,6 +911,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -890,13 +920,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/test_put_declarative_ldm/logicalModel
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/test_put_declarative_ldm/logicalModel
       body: null
       headers:
         Accept:
@@ -914,8 +944,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '6861'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -925,14 +957,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -1297,7 +1334,7 @@ interactions:
                 title: Date
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces
       body:
         workspaceDataFilters:
           - columnName: wdf__region
@@ -3122,6 +3159,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -3129,6 +3168,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -3136,7 +3177,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''

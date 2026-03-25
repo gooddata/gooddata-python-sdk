@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes:
@@ -50,6 +50,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '678'
         Content-Type:
@@ -62,16 +64,18 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Gdc-Cancel-Token:
-          - 313a2a3b-3174-445a-a263-226dc4f22f7f
+        X-GDC-CANCEL-TOKEN:
+          - 6605fea6-c227-4e7d-84b0-44e72ddeb3c7
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -103,10 +107,10 @@ interactions:
                       - localIdentifier: metric1
                 localIdentifier: dim_1
             links:
-              executionResult: 3c03df4b89ad6aec98eac71a4136a768eb633594:2b3d881dd97a5a40542888a9dd17b9e34311864c2c2d9dbada5899cf85d45457
+              executionResult: 51aa973b5c57ffaf530803a2fbe86cb8ed8e101d:87bf7f4ac2a0a2681f333f6e9b9c869409f0f323ff492294b8122345c6d505f8
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/3c03df4b89ad6aec98eac71a4136a768eb633594%3A2b3d881dd97a5a40542888a9dd17b9e34311864c2c2d9dbada5899cf85d45457?offset=0%2C0&limit=512%2C256
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute/result/51aa973b5c57ffaf530803a2fbe86cb8ed8e101d%3A87bf7f4ac2a0a2681f333f6e9b9c869409f0f323ff492294b8122345c6d505f8?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -124,8 +128,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '4471'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -135,14 +141,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -373,7 +384,7 @@ interactions:
             dataSourceMessages: []
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes:
@@ -429,6 +440,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '678'
         Content-Type:
@@ -440,16 +453,18 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Gdc-Cancel-Token:
-          - 5bfcda02-db1c-490f-aa8c-dd92a1626c3c
+        X-GDC-CANCEL-TOKEN:
+          - ddfc12a1-cab5-437d-a11c-becc164308f2
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -481,10 +496,10 @@ interactions:
                       - localIdentifier: metric1
                 localIdentifier: dim_1
             links:
-              executionResult: c0921238f50abf475e39d5632f125ad975a8ffcb:6667a381ebb54d49e0dbf15d61a9d899b6d2635fe4a5ba408fa42bdfb2791f9b
+              executionResult: ae8c8407edfeb8eb491089afdb2c0d92723e3b14:fc2a71ab4fdcbfc9e80d264a9b7e5cae18f46beaf1ce91dc161198493e98b3d9
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/c0921238f50abf475e39d5632f125ad975a8ffcb%3A6667a381ebb54d49e0dbf15d61a9d899b6d2635fe4a5ba408fa42bdfb2791f9b?offset=0%2C0&limit=512%2C256
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute/result/ae8c8407edfeb8eb491089afdb2c0d92723e3b14%3Afc2a71ab4fdcbfc9e80d264a9b7e5cae18f46beaf1ce91dc161198493e98b3d9?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -502,8 +517,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '4318'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -513,14 +530,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -747,7 +769,7 @@ interactions:
             dataSourceMessages: []
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes:
@@ -803,6 +825,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '678'
         Content-Type:
@@ -814,16 +838,18 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Gdc-Cancel-Token:
-          - 314bd4ff-d458-4a4a-ab86-2da0c8006518
+        X-GDC-CANCEL-TOKEN:
+          - 980eb084-548a-4284-ad1d-f0be64503d1d
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -855,10 +881,10 @@ interactions:
                       - localIdentifier: metric1
                 localIdentifier: dim_1
             links:
-              executionResult: de499b1aa643effd8d4730864b3a57b894eadada:22774bc0e415c324deeb6f3f50d4175a219fee5c33a5ff3aa0bc5a1025795a40
+              executionResult: aef6fd2660c240bb8411bd9bf1de1da042ac5971:e1ade985138e87d8d06e6df3cfe10a8bfc5ea3a3b722769073bc74cc7fbf39c5
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/de499b1aa643effd8d4730864b3a57b894eadada%3A22774bc0e415c324deeb6f3f50d4175a219fee5c33a5ff3aa0bc5a1025795a40?offset=0%2C0&limit=512%2C256
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute/result/aef6fd2660c240bb8411bd9bf1de1da042ac5971%3Ae1ade985138e87d8d06e6df3cfe10a8bfc5ea3a3b722769073bc74cc7fbf39c5?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -876,8 +902,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '2678'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -887,14 +915,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:

@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics?page=0&size=500
       body: null
       headers:
         Accept:
@@ -21,8 +21,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '10543'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,14 +35,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -54,7 +61,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: amount_of_active_customers
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
               meta:
                 origin:
                   originId: demo
@@ -69,7 +76,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: amount_of_orders
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_orders
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_orders
               meta:
                 origin:
                   originId: demo
@@ -85,7 +92,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: amount_of_top_customers
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_top_customers
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_top_customers
               meta:
                 origin:
                   originId: demo
@@ -102,7 +109,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: amount_of_valid_orders
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_valid_orders
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_valid_orders
               meta:
                 origin:
                   originId: demo
@@ -117,7 +124,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: campaign_spend
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/campaign_spend
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/campaign_spend
               meta:
                 origin:
                   originId: demo
@@ -132,7 +139,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: order_amount
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/order_amount
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/order_amount
               meta:
                 origin:
                   originId: demo
@@ -147,7 +154,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: percent_revenue
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue
               meta:
                 origin:
                   originId: demo
@@ -163,7 +170,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: percent_revenue_from_top_10_customers
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_customers
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_customers
               meta:
                 origin:
                   originId: demo
@@ -179,7 +186,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: percent_revenue_from_top_10_percent_customers
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_customers
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_customers
               meta:
                 origin:
                   originId: demo
@@ -195,7 +202,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: percent_revenue_from_top_10_percent_products
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_products
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_products
               meta:
                 origin:
                   originId: demo
@@ -211,7 +218,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: percent_revenue_from_top_10_products
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_products
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_products
               meta:
                 origin:
                   originId: demo
@@ -227,7 +234,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: percent_revenue_in_category
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
               meta:
                 origin:
                   originId: demo
@@ -243,7 +250,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: percent_revenue_per_product
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_per_product
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_per_product
               meta:
                 origin:
                   originId: demo
@@ -260,7 +267,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: revenue
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue
               meta:
                 origin:
                   originId: demo
@@ -276,7 +283,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: revenue-clothing
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-clothing
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-clothing
               meta:
                 origin:
                   originId: demo
@@ -292,7 +299,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: revenue-electronic
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-electronic
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-electronic
               meta:
                 origin:
                   originId: demo
@@ -308,7 +315,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: revenue-home
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-home
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-home
               meta:
                 origin:
                   originId: demo
@@ -324,7 +331,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: revenue-outdoor
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-outdoor
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-outdoor
               meta:
                 origin:
                   originId: demo
@@ -339,7 +346,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: revenue_per_customer
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
               meta:
                 origin:
                   originId: demo
@@ -354,7 +361,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: revenue_per_dollar_spent
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_dollar_spent
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_per_dollar_spent
               meta:
                 origin:
                   originId: demo
@@ -369,7 +376,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: revenue_top_10
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_top_10
               meta:
                 origin:
                   originId: demo
@@ -384,7 +391,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: revenue_top_10_percent
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10_percent
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_top_10_percent
               meta:
                 origin:
                   originId: demo
@@ -399,7 +406,7 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: total_revenue
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/total_revenue
               meta:
                 origin:
                   originId: demo
@@ -414,18 +421,18 @@ interactions:
                 createdAt: 2025-08-07 11:45
               id: total_revenue-no_filters
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue-no_filters
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/total_revenue-no_filters
               meta:
                 origin:
                   originId: demo
                   originType: NATIVE
               type: metric
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics?page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics?page=1&size=500
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes: []
@@ -463,6 +470,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '337'
         Content-Type:
@@ -474,16 +483,18 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Gdc-Cancel-Token:
-          - 844823d2-d4a4-4e97-9d86-c82b2bfc04c1
+        X-GDC-CANCEL-TOKEN:
+          - cc351094-43f7-4004-bde7-2576aaab112c
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -496,10 +507,10 @@ interactions:
                         name: '# of Active Customers'
                 localIdentifier: dim_0
             links:
-              executionResult: f7c5e144d4870f999a47792867641c087cb7e27e:807e4289fe0dc8684c6026d800600d38591ad8cba6ed5fc626ad5a49f8edb099
+              executionResult: e634429a8a94a8d8cd6515382f18f80ce12964e9:116165a10ca5e19f7e2bd5b45348106f14d72eebe522316b25231881371f5532
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/dataSources/demo-test-ds/uploadNotification
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSources/demo-test-ds/uploadNotification
       body: null
       headers:
         Accept-Encoding:
@@ -517,6 +528,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -524,6 +537,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -531,13 +546,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes: []
@@ -575,6 +590,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '337'
         Content-Type:
@@ -586,16 +603,18 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Gdc-Cancel-Token:
-          - 3f0a57e9-57c0-4774-9816-d0fb7a31ee42
+        X-GDC-CANCEL-TOKEN:
+          - 02b25b56-c095-4194-b44a-3b60bfea80d7
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -608,4 +627,4 @@ interactions:
                         name: '# of Active Customers'
                 localIdentifier: dim_0
             links:
-              executionResult: de61e90bb819b0d5f3b207e6da8eb46f2957ead5:387bb62860f96fdf80a16ff31dc98f51da7cc72d8181cbd19018ae1c935fc1c5
+              executionResult: d84cf434cc6800215a21e7a7e7a068ff39aedb97:db64173e3a46017a3d797d326733ad85612fbf595ff97885d7f96b5549dd4203

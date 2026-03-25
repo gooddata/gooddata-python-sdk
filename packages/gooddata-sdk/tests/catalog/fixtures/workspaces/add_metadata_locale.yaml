@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/translations/clean
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/translations/clean
       body:
         locale: fr-FR
       headers:
@@ -22,6 +22,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: &id001
           - PLACEHOLDER
         Expires:
@@ -30,6 +32,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -37,13 +41,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/translations/retrieve
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/translations/retrieve
       body:
         locale: fr-FR
       headers:
@@ -64,8 +68,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '40991'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/xml
         DATE: *id001
@@ -75,14 +81,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
@@ -144,13 +155,10 @@ interactions:
           id="attribute.campaign_channels.category.title"><segment><source>Category</source></segment></unit><unit
           id="attribute.campaign_channels.category.description"><segment><source>Category</source></segment></unit><unit
           id="attribute.campaign_channels.category.tags"><segment><source>Campaign
-          channels</source></segment></unit></group><group id="attribute.type"><unit
-          id="attribute.type.title"><segment><source>Type</source></segment></unit><unit
-          id="attribute.type.description"><segment><source>Type</source></segment></unit><unit
-          id="attribute.type.tags"><segment><source>Campaign channels</source></segment></unit></group><group
-          id="attribute.campaign_id"><unit id="attribute.campaign_id.title"><segment><source>Campaign
-          id</source></segment></unit><unit id="attribute.campaign_id.description"><segment><source>Campaign
-          id</source></segment></unit><unit id="attribute.campaign_id.tags"><segment><source>Campaigns</source></segment></unit></group><group
+          channels</source></segment></unit></group><group id="attribute.campaign_id"><unit
+          id="attribute.campaign_id.title"><segment><source>Campaign id</source></segment></unit><unit
+          id="attribute.campaign_id.description"><segment><source>Campaign id</source></segment></unit><unit
+          id="attribute.campaign_id.tags"><segment><source>Campaigns</source></segment></unit></group><group
           id="attribute.campaign_name"><unit id="attribute.campaign_name.title"><segment><source>Campaign
           name</source></segment></unit><unit id="attribute.campaign_name.description"><segment><source>Campaign
           name</source></segment></unit><unit id="attribute.campaign_name.tags"><segment><source>Campaigns</source></segment></unit></group><group
@@ -160,9 +168,21 @@ interactions:
           id="attribute.customer_name"><unit id="attribute.customer_name.title"><segment><source>Customer
           name</source></segment></unit><unit id="attribute.customer_name.description"><segment><source>Customer
           name</source></segment></unit><unit id="attribute.customer_name.tags"><segment><source>Customers</source></segment></unit></group><group
-          id="attribute.region"><unit id="attribute.region.title"><segment><source>Region</source></segment></unit><unit
-          id="attribute.region.description"><segment><source>Region</source></segment></unit><unit
-          id="attribute.region.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="attribute.date.day"><unit id="attribute.date.day.title"><segment><source>Date
+          - Date</source></segment></unit><unit id="attribute.date.day.description"><segment><source>Date</source></segment></unit><unit
+          id="attribute.date.day.tags"><segment><source>Date</source></segment></unit></group><group
+          id="attribute.date.month"><unit id="attribute.date.month.title"><segment><source>Date
+          - Month/Year</source></segment></unit><unit id="attribute.date.month.description"><segment><source>Month
+          and Year (12/2020)</source></segment></unit><unit id="attribute.date.month.tags"><segment><source>Date</source></segment></unit></group><group
+          id="attribute.date.quarter"><unit id="attribute.date.quarter.title"><segment><source>Date
+          - Quarter/Year</source></segment></unit><unit id="attribute.date.quarter.description"><segment><source>Quarter
+          and Year (Q1/2020)</source></segment></unit><unit id="attribute.date.quarter.tags"><segment><source>Date</source></segment></unit></group><group
+          id="attribute.date.week"><unit id="attribute.date.week.title"><segment><source>Date
+          - Week/Year</source></segment></unit><unit id="attribute.date.week.description"><segment><source>Week
+          and Year (W52/2020)</source></segment></unit><unit id="attribute.date.week.tags"><segment><source>Date</source></segment></unit></group><group
+          id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
+          - Year</source></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source></segment></unit><unit
+          id="attribute.date.year.tags"><segment><source>Date</source></segment></unit></group><group
           id="attribute.order_id"><unit id="attribute.order_id.title"><segment><source>Order
           id</source></segment></unit><unit id="attribute.order_id.description"><segment><source>Order
           id</source></segment></unit><unit id="attribute.order_id.tags"><segment><source>Order
@@ -183,24 +203,15 @@ interactions:
           id="attribute.products.category"><unit id="attribute.products.category.title"><segment><source>Category</source></segment></unit><unit
           id="attribute.products.category.description"><segment><source>Category</source></segment></unit><unit
           id="attribute.products.category.tags"><segment><source>Products</source></segment></unit></group><group
-          id="attribute.date.day"><unit id="attribute.date.day.title"><segment><source>Date
-          - Date</source></segment></unit><unit id="attribute.date.day.description"><segment><source>Date</source></segment></unit><unit
-          id="attribute.date.day.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.week"><unit id="attribute.date.week.title"><segment><source>Date
-          - Week/Year</source></segment></unit><unit id="attribute.date.week.description"><segment><source>Week
-          and Year (W52/2020)</source></segment></unit><unit id="attribute.date.week.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.month"><unit id="attribute.date.month.title"><segment><source>Date
-          - Month/Year</source></segment></unit><unit id="attribute.date.month.description"><segment><source>Month
-          and Year (12/2020)</source></segment></unit><unit id="attribute.date.month.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.quarter"><unit id="attribute.date.quarter.title"><segment><source>Date
-          - Quarter/Year</source></segment></unit><unit id="attribute.date.quarter.description"><segment><source>Quarter
-          and Year (Q1/2020)</source></segment></unit><unit id="attribute.date.quarter.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
-          - Year</source></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source></segment></unit><unit
-          id="attribute.date.year.tags"><segment><source>Date</source></segment></unit></group><group
+          id="attribute.region"><unit id="attribute.region.title"><segment><source>Region</source></segment></unit><unit
+          id="attribute.region.description"><segment><source>Region</source></segment></unit><unit
+          id="attribute.region.tags"><segment><source>Customers</source></segment></unit></group><group
           id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source></segment></unit><unit
           id="attribute.state.description"><segment><source>State</source></segment></unit><unit
-          id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group></group><group
+          id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="attribute.type"><unit id="attribute.type.title"><segment><source>Type</source></segment></unit><unit
+          id="attribute.type.description"><segment><source>Type</source></segment></unit><unit
+          id="attribute.type.tags"><segment><source>Campaign channels</source></segment></unit></group></group><group
           id="dataset"><group id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.description"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.tags"><segment><source>Campaign
@@ -248,9 +259,6 @@ interactions:
           id="label.campaign_channels.category.title"><segment><source>Category</source></segment></unit><unit
           id="label.campaign_channels.category.description"><segment><source>Category</source></segment></unit><unit
           id="label.campaign_channels.category.tags"><segment><source>Campaign channels</source></segment></unit></group><group
-          id="label.type"><unit id="label.type.title"><segment><source>Type</source></segment></unit><unit
-          id="label.type.description"><segment><source>Type</source></segment></unit><unit
-          id="label.type.tags"><segment><source>Campaign channels</source></segment></unit></group><group
           id="label.campaign_id"><unit id="label.campaign_id.title"><segment><source>Campaign
           id</source></segment></unit><unit id="label.campaign_id.description"><segment><source>Campaign
           id</source></segment></unit><unit id="label.campaign_id.tags"><segment><source>Campaigns</source></segment></unit></group><group
@@ -263,12 +271,21 @@ interactions:
           id="label.customer_name"><unit id="label.customer_name.title"><segment><source>Customer
           name</source></segment></unit><unit id="label.customer_name.description"><segment><source>Customer
           name</source></segment></unit><unit id="label.customer_name.tags"><segment><source>Customers</source></segment></unit></group><group
-          id="label.region"><unit id="label.region.title"><segment><source>Region</source></segment></unit><unit
-          id="label.region.description"><segment><source>Region</source></segment></unit><unit
-          id="label.region.tags"><segment><source>Customers</source></segment></unit></group><group
-          id="label.state"><unit id="label.state.title"><segment><source>State</source></segment></unit><unit
-          id="label.state.description"><segment><source>State</source></segment></unit><unit
-          id="label.state.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.date.day"><unit id="label.date.day.title"><segment><source>Date
+          - Date</source></segment></unit><unit id="label.date.day.description"><segment><source>Date</source></segment></unit><unit
+          id="label.date.day.tags"><segment><source>Date</source></segment></unit></group><group
+          id="label.date.month"><unit id="label.date.month.title"><segment><source>Date
+          - Month/Year</source></segment></unit><unit id="label.date.month.description"><segment><source>Month
+          and Year (12/2020)</source></segment></unit><unit id="label.date.month.tags"><segment><source>Date</source></segment></unit></group><group
+          id="label.date.quarter"><unit id="label.date.quarter.title"><segment><source>Date
+          - Quarter/Year</source></segment></unit><unit id="label.date.quarter.description"><segment><source>Quarter
+          and Year (Q1/2020)</source></segment></unit><unit id="label.date.quarter.tags"><segment><source>Date</source></segment></unit></group><group
+          id="label.date.week"><unit id="label.date.week.title"><segment><source>Date
+          - Week/Year</source></segment></unit><unit id="label.date.week.description"><segment><source>Week
+          and Year (W52/2020)</source></segment></unit><unit id="label.date.week.tags"><segment><source>Date</source></segment></unit></group><group
+          id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
+          - Year</source></segment></unit><unit id="label.date.year.description"><segment><source>Year</source></segment></unit><unit
+          id="label.date.year.tags"><segment><source>Date</source></segment></unit></group><group
           id="label.geo__state__location"><unit id="label.geo__state__location.title"><segment><source>Location</source></segment></unit><unit
           id="label.geo__state__location.description"><segment><source>Location</source></segment></unit><unit
           id="label.geo__state__location.tags"><segment><source>Customers</source></segment></unit></group><group
@@ -292,21 +309,15 @@ interactions:
           id="label.products.category"><unit id="label.products.category.title"><segment><source>Category</source></segment></unit><unit
           id="label.products.category.description"><segment><source>Category</source></segment></unit><unit
           id="label.products.category.tags"><segment><source>Products</source></segment></unit></group><group
-          id="label.date.day"><unit id="label.date.day.title"><segment><source>Date
-          - Date</source></segment></unit><unit id="label.date.day.description"><segment><source>Date</source></segment></unit><unit
-          id="label.date.day.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.week"><unit id="label.date.week.title"><segment><source>Date
-          - Week/Year</source></segment></unit><unit id="label.date.week.description"><segment><source>Week
-          and Year (W52/2020)</source></segment></unit><unit id="label.date.week.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.month"><unit id="label.date.month.title"><segment><source>Date
-          - Month/Year</source></segment></unit><unit id="label.date.month.description"><segment><source>Month
-          and Year (12/2020)</source></segment></unit><unit id="label.date.month.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.quarter"><unit id="label.date.quarter.title"><segment><source>Date
-          - Quarter/Year</source></segment></unit><unit id="label.date.quarter.description"><segment><source>Quarter
-          and Year (Q1/2020)</source></segment></unit><unit id="label.date.quarter.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
-          - Year</source></segment></unit><unit id="label.date.year.description"><segment><source>Year</source></segment></unit><unit
-          id="label.date.year.tags"><segment><source>Date</source></segment></unit></group></group><group
+          id="label.region"><unit id="label.region.title"><segment><source>Region</source></segment></unit><unit
+          id="label.region.description"><segment><source>Region</source></segment></unit><unit
+          id="label.region.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.state"><unit id="label.state.title"><segment><source>State</source></segment></unit><unit
+          id="label.state.description"><segment><source>State</source></segment></unit><unit
+          id="label.state.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.type"><unit id="label.type.title"><segment><source>Type</source></segment></unit><unit
+          id="label.type.description"><segment><source>Type</source></segment></unit><unit
+          id="label.type.tags"><segment><source>Campaign channels</source></segment></unit></group></group><group
           id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
           of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
           id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
@@ -503,7 +514,7 @@ interactions:
           id="filterContext.region_filter.description"><segment><source></source></segment></unit></group></group></file></xliff>
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/translations/retrieve
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/translations/retrieve
       body:
         locale: fr-FR
       headers:
@@ -524,8 +535,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '40991'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/xml
         DATE: *id001
@@ -535,14 +548,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
@@ -604,13 +622,10 @@ interactions:
           id="attribute.campaign_channels.category.title"><segment><source>Category</source></segment></unit><unit
           id="attribute.campaign_channels.category.description"><segment><source>Category</source></segment></unit><unit
           id="attribute.campaign_channels.category.tags"><segment><source>Campaign
-          channels</source></segment></unit></group><group id="attribute.type"><unit
-          id="attribute.type.title"><segment><source>Type</source></segment></unit><unit
-          id="attribute.type.description"><segment><source>Type</source></segment></unit><unit
-          id="attribute.type.tags"><segment><source>Campaign channels</source></segment></unit></group><group
-          id="attribute.campaign_id"><unit id="attribute.campaign_id.title"><segment><source>Campaign
-          id</source></segment></unit><unit id="attribute.campaign_id.description"><segment><source>Campaign
-          id</source></segment></unit><unit id="attribute.campaign_id.tags"><segment><source>Campaigns</source></segment></unit></group><group
+          channels</source></segment></unit></group><group id="attribute.campaign_id"><unit
+          id="attribute.campaign_id.title"><segment><source>Campaign id</source></segment></unit><unit
+          id="attribute.campaign_id.description"><segment><source>Campaign id</source></segment></unit><unit
+          id="attribute.campaign_id.tags"><segment><source>Campaigns</source></segment></unit></group><group
           id="attribute.campaign_name"><unit id="attribute.campaign_name.title"><segment><source>Campaign
           name</source></segment></unit><unit id="attribute.campaign_name.description"><segment><source>Campaign
           name</source></segment></unit><unit id="attribute.campaign_name.tags"><segment><source>Campaigns</source></segment></unit></group><group
@@ -620,9 +635,21 @@ interactions:
           id="attribute.customer_name"><unit id="attribute.customer_name.title"><segment><source>Customer
           name</source></segment></unit><unit id="attribute.customer_name.description"><segment><source>Customer
           name</source></segment></unit><unit id="attribute.customer_name.tags"><segment><source>Customers</source></segment></unit></group><group
-          id="attribute.region"><unit id="attribute.region.title"><segment><source>Region</source></segment></unit><unit
-          id="attribute.region.description"><segment><source>Region</source></segment></unit><unit
-          id="attribute.region.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="attribute.date.day"><unit id="attribute.date.day.title"><segment><source>Date
+          - Date</source></segment></unit><unit id="attribute.date.day.description"><segment><source>Date</source></segment></unit><unit
+          id="attribute.date.day.tags"><segment><source>Date</source></segment></unit></group><group
+          id="attribute.date.month"><unit id="attribute.date.month.title"><segment><source>Date
+          - Month/Year</source></segment></unit><unit id="attribute.date.month.description"><segment><source>Month
+          and Year (12/2020)</source></segment></unit><unit id="attribute.date.month.tags"><segment><source>Date</source></segment></unit></group><group
+          id="attribute.date.quarter"><unit id="attribute.date.quarter.title"><segment><source>Date
+          - Quarter/Year</source></segment></unit><unit id="attribute.date.quarter.description"><segment><source>Quarter
+          and Year (Q1/2020)</source></segment></unit><unit id="attribute.date.quarter.tags"><segment><source>Date</source></segment></unit></group><group
+          id="attribute.date.week"><unit id="attribute.date.week.title"><segment><source>Date
+          - Week/Year</source></segment></unit><unit id="attribute.date.week.description"><segment><source>Week
+          and Year (W52/2020)</source></segment></unit><unit id="attribute.date.week.tags"><segment><source>Date</source></segment></unit></group><group
+          id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
+          - Year</source></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source></segment></unit><unit
+          id="attribute.date.year.tags"><segment><source>Date</source></segment></unit></group><group
           id="attribute.order_id"><unit id="attribute.order_id.title"><segment><source>Order
           id</source></segment></unit><unit id="attribute.order_id.description"><segment><source>Order
           id</source></segment></unit><unit id="attribute.order_id.tags"><segment><source>Order
@@ -643,24 +670,15 @@ interactions:
           id="attribute.products.category"><unit id="attribute.products.category.title"><segment><source>Category</source></segment></unit><unit
           id="attribute.products.category.description"><segment><source>Category</source></segment></unit><unit
           id="attribute.products.category.tags"><segment><source>Products</source></segment></unit></group><group
-          id="attribute.date.day"><unit id="attribute.date.day.title"><segment><source>Date
-          - Date</source></segment></unit><unit id="attribute.date.day.description"><segment><source>Date</source></segment></unit><unit
-          id="attribute.date.day.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.week"><unit id="attribute.date.week.title"><segment><source>Date
-          - Week/Year</source></segment></unit><unit id="attribute.date.week.description"><segment><source>Week
-          and Year (W52/2020)</source></segment></unit><unit id="attribute.date.week.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.month"><unit id="attribute.date.month.title"><segment><source>Date
-          - Month/Year</source></segment></unit><unit id="attribute.date.month.description"><segment><source>Month
-          and Year (12/2020)</source></segment></unit><unit id="attribute.date.month.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.quarter"><unit id="attribute.date.quarter.title"><segment><source>Date
-          - Quarter/Year</source></segment></unit><unit id="attribute.date.quarter.description"><segment><source>Quarter
-          and Year (Q1/2020)</source></segment></unit><unit id="attribute.date.quarter.tags"><segment><source>Date</source></segment></unit></group><group
-          id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
-          - Year</source></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source></segment></unit><unit
-          id="attribute.date.year.tags"><segment><source>Date</source></segment></unit></group><group
+          id="attribute.region"><unit id="attribute.region.title"><segment><source>Region</source></segment></unit><unit
+          id="attribute.region.description"><segment><source>Region</source></segment></unit><unit
+          id="attribute.region.tags"><segment><source>Customers</source></segment></unit></group><group
           id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source></segment></unit><unit
           id="attribute.state.description"><segment><source>State</source></segment></unit><unit
-          id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group></group><group
+          id="attribute.state.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="attribute.type"><unit id="attribute.type.title"><segment><source>Type</source></segment></unit><unit
+          id="attribute.type.description"><segment><source>Type</source></segment></unit><unit
+          id="attribute.type.tags"><segment><source>Campaign channels</source></segment></unit></group></group><group
           id="dataset"><group id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.description"><segment><source>Campaign
           channels</source></segment></unit><unit id="dataset.campaign_channels.tags"><segment><source>Campaign
@@ -708,9 +726,6 @@ interactions:
           id="label.campaign_channels.category.title"><segment><source>Category</source></segment></unit><unit
           id="label.campaign_channels.category.description"><segment><source>Category</source></segment></unit><unit
           id="label.campaign_channels.category.tags"><segment><source>Campaign channels</source></segment></unit></group><group
-          id="label.type"><unit id="label.type.title"><segment><source>Type</source></segment></unit><unit
-          id="label.type.description"><segment><source>Type</source></segment></unit><unit
-          id="label.type.tags"><segment><source>Campaign channels</source></segment></unit></group><group
           id="label.campaign_id"><unit id="label.campaign_id.title"><segment><source>Campaign
           id</source></segment></unit><unit id="label.campaign_id.description"><segment><source>Campaign
           id</source></segment></unit><unit id="label.campaign_id.tags"><segment><source>Campaigns</source></segment></unit></group><group
@@ -723,12 +738,21 @@ interactions:
           id="label.customer_name"><unit id="label.customer_name.title"><segment><source>Customer
           name</source></segment></unit><unit id="label.customer_name.description"><segment><source>Customer
           name</source></segment></unit><unit id="label.customer_name.tags"><segment><source>Customers</source></segment></unit></group><group
-          id="label.region"><unit id="label.region.title"><segment><source>Region</source></segment></unit><unit
-          id="label.region.description"><segment><source>Region</source></segment></unit><unit
-          id="label.region.tags"><segment><source>Customers</source></segment></unit></group><group
-          id="label.state"><unit id="label.state.title"><segment><source>State</source></segment></unit><unit
-          id="label.state.description"><segment><source>State</source></segment></unit><unit
-          id="label.state.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.date.day"><unit id="label.date.day.title"><segment><source>Date
+          - Date</source></segment></unit><unit id="label.date.day.description"><segment><source>Date</source></segment></unit><unit
+          id="label.date.day.tags"><segment><source>Date</source></segment></unit></group><group
+          id="label.date.month"><unit id="label.date.month.title"><segment><source>Date
+          - Month/Year</source></segment></unit><unit id="label.date.month.description"><segment><source>Month
+          and Year (12/2020)</source></segment></unit><unit id="label.date.month.tags"><segment><source>Date</source></segment></unit></group><group
+          id="label.date.quarter"><unit id="label.date.quarter.title"><segment><source>Date
+          - Quarter/Year</source></segment></unit><unit id="label.date.quarter.description"><segment><source>Quarter
+          and Year (Q1/2020)</source></segment></unit><unit id="label.date.quarter.tags"><segment><source>Date</source></segment></unit></group><group
+          id="label.date.week"><unit id="label.date.week.title"><segment><source>Date
+          - Week/Year</source></segment></unit><unit id="label.date.week.description"><segment><source>Week
+          and Year (W52/2020)</source></segment></unit><unit id="label.date.week.tags"><segment><source>Date</source></segment></unit></group><group
+          id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
+          - Year</source></segment></unit><unit id="label.date.year.description"><segment><source>Year</source></segment></unit><unit
+          id="label.date.year.tags"><segment><source>Date</source></segment></unit></group><group
           id="label.geo__state__location"><unit id="label.geo__state__location.title"><segment><source>Location</source></segment></unit><unit
           id="label.geo__state__location.description"><segment><source>Location</source></segment></unit><unit
           id="label.geo__state__location.tags"><segment><source>Customers</source></segment></unit></group><group
@@ -752,21 +776,15 @@ interactions:
           id="label.products.category"><unit id="label.products.category.title"><segment><source>Category</source></segment></unit><unit
           id="label.products.category.description"><segment><source>Category</source></segment></unit><unit
           id="label.products.category.tags"><segment><source>Products</source></segment></unit></group><group
-          id="label.date.day"><unit id="label.date.day.title"><segment><source>Date
-          - Date</source></segment></unit><unit id="label.date.day.description"><segment><source>Date</source></segment></unit><unit
-          id="label.date.day.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.week"><unit id="label.date.week.title"><segment><source>Date
-          - Week/Year</source></segment></unit><unit id="label.date.week.description"><segment><source>Week
-          and Year (W52/2020)</source></segment></unit><unit id="label.date.week.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.month"><unit id="label.date.month.title"><segment><source>Date
-          - Month/Year</source></segment></unit><unit id="label.date.month.description"><segment><source>Month
-          and Year (12/2020)</source></segment></unit><unit id="label.date.month.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.quarter"><unit id="label.date.quarter.title"><segment><source>Date
-          - Quarter/Year</source></segment></unit><unit id="label.date.quarter.description"><segment><source>Quarter
-          and Year (Q1/2020)</source></segment></unit><unit id="label.date.quarter.tags"><segment><source>Date</source></segment></unit></group><group
-          id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
-          - Year</source></segment></unit><unit id="label.date.year.description"><segment><source>Year</source></segment></unit><unit
-          id="label.date.year.tags"><segment><source>Date</source></segment></unit></group></group><group
+          id="label.region"><unit id="label.region.title"><segment><source>Region</source></segment></unit><unit
+          id="label.region.description"><segment><source>Region</source></segment></unit><unit
+          id="label.region.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.state"><unit id="label.state.title"><segment><source>State</source></segment></unit><unit
+          id="label.state.description"><segment><source>State</source></segment></unit><unit
+          id="label.state.tags"><segment><source>Customers</source></segment></unit></group><group
+          id="label.type"><unit id="label.type.title"><segment><source>Type</source></segment></unit><unit
+          id="label.type.description"><segment><source>Type</source></segment></unit><unit
+          id="label.type.tags"><segment><source>Campaign channels</source></segment></unit></group></group><group
           id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
           of Active Customers</source></segment></unit></group><group id="metric.amount_of_orders"><unit
           id="metric.amount_of_orders.title"><segment><source># of Orders</source></segment></unit></group><group
@@ -963,7 +981,7 @@ interactions:
           id="filterContext.region_filter.description"><segment><source></source></segment></unit></group></group></file></xliff>
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/translations/set
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/translations/set
       body: '<?xml version=''1.0'' encoding=''utf-8''?>
 
         <xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.1" srcLang="en-US"
@@ -1042,10 +1060,6 @@ interactions:
         id="attribute.campaign_channels.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
         id="attribute.campaign_channels.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
         id="attribute.campaign_channels.category.tags"><segment><source>Campaign channels</source><target>Campaign
-        channels.</target></segment></unit></group><group id="attribute.type"><unit
-        id="attribute.type.title"><segment><source>Type</source><target>Type.</target></segment></unit><unit
-        id="attribute.type.description"><segment><source>Type</source><target>Type.</target></segment></unit><unit
-        id="attribute.type.tags"><segment><source>Campaign channels</source><target>Campaign
         channels.</target></segment></unit></group><group id="attribute.campaign_id"><unit
         id="attribute.campaign_id.title"><segment><source>Campaign id</source><target>Campaign
         id.</target></segment></unit><unit id="attribute.campaign_id.description"><segment><source>Campaign
@@ -1059,9 +1073,25 @@ interactions:
         id="attribute.customer_name"><unit id="attribute.customer_name.title"><segment><source>Customer
         name</source><target>Customer name.</target></segment></unit><unit id="attribute.customer_name.description"><segment><source>Customer
         name</source><target>Customer name.</target></segment></unit><unit id="attribute.customer_name.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
-        id="attribute.region"><unit id="attribute.region.title"><segment><source>Region</source><target>Region.</target></segment></unit><unit
-        id="attribute.region.description"><segment><source>Region</source><target>Region.</target></segment></unit><unit
-        id="attribute.region.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+        id="attribute.date.day"><unit id="attribute.date.day.title"><segment><source>Date
+        - Date</source><target>Date - Date.</target></segment></unit><unit id="attribute.date.day.description"><segment><source>Date</source><target>Date.</target></segment></unit><unit
+        id="attribute.date.day.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+        id="attribute.date.month"><unit id="attribute.date.month.title"><segment><source>Date
+        - Month/Year</source><target>Date - Month/Year.</target></segment></unit><unit
+        id="attribute.date.month.description"><segment><source>Month and Year (12/2020)</source><target>Month
+        and Year (12/2020).</target></segment></unit><unit id="attribute.date.month.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+        id="attribute.date.quarter"><unit id="attribute.date.quarter.title"><segment><source>Date
+        - Quarter/Year</source><target>Date - Quarter/Year.</target></segment></unit><unit
+        id="attribute.date.quarter.description"><segment><source>Quarter and Year
+        (Q1/2020)</source><target>Quarter and Year (Q1/2020).</target></segment></unit><unit
+        id="attribute.date.quarter.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+        id="attribute.date.week"><unit id="attribute.date.week.title"><segment><source>Date
+        - Week/Year</source><target>Date - Week/Year.</target></segment></unit><unit
+        id="attribute.date.week.description"><segment><source>Week and Year (W52/2020)</source><target>Week
+        and Year (W52/2020).</target></segment></unit><unit id="attribute.date.week.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+        id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
+        - Year</source><target>Date - Year.</target></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source><target>Year.</target></segment></unit><unit
+        id="attribute.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
         id="attribute.order_id"><unit id="attribute.order_id.title"><segment><source>Order
         id</source><target>Order id.</target></segment></unit><unit id="attribute.order_id.description"><segment><source>Order
         id</source><target>Order id.</target></segment></unit><unit id="attribute.order_id.tags"><segment><source>Order
@@ -1083,29 +1113,17 @@ interactions:
         id="attribute.products.category"><unit id="attribute.products.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
         id="attribute.products.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
         id="attribute.products.category.tags"><segment><source>Products</source><target>Products.</target></segment></unit></group><group
-        id="attribute.date.day"><unit id="attribute.date.day.title"><segment><source>Date
-        - Date</source><target>Date - Date.</target></segment></unit><unit id="attribute.date.day.description"><segment><source>Date</source><target>Date.</target></segment></unit><unit
-        id="attribute.date.day.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="attribute.date.week"><unit id="attribute.date.week.title"><segment><source>Date
-        - Week/Year</source><target>Date - Week/Year.</target></segment></unit><unit
-        id="attribute.date.week.description"><segment><source>Week and Year (W52/2020)</source><target>Week
-        and Year (W52/2020).</target></segment></unit><unit id="attribute.date.week.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="attribute.date.month"><unit id="attribute.date.month.title"><segment><source>Date
-        - Month/Year</source><target>Date - Month/Year.</target></segment></unit><unit
-        id="attribute.date.month.description"><segment><source>Month and Year (12/2020)</source><target>Month
-        and Year (12/2020).</target></segment></unit><unit id="attribute.date.month.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="attribute.date.quarter"><unit id="attribute.date.quarter.title"><segment><source>Date
-        - Quarter/Year</source><target>Date - Quarter/Year.</target></segment></unit><unit
-        id="attribute.date.quarter.description"><segment><source>Quarter and Year
-        (Q1/2020)</source><target>Quarter and Year (Q1/2020).</target></segment></unit><unit
-        id="attribute.date.quarter.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
-        - Year</source><target>Date - Year.</target></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source><target>Year.</target></segment></unit><unit
-        id="attribute.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+        id="attribute.region"><unit id="attribute.region.title"><segment><source>Region</source><target>Region.</target></segment></unit><unit
+        id="attribute.region.description"><segment><source>Region</source><target>Region.</target></segment></unit><unit
+        id="attribute.region.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
         id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
         id="attribute.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
-        id="attribute.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group></group><group
-        id="dataset"><group id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
+        id="attribute.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+        id="attribute.type"><unit id="attribute.type.title"><segment><source>Type</source><target>Type.</target></segment></unit><unit
+        id="attribute.type.description"><segment><source>Type</source><target>Type.</target></segment></unit><unit
+        id="attribute.type.tags"><segment><source>Campaign channels</source><target>Campaign
+        channels.</target></segment></unit></group></group><group id="dataset"><group
+        id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
         channels</source><target>Campaign channels.</target></segment></unit><unit
         id="dataset.campaign_channels.description"><segment><source>Campaign channels</source><target>Campaign
         channels.</target></segment></unit><unit id="dataset.campaign_channels.tags"><segment><source>Campaign
@@ -1156,9 +1174,6 @@ interactions:
         id="label.campaign_channels.category"><unit id="label.campaign_channels.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
         id="label.campaign_channels.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
         id="label.campaign_channels.category.tags"><segment><source>Campaign channels</source><target>Campaign
-        channels.</target></segment></unit></group><group id="label.type"><unit id="label.type.title"><segment><source>Type</source><target>Type.</target></segment></unit><unit
-        id="label.type.description"><segment><source>Type</source><target>Type.</target></segment></unit><unit
-        id="label.type.tags"><segment><source>Campaign channels</source><target>Campaign
         channels.</target></segment></unit></group><group id="label.campaign_id"><unit
         id="label.campaign_id.title"><segment><source>Campaign id</source><target>Campaign
         id.</target></segment></unit><unit id="label.campaign_id.description"><segment><source>Campaign
@@ -1172,12 +1187,24 @@ interactions:
         id="label.customer_name"><unit id="label.customer_name.title"><segment><source>Customer
         name</source><target>Customer name.</target></segment></unit><unit id="label.customer_name.description"><segment><source>Customer
         name</source><target>Customer name.</target></segment></unit><unit id="label.customer_name.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
-        id="label.region"><unit id="label.region.title"><segment><source>Region</source><target>Region.</target></segment></unit><unit
-        id="label.region.description"><segment><source>Region</source><target>Region.</target></segment></unit><unit
-        id="label.region.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
-        id="label.state"><unit id="label.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
-        id="label.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
-        id="label.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+        id="label.date.day"><unit id="label.date.day.title"><segment><source>Date
+        - Date</source><target>Date - Date.</target></segment></unit><unit id="label.date.day.description"><segment><source>Date</source><target>Date.</target></segment></unit><unit
+        id="label.date.day.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+        id="label.date.month"><unit id="label.date.month.title"><segment><source>Date
+        - Month/Year</source><target>Date - Month/Year.</target></segment></unit><unit
+        id="label.date.month.description"><segment><source>Month and Year (12/2020)</source><target>Month
+        and Year (12/2020).</target></segment></unit><unit id="label.date.month.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+        id="label.date.quarter"><unit id="label.date.quarter.title"><segment><source>Date
+        - Quarter/Year</source><target>Date - Quarter/Year.</target></segment></unit><unit
+        id="label.date.quarter.description"><segment><source>Quarter and Year (Q1/2020)</source><target>Quarter
+        and Year (Q1/2020).</target></segment></unit><unit id="label.date.quarter.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+        id="label.date.week"><unit id="label.date.week.title"><segment><source>Date
+        - Week/Year</source><target>Date - Week/Year.</target></segment></unit><unit
+        id="label.date.week.description"><segment><source>Week and Year (W52/2020)</source><target>Week
+        and Year (W52/2020).</target></segment></unit><unit id="label.date.week.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+        id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
+        - Year</source><target>Date - Year.</target></segment></unit><unit id="label.date.year.description"><segment><source>Year</source><target>Year.</target></segment></unit><unit
+        id="label.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
         id="label.geo__state__location"><unit id="label.geo__state__location.title"><segment><source>Location</source><target>Location.</target></segment></unit><unit
         id="label.geo__state__location.description"><segment><source>Location</source><target>Location.</target></segment></unit><unit
         id="label.geo__state__location.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
@@ -1202,25 +1229,17 @@ interactions:
         id="label.products.category"><unit id="label.products.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
         id="label.products.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
         id="label.products.category.tags"><segment><source>Products</source><target>Products.</target></segment></unit></group><group
-        id="label.date.day"><unit id="label.date.day.title"><segment><source>Date
-        - Date</source><target>Date - Date.</target></segment></unit><unit id="label.date.day.description"><segment><source>Date</source><target>Date.</target></segment></unit><unit
-        id="label.date.day.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="label.date.week"><unit id="label.date.week.title"><segment><source>Date
-        - Week/Year</source><target>Date - Week/Year.</target></segment></unit><unit
-        id="label.date.week.description"><segment><source>Week and Year (W52/2020)</source><target>Week
-        and Year (W52/2020).</target></segment></unit><unit id="label.date.week.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="label.date.month"><unit id="label.date.month.title"><segment><source>Date
-        - Month/Year</source><target>Date - Month/Year.</target></segment></unit><unit
-        id="label.date.month.description"><segment><source>Month and Year (12/2020)</source><target>Month
-        and Year (12/2020).</target></segment></unit><unit id="label.date.month.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="label.date.quarter"><unit id="label.date.quarter.title"><segment><source>Date
-        - Quarter/Year</source><target>Date - Quarter/Year.</target></segment></unit><unit
-        id="label.date.quarter.description"><segment><source>Quarter and Year (Q1/2020)</source><target>Quarter
-        and Year (Q1/2020).</target></segment></unit><unit id="label.date.quarter.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-        id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
-        - Year</source><target>Date - Year.</target></segment></unit><unit id="label.date.year.description"><segment><source>Year</source><target>Year.</target></segment></unit><unit
-        id="label.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group></group><group
-        id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+        id="label.region"><unit id="label.region.title"><segment><source>Region</source><target>Region.</target></segment></unit><unit
+        id="label.region.description"><segment><source>Region</source><target>Region.</target></segment></unit><unit
+        id="label.region.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+        id="label.state"><unit id="label.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
+        id="label.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
+        id="label.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+        id="label.type"><unit id="label.type.title"><segment><source>Type</source><target>Type.</target></segment></unit><unit
+        id="label.type.description"><segment><source>Type</source><target>Type.</target></segment></unit><unit
+        id="label.type.tags"><segment><source>Campaign channels</source><target>Campaign
+        channels.</target></segment></unit></group></group><group id="metric"><group
+        id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
         of Active Customers</source><target># of Active Customers.</target></segment></unit></group><group
         id="metric.amount_of_orders"><unit id="metric.amount_of_orders.title"><segment><source>#
         of Orders</source><target># of Orders.</target></segment></unit></group><group
@@ -1457,6 +1476,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -1464,6 +1485,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -1471,13 +1494,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/translations/retrieve
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/translations/retrieve
       body:
         locale: fr-FR
       headers:
@@ -1498,8 +1521,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '48809'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/xml
         DATE: *id001
@@ -1509,14 +1534,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
@@ -1592,12 +1622,8 @@ interactions:
           id="attribute.campaign_channels.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
           id="attribute.campaign_channels.category.tags"><segment><source>Campaign
           channels</source><target>Campaign channels.</target></segment></unit></group><group
-          id="attribute.type"><unit id="attribute.type.title"><segment><source>Type</source><target>Type.</target></segment></unit><unit
-          id="attribute.type.description"><segment><source>Type</source><target>Type.</target></segment></unit><unit
-          id="attribute.type.tags"><segment><source>Campaign channels</source><target>Campaign
-          channels.</target></segment></unit></group><group id="attribute.campaign_id"><unit
-          id="attribute.campaign_id.title"><segment><source>Campaign id</source><target>Campaign
-          id.</target></segment></unit><unit id="attribute.campaign_id.description"><segment><source>Campaign
+          id="attribute.campaign_id"><unit id="attribute.campaign_id.title"><segment><source>Campaign
+          id</source><target>Campaign id.</target></segment></unit><unit id="attribute.campaign_id.description"><segment><source>Campaign
           id</source><target>Campaign id.</target></segment></unit><unit id="attribute.campaign_id.tags"><segment><source>Campaigns</source><target>Campaigns.</target></segment></unit></group><group
           id="attribute.campaign_name"><unit id="attribute.campaign_name.title"><segment><source>Campaign
           name</source><target>Campaign name.</target></segment></unit><unit id="attribute.campaign_name.description"><segment><source>Campaign
@@ -1608,9 +1634,25 @@ interactions:
           id="attribute.customer_name"><unit id="attribute.customer_name.title"><segment><source>Customer
           name</source><target>Customer name.</target></segment></unit><unit id="attribute.customer_name.description"><segment><source>Customer
           name</source><target>Customer name.</target></segment></unit><unit id="attribute.customer_name.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
-          id="attribute.region"><unit id="attribute.region.title"><segment><source>Region</source><target>Region.</target></segment></unit><unit
-          id="attribute.region.description"><segment><source>Region</source><target>Region.</target></segment></unit><unit
-          id="attribute.region.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+          id="attribute.date.day"><unit id="attribute.date.day.title"><segment><source>Date
+          - Date</source><target>Date - Date.</target></segment></unit><unit id="attribute.date.day.description"><segment><source>Date</source><target>Date.</target></segment></unit><unit
+          id="attribute.date.day.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+          id="attribute.date.month"><unit id="attribute.date.month.title"><segment><source>Date
+          - Month/Year</source><target>Date - Month/Year.</target></segment></unit><unit
+          id="attribute.date.month.description"><segment><source>Month and Year (12/2020)</source><target>Month
+          and Year (12/2020).</target></segment></unit><unit id="attribute.date.month.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+          id="attribute.date.quarter"><unit id="attribute.date.quarter.title"><segment><source>Date
+          - Quarter/Year</source><target>Date - Quarter/Year.</target></segment></unit><unit
+          id="attribute.date.quarter.description"><segment><source>Quarter and Year
+          (Q1/2020)</source><target>Quarter and Year (Q1/2020).</target></segment></unit><unit
+          id="attribute.date.quarter.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+          id="attribute.date.week"><unit id="attribute.date.week.title"><segment><source>Date
+          - Week/Year</source><target>Date - Week/Year.</target></segment></unit><unit
+          id="attribute.date.week.description"><segment><source>Week and Year (W52/2020)</source><target>Week
+          and Year (W52/2020).</target></segment></unit><unit id="attribute.date.week.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+          id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
+          - Year</source><target>Date - Year.</target></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source><target>Year.</target></segment></unit><unit
+          id="attribute.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
           id="attribute.order_id"><unit id="attribute.order_id.title"><segment><source>Order
           id</source><target>Order id.</target></segment></unit><unit id="attribute.order_id.description"><segment><source>Order
           id</source><target>Order id.</target></segment></unit><unit id="attribute.order_id.tags"><segment><source>Order
@@ -1632,29 +1674,17 @@ interactions:
           id="attribute.products.category"><unit id="attribute.products.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
           id="attribute.products.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
           id="attribute.products.category.tags"><segment><source>Products</source><target>Products.</target></segment></unit></group><group
-          id="attribute.date.day"><unit id="attribute.date.day.title"><segment><source>Date
-          - Date</source><target>Date - Date.</target></segment></unit><unit id="attribute.date.day.description"><segment><source>Date</source><target>Date.</target></segment></unit><unit
-          id="attribute.date.day.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="attribute.date.week"><unit id="attribute.date.week.title"><segment><source>Date
-          - Week/Year</source><target>Date - Week/Year.</target></segment></unit><unit
-          id="attribute.date.week.description"><segment><source>Week and Year (W52/2020)</source><target>Week
-          and Year (W52/2020).</target></segment></unit><unit id="attribute.date.week.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="attribute.date.month"><unit id="attribute.date.month.title"><segment><source>Date
-          - Month/Year</source><target>Date - Month/Year.</target></segment></unit><unit
-          id="attribute.date.month.description"><segment><source>Month and Year (12/2020)</source><target>Month
-          and Year (12/2020).</target></segment></unit><unit id="attribute.date.month.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="attribute.date.quarter"><unit id="attribute.date.quarter.title"><segment><source>Date
-          - Quarter/Year</source><target>Date - Quarter/Year.</target></segment></unit><unit
-          id="attribute.date.quarter.description"><segment><source>Quarter and Year
-          (Q1/2020)</source><target>Quarter and Year (Q1/2020).</target></segment></unit><unit
-          id="attribute.date.quarter.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="attribute.date.year"><unit id="attribute.date.year.title"><segment><source>Date
-          - Year</source><target>Date - Year.</target></segment></unit><unit id="attribute.date.year.description"><segment><source>Year</source><target>Year.</target></segment></unit><unit
-          id="attribute.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+          id="attribute.region"><unit id="attribute.region.title"><segment><source>Region</source><target>Region.</target></segment></unit><unit
+          id="attribute.region.description"><segment><source>Region</source><target>Region.</target></segment></unit><unit
+          id="attribute.region.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
           id="attribute.state"><unit id="attribute.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
           id="attribute.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
-          id="attribute.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group></group><group
-          id="dataset"><group id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
+          id="attribute.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+          id="attribute.type"><unit id="attribute.type.title"><segment><source>Type</source><target>Type.</target></segment></unit><unit
+          id="attribute.type.description"><segment><source>Type</source><target>Type.</target></segment></unit><unit
+          id="attribute.type.tags"><segment><source>Campaign channels</source><target>Campaign
+          channels.</target></segment></unit></group></group><group id="dataset"><group
+          id="dataset.campaign_channels"><unit id="dataset.campaign_channels.title"><segment><source>Campaign
           channels</source><target>Campaign channels.</target></segment></unit><unit
           id="dataset.campaign_channels.description"><segment><source>Campaign channels</source><target>Campaign
           channels.</target></segment></unit><unit id="dataset.campaign_channels.tags"><segment><source>Campaign
@@ -1708,10 +1738,6 @@ interactions:
           id="label.campaign_channels.category"><unit id="label.campaign_channels.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
           id="label.campaign_channels.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
           id="label.campaign_channels.category.tags"><segment><source>Campaign channels</source><target>Campaign
-          channels.</target></segment></unit></group><group id="label.type"><unit
-          id="label.type.title"><segment><source>Type</source><target>Type.</target></segment></unit><unit
-          id="label.type.description"><segment><source>Type</source><target>Type.</target></segment></unit><unit
-          id="label.type.tags"><segment><source>Campaign channels</source><target>Campaign
           channels.</target></segment></unit></group><group id="label.campaign_id"><unit
           id="label.campaign_id.title"><segment><source>Campaign id</source><target>Campaign
           id.</target></segment></unit><unit id="label.campaign_id.description"><segment><source>Campaign
@@ -1725,12 +1751,24 @@ interactions:
           id="label.customer_name"><unit id="label.customer_name.title"><segment><source>Customer
           name</source><target>Customer name.</target></segment></unit><unit id="label.customer_name.description"><segment><source>Customer
           name</source><target>Customer name.</target></segment></unit><unit id="label.customer_name.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
-          id="label.region"><unit id="label.region.title"><segment><source>Region</source><target>Region.</target></segment></unit><unit
-          id="label.region.description"><segment><source>Region</source><target>Region.</target></segment></unit><unit
-          id="label.region.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
-          id="label.state"><unit id="label.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
-          id="label.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
-          id="label.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+          id="label.date.day"><unit id="label.date.day.title"><segment><source>Date
+          - Date</source><target>Date - Date.</target></segment></unit><unit id="label.date.day.description"><segment><source>Date</source><target>Date.</target></segment></unit><unit
+          id="label.date.day.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+          id="label.date.month"><unit id="label.date.month.title"><segment><source>Date
+          - Month/Year</source><target>Date - Month/Year.</target></segment></unit><unit
+          id="label.date.month.description"><segment><source>Month and Year (12/2020)</source><target>Month
+          and Year (12/2020).</target></segment></unit><unit id="label.date.month.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+          id="label.date.quarter"><unit id="label.date.quarter.title"><segment><source>Date
+          - Quarter/Year</source><target>Date - Quarter/Year.</target></segment></unit><unit
+          id="label.date.quarter.description"><segment><source>Quarter and Year (Q1/2020)</source><target>Quarter
+          and Year (Q1/2020).</target></segment></unit><unit id="label.date.quarter.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+          id="label.date.week"><unit id="label.date.week.title"><segment><source>Date
+          - Week/Year</source><target>Date - Week/Year.</target></segment></unit><unit
+          id="label.date.week.description"><segment><source>Week and Year (W52/2020)</source><target>Week
+          and Year (W52/2020).</target></segment></unit><unit id="label.date.week.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
+          id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
+          - Year</source><target>Date - Year.</target></segment></unit><unit id="label.date.year.description"><segment><source>Year</source><target>Year.</target></segment></unit><unit
+          id="label.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
           id="label.geo__state__location"><unit id="label.geo__state__location.title"><segment><source>Location</source><target>Location.</target></segment></unit><unit
           id="label.geo__state__location.description"><segment><source>Location</source><target>Location.</target></segment></unit><unit
           id="label.geo__state__location.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
@@ -1755,25 +1793,17 @@ interactions:
           id="label.products.category"><unit id="label.products.category.title"><segment><source>Category</source><target>Category.</target></segment></unit><unit
           id="label.products.category.description"><segment><source>Category</source><target>Category.</target></segment></unit><unit
           id="label.products.category.tags"><segment><source>Products</source><target>Products.</target></segment></unit></group><group
-          id="label.date.day"><unit id="label.date.day.title"><segment><source>Date
-          - Date</source><target>Date - Date.</target></segment></unit><unit id="label.date.day.description"><segment><source>Date</source><target>Date.</target></segment></unit><unit
-          id="label.date.day.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="label.date.week"><unit id="label.date.week.title"><segment><source>Date
-          - Week/Year</source><target>Date - Week/Year.</target></segment></unit><unit
-          id="label.date.week.description"><segment><source>Week and Year (W52/2020)</source><target>Week
-          and Year (W52/2020).</target></segment></unit><unit id="label.date.week.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="label.date.month"><unit id="label.date.month.title"><segment><source>Date
-          - Month/Year</source><target>Date - Month/Year.</target></segment></unit><unit
-          id="label.date.month.description"><segment><source>Month and Year (12/2020)</source><target>Month
-          and Year (12/2020).</target></segment></unit><unit id="label.date.month.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="label.date.quarter"><unit id="label.date.quarter.title"><segment><source>Date
-          - Quarter/Year</source><target>Date - Quarter/Year.</target></segment></unit><unit
-          id="label.date.quarter.description"><segment><source>Quarter and Year (Q1/2020)</source><target>Quarter
-          and Year (Q1/2020).</target></segment></unit><unit id="label.date.quarter.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group><group
-          id="label.date.year"><unit id="label.date.year.title"><segment><source>Date
-          - Year</source><target>Date - Year.</target></segment></unit><unit id="label.date.year.description"><segment><source>Year</source><target>Year.</target></segment></unit><unit
-          id="label.date.year.tags"><segment><source>Date</source><target>Date.</target></segment></unit></group></group><group
-          id="metric"><group id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
+          id="label.region"><unit id="label.region.title"><segment><source>Region</source><target>Region.</target></segment></unit><unit
+          id="label.region.description"><segment><source>Region</source><target>Region.</target></segment></unit><unit
+          id="label.region.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+          id="label.state"><unit id="label.state.title"><segment><source>State</source><target>State.</target></segment></unit><unit
+          id="label.state.description"><segment><source>State</source><target>State.</target></segment></unit><unit
+          id="label.state.tags"><segment><source>Customers</source><target>Customers.</target></segment></unit></group><group
+          id="label.type"><unit id="label.type.title"><segment><source>Type</source><target>Type.</target></segment></unit><unit
+          id="label.type.description"><segment><source>Type</source><target>Type.</target></segment></unit><unit
+          id="label.type.tags"><segment><source>Campaign channels</source><target>Campaign
+          channels.</target></segment></unit></group></group><group id="metric"><group
+          id="metric.amount_of_active_customers"><unit id="metric.amount_of_active_customers.title"><segment><source>#
           of Active Customers</source><target># of Active Customers.</target></segment></unit></group><group
           id="metric.amount_of_orders"><unit id="metric.amount_of_orders.title"><segment><source>#
           of Orders</source><target># of Orders.</target></segment></unit></group><group
@@ -1996,7 +2026,7 @@ interactions:
           id="filterContext.region_filter.description"><segment><source></source></segment></unit></group></group></file></xliff>
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/translations/clean
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/translations/clean
       body:
         locale: fr-FR
       headers:
@@ -2015,6 +2045,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -2022,6 +2054,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2029,7 +2063,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''

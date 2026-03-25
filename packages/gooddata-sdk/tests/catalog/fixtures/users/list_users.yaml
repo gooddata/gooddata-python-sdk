@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users?include=userGroups&page=0&size=500
       body: null
       headers:
         Accept:
@@ -21,8 +21,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1302'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,14 +35,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -48,7 +55,7 @@ interactions:
             - attributes: {}
               id: admin
               links:
-                self: http://localhost:3000/api/v1/entities/users/admin
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/admin
               relationships:
                 userGroups:
                   data:
@@ -56,13 +63,10 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQ1NzgxOGE5YS0zZWUwLTRhZDMtOGE4Zi0xZDJlODVmOTU5OTgSBWxvY2Fs
-                firstname: Demo
-                lastname: User
-                email: demo@example.com
+                authenticationId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
               id: demo
               links:
-                self: http://localhost:3000/api/v1/entities/users/demo
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo
               relationships:
                 userGroups:
                   data:
@@ -70,10 +74,10 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiRlMGNlMTY5OS1hY2IzLTRkNzAtOWVkYi02MDYyZjhiMGNlM2USBWxvY2Fs
+                authenticationId: CiQ5ZGMzNjU0MC1hYzMxLTQ2MTUtOThmNy1hYzJiZDE2NzZkYzUSBWxvY2Fs
               id: demo2
               links:
-                self: http://localhost:3000/api/v1/entities/users/demo2
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo2
               relationships:
                 userGroups:
                   data:
@@ -84,14 +88,14 @@ interactions:
             - attributes: {}
               id: adminGroup
               links:
-                self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/adminGroup
               type: userGroup
             - attributes:
                 name: demo group
               id: demoGroup
               links:
-                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup
               type: userGroup
           links:
-            self: http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/users?include=userGroups&page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users?include=userGroups&page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users?include=userGroups&page=1&size=500

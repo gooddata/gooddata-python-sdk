@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/entities/cspDirectives
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives
       body:
         data:
           attributes:
@@ -29,8 +29,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '174'
+          - '211'
         Content-Type:
           - application/json
         DATE: &id001
@@ -41,6 +43,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -48,7 +52,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -59,10 +63,10 @@ interactions:
             id: font-src
             type: cspDirective
           links:
-            self: http://localhost:3000/api/v1/entities/cspDirectives/font-src
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives/font-src
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/entities/cspDirectives/font-src
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives/font-src
       body:
         data:
           attributes:
@@ -88,8 +92,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '175'
+          - '212'
         Content-Type:
           - application/json
         DATE: *id001
@@ -99,6 +105,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -106,7 +114,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -117,10 +125,10 @@ interactions:
             id: font-src
             type: cspDirective
           links:
-            self: http://localhost:3000/api/v1/entities/cspDirectives/font-src
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives/font-src
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/cspDirectives/font-src
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives/font-src
       body: null
       headers:
         Accept:
@@ -138,8 +146,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '175'
+          - '212'
         Content-Type:
           - application/json
         DATE: *id001
@@ -149,6 +159,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -156,7 +168,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -167,10 +179,10 @@ interactions:
             id: font-src
             type: cspDirective
           links:
-            self: http://localhost:3000/api/v1/entities/cspDirectives/font-src
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives/font-src
   - request:
       method: DELETE
-      uri: http://localhost:3000/api/v1/entities/cspDirectives/font-src
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives/font-src
       body: null
       headers:
         Accept-Encoding:
@@ -186,6 +198,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -195,6 +209,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -202,7 +218,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''

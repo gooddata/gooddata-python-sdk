@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/usersAndUserGroups
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/usersAndUserGroups
       body: null
       headers:
         Accept:
@@ -21,8 +21,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '824'
+          - '760'
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,6 +35,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -40,7 +44,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -68,17 +72,14 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ1NzgxOGE5YS0zZWUwLTRhZDMtOGE4Zi0xZDJlODVmOTU5OTgSBWxvY2Fs
-              email: demo@example.com
-              firstname: Demo
+            - authId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
               id: demo
-              lastname: User
               permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRlMGNlMTY5OS1hY2IzLTRkNzAtOWVkYi02MDYyZjhiMGNlM2USBWxvY2Fs
+            - authId: CiQ5ZGMzNjU0MC1hYzMxLTQ2MTUtOThmNy1hYzJiZDE2NzZkYzUSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -87,7 +88,7 @@ interactions:
                   type: userGroup
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users?include=userGroups&page=0&size=500
       body: null
       headers:
         Accept:
@@ -105,8 +106,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1302'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -116,14 +119,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -131,7 +139,7 @@ interactions:
             - attributes: {}
               id: admin
               links:
-                self: http://localhost:3000/api/v1/entities/users/admin
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/admin
               relationships:
                 userGroups:
                   data:
@@ -139,13 +147,10 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQ1NzgxOGE5YS0zZWUwLTRhZDMtOGE4Zi0xZDJlODVmOTU5OTgSBWxvY2Fs
-                firstname: Demo
-                lastname: User
-                email: demo@example.com
+                authenticationId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
               id: demo
               links:
-                self: http://localhost:3000/api/v1/entities/users/demo
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo
               relationships:
                 userGroups:
                   data:
@@ -153,10 +158,10 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiRlMGNlMTY5OS1hY2IzLTRkNzAtOWVkYi02MDYyZjhiMGNlM2USBWxvY2Fs
+                authenticationId: CiQ5ZGMzNjU0MC1hYzMxLTQ2MTUtOThmNy1hYzJiZDE2NzZkYzUSBWxvY2Fs
               id: demo2
               links:
-                self: http://localhost:3000/api/v1/entities/users/demo2
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo2
               relationships:
                 userGroups:
                   data:
@@ -167,20 +172,20 @@ interactions:
             - attributes: {}
               id: adminGroup
               links:
-                self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/adminGroup
               type: userGroup
             - attributes:
                 name: demo group
               id: demoGroup
               links:
-                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup
               type: userGroup
           links:
-            self: http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/users?include=userGroups&page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users?include=userGroups&page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users?include=userGroups&page=1&size=500
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/userGroups
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/userGroups
       body:
         userGroups:
           - id: adminGroup
@@ -203,6 +208,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -210,6 +217,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -217,13 +226,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/organization
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
       body: null
       headers:
         Accept-Encoding:
@@ -239,6 +248,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '0'
         Content-Type:
@@ -247,11 +258,13 @@ interactions:
         Expires:
           - '0'
         Location:
-          - /api/v1/entities/admin/organizations/default
+          - /api/v1/entities/admin/organizations/python-sdk-dex
         Pragma:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -259,13 +272,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/admin/organizations/default
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       body: null
       headers:
         Accept-Encoding:
@@ -281,8 +294,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '450'
+          - '564'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -292,6 +307,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -299,14 +316,14 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
           data:
             attributes:
-              name: Default Organization
-              hostname: localhost
+              name: Python SDK Dex
+              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
               allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
@@ -318,13 +335,15 @@ interactions:
                 - enableUserManagement
                 - enableRawExports
                 - enableFlexibleDashboardLayout
-            id: default
+              region: ''
+              dataCenter: ''
+            id: python-sdk-dex
             type: organization
           links:
-            self: http://localhost:3000/api/v1/entities/admin/organizations/default
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/usersAndUserGroups
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/usersAndUserGroups
       body:
         userGroups:
           - id: adminGroup
@@ -380,6 +399,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -387,6 +408,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -394,13 +417,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/usersAndUserGroups
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/usersAndUserGroups
       body: null
       headers:
         Accept:
@@ -418,6 +441,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '760'
         Content-Type:
@@ -429,6 +454,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -436,7 +463,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -480,7 +507,7 @@ interactions:
                   type: userGroup
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/usersAndUserGroups
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/usersAndUserGroups
       body:
         userGroups:
           - id: adminGroup
@@ -507,17 +534,14 @@ interactions:
             settings: []
             permissions: []
           - id: demo
-            email: demo@example.com
-            firstname: Demo
-            lastname: User
-            authId: CiQ1NzgxOGE5YS0zZWUwLTRhZDMtOGE4Zi0xZDJlODVmOTU5OTgSBWxvY2Fs
+            authId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
             userGroups:
               - id: adminGroup
                 type: userGroup
             settings: []
             permissions: []
           - id: demo2
-            authId: CiRlMGNlMTY5OS1hY2IzLTRkNzAtOWVkYi02MDYyZjhiMGNlM2USBWxvY2Fs
+            authId: CiQ5ZGMzNjU0MC1hYzMxLTQ2MTUtOThmNy1hYzJiZDE2NzZkYzUSBWxvY2Fs
             userGroups:
               - id: demoGroup
                 type: userGroup
@@ -539,6 +563,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -546,6 +572,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -553,7 +581,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''

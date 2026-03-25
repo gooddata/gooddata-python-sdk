@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/labels?page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels?page=0&size=500
       body: null
       headers:
         Accept:
@@ -21,8 +21,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '8196'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,14 +35,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -57,7 +64,7 @@ interactions:
                 areRelationsValid: true
               id: campaign_channel_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channel_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_channel_id
               meta:
                 origin:
                   originId: demo
@@ -75,7 +82,7 @@ interactions:
                 areRelationsValid: true
               id: campaign_channels.category
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channels.category
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_channels.category
               meta:
                 origin:
                   originId: demo
@@ -93,7 +100,7 @@ interactions:
                 areRelationsValid: true
               id: campaign_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_id
               meta:
                 origin:
                   originId: demo
@@ -111,7 +118,7 @@ interactions:
                 areRelationsValid: true
               id: campaign_name
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_name
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_name
               meta:
                 origin:
                   originId: demo
@@ -129,7 +136,7 @@ interactions:
                 areRelationsValid: true
               id: customer_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/customer_id
               meta:
                 origin:
                   originId: demo
@@ -147,7 +154,7 @@ interactions:
                 areRelationsValid: true
               id: customer_name
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_name
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/customer_name
               meta:
                 origin:
                   originId: demo
@@ -163,7 +170,7 @@ interactions:
                 areRelationsValid: true
               id: date.day
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.day
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.day
               meta:
                 origin:
                   originId: demo
@@ -179,7 +186,7 @@ interactions:
                 areRelationsValid: true
               id: date.month
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.month
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.month
               meta:
                 origin:
                   originId: demo
@@ -195,7 +202,7 @@ interactions:
                 areRelationsValid: true
               id: date.quarter
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarter
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.quarter
               meta:
                 origin:
                   originId: demo
@@ -211,7 +218,7 @@ interactions:
                 areRelationsValid: true
               id: date.week
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.week
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.week
               meta:
                 origin:
                   originId: demo
@@ -227,7 +234,7 @@ interactions:
                 areRelationsValid: true
               id: date.year
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.year
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.year
               meta:
                 origin:
                   originId: demo
@@ -245,7 +252,7 @@ interactions:
                 areRelationsValid: true
               id: geo__state__location
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/geo__state__location
               meta:
                 origin:
                   originId: demo
@@ -263,7 +270,7 @@ interactions:
                 areRelationsValid: true
               id: order_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_id
               meta:
                 origin:
                   originId: demo
@@ -281,7 +288,7 @@ interactions:
                 areRelationsValid: true
               id: order_line_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_line_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_line_id
               meta:
                 origin:
                   originId: demo
@@ -299,7 +306,7 @@ interactions:
                 areRelationsValid: true
               id: order_status
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_status
               meta:
                 origin:
                   originId: demo
@@ -317,7 +324,7 @@ interactions:
                 areRelationsValid: true
               id: product_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/product_id
               meta:
                 origin:
                   originId: demo
@@ -335,7 +342,7 @@ interactions:
                 areRelationsValid: true
               id: product_name
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/product_name
               meta:
                 origin:
                   originId: demo
@@ -353,7 +360,7 @@ interactions:
                 areRelationsValid: true
               id: products.category
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/products.category
               meta:
                 origin:
                   originId: demo
@@ -371,7 +378,7 @@ interactions:
                 areRelationsValid: true
               id: region
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/region
               meta:
                 origin:
                   originId: demo
@@ -389,7 +396,7 @@ interactions:
                 areRelationsValid: true
               id: state
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/state
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/state
               meta:
                 origin:
                   originId: demo
@@ -407,12 +414,12 @@ interactions:
                 areRelationsValid: true
               id: type
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/type
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/type
               meta:
                 origin:
                   originId: demo
                   originType: NATIVE
               type: label
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/labels?page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces/demo/labels?page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels?page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels?page=1&size=500

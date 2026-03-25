@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=0&size=500
       body: null
       headers:
         Accept:
@@ -21,8 +21,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1115'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,14 +35,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -49,13 +56,13 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
               type: workspace
             - attributes:
                 name: Demo West
               id: demo_west
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west
               relationships:
                 parent:
                   data:
@@ -66,7 +73,7 @@ interactions:
                 name: Demo West California
               id: demo_west_california
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west_california
               relationships:
                 parent:
                   data:
@@ -78,20 +85,20 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
               type: workspace
             - attributes:
                 name: Demo West
               id: demo_west
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west
               type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=0&size=500
       body: null
       headers:
         Accept:
@@ -109,8 +116,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1115'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -120,14 +129,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -136,13 +150,13 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
               type: workspace
             - attributes:
                 name: Demo West
               id: demo_west
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west
               relationships:
                 parent:
                   data:
@@ -153,7 +167,7 @@ interactions:
                 name: Demo West California
               id: demo_west_california
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west_california
               relationships:
                 parent:
                   data:
@@ -165,20 +179,20 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
               type: workspace
             - attributes:
                 name: Demo West
               id: demo_west
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west
               type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=0&size=500
       body: null
       headers:
         Accept:
@@ -196,8 +210,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1115'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -207,14 +223,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -223,13 +244,13 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
               type: workspace
             - attributes:
                 name: Demo West
               id: demo_west
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west
               relationships:
                 parent:
                   data:
@@ -240,7 +261,7 @@ interactions:
                 name: Demo West California
               id: demo_west_california
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west_california
               relationships:
                 parent:
                   data:
@@ -252,14 +273,14 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
               type: workspace
             - attributes:
                 name: Demo West
               id: demo_west
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west
               type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=1&size=500

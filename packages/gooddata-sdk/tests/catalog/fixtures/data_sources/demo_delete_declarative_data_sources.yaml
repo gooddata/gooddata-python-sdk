@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/dataSources
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
       body:
         dataSources: []
       headers:
@@ -22,6 +22,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: &id001
           - PLACEHOLDER
         Expires:
@@ -30,6 +32,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -37,13 +41,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/dataSources
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
       body: null
       headers:
         Accept:
@@ -61,6 +65,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '18'
         Content-Type:
@@ -72,6 +78,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -79,21 +87,21 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
           dataSources: []
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/dataSources
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
       body:
         dataSources:
           - id: demo-test-ds
             name: demo-test-ds
             schema: demo
             type: POSTGRESQL
-            url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
+            url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
             username: postgres
             permissions:
               - assignee:
@@ -105,7 +113,7 @@ interactions:
                   type: userGroup
                 name: USE
             alternativeDataSourceId: ds-put-abc-id
-            password: passw0rd
+            password: secret
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -122,6 +130,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -129,6 +139,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -136,7 +148,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
