@@ -11,7 +11,7 @@ import vcr
 import yaml
 from vcr.record_mode import RecordMode
 
-VCR_MATCH_ON = ("method", "scheme", "host", "port", "path", "query", "body")
+VCR_MATCH_ON = ("method", "path", "query", "body")
 NON_STATIC_HEADERS = ["DATE", "X-GDC-CANCEL-TOKEN", "X-GDC-TRACE-ID"]
 HEADERS_STR = "headers"
 PLACEHOLDER = ["PLACEHOLDER"]
