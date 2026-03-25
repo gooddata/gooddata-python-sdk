@@ -94,6 +94,7 @@ class PositiveAttributeFilterPositiveAttributeFilter(ModelNormal):
             'label': (AfmIdentifier,),  # noqa: E501
             'apply_on_result': (bool,),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
+            'uses_arbitrary_values': (bool,),  # noqa: E501
         }
 
     @cached_property
@@ -106,6 +107,7 @@ class PositiveAttributeFilterPositiveAttributeFilter(ModelNormal):
         'label': 'label',  # noqa: E501
         'apply_on_result': 'applyOnResult',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
+        'uses_arbitrary_values': 'usesArbitraryValues',  # noqa: E501
     }
 
     read_only_vars = {
@@ -155,6 +157,7 @@ class PositiveAttributeFilterPositiveAttributeFilter(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
+            uses_arbitrary_values (bool): If true, indicates that the values in inElements were filled free-form, otherwise they have been picked from existing elements.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -248,6 +251,7 @@ class PositiveAttributeFilterPositiveAttributeFilter(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
+            uses_arbitrary_values (bool): If true, indicates that the values in inElements were filled free-form, otherwise they have been picked from existing elements.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

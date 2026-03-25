@@ -111,7 +111,6 @@ class NotificationChannelsApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -138,16 +137,12 @@ class NotificationChannelsApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -1147,7 +1142,6 @@ class NotificationChannelsApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -1217,7 +1211,7 @@ class NotificationChannelsApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_notification_channel_identifiers  # noqa: E501
+        """Get all Notification Channel Identifier entities  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1382,7 +1376,7 @@ class NotificationChannelsApi(object):
         id,
         **kwargs
     ):
-        """get_entity_notification_channel_identifiers  # noqa: E501
+        """Get Notification Channel Identifier entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

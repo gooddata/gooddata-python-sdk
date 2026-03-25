@@ -6,9 +6,9 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_entity_notification_channels**](NotificationChannelsApi.md#create_entity_notification_channels) | **POST** /api/v1/entities/notificationChannels | Post Notification Channel entities
 [**delete_entity_notification_channels**](NotificationChannelsApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | Delete Notification Channel entity
-[**get_all_entities_notification_channel_identifiers**](NotificationChannelsApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | 
+[**get_all_entities_notification_channel_identifiers**](NotificationChannelsApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | Get all Notification Channel Identifier entities
 [**get_all_entities_notification_channels**](NotificationChannelsApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
-[**get_entity_notification_channel_identifiers**](NotificationChannelsApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | 
+[**get_entity_notification_channel_identifiers**](NotificationChannelsApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | Get Notification Channel Identifier entity
 [**get_entity_notification_channels**](NotificationChannelsApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
 [**get_export_templates_layout**](NotificationChannelsApi.md#get_export_templates_layout) | **GET** /api/v1/layout/exportTemplates | Get all export templates layout
 [**get_notification_channels_layout**](NotificationChannelsApi.md#get_notification_channels_layout) | **GET** /api/v1/layout/notificationChannels | Get all notification channels layout
@@ -129,20 +129,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = notification_channels_api.NotificationChannelsApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Delete Notification Channel entity
         api_instance.delete_entity_notification_channels(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling NotificationChannelsApi->delete_entity_notification_channels: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete Notification Channel entity
-        api_instance.delete_entity_notification_channels(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling NotificationChannelsApi->delete_entity_notification_channels: %s\n" % e)
 ```
@@ -153,7 +144,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -180,7 +170,7 @@ No authorization required
 # **get_all_entities_notification_channel_identifiers**
 > JsonApiNotificationChannelIdentifierOutList get_all_entities_notification_channel_identifiers()
 
-
+Get all Notification Channel Identifier entities
 
 ### Example
 
@@ -215,6 +205,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Notification Channel Identifier entities
         api_response = api_instance.get_all_entities_notification_channel_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -335,7 +326,7 @@ No authorization required
 # **get_entity_notification_channel_identifiers**
 > JsonApiNotificationChannelIdentifierOutDocument get_entity_notification_channel_identifiers(id)
 
-
+Get Notification Channel Identifier entity
 
 ### Example
 
@@ -362,6 +353,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get Notification Channel Identifier entity
         api_response = api_instance.get_entity_notification_channel_identifiers(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -370,6 +362,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Notification Channel Identifier entity
         api_response = api_instance.get_entity_notification_channel_identifiers(id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

@@ -86,23 +86,23 @@ Class | Method | HTTP request | Description
 *AACAnalyticsModelApi* | [**set_analytics_model_aac**](docs/AACAnalyticsModelApi.md#set_analytics_model_aac) | **PUT** /api/v1/aac/workspaces/{workspaceId}/analyticsModel | Set analytics model from AAC format
 *AACLogicalDataModelApi* | [**get_logical_model_aac**](docs/AACLogicalDataModelApi.md#get_logical_model_aac) | **GET** /api/v1/aac/workspaces/{workspaceId}/logicalModel | Get logical model in AAC format
 *AACLogicalDataModelApi* | [**set_logical_model_aac**](docs/AACLogicalDataModelApi.md#set_logical_model_aac) | **PUT** /api/v1/aac/workspaces/{workspaceId}/logicalModel | Set logical model from AAC format
-*AIApi* | [**create_entity_knowledge_recommendations**](docs/AIApi.md#create_entity_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | 
-*AIApi* | [**create_entity_memory_items**](docs/AIApi.md#create_entity_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems | 
-*AIApi* | [**delete_entity_knowledge_recommendations**](docs/AIApi.md#delete_entity_knowledge_recommendations) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
-*AIApi* | [**delete_entity_memory_items**](docs/AIApi.md#delete_entity_memory_items) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
-*AIApi* | [**get_all_entities_knowledge_recommendations**](docs/AIApi.md#get_all_entities_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | 
-*AIApi* | [**get_all_entities_memory_items**](docs/AIApi.md#get_all_entities_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems | 
-*AIApi* | [**get_entity_knowledge_recommendations**](docs/AIApi.md#get_entity_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
-*AIApi* | [**get_entity_memory_items**](docs/AIApi.md#get_entity_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
+*AIApi* | [**create_entity_knowledge_recommendations**](docs/AIApi.md#create_entity_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | Post Knowledge Recommendations
+*AIApi* | [**create_entity_memory_items**](docs/AIApi.md#create_entity_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems | Post Memory Items
+*AIApi* | [**delete_entity_knowledge_recommendations**](docs/AIApi.md#delete_entity_knowledge_recommendations) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Delete a Knowledge Recommendation
+*AIApi* | [**delete_entity_memory_items**](docs/AIApi.md#delete_entity_memory_items) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Delete a Memory Item
+*AIApi* | [**get_all_entities_knowledge_recommendations**](docs/AIApi.md#get_all_entities_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | Get all Knowledge Recommendations
+*AIApi* | [**get_all_entities_memory_items**](docs/AIApi.md#get_all_entities_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems | Get all Memory Items
+*AIApi* | [**get_entity_knowledge_recommendations**](docs/AIApi.md#get_entity_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Get a Knowledge Recommendation
+*AIApi* | [**get_entity_memory_items**](docs/AIApi.md#get_entity_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Get a Memory Item
 *AIApi* | [**metadata_check_organization**](docs/AIApi.md#metadata_check_organization) | **POST** /api/v1/actions/organization/metadataCheck | (BETA) Check Organization Metadata Inconsistencies
 *AIApi* | [**metadata_sync**](docs/AIApi.md#metadata_sync) | **POST** /api/v1/actions/workspaces/{workspaceId}/metadataSync | (BETA) Sync Metadata to other services
 *AIApi* | [**metadata_sync_organization**](docs/AIApi.md#metadata_sync_organization) | **POST** /api/v1/actions/organization/metadataSync | (BETA) Sync organization scope Metadata to other services
-*AIApi* | [**patch_entity_knowledge_recommendations**](docs/AIApi.md#patch_entity_knowledge_recommendations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
-*AIApi* | [**patch_entity_memory_items**](docs/AIApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
+*AIApi* | [**patch_entity_knowledge_recommendations**](docs/AIApi.md#patch_entity_knowledge_recommendations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Patch a Knowledge Recommendation
+*AIApi* | [**patch_entity_memory_items**](docs/AIApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Patch a Memory Item
 *AIApi* | [**search_entities_knowledge_recommendations**](docs/AIApi.md#search_entities_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/search | The search endpoint (beta)
-*AIApi* | [**search_entities_memory_items**](docs/AIApi.md#search_entities_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems/search | Search request for MemoryItem
-*AIApi* | [**update_entity_knowledge_recommendations**](docs/AIApi.md#update_entity_knowledge_recommendations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
-*AIApi* | [**update_entity_memory_items**](docs/AIApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
+*AIApi* | [**search_entities_memory_items**](docs/AIApi.md#search_entities_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems/search | The search endpoint (beta)
+*AIApi* | [**update_entity_knowledge_recommendations**](docs/AIApi.md#update_entity_knowledge_recommendations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Put a Knowledge Recommendation
+*AIApi* | [**update_entity_memory_items**](docs/AIApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Put a Memory Item
 *AILakeApi* | [**deprovision_ai_lake_database_instance**](docs/AILakeApi.md#deprovision_ai_lake_database_instance) | **DELETE** /api/v1/ailake/database/instances/{instanceId} | (BETA) Delete an existing AILake Database instance
 *AILakeApi* | [**get_ai_lake_database_instance**](docs/AILakeApi.md#get_ai_lake_database_instance) | **GET** /api/v1/ailake/database/instances/{instanceId} | (BETA) Get the specified AILake Database instance
 *AILakeApi* | [**get_ai_lake_operation**](docs/AILakeApi.md#get_ai_lake_operation) | **GET** /api/v1/ailake/operations/{operationId} | (BETA) Get Long Running Operation details
@@ -151,7 +151,7 @@ Class | Method | HTTP request | Description
 *AutomationsApi* | [**patch_entity_automations**](docs/AutomationsApi.md#patch_entity_automations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Patch an Automation
 *AutomationsApi* | [**pause_organization_automations**](docs/AutomationsApi.md#pause_organization_automations) | **POST** /api/v1/actions/organization/automations/pause | Pause selected automations across all workspaces
 *AutomationsApi* | [**pause_workspace_automations**](docs/AutomationsApi.md#pause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/pause | Pause selected automations in the workspace
-*AutomationsApi* | [**search_entities_automation_results**](docs/AutomationsApi.md#search_entities_automation_results) | **POST** /api/v1/entities/workspaces/{workspaceId}/automationResults/search | Search request for AutomationResult
+*AutomationsApi* | [**search_entities_automation_results**](docs/AutomationsApi.md#search_entities_automation_results) | **POST** /api/v1/entities/workspaces/{workspaceId}/automationResults/search | The search endpoint (beta)
 *AutomationsApi* | [**search_entities_automations**](docs/AutomationsApi.md#search_entities_automations) | **POST** /api/v1/entities/workspaces/{workspaceId}/automations/search | The search endpoint (beta)
 *AutomationsApi* | [**set_automations**](docs/AutomationsApi.md#set_automations) | **PUT** /api/v1/layout/workspaces/{workspaceId}/automations | Set automations
 *AutomationsApi* | [**trigger_automation**](docs/AutomationsApi.md#trigger_automation) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/trigger | Trigger automation.
@@ -245,7 +245,7 @@ Class | Method | HTTP request | Description
 *DependencyGraphApi* | [**get_dependent_entities_graph**](docs/DependencyGraphApi.md#get_dependent_entities_graph) | **GET** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph
 *DependencyGraphApi* | [**get_dependent_entities_graph_from_entry_points**](docs/DependencyGraphApi.md#get_dependent_entities_graph_from_entry_points) | **POST** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph from given entry points
 *EntitlementApi* | [**get_all_entities_entitlements**](docs/EntitlementApi.md#get_all_entities_entitlements) | **GET** /api/v1/entities/entitlements | Get Entitlements
-*EntitlementApi* | [**get_entity_entitlements**](docs/EntitlementApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement
+*EntitlementApi* | [**get_entity_entitlements**](docs/EntitlementApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement entity
 *EntitlementApi* | [**resolve_all_entitlements**](docs/EntitlementApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 *EntitlementApi* | [**resolve_requested_entitlements**](docs/EntitlementApi.md#resolve_requested_entitlements) | **POST** /api/v1/actions/resolveEntitlements | Values for requested public entitlements.
 *ExportDefinitionsApi* | [**create_entity_export_definitions**](docs/ExportDefinitionsApi.md#create_entity_export_definitions) | **POST** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | Post Export Definitions
@@ -261,12 +261,12 @@ Class | Method | HTTP request | Description
 *ExportTemplatesApi* | [**get_entity_export_templates**](docs/ExportTemplatesApi.md#get_entity_export_templates) | **GET** /api/v1/entities/exportTemplates/{id} | GET Export Template entity
 *ExportTemplatesApi* | [**patch_entity_export_templates**](docs/ExportTemplatesApi.md#patch_entity_export_templates) | **PATCH** /api/v1/entities/exportTemplates/{id} | Patch Export Template entity
 *ExportTemplatesApi* | [**update_entity_export_templates**](docs/ExportTemplatesApi.md#update_entity_export_templates) | **PUT** /api/v1/entities/exportTemplates/{id} | PUT Export Template entity
-*FactsApi* | [**get_all_entities_aggregated_facts**](docs/FactsApi.md#get_all_entities_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts | 
+*FactsApi* | [**get_all_entities_aggregated_facts**](docs/FactsApi.md#get_all_entities_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts | Get all Aggregated Facts
 *FactsApi* | [**get_all_entities_facts**](docs/FactsApi.md#get_all_entities_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts | Get all Facts
-*FactsApi* | [**get_entity_aggregated_facts**](docs/FactsApi.md#get_entity_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/{objectId} | 
+*FactsApi* | [**get_entity_aggregated_facts**](docs/FactsApi.md#get_entity_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/{objectId} | Get an Aggregated Fact
 *FactsApi* | [**get_entity_facts**](docs/FactsApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
 *FactsApi* | [**patch_entity_facts**](docs/FactsApi.md#patch_entity_facts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Patch a Fact (beta)
-*FactsApi* | [**search_entities_aggregated_facts**](docs/FactsApi.md#search_entities_aggregated_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/search | Search request for AggregatedFact
+*FactsApi* | [**search_entities_aggregated_facts**](docs/FactsApi.md#search_entities_aggregated_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/search | The search endpoint (beta)
 *FactsApi* | [**search_entities_facts**](docs/FactsApi.md#search_entities_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/facts/search | The search endpoint (beta)
 *FilterContextApi* | [**create_entity_filter_contexts**](docs/FilterContextApi.md#create_entity_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Post Filter Context
 *FilterContextApi* | [**delete_entity_filter_contexts**](docs/FilterContextApi.md#delete_entity_filter_contexts) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Delete a Filter Context
@@ -347,9 +347,9 @@ Class | Method | HTTP request | Description
 *MetricsApi* | [**update_entity_metrics**](docs/MetricsApi.md#update_entity_metrics) | **PUT** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Put a Metric
 *NotificationChannelsApi* | [**create_entity_notification_channels**](docs/NotificationChannelsApi.md#create_entity_notification_channels) | **POST** /api/v1/entities/notificationChannels | Post Notification Channel entities
 *NotificationChannelsApi* | [**delete_entity_notification_channels**](docs/NotificationChannelsApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | Delete Notification Channel entity
-*NotificationChannelsApi* | [**get_all_entities_notification_channel_identifiers**](docs/NotificationChannelsApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | 
+*NotificationChannelsApi* | [**get_all_entities_notification_channel_identifiers**](docs/NotificationChannelsApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | Get all Notification Channel Identifier entities
 *NotificationChannelsApi* | [**get_all_entities_notification_channels**](docs/NotificationChannelsApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
-*NotificationChannelsApi* | [**get_entity_notification_channel_identifiers**](docs/NotificationChannelsApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | 
+*NotificationChannelsApi* | [**get_entity_notification_channel_identifiers**](docs/NotificationChannelsApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | Get Notification Channel Identifier entity
 *NotificationChannelsApi* | [**get_entity_notification_channels**](docs/NotificationChannelsApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
 *NotificationChannelsApi* | [**get_export_templates_layout**](docs/NotificationChannelsApi.md#get_export_templates_layout) | **GET** /api/v1/layout/exportTemplates | Get all export templates layout
 *NotificationChannelsApi* | [**get_notification_channels_layout**](docs/NotificationChannelsApi.md#get_notification_channels_layout) | **GET** /api/v1/layout/notificationChannels | Get all notification channels layout
@@ -371,14 +371,14 @@ Class | Method | HTTP request | Description
 *OrganizationDeclarativeAPIsApi* | [**set_custom_geo_collections**](docs/OrganizationDeclarativeAPIsApi.md#set_custom_geo_collections) | **PUT** /api/v1/layout/customGeoCollections | Set all custom geo collections
 *OrganizationDeclarativeAPIsApi* | [**set_organization_layout**](docs/OrganizationDeclarativeAPIsApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
 *OrganizationEntityAPIsApi* | [**create_entity_organization_settings**](docs/OrganizationEntityAPIsApi.md#create_entity_organization_settings) | **POST** /api/v1/entities/organizationSettings | Post Organization Setting entities
-*OrganizationEntityAPIsApi* | [**delete_entity_organization_settings**](docs/OrganizationEntityAPIsApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | Delete Organization entity
-*OrganizationEntityAPIsApi* | [**get_all_entities_organization_settings**](docs/OrganizationEntityAPIsApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization entities
-*OrganizationEntityAPIsApi* | [**get_entity_organization_settings**](docs/OrganizationEntityAPIsApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization entity
+*OrganizationEntityAPIsApi* | [**delete_entity_organization_settings**](docs/OrganizationEntityAPIsApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | Delete Organization Setting entity
+*OrganizationEntityAPIsApi* | [**get_all_entities_organization_settings**](docs/OrganizationEntityAPIsApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization Setting entities
+*OrganizationEntityAPIsApi* | [**get_entity_organization_settings**](docs/OrganizationEntityAPIsApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization Setting entity
 *OrganizationEntityAPIsApi* | [**get_entity_organizations**](docs/OrganizationEntityAPIsApi.md#get_entity_organizations) | **GET** /api/v1/entities/admin/organizations/{id} | Get Organizations
 *OrganizationEntityAPIsApi* | [**get_organization**](docs/OrganizationEntityAPIsApi.md#get_organization) | **GET** /api/v1/entities/organization | Get current organization info
-*OrganizationEntityAPIsApi* | [**patch_entity_organization_settings**](docs/OrganizationEntityAPIsApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | Patch Organization entity
+*OrganizationEntityAPIsApi* | [**patch_entity_organization_settings**](docs/OrganizationEntityAPIsApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | Patch Organization Setting entity
 *OrganizationEntityAPIsApi* | [**patch_entity_organizations**](docs/OrganizationEntityAPIsApi.md#patch_entity_organizations) | **PATCH** /api/v1/entities/admin/organizations/{id} | Patch Organization
-*OrganizationEntityAPIsApi* | [**update_entity_organization_settings**](docs/OrganizationEntityAPIsApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization entity
+*OrganizationEntityAPIsApi* | [**update_entity_organization_settings**](docs/OrganizationEntityAPIsApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization Setting entity
 *OrganizationEntityAPIsApi* | [**update_entity_organizations**](docs/OrganizationEntityAPIsApi.md#update_entity_organizations) | **PUT** /api/v1/entities/admin/organizations/{id} | Put Organization
 *PermissionsApi* | [**available_assignees**](docs/PermissionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 *PermissionsApi* | [**dashboard_permissions**](docs/PermissionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
@@ -543,7 +543,6 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**available_assignees**](docs/ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 *ActionsApi* | [**cancel_executions**](docs/ActionsApi.md#cancel_executions) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel | Applies all the given cancel tokens.
 *ActionsApi* | [**cancel_workflow**](docs/ActionsApi.md#cancel_workflow) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/cancel | 
-*ActionsApi* | [**cancel_workflow1**](docs/ActionsApi.md#cancel_workflow1) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/agent/{runId}/cancel | 
 *ActionsApi* | [**change_analysis**](docs/ActionsApi.md#change_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis | Compute change analysis
 *ActionsApi* | [**change_analysis_result**](docs/ActionsApi.md#change_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis/result/{resultId} | Get change analysis result
 *ActionsApi* | [**check_entity_overrides**](docs/ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
@@ -575,9 +574,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**forecast**](docs/ActionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
 *ActionsApi* | [**forecast_result**](docs/ActionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
 *ActionsApi* | [**generate_dashboard_summary**](docs/ActionsApi.md#generate_dashboard_summary) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/dashboardSummary | 
-*ActionsApi* | [**generate_dashboard_summary1**](docs/ActionsApi.md#generate_dashboard_summary1) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/agent/dashboardSummary | 
 *ActionsApi* | [**generate_description**](docs/ActionsApi.md#generate_description) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateDescription | Generate Description for Analytics Object
-*ActionsApi* | [**generate_knowledge_recommendations**](docs/ActionsApi.md#generate_knowledge_recommendations) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/agent/knowledgeRecommendations | 
 *ActionsApi* | [**generate_logical_model**](docs/ActionsApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
 *ActionsApi* | [**generate_logical_model_aac**](docs/ActionsApi.md#generate_logical_model_aac) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModelAac | Generate logical data model in AAC format from physical data model (PDM)
 *ActionsApi* | [**generate_title**](docs/ActionsApi.md#generate_title) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateTitle | Generate Title for Analytics Object
@@ -598,7 +595,6 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_tabular_export**](docs/ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 *ActionsApi* | [**get_translation_tags**](docs/ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
 *ActionsApi* | [**get_workflow_status**](docs/ActionsApi.md#get_workflow_status) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/status | 
-*ActionsApi* | [**get_workflow_status1**](docs/ActionsApi.md#get_workflow_status1) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/agent/{runId}/status | 
 *ActionsApi* | [**import_csv**](docs/ActionsApi.md#import_csv) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/importCsv | Import CSV
 *ActionsApi* | [**import_custom_geo_collection**](docs/ActionsApi.md#import_custom_geo_collection) | **POST** /api/v1/actions/customGeoCollection/{collectionId}/import | Import custom geo collection
 *ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
@@ -666,11 +662,13 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**unsubscribe_selected_workspace_automations**](docs/ActionsApi.md#unsubscribe_selected_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from selected automations in the workspace
 *ActionsApi* | [**unsubscribe_workspace_automations**](docs/ActionsApi.md#unsubscribe_workspace_automations) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from all automations in the workspace
 *ActionsApi* | [**upsert_document**](docs/ActionsApi.md#upsert_document) | **PUT** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents | 
-*ActionsApi* | [**user_feedback**](docs/ActionsApi.md#user_feedback) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/agent/{runId}/feedback | 
 *ActionsApi* | [**validate_llm_endpoint**](docs/ActionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint
 *ActionsApi* | [**validate_llm_endpoint_by_id**](docs/ActionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id
 *ActionsApi* | [**workspace_resolve_all_settings**](docs/ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 *ActionsApi* | [**workspace_resolve_settings**](docs/ActionsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
+*AggregatedFactControllerApi* | [**get_all_entities_aggregated_facts**](docs/AggregatedFactControllerApi.md#get_all_entities_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts | Get all Aggregated Facts
+*AggregatedFactControllerApi* | [**get_entity_aggregated_facts**](docs/AggregatedFactControllerApi.md#get_entity_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/{objectId} | Get an Aggregated Fact
+*AggregatedFactControllerApi* | [**search_entities_aggregated_facts**](docs/AggregatedFactControllerApi.md#search_entities_aggregated_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/search | The search endpoint (beta)
 *AnalyticalDashboardControllerApi* | [**create_entity_analytical_dashboards**](docs/AnalyticalDashboardControllerApi.md#create_entity_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | Post Dashboards
 *AnalyticalDashboardControllerApi* | [**delete_entity_analytical_dashboards**](docs/AnalyticalDashboardControllerApi.md#delete_entity_analytical_dashboards) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Delete a Dashboard
 *AnalyticalDashboardControllerApi* | [**get_all_entities_analytical_dashboards**](docs/AnalyticalDashboardControllerApi.md#get_all_entities_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | Get all Dashboards
@@ -701,9 +699,22 @@ Class | Method | HTTP request | Description
 *AutomationControllerApi* | [**search_entities_automations**](docs/AutomationControllerApi.md#search_entities_automations) | **POST** /api/v1/entities/workspaces/{workspaceId}/automations/search | The search endpoint (beta)
 *AutomationControllerApi* | [**update_entity_automations**](docs/AutomationControllerApi.md#update_entity_automations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Put an Automation
 *AutomationOrganizationViewControllerApi* | [**get_all_automations_workspace_automations**](docs/AutomationOrganizationViewControllerApi.md#get_all_automations_workspace_automations) | **GET** /api/v1/entities/organization/workspaceAutomations | Get all Automations across all Workspaces
+*AutomationResultControllerApi* | [**search_entities_automation_results**](docs/AutomationResultControllerApi.md#search_entities_automation_results) | **POST** /api/v1/entities/workspaces/{workspaceId}/automationResults/search | The search endpoint (beta)
+*ColorPaletteControllerApi* | [**create_entity_color_palettes**](docs/ColorPaletteControllerApi.md#create_entity_color_palettes) | **POST** /api/v1/entities/colorPalettes | Post Color Pallettes
+*ColorPaletteControllerApi* | [**delete_entity_color_palettes**](docs/ColorPaletteControllerApi.md#delete_entity_color_palettes) | **DELETE** /api/v1/entities/colorPalettes/{id} | Delete a Color Pallette
+*ColorPaletteControllerApi* | [**get_all_entities_color_palettes**](docs/ColorPaletteControllerApi.md#get_all_entities_color_palettes) | **GET** /api/v1/entities/colorPalettes | Get all Color Pallettes
+*ColorPaletteControllerApi* | [**get_entity_color_palettes**](docs/ColorPaletteControllerApi.md#get_entity_color_palettes) | **GET** /api/v1/entities/colorPalettes/{id} | Get Color Pallette
+*ColorPaletteControllerApi* | [**patch_entity_color_palettes**](docs/ColorPaletteControllerApi.md#patch_entity_color_palettes) | **PATCH** /api/v1/entities/colorPalettes/{id} | Patch Color Pallette
+*ColorPaletteControllerApi* | [**update_entity_color_palettes**](docs/ColorPaletteControllerApi.md#update_entity_color_palettes) | **PUT** /api/v1/entities/colorPalettes/{id} | Put Color Pallette
 *CookieSecurityConfigurationControllerApi* | [**get_entity_cookie_security_configurations**](docs/CookieSecurityConfigurationControllerApi.md#get_entity_cookie_security_configurations) | **GET** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Get CookieSecurityConfiguration
 *CookieSecurityConfigurationControllerApi* | [**patch_entity_cookie_security_configurations**](docs/CookieSecurityConfigurationControllerApi.md#patch_entity_cookie_security_configurations) | **PATCH** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Patch CookieSecurityConfiguration
 *CookieSecurityConfigurationControllerApi* | [**update_entity_cookie_security_configurations**](docs/CookieSecurityConfigurationControllerApi.md#update_entity_cookie_security_configurations) | **PUT** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Put CookieSecurityConfiguration
+*CspDirectiveControllerApi* | [**create_entity_csp_directives**](docs/CspDirectiveControllerApi.md#create_entity_csp_directives) | **POST** /api/v1/entities/cspDirectives | Post CSP Directives
+*CspDirectiveControllerApi* | [**delete_entity_csp_directives**](docs/CspDirectiveControllerApi.md#delete_entity_csp_directives) | **DELETE** /api/v1/entities/cspDirectives/{id} | Delete CSP Directives
+*CspDirectiveControllerApi* | [**get_all_entities_csp_directives**](docs/CspDirectiveControllerApi.md#get_all_entities_csp_directives) | **GET** /api/v1/entities/cspDirectives | Get CSP Directives
+*CspDirectiveControllerApi* | [**get_entity_csp_directives**](docs/CspDirectiveControllerApi.md#get_entity_csp_directives) | **GET** /api/v1/entities/cspDirectives/{id} | Get CSP Directives
+*CspDirectiveControllerApi* | [**patch_entity_csp_directives**](docs/CspDirectiveControllerApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | Patch CSP Directives
+*CspDirectiveControllerApi* | [**update_entity_csp_directives**](docs/CspDirectiveControllerApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | Put CSP Directives
 *CustomApplicationSettingControllerApi* | [**create_entity_custom_application_settings**](docs/CustomApplicationSettingControllerApi.md#create_entity_custom_application_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | Post Custom Application Settings
 *CustomApplicationSettingControllerApi* | [**delete_entity_custom_application_settings**](docs/CustomApplicationSettingControllerApi.md#delete_entity_custom_application_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Delete a Custom Application Setting
 *CustomApplicationSettingControllerApi* | [**get_all_entities_custom_application_settings**](docs/CustomApplicationSettingControllerApi.md#get_all_entities_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | Get all Custom Application Settings
@@ -730,6 +741,8 @@ Class | Method | HTTP request | Description
 *DataSourceControllerApi* | [**get_entity_data_sources**](docs/DataSourceControllerApi.md#get_entity_data_sources) | **GET** /api/v1/entities/dataSources/{id} | Get Data Source entity
 *DataSourceControllerApi* | [**patch_entity_data_sources**](docs/DataSourceControllerApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | Patch Data Source entity
 *DataSourceControllerApi* | [**update_entity_data_sources**](docs/DataSourceControllerApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | Put Data Source entity
+*DataSourceIdentifierControllerApi* | [**get_all_entities_data_source_identifiers**](docs/DataSourceIdentifierControllerApi.md#get_all_entities_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers | Get all Data Source Identifiers
+*DataSourceIdentifierControllerApi* | [**get_entity_data_source_identifiers**](docs/DataSourceIdentifierControllerApi.md#get_entity_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers/{id} | Get Data Source Identifier
 *DatasetControllerApi* | [**get_all_entities_datasets**](docs/DatasetControllerApi.md#get_all_entities_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets | Get all Datasets
 *DatasetControllerApi* | [**get_entity_datasets**](docs/DatasetControllerApi.md#get_entity_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Get a Dataset
 *DatasetControllerApi* | [**patch_entity_datasets**](docs/DatasetControllerApi.md#patch_entity_datasets) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Patch a Dataset (beta)
@@ -750,10 +763,10 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**create_entity_filter_views**](docs/EntitiesApi.md#create_entity_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews | Post Filter views
 *EntitiesApi* | [**create_entity_identity_providers**](docs/EntitiesApi.md#create_entity_identity_providers) | **POST** /api/v1/entities/identityProviders | Post Identity Providers
 *EntitiesApi* | [**create_entity_jwks**](docs/EntitiesApi.md#create_entity_jwks) | **POST** /api/v1/entities/jwks | Post Jwks
-*EntitiesApi* | [**create_entity_knowledge_recommendations**](docs/EntitiesApi.md#create_entity_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | 
+*EntitiesApi* | [**create_entity_knowledge_recommendations**](docs/EntitiesApi.md#create_entity_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | Post Knowledge Recommendations
 *EntitiesApi* | [**create_entity_llm_endpoints**](docs/EntitiesApi.md#create_entity_llm_endpoints) | **POST** /api/v1/entities/llmEndpoints | Post LLM endpoint entities
 *EntitiesApi* | [**create_entity_llm_providers**](docs/EntitiesApi.md#create_entity_llm_providers) | **POST** /api/v1/entities/llmProviders | Post LLM Provider entities
-*EntitiesApi* | [**create_entity_memory_items**](docs/EntitiesApi.md#create_entity_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems | 
+*EntitiesApi* | [**create_entity_memory_items**](docs/EntitiesApi.md#create_entity_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems | Post Memory Items
 *EntitiesApi* | [**create_entity_metrics**](docs/EntitiesApi.md#create_entity_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics | Post Metrics
 *EntitiesApi* | [**create_entity_notification_channels**](docs/EntitiesApi.md#create_entity_notification_channels) | **POST** /api/v1/entities/notificationChannels | Post Notification Channel entities
 *EntitiesApi* | [**create_entity_organization_settings**](docs/EntitiesApi.md#create_entity_organization_settings) | **POST** /api/v1/entities/organizationSettings | Post Organization Setting entities
@@ -783,13 +796,13 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**delete_entity_filter_views**](docs/EntitiesApi.md#delete_entity_filter_views) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Delete Filter view
 *EntitiesApi* | [**delete_entity_identity_providers**](docs/EntitiesApi.md#delete_entity_identity_providers) | **DELETE** /api/v1/entities/identityProviders/{id} | Delete Identity Provider
 *EntitiesApi* | [**delete_entity_jwks**](docs/EntitiesApi.md#delete_entity_jwks) | **DELETE** /api/v1/entities/jwks/{id} | Delete Jwk
-*EntitiesApi* | [**delete_entity_knowledge_recommendations**](docs/EntitiesApi.md#delete_entity_knowledge_recommendations) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
+*EntitiesApi* | [**delete_entity_knowledge_recommendations**](docs/EntitiesApi.md#delete_entity_knowledge_recommendations) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Delete a Knowledge Recommendation
 *EntitiesApi* | [**delete_entity_llm_endpoints**](docs/EntitiesApi.md#delete_entity_llm_endpoints) | **DELETE** /api/v1/entities/llmEndpoints/{id} | Delete LLM endpoint entity
 *EntitiesApi* | [**delete_entity_llm_providers**](docs/EntitiesApi.md#delete_entity_llm_providers) | **DELETE** /api/v1/entities/llmProviders/{id} | Delete LLM Provider entity
-*EntitiesApi* | [**delete_entity_memory_items**](docs/EntitiesApi.md#delete_entity_memory_items) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
+*EntitiesApi* | [**delete_entity_memory_items**](docs/EntitiesApi.md#delete_entity_memory_items) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Delete a Memory Item
 *EntitiesApi* | [**delete_entity_metrics**](docs/EntitiesApi.md#delete_entity_metrics) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Delete a Metric
 *EntitiesApi* | [**delete_entity_notification_channels**](docs/EntitiesApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | Delete Notification Channel entity
-*EntitiesApi* | [**delete_entity_organization_settings**](docs/EntitiesApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | Delete Organization entity
+*EntitiesApi* | [**delete_entity_organization_settings**](docs/EntitiesApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | Delete Organization Setting entity
 *EntitiesApi* | [**delete_entity_themes**](docs/EntitiesApi.md#delete_entity_themes) | **DELETE** /api/v1/entities/themes/{id} | Delete Theming
 *EntitiesApi* | [**delete_entity_user_data_filters**](docs/EntitiesApi.md#delete_entity_user_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Delete a User Data Filter
 *EntitiesApi* | [**delete_entity_user_groups**](docs/EntitiesApi.md#delete_entity_user_groups) | **DELETE** /api/v1/entities/userGroups/{id} | Delete UserGroup entity
@@ -801,7 +814,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**delete_entity_workspace_settings**](docs/EntitiesApi.md#delete_entity_workspace_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Delete a Setting for Workspace
 *EntitiesApi* | [**delete_entity_workspaces**](docs/EntitiesApi.md#delete_entity_workspaces) | **DELETE** /api/v1/entities/workspaces/{id} | Delete Workspace entity
 *EntitiesApi* | [**get_all_automations_workspace_automations**](docs/EntitiesApi.md#get_all_automations_workspace_automations) | **GET** /api/v1/entities/organization/workspaceAutomations | Get all Automations across all Workspaces
-*EntitiesApi* | [**get_all_entities_aggregated_facts**](docs/EntitiesApi.md#get_all_entities_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts | 
+*EntitiesApi* | [**get_all_entities_aggregated_facts**](docs/EntitiesApi.md#get_all_entities_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts | Get all Aggregated Facts
 *EntitiesApi* | [**get_all_entities_analytical_dashboards**](docs/EntitiesApi.md#get_all_entities_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | Get all Dashboards
 *EntitiesApi* | [**get_all_entities_api_tokens**](docs/EntitiesApi.md#get_all_entities_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens | List all api tokens for a user
 *EntitiesApi* | [**get_all_entities_attribute_hierarchies**](docs/EntitiesApi.md#get_all_entities_attribute_hierarchies) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies | Get all Attribute Hierarchies
@@ -823,15 +836,15 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_all_entities_filter_views**](docs/EntitiesApi.md#get_all_entities_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews | Get all Filter views
 *EntitiesApi* | [**get_all_entities_identity_providers**](docs/EntitiesApi.md#get_all_entities_identity_providers) | **GET** /api/v1/entities/identityProviders | Get all Identity Providers
 *EntitiesApi* | [**get_all_entities_jwks**](docs/EntitiesApi.md#get_all_entities_jwks) | **GET** /api/v1/entities/jwks | Get all Jwks
-*EntitiesApi* | [**get_all_entities_knowledge_recommendations**](docs/EntitiesApi.md#get_all_entities_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | 
+*EntitiesApi* | [**get_all_entities_knowledge_recommendations**](docs/EntitiesApi.md#get_all_entities_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | Get all Knowledge Recommendations
 *EntitiesApi* | [**get_all_entities_labels**](docs/EntitiesApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | Get all Labels
 *EntitiesApi* | [**get_all_entities_llm_endpoints**](docs/EntitiesApi.md#get_all_entities_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints | Get all LLM endpoint entities
 *EntitiesApi* | [**get_all_entities_llm_providers**](docs/EntitiesApi.md#get_all_entities_llm_providers) | **GET** /api/v1/entities/llmProviders | Get all LLM Provider entities
-*EntitiesApi* | [**get_all_entities_memory_items**](docs/EntitiesApi.md#get_all_entities_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems | 
+*EntitiesApi* | [**get_all_entities_memory_items**](docs/EntitiesApi.md#get_all_entities_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems | Get all Memory Items
 *EntitiesApi* | [**get_all_entities_metrics**](docs/EntitiesApi.md#get_all_entities_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics | Get all Metrics
-*EntitiesApi* | [**get_all_entities_notification_channel_identifiers**](docs/EntitiesApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | 
+*EntitiesApi* | [**get_all_entities_notification_channel_identifiers**](docs/EntitiesApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | Get all Notification Channel Identifier entities
 *EntitiesApi* | [**get_all_entities_notification_channels**](docs/EntitiesApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
-*EntitiesApi* | [**get_all_entities_organization_settings**](docs/EntitiesApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization entities
+*EntitiesApi* | [**get_all_entities_organization_settings**](docs/EntitiesApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization Setting entities
 *EntitiesApi* | [**get_all_entities_themes**](docs/EntitiesApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
 *EntitiesApi* | [**get_all_entities_user_data_filters**](docs/EntitiesApi.md#get_all_entities_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | Get all User Data Filters
 *EntitiesApi* | [**get_all_entities_user_groups**](docs/EntitiesApi.md#get_all_entities_user_groups) | **GET** /api/v1/entities/userGroups | Get UserGroup entities
@@ -845,7 +858,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_all_entities_workspaces**](docs/EntitiesApi.md#get_all_entities_workspaces) | **GET** /api/v1/entities/workspaces | Get Workspace entities
 *EntitiesApi* | [**get_all_options**](docs/EntitiesApi.md#get_all_options) | **GET** /api/v1/options | Links for all configuration options
 *EntitiesApi* | [**get_data_source_drivers**](docs/EntitiesApi.md#get_data_source_drivers) | **GET** /api/v1/options/availableDrivers | Get all available data source drivers
-*EntitiesApi* | [**get_entity_aggregated_facts**](docs/EntitiesApi.md#get_entity_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/{objectId} | 
+*EntitiesApi* | [**get_entity_aggregated_facts**](docs/EntitiesApi.md#get_entity_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/{objectId} | Get an Aggregated Fact
 *EntitiesApi* | [**get_entity_analytical_dashboards**](docs/EntitiesApi.md#get_entity_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Get a Dashboard
 *EntitiesApi* | [**get_entity_api_tokens**](docs/EntitiesApi.md#get_entity_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens/{id} | Get an API Token for a user
 *EntitiesApi* | [**get_entity_attribute_hierarchies**](docs/EntitiesApi.md#get_entity_attribute_hierarchies) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Get an Attribute Hierarchy
@@ -860,7 +873,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_entity_data_source_identifiers**](docs/EntitiesApi.md#get_entity_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers/{id} | Get Data Source Identifier
 *EntitiesApi* | [**get_entity_data_sources**](docs/EntitiesApi.md#get_entity_data_sources) | **GET** /api/v1/entities/dataSources/{id} | Get Data Source entity
 *EntitiesApi* | [**get_entity_datasets**](docs/EntitiesApi.md#get_entity_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Get a Dataset
-*EntitiesApi* | [**get_entity_entitlements**](docs/EntitiesApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement
+*EntitiesApi* | [**get_entity_entitlements**](docs/EntitiesApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement entity
 *EntitiesApi* | [**get_entity_export_definitions**](docs/EntitiesApi.md#get_entity_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Get an Export Definition
 *EntitiesApi* | [**get_entity_export_templates**](docs/EntitiesApi.md#get_entity_export_templates) | **GET** /api/v1/entities/exportTemplates/{id} | GET Export Template entity
 *EntitiesApi* | [**get_entity_facts**](docs/EntitiesApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
@@ -868,15 +881,15 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_entity_filter_views**](docs/EntitiesApi.md#get_entity_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Get Filter view
 *EntitiesApi* | [**get_entity_identity_providers**](docs/EntitiesApi.md#get_entity_identity_providers) | **GET** /api/v1/entities/identityProviders/{id} | Get Identity Provider
 *EntitiesApi* | [**get_entity_jwks**](docs/EntitiesApi.md#get_entity_jwks) | **GET** /api/v1/entities/jwks/{id} | Get Jwk
-*EntitiesApi* | [**get_entity_knowledge_recommendations**](docs/EntitiesApi.md#get_entity_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
+*EntitiesApi* | [**get_entity_knowledge_recommendations**](docs/EntitiesApi.md#get_entity_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Get a Knowledge Recommendation
 *EntitiesApi* | [**get_entity_labels**](docs/EntitiesApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Get a Label
 *EntitiesApi* | [**get_entity_llm_endpoints**](docs/EntitiesApi.md#get_entity_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints/{id} | Get LLM endpoint entity
 *EntitiesApi* | [**get_entity_llm_providers**](docs/EntitiesApi.md#get_entity_llm_providers) | **GET** /api/v1/entities/llmProviders/{id} | Get LLM Provider entity
-*EntitiesApi* | [**get_entity_memory_items**](docs/EntitiesApi.md#get_entity_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
+*EntitiesApi* | [**get_entity_memory_items**](docs/EntitiesApi.md#get_entity_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Get a Memory Item
 *EntitiesApi* | [**get_entity_metrics**](docs/EntitiesApi.md#get_entity_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Get a Metric
-*EntitiesApi* | [**get_entity_notification_channel_identifiers**](docs/EntitiesApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | 
+*EntitiesApi* | [**get_entity_notification_channel_identifiers**](docs/EntitiesApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | Get Notification Channel Identifier entity
 *EntitiesApi* | [**get_entity_notification_channels**](docs/EntitiesApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
-*EntitiesApi* | [**get_entity_organization_settings**](docs/EntitiesApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization entity
+*EntitiesApi* | [**get_entity_organization_settings**](docs/EntitiesApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization Setting entity
 *EntitiesApi* | [**get_entity_organizations**](docs/EntitiesApi.md#get_entity_organizations) | **GET** /api/v1/entities/admin/organizations/{id} | Get Organizations
 *EntitiesApi* | [**get_entity_themes**](docs/EntitiesApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | Get Theming
 *EntitiesApi* | [**get_entity_user_data_filters**](docs/EntitiesApi.md#get_entity_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Get a User Data Filter
@@ -909,14 +922,14 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**patch_entity_filter_views**](docs/EntitiesApi.md#patch_entity_filter_views) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Patch Filter view
 *EntitiesApi* | [**patch_entity_identity_providers**](docs/EntitiesApi.md#patch_entity_identity_providers) | **PATCH** /api/v1/entities/identityProviders/{id} | Patch Identity Provider
 *EntitiesApi* | [**patch_entity_jwks**](docs/EntitiesApi.md#patch_entity_jwks) | **PATCH** /api/v1/entities/jwks/{id} | Patch Jwk
-*EntitiesApi* | [**patch_entity_knowledge_recommendations**](docs/EntitiesApi.md#patch_entity_knowledge_recommendations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
+*EntitiesApi* | [**patch_entity_knowledge_recommendations**](docs/EntitiesApi.md#patch_entity_knowledge_recommendations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Patch a Knowledge Recommendation
 *EntitiesApi* | [**patch_entity_labels**](docs/EntitiesApi.md#patch_entity_labels) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Patch a Label (beta)
 *EntitiesApi* | [**patch_entity_llm_endpoints**](docs/EntitiesApi.md#patch_entity_llm_endpoints) | **PATCH** /api/v1/entities/llmEndpoints/{id} | Patch LLM endpoint entity
 *EntitiesApi* | [**patch_entity_llm_providers**](docs/EntitiesApi.md#patch_entity_llm_providers) | **PATCH** /api/v1/entities/llmProviders/{id} | Patch LLM Provider entity
-*EntitiesApi* | [**patch_entity_memory_items**](docs/EntitiesApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
+*EntitiesApi* | [**patch_entity_memory_items**](docs/EntitiesApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Patch a Memory Item
 *EntitiesApi* | [**patch_entity_metrics**](docs/EntitiesApi.md#patch_entity_metrics) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Patch a Metric
 *EntitiesApi* | [**patch_entity_notification_channels**](docs/EntitiesApi.md#patch_entity_notification_channels) | **PATCH** /api/v1/entities/notificationChannels/{id} | Patch Notification Channel entity
-*EntitiesApi* | [**patch_entity_organization_settings**](docs/EntitiesApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | Patch Organization entity
+*EntitiesApi* | [**patch_entity_organization_settings**](docs/EntitiesApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | Patch Organization Setting entity
 *EntitiesApi* | [**patch_entity_organizations**](docs/EntitiesApi.md#patch_entity_organizations) | **PATCH** /api/v1/entities/admin/organizations/{id} | Patch Organization
 *EntitiesApi* | [**patch_entity_themes**](docs/EntitiesApi.md#patch_entity_themes) | **PATCH** /api/v1/entities/themes/{id} | Patch Theming
 *EntitiesApi* | [**patch_entity_user_data_filters**](docs/EntitiesApi.md#patch_entity_user_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Patch a User Data Filter
@@ -927,11 +940,11 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**patch_entity_workspace_data_filters**](docs/EntitiesApi.md#patch_entity_workspace_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | Patch a Workspace Data Filter
 *EntitiesApi* | [**patch_entity_workspace_settings**](docs/EntitiesApi.md#patch_entity_workspace_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Patch a Setting for Workspace
 *EntitiesApi* | [**patch_entity_workspaces**](docs/EntitiesApi.md#patch_entity_workspaces) | **PATCH** /api/v1/entities/workspaces/{id} | Patch Workspace entity
-*EntitiesApi* | [**search_entities_aggregated_facts**](docs/EntitiesApi.md#search_entities_aggregated_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/search | Search request for AggregatedFact
+*EntitiesApi* | [**search_entities_aggregated_facts**](docs/EntitiesApi.md#search_entities_aggregated_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_analytical_dashboards**](docs/EntitiesApi.md#search_entities_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_attribute_hierarchies**](docs/EntitiesApi.md#search_entities_attribute_hierarchies) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_attributes**](docs/EntitiesApi.md#search_entities_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributes/search | The search endpoint (beta)
-*EntitiesApi* | [**search_entities_automation_results**](docs/EntitiesApi.md#search_entities_automation_results) | **POST** /api/v1/entities/workspaces/{workspaceId}/automationResults/search | Search request for AutomationResult
+*EntitiesApi* | [**search_entities_automation_results**](docs/EntitiesApi.md#search_entities_automation_results) | **POST** /api/v1/entities/workspaces/{workspaceId}/automationResults/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_automations**](docs/EntitiesApi.md#search_entities_automations) | **POST** /api/v1/entities/workspaces/{workspaceId}/automations/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_custom_application_settings**](docs/EntitiesApi.md#search_entities_custom_application_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_dashboard_plugins**](docs/EntitiesApi.md#search_entities_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/search | The search endpoint (beta)
@@ -942,7 +955,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**search_entities_filter_views**](docs/EntitiesApi.md#search_entities_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_knowledge_recommendations**](docs/EntitiesApi.md#search_entities_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_labels**](docs/EntitiesApi.md#search_entities_labels) | **POST** /api/v1/entities/workspaces/{workspaceId}/labels/search | The search endpoint (beta)
-*EntitiesApi* | [**search_entities_memory_items**](docs/EntitiesApi.md#search_entities_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems/search | Search request for MemoryItem
+*EntitiesApi* | [**search_entities_memory_items**](docs/EntitiesApi.md#search_entities_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_metrics**](docs/EntitiesApi.md#search_entities_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_user_data_filters**](docs/EntitiesApi.md#search_entities_user_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_visualization_objects**](docs/EntitiesApi.md#search_entities_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/search | The search endpoint (beta)
@@ -965,13 +978,13 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**update_entity_filter_views**](docs/EntitiesApi.md#update_entity_filter_views) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Put Filter views
 *EntitiesApi* | [**update_entity_identity_providers**](docs/EntitiesApi.md#update_entity_identity_providers) | **PUT** /api/v1/entities/identityProviders/{id} | Put Identity Provider
 *EntitiesApi* | [**update_entity_jwks**](docs/EntitiesApi.md#update_entity_jwks) | **PUT** /api/v1/entities/jwks/{id} | Put Jwk
-*EntitiesApi* | [**update_entity_knowledge_recommendations**](docs/EntitiesApi.md#update_entity_knowledge_recommendations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
+*EntitiesApi* | [**update_entity_knowledge_recommendations**](docs/EntitiesApi.md#update_entity_knowledge_recommendations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Put a Knowledge Recommendation
 *EntitiesApi* | [**update_entity_llm_endpoints**](docs/EntitiesApi.md#update_entity_llm_endpoints) | **PUT** /api/v1/entities/llmEndpoints/{id} | PUT LLM endpoint entity
 *EntitiesApi* | [**update_entity_llm_providers**](docs/EntitiesApi.md#update_entity_llm_providers) | **PUT** /api/v1/entities/llmProviders/{id} | PUT LLM Provider entity
-*EntitiesApi* | [**update_entity_memory_items**](docs/EntitiesApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
+*EntitiesApi* | [**update_entity_memory_items**](docs/EntitiesApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Put a Memory Item
 *EntitiesApi* | [**update_entity_metrics**](docs/EntitiesApi.md#update_entity_metrics) | **PUT** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Put a Metric
 *EntitiesApi* | [**update_entity_notification_channels**](docs/EntitiesApi.md#update_entity_notification_channels) | **PUT** /api/v1/entities/notificationChannels/{id} | Put Notification Channel entity
-*EntitiesApi* | [**update_entity_organization_settings**](docs/EntitiesApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization entity
+*EntitiesApi* | [**update_entity_organization_settings**](docs/EntitiesApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization Setting entity
 *EntitiesApi* | [**update_entity_organizations**](docs/EntitiesApi.md#update_entity_organizations) | **PUT** /api/v1/entities/admin/organizations/{id} | Put Organization
 *EntitiesApi* | [**update_entity_themes**](docs/EntitiesApi.md#update_entity_themes) | **PUT** /api/v1/entities/themes/{id} | Put Theming
 *EntitiesApi* | [**update_entity_user_data_filters**](docs/EntitiesApi.md#update_entity_user_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Put a User Data Filter
@@ -983,6 +996,8 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**update_entity_workspace_data_filters**](docs/EntitiesApi.md#update_entity_workspace_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | Put a Workspace Data Filter
 *EntitiesApi* | [**update_entity_workspace_settings**](docs/EntitiesApi.md#update_entity_workspace_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Put a Setting for a Workspace
 *EntitiesApi* | [**update_entity_workspaces**](docs/EntitiesApi.md#update_entity_workspaces) | **PUT** /api/v1/entities/workspaces/{id} | Put Workspace entity
+*EntitlementEntityControllerApi* | [**get_all_entities_entitlements**](docs/EntitlementEntityControllerApi.md#get_all_entities_entitlements) | **GET** /api/v1/entities/entitlements | Get Entitlements
+*EntitlementEntityControllerApi* | [**get_entity_entitlements**](docs/EntitlementEntityControllerApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement entity
 *ExportDefinitionControllerApi* | [**create_entity_export_definitions**](docs/ExportDefinitionControllerApi.md#create_entity_export_definitions) | **POST** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | Post Export Definitions
 *ExportDefinitionControllerApi* | [**delete_entity_export_definitions**](docs/ExportDefinitionControllerApi.md#delete_entity_export_definitions) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Delete an Export Definition
 *ExportDefinitionControllerApi* | [**get_all_entities_export_definitions**](docs/ExportDefinitionControllerApi.md#get_all_entities_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | Get all Export Definitions
@@ -990,6 +1005,12 @@ Class | Method | HTTP request | Description
 *ExportDefinitionControllerApi* | [**patch_entity_export_definitions**](docs/ExportDefinitionControllerApi.md#patch_entity_export_definitions) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Patch an Export Definition
 *ExportDefinitionControllerApi* | [**search_entities_export_definitions**](docs/ExportDefinitionControllerApi.md#search_entities_export_definitions) | **POST** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/search | The search endpoint (beta)
 *ExportDefinitionControllerApi* | [**update_entity_export_definitions**](docs/ExportDefinitionControllerApi.md#update_entity_export_definitions) | **PUT** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Put an Export Definition
+*ExportTemplateControllerApi* | [**create_entity_export_templates**](docs/ExportTemplateControllerApi.md#create_entity_export_templates) | **POST** /api/v1/entities/exportTemplates | Post Export Template entities
+*ExportTemplateControllerApi* | [**delete_entity_export_templates**](docs/ExportTemplateControllerApi.md#delete_entity_export_templates) | **DELETE** /api/v1/entities/exportTemplates/{id} | Delete Export Template entity
+*ExportTemplateControllerApi* | [**get_all_entities_export_templates**](docs/ExportTemplateControllerApi.md#get_all_entities_export_templates) | **GET** /api/v1/entities/exportTemplates | GET all Export Template entities
+*ExportTemplateControllerApi* | [**get_entity_export_templates**](docs/ExportTemplateControllerApi.md#get_entity_export_templates) | **GET** /api/v1/entities/exportTemplates/{id} | GET Export Template entity
+*ExportTemplateControllerApi* | [**patch_entity_export_templates**](docs/ExportTemplateControllerApi.md#patch_entity_export_templates) | **PATCH** /api/v1/entities/exportTemplates/{id} | Patch Export Template entity
+*ExportTemplateControllerApi* | [**update_entity_export_templates**](docs/ExportTemplateControllerApi.md#update_entity_export_templates) | **PUT** /api/v1/entities/exportTemplates/{id} | PUT Export Template entity
 *FactControllerApi* | [**get_all_entities_facts**](docs/FactControllerApi.md#get_all_entities_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts | Get all Facts
 *FactControllerApi* | [**get_entity_facts**](docs/FactControllerApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
 *FactControllerApi* | [**patch_entity_facts**](docs/FactControllerApi.md#patch_entity_facts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Patch a Fact (beta)
@@ -1008,12 +1029,25 @@ Class | Method | HTTP request | Description
 *FilterViewControllerApi* | [**patch_entity_filter_views**](docs/FilterViewControllerApi.md#patch_entity_filter_views) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Patch Filter view
 *FilterViewControllerApi* | [**search_entities_filter_views**](docs/FilterViewControllerApi.md#search_entities_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews/search | The search endpoint (beta)
 *FilterViewControllerApi* | [**update_entity_filter_views**](docs/FilterViewControllerApi.md#update_entity_filter_views) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Put Filter views
+*IdentityProviderControllerApi* | [**create_entity_identity_providers**](docs/IdentityProviderControllerApi.md#create_entity_identity_providers) | **POST** /api/v1/entities/identityProviders | Post Identity Providers
+*IdentityProviderControllerApi* | [**delete_entity_identity_providers**](docs/IdentityProviderControllerApi.md#delete_entity_identity_providers) | **DELETE** /api/v1/entities/identityProviders/{id} | Delete Identity Provider
+*IdentityProviderControllerApi* | [**get_all_entities_identity_providers**](docs/IdentityProviderControllerApi.md#get_all_entities_identity_providers) | **GET** /api/v1/entities/identityProviders | Get all Identity Providers
+*IdentityProviderControllerApi* | [**get_entity_identity_providers**](docs/IdentityProviderControllerApi.md#get_entity_identity_providers) | **GET** /api/v1/entities/identityProviders/{id} | Get Identity Provider
+*IdentityProviderControllerApi* | [**patch_entity_identity_providers**](docs/IdentityProviderControllerApi.md#patch_entity_identity_providers) | **PATCH** /api/v1/entities/identityProviders/{id} | Patch Identity Provider
+*IdentityProviderControllerApi* | [**update_entity_identity_providers**](docs/IdentityProviderControllerApi.md#update_entity_identity_providers) | **PUT** /api/v1/entities/identityProviders/{id} | Put Identity Provider
 *JwkControllerApi* | [**create_entity_jwks**](docs/JwkControllerApi.md#create_entity_jwks) | **POST** /api/v1/entities/jwks | Post Jwks
 *JwkControllerApi* | [**delete_entity_jwks**](docs/JwkControllerApi.md#delete_entity_jwks) | **DELETE** /api/v1/entities/jwks/{id} | Delete Jwk
 *JwkControllerApi* | [**get_all_entities_jwks**](docs/JwkControllerApi.md#get_all_entities_jwks) | **GET** /api/v1/entities/jwks | Get all Jwks
 *JwkControllerApi* | [**get_entity_jwks**](docs/JwkControllerApi.md#get_entity_jwks) | **GET** /api/v1/entities/jwks/{id} | Get Jwk
 *JwkControllerApi* | [**patch_entity_jwks**](docs/JwkControllerApi.md#patch_entity_jwks) | **PATCH** /api/v1/entities/jwks/{id} | Patch Jwk
 *JwkControllerApi* | [**update_entity_jwks**](docs/JwkControllerApi.md#update_entity_jwks) | **PUT** /api/v1/entities/jwks/{id} | Put Jwk
+*KnowledgeRecommendationControllerApi* | [**create_entity_knowledge_recommendations**](docs/KnowledgeRecommendationControllerApi.md#create_entity_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | Post Knowledge Recommendations
+*KnowledgeRecommendationControllerApi* | [**delete_entity_knowledge_recommendations**](docs/KnowledgeRecommendationControllerApi.md#delete_entity_knowledge_recommendations) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Delete a Knowledge Recommendation
+*KnowledgeRecommendationControllerApi* | [**get_all_entities_knowledge_recommendations**](docs/KnowledgeRecommendationControllerApi.md#get_all_entities_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | Get all Knowledge Recommendations
+*KnowledgeRecommendationControllerApi* | [**get_entity_knowledge_recommendations**](docs/KnowledgeRecommendationControllerApi.md#get_entity_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Get a Knowledge Recommendation
+*KnowledgeRecommendationControllerApi* | [**patch_entity_knowledge_recommendations**](docs/KnowledgeRecommendationControllerApi.md#patch_entity_knowledge_recommendations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Patch a Knowledge Recommendation
+*KnowledgeRecommendationControllerApi* | [**search_entities_knowledge_recommendations**](docs/KnowledgeRecommendationControllerApi.md#search_entities_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/search | The search endpoint (beta)
+*KnowledgeRecommendationControllerApi* | [**update_entity_knowledge_recommendations**](docs/KnowledgeRecommendationControllerApi.md#update_entity_knowledge_recommendations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Put a Knowledge Recommendation
 *LabelControllerApi* | [**get_all_entities_labels**](docs/LabelControllerApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | Get all Labels
 *LabelControllerApi* | [**get_entity_labels**](docs/LabelControllerApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Get a Label
 *LabelControllerApi* | [**patch_entity_labels**](docs/LabelControllerApi.md#patch_entity_labels) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Patch a Label (beta)
@@ -1062,6 +1096,25 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**set_workspace_data_filters_layout**](docs/LayoutApi.md#set_workspace_data_filters_layout) | **PUT** /api/v1/layout/workspaceDataFilters | Set all workspace data filters
 *LayoutApi* | [**set_workspace_permissions**](docs/LayoutApi.md#set_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
 *LayoutApi* | [**set_workspaces_layout**](docs/LayoutApi.md#set_workspaces_layout) | **PUT** /api/v1/layout/workspaces | Set all workspaces layout
+*LlmEndpointControllerApi* | [**create_entity_llm_endpoints**](docs/LlmEndpointControllerApi.md#create_entity_llm_endpoints) | **POST** /api/v1/entities/llmEndpoints | Post LLM endpoint entities
+*LlmEndpointControllerApi* | [**delete_entity_llm_endpoints**](docs/LlmEndpointControllerApi.md#delete_entity_llm_endpoints) | **DELETE** /api/v1/entities/llmEndpoints/{id} | Delete LLM endpoint entity
+*LlmEndpointControllerApi* | [**get_all_entities_llm_endpoints**](docs/LlmEndpointControllerApi.md#get_all_entities_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints | Get all LLM endpoint entities
+*LlmEndpointControllerApi* | [**get_entity_llm_endpoints**](docs/LlmEndpointControllerApi.md#get_entity_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints/{id} | Get LLM endpoint entity
+*LlmEndpointControllerApi* | [**patch_entity_llm_endpoints**](docs/LlmEndpointControllerApi.md#patch_entity_llm_endpoints) | **PATCH** /api/v1/entities/llmEndpoints/{id} | Patch LLM endpoint entity
+*LlmEndpointControllerApi* | [**update_entity_llm_endpoints**](docs/LlmEndpointControllerApi.md#update_entity_llm_endpoints) | **PUT** /api/v1/entities/llmEndpoints/{id} | PUT LLM endpoint entity
+*LlmProviderControllerApi* | [**create_entity_llm_providers**](docs/LlmProviderControllerApi.md#create_entity_llm_providers) | **POST** /api/v1/entities/llmProviders | Post LLM Provider entities
+*LlmProviderControllerApi* | [**delete_entity_llm_providers**](docs/LlmProviderControllerApi.md#delete_entity_llm_providers) | **DELETE** /api/v1/entities/llmProviders/{id} | Delete LLM Provider entity
+*LlmProviderControllerApi* | [**get_all_entities_llm_providers**](docs/LlmProviderControllerApi.md#get_all_entities_llm_providers) | **GET** /api/v1/entities/llmProviders | Get all LLM Provider entities
+*LlmProviderControllerApi* | [**get_entity_llm_providers**](docs/LlmProviderControllerApi.md#get_entity_llm_providers) | **GET** /api/v1/entities/llmProviders/{id} | Get LLM Provider entity
+*LlmProviderControllerApi* | [**patch_entity_llm_providers**](docs/LlmProviderControllerApi.md#patch_entity_llm_providers) | **PATCH** /api/v1/entities/llmProviders/{id} | Patch LLM Provider entity
+*LlmProviderControllerApi* | [**update_entity_llm_providers**](docs/LlmProviderControllerApi.md#update_entity_llm_providers) | **PUT** /api/v1/entities/llmProviders/{id} | PUT LLM Provider entity
+*MemoryItemControllerApi* | [**create_entity_memory_items**](docs/MemoryItemControllerApi.md#create_entity_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems | Post Memory Items
+*MemoryItemControllerApi* | [**delete_entity_memory_items**](docs/MemoryItemControllerApi.md#delete_entity_memory_items) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Delete a Memory Item
+*MemoryItemControllerApi* | [**get_all_entities_memory_items**](docs/MemoryItemControllerApi.md#get_all_entities_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems | Get all Memory Items
+*MemoryItemControllerApi* | [**get_entity_memory_items**](docs/MemoryItemControllerApi.md#get_entity_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Get a Memory Item
+*MemoryItemControllerApi* | [**patch_entity_memory_items**](docs/MemoryItemControllerApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Patch a Memory Item
+*MemoryItemControllerApi* | [**search_entities_memory_items**](docs/MemoryItemControllerApi.md#search_entities_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems/search | The search endpoint (beta)
+*MemoryItemControllerApi* | [**update_entity_memory_items**](docs/MemoryItemControllerApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Put a Memory Item
 *MetricControllerApi* | [**create_entity_metrics**](docs/MetricControllerApi.md#create_entity_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics | Post Metrics
 *MetricControllerApi* | [**delete_entity_metrics**](docs/MetricControllerApi.md#delete_entity_metrics) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Delete a Metric
 *MetricControllerApi* | [**get_all_entities_metrics**](docs/MetricControllerApi.md#get_all_entities_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics | Get all Metrics
@@ -1069,89 +1122,35 @@ Class | Method | HTTP request | Description
 *MetricControllerApi* | [**patch_entity_metrics**](docs/MetricControllerApi.md#patch_entity_metrics) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Patch a Metric
 *MetricControllerApi* | [**search_entities_metrics**](docs/MetricControllerApi.md#search_entities_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics/search | The search endpoint (beta)
 *MetricControllerApi* | [**update_entity_metrics**](docs/MetricControllerApi.md#update_entity_metrics) | **PUT** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Put a Metric
+*NotificationChannelControllerApi* | [**create_entity_notification_channels**](docs/NotificationChannelControllerApi.md#create_entity_notification_channels) | **POST** /api/v1/entities/notificationChannels | Post Notification Channel entities
+*NotificationChannelControllerApi* | [**delete_entity_notification_channels**](docs/NotificationChannelControllerApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | Delete Notification Channel entity
+*NotificationChannelControllerApi* | [**get_all_entities_notification_channels**](docs/NotificationChannelControllerApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
+*NotificationChannelControllerApi* | [**get_entity_notification_channels**](docs/NotificationChannelControllerApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
+*NotificationChannelControllerApi* | [**patch_entity_notification_channels**](docs/NotificationChannelControllerApi.md#patch_entity_notification_channels) | **PATCH** /api/v1/entities/notificationChannels/{id} | Patch Notification Channel entity
+*NotificationChannelControllerApi* | [**update_entity_notification_channels**](docs/NotificationChannelControllerApi.md#update_entity_notification_channels) | **PUT** /api/v1/entities/notificationChannels/{id} | Put Notification Channel entity
+*NotificationChannelIdentifierControllerApi* | [**get_all_entities_notification_channel_identifiers**](docs/NotificationChannelIdentifierControllerApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | Get all Notification Channel Identifier entities
+*NotificationChannelIdentifierControllerApi* | [**get_entity_notification_channel_identifiers**](docs/NotificationChannelIdentifierControllerApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | Get Notification Channel Identifier entity
 *OrganizationEntityControllerApi* | [**get_entity_organizations**](docs/OrganizationEntityControllerApi.md#get_entity_organizations) | **GET** /api/v1/entities/admin/organizations/{id} | Get Organizations
 *OrganizationEntityControllerApi* | [**patch_entity_organizations**](docs/OrganizationEntityControllerApi.md#patch_entity_organizations) | **PATCH** /api/v1/entities/admin/organizations/{id} | Patch Organization
 *OrganizationEntityControllerApi* | [**update_entity_organizations**](docs/OrganizationEntityControllerApi.md#update_entity_organizations) | **PUT** /api/v1/entities/admin/organizations/{id} | Put Organization
-*OrganizationModelControllerApi* | [**create_entity_color_palettes**](docs/OrganizationModelControllerApi.md#create_entity_color_palettes) | **POST** /api/v1/entities/colorPalettes | Post Color Pallettes
-*OrganizationModelControllerApi* | [**create_entity_csp_directives**](docs/OrganizationModelControllerApi.md#create_entity_csp_directives) | **POST** /api/v1/entities/cspDirectives | Post CSP Directives
-*OrganizationModelControllerApi* | [**create_entity_export_templates**](docs/OrganizationModelControllerApi.md#create_entity_export_templates) | **POST** /api/v1/entities/exportTemplates | Post Export Template entities
-*OrganizationModelControllerApi* | [**create_entity_identity_providers**](docs/OrganizationModelControllerApi.md#create_entity_identity_providers) | **POST** /api/v1/entities/identityProviders | Post Identity Providers
-*OrganizationModelControllerApi* | [**create_entity_llm_endpoints**](docs/OrganizationModelControllerApi.md#create_entity_llm_endpoints) | **POST** /api/v1/entities/llmEndpoints | Post LLM endpoint entities
-*OrganizationModelControllerApi* | [**create_entity_llm_providers**](docs/OrganizationModelControllerApi.md#create_entity_llm_providers) | **POST** /api/v1/entities/llmProviders | Post LLM Provider entities
-*OrganizationModelControllerApi* | [**create_entity_notification_channels**](docs/OrganizationModelControllerApi.md#create_entity_notification_channels) | **POST** /api/v1/entities/notificationChannels | Post Notification Channel entities
-*OrganizationModelControllerApi* | [**create_entity_organization_settings**](docs/OrganizationModelControllerApi.md#create_entity_organization_settings) | **POST** /api/v1/entities/organizationSettings | Post Organization Setting entities
-*OrganizationModelControllerApi* | [**create_entity_themes**](docs/OrganizationModelControllerApi.md#create_entity_themes) | **POST** /api/v1/entities/themes | Post Theming
-*OrganizationModelControllerApi* | [**create_entity_user_groups**](docs/OrganizationModelControllerApi.md#create_entity_user_groups) | **POST** /api/v1/entities/userGroups | Post User Group entities
-*OrganizationModelControllerApi* | [**create_entity_users**](docs/OrganizationModelControllerApi.md#create_entity_users) | **POST** /api/v1/entities/users | Post User entities
-*OrganizationModelControllerApi* | [**create_entity_workspaces**](docs/OrganizationModelControllerApi.md#create_entity_workspaces) | **POST** /api/v1/entities/workspaces | Post Workspace entities
-*OrganizationModelControllerApi* | [**delete_entity_color_palettes**](docs/OrganizationModelControllerApi.md#delete_entity_color_palettes) | **DELETE** /api/v1/entities/colorPalettes/{id} | Delete a Color Pallette
-*OrganizationModelControllerApi* | [**delete_entity_csp_directives**](docs/OrganizationModelControllerApi.md#delete_entity_csp_directives) | **DELETE** /api/v1/entities/cspDirectives/{id} | Delete CSP Directives
-*OrganizationModelControllerApi* | [**delete_entity_export_templates**](docs/OrganizationModelControllerApi.md#delete_entity_export_templates) | **DELETE** /api/v1/entities/exportTemplates/{id} | Delete Export Template entity
-*OrganizationModelControllerApi* | [**delete_entity_identity_providers**](docs/OrganizationModelControllerApi.md#delete_entity_identity_providers) | **DELETE** /api/v1/entities/identityProviders/{id} | Delete Identity Provider
-*OrganizationModelControllerApi* | [**delete_entity_llm_endpoints**](docs/OrganizationModelControllerApi.md#delete_entity_llm_endpoints) | **DELETE** /api/v1/entities/llmEndpoints/{id} | Delete LLM endpoint entity
-*OrganizationModelControllerApi* | [**delete_entity_llm_providers**](docs/OrganizationModelControllerApi.md#delete_entity_llm_providers) | **DELETE** /api/v1/entities/llmProviders/{id} | Delete LLM Provider entity
-*OrganizationModelControllerApi* | [**delete_entity_notification_channels**](docs/OrganizationModelControllerApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | Delete Notification Channel entity
-*OrganizationModelControllerApi* | [**delete_entity_organization_settings**](docs/OrganizationModelControllerApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | Delete Organization entity
-*OrganizationModelControllerApi* | [**delete_entity_themes**](docs/OrganizationModelControllerApi.md#delete_entity_themes) | **DELETE** /api/v1/entities/themes/{id} | Delete Theming
-*OrganizationModelControllerApi* | [**delete_entity_user_groups**](docs/OrganizationModelControllerApi.md#delete_entity_user_groups) | **DELETE** /api/v1/entities/userGroups/{id} | Delete UserGroup entity
-*OrganizationModelControllerApi* | [**delete_entity_users**](docs/OrganizationModelControllerApi.md#delete_entity_users) | **DELETE** /api/v1/entities/users/{id} | Delete User entity
-*OrganizationModelControllerApi* | [**delete_entity_workspaces**](docs/OrganizationModelControllerApi.md#delete_entity_workspaces) | **DELETE** /api/v1/entities/workspaces/{id} | Delete Workspace entity
-*OrganizationModelControllerApi* | [**get_all_entities_color_palettes**](docs/OrganizationModelControllerApi.md#get_all_entities_color_palettes) | **GET** /api/v1/entities/colorPalettes | Get all Color Pallettes
-*OrganizationModelControllerApi* | [**get_all_entities_csp_directives**](docs/OrganizationModelControllerApi.md#get_all_entities_csp_directives) | **GET** /api/v1/entities/cspDirectives | Get CSP Directives
-*OrganizationModelControllerApi* | [**get_all_entities_data_source_identifiers**](docs/OrganizationModelControllerApi.md#get_all_entities_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers | Get all Data Source Identifiers
-*OrganizationModelControllerApi* | [**get_all_entities_entitlements**](docs/OrganizationModelControllerApi.md#get_all_entities_entitlements) | **GET** /api/v1/entities/entitlements | Get Entitlements
-*OrganizationModelControllerApi* | [**get_all_entities_export_templates**](docs/OrganizationModelControllerApi.md#get_all_entities_export_templates) | **GET** /api/v1/entities/exportTemplates | GET all Export Template entities
-*OrganizationModelControllerApi* | [**get_all_entities_identity_providers**](docs/OrganizationModelControllerApi.md#get_all_entities_identity_providers) | **GET** /api/v1/entities/identityProviders | Get all Identity Providers
-*OrganizationModelControllerApi* | [**get_all_entities_llm_endpoints**](docs/OrganizationModelControllerApi.md#get_all_entities_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints | Get all LLM endpoint entities
-*OrganizationModelControllerApi* | [**get_all_entities_llm_providers**](docs/OrganizationModelControllerApi.md#get_all_entities_llm_providers) | **GET** /api/v1/entities/llmProviders | Get all LLM Provider entities
-*OrganizationModelControllerApi* | [**get_all_entities_notification_channel_identifiers**](docs/OrganizationModelControllerApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | 
-*OrganizationModelControllerApi* | [**get_all_entities_notification_channels**](docs/OrganizationModelControllerApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
-*OrganizationModelControllerApi* | [**get_all_entities_organization_settings**](docs/OrganizationModelControllerApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization entities
-*OrganizationModelControllerApi* | [**get_all_entities_themes**](docs/OrganizationModelControllerApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
-*OrganizationModelControllerApi* | [**get_all_entities_user_groups**](docs/OrganizationModelControllerApi.md#get_all_entities_user_groups) | **GET** /api/v1/entities/userGroups | Get UserGroup entities
-*OrganizationModelControllerApi* | [**get_all_entities_user_identifiers**](docs/OrganizationModelControllerApi.md#get_all_entities_user_identifiers) | **GET** /api/v1/entities/userIdentifiers | Get UserIdentifier entities
-*OrganizationModelControllerApi* | [**get_all_entities_users**](docs/OrganizationModelControllerApi.md#get_all_entities_users) | **GET** /api/v1/entities/users | Get User entities
-*OrganizationModelControllerApi* | [**get_all_entities_workspaces**](docs/OrganizationModelControllerApi.md#get_all_entities_workspaces) | **GET** /api/v1/entities/workspaces | Get Workspace entities
-*OrganizationModelControllerApi* | [**get_entity_color_palettes**](docs/OrganizationModelControllerApi.md#get_entity_color_palettes) | **GET** /api/v1/entities/colorPalettes/{id} | Get Color Pallette
-*OrganizationModelControllerApi* | [**get_entity_csp_directives**](docs/OrganizationModelControllerApi.md#get_entity_csp_directives) | **GET** /api/v1/entities/cspDirectives/{id} | Get CSP Directives
-*OrganizationModelControllerApi* | [**get_entity_data_source_identifiers**](docs/OrganizationModelControllerApi.md#get_entity_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers/{id} | Get Data Source Identifier
-*OrganizationModelControllerApi* | [**get_entity_entitlements**](docs/OrganizationModelControllerApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement
-*OrganizationModelControllerApi* | [**get_entity_export_templates**](docs/OrganizationModelControllerApi.md#get_entity_export_templates) | **GET** /api/v1/entities/exportTemplates/{id} | GET Export Template entity
-*OrganizationModelControllerApi* | [**get_entity_identity_providers**](docs/OrganizationModelControllerApi.md#get_entity_identity_providers) | **GET** /api/v1/entities/identityProviders/{id} | Get Identity Provider
-*OrganizationModelControllerApi* | [**get_entity_llm_endpoints**](docs/OrganizationModelControllerApi.md#get_entity_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints/{id} | Get LLM endpoint entity
-*OrganizationModelControllerApi* | [**get_entity_llm_providers**](docs/OrganizationModelControllerApi.md#get_entity_llm_providers) | **GET** /api/v1/entities/llmProviders/{id} | Get LLM Provider entity
-*OrganizationModelControllerApi* | [**get_entity_notification_channel_identifiers**](docs/OrganizationModelControllerApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | 
-*OrganizationModelControllerApi* | [**get_entity_notification_channels**](docs/OrganizationModelControllerApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
-*OrganizationModelControllerApi* | [**get_entity_organization_settings**](docs/OrganizationModelControllerApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization entity
-*OrganizationModelControllerApi* | [**get_entity_themes**](docs/OrganizationModelControllerApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | Get Theming
-*OrganizationModelControllerApi* | [**get_entity_user_groups**](docs/OrganizationModelControllerApi.md#get_entity_user_groups) | **GET** /api/v1/entities/userGroups/{id} | Get UserGroup entity
-*OrganizationModelControllerApi* | [**get_entity_user_identifiers**](docs/OrganizationModelControllerApi.md#get_entity_user_identifiers) | **GET** /api/v1/entities/userIdentifiers/{id} | Get UserIdentifier entity
-*OrganizationModelControllerApi* | [**get_entity_users**](docs/OrganizationModelControllerApi.md#get_entity_users) | **GET** /api/v1/entities/users/{id} | Get User entity
-*OrganizationModelControllerApi* | [**get_entity_workspaces**](docs/OrganizationModelControllerApi.md#get_entity_workspaces) | **GET** /api/v1/entities/workspaces/{id} | Get Workspace entity
-*OrganizationModelControllerApi* | [**patch_entity_color_palettes**](docs/OrganizationModelControllerApi.md#patch_entity_color_palettes) | **PATCH** /api/v1/entities/colorPalettes/{id} | Patch Color Pallette
-*OrganizationModelControllerApi* | [**patch_entity_csp_directives**](docs/OrganizationModelControllerApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | Patch CSP Directives
-*OrganizationModelControllerApi* | [**patch_entity_export_templates**](docs/OrganizationModelControllerApi.md#patch_entity_export_templates) | **PATCH** /api/v1/entities/exportTemplates/{id} | Patch Export Template entity
-*OrganizationModelControllerApi* | [**patch_entity_identity_providers**](docs/OrganizationModelControllerApi.md#patch_entity_identity_providers) | **PATCH** /api/v1/entities/identityProviders/{id} | Patch Identity Provider
-*OrganizationModelControllerApi* | [**patch_entity_llm_endpoints**](docs/OrganizationModelControllerApi.md#patch_entity_llm_endpoints) | **PATCH** /api/v1/entities/llmEndpoints/{id} | Patch LLM endpoint entity
-*OrganizationModelControllerApi* | [**patch_entity_llm_providers**](docs/OrganizationModelControllerApi.md#patch_entity_llm_providers) | **PATCH** /api/v1/entities/llmProviders/{id} | Patch LLM Provider entity
-*OrganizationModelControllerApi* | [**patch_entity_notification_channels**](docs/OrganizationModelControllerApi.md#patch_entity_notification_channels) | **PATCH** /api/v1/entities/notificationChannels/{id} | Patch Notification Channel entity
-*OrganizationModelControllerApi* | [**patch_entity_organization_settings**](docs/OrganizationModelControllerApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | Patch Organization entity
-*OrganizationModelControllerApi* | [**patch_entity_themes**](docs/OrganizationModelControllerApi.md#patch_entity_themes) | **PATCH** /api/v1/entities/themes/{id} | Patch Theming
-*OrganizationModelControllerApi* | [**patch_entity_user_groups**](docs/OrganizationModelControllerApi.md#patch_entity_user_groups) | **PATCH** /api/v1/entities/userGroups/{id} | Patch UserGroup entity
-*OrganizationModelControllerApi* | [**patch_entity_users**](docs/OrganizationModelControllerApi.md#patch_entity_users) | **PATCH** /api/v1/entities/users/{id} | Patch User entity
-*OrganizationModelControllerApi* | [**patch_entity_workspaces**](docs/OrganizationModelControllerApi.md#patch_entity_workspaces) | **PATCH** /api/v1/entities/workspaces/{id} | Patch Workspace entity
-*OrganizationModelControllerApi* | [**update_entity_color_palettes**](docs/OrganizationModelControllerApi.md#update_entity_color_palettes) | **PUT** /api/v1/entities/colorPalettes/{id} | Put Color Pallette
-*OrganizationModelControllerApi* | [**update_entity_csp_directives**](docs/OrganizationModelControllerApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | Put CSP Directives
-*OrganizationModelControllerApi* | [**update_entity_export_templates**](docs/OrganizationModelControllerApi.md#update_entity_export_templates) | **PUT** /api/v1/entities/exportTemplates/{id} | PUT Export Template entity
-*OrganizationModelControllerApi* | [**update_entity_identity_providers**](docs/OrganizationModelControllerApi.md#update_entity_identity_providers) | **PUT** /api/v1/entities/identityProviders/{id} | Put Identity Provider
-*OrganizationModelControllerApi* | [**update_entity_llm_endpoints**](docs/OrganizationModelControllerApi.md#update_entity_llm_endpoints) | **PUT** /api/v1/entities/llmEndpoints/{id} | PUT LLM endpoint entity
-*OrganizationModelControllerApi* | [**update_entity_llm_providers**](docs/OrganizationModelControllerApi.md#update_entity_llm_providers) | **PUT** /api/v1/entities/llmProviders/{id} | PUT LLM Provider entity
-*OrganizationModelControllerApi* | [**update_entity_notification_channels**](docs/OrganizationModelControllerApi.md#update_entity_notification_channels) | **PUT** /api/v1/entities/notificationChannels/{id} | Put Notification Channel entity
-*OrganizationModelControllerApi* | [**update_entity_organization_settings**](docs/OrganizationModelControllerApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization entity
-*OrganizationModelControllerApi* | [**update_entity_themes**](docs/OrganizationModelControllerApi.md#update_entity_themes) | **PUT** /api/v1/entities/themes/{id} | Put Theming
-*OrganizationModelControllerApi* | [**update_entity_user_groups**](docs/OrganizationModelControllerApi.md#update_entity_user_groups) | **PUT** /api/v1/entities/userGroups/{id} | Put UserGroup entity
-*OrganizationModelControllerApi* | [**update_entity_users**](docs/OrganizationModelControllerApi.md#update_entity_users) | **PUT** /api/v1/entities/users/{id} | Put User entity
-*OrganizationModelControllerApi* | [**update_entity_workspaces**](docs/OrganizationModelControllerApi.md#update_entity_workspaces) | **PUT** /api/v1/entities/workspaces/{id} | Put Workspace entity
+*OrganizationSettingControllerApi* | [**create_entity_organization_settings**](docs/OrganizationSettingControllerApi.md#create_entity_organization_settings) | **POST** /api/v1/entities/organizationSettings | Post Organization Setting entities
+*OrganizationSettingControllerApi* | [**delete_entity_organization_settings**](docs/OrganizationSettingControllerApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | Delete Organization Setting entity
+*OrganizationSettingControllerApi* | [**get_all_entities_organization_settings**](docs/OrganizationSettingControllerApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization Setting entities
+*OrganizationSettingControllerApi* | [**get_entity_organization_settings**](docs/OrganizationSettingControllerApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization Setting entity
+*OrganizationSettingControllerApi* | [**patch_entity_organization_settings**](docs/OrganizationSettingControllerApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | Patch Organization Setting entity
+*OrganizationSettingControllerApi* | [**update_entity_organization_settings**](docs/OrganizationSettingControllerApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization Setting entity
+*ThemeControllerApi* | [**create_entity_themes**](docs/ThemeControllerApi.md#create_entity_themes) | **POST** /api/v1/entities/themes | Post Theming
+*ThemeControllerApi* | [**delete_entity_themes**](docs/ThemeControllerApi.md#delete_entity_themes) | **DELETE** /api/v1/entities/themes/{id} | Delete Theming
+*ThemeControllerApi* | [**get_all_entities_themes**](docs/ThemeControllerApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
+*ThemeControllerApi* | [**get_entity_themes**](docs/ThemeControllerApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | Get Theming
+*ThemeControllerApi* | [**patch_entity_themes**](docs/ThemeControllerApi.md#patch_entity_themes) | **PATCH** /api/v1/entities/themes/{id} | Patch Theming
+*ThemeControllerApi* | [**update_entity_themes**](docs/ThemeControllerApi.md#update_entity_themes) | **PUT** /api/v1/entities/themes/{id} | Put Theming
+*UserControllerApi* | [**create_entity_users**](docs/UserControllerApi.md#create_entity_users) | **POST** /api/v1/entities/users | Post User entities
+*UserControllerApi* | [**delete_entity_users**](docs/UserControllerApi.md#delete_entity_users) | **DELETE** /api/v1/entities/users/{id} | Delete User entity
+*UserControllerApi* | [**get_all_entities_users**](docs/UserControllerApi.md#get_all_entities_users) | **GET** /api/v1/entities/users | Get User entities
+*UserControllerApi* | [**get_entity_users**](docs/UserControllerApi.md#get_entity_users) | **GET** /api/v1/entities/users/{id} | Get User entity
+*UserControllerApi* | [**patch_entity_users**](docs/UserControllerApi.md#patch_entity_users) | **PATCH** /api/v1/entities/users/{id} | Patch User entity
+*UserControllerApi* | [**update_entity_users**](docs/UserControllerApi.md#update_entity_users) | **PUT** /api/v1/entities/users/{id} | Put User entity
 *UserDataFilterControllerApi* | [**create_entity_user_data_filters**](docs/UserDataFilterControllerApi.md#create_entity_user_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | Post User Data Filters
 *UserDataFilterControllerApi* | [**delete_entity_user_data_filters**](docs/UserDataFilterControllerApi.md#delete_entity_user_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Delete a User Data Filter
 *UserDataFilterControllerApi* | [**get_all_entities_user_data_filters**](docs/UserDataFilterControllerApi.md#get_all_entities_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | Get all User Data Filters
@@ -1159,6 +1158,14 @@ Class | Method | HTTP request | Description
 *UserDataFilterControllerApi* | [**patch_entity_user_data_filters**](docs/UserDataFilterControllerApi.md#patch_entity_user_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Patch a User Data Filter
 *UserDataFilterControllerApi* | [**search_entities_user_data_filters**](docs/UserDataFilterControllerApi.md#search_entities_user_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/search | The search endpoint (beta)
 *UserDataFilterControllerApi* | [**update_entity_user_data_filters**](docs/UserDataFilterControllerApi.md#update_entity_user_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Put a User Data Filter
+*UserGroupControllerApi* | [**create_entity_user_groups**](docs/UserGroupControllerApi.md#create_entity_user_groups) | **POST** /api/v1/entities/userGroups | Post User Group entities
+*UserGroupControllerApi* | [**delete_entity_user_groups**](docs/UserGroupControllerApi.md#delete_entity_user_groups) | **DELETE** /api/v1/entities/userGroups/{id} | Delete UserGroup entity
+*UserGroupControllerApi* | [**get_all_entities_user_groups**](docs/UserGroupControllerApi.md#get_all_entities_user_groups) | **GET** /api/v1/entities/userGroups | Get UserGroup entities
+*UserGroupControllerApi* | [**get_entity_user_groups**](docs/UserGroupControllerApi.md#get_entity_user_groups) | **GET** /api/v1/entities/userGroups/{id} | Get UserGroup entity
+*UserGroupControllerApi* | [**patch_entity_user_groups**](docs/UserGroupControllerApi.md#patch_entity_user_groups) | **PATCH** /api/v1/entities/userGroups/{id} | Patch UserGroup entity
+*UserGroupControllerApi* | [**update_entity_user_groups**](docs/UserGroupControllerApi.md#update_entity_user_groups) | **PUT** /api/v1/entities/userGroups/{id} | Put UserGroup entity
+*UserIdentifierControllerApi* | [**get_all_entities_user_identifiers**](docs/UserIdentifierControllerApi.md#get_all_entities_user_identifiers) | **GET** /api/v1/entities/userIdentifiers | Get UserIdentifier entities
+*UserIdentifierControllerApi* | [**get_entity_user_identifiers**](docs/UserIdentifierControllerApi.md#get_entity_user_identifiers) | **GET** /api/v1/entities/userIdentifiers/{id} | Get UserIdentifier entity
 *UserSettingControllerApi* | [**create_entity_user_settings**](docs/UserSettingControllerApi.md#create_entity_user_settings) | **POST** /api/v1/entities/users/{userId}/userSettings | Post new user settings for the user
 *UserSettingControllerApi* | [**delete_entity_user_settings**](docs/UserSettingControllerApi.md#delete_entity_user_settings) | **DELETE** /api/v1/entities/users/{userId}/userSettings/{id} | Delete a setting for a user
 *UserSettingControllerApi* | [**get_all_entities_user_settings**](docs/UserSettingControllerApi.md#get_all_entities_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings | List all settings for a user
@@ -1171,6 +1178,12 @@ Class | Method | HTTP request | Description
 *VisualizationObjectControllerApi* | [**patch_entity_visualization_objects**](docs/VisualizationObjectControllerApi.md#patch_entity_visualization_objects) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Patch a Visualization Object
 *VisualizationObjectControllerApi* | [**search_entities_visualization_objects**](docs/VisualizationObjectControllerApi.md#search_entities_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/search | The search endpoint (beta)
 *VisualizationObjectControllerApi* | [**update_entity_visualization_objects**](docs/VisualizationObjectControllerApi.md#update_entity_visualization_objects) | **PUT** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Put a Visualization Object
+*WorkspaceControllerApi* | [**create_entity_workspaces**](docs/WorkspaceControllerApi.md#create_entity_workspaces) | **POST** /api/v1/entities/workspaces | Post Workspace entities
+*WorkspaceControllerApi* | [**delete_entity_workspaces**](docs/WorkspaceControllerApi.md#delete_entity_workspaces) | **DELETE** /api/v1/entities/workspaces/{id} | Delete Workspace entity
+*WorkspaceControllerApi* | [**get_all_entities_workspaces**](docs/WorkspaceControllerApi.md#get_all_entities_workspaces) | **GET** /api/v1/entities/workspaces | Get Workspace entities
+*WorkspaceControllerApi* | [**get_entity_workspaces**](docs/WorkspaceControllerApi.md#get_entity_workspaces) | **GET** /api/v1/entities/workspaces/{id} | Get Workspace entity
+*WorkspaceControllerApi* | [**patch_entity_workspaces**](docs/WorkspaceControllerApi.md#patch_entity_workspaces) | **PATCH** /api/v1/entities/workspaces/{id} | Patch Workspace entity
+*WorkspaceControllerApi* | [**update_entity_workspaces**](docs/WorkspaceControllerApi.md#update_entity_workspaces) | **PUT** /api/v1/entities/workspaces/{id} | Put Workspace entity
 *WorkspaceDataFilterControllerApi* | [**create_entity_workspace_data_filters**](docs/WorkspaceDataFilterControllerApi.md#create_entity_workspace_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters | Post Workspace Data Filters
 *WorkspaceDataFilterControllerApi* | [**delete_entity_workspace_data_filters**](docs/WorkspaceDataFilterControllerApi.md#delete_entity_workspace_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | Delete a Workspace Data Filter
 *WorkspaceDataFilterControllerApi* | [**get_all_entities_workspace_data_filters**](docs/WorkspaceDataFilterControllerApi.md#get_all_entities_workspace_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters | Get all Workspace Data Filters
@@ -1185,24 +1198,6 @@ Class | Method | HTTP request | Description
 *WorkspaceDataFilterSettingControllerApi* | [**patch_entity_workspace_data_filter_settings**](docs/WorkspaceDataFilterSettingControllerApi.md#patch_entity_workspace_data_filter_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | Patch a Settings for Workspace Data Filter
 *WorkspaceDataFilterSettingControllerApi* | [**search_entities_workspace_data_filter_settings**](docs/WorkspaceDataFilterSettingControllerApi.md#search_entities_workspace_data_filter_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/search | The search endpoint (beta)
 *WorkspaceDataFilterSettingControllerApi* | [**update_entity_workspace_data_filter_settings**](docs/WorkspaceDataFilterSettingControllerApi.md#update_entity_workspace_data_filter_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | Put a Settings for Workspace Data Filter
-*WorkspaceObjectControllerApi* | [**create_entity_knowledge_recommendations**](docs/WorkspaceObjectControllerApi.md#create_entity_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | 
-*WorkspaceObjectControllerApi* | [**create_entity_memory_items**](docs/WorkspaceObjectControllerApi.md#create_entity_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems | 
-*WorkspaceObjectControllerApi* | [**delete_entity_knowledge_recommendations**](docs/WorkspaceObjectControllerApi.md#delete_entity_knowledge_recommendations) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
-*WorkspaceObjectControllerApi* | [**delete_entity_memory_items**](docs/WorkspaceObjectControllerApi.md#delete_entity_memory_items) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
-*WorkspaceObjectControllerApi* | [**get_all_entities_aggregated_facts**](docs/WorkspaceObjectControllerApi.md#get_all_entities_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts | 
-*WorkspaceObjectControllerApi* | [**get_all_entities_knowledge_recommendations**](docs/WorkspaceObjectControllerApi.md#get_all_entities_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | 
-*WorkspaceObjectControllerApi* | [**get_all_entities_memory_items**](docs/WorkspaceObjectControllerApi.md#get_all_entities_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems | 
-*WorkspaceObjectControllerApi* | [**get_entity_aggregated_facts**](docs/WorkspaceObjectControllerApi.md#get_entity_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/{objectId} | 
-*WorkspaceObjectControllerApi* | [**get_entity_knowledge_recommendations**](docs/WorkspaceObjectControllerApi.md#get_entity_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
-*WorkspaceObjectControllerApi* | [**get_entity_memory_items**](docs/WorkspaceObjectControllerApi.md#get_entity_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
-*WorkspaceObjectControllerApi* | [**patch_entity_knowledge_recommendations**](docs/WorkspaceObjectControllerApi.md#patch_entity_knowledge_recommendations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
-*WorkspaceObjectControllerApi* | [**patch_entity_memory_items**](docs/WorkspaceObjectControllerApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
-*WorkspaceObjectControllerApi* | [**search_entities_aggregated_facts**](docs/WorkspaceObjectControllerApi.md#search_entities_aggregated_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/search | Search request for AggregatedFact
-*WorkspaceObjectControllerApi* | [**search_entities_automation_results**](docs/WorkspaceObjectControllerApi.md#search_entities_automation_results) | **POST** /api/v1/entities/workspaces/{workspaceId}/automationResults/search | Search request for AutomationResult
-*WorkspaceObjectControllerApi* | [**search_entities_knowledge_recommendations**](docs/WorkspaceObjectControllerApi.md#search_entities_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/search | The search endpoint (beta)
-*WorkspaceObjectControllerApi* | [**search_entities_memory_items**](docs/WorkspaceObjectControllerApi.md#search_entities_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems/search | Search request for MemoryItem
-*WorkspaceObjectControllerApi* | [**update_entity_knowledge_recommendations**](docs/WorkspaceObjectControllerApi.md#update_entity_knowledge_recommendations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
-*WorkspaceObjectControllerApi* | [**update_entity_memory_items**](docs/WorkspaceObjectControllerApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
 *WorkspaceSettingControllerApi* | [**create_entity_workspace_settings**](docs/WorkspaceSettingControllerApi.md#create_entity_workspace_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings | Post Settings for Workspaces
 *WorkspaceSettingControllerApi* | [**delete_entity_workspace_settings**](docs/WorkspaceSettingControllerApi.md#delete_entity_workspace_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Delete a Setting for Workspace
 *WorkspaceSettingControllerApi* | [**get_all_entities_workspace_settings**](docs/WorkspaceSettingControllerApi.md#get_all_entities_workspace_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings | Get all Setting for Workspaces
@@ -1409,7 +1404,6 @@ Class | Method | HTTP request | Description
  - [DashboardAttributeFilter](docs/DashboardAttributeFilter.md)
  - [DashboardAttributeFilterAttributeFilter](docs/DashboardAttributeFilterAttributeFilter.md)
  - [DashboardContext](docs/DashboardContext.md)
- - [DashboardContextWidgetsInner](docs/DashboardContextWidgetsInner.md)
  - [DashboardDateFilter](docs/DashboardDateFilter.md)
  - [DashboardDateFilterDateFilter](docs/DashboardDateFilterDateFilter.md)
  - [DashboardExportSettings](docs/DashboardExportSettings.md)
@@ -1419,8 +1413,6 @@ Class | Method | HTTP request | Description
  - [DashboardPermissions](docs/DashboardPermissions.md)
  - [DashboardPermissionsAssignment](docs/DashboardPermissionsAssignment.md)
  - [DashboardSlidesTemplate](docs/DashboardSlidesTemplate.md)
- - [DashboardSummaryRequestDto](docs/DashboardSummaryRequestDto.md)
- - [DashboardSummaryResponseDto](docs/DashboardSummaryResponseDto.md)
  - [DashboardTabularExportRequest](docs/DashboardTabularExportRequest.md)
  - [DashboardTabularExportRequestV2](docs/DashboardTabularExportRequestV2.md)
  - [DataColumnLocator](docs/DataColumnLocator.md)
@@ -1567,7 +1559,6 @@ Class | Method | HTTP request | Description
  - [FactIdentifier](docs/FactIdentifier.md)
  - [FailedOperation](docs/FailedOperation.md)
  - [FailedOperationAllOf](docs/FailedOperationAllOf.md)
- - [FeedbackRequestDto](docs/FeedbackRequestDto.md)
  - [File](docs/File.md)
  - [Filter](docs/Filter.md)
  - [FilterBy](docs/FilterBy.md)
@@ -1621,7 +1612,6 @@ Class | Method | HTTP request | Description
  - [InlineMeasureDefinition](docs/InlineMeasureDefinition.md)
  - [InlineMeasureDefinitionInline](docs/InlineMeasureDefinitionInline.md)
  - [InsightWidgetDescriptor](docs/InsightWidgetDescriptor.md)
- - [InsightWidgetDescriptorAllOf](docs/InsightWidgetDescriptorAllOf.md)
  - [IntroSlideTemplate](docs/IntroSlideTemplate.md)
  - [JsonApiAggregatedFactLinkage](docs/JsonApiAggregatedFactLinkage.md)
  - [JsonApiAggregatedFactOut](docs/JsonApiAggregatedFactOut.md)
@@ -2217,8 +2207,6 @@ Class | Method | HTTP request | Description
  - [KeyDriversResponse](docs/KeyDriversResponse.md)
  - [KeyDriversResult](docs/KeyDriversResult.md)
  - [KnowledgeDocumentMetadataDto](docs/KnowledgeDocumentMetadataDto.md)
- - [KnowledgeRecommendationsRequestDto](docs/KnowledgeRecommendationsRequestDto.md)
- - [KnowledgeRecommendationsResponseDto](docs/KnowledgeRecommendationsResponseDto.md)
  - [KnowledgeSearchResultDto](docs/KnowledgeSearchResultDto.md)
  - [LabelIdentifier](docs/LabelIdentifier.md)
  - [ListDatabaseInstancesResponse](docs/ListDatabaseInstancesResponse.md)
@@ -2354,7 +2342,6 @@ Class | Method | HTTP request | Description
  - [ResultDimensionHeader](docs/ResultDimensionHeader.md)
  - [ResultSpec](docs/ResultSpec.md)
  - [RichTextWidgetDescriptor](docs/RichTextWidgetDescriptor.md)
- - [RichTextWidgetDescriptorAllOf](docs/RichTextWidgetDescriptorAllOf.md)
  - [RouteResult](docs/RouteResult.md)
  - [RsaSpecification](docs/RsaSpecification.md)
  - [RulePermission](docs/RulePermission.md)
@@ -2450,7 +2437,6 @@ Class | Method | HTTP request | Description
  - [VisualExportRequest](docs/VisualExportRequest.md)
  - [VisualizationConfig](docs/VisualizationConfig.md)
  - [VisualizationSwitcherWidgetDescriptor](docs/VisualizationSwitcherWidgetDescriptor.md)
- - [VisualizationSwitcherWidgetDescriptorAllOf](docs/VisualizationSwitcherWidgetDescriptorAllOf.md)
  - [Webhook](docs/Webhook.md)
  - [WebhookAllOf](docs/WebhookAllOf.md)
  - [WebhookAutomationInfo](docs/WebhookAutomationInfo.md)

@@ -1338,6 +1338,12 @@
               "title": {
                 "type": "string"
               },
+              "validateElementsBy": {
+                "items": {
+                  "$ref": "#/components/schemas/IdentifierRef"
+                },
+                "type": "array"
+              },
               "values": {
                 "items": {
                   "type": "string"
@@ -2285,6 +2291,10 @@
               },
               "notIn": {
                 "$ref": "#/components/schemas/AttributeFilterElements"
+              },
+              "usesArbitraryValues": {
+                "description": "If true, indicates that the values in notInElements were filled free-form, otherwise they have been picked from existing elements.",
+                "type": "boolean"
               }
             },
             "required": [
@@ -2622,6 +2632,10 @@
               },
               "localIdentifier": {
                 "type": "string"
+              },
+              "usesArbitraryValues": {
+                "description": "If true, indicates that the values in inElements were filled free-form, otherwise they have been picked from existing elements.",
+                "type": "boolean"
               }
             },
             "required": [

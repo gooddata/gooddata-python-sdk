@@ -5895,6 +5895,12 @@
               "title": {
                 "type": "string"
               },
+              "validateElementsBy": {
+                "items": {
+                  "$ref": "#/components/schemas/IdentifierRef"
+                },
+                "type": "array"
+              },
               "values": {
                 "items": {
                   "type": "string"
@@ -28058,6 +28064,10 @@
               },
               "notIn": {
                 "$ref": "#/components/schemas/AttributeFilterElements"
+              },
+              "usesArbitraryValues": {
+                "description": "If true, indicates that the values in notInElements were filled free-form, otherwise they have been picked from existing elements.",
+                "type": "boolean"
               }
             },
             "required": [
@@ -28666,6 +28676,10 @@
               },
               "localIdentifier": {
                 "type": "string"
+              },
+              "usesArbitraryValues": {
+                "description": "If true, indicates that the values in inElements were filled free-form, otherwise they have been picked from existing elements.",
+                "type": "boolean"
               }
             },
             "required": [
@@ -33427,7 +33441,7 @@
         "tags": [
           "Appearance",
           "entities",
-          "organization-model-controller"
+          "color-palette-controller"
         ]
       },
       "post": {
@@ -33468,7 +33482,7 @@
         "tags": [
           "Appearance",
           "entities",
-          "organization-model-controller"
+          "color-palette-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -33484,15 +33498,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "name==someString;content==JsonNodeValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -33504,7 +33509,7 @@
         "tags": [
           "Appearance",
           "entities",
-          "organization-model-controller"
+          "color-palette-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -33550,7 +33555,7 @@
         "tags": [
           "Appearance",
           "entities",
-          "organization-model-controller"
+          "color-palette-controller"
         ]
       },
       "patch": {
@@ -33605,7 +33610,7 @@
         "tags": [
           "Appearance",
           "entities",
-          "organization-model-controller"
+          "color-palette-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -33666,7 +33671,7 @@
         "tags": [
           "Appearance",
           "entities",
-          "organization-model-controller"
+          "color-palette-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -33743,7 +33748,7 @@
         "tags": [
           "CSP Directives",
           "entities",
-          "organization-model-controller"
+          "csp-directive-controller"
         ]
       },
       "post": {
@@ -33785,7 +33790,7 @@
         "tags": [
           "CSP Directives",
           "entities",
-          "organization-model-controller"
+          "csp-directive-controller"
         ]
       }
     },
@@ -33796,15 +33801,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "sources==v1,v2,v3",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -33816,7 +33812,7 @@
         "tags": [
           "CSP Directives",
           "entities",
-          "organization-model-controller"
+          "csp-directive-controller"
         ]
       },
       "get": {
@@ -33857,7 +33853,7 @@
         "tags": [
           "CSP Directives",
           "entities",
-          "organization-model-controller"
+          "csp-directive-controller"
         ]
       },
       "patch": {
@@ -33913,7 +33909,7 @@
         "tags": [
           "CSP Directives",
           "entities",
-          "organization-model-controller"
+          "csp-directive-controller"
         ]
       },
       "put": {
@@ -33969,7 +33965,7 @@
         "tags": [
           "CSP Directives",
           "entities",
-          "organization-model-controller"
+          "csp-directive-controller"
         ]
       }
     },
@@ -34322,7 +34318,7 @@
         "tags": [
           "Data Source - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "data-source-identifier-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -34392,7 +34388,7 @@
         "tags": [
           "Data Source - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "data-source-identifier-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -34840,8 +34836,14 @@
         "tags": [
           "Entitlement",
           "entities",
-          "organization-model-controller"
-        ]
+          "entitlement-entity-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/entitlements/{id}": {
@@ -34879,12 +34881,18 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Get Entitlement",
+        "summary": "Get Entitlement entity",
         "tags": [
           "Entitlement",
           "entities",
-          "organization-model-controller"
-        ]
+          "entitlement-entity-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/exportTemplates": {
@@ -34953,7 +34961,7 @@
         "tags": [
           "Export templates",
           "entities",
-          "organization-model-controller"
+          "export-template-controller"
         ]
       },
       "post": {
@@ -34994,8 +35002,14 @@
         "tags": [
           "Export templates",
           "entities",
-          "organization-model-controller"
-        ]
+          "export-template-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/exportTemplates/{id}": {
@@ -35004,15 +35018,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -35024,8 +35029,14 @@
         "tags": [
           "Export templates",
           "entities",
-          "organization-model-controller"
-        ]
+          "export-template-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "get": {
         "operationId": "getEntity@ExportTemplates",
@@ -35064,7 +35075,7 @@
         "tags": [
           "Export templates",
           "entities",
-          "organization-model-controller"
+          "export-template-controller"
         ]
       },
       "patch": {
@@ -35119,8 +35130,14 @@
         "tags": [
           "Export templates",
           "entities",
-          "organization-model-controller"
-        ]
+          "export-template-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "put": {
         "operationId": "updateEntity@ExportTemplates",
@@ -35174,8 +35191,14 @@
         "tags": [
           "Export templates",
           "entities",
-          "organization-model-controller"
-        ]
+          "export-template-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/identityProviders": {
@@ -35244,7 +35267,7 @@
         "tags": [
           "Identity Providers",
           "entities",
-          "organization-model-controller"
+          "identity-provider-controller"
         ]
       },
       "post": {
@@ -35285,7 +35308,7 @@
         "tags": [
           "Identity Providers",
           "entities",
-          "organization-model-controller"
+          "identity-provider-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -35301,15 +35324,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "identifiers==v1,v2,v3;customClaimMapping==MapValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -35321,7 +35335,7 @@
         "tags": [
           "Identity Providers",
           "entities",
-          "organization-model-controller"
+          "identity-provider-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -35367,7 +35381,7 @@
         "tags": [
           "Identity Providers",
           "entities",
-          "organization-model-controller"
+          "identity-provider-controller"
         ]
       },
       "patch": {
@@ -35422,7 +35436,7 @@
         "tags": [
           "Identity Providers",
           "entities",
-          "organization-model-controller"
+          "identity-provider-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -35483,7 +35497,7 @@
         "tags": [
           "Identity Providers",
           "entities",
-          "organization-model-controller"
+          "identity-provider-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -35873,8 +35887,14 @@
         "tags": [
           "LLM Endpoints",
           "entities",
-          "organization-model-controller"
-        ]
+          "llm-endpoint-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "post": {
         "deprecated": true,
@@ -35916,8 +35936,14 @@
         "tags": [
           "LLM Endpoints",
           "entities",
-          "organization-model-controller"
-        ]
+          "llm-endpoint-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/llmEndpoints/{id}": {
@@ -35928,15 +35954,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;provider==LlmEndpointProviderValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -35948,8 +35965,14 @@
         "tags": [
           "LLM Endpoints",
           "entities",
-          "organization-model-controller"
-        ]
+          "llm-endpoint-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "get": {
         "deprecated": true,
@@ -35990,8 +36013,14 @@
         "tags": [
           "LLM Endpoints",
           "entities",
-          "organization-model-controller"
-        ]
+          "llm-endpoint-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "patch": {
         "deprecated": true,
@@ -36047,8 +36076,14 @@
         "tags": [
           "LLM Endpoints",
           "entities",
-          "organization-model-controller"
-        ]
+          "llm-endpoint-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "put": {
         "deprecated": true,
@@ -36104,8 +36139,14 @@
         "tags": [
           "LLM Endpoints",
           "entities",
-          "organization-model-controller"
-        ]
+          "llm-endpoint-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/llmProviders": {
@@ -36174,7 +36215,7 @@
         "tags": [
           "LLM Providers",
           "entities",
-          "organization-model-controller"
+          "llm-provider-controller"
         ]
       },
       "post": {
@@ -36216,8 +36257,14 @@
         "tags": [
           "LLM Providers",
           "entities",
-          "organization-model-controller"
-        ]
+          "llm-provider-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/llmProviders/{id}": {
@@ -36226,15 +36273,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "name==someString;description==someString",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -36246,8 +36284,14 @@
         "tags": [
           "LLM Providers",
           "entities",
-          "organization-model-controller"
-        ]
+          "llm-provider-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "get": {
         "operationId": "getEntity@LlmProviders",
@@ -36286,7 +36330,7 @@
         "tags": [
           "LLM Providers",
           "entities",
-          "organization-model-controller"
+          "llm-provider-controller"
         ]
       },
       "patch": {
@@ -36341,8 +36385,14 @@
         "tags": [
           "LLM Providers",
           "entities",
-          "organization-model-controller"
-        ]
+          "llm-provider-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "put": {
         "operationId": "updateEntity@LlmProviders",
@@ -36396,8 +36446,14 @@
         "tags": [
           "LLM Providers",
           "entities",
-          "organization-model-controller"
-        ]
+          "llm-provider-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/notificationChannelIdentifiers": {
@@ -36462,10 +36518,11 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Notification Channel Identifier entities",
         "tags": [
           "Notification Channels",
           "entities",
-          "organization-model-controller"
+          "notification-channel-identifier-controller"
         ]
       }
     },
@@ -36503,10 +36560,11 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get Notification Channel Identifier entity",
         "tags": [
           "Notification Channels",
           "entities",
-          "organization-model-controller"
+          "notification-channel-identifier-controller"
         ]
       }
     },
@@ -36576,7 +36634,7 @@
         "tags": [
           "Notification Channels",
           "entities",
-          "organization-model-controller"
+          "notification-channel-controller"
         ]
       },
       "post": {
@@ -36617,7 +36675,7 @@
         "tags": [
           "Notification Channels",
           "entities",
-          "organization-model-controller"
+          "notification-channel-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -36633,15 +36691,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "name==someString;description==someString",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -36653,7 +36702,7 @@
         "tags": [
           "Notification Channels",
           "entities",
-          "organization-model-controller"
+          "notification-channel-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -36699,7 +36748,7 @@
         "tags": [
           "Notification Channels",
           "entities",
-          "organization-model-controller"
+          "notification-channel-controller"
         ]
       },
       "patch": {
@@ -36754,7 +36803,7 @@
         "tags": [
           "Notification Channels",
           "entities",
-          "organization-model-controller"
+          "notification-channel-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -36815,7 +36864,7 @@
         "tags": [
           "Notification Channels",
           "entities",
-          "organization-model-controller"
+          "notification-channel-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -37031,12 +37080,18 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Get Organization entities",
+        "summary": "Get Organization Setting entities",
         "tags": [
           "Organization - Entity APIs",
           "entities",
-          "organization-model-controller"
-        ]
+          "organization-setting-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "post": {
         "operationId": "createEntity@OrganizationSettings",
@@ -37076,7 +37131,7 @@
         "tags": [
           "Organization - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "organization-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -37092,15 +37147,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "content==JsonNodeValue;type==SettingTypeValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -37108,11 +37154,11 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
-        "summary": "Delete Organization entity",
+        "summary": "Delete Organization Setting entity",
         "tags": [
           "Organization - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "organization-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -37154,12 +37200,18 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Get Organization entity",
+        "summary": "Get Organization Setting entity",
         "tags": [
           "Organization - Entity APIs",
           "entities",
-          "organization-model-controller"
-        ]
+          "organization-setting-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "patch": {
         "operationId": "patchEntity@OrganizationSettings",
@@ -37209,11 +37261,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Patch Organization entity",
+        "summary": "Patch Organization Setting entity",
         "tags": [
           "Organization - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "organization-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -37270,11 +37322,11 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Put Organization entity",
+        "summary": "Put Organization Setting entity",
         "tags": [
           "Organization - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "organization-setting-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -37350,7 +37402,7 @@
         "tags": [
           "Appearance",
           "entities",
-          "organization-model-controller"
+          "theme-controller"
         ]
       },
       "post": {
@@ -37391,7 +37443,7 @@
         "tags": [
           "Appearance",
           "entities",
-          "organization-model-controller"
+          "theme-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -37407,15 +37459,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "name==someString;content==JsonNodeValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -37427,7 +37470,7 @@
         "tags": [
           "Appearance",
           "entities",
-          "organization-model-controller"
+          "theme-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -37473,7 +37516,7 @@
         "tags": [
           "Appearance",
           "entities",
-          "organization-model-controller"
+          "theme-controller"
         ]
       },
       "patch": {
@@ -37528,7 +37571,7 @@
         "tags": [
           "Appearance",
           "entities",
-          "organization-model-controller"
+          "theme-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -37589,7 +37632,7 @@
         "tags": [
           "Appearance",
           "entities",
-          "organization-model-controller"
+          "theme-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -37686,10 +37729,10 @@
         "tags": [
           "UserGroups - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "user-group-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to view this object type.",
+          "description": "Contains minimal permission level required to manage this object type.",
           "permissions": [
             "MANAGE"
           ]
@@ -37756,7 +37799,7 @@
         "tags": [
           "UserGroups - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "user-group-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -37773,15 +37816,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "name==someString",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -37793,7 +37827,7 @@
         "tags": [
           "UserGroups - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "user-group-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -37860,10 +37894,10 @@
         "tags": [
           "UserGroups - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "user-group-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to view this object type.",
+          "description": "Contains minimal permission level required to manage this object type.",
           "permissions": [
             "MANAGE"
           ]
@@ -37942,7 +37976,7 @@
         "tags": [
           "UserGroups - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "user-group-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -38024,7 +38058,7 @@
         "tags": [
           "UserGroups - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "user-group-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -38101,7 +38135,7 @@
         "tags": [
           "User Identifiers",
           "entities",
-          "organization-model-controller"
+          "user-identifier-controller"
         ]
       }
     },
@@ -38144,7 +38178,7 @@
         "tags": [
           "User Identifiers",
           "entities",
-          "organization-model-controller"
+          "user-identifier-controller"
         ]
       }
     },
@@ -38234,10 +38268,10 @@
         "tags": [
           "Users - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "user-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to view this object type.",
+          "description": "Contains minimal permission level required to manage this object type.",
           "permissions": [
             "MANAGE"
           ]
@@ -38303,7 +38337,7 @@
         "tags": [
           "Users - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "user-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -38320,15 +38354,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "authenticationId==someString;firstname==someString",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -38340,7 +38365,7 @@
         "tags": [
           "Users - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "user-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -38406,10 +38431,10 @@
         "tags": [
           "Users - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "user-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to view this object type.",
+          "description": "Contains minimal permission level required to manage this object type.",
           "permissions": [
             "MANAGE"
           ]
@@ -38487,7 +38512,7 @@
         "tags": [
           "Users - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "user-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -38568,7 +38593,7 @@
         "tags": [
           "Users - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "user-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -39144,7 +39169,7 @@
         "tags": [
           "Workspaces - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "workspace-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -39239,7 +39264,7 @@
         "tags": [
           "Workspaces - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "workspace-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -39256,15 +39281,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "name==someString;earlyAccess==someString;parent.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -39276,7 +39292,7 @@
         "tags": [
           "Workspaces - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "workspace-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -39368,7 +39384,7 @@
         "tags": [
           "Workspaces - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "workspace-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -39450,7 +39466,7 @@
         "tags": [
           "Workspaces - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "workspace-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -39532,7 +39548,7 @@
         "tags": [
           "Workspaces - Entity APIs",
           "entities",
-          "organization-model-controller"
+          "workspace-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -39659,11 +39675,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Aggregated Facts",
         "tags": [
           "Facts",
           "entities",
-          "workspace-object-controller"
-        ]
+          "aggregated-fact-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/search": {
@@ -39731,12 +39754,18 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for AggregatedFact",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Facts",
           "entities",
-          "workspace-object-controller"
-        ]
+          "aggregated-fact-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/{objectId}": {
@@ -39839,11 +39868,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get an Aggregated Fact",
         "tags": [
           "Facts",
           "entities",
-          "workspace-object-controller"
-        ]
+          "aggregated-fact-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/analyticalDashboards": {
@@ -41685,12 +41721,18 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for AutomationResult",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "Automations",
           "entities",
-          "workspace-object-controller"
-        ]
+          "automation-result-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/automations": {
@@ -46451,11 +46493,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Knowledge Recommendations",
         "tags": [
           "AI",
           "entities",
-          "workspace-object-controller"
-        ]
+          "knowledge-recommendation-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       },
       "post": {
         "operationId": "createEntity@KnowledgeRecommendations",
@@ -46545,11 +46594,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Knowledge Recommendations",
         "tags": [
           "AI",
           "entities",
-          "workspace-object-controller"
-        ]
+          "knowledge-recommendation-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/search": {
@@ -46621,8 +46677,14 @@
         "tags": [
           "AI",
           "entities",
-          "workspace-object-controller"
-        ]
+          "knowledge-recommendation-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId}": {
@@ -46644,15 +46706,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;metric.id==321;analyticalDashboard.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -46660,11 +46713,18 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete a Knowledge Recommendation",
         "tags": [
           "AI",
           "entities",
-          "workspace-object-controller"
-        ]
+          "knowledge-recommendation-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "get": {
         "operationId": "getEntity@KnowledgeRecommendations",
@@ -46765,11 +46825,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Knowledge Recommendation",
         "tags": [
           "AI",
           "entities",
-          "workspace-object-controller"
-        ]
+          "knowledge-recommendation-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       },
       "patch": {
         "operationId": "patchEntity@KnowledgeRecommendations",
@@ -46854,11 +46921,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch a Knowledge Recommendation",
         "tags": [
           "AI",
           "entities",
-          "workspace-object-controller"
-        ]
+          "knowledge-recommendation-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "put": {
         "operationId": "updateEntity@KnowledgeRecommendations",
@@ -46943,11 +47017,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put a Knowledge Recommendation",
         "tags": [
           "AI",
           "entities",
-          "workspace-object-controller"
-        ]
+          "knowledge-recommendation-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/labels": {
@@ -47480,11 +47561,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Memory Items",
         "tags": [
           "AI",
           "entities",
-          "workspace-object-controller"
-        ]
+          "memory-item-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       },
       "post": {
         "operationId": "createEntity@MemoryItems",
@@ -47573,11 +47661,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Memory Items",
         "tags": [
           "AI",
           "entities",
-          "workspace-object-controller"
-        ]
+          "memory-item-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/memoryItems/search": {
@@ -47645,12 +47740,18 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Search request for MemoryItem",
+        "summary": "The search endpoint (beta)",
         "tags": [
           "AI",
           "entities",
-          "workspace-object-controller"
-        ]
+          "memory-item-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId}": {
@@ -47672,15 +47773,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -47688,11 +47780,18 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete a Memory Item",
         "tags": [
           "AI",
           "entities",
-          "workspace-object-controller"
-        ]
+          "memory-item-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "get": {
         "operationId": "getEntity@MemoryItems",
@@ -47792,11 +47891,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Memory Item",
         "tags": [
           "AI",
           "entities",
-          "workspace-object-controller"
-        ]
+          "memory-item-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       },
       "patch": {
         "operationId": "patchEntity@MemoryItems",
@@ -47880,11 +47986,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch a Memory Item",
         "tags": [
           "AI",
           "entities",
-          "workspace-object-controller"
-        ]
+          "memory-item-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       },
       "put": {
         "operationId": "updateEntity@MemoryItems",
@@ -47968,11 +48081,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put a Memory Item",
         "tags": [
           "AI",
           "entities",
-          "workspace-object-controller"
-        ]
+          "memory-item-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/metrics": {

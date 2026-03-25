@@ -2833,7 +2833,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -2860,16 +2859,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -2892,7 +2887,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -2919,16 +2913,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3218,7 +3208,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -3245,16 +3234,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3383,7 +3368,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -3410,16 +3394,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3497,7 +3477,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -3520,18 +3499,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3554,7 +3529,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -3581,16 +3555,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3613,7 +3583,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -3640,16 +3609,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3673,7 +3638,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -3696,18 +3660,14 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3783,7 +3743,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -3810,16 +3769,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3842,7 +3797,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -3869,16 +3823,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -3901,7 +3851,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -3928,16 +3877,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -4013,7 +3958,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -4040,16 +3984,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -4132,7 +4072,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -4159,16 +4098,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -4403,7 +4338,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -4430,16 +4364,12 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -21179,7 +21109,7 @@ class EntitiesApi(object):
         json_api_knowledge_recommendation_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_knowledge_recommendations  # noqa: E501
+        """Post Knowledge Recommendations  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -21433,7 +21363,7 @@ class EntitiesApi(object):
         json_api_memory_item_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_memory_items  # noqa: E501
+        """Post Memory Items  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -22988,7 +22918,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -23072,7 +23001,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -23578,7 +23506,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -23833,7 +23760,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -23988,7 +23914,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_knowledge_recommendations  # noqa: E501
+        """Delete a Knowledge Recommendation  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -24001,7 +23927,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -24087,7 +24012,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -24170,7 +24094,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -24242,7 +24165,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_memory_items  # noqa: E501
+        """Delete a Memory Item  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -24255,7 +24178,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -24426,7 +24348,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -24497,7 +24418,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """Delete Organization entity  # noqa: E501
+        """Delete Organization Setting entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -24509,7 +24430,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -24592,7 +24512,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -24762,7 +24681,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -24932,7 +24850,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -25360,7 +25277,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -25514,7 +25430,7 @@ class EntitiesApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_aggregated_facts  # noqa: E501
+        """Get all Aggregated Facts  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -27422,7 +27338,7 @@ class EntitiesApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_knowledge_recommendations  # noqa: E501
+        """Get all Knowledge Recommendations  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -27767,7 +27683,7 @@ class EntitiesApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_memory_items  # noqa: E501
+        """Get all Memory Items  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -27946,7 +27862,7 @@ class EntitiesApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_notification_channel_identifiers  # noqa: E501
+        """Get all Notification Channel Identifier entities  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -28110,7 +28026,7 @@ class EntitiesApi(object):
         self,
         **kwargs
     ):
-        """Get Organization entities  # noqa: E501
+        """Get Organization Setting entities  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -29303,7 +29219,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_aggregated_facts  # noqa: E501
+        """Get an Aggregated Fact  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -30610,7 +30526,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """Get Entitlement  # noqa: E501
+        """Get Entitlement entity  # noqa: E501
 
         Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -31304,7 +31220,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_knowledge_recommendations  # noqa: E501
+        """Get a Knowledge Recommendation  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -31651,7 +31567,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_memory_items  # noqa: E501
+        """Get a Memory Item  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -31830,7 +31746,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_notification_channel_identifiers  # noqa: E501
+        """Get Notification Channel Identifier entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -31996,7 +31912,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """Get Organization entity  # noqa: E501
+        """Get Organization Setting entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -34914,7 +34830,7 @@ class EntitiesApi(object):
         json_api_knowledge_recommendation_patch_document,
         **kwargs
     ):
-        """patch_entity_knowledge_recommendations  # noqa: E501
+        """Patch a Knowledge Recommendation  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -35273,7 +35189,7 @@ class EntitiesApi(object):
         json_api_memory_item_patch_document,
         **kwargs
     ):
-        """patch_entity_memory_items  # noqa: E501
+        """Patch a Memory Item  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -35543,7 +35459,7 @@ class EntitiesApi(object):
         json_api_organization_setting_patch_document,
         **kwargs
     ):
-        """Patch Organization entity  # noqa: E501
+        """Patch Organization Setting entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -36531,7 +36447,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for AggregatedFact  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -36883,7 +36799,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for AutomationResult  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -37851,7 +37767,7 @@ class EntitiesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for MemoryItem  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -39902,7 +39818,7 @@ class EntitiesApi(object):
         json_api_knowledge_recommendation_in_document,
         **kwargs
     ):
-        """update_entity_knowledge_recommendations  # noqa: E501
+        """Put a Knowledge Recommendation  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -40169,7 +40085,7 @@ class EntitiesApi(object):
         json_api_memory_item_in_document,
         **kwargs
     ):
-        """update_entity_memory_items  # noqa: E501
+        """Put a Memory Item  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -40439,7 +40355,7 @@ class EntitiesApi(object):
         json_api_organization_setting_in_document,
         **kwargs
     ):
-        """Put Organization entity  # noqa: E501
+        """Put Organization Setting entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

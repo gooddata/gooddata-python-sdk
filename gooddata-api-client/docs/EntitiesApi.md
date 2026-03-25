@@ -20,10 +20,10 @@ Method | HTTP request | Description
 [**create_entity_filter_views**](EntitiesApi.md#create_entity_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews | Post Filter views
 [**create_entity_identity_providers**](EntitiesApi.md#create_entity_identity_providers) | **POST** /api/v1/entities/identityProviders | Post Identity Providers
 [**create_entity_jwks**](EntitiesApi.md#create_entity_jwks) | **POST** /api/v1/entities/jwks | Post Jwks
-[**create_entity_knowledge_recommendations**](EntitiesApi.md#create_entity_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | 
+[**create_entity_knowledge_recommendations**](EntitiesApi.md#create_entity_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | Post Knowledge Recommendations
 [**create_entity_llm_endpoints**](EntitiesApi.md#create_entity_llm_endpoints) | **POST** /api/v1/entities/llmEndpoints | Post LLM endpoint entities
 [**create_entity_llm_providers**](EntitiesApi.md#create_entity_llm_providers) | **POST** /api/v1/entities/llmProviders | Post LLM Provider entities
-[**create_entity_memory_items**](EntitiesApi.md#create_entity_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems | 
+[**create_entity_memory_items**](EntitiesApi.md#create_entity_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems | Post Memory Items
 [**create_entity_metrics**](EntitiesApi.md#create_entity_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics | Post Metrics
 [**create_entity_notification_channels**](EntitiesApi.md#create_entity_notification_channels) | **POST** /api/v1/entities/notificationChannels | Post Notification Channel entities
 [**create_entity_organization_settings**](EntitiesApi.md#create_entity_organization_settings) | **POST** /api/v1/entities/organizationSettings | Post Organization Setting entities
@@ -53,13 +53,13 @@ Method | HTTP request | Description
 [**delete_entity_filter_views**](EntitiesApi.md#delete_entity_filter_views) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Delete Filter view
 [**delete_entity_identity_providers**](EntitiesApi.md#delete_entity_identity_providers) | **DELETE** /api/v1/entities/identityProviders/{id} | Delete Identity Provider
 [**delete_entity_jwks**](EntitiesApi.md#delete_entity_jwks) | **DELETE** /api/v1/entities/jwks/{id} | Delete Jwk
-[**delete_entity_knowledge_recommendations**](EntitiesApi.md#delete_entity_knowledge_recommendations) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
+[**delete_entity_knowledge_recommendations**](EntitiesApi.md#delete_entity_knowledge_recommendations) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Delete a Knowledge Recommendation
 [**delete_entity_llm_endpoints**](EntitiesApi.md#delete_entity_llm_endpoints) | **DELETE** /api/v1/entities/llmEndpoints/{id} | Delete LLM endpoint entity
 [**delete_entity_llm_providers**](EntitiesApi.md#delete_entity_llm_providers) | **DELETE** /api/v1/entities/llmProviders/{id} | Delete LLM Provider entity
-[**delete_entity_memory_items**](EntitiesApi.md#delete_entity_memory_items) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
+[**delete_entity_memory_items**](EntitiesApi.md#delete_entity_memory_items) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Delete a Memory Item
 [**delete_entity_metrics**](EntitiesApi.md#delete_entity_metrics) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Delete a Metric
 [**delete_entity_notification_channels**](EntitiesApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | Delete Notification Channel entity
-[**delete_entity_organization_settings**](EntitiesApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | Delete Organization entity
+[**delete_entity_organization_settings**](EntitiesApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | Delete Organization Setting entity
 [**delete_entity_themes**](EntitiesApi.md#delete_entity_themes) | **DELETE** /api/v1/entities/themes/{id} | Delete Theming
 [**delete_entity_user_data_filters**](EntitiesApi.md#delete_entity_user_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Delete a User Data Filter
 [**delete_entity_user_groups**](EntitiesApi.md#delete_entity_user_groups) | **DELETE** /api/v1/entities/userGroups/{id} | Delete UserGroup entity
@@ -71,7 +71,7 @@ Method | HTTP request | Description
 [**delete_entity_workspace_settings**](EntitiesApi.md#delete_entity_workspace_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Delete a Setting for Workspace
 [**delete_entity_workspaces**](EntitiesApi.md#delete_entity_workspaces) | **DELETE** /api/v1/entities/workspaces/{id} | Delete Workspace entity
 [**get_all_automations_workspace_automations**](EntitiesApi.md#get_all_automations_workspace_automations) | **GET** /api/v1/entities/organization/workspaceAutomations | Get all Automations across all Workspaces
-[**get_all_entities_aggregated_facts**](EntitiesApi.md#get_all_entities_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts | 
+[**get_all_entities_aggregated_facts**](EntitiesApi.md#get_all_entities_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts | Get all Aggregated Facts
 [**get_all_entities_analytical_dashboards**](EntitiesApi.md#get_all_entities_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | Get all Dashboards
 [**get_all_entities_api_tokens**](EntitiesApi.md#get_all_entities_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens | List all api tokens for a user
 [**get_all_entities_attribute_hierarchies**](EntitiesApi.md#get_all_entities_attribute_hierarchies) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies | Get all Attribute Hierarchies
@@ -93,15 +93,15 @@ Method | HTTP request | Description
 [**get_all_entities_filter_views**](EntitiesApi.md#get_all_entities_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews | Get all Filter views
 [**get_all_entities_identity_providers**](EntitiesApi.md#get_all_entities_identity_providers) | **GET** /api/v1/entities/identityProviders | Get all Identity Providers
 [**get_all_entities_jwks**](EntitiesApi.md#get_all_entities_jwks) | **GET** /api/v1/entities/jwks | Get all Jwks
-[**get_all_entities_knowledge_recommendations**](EntitiesApi.md#get_all_entities_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | 
+[**get_all_entities_knowledge_recommendations**](EntitiesApi.md#get_all_entities_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | Get all Knowledge Recommendations
 [**get_all_entities_labels**](EntitiesApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | Get all Labels
 [**get_all_entities_llm_endpoints**](EntitiesApi.md#get_all_entities_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints | Get all LLM endpoint entities
 [**get_all_entities_llm_providers**](EntitiesApi.md#get_all_entities_llm_providers) | **GET** /api/v1/entities/llmProviders | Get all LLM Provider entities
-[**get_all_entities_memory_items**](EntitiesApi.md#get_all_entities_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems | 
+[**get_all_entities_memory_items**](EntitiesApi.md#get_all_entities_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems | Get all Memory Items
 [**get_all_entities_metrics**](EntitiesApi.md#get_all_entities_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics | Get all Metrics
-[**get_all_entities_notification_channel_identifiers**](EntitiesApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | 
+[**get_all_entities_notification_channel_identifiers**](EntitiesApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | Get all Notification Channel Identifier entities
 [**get_all_entities_notification_channels**](EntitiesApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
-[**get_all_entities_organization_settings**](EntitiesApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization entities
+[**get_all_entities_organization_settings**](EntitiesApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization Setting entities
 [**get_all_entities_themes**](EntitiesApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
 [**get_all_entities_user_data_filters**](EntitiesApi.md#get_all_entities_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | Get all User Data Filters
 [**get_all_entities_user_groups**](EntitiesApi.md#get_all_entities_user_groups) | **GET** /api/v1/entities/userGroups | Get UserGroup entities
@@ -115,7 +115,7 @@ Method | HTTP request | Description
 [**get_all_entities_workspaces**](EntitiesApi.md#get_all_entities_workspaces) | **GET** /api/v1/entities/workspaces | Get Workspace entities
 [**get_all_options**](EntitiesApi.md#get_all_options) | **GET** /api/v1/options | Links for all configuration options
 [**get_data_source_drivers**](EntitiesApi.md#get_data_source_drivers) | **GET** /api/v1/options/availableDrivers | Get all available data source drivers
-[**get_entity_aggregated_facts**](EntitiesApi.md#get_entity_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/{objectId} | 
+[**get_entity_aggregated_facts**](EntitiesApi.md#get_entity_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/{objectId} | Get an Aggregated Fact
 [**get_entity_analytical_dashboards**](EntitiesApi.md#get_entity_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Get a Dashboard
 [**get_entity_api_tokens**](EntitiesApi.md#get_entity_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens/{id} | Get an API Token for a user
 [**get_entity_attribute_hierarchies**](EntitiesApi.md#get_entity_attribute_hierarchies) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Get an Attribute Hierarchy
@@ -130,7 +130,7 @@ Method | HTTP request | Description
 [**get_entity_data_source_identifiers**](EntitiesApi.md#get_entity_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers/{id} | Get Data Source Identifier
 [**get_entity_data_sources**](EntitiesApi.md#get_entity_data_sources) | **GET** /api/v1/entities/dataSources/{id} | Get Data Source entity
 [**get_entity_datasets**](EntitiesApi.md#get_entity_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Get a Dataset
-[**get_entity_entitlements**](EntitiesApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement
+[**get_entity_entitlements**](EntitiesApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement entity
 [**get_entity_export_definitions**](EntitiesApi.md#get_entity_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | Get an Export Definition
 [**get_entity_export_templates**](EntitiesApi.md#get_entity_export_templates) | **GET** /api/v1/entities/exportTemplates/{id} | GET Export Template entity
 [**get_entity_facts**](EntitiesApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
@@ -138,15 +138,15 @@ Method | HTTP request | Description
 [**get_entity_filter_views**](EntitiesApi.md#get_entity_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Get Filter view
 [**get_entity_identity_providers**](EntitiesApi.md#get_entity_identity_providers) | **GET** /api/v1/entities/identityProviders/{id} | Get Identity Provider
 [**get_entity_jwks**](EntitiesApi.md#get_entity_jwks) | **GET** /api/v1/entities/jwks/{id} | Get Jwk
-[**get_entity_knowledge_recommendations**](EntitiesApi.md#get_entity_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
+[**get_entity_knowledge_recommendations**](EntitiesApi.md#get_entity_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Get a Knowledge Recommendation
 [**get_entity_labels**](EntitiesApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Get a Label
 [**get_entity_llm_endpoints**](EntitiesApi.md#get_entity_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints/{id} | Get LLM endpoint entity
 [**get_entity_llm_providers**](EntitiesApi.md#get_entity_llm_providers) | **GET** /api/v1/entities/llmProviders/{id} | Get LLM Provider entity
-[**get_entity_memory_items**](EntitiesApi.md#get_entity_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
+[**get_entity_memory_items**](EntitiesApi.md#get_entity_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Get a Memory Item
 [**get_entity_metrics**](EntitiesApi.md#get_entity_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Get a Metric
-[**get_entity_notification_channel_identifiers**](EntitiesApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | 
+[**get_entity_notification_channel_identifiers**](EntitiesApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | Get Notification Channel Identifier entity
 [**get_entity_notification_channels**](EntitiesApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
-[**get_entity_organization_settings**](EntitiesApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization entity
+[**get_entity_organization_settings**](EntitiesApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization Setting entity
 [**get_entity_organizations**](EntitiesApi.md#get_entity_organizations) | **GET** /api/v1/entities/admin/organizations/{id} | Get Organizations
 [**get_entity_themes**](EntitiesApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | Get Theming
 [**get_entity_user_data_filters**](EntitiesApi.md#get_entity_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Get a User Data Filter
@@ -179,14 +179,14 @@ Method | HTTP request | Description
 [**patch_entity_filter_views**](EntitiesApi.md#patch_entity_filter_views) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Patch Filter view
 [**patch_entity_identity_providers**](EntitiesApi.md#patch_entity_identity_providers) | **PATCH** /api/v1/entities/identityProviders/{id} | Patch Identity Provider
 [**patch_entity_jwks**](EntitiesApi.md#patch_entity_jwks) | **PATCH** /api/v1/entities/jwks/{id} | Patch Jwk
-[**patch_entity_knowledge_recommendations**](EntitiesApi.md#patch_entity_knowledge_recommendations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
+[**patch_entity_knowledge_recommendations**](EntitiesApi.md#patch_entity_knowledge_recommendations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Patch a Knowledge Recommendation
 [**patch_entity_labels**](EntitiesApi.md#patch_entity_labels) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Patch a Label (beta)
 [**patch_entity_llm_endpoints**](EntitiesApi.md#patch_entity_llm_endpoints) | **PATCH** /api/v1/entities/llmEndpoints/{id} | Patch LLM endpoint entity
 [**patch_entity_llm_providers**](EntitiesApi.md#patch_entity_llm_providers) | **PATCH** /api/v1/entities/llmProviders/{id} | Patch LLM Provider entity
-[**patch_entity_memory_items**](EntitiesApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
+[**patch_entity_memory_items**](EntitiesApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Patch a Memory Item
 [**patch_entity_metrics**](EntitiesApi.md#patch_entity_metrics) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Patch a Metric
 [**patch_entity_notification_channels**](EntitiesApi.md#patch_entity_notification_channels) | **PATCH** /api/v1/entities/notificationChannels/{id} | Patch Notification Channel entity
-[**patch_entity_organization_settings**](EntitiesApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | Patch Organization entity
+[**patch_entity_organization_settings**](EntitiesApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | Patch Organization Setting entity
 [**patch_entity_organizations**](EntitiesApi.md#patch_entity_organizations) | **PATCH** /api/v1/entities/admin/organizations/{id} | Patch Organization
 [**patch_entity_themes**](EntitiesApi.md#patch_entity_themes) | **PATCH** /api/v1/entities/themes/{id} | Patch Theming
 [**patch_entity_user_data_filters**](EntitiesApi.md#patch_entity_user_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Patch a User Data Filter
@@ -197,11 +197,11 @@ Method | HTTP request | Description
 [**patch_entity_workspace_data_filters**](EntitiesApi.md#patch_entity_workspace_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | Patch a Workspace Data Filter
 [**patch_entity_workspace_settings**](EntitiesApi.md#patch_entity_workspace_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Patch a Setting for Workspace
 [**patch_entity_workspaces**](EntitiesApi.md#patch_entity_workspaces) | **PATCH** /api/v1/entities/workspaces/{id} | Patch Workspace entity
-[**search_entities_aggregated_facts**](EntitiesApi.md#search_entities_aggregated_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/search | Search request for AggregatedFact
+[**search_entities_aggregated_facts**](EntitiesApi.md#search_entities_aggregated_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/search | The search endpoint (beta)
 [**search_entities_analytical_dashboards**](EntitiesApi.md#search_entities_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/search | The search endpoint (beta)
 [**search_entities_attribute_hierarchies**](EntitiesApi.md#search_entities_attribute_hierarchies) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/search | The search endpoint (beta)
 [**search_entities_attributes**](EntitiesApi.md#search_entities_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributes/search | The search endpoint (beta)
-[**search_entities_automation_results**](EntitiesApi.md#search_entities_automation_results) | **POST** /api/v1/entities/workspaces/{workspaceId}/automationResults/search | Search request for AutomationResult
+[**search_entities_automation_results**](EntitiesApi.md#search_entities_automation_results) | **POST** /api/v1/entities/workspaces/{workspaceId}/automationResults/search | The search endpoint (beta)
 [**search_entities_automations**](EntitiesApi.md#search_entities_automations) | **POST** /api/v1/entities/workspaces/{workspaceId}/automations/search | The search endpoint (beta)
 [**search_entities_custom_application_settings**](EntitiesApi.md#search_entities_custom_application_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/search | The search endpoint (beta)
 [**search_entities_dashboard_plugins**](EntitiesApi.md#search_entities_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/search | The search endpoint (beta)
@@ -212,7 +212,7 @@ Method | HTTP request | Description
 [**search_entities_filter_views**](EntitiesApi.md#search_entities_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews/search | The search endpoint (beta)
 [**search_entities_knowledge_recommendations**](EntitiesApi.md#search_entities_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/search | The search endpoint (beta)
 [**search_entities_labels**](EntitiesApi.md#search_entities_labels) | **POST** /api/v1/entities/workspaces/{workspaceId}/labels/search | The search endpoint (beta)
-[**search_entities_memory_items**](EntitiesApi.md#search_entities_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems/search | Search request for MemoryItem
+[**search_entities_memory_items**](EntitiesApi.md#search_entities_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems/search | The search endpoint (beta)
 [**search_entities_metrics**](EntitiesApi.md#search_entities_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics/search | The search endpoint (beta)
 [**search_entities_user_data_filters**](EntitiesApi.md#search_entities_user_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/search | The search endpoint (beta)
 [**search_entities_visualization_objects**](EntitiesApi.md#search_entities_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/search | The search endpoint (beta)
@@ -235,13 +235,13 @@ Method | HTTP request | Description
 [**update_entity_filter_views**](EntitiesApi.md#update_entity_filter_views) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Put Filter views
 [**update_entity_identity_providers**](EntitiesApi.md#update_entity_identity_providers) | **PUT** /api/v1/entities/identityProviders/{id} | Put Identity Provider
 [**update_entity_jwks**](EntitiesApi.md#update_entity_jwks) | **PUT** /api/v1/entities/jwks/{id} | Put Jwk
-[**update_entity_knowledge_recommendations**](EntitiesApi.md#update_entity_knowledge_recommendations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
+[**update_entity_knowledge_recommendations**](EntitiesApi.md#update_entity_knowledge_recommendations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Put a Knowledge Recommendation
 [**update_entity_llm_endpoints**](EntitiesApi.md#update_entity_llm_endpoints) | **PUT** /api/v1/entities/llmEndpoints/{id} | PUT LLM endpoint entity
 [**update_entity_llm_providers**](EntitiesApi.md#update_entity_llm_providers) | **PUT** /api/v1/entities/llmProviders/{id} | PUT LLM Provider entity
-[**update_entity_memory_items**](EntitiesApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
+[**update_entity_memory_items**](EntitiesApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Put a Memory Item
 [**update_entity_metrics**](EntitiesApi.md#update_entity_metrics) | **PUT** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Put a Metric
 [**update_entity_notification_channels**](EntitiesApi.md#update_entity_notification_channels) | **PUT** /api/v1/entities/notificationChannels/{id} | Put Notification Channel entity
-[**update_entity_organization_settings**](EntitiesApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization entity
+[**update_entity_organization_settings**](EntitiesApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization Setting entity
 [**update_entity_organizations**](EntitiesApi.md#update_entity_organizations) | **PUT** /api/v1/entities/admin/organizations/{id} | Put Organization
 [**update_entity_themes**](EntitiesApi.md#update_entity_themes) | **PUT** /api/v1/entities/themes/{id} | Put Theming
 [**update_entity_user_data_filters**](EntitiesApi.md#update_entity_user_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Put a User Data Filter
@@ -2027,7 +2027,7 @@ No authorization required
 # **create_entity_knowledge_recommendations**
 > JsonApiKnowledgeRecommendationOutDocument create_entity_knowledge_recommendations(workspace_id, json_api_knowledge_recommendation_post_optional_id_document)
 
-
+Post Knowledge Recommendations
 
 ### Example
 
@@ -2095,6 +2095,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post Knowledge Recommendations
         api_response = api_instance.create_entity_knowledge_recommendations(workspace_id, json_api_knowledge_recommendation_post_optional_id_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -2103,6 +2104,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Post Knowledge Recommendations
         api_response = api_instance.create_entity_knowledge_recommendations(workspace_id, json_api_knowledge_recommendation_post_optional_id_document, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -2310,7 +2312,7 @@ No authorization required
 # **create_entity_memory_items**
 > JsonApiMemoryItemOutDocument create_entity_memory_items(workspace_id, json_api_memory_item_post_optional_id_document)
 
-
+Post Memory Items
 
 ### Example
 
@@ -2363,6 +2365,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post Memory Items
         api_response = api_instance.create_entity_memory_items(workspace_id, json_api_memory_item_post_optional_id_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -2371,6 +2374,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Post Memory Items
         api_response = api_instance.create_entity_memory_items(workspace_id, json_api_memory_item_post_optional_id_document, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -3923,20 +3927,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Delete a Color Pallette
         api_instance.delete_entity_color_palettes(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_color_palettes: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete a Color Pallette
-        api_instance.delete_entity_color_palettes(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_color_palettes: %s\n" % e)
 ```
@@ -3947,7 +3942,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -3998,20 +3992,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "sources==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Delete CSP Directives
         api_instance.delete_entity_csp_directives(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_csp_directives: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete CSP Directives
-        api_instance.delete_entity_csp_directives(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_csp_directives: %s\n" % e)
 ```
@@ -4022,7 +4007,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -4394,20 +4378,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;dashboardSlidesTemplate==DashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Delete Export Template entity
         api_instance.delete_entity_export_templates(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_export_templates: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete Export Template entity
-        api_instance.delete_entity_export_templates(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_export_templates: %s\n" % e)
 ```
@@ -4418,7 +4393,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -4597,20 +4571,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "identifiers==v1,v2,v3;customClaimMapping==MapValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Delete Identity Provider
         api_instance.delete_entity_identity_providers(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_identity_providers: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete Identity Provider
-        api_instance.delete_entity_identity_providers(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_identity_providers: %s\n" % e)
 ```
@@ -4621,7 +4586,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -4713,7 +4677,7 @@ No authorization required
 # **delete_entity_knowledge_recommendations**
 > delete_entity_knowledge_recommendations(workspace_id, object_id)
 
-
+Delete a Knowledge Recommendation
 
 ### Example
 
@@ -4736,18 +4700,11 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = entities_api.EntitiesApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     object_id = "objectId_example" # str | 
-    filter = "title==someString;description==someString;metric.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete a Knowledge Recommendation
         api_instance.delete_entity_knowledge_recommendations(workspace_id, object_id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_knowledge_recommendations: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        api_instance.delete_entity_knowledge_recommendations(workspace_id, object_id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_knowledge_recommendations: %s\n" % e)
 ```
@@ -4759,7 +4716,6 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **object_id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -4810,20 +4766,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "title==someString;provider==LlmEndpointProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Delete LLM endpoint entity
         api_instance.delete_entity_llm_endpoints(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_llm_endpoints: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete LLM endpoint entity
-        api_instance.delete_entity_llm_endpoints(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_llm_endpoints: %s\n" % e)
 ```
@@ -4834,7 +4781,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -4883,20 +4829,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Delete LLM Provider entity
         api_instance.delete_entity_llm_providers(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_llm_providers: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete LLM Provider entity
-        api_instance.delete_entity_llm_providers(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_llm_providers: %s\n" % e)
 ```
@@ -4907,7 +4844,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -4934,7 +4870,7 @@ No authorization required
 # **delete_entity_memory_items**
 > delete_entity_memory_items(workspace_id, object_id)
 
-
+Delete a Memory Item
 
 ### Example
 
@@ -4957,18 +4893,11 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = entities_api.EntitiesApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     object_id = "objectId_example" # str | 
-    filter = "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete a Memory Item
         api_instance.delete_entity_memory_items(workspace_id, object_id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_memory_items: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        api_instance.delete_entity_memory_items(workspace_id, object_id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_memory_items: %s\n" % e)
 ```
@@ -4980,7 +4909,6 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **object_id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -5094,20 +5022,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Delete Notification Channel entity
         api_instance.delete_entity_notification_channels(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_notification_channels: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete Notification Channel entity
-        api_instance.delete_entity_notification_channels(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_notification_channels: %s\n" % e)
 ```
@@ -5118,7 +5037,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -5145,7 +5063,7 @@ No authorization required
 # **delete_entity_organization_settings**
 > delete_entity_organization_settings(id)
 
-Delete Organization entity
+Delete Organization Setting entity
 
 ### Example
 
@@ -5167,20 +5085,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "content==JsonNodeValue;type==SettingTypeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
-        # Delete Organization entity
+        # Delete Organization Setting entity
         api_instance.delete_entity_organization_settings(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_organization_settings: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete Organization entity
-        api_instance.delete_entity_organization_settings(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_organization_settings: %s\n" % e)
 ```
@@ -5191,7 +5100,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -5240,20 +5148,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Delete Theming
         api_instance.delete_entity_themes(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_themes: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete Theming
-        api_instance.delete_entity_themes(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_themes: %s\n" % e)
 ```
@@ -5264,7 +5163,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -5380,20 +5278,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Delete UserGroup entity
         api_instance.delete_entity_user_groups(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_user_groups: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete UserGroup entity
-        api_instance.delete_entity_user_groups(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_user_groups: %s\n" % e)
 ```
@@ -5404,7 +5293,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -5520,20 +5408,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "authenticationId==someString;firstname==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Delete User entity
         api_instance.delete_entity_users(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_users: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete User entity
-        api_instance.delete_entity_users(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_users: %s\n" % e)
 ```
@@ -5544,7 +5423,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -5855,20 +5733,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "name==someString;earlyAccess==someString;parent.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Delete Workspace entity
         api_instance.delete_entity_workspaces(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_workspaces: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete Workspace entity
-        api_instance.delete_entity_workspaces(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_workspaces: %s\n" % e)
 ```
@@ -5879,7 +5748,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -5988,7 +5856,7 @@ No authorization required
 # **get_all_entities_aggregated_facts**
 > JsonApiAggregatedFactOutList get_all_entities_aggregated_facts(workspace_id)
 
-
+Get all Aggregated Facts
 
 ### Example
 
@@ -6028,6 +5896,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get all Aggregated Facts
         api_response = api_instance.get_all_entities_aggregated_facts(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -6036,6 +5905,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Aggregated Facts
         api_response = api_instance.get_all_entities_aggregated_facts(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -7932,7 +7802,7 @@ No authorization required
 # **get_all_entities_knowledge_recommendations**
 > JsonApiKnowledgeRecommendationOutList get_all_entities_knowledge_recommendations(workspace_id)
 
-
+Get all Knowledge Recommendations
 
 ### Example
 
@@ -7972,6 +7842,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get all Knowledge Recommendations
         api_response = api_instance.get_all_entities_knowledge_recommendations(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -7980,6 +7851,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Knowledge Recommendations
         api_response = api_instance.get_all_entities_knowledge_recommendations(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -8280,7 +8152,7 @@ No authorization required
 # **get_all_entities_memory_items**
 > JsonApiMemoryItemOutList get_all_entities_memory_items(workspace_id)
 
-
+Get all Memory Items
 
 ### Example
 
@@ -8320,6 +8192,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get all Memory Items
         api_response = api_instance.get_all_entities_memory_items(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -8328,6 +8201,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Memory Items
         api_response = api_instance.get_all_entities_memory_items(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -8470,7 +8344,7 @@ No authorization required
 # **get_all_entities_notification_channel_identifiers**
 > JsonApiNotificationChannelIdentifierOutList get_all_entities_notification_channel_identifiers()
 
-
+Get all Notification Channel Identifier entities
 
 ### Example
 
@@ -8505,6 +8379,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Notification Channel Identifier entities
         api_response = api_instance.get_all_entities_notification_channel_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -8625,7 +8500,7 @@ No authorization required
 # **get_all_entities_organization_settings**
 > JsonApiOrganizationSettingOutList get_all_entities_organization_settings()
 
-Get Organization entities
+Get Organization Setting entities
 
 ### Example
 
@@ -8660,7 +8535,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Get Organization entities
+        # Get Organization Setting entities
         api_response = api_instance.get_all_entities_organization_settings(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -9801,7 +9676,7 @@ No authorization required
 # **get_entity_aggregated_facts**
 > JsonApiAggregatedFactOutDocument get_entity_aggregated_facts(workspace_id, object_id)
 
-
+Get an Aggregated Fact
 
 ### Example
 
@@ -9836,6 +9711,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get an Aggregated Fact
         api_response = api_instance.get_entity_aggregated_facts(workspace_id, object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -9844,6 +9720,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get an Aggregated Fact
         api_response = api_instance.get_entity_aggregated_facts(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -11045,7 +10922,7 @@ No authorization required
 # **get_entity_entitlements**
 > JsonApiEntitlementOutDocument get_entity_entitlements(id)
 
-Get Entitlement
+Get Entitlement entity
 
 Space of the shared interest
 
@@ -11074,7 +10951,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Get Entitlement
+        # Get Entitlement entity
         api_response = api_instance.get_entity_entitlements(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -11083,7 +10960,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Get Entitlement
+        # Get Entitlement entity
         api_response = api_instance.get_entity_entitlements(id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -11701,7 +11578,7 @@ No authorization required
 # **get_entity_knowledge_recommendations**
 > JsonApiKnowledgeRecommendationOutDocument get_entity_knowledge_recommendations(workspace_id, object_id)
 
-
+Get a Knowledge Recommendation
 
 ### Example
 
@@ -11736,6 +11613,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get a Knowledge Recommendation
         api_response = api_instance.get_entity_knowledge_recommendations(workspace_id, object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -11744,6 +11622,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get a Knowledge Recommendation
         api_response = api_instance.get_entity_knowledge_recommendations(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -12029,7 +11908,7 @@ No authorization required
 # **get_entity_memory_items**
 > JsonApiMemoryItemOutDocument get_entity_memory_items(workspace_id, object_id)
 
-
+Get a Memory Item
 
 ### Example
 
@@ -12064,6 +11943,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get a Memory Item
         api_response = api_instance.get_entity_memory_items(workspace_id, object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -12072,6 +11952,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get a Memory Item
         api_response = api_instance.get_entity_memory_items(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -12203,7 +12084,7 @@ No authorization required
 # **get_entity_notification_channel_identifiers**
 > JsonApiNotificationChannelIdentifierOutDocument get_entity_notification_channel_identifiers(id)
 
-
+Get Notification Channel Identifier entity
 
 ### Example
 
@@ -12230,6 +12111,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get Notification Channel Identifier entity
         api_response = api_instance.get_entity_notification_channel_identifiers(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -12238,6 +12120,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Notification Channel Identifier entity
         api_response = api_instance.get_entity_notification_channel_identifiers(id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -12353,7 +12236,7 @@ No authorization required
 # **get_entity_organization_settings**
 > JsonApiOrganizationSettingOutDocument get_entity_organization_settings(id)
 
-Get Organization entity
+Get Organization Setting entity
 
 ### Example
 
@@ -12380,7 +12263,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Get Organization entity
+        # Get Organization Setting entity
         api_response = api_instance.get_entity_organization_settings(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -12389,7 +12272,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Get Organization entity
+        # Get Organization Setting entity
         api_response = api_instance.get_entity_organization_settings(id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -15661,7 +15544,7 @@ No authorization required
 # **patch_entity_knowledge_recommendations**
 > JsonApiKnowledgeRecommendationOutDocument patch_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_patch_document)
 
-
+Patch a Knowledge Recommendation
 
 ### Example
 
@@ -15728,6 +15611,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch a Knowledge Recommendation
         api_response = api_instance.patch_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -15736,6 +15620,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch a Knowledge Recommendation
         api_response = api_instance.patch_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -16065,7 +15950,7 @@ No authorization required
 # **patch_entity_memory_items**
 > JsonApiMemoryItemOutDocument patch_entity_memory_items(workspace_id, object_id, json_api_memory_item_patch_document)
 
-
+Patch a Memory Item
 
 ### Example
 
@@ -16117,6 +16002,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch a Memory Item
         api_response = api_instance.patch_entity_memory_items(workspace_id, object_id, json_api_memory_item_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -16125,6 +16011,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch a Memory Item
         api_response = api_instance.patch_entity_memory_items(workspace_id, object_id, json_api_memory_item_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -16366,7 +16253,7 @@ No authorization required
 # **patch_entity_organization_settings**
 > JsonApiOrganizationSettingOutDocument patch_entity_organization_settings(id, json_api_organization_setting_patch_document)
 
-Patch Organization entity
+Patch Organization Setting entity
 
 ### Example
 
@@ -16404,7 +16291,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Patch Organization entity
+        # Patch Organization Setting entity
         api_response = api_instance.patch_entity_organization_settings(id, json_api_organization_setting_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -16413,7 +16300,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Patch Organization entity
+        # Patch Organization Setting entity
         api_response = api_instance.patch_entity_organization_settings(id, json_api_organization_setting_patch_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -17470,7 +17357,7 @@ No authorization required
 # **search_entities_aggregated_facts**
 > JsonApiAggregatedFactOutList search_entities_aggregated_facts(workspace_id, entity_search_body)
 
-Search request for AggregatedFact
+The search endpoint (beta)
 
 ### Example
 
@@ -17518,7 +17405,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for AggregatedFact
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_aggregated_facts(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -17527,7 +17414,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for AggregatedFact
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_aggregated_facts(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -17866,7 +17753,7 @@ No authorization required
 # **search_entities_automation_results**
 > JsonApiAutomationResultOutList search_entities_automation_results(workspace_id, entity_search_body)
 
-Search request for AutomationResult
+The search endpoint (beta)
 
 ### Example
 
@@ -17914,7 +17801,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for AutomationResult
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_automation_results(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -17923,7 +17810,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for AutomationResult
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_automation_results(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -18955,7 +18842,7 @@ No authorization required
 # **search_entities_memory_items**
 > JsonApiMemoryItemOutList search_entities_memory_items(workspace_id, entity_search_body)
 
-Search request for MemoryItem
+The search endpoint (beta)
 
 ### Example
 
@@ -19003,7 +18890,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for MemoryItem
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_memory_items(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -19012,7 +18899,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for MemoryItem
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_memory_items(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -21514,7 +21401,7 @@ No authorization required
 # **update_entity_knowledge_recommendations**
 > JsonApiKnowledgeRecommendationOutDocument update_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_in_document)
 
-
+Put a Knowledge Recommendation
 
 ### Example
 
@@ -21581,6 +21468,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put a Knowledge Recommendation
         api_response = api_instance.update_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -21589,6 +21477,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put a Knowledge Recommendation
         api_response = api_instance.update_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_in_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -21821,7 +21710,7 @@ No authorization required
 # **update_entity_memory_items**
 > JsonApiMemoryItemOutDocument update_entity_memory_items(workspace_id, object_id, json_api_memory_item_in_document)
 
-
+Put a Memory Item
 
 ### Example
 
@@ -21873,6 +21762,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put a Memory Item
         api_response = api_instance.update_entity_memory_items(workspace_id, object_id, json_api_memory_item_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -21881,6 +21771,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put a Memory Item
         api_response = api_instance.update_entity_memory_items(workspace_id, object_id, json_api_memory_item_in_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -22122,7 +22013,7 @@ No authorization required
 # **update_entity_organization_settings**
 > JsonApiOrganizationSettingOutDocument update_entity_organization_settings(id, json_api_organization_setting_in_document)
 
-Put Organization entity
+Put Organization Setting entity
 
 ### Example
 
@@ -22160,7 +22051,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Put Organization entity
+        # Put Organization Setting entity
         api_response = api_instance.update_entity_organization_settings(id, json_api_organization_setting_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -22169,7 +22060,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Put Organization entity
+        # Put Organization Setting entity
         api_response = api_instance.update_entity_organization_settings(id, json_api_organization_setting_in_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

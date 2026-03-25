@@ -1494,7 +1494,7 @@
   "servers": [
     {
       "description": "Generated server url",
-      "url": "https://internal-testing.staging.stg11.panther.intgdc.com"
+      "url": "https://demo-cicd.cloud.gooddata.com"
     },
     {
       "description": "GoodData.CN endpoint",

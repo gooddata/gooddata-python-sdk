@@ -106,7 +106,6 @@ class OrganizationEntityAPIsApi(object):
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -133,16 +132,12 @@ class OrganizationEntityAPIsApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -850,7 +845,7 @@ class OrganizationEntityAPIsApi(object):
         id,
         **kwargs
     ):
-        """Delete Organization entity  # noqa: E501
+        """Delete Organization Setting entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -862,7 +857,6 @@ class OrganizationEntityAPIsApi(object):
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -932,7 +926,7 @@ class OrganizationEntityAPIsApi(object):
         self,
         **kwargs
     ):
-        """Get Organization entities  # noqa: E501
+        """Get Organization Setting entities  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1015,7 +1009,7 @@ class OrganizationEntityAPIsApi(object):
         id,
         **kwargs
     ):
-        """Get Organization entity  # noqa: E501
+        """Get Organization Setting entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1263,7 +1257,7 @@ class OrganizationEntityAPIsApi(object):
         json_api_organization_setting_patch_document,
         **kwargs
     ):
-        """Patch Organization entity  # noqa: E501
+        """Patch Organization Setting entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1438,7 +1432,7 @@ class OrganizationEntityAPIsApi(object):
         json_api_organization_setting_in_document,
         **kwargs
     ):
-        """Put Organization entity  # noqa: E501
+        """Put Organization Setting entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

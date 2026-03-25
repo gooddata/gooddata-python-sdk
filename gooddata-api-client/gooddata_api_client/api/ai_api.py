@@ -238,7 +238,6 @@ class AIApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -261,18 +260,14 @@ class AIApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -296,7 +291,6 @@ class AIApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'filter',
                 ],
                 'required': [
                     'workspace_id',
@@ -319,18 +313,14 @@ class AIApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -1393,7 +1383,7 @@ class AIApi(object):
         json_api_knowledge_recommendation_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_knowledge_recommendations  # noqa: E501
+        """Post Knowledge Recommendations  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1481,7 +1471,7 @@ class AIApi(object):
         json_api_memory_item_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_memory_items  # noqa: E501
+        """Post Memory Items  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1569,7 +1559,7 @@ class AIApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_knowledge_recommendations  # noqa: E501
+        """Delete a Knowledge Recommendation  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1582,7 +1572,6 @@ class AIApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -1656,7 +1645,7 @@ class AIApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_memory_items  # noqa: E501
+        """Delete a Memory Item  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1669,7 +1658,6 @@ class AIApi(object):
             object_id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -1742,7 +1730,7 @@ class AIApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_knowledge_recommendations  # noqa: E501
+        """Get all Knowledge Recommendations  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1832,7 +1820,7 @@ class AIApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_memory_items  # noqa: E501
+        """Get all Memory Items  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1923,7 +1911,7 @@ class AIApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_knowledge_recommendations  # noqa: E501
+        """Get a Knowledge Recommendation  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -2013,7 +2001,7 @@ class AIApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_memory_items  # noqa: E501
+        """Get a Memory Item  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -2343,7 +2331,7 @@ class AIApi(object):
         json_api_knowledge_recommendation_patch_document,
         **kwargs
     ):
-        """patch_entity_knowledge_recommendations  # noqa: E501
+        """Patch a Knowledge Recommendation  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -2435,7 +2423,7 @@ class AIApi(object):
         json_api_memory_item_patch_document,
         **kwargs
     ):
-        """patch_entity_memory_items  # noqa: E501
+        """Patch a Memory Item  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -2614,7 +2602,7 @@ class AIApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for MemoryItem  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -2703,7 +2691,7 @@ class AIApi(object):
         json_api_knowledge_recommendation_in_document,
         **kwargs
     ):
-        """update_entity_knowledge_recommendations  # noqa: E501
+        """Put a Knowledge Recommendation  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -2795,7 +2783,7 @@ class AIApi(object):
         json_api_memory_item_in_document,
         **kwargs
     ):
-        """update_entity_memory_items  # noqa: E501
+        """Put a Memory Item  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

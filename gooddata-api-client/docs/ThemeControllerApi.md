@@ -1,0 +1,482 @@
+# gooddata_api_client.ThemeControllerApi
+
+All URIs are relative to *http://localhost*
+
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**create_entity_themes**](ThemeControllerApi.md#create_entity_themes) | **POST** /api/v1/entities/themes | Post Theming
+[**delete_entity_themes**](ThemeControllerApi.md#delete_entity_themes) | **DELETE** /api/v1/entities/themes/{id} | Delete Theming
+[**get_all_entities_themes**](ThemeControllerApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
+[**get_entity_themes**](ThemeControllerApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | Get Theming
+[**patch_entity_themes**](ThemeControllerApi.md#patch_entity_themes) | **PATCH** /api/v1/entities/themes/{id} | Patch Theming
+[**update_entity_themes**](ThemeControllerApi.md#update_entity_themes) | **PUT** /api/v1/entities/themes/{id} | Put Theming
+
+
+# **create_entity_themes**
+> JsonApiThemeOutDocument create_entity_themes(json_api_theme_in_document)
+
+Post Theming
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import theme_controller_api
+from gooddata_api_client.model.json_api_theme_in_document import JsonApiThemeInDocument
+from gooddata_api_client.model.json_api_theme_out_document import JsonApiThemeOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = theme_controller_api.ThemeControllerApi(api_client)
+    json_api_theme_in_document = JsonApiThemeInDocument(
+        data=JsonApiThemeIn(
+            attributes=JsonApiColorPaletteInAttributes(
+                content={},
+                name="name_example",
+            ),
+            id="id1",
+            type="theme",
+        ),
+    ) # JsonApiThemeInDocument | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Post Theming
+        api_response = api_instance.create_entity_themes(json_api_theme_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ThemeControllerApi->create_entity_themes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **json_api_theme_in_document** | [**JsonApiThemeInDocument**](JsonApiThemeInDocument.md)|  |
+
+### Return type
+
+[**JsonApiThemeOutDocument**](JsonApiThemeOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_entity_themes**
+> delete_entity_themes(id)
+
+Delete Theming
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import theme_controller_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = theme_controller_api.ThemeControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete Theming
+        api_instance.delete_entity_themes(id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ThemeControllerApi->delete_entity_themes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_all_entities_themes**
+> JsonApiThemeOutList get_all_entities_themes()
+
+Get all Theming entities
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import theme_controller_api
+from gooddata_api_client.model.json_api_theme_out_list import JsonApiThemeOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = theme_controller_api.ThemeControllerApi(api_client)
+    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get all Theming entities
+        api_response = api_instance.get_all_entities_themes(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ThemeControllerApi->get_all_entities_themes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiThemeOutList**](JsonApiThemeOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_entity_themes**
+> JsonApiThemeOutDocument get_entity_themes(id)
+
+Get Theming
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import theme_controller_api
+from gooddata_api_client.model.json_api_theme_out_document import JsonApiThemeOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = theme_controller_api.ThemeControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Theming
+        api_response = api_instance.get_entity_themes(id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ThemeControllerApi->get_entity_themes: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get Theming
+        api_response = api_instance.get_entity_themes(id, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ThemeControllerApi->get_entity_themes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiThemeOutDocument**](JsonApiThemeOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **patch_entity_themes**
+> JsonApiThemeOutDocument patch_entity_themes(id, json_api_theme_patch_document)
+
+Patch Theming
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import theme_controller_api
+from gooddata_api_client.model.json_api_theme_patch_document import JsonApiThemePatchDocument
+from gooddata_api_client.model.json_api_theme_out_document import JsonApiThemeOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = theme_controller_api.ThemeControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_theme_patch_document = JsonApiThemePatchDocument(
+        data=JsonApiThemePatch(
+            attributes=JsonApiColorPalettePatchAttributes(
+                content={},
+                name="name_example",
+            ),
+            id="id1",
+            type="theme",
+        ),
+    ) # JsonApiThemePatchDocument | 
+    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Patch Theming
+        api_response = api_instance.patch_entity_themes(id, json_api_theme_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ThemeControllerApi->patch_entity_themes: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Patch Theming
+        api_response = api_instance.patch_entity_themes(id, json_api_theme_patch_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ThemeControllerApi->patch_entity_themes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_theme_patch_document** | [**JsonApiThemePatchDocument**](JsonApiThemePatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiThemeOutDocument**](JsonApiThemeOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **update_entity_themes**
+> JsonApiThemeOutDocument update_entity_themes(id, json_api_theme_in_document)
+
+Put Theming
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import theme_controller_api
+from gooddata_api_client.model.json_api_theme_in_document import JsonApiThemeInDocument
+from gooddata_api_client.model.json_api_theme_out_document import JsonApiThemeOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = theme_controller_api.ThemeControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_theme_in_document = JsonApiThemeInDocument(
+        data=JsonApiThemeIn(
+            attributes=JsonApiColorPaletteInAttributes(
+                content={},
+                name="name_example",
+            ),
+            id="id1",
+            type="theme",
+        ),
+    ) # JsonApiThemeInDocument | 
+    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Put Theming
+        api_response = api_instance.update_entity_themes(id, json_api_theme_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ThemeControllerApi->update_entity_themes: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Put Theming
+        api_response = api_instance.update_entity_themes(id, json_api_theme_in_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ThemeControllerApi->update_entity_themes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_theme_in_document** | [**JsonApiThemeInDocument**](JsonApiThemeInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiThemeOutDocument**](JsonApiThemeOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
