@@ -37,3 +37,8 @@ packages/gooddata-sdk/tests/export/exports/default/
 
 # Staging test fixture backups (created by conftest.py, self-heal on next run)
 *.staging-backup
+.cursor/rules/aida.mdc
+.claude/CLAUDE.md
+AGENTS.md
+.aiassistant/rules/aida.md
+.junie/guidelines.md

@@ -1,0 +1,19 @@
+# (C) 2026 GoodData Corporation
+# AIDA preferences
+#
+# Shared team defaults for AIDA behavior.
+# Developers can override locally in `.aida/preferences.local.yaml`.
+version: 1
+preferences:
+  # Operating mode: full (MCP server) or native (exported static rules).
+  mode: full
+  validation:
+    # auto: run automatically | ask: confirm before running | disabled: skip.
+    pre_commit: auto
+    pre_push: auto
+  commit:
+    # auto: execute server-side | ask: show command and confirm | disabled: skip.
+    mode: auto
+  pr:
+    # auto: execute server-side | ask: show command and confirm | disabled: skip.
+    mode: auto
