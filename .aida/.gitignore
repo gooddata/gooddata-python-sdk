@@ -1,2 +1,4 @@
 rules_selection.local.yaml
 git_policy.local.yaml
+preferences.local.yaml
+native-export-manifest.json
