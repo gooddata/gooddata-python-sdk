@@ -185,6 +185,13 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
         not_in_values = f["notIn"]["values"] if "values" in f["notIn"] else f["notIn"]["uris"]
 
         return NegativeAttributeFilter(label=ref_extract(f["displayForm"]), values=not_in_values)
+    elif "arbitraryAttributeFilter" in filter_obj:
+        f = filter_obj["arbitraryAttributeFilter"]
+        label = ref_extract(f["label"])
+        values = f.get("values", [])
+        if f.get("negativeSelection", False):
+            return NegativeAttributeFilter(label=label, values=values)
+        return PositiveAttributeFilter(label=label, values=values)
     elif "matchAttributeFilter" in filter_obj:
         f = filter_obj["matchAttributeFilter"]
         return MatchAttributeFilter(
