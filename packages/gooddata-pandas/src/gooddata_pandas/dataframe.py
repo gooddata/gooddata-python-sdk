@@ -1,7 +1,10 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Callable, Literal, Union
+from typing import TYPE_CHECKING, Callable, Literal, Union
+
+if TYPE_CHECKING:
+    import pyarrow as pa
 
 import pandas
 from gooddata_api_client import models
@@ -16,7 +19,20 @@ from gooddata_sdk import (
     ResultSizeDimensions,
 )
 
+from gooddata_pandas._arrow_types import TypesMapper
 from gooddata_pandas.data_access import compute_and_extract
+
+try:
+    from gooddata_pandas.arrow_convertor import (
+        compute_primary_labels,
+        compute_row_totals_indexes,
+        convert_arrow_table_to_dataframe,
+    )
+
+    _ARROW_AVAILABLE = True
+except ImportError:
+    _ARROW_AVAILABLE = False
+
 from gooddata_pandas.result_convertor import (
     _DEFAULT_PAGE_SIZE,
     DataFrameMetadata,
@@ -51,6 +67,12 @@ class DataFrameFactory:
         - for_exec_def(self, exec_def: ExecutionDefinition, label_overrides: Optional[LabelOverrides] = None,
             result_size_dimensions_limits: ResultSizeDimensions = (), result_size_bytes_limit: Optional[int] = None,
             page_size: int = _DEFAULT_PAGE_SIZE,) -> Tuple[pandas.DataFrame, DataFrameMetadata]:
+        - for_exec_def_arrow(self, exec_def: ExecutionDefinition,
+            on_execution_submitted: Optional[Callable[[Execution], None]] = None)
+            -> Tuple[pandas.DataFrame, DataFrameMetadata]:
+        - for_arrow_table(self, table: pa.Table,
+            execution_response: Optional[BareExecutionResponse] = None)
+            -> Tuple[pandas.DataFrame, DataFrameMetadata]:
         - for_exec_result_id(self, result_id: str, label_overrides: Optional[LabelOverrides] = None,
             result_cache_metadata: Optional[ResultCacheMetadata] = None,
             result_size_dimensions_limits: ResultSizeDimensions = (),
@@ -282,7 +304,8 @@ class DataFrameFactory:
             pandas.DataFrame: A DataFrame instance.
         """
         execution_definition = self._sdk.compute.build_exec_def_from_chat_result(
-            created_visualizations_response, is_cancellable=is_cancellable
+            created_visualizations_response,
+            is_cancellable=is_cancellable,
         )
         return self.for_exec_def(
             exec_def=execution_definition,
@@ -375,6 +398,124 @@ class DataFrameFactory:
             optimized=optimized,
             grand_totals_position=grand_totals_position,
         )
+
+    def for_exec_def_arrow(
+        self,
+        exec_def: ExecutionDefinition,
+        on_execution_submitted: Callable[[Execution], None] | None = None,
+        self_destruct: bool = False,
+        types_mapper: TypesMapper = TypesMapper.DEFAULT,
+        custom_mapping: dict | None = None,
+    ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
+        """
+        Creates a DataFrame from an execution definition using the Arrow IPC binary format.
+
+        Compared to for_exec_def(), this skips the page-by-page JSON deserialization and
+        converts the result in one shot via pyarrow, which is significantly faster for large results.
+
+        Returns the same ``(DataFrame, DataFrameMetadata)`` tuple as :meth:`for_exec_def` so that
+        callers can switch between the two paths without changing their code.
+
+        Requires pyarrow to be installed (pip install gooddata-pandas[arrow]).
+
+        Args:
+            exec_def (ExecutionDefinition): Execution definition.
+            on_execution_submitted (Optional[Callable[[Execution], None]]): Callback fired after
+                the execution is submitted to the backend.
+            self_destruct (bool): If True, Arrow buffers are freed during conversion, reducing
+                peak native memory at the cost of not being able to reuse the table.
+            types_mapper (TypesMapper): Controls how Arrow types are mapped to pandas dtypes.
+                ``TypesMapper.DEFAULT`` (default) — no mapping; produces float64 and object
+                    strings, identical to the JSON execution path.
+                ``TypesMapper.ARROW_STRINGS`` — strings use Arrow-backed StringDtype (lower
+                    memory, faster); all numeric types unchanged.
+                ``TypesMapper.CUSTOM`` — uses ``custom_mapping`` dict; raises ValueError if
+                    ``custom_mapping`` is not provided.
+            custom_mapping (Optional[dict]): Arrow type → pandas dtype mapping dict.
+                Only used when ``types_mapper=TypesMapper.CUSTOM``, ignored otherwise.
+
+        Returns:
+            Tuple[pandas.DataFrame, DataFrameMetadata]
+
+        """
+        if not _ARROW_AVAILABLE:
+            raise ImportError(
+                "pyarrow is required to use for_exec_def_arrow(). Install it with: pip install gooddata-pandas[arrow]"
+            )
+
+        execution = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
+
+        if on_execution_submitted is not None:
+            on_execution_submitted(execution)
+
+        exec_response = execution.bare_exec_response
+        table = exec_response.read_result_arrow()
+        df = convert_arrow_table_to_dataframe(
+            table, self_destruct=self_destruct, types_mapper=types_mapper, custom_mapping=custom_mapping
+        )
+        row_totals_indexes = compute_row_totals_indexes(table, exec_response.dimensions)
+        primary_labels_from_index, primary_labels_from_columns = compute_primary_labels(table)
+        metadata = DataFrameMetadata(
+            row_totals_indexes=row_totals_indexes,
+            column_totals_indexes=[],
+            execution_response=exec_response,
+            primary_labels_from_index=primary_labels_from_index,
+            primary_labels_from_columns=primary_labels_from_columns,
+        )
+        return df, metadata
+
+    def for_arrow_table(
+        self,
+        table: pa.Table,
+        execution_response: BareExecutionResponse | None = None,
+        self_destruct: bool = False,
+        types_mapper: TypesMapper = TypesMapper.DEFAULT,
+        custom_mapping: dict | None = None,
+    ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
+        """
+        Creates a DataFrame from an already-obtained PyArrow Table.
+
+        Use this when you have fetched Arrow IPC bytes yourself (e.g. from the raw export
+        REST API or a future Flight RPC endpoint) and converted them to a ``pa.Table``.
+        For the common case of submitting an execution and reading the result in one call,
+        use :meth:`for_exec_def_arrow` instead.
+
+        Args:
+            table: PyArrow Table as returned by the GoodData binary execution endpoint.
+            execution_response: Optional ``BareExecutionResponse`` from the execution that
+                produced this table. When provided, ``DataFrameMetadata.row_totals_indexes``
+                is computed accurately and ``DataFrameMetadata.execution_response`` is
+                populated. When omitted, ``row_totals_indexes`` is an empty list and
+                ``execution_response`` is ``None`` in the returned metadata.
+            self_destruct: If True, Arrow buffers are freed during conversion, reducing
+                peak native memory at the cost of not being able to reuse the table.
+            types_mapper: Controls how Arrow types are mapped to pandas dtypes.
+            custom_mapping: Arrow type → pandas dtype mapping dict.
+                Only used when ``types_mapper=TypesMapper.CUSTOM``.
+
+        Returns:
+            Tuple[pandas.DataFrame, DataFrameMetadata]
+        """
+        if not _ARROW_AVAILABLE:
+            raise ImportError(
+                "pyarrow is required to use for_arrow_table(). Install it with: pip install gooddata-pandas[arrow]"
+            )
+
+        df = convert_arrow_table_to_dataframe(
+            table, self_destruct=self_destruct, types_mapper=types_mapper, custom_mapping=custom_mapping
+        )
+        row_totals_indexes = (
+            compute_row_totals_indexes(table, execution_response.dimensions) if execution_response is not None else []
+        )
+        primary_labels_from_index, primary_labels_from_columns = compute_primary_labels(table)
+        metadata = DataFrameMetadata(
+            row_totals_indexes=row_totals_indexes,
+            column_totals_indexes=[],
+            execution_response=execution_response,
+            primary_labels_from_index=primary_labels_from_index,
+            primary_labels_from_columns=primary_labels_from_columns,
+        )
+        return df, metadata
 
     def for_exec_result_id(
         self,

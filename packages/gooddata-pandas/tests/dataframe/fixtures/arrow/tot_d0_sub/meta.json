@@ -1,0 +1,126 @@
+{
+  "result_id": "471a1f126185445653203b3a99961a86aa43fa7f:e4fc71222a50bd7e597c370649044f8f2d0534fbd64534f5ed218a411670c1b5",
+  "row_totals_indexes": [
+    [],
+    [
+      8,
+      9,
+      18,
+      19,
+      28,
+      29,
+      32,
+      33,
+      42,
+      43
+    ],
+    []
+  ],
+  "primary_labels_from_index": {
+    "0": {
+      "Midwest": "Midwest",
+      "Northeast": "Northeast",
+      "South": "South",
+      "Unknown": "Unknown",
+      "West": "West"
+    },
+    "1": {
+      "Clothing": "Clothing",
+      "Electronics": "Electronics",
+      "Home": "Home",
+      "Outdoor": "Outdoor"
+    }
+  },
+  "primary_labels_from_columns": {
+    "0": {
+      "Canceled": "Canceled",
+      "Delivered": "Delivered",
+      "Returned": "Returned"
+    }
+  },
+  "dimensions": [
+    {
+      "headers": [
+        {
+          "attributeHeader": {
+            "localIdentifier": "region",
+            "label": {
+              "id": "region",
+              "type": "label"
+            },
+            "labelName": "Region",
+            "attribute": {
+              "id": "region",
+              "type": "attribute"
+            },
+            "attributeName": "Region",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "region",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        },
+        {
+          "attributeHeader": {
+            "localIdentifier": "category",
+            "label": {
+              "id": "products.category",
+              "type": "label"
+            },
+            "labelName": "Category",
+            "attribute": {
+              "id": "products.category",
+              "type": "attribute"
+            },
+            "attributeName": "Category",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "products.category",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        },
+        {
+          "measureGroupHeaders": [
+            {
+              "localIdentifier": "price"
+            },
+            {
+              "localIdentifier": "order_amount",
+              "format": "$#,##0",
+              "name": "Order Amount"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "headers": [
+        {
+          "attributeHeader": {
+            "localIdentifier": "status",
+            "label": {
+              "id": "order_status",
+              "type": "label"
+            },
+            "labelName": "Order status",
+            "attribute": {
+              "id": "order_status",
+              "type": "attribute"
+            },
+            "attributeName": "Order status",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "order_status",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        }
+      ]
+    }
+  ]
+}

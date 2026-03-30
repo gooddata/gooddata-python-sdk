@@ -1,0 +1,58 @@
+{
+  "result_id": "d112ed32d89e491e5282d5e9d60a59fd176a2dd9:ba3f6632101fb9d1afb000c9bdac588c5a8d6d0c28a312516f69b743e0552aae",
+  "row_totals_indexes": [
+    []
+  ],
+  "primary_labels_from_index": {},
+  "primary_labels_from_columns": {
+    "0": {
+      "Clothing": "Clothing",
+      "Electronics": "Electronics",
+      "Home": "Home",
+      "Outdoor": "Outdoor"
+    }
+  },
+  "dimensions": [
+    {
+      "headers": [
+        {
+          "measureGroupHeaders": [
+            {
+              "localIdentifier": "price"
+            },
+            {
+              "localIdentifier": "order_amount",
+              "format": "$#,##0",
+              "name": "Order Amount"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "headers": [
+        {
+          "attributeHeader": {
+            "localIdentifier": "category",
+            "label": {
+              "id": "products.category",
+              "type": "label"
+            },
+            "labelName": "Category",
+            "attribute": {
+              "id": "products.category",
+              "type": "attribute"
+            },
+            "attributeName": "Category",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "products.category",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        }
+      ]
+    }
+  ]
+}
