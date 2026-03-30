@@ -329,6 +329,39 @@ class ExportService(CatalogServiceBase):
             max_retry=max_retry,
         )
 
+    def get_raw_export_bytes(
+        self,
+        workspace_id: str,
+        export_id: str,
+        timeout: float = 60.0,
+        retry: float = 0.2,
+        max_retry: float = 5.0,
+    ) -> bytes:
+        """
+        Poll the raw export endpoint for an already-submitted export and return the Arrow IPC bytes.
+
+        The caller is responsible for submitting the AFM execution and the export request
+        (via ``actions_api.create_raw_export``), then passing the resulting ``export_id`` here.
+
+        Args:
+            workspace_id (str): The ID of the target workspace.
+            export_id (str): Export ID returned by ``create_raw_export``.
+            timeout (float): Total seconds to wait for the export to complete. Defaults to 60.0.
+            retry (float): Initial wait between retries in seconds. Defaults to 0.2.
+            max_retry (float): Maximum wait between retries in seconds. Defaults to 5.0.
+
+        Returns:
+            bytes: Arrow IPC bytes that can be read with ``pyarrow.ipc.open_file``.
+        """
+        return self._get_exported_content(
+            workspace_id=workspace_id,
+            export_id=export_id,
+            get_func=self._actions_api.get_raw_export,
+            timeout=timeout,
+            retry=retry,
+            max_retry=max_retry,
+        )
+
     def export_slides(
         self,
         workspace_id: str,
