@@ -40,7 +40,7 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = ai_lake_api.AILakeApi(api_client)
-    instance_id = "instanceId_example" # str | 
+    instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
     operation_id = "operation-id_example" # str |  (optional)
 
     # example passing only required values which don't have defaults set
@@ -66,7 +66,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **instance_id** | **str**|  |
+ **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
  **operation_id** | **str**|  | [optional]
 
 ### Return type
@@ -118,7 +118,7 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = ai_lake_api.AILakeApi(api_client)
-    instance_id = "instanceId_example" # str | 
+    instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
 
     # example passing only required values which don't have defaults set
     try:
@@ -134,7 +134,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **instance_id** | **str**|  |
+ **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
 
 ### Return type
 

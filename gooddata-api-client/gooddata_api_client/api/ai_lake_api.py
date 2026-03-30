@@ -505,7 +505,7 @@ class AILakeApi(object):
         >>> result = thread.get()
 
         Args:
-            instance_id (str):
+            instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
 
         Keyword Args:
             operation_id (str): [optional]
@@ -589,7 +589,7 @@ class AILakeApi(object):
         >>> result = thread.get()
 
         Args:
-            instance_id (str):
+            instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
 
         Keyword Args:
             _return_http_data_only (bool): response data without head status

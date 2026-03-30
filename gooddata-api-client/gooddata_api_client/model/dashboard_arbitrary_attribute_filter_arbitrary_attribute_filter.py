@@ -99,6 +99,7 @@ class DashboardArbitraryAttributeFilterArbitraryAttributeFilter(ModelNormal):
             'filter_elements_by_date': ([AttributeFilterByDate],),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
+            'validate_elements_by': ([IdentifierRef],),  # noqa: E501
         }
 
     @cached_property
@@ -114,6 +115,7 @@ class DashboardArbitraryAttributeFilterArbitraryAttributeFilter(ModelNormal):
         'filter_elements_by_date': 'filterElementsByDate',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
         'title': 'title',  # noqa: E501
+        'validate_elements_by': 'validateElementsBy',  # noqa: E501
     }
 
     read_only_vars = {
@@ -166,6 +168,7 @@ class DashboardArbitraryAttributeFilterArbitraryAttributeFilter(ModelNormal):
             filter_elements_by_date ([AttributeFilterByDate]): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
+            validate_elements_by ([IdentifierRef]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -263,6 +266,7 @@ class DashboardArbitraryAttributeFilterArbitraryAttributeFilter(ModelNormal):
             filter_elements_by_date ([AttributeFilterByDate]): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
+            validate_elements_by ([IdentifierRef]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

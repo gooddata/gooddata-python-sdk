@@ -711,7 +711,7 @@ class FactsApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_aggregated_facts  # noqa: E501
+        """Get all Aggregated Facts  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -892,7 +892,7 @@ class FactsApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_aggregated_facts  # noqa: E501
+        """Get an Aggregated Fact  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1164,7 +1164,7 @@ class FactsApi(object):
         entity_search_body,
         **kwargs
     ):
-        """Search request for AggregatedFact  # noqa: E501
+        """The search endpoint (beta)  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

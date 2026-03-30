@@ -107,7 +107,11 @@ with gooddata_api_client.ApiClient() as api_client:
                 dashboard=DashboardContext(
                     id="id_example",
                     widgets=[
-                        DashboardContextWidgetsInner(None),
+                        WidgetDescriptor(
+                            title="title_example",
+                            widget_id="widget_id_example",
+                            widget_type="widget_type_example",
+                        ),
                     ],
                 ),
             ),
@@ -306,7 +310,11 @@ with gooddata_api_client.ApiClient() as api_client:
                 dashboard=DashboardContext(
                     id="id_example",
                     widgets=[
-                        DashboardContextWidgetsInner(None),
+                        WidgetDescriptor(
+                            title="title_example",
+                            widget_id="widget_id_example",
+                            widget_type="widget_type_example",
+                        ),
                     ],
                 ),
             ),

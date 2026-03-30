@@ -1,14 +1,19 @@
 # (C) 2021 GoodData Corporation
+# Load .env if it exists (staging secrets, gitignored)
+-include .env
+
 # list all full paths to files and directories in CWD containing "gooddata", filter out ones ending by "client"
 NO_CLIENT_GD_PROJECTS_ABS = $(filter-out %client, $(wildcard $(CURDIR)/packages/*gooddata*))
 # for each path, take only the base name of the path
 NO_CLIENT_GD_PROJECTS_DIRS = $(foreach dir, $(NO_CLIENT_GD_PROJECTS_ABS), $(notdir $(dir)))
 # TODO: replace API_VERSION in the future by call to API
 API_VERSION="v1"
-# Generate from localhost
+# Default: generate from localhost; use `make api-client STAGING=1` to download from remote
+ifdef STAGING
+BASE_URL="https://demo-cicd.cloud.gooddata.com"
+else
 BASE_URL="http://localhost:3000"
-# Generate from PROD
-# BASE_URL="https://demo-cicd.cloud.gooddata.com"
+endif
 URL="${BASE_URL}/api/${API_VERSION}/schemas"
 
 include ci_tests.mk
@@ -90,18 +95,21 @@ test:
 
 .PHONY: test-staging
 test-staging:
-	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required. Usage: make test-staging TOKEN=<api-token>" && exit 1)
-	$(MAKE) -C packages/gooddata-sdk test-staging TOKEN=$(TOKEN)
+	@test -n "$(STAGING_ADMIN_TOKEN)" || (echo "ERROR: STAGING_ADMIN_TOKEN is required. Set it in .env or pass on CLI." && exit 1)
+	@test -n "$(STAGING_DS_PASSWORD)" || (echo "ERROR: STAGING_DS_PASSWORD is required. Set it in .env or pass on CLI." && exit 1)
+	$(MAKE) -C packages/gooddata-sdk test-staging TOKEN=$(STAGING_ADMIN_TOKEN) DS_PASSWORD=$(STAGING_DS_PASSWORD)
 
 .PHONY: clean-staging
 clean-staging:
-	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required. Usage: make clean-staging TOKEN=<api-token>" && exit 1)
-	cd packages/tests-support && STAGING=1 TOKEN="$(TOKEN)" python clean_staging.py
+	@test -n "$(STAGING_ADMIN_TOKEN)" || (echo "ERROR: STAGING_ADMIN_TOKEN is required. Set it in .env or pass on CLI." && exit 1)
+	@test -n "$(STAGING_DS_PASSWORD)" || (echo "ERROR: STAGING_DS_PASSWORD is required. Set it in .env or pass on CLI." && exit 1)
+	cd packages/tests-support && STAGING=1 TOKEN="$(STAGING_ADMIN_TOKEN)" DS_PASSWORD="$(STAGING_DS_PASSWORD)" python clean_staging.py
 
 .PHONY: load-staging
 load-staging:
-	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required. Usage: make load-staging TOKEN=<api-token>" && exit 1)
-	cd packages/tests-support && STAGING=1 TOKEN="$(TOKEN)" python upload_demo_layout.py
+	@test -n "$(STAGING_ADMIN_TOKEN)" || (echo "ERROR: STAGING_ADMIN_TOKEN is required. Set it in .env or pass on CLI." && exit 1)
+	@test -n "$(STAGING_DS_PASSWORD)" || (echo "ERROR: STAGING_DS_PASSWORD is required. Set it in .env or pass on CLI." && exit 1)
+	cd packages/tests-support && STAGING=1 TOKEN="$(STAGING_ADMIN_TOKEN)" DS_PASSWORD="$(STAGING_DS_PASSWORD)" python upload_demo_layout.py
 
 .PHONY: release
 release:

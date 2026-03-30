@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/dataSources/demo-test-ds/generateLogicalModel
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSources/demo-test-ds/generateLogicalModel
       body:
         separator: __
         wdfPrefix: wdf
@@ -58,6 +58,7 @@ interactions:
                   isPrimaryKey: false
                   referencedTableId: campaigns
                   referencedTableColumn: campaign_id
+                  isNullable: true
                 - dataType: STRING
                   name: category
                   isPrimaryKey: false
@@ -121,14 +122,17 @@ interactions:
                   isPrimaryKey: false
                   referencedTableId: campaigns
                   referencedTableColumn: campaign_id
+                  isNullable: true
                 - dataType: INT
                   name: customer_id
                   isPrimaryKey: false
                   referencedTableId: customers
                   referencedTableColumn: customer_id
+                  isNullable: true
                 - dataType: DATE
                   name: date
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: STRING
                   name: order_id
                   isPrimaryKey: false
@@ -150,6 +154,7 @@ interactions:
                   isPrimaryKey: false
                   referencedTableId: products
                   referencedTableColumn: product_id
+                  isNullable: true
                 - dataType: NUMERIC
                   name: quantity
                   isPrimaryKey: false
@@ -157,9 +162,11 @@ interactions:
                 - dataType: STRING
                   name: wdf__region
                   isPrimaryKey: false
+                  isNullable: true
                 - dataType: STRING
                   name: wdf__state
                   isPrimaryKey: false
+                  isNullable: true
               id: order_lines
               path:
                 - demo
@@ -201,8 +208,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '10163'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: &id001
@@ -213,14 +222,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -292,6 +306,7 @@ interactions:
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: campaigns.campaign_id
                           type: attribute
@@ -465,6 +480,7 @@ interactions:
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: campaigns.campaign_id
                           type: attribute
@@ -475,6 +491,7 @@ interactions:
                     sources:
                       - column: customer_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: customers.customer_id
                           type: attribute
@@ -485,6 +502,7 @@ interactions:
                     sources:
                       - column: date
                         dataType: DATE
+                        isNullable: true
                         target:
                           id: date
                           type: date
@@ -495,6 +513,7 @@ interactions:
                     sources:
                       - column: product_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: products.product_id
                           type: attribute
@@ -698,6 +717,7 @@ interactions:
                   - HOUR_OF_DAY
                   - DAY_OF_WEEK
                   - DAY_OF_MONTH
+                  - DAY_OF_QUARTER
                   - DAY_OF_YEAR
                   - WEEK_OF_YEAR
                   - MONTH_OF_YEAR

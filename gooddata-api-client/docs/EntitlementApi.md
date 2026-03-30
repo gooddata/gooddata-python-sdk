@@ -5,7 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**get_all_entities_entitlements**](EntitlementApi.md#get_all_entities_entitlements) | **GET** /api/v1/entities/entitlements | Get Entitlements
-[**get_entity_entitlements**](EntitlementApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement
+[**get_entity_entitlements**](EntitlementApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement entity
 [**resolve_all_entitlements**](EntitlementApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 [**resolve_requested_entitlements**](EntitlementApi.md#resolve_requested_entitlements) | **POST** /api/v1/actions/resolveEntitlements | Values for requested public entitlements.
 
@@ -93,7 +93,7 @@ No authorization required
 # **get_entity_entitlements**
 > JsonApiEntitlementOutDocument get_entity_entitlements(id)
 
-Get Entitlement
+Get Entitlement entity
 
 Space of the shared interest
 
@@ -122,7 +122,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Get Entitlement
+        # Get Entitlement entity
         api_response = api_instance.get_entity_entitlements(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -131,7 +131,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Get Entitlement
+        # Get Entitlement entity
         api_response = api_instance.get_entity_entitlements(id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

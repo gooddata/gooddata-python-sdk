@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
       body: null
       headers:
         Accept:
@@ -21,6 +21,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
@@ -33,6 +35,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -40,7 +44,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -48,10 +52,10 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: af89d27af09d66a5e96186ca8d6cfa87
+          traceId: 5aab2cfc6796a4f4bc54f30d013c80a7
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings
       body:
         data:
           type: workspaceSetting
@@ -78,8 +82,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '283'
+          - '320'
         Content-Type:
           - application/json
         DATE: *id001
@@ -89,6 +95,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -96,7 +104,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -112,10 +120,10 @@ interactions:
                 originType: NATIVE
             type: workspaceSetting
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
       body: null
       headers:
         Accept:
@@ -133,6 +141,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
@@ -144,6 +154,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -151,7 +163,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -159,10 +171,10 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 60c5345f7fa8206c1d084eb77bf500c2
+          traceId: 60a429950db2919f6fe9e37c15a8e874
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings
       body:
         data:
           type: workspaceSetting
@@ -189,8 +201,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '290'
+          - '327'
         Content-Type:
           - application/json
         DATE: *id001
@@ -200,6 +214,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -207,7 +223,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -223,10 +239,10 @@ interactions:
                 originType: NATIVE
             type: workspaceSetting
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings?page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings?page=0&size=500
       body: null
       headers:
         Accept:
@@ -244,8 +260,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '771'
+          - '919'
         Content-Type:
           - application/json
         DATE: *id001
@@ -255,6 +273,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -262,7 +282,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -273,7 +293,7 @@ interactions:
                 type: LOCALE
               id: test_setting_1
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
               meta:
                 origin:
                   originId: demo
@@ -285,18 +305,18 @@ interactions:
                 type: FORMAT_LOCALE
               id: test_setting_2
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
               meta:
                 origin:
                   originId: demo
                   originType: NATIVE
               type: workspaceSetting
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings?page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings?page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings?page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings?page=1&size=500
   - request:
       method: DELETE
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
       body: null
       headers:
         Accept-Encoding:
@@ -312,6 +332,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -321,6 +343,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -328,13 +352,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: DELETE
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
       body: null
       headers:
         Accept-Encoding:
@@ -350,6 +374,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -359,6 +385,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -366,7 +394,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''

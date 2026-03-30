@@ -62,8 +62,7 @@
                               }
                             },
                             "drills": [],
-                            "properties": {
-                            }
+                            "properties": {}
                           }
                         },
                         {
@@ -85,8 +84,7 @@
                               }
                             },
                             "drills": [],
-                            "properties": {
-                            }
+                            "properties": {}
                           }
                         }
                       ]
@@ -141,8 +139,7 @@
                                 "type": "visualizationObject"
                               }
                             },
-                            "properties": {
-                            },
+                            "properties": {},
                             "title": "DHO simple",
                             "type": "insight"
                           }
@@ -213,8 +210,7 @@
                               }
                             },
                             "drills": [],
-                            "properties": {
-                            }
+                            "properties": {}
                           }
                         },
                         {
@@ -242,8 +238,7 @@
                               }
                             },
                             "drills": [],
-                            "properties": {
-                            }
+                            "properties": {}
                           }
                         },
                         {
@@ -271,8 +266,7 @@
                               }
                             },
                             "drills": [],
-                            "properties": {
-                            }
+                            "properties": {}
                           }
                         },
                         {
@@ -300,8 +294,7 @@
                               }
                             },
                             "drills": [],
-                            "properties": {
-                            }
+                            "properties": {}
                           }
                         },
                         {
@@ -329,8 +322,7 @@
                               }
                             },
                             "drills": [],
-                            "properties": {
-                            }
+                            "properties": {}
                           }
                         },
                         {
@@ -358,8 +350,7 @@
                               }
                             },
                             "drills": [],
-                            "properties": {
-                            }
+                            "properties": {}
                           }
                         },
                         {
@@ -387,8 +378,7 @@
                               }
                             },
                             "drills": [],
-                            "properties": {
-                            }
+                            "properties": {}
                           }
                         }
                       ]
@@ -531,7 +521,7 @@
             {
               "content": {
                 "format": "#,##0",
-                "maql": "SELECT {metric/amount_of_active_customers} WHERE (SELECT {metric/revenue} BY {attribute/customer_id}) \u003E  10000 "
+                "maql": "SELECT {metric/amount_of_active_customers} WHERE (SELECT {metric/revenue} BY {attribute/customer_id}) >  10000 "
               },
               "createdAt": "2025-08-07 11:45",
               "createdBy": {
@@ -597,7 +587,7 @@
             {
               "content": {
                 "format": "#,##0.0%",
-                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/customer_id}) \u003E 0)\n  /\n {metric/revenue}"
+                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               },
               "createdAt": "2025-08-07 11:45",
               "createdBy": {
@@ -610,7 +600,7 @@
             {
               "content": {
                 "format": "#,##0.0%",
-                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/customer_id}) \u003E 0)\n  /\n {metric/revenue}"
+                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               },
               "createdAt": "2025-08-07 11:45",
               "createdBy": {
@@ -623,7 +613,7 @@
             {
               "content": {
                 "format": "#,##0.0%",
-                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/product_id}) \u003E 0)\n  /\n {metric/revenue}"
+                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               },
               "createdAt": "2025-08-07 11:45",
               "createdBy": {
@@ -636,7 +626,7 @@
             {
               "content": {
                 "format": "#,##0.0%",
-                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/product_id}) \u003E 0)\n  /\n {metric/revenue}"
+                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               },
               "createdAt": "2025-08-07 11:45",
               "createdBy": {
@@ -1186,8 +1176,7 @@
                     }
                   }
                 ],
-                "properties": {
-                },
+                "properties": {},
                 "sorts": [
                   {
                     "attributeSortItem": {
@@ -1891,8 +1880,7 @@
                     }
                   }
                 ],
-                "properties": {
-                },
+                "properties": {},
                 "sorts": [
                   {
                     "attributeSortItem": {
@@ -2071,8 +2059,7 @@
                     }
                   }
                 ],
-                "properties": {
-                },
+                "properties": {},
                 "version": "2",
                 "visualizationUrl": "local:bar"
               },
@@ -2605,7 +2592,8 @@
                       "target": {
                         "id": "campaign_id",
                         "type": "attribute"
-                      }
+                      },
+                      "isNullable": true
                     }
                   ]
                 }
@@ -2639,7 +2627,7 @@
               ],
               "grain": [],
               "id": "campaign_channels_per_category",
-              "precedence":  1,
+              "precedence": 1,
               "references": [
                 {
                   "identifier": {
@@ -2654,7 +2642,8 @@
                       "target": {
                         "id": "campaign_channel_id",
                         "type": "attribute"
-                      }
+                      },
+                      "isNullable": true
                     }
                   ]
                 }
@@ -2903,7 +2892,8 @@
                       "target": {
                         "id": "campaign_id",
                         "type": "attribute"
-                      }
+                      },
+                      "isNullable": true
                     }
                   ]
                 },
@@ -2920,7 +2910,8 @@
                       "target": {
                         "id": "customer_id",
                         "type": "attribute"
-                      }
+                      },
+                      "isNullable": true
                     }
                   ]
                 },
@@ -2937,7 +2928,8 @@
                       "target": {
                         "id": "date",
                         "type": "date"
-                      }
+                      },
+                      "isNullable": true
                     }
                   ]
                 },
@@ -2954,7 +2946,8 @@
                       "target": {
                         "id": "product_id",
                         "type": "attribute"
-                      }
+                      },
+                      "isNullable": true
                     }
                   ]
                 }

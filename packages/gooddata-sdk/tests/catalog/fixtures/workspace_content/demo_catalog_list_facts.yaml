@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/facts?page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts?page=0&size=500
       body: null
       headers:
         Accept:
@@ -21,8 +21,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1546'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,14 +35,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -55,7 +62,7 @@ interactions:
                 areRelationsValid: true
               id: budget
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/budget
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/budget
               meta:
                 origin:
                   originId: demo
@@ -71,7 +78,7 @@ interactions:
                 areRelationsValid: true
               id: price
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/price
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/price
               meta:
                 origin:
                   originId: demo
@@ -87,7 +94,7 @@ interactions:
                 areRelationsValid: true
               id: quantity
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/quantity
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/quantity
               meta:
                 origin:
                   originId: demo
@@ -103,12 +110,12 @@ interactions:
                 areRelationsValid: true
               id: spend
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/spend
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/spend
               meta:
                 origin:
                   originId: demo
                   originType: NATIVE
               type: fact
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/facts?page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces/demo/facts?page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts?page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts?page=1&size=500

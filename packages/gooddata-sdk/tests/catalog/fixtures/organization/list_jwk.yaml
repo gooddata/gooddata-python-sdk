@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/jwks?page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks?page=0&size=500
       body: null
       headers:
         Accept:
@@ -21,8 +21,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '157'
+          - '231'
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,6 +35,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -40,17 +44,17 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
           data: []
           links:
-            self: http://localhost:3000/api/v1/entities/jwks?page=0&size=500
-            next: http://localhost:3000/api/v1/entities/jwks?page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks?page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks?page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/jwks/demoJwk1
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk1
       body: null
       headers:
         Accept:
@@ -68,6 +72,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
@@ -79,6 +85,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -86,7 +94,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -94,10 +102,10 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 2095cb66328f219df75316da3b9e2932
+          traceId: 2ddbb363e991dc452c4c13852cef611d
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/entities/jwks
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks
       body:
         data:
           id: demoJwk1
@@ -131,8 +139,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '1771'
+          - '1808'
         Content-Type:
           - application/json
         DATE: *id001
@@ -142,6 +152,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -149,7 +161,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -168,10 +180,10 @@ interactions:
             id: demoJwk1
             type: jwk
           links:
-            self: http://localhost:3000/api/v1/entities/jwks/demoJwk1
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk1
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/jwks/demoJwk2
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk2
       body: null
       headers:
         Accept:
@@ -189,6 +201,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
@@ -200,6 +214,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -207,7 +223,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -215,10 +231,10 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 163feabe392c4a4d8f4049d4e08f9fb7
+          traceId: b4b804b8c547855d1f7632a090590087
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/entities/jwks
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks
       body:
         data:
           id: demoJwk2
@@ -252,8 +268,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '1771'
+          - '1808'
         Content-Type:
           - application/json
         DATE: *id001
@@ -263,6 +281,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -270,7 +290,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -289,10 +309,10 @@ interactions:
             id: demoJwk2
             type: jwk
           links:
-            self: http://localhost:3000/api/v1/entities/jwks/demoJwk2
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk2
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/jwks?page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks?page=0&size=500
       body: null
       headers:
         Accept:
@@ -310,8 +330,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '3682'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -321,14 +343,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -346,7 +373,7 @@ interactions:
                   x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
               id: demoJwk1
               links:
-                self: http://localhost:3000/api/v1/entities/jwks/demoJwk1
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk1
               type: jwk
             - attributes:
                 content:
@@ -361,14 +388,14 @@ interactions:
                   x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
               id: demoJwk2
               links:
-                self: http://localhost:3000/api/v1/entities/jwks/demoJwk2
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk2
               type: jwk
           links:
-            self: http://localhost:3000/api/v1/entities/jwks?page=0&size=500
-            next: http://localhost:3000/api/v1/entities/jwks?page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks?page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks?page=1&size=500
   - request:
       method: DELETE
-      uri: http://localhost:3000/api/v1/entities/jwks/demoJwk1
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk1
       body: null
       headers:
         Accept-Encoding:
@@ -384,6 +411,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -393,6 +422,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -400,13 +431,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: DELETE
-      uri: http://localhost:3000/api/v1/entities/jwks/demoJwk2
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk2
       body: null
       headers:
         Accept-Encoding:
@@ -422,6 +453,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -431,6 +464,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -438,7 +473,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''

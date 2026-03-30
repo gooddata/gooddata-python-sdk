@@ -4,29 +4,29 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_entity_knowledge_recommendations**](AIApi.md#create_entity_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | 
-[**create_entity_memory_items**](AIApi.md#create_entity_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems | 
-[**delete_entity_knowledge_recommendations**](AIApi.md#delete_entity_knowledge_recommendations) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
-[**delete_entity_memory_items**](AIApi.md#delete_entity_memory_items) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
-[**get_all_entities_knowledge_recommendations**](AIApi.md#get_all_entities_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | 
-[**get_all_entities_memory_items**](AIApi.md#get_all_entities_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems | 
-[**get_entity_knowledge_recommendations**](AIApi.md#get_entity_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
-[**get_entity_memory_items**](AIApi.md#get_entity_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
+[**create_entity_knowledge_recommendations**](AIApi.md#create_entity_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | Post Knowledge Recommendations
+[**create_entity_memory_items**](AIApi.md#create_entity_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems | Post Memory Items
+[**delete_entity_knowledge_recommendations**](AIApi.md#delete_entity_knowledge_recommendations) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Delete a Knowledge Recommendation
+[**delete_entity_memory_items**](AIApi.md#delete_entity_memory_items) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Delete a Memory Item
+[**get_all_entities_knowledge_recommendations**](AIApi.md#get_all_entities_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | Get all Knowledge Recommendations
+[**get_all_entities_memory_items**](AIApi.md#get_all_entities_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems | Get all Memory Items
+[**get_entity_knowledge_recommendations**](AIApi.md#get_entity_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Get a Knowledge Recommendation
+[**get_entity_memory_items**](AIApi.md#get_entity_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Get a Memory Item
 [**metadata_check_organization**](AIApi.md#metadata_check_organization) | **POST** /api/v1/actions/organization/metadataCheck | (BETA) Check Organization Metadata Inconsistencies
 [**metadata_sync**](AIApi.md#metadata_sync) | **POST** /api/v1/actions/workspaces/{workspaceId}/metadataSync | (BETA) Sync Metadata to other services
 [**metadata_sync_organization**](AIApi.md#metadata_sync_organization) | **POST** /api/v1/actions/organization/metadataSync | (BETA) Sync organization scope Metadata to other services
-[**patch_entity_knowledge_recommendations**](AIApi.md#patch_entity_knowledge_recommendations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
-[**patch_entity_memory_items**](AIApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
+[**patch_entity_knowledge_recommendations**](AIApi.md#patch_entity_knowledge_recommendations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Patch a Knowledge Recommendation
+[**patch_entity_memory_items**](AIApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Patch a Memory Item
 [**search_entities_knowledge_recommendations**](AIApi.md#search_entities_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/search | The search endpoint (beta)
-[**search_entities_memory_items**](AIApi.md#search_entities_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems/search | Search request for MemoryItem
-[**update_entity_knowledge_recommendations**](AIApi.md#update_entity_knowledge_recommendations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | 
-[**update_entity_memory_items**](AIApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | 
+[**search_entities_memory_items**](AIApi.md#search_entities_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems/search | The search endpoint (beta)
+[**update_entity_knowledge_recommendations**](AIApi.md#update_entity_knowledge_recommendations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Put a Knowledge Recommendation
+[**update_entity_memory_items**](AIApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Put a Memory Item
 
 
 # **create_entity_knowledge_recommendations**
 > JsonApiKnowledgeRecommendationOutDocument create_entity_knowledge_recommendations(workspace_id, json_api_knowledge_recommendation_post_optional_id_document)
 
-
+Post Knowledge Recommendations
 
 ### Example
 
@@ -94,6 +94,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post Knowledge Recommendations
         api_response = api_instance.create_entity_knowledge_recommendations(workspace_id, json_api_knowledge_recommendation_post_optional_id_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -102,6 +103,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Post Knowledge Recommendations
         api_response = api_instance.create_entity_knowledge_recommendations(workspace_id, json_api_knowledge_recommendation_post_optional_id_document, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -143,7 +145,7 @@ No authorization required
 # **create_entity_memory_items**
 > JsonApiMemoryItemOutDocument create_entity_memory_items(workspace_id, json_api_memory_item_post_optional_id_document)
 
-
+Post Memory Items
 
 ### Example
 
@@ -196,6 +198,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post Memory Items
         api_response = api_instance.create_entity_memory_items(workspace_id, json_api_memory_item_post_optional_id_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -204,6 +207,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Post Memory Items
         api_response = api_instance.create_entity_memory_items(workspace_id, json_api_memory_item_post_optional_id_document, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -245,7 +249,7 @@ No authorization required
 # **delete_entity_knowledge_recommendations**
 > delete_entity_knowledge_recommendations(workspace_id, object_id)
 
-
+Delete a Knowledge Recommendation
 
 ### Example
 
@@ -268,18 +272,11 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = ai_api.AIApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     object_id = "objectId_example" # str | 
-    filter = "title==someString;description==someString;metric.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete a Knowledge Recommendation
         api_instance.delete_entity_knowledge_recommendations(workspace_id, object_id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling AIApi->delete_entity_knowledge_recommendations: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        api_instance.delete_entity_knowledge_recommendations(workspace_id, object_id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AIApi->delete_entity_knowledge_recommendations: %s\n" % e)
 ```
@@ -291,7 +288,6 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **object_id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -318,7 +314,7 @@ No authorization required
 # **delete_entity_memory_items**
 > delete_entity_memory_items(workspace_id, object_id)
 
-
+Delete a Memory Item
 
 ### Example
 
@@ -341,18 +337,11 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = ai_api.AIApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     object_id = "objectId_example" # str | 
-    filter = "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete a Memory Item
         api_instance.delete_entity_memory_items(workspace_id, object_id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling AIApi->delete_entity_memory_items: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        api_instance.delete_entity_memory_items(workspace_id, object_id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AIApi->delete_entity_memory_items: %s\n" % e)
 ```
@@ -364,7 +353,6 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **object_id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -391,7 +379,7 @@ No authorization required
 # **get_all_entities_knowledge_recommendations**
 > JsonApiKnowledgeRecommendationOutList get_all_entities_knowledge_recommendations(workspace_id)
 
-
+Get all Knowledge Recommendations
 
 ### Example
 
@@ -431,6 +419,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get all Knowledge Recommendations
         api_response = api_instance.get_all_entities_knowledge_recommendations(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -439,6 +428,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Knowledge Recommendations
         api_response = api_instance.get_all_entities_knowledge_recommendations(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -485,7 +475,7 @@ No authorization required
 # **get_all_entities_memory_items**
 > JsonApiMemoryItemOutList get_all_entities_memory_items(workspace_id)
 
-
+Get all Memory Items
 
 ### Example
 
@@ -525,6 +515,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get all Memory Items
         api_response = api_instance.get_all_entities_memory_items(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -533,6 +524,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Memory Items
         api_response = api_instance.get_all_entities_memory_items(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -579,7 +571,7 @@ No authorization required
 # **get_entity_knowledge_recommendations**
 > JsonApiKnowledgeRecommendationOutDocument get_entity_knowledge_recommendations(workspace_id, object_id)
 
-
+Get a Knowledge Recommendation
 
 ### Example
 
@@ -614,6 +606,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get a Knowledge Recommendation
         api_response = api_instance.get_entity_knowledge_recommendations(workspace_id, object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -622,6 +615,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get a Knowledge Recommendation
         api_response = api_instance.get_entity_knowledge_recommendations(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -665,7 +659,7 @@ No authorization required
 # **get_entity_memory_items**
 > JsonApiMemoryItemOutDocument get_entity_memory_items(workspace_id, object_id)
 
-
+Get a Memory Item
 
 ### Example
 
@@ -700,6 +694,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get a Memory Item
         api_response = api_instance.get_entity_memory_items(workspace_id, object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -708,6 +703,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get a Memory Item
         api_response = api_instance.get_entity_memory_items(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -938,7 +934,7 @@ No authorization required
 # **patch_entity_knowledge_recommendations**
 > JsonApiKnowledgeRecommendationOutDocument patch_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_patch_document)
 
-
+Patch a Knowledge Recommendation
 
 ### Example
 
@@ -1005,6 +1001,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch a Knowledge Recommendation
         api_response = api_instance.patch_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1013,6 +1010,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch a Knowledge Recommendation
         api_response = api_instance.patch_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1055,7 +1053,7 @@ No authorization required
 # **patch_entity_memory_items**
 > JsonApiMemoryItemOutDocument patch_entity_memory_items(workspace_id, object_id, json_api_memory_item_patch_document)
 
-
+Patch a Memory Item
 
 ### Example
 
@@ -1107,6 +1105,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch a Memory Item
         api_response = api_instance.patch_entity_memory_items(workspace_id, object_id, json_api_memory_item_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1115,6 +1114,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch a Memory Item
         api_response = api_instance.patch_entity_memory_items(workspace_id, object_id, json_api_memory_item_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1256,7 +1256,7 @@ No authorization required
 # **search_entities_memory_items**
 > JsonApiMemoryItemOutList search_entities_memory_items(workspace_id, entity_search_body)
 
-Search request for MemoryItem
+The search endpoint (beta)
 
 ### Example
 
@@ -1304,7 +1304,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Search request for MemoryItem
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_memory_items(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1313,7 +1313,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Search request for MemoryItem
+        # The search endpoint (beta)
         api_response = api_instance.search_entities_memory_items(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1355,7 +1355,7 @@ No authorization required
 # **update_entity_knowledge_recommendations**
 > JsonApiKnowledgeRecommendationOutDocument update_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_in_document)
 
-
+Put a Knowledge Recommendation
 
 ### Example
 
@@ -1422,6 +1422,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put a Knowledge Recommendation
         api_response = api_instance.update_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1430,6 +1431,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put a Knowledge Recommendation
         api_response = api_instance.update_entity_knowledge_recommendations(workspace_id, object_id, json_api_knowledge_recommendation_in_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1472,7 +1474,7 @@ No authorization required
 # **update_entity_memory_items**
 > JsonApiMemoryItemOutDocument update_entity_memory_items(workspace_id, object_id, json_api_memory_item_in_document)
 
-
+Put a Memory Item
 
 ### Example
 
@@ -1524,6 +1526,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put a Memory Item
         api_response = api_instance.update_entity_memory_items(workspace_id, object_id, json_api_memory_item_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1532,6 +1535,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put a Memory Item
         api_response = api_instance.update_entity_memory_items(workspace_id, object_id, json_api_memory_item_in_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

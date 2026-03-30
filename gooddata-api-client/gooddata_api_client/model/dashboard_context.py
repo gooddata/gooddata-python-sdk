@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.dashboard_context_widgets_inner import DashboardContextWidgetsInner
-    globals()['DashboardContextWidgetsInner'] = DashboardContextWidgetsInner
+    from gooddata_api_client.model.widget_descriptor import WidgetDescriptor
+    globals()['WidgetDescriptor'] = WidgetDescriptor
 
 
 class DashboardContext(ModelNormal):
@@ -89,7 +89,7 @@ class DashboardContext(ModelNormal):
         lazy_import()
         return {
             'id': (str,),  # noqa: E501
-            'widgets': ([DashboardContextWidgetsInner],),  # noqa: E501
+            'widgets': ([WidgetDescriptor],),  # noqa: E501
         }
 
     @cached_property
@@ -114,7 +114,7 @@ class DashboardContext(ModelNormal):
 
         Args:
             id (str): Dashboard object ID.
-            widgets ([DashboardContextWidgetsInner]): Widgets currently visible on the dashboard.
+            widgets ([WidgetDescriptor]): Widgets currently visible on the dashboard.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -205,7 +205,7 @@ class DashboardContext(ModelNormal):
 
         Args:
             id (str): Dashboard object ID.
-            widgets ([DashboardContextWidgetsInner]): Widgets currently visible on the dashboard.
+            widgets ([WidgetDescriptor]): Widgets currently visible on the dashboard.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

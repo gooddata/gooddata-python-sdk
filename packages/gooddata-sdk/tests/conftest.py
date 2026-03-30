@@ -58,6 +58,39 @@ def test_config(request):
     return config
 
 
+@pytest.fixture(scope="session", autouse=True)
+def _patch_ds_credentials(test_config):
+    """Override demo-test-ds password in memory when DS_PASSWORD env var is set.
+
+    The credentials file (data_sources_credentials.yaml) is read by
+    _credentials_from_file() and used by put_declarative_data_sources and
+    test_data_sources_connection. Instead of rewriting the file on disk,
+    we wrap the static method to patch the returned dict in memory.
+    """
+    env_ds_password = os.environ.get("DS_PASSWORD")
+    if not env_ds_password:
+        yield
+        return
+
+    from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
+
+    original = CatalogDataSourceService._credentials_from_file
+
+    @staticmethod
+    def _patched_credentials_from_file(credentials_path):
+        credentials = original(credentials_path)
+        if "demo-test-ds" in credentials:
+            credentials["demo-test-ds"] = env_ds_password
+        return credentials
+
+    CatalogDataSourceService._credentials_from_file = _patched_credentials_from_file
+    logger.info("Patched _credentials_from_file to override demo-test-ds password in memory")
+
+    yield
+
+    CatalogDataSourceService._credentials_from_file = staticmethod(original)
+
+
 @pytest.fixture()
 def setenvvar(monkeypatch):
     with mock.patch.dict(os.environ, clear=True):
@@ -73,7 +106,7 @@ def setenvvar(monkeypatch):
 
 
 @pytest.fixture(scope="session", autouse=True)
-def staging_preflight(test_config):
+def staging_preflight(test_config, _patch_ds_credentials):
     """When staging: true, verify connectivity and that required resources exist.
 
     Calls pytest.exit() on failure so the session stops immediately with a clear

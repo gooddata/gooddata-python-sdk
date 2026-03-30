@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
         label: order_status
         dependsOn:
@@ -31,6 +31,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '261'
         Content-Type:
@@ -43,6 +45,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -50,7 +54,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -67,10 +71,10 @@ interactions:
             count: 2
             offset: 0
             next: null
-          cacheId: cdd479c1c2798e062071ebcbccf4863c
+          cacheId: aa29ce0b0acfc72b7b488152b1dc394c
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
         label: order_status
         dependsOn: []
@@ -95,6 +99,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '214'
         Content-Type:
@@ -106,6 +112,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -113,7 +121,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -128,10 +136,10 @@ interactions:
             count: 1
             offset: 0
             next: null
-          cacheId: 2ede5e5d6fef293030612ba53d1c03d3
+          cacheId: 3c7c819807baf97f6bc15e014b9139e8
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
         label: order_status
         dependsOn: []
@@ -154,6 +162,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '308'
         Content-Type:
@@ -165,6 +175,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -172,7 +184,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -191,10 +203,10 @@ interactions:
             count: 3
             offset: 0
             next: null
-          cacheId: 00aee686b7cab94db573f3c5959fed9d
+          cacheId: 8fb034e5fd0dd18ae306dfacb1dd4f1f
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
         label: order_status
         dependsOn:
@@ -225,6 +237,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '166'
         Content-Type:
@@ -236,6 +250,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -243,7 +259,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -256,10 +272,10 @@ interactions:
             count: 0
             offset: 0
             next: null
-          cacheId: 48c730a16b1f296e656101fef1321c5a
+          cacheId: bae075546ebbe3012d270ac44be24d3d
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
         label: order_status
         dependsOn:
@@ -291,6 +307,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '166'
         Content-Type:
@@ -302,6 +320,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -309,7 +329,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -322,10 +342,10 @@ interactions:
             count: 0
             offset: 0
             next: null
-          cacheId: 24fcaea2652f1011de237877e5a01712
+          cacheId: 02c087ef137761b52b78cb53e865d9b2
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
         label: order_status
         dependsOn:
@@ -353,6 +373,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '261'
         Content-Type:
@@ -364,6 +386,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -371,7 +395,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -388,10 +412,10 @@ interactions:
             count: 2
             offset: 0
             next: null
-          cacheId: cdd479c1c2798e062071ebcbccf4863c
+          cacheId: aa29ce0b0acfc72b7b488152b1dc394c
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
         label: order_status
         dependsOn: []
@@ -415,6 +439,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '214'
         Content-Type:
@@ -426,6 +452,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -433,7 +461,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -448,10 +476,10 @@ interactions:
             count: 1
             offset: 0
             next: null
-          cacheId: 7a876ef250782d8e901e3392b9d9c750
+          cacheId: aac53166877308a6883016dcb824971b
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
         label: order_status
         dependsOn: []
@@ -476,6 +504,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '259'
         Content-Type:
@@ -487,6 +517,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -494,7 +526,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -511,10 +543,10 @@ interactions:
             count: 2
             offset: 0
             next: null
-          cacheId: b1e97871df34a871ba8ca97a94b9ce73
+          cacheId: efd977c2fe3f1e299ce49dd480cd6fc8
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
         label: order_status
         dependsOn: []
@@ -538,6 +570,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '308'
         Content-Type:
@@ -549,6 +583,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -556,7 +592,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -575,10 +611,10 @@ interactions:
             count: 3
             offset: 0
             next: null
-          cacheId: 8dbe403937161cff935db7c7db059be4
+          cacheId: 411ad9655331584b50df58a262a29cf4
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements?offset=1&limit=1
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements?offset=1&limit=1
       body:
         label: order_status
         dependsOn: []
@@ -601,8 +637,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '312'
+          - '349'
         Content-Type:
           - application/json
         DATE: *id001
@@ -612,6 +650,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -619,7 +659,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -633,5 +673,5 @@ interactions:
             total: 3
             count: 1
             offset: 1
-            next: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements?limit=1&offset=2
-          cacheId: 00aee686b7cab94db573f3c5959fed9d
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements?limit=1&offset=2
+          cacheId: 8fb034e5fd0dd18ae306dfacb1dd4f1f

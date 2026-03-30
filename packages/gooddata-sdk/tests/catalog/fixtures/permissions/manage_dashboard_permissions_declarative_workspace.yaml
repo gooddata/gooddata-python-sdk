@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
       body:
         - permissions:
             - VIEW
@@ -30,6 +30,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: &id001
           - PLACEHOLDER
         Expires:
@@ -38,6 +40,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -45,13 +49,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
       body: null
       headers:
         Accept:
@@ -69,6 +73,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '209'
         Content-Type:
@@ -80,6 +86,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -87,7 +95,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -105,7 +113,7 @@ interactions:
           users: []
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo
       body: null
       headers:
         Accept:
@@ -123,8 +131,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '38392'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -134,14 +144,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -1714,6 +1729,7 @@ interactions:
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: campaign_id
                           type: attribute
@@ -1746,6 +1762,7 @@ interactions:
                     sources:
                       - column: campaign_channel_id
                         dataType: STRING
+                        isNullable: true
                         target:
                           id: campaign_channel_id
                           type: attribute
@@ -1923,6 +1940,7 @@ interactions:
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: campaign_id
                           type: attribute
@@ -1933,6 +1951,7 @@ interactions:
                     sources:
                       - column: customer_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: customer_id
                           type: attribute
@@ -1943,6 +1962,7 @@ interactions:
                     sources:
                       - column: date
                         dataType: DATE
+                        isNullable: true
                         target:
                           id: date
                           type: date
@@ -1953,6 +1973,7 @@ interactions:
                     sources:
                       - column: product_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: product_id
                           type: attribute
@@ -2033,7 +2054,7 @@ interactions:
                 title: Date
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
       body:
         - permissions: []
           assigneeIdentifier:
@@ -2058,6 +2079,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -2065,6 +2088,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2072,13 +2097,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
       body: null
       headers:
         Accept:
@@ -2096,6 +2121,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '39'
         Content-Type:
@@ -2107,6 +2134,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2114,7 +2143,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:

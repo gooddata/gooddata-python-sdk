@@ -5,14 +5,14 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_entity_organization_settings**](OrganizationEntityAPIsApi.md#create_entity_organization_settings) | **POST** /api/v1/entities/organizationSettings | Post Organization Setting entities
-[**delete_entity_organization_settings**](OrganizationEntityAPIsApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | Delete Organization entity
-[**get_all_entities_organization_settings**](OrganizationEntityAPIsApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization entities
-[**get_entity_organization_settings**](OrganizationEntityAPIsApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization entity
+[**delete_entity_organization_settings**](OrganizationEntityAPIsApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | Delete Organization Setting entity
+[**get_all_entities_organization_settings**](OrganizationEntityAPIsApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization Setting entities
+[**get_entity_organization_settings**](OrganizationEntityAPIsApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization Setting entity
 [**get_entity_organizations**](OrganizationEntityAPIsApi.md#get_entity_organizations) | **GET** /api/v1/entities/admin/organizations/{id} | Get Organizations
 [**get_organization**](OrganizationEntityAPIsApi.md#get_organization) | **GET** /api/v1/entities/organization | Get current organization info
-[**patch_entity_organization_settings**](OrganizationEntityAPIsApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | Patch Organization entity
+[**patch_entity_organization_settings**](OrganizationEntityAPIsApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | Patch Organization Setting entity
 [**patch_entity_organizations**](OrganizationEntityAPIsApi.md#patch_entity_organizations) | **PATCH** /api/v1/entities/admin/organizations/{id} | Patch Organization
-[**update_entity_organization_settings**](OrganizationEntityAPIsApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization entity
+[**update_entity_organization_settings**](OrganizationEntityAPIsApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization Setting entity
 [**update_entity_organizations**](OrganizationEntityAPIsApi.md#update_entity_organizations) | **PUT** /api/v1/entities/admin/organizations/{id} | Put Organization
 
 
@@ -94,7 +94,7 @@ No authorization required
 # **delete_entity_organization_settings**
 > delete_entity_organization_settings(id)
 
-Delete Organization entity
+Delete Organization Setting entity
 
 ### Example
 
@@ -116,20 +116,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = organization_entity_apis_api.OrganizationEntityAPIsApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "content==JsonNodeValue;type==SettingTypeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
-        # Delete Organization entity
+        # Delete Organization Setting entity
         api_instance.delete_entity_organization_settings(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling OrganizationEntityAPIsApi->delete_entity_organization_settings: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete Organization entity
-        api_instance.delete_entity_organization_settings(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationEntityAPIsApi->delete_entity_organization_settings: %s\n" % e)
 ```
@@ -140,7 +131,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 
@@ -167,7 +157,7 @@ No authorization required
 # **get_all_entities_organization_settings**
 > JsonApiOrganizationSettingOutList get_all_entities_organization_settings()
 
-Get Organization entities
+Get Organization Setting entities
 
 ### Example
 
@@ -202,7 +192,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Get Organization entities
+        # Get Organization Setting entities
         api_response = api_instance.get_all_entities_organization_settings(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -245,7 +235,7 @@ No authorization required
 # **get_entity_organization_settings**
 > JsonApiOrganizationSettingOutDocument get_entity_organization_settings(id)
 
-Get Organization entity
+Get Organization Setting entity
 
 ### Example
 
@@ -272,7 +262,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Get Organization entity
+        # Get Organization Setting entity
         api_response = api_instance.get_entity_organization_settings(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -281,7 +271,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Get Organization entity
+        # Get Organization Setting entity
         api_response = api_instance.get_entity_organization_settings(id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -473,7 +463,7 @@ No authorization required
 # **patch_entity_organization_settings**
 > JsonApiOrganizationSettingOutDocument patch_entity_organization_settings(id, json_api_organization_setting_patch_document)
 
-Patch Organization entity
+Patch Organization Setting entity
 
 ### Example
 
@@ -511,7 +501,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Patch Organization entity
+        # Patch Organization Setting entity
         api_response = api_instance.patch_entity_organization_settings(id, json_api_organization_setting_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -520,7 +510,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Patch Organization entity
+        # Patch Organization Setting entity
         api_response = api_instance.patch_entity_organization_settings(id, json_api_organization_setting_patch_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -665,7 +655,7 @@ No authorization required
 # **update_entity_organization_settings**
 > JsonApiOrganizationSettingOutDocument update_entity_organization_settings(id, json_api_organization_setting_in_document)
 
-Put Organization entity
+Put Organization Setting entity
 
 ### Example
 
@@ -703,7 +693,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Put Organization entity
+        # Put Organization Setting entity
         api_response = api_instance.update_entity_organization_settings(id, json_api_organization_setting_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -712,7 +702,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Put Organization entity
+        # Put Organization Setting entity
         api_response = api_instance.update_entity_organization_settings(id, json_api_organization_setting_in_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
