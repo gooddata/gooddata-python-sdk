@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/logicalModel
       body: null
       headers:
         Accept:
@@ -14,41 +11,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/logicalModel
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: &id001
-          - PLACEHOLDER
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           ldm:
@@ -442,9 +407,39 @@ interactions:
                 tags:
                   - Date
                 title: Date
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '1196'
+        Content-Type:
+          - application/json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSources/demo-test-ds/scan
       body:
         scanTables: true
         scanViews: false
@@ -460,40 +455,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSources/demo-test-ds/scan
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           pdm:
@@ -645,41 +609,68 @@ interactions:
                   - products
                 type: TABLE
           warnings: []
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '413'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSources/demo-test-ds/generateLogicalModel
       body:
-        separator: __
-        wdfPrefix: wdf
         pdm:
           tables:
             - columns:
                 - dataType: NUMERIC
+                  isNullable: true
+                  isPrimaryKey: false
                   name: budget
-                  isPrimaryKey: false
-                  isNullable: true
                 - dataType: STRING
-                  name: campaign_channel_id
-                  isPrimaryKey: true
                   isNullable: false
+                  isPrimaryKey: true
+                  name: campaign_channel_id
                 - dataType: INT
+                  isNullable: true
+                  isPrimaryKey: false
                   name: campaign_id
-                  isPrimaryKey: false
-                  referencedTableId: campaigns
                   referencedTableColumn: campaign_id
-                  isNullable: true
+                  referencedTableId: campaigns
                 - dataType: STRING
+                  isNullable: true
+                  isPrimaryKey: false
                   name: category
-                  isPrimaryKey: false
-                  isNullable: true
                 - dataType: NUMERIC
+                  isNullable: true
+                  isPrimaryKey: false
                   name: spend
-                  isPrimaryKey: false
-                  isNullable: true
                 - dataType: STRING
-                  name: type
-                  isPrimaryKey: false
                   isNullable: true
+                  isPrimaryKey: false
+                  name: type
               id: campaign_channels
               path:
                 - demo
@@ -687,13 +678,13 @@ interactions:
               type: TABLE
             - columns:
                 - dataType: INT
-                  name: campaign_id
-                  isPrimaryKey: true
                   isNullable: false
+                  isPrimaryKey: true
+                  name: campaign_id
                 - dataType: STRING
-                  name: campaign_name
-                  isPrimaryKey: false
                   isNullable: true
+                  isPrimaryKey: false
+                  name: campaign_name
               id: campaigns
               path:
                 - demo
@@ -701,25 +692,25 @@ interactions:
               type: TABLE
             - columns:
                 - dataType: INT
-                  name: customer_id
-                  isPrimaryKey: true
                   isNullable: false
+                  isPrimaryKey: true
+                  name: customer_id
                 - dataType: STRING
+                  isNullable: true
+                  isPrimaryKey: false
                   name: customer_name
-                  isPrimaryKey: false
-                  isNullable: true
                 - dataType: STRING
+                  isNullable: true
+                  isPrimaryKey: false
                   name: geo__state__location
-                  isPrimaryKey: false
-                  isNullable: true
                 - dataType: STRING
+                  isNullable: true
+                  isPrimaryKey: false
                   name: region
-                  isPrimaryKey: false
-                  isNullable: true
                 - dataType: STRING
-                  name: state
-                  isPrimaryKey: false
                   isNullable: true
+                  isPrimaryKey: false
+                  name: state
               id: customers
               path:
                 - demo
@@ -727,55 +718,55 @@ interactions:
               type: TABLE
             - columns:
                 - dataType: INT
+                  isNullable: true
+                  isPrimaryKey: false
                   name: campaign_id
-                  isPrimaryKey: false
-                  referencedTableId: campaigns
                   referencedTableColumn: campaign_id
-                  isNullable: true
+                  referencedTableId: campaigns
                 - dataType: INT
+                  isNullable: true
+                  isPrimaryKey: false
                   name: customer_id
-                  isPrimaryKey: false
-                  referencedTableId: customers
                   referencedTableColumn: customer_id
-                  isNullable: true
+                  referencedTableId: customers
                 - dataType: DATE
+                  isNullable: true
+                  isPrimaryKey: false
                   name: date
-                  isPrimaryKey: false
-                  isNullable: true
                 - dataType: STRING
+                  isNullable: true
+                  isPrimaryKey: false
                   name: order_id
-                  isPrimaryKey: false
-                  isNullable: true
                 - dataType: STRING
-                  name: order_line_id
-                  isPrimaryKey: true
                   isNullable: false
+                  isPrimaryKey: true
+                  name: order_line_id
                 - dataType: STRING
+                  isNullable: true
+                  isPrimaryKey: false
                   name: order_status
-                  isPrimaryKey: false
-                  isNullable: true
                 - dataType: NUMERIC
+                  isNullable: true
+                  isPrimaryKey: false
                   name: price
-                  isPrimaryKey: false
-                  isNullable: true
                 - dataType: INT
+                  isNullable: true
+                  isPrimaryKey: false
                   name: product_id
-                  isPrimaryKey: false
-                  referencedTableId: products
                   referencedTableColumn: product_id
-                  isNullable: true
+                  referencedTableId: products
                 - dataType: NUMERIC
+                  isNullable: true
+                  isPrimaryKey: false
                   name: quantity
-                  isPrimaryKey: false
-                  isNullable: true
                 - dataType: STRING
+                  isNullable: true
+                  isPrimaryKey: false
                   name: wdf__region
-                  isPrimaryKey: false
-                  isNullable: true
                 - dataType: STRING
-                  name: wdf__state
-                  isPrimaryKey: false
                   isNullable: true
+                  isPrimaryKey: false
+                  name: wdf__state
               id: order_lines
               path:
                 - demo
@@ -783,24 +774,26 @@ interactions:
               type: TABLE
             - columns:
                 - dataType: STRING
+                  isNullable: true
+                  isPrimaryKey: false
                   name: category
-                  isPrimaryKey: false
-                  isNullable: true
                 - dataType: INT
-                  name: product_id
-                  isPrimaryKey: true
                   isNullable: false
+                  isPrimaryKey: true
+                  name: product_id
                 - dataType: STRING
-                  name: product_name
-                  isPrimaryKey: false
                   isNullable: true
+                  isPrimaryKey: false
+                  name: product_name
               id: products
               path:
                 - demo
                 - products
               type: TABLE
-        workspaceId: demo
+        separator: __
         translationPrefix: tr
+        wdfPrefix: wdf
+        workspaceId: demo
       headers:
         Accept:
           - application/json
@@ -812,40 +805,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSources/demo-test-ds/generateLogicalModel
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           ldm:
@@ -1212,3 +1174,35 @@ interactions:
                 tags:
                   - Date
                 title: Date
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '1075'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1
