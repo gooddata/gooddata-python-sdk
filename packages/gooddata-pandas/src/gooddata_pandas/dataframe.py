@@ -304,7 +304,7 @@ class DataFrameFactory:
             pandas.DataFrame: A DataFrame instance.
         """
         execution_definition = self._sdk.compute.build_exec_def_from_chat_result(
-            created_visualizations_response,  # type: ignore[invalid-argument-type]
+            created_visualizations_response,
             is_cancellable=is_cancellable,
         )
         return self.for_exec_def(
@@ -580,7 +580,7 @@ class DataFrameFactory:
             execution_response=BareExecutionResponse(
                 api_client=self._sdk.client,
                 workspace_id=self._workspace_id,
-                execution_response=models.AfmExecutionResponse(  # type: ignore[invalid-argument-type]
+                execution_response=models.AfmExecutionResponse(
                     result_cache_metadata.execution_response, _check_type=False
                 ),
             ),
