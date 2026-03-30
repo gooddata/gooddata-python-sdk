@@ -580,9 +580,8 @@ class DataFrameFactory:
             execution_response=BareExecutionResponse(
                 api_client=self._sdk.client,
                 workspace_id=self._workspace_id,
-                execution_response=models.AfmExecutionResponse(
-                    executionResponse=result_cache_metadata.execution_response,  # type: ignore[invalid-argument-type]
-                    _check_type=False,
+                execution_response=models.AfmExecutionResponse(  # type: ignore[invalid-argument-type]
+                    result_cache_metadata.execution_response, _check_type=False
                 ),
             ),
             result_cache_metadata=result_cache_metadata,
