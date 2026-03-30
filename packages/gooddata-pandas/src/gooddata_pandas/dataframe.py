@@ -304,7 +304,8 @@ class DataFrameFactory:
             pandas.DataFrame: A DataFrame instance.
         """
         execution_definition = self._sdk.compute.build_exec_def_from_chat_result(
-            created_visualizations_response, is_cancellable=is_cancellable
+            created_visualizations_response,  # type: ignore[invalid-argument-type]
+            is_cancellable=is_cancellable,
         )
         return self.for_exec_def(
             exec_def=execution_definition,
@@ -401,10 +402,10 @@ class DataFrameFactory:
     def for_exec_def_arrow(
         self,
         exec_def: ExecutionDefinition,
-        on_execution_submitted: Optional[Callable[[Execution], None]] = None,
+        on_execution_submitted: Callable[[Execution], None] | None = None,
         self_destruct: bool = False,
         types_mapper: TypesMapper = TypesMapper.DEFAULT,
-        custom_mapping: Optional[dict] = None,
+        custom_mapping: dict | None = None,
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a DataFrame from an execution definition using the Arrow IPC binary format.
@@ -456,6 +457,7 @@ class DataFrameFactory:
         primary_labels_from_index, primary_labels_from_columns = compute_primary_labels(table)
         metadata = DataFrameMetadata(
             row_totals_indexes=row_totals_indexes,
+            column_totals_indexes=[],
             execution_response=exec_response,
             primary_labels_from_index=primary_labels_from_index,
             primary_labels_from_columns=primary_labels_from_columns,
@@ -465,10 +467,10 @@ class DataFrameFactory:
     def for_arrow_table(
         self,
         table: pa.Table,
-        execution_response: Optional[BareExecutionResponse] = None,
+        execution_response: BareExecutionResponse | None = None,
         self_destruct: bool = False,
         types_mapper: TypesMapper = TypesMapper.DEFAULT,
-        custom_mapping: Optional[dict] = None,
+        custom_mapping: dict | None = None,
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a DataFrame from an already-obtained PyArrow Table.
@@ -508,6 +510,7 @@ class DataFrameFactory:
         primary_labels_from_index, primary_labels_from_columns = compute_primary_labels(table)
         metadata = DataFrameMetadata(
             row_totals_indexes=row_totals_indexes,
+            column_totals_indexes=[],
             execution_response=execution_response,
             primary_labels_from_index=primary_labels_from_index,
             primary_labels_from_columns=primary_labels_from_columns,
@@ -578,7 +581,8 @@ class DataFrameFactory:
                 api_client=self._sdk.client,
                 workspace_id=self._workspace_id,
                 execution_response=models.AfmExecutionResponse(
-                    result_cache_metadata.execution_response, _check_type=False
+                    executionResponse=result_cache_metadata.execution_response,  # type: ignore[invalid-argument-type]
+                    _check_type=False,
                 ),
             ),
             result_cache_metadata=result_cache_metadata,

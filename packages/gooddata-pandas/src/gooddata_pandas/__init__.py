@@ -7,7 +7,7 @@ try:
     from gooddata_pandas.arrow_convertor import convert_arrow_table_to_dataframe
 except ImportError:
 
-    def convert_arrow_table_to_dataframe(*args, **kwargs):  # type: ignore[misc]
+    def convert_arrow_table_to_dataframe(*args, **kwargs):
         raise ImportError("pyarrow is required for Arrow support. Install it with: pip install gooddata-pandas[arrow]")
 
 
