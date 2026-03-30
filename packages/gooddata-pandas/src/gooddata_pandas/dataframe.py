@@ -1,7 +1,10 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Callable, Literal, Union
+from typing import TYPE_CHECKING, Callable, Literal, Union
+
+if TYPE_CHECKING:
+    import pyarrow as pa
 
 import pandas
 from gooddata_api_client import models
@@ -20,7 +23,11 @@ from gooddata_pandas._arrow_types import TypesMapper
 from gooddata_pandas.data_access import compute_and_extract
 
 try:
-    from gooddata_pandas.arrow_convertor import compute_row_totals_indexes, convert_arrow_table_to_dataframe
+    from gooddata_pandas.arrow_convertor import (
+        compute_primary_labels,
+        compute_row_totals_indexes,
+        convert_arrow_table_to_dataframe,
+    )
 
     _ARROW_AVAILABLE = True
 except ImportError:
@@ -447,11 +454,64 @@ class DataFrameFactory:
             table, self_destruct=self_destruct, types_mapper=types_mapper, custom_mapping=custom_mapping
         )
         row_totals_indexes = compute_row_totals_indexes(table, exec_response.dimensions)
+        primary_labels_from_index, primary_labels_from_columns = compute_primary_labels(table)
         metadata = DataFrameMetadata(
             row_totals_indexes=row_totals_indexes,
             execution_response=exec_response,
-            primary_labels_from_index={},
-            primary_labels_from_columns={},
+            primary_labels_from_index=primary_labels_from_index,
+            primary_labels_from_columns=primary_labels_from_columns,
+        )
+        return df, metadata
+
+    def for_arrow_table(
+        self,
+        table: pa.Table,
+        execution_response: Optional[BareExecutionResponse] = None,
+        self_destruct: bool = False,
+        types_mapper: TypesMapper = TypesMapper.DEFAULT,
+        custom_mapping: Optional[dict] = None,
+    ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
+        """
+        Creates a DataFrame from an already-obtained PyArrow Table.
+
+        Use this when you have fetched Arrow IPC bytes yourself (e.g. from the raw export
+        REST API or a future Flight RPC endpoint) and converted them to a ``pa.Table``.
+        For the common case of submitting an execution and reading the result in one call,
+        use :meth:`for_exec_def_arrow` instead.
+
+        Args:
+            table: PyArrow Table as returned by the GoodData binary execution endpoint.
+            execution_response: Optional ``BareExecutionResponse`` from the execution that
+                produced this table. When provided, ``DataFrameMetadata.row_totals_indexes``
+                is computed accurately and ``DataFrameMetadata.execution_response`` is
+                populated. When omitted, ``row_totals_indexes`` is an empty list and
+                ``execution_response`` is ``None`` in the returned metadata.
+            self_destruct: If True, Arrow buffers are freed during conversion, reducing
+                peak native memory at the cost of not being able to reuse the table.
+            types_mapper: Controls how Arrow types are mapped to pandas dtypes.
+            custom_mapping: Arrow type → pandas dtype mapping dict.
+                Only used when ``types_mapper=TypesMapper.CUSTOM``.
+
+        Returns:
+            Tuple[pandas.DataFrame, DataFrameMetadata]
+        """
+        if not _ARROW_AVAILABLE:
+            raise ImportError(
+                "pyarrow is required to use for_arrow_table(). Install it with: pip install gooddata-pandas[arrow]"
+            )
+
+        df = convert_arrow_table_to_dataframe(
+            table, self_destruct=self_destruct, types_mapper=types_mapper, custom_mapping=custom_mapping
+        )
+        row_totals_indexes = (
+            compute_row_totals_indexes(table, execution_response.dimensions) if execution_response is not None else []
+        )
+        primary_labels_from_index, primary_labels_from_columns = compute_primary_labels(table)
+        metadata = DataFrameMetadata(
+            row_totals_indexes=row_totals_indexes,
+            execution_response=execution_response,
+            primary_labels_from_index=primary_labels_from_index,
+            primary_labels_from_columns=primary_labels_from_columns,
         )
         return df, metadata
 

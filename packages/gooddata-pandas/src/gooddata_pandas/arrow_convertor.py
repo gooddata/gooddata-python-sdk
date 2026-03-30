@@ -314,6 +314,122 @@ def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[li
         return result
 
 
+def _compute_primary_labels_from_inline(
+    table: pa.Table,
+    label_refs: list[str],
+    label_ref_to_id: dict[str, str],
+    xtab_meta: dict,
+) -> dict[int, dict[str, str]]:
+    """Build primary_labels mapping from Arrow row-attribute columns.
+
+    For each attribute level j the result maps primary_label_value → display_label_value
+    for every data row (row_type==0).  Total rows are excluded because their column
+    values are aggregation-function markers, not real attribute values.
+
+    When primaryLabelId == labelId the mapping is identity ({v: v}).
+    When they differ the function looks for a separate Arrow column named
+    primaryLabelId; failing that it falls back to identity.
+    """
+    result: dict[int, dict[str, str]] = {}
+    label_meta = xtab_meta.get("labelMetadata", {})
+    row_types = table.column("__row_type").to_pylist()
+    data_row_mask = [rt == 0 for rt in row_types]
+
+    for j, ref in enumerate(label_refs):
+        info = label_meta.get(ref, {})
+        label_id = label_ref_to_id.get(ref, info.get("labelId", ""))
+        primary_label_id = info.get("primaryLabelId", label_id)
+
+        display_vals = table.column(label_id).to_pylist()
+
+        if label_id == primary_label_id:
+            mapping: dict[str, str] = {
+                v: v for v, is_data in zip(display_vals, data_row_mask) if is_data and isinstance(v, str)
+            }
+        elif primary_label_id in table.schema.names:
+            primary_vals = table.column(primary_label_id).to_pylist()
+            mapping = {
+                p: d
+                for p, d, is_data in zip(primary_vals, display_vals, data_row_mask)
+                if is_data and isinstance(p, str) and isinstance(d, str)
+            }
+        else:
+            # Fallback: identity (primary label data not present in table)
+            mapping = {v: v for v, is_data in zip(display_vals, data_row_mask) if is_data and isinstance(v, str)}
+
+        result[j] = mapping
+    return result
+
+
+def _compute_primary_labels_from_fields(
+    all_data_fields: list,
+    n_col_labels: int,
+) -> dict[int, dict[str, str]]:
+    """Build primary_labels mapping from Arrow field (column) metadata.
+
+    Each metric_group field carries gdc.label_values (display) and
+    gdc.primary_label_values (primary) for every column-label level.  Total
+    (grand_total) fields are skipped, matching the JSON-path behaviour where
+    totalHeader rows do not contribute to primary_attribute_labels_mapping.
+    """
+    result: dict[int, dict[str, str]] = {}
+    if n_col_labels == 0:
+        return result
+
+    for field in all_data_fields:
+        gdc = json.loads(field.metadata[b"gdc"])
+        if gdc["type"] != "metric":
+            continue
+        label_values: list = gdc.get("label_values", [])
+        primary_label_values: list = gdc.get("primary_label_values", [])
+        for j in range(min(n_col_labels, len(label_values), len(primary_label_values))):
+            display = label_values[j]
+            primary = primary_label_values[j]
+            if not isinstance(display, str) or not isinstance(primary, str):
+                continue
+            if j not in result:
+                result[j] = {}
+            result[j][primary] = display
+
+    return result
+
+
+def compute_primary_labels(
+    table: pa.Table,
+) -> tuple[dict[int, dict[str, str]], dict[int, dict[str, str]]]:
+    """
+    Compute primary_labels_from_index and primary_labels_from_columns from an Arrow table.
+
+    Mirrors the primary_attribute_labels_mapping built by the JSON execution path so that
+    DataFrameMetadata is fully populated by the Arrow path too.
+
+    Returns:
+        (primary_labels_from_index, primary_labels_from_columns)
+    """
+    schema_meta = {k.decode(): json.loads(v) for k, v in table.schema.metadata.items()}
+    xtab_meta = schema_meta["x-gdc-xtab-v1"]
+    is_transposed = schema_meta["x-gdc-view-v1"]["isTransposed"]
+
+    label_ref_to_id = _label_ref_to_id_map(xtab_meta)
+    row_label_refs: list[str] = xtab_meta["computedShape"]["rows"]
+    col_label_refs: list[str] = xtab_meta["computedShape"]["cols"]
+
+    all_data_fields = [
+        f for f in table.schema if f.name.startswith("metric_group_") or f.name.startswith("grand_total_")
+    ]
+
+    inline_primary = (
+        _compute_primary_labels_from_inline(table, row_label_refs, label_ref_to_id, xtab_meta) if row_label_refs else {}
+    )
+    field_primary = _compute_primary_labels_from_fields(all_data_fields, len(col_label_refs))
+
+    # Mirror convert_arrow_table_to_dataframe's orientation logic:
+    #   isTransposed or no inline → field cols become output rows (index)
+    if is_transposed or not row_label_refs:
+        return field_primary, inline_primary
+    return inline_primary, field_primary
+
+
 def convert_arrow_table_to_dataframe(
     table: pa.Table,
     self_destruct: bool = False,

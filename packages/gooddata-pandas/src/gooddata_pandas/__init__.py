@@ -2,6 +2,11 @@
 
 from gooddata_pandas._arrow_types import TypesMapper
 from gooddata_pandas._version import __version__
+
+try:
+    from gooddata_pandas.arrow_convertor import convert_arrow_table_to_dataframe
+except ImportError:
+    pass
 from gooddata_pandas.dataframe import DataFrameFactory
 from gooddata_pandas.good_pandas import GoodPandas
 from gooddata_pandas.result_convertor import LabelOverrides
