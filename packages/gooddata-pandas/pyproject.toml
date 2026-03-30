@@ -65,6 +65,7 @@ test = [
     "python-dotenv~=1.0.0",
     "pyyaml",
     "tests_support",
+    "pyarrow>=16.1.0",
 ]
 
 [tool.ty.analysis]
