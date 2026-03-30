@@ -71,6 +71,7 @@ test = [
     "python-dotenv~=1.0.0",
     "deepdiff~=8.5.0",
     "tests_support",
+    "pyarrow>=16.1.0",
 ]
 
 [tool.ty.analysis]
