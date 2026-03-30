@@ -35,9 +35,6 @@ dependencies = [
     "requests~=2.32.0",
     "python-dotenv>=1.0.0,<2.0.0",
 ]
-
-[project.optional-dependencies]
-arrow = ["pyarrow>=16.1.0"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
@@ -51,6 +48,9 @@ classifiers = [
     "Topic :: Software Development",
     "Typing :: Typed",
 ]
+
+[project.optional-dependencies]
+arrow = ["pyarrow>=16.1.0"]
 
 [project.urls]
 Documentation = "https://www.gooddata.com/docs/python-sdk/1.62.0"
