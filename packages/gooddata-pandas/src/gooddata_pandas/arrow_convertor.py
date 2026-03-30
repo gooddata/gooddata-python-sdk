@@ -23,23 +23,6 @@ _ARROW_STRINGS_MAPPER: dict = {
     pa.large_string(): pandas.StringDtype("pyarrow"),
 }
 
-# Full nullable-type mapper: also maps integer and boolean Arrow types to their
-# pandas nullable equivalents.  NOT the default — nullable integer dtypes are
-# not backward compatible with the JSON path which produces float64 for all
-# numeric columns (with NaN for nulls).
-_FULL_TYPES_MAPPER: dict = {
-    **_ARROW_STRINGS_MAPPER,
-    pa.int8(): pandas.Int8Dtype(),
-    pa.int16(): pandas.Int16Dtype(),
-    pa.int32(): pandas.Int32Dtype(),
-    pa.int64(): pandas.Int64Dtype(),
-    pa.uint8(): pandas.UInt8Dtype(),
-    pa.uint16(): pandas.UInt16Dtype(),
-    pa.uint32(): pandas.UInt32Dtype(),
-    pa.uint64(): pandas.UInt64Dtype(),
-    pa.bool_(): pandas.BooleanDtype(),
-}
-
 
 def _label_ref_to_id_map(xtab_meta: dict) -> dict[str, str]:
     """Map 'l0', 'l1', ... to actual label local IDs."""

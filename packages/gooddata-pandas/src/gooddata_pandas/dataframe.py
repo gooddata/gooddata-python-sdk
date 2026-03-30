@@ -70,6 +70,9 @@ class DataFrameFactory:
         - for_exec_def_arrow(self, exec_def: ExecutionDefinition,
             on_execution_submitted: Optional[Callable[[Execution], None]] = None)
             -> Tuple[pandas.DataFrame, DataFrameMetadata]:
+        - for_arrow_table(self, table: pa.Table,
+            execution_response: Optional[BareExecutionResponse] = None)
+            -> Tuple[pandas.DataFrame, DataFrameMetadata]:
         - for_exec_result_id(self, result_id: str, label_overrides: Optional[LabelOverrides] = None,
             result_cache_metadata: Optional[ResultCacheMetadata] = None,
             result_size_dimensions_limits: ResultSizeDimensions = (),
@@ -411,10 +414,6 @@ class DataFrameFactory:
 
         Returns the same ``(DataFrame, DataFrameMetadata)`` tuple as :meth:`for_exec_def` so that
         callers can switch between the two paths without changing their code.
-
-        ``DataFrameMetadata.primary_labels_from_index`` and
-        ``DataFrameMetadata.primary_labels_from_columns`` are always empty dicts because the
-        Arrow path does not support the ``use_primary_labels_in_attributes`` feature.
 
         Requires pyarrow to be installed (pip install gooddata-pandas[arrow]).
 

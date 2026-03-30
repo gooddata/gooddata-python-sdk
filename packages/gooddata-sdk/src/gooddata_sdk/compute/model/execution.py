@@ -394,6 +394,8 @@ class BareExecutionResponse:
             raise ImportError(
                 "pyarrow is required to use read_result_arrow(). Install it with: pip install gooddata-sdk[arrow]"
             )
+        import io
+
         response = self._actions_api.retrieve_result_binary(
             workspace_id=self._workspace_id,
             result_id=self.result_id,
@@ -401,9 +403,10 @@ class BareExecutionResponse:
             **({"x_gdc_cancel_token": self.cancel_token} if self.cancel_token else {}),
         )
         try:
-            return _ipc.open_stream(response).read_all()
+            buf = io.BytesIO(response.read())
         finally:
             response.release_conn()
+        return _ipc.open_stream(buf).read_all()
 
     def cancel(self) -> None:
         """
