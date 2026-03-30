@@ -141,20 +141,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = users_entity_apis_api.UsersEntityAPIsApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "authenticationId==someString;firstname==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Delete User entity
         api_instance.delete_entity_users(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling UsersEntityAPIsApi->delete_entity_users: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Delete User entity
-        api_instance.delete_entity_users(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling UsersEntityAPIsApi->delete_entity_users: %s\n" % e)
 ```
@@ -165,7 +156,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
 
 ### Return type
 

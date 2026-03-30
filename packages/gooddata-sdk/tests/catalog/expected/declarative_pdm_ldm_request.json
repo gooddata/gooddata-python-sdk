@@ -19,7 +19,8 @@
           "isPrimaryKey": false,
           "name": "campaign_id",
           "referencedTableColumn": "campaign_id",
-          "referencedTableId": "campaigns"
+          "referencedTableId": "campaigns",
+          "isNullable": true
         },
         {
           "data_type": "STRING",
@@ -116,19 +117,22 @@
           "isPrimaryKey": false,
           "name": "campaign_id",
           "referencedTableColumn": "campaign_id",
-          "referencedTableId": "campaigns"
+          "referencedTableId": "campaigns",
+          "isNullable": true
         },
         {
           "data_type": "INT",
           "isPrimaryKey": false,
           "name": "customer_id",
           "referencedTableColumn": "customer_id",
-          "referencedTableId": "customers"
+          "referencedTableId": "customers",
+          "isNullable": true
         },
         {
           "data_type": "DATE",
           "isPrimaryKey": false,
-          "name": "date"
+          "name": "date",
+          "isNullable": true
         },
         {
           "data_type": "STRING",
@@ -159,7 +163,8 @@
           "isPrimaryKey": false,
           "name": "product_id",
           "referencedTableColumn": "product_id",
-          "referencedTableId": "products"
+          "referencedTableId": "products",
+          "isNullable": true
         },
         {
           "data_type": "NUMERIC",
@@ -170,12 +175,14 @@
         {
           "data_type": "STRING",
           "isPrimaryKey": false,
-          "name": "wdf__region"
+          "name": "wdf__region",
+          "isNullable": true
         },
         {
           "data_type": "STRING",
           "isPrimaryKey": false,
-          "name": "wdf__state"
+          "name": "wdf__state",
+          "isNullable": true
         }
       ],
       "id": "order_lines",

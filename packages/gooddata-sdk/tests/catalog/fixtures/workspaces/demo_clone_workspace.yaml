@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/dataSources/demo-bigquery-ds
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/demo-bigquery-ds
       body: null
       headers:
         Accept:
@@ -21,6 +21,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
@@ -33,6 +35,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -40,7 +44,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -48,10 +52,10 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: c805d5e13616e4239a3860998c1232cd
+          traceId: b495b86387d5ca4c821f6bfcbbc5123e
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/entities/dataSources
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources
       body:
         data:
           attributes:
@@ -81,8 +85,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '345'
+          - '382'
         Content-Type:
           - application/json
         DATE: *id001
@@ -92,6 +98,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -99,7 +107,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -108,16 +116,16 @@ interactions:
               url: jdbc:postgresql://localhost:5432/demo?autosave=false&sslmode=prefer
               username: demouser
               authenticationType: USERNAME_PASSWORD
-              type: POSTGRESQL
               name: Test2
+              type: POSTGRESQL
               schema: demo
             id: demo-bigquery-ds
             type: dataSource
           links:
-            self: http://localhost:3000/api/v1/entities/dataSources/demo-bigquery-ds
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/demo-bigquery-ds
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo
       body: null
       headers:
         Accept:
@@ -135,8 +143,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '37957'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -146,14 +156,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -207,7 +222,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -250,7 +265,7 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -400,7 +415,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -412,7 +427,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -422,7 +437,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -473,7 +488,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -482,7 +497,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -492,7 +507,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -502,7 +517,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -512,7 +527,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -521,7 +536,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -530,7 +545,7 @@ interactions:
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -540,7 +555,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -550,7 +565,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -560,7 +575,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -570,7 +585,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -580,7 +595,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -590,7 +605,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -600,7 +615,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -611,7 +626,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -621,7 +636,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -631,7 +646,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -641,7 +656,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -650,7 +665,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -659,7 +674,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -668,7 +683,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -677,7 +692,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -686,7 +701,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -695,7 +710,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -760,7 +775,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -836,7 +851,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -915,7 +930,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -974,7 +989,7 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -1031,7 +1046,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -1084,7 +1099,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -1159,7 +1174,7 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -1216,7 +1231,7 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -1315,7 +1330,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -1371,7 +1386,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -1410,7 +1425,7 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -1466,7 +1481,7 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -1534,7 +1549,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -1591,7 +1606,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -1648,7 +1663,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -2021,7 +2036,7 @@ interactions:
                 title: Date
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo?include=workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo?include=workspaces
       body: null
       headers:
         Accept:
@@ -2039,13 +2054,17 @@ interactions:
       headers:
         Cache-Control:
           - max-age=5, private
+        Connection:
+          - keep-alive
         Content-Length:
-          - '162'
+          - '199'
         Content-Type:
           - application/json
         DATE: *id001
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2053,7 +2072,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -2063,10 +2082,10 @@ interactions:
             id: demo
             type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo?include=workspaces
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo?include=workspaces
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo_clone?include=workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_clone?include=workspaces
       body: null
       headers:
         Accept:
@@ -2082,23 +2101,38 @@ interactions:
         code: 404
         message: Not Found
       headers:
+        Cache-Control:
+          - max-age=5, private
+        Connection:
+          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
-          - application/json
+          - application/problem+json
         DATE: *id001
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-XSS-Protection:
+          - '0'
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: b2001d11d69e43e56fddf84809ae72a3
+          traceId: 7f12a363837e4aa580d964a3906acfad
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo_clone?include=workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_clone?include=workspaces
       body: null
       headers:
         Accept:
@@ -2114,23 +2148,38 @@ interactions:
         code: 404
         message: Not Found
       headers:
+        Cache-Control:
+          - max-age=5, private
+        Connection:
+          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
-          - application/json
+          - application/problem+json
         DATE: *id001
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-XSS-Protection:
+          - '0'
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: cbd4552558d923068577d5ef47a71ac5
+          traceId: 791315b0de437cd04bc4fa0c3ee40246
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/entities/workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces
       body:
         data:
           id: demo_clone
@@ -2155,8 +2204,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '163'
+          - '200'
         Content-Type:
           - application/json
         DATE: *id001
@@ -2166,6 +2217,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2173,7 +2226,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -2183,10 +2236,10 @@ interactions:
             id: demo_clone
             type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo_clone
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_clone
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaceDataFilters
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaceDataFilters
       body: null
       headers:
         Accept:
@@ -2204,6 +2257,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '603'
         Content-Type:
@@ -2215,6 +2270,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2222,7 +2279,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -2257,7 +2314,7 @@ interactions:
                     type: workspace
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaceDataFilters
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaceDataFilters
       body:
         workspaceDataFilters:
           - columnName: wdf__region
@@ -2311,6 +2368,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -2318,6 +2377,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2325,13 +2386,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo_clone
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo_clone
       body:
         ldm:
           datasets:
@@ -2749,7 +2810,7 @@ interactions:
                 version: '2'
               id: campaign
               title: Campaign
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -2792,7 +2853,7 @@ interactions:
                 version: '2'
               id: dashboard_plugin
               title: Dashboard plugin
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -2942,7 +3003,7 @@ interactions:
                 version: '2'
               id: product_and_category
               title: Product & Category
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -2955,7 +3016,7 @@ interactions:
                 version: '2'
               id: dashboard_plugin_1
               title: dashboard_plugin_1
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -2965,7 +3026,7 @@ interactions:
                 version: '2'
               id: dashboard_plugin_2
               title: dashboard_plugin_2
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3014,7 +3075,7 @@ interactions:
                 maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
               id: amount_of_active_customers
               title: '# of Active Customers'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3023,7 +3084,7 @@ interactions:
                 maql: SELECT COUNT({attribute/order_id})
               id: amount_of_orders
               title: '# of Orders'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3033,7 +3094,7 @@ interactions:
                   BY {attribute/customer_id}) >  10000 '
               id: amount_of_top_customers
               title: '# of Top Customers'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3043,7 +3104,7 @@ interactions:
                   IN ("Returned", "Canceled"))
               id: amount_of_valid_orders
               title: '# of Valid Orders'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3053,7 +3114,7 @@ interactions:
                 maql: SELECT SUM({fact/spend})
               id: campaign_spend
               title: Campaign Spend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3062,7 +3123,7 @@ interactions:
                 maql: SELECT SUM({fact/price}*{fact/quantity})
               id: order_amount
               title: Order Amount
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3071,7 +3132,7 @@ interactions:
                 maql: SELECT {metric/revenue} / {metric/total_revenue}
               id: percent_revenue
               title: '% Revenue'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3081,7 +3142,7 @@ interactions:
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_customers
               title: '% Revenue from Top 10 Customers'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3091,7 +3152,7 @@ interactions:
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_customers
               title: '% Revenue from Top 10% Customers'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3101,7 +3162,7 @@ interactions:
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_products
               title: '% Revenue from Top 10% Products'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3111,7 +3172,7 @@ interactions:
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_products
               title: '% Revenue from Top 10 Products'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3121,7 +3182,7 @@ interactions:
                   ALL OTHER)
               id: percent_revenue_in_category
               title: '% Revenue in Category'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3130,7 +3191,7 @@ interactions:
                 maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/product_id})
               id: percent_revenue_per_product
               title: '% Revenue per Product'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3140,7 +3201,7 @@ interactions:
                   IN ("Returned", "Canceled"))
               id: revenue
               title: Revenue
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3150,7 +3211,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Clothing")
               id: revenue-clothing
               title: Revenue (Clothing)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3160,7 +3221,7 @@ interactions:
                   "Electronics")
               id: revenue-electronic
               title: Revenue (Electronic)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3169,7 +3230,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Home")
               id: revenue-home
               title: Revenue (Home)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3178,7 +3239,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Outdoor")
               id: revenue-outdoor
               title: Revenue (Outdoor)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3187,7 +3248,7 @@ interactions:
                 maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
               id: revenue_per_customer
               title: Revenue per Customer
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3196,7 +3257,7 @@ interactions:
                 maql: SELECT {metric/revenue} / {metric/campaign_spend}
               id: revenue_per_dollar_spent
               title: Revenue per Dollar Spent
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3205,7 +3266,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
               id: revenue_top_10
               title: Revenue / Top 10
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3214,7 +3275,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
               id: revenue_top_10_percent
               title: Revenue / Top 10%
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3223,7 +3284,7 @@ interactions:
                 maql: SELECT {metric/revenue} BY ALL OTHER
               id: total_revenue
               title: Total Revenue
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3232,7 +3293,7 @@ interactions:
                 maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
               id: total_revenue-no_filters
               title: Total Revenue (No Filters)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3297,7 +3358,7 @@ interactions:
                 visualizationUrl: local:treemap
               id: campaign_spend
               title: Campaign Spend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3373,7 +3434,7 @@ interactions:
                 visualizationUrl: local:combo2
               id: customers_trend
               title: Customers Trend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3452,7 +3513,7 @@ interactions:
                 visualizationUrl: local:table
               id: percent_revenue_per_product_by_customer_and_category
               title: '% Revenue per Product by Customer and Category'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3511,7 +3572,7 @@ interactions:
                 visualizationUrl: local:area
               id: percentage_of_customers_by_region
               title: Percentage of Customers by Region
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3568,7 +3629,7 @@ interactions:
                 visualizationUrl: local:treemap
               id: product_breakdown
               title: Product Breakdown
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3621,7 +3682,7 @@ interactions:
                 visualizationUrl: local:donut
               id: product_categories_pie_chart
               title: Product Categories Pie Chart
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3696,7 +3757,7 @@ interactions:
                 visualizationUrl: local:column
               id: product_revenue_comparison-over_previous_period
               title: Product Revenue Comparison (over previous period)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3753,7 +3814,7 @@ interactions:
                 visualizationUrl: local:scatter
               id: product_saleability
               title: Product Saleability
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3852,7 +3913,7 @@ interactions:
                 visualizationUrl: local:table
               id: revenue_and_quantity_by_product_and_category
               title: Revenue and Quantity by Product and Category
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3908,7 +3969,7 @@ interactions:
                 visualizationUrl: local:line
               id: revenue_by_category_trend
               title: Revenue by Category Trend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -3947,7 +4008,7 @@ interactions:
                 visualizationUrl: local:bar
               id: revenue_by_product
               title: Revenue by Product
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -4003,7 +4064,7 @@ interactions:
                 visualizationUrl: local:scatter
               id: revenue_per_usd_vs_spend_by_campaign
               title: Revenue per $ vs Spend by Campaign
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -4071,7 +4132,7 @@ interactions:
                 visualizationUrl: local:combo2
               id: revenue_trend
               title: Revenue Trend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -4128,7 +4189,7 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_customers
               title: Top 10 Customers
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -4185,7 +4246,7 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_products
               title: Top 10 Products
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -4207,6 +4268,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -4214,6 +4277,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -4221,13 +4286,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo/permissions
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/permissions
       body: null
       headers:
         Accept:
@@ -4245,6 +4310,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '292'
         Content-Type:
@@ -4256,6 +4323,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -4263,7 +4332,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -4287,7 +4356,7 @@ interactions:
               name: VIEW
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo_clone/permissions
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo_clone/permissions
       body:
         permissions:
           - assignee:
@@ -4323,6 +4392,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -4330,6 +4401,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -4337,13 +4410,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo_clone?include=workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_clone?include=workspaces
       body: null
       headers:
         Accept:
@@ -4361,13 +4434,17 @@ interactions:
       headers:
         Cache-Control:
           - max-age=5, private
+        Connection:
+          - keep-alive
         Content-Length:
-          - '182'
+          - '219'
         Content-Type:
           - application/json
         DATE: *id001
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -4375,7 +4452,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -4385,10 +4462,10 @@ interactions:
             id: demo_clone
             type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo_clone?include=workspaces
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_clone?include=workspaces
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo_clone
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo_clone
       body: null
       headers:
         Accept:
@@ -4406,8 +4483,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '37992'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -4417,14 +4496,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -4478,7 +4562,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4521,7 +4605,7 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4671,7 +4755,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4683,7 +4767,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4693,7 +4777,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4744,7 +4828,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4753,7 +4837,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4763,7 +4847,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4773,7 +4857,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4783,7 +4867,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4792,7 +4876,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4801,7 +4885,7 @@ interactions:
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4811,7 +4895,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4821,7 +4905,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4831,7 +4915,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4841,7 +4925,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4851,7 +4935,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4861,7 +4945,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4871,7 +4955,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4882,7 +4966,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4892,7 +4976,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4902,7 +4986,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4912,7 +4996,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4921,7 +5005,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4930,7 +5014,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4939,7 +5023,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4948,7 +5032,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4957,7 +5041,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -4966,7 +5050,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5031,7 +5115,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5107,7 +5191,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5186,7 +5270,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5245,7 +5329,7 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5302,7 +5386,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5355,7 +5439,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5430,7 +5514,7 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5487,7 +5571,7 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5586,7 +5670,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5642,7 +5726,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5681,7 +5765,7 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5737,7 +5821,7 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5805,7 +5889,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5862,7 +5946,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -5919,7 +6003,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6292,7 +6376,7 @@ interactions:
                 title: Date
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo
       body: null
       headers:
         Accept:
@@ -6310,8 +6394,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '37957'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -6321,14 +6407,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -6382,7 +6473,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6425,7 +6516,7 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6575,7 +6666,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6587,7 +6678,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6597,7 +6688,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6648,7 +6739,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6657,7 +6748,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6667,7 +6758,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6677,7 +6768,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6687,7 +6778,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6696,7 +6787,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6705,7 +6796,7 @@ interactions:
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6715,7 +6806,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6725,7 +6816,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6735,7 +6826,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6745,7 +6836,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6755,7 +6846,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6765,7 +6856,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6775,7 +6866,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6786,7 +6877,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6796,7 +6887,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6806,7 +6897,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6816,7 +6907,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6825,7 +6916,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6834,7 +6925,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6843,7 +6934,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6852,7 +6943,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6861,7 +6952,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6870,7 +6961,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -6935,7 +7026,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -7011,7 +7102,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -7090,7 +7181,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -7149,7 +7240,7 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -7206,7 +7297,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -7259,7 +7350,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -7334,7 +7425,7 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -7391,7 +7482,7 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -7490,7 +7581,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -7546,7 +7637,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -7585,7 +7676,7 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -7641,7 +7732,7 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -7709,7 +7800,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -7766,7 +7857,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -7823,7 +7914,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -8196,7 +8287,7 @@ interactions:
                 title: Date
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo?include=workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo?include=workspaces
       body: null
       headers:
         Accept:
@@ -8214,13 +8305,17 @@ interactions:
       headers:
         Cache-Control:
           - max-age=5, private
+        Connection:
+          - keep-alive
         Content-Length:
-          - '162'
+          - '199'
         Content-Type:
           - application/json
         DATE: *id001
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -8228,7 +8323,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -8238,10 +8333,10 @@ interactions:
             id: demo
             type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo?include=workspaces
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo?include=workspaces
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo_jacek?include=workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_jacek?include=workspaces
       body: null
       headers:
         Accept:
@@ -8257,23 +8352,38 @@ interactions:
         code: 404
         message: Not Found
       headers:
+        Cache-Control:
+          - max-age=5, private
+        Connection:
+          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
-          - application/json
+          - application/problem+json
         DATE: *id001
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-XSS-Protection:
+          - '0'
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: b100eaf724516fbea63f0e593b46f3d1
+          traceId: fd8c50b808e49d4cd3765d2c064d07c2
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo_jacek?include=workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_jacek?include=workspaces
       body: null
       headers:
         Accept:
@@ -8289,23 +8399,38 @@ interactions:
         code: 404
         message: Not Found
       headers:
+        Cache-Control:
+          - max-age=5, private
+        Connection:
+          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
-          - application/json
+          - application/problem+json
         DATE: *id001
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-XSS-Protection:
+          - '0'
       body:
         string:
           detail: The requested endpoint does not exist or you do not have permission
             to access it.
           status: 404
           title: Not Found
-          traceId: abb270a4b327a445c0d67c7ef6ed54ed
+          traceId: 6b6a6bc22f2936dc49afcfe90546eeaa
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/entities/workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces
       body:
         data:
           id: demo_jacek
@@ -8330,8 +8455,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '161'
+          - '198'
         Content-Type:
           - application/json
         DATE: *id001
@@ -8341,6 +8468,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -8348,7 +8477,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -8358,10 +8487,10 @@ interactions:
             id: demo_jacek
             type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo_jacek
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_jacek
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaceDataFilters
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaceDataFilters
       body: null
       headers:
         Accept:
@@ -8379,6 +8508,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '772'
         Content-Type:
@@ -8390,6 +8521,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -8397,7 +8530,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -8439,7 +8572,7 @@ interactions:
                     type: workspace
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaceDataFilters
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaceDataFilters
       body:
         workspaceDataFilters:
           - columnName: wdf__region
@@ -8500,6 +8633,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -8507,6 +8642,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -8514,13 +8651,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo_jacek
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo_jacek
       body:
         ldm:
           datasets:
@@ -8938,7 +9075,7 @@ interactions:
                 version: '2'
               id: campaign
               title: Campaign
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -8981,7 +9118,7 @@ interactions:
                 version: '2'
               id: dashboard_plugin
               title: Dashboard plugin
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9131,7 +9268,7 @@ interactions:
                 version: '2'
               id: product_and_category
               title: Product & Category
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9144,7 +9281,7 @@ interactions:
                 version: '2'
               id: dashboard_plugin_1
               title: dashboard_plugin_1
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9154,7 +9291,7 @@ interactions:
                 version: '2'
               id: dashboard_plugin_2
               title: dashboard_plugin_2
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9203,7 +9340,7 @@ interactions:
                 maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
               id: amount_of_active_customers
               title: '# of Active Customers'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9212,7 +9349,7 @@ interactions:
                 maql: SELECT COUNT({attribute/order_id})
               id: amount_of_orders
               title: '# of Orders'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9222,7 +9359,7 @@ interactions:
                   BY {attribute/customer_id}) >  10000 '
               id: amount_of_top_customers
               title: '# of Top Customers'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9232,7 +9369,7 @@ interactions:
                   IN ("Returned", "Canceled"))
               id: amount_of_valid_orders
               title: '# of Valid Orders'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9242,7 +9379,7 @@ interactions:
                 maql: SELECT SUM({fact/spend})
               id: campaign_spend
               title: Campaign Spend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9251,7 +9388,7 @@ interactions:
                 maql: SELECT SUM({fact/price}*{fact/quantity})
               id: order_amount
               title: Order Amount
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9260,7 +9397,7 @@ interactions:
                 maql: SELECT {metric/revenue} / {metric/total_revenue}
               id: percent_revenue
               title: '% Revenue'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9270,7 +9407,7 @@ interactions:
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_customers
               title: '% Revenue from Top 10 Customers'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9280,7 +9417,7 @@ interactions:
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_customers
               title: '% Revenue from Top 10% Customers'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9290,7 +9427,7 @@ interactions:
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_products
               title: '% Revenue from Top 10% Products'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9300,7 +9437,7 @@ interactions:
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_products
               title: '% Revenue from Top 10 Products'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9310,7 +9447,7 @@ interactions:
                   ALL OTHER)
               id: percent_revenue_in_category
               title: '% Revenue in Category'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9319,7 +9456,7 @@ interactions:
                 maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/product_id})
               id: percent_revenue_per_product
               title: '% Revenue per Product'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9329,7 +9466,7 @@ interactions:
                   IN ("Returned", "Canceled"))
               id: revenue
               title: Revenue
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9339,7 +9476,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Clothing")
               id: revenue-clothing
               title: Revenue (Clothing)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9349,7 +9486,7 @@ interactions:
                   "Electronics")
               id: revenue-electronic
               title: Revenue (Electronic)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9358,7 +9495,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Home")
               id: revenue-home
               title: Revenue (Home)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9367,7 +9504,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Outdoor")
               id: revenue-outdoor
               title: Revenue (Outdoor)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9376,7 +9513,7 @@ interactions:
                 maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
               id: revenue_per_customer
               title: Revenue per Customer
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9385,7 +9522,7 @@ interactions:
                 maql: SELECT {metric/revenue} / {metric/campaign_spend}
               id: revenue_per_dollar_spent
               title: Revenue per Dollar Spent
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9394,7 +9531,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
               id: revenue_top_10
               title: Revenue / Top 10
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9403,7 +9540,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
               id: revenue_top_10_percent
               title: Revenue / Top 10%
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9412,7 +9549,7 @@ interactions:
                 maql: SELECT {metric/revenue} BY ALL OTHER
               id: total_revenue
               title: Total Revenue
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9421,7 +9558,7 @@ interactions:
                 maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
               id: total_revenue-no_filters
               title: Total Revenue (No Filters)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9486,7 +9623,7 @@ interactions:
                 visualizationUrl: local:treemap
               id: campaign_spend
               title: Campaign Spend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9562,7 +9699,7 @@ interactions:
                 visualizationUrl: local:combo2
               id: customers_trend
               title: Customers Trend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9641,7 +9778,7 @@ interactions:
                 visualizationUrl: local:table
               id: percent_revenue_per_product_by_customer_and_category
               title: '% Revenue per Product by Customer and Category'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9700,7 +9837,7 @@ interactions:
                 visualizationUrl: local:area
               id: percentage_of_customers_by_region
               title: Percentage of Customers by Region
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9757,7 +9894,7 @@ interactions:
                 visualizationUrl: local:treemap
               id: product_breakdown
               title: Product Breakdown
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9810,7 +9947,7 @@ interactions:
                 visualizationUrl: local:donut
               id: product_categories_pie_chart
               title: Product Categories Pie Chart
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9885,7 +10022,7 @@ interactions:
                 visualizationUrl: local:column
               id: product_revenue_comparison-over_previous_period
               title: Product Revenue Comparison (over previous period)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -9942,7 +10079,7 @@ interactions:
                 visualizationUrl: local:scatter
               id: product_saleability
               title: Product Saleability
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -10041,7 +10178,7 @@ interactions:
                 visualizationUrl: local:table
               id: revenue_and_quantity_by_product_and_category
               title: Revenue and Quantity by Product and Category
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -10097,7 +10234,7 @@ interactions:
                 visualizationUrl: local:line
               id: revenue_by_category_trend
               title: Revenue by Category Trend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -10136,7 +10273,7 @@ interactions:
                 visualizationUrl: local:bar
               id: revenue_by_product
               title: Revenue by Product
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -10192,7 +10329,7 @@ interactions:
                 visualizationUrl: local:scatter
               id: revenue_per_usd_vs_spend_by_campaign
               title: Revenue per $ vs Spend by Campaign
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -10260,7 +10397,7 @@ interactions:
                 visualizationUrl: local:combo2
               id: revenue_trend
               title: Revenue Trend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -10317,7 +10454,7 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_customers
               title: Top 10 Customers
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -10374,7 +10511,7 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_products
               title: Top 10 Products
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -10396,6 +10533,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -10403,6 +10542,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -10410,13 +10551,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo/permissions
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/permissions
       body: null
       headers:
         Accept:
@@ -10434,6 +10575,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '292'
         Content-Type:
@@ -10445,6 +10588,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -10452,7 +10597,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -10476,7 +10621,7 @@ interactions:
               name: VIEW
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo_jacek/permissions
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo_jacek/permissions
       body:
         permissions:
           - assignee:
@@ -10512,6 +10657,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -10519,6 +10666,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -10526,13 +10675,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo_jacek?include=workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_jacek?include=workspaces
       body: null
       headers:
         Accept:
@@ -10550,13 +10699,17 @@ interactions:
       headers:
         Cache-Control:
           - max-age=5, private
+        Connection:
+          - keep-alive
         Content-Length:
-          - '180'
+          - '217'
         Content-Type:
           - application/json
         DATE: *id001
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -10564,7 +10717,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -10574,10 +10727,10 @@ interactions:
             id: demo_jacek
             type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo_jacek?include=workspaces
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_jacek?include=workspaces
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo/permissions
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/permissions
       body: null
       headers:
         Accept:
@@ -10595,6 +10748,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '292'
         Content-Type:
@@ -10606,6 +10761,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -10613,7 +10770,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -10637,7 +10794,7 @@ interactions:
               name: VIEW
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo_jacek/permissions
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo_jacek/permissions
       body: null
       headers:
         Accept:
@@ -10655,6 +10812,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '292'
         Content-Type:
@@ -10666,6 +10825,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -10673,7 +10834,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -10697,7 +10858,7 @@ interactions:
               name: VIEW
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo
       body: null
       headers:
         Accept:
@@ -10715,8 +10876,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '37957'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -10726,14 +10889,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -10787,7 +10955,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -10830,7 +10998,7 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -10980,7 +11148,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -10992,7 +11160,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11002,7 +11170,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11053,7 +11221,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11062,7 +11230,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11072,7 +11240,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11082,7 +11250,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11092,7 +11260,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11101,7 +11269,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11110,7 +11278,7 @@ interactions:
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11120,7 +11288,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11130,7 +11298,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11140,7 +11308,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11150,7 +11318,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11160,7 +11328,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11170,7 +11338,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11180,7 +11348,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11191,7 +11359,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11201,7 +11369,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11211,7 +11379,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11221,7 +11389,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11230,7 +11398,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11239,7 +11407,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11248,7 +11416,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11257,7 +11425,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11266,7 +11434,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11275,7 +11443,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11340,7 +11508,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11416,7 +11584,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11495,7 +11663,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11554,7 +11722,7 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11611,7 +11779,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11664,7 +11832,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11739,7 +11907,7 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11796,7 +11964,7 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11895,7 +12063,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11951,7 +12119,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -11990,7 +12158,7 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -12046,7 +12214,7 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -12114,7 +12282,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -12171,7 +12339,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -12228,7 +12396,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2026-03-17 08:23
+                createdAt: 2026-03-25 09:16
                 createdBy:
                   id: admin
                   type: user
@@ -12601,7 +12769,7 @@ interactions:
                 title: Date
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo?include=workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo?include=workspaces
       body: null
       headers:
         Accept:
@@ -12619,13 +12787,17 @@ interactions:
       headers:
         Cache-Control:
           - max-age=5, private
+        Connection:
+          - keep-alive
         Content-Length:
-          - '162'
+          - '199'
         Content-Type:
           - application/json
         DATE: *id001
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -12633,7 +12805,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -12643,10 +12815,10 @@ interactions:
             id: demo
             type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo?include=workspaces
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo?include=workspaces
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo_clone?include=workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_clone?include=workspaces
       body: null
       headers:
         Accept:
@@ -12664,13 +12836,17 @@ interactions:
       headers:
         Cache-Control:
           - max-age=5, private
+        Connection:
+          - keep-alive
         Content-Length:
-          - '182'
+          - '219'
         Content-Type:
           - application/json
         DATE: *id001
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -12678,7 +12854,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -12688,10 +12864,10 @@ interactions:
             id: demo_clone
             type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo_clone?include=workspaces
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_clone?include=workspaces
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=0&size=500
       body: null
       headers:
         Accept:
@@ -12709,8 +12885,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1423'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -12720,14 +12898,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -12736,25 +12919,25 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
               type: workspace
             - attributes:
                 name: Demo (Clone)
               id: demo_clone
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_clone
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_clone
               type: workspace
             - attributes:
                 name: Deno Jacek
               id: demo_jacek
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_jacek
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_jacek
               type: workspace
             - attributes:
                 name: Demo West
               id: demo_west
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west
               relationships:
                 parent:
                   data:
@@ -12765,7 +12948,7 @@ interactions:
                 name: Demo West California
               id: demo_west_california
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west_california
               relationships:
                 parent:
                   data:
@@ -12777,20 +12960,20 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
               type: workspace
             - attributes:
                 name: Demo West
               id: demo_west
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west
               type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=1&size=500
   - request:
       method: DELETE
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo_clone
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_clone
       body: null
       headers:
         Accept-Encoding:
@@ -12806,6 +12989,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -12815,6 +13000,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -12822,13 +13009,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo_clone?include=workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_clone?include=workspaces
       body: null
       headers:
         Accept:
@@ -12846,6 +13033,8 @@ interactions:
       headers:
         Cache-Control:
           - max-age=5, private
+        Connection:
+          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
@@ -12853,6 +13042,8 @@ interactions:
         DATE: *id001
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -12860,7 +13051,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -12868,10 +13059,10 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 8500bc34fb73033da5cc1057542f8d0b
+          traceId: 7c909299b72f95d231cb97a19693e4e3
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/entities/workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces
       body:
         data:
           id: demo_clone
@@ -12896,8 +13087,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '163'
+          - '200'
         Content-Type:
           - application/json
         DATE: *id001
@@ -12907,6 +13100,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -12914,7 +13109,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -12924,10 +13119,10 @@ interactions:
             id: demo_clone
             type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo_clone
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_clone
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaceDataFilters
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaceDataFilters
       body: null
       headers:
         Accept:
@@ -12945,6 +13140,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '772'
         Content-Type:
@@ -12956,6 +13153,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -12963,7 +13162,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -13005,7 +13204,7 @@ interactions:
                     type: workspace
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaceDataFilters
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaceDataFilters
       body:
         workspaceDataFilters:
           - columnName: wdf__region
@@ -13066,6 +13265,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -13073,6 +13274,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -13080,13 +13283,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo_clone
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo_clone
       body:
         ldm:
           datasets:
@@ -13504,7 +13707,7 @@ interactions:
                 version: '2'
               id: campaign
               title: Campaign
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13547,7 +13750,7 @@ interactions:
                 version: '2'
               id: dashboard_plugin
               title: Dashboard plugin
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13697,7 +13900,7 @@ interactions:
                 version: '2'
               id: product_and_category
               title: Product & Category
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13710,7 +13913,7 @@ interactions:
                 version: '2'
               id: dashboard_plugin_1
               title: dashboard_plugin_1
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13720,7 +13923,7 @@ interactions:
                 version: '2'
               id: dashboard_plugin_2
               title: dashboard_plugin_2
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13769,7 +13972,7 @@ interactions:
                 maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
               id: amount_of_active_customers
               title: '# of Active Customers'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13778,7 +13981,7 @@ interactions:
                 maql: SELECT COUNT({attribute/order_id})
               id: amount_of_orders
               title: '# of Orders'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13788,7 +13991,7 @@ interactions:
                   BY {attribute/customer_id}) >  10000 '
               id: amount_of_top_customers
               title: '# of Top Customers'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13798,7 +14001,7 @@ interactions:
                   IN ("Returned", "Canceled"))
               id: amount_of_valid_orders
               title: '# of Valid Orders'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13808,7 +14011,7 @@ interactions:
                 maql: SELECT SUM({fact/spend})
               id: campaign_spend
               title: Campaign Spend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13817,7 +14020,7 @@ interactions:
                 maql: SELECT SUM({fact/price}*{fact/quantity})
               id: order_amount
               title: Order Amount
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13826,7 +14029,7 @@ interactions:
                 maql: SELECT {metric/revenue} / {metric/total_revenue}
               id: percent_revenue
               title: '% Revenue'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13836,7 +14039,7 @@ interactions:
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_customers
               title: '% Revenue from Top 10 Customers'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13846,7 +14049,7 @@ interactions:
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_customers
               title: '% Revenue from Top 10% Customers'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13856,7 +14059,7 @@ interactions:
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_products
               title: '% Revenue from Top 10% Products'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13866,7 +14069,7 @@ interactions:
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_products
               title: '% Revenue from Top 10 Products'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13876,7 +14079,7 @@ interactions:
                   ALL OTHER)
               id: percent_revenue_in_category
               title: '% Revenue in Category'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13885,7 +14088,7 @@ interactions:
                 maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/product_id})
               id: percent_revenue_per_product
               title: '% Revenue per Product'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13895,7 +14098,7 @@ interactions:
                   IN ("Returned", "Canceled"))
               id: revenue
               title: Revenue
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13905,7 +14108,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Clothing")
               id: revenue-clothing
               title: Revenue (Clothing)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13915,7 +14118,7 @@ interactions:
                   "Electronics")
               id: revenue-electronic
               title: Revenue (Electronic)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13924,7 +14127,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Home")
               id: revenue-home
               title: Revenue (Home)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13933,7 +14136,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Outdoor")
               id: revenue-outdoor
               title: Revenue (Outdoor)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13942,7 +14145,7 @@ interactions:
                 maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
               id: revenue_per_customer
               title: Revenue per Customer
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13951,7 +14154,7 @@ interactions:
                 maql: SELECT {metric/revenue} / {metric/campaign_spend}
               id: revenue_per_dollar_spent
               title: Revenue per Dollar Spent
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13960,7 +14163,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
               id: revenue_top_10
               title: Revenue / Top 10
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13969,7 +14172,7 @@ interactions:
                 maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
               id: revenue_top_10_percent
               title: Revenue / Top 10%
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13978,7 +14181,7 @@ interactions:
                 maql: SELECT {metric/revenue} BY ALL OTHER
               id: total_revenue
               title: Total Revenue
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -13987,7 +14190,7 @@ interactions:
                 maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
               id: total_revenue-no_filters
               title: Total Revenue (No Filters)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14052,7 +14255,7 @@ interactions:
                 visualizationUrl: local:treemap
               id: campaign_spend
               title: Campaign Spend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14128,7 +14331,7 @@ interactions:
                 visualizationUrl: local:combo2
               id: customers_trend
               title: Customers Trend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14207,7 +14410,7 @@ interactions:
                 visualizationUrl: local:table
               id: percent_revenue_per_product_by_customer_and_category
               title: '% Revenue per Product by Customer and Category'
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14266,7 +14469,7 @@ interactions:
                 visualizationUrl: local:area
               id: percentage_of_customers_by_region
               title: Percentage of Customers by Region
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14323,7 +14526,7 @@ interactions:
                 visualizationUrl: local:treemap
               id: product_breakdown
               title: Product Breakdown
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14376,7 +14579,7 @@ interactions:
                 visualizationUrl: local:donut
               id: product_categories_pie_chart
               title: Product Categories Pie Chart
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14451,7 +14654,7 @@ interactions:
                 visualizationUrl: local:column
               id: product_revenue_comparison-over_previous_period
               title: Product Revenue Comparison (over previous period)
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14508,7 +14711,7 @@ interactions:
                 visualizationUrl: local:scatter
               id: product_saleability
               title: Product Saleability
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14607,7 +14810,7 @@ interactions:
                 visualizationUrl: local:table
               id: revenue_and_quantity_by_product_and_category
               title: Revenue and Quantity by Product and Category
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14663,7 +14866,7 @@ interactions:
                 visualizationUrl: local:line
               id: revenue_by_category_trend
               title: Revenue by Category Trend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14702,7 +14905,7 @@ interactions:
                 visualizationUrl: local:bar
               id: revenue_by_product
               title: Revenue by Product
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14758,7 +14961,7 @@ interactions:
                 visualizationUrl: local:scatter
               id: revenue_per_usd_vs_spend_by_campaign
               title: Revenue per $ vs Spend by Campaign
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14826,7 +15029,7 @@ interactions:
                 visualizationUrl: local:combo2
               id: revenue_trend
               title: Revenue Trend
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14883,7 +15086,7 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_customers
               title: Top 10 Customers
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14940,7 +15143,7 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_products
               title: Top 10 Products
-              createdAt: 2026-03-17 08:23
+              createdAt: 2026-03-25 09:16
               createdBy:
                 id: admin
                 type: user
@@ -14962,6 +15165,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -14969,6 +15174,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -14976,13 +15183,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo/permissions
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/permissions
       body: null
       headers:
         Accept:
@@ -15000,6 +15207,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '292'
         Content-Type:
@@ -15011,6 +15220,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -15018,7 +15229,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -15042,7 +15253,7 @@ interactions:
               name: VIEW
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo_clone/permissions
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo_clone/permissions
       body:
         permissions:
           - assignee:
@@ -15078,6 +15289,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -15085,6 +15298,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -15092,13 +15307,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces
       body:
         workspaceDataFilters:
           - columnName: wdf__region
@@ -16923,6 +17138,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -16930,6 +17147,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -16937,13 +17156,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: DELETE
-      uri: http://localhost:3000/api/v1/entities/dataSources/demo-bigquery-ds
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/demo-bigquery-ds
       body: null
       headers:
         Accept-Encoding:
@@ -16959,6 +17178,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -16968,6 +17189,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -16975,7 +17198,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''

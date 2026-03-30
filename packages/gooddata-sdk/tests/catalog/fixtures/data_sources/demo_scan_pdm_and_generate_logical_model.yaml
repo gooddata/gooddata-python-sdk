@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo/logicalModel
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/logicalModel
       body: null
       headers:
         Accept:
@@ -21,8 +21,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '7384'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,14 +35,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -145,6 +152,7 @@ interactions:
                     sources:
                       - column: campaign_channel_id
                         dataType: STRING
+                        isNullable: true
                         target:
                           id: campaign_channel_id
                           type: attribute
@@ -436,7 +444,7 @@ interactions:
                 title: Date
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/dataSources/demo-test-ds/scan
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSources/demo-test-ds/scan
       body:
         scanTables: true
         scanViews: false
@@ -459,8 +467,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '2863'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -470,14 +480,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -632,7 +647,7 @@ interactions:
           warnings: []
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/dataSources/demo-test-ds/generateLogicalModel
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSources/demo-test-ds/generateLogicalModel
       body:
         separator: __
         wdfPrefix: wdf
@@ -804,8 +819,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '6788'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -815,14 +832,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -1178,6 +1200,7 @@ interactions:
                   - HOUR_OF_DAY
                   - DAY_OF_WEEK
                   - DAY_OF_MONTH
+                  - DAY_OF_QUARTER
                   - DAY_OF_YEAR
                   - WEEK_OF_YEAR
                   - MONTH_OF_YEAR

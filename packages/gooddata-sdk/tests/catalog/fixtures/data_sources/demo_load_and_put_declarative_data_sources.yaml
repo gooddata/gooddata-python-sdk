@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/dataSources
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
       body:
         dataSources: []
       headers:
@@ -22,6 +22,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: &id001
           - PLACEHOLDER
         Expires:
@@ -30,6 +32,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -37,13 +41,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/organization
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
       body: null
       headers:
         Accept-Encoding:
@@ -59,6 +63,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '0'
         Content-Type:
@@ -67,11 +73,13 @@ interactions:
         Expires:
           - '0'
         Location:
-          - /api/v1/entities/admin/organizations/default
+          - /api/v1/entities/admin/organizations/python-sdk-dex
         Pragma:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -79,13 +87,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/admin/organizations/default
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       body: null
       headers:
         Accept-Encoding:
@@ -101,8 +109,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '430'
+          - '564'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -112,6 +122,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -119,14 +131,15 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
           data:
             attributes:
-              name: Default Organization
-              hostname: localhost
+              name: Python SDK Dex
+              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -137,13 +150,15 @@ interactions:
                 - enableUserManagement
                 - enableRawExports
                 - enableFlexibleDashboardLayout
-            id: default
+              region: ''
+              dataCenter: ''
+            id: python-sdk-dex
             type: organization
           links:
-            self: http://localhost:3000/api/v1/entities/admin/organizations/default
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/dataSources
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
       body:
         dataSources:
           - id: demo-bigquery-ds
@@ -173,7 +188,7 @@ interactions:
                   id: demoGroup
                   type: userGroup
                 name: USE
-            password: passw0rd
+            password: secret
           - id: demo-test-ds-databricks-client-secret
             name: demo-test-ds-databricks-client-secret
             schema: demo
@@ -233,6 +248,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -240,6 +257,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -247,13 +266,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/dataSources
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
       body: null
       headers:
         Accept:
@@ -271,8 +290,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1814'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -282,14 +303,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -371,7 +397,7 @@ interactions:
               url: jdbc:vertica://localhost:5434/demo
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/dataSources
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
       body:
         dataSources:
           - id: demo-test-ds
@@ -390,7 +416,7 @@ interactions:
                   type: userGroup
                 name: USE
             alternativeDataSourceId: ds-put-abc-id
-            password: passw0rd
+            password: secret
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -407,6 +433,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -414,6 +442,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -421,7 +451,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''

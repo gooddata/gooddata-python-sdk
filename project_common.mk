@@ -68,8 +68,8 @@ test-ci:
 
 .PHONY: test-staging
 test-staging:
-	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required. Usage: make test-staging TOKEN=<api-token>" && exit 1)
-	TOKEN=$(TOKEN) GD_TEST_ENV=staging uv run tox -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
+	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required." && exit 1)
+	TOKEN=$(TOKEN) DS_PASSWORD=$(DS_PASSWORD) GD_TEST_ENV=staging uv run tox -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
 
 # this is effective for gooddata-sdk only now - it should be part of test fixtures
 # remove this target once implemented in pytest global fixture

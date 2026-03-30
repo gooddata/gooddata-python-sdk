@@ -51,6 +51,6 @@ environments:
     org_id: "python-sdk-dex"
     org_name: "Python SDK Dex"
     org_hostname: "python-sdk-dex.dev-latest.stg11.panther.intgdc.com"
-    ds_url: "jdbc:postgresql://cnpg-cluster-pooler:5432/tiger?sslmode=prefer"
-    ds_username: "tiger"
-    ds_password: "passw0rd"  # overridden from DS_PASSWORD env var
+    ds_url: "jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer"
+    ds_username: "postgres"
+    ds_password: ""  # overridden from DS_PASSWORD env var

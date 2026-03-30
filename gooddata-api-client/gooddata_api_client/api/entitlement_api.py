@@ -363,7 +363,7 @@ class EntitlementApi(object):
         id,
         **kwargs
     ):
-        """Get Entitlement  # noqa: E501
+        """Get Entitlement entity  # noqa: E501
 
         Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an

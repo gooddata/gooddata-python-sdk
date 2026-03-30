@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=0&size=500
       body: null
       headers:
         Accept:
@@ -21,8 +21,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '235'
+          - '309'
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,6 +35,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -40,17 +44,17 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
           data: []
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter?include=ALL
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter?include=ALL
       body: null
       headers:
         Accept:
@@ -68,6 +72,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
@@ -79,6 +85,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -86,7 +94,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -94,10 +102,10 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 105ffa726f9615e740787e16e8dbc867
+          traceId: 1581acc7551eb5392308db48eb5772c4
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters
       body:
         data:
           attributes:
@@ -128,8 +136,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '325'
+          - '362'
         Content-Type:
           - application/json
         DATE: *id001
@@ -139,6 +149,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -146,7 +158,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -161,10 +173,10 @@ interactions:
                 originType: NATIVE
             type: userDataFilter
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=0&size=500
       body: null
       headers:
         Accept:
@@ -182,8 +194,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1297'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -193,14 +207,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -211,7 +230,7 @@ interactions:
                 maql: '{label/order_status} IN ("returned")'
               id: newUserDataFilter
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter
               meta:
                 origin:
                   originId: demo
@@ -238,23 +257,20 @@ interactions:
                 valueType: TEXT
               id: order_status
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_status
               type: label
             - attributes:
-                authenticationId: CiQ1NzgxOGE5YS0zZWUwLTRhZDMtOGE4Zi0xZDJlODVmOTU5OTgSBWxvY2Fs
-                firstname: Demo
-                lastname: User
-                email: demo@example.com
+                authenticationId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
               id: demo
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/users/demo
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/users/demo
               type: user
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter?include=ALL
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter?include=ALL
       body: null
       headers:
         Accept:
@@ -272,8 +288,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1083'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -283,14 +301,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -316,13 +339,10 @@ interactions:
             type: userDataFilter
           included:
             - attributes:
-                authenticationId: CiQ1NzgxOGE5YS0zZWUwLTRhZDMtOGE4Zi0xZDJlODVmOTU5OTgSBWxvY2Fs
-                firstname: Demo
-                lastname: User
-                email: demo@example.com
+                authenticationId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
               id: demo
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/users/demo
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/users/demo
               type: user
             - attributes:
                 title: Order status
@@ -335,13 +355,13 @@ interactions:
                 valueType: TEXT
               id: order_status
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_status
               type: label
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter?include=ALL
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter?include=ALL
   - request:
       method: DELETE
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters/newUserDataFilter
       body: null
       headers:
         Accept-Encoding:
@@ -357,6 +377,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -366,6 +388,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -373,13 +397,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=0&size=500
       body: null
       headers:
         Accept:
@@ -397,8 +421,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
-          - '235'
+          - '309'
         Content-Type:
           - application/json
         DATE: *id001
@@ -408,6 +434,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -415,17 +443,17 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
           data: []
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userDataFilters?include=ALL&page=1&size=500
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces
       body:
         workspaceDataFilters:
           - columnName: wdf__region
@@ -2250,6 +2278,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -2257,6 +2287,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2264,7 +2296,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''

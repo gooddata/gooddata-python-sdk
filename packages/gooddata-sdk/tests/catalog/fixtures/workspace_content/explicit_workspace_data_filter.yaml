@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo/logicalModel
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/logicalModel
       body: null
       headers:
         Accept:
@@ -21,8 +21,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '7019'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,14 +35,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -411,7 +418,7 @@ interactions:
                 title: Date
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo/logicalModel
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/logicalModel
       body:
         ldm:
           datasets:
@@ -800,6 +807,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -807,6 +816,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -814,13 +825,13 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo/logicalModel
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/logicalModel
       body: null
       headers:
         Accept:
@@ -838,8 +849,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '7177'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -849,14 +862,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -1233,7 +1251,7 @@ interactions:
                 title: Date
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=0&size=500
       body: null
       headers:
         Accept:
@@ -1251,8 +1269,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '20307'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -1262,14 +1282,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -1284,7 +1309,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: campaign_channel_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
               meta:
                 origin:
                   originId: demo
@@ -1309,7 +1334,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: campaign_channels.category
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
               meta:
                 origin:
                   originId: demo
@@ -1334,7 +1359,7 @@ interactions:
                 sourceColumnDataType: INT
               id: campaign_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_id
               meta:
                 origin:
                   originId: demo
@@ -1359,7 +1384,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: campaign_name
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_name
               meta:
                 origin:
                   originId: demo
@@ -1384,7 +1409,7 @@ interactions:
                 sourceColumnDataType: INT
               id: customer_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/customer_id
               meta:
                 origin:
                   originId: demo
@@ -1409,7 +1434,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: customer_name
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/customer_name
               meta:
                 origin:
                   originId: demo
@@ -1433,7 +1458,7 @@ interactions:
                 areRelationsValid: true
               id: date.day
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.day
               meta:
                 origin:
                   originId: demo
@@ -1457,7 +1482,7 @@ interactions:
                 areRelationsValid: true
               id: date.month
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.month
               meta:
                 origin:
                   originId: demo
@@ -1481,7 +1506,7 @@ interactions:
                 areRelationsValid: true
               id: date.quarter
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.quarter
               meta:
                 origin:
                   originId: demo
@@ -1505,7 +1530,7 @@ interactions:
                 areRelationsValid: true
               id: date.week
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.week
               meta:
                 origin:
                   originId: demo
@@ -1529,7 +1554,7 @@ interactions:
                 areRelationsValid: true
               id: date.year
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.year
               meta:
                 origin:
                   originId: demo
@@ -1554,7 +1579,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: order_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_id
               meta:
                 origin:
                   originId: demo
@@ -1579,7 +1604,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: order_line_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_line_id
               meta:
                 origin:
                   originId: demo
@@ -1604,7 +1629,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: order_status
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_status
               meta:
                 origin:
                   originId: demo
@@ -1629,7 +1654,7 @@ interactions:
                 sourceColumnDataType: INT
               id: product_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/product_id
               meta:
                 origin:
                   originId: demo
@@ -1654,7 +1679,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: product_name
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/product_name
               meta:
                 origin:
                   originId: demo
@@ -1679,7 +1704,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: products.category
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/products.category
               meta:
                 origin:
                   originId: demo
@@ -1704,7 +1729,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: region
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/region
               meta:
                 origin:
                   originId: demo
@@ -1729,7 +1754,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: state
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/state
               meta:
                 origin:
                   originId: demo
@@ -1745,9 +1770,9 @@ interactions:
                     type: dataset
                 labels:
                   data:
-                    - id: geo__state__location
-                      type: label
                     - id: state
+                      type: label
+                    - id: geo__state__location
                       type: label
               type: attribute
             - attributes:
@@ -1760,7 +1785,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: type
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/type
               meta:
                 origin:
                   originId: demo
@@ -1787,7 +1812,7 @@ interactions:
                 valueType: TEXT
               id: product_name
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/product_name
               type: label
             - attributes:
                 title: Order status
@@ -1800,7 +1825,7 @@ interactions:
                 valueType: TEXT
               id: order_status
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_status
               type: label
             - attributes:
                 title: Order lines
@@ -1812,14 +1837,14 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: products
+                      id: campaigns
                       type: dataset
                     multivalue: false
                     sources:
-                      - column: product_id
+                      - column: campaign_id
                         dataType: INT
                         target:
-                          id: product_id
+                          id: campaign_id
                           type: attribute
                         isNullable: null
                         nullValue: null
@@ -1854,14 +1879,14 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
-                      id: campaigns
+                      id: products
                       type: dataset
                     multivalue: false
                     sources:
-                      - column: campaign_id
+                      - column: product_id
                         dataType: INT
                         target:
-                          id: campaign_id
+                          id: product_id
                           type: attribute
                         isNullable: null
                         nullValue: null
@@ -1872,25 +1897,25 @@ interactions:
                   - demo
                   - order_lines
                 workspaceDataFilterColumns:
-                  - name: wdf__state
-                    dataType: STRING
                   - name: wdf__region
                     dataType: STRING
+                  - name: wdf__state
+                    dataType: STRING
                 workspaceDataFilterReferences:
-                  - filterId:
-                      id: wdf__state
-                      type: workspaceDataFilter
-                    filterColumn: wdf__state
-                    filterColumnDataType: STRING
                   - filterId:
                       id: wdf__region
                       type: workspaceDataFilter
                     filterColumn: wdf__region
                     filterColumnDataType: STRING
+                  - filterId:
+                      id: wdf__state
+                      type: workspaceDataFilter
+                    filterColumn: wdf__state
+                    filterColumnDataType: STRING
                 type: NORMAL
               id: order_lines
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/order_lines
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/order_lines
               type: dataset
             - attributes:
                 title: Campaign name
@@ -1903,7 +1928,7 @@ interactions:
                 valueType: TEXT
               id: campaign_name
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_name
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_name
               type: label
             - attributes:
                 title: Campaign channels
@@ -1935,7 +1960,7 @@ interactions:
                 type: NORMAL
               id: campaign_channels
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/campaign_channels
               type: dataset
             - attributes:
                 title: Date - Month/Year
@@ -1946,7 +1971,7 @@ interactions:
                 sourceColumn: ''
               id: date.month
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.month
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.month
               type: label
             - attributes:
                 title: Date - Quarter/Year
@@ -1957,7 +1982,7 @@ interactions:
                 sourceColumn: ''
               id: date.quarter
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarter
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.quarter
               type: label
             - attributes:
                 title: Campaign channel id
@@ -1970,7 +1995,7 @@ interactions:
                 valueType: TEXT
               id: campaign_channel_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channel_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_channel_id
               type: label
             - attributes:
                 title: Date - Date
@@ -1981,7 +2006,7 @@ interactions:
                 sourceColumn: ''
               id: date.day
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.day
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.day
               type: label
             - attributes:
                 title: Campaigns
@@ -1998,7 +2023,7 @@ interactions:
                 type: NORMAL
               id: campaigns
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/campaigns
               type: dataset
             - attributes:
                 title: Order id
@@ -2011,7 +2036,7 @@ interactions:
                 valueType: TEXT
               id: order_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_id
               type: label
             - attributes:
                 title: Customer name
@@ -2024,7 +2049,7 @@ interactions:
                 valueType: TEXT
               id: customer_name
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_name
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/customer_name
               type: label
             - attributes:
                 title: Type
@@ -2037,7 +2062,7 @@ interactions:
                 valueType: TEXT
               id: type
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/type
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/type
               type: label
             - attributes:
                 title: Customers
@@ -2060,7 +2085,7 @@ interactions:
                 type: NORMAL
               id: customers
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/customers
               type: dataset
             - attributes:
                 title: Region
@@ -2073,7 +2098,7 @@ interactions:
                 valueType: TEXT
               id: region
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/region
               type: label
             - attributes:
                 title: Category
@@ -2086,7 +2111,7 @@ interactions:
                 valueType: TEXT
               id: products.category
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/products.category
               type: label
             - attributes:
                 title: Date - Week/Year
@@ -2097,7 +2122,7 @@ interactions:
                 sourceColumn: ''
               id: date.week
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.week
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.week
               type: label
             - attributes:
                 title: Location
@@ -2110,7 +2135,7 @@ interactions:
                 valueType: GEO
               id: geo__state__location
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/geo__state__location
               type: label
             - attributes:
                 title: Product id
@@ -2123,7 +2148,7 @@ interactions:
                 valueType: TEXT
               id: product_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/product_id
               type: label
             - attributes:
                 title: Order line id
@@ -2136,7 +2161,7 @@ interactions:
                 valueType: TEXT
               id: order_line_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_line_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_line_id
               type: label
             - attributes:
                 title: Products
@@ -2153,7 +2178,7 @@ interactions:
                 type: NORMAL
               id: products
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/products
               type: dataset
             - attributes:
                 title: Date
@@ -2163,7 +2188,7 @@ interactions:
                 type: DATE
               id: date
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/date
               type: dataset
             - attributes:
                 title: Category
@@ -2176,7 +2201,7 @@ interactions:
                 valueType: TEXT
               id: campaign_channels.category
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channels.category
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_channels.category
               type: label
             - attributes:
                 title: Customer id
@@ -2189,7 +2214,7 @@ interactions:
                 valueType: TEXT
               id: customer_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/customer_id
               type: label
             - attributes:
                 title: Date - Year
@@ -2200,7 +2225,7 @@ interactions:
                 sourceColumn: ''
               id: date.year
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.year
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.year
               type: label
             - attributes:
                 title: State
@@ -2213,7 +2238,7 @@ interactions:
                 valueType: TEXT
               id: state
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/state
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/state
               type: label
             - attributes:
                 title: Campaign id
@@ -2226,14 +2251,14 @@ interactions:
                 valueType: TEXT
               id: campaign_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_id
               type: label
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts%2CaggregatedFacts&page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts%2CaggregatedFacts&page=0&size=500
       body: null
       headers:
         Accept:
@@ -2251,8 +2276,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '13732'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -2262,14 +2289,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -2305,7 +2337,7 @@ interactions:
                 type: NORMAL
               id: campaign_channels
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/campaign_channels
               meta:
                 origin:
                   originId: demo
@@ -2355,7 +2387,7 @@ interactions:
                 type: NORMAL
               id: campaign_channels_per_category
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels_per_category
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/campaign_channels_per_category
               meta:
                 origin:
                   originId: demo
@@ -2382,7 +2414,7 @@ interactions:
                 type: NORMAL
               id: campaigns
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/campaigns
               meta:
                 origin:
                   originId: demo
@@ -2417,7 +2449,7 @@ interactions:
                 type: NORMAL
               id: customers
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/customers
               meta:
                 origin:
                   originId: demo
@@ -2443,7 +2475,7 @@ interactions:
                 type: DATE
               id: date
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/date
               meta:
                 origin:
                   originId: demo
@@ -2472,6 +2504,20 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: date
+                        dataType: DATE
+                        target:
+                          id: date
+                          type: date
+                        isNullable: null
+                        nullValue: null
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
                       id: products
                       type: dataset
                     multivalue: false
@@ -2480,6 +2526,20 @@ interactions:
                         dataType: INT
                         target:
                           id: product_id
+                          type: attribute
+                        isNullable: null
+                        nullValue: null
+                    sourceColumns: null
+                    sourceColumnDataTypes: null
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        target:
+                          id: campaign_id
                           type: attribute
                         isNullable: null
                         nullValue: null
@@ -2499,59 +2559,31 @@ interactions:
                         nullValue: null
                     sourceColumns: null
                     sourceColumnDataTypes: null
-                  - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: date
-                        dataType: DATE
-                        target:
-                          id: date
-                          type: date
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: campaign_id
-                        dataType: INT
-                        target:
-                          id: campaign_id
-                          type: attribute
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
                 dataSourceTableId: demo-test-ds:order_lines
                 dataSourceTablePath:
                   - demo
                   - order_lines
                 areRelationsValid: true
                 workspaceDataFilterColumns:
-                  - name: wdf__state
-                    dataType: STRING
                   - name: wdf__region
                     dataType: STRING
+                  - name: wdf__state
+                    dataType: STRING
                 workspaceDataFilterReferences:
-                  - filterId:
-                      id: wdf__state
-                      type: workspaceDataFilter
-                    filterColumn: wdf__state
-                    filterColumnDataType: STRING
                   - filterId:
                       id: wdf__region
                       type: workspaceDataFilter
                     filterColumn: wdf__region
                     filterColumnDataType: STRING
+                  - filterId:
+                      id: wdf__state
+                      type: workspaceDataFilter
+                    filterColumn: wdf__state
+                    filterColumnDataType: STRING
                 type: NORMAL
               id: order_lines
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/order_lines
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/order_lines
               meta:
                 origin:
                   originId: demo
@@ -2588,7 +2620,7 @@ interactions:
                 type: NORMAL
               id: products
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/products
               meta:
                 origin:
                   originId: demo
@@ -2613,7 +2645,7 @@ interactions:
                 sourceColumnDataType: INT
               id: product_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/product_id
               type: attribute
             - attributes:
                 title: Budget
@@ -2624,7 +2656,7 @@ interactions:
                 sourceColumnDataType: NUMERIC
               id: budget
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/budget
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/budget
               type: fact
             - attributes:
                 title: Date - Year
@@ -2634,7 +2666,7 @@ interactions:
                 granularity: YEAR
               id: date.year
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.year
               type: attribute
             - attributes:
                 title: Product name
@@ -2645,7 +2677,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: product_name
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/product_name
               type: attribute
             - attributes:
                 title: Date - Month/Year
@@ -2655,7 +2687,7 @@ interactions:
                 granularity: MONTH
               id: date.month
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.month
               type: attribute
             - attributes:
                 title: Category
@@ -2666,7 +2698,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: products.category
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/products.category
               type: attribute
             - attributes:
                 title: Date - Quarter/Year
@@ -2676,7 +2708,7 @@ interactions:
                 granularity: QUARTER
               id: date.quarter
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.quarter
               type: attribute
             - attributes:
                 title: Category
@@ -2687,7 +2719,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: campaign_channels.category
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
               type: attribute
             - attributes:
                 title: State
@@ -2698,7 +2730,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: state
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/state
               type: attribute
             - attributes:
                 title: Date - Week/Year
@@ -2708,7 +2740,7 @@ interactions:
                 granularity: WEEK
               id: date.week
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.week
               type: attribute
             - attributes:
                 title: Order id
@@ -2719,7 +2751,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: order_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_id
               type: attribute
             - attributes:
                 title: Campaign name
@@ -2730,7 +2762,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: campaign_name
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_name
               type: attribute
             - attributes:
                 title: Price
@@ -2741,7 +2773,7 @@ interactions:
                 sourceColumnDataType: NUMERIC
               id: price
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/price
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/price
               type: fact
             - attributes:
                 description: Budget Agg
@@ -2752,7 +2784,7 @@ interactions:
                 operation: SUM
               id: budget_agg
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/aggregatedFacts/budget_agg
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/aggregatedFacts/budget_agg
               type: aggregatedFact
             - attributes:
                 title: Date - Date
@@ -2762,7 +2794,7 @@ interactions:
                 granularity: DAY
               id: date.day
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.day
               type: attribute
             - attributes:
                 title: Region
@@ -2773,7 +2805,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: region
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/region
               type: attribute
             - attributes:
                 title: Campaign channel id
@@ -2784,7 +2816,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: campaign_channel_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
               type: attribute
             - attributes:
                 title: Customer id
@@ -2795,7 +2827,7 @@ interactions:
                 sourceColumnDataType: INT
               id: customer_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/customer_id
               type: attribute
             - attributes:
                 title: Quantity
@@ -2806,7 +2838,7 @@ interactions:
                 sourceColumnDataType: NUMERIC
               id: quantity
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/quantity
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/quantity
               type: fact
             - attributes:
                 title: Campaign id
@@ -2817,7 +2849,7 @@ interactions:
                 sourceColumnDataType: INT
               id: campaign_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_id
               type: attribute
             - attributes:
                 title: Type
@@ -2828,7 +2860,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: type
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/type
               type: attribute
             - attributes:
                 title: Spend
@@ -2839,7 +2871,7 @@ interactions:
                 sourceColumnDataType: NUMERIC
               id: spend
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/spend
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/spend
               type: fact
             - attributes:
                 title: Order status
@@ -2850,7 +2882,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: order_status
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_status
               type: attribute
             - attributes:
                 title: Customer name
@@ -2861,7 +2893,7 @@ interactions:
                 sourceColumnDataType: STRING
               id: customer_name
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/customer_name
               type: attribute
             - attributes:
                 title: Order line id
@@ -2872,14 +2904,14 @@ interactions:
                 sourceColumnDataType: STRING
               id: order_line_id
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_line_id
               type: attribute
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts%2CaggregatedFacts&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts%2CaggregatedFacts&page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts%2CaggregatedFacts&page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts%2CaggregatedFacts&page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=0&size=500
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics?page=0&size=500
       body: null
       headers:
         Accept:
@@ -2897,8 +2929,10 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '10543'
+        Connection:
+          - keep-alive
+        Content-Encoding:
+          - br
         Content-Type:
           - application/json
         DATE: *id001
@@ -2908,14 +2942,19 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
+        Transfer-Encoding:
+          - chunked
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -2926,10 +2965,10 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: amount_of_active_customers
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
               meta:
                 origin:
                   originId: demo
@@ -2941,10 +2980,10 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: amount_of_orders
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_orders
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_orders
               meta:
                 origin:
                   originId: demo
@@ -2957,10 +2996,10 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: amount_of_top_customers
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_top_customers
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_top_customers
               meta:
                 origin:
                   originId: demo
@@ -2974,10 +3013,10 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: amount_of_valid_orders
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_valid_orders
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_valid_orders
               meta:
                 origin:
                   originId: demo
@@ -2989,10 +3028,10 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: campaign_spend
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/campaign_spend
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/campaign_spend
               meta:
                 origin:
                   originId: demo
@@ -3004,10 +3043,10 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: order_amount
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/order_amount
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/order_amount
               meta:
                 origin:
                   originId: demo
@@ -3019,10 +3058,10 @@ interactions:
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: percent_revenue
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue
               meta:
                 origin:
                   originId: demo
@@ -3035,10 +3074,10 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: percent_revenue_from_top_10_customers
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_customers
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_customers
               meta:
                 origin:
                   originId: demo
@@ -3051,10 +3090,10 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: percent_revenue_from_top_10_percent_customers
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_customers
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_customers
               meta:
                 origin:
                   originId: demo
@@ -3067,10 +3106,10 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: percent_revenue_from_top_10_percent_products
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_products
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_products
               meta:
                 origin:
                   originId: demo
@@ -3083,10 +3122,10 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: percent_revenue_from_top_10_products
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_products
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_products
               meta:
                 origin:
                   originId: demo
@@ -3099,10 +3138,10 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: percent_revenue_in_category
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
               meta:
                 origin:
                   originId: demo
@@ -3115,10 +3154,10 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: percent_revenue_per_product
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_per_product
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_per_product
               meta:
                 origin:
                   originId: demo
@@ -3132,10 +3171,10 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: revenue
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue
               meta:
                 origin:
                   originId: demo
@@ -3148,10 +3187,10 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: revenue-clothing
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-clothing
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-clothing
               meta:
                 origin:
                   originId: demo
@@ -3164,10 +3203,10 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: revenue-electronic
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-electronic
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-electronic
               meta:
                 origin:
                   originId: demo
@@ -3180,10 +3219,10 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: revenue-home
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-home
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-home
               meta:
                 origin:
                   originId: demo
@@ -3196,10 +3235,10 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: revenue-outdoor
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-outdoor
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-outdoor
               meta:
                 origin:
                   originId: demo
@@ -3211,10 +3250,10 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: revenue_per_customer
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
               meta:
                 origin:
                   originId: demo
@@ -3226,10 +3265,10 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: revenue_per_dollar_spent
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_dollar_spent
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_per_dollar_spent
               meta:
                 origin:
                   originId: demo
@@ -3241,10 +3280,10 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: revenue_top_10
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_top_10
               meta:
                 origin:
                   originId: demo
@@ -3256,10 +3295,10 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: revenue_top_10_percent
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10_percent
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_top_10_percent
               meta:
                 origin:
                   originId: demo
@@ -3271,10 +3310,10 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: total_revenue
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/total_revenue
               meta:
                 origin:
                   originId: demo
@@ -3286,21 +3325,21 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2026-03-17 08:24
+                createdAt: 2026-03-25 09:17
               id: total_revenue-no_filters
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue-no_filters
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/total_revenue-no_filters
               meta:
                 origin:
                   originId: demo
                   originType: NATIVE
               type: metric
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics?page=0&size=500
+            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics?page=1&size=500
   - request:
       method: PUT
-      uri: http://localhost:3000/api/v1/layout/workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces
       body:
         workspaceDataFilters:
           - columnName: wdf__region
@@ -5125,6 +5164,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -5132,6 +5173,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -5139,7 +5182,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string: ''

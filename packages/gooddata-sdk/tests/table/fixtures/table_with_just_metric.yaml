@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes: []
@@ -41,6 +41,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '310'
         Content-Type:
@@ -53,16 +55,18 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Gdc-Cancel-Token:
-          - f86ce4f7-7a1b-4c62-80c5-33eaab3db28c
+        X-GDC-CANCEL-TOKEN:
+          - 772ed5c6-3bd2-4cb0-81ad-1c9a555afac9
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -75,10 +79,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_0
             links:
-              executionResult: df95fe3d83e3f4ecc11357b629aba68eeaa15067:2bf8a69c12532f7f555e489d8118d8fb9339dcadb1dc22bbc6054ab0063a94fe
+              executionResult: 6e7ecd5977fbef159d8ffc585a4c99c2b87d0d07:64a364287032033653002d8e0bad0d17eaa70a7b08263de27c3a7f9a68634897
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/df95fe3d83e3f4ecc11357b629aba68eeaa15067%3A2bf8a69c12532f7f555e489d8118d8fb9339dcadb1dc22bbc6054ab0063a94fe?offset=0&limit=256
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute/result/6e7ecd5977fbef159d8ffc585a4c99c2b87d0d07%3A64a364287032033653002d8e0bad0d17eaa70a7b08263de27c3a7f9a68634897?offset=0&limit=256
       body: null
       headers:
         Accept:
@@ -96,6 +100,8 @@ interactions:
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
         Content-Length:
           - '213'
         Content-Type:
@@ -107,6 +113,8 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -114,7 +122,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:

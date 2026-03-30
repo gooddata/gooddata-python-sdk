@@ -36,6 +36,10 @@ if not _config_path.exists():
 with open(_config_path, encoding="utf-8") as _f:
     _test_config = yaml.safe_load(_f)
     _ds_config = _test_config["environments"][_env_name]
+    # Allow env var override (same pattern as conftest.py)
+    _env_ds_password = os.environ.get("DS_PASSWORD")
+    if _env_ds_password:
+        _ds_config["ds_password"] = _env_ds_password
 
 
 def rest_op(op, url_path, data=None, raise_ex=True):

@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo?include=workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo?include=workspaces
       body: null
       headers:
         Accept:
@@ -21,14 +21,18 @@ interactions:
       headers:
         Cache-Control:
           - max-age=5, private
+        Connection:
+          - keep-alive
         Content-Length:
-          - '162'
+          - '199'
         Content-Type:
           - application/json
         DATE: &id001
           - PLACEHOLDER
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -36,7 +40,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -46,10 +50,10 @@ interactions:
             id: demo
             type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo?include=workspaces
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo?include=workspaces
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo_west?include=workspaces
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west?include=workspaces
       body: null
       headers:
         Accept:
@@ -67,13 +71,17 @@ interactions:
       headers:
         Cache-Control:
           - max-age=5, private
+        Connection:
+          - keep-alive
         Content-Length:
-          - '394'
+          - '468'
         Content-Type:
           - application/json
         DATE: *id001
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=63072000; includeSubDomains
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -81,7 +89,7 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
+        X-XSS-Protection:
           - '0'
       body:
         string:
@@ -100,7 +108,7 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
               type: workspace
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo_west?include=workspaces
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west?include=workspaces
