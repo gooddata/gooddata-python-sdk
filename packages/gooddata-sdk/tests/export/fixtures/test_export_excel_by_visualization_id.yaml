@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/visualizationObjects/customers_trend?include=ALL
       body: null
       headers:
         Accept:
@@ -14,46 +11,13 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/visualizationObjects/customers_trend?include=ALL
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: &id001
-          - PLACEHOLDER
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
             attributes:
-              title: Customers Trend
               areRelationsValid: true
               content:
                 buckets:
@@ -125,7 +89,8 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2026-03-25 09:18
+              createdAt: 2026-03-31 07:28
+              title: Customers Trend
             id: customers_trend
             meta:
               origin:
@@ -136,12 +101,6 @@ interactions:
                 data:
                   id: admin
                   type: userIdentifier
-              metrics:
-                data:
-                  - id: amount_of_active_customers
-                    type: metric
-                  - id: revenue_per_customer
-                    type: metric
               datasets:
                 data:
                   - id: date
@@ -150,6 +109,12 @@ interactions:
                 data:
                   - id: date.month
                     type: label
+              metrics:
+                data:
+                  - id: amount_of_active_customers
+                    type: metric
+                  - id: revenue_per_customer
+                    type: metric
             type: visualizationObject
           included:
             - attributes: {}
@@ -158,51 +123,81 @@ interactions:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userIdentifiers/admin
               type: userIdentifier
             - attributes:
-                title: Date
                 description: ''
                 tags:
                   - Date
+                title: Date
                 type: DATE
               id: date
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/date
               type: dataset
             - attributes:
-                title: '# of Active Customers'
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-03-25 09:18
+                createdAt: 2026-03-31 07:28
+                title: '# of Active Customers'
               id: amount_of_active_customers
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
               type: metric
             - attributes:
-                title: Revenue per Customer
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-03-25 09:18
+                createdAt: 2026-03-31 07:28
+                title: Revenue per Customer
               id: revenue_per_customer
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
               type: metric
             - attributes:
-                title: Date - Month/Year
                 description: Month and Year (12/2020)
-                tags:
-                  - Date
                 primary: true
                 sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Month/Year
               id: date.month
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.month
               type: label
           links:
             self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/visualizationObjects/customers_trend?include=ALL
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '1055'
+        Content-Type:
+          - application/json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular
       body:
         fileName: Customers Trend
         format: XLSX
@@ -218,15 +213,15 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular
     response:
-      status:
-        code: 201
-        message: Created
+      body:
+        string:
+          exportResult: 0ac68b7267a44c0b3908c2082a19c20fefe54f79
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '59'
         Content-Type:
@@ -239,22 +234,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          exportResult: e9ca44328f74f4ee25d5518df98bb29c0e126865
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 201
+        message: Created
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/e9ca44328f74f4ee25d5518df98bb29c0e126865
       body: null
       headers:
         Accept:
@@ -266,40 +260,39 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/0ac68b7267a44c0b3908c2082a19c20fefe54f79
     response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
       status:
         code: 202
         message: Accepted
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '0'
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/e9ca44328f74f4ee25d5518df98bb29c0e126865
       body: null
       headers:
         Accept:
@@ -311,40 +304,39 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/0ac68b7267a44c0b3908c2082a19c20fefe54f79
     response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
       status:
         code: 202
         message: Accepted
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '0'
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/e9ca44328f74f4ee25d5518df98bb29c0e126865
       body: null
       headers:
         Accept:
@@ -356,40 +348,39 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/0ac68b7267a44c0b3908c2082a19c20fefe54f79
     response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
       status:
         code: 202
         message: Accepted
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '0'
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/e9ca44328f74f4ee25d5518df98bb29c0e126865
       body: null
       headers:
         Accept:
@@ -401,40 +392,39 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/0ac68b7267a44c0b3908c2082a19c20fefe54f79
     response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
       status:
         code: 202
         message: Accepted
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '0'
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/e9ca44328f74f4ee25d5518df98bb29c0e126865
       body: null
       headers:
         Accept:
@@ -446,21 +436,16 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/0ac68b7267a44c0b3908c2082a19c20fefe54f79
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Disposition:
-          - attachment; filename="=?UTF-8?Q?Customers_Trend.xlsx?="; filename*=UTF-8''Customers%20Trend.xlsx
         Content-Length:
-          - '6036'
-        Content-Type:
-          - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+          - '0'
         DATE: *id001
         Expires:
           - '0'
@@ -469,16 +454,35 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 202
+        message: Accepted
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/0ac68b7267a44c0b3908c2082a19c20fefe54f79
+    response:
       body:
         string: !!binary |
           UEsDBBQAAAAIAAAAPwBhXUk6TwEAAI8EAAATAAAAW0NvbnRlbnRfVHlwZXNdLnhtbK2Uy27CMBBF
@@ -562,28 +566,60 @@ interactions:
           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
-          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
+          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
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Disposition:
+          - attachment; filename="=?UTF-8?Q?Customers_Trend.xlsx?="; filename*=UTF-8''Customers%20Trend.xlsx
+        Content-Length:
+          - '6035'
+        Content-Type:
+          - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1
