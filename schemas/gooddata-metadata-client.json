@@ -4919,7 +4919,11 @@
               "FederatedIdentityManagement",
               "AuditLogging",
               "ControlledFeatureRollout",
-              "AiLake"
+              "AiLake",
+              "AiModule",
+              "AiQueryLimit",
+              "AiKnowledgeStorageLimit",
+              "AiAgentLimit"
             ],
             "type": "string"
           },
@@ -4938,7 +4942,7 @@
             "$ref": "#/components/schemas/LocalIdentifier"
           },
           "operator": {
-            "description": "Arithmetic operator.\nDIFFERENCE - m₁−m₂ - the difference between two metrics.\nCHANGE - (m₁−m₂)÷m₂ - the relative difference between two metrics.\n",
+            "description": "Arithmetic operator.\nDIFFERENCE - m\u2081\u2212m\u2082 - the difference between two metrics.\nCHANGE - (m\u2081\u2212m\u2082)\u00f7m\u2082 - the relative difference between two metrics.\n",
             "enum": [
               "DIFFERENCE",
               "CHANGE"
@@ -6081,7 +6085,7 @@
         "properties": {
           "exportInfo": {
             "default": false,
-            "description": "If true, the export will contain the information about the export – exported date, dashboard filters, etc.",
+            "description": "If true, the export will contain the information about the export \u2013 exported date, dashboard filters, etc.",
             "example": true,
             "type": "boolean"
           },
@@ -10247,7 +10251,11 @@
                 "FederatedIdentityManagement",
                 "AuditLogging",
                 "ControlledFeatureRollout",
-                "AiLake"
+                "AiLake",
+                "AiModule",
+                "AiQueryLimit",
+                "AiKnowledgeStorageLimit",
+                "AiAgentLimit"
               ],
               "type": "string"
             },
@@ -19479,7 +19487,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000.0
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -19531,7 +19539,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000.0
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -19653,7 +19661,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000.0
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -19709,7 +19717,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000.0
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -19919,7 +19927,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000.0
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -19971,7 +19979,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000.0
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -20085,7 +20093,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000.0
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -20137,7 +20145,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000.0
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -29439,7 +29447,7 @@
           },
           "exportInfo": {
             "default": false,
-            "description": "If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF)",
+            "description": "If true, the export will contain the information about the export \u2013 exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF)",
             "example": true,
             "type": "boolean"
           },
@@ -31146,23 +31154,6 @@
         "summary": "Manage Permissions for a Organization",
         "tags": [
           "Permissions",
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/organization/metadataCheck": {
-      "post": {
-        "description": "(BETA) Temporary solution. Resyncs all organization objects and full workspaces within the organization with target GEN_AI_CHECK.",
-        "operationId": "metadataCheckOrganization",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "summary": "(BETA) Check Organization Metadata Inconsistencies",
-        "tags": [
-          "AI",
-          "Metadata Check",
           "actions"
         ]
       }
@@ -39123,7 +39114,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,page,all",
+            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -39132,8 +39123,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "config",
                   "permissions",
+                  "config",
                   "hierarchy",
                   "dataModelDatasets",
                   "page",
@@ -39204,7 +39195,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
+            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -39213,8 +39204,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "config",
                   "permissions",
+                  "config",
                   "hierarchy",
                   "dataModelDatasets",
                   "all",
@@ -39339,7 +39330,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
+            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -39348,8 +39339,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "config",
                   "permissions",
+                  "config",
                   "hierarchy",
                   "dataModelDatasets",
                   "all",
