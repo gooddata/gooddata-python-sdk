@@ -1494,7 +1494,7 @@
   "servers": [
     {
       "description": "Generated server url",
-      "url": "https://demo-cicd.cloud.gooddata.com"
+      "url": ""
     },
     {
       "description": "GoodData.CN endpoint",
