@@ -58,8 +58,8 @@ define generate_client
 	./scripts/generate_client.sh gooddata-$(1)-client -f "/local/schemas/gooddata-$(1)-client.json"
 endef
 
-.PHONY: api-client
-api-client: download
+.PHONY: _api-client-generate
+_api-client-generate:
 	rm -f schemas/gooddata-api-client.json
 	cat schemas/gooddata-*.json | jq -S -s 'reduce .[] as $$item ({}; . * $$item) + { tags : ( reduce .[].tags as $$item (null; . + $$item) | unique_by(.name) ) }' | sed '/\u0000/d' > "schemas/gooddata-api-client.json"
 	$(call generate_client,api)
@@ -68,6 +68,12 @@ api-client: download
 	find gooddata-api-client/gooddata_api_client -name '*.py' -exec \
 		sed -i.bak 's/\^\[\^\]\*\$$/^[^\\x00]*$$/g' {} + && \
 		find gooddata-api-client/gooddata_api_client -name '*.py.bak' -delete
+
+.PHONY: api-client
+api-client: download _api-client-generate
+
+.PHONY: api-client-local
+api-client-local: _api-client-generate
 
 .PHONY: download
 download:
