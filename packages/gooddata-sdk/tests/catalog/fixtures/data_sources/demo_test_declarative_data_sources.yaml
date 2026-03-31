@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
       body: null
       headers:
         Accept:
@@ -14,38 +11,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '428'
-        Content-Type:
-          - application/json
-        DATE: &id001
-          - PLACEHOLDER
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           dataSources:
@@ -66,13 +34,41 @@ interactions:
               type: POSTGRESQL
               url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
               username: postgres
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '428'
+        Content-Type:
+          - application/json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSource/test
       body:
+        schema: demo
         type: POSTGRESQL
         url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
-        schema: demo
         username: postgres
       headers:
         Accept:
@@ -85,15 +81,20 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSource/test
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          error: 'DB request exception (state=GENERAL_ERROR dataSourceId=null vendorErrorState=08004
+            vendorErrorCode=0) org.postgresql.util.PSQLException: The server requested
+            SCRAM-based authentication, but the password is an empty string.org.postgresql.util.PSQLException:
+            The server requested SCRAM-based authentication, but the password is an
+            empty string.'
+          successful: false
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '373'
         Content-Type:
@@ -106,32 +107,26 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          error: 'DB request exception (state=GENERAL_ERROR dataSourceId=null vendorErrorState=08004
-            vendorErrorCode=0) org.postgresql.util.PSQLException: The server requested
-            SCRAM-based authentication, but the password is an empty string.org.postgresql.util.PSQLException:
-            The server requested SCRAM-based authentication, but the password is an
-            empty string.'
-          successful: false
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSource/test
       body:
+        password: secret
+        schema: demo
         type: POSTGRESQL
         url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
-        schema: demo
-        password: secret
         username: postgres
       headers:
         Accept:
@@ -144,17 +139,20 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSource/test
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          queryDurationMillis:
+            createCacheTable: 0
+            simpleSelect: 204
+          successful: true
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
-          - '82'
+          - '83'
         Content-Type:
           - application/json
         DATE: *id001
@@ -165,19 +163,18 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          queryDurationMillis:
-            createCacheTable: 0
-            simpleSelect: 11
-          successful: true
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1

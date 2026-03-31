@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/visualizationObjects/customers_trend?include=ALL
       body: null
       headers:
         Accept:
@@ -14,46 +11,13 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/visualizationObjects/customers_trend?include=ALL
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: &id001
-          - PLACEHOLDER
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
             attributes:
-              title: Customers Trend
               areRelationsValid: true
               content:
                 buckets:
@@ -125,7 +89,8 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2026-03-25 09:18
+              createdAt: 2026-03-31 07:43
+              title: Customers Trend
             id: customers_trend
             meta:
               origin:
@@ -136,12 +101,6 @@ interactions:
                 data:
                   id: admin
                   type: userIdentifier
-              metrics:
-                data:
-                  - id: amount_of_active_customers
-                    type: metric
-                  - id: revenue_per_customer
-                    type: metric
               datasets:
                 data:
                   - id: date
@@ -150,6 +109,12 @@ interactions:
                 data:
                   - id: date.month
                     type: label
+              metrics:
+                data:
+                  - id: amount_of_active_customers
+                    type: metric
+                  - id: revenue_per_customer
+                    type: metric
             type: visualizationObject
           included:
             - attributes: {}
@@ -158,51 +123,81 @@ interactions:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userIdentifiers/admin
               type: userIdentifier
             - attributes:
-                title: Date
                 description: ''
                 tags:
                   - Date
+                title: Date
                 type: DATE
               id: date
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/date
               type: dataset
             - attributes:
-                title: '# of Active Customers'
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-03-25 09:18
+                createdAt: 2026-03-31 07:43
+                title: '# of Active Customers'
               id: amount_of_active_customers
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
               type: metric
             - attributes:
-                title: Revenue per Customer
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-03-25 09:18
+                createdAt: 2026-03-31 07:43
+                title: Revenue per Customer
               id: revenue_per_customer
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
               type: metric
             - attributes:
-                title: Date - Month/Year
                 description: Month and Year (12/2020)
-                tags:
-                  - Date
                 primary: true
                 sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Month/Year
               id: date.month
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.month
               type: label
           links:
             self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/visualizationObjects/customers_trend?include=ALL
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '1053'
+        Content-Type:
+          - application/json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular
       body:
         fileName: Customers Trend
         format: CSV
@@ -218,15 +213,15 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular
     response:
-      status:
-        code: 201
-        message: Created
+      body:
+        string:
+          exportResult: c67e0d18e307f4389d9dad5bc5d833f8f68be793
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '59'
         Content-Type:
@@ -239,44 +234,282 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 201
+        message: Created
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/c67e0d18e307f4389d9dad5bc5d833f8f68be793
+    response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
           - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 202
+        message: Accepted
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/c67e0d18e307f4389d9dad5bc5d833f8f68be793
+    response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 202
+        message: Accepted
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/c67e0d18e307f4389d9dad5bc5d833f8f68be793
+    response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 202
+        message: Accepted
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/c67e0d18e307f4389d9dad5bc5d833f8f68be793
+    response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 202
+        message: Accepted
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/c67e0d18e307f4389d9dad5bc5d833f8f68be793
+    response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 202
+        message: Accepted
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/c67e0d18e307f4389d9dad5bc5d833f8f68be793
+    response:
       body:
         string:
-          exportResult: 458b7e1f0c68b09df15586401c72bea1e92e2e26
-  - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/458b7e1f0c68b09df15586401c72bea1e92e2e26
-      body: null
-      headers:
-        Accept:
-          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
-            application/zip, text/csv, text/html
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 202
-        message: Accepted
+          detail: 'INVALID_ARGUMENT: Status Code: 404
+
+            Reason: Not Found
+
+            HTTP response headers: HTTPHeaderDict({''Vary'': ''Origin, Access-Control-Request-Method,
+            Access-Control-Request-Headers'', ''X-GDC-TRACE-ID'': ''69cb7b1d0a2394e7bec961a13f20a83e'',
+            ''Content-Type'': ''application/problem+json'', ''Cache-Control'': ''no-cache,
+            no-store, max-age=0, must-revalidate'', ''Pragma'': ''no-cache'', ''Expires'':
+            ''0'', ''X-Content-Type-Options'': ''nosniff'', ''X-XSS-Protection'':
+            ''0'', ''Referrer-Policy'': ''no-referrer'', ''content-length'': ''172''})
+
+            HTTP response body: {"title":"Not Found","status":404,"detail":"The requested
+            endpoint does not exist or you do not have permission to access it.","traceId":"69cb7b1d0a2394e7bec961a13f20a83e"}
+
+            '
+          status: 400
+          title: Bad Request
+          traceId: 69cb7b200ceaded48d51236353fd3d32
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
-          - '0'
+          - '802'
+        Content-Type:
+          - application/problem+json
         DATE: *id001
         Expires:
           - '0'
@@ -285,43 +518,194 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 400
+        message: Bad Request
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/458b7e1f0c68b09df15586401c72bea1e92e2e26
       body: null
       headers:
         Accept:
-          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
-            application/zip, text/csv, text/html
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/visualizationObjects/customers_trend?include=ALL
     response:
-      status:
-        code: 202
-        message: Accepted
+      body:
+        string:
+          data:
+            attributes:
+              areRelationsValid: true
+              content:
+                buckets:
+                  - items:
+                      - measure:
+                          alias: Active Customers
+                          definition:
+                            measureDefinition:
+                              computeRatio: false
+                              filters: []
+                              item:
+                                identifier:
+                                  id: amount_of_active_customers
+                                  type: metric
+                          localIdentifier: 2ba0b87b59ca41a4b1530e81a5c1d081
+                          title: '# of Active Customers'
+                    localIdentifier: measures
+                  - items:
+                      - measure:
+                          definition:
+                            measureDefinition:
+                              filters: []
+                              item:
+                                identifier:
+                                  id: revenue_per_customer
+                                  type: metric
+                          localIdentifier: ec0606894b9f4897b7beaf1550608928
+                          title: Revenue per Customer
+                    localIdentifier: secondary_measures
+                  - items:
+                      - attribute:
+                          displayForm:
+                            identifier:
+                              id: date.month
+                              type: label
+                          localIdentifier: 0de7d7f08af7480aa636857a26be72b6
+                    localIdentifier: view
+                filters:
+                  - relativeDateFilter:
+                      dataSet:
+                        identifier:
+                          id: date
+                          type: dataset
+                      from: -12
+                      granularity: GDC.time.month
+                      to: -1
+                properties:
+                  controls:
+                    colorMapping:
+                      - color:
+                          type: guid
+                          value: '20'
+                        id: 2ba0b87b59ca41a4b1530e81a5c1d081
+                      - color:
+                          type: guid
+                          value: '4'
+                        id: ec0606894b9f4897b7beaf1550608928
+                    dualAxis: true
+                    legend:
+                      position: bottom
+                    primaryChartType: column
+                    secondaryChartType: line
+                    secondary_yaxis:
+                      measures:
+                        - ec0606894b9f4897b7beaf1550608928
+                    xaxis:
+                      name:
+                        visible: false
+                      rotation: auto
+                version: '2'
+                visualizationUrl: local:combo2
+              createdAt: 2026-03-31 07:44
+              title: Customers Trend
+            id: customers_trend
+            meta:
+              origin:
+                originId: demo
+                originType: NATIVE
+            relationships:
+              createdBy:
+                data:
+                  id: admin
+                  type: userIdentifier
+              datasets:
+                data:
+                  - id: date
+                    type: dataset
+              labels:
+                data:
+                  - id: date.month
+                    type: label
+              metrics:
+                data:
+                  - id: amount_of_active_customers
+                    type: metric
+                  - id: revenue_per_customer
+                    type: metric
+            type: visualizationObject
+          included:
+            - attributes: {}
+              id: admin
+              links:
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/userIdentifiers/admin
+              type: userIdentifier
+            - attributes:
+                description: ''
+                tags:
+                  - Date
+                title: Date
+                type: DATE
+              id: date
+              links:
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/date
+              type: dataset
+            - attributes:
+                content:
+                  format: '#,##0'
+                  maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
+                createdAt: 2026-03-31 07:44
+                title: '# of Active Customers'
+              id: amount_of_active_customers
+              links:
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
+              type: metric
+            - attributes:
+                content:
+                  format: $#,##0.0
+                  maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
+                createdAt: 2026-03-31 07:44
+                title: Revenue per Customer
+              id: revenue_per_customer
+              links:
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
+              type: metric
+            - attributes:
+                description: Month and Year (12/2020)
+                primary: true
+                sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Month/Year
+              id: date.month
+              links:
+                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.month
+              type: label
+          links:
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/visualizationObjects/customers_trend?include=ALL
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
+        Content-Encoding:
+          - br
         Content-Length:
-          - '0'
+          - '1053'
+        Content-Type:
+          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -330,90 +714,274 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
-  - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/458b7e1f0c68b09df15586401c72bea1e92e2e26
-      body: null
-      headers:
-        Accept:
-          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
-            application/zip, text/csv, text/html
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 202
-        message: Accepted
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '0'
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
-  - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/458b7e1f0c68b09df15586401c72bea1e92e2e26
-      body: null
-      headers:
-        Accept:
-          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
-            application/zip, text/csv, text/html
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
+        X-Xss-Protection:
+          - 1; mode=block
       status:
         code: 200
         message: OK
+  - request:
+      body:
+        fileName: Customers Trend
+        format: CSV
+        visualizationObject: customers_trend
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular
+    response:
+      body:
+        string:
+          exportResult: 728341f800901456539e9c4e3d3c1781f965a081
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
+        Content-Length:
+          - '59'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 201
+        message: Created
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/728341f800901456539e9c4e3d3c1781f965a081
+    response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 202
+        message: Accepted
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/728341f800901456539e9c4e3d3c1781f965a081
+    response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 202
+        message: Accepted
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/728341f800901456539e9c4e3d3c1781f965a081
+    response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 202
+        message: Accepted
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/728341f800901456539e9c4e3d3c1781f965a081
+    response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 202
+        message: Accepted
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/728341f800901456539e9c4e3d3c1781f965a081
+    response:
+      body:
+        string: "\uFEFF\"Date - Month/Year\",\"2025-03\",\"2025-04\",\"2025-05\",\"\
+          2025-06\",\"2025-07\",\"2025-08\",\"2025-09\",\"2025-10\",\"2025-11\",\"\
+          2025-12\",\"2026-01\",\"2026-02\"\nActive Customers,62,60,51,60,55,86,89,72,56,90,60,64\n\
+          Revenue per Customer,93.78964285714285,115.96454545454546,241.92872340425532,270.91346938775513,92.0542,251.6236842105263,204.48873417721518,187.41,160.19469387755103,178.3658536585366,185.4194,146.6475\n"
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
         Content-Disposition:
           - attachment; filename="=?UTF-8?Q?Customers_Trend.csv?="; filename*=UTF-8''Customers%20Trend.csv
         Content-Length:
-          - '400'
+          - '399'
         Content-Type:
           - text/csv
         DATE: *id001
@@ -424,18 +992,18 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: "\uFEFF\"Date - Month/Year\",\"2025-04\",\"2025-05\",\"2025-06\",\"\
-          2025-07\",\"2025-08\",\"2025-09\",\"2025-10\",\"2025-11\",\"2025-12\",\"\
-          2026-01\",\"2026-02\",\"2026-03\"\nActive Customers,60,51,60,55,86,89,72,56,90,60,64,65\n\
-          Revenue per Customer,115.96454545454546,241.92872340425532,270.91346938775513,92.0542,251.6236842105263,204.48873417721518,187.41,160.19469387755103,178.3658536585366,185.4194,146.6475,111.88542372881356\n"
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1

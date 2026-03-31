@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes:
@@ -21,22 +18,22 @@ interactions:
           measures:
             - definition:
                 measure:
+                  aggregation: SUM
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: price
                       type: fact
-                  aggregation: SUM
-                  computeRatio: false
-                  filters: []
               localIdentifier: price
             - definition:
                 measure:
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: order_amount
                       type: metric
-                  computeRatio: false
-                  filters: []
               localIdentifier: order_amount
         resultSpec:
           dimensions:
@@ -58,15 +55,57 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          executionResponse:
+            dimensions:
+              - headers:
+                  - attributeHeader:
+                      attribute:
+                        id: state
+                        type: attribute
+                      attributeName: State
+                      granularity: null
+                      label:
+                        id: state
+                        type: label
+                      labelName: State
+                      localIdentifier: state
+                      primaryLabel:
+                        id: state
+                        type: label
+                      valueType: TEXT
+                  - attributeHeader:
+                      attribute:
+                        id: region
+                        type: attribute
+                      attributeName: Region
+                      granularity: null
+                      label:
+                        id: region
+                        type: label
+                      labelName: Region
+                      localIdentifier: region
+                      primaryLabel:
+                        id: region
+                        type: label
+                      valueType: TEXT
+                localIdentifier: dim_0
+              - headers:
+                  - measureGroupHeaders:
+                      - localIdentifier: price
+                      - format: $#,##0
+                        localIdentifier: order_amount
+                        name: Order Amount
+                localIdentifier: dim_1
+            links:
+              executionResult: 98d2acd22110480ba3abf854d95ed1893a0a7c26:64e305ea99882dd9cf927498ab34d4635823becaf25db6ade37fe1f4e9fe6c04
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '907'
         Content-Type:
@@ -80,81 +119,37 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-GDC-CANCEL-TOKEN:
-          - 09d55b2a-9f50-43ae-8268-ffbde6f88afd
+        X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          executionResponse:
-            dimensions:
-              - headers:
-                  - attributeHeader:
-                      localIdentifier: state
-                      label:
-                        id: state
-                        type: label
-                      labelName: State
-                      attribute:
-                        id: state
-                        type: attribute
-                      attributeName: State
-                      granularity: null
-                      primaryLabel:
-                        id: state
-                        type: label
-                      valueType: TEXT
-                  - attributeHeader:
-                      localIdentifier: region
-                      label:
-                        id: region
-                        type: label
-                      labelName: Region
-                      attribute:
-                        id: region
-                        type: attribute
-                      attributeName: Region
-                      granularity: null
-                      primaryLabel:
-                        id: region
-                        type: label
-                      valueType: TEXT
-                localIdentifier: dim_0
-              - headers:
-                  - measureGroupHeaders:
-                      - localIdentifier: price
-                      - localIdentifier: order_amount
-                        format: $#,##0
-                        name: Order Amount
-                localIdentifier: dim_1
-            links:
-              executionResult: 02023d75d2dda2fa71af2a31a06edb83a734234b:5598a2eccd77edb85ac25038aba7e9783f9f586d333a57be6f7d4e7a740454d5
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular
       body:
-        fileName: test_xlsx
-        format: XLSX
-        executionResult: 02023d75d2dda2fa71af2a31a06edb83a734234b:5598a2eccd77edb85ac25038aba7e9783f9f586d333a57be6f7d4e7a740454d5
         customOverride:
           labels:
             region:
               title: Custom Title Region
           metrics:
-            price:
-              format: ''
-              title: Sum Of Price
             order_amount:
               format: '#,##0.00'
               title: Order Amount Metric
+            price:
+              format: ''
+              title: Sum Of Price
+        executionResult: 98d2acd22110480ba3abf854d95ed1893a0a7c26:64e305ea99882dd9cf927498ab34d4635823becaf25db6ade37fe1f4e9fe6c04
+        fileName: test_xlsx
+        format: XLSX
       headers:
         Accept:
           - application/json
@@ -166,15 +161,15 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular
     response:
-      status:
-        code: 201
-        message: Created
+      body:
+        string:
+          exportResult: b372c8f7a2d0cd4926928f50169d75d22077d900
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '59'
         Content-Type:
@@ -187,22 +182,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          exportResult: 378a92a07cc081febc1b7cd4b4cb9d695d9c0cc5
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 201
+        message: Created
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/378a92a07cc081febc1b7cd4b4cb9d695d9c0cc5
       body: null
       headers:
         Accept:
@@ -214,40 +208,39 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/b372c8f7a2d0cd4926928f50169d75d22077d900
     response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
       status:
         code: 202
         message: Accepted
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '0'
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/378a92a07cc081febc1b7cd4b4cb9d695d9c0cc5
       body: null
       headers:
         Accept:
@@ -259,21 +252,16 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/b372c8f7a2d0cd4926928f50169d75d22077d900
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Disposition:
-          - attachment; filename="=?UTF-8?Q?test=5Fxlsx.xlsx?="; filename*=UTF-8''test_xlsx.xlsx
         Content-Length:
-          - '7543'
-        Content-Type:
-          - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+          - '0'
         DATE: *id001
         Expires:
           - '0'
@@ -282,16 +270,338 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 202
+        message: Accepted
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/b372c8f7a2d0cd4926928f50169d75d22077d900
+    response:
+      body:
+        string:
+          detail: 'INVALID_ARGUMENT: Status Code: 404
+
+            Reason: Not Found
+
+            HTTP response headers: HTTPHeaderDict({''Vary'': ''Origin, Access-Control-Request-Method,
+            Access-Control-Request-Headers'', ''X-GDC-TRACE-ID'': ''69cb7b1921bb3e9dd2b90be0f2ed615d'',
+            ''Content-Type'': ''application/problem+json'', ''Cache-Control'': ''no-cache,
+            no-store, max-age=0, must-revalidate'', ''Pragma'': ''no-cache'', ''Expires'':
+            ''0'', ''X-Content-Type-Options'': ''nosniff'', ''X-XSS-Protection'':
+            ''0'', ''Referrer-Policy'': ''no-referrer'', ''content-length'': ''172''})
+
+            HTTP response body: {"title":"Not Found","status":404,"detail":"The requested
+            endpoint does not exist or you do not have permission to access it.","traceId":"69cb7b1921bb3e9dd2b90be0f2ed615d"}
+
+            '
+          status: 400
+          title: Bad Request
+          traceId: 69cb7b190b1c0873c00d68a133767209
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '802'
+        Content-Type:
+          - application/problem+json
+        DATE: *id001
+        Expires:
           - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 400
+        message: Bad Request
+  - request:
+      body:
+        execution:
+          attributes:
+            - label:
+                identifier:
+                  id: region
+                  type: label
+              localIdentifier: region
+            - label:
+                identifier:
+                  id: state
+                  type: label
+              localIdentifier: state
+          filters: []
+          measures:
+            - definition:
+                measure:
+                  aggregation: SUM
+                  computeRatio: false
+                  filters: []
+                  item:
+                    identifier:
+                      id: price
+                      type: fact
+              localIdentifier: price
+            - definition:
+                measure:
+                  computeRatio: false
+                  filters: []
+                  item:
+                    identifier:
+                      id: order_amount
+                      type: metric
+              localIdentifier: order_amount
+        resultSpec:
+          dimensions:
+            - itemIdentifiers:
+                - state
+                - region
+              localIdentifier: dim_0
+            - itemIdentifiers:
+                - measureGroup
+              localIdentifier: dim_1
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
+    response:
+      body:
+        string:
+          executionResponse:
+            dimensions:
+              - headers:
+                  - attributeHeader:
+                      attribute:
+                        id: state
+                        type: attribute
+                      attributeName: State
+                      granularity: null
+                      label:
+                        id: state
+                        type: label
+                      labelName: State
+                      localIdentifier: state
+                      primaryLabel:
+                        id: state
+                        type: label
+                      valueType: TEXT
+                  - attributeHeader:
+                      attribute:
+                        id: region
+                        type: attribute
+                      attributeName: Region
+                      granularity: null
+                      label:
+                        id: region
+                        type: label
+                      labelName: Region
+                      localIdentifier: region
+                      primaryLabel:
+                        id: region
+                        type: label
+                      valueType: TEXT
+                localIdentifier: dim_0
+              - headers:
+                  - measureGroupHeaders:
+                      - localIdentifier: price
+                      - format: $#,##0
+                        localIdentifier: order_amount
+                        name: Order Amount
+                localIdentifier: dim_1
+            links:
+              executionResult: 0dcebebeaa130c3e46fae52260426f2e8cb8567d:5f59f192492faac4ca1f38dd9a355ba547c9107d5b4380130cc073d1e60c29f8
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '907'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-CANCEL-TOKEN: *id001
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+  - request:
+      body:
+        customOverride:
+          labels:
+            region:
+              title: Custom Title Region
+          metrics:
+            order_amount:
+              format: '#,##0.00'
+              title: Order Amount Metric
+            price:
+              format: ''
+              title: Sum Of Price
+        executionResult: 0dcebebeaa130c3e46fae52260426f2e8cb8567d:5f59f192492faac4ca1f38dd9a355ba547c9107d5b4380130cc073d1e60c29f8
+        fileName: test_xlsx
+        format: XLSX
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular
+    response:
+      body:
+        string:
+          exportResult: 45deebc32a449c0edc2ed1d092b18b58d085dd66
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '59'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 201
+        message: Created
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/45deebc32a449c0edc2ed1d092b18b58d085dd66
+    response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '0'
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 202
+        message: Accepted
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/zip, text/csv, text/html
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/export/tabular/45deebc32a449c0edc2ed1d092b18b58d085dd66
+    response:
       body:
         string: !!binary |
           UEsDBBQAAAAIAAAAPwBhXUk6TwEAAI8EAAATAAAAW0NvbnRlbnRfVHlwZXNdLnhtbK2Uy27CMBBF
@@ -401,29 +711,61 @@ interactions:
           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
-          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
-          BgAAAAAKAAoAgAIAAOEaAAAAAA==
+          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
+          AAAAAAoACgCAAgAA4BoAAAAA
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Disposition:
+          - attachment; filename="=?UTF-8?Q?test=5Fxlsx.xlsx?="; filename*=UTF-8''test_xlsx.xlsx
+        Content-Length:
+          - '7542'
+        Content-Type:
+          - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1

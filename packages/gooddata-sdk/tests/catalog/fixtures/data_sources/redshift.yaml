@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body: null
       headers:
         Accept:
@@ -14,15 +11,19 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 404
-        message: Not Found
+      body:
+        string:
+          detail: The requested endpoint does not exist or you do not have permission
+            to access it.
+          status: 404
+          title: Not Found
+          traceId: 69cb7a9a9e0243725929f881f5d56281
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
@@ -36,36 +37,31 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          detail: The requested endpoint does not exist or you do not have permission
-            to access it.
-          status: 404
-          title: Not Found
-          traceId: 91771d4e564ae5f17c86201e47fdda34
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 404
+        message: Not Found
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources
       body:
         data:
           attributes:
+            alternativeDataSourceId: ds-abc-id
             name: Test2
+            password: demopass
             schema: demo
             type: REDSHIFT
-            username: demouser
-            password: demopass
             url: jdbc:redshift://aws.endpoint:5439/demo?autosave=true
-            alternativeDataSourceId: ds-abc-id
+            username: demouser
           id: test
           type: dataSource
       headers:
@@ -79,15 +75,27 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources
     response:
-      status:
-        code: 201
-        message: Created
+      body:
+        string:
+          data:
+            attributes:
+              alternativeDataSourceId: ds-abc-id
+              authenticationType: USERNAME_PASSWORD
+              name: Test2
+              schema: demo
+              type: REDSHIFT
+              url: jdbc:redshift://aws.endpoint:5439/demo?autosave=true
+              username: demouser
+            id: test
+            type: dataSource
+          links:
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '379'
         Content-Type:
@@ -100,34 +108,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:redshift://aws.endpoint:5439/demo?autosave=true
-              username: demouser
-              authenticationType: USERNAME_PASSWORD
-              alternativeDataSourceId: ds-abc-id
-              name: Test2
-              type: REDSHIFT
-              schema: demo
-            id: test
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 201
+        message: Created
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body: null
       headers:
         Accept:
@@ -138,15 +133,27 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              alternativeDataSourceId: ds-abc-id
+              authenticationType: USERNAME_PASSWORD
+              name: Test2
+              schema: demo
+              type: REDSHIFT
+              url: jdbc:redshift://aws.endpoint:5439/demo?autosave=true
+              username: demouser
+            id: test
+            type: dataSource
+          links:
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '379'
         Content-Type:
@@ -159,34 +166,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:redshift://aws.endpoint:5439/demo?autosave=true
-              username: demouser
-              authenticationType: USERNAME_PASSWORD
-              alternativeDataSourceId: ds-abc-id
-              name: Test2
-              type: REDSHIFT
-              schema: demo
-            id: test
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: DELETE
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body: null
       headers:
         Accept-Encoding:
@@ -195,15 +189,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: DELETE
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -214,15 +207,18 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 204
+        message: No Content
+version: 1

@@ -1,19 +1,16 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
       body:
-        - permissions:
-            - VIEW
-          assigneeIdentifier:
+        - assigneeIdentifier:
             id: visitorsGroup
             type: userGroup
-        - permissions:
+          permissions:
             - VIEW
-          assigneeRule:
+        - assigneeRule:
             type: allWorkspaceUsers
+          permissions:
+            - VIEW
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -23,15 +20,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         DATE: &id001
           - PLACEHOLDER
         Expires:
@@ -41,21 +37,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 204
+        message: No Content
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
       body: null
       headers:
         Accept:
@@ -66,37 +62,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '209'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           rules:
@@ -111,30 +79,11 @@ interactions:
                 - level: VIEW
                   source: direct
           users: []
-  - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
+        Content-Length:
+          - '209'
         Content-Type:
           - application/json
         DATE: *id001
@@ -145,9 +94,7 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
+          - max-age=31536000; includeSubDomains; preload
         Vary:
           - Accept-Encoding
           - Origin
@@ -156,8 +103,25 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo
+    response:
       body:
         string:
           analytics:
@@ -169,46 +133,46 @@ interactions:
                       id: campaign_name_filter
                       type: filterContext
                   layout:
-                    type: IDashboardLayout
                     sections:
-                      - type: IDashboardLayoutSection
-                        header:
-                          title: Spend breakdown and Revenue
+                      - header:
                           description: The first insight shows a breakdown of spend
                             by category and campaign. The second shows revenue per
                             $ spend, for each campaign, to demonstrate, how campaigns
                             are successful.
+                          title: Spend breakdown and Revenue
                         items:
-                          - type: IDashboardLayoutItem
-                            size:
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Campaign Spend
                               description: ''
+                              drills: []
                               ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: campaign_spend
                                   type: visualizationObject
-                              drills: []
                               properties: {}
-                          - type: IDashboardLayoutItem
-                            size:
+                              title: Campaign Spend
+                              type: insight
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Revenue per $ vs Spend by Campaign
                               description: ''
+                              drills: []
                               ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: revenue_per_usd_vs_spend_by_campaign
                                   type: visualizationObject
-                              drills: []
                               properties: {}
+                              title: Revenue per $ vs Spend by Campaign
+                              type: insight
+                        type: IDashboardLayoutSection
+                    type: IDashboardLayout
                   version: '2'
                 createdAt: 2025-08-07 11:45
                 createdBy:
@@ -269,143 +233,143 @@ interactions:
                       id: region_filter
                       type: filterContext
                   layout:
-                    type: IDashboardLayout
                     sections:
-                      - type: IDashboardLayoutSection
-                        items:
-                          - type: IDashboardLayoutItem
-                            size:
+                      - items:
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Top 10 Products
-                              description: ''
-                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
+                              description: ''
+                              drills: []
+                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: top_10_products
                                   type: visualizationObject
-                              drills: []
                               properties: {}
-                          - type: IDashboardLayoutItem
-                            size:
+                              title: Top 10 Products
+                              type: insight
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Revenue Trend
-                              description: ''
-                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
+                              description: ''
+                              drills: []
+                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: revenue_trend
                                   type: visualizationObject
-                              drills: []
                               properties: {}
-                          - type: IDashboardLayoutItem
-                            size:
+                              title: Revenue Trend
+                              type: insight
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Customers Trend
-                              description: ''
-                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
+                              description: ''
+                              drills: []
+                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: customers_trend
                                   type: visualizationObject
-                              drills: []
                               properties: {}
-                          - type: IDashboardLayoutItem
-                            size:
+                              title: Customers Trend
+                              type: insight
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Product Categories Pie Chart
-                              description: ''
-                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
+                              description: ''
+                              drills: []
+                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: product_categories_pie_chart
                                   type: visualizationObject
-                              drills: []
                               properties: {}
-                          - type: IDashboardLayoutItem
-                            size:
+                              title: Product Categories Pie Chart
+                              type: insight
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Product Breakdown
-                              description: ''
-                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
+                              description: ''
+                              drills: []
+                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: product_breakdown
                                   type: visualizationObject
-                              drills: []
                               properties: {}
-                          - type: IDashboardLayoutItem
-                            size:
+                              title: Product Breakdown
+                              type: insight
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Product Saleability
-                              description: ''
-                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
+                              description: ''
+                              drills: []
+                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: product_saleability
                                   type: visualizationObject
-                              drills: []
                               properties: {}
-                          - type: IDashboardLayoutItem
-                            size:
+                              title: Product Saleability
+                              type: insight
+                          - size:
                               xl:
                                 gridWidth: 12
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: '% Revenue per Product by Customer and Category'
-                              description: ''
-                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
+                              description: ''
+                              drills: []
+                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: percent_revenue_per_product_by_customer_and_category
                                   type: visualizationObject
-                              drills: []
                               properties: {}
+                              title: '% Revenue per Product by Customer and Category'
+                              type: insight
+                        type: IDashboardLayoutSection
+                    type: IDashboardLayout
                   version: '2'
                 createdAt: 2025-08-07 11:45
                 createdBy:
@@ -442,19 +406,19 @@ interactions:
                   filters:
                     - dateFilter:
                         from: '0'
-                        to: '0'
                         granularity: GDC.time.month
+                        to: '0'
                         type: relative
                     - attributeFilter:
+                        attributeElements:
+                          uris: []
                         displayForm:
                           identifier:
                             id: campaign_name
                             type: label
-                        negativeSelection: true
-                        attributeElements:
-                          uris: []
-                        localIdentifier: 14b0807447ef4bc28f43e4fc5c337d1d
                         filterElementsBy: []
+                        localIdentifier: 14b0807447ef4bc28f43e4fc5c337d1d
+                        negativeSelection: true
                   version: '2'
                 description: ''
                 id: campaign_name_filter
@@ -462,15 +426,15 @@ interactions:
               - content:
                   filters:
                     - attributeFilter:
+                        attributeElements:
+                          uris: []
                         displayForm:
                           identifier:
                             id: region
                             type: label
-                        negativeSelection: true
-                        attributeElements:
-                          uris: []
-                        localIdentifier: 2d5ef8df82444f6ba27b45f0990ee6af
                         filterElementsBy: []
+                        localIdentifier: 2d5ef8df82444f6ba27b45f0990ee6af
+                        negativeSelection: true
                   version: '2'
                 description: ''
                 id: region_filter
@@ -1056,9 +1020,9 @@ interactions:
                                   identifier:
                                     id: revenue
                                     type: metric
+                            format: '#,##0.00%'
                             localIdentifier: 162b857af49d45769bc12604a5c192b9
                             title: '% Revenue'
-                            format: '#,##0.00%'
                       localIdentifier: measures
                     - items:
                         - attribute:
@@ -2052,17 +2016,46 @@ interactions:
                 tags:
                   - Date
                 title: Date
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Transfer-Encoding:
+          - chunked
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
       body:
-        - permissions: []
-          assigneeIdentifier:
+        - assigneeIdentifier:
             id: visitorsGroup
             type: userGroup
-        - permissions: []
-          assigneeRule:
+          permissions: []
+        - assigneeRule:
             type: allWorkspaceUsers
+          permissions: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -2072,15 +2065,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -2089,21 +2081,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 204
+        message: No Content
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
       body: null
       headers:
         Accept:
@@ -2114,15 +2106,17 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          rules: []
+          userGroups: []
+          users: []
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '39'
         Content-Type:
@@ -2135,18 +2129,18 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          rules: []
-          userGroups: []
-          users: []
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1

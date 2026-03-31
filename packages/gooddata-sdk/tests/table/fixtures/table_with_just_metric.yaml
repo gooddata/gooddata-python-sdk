@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes: []
@@ -11,12 +8,12 @@ interactions:
           measures:
             - definition:
                 measure:
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: order_amount
                       type: metric
-                  computeRatio: false
-                  filters: []
               localIdentifier: metric1
         resultSpec:
           dimensions:
@@ -34,15 +31,24 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          executionResponse:
+            dimensions:
+              - headers:
+                  - measureGroupHeaders:
+                      - format: $#,##0
+                        localIdentifier: metric1
+                        name: Order Amount
+                localIdentifier: dim_0
+            links:
+              executionResult: 3495aeefa1be386f864d8fea74c36bff657239ba:9ade105a4a78524a5bce0c3851f44bae032026b4d0db5ed8beeaa341290bc747
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '310'
         Content-Type:
@@ -56,33 +62,22 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-GDC-CANCEL-TOKEN:
-          - 772ed5c6-3bd2-4cb0-81ad-1c9a555afac9
+        X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          executionResponse:
-            dimensions:
-              - headers:
-                  - measureGroupHeaders:
-                      - localIdentifier: metric1
-                        format: $#,##0
-                        name: Order Amount
-                localIdentifier: dim_0
-            links:
-              executionResult: 6e7ecd5977fbef159d8ffc585a4c99c2b87d0d07:64a364287032033653002d8e0bad0d17eaa70a7b08263de27c3a7f9a68634897
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute/result/6e7ecd5977fbef159d8ffc585a4c99c2b87d0d07%3A64a364287032033653002d8e0bad0d17eaa70a7b08263de27c3a7f9a68634897?offset=0&limit=256
       body: null
       headers:
         Accept:
@@ -93,15 +88,31 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute/result/3495aeefa1be386f864d8fea74c36bff657239ba%3A9ade105a4a78524a5bce0c3851f44bae032026b4d0db5ed8beeaa341290bc747?offset=0&limit=256
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            - 516058.34
+          dimensionHeaders:
+            - headerGroups:
+                - headers:
+                    - measureHeader:
+                        measureIndex: 0
+          grandTotals: []
+          metadata:
+            dataSourceMessages: []
+          paging:
+            count:
+              - 1
+            offset:
+              - 0
+            total:
+              - 1
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '213'
         Content-Type:
@@ -114,32 +125,18 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            - 516058.34
-          dimensionHeaders:
-            - headerGroups:
-                - headers:
-                    - measureHeader:
-                        measureIndex: 0
-          grandTotals: []
-          paging:
-            count:
-              - 1
-            offset:
-              - 0
-            total:
-              - 1
-          metadata:
-            dataSourceMessages: []
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1
