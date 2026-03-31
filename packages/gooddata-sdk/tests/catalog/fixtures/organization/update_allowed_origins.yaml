@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
       body: null
       headers:
         Accept-Encoding:
@@ -12,15 +9,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
     response:
-      status:
-        code: 302
-        message: Found
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '0'
         Content-Type:
@@ -36,21 +32,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 302
+        message: Found
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       body: null
       headers:
         Accept-Encoding:
@@ -59,15 +55,35 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              allowedOrigins: []
+              dataCenter: ''
+              earlyAccess: enableAlerting
+              earlyAccessValues:
+                - enableAlerting
+                - enableSmtp
+                - enablePreAggregationDatasets
+                - enableScheduling
+                - enableCompositeGrain
+                - enableUserManagement
+                - enableRawExports
+                - enableFlexibleDashboardLayout
+              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
+              name: Python SDK Dex
+              region: ''
+            id: python-sdk-dex
+            type: organization
+          links:
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '564'
         Content-Type:
@@ -80,42 +96,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: Python SDK Dex
-              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
-              allowedOrigins: []
-              earlyAccess: enableAlerting
-              earlyAccessValues:
-                - enableAlerting
-                - enableSmtp
-                - enablePreAggregationDatasets
-                - enableScheduling
-                - enableCompositeGrain
-                - enableUserManagement
-                - enableRawExports
-                - enableFlexibleDashboardLayout
-              region: ''
-              dataCenter: ''
-            id: python-sdk-dex
-            type: organization
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
       body: null
       headers:
         Accept-Encoding:
@@ -124,15 +119,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
     response:
-      status:
-        code: 302
-        message: Found
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '0'
         Content-Type:
@@ -147,21 +141,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 302
+        message: Found
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       body: null
       headers:
         Accept-Encoding:
@@ -170,15 +164,35 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              allowedOrigins: []
+              dataCenter: ''
+              earlyAccess: enableAlerting
+              earlyAccessValues:
+                - enableAlerting
+                - enableSmtp
+                - enablePreAggregationDatasets
+                - enableScheduling
+                - enableCompositeGrain
+                - enableUserManagement
+                - enableRawExports
+                - enableFlexibleDashboardLayout
+              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
+              name: Python SDK Dex
+              region: ''
+            id: python-sdk-dex
+            type: organization
+          links:
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '564'
         Content-Type:
@@ -191,49 +205,28 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: Python SDK Dex
-              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
-              allowedOrigins: []
-              earlyAccess: enableAlerting
-              earlyAccessValues:
-                - enableAlerting
-                - enableSmtp
-                - enablePreAggregationDatasets
-                - enableScheduling
-                - enableCompositeGrain
-                - enableUserManagement
-                - enableRawExports
-                - enableFlexibleDashboardLayout
-              region: ''
-              dataCenter: ''
-            id: python-sdk-dex
-            type: organization
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: PATCH
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       body:
         data:
-          id: python-sdk-dex
-          type: organization
           attributes:
             allowedOrigins:
               - https://test.com
+          id: python-sdk-dex
+          type: organization
       headers:
         Accept:
           - application/json
@@ -245,15 +238,34 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: PATCH
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              allowedOrigins:
+                - https://test.com
+              earlyAccess: enableAlerting
+              earlyAccessValues:
+                - enableAlerting
+                - enableSmtp
+                - enablePreAggregationDatasets
+                - enableScheduling
+                - enableCompositeGrain
+                - enableUserManagement
+                - enableRawExports
+                - enableFlexibleDashboardLayout
+              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
+              name: Python SDK Dex
+            id: python-sdk-dex
+            type: organization
+          links:
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '554'
         Content-Type:
@@ -266,41 +278,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: Python SDK Dex
-              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
-              allowedOrigins:
-                - https://test.com
-              earlyAccess: enableAlerting
-              earlyAccessValues:
-                - enableAlerting
-                - enableSmtp
-                - enablePreAggregationDatasets
-                - enableScheduling
-                - enableCompositeGrain
-                - enableUserManagement
-                - enableRawExports
-                - enableFlexibleDashboardLayout
-            id: python-sdk-dex
-            type: organization
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
       body: null
       headers:
         Accept-Encoding:
@@ -309,15 +301,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
     response:
-      status:
-        code: 302
-        message: Found
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '0'
         Content-Type:
@@ -332,21 +323,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 302
+        message: Found
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       body: null
       headers:
         Accept-Encoding:
@@ -355,15 +346,36 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              allowedOrigins:
+                - https://test.com
+              dataCenter: ''
+              earlyAccess: enableAlerting
+              earlyAccessValues:
+                - enableAlerting
+                - enableSmtp
+                - enablePreAggregationDatasets
+                - enableScheduling
+                - enableCompositeGrain
+                - enableUserManagement
+                - enableRawExports
+                - enableFlexibleDashboardLayout
+              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
+              name: Python SDK Dex
+              region: ''
+            id: python-sdk-dex
+            type: organization
+          links:
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '582'
         Content-Type:
@@ -376,43 +388,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: Python SDK Dex
-              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
-              allowedOrigins:
-                - https://test.com
-              earlyAccess: enableAlerting
-              earlyAccessValues:
-                - enableAlerting
-                - enableSmtp
-                - enablePreAggregationDatasets
-                - enableScheduling
-                - enableCompositeGrain
-                - enableUserManagement
-                - enableRawExports
-                - enableFlexibleDashboardLayout
-              region: ''
-              dataCenter: ''
-            id: python-sdk-dex
-            type: organization
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
       body: null
       headers:
         Accept-Encoding:
@@ -421,15 +411,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
     response:
-      status:
-        code: 302
-        message: Found
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '0'
         Content-Type:
@@ -444,21 +433,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 302
+        message: Found
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       body: null
       headers:
         Accept-Encoding:
@@ -467,15 +456,36 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              allowedOrigins:
+                - https://test.com
+              dataCenter: ''
+              earlyAccess: enableAlerting
+              earlyAccessValues:
+                - enableAlerting
+                - enableSmtp
+                - enablePreAggregationDatasets
+                - enableScheduling
+                - enableCompositeGrain
+                - enableUserManagement
+                - enableRawExports
+                - enableFlexibleDashboardLayout
+              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
+              name: Python SDK Dex
+              region: ''
+            id: python-sdk-dex
+            type: organization
+          links:
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '582'
         Content-Type:
@@ -488,49 +498,27 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: Python SDK Dex
-              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
-              allowedOrigins:
-                - https://test.com
-              earlyAccess: enableAlerting
-              earlyAccessValues:
-                - enableAlerting
-                - enableSmtp
-                - enablePreAggregationDatasets
-                - enableScheduling
-                - enableCompositeGrain
-                - enableUserManagement
-                - enableRawExports
-                - enableFlexibleDashboardLayout
-              region: ''
-              dataCenter: ''
-            id: python-sdk-dex
-            type: organization
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: PATCH
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       body:
         data:
-          id: python-sdk-dex
-          type: organization
           attributes:
             allowedOrigins: []
+          id: python-sdk-dex
+          type: organization
       headers:
         Accept:
           - application/json
@@ -542,15 +530,33 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: PATCH
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              allowedOrigins: []
+              earlyAccess: enableAlerting
+              earlyAccessValues:
+                - enableAlerting
+                - enableSmtp
+                - enablePreAggregationDatasets
+                - enableScheduling
+                - enableCompositeGrain
+                - enableUserManagement
+                - enableRawExports
+                - enableFlexibleDashboardLayout
+              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
+              name: Python SDK Dex
+            id: python-sdk-dex
+            type: organization
+          links:
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '536'
         Content-Type:
@@ -563,34 +569,18 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: Python SDK Dex
-              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
-              allowedOrigins: []
-              earlyAccess: enableAlerting
-              earlyAccessValues:
-                - enableAlerting
-                - enableSmtp
-                - enablePreAggregationDatasets
-                - enableScheduling
-                - enableCompositeGrain
-                - enableUserManagement
-                - enableRawExports
-                - enableFlexibleDashboardLayout
-            id: python-sdk-dex
-            type: organization
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1

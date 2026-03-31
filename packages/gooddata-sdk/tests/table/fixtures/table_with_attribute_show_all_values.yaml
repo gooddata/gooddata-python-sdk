@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes:
@@ -16,13 +13,13 @@ interactions:
           measures:
             - definition:
                 measure:
+                  aggregation: SUM
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: quantity
                       type: fact
-                  aggregation: SUM
-                  computeRatio: false
-                  filters: []
               localIdentifier: metric1
         resultSpec:
           dimensions:
@@ -43,15 +40,43 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          executionResponse:
+            dimensions:
+              - headers:
+                  - attributeHeader:
+                      attribute:
+                        id: date.month
+                        type: attribute
+                      attributeName: Date - Month/Year
+                      format:
+                        locale: en-US
+                        pattern: MMM y
+                        timezone: Etc/UTC
+                      granularity: MONTH
+                      label:
+                        id: date.month
+                        type: label
+                      labelName: Date - Month/Year
+                      localIdentifier: attr1
+                      primaryLabel:
+                        id: date.month
+                        type: label
+                      valueType: TEXT
+                localIdentifier: dim_0
+              - headers:
+                  - measureGroupHeaders:
+                      - localIdentifier: metric1
+                localIdentifier: dim_1
+            links:
+              executionResult: 9480c19ecaddbbb4accf57d92e99b60f9b0954da:d989cf66fae4f3334c19b442c89aa1447da60eb34a5a925a1b3461ff26862273
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '678'
         Content-Type:
@@ -65,52 +90,22 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-GDC-CANCEL-TOKEN:
-          - 6605fea6-c227-4e7d-84b0-44e72ddeb3c7
+        X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          executionResponse:
-            dimensions:
-              - headers:
-                  - attributeHeader:
-                      localIdentifier: attr1
-                      label:
-                        id: date.month
-                        type: label
-                      labelName: Date - Month/Year
-                      attribute:
-                        id: date.month
-                        type: attribute
-                      attributeName: Date - Month/Year
-                      granularity: MONTH
-                      primaryLabel:
-                        id: date.month
-                        type: label
-                      format:
-                        locale: en-US
-                        pattern: MMM y
-                        timezone: Etc/UTC
-                      valueType: TEXT
-                localIdentifier: dim_0
-              - headers:
-                  - measureGroupHeaders:
-                      - localIdentifier: metric1
-                localIdentifier: dim_1
-            links:
-              executionResult: 51aa973b5c57ffaf530803a2fbe86cb8ed8e101d:87bf7f4ac2a0a2681f333f6e9b9c869409f0f323ff492294b8122345c6d505f8
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute/result/51aa973b5c57ffaf530803a2fbe86cb8ed8e101d%3A87bf7f4ac2a0a2681f333f6e9b9c869409f0f323ff492294b8122345c6d505f8?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -121,40 +116,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute/result/9480c19ecaddbbb4accf57d92e99b60f9b0954da%3Ad989cf66fae4f3334c19b442c89aa1447da60eb34a5a925a1b3461ff26862273?offset=0%2C0&limit=512%2C256
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
@@ -370,6 +334,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 0
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 51
@@ -380,11 +346,38 @@ interactions:
             total:
               - 51
               - 1
-          metadata:
-            dataSourceMessages: []
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '428'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes:
@@ -406,13 +399,13 @@ interactions:
           measures:
             - definition:
                 measure:
+                  aggregation: SUM
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: quantity
                       type: fact
-                  aggregation: SUM
-                  computeRatio: false
-                  filters: []
               localIdentifier: metric1
         resultSpec:
           dimensions:
@@ -433,15 +426,43 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          executionResponse:
+            dimensions:
+              - headers:
+                  - attributeHeader:
+                      attribute:
+                        id: date.month
+                        type: attribute
+                      attributeName: Date - Month/Year
+                      format:
+                        locale: en-US
+                        pattern: MMM y
+                        timezone: Etc/UTC
+                      granularity: MONTH
+                      label:
+                        id: date.month
+                        type: label
+                      labelName: Date - Month/Year
+                      localIdentifier: attr1
+                      primaryLabel:
+                        id: date.month
+                        type: label
+                      valueType: TEXT
+                localIdentifier: dim_0
+              - headers:
+                  - measureGroupHeaders:
+                      - localIdentifier: metric1
+                localIdentifier: dim_1
+            links:
+              executionResult: a3ca40a7cc106b33d8e4f395e37e5413263c4385:88fbb3d2d56cc18dcdef685b3b8e5ce5c8c553a43e09236bbb26501542f624f2
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '678'
         Content-Type:
@@ -454,52 +475,22 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-GDC-CANCEL-TOKEN:
-          - ddfc12a1-cab5-437d-a11c-becc164308f2
+        X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          executionResponse:
-            dimensions:
-              - headers:
-                  - attributeHeader:
-                      localIdentifier: attr1
-                      label:
-                        id: date.month
-                        type: label
-                      labelName: Date - Month/Year
-                      attribute:
-                        id: date.month
-                        type: attribute
-                      attributeName: Date - Month/Year
-                      granularity: MONTH
-                      primaryLabel:
-                        id: date.month
-                        type: label
-                      format:
-                        locale: en-US
-                        pattern: MMM y
-                        timezone: Etc/UTC
-                      valueType: TEXT
-                localIdentifier: dim_0
-              - headers:
-                  - measureGroupHeaders:
-                      - localIdentifier: metric1
-                localIdentifier: dim_1
-            links:
-              executionResult: ae8c8407edfeb8eb491089afdb2c0d92723e3b14:fc2a71ab4fdcbfc9e80d264a9b7e5cae18f46beaf1ce91dc161198493e98b3d9
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute/result/ae8c8407edfeb8eb491089afdb2c0d92723e3b14%3Afc2a71ab4fdcbfc9e80d264a9b7e5cae18f46beaf1ce91dc161198493e98b3d9?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -510,40 +501,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute/result/a3ca40a7cc106b33d8e4f395e37e5413263c4385%3A88fbb3d2d56cc18dcdef685b3b8e5ce5c8c553a43e09236bbb26501542f624f2?offset=0%2C0&limit=512%2C256
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
@@ -755,6 +715,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 0
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 50
@@ -765,11 +727,38 @@ interactions:
             total:
               - 50
               - 1
-          metadata:
-            dataSourceMessages: []
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '388'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes:
@@ -791,13 +780,13 @@ interactions:
           measures:
             - definition:
                 measure:
+                  aggregation: SUM
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: quantity
                       type: fact
-                  aggregation: SUM
-                  computeRatio: false
-                  filters: []
               localIdentifier: metric1
         resultSpec:
           dimensions:
@@ -818,15 +807,43 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          executionResponse:
+            dimensions:
+              - headers:
+                  - attributeHeader:
+                      attribute:
+                        id: date.month
+                        type: attribute
+                      attributeName: Date - Month/Year
+                      format:
+                        locale: en-US
+                        pattern: MMM y
+                        timezone: Etc/UTC
+                      granularity: MONTH
+                      label:
+                        id: date.month
+                        type: label
+                      labelName: Date - Month/Year
+                      localIdentifier: attr1
+                      primaryLabel:
+                        id: date.month
+                        type: label
+                      valueType: TEXT
+                localIdentifier: dim_0
+              - headers:
+                  - measureGroupHeaders:
+                      - localIdentifier: metric1
+                localIdentifier: dim_1
+            links:
+              executionResult: bf3e26889f0daa68db73a0fa577b35b0ff11bc77:8e4d72104cbb80d2f040a6c79f8e665277046ecccabc3d0dd6d50e35be2066e1
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '678'
         Content-Type:
@@ -839,52 +856,22 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-GDC-CANCEL-TOKEN:
-          - 980eb084-548a-4284-ad1d-f0be64503d1d
+        X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          executionResponse:
-            dimensions:
-              - headers:
-                  - attributeHeader:
-                      localIdentifier: attr1
-                      label:
-                        id: date.month
-                        type: label
-                      labelName: Date - Month/Year
-                      attribute:
-                        id: date.month
-                        type: attribute
-                      attributeName: Date - Month/Year
-                      granularity: MONTH
-                      primaryLabel:
-                        id: date.month
-                        type: label
-                      format:
-                        locale: en-US
-                        pattern: MMM y
-                        timezone: Etc/UTC
-                      valueType: TEXT
-                localIdentifier: dim_0
-              - headers:
-                  - measureGroupHeaders:
-                      - localIdentifier: metric1
-                localIdentifier: dim_1
-            links:
-              executionResult: aef6fd2660c240bb8411bd9bf1de1da042ac5971:e1ade985138e87d8d06e6df3cfe10a8bfc5ea3a3b722769073bc74cc7fbf39c5
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute/result/aef6fd2660c240bb8411bd9bf1de1da042ac5971%3Ae1ade985138e87d8d06e6df3cfe10a8bfc5ea3a3b722769073bc74cc7fbf39c5?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -895,40 +882,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute/result/bf3e26889f0daa68db73a0fa577b35b0ff11bc77%3A8e4d72104cbb80d2f040a6c79f8e665277046ecccabc3d0dd6d50e35be2066e1?offset=0%2C0&limit=512%2C256
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
@@ -1060,6 +1016,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 0
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 30
@@ -1070,5 +1028,35 @@ interactions:
             total:
               - 30
               - 1
-          metadata:
-            dataSourceMessages: []
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '327'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1
