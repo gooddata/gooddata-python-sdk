@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/dremio
       body: null
       headers:
         Accept:
@@ -14,15 +11,19 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/dremio
     response:
-      status:
-        code: 404
-        message: Not Found
+      body:
+        string:
+          detail: The requested endpoint does not exist or you do not have permission
+            to access it.
+          status: 404
+          title: Not Found
+          traceId: 69cb7ce4283735d9b2c24a446dec131d
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
@@ -36,35 +37,30 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          detail: The requested endpoint does not exist or you do not have permission
-            to access it.
-          status: 404
-          title: Not Found
-          traceId: ab644bd972d1f53f8d9fe0298b29e067
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 404
+        message: Not Found
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources
       body:
         data:
           attributes:
             name: Dremio
+            password: demopass
             schema: ''
             type: DREMIO
-            username: demouser
-            password: demopass
             url: jdbc:dremio:direct=dremio:31010
+            username: demouser
           id: dremio
           type: dataSource
       headers:
@@ -78,15 +74,26 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources
     response:
-      status:
-        code: 201
-        message: Created
+      body:
+        string:
+          data:
+            attributes:
+              authenticationType: USERNAME_PASSWORD
+              name: Dremio
+              schema: ''
+              type: DREMIO
+              url: jdbc:dremio:direct=dremio:31010
+              username: demouser
+            id: dremio
+            type: dataSource
+          links:
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/dremio
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '319'
         Content-Type:
@@ -99,33 +106,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:dremio:direct=dremio:31010
-              username: demouser
-              authenticationType: USERNAME_PASSWORD
-              name: Dremio
-              type: DREMIO
-              schema: ''
-            id: dremio
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/dremio
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 201
+        message: Created
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/dremio
       body: null
       headers:
         Accept:
@@ -136,15 +131,26 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/dremio
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              authenticationType: USERNAME_PASSWORD
+              name: Dremio
+              schema: ''
+              type: DREMIO
+              url: jdbc:dremio:direct=dremio:31010
+              username: demouser
+            id: dremio
+            type: dataSource
+          links:
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/dremio
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '319'
         Content-Type:
@@ -157,33 +163,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:dremio:direct=dremio:31010
-              username: demouser
-              authenticationType: USERNAME_PASSWORD
-              name: Dremio
-              type: DREMIO
-              schema: ''
-            id: dremio
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/dremio
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: DELETE
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/dremio
       body: null
       headers:
         Accept-Encoding:
@@ -192,15 +186,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: DELETE
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/dremio
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -211,15 +204,18 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 204
+        message: No Content
+version: 1
