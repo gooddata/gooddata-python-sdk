@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk
       body: null
       headers:
         Accept:
@@ -14,15 +11,19 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk
     response:
-      status:
-        code: 404
-        message: Not Found
+      body:
+        string:
+          detail: The requested endpoint does not exist or you do not have permission
+            to access it.
+          status: 404
+          title: Not Found
+          traceId: 69cb984966d2971d51af8bcf4e1d8ea0
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
@@ -36,30 +37,23 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          detail: The requested endpoint does not exist or you do not have permission
-            to access it.
-          status: 404
-          title: Not Found
-          traceId: bdf42ba1da0c0b08d4d155b3eeab5b4b
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 404
+        message: Not Found
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks
       body:
         data:
-          id: demoJwk
-          type: jwk
           attributes:
             content:
               alg: RS256
@@ -71,6 +65,8 @@ interactions:
               x5c:
                 - MIIDbjCCAlagAwIBAgIUQ/BwWYGeDkDQjbUycWZqI/FeUDcwDQYJKoZIhvcNAQELBQAwZDELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNhbiBGcmFuY2lzY28xETAPBgNVBAoMCEdvb2REYXRhMRUwEwYDVQQDDAxnb29kZGF0YS5jb20wHhcNMjMwODE2MTM1NDMyWhcNMjMwOTE1MTM1NDMyWjBkMQswCQYDVQQGEwJVUzETMBEGA1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzERMA8GA1UECgwIR29vZERhdGExFTATBgNVBAMMDGdvb2RkYXRhLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALF4sOXTjpeg8ABSmED+tt4VDrO09H9piRLzDdT/gJFW8GoMWpyc8kaSSV9s8l7SGJ7E65bI60kcwU71gWQlxluF6ZnEiCqEZMv4QSRoCurISt9++aE4XAKtNSWVhFl1Nq6GMgUM+1cb1EiAD5kFV5/UwkO2E/00DoN/Q86Ldj2T2bWmyjNiEBLVer1ZnIqs90JDJ3Jbxp1AHGuimQjwaLXTV/XVnnQDgR5oqQs82CB7rZzF7E2bTwhL65YGMktcg+7tVmsT4JfOA+roJagwRelhdVa9n4Hnln8ro4if1NugQqug5hkAjewTwISSbKOm7z9uxufMGRkdxzP24ye9emcCAwEAAaMYMBYwFAYDVR0RBA0wC4IJbG9jYWxob3N0MA0GCSqGSIb3DQEBCwUAA4IBAQA2j3W4+qAkp0K6WP0gogMhqToJCx4/ojRdJ0hJeoIluIAiTzL3uDmG+85xbQ758qD6Ya1Mty6aPdNekFxYlUmulhYY+2Sdby6ChQIUgS9wj1sNFuo4e3U3JVpBfdtJq3diNTcEO/iNWds9MRtNzmrkRIDxAyZvB79Ghuq8i+J9OQ1Na0MEDqKD+KrW0eLT661sT0HgBJCyZaDFQHaiFs3GXEP2QMseMXZuuhLrg8im7DsO+skQtIWH02x6xxKgj/o5bRmoU4ArOzYRWehrrj+pEeAEIVStLzSnhl4v4ovrQ7P5YbeHLFvmw6rb0wp0HYmuZIvA+wJa0uazJjfzjv3a
               x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
+          id: demoJwk
+          type: jwk
       headers:
         Accept:
           - application/json
@@ -82,17 +78,34 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks
     response:
-      status:
-        code: 201
-        message: Created
+      body:
+        string:
+          data:
+            attributes:
+              content:
+                alg: RS256
+                e: AQAB
+                kid: Gkncy6f9BSp7wdav8w4SNZE1yt0
+                kty: RSA
+                n: sXiw5dOOl6DwAFKYQP623hUOs7T0f2mJEvMN1P-AkVbwagxanJzyRpJJX2zyXtIYnsTrlsjrSRzBTvWBZCXGW4XpmcSIKoRky_hBJGgK6shK3375oThcAq01JZWEWXU2roYyBQz7VxvUSIAPmQVXn9TCQ7YT_TQOg39Dzot2PZPZtabKM2IQEtV6vVmciqz3QkMnclvGnUAca6KZCPBotdNX9dWedAOBHmipCzzYIHutnMXsTZtPCEvrlgYyS1yD7u1WaxPgl84D6uglqDBF6WF1Vr2fgeeWfyujiJ_U26BCq6DmGQCN7BPAhJJso6bvP27G58wZGR3HM_bjJ716Zw
+                use: sig
+                x5c:
+                  - MIIDbjCCAlagAwIBAgIUQ/BwWYGeDkDQjbUycWZqI/FeUDcwDQYJKoZIhvcNAQELBQAwZDELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNhbiBGcmFuY2lzY28xETAPBgNVBAoMCEdvb2REYXRhMRUwEwYDVQQDDAxnb29kZGF0YS5jb20wHhcNMjMwODE2MTM1NDMyWhcNMjMwOTE1MTM1NDMyWjBkMQswCQYDVQQGEwJVUzETMBEGA1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzERMA8GA1UECgwIR29vZERhdGExFTATBgNVBAMMDGdvb2RkYXRhLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALF4sOXTjpeg8ABSmED+tt4VDrO09H9piRLzDdT/gJFW8GoMWpyc8kaSSV9s8l7SGJ7E65bI60kcwU71gWQlxluF6ZnEiCqEZMv4QSRoCurISt9++aE4XAKtNSWVhFl1Nq6GMgUM+1cb1EiAD5kFV5/UwkO2E/00DoN/Q86Ldj2T2bWmyjNiEBLVer1ZnIqs90JDJ3Jbxp1AHGuimQjwaLXTV/XVnnQDgR5oqQs82CB7rZzF7E2bTwhL65YGMktcg+7tVmsT4JfOA+roJagwRelhdVa9n4Hnln8ro4if1NugQqug5hkAjewTwISSbKOm7z9uxufMGRkdxzP24ye9emcCAwEAAaMYMBYwFAYDVR0RBA0wC4IJbG9jYWxob3N0MA0GCSqGSIb3DQEBCwUAA4IBAQA2j3W4+qAkp0K6WP0gogMhqToJCx4/ojRdJ0hJeoIluIAiTzL3uDmG+85xbQ758qD6Ya1Mty6aPdNekFxYlUmulhYY+2Sdby6ChQIUgS9wj1sNFuo4e3U3JVpBfdtJq3diNTcEO/iNWds9MRtNzmrkRIDxAyZvB79Ghuq8i+J9OQ1Na0MEDqKD+KrW0eLT661sT0HgBJCyZaDFQHaiFs3GXEP2QMseMXZuuhLrg8im7DsO+skQtIWH02x6xxKgj/o5bRmoU4ArOzYRWehrrj+pEeAEIVStLzSnhl4v4ovrQ7P5YbeHLFvmw6rb0wp0HYmuZIvA+wJa0uazJjfzjv3a
+                x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
+            id: demoJwk
+            type: jwk
+          links:
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
+        Content-Encoding:
+          - br
         Content-Length:
-          - '1829'
+          - '1396'
         Content-Type:
           - application/json
         DATE: *id001
@@ -103,37 +116,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              content:
-                kty: RSA
-                alg: RS256
-                use: sig
-                x5c:
-                  - MIIDbjCCAlagAwIBAgIUQ/BwWYGeDkDQjbUycWZqI/FeUDcwDQYJKoZIhvcNAQELBQAwZDELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNhbiBGcmFuY2lzY28xETAPBgNVBAoMCEdvb2REYXRhMRUwEwYDVQQDDAxnb29kZGF0YS5jb20wHhcNMjMwODE2MTM1NDMyWhcNMjMwOTE1MTM1NDMyWjBkMQswCQYDVQQGEwJVUzETMBEGA1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzERMA8GA1UECgwIR29vZERhdGExFTATBgNVBAMMDGdvb2RkYXRhLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALF4sOXTjpeg8ABSmED+tt4VDrO09H9piRLzDdT/gJFW8GoMWpyc8kaSSV9s8l7SGJ7E65bI60kcwU71gWQlxluF6ZnEiCqEZMv4QSRoCurISt9++aE4XAKtNSWVhFl1Nq6GMgUM+1cb1EiAD5kFV5/UwkO2E/00DoN/Q86Ldj2T2bWmyjNiEBLVer1ZnIqs90JDJ3Jbxp1AHGuimQjwaLXTV/XVnnQDgR5oqQs82CB7rZzF7E2bTwhL65YGMktcg+7tVmsT4JfOA+roJagwRelhdVa9n4Hnln8ro4if1NugQqug5hkAjewTwISSbKOm7z9uxufMGRkdxzP24ye9emcCAwEAAaMYMBYwFAYDVR0RBA0wC4IJbG9jYWxob3N0MA0GCSqGSIb3DQEBCwUAA4IBAQA2j3W4+qAkp0K6WP0gogMhqToJCx4/ojRdJ0hJeoIluIAiTzL3uDmG+85xbQ758qD6Ya1Mty6aPdNekFxYlUmulhYY+2Sdby6ChQIUgS9wj1sNFuo4e3U3JVpBfdtJq3diNTcEO/iNWds9MRtNzmrkRIDxAyZvB79Ghuq8i+J9OQ1Na0MEDqKD+KrW0eLT661sT0HgBJCyZaDFQHaiFs3GXEP2QMseMXZuuhLrg8im7DsO+skQtIWH02x6xxKgj/o5bRmoU4ArOzYRWehrrj+pEeAEIVStLzSnhl4v4ovrQ7P5YbeHLFvmw6rb0wp0HYmuZIvA+wJa0uazJjfzjv3a
-                n: sXiw5dOOl6DwAFKYQP623hUOs7T0f2mJEvMN1P-AkVbwagxanJzyRpJJX2zyXtIYnsTrlsjrSRzBTvWBZCXGW4XpmcSIKoRky_hBJGgK6shK3375oThcAq01JZWEWXU2roYyBQz7VxvUSIAPmQVXn9TCQ7YT_TQOg39Dzot2PZPZtabKM2IQEtV6vVmciqz3QkMnclvGnUAca6KZCPBotdNX9dWedAOBHmipCzzYIHutnMXsTZtPCEvrlgYyS1yD7u1WaxPgl84D6uglqDBF6WF1Vr2fgeeWfyujiJ_U26BCq6DmGQCN7BPAhJJso6bvP27G58wZGR3HM_bjJ716Zw
-                e: AQAB
-                kid: Gkncy6f9BSp7wdav8w4SNZE1yt0
-                x5t: tGg2yZgC0sVyvaK49GenyQB7cuA
-            id: demoJwk
-            type: jwk
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 201
+        message: Created
   - request:
-      method: DELETE
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk
       body: null
       headers:
         Accept-Encoding:
@@ -142,15 +139,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: DELETE
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -161,21 +157,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 204
+        message: No Content
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk
       body: null
       headers:
         Accept:
@@ -186,15 +182,19 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk
     response:
-      status:
-        code: 404
-        message: Not Found
+      body:
+        string:
+          detail: The requested endpoint does not exist or you do not have permission
+            to access it.
+          status: 404
+          title: Not Found
+          traceId: 69cb98499b559893af59b3b9e17bd168
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
@@ -207,26 +207,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          detail: The requested endpoint does not exist or you do not have permission
-            to access it.
-          status: 404
-          title: Not Found
-          traceId: 7e2c892cd373c1045935f4b343d73cc3
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 404
+        message: Not Found
   - request:
-      method: DELETE
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk
       body: null
       headers:
         Accept-Encoding:
@@ -235,15 +230,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: DELETE
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/jwks/demoJwk
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -254,15 +248,18 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 204
+        message: No Content
+version: 1

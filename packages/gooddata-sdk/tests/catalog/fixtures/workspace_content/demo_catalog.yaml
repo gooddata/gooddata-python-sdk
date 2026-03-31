@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=0&size=500
       body: null
       headers:
         Accept:
@@ -14,52 +11,20 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: &id001
-          - PLACEHOLDER
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
             - attributes:
-                title: Campaign channel id
-                description: Campaign channel id
-                tags:
-                  - Campaign channels
                 areRelationsValid: true
+                description: Campaign channel id
                 sourceColumn: campaign_channel_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Campaign channel id
               id: campaign_channel_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
@@ -78,13 +43,13 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Category
-                description: Category
-                tags:
-                  - Campaign channels
                 areRelationsValid: true
+                description: Category
                 sourceColumn: category
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Category
               id: campaign_channels.category
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
@@ -103,13 +68,13 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Campaign id
-                description: Campaign id
-                tags:
-                  - Campaigns
                 areRelationsValid: true
+                description: Campaign id
                 sourceColumn: campaign_id
                 sourceColumnDataType: INT
+                tags:
+                  - Campaigns
+                title: Campaign id
               id: campaign_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_id
@@ -128,13 +93,13 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Campaign name
-                description: Campaign name
-                tags:
-                  - Campaigns
                 areRelationsValid: true
+                description: Campaign name
                 sourceColumn: campaign_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaigns
+                title: Campaign name
               id: campaign_name
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_name
@@ -153,13 +118,13 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Customer id
-                description: Customer id
-                tags:
-                  - Customers
                 areRelationsValid: true
+                description: Customer id
                 sourceColumn: customer_id
                 sourceColumnDataType: INT
+                tags:
+                  - Customers
+                title: Customer id
               id: customer_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/customer_id
@@ -178,13 +143,13 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Customer name
-                description: Customer name
-                tags:
-                  - Customers
                 areRelationsValid: true
+                description: Customer name
                 sourceColumn: customer_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Customer name
               id: customer_name
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/customer_name
@@ -203,12 +168,12 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Date - Date
+                areRelationsValid: true
                 description: Date
+                granularity: DAY
                 tags:
                   - Date
-                granularity: DAY
-                areRelationsValid: true
+                title: Date - Date
               id: date.day
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.day
@@ -227,12 +192,12 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Date - Month/Year
+                areRelationsValid: true
                 description: Month and Year (12/2020)
+                granularity: MONTH
                 tags:
                   - Date
-                granularity: MONTH
-                areRelationsValid: true
+                title: Date - Month/Year
               id: date.month
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.month
@@ -251,12 +216,12 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Date - Quarter/Year
+                areRelationsValid: true
                 description: Quarter and Year (Q1/2020)
+                granularity: QUARTER
                 tags:
                   - Date
-                granularity: QUARTER
-                areRelationsValid: true
+                title: Date - Quarter/Year
               id: date.quarter
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.quarter
@@ -275,12 +240,12 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Date - Week/Year
+                areRelationsValid: true
                 description: Week and Year (W52/2020)
+                granularity: WEEK
                 tags:
                   - Date
-                granularity: WEEK
-                areRelationsValid: true
+                title: Date - Week/Year
               id: date.week
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.week
@@ -299,12 +264,12 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Date - Year
+                areRelationsValid: true
                 description: Year
+                granularity: YEAR
                 tags:
                   - Date
-                granularity: YEAR
-                areRelationsValid: true
+                title: Date - Year
               id: date.year
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.year
@@ -323,13 +288,13 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Order id
-                description: Order id
-                tags:
-                  - Order lines
                 areRelationsValid: true
+                description: Order id
                 sourceColumn: order_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order id
               id: order_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_id
@@ -348,13 +313,13 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Order line id
-                description: Order line id
-                tags:
-                  - Order lines
                 areRelationsValid: true
+                description: Order line id
                 sourceColumn: order_line_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order line id
               id: order_line_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_line_id
@@ -373,13 +338,13 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Order status
-                description: Order status
-                tags:
-                  - Order lines
                 areRelationsValid: true
+                description: Order status
                 sourceColumn: order_status
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order status
               id: order_status
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_status
@@ -398,13 +363,13 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Product id
-                description: Product id
-                tags:
-                  - Products
                 areRelationsValid: true
+                description: Product id
                 sourceColumn: product_id
                 sourceColumnDataType: INT
+                tags:
+                  - Products
+                title: Product id
               id: product_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/product_id
@@ -423,13 +388,13 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Product name
-                description: Product name
-                tags:
-                  - Products
                 areRelationsValid: true
+                description: Product name
                 sourceColumn: product_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Product name
               id: product_name
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/product_name
@@ -448,13 +413,13 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Category
-                description: Category
-                tags:
-                  - Products
                 areRelationsValid: true
+                description: Category
                 sourceColumn: category
                 sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Category
               id: products.category
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/products.category
@@ -473,13 +438,13 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Region
-                description: Region
-                tags:
-                  - Customers
                 areRelationsValid: true
+                description: Region
                 sourceColumn: region
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Region
               id: region
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/region
@@ -498,13 +463,13 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: State
-                description: State
-                tags:
-                  - Customers
                 areRelationsValid: true
+                description: State
                 sourceColumn: state
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: State
               id: state
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/state
@@ -513,14 +478,14 @@ interactions:
                   originId: demo
                   originType: NATIVE
               relationships:
-                defaultView:
-                  data:
-                    id: state
-                    type: label
                 dataset:
                   data:
                     id: customers
                     type: dataset
+                defaultView:
+                  data:
+                    id: state
+                    type: label
                 labels:
                   data:
                     - id: state
@@ -529,13 +494,13 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Type
-                description: Type
-                tags:
-                  - Campaign channels
                 areRelationsValid: true
+                description: Type
                 sourceColumn: type
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Type
               id: type
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/type
@@ -555,139 +520,140 @@ interactions:
               type: attribute
           included:
             - attributes:
-                title: Product name
                 description: Product name
-                tags:
-                  - Products
                 primary: true
                 sourceColumn: product_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Product name
                 valueType: TEXT
               id: product_name
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/product_name
               type: label
             - attributes:
-                title: Order status
                 description: Order status
-                tags:
-                  - Order lines
                 primary: true
                 sourceColumn: order_status
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order status
                 valueType: TEXT
               id: order_status
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_status
               type: label
             - attributes:
-                title: Order lines
+                dataSourceTableId: demo-test-ds:order_lines
+                dataSourceTablePath:
+                  - demo
+                  - order_lines
                 description: Order lines
-                tags:
-                  - Order lines
                 grain:
                   - id: order_line_id
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: date
-                        dataType: DATE
-                        target:
-                          id: date
-                          type: date
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
-                      id: products
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: product_id
-                        dataType: INT
-                        target:
-                          id: product_id
-                          type: attribute
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
                       id: campaigns
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: null
+                        nullValue: null
                         target:
                           id: campaign_id
                           type: attribute
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
                   - identifier:
                       id: customers
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
                     sources:
                       - column: customer_id
                         dataType: INT
+                        isNullable: null
+                        nullValue: null
                         target:
                           id: customer_id
                           type: attribute
+                  - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
+                    sources:
+                      - column: date
+                        dataType: DATE
                         isNullable: null
                         nullValue: null
-                    sourceColumns: null
+                        target:
+                          id: date
+                          type: date
+                  - identifier:
+                      id: products
+                      type: dataset
+                    multivalue: false
                     sourceColumnDataTypes: null
-                dataSourceTableId: demo-test-ds:order_lines
-                dataSourceTablePath:
-                  - demo
-                  - order_lines
+                    sourceColumns: null
+                    sources:
+                      - column: product_id
+                        dataType: INT
+                        isNullable: null
+                        nullValue: null
+                        target:
+                          id: product_id
+                          type: attribute
+                tags:
+                  - Order lines
+                title: Order lines
+                type: NORMAL
                 workspaceDataFilterColumns:
-                  - name: wdf__region
-                    dataType: STRING
-                  - name: wdf__state
-                    dataType: STRING
+                  - dataType: STRING
+                    name: wdf__region
+                  - dataType: STRING
+                    name: wdf__state
                 workspaceDataFilterReferences:
-                  - filterId:
+                  - filterColumn: wdf__state
+                    filterColumnDataType: STRING
+                    filterId:
                       id: wdf__state
                       type: workspaceDataFilter
-                    filterColumn: wdf__state
+                  - filterColumn: wdf__region
                     filterColumnDataType: STRING
-                  - filterId:
+                    filterId:
                       id: wdf__region
                       type: workspaceDataFilter
-                    filterColumn: wdf__region
-                    filterColumnDataType: STRING
-                type: NORMAL
               id: order_lines
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/order_lines
               type: dataset
             - attributes:
-                title: Campaign name
                 description: Campaign name
-                tags:
-                  - Campaigns
                 primary: true
                 sourceColumn: campaign_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaigns
+                title: Campaign name
                 valueType: TEXT
               id: campaign_name
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_name
               type: label
             - attributes:
-                title: Campaign channels
+                dataSourceTableId: demo-test-ds:campaign_channels
+                dataSourceTablePath:
+                  - demo
+                  - campaign_channels
                 description: Campaign channels
-                tags:
-                  - Campaign channels
                 grain:
                   - id: campaign_channel_id
                     type: attribute
@@ -696,316 +662,345 @@ interactions:
                       id: campaigns
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: null
+                        nullValue: null
                         target:
                           id: campaign_id
                           type: attribute
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                dataSourceTableId: demo-test-ds:campaign_channels
-                dataSourceTablePath:
-                  - demo
-                  - campaign_channels
+                tags:
+                  - Campaign channels
+                title: Campaign channels
                 type: NORMAL
               id: campaign_channels
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/campaign_channels
               type: dataset
             - attributes:
-                title: Date - Month/Year
                 description: Month and Year (12/2020)
-                tags:
-                  - Date
                 primary: true
                 sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Month/Year
               id: date.month
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.month
               type: label
             - attributes:
-                title: Date - Quarter/Year
                 description: Quarter and Year (Q1/2020)
-                tags:
-                  - Date
                 primary: true
                 sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Quarter/Year
               id: date.quarter
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.quarter
               type: label
             - attributes:
-                title: Campaign channel id
                 description: Campaign channel id
-                tags:
-                  - Campaign channels
                 primary: true
                 sourceColumn: campaign_channel_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Campaign channel id
                 valueType: TEXT
               id: campaign_channel_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_channel_id
               type: label
             - attributes:
-                title: Date - Date
                 description: Date
-                tags:
-                  - Date
                 primary: true
                 sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Date
               id: date.day
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.day
               type: label
             - attributes:
-                title: Campaigns
-                description: Campaigns
-                tags:
-                  - Campaigns
-                grain:
-                  - id: campaign_id
-                    type: attribute
                 dataSourceTableId: demo-test-ds:campaigns
                 dataSourceTablePath:
                   - demo
                   - campaigns
+                description: Campaigns
+                grain:
+                  - id: campaign_id
+                    type: attribute
+                tags:
+                  - Campaigns
+                title: Campaigns
                 type: NORMAL
               id: campaigns
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/campaigns
               type: dataset
             - attributes:
-                title: Order id
                 description: Order id
-                tags:
-                  - Order lines
                 primary: true
                 sourceColumn: order_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order id
                 valueType: TEXT
               id: order_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_id
               type: label
             - attributes:
-                title: Customer name
                 description: Customer name
-                tags:
-                  - Customers
                 primary: true
                 sourceColumn: customer_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Customer name
                 valueType: TEXT
               id: customer_name
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/customer_name
               type: label
             - attributes:
-                title: Type
                 description: Type
-                tags:
-                  - Campaign channels
                 primary: true
                 sourceColumn: type
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Type
                 valueType: TEXT
               id: type
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/type
               type: label
             - attributes:
-                title: Customers
-                description: Customers
-                tags:
-                  - Customers
-                grain:
-                  - id: customer_id
-                    type: attribute
                 dataSourceTableId: demo-test-ds:customers
                 dataSourceTablePath:
                   - demo
                   - customers
+                description: Customers
+                grain:
+                  - id: customer_id
+                    type: attribute
+                tags:
+                  - Customers
+                title: Customers
                 type: NORMAL
               id: customers
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/customers
               type: dataset
             - attributes:
-                title: Region
                 description: Region
-                tags:
-                  - Customers
                 primary: true
                 sourceColumn: region
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Region
                 valueType: TEXT
               id: region
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/region
               type: label
             - attributes:
-                title: Category
                 description: Category
-                tags:
-                  - Products
                 primary: true
                 sourceColumn: category
                 sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Category
                 valueType: TEXT
               id: products.category
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/products.category
               type: label
             - attributes:
-                title: Date - Week/Year
                 description: Week and Year (W52/2020)
-                tags:
-                  - Date
                 primary: true
                 sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Week/Year
               id: date.week
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.week
               type: label
             - attributes:
-                title: Location
                 description: Location
-                tags:
-                  - Customers
                 primary: false
                 sourceColumn: geo__state__location
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Location
                 valueType: GEO
               id: geo__state__location
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/geo__state__location
               type: label
             - attributes:
-                title: Product id
                 description: Product id
-                tags:
-                  - Products
                 primary: true
                 sourceColumn: product_id
                 sourceColumnDataType: INT
+                tags:
+                  - Products
+                title: Product id
                 valueType: TEXT
               id: product_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/product_id
               type: label
             - attributes:
-                title: Order line id
                 description: Order line id
-                tags:
-                  - Order lines
                 primary: true
                 sourceColumn: order_line_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order line id
                 valueType: TEXT
               id: order_line_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_line_id
               type: label
             - attributes:
-                title: Products
-                description: Products
-                tags:
-                  - Products
-                grain:
-                  - id: product_id
-                    type: attribute
                 dataSourceTableId: demo-test-ds:products
                 dataSourceTablePath:
                   - demo
                   - products
+                description: Products
+                grain:
+                  - id: product_id
+                    type: attribute
+                tags:
+                  - Products
+                title: Products
                 type: NORMAL
               id: products
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/products
               type: dataset
             - attributes:
-                title: Date
                 description: ''
                 tags:
                   - Date
+                title: Date
                 type: DATE
               id: date
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/date
               type: dataset
             - attributes:
-                title: Category
                 description: Category
-                tags:
-                  - Campaign channels
                 primary: true
                 sourceColumn: category
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Category
                 valueType: TEXT
               id: campaign_channels.category
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_channels.category
               type: label
             - attributes:
-                title: Customer id
                 description: Customer id
-                tags:
-                  - Customers
                 primary: true
                 sourceColumn: customer_id
                 sourceColumnDataType: INT
+                tags:
+                  - Customers
+                title: Customer id
                 valueType: TEXT
               id: customer_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/customer_id
               type: label
             - attributes:
-                title: Date - Year
                 description: Year
-                tags:
-                  - Date
                 primary: true
                 sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Year
               id: date.year
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.year
               type: label
             - attributes:
-                title: State
                 description: State
-                tags:
-                  - Customers
                 primary: true
                 sourceColumn: state
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: State
                 valueType: TEXT
               id: state
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/state
               type: label
             - attributes:
-                title: Campaign id
                 description: Campaign id
-                tags:
-                  - Campaigns
                 primary: true
                 sourceColumn: campaign_id
                 sourceColumnDataType: INT
+                tags:
+                  - Campaigns
+                title: Campaign id
                 valueType: TEXT
               id: campaign_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_id
               type: label
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=0&size=500
             next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=0&size=500
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '1873'
+        Content-Type:
+          - application/json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts%2CaggregatedFacts&page=0&size=500
       body: null
       headers:
         Accept:
@@ -1016,48 +1011,19 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts%2CaggregatedFacts&page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
             - attributes:
-                title: Campaign channels
+                areRelationsValid: true
+                dataSourceTableId: demo-test-ds:campaign_channels
+                dataSourceTablePath:
+                  - demo
+                  - campaign_channels
                 description: Campaign channels
-                tags:
-                  - Campaign channels
                 grain:
                   - id: campaign_channel_id
                     type: attribute
@@ -1066,21 +1032,19 @@ interactions:
                       id: campaigns
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: null
+                        nullValue: null
                         target:
                           id: campaign_id
                           type: attribute
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                dataSourceTableId: demo-test-ds:campaign_channels
-                dataSourceTablePath:
-                  - demo
-                  - campaign_channels
-                areRelationsValid: true
+                tags:
+                  - Campaign channels
+                title: Campaign channels
                 type: NORMAL
               id: campaign_channels
               links:
@@ -1106,31 +1070,31 @@ interactions:
                       type: fact
               type: dataset
             - attributes:
-                title: Campaign channels per category
+                areRelationsValid: true
                 description: Campaign channels per categories
-                tags:
-                  - Campaign channels per category
+                precedence: 1
                 referenceProperties:
                   - identifier:
                       id: campaign_channels
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
                     sources:
                       - column: campaign_channel_id
                         dataType: STRING
+                        isNullable: null
+                        nullValue: null
                         target:
                           id: campaign_channel_id
                           type: attribute
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
                 sql:
+                  dataSourceId: demo-test-ds
                   statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
                     BY category
-                  dataSourceId: demo-test-ds
-                precedence: 1
-                areRelationsValid: true
+                tags:
+                  - Campaign channels per category
+                title: Campaign channels per category
                 type: NORMAL
               id: campaign_channels_per_category
               links:
@@ -1146,18 +1110,18 @@ interactions:
                       type: aggregatedFact
               type: dataset
             - attributes:
-                title: Campaigns
-                description: Campaigns
-                tags:
-                  - Campaigns
-                grain:
-                  - id: campaign_id
-                    type: attribute
+                areRelationsValid: true
                 dataSourceTableId: demo-test-ds:campaigns
                 dataSourceTablePath:
                   - demo
                   - campaigns
-                areRelationsValid: true
+                description: Campaigns
+                grain:
+                  - id: campaign_id
+                    type: attribute
+                tags:
+                  - Campaigns
+                title: Campaigns
                 type: NORMAL
               id: campaigns
               links:
@@ -1175,18 +1139,18 @@ interactions:
                       type: attribute
               type: dataset
             - attributes:
-                title: Customers
-                description: Customers
-                tags:
-                  - Customers
-                grain:
-                  - id: customer_id
-                    type: attribute
+                areRelationsValid: true
                 dataSourceTableId: demo-test-ds:customers
                 dataSourceTablePath:
                   - demo
                   - customers
-                areRelationsValid: true
+                description: Customers
+                grain:
+                  - id: customer_id
+                    type: attribute
+                tags:
+                  - Customers
+                title: Customers
                 type: NORMAL
               id: customers
               links:
@@ -1208,11 +1172,11 @@ interactions:
                       type: attribute
               type: dataset
             - attributes:
-                title: Date
+                areRelationsValid: true
                 description: ''
                 tags:
                   - Date
-                areRelationsValid: true
+                title: Date
                 type: DATE
               id: date
               links:
@@ -1236,92 +1200,92 @@ interactions:
                       type: attribute
               type: dataset
             - attributes:
-                title: Order lines
+                areRelationsValid: true
+                dataSourceTableId: demo-test-ds:order_lines
+                dataSourceTablePath:
+                  - demo
+                  - order_lines
                 description: Order lines
-                tags:
-                  - Order lines
                 grain:
                   - id: order_line_id
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sources:
-                      - column: date
-                        dataType: DATE
-                        target:
-                          id: date
-                          type: date
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                  - identifier:
                       id: products
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
                     sources:
                       - column: product_id
                         dataType: INT
+                        isNullable: null
+                        nullValue: null
                         target:
                           id: product_id
                           type: attribute
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
                   - identifier:
                       id: campaigns
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: null
+                        nullValue: null
                         target:
                           id: campaign_id
                           type: attribute
-                        isNullable: null
-                        nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
                   - identifier:
                       id: customers
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
                     sources:
                       - column: customer_id
                         dataType: INT
+                        isNullable: null
+                        nullValue: null
                         target:
                           id: customer_id
                           type: attribute
+                  - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
+                    sources:
+                      - column: date
+                        dataType: DATE
                         isNullable: null
                         nullValue: null
-                    sourceColumns: null
-                    sourceColumnDataTypes: null
-                dataSourceTableId: demo-test-ds:order_lines
-                dataSourceTablePath:
-                  - demo
-                  - order_lines
-                areRelationsValid: true
+                        target:
+                          id: date
+                          type: date
+                tags:
+                  - Order lines
+                title: Order lines
+                type: NORMAL
                 workspaceDataFilterColumns:
-                  - name: wdf__region
-                    dataType: STRING
-                  - name: wdf__state
-                    dataType: STRING
+                  - dataType: STRING
+                    name: wdf__region
+                  - dataType: STRING
+                    name: wdf__state
                 workspaceDataFilterReferences:
-                  - filterId:
+                  - filterColumn: wdf__state
+                    filterColumnDataType: STRING
+                    filterId:
                       id: wdf__state
                       type: workspaceDataFilter
-                    filterColumn: wdf__state
+                  - filterColumn: wdf__region
                     filterColumnDataType: STRING
-                  - filterId:
+                    filterId:
                       id: wdf__region
                       type: workspaceDataFilter
-                    filterColumn: wdf__region
-                    filterColumnDataType: STRING
-                type: NORMAL
               id: order_lines
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets/order_lines
@@ -1346,18 +1310,18 @@ interactions:
                       type: fact
               type: dataset
             - attributes:
-                title: Products
-                description: Products
-                tags:
-                  - Products
-                grain:
-                  - id: product_id
-                    type: attribute
+                areRelationsValid: true
                 dataSourceTableId: demo-test-ds:products
                 dataSourceTablePath:
                   - demo
                   - products
-                areRelationsValid: true
+                description: Products
+                grain:
+                  - id: product_id
+                    type: attribute
+                tags:
+                  - Products
+                title: Products
                 type: NORMAL
               id: products
               links:
@@ -1378,302 +1342,285 @@ interactions:
               type: dataset
           included:
             - attributes:
-                title: Product id
                 description: Product id
-                tags:
-                  - Products
                 sourceColumn: product_id
                 sourceColumnDataType: INT
+                tags:
+                  - Products
+                title: Product id
               id: product_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/product_id
               type: attribute
             - attributes:
-                title: Budget
                 description: Budget
-                tags:
-                  - Campaign channels
                 sourceColumn: budget
                 sourceColumnDataType: NUMERIC
+                tags:
+                  - Campaign channels
+                title: Budget
               id: budget
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/budget
               type: fact
             - attributes:
-                title: Date - Year
                 description: Year
+                granularity: YEAR
                 tags:
                   - Date
-                granularity: YEAR
+                title: Date - Year
               id: date.year
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.year
               type: attribute
             - attributes:
-                title: Product name
                 description: Product name
-                tags:
-                  - Products
                 sourceColumn: product_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Product name
               id: product_name
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/product_name
               type: attribute
             - attributes:
-                title: Date - Month/Year
                 description: Month and Year (12/2020)
+                granularity: MONTH
                 tags:
                   - Date
-                granularity: MONTH
+                title: Date - Month/Year
               id: date.month
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.month
               type: attribute
             - attributes:
-                title: Category
                 description: Category
-                tags:
-                  - Products
                 sourceColumn: category
                 sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Category
               id: products.category
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/products.category
               type: attribute
             - attributes:
-                title: Date - Quarter/Year
                 description: Quarter and Year (Q1/2020)
+                granularity: QUARTER
                 tags:
                   - Date
-                granularity: QUARTER
+                title: Date - Quarter/Year
               id: date.quarter
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.quarter
               type: attribute
             - attributes:
-                title: Category
                 description: Category
-                tags:
-                  - Campaign channels
                 sourceColumn: category
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Category
               id: campaign_channels.category
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
               type: attribute
             - attributes:
-                title: State
                 description: State
-                tags:
-                  - Customers
                 sourceColumn: state
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: State
               id: state
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/state
               type: attribute
             - attributes:
-                title: Date - Week/Year
                 description: Week and Year (W52/2020)
+                granularity: WEEK
                 tags:
                   - Date
-                granularity: WEEK
+                title: Date - Week/Year
               id: date.week
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.week
               type: attribute
             - attributes:
-                title: Order id
                 description: Order id
-                tags:
-                  - Order lines
                 sourceColumn: order_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order id
               id: order_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_id
               type: attribute
             - attributes:
-                title: Campaign name
                 description: Campaign name
-                tags:
-                  - Campaigns
                 sourceColumn: campaign_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaigns
+                title: Campaign name
               id: campaign_name
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_name
               type: attribute
             - attributes:
-                title: Price
                 description: Price
-                tags:
-                  - Order lines
                 sourceColumn: price
                 sourceColumnDataType: NUMERIC
+                tags:
+                  - Order lines
+                title: Price
               id: price
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/price
               type: fact
             - attributes:
                 description: Budget Agg
-                tags:
-                  - Campaign channels per category
+                operation: SUM
                 sourceColumn: budget
                 sourceColumnDataType: INT
-                operation: SUM
+                tags:
+                  - Campaign channels per category
               id: budget_agg
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/aggregatedFacts/budget_agg
               type: aggregatedFact
             - attributes:
-                title: Date - Date
                 description: Date
+                granularity: DAY
                 tags:
                   - Date
-                granularity: DAY
+                title: Date - Date
               id: date.day
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.day
               type: attribute
             - attributes:
-                title: Region
                 description: Region
-                tags:
-                  - Customers
                 sourceColumn: region
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Region
               id: region
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/region
               type: attribute
             - attributes:
-                title: Campaign channel id
                 description: Campaign channel id
-                tags:
-                  - Campaign channels
                 sourceColumn: campaign_channel_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Campaign channel id
               id: campaign_channel_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
               type: attribute
             - attributes:
-                title: Customer id
                 description: Customer id
-                tags:
-                  - Customers
                 sourceColumn: customer_id
                 sourceColumnDataType: INT
+                tags:
+                  - Customers
+                title: Customer id
               id: customer_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/customer_id
               type: attribute
             - attributes:
-                title: Quantity
                 description: Quantity
-                tags:
-                  - Order lines
                 sourceColumn: quantity
                 sourceColumnDataType: NUMERIC
+                tags:
+                  - Order lines
+                title: Quantity
               id: quantity
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/quantity
               type: fact
             - attributes:
-                title: Campaign id
                 description: Campaign id
-                tags:
-                  - Campaigns
                 sourceColumn: campaign_id
                 sourceColumnDataType: INT
+                tags:
+                  - Campaigns
+                title: Campaign id
               id: campaign_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_id
               type: attribute
             - attributes:
-                title: Type
                 description: Type
-                tags:
-                  - Campaign channels
                 sourceColumn: type
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Type
               id: type
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/type
               type: attribute
             - attributes:
-                title: Spend
                 description: Spend
-                tags:
-                  - Campaign channels
                 sourceColumn: spend
                 sourceColumnDataType: NUMERIC
+                tags:
+                  - Campaign channels
+                title: Spend
               id: spend
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/spend
               type: fact
             - attributes:
-                title: Order status
                 description: Order status
-                tags:
-                  - Order lines
                 sourceColumn: order_status
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order status
               id: order_status
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_status
               type: attribute
             - attributes:
-                title: Customer name
                 description: Customer name
-                tags:
-                  - Customers
                 sourceColumn: customer_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Customer name
               id: customer_name
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/customer_name
               type: attribute
             - attributes:
-                title: Order line id
                 description: Order line id
-                tags:
-                  - Order lines
                 sourceColumn: order_line_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order line id
               id: order_line_id
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_line_id
               type: attribute
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts%2CaggregatedFacts&page=0&size=500
             next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts%2CaggregatedFacts&page=1&size=500
-  - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics?page=0&size=500
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts%2CaggregatedFacts&page=0&size=500
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Encoding:
           - br
+        Content-Length:
+          - '1740'
         Content-Type:
           - application/json
         DATE: *id001
@@ -1684,9 +1631,7 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
+          - max-age=31536000; includeSubDomains; preload
         Vary:
           - Accept-Encoding
           - Origin
@@ -1695,18 +1640,35 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics?page=0&size=500
+    response:
       body:
         string:
           data:
             - attributes:
-                title: '# of Active Customers'
                 areRelationsValid: true
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: '# of Active Customers'
               id: amount_of_active_customers
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
@@ -1716,12 +1678,12 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: '# of Orders'
                 areRelationsValid: true
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: '# of Orders'
               id: amount_of_orders
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_orders
@@ -1731,13 +1693,13 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: '# of Top Customers'
                 areRelationsValid: true
                 content:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: '# of Top Customers'
               id: amount_of_top_customers
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_top_customers
@@ -1747,14 +1709,14 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: '# of Valid Orders'
-                description: ''
                 areRelationsValid: true
                 content:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                description: ''
+                title: '# of Valid Orders'
               id: amount_of_valid_orders
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_valid_orders
@@ -1764,12 +1726,12 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: Campaign Spend
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: Campaign Spend
               id: campaign_spend
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/campaign_spend
@@ -1779,12 +1741,12 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: Order Amount
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: Order Amount
               id: order_amount
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/order_amount
@@ -1794,12 +1756,12 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: '% Revenue'
                 areRelationsValid: true
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: '% Revenue'
               id: percent_revenue
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue
@@ -1809,13 +1771,13 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: '% Revenue from Top 10 Customers'
                 areRelationsValid: true
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: '% Revenue from Top 10 Customers'
               id: percent_revenue_from_top_10_customers
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_customers
@@ -1825,13 +1787,13 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: '% Revenue from Top 10% Customers'
                 areRelationsValid: true
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: '% Revenue from Top 10% Customers'
               id: percent_revenue_from_top_10_percent_customers
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_customers
@@ -1841,13 +1803,13 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: '% Revenue from Top 10% Products'
                 areRelationsValid: true
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: '% Revenue from Top 10% Products'
               id: percent_revenue_from_top_10_percent_products
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_products
@@ -1857,13 +1819,13 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: '% Revenue from Top 10 Products'
                 areRelationsValid: true
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: '% Revenue from Top 10 Products'
               id: percent_revenue_from_top_10_products
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_products
@@ -1873,13 +1835,13 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: '% Revenue in Category'
                 areRelationsValid: true
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: '% Revenue in Category'
               id: percent_revenue_in_category
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
@@ -1889,13 +1851,13 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: '% Revenue per Product'
                 areRelationsValid: true
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: '% Revenue per Product'
               id: percent_revenue_per_product
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_per_product
@@ -1905,14 +1867,14 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: Revenue
-                description: ''
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                description: ''
+                title: Revenue
               id: revenue
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue
@@ -1922,13 +1884,13 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: Revenue (Clothing)
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: Revenue (Clothing)
               id: revenue-clothing
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-clothing
@@ -1938,13 +1900,13 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: Revenue (Electronic)
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: Revenue (Electronic)
               id: revenue-electronic
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-electronic
@@ -1954,13 +1916,13 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: Revenue (Home)
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: Revenue (Home)
               id: revenue-home
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-home
@@ -1970,13 +1932,13 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: Revenue (Outdoor)
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: Revenue (Outdoor)
               id: revenue-outdoor
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-outdoor
@@ -1986,12 +1948,12 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: Revenue per Customer
                 areRelationsValid: true
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: Revenue per Customer
               id: revenue_per_customer
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
@@ -2001,12 +1963,12 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: Revenue per Dollar Spent
                 areRelationsValid: true
                 content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: Revenue per Dollar Spent
               id: revenue_per_dollar_spent
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_per_dollar_spent
@@ -2016,12 +1978,12 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: Revenue / Top 10
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: Revenue / Top 10
               id: revenue_top_10
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_top_10
@@ -2031,12 +1993,12 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: Revenue / Top 10%
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: Revenue / Top 10%
               id: revenue_top_10_percent
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_top_10_percent
@@ -2046,12 +2008,12 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: Total Revenue
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: Total Revenue
               id: total_revenue
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/total_revenue
@@ -2061,12 +2023,12 @@ interactions:
                   originType: NATIVE
               type: metric
             - attributes:
-                title: Total Revenue (No Filters)
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2026-03-25 09:17
+                createdAt: 2026-03-31 09:49
+                title: Total Revenue (No Filters)
               id: total_revenue-no_filters
               links:
                 self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/total_revenue-no_filters
@@ -2076,5 +2038,37 @@ interactions:
                   originType: NATIVE
               type: metric
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics?page=0&size=500
             next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics?page=1&size=500
+            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics?page=0&size=500
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '1089'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1
