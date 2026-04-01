@@ -2,7 +2,10 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Union
+from typing import TYPE_CHECKING, Any, Union
+
+if TYPE_CHECKING:
+    import pyarrow
 
 from attrs import define, field
 from attrs.setters import frozen as frozen_attr
@@ -10,6 +13,13 @@ from gooddata_api_client import models
 from gooddata_api_client.model.afm import AFM
 from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
 from gooddata_api_client.model.result_spec import ResultSpec
+
+try:
+    import pyarrow as _pyarrow
+    from pyarrow import ipc as _ipc
+except ImportError:
+    _pyarrow = None  # type: ignore
+    _ipc = None  # type: ignore
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
@@ -371,6 +381,31 @@ class BareExecutionResponse:
                 ),
             )
         return ExecutionResult(execution_result)
+
+    def read_result_arrow(self) -> pyarrow.Table:
+        """
+        Reads the full execution result as a pyarrow Table.
+
+        The binary endpoint returns the complete result in one shot (no paging).
+        Requires pyarrow to be installed (pip install gooddata-sdk[arrow]).
+        """
+        if _ipc is None:
+            raise ImportError(
+                "pyarrow is required to use read_result_arrow(). Install it with: pip install gooddata-sdk[arrow]"
+            )
+        import io
+
+        response = self._actions_api.retrieve_result_binary(
+            workspace_id=self._workspace_id,
+            result_id=self.result_id,
+            _preload_content=False,
+            **({"x_gdc_cancel_token": self.cancel_token} if self.cancel_token else {}),
+        )
+        try:
+            buf = io.BytesIO(response.read())
+        finally:
+            response.release_conn()
+        return _ipc.open_file(buf).read_all()
 
     def cancel(self) -> None:
         """
