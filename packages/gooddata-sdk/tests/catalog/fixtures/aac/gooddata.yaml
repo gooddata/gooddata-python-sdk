@@ -1,0 +1,9 @@
+# (C) 2026 GoodData Corporation
+profiles:
+  default:
+    host: "https://test.gooddata.com"
+    token: "test-token"
+    workspace_id: "test-workspace"
+    data_source: "test-datasource"
+default_profile: "default"
+source_dir: "analytics"

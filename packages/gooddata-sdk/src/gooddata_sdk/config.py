@@ -32,26 +32,35 @@ class ConfigBase:
 class Profile(ConfigBase):
     host: str
     token: str
+    workspace_id: str | None = None
+    data_source: str | None = None
     custom_headers: dict[str, str] | None = None
     extra_user_agent: str | None = None
     ssl_ca_cert: str | None = None
 
+    # Fields used only by CLI/config, not passed to GoodDataApiClient
+    _NON_API_FIELDS = frozenset({"workspace_id", "data_source"})
+
     def to_dict(self, use_env: bool = False) -> dict[str, str]:
         load_dotenv()
+        base = {k: v for k, v in asdict(self).items() if k not in self._NON_API_FIELDS}
         if not use_env:
-            return asdict(self)
+            return base
         env_var = self.token[1:]
         if env_var not in os.environ:
             raise ValueError(f"Environment variable {env_var} not found")
-        return {**asdict(self), "token": os.environ[env_var]}
+        return {**base, "token": os.environ[env_var]}
 
 
 @define
 class AacConfig(ConfigBase):
     profiles: dict[str, Profile]
     default_profile: str
-    access: dict[str, str]
+    access: dict[str, str] | None = None
+    source_dir: str | None = None
 
     def ds_credentials(self) -> dict[str, str]:
         load_dotenv()
+        if self.access is None:
+            return {}
         return {k: os.environ.get(v[1:], v) for k, v in self.access.items()}

@@ -1,72 +1,64 @@
 # (C) 2024 GoodData Corporation
 import argparse
-import json
-import subprocess
 from pathlib import Path
-from typing import Any
 
 from gooddata_sdk import (
     CatalogDeclarativeDataSources,
     CatalogDeclarativeUserGroups,
     CatalogDeclarativeUsers,
-    CatalogDeclarativeWorkspace,
     CatalogDeclarativeWorkspaceDataFilters,
-    CatalogDeclarativeWorkspaces,
     GoodDataSdk,
 )
+from gooddata_sdk.catalog.workspace.aac import load_aac_workspace_from_disk
 from gooddata_sdk.cli.constants import (
-    BASE_DIR,
     CONFIG_FILE,
     DATA_SOURCES,
-    GD_COMMAND,
     USER_GROUPS,
     USERS,
     WORKSPACES,
     WORKSPACES_DATA_FILTERS,
 )
 from gooddata_sdk.cli.utils import measure_deploy
+from gooddata_sdk.config import AacConfig
+from gooddata_sdk.utils import read_layout_from_file
 
 
-def _call_gd_stram_out(path: Path) -> dict[str, Any]:
-    """
-    Call 'gd stream-out' command to read workspaces file structure using Node.js CLI.
-    """
-    assert (path / CONFIG_FILE).exists() and (path / BASE_DIR).exists()
-    p = subprocess.Popen(
-        [GD_COMMAND, "stream-out", "--no-validate"],
-        cwd=path,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    output, err = p.communicate()
-    if err:
-        print(f"Deploy workspaces failed with the following error {err=}.")
-    data = json.loads(output.decode())
-    if WORKSPACES not in data:
-        raise ValueError("No workspaces found in the output.")
-    return data
+def _get_workspace_id(config_path: Path, profile: str = "default") -> str:
+    """Extract workspace_id from the config file profile."""
+    content = read_layout_from_file(config_path)
+    if not isinstance(content, dict):
+        raise ValueError(f"Invalid config file: {config_path}")
+    config = AacConfig.from_dict(content)
+    selected_profile = config.default_profile if profile == "default" else profile
+    if selected_profile not in config.profiles:
+        raise ValueError(f"Profile '{selected_profile}' not found in config")
+    p = config.profiles[selected_profile]
+    if p.workspace_id is None:
+        raise ValueError(
+            f"Profile '{selected_profile}' does not have 'workspace_id' set. Required for deploying workspace objects."
+        )
+    return p.workspace_id
 
 
 @measure_deploy(step=WORKSPACES)
-def _deploy_workspaces_with_filters(sdk: GoodDataSdk, path: Path) -> None:
-    analytics_root_dir = path / BASE_DIR
-    data = _call_gd_stram_out(path)
-    workspaces = [CatalogDeclarativeWorkspace.from_dict(workspace_dict) for workspace_dict in data[WORKSPACES]]
-    # fetch this information first, so we do not lose them
-    workspace_data_filters = CatalogDeclarativeWorkspaceDataFilters.load_from_disk(analytics_root_dir)
-    workspaces_o = CatalogDeclarativeWorkspaces(
-        workspaces=workspaces, workspace_data_filters=workspace_data_filters.workspace_data_filters
-    )
-    sdk.catalog_workspace.put_declarative_workspaces(workspaces_o)
+def _deploy_workspaces(sdk: GoodDataSdk, path: Path, source_dir: str) -> None:
+    source_path = path / source_dir
+    config_path = path / CONFIG_FILE
+    workspace_id = _get_workspace_id(config_path)
+    workspace_model = load_aac_workspace_from_disk(source_path)
+
+    # Preserve workspace data filters from declarative subdirs
+    wdf = CatalogDeclarativeWorkspaceDataFilters.load_from_disk(source_path)
+    if wdf.workspace_data_filters:
+        workspace_model.remove_wdf_refs()
+
+    sdk.catalog_workspace.put_declarative_workspace(workspace_id=workspace_id, workspace=workspace_model)
 
 
 @measure_deploy(step="data sources")
-def _deploy_data_sources(sdk: GoodDataSdk, analytics_root_dir: Path) -> None:
+def _deploy_data_sources(sdk: GoodDataSdk, analytics_root_dir: Path, config_path: Path) -> None:
     data_sources = CatalogDeclarativeDataSources.load_from_disk(analytics_root_dir)
-    sdk.catalog_data_source.put_declarative_data_sources(
-        data_sources, config_file=analytics_root_dir.parent / "gooddata.yaml"
-    )
+    sdk.catalog_data_source.put_declarative_data_sources(data_sources, config_file=config_path)
 
 
 @measure_deploy(step="user groups")
@@ -87,27 +79,26 @@ def _deploy_workspace_data_filters(sdk: GoodDataSdk, analytics_root_dir: Path) -
     sdk.catalog_workspace.put_declarative_workspace_data_filters(workspace_data_filters)
 
 
-def deploy_all(path: Path) -> None:
-    init_file = path / CONFIG_FILE
-    sdk = GoodDataSdk.create_from_profile(profiles_path=init_file)
+def deploy_all(path: Path, source_dir: str) -> None:
+    config_path = path / CONFIG_FILE
+    sdk = GoodDataSdk.create_from_profile(profiles_path=config_path)
+    analytics_root_dir = path / source_dir
 
-    analytics_root_dir = path / BASE_DIR
-
-    print("Deploying the whole organization... ⏲️⏲️⏲️")
-    _deploy_data_sources(sdk, analytics_root_dir)
+    print("Deploying the whole organization...")
+    _deploy_data_sources(sdk, analytics_root_dir, config_path)
     _deploy_user_groups(sdk, analytics_root_dir)
     _deploy_users(sdk, analytics_root_dir)
-    _deploy_workspaces_with_filters(sdk, path)
-    print("Deployed 🚀🚀🚀")
+    _deploy_workspaces(sdk, path, source_dir)
+    print("Deployed successfully.")
 
 
-def deploy_granular(path: Path, args: argparse.Namespace) -> None:
-    init_file = path / CONFIG_FILE
-    analytics_root_dir = path / "analytics"
+def deploy_granular(path: Path, source_dir: str, args: argparse.Namespace) -> None:
+    config_path = path / CONFIG_FILE
+    analytics_root_dir = path / source_dir
     selected_entities = set(args.only)
-    sdk = GoodDataSdk.create_from_profile(profiles_path=init_file)
+    sdk = GoodDataSdk.create_from_profile(profiles_path=config_path)
     if DATA_SOURCES in selected_entities:
-        _deploy_data_sources(sdk, analytics_root_dir)
+        _deploy_data_sources(sdk, analytics_root_dir, config_path)
     if USER_GROUPS in selected_entities:
         _deploy_user_groups(sdk, analytics_root_dir)
     if USERS in selected_entities:
@@ -115,4 +106,4 @@ def deploy_granular(path: Path, args: argparse.Namespace) -> None:
     if WORKSPACES_DATA_FILTERS in selected_entities:
         _deploy_workspace_data_filters(sdk, analytics_root_dir)
     if WORKSPACES in selected_entities:
-        _deploy_workspaces_with_filters(sdk, analytics_root_dir.parent)
+        _deploy_workspaces(sdk, path, source_dir)

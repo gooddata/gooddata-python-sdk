@@ -1,113 +1,70 @@
 # (C) 2024 GoodData Corporation
 import argparse
-import shutil
-import subprocess
 import sys
 from pathlib import Path
 
 from gooddata_sdk.cli.clone import clone_all, clone_granular
-from gooddata_sdk.cli.constants import GD_COMMAND, GD_PACKAGE_JSON, GD_ROOT
+from gooddata_sdk.cli.constants import CONFIG_FILE, DEFAULT_SOURCE_DIR
 from gooddata_sdk.cli.deploy import deploy_all, deploy_granular
 from gooddata_sdk.cli.utils import _SUPPORTED, Bcolors
-from gooddata_sdk.utils import read_json
-
-_CURRENT_DIR = Path(__file__).parent
-
-
-def get_manifest_directory() -> Path:
-    """
-    Get the directory where the manifest file (gooddata.yaml) is located
-    using the gd stream-manifest-path command.
-    """
-    p = subprocess.Popen(
-        [GD_COMMAND, "stream-manifest-path"],
-        cwd=Path().resolve(),
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    output, err = p.communicate()
-    if err:
-        print(f"{Bcolors.FAIL}Manifest gooddata.yaml was not found.{Bcolors.ENDC}")
-        sys.exit(1)
-    return Path(output.decode()).parent
+from gooddata_sdk.config import AacConfig
+from gooddata_sdk.utils import read_layout_from_file
 
 
-def _deploy(path: Path, args: argparse.Namespace) -> None:
-    """
-    Handles deploy command use cases.
-    """
+def _find_config_file() -> Path:
+    """Find the gooddata.yaml config file in the current directory or parents."""
+    current = Path.cwd()
+    for directory in [current, *current.parents]:
+        config_path = directory / CONFIG_FILE
+        if config_path.exists():
+            return config_path
+    print(f"{Bcolors.FAIL}Config file {CONFIG_FILE} was not found.{Bcolors.ENDC}")
+    sys.exit(1)
+
+
+def _get_source_dir(config_path: Path) -> str:
+    """Get source_dir from config file, falling back to default."""
+    content = read_layout_from_file(config_path)
+    if isinstance(content, dict) and AacConfig.can_structure(content):
+        config = AacConfig.from_dict(content)
+        if config.source_dir is not None:
+            return config.source_dir
+    return DEFAULT_SOURCE_DIR
+
+
+def _deploy(path: Path, source_dir: str, args: argparse.Namespace) -> None:
     if not path.is_dir():
         raise ValueError(f"Path {path} is not a directory.")
-
     if args.only is None:
-        deploy_all(path)
+        deploy_all(path, source_dir)
     else:
-        deploy_granular(path, args)
+        deploy_granular(path, source_dir, args)
 
 
-def _clone(path: Path, args: argparse.Namespace) -> None:
-    """
-    Handles clone command use cases.
-    """
+def _clone(path: Path, source_dir: str, args: argparse.Namespace) -> None:
     if args.only is None:
-        clone_all(path)
+        clone_all(path, source_dir)
     else:
-        clone_granular(path, args)
-
-
-def _manage_node_cli() -> None:
-    """
-    First, it checks if Node CLI is installed and if it is the correct version.
-    If not, it installs the correct version. If it is not installed at all then it's installed
-    locally in ~/.gooddata directory.
-    """
-    requested_version = read_json(_CURRENT_DIR / "package.json")["dependencies"]["@gooddata/code-cli"]
-    if GD_PACKAGE_JSON.exists():
-        current_version = read_json(GD_PACKAGE_JSON)["version"]
-        if current_version == requested_version:
-            return
-        else:
-            print(
-                f"Node.js @gooddata/code-cli version '{requested_version}' is required,"
-                f" but version '{current_version}' is installed."
-            )
-    if not GD_ROOT.exists():
-        GD_ROOT.mkdir()
-    shutil.copyfile(_CURRENT_DIR / "package.json", GD_ROOT / "package.json")
-    print(f"Installing @gooddata/code-cli version '{requested_version}' in {GD_ROOT}...")
-    p = subprocess.Popen(
-        ["npm", "i"],
-        cwd=GD_ROOT,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    _, err = p.communicate()
-    if err:
-        print(f"{Bcolors.FAIL}An error has occurred during installation: {err.decode()}.{Bcolors.ENDC}")
-        sys.exit(1)
+        clone_granular(path, source_dir, args)
 
 
 def main() -> None:
-    """
-    The entrypoint for gdc cli.
-    """
     parser = argparse.ArgumentParser(
         prog="gdc",
-        description="Process GoodData as code file structure. Utilize @gooddata/code-cli for workspaces. "
-        "Note that this is an EXPERIMENTAL feature.",
+        description="GoodData CLI for deploying and cloning analytics-as-code projects.",
     )
     parser.add_argument("action", help="Specify if you want to deploy or clone project.", choices=("deploy", "clone"))
     parser.add_argument("--only", help="Specify available granularity for action.", nargs="+", choices=_SUPPORTED)
 
-    _manage_node_cli()
     args = parser.parse_args()
-    manifest_directory = get_manifest_directory()
+    config_path = _find_config_file()
+    manifest_directory = config_path.parent
+    source_dir = _get_source_dir(config_path)
+
     if args.action == "clone":
-        _clone(manifest_directory, args)
+        _clone(manifest_directory, source_dir, args)
     elif args.action == "deploy":
-        _deploy(manifest_directory, args)
+        _deploy(manifest_directory, source_dir, args)
 
 
 if __name__ == "__main__":
