@@ -55,6 +55,21 @@ Start integrating GoodData into your Python application right now.
 
     The `token` field should reference an environment variable that holds your personal access token. The `access` field can include references to environment variables with data source secrets, or it can be left empty if not needed.
 
+    If you use the GoodData VSCode extension, the SDK can read its `gooddata.yaml` config file directly:
+
+    ```yaml
+    profiles:
+        default:
+            host: "https://www.example.com"
+            token: "$GOODDATA_API_TOKEN"
+            workspace_id: "my-workspace"     # used by gdc CLI
+            data_source: "my-datasource"     # used by gdc CLI
+    default_profile: "default"
+    source_dir: "analytics"                  # used by gdc CLI
+    ```
+
+    The `workspace_id`, `data_source`, and `source_dir` fields are used by the `gdc` CLI for [Analytics-as-Code workflows](../workspace/workspaces/#analytics-as-code-aac-methods) and are ignored by the SDK API client.
+
 1. Start using Python SDK! For example, get a list of all workspaces:
 
     ```python
