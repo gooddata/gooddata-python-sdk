@@ -1,0 +1,35 @@
+# (C) 2026 GoodData Corporation
+# A dashboard is a collection of visualizations that are organized into sections.
+# Because they allow filtering and other adjustments, they function as a dynamic presentation layer for your data analytics.
+# Read more about dashboards:
+# https://www.gooddata.com/docs/cloud/create-dashboards/concepts/dashboard/
+
+id: 90a53321-9060-4aef-9dc6-a3d0a9a5323e
+type: dashboard
+
+title: Dashboard 1
+
+sections:
+    - widgets:
+          - visualization: 71bdc379-384a-4eac-9627-364ea847d977
+            title: Ratings
+            columns: 12
+            rows: 22
+
+filters:
+    date_month:
+        type: date_filter
+        granularity: MONTH
+        from: 0
+        to: 0
+        mode: hidden
+    customer_created_date_year:
+        type: date_filter
+        granularity: YEAR
+        date: customer_created_date
+        from: 0
+        to: 0
+        mode: hidden
+    customer_age:
+        type: attribute_filter
+        using: label/customer_age

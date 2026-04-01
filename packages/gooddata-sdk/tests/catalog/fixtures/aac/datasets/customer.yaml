@@ -1,0 +1,97 @@
+# (C) 2026 GoodData Corporation
+# A dataset is a logical object that represents a set of related facts, attributes, and attribute labels.
+# Datasets are basic organization units of a logical data model.
+# Read more about Datasets:
+# https://www.gooddata.com/developers/cloud-native/doc/cloud/model-data/concepts/dataset/
+
+type: dataset
+id: customer
+
+table_path: ECOMMERCE_DEMO_SCHEMA/customer
+
+title: Customer
+description: Customer
+tags:
+    - Customer
+
+primary_key: customer_id
+
+fields:
+    customer_city:
+        type: attribute
+        source_column: customer_city
+        data_type: STRING
+        title: Customer city
+        description: Customer city
+        tags:
+            - Customer
+        labels:
+            geo__customer_city__city_pushpin_latitude:
+                source_column: geo__customer_city__city_pushpin_latitude
+                data_type: STRING
+                title: City pushpin latitude
+                description: City pushpin latitude
+                tags:
+                    - Customer
+            geo__customer_city__city_pushpin_longitude:
+                source_column: geo__customer_city__city_pushpin_longitude
+                data_type: STRING
+                title: City pushpin longitude
+                description: City pushpin longitude
+                tags:
+                    - Customer
+    customer_country:
+        type: attribute
+        source_column: customer_country
+        data_type: STRING
+        title: Customer country
+        description: Customer country
+        tags:
+            - Customer
+    customer_email:
+        type: attribute
+        source_column: customer_email
+        data_type: STRING
+        title: Customer email
+        description: Customer email
+        tags:
+            - Customer
+        labels:
+            customer_email.customeremaillink:
+                source_column: customer_email
+                data_type: STRING
+                title: Customer email link
+                tags:
+                    - Customer
+                value_type: HYPERLINK
+    customer_id:
+        type: attribute
+        source_column: customer_id
+        data_type: STRING
+        title: Customer id
+        description: Customer id
+        tags:
+            - Customer
+        labels:
+            customer_name:
+                source_column: ls__customer_id__customer_name
+                data_type: STRING
+                title: Customer name
+                description: Customer name
+                tags:
+                    - Customer
+    customer_state:
+        type: attribute
+        source_column: customer_state
+        data_type: STRING
+        title: Customer state
+        description: Customer state
+        tags:
+            - Customer
+
+references:
+    - dataset: customer_created_date
+      sources:
+          - source_column: customer_created_date
+            data_type: DATE
+            target: customer_created_date

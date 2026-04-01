@@ -20,6 +20,7 @@ from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRe
 from gooddata_sdk import CatalogDeclarativeAutomation
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.permission.service import CatalogPermissionService
+from gooddata_sdk.catalog.workspace.aac import load_aac_workspace_from_disk, store_aac_workspace_to_disk
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
     CatalogDeclarativeFilterView,
     CatalogDeclarativeUserDataFilters,
@@ -416,6 +417,32 @@ class CatalogWorkspaceService(CatalogServiceBase):
             workspace_id=workspace_id, layout_root_path=layout_root_path
         )
         self.put_declarative_workspace(workspace_id=workspace_id, workspace=declarative_workspace)
+
+    # AAC (Analytics-as-Code) methods
+
+    def load_and_put_aac_workspace(self, workspace_id: str, source_dir: Path) -> None:
+        """Load AAC YAML files from source_dir, convert to declarative, and deploy to workspace.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+            source_dir (Path):
+                Path to the directory containing AAC YAML files.
+        """
+        workspace_model = load_aac_workspace_from_disk(source_dir)
+        self.put_declarative_workspace(workspace_id=workspace_id, workspace=workspace_model)
+
+    def get_and_store_aac_workspace(self, workspace_id: str, source_dir: Path) -> None:
+        """Get declarative workspace from server, convert to AAC YAML files, and write to disk.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+            source_dir (Path):
+                Path to the directory where AAC YAML files will be written.
+        """
+        workspace_model = self.get_declarative_workspace(workspace_id=workspace_id)
+        store_aac_workspace_to_disk(workspace_model, source_dir)
 
     def clone_workspace(
         self,
