@@ -94,7 +94,6 @@ Class | Method | HTTP request | Description
 *AIApi* | [**get_all_entities_memory_items**](docs/AIApi.md#get_all_entities_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems | Get all Memory Items
 *AIApi* | [**get_entity_knowledge_recommendations**](docs/AIApi.md#get_entity_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Get a Knowledge Recommendation
 *AIApi* | [**get_entity_memory_items**](docs/AIApi.md#get_entity_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Get a Memory Item
-*AIApi* | [**metadata_check_organization**](docs/AIApi.md#metadata_check_organization) | **POST** /api/v1/actions/organization/metadataCheck | (BETA) Check Organization Metadata Inconsistencies
 *AIApi* | [**metadata_sync**](docs/AIApi.md#metadata_sync) | **POST** /api/v1/actions/workspaces/{workspaceId}/metadataSync | (BETA) Sync Metadata to other services
 *AIApi* | [**metadata_sync_organization**](docs/AIApi.md#metadata_sync_organization) | **POST** /api/v1/actions/organization/metadataSync | (BETA) Sync organization scope Metadata to other services
 *AIApi* | [**patch_entity_knowledge_recommendations**](docs/AIApi.md#patch_entity_knowledge_recommendations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Patch a Knowledge Recommendation
@@ -335,7 +334,6 @@ Class | Method | HTTP request | Description
 *ManagePermissionsApi* | [**get_data_source_permissions**](docs/ManagePermissionsApi.md#get_data_source_permissions) | **GET** /api/v1/layout/dataSources/{dataSourceId}/permissions | Get permissions for the data source
 *ManagePermissionsApi* | [**manage_data_source_permissions**](docs/ManagePermissionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 *ManagePermissionsApi* | [**set_data_source_permissions**](docs/ManagePermissionsApi.md#set_data_source_permissions) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/permissions | Set data source permissions.
-*MetadataCheckApi* | [**metadata_check_organization**](docs/MetadataCheckApi.md#metadata_check_organization) | **POST** /api/v1/actions/organization/metadataCheck | (BETA) Check Organization Metadata Inconsistencies
 *MetadataSyncApi* | [**metadata_sync**](docs/MetadataSyncApi.md#metadata_sync) | **POST** /api/v1/actions/workspaces/{workspaceId}/metadataSync | (BETA) Sync Metadata to other services
 *MetadataSyncApi* | [**metadata_sync_organization**](docs/MetadataSyncApi.md#metadata_sync_organization) | **POST** /api/v1/actions/organization/metadataSync | (BETA) Sync organization scope Metadata to other services
 *MetricsApi* | [**create_entity_metrics**](docs/MetricsApi.md#create_entity_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics | Post Metrics
@@ -557,7 +555,6 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**compute_valid_objects**](docs/ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
 *ActionsApi* | [**convert_geo_file**](docs/ActionsApi.md#convert_geo_file) | **POST** /api/v1/actions/customGeoCollection/convert | Convert a geo file to GeoParquet format
 *ActionsApi* | [**create_dashboard_export_request**](docs/ActionsApi.md#create_dashboard_export_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/export/tabular | (EXPERIMENTAL) Create dashboard tabular export request
-*ActionsApi* | [**create_document**](docs/ActionsApi.md#create_document) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents | 
 *ActionsApi* | [**create_image_export**](docs/ActionsApi.md#create_image_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/image | (EXPERIMENTAL) Create image export request
 *ActionsApi* | [**create_pdf_export**](docs/ActionsApi.md#create_pdf_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/visual | Create visual - pdf export request
 *ActionsApi* | [**create_raw_export**](docs/ActionsApi.md#create_raw_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/raw | (EXPERIMENTAL) Create raw export request
@@ -566,7 +563,6 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**created_by**](docs/ActionsApi.md#created_by) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy | Get Analytics Catalog CreatedBy Users
 *ActionsApi* | [**custom_geo_collection_staging_upload**](docs/ActionsApi.md#custom_geo_collection_staging_upload) | **POST** /api/v1/actions/customGeoCollection/staging/upload | Upload a geo collection file to the staging area
 *ActionsApi* | [**dashboard_permissions**](docs/ActionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
-*ActionsApi* | [**delete_document**](docs/ActionsApi.md#delete_document) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents/{filename} | 
 *ActionsApi* | [**delete_files**](docs/ActionsApi.md#delete_files) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/deleteFiles | Delete datasource files
 *ActionsApi* | [**delete_organization_automations**](docs/ActionsApi.md#delete_organization_automations) | **POST** /api/v1/actions/organization/automations/delete | Delete selected automations across all workspaces
 *ActionsApi* | [**delete_workspace_automations**](docs/ActionsApi.md#delete_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/delete | Delete selected automations in the workspace
@@ -581,7 +577,6 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_data_source_schemata**](docs/ActionsApi.md#get_data_source_schemata) | **GET** /api/v1/actions/dataSources/{dataSourceId}/scanSchemata | Get a list of schema names of a database
 *ActionsApi* | [**get_dependent_entities_graph**](docs/ActionsApi.md#get_dependent_entities_graph) | **GET** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph
 *ActionsApi* | [**get_dependent_entities_graph_from_entry_points**](docs/ActionsApi.md#get_dependent_entities_graph_from_entry_points) | **POST** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph from given entry points
-*ActionsApi* | [**get_document**](docs/ActionsApi.md#get_document) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents/{filename} | 
 *ActionsApi* | [**get_exported_file**](docs/ActionsApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
 *ActionsApi* | [**get_image_export**](docs/ActionsApi.md#get_image_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/image/{exportId} | (EXPERIMENTAL) Retrieve exported files
 *ActionsApi* | [**get_image_export_metadata**](docs/ActionsApi.md#get_image_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/image/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
@@ -601,7 +596,6 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**inherited_entity_prefixes**](docs/ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
 *ActionsApi* | [**key_driver_analysis**](docs/ActionsApi.md#key_driver_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers | (EXPERIMENTAL) Compute key driver analysis
 *ActionsApi* | [**key_driver_analysis_result**](docs/ActionsApi.md#key_driver_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId} | (EXPERIMENTAL) Get key driver analysis result
-*ActionsApi* | [**list_documents**](docs/ActionsApi.md#list_documents) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents | 
 *ActionsApi* | [**list_files**](docs/ActionsApi.md#list_files) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/listFiles | List datasource files
 *ActionsApi* | [**list_llm_provider_models**](docs/ActionsApi.md#list_llm_provider_models) | **POST** /api/v1/actions/ai/llmProvider/listModels | List LLM Provider Models
 *ActionsApi* | [**list_llm_provider_models_by_id**](docs/ActionsApi.md#list_llm_provider_models_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/listModels | List LLM Provider Models By Id
@@ -614,14 +608,12 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**mark_as_read_notification**](docs/ActionsApi.md#mark_as_read_notification) | **POST** /api/v1/actions/notifications/{notificationId}/markAsRead | Mark notification as read.
 *ActionsApi* | [**mark_as_read_notification_all**](docs/ActionsApi.md#mark_as_read_notification_all) | **POST** /api/v1/actions/notifications/markAsRead | Mark all notifications as read.
 *ActionsApi* | [**memory_created_by_users**](docs/ActionsApi.md#memory_created_by_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory/createdBy | Get AI Memory CreatedBy Users
-*ActionsApi* | [**metadata_check_organization**](docs/ActionsApi.md#metadata_check_organization) | **POST** /api/v1/actions/organization/metadataCheck | (BETA) Check Organization Metadata Inconsistencies
 *ActionsApi* | [**metadata_sync**](docs/ActionsApi.md#metadata_sync) | **POST** /api/v1/actions/workspaces/{workspaceId}/metadataSync | (BETA) Sync Metadata to other services
 *ActionsApi* | [**metadata_sync_organization**](docs/ActionsApi.md#metadata_sync_organization) | **POST** /api/v1/actions/organization/metadataSync | (BETA) Sync organization scope Metadata to other services
 *ActionsApi* | [**outlier_detection**](docs/ActionsApi.md#outlier_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/detectOutliers | (BETA) Outlier Detection
 *ActionsApi* | [**outlier_detection_result**](docs/ActionsApi.md#outlier_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/detectOutliers/result/{resultId} | (BETA) Outlier Detection Result
 *ActionsApi* | [**overridden_child_entities**](docs/ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
 *ActionsApi* | [**particular_platform_usage**](docs/ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
-*ActionsApi* | [**patch_document**](docs/ActionsApi.md#patch_document) | **PATCH** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents/{filename} | 
 *ActionsApi* | [**pause_organization_automations**](docs/ActionsApi.md#pause_organization_automations) | **POST** /api/v1/actions/organization/automations/pause | Pause selected automations across all workspaces
 *ActionsApi* | [**pause_workspace_automations**](docs/ActionsApi.md#pause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/pause | Pause selected automations in the workspace
 *ActionsApi* | [**read_csv_file_manifests**](docs/ActionsApi.md#read_csv_file_manifests) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/readCsvFileManifests | Read CSV file manifests
@@ -638,7 +630,6 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**retrieve_translations**](docs/ActionsApi.md#retrieve_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/retrieve | Retrieve translations for entities.
 *ActionsApi* | [**scan_data_source**](docs/ActionsApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
 *ActionsApi* | [**scan_sql**](docs/ActionsApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
-*ActionsApi* | [**search_knowledge**](docs/ActionsApi.md#search_knowledge) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/search | 
 *ActionsApi* | [**set_certification**](docs/ActionsApi.md#set_certification) | **POST** /api/v1/actions/workspaces/{workspaceId}/setCertification | Set Certification
 *ActionsApi* | [**set_translations**](docs/ActionsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
 *ActionsApi* | [**staging_upload**](docs/ActionsApi.md#staging_upload) | **POST** /api/v1/actions/fileStorage/staging/upload | Upload a file to the staging area
@@ -661,7 +652,6 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**unsubscribe_organization_automations**](docs/ActionsApi.md#unsubscribe_organization_automations) | **POST** /api/v1/actions/organization/automations/unsubscribe | Unsubscribe from selected automations across all workspaces
 *ActionsApi* | [**unsubscribe_selected_workspace_automations**](docs/ActionsApi.md#unsubscribe_selected_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from selected automations in the workspace
 *ActionsApi* | [**unsubscribe_workspace_automations**](docs/ActionsApi.md#unsubscribe_workspace_automations) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from all automations in the workspace
-*ActionsApi* | [**upsert_document**](docs/ActionsApi.md#upsert_document) | **PUT** /api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents | 
 *ActionsApi* | [**validate_llm_endpoint**](docs/ActionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint
 *ActionsApi* | [**validate_llm_endpoint_by_id**](docs/ActionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id
 *ActionsApi* | [**workspace_resolve_all_settings**](docs/ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
@@ -1281,6 +1271,7 @@ Class | Method | HTTP request | Description
  - [AfmValidDescendantsResponse](docs/AfmValidDescendantsResponse.md)
  - [AfmValidObjectsQuery](docs/AfmValidObjectsQuery.md)
  - [AfmValidObjectsResponse](docs/AfmValidObjectsResponse.md)
+ - [AiUsageMetadataItem](docs/AiUsageMetadataItem.md)
  - [AlertAfm](docs/AlertAfm.md)
  - [AlertCondition](docs/AlertCondition.md)
  - [AlertConditionOperand](docs/AlertConditionOperand.md)
@@ -1386,8 +1377,6 @@ Class | Method | HTTP request | Description
  - [ConvertGeoFileRequest](docs/ConvertGeoFileRequest.md)
  - [ConvertGeoFileResponse](docs/ConvertGeoFileResponse.md)
  - [CoverSlideTemplate](docs/CoverSlideTemplate.md)
- - [CreateKnowledgeDocumentRequestDto](docs/CreateKnowledgeDocumentRequestDto.md)
- - [CreateKnowledgeDocumentResponseDto](docs/CreateKnowledgeDocumentResponseDto.md)
  - [CreatedVisualization](docs/CreatedVisualization.md)
  - [CreatedVisualizationFiltersInner](docs/CreatedVisualizationFiltersInner.md)
  - [CreatedVisualizations](docs/CreatedVisualizations.md)
@@ -1522,7 +1511,6 @@ Class | Method | HTTP request | Description
  - [DefaultSmtp](docs/DefaultSmtp.md)
  - [DefaultSmtpAllOf](docs/DefaultSmtpAllOf.md)
  - [DeleteFilesRequest](docs/DeleteFilesRequest.md)
- - [DeleteKnowledgeDocumentResponseDto](docs/DeleteKnowledgeDocumentResponseDto.md)
  - [DependentEntitiesGraph](docs/DependentEntitiesGraph.md)
  - [DependentEntitiesNode](docs/DependentEntitiesNode.md)
  - [DependentEntitiesRequest](docs/DependentEntitiesRequest.md)
@@ -2206,11 +2194,8 @@ Class | Method | HTTP request | Description
  - [KeyDriversRequest](docs/KeyDriversRequest.md)
  - [KeyDriversResponse](docs/KeyDriversResponse.md)
  - [KeyDriversResult](docs/KeyDriversResult.md)
- - [KnowledgeDocumentMetadataDto](docs/KnowledgeDocumentMetadataDto.md)
- - [KnowledgeSearchResultDto](docs/KnowledgeSearchResultDto.md)
  - [LabelIdentifier](docs/LabelIdentifier.md)
  - [ListDatabaseInstancesResponse](docs/ListDatabaseInstancesResponse.md)
- - [ListKnowledgeDocumentsResponseDto](docs/ListKnowledgeDocumentsResponseDto.md)
  - [ListLinks](docs/ListLinks.md)
  - [ListLinksAllOf](docs/ListLinksAllOf.md)
  - [ListLlmProviderModelsRequest](docs/ListLlmProviderModelsRequest.md)
@@ -2276,7 +2261,6 @@ Class | Method | HTTP request | Description
  - [PageMetadata](docs/PageMetadata.md)
  - [Paging](docs/Paging.md)
  - [Parameter](docs/Parameter.md)
- - [PatchKnowledgeDocumentRequestDto](docs/PatchKnowledgeDocumentRequestDto.md)
  - [PdfTableStyle](docs/PdfTableStyle.md)
  - [PdfTableStyleProperty](docs/PdfTableStyleProperty.md)
  - [PdmLdmRequest](docs/PdmLdmRequest.md)
@@ -2352,12 +2336,10 @@ Class | Method | HTTP request | Description
  - [ScanResultPdm](docs/ScanResultPdm.md)
  - [ScanSqlRequest](docs/ScanSqlRequest.md)
  - [ScanSqlResponse](docs/ScanSqlResponse.md)
- - [SearchKnowledgeResponseDto](docs/SearchKnowledgeResponseDto.md)
  - [SearchRelationshipObject](docs/SearchRelationshipObject.md)
  - [SearchRequest](docs/SearchRequest.md)
  - [SearchResult](docs/SearchResult.md)
  - [SearchResultObject](docs/SearchResultObject.md)
- - [SearchStatisticsDto](docs/SearchStatisticsDto.md)
  - [SectionSlideTemplate](docs/SectionSlideTemplate.md)
  - [ServiceInfo](docs/ServiceInfo.md)
  - [SetCertificationRequest](docs/SetCertificationRequest.md)
@@ -2411,8 +2393,6 @@ Class | Method | HTTP request | Description
  - [UIContext](docs/UIContext.md)
  - [UploadFileResponse](docs/UploadFileResponse.md)
  - [UploadGeoCollectionFileResponse](docs/UploadGeoCollectionFileResponse.md)
- - [UpsertKnowledgeDocumentRequestDto](docs/UpsertKnowledgeDocumentRequestDto.md)
- - [UpsertKnowledgeDocumentResponseDto](docs/UpsertKnowledgeDocumentResponseDto.md)
  - [UserAssignee](docs/UserAssignee.md)
  - [UserContext](docs/UserContext.md)
  - [UserGroupAssignee](docs/UserGroupAssignee.md)
