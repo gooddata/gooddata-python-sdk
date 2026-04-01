@@ -50,6 +50,9 @@ classifiers = [
     "Typing :: Typed",
 ]
 
+[project.optional-dependencies]
+arrow = ["pyarrow>=23.0.1"]
+
 [project.urls]
 Documentation = "https://www.gooddata.com/docs/python-sdk/1.62.0"
 Source = "https://github.com/gooddata/gooddata-python-sdk"
@@ -69,6 +72,7 @@ test = [
     "python-dotenv~=1.0.0",
     "deepdiff~=8.5.0",
     "tests_support",
+    "pyarrow>=16.1.0",
 ]
 
 [tool.ty.analysis]
