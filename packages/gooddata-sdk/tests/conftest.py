@@ -60,15 +60,15 @@ def test_config(request):
 
 @pytest.fixture(scope="session", autouse=True)
 def _patch_ds_credentials(test_config):
-    """Override demo-test-ds password in memory when DS_PASSWORD env var is set.
+    """Override demo-test-ds password in memory.
 
-    The credentials file (data_sources_credentials.yaml) is read by
-    _credentials_from_file() and used by put_declarative_data_sources and
-    test_data_sources_connection. Instead of rewriting the file on disk,
-    we wrap the static method to patch the returned dict in memory.
+    The credentials file (data_sources_credentials.yaml) contains a placeholder
+    value for demo-test-ds. This fixture patches _credentials_from_file() to
+    replace it with the real password — from DS_PASSWORD env var (staging) or
+    from the test config ds_password (local).
     """
-    env_ds_password = os.environ.get("DS_PASSWORD")
-    if not env_ds_password:
+    ds_password = os.environ.get("DS_PASSWORD") or test_config.get("ds_password")
+    if not ds_password:
         yield
         return
 
@@ -80,7 +80,7 @@ def _patch_ds_credentials(test_config):
     def _patched_credentials_from_file(credentials_path):
         credentials = original(credentials_path)
         if "demo-test-ds" in credentials:
-            credentials["demo-test-ds"] = env_ds_password
+            credentials["demo-test-ds"] = ds_password
         return credentials
 
     CatalogDataSourceService._credentials_from_file = _patched_credentials_from_file
