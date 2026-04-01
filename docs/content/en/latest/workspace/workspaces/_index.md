@@ -30,6 +30,11 @@ Manage workspaces. Entity and Declarative methods are supported.
 * [get_declarative_automations](./get_declarative_automations/)
 * [put_declarative_automations](./put_declarative_automations/)
 
+### Analytics-as-Code (AAC) Methods
+
+* [load_and_put_aac_workspace](./load_and_put_aac_workspace/)
+* [get_and_store_aac_workspace](./get_and_store_aac_workspace/)
+
 
 ## Example
 
