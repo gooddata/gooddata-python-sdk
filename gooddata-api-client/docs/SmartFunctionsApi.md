@@ -108,6 +108,9 @@ with gooddata_api_client.ApiClient() as api_client:
                     id="id_example",
                     widgets=[
                         WidgetDescriptor(
+                            filters=[
+                                ChangeAnalysisParamsFiltersInner(None),
+                            ],
                             title="title_example",
                             widget_id="widget_id_example",
                             widget_type="widget_type_example",
@@ -311,6 +314,9 @@ with gooddata_api_client.ApiClient() as api_client:
                     id="id_example",
                     widgets=[
                         WidgetDescriptor(
+                            filters=[
+                                ChangeAnalysisParamsFiltersInner(None),
+                            ],
                             title="title_example",
                             widget_id="widget_id_example",
                             widget_type="widget_type_example",

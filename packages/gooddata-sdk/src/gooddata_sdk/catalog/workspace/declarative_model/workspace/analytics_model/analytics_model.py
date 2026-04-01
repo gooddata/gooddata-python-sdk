@@ -18,6 +18,7 @@ from gooddata_api_client.model.declarative_metric import DeclarativeMetric
 from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
 
 from gooddata_sdk.catalog.base import Base
+from gooddata_sdk.catalog.parameter import CatalogParameter
 from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeDashboardPermissionsForAssignee,
     CatalogDeclarativeDashboardPermissionsForAssigneeRule,
@@ -81,6 +82,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
     visualization_objects: list[CatalogDeclarativeVisualizationObject] = field(factory=list)
     export_definitions: list[CatalogDeclarativeExportDefinition] = field(factory=list)
     memory_items: list[CatalogDeclarativeMemoryItem] = field(factory=list)
+    parameters: list[CatalogParameter] = field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeAnalyticsLayer]:

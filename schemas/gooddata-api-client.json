@@ -4964,6 +4964,31 @@
         ],
         "type": "object"
       },
+      "AiUsageMetadataItem": {
+        "description": "AI usage metadata returned after the interaction (e.g. current query count vs. entitlement limit).",
+        "properties": {
+          "counterType": {
+            "description": "Type of usage counter, e.g. AI_QUERIES.",
+            "type": "string"
+          },
+          "currentValue": {
+            "description": "Current usage value after this request.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "limit": {
+            "description": "Entitlement limit. 0 means unlimited.",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "counterType",
+          "currentValue",
+          "limit"
+        ],
+        "type": "object"
+      },
       "AlertAfm": {
         "properties": {
           "attributes": {
@@ -5569,7 +5594,11 @@
               "FederatedIdentityManagement",
               "AuditLogging",
               "ControlledFeatureRollout",
-              "AiLake"
+              "AiLake",
+              "AiModule",
+              "AiQueryLimit",
+              "AiKnowledgeStorageLimit",
+              "AiAgentLimit"
             ],
             "type": "string"
           },
@@ -6892,6 +6921,13 @@
               "$ref": "#/components/schemas/ToolCallEventResult"
             },
             "type": "array"
+          },
+          "usage": {
+            "description": "AI usage metadata returned after the interaction (e.g. current query count vs. entitlement limit).",
+            "items": {
+              "$ref": "#/components/schemas/AiUsageMetadataItem"
+            },
+            "type": "array"
           }
         },
         "type": "object"
@@ -7432,61 +7468,6 @@
             "$ref": "#/components/schemas/RunningSection"
           }
         },
-        "type": "object"
-      },
-      "CreateKnowledgeDocumentRequestDto": {
-        "properties": {
-          "content": {
-            "type": "string"
-          },
-          "filename": {
-            "type": "string"
-          },
-          "pageBoundaries": {
-            "items": {
-              "format": "int32",
-              "type": "integer"
-            },
-            "type": "array"
-          },
-          "scopes": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "title": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "content",
-          "filename"
-        ],
-        "type": "object"
-      },
-      "CreateKnowledgeDocumentResponseDto": {
-        "properties": {
-          "filename": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "numChunks": {
-            "format": "int32",
-            "type": "integer"
-          },
-          "success": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "filename",
-          "message",
-          "numChunks",
-          "success"
-        ],
         "type": "object"
       },
       "CreatedVisualization": {
@@ -12424,21 +12405,6 @@
         ],
         "type": "object"
       },
-      "DeleteKnowledgeDocumentResponseDto": {
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "success": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "message",
-          "success"
-        ],
-        "type": "object"
-      },
       "DependentEntitiesGraph": {
         "properties": {
           "edges": {
@@ -12856,7 +12822,11 @@
                 "FederatedIdentityManagement",
                 "AuditLogging",
                 "ControlledFeatureRollout",
-                "AiLake"
+                "AiLake",
+                "AiModule",
+                "AiQueryLimit",
+                "AiKnowledgeStorageLimit",
+                "AiAgentLimit"
               ],
               "type": "string"
             },
@@ -14506,6 +14476,13 @@
       "InsightWidgetDescriptor": {
         "description": "Insight widget displaying a visualization.",
         "properties": {
+          "filters": {
+            "description": "Filters currently applied to the dashboard.",
+            "items": {
+              "$ref": "#/components/schemas/FilterDefinition"
+            },
+            "type": "array"
+          },
           "resultId": {
             "description": "Signed result ID for this widget's cached execution result.",
             "type": "string"
@@ -31478,105 +31455,6 @@
         ],
         "type": "object"
       },
-      "KnowledgeDocumentMetadataDto": {
-        "properties": {
-          "createdAt": {
-            "type": "string"
-          },
-          "createdBy": {
-            "type": "string"
-          },
-          "filename": {
-            "type": "string"
-          },
-          "isDisabled": {
-            "type": "boolean"
-          },
-          "numChunks": {
-            "format": "int32",
-            "type": "integer"
-          },
-          "scopes": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "title": {
-            "type": "string"
-          },
-          "updatedAt": {
-            "type": "string"
-          },
-          "updatedBy": {
-            "type": "string"
-          },
-          "workspaceId": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "createdAt",
-          "createdBy",
-          "filename",
-          "numChunks",
-          "scopes",
-          "updatedAt",
-          "updatedBy"
-        ],
-        "type": "object"
-      },
-      "KnowledgeSearchResultDto": {
-        "properties": {
-          "chunkIndex": {
-            "format": "int32",
-            "type": "integer"
-          },
-          "content": {
-            "type": "string"
-          },
-          "filename": {
-            "type": "string"
-          },
-          "pageNumbers": {
-            "items": {
-              "format": "int32",
-              "type": "integer"
-            },
-            "type": "array"
-          },
-          "scopes": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "score": {
-            "format": "float",
-            "type": "number"
-          },
-          "title": {
-            "type": "string"
-          },
-          "totalChunks": {
-            "format": "int32",
-            "type": "integer"
-          },
-          "workspaceId": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "chunkIndex",
-          "content",
-          "filename",
-          "pageNumbers",
-          "scopes",
-          "score",
-          "totalChunks"
-        ],
-        "type": "object"
-      },
       "LabelIdentifier": {
         "description": "A label identifier.",
         "properties": {
@@ -31619,27 +31497,6 @@
         },
         "required": [
           "databases"
-        ],
-        "type": "object"
-      },
-      "ListKnowledgeDocumentsResponseDto": {
-        "properties": {
-          "documents": {
-            "items": {
-              "$ref": "#/components/schemas/KnowledgeDocumentMetadataDto"
-            },
-            "type": "array"
-          },
-          "nextPageToken": {
-            "type": "string"
-          },
-          "totalCount": {
-            "format": "int32",
-            "type": "integer"
-          }
-        },
-        "required": [
-          "documents"
         ],
         "type": "object"
       },
@@ -32945,23 +32802,6 @@
           "name",
           "value"
         ],
-        "type": "object"
-      },
-      "PatchKnowledgeDocumentRequestDto": {
-        "properties": {
-          "isDisabled": {
-            "type": "boolean"
-          },
-          "scopes": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "title": {
-            "type": "string"
-          }
-        },
         "type": "object"
       },
       "PdfTableStyle": {
@@ -34389,6 +34229,13 @@
       "RichTextWidgetDescriptor": {
         "description": "Rich text widget displaying static content. Has no execution result.",
         "properties": {
+          "filters": {
+            "description": "Filters currently applied to the dashboard.",
+            "items": {
+              "$ref": "#/components/schemas/FilterDefinition"
+            },
+            "type": "array"
+          },
           "title": {
             "description": "Widget title as displayed on the dashboard.",
             "type": "string"
@@ -34667,24 +34514,6 @@
         ],
         "type": "object"
       },
-      "SearchKnowledgeResponseDto": {
-        "properties": {
-          "results": {
-            "items": {
-              "$ref": "#/components/schemas/KnowledgeSearchResultDto"
-            },
-            "type": "array"
-          },
-          "statistics": {
-            "$ref": "#/components/schemas/SearchStatisticsDto"
-          }
-        },
-        "required": [
-          "results",
-          "statistics"
-        ],
-        "type": "object"
-      },
       "SearchRelationshipObject": {
         "properties": {
           "sourceObjectId": {
@@ -34919,23 +34748,6 @@
           "title",
           "type",
           "workspaceId"
-        ],
-        "type": "object"
-      },
-      "SearchStatisticsDto": {
-        "properties": {
-          "averageSimilarityScore": {
-            "format": "float",
-            "type": "number"
-          },
-          "totalResults": {
-            "format": "int32",
-            "type": "integer"
-          }
-        },
-        "required": [
-          "averageSimilarityScore",
-          "totalResults"
         ],
         "type": "object"
       },
@@ -36316,61 +36128,6 @@
         ],
         "type": "object"
       },
-      "UpsertKnowledgeDocumentRequestDto": {
-        "properties": {
-          "content": {
-            "type": "string"
-          },
-          "filename": {
-            "type": "string"
-          },
-          "pageBoundaries": {
-            "items": {
-              "format": "int32",
-              "type": "integer"
-            },
-            "type": "array"
-          },
-          "scopes": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "title": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "content",
-          "filename"
-        ],
-        "type": "object"
-      },
-      "UpsertKnowledgeDocumentResponseDto": {
-        "properties": {
-          "filename": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "numChunks": {
-            "format": "int32",
-            "type": "integer"
-          },
-          "success": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "filename",
-          "message",
-          "numChunks",
-          "success"
-        ],
-        "type": "object"
-      },
       "UserAssignee": {
         "description": "List of users",
         "properties": {
@@ -36933,6 +36690,13 @@
             "description": "ID of the currently active visualization in the switcher.",
             "type": "string"
           },
+          "filters": {
+            "description": "Filters currently applied to the dashboard.",
+            "items": {
+              "$ref": "#/components/schemas/FilterDefinition"
+            },
+            "type": "array"
+          },
           "resultId": {
             "description": "Signed result ID for the currently active visualization's execution result.",
             "type": "string"
@@ -37280,6 +37044,22 @@
           "propertyName": "widgetType"
         },
         "properties": {
+          "filters": {
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AbstractMeasureValueFilter"
+                },
+                {
+                  "$ref": "#/components/schemas/FilterDefinitionForSimpleMeasure"
+                },
+                {
+                  "$ref": "#/components/schemas/InlineFilterDefinition"
+                }
+              ]
+            },
+            "type": "array"
+          },
           "title": {
             "type": "string"
           },
@@ -39590,23 +39370,6 @@
         ]
       }
     },
-    "/api/v1/actions/organization/metadataCheck": {
-      "post": {
-        "description": "(BETA) Temporary solution. Resyncs all organization objects and full workspaces within the organization with target GEN_AI_CHECK.",
-        "operationId": "metadataCheckOrganization",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "summary": "(BETA) Check Organization Metadata Inconsistencies",
-        "tags": [
-          "AI",
-          "Metadata Check",
-          "actions"
-        ]
-      }
-    },
     "/api/v1/actions/organization/metadataSync": {
       "post": {
         "description": "(BETA) Temporary solution. Later relevant metadata actions will trigger sync in their scope only.",
@@ -40746,368 +40509,6 @@
         "summary": "Trigger Quality Issues Calculation",
         "tags": [
           "Smart Functions",
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents": {
-      "get": {
-        "operationId": "listDocuments",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "scopes",
-            "required": false,
-            "schema": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          {
-            "in": "query",
-            "name": "size",
-            "required": false,
-            "schema": {
-              "default": 50,
-              "format": "int32",
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "pageToken",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "metaInclude",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "state",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListKnowledgeDocumentsResponseDto"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      },
-      "post": {
-        "operationId": "createDocument",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateKnowledgeDocumentRequestDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateKnowledgeDocumentResponseDto"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      },
-      "put": {
-        "operationId": "upsertDocument",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpsertKnowledgeDocumentRequestDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpsertKnowledgeDocumentResponseDto"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/knowledge/documents/{filename}": {
-      "delete": {
-        "operationId": "deleteDocument",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "filename",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteKnowledgeDocumentResponseDto"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      },
-      "get": {
-        "operationId": "getDocument",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "filename",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/KnowledgeDocumentMetadataDto"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      },
-      "patch": {
-        "operationId": "patchDocument",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "filename",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PatchKnowledgeDocumentRequestDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/KnowledgeDocumentMetadataDto"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/knowledge/search": {
-      "get": {
-        "operationId": "searchKnowledge",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "limit",
-            "required": false,
-            "schema": {
-              "default": 10,
-              "format": "int32",
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "minScore",
-            "required": false,
-            "schema": {
-              "default": 0.0,
-              "format": "double",
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "scopes",
-            "required": false,
-            "schema": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SearchKnowledgeResponseDto"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
           "actions"
         ]
       }
