@@ -2,7 +2,6 @@
 # AIDA validation policy
 #
 # This file wires domains -> pipelines -> steps (command_id + processor_id).
-# Initially empty (validate may no-op until you configure routes).
 version: 1
 validation_policy:
   codegen:
@@ -26,22 +25,16 @@ validation_policy:
   pipelines:
     package-fast:
       steps:
-      - command_id: package-lint
-        processor_id: passthrough
-      - command_id: package-type-check
-        processor_id: passthrough
-      - command_id: package-test-py314
-        processor_id: pytest
+      - command_id: package-validate
+        processor_id: external_json
+    repo-fast:
+      steps:
+      - command_id: package-validate-no-tests
+        processor_id: external_json
     api-client-fast:
       steps:
       - command_id: api-client-tests
         processor_id: pytest
-    repo-fast:
-      steps:
-      - command_id: workspace-lint
-        processor_id: passthrough
-      - command_id: workspace-type-check
-        processor_id: passthrough
     aida-config:
       steps:
       - command_id: aida-doctor
