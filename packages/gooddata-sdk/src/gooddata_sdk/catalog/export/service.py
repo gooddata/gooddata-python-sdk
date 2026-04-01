@@ -338,10 +338,12 @@ class ExportService(CatalogServiceBase):
         max_retry: float = 5.0,
     ) -> bytes:
         """
-        Poll the raw export endpoint for an already-submitted export and return the Arrow IPC bytes.
+        Poll the raw export endpoint for an already-submitted export and return its bytes.
 
-        The caller is responsible for submitting the AFM execution and the export request
-        (via ``actions_api.create_raw_export``), then passing the resulting ``export_id`` here.
+        Low-level building block: the caller is responsible for submitting the export request
+        (via ``actions_api.create_raw_export``) and passing the resulting ``export_id`` here.
+        The returned bytes reflect whatever format was requested at creation time
+        (``ARROW_FILE``, ``ARROW_STREAM``, or ``CSV``).
 
         Args:
             workspace_id (str): The ID of the target workspace.
@@ -351,7 +353,7 @@ class ExportService(CatalogServiceBase):
             max_retry (float): Maximum wait between retries in seconds. Defaults to 5.0.
 
         Returns:
-            bytes: Arrow IPC bytes that can be read with ``pyarrow.ipc.open_file``.
+            bytes: Raw export bytes in the format requested at submission time.
         """
         return self._get_exported_content(
             workspace_id=workspace_id,
