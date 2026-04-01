@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives?page=0&size=500
       body: null
       headers:
         Accept:
@@ -14,15 +11,18 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/cspDirectives?page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data: []
+          links:
+            next: http://localhost:3000/api/v1/entities/cspDirectives?page=1&size=500
+            self: http://localhost:3000/api/v1/entities/cspDirectives?page=0&size=500
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '249'
         Content-Type:
@@ -36,25 +36,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data: []
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives?page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives?page=1&size=500
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives
       body:
         data:
           attributes:
@@ -73,15 +69,22 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/cspDirectives
     response:
-      status:
-        code: 201
-        message: Created
+      body:
+        string:
+          data:
+            attributes:
+              sources:
+                - https://test.com
+            id: font-src
+            type: cspDirective
+          links:
+            self: http://localhost:3000/api/v1/entities/cspDirectives/font-src
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '211'
         Content-Type:
@@ -94,29 +97,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              sources:
-                - https://test.com
-            id: font-src
-            type: cspDirective
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives/font-src
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 201
+        message: Created
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives
       body:
         data:
           attributes:
@@ -135,15 +130,22 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/cspDirectives
     response:
-      status:
-        code: 201
-        message: Created
+      body:
+        string:
+          data:
+            attributes:
+              sources:
+                - https://test2.com
+            id: script-src
+            type: cspDirective
+          links:
+            self: http://localhost:3000/api/v1/entities/cspDirectives/script-src
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '216'
         Content-Type:
@@ -156,29 +158,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              sources:
-                - https://test2.com
-            id: script-src
-            type: cspDirective
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives/script-src
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 201
+        message: Created
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives?page=0&size=500
       body: null
       headers:
         Accept:
@@ -189,15 +183,32 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/cspDirectives?page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            - attributes:
+                sources:
+                  - https://test.com
+              id: font-src
+              links:
+                self: http://localhost:3000/api/v1/entities/cspDirectives/font-src
+              type: cspDirective
+            - attributes:
+                sources:
+                  - https://test2.com
+              id: script-src
+              links:
+                self: http://localhost:3000/api/v1/entities/cspDirectives/script-src
+              type: cspDirective
+          links:
+            next: http://localhost:3000/api/v1/entities/cspDirectives?page=1&size=500
+            self: http://localhost:3000/api/v1/entities/cspDirectives?page=0&size=500
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '659'
         Content-Type:
@@ -210,39 +221,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            - attributes:
-                sources:
-                  - https://test.com
-              id: font-src
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives/font-src
-              type: cspDirective
-            - attributes:
-                sources:
-                  - https://test2.com
-              id: script-src
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives/script-src
-              type: cspDirective
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives?page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives?page=1&size=500
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: DELETE
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives/font-src
       body: null
       headers:
         Accept-Encoding:
@@ -251,15 +244,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/cspDirectives/font-src
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -270,21 +262,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 204
+        message: No Content
   - request:
-      method: DELETE
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/cspDirectives/script-src
       body: null
       headers:
         Accept-Encoding:
@@ -293,15 +285,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/cspDirectives/script-src
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -312,15 +303,18 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 204
+        message: No Content
+version: 1

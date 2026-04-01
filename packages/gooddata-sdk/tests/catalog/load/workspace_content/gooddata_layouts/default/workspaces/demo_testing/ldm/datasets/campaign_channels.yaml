@@ -1,8 +1,9 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 aggregatedFacts: []
 attributes:
   - description: Campaign channel id
     id: campaign_channel_id
+    isNullable: false
     labels: []
     sourceColumn: campaign_channel_id
     sourceColumnDataType: STRING
@@ -11,6 +12,7 @@ attributes:
     title: Campaign channel id
   - description: Category
     id: campaign_channels.category
+    isNullable: true
     labels: []
     sourceColumn: category
     sourceColumnDataType: STRING
@@ -19,6 +21,7 @@ attributes:
     title: Category
   - description: Type
     id: type
+    isNullable: true
     labels: []
     sourceColumn: type
     sourceColumnDataType: STRING
@@ -36,6 +39,7 @@ description: Campaign channels
 facts:
   - description: Budget
     id: budget
+    isNullable: true
     sourceColumn: budget
     sourceColumnDataType: NUMERIC
     tags:
@@ -43,6 +47,7 @@ facts:
     title: Budget
   - description: Spend
     id: spend
+    isNullable: true
     sourceColumn: spend
     sourceColumnDataType: NUMERIC
     tags:
@@ -60,6 +65,7 @@ references:
     sources:
       - column: campaign_id
         dataType: INT
+        isNullable: true
         target:
           id: campaign_id
           type: attribute

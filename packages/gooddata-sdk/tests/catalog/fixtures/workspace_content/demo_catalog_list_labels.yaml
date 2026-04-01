@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels?page=0&size=500
       body: null
       headers:
         Accept:
@@ -14,17 +11,406 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/labels?page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            - attributes:
+                areRelationsValid: true
+                description: Campaign channel id
+                isNullable: false
+                primary: true
+                sourceColumn: campaign_channel_id
+                sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Campaign channel id
+                valueType: TEXT
+              id: campaign_channel_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channel_id
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Category
+                isNullable: true
+                primary: true
+                sourceColumn: category
+                sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Category
+                valueType: TEXT
+              id: campaign_channels.category
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channels.category
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Campaign id
+                isNullable: false
+                primary: true
+                sourceColumn: campaign_id
+                sourceColumnDataType: INT
+                tags:
+                  - Campaigns
+                title: Campaign id
+                valueType: TEXT
+              id: campaign_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_id
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Campaign name
+                isNullable: true
+                primary: true
+                sourceColumn: campaign_name
+                sourceColumnDataType: STRING
+                tags:
+                  - Campaigns
+                title: Campaign name
+                valueType: TEXT
+              id: campaign_name
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_name
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Customer id
+                isNullable: false
+                primary: true
+                sourceColumn: customer_id
+                sourceColumnDataType: INT
+                tags:
+                  - Customers
+                title: Customer id
+                valueType: TEXT
+              id: customer_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_id
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Customer name
+                isNullable: true
+                primary: true
+                sourceColumn: customer_name
+                sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Customer name
+                valueType: TEXT
+              id: customer_name
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_name
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Date
+                primary: true
+                sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Date
+              id: date.day
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.day
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Month and Year (12/2020)
+                primary: true
+                sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Month/Year
+              id: date.month
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.month
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Quarter and Year (Q1/2020)
+                primary: true
+                sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Quarter/Year
+              id: date.quarter
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarter
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Week and Year (W52/2020)
+                primary: true
+                sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Week/Year
+              id: date.week
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.week
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Year
+                primary: true
+                sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Year
+              id: date.year
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.year
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Location
+                isNullable: true
+                primary: false
+                sourceColumn: geo__state__location
+                sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Location
+                valueType: GEO
+              id: geo__state__location
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Order id
+                isNullable: true
+                primary: true
+                sourceColumn: order_id
+                sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order id
+                valueType: TEXT
+              id: order_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_id
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Order line id
+                isNullable: false
+                primary: true
+                sourceColumn: order_line_id
+                sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order line id
+                valueType: TEXT
+              id: order_line_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_line_id
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Order status
+                isNullable: true
+                primary: true
+                sourceColumn: order_status
+                sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order status
+                valueType: TEXT
+              id: order_status
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Product id
+                isNullable: false
+                primary: true
+                sourceColumn: product_id
+                sourceColumnDataType: INT
+                tags:
+                  - Products
+                title: Product id
+                valueType: TEXT
+              id: product_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_id
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Product name
+                isNullable: true
+                primary: true
+                sourceColumn: product_name
+                sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Product name
+                valueType: TEXT
+              id: product_name
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Category
+                isNullable: true
+                primary: true
+                sourceColumn: category
+                sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Category
+                valueType: TEXT
+              id: products.category
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Region
+                isNullable: true
+                primary: true
+                sourceColumn: region
+                sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Region
+                valueType: TEXT
+              id: region
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: State
+                isNullable: true
+                primary: true
+                sourceColumn: state
+                sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: State
+                valueType: TEXT
+              id: state
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/state
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+            - attributes:
+                areRelationsValid: true
+                description: Type
+                isNullable: true
+                primary: true
+                sourceColumn: type
+                sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Type
+                valueType: TEXT
+              id: type
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/type
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: label
+          links:
+            next: http://localhost:3000/api/v1/entities/workspaces/demo/labels?page=1&size=500
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/labels?page=0&size=500
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Encoding:
           - br
+        Content-Length:
+          - '823'
         Content-Type:
           - application/json
         DATE: &id001
@@ -36,9 +422,7 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
+          - max-age=31536000; includeSubDomains; preload
         Vary:
           - Accept-Encoding
           - Origin
@@ -47,379 +431,9 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            - attributes:
-                title: Campaign channel id
-                description: Campaign channel id
-                tags:
-                  - Campaign channels
-                primary: true
-                sourceColumn: campaign_channel_id
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                areRelationsValid: true
-              id: campaign_channel_id
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_channel_id
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Category
-                description: Category
-                tags:
-                  - Campaign channels
-                primary: true
-                sourceColumn: category
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                areRelationsValid: true
-              id: campaign_channels.category
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_channels.category
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Campaign id
-                description: Campaign id
-                tags:
-                  - Campaigns
-                primary: true
-                sourceColumn: campaign_id
-                sourceColumnDataType: INT
-                valueType: TEXT
-                areRelationsValid: true
-              id: campaign_id
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_id
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Campaign name
-                description: Campaign name
-                tags:
-                  - Campaigns
-                primary: true
-                sourceColumn: campaign_name
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                areRelationsValid: true
-              id: campaign_name
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_name
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Customer id
-                description: Customer id
-                tags:
-                  - Customers
-                primary: true
-                sourceColumn: customer_id
-                sourceColumnDataType: INT
-                valueType: TEXT
-                areRelationsValid: true
-              id: customer_id
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/customer_id
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Customer name
-                description: Customer name
-                tags:
-                  - Customers
-                primary: true
-                sourceColumn: customer_name
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                areRelationsValid: true
-              id: customer_name
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/customer_name
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Date - Date
-                description: Date
-                tags:
-                  - Date
-                primary: true
-                sourceColumn: ''
-                areRelationsValid: true
-              id: date.day
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.day
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Date - Month/Year
-                description: Month and Year (12/2020)
-                tags:
-                  - Date
-                primary: true
-                sourceColumn: ''
-                areRelationsValid: true
-              id: date.month
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.month
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Date - Quarter/Year
-                description: Quarter and Year (Q1/2020)
-                tags:
-                  - Date
-                primary: true
-                sourceColumn: ''
-                areRelationsValid: true
-              id: date.quarter
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.quarter
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Date - Week/Year
-                description: Week and Year (W52/2020)
-                tags:
-                  - Date
-                primary: true
-                sourceColumn: ''
-                areRelationsValid: true
-              id: date.week
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.week
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Date - Year
-                description: Year
-                tags:
-                  - Date
-                primary: true
-                sourceColumn: ''
-                areRelationsValid: true
-              id: date.year
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.year
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Location
-                description: Location
-                tags:
-                  - Customers
-                primary: false
-                sourceColumn: geo__state__location
-                sourceColumnDataType: STRING
-                valueType: GEO
-                areRelationsValid: true
-              id: geo__state__location
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/geo__state__location
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Order id
-                description: Order id
-                tags:
-                  - Order lines
-                primary: true
-                sourceColumn: order_id
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                areRelationsValid: true
-              id: order_id
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_id
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Order line id
-                description: Order line id
-                tags:
-                  - Order lines
-                primary: true
-                sourceColumn: order_line_id
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                areRelationsValid: true
-              id: order_line_id
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_line_id
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Order status
-                description: Order status
-                tags:
-                  - Order lines
-                primary: true
-                sourceColumn: order_status
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                areRelationsValid: true
-              id: order_status
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_status
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Product id
-                description: Product id
-                tags:
-                  - Products
-                primary: true
-                sourceColumn: product_id
-                sourceColumnDataType: INT
-                valueType: TEXT
-                areRelationsValid: true
-              id: product_id
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/product_id
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Product name
-                description: Product name
-                tags:
-                  - Products
-                primary: true
-                sourceColumn: product_name
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                areRelationsValid: true
-              id: product_name
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/product_name
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Category
-                description: Category
-                tags:
-                  - Products
-                primary: true
-                sourceColumn: category
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                areRelationsValid: true
-              id: products.category
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/products.category
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Region
-                description: Region
-                tags:
-                  - Customers
-                primary: true
-                sourceColumn: region
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                areRelationsValid: true
-              id: region
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/region
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: State
-                description: State
-                tags:
-                  - Customers
-                primary: true
-                sourceColumn: state
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                areRelationsValid: true
-              id: state
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/state
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-            - attributes:
-                title: Type
-                description: Type
-                tags:
-                  - Campaign channels
-                primary: true
-                sourceColumn: type
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                areRelationsValid: true
-              id: type
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/type
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: label
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels?page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels?page=1&size=500
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1

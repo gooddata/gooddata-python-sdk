@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes:
@@ -30,15 +27,35 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          executionResponse:
+            dimensions:
+              - headers:
+                  - attributeHeader:
+                      attribute:
+                        id: region
+                        type: attribute
+                      attributeName: Region
+                      granularity: null
+                      label:
+                        id: region
+                        type: label
+                      labelName: Region
+                      localIdentifier: attr1
+                      primaryLabel:
+                        id: region
+                        type: label
+                      valueType: TEXT
+                localIdentifier: dim_0
+            links:
+              executionResult: d302481bb4ad067a6d17ed27cd70985cfc64e2fd:787414056513ccd1fb62b204f0b833b08f98de8394e4d86dc1452b1e378bf358
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '478'
         Content-Type:
@@ -52,44 +69,22 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-GDC-CANCEL-TOKEN:
-          - fbf40767-c244-44a1-8617-e87f5e8eaad7
+        X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          executionResponse:
-            dimensions:
-              - headers:
-                  - attributeHeader:
-                      localIdentifier: attr1
-                      label:
-                        id: region
-                        type: label
-                      labelName: Region
-                      attribute:
-                        id: region
-                        type: attribute
-                      attributeName: Region
-                      granularity: null
-                      primaryLabel:
-                        id: region
-                        type: label
-                      valueType: TEXT
-                localIdentifier: dim_0
-            links:
-              executionResult: 920f6a9f2d99c83e297c73d7ebe2b2c6e2bc1299:44886e2a7e4eb3098069908656e95c3e87ea63d7b566335fbde0b8f6617714f5
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/afm/execute/result/920f6a9f2d99c83e297c73d7ebe2b2c6e2bc1299%3A44886e2a7e4eb3098069908656e95c3e87ea63d7b566335fbde0b8f6617714f5?offset=0&limit=512
       body: null
       headers:
         Accept:
@@ -100,37 +95,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/d302481bb4ad067a6d17ed27cd70985cfc64e2fd%3A787414056513ccd1fb62b204f0b833b08f98de8394e4d86dc1452b1e378bf358?offset=0&limit=512
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '536'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data: []
@@ -153,6 +120,8 @@ interactions:
                         labelValue: West
                         primaryLabelValue: West
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 5
@@ -160,5 +129,33 @@ interactions:
               - 0
             total:
               - 5
-          metadata:
-            dataSourceMessages: []
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '536'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1

@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaceDataFilters
       body: null
       headers:
         Accept:
@@ -14,15 +11,43 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/layout/workspaceDataFilters
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          workspaceDataFilters:
+            - columnName: wdf__region
+              id: wdf__region
+              title: Customer region
+              workspace:
+                id: demo
+                type: workspace
+              workspaceDataFilterSettings:
+                - filterValues:
+                    - West
+                  id: region_west
+                  title: Region West
+                  workspace:
+                    id: demo_west
+                    type: workspace
+            - columnName: wdf__state
+              id: wdf__state
+              title: Customer state
+              workspace:
+                id: demo_west
+                type: workspace
+              workspaceDataFilterSettings:
+                - filterValues:
+                    - California
+                  id: region_west_california
+                  title: Region West California
+                  workspace:
+                    id: demo_west_california
+                    type: workspace
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '603'
         Content-Type:
@@ -36,16 +61,34 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/layout/workspaceDataFilters
+    response:
       body:
         string:
           workspaceDataFilters:
@@ -77,28 +120,9 @@ interactions:
                   workspace:
                     id: demo_west_california
                     type: workspace
-  - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaceDataFilters
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '603'
         Content-Type:
@@ -111,50 +135,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          workspaceDataFilters:
-            - columnName: wdf__region
-              id: wdf__region
-              title: Customer region
-              workspace:
-                id: demo
-                type: workspace
-              workspaceDataFilterSettings:
-                - filterValues:
-                    - West
-                  id: region_west
-                  title: Region West
-                  workspace:
-                    id: demo_west
-                    type: workspace
-            - columnName: wdf__state
-              id: wdf__state
-              title: Customer state
-              workspace:
-                id: demo_west
-                type: workspace
-              workspaceDataFilterSettings:
-                - filterValues:
-                    - California
-                  id: region_west_california
-                  title: Region West California
-                  workspace:
-                    id: demo_west_california
-                    type: workspace
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
       body: null
       headers:
         Accept-Encoding:
@@ -163,15 +158,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/organization
     response:
-      status:
-        code: 302
-        message: Found
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '0'
         Content-Type:
@@ -180,27 +174,27 @@ interactions:
         Expires:
           - '0'
         Location:
-          - /api/v1/entities/admin/organizations/python-sdk-dex
+          - /api/v1/entities/admin/organizations/default
         Pragma:
           - no-cache
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 302
+        message: Found
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       body: null
       headers:
         Accept-Encoding:
@@ -209,15 +203,35 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/admin/organizations/default
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              allowedOrigins: []
+              dataCenter: ''
+              earlyAccess: enableAlerting
+              earlyAccessValues:
+                - enableAlerting
+                - enableSmtp
+                - enablePreAggregationDatasets
+                - enableScheduling
+                - enableCompositeGrain
+                - enableUserManagement
+                - enableRawExports
+                - enableFlexibleDashboardLayout
+              hostname: localhost
+              name: Default Organization
+              region: ''
+            id: default
+            type: organization
+          links:
+            self: http://localhost:3000/api/v1/entities/admin/organizations/default
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '564'
         Content-Type:
@@ -230,23 +244,83 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/organization
+    response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
           - '0'
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Location:
+          - /api/v1/entities/admin/organizations/default
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 302
+        message: Found
+  - request:
+      body: null
+      headers:
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/admin/organizations/default
+    response:
       body:
         string:
           data:
             attributes:
-              name: Python SDK Dex
-              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
               allowedOrigins: []
+              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -257,78 +331,16 @@ interactions:
                 - enableUserManagement
                 - enableRawExports
                 - enableFlexibleDashboardLayout
+              hostname: localhost
+              name: Default Organization
               region: ''
-              dataCenter: ''
-            id: python-sdk-dex
+            id: default
             type: organization
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
-  - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
-      body: null
-      headers:
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 302
-        message: Found
+            self: http://localhost:3000/api/v1/entities/admin/organizations/default
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '0'
-        Content-Type:
-          - application/vnd.gooddata.api+json
-        DATE: *id001
-        Expires:
-          - '0'
-        Location:
-          - /api/v1/entities/admin/organizations/python-sdk-dex
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
-  - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
-      body: null
-      headers:
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '564'
         Content-Type:
@@ -341,36 +353,18 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: Python SDK Dex
-              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
-              allowedOrigins: []
-              earlyAccess: enableAlerting
-              earlyAccessValues:
-                - enableAlerting
-                - enableSmtp
-                - enablePreAggregationDatasets
-                - enableScheduling
-                - enableCompositeGrain
-                - enableUserManagement
-                - enableRawExports
-                - enableFlexibleDashboardLayout
-              region: ''
-              dataCenter: ''
-            id: python-sdk-dex
-            type: organization
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1

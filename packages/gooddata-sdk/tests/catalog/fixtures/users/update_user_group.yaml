@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup?include=ALL
       body: null
       headers:
         Accept:
@@ -14,15 +11,21 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/userGroups/demoGroup?include=ALL
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              name: demo group
+            id: demoGroup
+            type: userGroup
+          links:
+            self: http://localhost:3000/api/v1/entities/userGroups/demoGroup?include=ALL
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '208'
         Content-Type:
@@ -36,28 +39,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: demo group
-            id: demoGroup
-            type: userGroup
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup?include=ALL
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup?include=ALL
       body: null
       headers:
         Accept:
@@ -68,15 +64,21 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/userGroups/demoGroup?include=ALL
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              name: demo group
+            id: demoGroup
+            type: userGroup
+          links:
+            self: http://localhost:3000/api/v1/entities/userGroups/demoGroup?include=ALL
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '208'
         Content-Type:
@@ -89,37 +91,30 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: demo group
-            id: demoGroup
-            type: userGroup
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup?include=ALL
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: PUT
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup
       body:
         data:
-          id: demoGroup
-          type: userGroup
           attributes:
             name: test_update_user_group
+          id: demoGroup
           relationships:
             parents:
               data: []
+          type: userGroup
       headers:
         Accept:
           - application/json
@@ -131,15 +126,21 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: PUT
+      uri: http://localhost:3000/api/v1/entities/userGroups/demoGroup
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              name: test_update_user_group
+            id: demoGroup
+            type: userGroup
+          links:
+            self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '208'
         Content-Type:
@@ -152,28 +153,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: test_update_user_group
-            id: demoGroup
-            type: userGroup
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup?include=ALL
       body: null
       headers:
         Accept:
@@ -184,15 +178,21 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/userGroups/demoGroup?include=ALL
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              name: test_update_user_group
+            id: demoGroup
+            type: userGroup
+          links:
+            self: http://localhost:3000/api/v1/entities/userGroups/demoGroup?include=ALL
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '220'
         Content-Type:
@@ -205,28 +205,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: test_update_user_group
-            id: demoGroup
-            type: userGroup
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup?include=ALL
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup?include=ALL
       body: null
       headers:
         Accept:
@@ -237,15 +230,21 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/userGroups/demoGroup?include=ALL
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              name: test_update_user_group
+            id: demoGroup
+            type: userGroup
+          links:
+            self: http://localhost:3000/api/v1/entities/userGroups/demoGroup?include=ALL
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '220'
         Content-Type:
@@ -258,34 +257,27 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: test_update_user_group
-            id: demoGroup
-            type: userGroup
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup?include=ALL
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: PUT
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup
       body:
         data:
-          id: demoGroup
-          type: userGroup
           attributes:
             name: demo group
+          id: demoGroup
+          type: userGroup
       headers:
         Accept:
           - application/json
@@ -297,15 +289,21 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: PUT
+      uri: http://localhost:3000/api/v1/entities/userGroups/demoGroup
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              name: demo group
+            id: demoGroup
+            type: userGroup
+          links:
+            self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '196'
         Content-Type:
@@ -318,22 +316,18 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: demo group
-            id: demoGroup
-            type: userGroup
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1

@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups?include=userGroups&page=0&size=500
       body: null
       headers:
         Accept:
@@ -14,17 +11,66 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/userGroups?include=userGroups&page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            - attributes: {}
+              id: adminGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
+              type: userGroup
+            - attributes: {}
+              id: adminQA1Group
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/adminQA1Group
+              relationships:
+                parents:
+                  data:
+                    - id: adminGroup
+                      type: userGroup
+              type: userGroup
+            - attributes:
+                name: demo group
+              id: demoGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
+              type: userGroup
+            - attributes:
+                name: visitors
+              id: visitorsGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/visitorsGroup
+              relationships:
+                parents:
+                  data:
+                    - id: demoGroup
+                      type: userGroup
+              type: userGroup
+          included:
+            - attributes: {}
+              id: adminGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
+              type: userGroup
+            - attributes:
+                name: demo group
+              id: demoGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
+              type: userGroup
+          links:
+            next: http://localhost:3000/api/v1/entities/userGroups?include=userGroups&page=1&size=500
+            self: http://localhost:3000/api/v1/entities/userGroups?include=userGroups&page=0&size=500
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Encoding:
           - br
+        Content-Length:
+          - '266'
         Content-Type:
           - application/json
         DATE: &id001
@@ -36,9 +82,7 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
+          - max-age=31536000; includeSubDomains; preload
         Vary:
           - Accept-Encoding
           - Origin
@@ -47,55 +91,9 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            - attributes: {}
-              id: adminGroup
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/adminGroup
-              type: userGroup
-            - attributes: {}
-              id: adminQA1Group
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/adminQA1Group
-              relationships:
-                parents:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              type: userGroup
-            - attributes:
-                name: demo group
-              id: demoGroup
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup
-              type: userGroup
-            - attributes:
-                name: visitors
-              id: visitorsGroup
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/visitorsGroup
-              relationships:
-                parents:
-                  data:
-                    - id: demoGroup
-                      type: userGroup
-              type: userGroup
-          included:
-            - attributes: {}
-              id: adminGroup
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/adminGroup
-              type: userGroup
-            - attributes:
-                name: demo group
-              id: demoGroup
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups/demoGroup
-              type: userGroup
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups?include=userGroups&page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/userGroups?include=userGroups&page=1&size=500
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1

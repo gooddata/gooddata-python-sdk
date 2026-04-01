@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2026 GoodData Corporation
 content:
   buckets:
     - items:
@@ -68,5 +68,9 @@ content:
           visible: false
   version: '2'
   visualizationUrl: local:column
+createdAt: 2025-08-07 11:45
+createdBy:
+  id: admin
+  type: user
 id: product_revenue_comparison-over_previous_period
 title: Product Revenue Comparison (over previous period)

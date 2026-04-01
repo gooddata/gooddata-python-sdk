@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/entities/organization
       body: null
       headers:
         Accept-Encoding:
@@ -12,10 +9,11 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/organization
     response:
-      status:
-        code: 302
-        message: Found
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -33,7 +31,10 @@ interactions:
           - no-cache
         Referrer-Policy:
           - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
@@ -41,12 +42,11 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
-          - '0'
-      body:
-        string: ''
+          - 1; mode=block
+      status:
+        code: 302
+        message: Found
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/entities/admin/organizations/default
       body: null
       headers:
         Accept-Encoding:
@@ -55,39 +55,15 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/admin/organizations/default
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '430'
-        Content-Type:
-          - application/vnd.gooddata.api+json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       body:
         string:
           data:
             attributes:
-              name: Default Organization
-              hostname: localhost
+              allowedOrigins: []
+              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -98,7 +74,40 @@ interactions:
                 - enableUserManagement
                 - enableRawExports
                 - enableFlexibleDashboardLayout
+              hostname: localhost
+              name: Default Organization
+              region: ''
             id: default
             type: organization
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '564'
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1

@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSources/demo-test-ds/scanSql
       body:
         sql: SELECT ol.campaign_id FROM order_lines ol ORDER BY campaign_id NULLS
           FIRST LIMIT 5
@@ -18,15 +15,23 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/dataSources/demo-test-ds/scanSql
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          columns:
+            - dataType: INT
+              name: campaign_id
+          dataPreview:
+            - - null
+            - - null
+            - - null
+            - - null
+            - - null
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '104'
         Content-Type:
@@ -40,24 +45,18 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          columns:
-            - dataType: INT
-              name: campaign_id
-          dataPreview:
-            - - null
-            - - null
-            - - null
-            - - null
-            - - null
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1

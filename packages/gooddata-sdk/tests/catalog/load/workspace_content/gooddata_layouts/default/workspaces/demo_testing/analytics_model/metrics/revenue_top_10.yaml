@@ -1,6 +1,10 @@
-# (C) 2022 GoodData Corporation
+# (C) 2026 GoodData Corporation
 content:
   format: $#,##0
   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
+createdAt: 2025-08-07 11:45
+createdBy:
+  id: admin
+  type: user
 id: revenue_top_10
 title: Revenue / Top 10

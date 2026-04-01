@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 content:
   filterContextRef:
     identifier:
@@ -31,5 +31,9 @@ content:
           type: dashboardPlugin
       version: '2'
   version: '2'
+createdAt: 2025-08-07 11:45
+createdBy:
+  id: admin
+  type: user
 id: dashboard_plugin
 title: Dashboard plugin

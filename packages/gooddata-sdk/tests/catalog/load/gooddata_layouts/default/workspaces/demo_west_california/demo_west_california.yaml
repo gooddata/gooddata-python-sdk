@@ -1,4 +1,7 @@
-# (C) 2022 GoodData Corporation
+# (C) 2026 GoodData Corporation
+automations: []
+customApplicationSettings: []
+filterViews: []
 hierarchyPermissions: []
 id: demo_west_california
 name: Demo West California
@@ -7,3 +10,4 @@ parent:
   type: workspace
 permissions: []
 settings: []
+userDataFilters: []
