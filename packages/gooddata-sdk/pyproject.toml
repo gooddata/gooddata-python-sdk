@@ -34,6 +34,7 @@ dependencies = [
     "brotli==1.2.0",
     "requests~=2.32.0",
     "python-dotenv>=1.0.0,<2.0.0",
+    "gooddata-code-convertors",
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -75,9 +76,6 @@ allowed-unresolved-imports = ["gooddata_api_client.**"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/gooddata_sdk"]
-include = [
-    "src/gooddata_sdk/cli/package.json",
-]
 
 [tool.coverage.run]
 source = ["gooddata_sdk"]

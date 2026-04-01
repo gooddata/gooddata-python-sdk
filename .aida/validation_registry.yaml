@@ -6,39 +6,36 @@ version: 1
 registry:
   includes: []
   commands:
-    package-lint:
+    package-validate:
       argv:
-      - make
-      - -C
-      - '{root}'
-      - lint
+      - bash
+      - '{workspace_root}/scripts/validate_python.sh'
+      - --project-path
+      - '{workspace_root}/{root}'
+      - --workspace-root
+      - '{workspace_root}'
+      - --scope
+      - '{scope}'
+      - --auto-fix
+      - "true"
       cwd: '{workspace_root}'
-    package-type-check:
+      timeout_sec: 900
+    package-validate-no-tests:
       argv:
-      - make
-      - -C
-      - '{root}'
-      - type-check
+      - bash
+      - '{workspace_root}/scripts/validate_python.sh'
+      - --project-path
+      - '{workspace_root}/{root}'
+      - --workspace-root
+      - '{workspace_root}'
+      - --scope
+      - '{scope}'
+      - --auto-fix
+      - "true"
+      - --steps-csv
+      - format,lint,types
       cwd: '{workspace_root}'
-    package-test-py314:
-      argv:
-      - make
-      - -C
-      - '{root}'
-      - test
-      cwd: '{workspace_root}'
-      env:
-        TEST_ENVS: py314
-    workspace-lint:
-      argv:
-      - make
-      - lint
-      cwd: '{workspace_root}'
-    workspace-type-check:
-      argv:
-      - make
-      - type-check
-      cwd: '{workspace_root}'
+      timeout_sec: 600
     api-client-tests:
       argv:
       - uv
@@ -52,10 +49,4 @@ registry:
       - aida-mcp
       - doctor
       cwd: '{workspace_root}'
-  processors:
-    passthrough:
-      kind: builtin
-      builtin_id: passthrough
-    pytest:
-      kind: builtin
-      builtin_id: pytest
+  processors: {}

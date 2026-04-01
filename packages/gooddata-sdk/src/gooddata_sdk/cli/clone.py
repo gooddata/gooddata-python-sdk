@@ -1,49 +1,29 @@
 # (C) 2024 GoodData Corporation
 import argparse
-import json
 import shutil
-import subprocess
 from pathlib import Path
 
-from gooddata_sdk import CatalogDeclarativeWorkspaces, GoodDataSdk
+from gooddata_sdk import GoodDataSdk
+from gooddata_sdk.catalog.workspace.aac import store_aac_workspace_to_disk
 from gooddata_sdk.cli.constants import (
-    BASE_DIR,
     CONFIG_FILE,
     DATA_SOURCES,
-    GD_COMMAND,
     USER_GROUPS,
     USERS,
     WORKSPACES,
     WORKSPACES_DATA_FILTERS,
 )
-from gooddata_sdk.cli.utils import (
-    Bcolors,
-    measure_clone,
-)
-
-
-def _call_gd_stream_in(workspace_objects: CatalogDeclarativeWorkspaces, path: Path) -> None:
-    """
-    Call 'gd stream-in' command to create workspaces file structure using Node.js CLI.
-    """
-    workspaces = json.dumps({WORKSPACES: workspace_objects.to_dict()[WORKSPACES]})
-    p = subprocess.Popen(
-        [GD_COMMAND, "stream-in"],
-        cwd=path,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    _, err = p.communicate(input=workspaces.encode())
-    if err:
-        print(f"{Bcolors.FAIL}Clone workspaces failed with the following error {err=}.{Bcolors.ENDC}")
+from gooddata_sdk.cli.deploy import _get_workspace_id
+from gooddata_sdk.cli.utils import measure_clone
 
 
 @measure_clone(step="workspaces")
-def _clone_workspaces(sdk: GoodDataSdk, path: Path) -> None:
-    assert (path / CONFIG_FILE).exists() and (path / BASE_DIR).exists()
-    workspace_objects = sdk.catalog_workspace.get_declarative_workspaces()
-    _call_gd_stream_in(workspace_objects, path)
+def _clone_workspaces(sdk: GoodDataSdk, path: Path, source_dir: str) -> None:
+    config_path = path / CONFIG_FILE
+    workspace_id = _get_workspace_id(config_path)
+    source_path = path / source_dir
+    workspace_model = sdk.catalog_workspace.get_declarative_workspace(workspace_id)
+    store_aac_workspace_to_disk(workspace_model, source_path)
 
 
 @measure_clone(step="data sources")
@@ -70,31 +50,29 @@ def _clone_workspace_data_filters(sdk: GoodDataSdk, analytics_root_dir: Path) ->
     workspace_data_filters.store_to_disk(analytics_root_dir)
 
 
-def clone_all(path: Path) -> None:
-    init_file = path / CONFIG_FILE
-    sdk = GoodDataSdk.create_from_profile(profiles_path=init_file)
-    analytics_root_dir = path / BASE_DIR
+def clone_all(path: Path, source_dir: str) -> None:
+    config_path = path / CONFIG_FILE
+    sdk = GoodDataSdk.create_from_profile(profiles_path=config_path)
+    analytics_root_dir = path / source_dir
 
     # clean the directory
     if analytics_root_dir.exists():
         shutil.rmtree(analytics_root_dir)
-    # create directory
     analytics_root_dir.mkdir()
 
-    print("Cloning the whole organization... ⏲️⏲️️⏲️️")
+    print("Cloning the whole organization...")
     _clone_data_sources(sdk, analytics_root_dir)
     _clone_user_groups(sdk, analytics_root_dir)
     _clone_users(sdk, analytics_root_dir)
     _clone_workspace_data_filters(sdk, analytics_root_dir)
-    _clone_workspaces(sdk, path)
-    print("Cloning finished 🚀🚀🚀")
+    _clone_workspaces(sdk, path, source_dir)
+    print("Cloning finished.")
 
 
-def clone_granular(path: Path, args: argparse.Namespace) -> None:
-    init_file = path / CONFIG_FILE
-    analytics_root_dir = path / "analytics"
-    config_directory = analytics_root_dir.parent
-    sdk = GoodDataSdk.create_from_profile(profiles_path=init_file)
+def clone_granular(path: Path, source_dir: str, args: argparse.Namespace) -> None:
+    config_path = path / CONFIG_FILE
+    analytics_root_dir = path / source_dir
+    sdk = GoodDataSdk.create_from_profile(profiles_path=config_path)
     selected_entities = set(args.only)
     if DATA_SOURCES in selected_entities:
         _clone_data_sources(sdk, analytics_root_dir)
@@ -105,4 +83,4 @@ def clone_granular(path: Path, args: argparse.Namespace) -> None:
     if WORKSPACES_DATA_FILTERS in selected_entities:
         _clone_workspace_data_filters(sdk, analytics_root_dir)
     if WORKSPACES in selected_entities:
-        _clone_workspaces(sdk, config_directory)
+        _clone_workspaces(sdk, path, source_dir)
