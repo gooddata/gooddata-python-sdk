@@ -1,0 +1,27 @@
+.aida/validation_policy.yaml
+  4ae20b1ad5b5317e 28-33
+.aida/validation_registry.yaml
+  4ae20b1ad5b5317e 9,11-20,22-23,25-36,38,52
+scripts/validate_python.sh
+  4ae20b1ad5b5317e 1-223
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "c0b697fe12cf375d9c8470165a5f064e90432290",
+  "prompts": {
+    "4ae20b1ad5b5317e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c1a16e11-2c02-4f84-92fa-3f303de4930c",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>",
+      "messages": [],
+      "total_additions": 271,
+      "total_deletions": 63,
+      "accepted_lines": 259,
+      "overriden_lines": 0
+    }
+  }
+}
