@@ -89,13 +89,13 @@ interactions:
         string:
           queryDurationMillis:
             createCacheTable: 0
-            simpleSelect: 201
+            simpleSelect: 7
           successful: true
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '83'
+          - '81'
         Content-Type:
           - application/json
         DATE: *id001

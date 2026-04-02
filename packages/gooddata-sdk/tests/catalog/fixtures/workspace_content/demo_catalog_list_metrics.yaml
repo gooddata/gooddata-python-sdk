@@ -22,7 +22,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: '# of Active Customers'
               id: amount_of_active_customers
               links:
@@ -37,7 +37,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: '# of Orders'
               id: amount_of_orders
               links:
@@ -53,7 +53,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: '# of Top Customers'
               id: amount_of_top_customers
               links:
@@ -69,7 +69,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 description: ''
                 title: '# of Valid Orders'
               id: amount_of_valid_orders
@@ -85,7 +85,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: Campaign Spend
               id: campaign_spend
               links:
@@ -100,7 +100,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: Order Amount
               id: order_amount
               links:
@@ -115,7 +115,7 @@ interactions:
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: '% Revenue'
               id: percent_revenue
               links:
@@ -131,7 +131,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: '% Revenue from Top 10 Customers'
               id: percent_revenue_from_top_10_customers
               links:
@@ -147,7 +147,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: '% Revenue from Top 10% Customers'
               id: percent_revenue_from_top_10_percent_customers
               links:
@@ -163,7 +163,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: '% Revenue from Top 10% Products'
               id: percent_revenue_from_top_10_percent_products
               links:
@@ -179,7 +179,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: '% Revenue from Top 10 Products'
               id: percent_revenue_from_top_10_products
               links:
@@ -195,7 +195,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: '% Revenue in Category'
               id: percent_revenue_in_category
               links:
@@ -211,7 +211,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: '% Revenue per Product'
               id: percent_revenue_per_product
               links:
@@ -227,7 +227,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 description: ''
                 title: Revenue
               id: revenue
@@ -244,7 +244,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: Revenue (Clothing)
               id: revenue-clothing
               links:
@@ -260,7 +260,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: Revenue (Electronic)
               id: revenue-electronic
               links:
@@ -276,7 +276,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: Revenue (Home)
               id: revenue-home
               links:
@@ -292,7 +292,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: Revenue (Outdoor)
               id: revenue-outdoor
               links:
@@ -307,7 +307,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: Revenue per Customer
               id: revenue_per_customer
               links:
@@ -322,7 +322,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: Revenue per Dollar Spent
               id: revenue_per_dollar_spent
               links:
@@ -337,7 +337,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: Revenue / Top 10
               id: revenue_top_10
               links:
@@ -352,7 +352,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: Revenue / Top 10%
               id: revenue_top_10_percent
               links:
@@ -367,7 +367,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: Total Revenue
               id: total_revenue
               links:
@@ -382,7 +382,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2026-04-01 14:35
+                createdAt: 2026-04-02 13:24
                 title: Total Revenue (No Filters)
               id: total_revenue-no_filters
               links:

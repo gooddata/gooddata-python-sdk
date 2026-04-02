@@ -89,7 +89,7 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2026-04-01 14:36
+              createdAt: 2026-04-02 13:26
               title: Customers Trend
             id: customers_trend
             meta:
@@ -136,7 +136,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-04-01 14:36
+                createdAt: 2026-04-02 13:26
                 title: '# of Active Customers'
               id: amount_of_active_customers
               links:
@@ -146,7 +146,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-04-01 14:36
+                createdAt: 2026-04-02 13:26
                 title: Revenue per Customer
               id: revenue_per_customer
               links:
@@ -218,7 +218,7 @@ interactions:
     response:
       body:
         string:
-          exportResult: 90c85d1cc5d7ccf0180c81c3847d183aca5c24a4
+          exportResult: 5a39d28ab92dd66b4efee732e42bb031e39fb6ea
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -261,7 +261,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/90c85d1cc5d7ccf0180c81c3847d183aca5c24a4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/5a39d28ab92dd66b4efee732e42bb031e39fb6ea
     response:
       body:
         string: ''
@@ -305,7 +305,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/90c85d1cc5d7ccf0180c81c3847d183aca5c24a4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/5a39d28ab92dd66b4efee732e42bb031e39fb6ea
     response:
       body:
         string: ''
@@ -349,7 +349,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/90c85d1cc5d7ccf0180c81c3847d183aca5c24a4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/5a39d28ab92dd66b4efee732e42bb031e39fb6ea
     response:
       body:
         string: ''
@@ -393,7 +393,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/90c85d1cc5d7ccf0180c81c3847d183aca5c24a4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/5a39d28ab92dd66b4efee732e42bb031e39fb6ea
     response:
       body:
         string: ''
@@ -437,7 +437,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/90c85d1cc5d7ccf0180c81c3847d183aca5c24a4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/5a39d28ab92dd66b4efee732e42bb031e39fb6ea
     response:
       body:
         string: "PK\x03\x04\x14\0\0\0\b\0\0\0?\0a]I:O\x01\0\0\uFFFD\x04\0\0\x13\0\0\
@@ -652,48 +652,47 @@ interactions:
           \uFFFD9\uFFFD\uFFFD\uFFFD\uFFFDg\uFFFD{sg{\x06_{g\uFFFD\uFFFD^.Q[;\uFFFD\
           \u4AE5?\uFFFD\uFFFD\uFFFD>\uFFFD\u0781\uFFFD\u0484)Y\uFFFDMz\0G\uFFFD\uFFFD\
           \uFFFD/\x03\uFFFDc/H\uFFFD\uFFFD\x06PK\x03\x04\x14\0\0\0\b\0\0\0?\0\uFFFD\
-          \uFFFDs\uFFFD%\x01\0\0P\x02\0\0\x11\0\0\0docProps/core.xml\uFFFD\uFFFD\uFFFD\
-          j\uFFFD0\x10\uFFFD\uFFFD}\n\uFFFD\uFFFD-\uFFFD\tI\x11\uFFFD\x03m\u0269\uFFFD\
-          BSZr\x13\uFFFD\uFFFD\x11\uFFFD~\uFFFD\uFFFD:y\uFFFD\u028E\uFFFD$\uFFFDS\uFFFD\
-          \uFFFD\uFFFD\uFFFDvvQ\uFFFD:\uFFFD&\uFFFD\x05\uFFFDV%\u0292\x14E\uFFFD\uFFFD\
-          \uFFFDB\uFFFD%\uFFFD\u062E\uFFFDG\x149O\x15\uFFFD\uFFFDVP\uFFFD\x138\uFFFD\
-          \uFFFD\x1E\nf\b\uFFFD\x16\u07AC6`\uFFFD\0\x17\x05\uFFFDr\uFFFD\uFFFD\x12\
-          \x1D\uFFFD7\x04c\uFFFD\x0E \uFFFDK\uFFFDC\x05q\uFFFD\uFFFD\uFFFD>\uFFFD\uFFFD\
-          \u0186\uFFFDoZ\x03\uFFFD\uFFFDt\uFFFD%x\u02A9\uFFFD\uFFFD\x03\uFFFDf$\uFFFD\
-          \x01\uFFFD\u06484?\uFFFD\uFFFD\x01\uFFFDah@\uFFFD\uFFFD\x0EgI\uFFFD\uFFFD\
-          ^\x0FV\uFFFD\u0246^\uFFFDqJ\uFFFDO\x06&\uFFFD\x17qt\x1F\uFFFD\x18\uFFFD\
-          m\uFFFD&\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\x19\uFFFD\u06BC\uFFFD\uFFFD\uFFFD\
-          \uFFFDBu\uFFFDb\uFFFD\uFFFD\uFFFD3\uFFFD,P\uFFFDmU\uFFFD\uFFFD\"\x1C\uFFFD\
-          \uFFFD\uFFFDo\x89\uFFFD\x02\uFFFD\uFFFD)\uFFFD\x13o\uFFFD\"\uFFFD>\uFFFD\
-          Q\b@\uFFFDq/\uFFFD\uFFFD\uFFFD\uFFFDe\uFFFDFU\uFFFD\uFFFD8\uFFFD\uFFFDi\uFFFD\
-          \uFFFD\uFFFDd\uFFFD$\uFFFDr\u05CD\uFFFD\uFFFD\x02\uFFFD0\uFFFD\uFFFD\uFFFD\
-          \v\uFFFD\uFFFD\uFFFD\uFFFD\x13T\x7FPK\x03\x04\x14\0\0\0\b\0\0\0?\0\uFFFD\
-          \uFFFD2G~\x01\0\0\x19\x03\0\0\x10\0\0\0docProps/app.xml\uFFFDR\uFFFDN\uFFFD\
-          0\x10\uFFFD\uFFFD\x15\uFFFD\uFFFD\uFFFDi\uFFFD\uFFFDS\uFFFD\x18\uFFFD\x02\
-          \uFFFD\uFFFD\u04EB\uFFFD\0g\uFFFDl\x1A\v\u01F6\uFFFD\u06E8}_\uFFFD\uFFFD\
-          \uFFFD!\x05N\uFFFD4;;\x1AOvW\uFFFD\uFFFD[\uFFFDu\x10\uFFFDxW\uFFFD\uFFFD\
-          ,g\x198\uFFFD+\uFFFD\x05{.\x1F.\uFFFD\uFFFD\fI\uFFFDJY\uFFFD`\a@v#/\uFFFD\
-          :\uFFFD\0\uFFFD\f`\uFFFD\x1C\x1C\x16\uFFFD!\nK\uFFFDQ7\uFFFD*\uFFFD\uFFFD\
-          \uFFFDK\uFFFD\uFFFD\uFFFDVQ*\uFFFD\uFFFD\uFFFD6\x1A\uFFFD\u07B5\uFFFD\uFFFD\
-          /\uFFFD\uFFFD\uFFFD\xDE\uFFFDUP]\uFFFD\u0450\x1D\x1D\uFFFD\x1D\uFFFD\u05B4\
-          \uFFFD\u03C7/\uFFFD!$?)nC\uFFFDF+J?)\uFFFD\x1A\x1D=\uFFFD\uFFFD\uFFFD\uFFFD\
-          \uFFFD\x06+\uFFFD\uFFFD)\uFFFD\uFFFD\x06\uFFFD.\x1A:\uFFFD\\\uFFFDi)6ZYX%cY+\uFFFD\
-          \ \uFFFD'!\x1EA\uFFFD3[+\x13Q\uFFFD\uFFFD\uFFFD\x1Dh\uFFFD1C\uFFFD?Mm\uFFFD\
-          \uFFFD7\uFFFD\uFFFD\uFFFD)X\uFFFD\uFFFDQ\uFFFD\uFFFDQv,\x06l\x03R\uFFFD\uFFFD\
-          >\uFFFDc\x03@(\uFFFDH\x0Ep\uFFFD\uFFFDbs%\uFFFD \uFFFDs!\x1F\uFFFD$|\x1E\
-          \uFFFD4d\x01\uFFFD\uFFFDk\x15\uFFFD\uFFFD\uFFFDi\uFFFD!\x03\uFFFDd\\\uFFFD\
-          |\uFFFD\uFFFD&+cZ\u07F7\uFFFD\uFFFD'\uFFFD<\uFFFD\uFFFDmP.M\uFFFD\uFFFD\uFFFD\
-          \u0278w|\x0E\uFFFD\uFFFDS\x04\uFFFD\uFFFD\uFFFD\uFFFDb\u04E8\bUZ\uFFFD8\uFFFD\
-          \uFFFD\x10\uFFFD)`\uFFFD\uFFFD~\uFFFD(\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\
-          \uFFFD\uFFFDx\uFFFDr\uFFFD\uFFFD\uFFFD\uFFFD\e\uFFFD\x7F\uFFFD\x04\uFFFD\
-          <j\uFFFD\x01PK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0?\0a]I:O\x01\0\0\uFFFD\x04\
-          \0\0\x13\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\0\0\0\0[Content_Types].xmlPK\x01\
-          \x02\x14\x03\x14\0\0\0\b\0\0\0?\0\uFFFDI\uFFFD\uFFFD\0\0\0K\x02\0\0\v\0\0\
-          \0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x01\0\0_rels/.relsPK\x01\x02\x14\x03\
-          \x14\0\0\0\b\0\0\0?\0Du[\uFFFD\uFFFD\0\0\0\uFFFD\x02\0\0\x1A\0\0\0\0\0\0\
-          \0\0\0\0\0\uFFFD\uFFFD\uFFFD\x02\0\0xl/_rels/workbook.xml.relsPK\x01\x02\
-          \x14\x03\x14\0\0\0\b\0\0\0?\0\uFFFDo\uFFFD\x1A\uFFFD\x02\0\0\uFFFD\a\0\0\
-          \x18\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x03\0\0xl/worksheets/sheet1.xmlPK\x01\
+          M\0\uFFFD%\x01\0\0P\x02\0\0\x11\0\0\0docProps/core.xml\uFFFD\uFFFD\uFFFD\
+          j\uFFFD0\x10E\uFFFD\uFFFD\n\uFFFD\uFFFD-\uFFFD)!\b\u06C1\uFFFDd\uFFFD@\uFFFD\
+          .-\uFFFD\ti\uFFFD\uFFFDZ\x0F$\uFFFDN\uFFFD\uFFFD\uFFFD#N\x02^e9\uFFFDw\uFFFD\
+          \uFFFD\x19T\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD:\uFFFDU\uFFFD\uFFFD$E\x11\
+          (\uFFFD\uFFFDP\uFFFD\x12}\u051Bx\uFFFD\"\uFFFD\uFFFD\uFFFD\nJt\x02\uFFFD\
+          \uFFFD\uFFFDC\uFFFD\fa\uFFFD\x9B\uFFFD\x06\uFFFD\x17\uFFFD\0R\uFFFD0S\uFFFD\
+          \uFFFD\uFFFD\uFFFD`\uFFFD\uFFFD\x01$uIp\uFFFD \uED15\u0507\uFFFD\uEC61\uFFFD\
+          \uFFFD\x01\uFFFDi\uFFFD\uFFFD\x12<\uFFFD\uFFFDS\uFFFD\x01c3\x11\u0448\uFFFD\
+          lB\uFFFD_\uFFFD\uFFFD\0\uFFFD04 Ay\uFFFD\uFFFD$\uFFFD\x17\uFFFD\a+\uFFFD\
+          lC\uFFFD\\9\uFFFD\uFFFD'\x03\uFFFD\u05B38\uFFFD\uFFFDNL\u01B6m\uFFFDv\uFFFD\
+          [C\uFFFD\f\x7Fm_\uFFFD\uFFFDUc\uFFFD\uFFFDS1@U\uFFFD\x19a\x16\uFFFD\u05F6\
+          *\uFFFDu\x11\x0E\uFFFDP\uFFFD\uFFFD\uFFFD;\x01\uFFFD\uFFFD\x14\uFFFD\uFFFD\
+          \uFFFDq\uFFFD\uFFFD\x0Fx\x14\x02\uFFFD!\uFFFDY\uFFFD\\<\uFFFD\uFFFD\eT\uFFFD\
+          i\uFFFD\uFFFD\uFFFD\uFFFD8\uFFFD\uFFFDlA\uFFFD%\uFFFDW\uFFFD\uFFFD\u021B\
+          \uFFFD\vP\uFFFDC\uFFFD&\uFFFD\x01C\uFFFD\uFFFDOP\uFFFD\x03PK\x03\x04\x14\
+          \0\0\0\b\0\0\0?\0\uFFFD\uFFFD2G~\x01\0\0\x19\x03\0\0\x10\0\0\0docProps/app.xml\uFFFD\
+          R\uFFFDN\uFFFD0\x10\uFFFD\uFFFD\x15\uFFFD\uFFFD\uFFFDi\uFFFD\uFFFDS\uFFFD\
+          \x18\uFFFD\x02\uFFFD\uFFFD\u04EB\uFFFD\0g\uFFFDl\x1A\v\u01F6\uFFFD\u06E8\
+          }_\uFFFD\uFFFD\uFFFD!\x05N\uFFFD4;;\x1AOvW\uFFFD\uFFFD[\uFFFDu\x10\uFFFD\
+          xW\uFFFD\uFFFD,g\x198\uFFFD+\uFFFD\x05{.\x1F.\uFFFD\uFFFD\fI\uFFFDJY\uFFFD\
+          `\a@v#/\uFFFD:\uFFFD\0\uFFFD\f`\uFFFD\x1C\x1C\x16\uFFFD!\nK\uFFFDQ7\uFFFD\
+          *\uFFFD\uFFFD\uFFFDK\uFFFD\uFFFD\uFFFDVQ*\uFFFD\uFFFD\uFFFD6\x1A\uFFFD\u07B5\
+          \uFFFD\uFFFD/\uFFFD\uFFFD\uFFFD\xDE\uFFFDUP]\uFFFD\u0450\x1D\x1D\uFFFD\x1D\
+          \uFFFD\u05B4\uFFFD\u03C7/\uFFFD!$?)nC\uFFFDF+J?)\uFFFD\x1A\x1D=\uFFFD\uFFFD\
+          \uFFFD\uFFFD\uFFFD\x06+\uFFFD\uFFFD)\uFFFD\uFFFD\x06\uFFFD.\x1A:\uFFFD\\\
+          \uFFFDi)6ZYX%cY+\uFFFD \uFFFD'!\x1EA\uFFFD3[+\x13Q\uFFFD\uFFFD\uFFFD\x1D\
+          h\uFFFD1C\uFFFD?Mm\uFFFD\uFFFD7\uFFFD\uFFFD\uFFFD)X\uFFFD\uFFFDQ\uFFFD\uFFFD\
+          Qv,\x06l\x03R\uFFFD\uFFFD>\uFFFDc\x03@(\uFFFDH\x0Ep\uFFFD\uFFFDbs%\uFFFD\
+          \ \uFFFDs!\x1F\uFFFD$|\x1E\uFFFD4d\x01\uFFFD\uFFFDk\x15\uFFFD\uFFFD\uFFFD\
+          i\uFFFD!\x03\uFFFDd\\\uFFFD|\uFFFD\uFFFD&+cZ\u07F7\uFFFD\uFFFD'\uFFFD<\uFFFD\
+          \uFFFDmP.M\uFFFD\uFFFD\uFFFD\u0278w|\x0E\uFFFD\uFFFDS\x04\uFFFD\uFFFD\uFFFD\
+          \uFFFDb\u04E8\bUZ\uFFFD8\uFFFD\uFFFD\x10\uFFFD)`\uFFFD\uFFFD~\uFFFD(\uFFFD\
+          \uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFDx\uFFFDr\uFFFD\uFFFD\uFFFD\uFFFD\
+          \e\uFFFD\x7F\uFFFD\x04\uFFFD<j\uFFFD\x01PK\x01\x02\x14\x03\x14\0\0\0\b\0\
+          \0\0?\0a]I:O\x01\0\0\uFFFD\x04\0\0\x13\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\
+          \0\0\0\0[Content_Types].xmlPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0?\0\uFFFD\
+          I\uFFFD\uFFFD\0\0\0K\x02\0\0\v\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x01\
+          \0\0_rels/.relsPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0?\0Du[\uFFFD\uFFFD\0\0\
+          \0\uFFFD\x02\0\0\x1A\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x02\0\0xl/_rels/workbook.xml.relsPK\x01\
+          \x02\x14\x03\x14\0\0\0\b\0\0\0?\0\uFFFDo\uFFFD\x1A\uFFFD\x02\0\0\uFFFD\a\
+          \0\0\x18\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x03\0\0xl/worksheets/sheet1.xmlPK\x01\
           \x02\x14\x03\x14\0\0\0\b\0\0\0?\0\uFFFDm\uFFFD\uFFFDO\x01\0\0/\x02\0\0\x0F\
           \0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x06\0\0xl/workbook.xmlPK\x01\x02\
           \x14\x03\x14\0\0\0\b\0\0\0?\0\uFFFD\u0102#\uFFFD\0\0\0\x04\x01\0\0\x14\0\
@@ -702,11 +701,11 @@ interactions:
           \0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\x02\t\0\0xl/styles.xmlPK\x01\x02\x14\x03\
           \x14\0\0\0\b\0\0\0?\0\x18\uFFFDFT\uFFFD\x05\0\0R\e\0\0\x13\0\0\0\0\0\0\0\
           \0\0\0\0\uFFFD\uFFFD\x1C\f\0\0xl/theme/theme1.xmlPK\x01\x02\x14\x03\x14\0\
-          \0\0\b\0\0\0?\0\uFFFD\uFFFDs\uFFFD%\x01\0\0P\x02\0\0\x11\0\0\0\0\0\0\0\0\
-          \0\0\0\uFFFD\uFFFD\uFFFD\x11\0\0docProps/core.xmlPK\x01\x02\x14\x03\x14\0\
-          \0\0\b\0\0\0?\0\uFFFD\uFFFD2G~\x01\0\0\x19\x03\0\0\x10\0\0\0\0\0\0\0\0\0\
-          \0\0\uFFFD\uFFFDQ\x13\0\0docProps/app.xmlPK\x05\x06\0\0\0\0\n\0\n\0\uFFFD\
-          \x02\0\0\uFFFD\x14\0\0\0\0"
+          \0\0\b\0\0\0?\0\uFFFDM\0\uFFFD%\x01\0\0P\x02\0\0\x11\0\0\0\0\0\0\0\0\0\0\
+          \0\uFFFD\uFFFD\uFFFD\x11\0\0docProps/core.xmlPK\x01\x02\x14\x03\x14\0\0\0\
+          \b\0\0\0?\0\uFFFD\uFFFD2G~\x01\0\0\x19\x03\0\0\x10\0\0\0\0\0\0\0\0\0\0\0\
+          \uFFFD\uFFFDQ\x13\0\0docProps/app.xmlPK\x05\x06\0\0\0\0\n\0\n\0\uFFFD\x02\
+          \0\0\uFFFD\x14\0\0\0\0"
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate

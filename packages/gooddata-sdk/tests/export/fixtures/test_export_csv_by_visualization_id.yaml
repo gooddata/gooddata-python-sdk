@@ -89,7 +89,7 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2026-04-01 14:36
+              createdAt: 2026-04-02 13:26
               title: Customers Trend
             id: customers_trend
             meta:
@@ -136,7 +136,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-04-01 14:36
+                createdAt: 2026-04-02 13:26
                 title: '# of Active Customers'
               id: amount_of_active_customers
               links:
@@ -146,7 +146,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-04-01 14:36
+                createdAt: 2026-04-02 13:26
                 title: Revenue per Customer
               id: revenue_per_customer
               links:
@@ -218,7 +218,7 @@ interactions:
     response:
       body:
         string:
-          exportResult: 3985b644b3f300e3ef45f0cd92767ed1bae4eda4
+          exportResult: e6a127b81b378d116ac248b33dd8d9d42033e593
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -261,7 +261,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/3985b644b3f300e3ef45f0cd92767ed1bae4eda4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/e6a127b81b378d116ac248b33dd8d9d42033e593
     response:
       body:
         string: ''
@@ -305,7 +305,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/3985b644b3f300e3ef45f0cd92767ed1bae4eda4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/e6a127b81b378d116ac248b33dd8d9d42033e593
     response:
       body:
         string: ''
@@ -349,7 +349,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/3985b644b3f300e3ef45f0cd92767ed1bae4eda4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/e6a127b81b378d116ac248b33dd8d9d42033e593
     response:
       body:
         string: ''
@@ -393,7 +393,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/3985b644b3f300e3ef45f0cd92767ed1bae4eda4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/e6a127b81b378d116ac248b33dd8d9d42033e593
     response:
       body:
         string: ''
@@ -437,51 +437,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/3985b644b3f300e3ef45f0cd92767ed1bae4eda4
-    response:
-      body:
-        string: ''
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '0'
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=31536000; includeSubDomains; preload
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - 1; mode=block
-      status:
-        code: 202
-        message: Accepted
-  - request:
-      body: null
-      headers:
-        Accept:
-          - application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
-            application/zip, text/csv, text/html
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/3985b644b3f300e3ef45f0cd92767ed1bae4eda4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/e6a127b81b378d116ac248b33dd8d9d42033e593
     response:
       body:
         string: "\uFEFF\"Date - Month/Year\",\"2025-04\",\"2025-05\",\"2025-06\",\"\

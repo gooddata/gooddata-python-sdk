@@ -102,7 +102,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 0b139b1b8d35fabad8a39379486307064d07ebc4:f9731994af724fb69d0fabf08f6ed9363a387483cceab3bb62300da3a07c5865
+              executionResult: f433d8e4f2d105f4a329d4683ca39c3306bbb8d9:3b5f2e8c17f7677468017d08f86dbd0ac2115fa479d45768df7da844acacd48c
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -147,7 +147,7 @@ interactions:
             price:
               format: ''
               title: Sum Of Price
-        executionResult: 0b139b1b8d35fabad8a39379486307064d07ebc4:f9731994af724fb69d0fabf08f6ed9363a387483cceab3bb62300da3a07c5865
+        executionResult: f433d8e4f2d105f4a329d4683ca39c3306bbb8d9:3b5f2e8c17f7677468017d08f86dbd0ac2115fa479d45768df7da844acacd48c
         fileName: test_xlsx
         format: XLSX
       headers:
@@ -166,7 +166,7 @@ interactions:
     response:
       body:
         string:
-          exportResult: 84385825b9e25262db47072340b7c126d9922be1
+          exportResult: f0a7709174cdc2944c8d6bab6910d6677117b24f
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -209,7 +209,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/84385825b9e25262db47072340b7c126d9922be1
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/f0a7709174cdc2944c8d6bab6910d6677117b24f
     response:
       body:
         string: ''
@@ -253,7 +253,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/84385825b9e25262db47072340b7c126d9922be1
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/f0a7709174cdc2944c8d6bab6910d6677117b24f
     response:
       body:
         string: "PK\x03\x04\x14\0\0\0\b\0\0\0?\0a]I:O\x01\0\0\uFFFD\x04\0\0\x13\0\0\
@@ -536,60 +536,60 @@ interactions:
           tni\uFFFDe\uFFFD\uFFFD\uFFFD1j\x11\uFFFD\u058Ax_\uFFFD\uFFFD9\uFFFD\uFFFD\
           \uFFFD\uFFFDg\uFFFD{sg{\x06_{g\uFFFD\uFFFD^.Q[;\uFFFD\u4AE5?\uFFFD\uFFFD\
           \uFFFD>\uFFFD\u0781\uFFFD\u0484)Y\uFFFDMz\0G\uFFFD\uFFFD\uFFFD/\x03\uFFFD\
-          c/H\uFFFD\uFFFD\x06PK\x03\x04\x14\0\0\0\b\0\0\0?\0t\uFFFD\uFFFD\x18%\x01\
-          \0\0P\x02\0\0\x11\0\0\0docProps/core.xml\uFFFD\uFFFD\uFFFDj\uFFFD0\x10\uFFFD\
-          \uFFFD}\n\uFFFD\uFFFD-\uFFFD1\uFFFD\x15\uFFFD\x03m\u0269\uFFFDBSZz\x13\uFFFD\
-          &\x11\uFFFD~\uFFFD\uFFFD:y\uFFFD*N\uFFFD$\uFFFDS\uFFFD\uFFFD\uFFFD\uFFFD\
-          vvQ=\uFFFD\uFFFD.\uFFFD\x05\x1F\uFFFD5\r\uFFFD\x05A\x19\x18a\uFFFD2\uFFFD\
-          \x06\uFFFD/\uFFFD\uFFFD=\uFFFDB\uFFFDF\uFFFD\uFFFD\x1Ah\uFFFD\x0E\x02\uFFFD\
-          \uFFFDw\uFFFDpLX\x0F\uFFFD\uFFFD:\uFFFDQA\uFFFD\x12\uFFFD\x04&\\\uFFFD61:\uFFFD\
-          q\x10\e\uFFFD<\x14\uFFFDa\uFFFD\uFFFD\uFFFD^\uFFFDJ\uFFFD\u018E\uFFFDo\uFFFD\
-          \x06\\\x122\uFFFD\x1A\"\uFFFD<r\uFFFD\a\uFFFDn$\uFFFD#R\uFFFD\x11\uFFFD\
-          ~|7\0\uFFFD\uFFFD\u0401\x06\x13\x03\uFFFD\x05\uFFFDgo\x04\uFFFD\uFFFD\u0346\
-          A\uFFFDpj\x15w\x0EnZO\uFFFD\uFFFD\uFFFD\x065\x1A\uFFFD\uFFFD/\uFFFD\uFFFD\
-          `M\uFFFD)\uFFFD\\\uFFFD\uFFFD\r\uFFFD\uFFFD\uFFFD\uFFFDO%\0\uFFFD\uFFFD\x14\
-          Lx\uFFFD\uFFFD\uFFFD\uFFFD\u0197E:\\\uFFFDC\\\uFFFD\x13\uFFFD\x14\uFFFD\uFFFD\
-          ]\uFFFDo\uFFFD\x1D\x179\uFFFD\uFFFDR\0v\uFFFD{R>&O\uFFFD\uFFFD9jKRNsR\uFFFD\
-          .i\uFFFD*\uFFFD\uFFFD\uFFFD\uFFFD~\uFFFDU\uFFFD\x19\uFFFD\uFFFDC\uFFFDM<\x01\
-          \x0E\uFFFD\uFFFD?A\uFFFD\aPK\x03\x04\x14\0\0\0\b\0\0\0?\0\x04qEc{\x01\0\0\
-          \x13\x03\0\0\x10\0\0\0docProps/app.xml\uFFFDR\uFFFDN\uFFFD0\x10\uFFFD\uFFFD\
-          \x15\uFFFD\uFFFD\uFFFDi\uFFFDZ\uFFFD\uFFFD1Z\uFFFD]\uFFFD\uFFFD\uFFFDJ-p\\\
-          \x19g\uFFFDXul\uFFFD3D)_\uFFFD\uFFFD\uFFFD!\uFFFD=\uFFFD\u04DB7O\uFFFD\uFFFD\
-          3\x16\uFFFD]c\uFFFD\x16\"\x1A\uFFFD\n6\uFFFD\uFFFD,\x03\uFFFD}i\u073E`\uFFFD\
-          \uFFFD?\uFFFD7,CR\uFFFDT\uFFFD;(\uFFFD\x11\uFFFD\uFFFD\uFFFD+\uFFFD\uFFFD\
-          >@$\x03\uFFFD%\a\uFFFD\x05\uFFFD\uFFFD\x92s\uFFFD54\ng\uFFFD\uFFFDR\uFFFD\
-          \uFFFDQ\uFFFD\u02B8\u7FAA\uFFFD\uFFFD;\uFFFD_\ep\uFFFD\x17y\uFFFD\uFFFD\
-          CG\uFFFDJ(\uFFFD\uFFFDh\uFFFDN\uFFFD\u02D6\uFFFDkZz\uFFFD\uFFFD\xE7\uFFFD\
-          1$?)~\uFFFD`\uFFFDV\uFFFD\x1E)\uF34E\x1E}E\uFFFD\uFFFDN\uFFFD\x15|\uFFFD\
-          \x14\uFFFDh\v\uFFFD5\x1A:\uFFFD\\\uFFFDi)\uFFFDZYX%cY)\uFFFD \uFFFD\a!\u05A0\
-          \uFFFD\uFFFDm\uFFFD\uFFFD(EK\uFFFD\x164\uFFFD\uFFFD\uFFFDyKS[\uFFFD\uFFFD\
-          E!\uFFFDq\n\u05AAh\uFFFD#v\uFFFD\uFFFD\uFFFD\x01\u06C0\x14\u5CCF\a\uFFFD\
-          \x01\b\x05\x1F\uFFFD\x01N\uFFFDSl~\uFFFD\uFFFD H\uFFFDR\uFFFD\uFFFD \t_F\uFFFD\
-          \x19\uFFFD\uFFFD\x0F\uFFFDFE\uFFFDO\uFFFD\uFFFD4\uFFFDM2\x12 \uFFFD\uFFFD\
-          ,v_\"\uFFFD/\uFFFDd\uFFFD\uFFFDMP.\u0350\uFFFD\uFFFDq\a|\f;\x7F\uFFFD\b\uFFFD\
-          \x13\uFFFD$\u0176V\x11\u02B4\uFFFDq\uFFFD#!\uFFFD)Z\uFFFD\uFFFD~U+\uFFFD\
-          \uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFDt\uFFFD\uFFFDr\uFFFD\uFFFD\uFFFD\
-          \uFFFD\fk?s\uFFFD\x7F|g\uFFFD\x0EPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0?\0\
-          a]I:O\x01\0\0\uFFFD\x04\0\0\x13\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\0\0\0\0\
-          [Content_Types].xmlPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0?\0\uFFFDI\uFFFD\uFFFD\
-          \0\0\0K\x02\0\0\v\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x01\0\0_rels/.relsPK\x01\
-          \x02\x14\x03\x14\0\0\0\b\0\0\0?\0Du[\uFFFD\uFFFD\0\0\0\uFFFD\x02\0\0\x1A\
-          \0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x02\0\0xl/_rels/workbook.xml.relsPK\x01\
-          \x02\x14\x03\x14\0\0\0\b\0\0\0?\0\f\uFFFD\uFFFD\fR\a\0\0 #\0\0\x18\0\0\0\
-          \0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x03\0\0xl/worksheets/sheet1.xmlPK\x01\
-          \x02\x14\x03\x14\0\0\0\b\0\0\0?\0\b\uFFFD\uFFFD\uFFFDL\x01\0\0)\x02\0\0\x0F\
-          \0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD:\v\0\0xl/workbook.xmlPK\x01\x02\x14\x03\
-          \x14\0\0\0\b\0\0\0?\0\uFFFD\xC2\uFFFD\x13\x02\0\00\x06\0\0\x14\0\0\0\0\0\
-          \0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\f\0\0xl/sharedStrings.xmlPK\x01\x02\x14\x03\
-          \x14\0\0\0\b\0\0\0?\0]\uFFFD:4\uFFFD\x02\0\0\uFFFD\x0F\0\0\r\0\0\0\0\0\0\
-          \0\0\0\0\0\uFFFD\uFFFD\uFFFD\x0E\0\0xl/styles.xmlPK\x01\x02\x14\x03\x14\0\
-          \0\0\b\0\0\0?\0\x18\uFFFDFT\uFFFD\x05\0\0R\e\0\0\x13\0\0\0\0\0\0\0\0\0\0\
-          \0\uFFFD\uFFFD\x02\x12\0\0xl/theme/theme1.xmlPK\x01\x02\x14\x03\x14\0\0\0\
-          \b\0\0\0?\0t\uFFFD\uFFFD\x18%\x01\0\0P\x02\0\0\x11\0\0\0\0\0\0\0\0\0\0\0\
-          \uFFFD\uFFFD\uFFFD\x17\0\0docProps/core.xmlPK\x01\x02\x14\x03\x14\0\0\0\b\
-          \0\0\0?\0\x04qEc{\x01\0\0\x13\x03\0\0\x10\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\
-          7\x19\0\0docProps/app.xmlPK\x05\x06\0\0\0\0\n\0\n\0\uFFFD\x02\0\0\uFFFD\x1A\
-          \0\0\0\0"
+          c/H\uFFFD\uFFFD\x06PK\x03\x04\x14\0\0\0\b\0\0\0?\0\r\uFFFD\uFFFDo%\x01\0\
+          \0P\x02\0\0\x11\0\0\0docProps/core.xml\uFFFD\uFFFD\uFFFDj\uFFFD0\x10E\uFFFD\
+          \uFFFD\n\uFFFD\uFFFD-\uFFFDiC\x11\uFFFD\x03m\u026A\uFFFDB]Z\uFFFD\x13\uFFFD\
+          $\x11\uFFFD\x1EHj\uFFFD\uFFFD}\x15\uFFFD\uFFFD\uFFFDW]\uFFFD\uFFFD3w\x06\
+          \x15\uFFFD\uFFFDl\uFFFD_\uFFFDNhU\uFFFD,IQ\x04\uFFFDi.\u053ED\x1F\uFFFD\
+          :~D\uFFFD\uFFFDTq\uFFFDh\x05%:\uFFFDC\uFFFD\uFFFD`\uFFFD0m\uFFFD\uFFFDj\x03\
+          \uFFFD\vpQ\0)G\uFFFD)\uFFFD\uFFFD{C0v\uFFFD\0\uFFFD\uFFFD$8T\x10w\uFFFD\
+          J\uFFFDCi\uFFFD\uFFFDP\uFFFDM\uFFFD\uFFFD\uFFFD4]b\t\uFFFDr\uFFFD)>\x03\
+          c3\x11\u0440\uFFFDlB\uFFFD\x1F\uFFFDt\0\uFFFD04 Ay\uFFFD\uFFFD$\uFFFD\x17\
+          \uFFFD\a+\uFFFDlC\uFFFD\\9\uFFFD\uFFFD'\x03\uFFFD\uFFFDQ\uFFFD\uFFFDG'&c\u06F6\
+          I\uFFFD\uFFFD!\x7F\uFFFD\uFFFD6\uFFFD\uFFFD\u076A\uFFFDP\uFFFDS1@U\uFFFD\
+          \x19a\x16\uFFFD\u05F6*\uFFFDu\x11\x0E\uFFFDP\uFFFD7\uFFFD\uFFFD;\x01\uFFFD\
+          \uFFFD\x14\uFFFD\uFFFD\uFFFDa\uFFFD\uFFFD\x0Fx\x14\x02\uFFFD>\uFFFD|.\uFFFD\
+          _\uFFFD5\uFFFD\uFFFD4_\uFFFD\uFFFD}\uFFFD\uFFFDu\uFFFD \uFFFD\uFFFDd\x0F\
+          \uFFFD\uFFFD\u021B\uFFFD\vP\x0EC\uFFFDM\x1C\x01}\uFFFD\uFFFDOP\uFFFD\x01\
+          PK\x03\x04\x14\0\0\0\b\0\0\0?\0\x04qEc{\x01\0\0\x13\x03\0\0\x10\0\0\0docProps/app.xml\uFFFD\
+          R\uFFFDN\uFFFD0\x10\uFFFD\uFFFD\x15\uFFFD\uFFFD\uFFFDi\uFFFDZ\uFFFD\uFFFD\
+          1Z\uFFFD]\uFFFD\uFFFD\uFFFDJ-p\\\x19g\uFFFDXul\uFFFD3D)_\uFFFD\uFFFD\uFFFD\
+          !\uFFFD=\uFFFD\u04DB7O\uFFFD\uFFFD3\x16\uFFFD]c\uFFFD\x16\"\x1A\uFFFD\n\
+          6\uFFFD\uFFFD,\x03\uFFFD}i\u073E`\uFFFD\uFFFD?\uFFFD7,CR\uFFFDT\uFFFD;(\uFFFD\
+          \x11\uFFFD\uFFFD\uFFFD+\uFFFD\uFFFD>@$\x03\uFFFD%\a\uFFFD\x05\uFFFD\uFFFD\
+          \x92s\uFFFD54\ng\uFFFD\uFFFDR\uFFFD\uFFFDQ\uFFFD\u02B8\u7FAA\uFFFD\uFFFD\
+          ;\uFFFD_\ep\uFFFD\x17y\uFFFD\uFFFDCG\uFFFDJ(\uFFFD\uFFFDh\uFFFDN\uFFFD\u02D6\
+          \uFFFDkZz\uFFFD\uFFFD\xE7\uFFFD1$?)~\uFFFD`\uFFFDV\uFFFD\x1E)\uF34E\x1E\
+          }E\uFFFD\uFFFDN\uFFFD\x15|\uFFFD\x14\uFFFDh\v\uFFFD5\x1A:\uFFFD\\\uFFFD\
+          i)\uFFFDZYX%cY)\uFFFD \uFFFD\a!\u05A0\uFFFD\uFFFDm\uFFFD\uFFFD(EK\uFFFD\x16\
+          4\uFFFD\uFFFD\uFFFDyKS[\uFFFD\uFFFDE!\uFFFDq\n\u05AAh\uFFFD#v\uFFFD\uFFFD\
+          \uFFFD\x01\u06C0\x14\u5CCF\a\uFFFD\x01\b\x05\x1F\uFFFD\x01N\uFFFDSl~\uFFFD\
+          \uFFFD H\uFFFDR\uFFFD\uFFFD \t_F\uFFFD\x19\uFFFD\uFFFD\x0F\uFFFDFE\uFFFD\
+          O\uFFFD\uFFFD4\uFFFDM2\x12 \uFFFD\uFFFD,v_\"\uFFFD/\uFFFDd\uFFFD\uFFFDMP.\u0350\
+          \uFFFD\uFFFDq\a|\f;\x7F\uFFFD\b\uFFFD\x13\uFFFD$\u0176V\x11\u02B4\uFFFD\
+          q\uFFFD#!\uFFFD)Z\uFFFD\uFFFD~U+\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\
+          \uFFFDt\uFFFD\uFFFDr\uFFFD\uFFFD\uFFFD\uFFFD\fk?s\uFFFD\x7F|g\uFFFD\x0E\
+          PK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0?\0a]I:O\x01\0\0\uFFFD\x04\0\0\x13\0\
+          \0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\0\0\0\0[Content_Types].xmlPK\x01\x02\x14\
+          \x03\x14\0\0\0\b\0\0\0?\0\uFFFDI\uFFFD\uFFFD\0\0\0K\x02\0\0\v\0\0\0\0\0\0\
+          \0\0\0\0\0\uFFFD\uFFFD\uFFFD\x01\0\0_rels/.relsPK\x01\x02\x14\x03\x14\0\0\
+          \0\b\0\0\0?\0Du[\uFFFD\uFFFD\0\0\0\uFFFD\x02\0\0\x1A\0\0\0\0\0\0\0\0\0\0\
+          \0\uFFFD\uFFFD\uFFFD\x02\0\0xl/_rels/workbook.xml.relsPK\x01\x02\x14\x03\
+          \x14\0\0\0\b\0\0\0?\0\f\uFFFD\uFFFD\fR\a\0\0 #\0\0\x18\0\0\0\0\0\0\0\0\0\
+          \0\0\uFFFD\uFFFD\uFFFD\x03\0\0xl/worksheets/sheet1.xmlPK\x01\x02\x14\x03\
+          \x14\0\0\0\b\0\0\0?\0\b\uFFFD\uFFFD\uFFFDL\x01\0\0)\x02\0\0\x0F\0\0\0\0\0\
+          \0\0\0\0\0\0\uFFFD\uFFFD:\v\0\0xl/workbook.xmlPK\x01\x02\x14\x03\x14\0\0\
+          \0\b\0\0\0?\0\uFFFD\xC2\uFFFD\x13\x02\0\00\x06\0\0\x14\0\0\0\0\0\0\0\0\0\
+          \0\0\uFFFD\uFFFD\uFFFD\f\0\0xl/sharedStrings.xmlPK\x01\x02\x14\x03\x14\0\
+          \0\0\b\0\0\0?\0]\uFFFD:4\uFFFD\x02\0\0\uFFFD\x0F\0\0\r\0\0\0\0\0\0\0\0\0\
+          \0\0\uFFFD\uFFFD\uFFFD\x0E\0\0xl/styles.xmlPK\x01\x02\x14\x03\x14\0\0\0\b\
+          \0\0\0?\0\x18\uFFFDFT\uFFFD\x05\0\0R\e\0\0\x13\0\0\0\0\0\0\0\0\0\0\0\uFFFD\
+          \uFFFD\x02\x12\0\0xl/theme/theme1.xmlPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0\
+          ?\0\r\uFFFD\uFFFDo%\x01\0\0P\x02\0\0\x11\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\
+          \uFFFD\x17\0\0docProps/core.xmlPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0?\0\x04\
+          qEc{\x01\0\0\x13\x03\0\0\x10\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD7\x19\0\0\
+          docProps/app.xmlPK\x05\x06\0\0\0\0\n\0\n\0\uFFFD\x02\0\0\uFFFD\x1A\0\0\0\
+          \0"
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
