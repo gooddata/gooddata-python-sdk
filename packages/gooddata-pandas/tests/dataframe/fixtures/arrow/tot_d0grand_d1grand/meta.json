@@ -1,0 +1,148 @@
+{
+  "result_id": "2dc12baa4d0baf56d4c429c5be750d93a82237ec:ff13f8c8a0efca035cc53cd877045b0f997d324bbd36a127e52c3166c870d220",
+  "row_totals_indexes": [
+    [],
+    [],
+    []
+  ],
+  "primary_labels_from_index": {
+    "0": {
+      "Midwest": "Midwest",
+      "Northeast": "Northeast",
+      "South": "South",
+      "Unknown": "Unknown",
+      "West": "West"
+    },
+    "1": {
+      "Clothing": "Clothing",
+      "Electronics": "Electronics",
+      "Home": "Home",
+      "Outdoor": "Outdoor"
+    }
+  },
+  "primary_labels_from_columns": {
+    "0": {
+      "Canceled": "Canceled",
+      "Delivered": "Delivered",
+      "Returned": "Returned"
+    },
+    "1": {
+      "2022": "2022",
+      "2023": "2023",
+      "2024": "2024",
+      "2025": "2025",
+      "2026": "2026"
+    }
+  },
+  "dimensions": [
+    {
+      "headers": [
+        {
+          "attributeHeader": {
+            "localIdentifier": "region",
+            "label": {
+              "id": "region",
+              "type": "label"
+            },
+            "labelName": "Region",
+            "attribute": {
+              "id": "region",
+              "type": "attribute"
+            },
+            "attributeName": "Region",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "region",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        },
+        {
+          "attributeHeader": {
+            "localIdentifier": "category",
+            "label": {
+              "id": "products.category",
+              "type": "label"
+            },
+            "labelName": "Category",
+            "attribute": {
+              "id": "products.category",
+              "type": "attribute"
+            },
+            "attributeName": "Category",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "products.category",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        },
+        {
+          "measureGroupHeaders": [
+            {
+              "localIdentifier": "price"
+            },
+            {
+              "localIdentifier": "order_amount",
+              "format": "$#,##0",
+              "name": "Order Amount"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "headers": [
+        {
+          "attributeHeader": {
+            "localIdentifier": "status",
+            "label": {
+              "id": "order_status",
+              "type": "label"
+            },
+            "labelName": "Order status",
+            "attribute": {
+              "id": "order_status",
+              "type": "attribute"
+            },
+            "attributeName": "Order status",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "order_status",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        },
+        {
+          "attributeHeader": {
+            "localIdentifier": "year",
+            "label": {
+              "id": "date.year",
+              "type": "label"
+            },
+            "labelName": "Date - Year",
+            "attribute": {
+              "id": "date.year",
+              "type": "attribute"
+            },
+            "attributeName": "Date - Year",
+            "granularity": "YEAR",
+            "primaryLabel": {
+              "id": "date.year",
+              "type": "label"
+            },
+            "format": {
+              "locale": "en-US",
+              "pattern": "y",
+              "timezone": "Etc/UTC"
+            },
+            "valueType": "TEXT"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -32,7 +32,6 @@ dependencies = [
     "gooddata-sdk~=1.63.0",
     "pandas>=2.0.0,<3.0.0",
 ]
-
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
@@ -46,6 +45,9 @@ classifiers = [
     "Topic :: Software Development",
     "Typing :: Typed",
 ]
+
+[project.optional-dependencies]
+arrow = ["pyarrow>=23.0.1"]
 
 [project.urls]
 Documentation = "https://gooddata-pandas.readthedocs.io/en/v1.63.0"
@@ -63,6 +65,7 @@ test = [
     "python-dotenv~=1.0.0",
     "pyyaml",
     "tests_support",
+    "pyarrow>=16.1.0",
 ]
 
 [tool.ty.analysis]

@@ -62,7 +62,7 @@ class CatalogDataSourceBase(Base):
     credentials: Credentials = field(repr=False)
     alternative_data_source_id: str | None = None
 
-    @type.validator  # type: ignore[attr-defined]
+    @type.validator  # type: ignore
     def _check_allowed_values(self, attribute: Attribute, value: str) -> None:
         value_in_allowed(self.__class__, attribute, value, JsonApiDataSourceInAttributes)
 
