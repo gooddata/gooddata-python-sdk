@@ -2500,12 +2500,14 @@ name = "tests-support"
 version = "1.0.0"
 source = { editable = "packages/tests-support" }
 dependencies = [
+    { name = "orjson" },
     { name = "pyyaml" },
     { name = "requests" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "orjson" },
     { name = "pyyaml", specifier = ">=6.0" },
     { name = "requests" },
 ]

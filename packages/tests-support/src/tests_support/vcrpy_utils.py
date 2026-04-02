@@ -1,13 +1,12 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-import json
 import os
 import typing
-from json import JSONDecodeError
 from typing import Any
 from urllib.parse import urlparse
 
+import orjson
 import vcr
 import yaml
 from vcr.record_mode import RecordMode
@@ -20,7 +19,15 @@ PLACEHOLDER = ["PLACEHOLDER"]
 # Fields stripped from request bodies before VCR body matching.
 # These differ between local and staging environments but don't affect
 # the logical identity of a request.
-_ENV_SPECIFIC_BODY_FIELDS = {"password", "token", "url", "username", "privateKey"}
+_ENV_SPECIFIC_BODY_FIELDS = {
+    "password",
+    "token",
+    "url",
+    "username",
+    "privateKey",
+    "client_secret",
+    "private_key_passphrase",
+}
 
 # Canonical (local) values — cassettes always use these.
 _CANONICAL_HOST = "http://localhost:3000"
@@ -33,6 +40,7 @@ _CANONICAL_ORG_NAME = "Default Organization"
 # Each entry is (source_string, replacement_string).
 # Ordered longest-first so more specific patterns match before substrings.
 _normalization_replacements: list[tuple[str, str]] = []
+_normalization_configured: bool = False
 
 
 def configure_normalization(test_config: dict[str, Any]) -> None:
@@ -49,7 +57,7 @@ def configure_normalization(test_config: dict[str, Any]) -> None:
         rm -rf packages/gooddata-sdk/.tox
         uv cache clean tests-support --force
     """
-    global _normalization_replacements
+    global _normalization_replacements, _normalization_configured
     replacements: list[tuple[str, str]] = []
 
     parsed = urlparse(test_config.get("host", _CANONICAL_HOST))
@@ -99,6 +107,7 @@ def configure_normalization(test_config: dict[str, Any]) -> None:
     replacements.sort(key=lambda pair: len(pair[0]), reverse=True)
 
     _normalization_replacements = replacements
+    _normalization_configured = True
 
 
 def _apply_replacements(text: str) -> str:
@@ -113,8 +122,8 @@ def _normalize_body(body: str | None) -> str:
     if not body:
         return body or ""
     try:
-        data = json.loads(body)
-    except (JSONDecodeError, TypeError):
+        data = orjson.loads(body)
+    except (orjson.JSONDecodeError, TypeError):
         return body
 
     def _strip(obj: Any) -> Any:
@@ -124,7 +133,7 @@ def _normalize_body(body: str | None) -> str:
             return [_strip(item) for item in obj]
         return obj
 
-    return json.dumps(_strip(data), sort_keys=True)
+    return orjson.dumps(_strip(data), option=orjson.OPT_SORT_KEYS).decode("utf-8")
 
 
 def _body_matcher(r1: Any, r2: Any) -> None:
@@ -174,13 +183,15 @@ class CustomSerializerYaml:
                 if isinstance(request_body, str) and request_body.startswith("<?xml"):
                     interaction["request"]["body"] = request_body
                 else:
-                    interaction["request"]["body"] = json.dumps(request_body)
+                    interaction["request"]["body"] = orjson.dumps(request_body).decode("utf-8")
             if response_body is not None and response_body["string"] != "":
                 try:
                     if isinstance(response_body["string"], str) and response_body["string"].startswith("<?xml"):
                         interaction["response"]["body"]["string"] = response_body["string"]
                     else:
-                        interaction["response"]["body"]["string"] = json.dumps(response_body["string"])
+                        interaction["response"]["body"]["string"] = orjson.dumps(response_body["string"]).decode(
+                            "utf-8"
+                        )
                 except TypeError:
                     # this exception is expected while getting XLSX file content
                     continue
@@ -192,14 +203,14 @@ class CustomSerializerYaml:
             response_body = interaction["response"]["body"]
             if request_body is not None:
                 try:
-                    interaction["request"]["body"] = json.loads(request_body)
-                except (JSONDecodeError, UnicodeDecodeError):
+                    interaction["request"]["body"] = orjson.loads(request_body)
+                except (orjson.JSONDecodeError, UnicodeDecodeError):
                     # The response can be in XML
                     interaction["request"]["body"] = request_body
             if response_body is not None and response_body["string"] != "":
                 try:
-                    interaction["response"]["body"]["string"] = json.loads(response_body["string"])
-                except (JSONDecodeError, UnicodeDecodeError):
+                    interaction["response"]["body"]["string"] = orjson.loads(response_body["string"])
+                except (orjson.JSONDecodeError, UnicodeDecodeError):
                     # these exceptions are expected while getting file content
                     continue
         return yaml.dump(cassette_dict, Dumper=IndentDumper, sort_keys=True)
@@ -213,6 +224,12 @@ def _normalize_uri(uri: str) -> str:
 
 
 def custom_before_request(request, headers_str: str = HEADERS_STR):
+    if not _normalization_configured and "OVERWRITE" in os.environ:
+        raise RuntimeError(
+            "VCR normalization not configured. "
+            "Ensure your test fixture depends on 'test_config' (directly or transitively) "
+            "so that configure_normalization() runs before cassette recording starts."
+        )
     # Normalize URI to canonical host
     request.uri = _normalize_uri(request.uri)
 
@@ -234,6 +251,13 @@ def custom_before_response(
     non_static_headers: list[str] | None = None,
     placeholder: list[str] | None = None,
 ):
+    if not _normalization_configured and "OVERWRITE" in os.environ:
+        raise RuntimeError(
+            "VCR normalization not configured. "
+            "Ensure your test fixture depends on 'test_config' (directly or transitively) "
+            "so that configure_normalization() runs before cassette recording starts."
+        )
+
     if non_static_headers is None:
         non_static_headers = NON_STATIC_HEADERS
 
