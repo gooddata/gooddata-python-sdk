@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/logicalModel
       body: null
       headers:
         Accept:
@@ -14,41 +11,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo/logicalModel
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: &id001
-          - PLACEHOLDER
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           ldm:
@@ -57,6 +22,7 @@ interactions:
                 attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
+                    isNullable: false
                     labels: []
                     sourceColumn: campaign_channel_id
                     sourceColumnDataType: STRING
@@ -65,6 +31,7 @@ interactions:
                     title: Campaign channel id
                   - description: Category
                     id: campaign_channels.category
+                    isNullable: true
                     labels: []
                     sourceColumn: category
                     sourceColumnDataType: STRING
@@ -73,6 +40,7 @@ interactions:
                     title: Category
                   - description: Type
                     id: type
+                    isNullable: true
                     labels: []
                     sourceColumn: type
                     sourceColumnDataType: STRING
@@ -90,6 +58,7 @@ interactions:
                 facts:
                   - description: Budget
                     id: budget
+                    isNullable: true
                     sourceColumn: budget
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -97,6 +66,7 @@ interactions:
                     title: Budget
                   - description: Spend
                     id: spend
+                    isNullable: true
                     sourceColumn: spend
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -114,6 +84,7 @@ interactions:
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: campaign_id
                           type: attribute
@@ -146,6 +117,7 @@ interactions:
                     sources:
                       - column: campaign_channel_id
                         dataType: STRING
+                        isNullable: true
                         target:
                           id: campaign_channel_id
                           type: attribute
@@ -160,6 +132,7 @@ interactions:
                 attributes:
                   - description: Campaign id
                     id: campaign_id
+                    isNullable: false
                     labels: []
                     sourceColumn: campaign_id
                     sourceColumnDataType: INT
@@ -168,6 +141,7 @@ interactions:
                     title: Campaign id
                   - description: Campaign name
                     id: campaign_name
+                    isNullable: true
                     labels: []
                     sourceColumn: campaign_name
                     sourceColumnDataType: STRING
@@ -195,6 +169,7 @@ interactions:
                 attributes:
                   - description: Customer id
                     id: customer_id
+                    isNullable: false
                     labels: []
                     sourceColumn: customer_id
                     sourceColumnDataType: INT
@@ -203,6 +178,7 @@ interactions:
                     title: Customer id
                   - description: Customer name
                     id: customer_name
+                    isNullable: true
                     labels: []
                     sourceColumn: customer_name
                     sourceColumnDataType: STRING
@@ -211,6 +187,7 @@ interactions:
                     title: Customer name
                   - description: Region
                     id: region
+                    isNullable: true
                     labels: []
                     sourceColumn: region
                     sourceColumnDataType: STRING
@@ -219,9 +196,11 @@ interactions:
                     title: Region
                   - description: State
                     id: state
+                    isNullable: true
                     labels:
                       - description: Location
                         id: geo__state__location
+                        isNullable: true
                         sourceColumn: geo__state__location
                         sourceColumnDataType: STRING
                         tags:
@@ -254,6 +233,7 @@ interactions:
                 attributes:
                   - description: Order id
                     id: order_id
+                    isNullable: true
                     labels: []
                     sourceColumn: order_id
                     sourceColumnDataType: STRING
@@ -262,6 +242,7 @@ interactions:
                     title: Order id
                   - description: Order line id
                     id: order_line_id
+                    isNullable: false
                     labels: []
                     sourceColumn: order_line_id
                     sourceColumnDataType: STRING
@@ -270,6 +251,7 @@ interactions:
                     title: Order line id
                   - description: Order status
                     id: order_status
+                    isNullable: true
                     labels: []
                     sourceColumn: order_status
                     sourceColumnDataType: STRING
@@ -287,6 +269,7 @@ interactions:
                 facts:
                   - description: Price
                     id: price
+                    isNullable: true
                     sourceColumn: price
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -294,6 +277,7 @@ interactions:
                     title: Price
                   - description: Quantity
                     id: quantity
+                    isNullable: true
                     sourceColumn: quantity
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -311,6 +295,7 @@ interactions:
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: campaign_id
                           type: attribute
@@ -321,6 +306,7 @@ interactions:
                     sources:
                       - column: customer_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: customer_id
                           type: attribute
@@ -331,6 +317,7 @@ interactions:
                     sources:
                       - column: date
                         dataType: DATE
+                        isNullable: true
                         target:
                           id: date
                           type: date
@@ -341,6 +328,7 @@ interactions:
                     sources:
                       - column: product_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: product_id
                           type: attribute
@@ -362,6 +350,7 @@ interactions:
                 attributes:
                   - description: Product id
                     id: product_id
+                    isNullable: false
                     labels: []
                     sourceColumn: product_id
                     sourceColumnDataType: INT
@@ -370,6 +359,7 @@ interactions:
                     title: Product id
                   - description: Product name
                     id: product_name
+                    isNullable: true
                     labels: []
                     sourceColumn: product_name
                     sourceColumnDataType: STRING
@@ -378,6 +368,7 @@ interactions:
                     title: Product name
                   - description: Category
                     id: products.category
+                    isNullable: true
                     labels: []
                     sourceColumn: category
                     sourceColumnDataType: STRING
@@ -416,3 +407,36 @@ interactions:
                 tags:
                   - Date
                 title: Date
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '1196'
+        Content-Type:
+          - application/json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1

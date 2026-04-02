@@ -207,6 +207,19 @@ def update_layout():
     print("Uploading test DS with physical model for demo", flush=True)
     rest_op_default("put", f"api/{api_version}/layout/dataSources", data_sources)
 
+    # Layout PUT does not persist passwords — set them via entities PATCH
+    print("Setting data source passwords via entities API...", flush=True)
+    for ds in data_sources.get("dataSources", []):
+        ds_id = ds["id"]
+        ds_password = ds.get("password")
+        if ds_password:
+            rest_op_jsonapi(
+                "patch",
+                f"api/{api_version}/entities/dataSources/{ds_id}",
+                {"data": {"id": ds_id, "type": "dataSource", "attributes": {"password": ds_password}}},
+            )
+            print(f"  Set password for DS '{ds_id}'", flush=True)
+
     # Verify data sources were uploaded with permissions
     print("Verifying data source permissions...", flush=True)
     result = rest_op_default("get", f"api/{api_version}/layout/dataSources", raise_ex=False)

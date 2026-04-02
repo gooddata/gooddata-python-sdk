@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_testing?include=workspaces
       body: null
       headers:
         Accept:
@@ -14,15 +11,19 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo_testing?include=workspaces
     response:
-      status:
-        code: 404
-        message: Not Found
+      body:
+        string:
+          detail: The requested endpoint does not exist or you do not have permission
+            to access it.
+          status: 404
+          title: Not Found
+          traceId: 76a5ba2ba9ede577f58db80c4a6d855b
       headers:
         Cache-Control:
           - max-age=5, private
-        Connection:
-          - keep-alive
         Content-Length:
           - '172'
         Content-Type:
@@ -32,32 +33,27 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          detail: The requested endpoint does not exist or you do not have permission
-            to access it.
-          status: 404
-          title: Not Found
-          traceId: a63b4b8178a2dc022556694b2d9b342d
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 404
+        message: Not Found
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces
       body:
         data:
-          id: demo_testing
-          type: workspace
           attributes:
             name: demo_testing
+          id: demo_testing
+          type: workspace
       headers:
         Accept:
           - application/json
@@ -69,15 +65,21 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/workspaces
     response:
-      status:
-        code: 201
-        message: Created
+      body:
+        string:
+          data:
+            attributes:
+              name: demo_testing
+            id: demo_testing
+            type: workspace
+          links:
+            self: http://localhost:3000/api/v1/entities/workspaces/demo_testing
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '204'
         Content-Type:
@@ -90,28 +92,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: demo_testing
-            id: demo_testing
-            type: workspace
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_testing
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 201
+        message: Created
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/logicalModel
       body: null
       headers:
         Accept:
@@ -122,40 +117,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo/logicalModel
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           ldm:
@@ -164,6 +128,7 @@ interactions:
                 attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
+                    isNullable: false
                     labels: []
                     sourceColumn: campaign_channel_id
                     sourceColumnDataType: STRING
@@ -172,6 +137,7 @@ interactions:
                     title: Campaign channel id
                   - description: Category
                     id: campaign_channels.category
+                    isNullable: true
                     labels: []
                     sourceColumn: category
                     sourceColumnDataType: STRING
@@ -180,6 +146,7 @@ interactions:
                     title: Category
                   - description: Type
                     id: type
+                    isNullable: true
                     labels: []
                     sourceColumn: type
                     sourceColumnDataType: STRING
@@ -197,6 +164,7 @@ interactions:
                 facts:
                   - description: Budget
                     id: budget
+                    isNullable: true
                     sourceColumn: budget
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -204,6 +172,7 @@ interactions:
                     title: Budget
                   - description: Spend
                     id: spend
+                    isNullable: true
                     sourceColumn: spend
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -221,6 +190,7 @@ interactions:
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: campaign_id
                           type: attribute
@@ -253,6 +223,7 @@ interactions:
                     sources:
                       - column: campaign_channel_id
                         dataType: STRING
+                        isNullable: true
                         target:
                           id: campaign_channel_id
                           type: attribute
@@ -267,6 +238,7 @@ interactions:
                 attributes:
                   - description: Campaign id
                     id: campaign_id
+                    isNullable: false
                     labels: []
                     sourceColumn: campaign_id
                     sourceColumnDataType: INT
@@ -275,6 +247,7 @@ interactions:
                     title: Campaign id
                   - description: Campaign name
                     id: campaign_name
+                    isNullable: true
                     labels: []
                     sourceColumn: campaign_name
                     sourceColumnDataType: STRING
@@ -302,6 +275,7 @@ interactions:
                 attributes:
                   - description: Customer id
                     id: customer_id
+                    isNullable: false
                     labels: []
                     sourceColumn: customer_id
                     sourceColumnDataType: INT
@@ -310,6 +284,7 @@ interactions:
                     title: Customer id
                   - description: Customer name
                     id: customer_name
+                    isNullable: true
                     labels: []
                     sourceColumn: customer_name
                     sourceColumnDataType: STRING
@@ -318,6 +293,7 @@ interactions:
                     title: Customer name
                   - description: Region
                     id: region
+                    isNullable: true
                     labels: []
                     sourceColumn: region
                     sourceColumnDataType: STRING
@@ -326,9 +302,11 @@ interactions:
                     title: Region
                   - description: State
                     id: state
+                    isNullable: true
                     labels:
                       - description: Location
                         id: geo__state__location
+                        isNullable: true
                         sourceColumn: geo__state__location
                         sourceColumnDataType: STRING
                         tags:
@@ -361,6 +339,7 @@ interactions:
                 attributes:
                   - description: Order id
                     id: order_id
+                    isNullable: true
                     labels: []
                     sourceColumn: order_id
                     sourceColumnDataType: STRING
@@ -369,6 +348,7 @@ interactions:
                     title: Order id
                   - description: Order line id
                     id: order_line_id
+                    isNullable: false
                     labels: []
                     sourceColumn: order_line_id
                     sourceColumnDataType: STRING
@@ -377,6 +357,7 @@ interactions:
                     title: Order line id
                   - description: Order status
                     id: order_status
+                    isNullable: true
                     labels: []
                     sourceColumn: order_status
                     sourceColumnDataType: STRING
@@ -394,6 +375,7 @@ interactions:
                 facts:
                   - description: Price
                     id: price
+                    isNullable: true
                     sourceColumn: price
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -401,6 +383,7 @@ interactions:
                     title: Price
                   - description: Quantity
                     id: quantity
+                    isNullable: true
                     sourceColumn: quantity
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -418,6 +401,7 @@ interactions:
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: campaign_id
                           type: attribute
@@ -428,6 +412,7 @@ interactions:
                     sources:
                       - column: customer_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: customer_id
                           type: attribute
@@ -438,6 +423,7 @@ interactions:
                     sources:
                       - column: date
                         dataType: DATE
+                        isNullable: true
                         target:
                           id: date
                           type: date
@@ -448,6 +434,7 @@ interactions:
                     sources:
                       - column: product_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: product_id
                           type: attribute
@@ -469,6 +456,7 @@ interactions:
                 attributes:
                   - description: Product id
                     id: product_id
+                    isNullable: false
                     labels: []
                     sourceColumn: product_id
                     sourceColumnDataType: INT
@@ -477,6 +465,7 @@ interactions:
                     title: Product id
                   - description: Product name
                     id: product_name
+                    isNullable: true
                     labels: []
                     sourceColumn: product_name
                     sourceColumnDataType: STRING
@@ -485,6 +474,7 @@ interactions:
                     title: Product name
                   - description: Category
                     id: products.category
+                    isNullable: true
                     labels: []
                     sourceColumn: category
                     sourceColumnDataType: STRING
@@ -523,956 +513,13 @@ interactions:
                 tags:
                   - Date
                 title: Date
-  - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources?page=0&size=500
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '671'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            - attributes:
-                url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
-                username: postgres
-                authenticationType: USERNAME_PASSWORD
-                alternativeDataSourceId: ds-put-abc-id
-                name: demo-test-ds
-                type: POSTGRESQL
-                schema: demo
-              id: demo-test-ds
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/demo-test-ds
-              type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources?page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources?page=1&size=500
-  - request:
-      method: PUT
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo_testing/logicalModel
-      body:
-        ldm:
-          datasets:
-            - grain:
-                - id: campaign_channel_id
-                  type: attribute
-              id: campaign_channels
-              references:
-                - identifier:
-                    id: campaigns
-                    type: dataset
-                  multivalue: false
-                  sources:
-                    - column: campaign_id
-                      target:
-                        id: campaign_id
-                        type: attribute
-                      dataType: INT
-              title: Campaign channels
-              description: Campaign channels
-              attributes:
-                - id: campaign_channel_id
-                  labels: []
-                  sourceColumn: campaign_channel_id
-                  title: Campaign channel id
-                  sourceColumnDataType: STRING
-                  description: Campaign channel id
-                  tags:
-                    - Campaign channels
-                - id: campaign_channels.category
-                  labels: []
-                  sourceColumn: category
-                  title: Category
-                  sourceColumnDataType: STRING
-                  description: Category
-                  tags:
-                    - Campaign channels
-                - id: type
-                  labels: []
-                  sourceColumn: type
-                  title: Type
-                  sourceColumnDataType: STRING
-                  description: Type
-                  tags:
-                    - Campaign channels
-              facts:
-                - id: budget
-                  sourceColumn: budget
-                  title: Budget
-                  sourceColumnDataType: NUMERIC
-                  description: Budget
-                  tags:
-                    - Campaign channels
-                - id: spend
-                  sourceColumn: spend
-                  title: Spend
-                  sourceColumnDataType: NUMERIC
-                  description: Spend
-                  tags:
-                    - Campaign channels
-              aggregatedFacts: []
-              dataSourceTableId:
-                dataSourceId: demo-test-ds
-                id: campaign_channels
-                type: dataSource
-                path:
-                  - demo
-                  - campaign_channels
-              tags:
-                - Campaign channels
-            - grain: []
-              id: campaign_channels_per_category
-              references:
-                - identifier:
-                    id: campaign_channels
-                    type: dataset
-                  multivalue: false
-                  sources:
-                    - column: campaign_channel_id
-                      target:
-                        id: campaign_channel_id
-                        type: attribute
-                      dataType: STRING
-              title: Campaign channels per category
-              description: Campaign channels per categories
-              attributes: []
-              facts: []
-              aggregatedFacts:
-                - id: budget_agg
-                  sourceColumn: budget
-                  sourceFactReference:
-                    operation: SUM
-                    reference:
-                      id: budget
-                      type: fact
-                  sourceColumnDataType: INT
-                  description: Budget Agg
-                  tags:
-                    - Campaign channels per category
-              precedence: 1
-              sql:
-                dataSourceId: demo-test-ds
-                statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
-                  BY category
-              tags:
-                - Campaign channels per category
-            - grain:
-                - id: campaign_id
-                  type: attribute
-              id: campaigns
-              references: []
-              title: Campaigns
-              description: Campaigns
-              attributes:
-                - id: campaign_id
-                  labels: []
-                  sourceColumn: campaign_id
-                  title: Campaign id
-                  sourceColumnDataType: INT
-                  description: Campaign id
-                  tags:
-                    - Campaigns
-                - id: campaign_name
-                  labels: []
-                  sourceColumn: campaign_name
-                  title: Campaign name
-                  sourceColumnDataType: STRING
-                  description: Campaign name
-                  tags:
-                    - Campaigns
-              facts: []
-              aggregatedFacts: []
-              dataSourceTableId:
-                dataSourceId: demo-test-ds
-                id: campaigns
-                type: dataSource
-                path:
-                  - demo
-                  - campaigns
-              tags:
-                - Campaigns
-            - grain:
-                - id: customer_id
-                  type: attribute
-              id: customers
-              references: []
-              title: Customers
-              description: Customers
-              attributes:
-                - id: customer_id
-                  labels: []
-                  sourceColumn: customer_id
-                  title: Customer id
-                  sourceColumnDataType: INT
-                  description: Customer id
-                  tags:
-                    - Customers
-                - id: customer_name
-                  labels: []
-                  sourceColumn: customer_name
-                  title: Customer name
-                  sourceColumnDataType: STRING
-                  description: Customer name
-                  tags:
-                    - Customers
-                - id: region
-                  labels: []
-                  sourceColumn: region
-                  title: Region
-                  sourceColumnDataType: STRING
-                  description: Region
-                  tags:
-                    - Customers
-                - id: state
-                  labels:
-                    - id: geo__state__location
-                      sourceColumn: geo__state__location
-                      title: Location
-                      sourceColumnDataType: STRING
-                      description: Location
-                      tags:
-                        - Customers
-                      valueType: GEO
-                  sourceColumn: state
-                  title: State
-                  sourceColumnDataType: STRING
-                  description: State
-                  tags:
-                    - Customers
-              facts: []
-              aggregatedFacts: []
-              dataSourceTableId:
-                dataSourceId: demo-test-ds
-                id: customers
-                type: dataSource
-                path:
-                  - demo
-                  - customers
-              tags:
-                - Customers
-            - grain:
-                - id: order_line_id
-                  type: attribute
-              id: order_lines
-              references:
-                - identifier:
-                    id: campaigns
-                    type: dataset
-                  multivalue: false
-                  sources:
-                    - column: campaign_id
-                      target:
-                        id: campaign_id
-                        type: attribute
-                      dataType: INT
-                - identifier:
-                    id: customers
-                    type: dataset
-                  multivalue: false
-                  sources:
-                    - column: customer_id
-                      target:
-                        id: customer_id
-                        type: attribute
-                      dataType: INT
-                - identifier:
-                    id: date
-                    type: dataset
-                  multivalue: false
-                  sources:
-                    - column: date
-                      target:
-                        id: date
-                        type: date
-                      dataType: DATE
-                - identifier:
-                    id: products
-                    type: dataset
-                  multivalue: false
-                  sources:
-                    - column: product_id
-                      target:
-                        id: product_id
-                        type: attribute
-                      dataType: INT
-              title: Order lines
-              description: Order lines
-              attributes:
-                - id: order_id
-                  labels: []
-                  sourceColumn: order_id
-                  title: Order id
-                  sourceColumnDataType: STRING
-                  description: Order id
-                  tags:
-                    - Order lines
-                - id: order_line_id
-                  labels: []
-                  sourceColumn: order_line_id
-                  title: Order line id
-                  sourceColumnDataType: STRING
-                  description: Order line id
-                  tags:
-                    - Order lines
-                - id: order_status
-                  labels: []
-                  sourceColumn: order_status
-                  title: Order status
-                  sourceColumnDataType: STRING
-                  description: Order status
-                  tags:
-                    - Order lines
-              facts:
-                - id: price
-                  sourceColumn: price
-                  title: Price
-                  sourceColumnDataType: NUMERIC
-                  description: Price
-                  tags:
-                    - Order lines
-                - id: quantity
-                  sourceColumn: quantity
-                  title: Quantity
-                  sourceColumnDataType: NUMERIC
-                  description: Quantity
-                  tags:
-                    - Order lines
-              aggregatedFacts: []
-              dataSourceTableId:
-                dataSourceId: demo-test-ds
-                id: order_lines
-                type: dataSource
-                path:
-                  - demo
-                  - order_lines
-              tags:
-                - Order lines
-              workspaceDataFilterColumns:
-                - dataType: STRING
-                  name: wdf__region
-                - dataType: STRING
-                  name: wdf__state
-            - grain:
-                - id: product_id
-                  type: attribute
-              id: products
-              references: []
-              title: Products
-              description: Products
-              attributes:
-                - id: product_id
-                  labels: []
-                  sourceColumn: product_id
-                  title: Product id
-                  sourceColumnDataType: INT
-                  description: Product id
-                  tags:
-                    - Products
-                - id: product_name
-                  labels: []
-                  sourceColumn: product_name
-                  title: Product name
-                  sourceColumnDataType: STRING
-                  description: Product name
-                  tags:
-                    - Products
-                - id: products.category
-                  labels: []
-                  sourceColumn: category
-                  title: Category
-                  sourceColumnDataType: STRING
-                  description: Category
-                  tags:
-                    - Products
-              facts: []
-              aggregatedFacts: []
-              dataSourceTableId:
-                dataSourceId: demo-test-ds
-                id: products
-                type: dataSource
-                path:
-                  - demo
-                  - products
-              tags:
-                - Products
-          dateInstances:
-            - granularities:
-                - DAY
-                - WEEK
-                - MONTH
-                - QUARTER
-                - YEAR
-              granularitiesFormatting:
-                titleBase: ''
-                titlePattern: '%titleBase - %granularityTitle'
-              id: date
-              title: Date
-              description: ''
-              tags:
-                - Date
-      headers:
-        Accept-Encoding:
-          - br, gzip, deflate
-        Content-Type:
-          - application/json
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 204
-        message: No Content
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
-  - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources?page=0&size=500
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '671'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            - attributes:
-                url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
-                username: postgres
-                authenticationType: USERNAME_PASSWORD
-                alternativeDataSourceId: ds-put-abc-id
-                name: demo-test-ds
-                type: POSTGRESQL
-                schema: demo
-              id: demo-test-ds
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/demo-test-ds
-              type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources?page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources?page=1&size=500
-  - request:
-      method: PUT
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo_testing/logicalModel
-      body:
-        ldm:
-          datasets:
-            - grain:
-                - id: campaign_channel_id
-                  type: attribute
-              id: campaign_channels
-              references:
-                - identifier:
-                    id: campaigns
-                    type: dataset
-                  multivalue: false
-                  sources:
-                    - column: campaign_id
-                      target:
-                        id: campaign_id
-                        type: attribute
-                      dataType: INT
-              title: Campaign channels
-              description: Campaign channels
-              attributes:
-                - id: campaign_channel_id
-                  labels: []
-                  sourceColumn: campaign_channel_id
-                  title: Campaign channel id
-                  sourceColumnDataType: STRING
-                  description: Campaign channel id
-                  tags:
-                    - Campaign channels
-                - id: campaign_channels.category
-                  labels: []
-                  sourceColumn: category
-                  title: Category
-                  sourceColumnDataType: STRING
-                  description: Category
-                  tags:
-                    - Campaign channels
-                - id: type
-                  labels: []
-                  sourceColumn: type
-                  title: Type
-                  sourceColumnDataType: STRING
-                  description: Type
-                  tags:
-                    - Campaign channels
-              facts:
-                - id: budget
-                  sourceColumn: budget
-                  title: Budget
-                  sourceColumnDataType: NUMERIC
-                  description: Budget
-                  tags:
-                    - Campaign channels
-                - id: spend
-                  sourceColumn: spend
-                  title: Spend
-                  sourceColumnDataType: NUMERIC
-                  description: Spend
-                  tags:
-                    - Campaign channels
-              aggregatedFacts: []
-              dataSourceTableId:
-                dataSourceId: demo-test-ds
-                id: campaign_channels
-                type: dataSource
-                path:
-                  - demo
-                  - campaign_channels
-              tags:
-                - Campaign channels
-            - grain: []
-              id: campaign_channels_per_category
-              references:
-                - identifier:
-                    id: campaign_channels
-                    type: dataset
-                  multivalue: false
-                  sources:
-                    - column: campaign_channel_id
-                      target:
-                        id: campaign_channel_id
-                        type: attribute
-                      dataType: STRING
-              title: Campaign channels per category
-              description: Campaign channels per categories
-              attributes: []
-              facts: []
-              aggregatedFacts:
-                - id: budget_agg
-                  sourceColumn: budget
-                  sourceFactReference:
-                    operation: SUM
-                    reference:
-                      id: budget
-                      type: fact
-                  sourceColumnDataType: INT
-                  description: Budget Agg
-                  tags:
-                    - Campaign channels per category
-              precedence: 1
-              sql:
-                dataSourceId: demo-test-ds
-                statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
-                  BY category
-              tags:
-                - Campaign channels per category
-            - grain:
-                - id: campaign_id
-                  type: attribute
-              id: campaigns
-              references: []
-              title: Campaigns
-              description: Campaigns
-              attributes:
-                - id: campaign_id
-                  labels: []
-                  sourceColumn: campaign_id
-                  title: Campaign id
-                  sourceColumnDataType: INT
-                  description: Campaign id
-                  tags:
-                    - Campaigns
-                - id: campaign_name
-                  labels: []
-                  sourceColumn: campaign_name
-                  title: Campaign name
-                  sourceColumnDataType: STRING
-                  description: Campaign name
-                  tags:
-                    - Campaigns
-              facts: []
-              aggregatedFacts: []
-              dataSourceTableId:
-                dataSourceId: demo-test-ds
-                id: campaigns
-                type: dataSource
-                path:
-                  - demo
-                  - campaigns
-              tags:
-                - Campaigns
-            - grain:
-                - id: customer_id
-                  type: attribute
-              id: customers
-              references: []
-              title: Customers
-              description: Customers
-              attributes:
-                - id: customer_id
-                  labels: []
-                  sourceColumn: customer_id
-                  title: Customer id
-                  sourceColumnDataType: INT
-                  description: Customer id
-                  tags:
-                    - Customers
-                - id: customer_name
-                  labels: []
-                  sourceColumn: customer_name
-                  title: Customer name
-                  sourceColumnDataType: STRING
-                  description: Customer name
-                  tags:
-                    - Customers
-                - id: region
-                  labels: []
-                  sourceColumn: region
-                  title: Region
-                  sourceColumnDataType: STRING
-                  description: Region
-                  tags:
-                    - Customers
-                - id: state
-                  labels:
-                    - id: geo__state__location
-                      sourceColumn: geo__state__location
-                      title: Location
-                      sourceColumnDataType: STRING
-                      description: Location
-                      tags:
-                        - Customers
-                      valueType: GEO
-                  sourceColumn: state
-                  title: State
-                  sourceColumnDataType: STRING
-                  description: State
-                  tags:
-                    - Customers
-              facts: []
-              aggregatedFacts: []
-              dataSourceTableId:
-                dataSourceId: demo-test-ds
-                id: customers
-                type: dataSource
-                path:
-                  - demo
-                  - customers
-              tags:
-                - Customers
-            - grain:
-                - id: order_line_id
-                  type: attribute
-              id: order_lines
-              references:
-                - identifier:
-                    id: campaigns
-                    type: dataset
-                  multivalue: false
-                  sources:
-                    - column: campaign_id
-                      target:
-                        id: campaign_id
-                        type: attribute
-                      dataType: INT
-                - identifier:
-                    id: customers
-                    type: dataset
-                  multivalue: false
-                  sources:
-                    - column: customer_id
-                      target:
-                        id: customer_id
-                        type: attribute
-                      dataType: INT
-                - identifier:
-                    id: date
-                    type: dataset
-                  multivalue: false
-                  sources:
-                    - column: date
-                      target:
-                        id: date
-                        type: date
-                      dataType: DATE
-                - identifier:
-                    id: products
-                    type: dataset
-                  multivalue: false
-                  sources:
-                    - column: product_id
-                      target:
-                        id: product_id
-                        type: attribute
-                      dataType: INT
-              title: Order lines
-              description: Order lines
-              attributes:
-                - id: order_id
-                  labels: []
-                  sourceColumn: order_id
-                  title: Order id
-                  sourceColumnDataType: STRING
-                  description: Order id
-                  tags:
-                    - Order lines
-                - id: order_line_id
-                  labels: []
-                  sourceColumn: order_line_id
-                  title: Order line id
-                  sourceColumnDataType: STRING
-                  description: Order line id
-                  tags:
-                    - Order lines
-                - id: order_status
-                  labels: []
-                  sourceColumn: order_status
-                  title: Order status
-                  sourceColumnDataType: STRING
-                  description: Order status
-                  tags:
-                    - Order lines
-              facts:
-                - id: price
-                  sourceColumn: price
-                  title: Price
-                  sourceColumnDataType: NUMERIC
-                  description: Price
-                  tags:
-                    - Order lines
-                - id: quantity
-                  sourceColumn: quantity
-                  title: Quantity
-                  sourceColumnDataType: NUMERIC
-                  description: Quantity
-                  tags:
-                    - Order lines
-              aggregatedFacts: []
-              dataSourceTableId:
-                dataSourceId: demo-test-ds
-                id: order_lines
-                type: dataSource
-                path:
-                  - demo
-                  - order_lines
-              tags:
-                - Order lines
-              workspaceDataFilterColumns:
-                - dataType: STRING
-                  name: wdf__region
-                - dataType: STRING
-                  name: wdf__state
-            - grain:
-                - id: product_id
-                  type: attribute
-              id: products
-              references: []
-              title: Products
-              description: Products
-              attributes:
-                - id: product_id
-                  labels: []
-                  sourceColumn: product_id
-                  title: Product id
-                  sourceColumnDataType: INT
-                  description: Product id
-                  tags:
-                    - Products
-                - id: product_name
-                  labels: []
-                  sourceColumn: product_name
-                  title: Product name
-                  sourceColumnDataType: STRING
-                  description: Product name
-                  tags:
-                    - Products
-                - id: products.category
-                  labels: []
-                  sourceColumn: category
-                  title: Category
-                  sourceColumnDataType: STRING
-                  description: Category
-                  tags:
-                    - Products
-              facts: []
-              aggregatedFacts: []
-              dataSourceTableId:
-                dataSourceId: demo-test-ds
-                id: products
-                type: dataSource
-                path:
-                  - demo
-                  - products
-              tags:
-                - Products
-          dateInstances:
-            - granularities:
-                - DAY
-                - WEEK
-                - MONTH
-                - QUARTER
-                - YEAR
-              granularitiesFormatting:
-                titleBase: ''
-                titlePattern: '%titleBase - %granularityTitle'
-              id: date
-              title: Date
-              description: ''
-              tags:
-                - Date
-      headers:
-        Accept-Encoding:
-          - br, gzip, deflate
-        Content-Type:
-          - application/json
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 204
-        message: No Content
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
-  - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo_testing/logicalModel
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Encoding:
           - br
+        Content-Length:
+          - '1196'
         Content-Type:
           - application/json
         DATE: *id001
@@ -1483,9 +530,7 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
+          - max-age=31536000; includeSubDomains; preload
         Vary:
           - Accept-Encoding
           - Origin
@@ -1494,8 +539,999 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/dataSources?page=0&size=500
+    response:
+      body:
+        string:
+          data:
+            - attributes:
+                alternativeDataSourceId: ds-put-abc-id
+                authenticationType: USERNAME_PASSWORD
+                name: demo-test-ds
+                schema: demo
+                type: POSTGRESQL
+                url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
+                username: postgres
+              id: demo-test-ds
+              links:
+                self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
+              type: dataSource
+          links:
+            next: http://localhost:3000/api/v1/entities/dataSources?page=1&size=500
+            self: http://localhost:3000/api/v1/entities/dataSources?page=0&size=500
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '671'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
           - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+  - request:
+      body:
+        ldm:
+          datasets:
+            - aggregatedFacts: []
+              attributes:
+                - description: Campaign channel id
+                  id: campaign_channel_id
+                  isNullable: false
+                  labels: []
+                  sourceColumn: campaign_channel_id
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Campaign channels
+                  title: Campaign channel id
+                - description: Category
+                  id: campaign_channels.category
+                  isNullable: true
+                  labels: []
+                  sourceColumn: category
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Campaign channels
+                  title: Category
+                - description: Type
+                  id: type
+                  isNullable: true
+                  labels: []
+                  sourceColumn: type
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Campaign channels
+                  title: Type
+              dataSourceTableId:
+                dataSourceId: demo-test-ds
+                id: campaign_channels
+                path:
+                  - demo
+                  - campaign_channels
+                type: dataSource
+              description: Campaign channels
+              facts:
+                - description: Budget
+                  id: budget
+                  isNullable: true
+                  sourceColumn: budget
+                  sourceColumnDataType: NUMERIC
+                  tags:
+                    - Campaign channels
+                  title: Budget
+                - description: Spend
+                  id: spend
+                  isNullable: true
+                  sourceColumn: spend
+                  sourceColumnDataType: NUMERIC
+                  tags:
+                    - Campaign channels
+                  title: Spend
+              grain:
+                - id: campaign_channel_id
+                  type: attribute
+              id: campaign_channels
+              references:
+                - identifier:
+                    id: campaigns
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: campaign_id
+                      dataType: INT
+                      isNullable: true
+                      target:
+                        id: campaign_id
+                        type: attribute
+              tags:
+                - Campaign channels
+              title: Campaign channels
+            - aggregatedFacts:
+                - description: Budget Agg
+                  id: budget_agg
+                  sourceColumn: budget
+                  sourceColumnDataType: INT
+                  sourceFactReference:
+                    operation: SUM
+                    reference:
+                      id: budget
+                      type: fact
+                  tags:
+                    - Campaign channels per category
+              attributes: []
+              description: Campaign channels per categories
+              facts: []
+              grain: []
+              id: campaign_channels_per_category
+              precedence: 1
+              references:
+                - identifier:
+                    id: campaign_channels
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: campaign_channel_id
+                      dataType: STRING
+                      isNullable: true
+                      target:
+                        id: campaign_channel_id
+                        type: attribute
+              sql:
+                dataSourceId: demo-test-ds
+                statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
+                  BY category
+              tags:
+                - Campaign channels per category
+              title: Campaign channels per category
+            - aggregatedFacts: []
+              attributes:
+                - description: Campaign id
+                  id: campaign_id
+                  isNullable: false
+                  labels: []
+                  sourceColumn: campaign_id
+                  sourceColumnDataType: INT
+                  tags:
+                    - Campaigns
+                  title: Campaign id
+                - description: Campaign name
+                  id: campaign_name
+                  isNullable: true
+                  labels: []
+                  sourceColumn: campaign_name
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Campaigns
+                  title: Campaign name
+              dataSourceTableId:
+                dataSourceId: demo-test-ds
+                id: campaigns
+                path:
+                  - demo
+                  - campaigns
+                type: dataSource
+              description: Campaigns
+              facts: []
+              grain:
+                - id: campaign_id
+                  type: attribute
+              id: campaigns
+              references: []
+              tags:
+                - Campaigns
+              title: Campaigns
+            - aggregatedFacts: []
+              attributes:
+                - description: Customer id
+                  id: customer_id
+                  isNullable: false
+                  labels: []
+                  sourceColumn: customer_id
+                  sourceColumnDataType: INT
+                  tags:
+                    - Customers
+                  title: Customer id
+                - description: Customer name
+                  id: customer_name
+                  isNullable: true
+                  labels: []
+                  sourceColumn: customer_name
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Customers
+                  title: Customer name
+                - description: Region
+                  id: region
+                  isNullable: true
+                  labels: []
+                  sourceColumn: region
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Customers
+                  title: Region
+                - description: State
+                  id: state
+                  isNullable: true
+                  labels:
+                    - description: Location
+                      id: geo__state__location
+                      isNullable: true
+                      sourceColumn: geo__state__location
+                      sourceColumnDataType: STRING
+                      tags:
+                        - Customers
+                      title: Location
+                      valueType: GEO
+                  sourceColumn: state
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Customers
+                  title: State
+              dataSourceTableId:
+                dataSourceId: demo-test-ds
+                id: customers
+                path:
+                  - demo
+                  - customers
+                type: dataSource
+              description: Customers
+              facts: []
+              grain:
+                - id: customer_id
+                  type: attribute
+              id: customers
+              references: []
+              tags:
+                - Customers
+              title: Customers
+            - aggregatedFacts: []
+              attributes:
+                - description: Order id
+                  id: order_id
+                  isNullable: true
+                  labels: []
+                  sourceColumn: order_id
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Order lines
+                  title: Order id
+                - description: Order line id
+                  id: order_line_id
+                  isNullable: false
+                  labels: []
+                  sourceColumn: order_line_id
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Order lines
+                  title: Order line id
+                - description: Order status
+                  id: order_status
+                  isNullable: true
+                  labels: []
+                  sourceColumn: order_status
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Order lines
+                  title: Order status
+              dataSourceTableId:
+                dataSourceId: demo-test-ds
+                id: order_lines
+                path:
+                  - demo
+                  - order_lines
+                type: dataSource
+              description: Order lines
+              facts:
+                - description: Price
+                  id: price
+                  isNullable: true
+                  sourceColumn: price
+                  sourceColumnDataType: NUMERIC
+                  tags:
+                    - Order lines
+                  title: Price
+                - description: Quantity
+                  id: quantity
+                  isNullable: true
+                  sourceColumn: quantity
+                  sourceColumnDataType: NUMERIC
+                  tags:
+                    - Order lines
+                  title: Quantity
+              grain:
+                - id: order_line_id
+                  type: attribute
+              id: order_lines
+              references:
+                - identifier:
+                    id: campaigns
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: campaign_id
+                      dataType: INT
+                      isNullable: true
+                      target:
+                        id: campaign_id
+                        type: attribute
+                - identifier:
+                    id: customers
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: customer_id
+                      dataType: INT
+                      isNullable: true
+                      target:
+                        id: customer_id
+                        type: attribute
+                - identifier:
+                    id: date
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: date
+                      dataType: DATE
+                      isNullable: true
+                      target:
+                        id: date
+                        type: date
+                - identifier:
+                    id: products
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: product_id
+                      dataType: INT
+                      isNullable: true
+                      target:
+                        id: product_id
+                        type: attribute
+              tags:
+                - Order lines
+              title: Order lines
+              workspaceDataFilterColumns:
+                - dataType: STRING
+                  name: wdf__region
+                - dataType: STRING
+                  name: wdf__state
+            - aggregatedFacts: []
+              attributes:
+                - description: Product id
+                  id: product_id
+                  isNullable: false
+                  labels: []
+                  sourceColumn: product_id
+                  sourceColumnDataType: INT
+                  tags:
+                    - Products
+                  title: Product id
+                - description: Product name
+                  id: product_name
+                  isNullable: true
+                  labels: []
+                  sourceColumn: product_name
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Products
+                  title: Product name
+                - description: Category
+                  id: products.category
+                  isNullable: true
+                  labels: []
+                  sourceColumn: category
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Products
+                  title: Category
+              dataSourceTableId:
+                dataSourceId: demo-test-ds
+                id: products
+                path:
+                  - demo
+                  - products
+                type: dataSource
+              description: Products
+              facts: []
+              grain:
+                - id: product_id
+                  type: attribute
+              id: products
+              references: []
+              tags:
+                - Products
+              title: Products
+          dateInstances:
+            - description: ''
+              granularities:
+                - DAY
+                - WEEK
+                - MONTH
+                - QUARTER
+                - YEAR
+              granularitiesFormatting:
+                titleBase: ''
+                titlePattern: '%titleBase - %granularityTitle'
+              id: date
+              tags:
+                - Date
+              title: Date
+      headers:
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: PUT
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo_testing/logicalModel
+    response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 204
+        message: No Content
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/dataSources?page=0&size=500
+    response:
+      body:
+        string:
+          data:
+            - attributes:
+                alternativeDataSourceId: ds-put-abc-id
+                authenticationType: USERNAME_PASSWORD
+                name: demo-test-ds
+                schema: demo
+                type: POSTGRESQL
+                url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
+                username: postgres
+              id: demo-test-ds
+              links:
+                self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
+              type: dataSource
+          links:
+            next: http://localhost:3000/api/v1/entities/dataSources?page=1&size=500
+            self: http://localhost:3000/api/v1/entities/dataSources?page=0&size=500
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '671'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+  - request:
+      body:
+        ldm:
+          datasets:
+            - aggregatedFacts: []
+              attributes:
+                - description: Campaign channel id
+                  id: campaign_channel_id
+                  isNullable: false
+                  labels: []
+                  sourceColumn: campaign_channel_id
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Campaign channels
+                  title: Campaign channel id
+                - description: Category
+                  id: campaign_channels.category
+                  isNullable: true
+                  labels: []
+                  sourceColumn: category
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Campaign channels
+                  title: Category
+                - description: Type
+                  id: type
+                  isNullable: true
+                  labels: []
+                  sourceColumn: type
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Campaign channels
+                  title: Type
+              dataSourceTableId:
+                dataSourceId: demo-test-ds
+                id: campaign_channels
+                path:
+                  - demo
+                  - campaign_channels
+                type: dataSource
+              description: Campaign channels
+              facts:
+                - description: Budget
+                  id: budget
+                  isNullable: true
+                  sourceColumn: budget
+                  sourceColumnDataType: NUMERIC
+                  tags:
+                    - Campaign channels
+                  title: Budget
+                - description: Spend
+                  id: spend
+                  isNullable: true
+                  sourceColumn: spend
+                  sourceColumnDataType: NUMERIC
+                  tags:
+                    - Campaign channels
+                  title: Spend
+              grain:
+                - id: campaign_channel_id
+                  type: attribute
+              id: campaign_channels
+              references:
+                - identifier:
+                    id: campaigns
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: campaign_id
+                      dataType: INT
+                      isNullable: true
+                      target:
+                        id: campaign_id
+                        type: attribute
+              tags:
+                - Campaign channels
+              title: Campaign channels
+            - aggregatedFacts:
+                - description: Budget Agg
+                  id: budget_agg
+                  sourceColumn: budget
+                  sourceColumnDataType: INT
+                  sourceFactReference:
+                    operation: SUM
+                    reference:
+                      id: budget
+                      type: fact
+                  tags:
+                    - Campaign channels per category
+              attributes: []
+              description: Campaign channels per categories
+              facts: []
+              grain: []
+              id: campaign_channels_per_category
+              precedence: 1
+              references:
+                - identifier:
+                    id: campaign_channels
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: campaign_channel_id
+                      dataType: STRING
+                      isNullable: true
+                      target:
+                        id: campaign_channel_id
+                        type: attribute
+              sql:
+                dataSourceId: demo-test-ds
+                statement: SELECT category, SUM(budget) FROM campaign_channels GROUP
+                  BY category
+              tags:
+                - Campaign channels per category
+              title: Campaign channels per category
+            - aggregatedFacts: []
+              attributes:
+                - description: Campaign id
+                  id: campaign_id
+                  isNullable: false
+                  labels: []
+                  sourceColumn: campaign_id
+                  sourceColumnDataType: INT
+                  tags:
+                    - Campaigns
+                  title: Campaign id
+                - description: Campaign name
+                  id: campaign_name
+                  isNullable: true
+                  labels: []
+                  sourceColumn: campaign_name
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Campaigns
+                  title: Campaign name
+              dataSourceTableId:
+                dataSourceId: demo-test-ds
+                id: campaigns
+                path:
+                  - demo
+                  - campaigns
+                type: dataSource
+              description: Campaigns
+              facts: []
+              grain:
+                - id: campaign_id
+                  type: attribute
+              id: campaigns
+              references: []
+              tags:
+                - Campaigns
+              title: Campaigns
+            - aggregatedFacts: []
+              attributes:
+                - description: Customer id
+                  id: customer_id
+                  isNullable: false
+                  labels: []
+                  sourceColumn: customer_id
+                  sourceColumnDataType: INT
+                  tags:
+                    - Customers
+                  title: Customer id
+                - description: Customer name
+                  id: customer_name
+                  isNullable: true
+                  labels: []
+                  sourceColumn: customer_name
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Customers
+                  title: Customer name
+                - description: Region
+                  id: region
+                  isNullable: true
+                  labels: []
+                  sourceColumn: region
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Customers
+                  title: Region
+                - description: State
+                  id: state
+                  isNullable: true
+                  labels:
+                    - description: Location
+                      id: geo__state__location
+                      isNullable: true
+                      sourceColumn: geo__state__location
+                      sourceColumnDataType: STRING
+                      tags:
+                        - Customers
+                      title: Location
+                      valueType: GEO
+                  sourceColumn: state
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Customers
+                  title: State
+              dataSourceTableId:
+                dataSourceId: demo-test-ds
+                id: customers
+                path:
+                  - demo
+                  - customers
+                type: dataSource
+              description: Customers
+              facts: []
+              grain:
+                - id: customer_id
+                  type: attribute
+              id: customers
+              references: []
+              tags:
+                - Customers
+              title: Customers
+            - aggregatedFacts: []
+              attributes:
+                - description: Order id
+                  id: order_id
+                  isNullable: true
+                  labels: []
+                  sourceColumn: order_id
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Order lines
+                  title: Order id
+                - description: Order line id
+                  id: order_line_id
+                  isNullable: false
+                  labels: []
+                  sourceColumn: order_line_id
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Order lines
+                  title: Order line id
+                - description: Order status
+                  id: order_status
+                  isNullable: true
+                  labels: []
+                  sourceColumn: order_status
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Order lines
+                  title: Order status
+              dataSourceTableId:
+                dataSourceId: demo-test-ds
+                id: order_lines
+                path:
+                  - demo
+                  - order_lines
+                type: dataSource
+              description: Order lines
+              facts:
+                - description: Price
+                  id: price
+                  isNullable: true
+                  sourceColumn: price
+                  sourceColumnDataType: NUMERIC
+                  tags:
+                    - Order lines
+                  title: Price
+                - description: Quantity
+                  id: quantity
+                  isNullable: true
+                  sourceColumn: quantity
+                  sourceColumnDataType: NUMERIC
+                  tags:
+                    - Order lines
+                  title: Quantity
+              grain:
+                - id: order_line_id
+                  type: attribute
+              id: order_lines
+              references:
+                - identifier:
+                    id: campaigns
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: campaign_id
+                      dataType: INT
+                      isNullable: true
+                      target:
+                        id: campaign_id
+                        type: attribute
+                - identifier:
+                    id: customers
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: customer_id
+                      dataType: INT
+                      isNullable: true
+                      target:
+                        id: customer_id
+                        type: attribute
+                - identifier:
+                    id: date
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: date
+                      dataType: DATE
+                      isNullable: true
+                      target:
+                        id: date
+                        type: date
+                - identifier:
+                    id: products
+                    type: dataset
+                  multivalue: false
+                  sources:
+                    - column: product_id
+                      dataType: INT
+                      isNullable: true
+                      target:
+                        id: product_id
+                        type: attribute
+              tags:
+                - Order lines
+              title: Order lines
+              workspaceDataFilterColumns:
+                - dataType: STRING
+                  name: wdf__region
+                - dataType: STRING
+                  name: wdf__state
+            - aggregatedFacts: []
+              attributes:
+                - description: Product id
+                  id: product_id
+                  isNullable: false
+                  labels: []
+                  sourceColumn: product_id
+                  sourceColumnDataType: INT
+                  tags:
+                    - Products
+                  title: Product id
+                - description: Product name
+                  id: product_name
+                  isNullable: true
+                  labels: []
+                  sourceColumn: product_name
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Products
+                  title: Product name
+                - description: Category
+                  id: products.category
+                  isNullable: true
+                  labels: []
+                  sourceColumn: category
+                  sourceColumnDataType: STRING
+                  tags:
+                    - Products
+                  title: Category
+              dataSourceTableId:
+                dataSourceId: demo-test-ds
+                id: products
+                path:
+                  - demo
+                  - products
+                type: dataSource
+              description: Products
+              facts: []
+              grain:
+                - id: product_id
+                  type: attribute
+              id: products
+              references: []
+              tags:
+                - Products
+              title: Products
+          dateInstances:
+            - description: ''
+              granularities:
+                - DAY
+                - WEEK
+                - MONTH
+                - QUARTER
+                - YEAR
+              granularitiesFormatting:
+                titleBase: ''
+                titlePattern: '%titleBase - %granularityTitle'
+              id: date
+              tags:
+                - Date
+              title: Date
+      headers:
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: PUT
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo_testing/logicalModel
+    response:
+      body:
+        string: ''
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 204
+        message: No Content
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo_testing/logicalModel
+    response:
       body:
         string:
           ldm:
@@ -1504,6 +1540,7 @@ interactions:
                 attributes:
                   - description: Campaign channel id
                     id: campaign_channel_id
+                    isNullable: false
                     labels: []
                     sourceColumn: campaign_channel_id
                     sourceColumnDataType: STRING
@@ -1512,6 +1549,7 @@ interactions:
                     title: Campaign channel id
                   - description: Category
                     id: campaign_channels.category
+                    isNullable: true
                     labels: []
                     sourceColumn: category
                     sourceColumnDataType: STRING
@@ -1520,6 +1558,7 @@ interactions:
                     title: Category
                   - description: Type
                     id: type
+                    isNullable: true
                     labels: []
                     sourceColumn: type
                     sourceColumnDataType: STRING
@@ -1537,6 +1576,7 @@ interactions:
                 facts:
                   - description: Budget
                     id: budget
+                    isNullable: true
                     sourceColumn: budget
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -1544,6 +1584,7 @@ interactions:
                     title: Budget
                   - description: Spend
                     id: spend
+                    isNullable: true
                     sourceColumn: spend
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -1561,6 +1602,7 @@ interactions:
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: campaign_id
                           type: attribute
@@ -1593,6 +1635,7 @@ interactions:
                     sources:
                       - column: campaign_channel_id
                         dataType: STRING
+                        isNullable: true
                         target:
                           id: campaign_channel_id
                           type: attribute
@@ -1607,6 +1650,7 @@ interactions:
                 attributes:
                   - description: Campaign id
                     id: campaign_id
+                    isNullable: false
                     labels: []
                     sourceColumn: campaign_id
                     sourceColumnDataType: INT
@@ -1615,6 +1659,7 @@ interactions:
                     title: Campaign id
                   - description: Campaign name
                     id: campaign_name
+                    isNullable: true
                     labels: []
                     sourceColumn: campaign_name
                     sourceColumnDataType: STRING
@@ -1642,6 +1687,7 @@ interactions:
                 attributes:
                   - description: Customer id
                     id: customer_id
+                    isNullable: false
                     labels: []
                     sourceColumn: customer_id
                     sourceColumnDataType: INT
@@ -1650,6 +1696,7 @@ interactions:
                     title: Customer id
                   - description: Customer name
                     id: customer_name
+                    isNullable: true
                     labels: []
                     sourceColumn: customer_name
                     sourceColumnDataType: STRING
@@ -1658,6 +1705,7 @@ interactions:
                     title: Customer name
                   - description: Region
                     id: region
+                    isNullable: true
                     labels: []
                     sourceColumn: region
                     sourceColumnDataType: STRING
@@ -1666,9 +1714,11 @@ interactions:
                     title: Region
                   - description: State
                     id: state
+                    isNullable: true
                     labels:
                       - description: Location
                         id: geo__state__location
+                        isNullable: true
                         sourceColumn: geo__state__location
                         sourceColumnDataType: STRING
                         tags:
@@ -1701,6 +1751,7 @@ interactions:
                 attributes:
                   - description: Order id
                     id: order_id
+                    isNullable: true
                     labels: []
                     sourceColumn: order_id
                     sourceColumnDataType: STRING
@@ -1709,6 +1760,7 @@ interactions:
                     title: Order id
                   - description: Order line id
                     id: order_line_id
+                    isNullable: false
                     labels: []
                     sourceColumn: order_line_id
                     sourceColumnDataType: STRING
@@ -1717,6 +1769,7 @@ interactions:
                     title: Order line id
                   - description: Order status
                     id: order_status
+                    isNullable: true
                     labels: []
                     sourceColumn: order_status
                     sourceColumnDataType: STRING
@@ -1734,6 +1787,7 @@ interactions:
                 facts:
                   - description: Price
                     id: price
+                    isNullable: true
                     sourceColumn: price
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -1741,6 +1795,7 @@ interactions:
                     title: Price
                   - description: Quantity
                     id: quantity
+                    isNullable: true
                     sourceColumn: quantity
                     sourceColumnDataType: NUMERIC
                     tags:
@@ -1758,6 +1813,7 @@ interactions:
                     sources:
                       - column: campaign_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: campaign_id
                           type: attribute
@@ -1768,6 +1824,7 @@ interactions:
                     sources:
                       - column: customer_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: customer_id
                           type: attribute
@@ -1778,6 +1835,7 @@ interactions:
                     sources:
                       - column: date
                         dataType: DATE
+                        isNullable: true
                         target:
                           id: date
                           type: date
@@ -1788,6 +1846,7 @@ interactions:
                     sources:
                       - column: product_id
                         dataType: INT
+                        isNullable: true
                         target:
                           id: product_id
                           type: attribute
@@ -1803,6 +1862,7 @@ interactions:
                 attributes:
                   - description: Product id
                     id: product_id
+                    isNullable: false
                     labels: []
                     sourceColumn: product_id
                     sourceColumnDataType: INT
@@ -1811,6 +1871,7 @@ interactions:
                     title: Product id
                   - description: Product name
                     id: product_name
+                    isNullable: true
                     labels: []
                     sourceColumn: product_name
                     sourceColumnDataType: STRING
@@ -1819,6 +1880,7 @@ interactions:
                     title: Product name
                   - description: Category
                     id: products.category
+                    isNullable: true
                     labels: []
                     sourceColumn: category
                     sourceColumnDataType: STRING
@@ -1857,9 +1919,38 @@ interactions:
                 tags:
                   - Date
                 title: Date
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '1164'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: PUT
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces
       body:
         workspaceDataFilters:
           - columnName: wdf__region
@@ -1891,9 +1982,7 @@ interactions:
                   id: demo_west_california
                   type: workspace
         workspaces:
-          - id: demo
-            name: Demo
-            automations: []
+          - automations: []
             customApplicationSettings: []
             filterViews: []
             hierarchyPermissions:
@@ -1905,6 +1994,7 @@ interactions:
                   id: demoGroup
                   type: userGroup
                 name: ANALYZE
+            id: demo
             model:
               analytics:
                 analyticalDashboardExtensions: []
@@ -1915,54 +2005,54 @@ interactions:
                           id: campaign_name_filter
                           type: filterContext
                       layout:
-                        type: IDashboardLayout
                         sections:
-                          - type: IDashboardLayoutSection
-                            header:
-                              title: Spend breakdown and Revenue
+                          - header:
                               description: The first insight shows a breakdown of
                                 spend by category and campaign. The second shows revenue
                                 per $ spend, for each campaign, to demonstrate, how
                                 campaigns are successful.
+                              title: Spend breakdown and Revenue
                             items:
-                              - type: IDashboardLayoutItem
-                                size:
+                              - size:
                                   xl:
                                     gridWidth: 6
+                                type: IDashboardLayoutItem
                                 widget:
-                                  type: insight
-                                  title: Campaign Spend
                                   description: ''
+                                  drills: []
                                   ignoreDashboardFilters: []
                                   insight:
                                     identifier:
                                       id: campaign_spend
                                       type: visualizationObject
-                                  drills: []
                                   properties: {}
-                              - type: IDashboardLayoutItem
-                                size:
+                                  title: Campaign Spend
+                                  type: insight
+                              - size:
                                   xl:
                                     gridWidth: 6
+                                type: IDashboardLayoutItem
                                 widget:
-                                  type: insight
-                                  title: Revenue per $ vs Spend by Campaign
                                   description: ''
+                                  drills: []
                                   ignoreDashboardFilters: []
                                   insight:
                                     identifier:
                                       id: revenue_per_usd_vs_spend_by_campaign
                                       type: visualizationObject
-                                  drills: []
                                   properties: {}
+                                  title: Revenue per $ vs Spend by Campaign
+                                  type: insight
+                            type: IDashboardLayoutSection
+                        type: IDashboardLayout
                       version: '2'
-                    id: campaign
-                    title: Campaign
                     description: ''
+                    id: campaign
                     permissions:
                       - assigneeRule:
                           type: allWorkspaceUsers
                         name: VIEW
+                    title: Campaign
                   - content:
                       filterContextRef:
                         identifier:
@@ -2003,200 +2093,201 @@ interactions:
                           id: region_filter
                           type: filterContext
                       layout:
-                        type: IDashboardLayout
                         sections:
-                          - type: IDashboardLayoutSection
-                            items:
-                              - type: IDashboardLayoutItem
-                                size:
+                          - items:
+                              - size:
                                   xl:
                                     gridWidth: 6
+                                type: IDashboardLayoutItem
                                 widget:
-                                  type: insight
-                                  title: Top 10 Products
-                                  description: ''
-                                  ignoreDashboardFilters: []
                                   dateDataSet:
                                     identifier:
                                       id: date
                                       type: dataset
+                                  description: ''
+                                  drills: []
+                                  ignoreDashboardFilters: []
                                   insight:
                                     identifier:
                                       id: top_10_products
                                       type: visualizationObject
-                                  drills: []
                                   properties: {}
-                              - type: IDashboardLayoutItem
-                                size:
+                                  title: Top 10 Products
+                                  type: insight
+                              - size:
                                   xl:
                                     gridWidth: 6
+                                type: IDashboardLayoutItem
                                 widget:
-                                  type: insight
-                                  title: Revenue Trend
-                                  description: ''
-                                  ignoreDashboardFilters: []
                                   dateDataSet:
                                     identifier:
                                       id: date
                                       type: dataset
+                                  description: ''
+                                  drills: []
+                                  ignoreDashboardFilters: []
                                   insight:
                                     identifier:
                                       id: revenue_trend
                                       type: visualizationObject
-                                  drills: []
                                   properties: {}
-                              - type: IDashboardLayoutItem
-                                size:
+                                  title: Revenue Trend
+                                  type: insight
+                              - size:
                                   xl:
                                     gridWidth: 6
+                                type: IDashboardLayoutItem
                                 widget:
-                                  type: insight
-                                  title: Customers Trend
-                                  description: ''
-                                  ignoreDashboardFilters: []
                                   dateDataSet:
                                     identifier:
                                       id: date
                                       type: dataset
+                                  description: ''
+                                  drills: []
+                                  ignoreDashboardFilters: []
                                   insight:
                                     identifier:
                                       id: customers_trend
                                       type: visualizationObject
-                                  drills: []
                                   properties: {}
-                              - type: IDashboardLayoutItem
-                                size:
+                                  title: Customers Trend
+                                  type: insight
+                              - size:
                                   xl:
                                     gridWidth: 6
+                                type: IDashboardLayoutItem
                                 widget:
-                                  type: insight
-                                  title: Product Categories Pie Chart
-                                  description: ''
-                                  ignoreDashboardFilters: []
                                   dateDataSet:
                                     identifier:
                                       id: date
                                       type: dataset
+                                  description: ''
+                                  drills: []
+                                  ignoreDashboardFilters: []
                                   insight:
                                     identifier:
                                       id: product_categories_pie_chart
                                       type: visualizationObject
-                                  drills: []
                                   properties: {}
-                              - type: IDashboardLayoutItem
-                                size:
+                                  title: Product Categories Pie Chart
+                                  type: insight
+                              - size:
                                   xl:
                                     gridWidth: 6
+                                type: IDashboardLayoutItem
                                 widget:
-                                  type: insight
-                                  title: Product Breakdown
-                                  description: ''
-                                  ignoreDashboardFilters: []
                                   dateDataSet:
                                     identifier:
                                       id: date
                                       type: dataset
+                                  description: ''
+                                  drills: []
+                                  ignoreDashboardFilters: []
                                   insight:
                                     identifier:
                                       id: product_breakdown
                                       type: visualizationObject
-                                  drills: []
                                   properties: {}
-                              - type: IDashboardLayoutItem
-                                size:
+                                  title: Product Breakdown
+                                  type: insight
+                              - size:
                                   xl:
                                     gridWidth: 6
+                                type: IDashboardLayoutItem
                                 widget:
-                                  type: insight
-                                  title: Product Saleability
-                                  description: ''
-                                  ignoreDashboardFilters: []
                                   dateDataSet:
                                     identifier:
                                       id: date
                                       type: dataset
+                                  description: ''
+                                  drills: []
+                                  ignoreDashboardFilters: []
                                   insight:
                                     identifier:
                                       id: product_saleability
                                       type: visualizationObject
-                                  drills: []
                                   properties: {}
-                              - type: IDashboardLayoutItem
-                                size:
+                                  title: Product Saleability
+                                  type: insight
+                              - size:
                                   xl:
                                     gridWidth: 12
+                                type: IDashboardLayoutItem
                                 widget:
-                                  type: insight
-                                  title: '% Revenue per Product by Customer and Category'
-                                  description: ''
-                                  ignoreDashboardFilters: []
                                   dateDataSet:
                                     identifier:
                                       id: date
                                       type: dataset
+                                  description: ''
+                                  drills: []
+                                  ignoreDashboardFilters: []
                                   insight:
                                     identifier:
                                       id: percent_revenue_per_product_by_customer_and_category
                                       type: visualizationObject
-                                  drills: []
                                   properties: {}
+                                  title: '% Revenue per Product by Customer and Category'
+                                  type: insight
+                            type: IDashboardLayoutSection
+                        type: IDashboardLayout
                       version: '2'
+                    description: ''
                     id: product_and_category
                     title: Product & Category
-                    description: ''
                 attributeHierarchies: []
                 dashboardPlugins:
                   - content:
                       url: https://www.example.com
                       version: '2'
+                    description: Testing record dashboard_plugin_1
                     id: dashboard_plugin_1
                     title: dashboard_plugin_1
-                    description: Testing record dashboard_plugin_1
                   - content:
                       url: https://www.example.com
                       version: '2'
+                    description: Testing record dashboard_plugin_2
                     id: dashboard_plugin_2
                     title: dashboard_plugin_2
-                    description: Testing record dashboard_plugin_2
                 exportDefinitions: []
                 filterContexts:
                   - content:
                       filters:
                         - dateFilter:
                             from: '0'
-                            to: '0'
                             granularity: GDC.time.month
+                            to: '0'
                             type: relative
                         - attributeFilter:
+                            attributeElements:
+                              uris: []
                             displayForm:
                               identifier:
                                 id: campaign_name
                                 type: label
-                            negativeSelection: true
-                            attributeElements:
-                              uris: []
-                            localIdentifier: 14b0807447ef4bc28f43e4fc5c337d1d
                             filterElementsBy: []
+                            localIdentifier: 14b0807447ef4bc28f43e4fc5c337d1d
+                            negativeSelection: true
                       version: '2'
+                    description: ''
                     id: campaign_name_filter
                     title: filterContext
-                    description: ''
                   - content:
                       filters:
                         - attributeFilter:
+                            attributeElements:
+                              uris: []
                             displayForm:
                               identifier:
                                 id: region
                                 type: label
-                            negativeSelection: true
-                            attributeElements:
-                              uris: []
-                            localIdentifier: 2d5ef8df82444f6ba27b45f0990ee6af
                             filterElementsBy: []
+                            localIdentifier: 2d5ef8df82444f6ba27b45f0990ee6af
+                            negativeSelection: true
                       version: '2'
+                    description: ''
                     id: region_filter
                     title: filterContext
-                    description: ''
+                memoryItems: []
                 metrics:
                   - content:
                       format: '#,##0'
@@ -2218,9 +2309,9 @@ interactions:
                       format: '#,##0.00'
                       maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                         IN ("Returned", "Canceled"))
+                    description: ''
                     id: amount_of_valid_orders
                     title: '# of Valid Orders'
-                    description: ''
                   - content:
                       format: $#,##0
                       maql: SELECT SUM({fact/spend})
@@ -2276,9 +2367,9 @@ interactions:
                       format: $#,##0
                       maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                         IN ("Returned", "Canceled"))
+                    description: ''
                     id: revenue
                     title: Revenue
-                    description: ''
                   - content:
                       format: $#,##0
                       maql: SELECT {metric/revenue} WHERE {label/products.category}
@@ -2333,6 +2424,7 @@ interactions:
                       maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
                     id: total_revenue-no_filters
                     title: Total Revenue (No Filters)
+                parameters: []
                 visualizationObjects:
                   - content:
                       buckets:
@@ -2436,9 +2528,9 @@ interactions:
                               identifier:
                                 id: date
                                 type: dataset
-                            from: -11
+                            from: -12
                             granularity: GDC.time.month
-                            to: 0
+                            to: -1
                       properties:
                         controls:
                           colorMapping:
@@ -2661,9 +2753,9 @@ interactions:
                                       identifier:
                                         id: revenue
                                         type: metric
+                                format: '#,##0.00%'
                                 localIdentifier: 162b857af49d45769bc12604a5c192b9
                                 title: '% Revenue'
-                                format: '#,##0.00%'
                           localIdentifier: measures
                         - items:
                             - attribute:
@@ -3226,10 +3318,63 @@ interactions:
                       visualizationUrl: local:bar
                     id: top_10_products
                     title: Top 10 Products
-                memoryItems: []
               ldm:
                 datasets:
-                  - grain:
+                  - aggregatedFacts: []
+                    attributes:
+                      - description: Campaign channel id
+                        id: campaign_channel_id
+                        isNullable: false
+                        labels: []
+                        sourceColumn: campaign_channel_id
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Campaign channels
+                        title: Campaign channel id
+                      - description: Category
+                        id: campaign_channels.category
+                        isNullable: true
+                        labels: []
+                        sourceColumn: category
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Campaign channels
+                        title: Category
+                      - description: Type
+                        id: type
+                        isNullable: true
+                        labels: []
+                        sourceColumn: type
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Campaign channels
+                        title: Type
+                    dataSourceTableId:
+                      dataSourceId: demo-test-ds
+                      id: campaign_channels
+                      path:
+                        - demo
+                        - campaign_channels
+                      type: dataSource
+                    description: Campaign channels
+                    facts:
+                      - description: Budget
+                        id: budget
+                        isNullable: true
+                        sourceColumn: budget
+                        sourceColumnDataType: NUMERIC
+                        tags:
+                          - Campaign channels
+                        title: Budget
+                      - description: Spend
+                        id: spend
+                        isNullable: true
+                        sourceColumn: spend
+                        sourceColumnDataType: NUMERIC
+                        tags:
+                          - Campaign channels
+                        title: Spend
+                    grain:
                       - id: campaign_channel_id
                         type: attribute
                     id: campaign_channels
@@ -3240,64 +3385,32 @@ interactions:
                         multivalue: false
                         sources:
                           - column: campaign_id
+                            dataType: INT
+                            isNullable: true
                             target:
                               id: campaign_id
                               type: attribute
-                            dataType: INT
-                    title: Campaign channels
-                    aggregatedFacts: []
-                    attributes:
-                      - id: campaign_channel_id
-                        labels: []
-                        sourceColumn: campaign_channel_id
-                        title: Campaign channel id
-                        description: Campaign channel id
-                        sourceColumnDataType: STRING
-                        tags:
-                          - Campaign channels
-                      - id: campaign_channels.category
-                        labels: []
-                        sourceColumn: category
-                        title: Category
-                        description: Category
-                        sourceColumnDataType: STRING
-                        tags:
-                          - Campaign channels
-                      - id: type
-                        labels: []
-                        sourceColumn: type
-                        title: Type
-                        description: Type
-                        sourceColumnDataType: STRING
-                        tags:
-                          - Campaign channels
-                    dataSourceTableId:
-                      dataSourceId: demo-test-ds
-                      id: campaign_channels
-                      type: dataSource
-                      path:
-                        - demo
-                        - campaign_channels
-                    description: Campaign channels
-                    facts:
-                      - id: budget
-                        sourceColumn: budget
-                        title: Budget
-                        description: Budget
-                        sourceColumnDataType: NUMERIC
-                        tags:
-                          - Campaign channels
-                      - id: spend
-                        sourceColumn: spend
-                        title: Spend
-                        description: Spend
-                        sourceColumnDataType: NUMERIC
-                        tags:
-                          - Campaign channels
                     tags:
                       - Campaign channels
-                  - grain: []
+                    title: Campaign channels
+                  - aggregatedFacts:
+                      - description: Budget Agg
+                        id: budget_agg
+                        sourceColumn: budget
+                        sourceColumnDataType: INT
+                        sourceFactReference:
+                          operation: SUM
+                          reference:
+                            id: budget
+                            type: fact
+                        tags:
+                          - Campaign channels per category
+                    attributes: []
+                    description: Campaign channels per categories
+                    facts: []
+                    grain: []
                     id: campaign_channels_per_category
+                    precedence: 1
                     references:
                       - identifier:
                           id: campaign_channels
@@ -3305,128 +3418,174 @@ interactions:
                         multivalue: false
                         sources:
                           - column: campaign_channel_id
+                            dataType: STRING
+                            isNullable: true
                             target:
                               id: campaign_channel_id
                               type: attribute
-                            dataType: STRING
-                    title: Campaign channels per category
-                    aggregatedFacts:
-                      - id: budget_agg
-                        sourceColumn: budget
-                        sourceFactReference:
-                          operation: SUM
-                          reference:
-                            id: budget
-                            type: fact
-                        description: Budget Agg
-                        sourceColumnDataType: INT
-                        tags:
-                          - Campaign channels per category
-                    attributes: []
-                    description: Campaign channels per categories
-                    facts: []
-                    precedence: 1
                     sql:
                       dataSourceId: demo-test-ds
                       statement: SELECT category, SUM(budget) FROM campaign_channels
                         GROUP BY category
                     tags:
                       - Campaign channels per category
-                  - grain:
+                    title: Campaign channels per category
+                  - aggregatedFacts: []
+                    attributes:
+                      - description: Campaign id
+                        id: campaign_id
+                        isNullable: false
+                        labels: []
+                        sourceColumn: campaign_id
+                        sourceColumnDataType: INT
+                        tags:
+                          - Campaigns
+                        title: Campaign id
+                      - description: Campaign name
+                        id: campaign_name
+                        isNullable: true
+                        labels: []
+                        sourceColumn: campaign_name
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Campaigns
+                        title: Campaign name
+                    dataSourceTableId:
+                      dataSourceId: demo-test-ds
+                      id: campaigns
+                      path:
+                        - demo
+                        - campaigns
+                      type: dataSource
+                    description: Campaigns
+                    facts: []
+                    grain:
                       - id: campaign_id
                         type: attribute
                     id: campaigns
                     references: []
-                    title: Campaigns
-                    aggregatedFacts: []
-                    attributes:
-                      - id: campaign_id
-                        labels: []
-                        sourceColumn: campaign_id
-                        title: Campaign id
-                        description: Campaign id
-                        sourceColumnDataType: INT
-                        tags:
-                          - Campaigns
-                      - id: campaign_name
-                        labels: []
-                        sourceColumn: campaign_name
-                        title: Campaign name
-                        description: Campaign name
-                        sourceColumnDataType: STRING
-                        tags:
-                          - Campaigns
-                    dataSourceTableId:
-                      dataSourceId: demo-test-ds
-                      id: campaigns
-                      type: dataSource
-                      path:
-                        - demo
-                        - campaigns
-                    description: Campaigns
-                    facts: []
                     tags:
                       - Campaigns
-                  - grain:
+                    title: Campaigns
+                  - aggregatedFacts: []
+                    attributes:
+                      - description: Customer id
+                        id: customer_id
+                        isNullable: false
+                        labels: []
+                        sourceColumn: customer_id
+                        sourceColumnDataType: INT
+                        tags:
+                          - Customers
+                        title: Customer id
+                      - description: Customer name
+                        id: customer_name
+                        isNullable: true
+                        labels: []
+                        sourceColumn: customer_name
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Customers
+                        title: Customer name
+                      - description: Region
+                        id: region
+                        isNullable: true
+                        labels: []
+                        sourceColumn: region
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Customers
+                        title: Region
+                      - description: State
+                        id: state
+                        isNullable: true
+                        labels:
+                          - description: Location
+                            id: geo__state__location
+                            isNullable: true
+                            sourceColumn: geo__state__location
+                            sourceColumnDataType: STRING
+                            tags:
+                              - Customers
+                            title: Location
+                            valueType: GEO
+                        sourceColumn: state
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Customers
+                        title: State
+                    dataSourceTableId:
+                      dataSourceId: demo-test-ds
+                      id: customers
+                      path:
+                        - demo
+                        - customers
+                      type: dataSource
+                    description: Customers
+                    facts: []
+                    grain:
                       - id: customer_id
                         type: attribute
                     id: customers
                     references: []
-                    title: Customers
-                    aggregatedFacts: []
-                    attributes:
-                      - id: customer_id
-                        labels: []
-                        sourceColumn: customer_id
-                        title: Customer id
-                        description: Customer id
-                        sourceColumnDataType: INT
-                        tags:
-                          - Customers
-                      - id: customer_name
-                        labels: []
-                        sourceColumn: customer_name
-                        title: Customer name
-                        description: Customer name
-                        sourceColumnDataType: STRING
-                        tags:
-                          - Customers
-                      - id: region
-                        labels: []
-                        sourceColumn: region
-                        title: Region
-                        description: Region
-                        sourceColumnDataType: STRING
-                        tags:
-                          - Customers
-                      - id: state
-                        labels:
-                          - id: geo__state__location
-                            sourceColumn: geo__state__location
-                            title: Location
-                            description: Location
-                            sourceColumnDataType: STRING
-                            tags:
-                              - Customers
-                            valueType: GEO
-                        sourceColumn: state
-                        title: State
-                        description: State
-                        sourceColumnDataType: STRING
-                        tags:
-                          - Customers
-                    dataSourceTableId:
-                      dataSourceId: demo-test-ds
-                      id: customers
-                      type: dataSource
-                      path:
-                        - demo
-                        - customers
-                    description: Customers
-                    facts: []
                     tags:
                       - Customers
-                  - grain:
+                    title: Customers
+                  - aggregatedFacts: []
+                    attributes:
+                      - description: Order id
+                        id: order_id
+                        isNullable: true
+                        labels: []
+                        sourceColumn: order_id
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Order lines
+                        title: Order id
+                      - description: Order line id
+                        id: order_line_id
+                        isNullable: false
+                        labels: []
+                        sourceColumn: order_line_id
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Order lines
+                        title: Order line id
+                      - description: Order status
+                        id: order_status
+                        isNullable: true
+                        labels: []
+                        sourceColumn: order_status
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Order lines
+                        title: Order status
+                    dataSourceTableId:
+                      dataSourceId: demo-test-ds
+                      id: order_lines
+                      path:
+                        - demo
+                        - order_lines
+                      type: dataSource
+                    description: Order lines
+                    facts:
+                      - description: Price
+                        id: price
+                        isNullable: true
+                        sourceColumn: price
+                        sourceColumnDataType: NUMERIC
+                        tags:
+                          - Order lines
+                        title: Price
+                      - description: Quantity
+                        id: quantity
+                        isNullable: true
+                        sourceColumn: quantity
+                        sourceColumnDataType: NUMERIC
+                        tags:
+                          - Order lines
+                        title: Quantity
+                    grain:
                       - id: order_line_id
                         type: attribute
                     id: order_lines
@@ -3437,92 +3596,47 @@ interactions:
                         multivalue: false
                         sources:
                           - column: campaign_id
+                            dataType: INT
+                            isNullable: true
                             target:
                               id: campaign_id
                               type: attribute
-                            dataType: INT
                       - identifier:
                           id: customers
                           type: dataset
                         multivalue: false
                         sources:
                           - column: customer_id
+                            dataType: INT
+                            isNullable: true
                             target:
                               id: customer_id
                               type: attribute
-                            dataType: INT
                       - identifier:
                           id: date
                           type: dataset
                         multivalue: false
                         sources:
                           - column: date
+                            dataType: DATE
+                            isNullable: true
                             target:
                               id: date
                               type: date
-                            dataType: DATE
                       - identifier:
                           id: products
                           type: dataset
                         multivalue: false
                         sources:
                           - column: product_id
+                            dataType: INT
+                            isNullable: true
                             target:
                               id: product_id
                               type: attribute
-                            dataType: INT
-                    title: Order lines
-                    aggregatedFacts: []
-                    attributes:
-                      - id: order_id
-                        labels: []
-                        sourceColumn: order_id
-                        title: Order id
-                        description: Order id
-                        sourceColumnDataType: STRING
-                        tags:
-                          - Order lines
-                      - id: order_line_id
-                        labels: []
-                        sourceColumn: order_line_id
-                        title: Order line id
-                        description: Order line id
-                        sourceColumnDataType: STRING
-                        tags:
-                          - Order lines
-                      - id: order_status
-                        labels: []
-                        sourceColumn: order_status
-                        title: Order status
-                        description: Order status
-                        sourceColumnDataType: STRING
-                        tags:
-                          - Order lines
-                    dataSourceTableId:
-                      dataSourceId: demo-test-ds
-                      id: order_lines
-                      type: dataSource
-                      path:
-                        - demo
-                        - order_lines
-                    description: Order lines
-                    facts:
-                      - id: price
-                        sourceColumn: price
-                        title: Price
-                        description: Price
-                        sourceColumnDataType: NUMERIC
-                        tags:
-                          - Order lines
-                      - id: quantity
-                        sourceColumn: quantity
-                        title: Quantity
-                        description: Quantity
-                        sourceColumnDataType: NUMERIC
-                        tags:
-                          - Order lines
                     tags:
                       - Order lines
+                    title: Order lines
                     workspaceDataFilterColumns:
                       - dataType: STRING
                         name: wdf__region
@@ -3534,51 +3648,55 @@ interactions:
                         filterId:
                           id: wdf__region
                           type: workspaceDataFilter
-                  - grain:
+                  - aggregatedFacts: []
+                    attributes:
+                      - description: Product id
+                        id: product_id
+                        isNullable: false
+                        labels: []
+                        sourceColumn: product_id
+                        sourceColumnDataType: INT
+                        tags:
+                          - Products
+                        title: Product id
+                      - description: Product name
+                        id: product_name
+                        isNullable: true
+                        labels: []
+                        sourceColumn: product_name
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Products
+                        title: Product name
+                      - description: Category
+                        id: products.category
+                        isNullable: true
+                        labels: []
+                        sourceColumn: category
+                        sourceColumnDataType: STRING
+                        tags:
+                          - Products
+                        title: Category
+                    dataSourceTableId:
+                      dataSourceId: demo-test-ds
+                      id: products
+                      path:
+                        - demo
+                        - products
+                      type: dataSource
+                    description: Products
+                    facts: []
+                    grain:
                       - id: product_id
                         type: attribute
                     id: products
                     references: []
-                    title: Products
-                    aggregatedFacts: []
-                    attributes:
-                      - id: product_id
-                        labels: []
-                        sourceColumn: product_id
-                        title: Product id
-                        description: Product id
-                        sourceColumnDataType: INT
-                        tags:
-                          - Products
-                      - id: product_name
-                        labels: []
-                        sourceColumn: product_name
-                        title: Product name
-                        description: Product name
-                        sourceColumnDataType: STRING
-                        tags:
-                          - Products
-                      - id: products.category
-                        labels: []
-                        sourceColumn: category
-                        title: Category
-                        description: Category
-                        sourceColumnDataType: STRING
-                        tags:
-                          - Products
-                    dataSourceTableId:
-                      dataSourceId: demo-test-ds
-                      id: products
-                      type: dataSource
-                      path:
-                        - demo
-                        - products
-                    description: Products
-                    facts: []
                     tags:
                       - Products
+                    title: Products
                 dateInstances:
-                  - granularities:
+                  - description: ''
+                    granularities:
                       - DAY
                       - WEEK
                       - MONTH
@@ -3588,10 +3706,10 @@ interactions:
                       titleBase: ''
                       titlePattern: '%titleBase - %granularityTitle'
                     id: date
-                    title: Date
-                    description: ''
                     tags:
                       - Date
+                    title: Date
+            name: Demo
             permissions:
               - assignee:
                   id: demo2
@@ -3603,12 +3721,11 @@ interactions:
                 name: VIEW
             settings: []
             userDataFilters: []
-          - id: demo_west
-            name: Demo West
-            automations: []
+          - automations: []
             customApplicationSettings: []
             filterViews: []
             hierarchyPermissions: []
+            id: demo_west
             model:
               analytics:
                 analyticalDashboardExtensions:
@@ -3622,9 +3739,10 @@ interactions:
                 dashboardPlugins: []
                 exportDefinitions: []
                 filterContexts: []
-                metrics: []
-                visualizationObjects: []
                 memoryItems: []
+                metrics: []
+                parameters: []
+                visualizationObjects: []
               ldm:
                 datasetExtensions:
                   - id: order_lines
@@ -3636,18 +3754,18 @@ interactions:
                           type: workspaceDataFilter
                 datasets: []
                 dateInstances: []
+            name: Demo West
             parent:
               id: demo
               type: workspace
             permissions: []
             settings: []
             userDataFilters: []
-          - id: demo_west_california
-            name: Demo West California
-            automations: []
+          - automations: []
             customApplicationSettings: []
             filterViews: []
             hierarchyPermissions: []
+            id: demo_west_california
             model:
               analytics:
                 analyticalDashboardExtensions: []
@@ -3656,12 +3774,14 @@ interactions:
                 dashboardPlugins: []
                 exportDefinitions: []
                 filterContexts: []
-                metrics: []
-                visualizationObjects: []
                 memoryItems: []
+                metrics: []
+                parameters: []
+                visualizationObjects: []
               ldm:
                 datasets: []
                 dateInstances: []
+            name: Demo West California
             parent:
               id: demo_west
               type: workspace
@@ -3677,15 +3797,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: PUT
+      uri: http://localhost:3000/api/v1/layout/workspaces
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -3694,15 +3813,18 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 204
+        message: No Content
+version: 1

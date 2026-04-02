@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2026 GoodData Corporation
 content:
   buckets:
     - items:
@@ -49,5 +49,9 @@ content:
         position: bottom
   version: '2'
   visualizationUrl: local:line
+createdAt: 2025-08-07 11:45
+createdBy:
+  id: admin
+  type: user
 id: revenue_by_category_trend
 title: Revenue by Category Trend

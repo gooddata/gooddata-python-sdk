@@ -4919,7 +4919,11 @@
               "FederatedIdentityManagement",
               "AuditLogging",
               "ControlledFeatureRollout",
-              "AiLake"
+              "AiLake",
+              "AiModule",
+              "AiQueryLimit",
+              "AiKnowledgeStorageLimit",
+              "AiAgentLimit"
             ],
             "type": "string"
           },
@@ -10247,7 +10251,11 @@
                 "FederatedIdentityManagement",
                 "AuditLogging",
                 "ControlledFeatureRollout",
-                "AiLake"
+                "AiLake",
+                "AiModule",
+                "AiQueryLimit",
+                "AiKnowledgeStorageLimit",
+                "AiAgentLimit"
               ],
               "type": "string"
             },
@@ -31146,23 +31154,6 @@
         "summary": "Manage Permissions for a Organization",
         "tags": [
           "Permissions",
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/organization/metadataCheck": {
-      "post": {
-        "description": "(BETA) Temporary solution. Resyncs all organization objects and full workspaces within the organization with target GEN_AI_CHECK.",
-        "operationId": "metadataCheckOrganization",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "summary": "(BETA) Check Organization Metadata Inconsistencies",
-        "tags": [
-          "AI",
-          "Metadata Check",
           "actions"
         ]
       }

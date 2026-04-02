@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/demo-test-ds
       body: null
       headers:
         Accept:
@@ -14,15 +11,27 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              alternativeDataSourceId: ds-put-abc-id
+              authenticationType: USERNAME_PASSWORD
+              name: demo-test-ds
+              schema: demo
+              type: POSTGRESQL
+              url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
+              username: postgres
+            id: demo-test-ds
+            type: dataSource
+          links:
+            self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '435'
         Content-Type:
@@ -36,34 +45,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
-              username: postgres
-              authenticationType: USERNAME_PASSWORD
-              alternativeDataSourceId: ds-put-abc-id
-              name: demo-test-ds
-              type: POSTGRESQL
-              schema: demo
-            id: demo-test-ds
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/demo-test-ds
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: PATCH
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/demo-test-ds
       body:
         data:
           attributes:
@@ -83,15 +79,28 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: PATCH
+      uri: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              alternativeDataSourceId: ds-put-abc-id
+              authenticationType: USERNAME_PASSWORD
+              cacheStrategy: NEVER
+              name: demo-test-ds
+              schema: demo
+              type: POSTGRESQL
+              url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha:5432/tiger_tests?sslmode=prefer
+              username: postgres
+            id: demo-test-ds
+            type: dataSource
+          links:
+            self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '464'
         Content-Type:
@@ -104,35 +113,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha:5432/tiger_tests?sslmode=prefer
-              username: postgres
-              cacheStrategy: NEVER
-              authenticationType: USERNAME_PASSWORD
-              alternativeDataSourceId: ds-put-abc-id
-              name: demo-test-ds
-              type: POSTGRESQL
-              schema: demo
-            id: demo-test-ds
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/demo-test-ds
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/demo-test-ds
       body: null
       headers:
         Accept:
@@ -143,15 +138,28 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              alternativeDataSourceId: ds-put-abc-id
+              authenticationType: USERNAME_PASSWORD
+              cacheStrategy: NEVER
+              name: demo-test-ds
+              schema: demo
+              type: POSTGRESQL
+              url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha:5432/tiger_tests?sslmode=prefer
+              username: postgres
+            id: demo-test-ds
+            type: dataSource
+          links:
+            self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Length:
           - '464'
         Content-Type:
@@ -164,43 +172,27 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha:5432/tiger_tests?sslmode=prefer
-              username: postgres
-              cacheStrategy: NEVER
-              authenticationType: USERNAME_PASSWORD
-              alternativeDataSourceId: ds-put-abc-id
-              name: demo-test-ds
-              type: POSTGRESQL
-              schema: demo
-            id: demo-test-ds
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/demo-test-ds
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: PUT
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
       body:
         dataSources:
-          - id: demo-test-ds
+          - alternativeDataSourceId: ds-put-abc-id
+            id: demo-test-ds
             name: demo-test-ds
-            schema: demo
-            type: POSTGRESQL
-            url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
-            username: postgres
+            password: secret
             permissions:
               - assignee:
                   id: demo2
@@ -210,8 +202,10 @@ interactions:
                   id: demoGroup
                   type: userGroup
                 name: USE
-            alternativeDataSourceId: ds-put-abc-id
-            password: secret
+            schema: demo
+            type: POSTGRESQL
+            url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
+            username: postgres
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -221,15 +215,14 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: PUT
+      uri: http://localhost:3000/api/v1/layout/dataSources
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         DATE: *id001
         Expires:
           - '0'
@@ -238,15 +231,18 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 204
+        message: No Content
+version: 1

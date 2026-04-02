@@ -85,6 +85,10 @@ class EntitlementsRequest(ModelNormal):
             'AUDITLOGGING': "AuditLogging",
             'CONTROLLEDFEATUREROLLOUT': "ControlledFeatureRollout",
             'AILAKE': "AiLake",
+            'AIMODULE': "AiModule",
+            'AIQUERYLIMIT': "AiQueryLimit",
+            'AIKNOWLEDGESTORAGELIMIT': "AiKnowledgeStorageLimit",
+            'AIAGENTLIMIT': "AiAgentLimit",
         },
     }
 

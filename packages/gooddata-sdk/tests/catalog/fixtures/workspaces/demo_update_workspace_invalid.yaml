@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west?include=workspaces
       body: null
       headers:
         Accept:
@@ -14,15 +11,33 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo_west?include=workspaces
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              name: Demo West
+            id: demo_west
+            relationships:
+              parent:
+                data:
+                  id: demo
+                  type: workspace
+            type: workspace
+          included:
+            - attributes:
+                name: Demo
+              id: demo
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
+              type: workspace
+          links:
+            self: http://localhost:3000/api/v1/entities/workspaces/demo_west?include=workspaces
       headers:
         Cache-Control:
           - max-age=5, private
-        Connection:
-          - keep-alive
         Content-Length:
           - '468'
         Content-Type:
@@ -32,40 +47,21 @@ interactions:
         Referrer-Policy:
           - no-referrer
         Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
+          - max-age=31536000; includeSubDomains; preload
         Vary:
+          - Accept-Encoding
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              name: Demo West
-            id: demo_west
-            relationships:
-              parent:
-                data:
-                  id: demo
-                  type: workspace
-            type: workspace
-          included:
-            - attributes:
-                name: Demo
-              id: demo
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
-              type: workspace
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west?include=workspaces
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=0&size=500
       body: null
       headers:
         Accept:
@@ -76,40 +72,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
@@ -117,13 +82,13 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
               type: workspace
             - attributes:
                 name: Demo West
               id: demo_west
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
               relationships:
                 parent:
                   data:
@@ -134,7 +99,7 @@ interactions:
                 name: Demo West California
               id: demo_west_california
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west_california
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
               relationships:
                 parent:
                   data:
@@ -146,20 +111,49 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
               type: workspace
             - attributes:
                 name: Demo West
               id: demo_west
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
               type: workspace
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=1&size=500
+            next: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=1&size=500
+            self: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '255'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west?include=workspaces
       body: null
       headers:
         Accept:
@@ -170,33 +164,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo_west?include=workspaces
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - max-age=5, private
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '468'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
@@ -214,13 +184,36 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
               type: workspace
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west?include=workspaces
+            self: http://localhost:3000/api/v1/entities/workspaces/demo_west?include=workspaces
+      headers:
+        Cache-Control:
+          - max-age=5, private
+        Content-Length:
+          - '468'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=0&size=500
       body: null
       headers:
         Accept:
@@ -231,40 +224,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
@@ -272,13 +234,13 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
               type: workspace
             - attributes:
                 name: Demo West
               id: demo_west
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
               relationships:
                 parent:
                   data:
@@ -289,7 +251,7 @@ interactions:
                 name: Demo West California
               id: demo_west_california
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west_california
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
               relationships:
                 parent:
                   data:
@@ -301,20 +263,49 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
               type: workspace
             - attributes:
                 name: Demo West
               id: demo_west
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
               type: workspace
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces?include=workspaces&page=1&size=500
+            next: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=1&size=500
+            self: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '255'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west?include=workspaces
       body: null
       headers:
         Accept:
@@ -325,33 +316,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo_west?include=workspaces
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - max-age=5, private
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '468'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
@@ -369,7 +336,33 @@ interactions:
                 name: Demo
               id: demo
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
               type: workspace
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo_west?include=workspaces
+            self: http://localhost:3000/api/v1/entities/workspaces/demo_west?include=workspaces
+      headers:
+        Cache-Control:
+          - max-age=5, private
+        Content-Length:
+          - '468'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1

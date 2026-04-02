@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes?include=labels&page=0&size=500
       body: null
       headers:
         Accept:
@@ -14,55 +11,24 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels&page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: &id001
-          - PLACEHOLDER
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
             - attributes:
-                title: Campaign channel id
-                description: Campaign channel id
-                tags:
-                  - Campaign channels
                 areRelationsValid: true
+                description: Campaign channel id
+                isNullable: false
                 sourceColumn: campaign_channel_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Campaign channel id
               id: campaign_channel_id
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
               meta:
                 origin:
                   originId: demo
@@ -74,16 +40,17 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Category
-                description: Category
-                tags:
-                  - Campaign channels
                 areRelationsValid: true
+                description: Category
+                isNullable: true
                 sourceColumn: category
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Category
               id: campaign_channels.category
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
               meta:
                 origin:
                   originId: demo
@@ -95,16 +62,17 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Campaign id
-                description: Campaign id
-                tags:
-                  - Campaigns
                 areRelationsValid: true
+                description: Campaign id
+                isNullable: false
                 sourceColumn: campaign_id
                 sourceColumnDataType: INT
+                tags:
+                  - Campaigns
+                title: Campaign id
               id: campaign_id
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_id
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id
               meta:
                 origin:
                   originId: demo
@@ -116,16 +84,17 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Campaign name
-                description: Campaign name
-                tags:
-                  - Campaigns
                 areRelationsValid: true
+                description: Campaign name
+                isNullable: true
                 sourceColumn: campaign_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaigns
+                title: Campaign name
               id: campaign_name
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/campaign_name
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
               meta:
                 origin:
                   originId: demo
@@ -137,16 +106,17 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Customer id
-                description: Customer id
-                tags:
-                  - Customers
                 areRelationsValid: true
+                description: Customer id
+                isNullable: false
                 sourceColumn: customer_id
                 sourceColumnDataType: INT
+                tags:
+                  - Customers
+                title: Customer id
               id: customer_id
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/customer_id
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id
               meta:
                 origin:
                   originId: demo
@@ -158,16 +128,17 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Customer name
-                description: Customer name
-                tags:
-                  - Customers
                 areRelationsValid: true
+                description: Customer name
+                isNullable: true
                 sourceColumn: customer_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Customer name
               id: customer_name
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/customer_name
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name
               meta:
                 origin:
                   originId: demo
@@ -179,15 +150,15 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Date - Date
+                areRelationsValid: true
                 description: Date
+                granularity: DAY
                 tags:
                   - Date
-                granularity: DAY
-                areRelationsValid: true
+                title: Date - Date
               id: date.day
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.day
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day
               meta:
                 origin:
                   originId: demo
@@ -199,15 +170,15 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Date - Month/Year
+                areRelationsValid: true
                 description: Month and Year (12/2020)
+                granularity: MONTH
                 tags:
                   - Date
-                granularity: MONTH
-                areRelationsValid: true
+                title: Date - Month/Year
               id: date.month
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.month
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month
               meta:
                 origin:
                   originId: demo
@@ -219,15 +190,15 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Date - Quarter/Year
+                areRelationsValid: true
                 description: Quarter and Year (Q1/2020)
+                granularity: QUARTER
                 tags:
                   - Date
-                granularity: QUARTER
-                areRelationsValid: true
+                title: Date - Quarter/Year
               id: date.quarter
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.quarter
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter
               meta:
                 origin:
                   originId: demo
@@ -239,15 +210,15 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Date - Week/Year
+                areRelationsValid: true
                 description: Week and Year (W52/2020)
+                granularity: WEEK
                 tags:
                   - Date
-                granularity: WEEK
-                areRelationsValid: true
+                title: Date - Week/Year
               id: date.week
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.week
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week
               meta:
                 origin:
                   originId: demo
@@ -259,15 +230,15 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Date - Year
+                areRelationsValid: true
                 description: Year
+                granularity: YEAR
                 tags:
                   - Date
-                granularity: YEAR
-                areRelationsValid: true
+                title: Date - Year
               id: date.year
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/date.year
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year
               meta:
                 origin:
                   originId: demo
@@ -279,16 +250,17 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Order id
-                description: Order id
-                tags:
-                  - Order lines
                 areRelationsValid: true
+                description: Order id
+                isNullable: true
                 sourceColumn: order_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order id
               id: order_id
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_id
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_id
               meta:
                 origin:
                   originId: demo
@@ -300,16 +272,17 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Order line id
-                description: Order line id
-                tags:
-                  - Order lines
                 areRelationsValid: true
+                description: Order line id
+                isNullable: false
                 sourceColumn: order_line_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order line id
               id: order_line_id
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_line_id
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id
               meta:
                 origin:
                   originId: demo
@@ -321,16 +294,17 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Order status
-                description: Order status
-                tags:
-                  - Order lines
                 areRelationsValid: true
+                description: Order status
+                isNullable: true
                 sourceColumn: order_status
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order status
               id: order_status
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/order_status
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status
               meta:
                 origin:
                   originId: demo
@@ -342,16 +316,17 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Product id
-                description: Product id
-                tags:
-                  - Products
                 areRelationsValid: true
+                description: Product id
+                isNullable: false
                 sourceColumn: product_id
                 sourceColumnDataType: INT
+                tags:
+                  - Products
+                title: Product id
               id: product_id
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/product_id
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_id
               meta:
                 origin:
                   originId: demo
@@ -363,16 +338,17 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Product name
-                description: Product name
-                tags:
-                  - Products
                 areRelationsValid: true
+                description: Product name
+                isNullable: true
                 sourceColumn: product_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Product name
               id: product_name
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/product_name
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name
               meta:
                 origin:
                   originId: demo
@@ -384,16 +360,17 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Category
-                description: Category
-                tags:
-                  - Products
                 areRelationsValid: true
+                description: Category
+                isNullable: true
                 sourceColumn: category
                 sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Category
               id: products.category
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/products.category
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
               meta:
                 origin:
                   originId: demo
@@ -405,16 +382,17 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Region
-                description: Region
-                tags:
-                  - Customers
                 areRelationsValid: true
+                description: Region
+                isNullable: true
                 sourceColumn: region
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Region
               id: region
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/region
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
               meta:
                 origin:
                   originId: demo
@@ -426,16 +404,17 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: State
-                description: State
-                tags:
-                  - Customers
                 areRelationsValid: true
+                description: State
+                isNullable: true
                 sourceColumn: state
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: State
               id: state
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/state
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
               meta:
                 origin:
                   originId: demo
@@ -443,22 +422,23 @@ interactions:
               relationships:
                 labels:
                   data:
-                    - id: state
-                      type: label
                     - id: geo__state__location
+                      type: label
+                    - id: state
                       type: label
               type: attribute
             - attributes:
-                title: Type
-                description: Type
-                tags:
-                  - Campaign channels
                 areRelationsValid: true
+                description: Type
+                isNullable: true
                 sourceColumn: type
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Type
               id: type
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes/type
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
               meta:
                 origin:
                   originId: demo
@@ -471,268 +451,317 @@ interactions:
               type: attribute
           included:
             - attributes:
-                title: Product name
                 description: Product name
-                tags:
-                  - Products
+                isNullable: true
                 primary: true
                 sourceColumn: product_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Product name
                 valueType: TEXT
               id: product_name
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/product_name
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name
               type: label
             - attributes:
-                title: Order status
                 description: Order status
-                tags:
-                  - Order lines
+                isNullable: true
                 primary: true
                 sourceColumn: order_status
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order status
                 valueType: TEXT
               id: order_status
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_status
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
               type: label
             - attributes:
-                title: Campaign name
                 description: Campaign name
-                tags:
-                  - Campaigns
+                isNullable: true
                 primary: true
                 sourceColumn: campaign_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaigns
+                title: Campaign name
                 valueType: TEXT
               id: campaign_name
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_name
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_name
               type: label
             - attributes:
-                title: Date - Week/Year
                 description: Week and Year (W52/2020)
-                tags:
-                  - Date
                 primary: true
                 sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Week/Year
               id: date.week
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.week
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.week
               type: label
             - attributes:
-                title: Location
                 description: Location
-                tags:
-                  - Customers
+                isNullable: true
                 primary: false
                 sourceColumn: geo__state__location
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Location
                 valueType: GEO
               id: geo__state__location
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/geo__state__location
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location
               type: label
             - attributes:
-                title: Product id
                 description: Product id
-                tags:
-                  - Products
+                isNullable: false
                 primary: true
                 sourceColumn: product_id
                 sourceColumnDataType: INT
+                tags:
+                  - Products
+                title: Product id
                 valueType: TEXT
               id: product_id
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/product_id
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_id
               type: label
             - attributes:
-                title: Order line id
                 description: Order line id
-                tags:
-                  - Order lines
+                isNullable: false
                 primary: true
                 sourceColumn: order_line_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order line id
                 valueType: TEXT
               id: order_line_id
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_line_id
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_line_id
               type: label
             - attributes:
-                title: Date - Month/Year
                 description: Month and Year (12/2020)
-                tags:
-                  - Date
                 primary: true
                 sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Month/Year
               id: date.month
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.month
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.month
               type: label
             - attributes:
-                title: Date - Quarter/Year
                 description: Quarter and Year (Q1/2020)
-                tags:
-                  - Date
                 primary: true
                 sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Quarter/Year
               id: date.quarter
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.quarter
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarter
               type: label
             - attributes:
-                title: Campaign channel id
                 description: Campaign channel id
-                tags:
-                  - Campaign channels
+                isNullable: false
                 primary: true
                 sourceColumn: campaign_channel_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Campaign channel id
                 valueType: TEXT
               id: campaign_channel_id
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_channel_id
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channel_id
               type: label
             - attributes:
-                title: Date - Date
                 description: Date
-                tags:
-                  - Date
                 primary: true
                 sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Date
               id: date.day
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.day
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.day
               type: label
             - attributes:
-                title: Order id
                 description: Order id
-                tags:
-                  - Order lines
+                isNullable: true
                 primary: true
                 sourceColumn: order_id
                 sourceColumnDataType: STRING
+                tags:
+                  - Order lines
+                title: Order id
                 valueType: TEXT
               id: order_id
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/order_id
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_id
               type: label
             - attributes:
-                title: Category
                 description: Category
-                tags:
-                  - Campaign channels
+                isNullable: true
                 primary: true
                 sourceColumn: category
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Category
                 valueType: TEXT
               id: campaign_channels.category
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_channels.category
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channels.category
               type: label
             - attributes:
-                title: Customer name
                 description: Customer name
-                tags:
-                  - Customers
+                isNullable: true
                 primary: true
                 sourceColumn: customer_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Customer name
                 valueType: TEXT
               id: customer_name
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/customer_name
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_name
               type: label
             - attributes:
-                title: Type
                 description: Type
-                tags:
-                  - Campaign channels
+                isNullable: true
                 primary: true
                 sourceColumn: type
                 sourceColumnDataType: STRING
+                tags:
+                  - Campaign channels
+                title: Type
                 valueType: TEXT
               id: type
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/type
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/type
               type: label
             - attributes:
-                title: Region
                 description: Region
-                tags:
-                  - Customers
+                isNullable: true
                 primary: true
                 sourceColumn: region
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Region
                 valueType: TEXT
               id: region
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/region
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
               type: label
             - attributes:
-                title: Customer id
                 description: Customer id
-                tags:
-                  - Customers
+                isNullable: false
                 primary: true
                 sourceColumn: customer_id
                 sourceColumnDataType: INT
+                tags:
+                  - Customers
+                title: Customer id
                 valueType: TEXT
               id: customer_id
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/customer_id
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_id
               type: label
             - attributes:
-                title: Date - Year
                 description: Year
-                tags:
-                  - Date
                 primary: true
                 sourceColumn: ''
+                tags:
+                  - Date
+                title: Date - Year
               id: date.year
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/date.year
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.year
               type: label
             - attributes:
-                title: State
                 description: State
-                tags:
-                  - Customers
+                isNullable: true
                 primary: true
                 sourceColumn: state
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: State
                 valueType: TEXT
               id: state
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/state
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/state
               type: label
             - attributes:
-                title: Category
                 description: Category
-                tags:
-                  - Products
+                isNullable: true
                 primary: true
                 sourceColumn: category
                 sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Category
                 valueType: TEXT
               id: products.category
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/products.category
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
               type: label
             - attributes:
-                title: Campaign id
                 description: Campaign id
-                tags:
-                  - Campaigns
+                isNullable: false
                 primary: true
                 sourceColumn: campaign_id
                 sourceColumnDataType: INT
+                tags:
+                  - Campaigns
+                title: Campaign id
                 valueType: TEXT
               id: campaign_id
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/labels/campaign_id
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_id
               type: label
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes?include=labels&page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/attributes?include=labels&page=1&size=500
+            next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels&page=1&size=500
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels&page=0&size=500
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Encoding:
+          - br
+        Content-Length:
+          - '1365'
+        Content-Type:
+          - application/json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Vary:
+          - Accept-Encoding
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - 1; mode=block
+      status:
+        code: 200
+        message: OK
+version: 1
