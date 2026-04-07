@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes: []
@@ -11,21 +8,21 @@ interactions:
           measures:
             - definition:
                 measure:
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: order_amount
                       type: metric
-                  computeRatio: false
-                  filters: []
               localIdentifier: 1a0aecdfcb500f7767579f45477cbdb3
             - definition:
                 measure:
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: amount_of_orders
                       type: metric
-                  computeRatio: false
-                  filters: []
               localIdentifier: 5f5d69477a25411cd33be7820a9c8e8e
         resultSpec:
           dimensions:
@@ -43,10 +40,24 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          executionResponse:
+            dimensions:
+              - headers:
+                  - measureGroupHeaders:
+                      - format: $#,##0
+                        localIdentifier: 1a0aecdfcb500f7767579f45477cbdb3
+                        name: Order Amount
+                      - format: '#,##0'
+                        localIdentifier: 5f5d69477a25411cd33be7820a9c8e8e
+                        name: '# of Orders'
+                localIdentifier: dim_0
+            links:
+              executionResult: EXECUTION_RESULT_20
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -68,29 +79,14 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Gdc-Cancel-Token:
-          - 90baf11f-beb0-4071-bff9-3c34ce92a545
+        X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
-      body:
-        string:
-          executionResponse:
-            dimensions:
-              - headers:
-                  - measureGroupHeaders:
-                      - localIdentifier: 1a0aecdfcb500f7767579f45477cbdb3
-                        format: $#,##0
-                        name: Order Amount
-                      - localIdentifier: 5f5d69477a25411cd33be7820a9c8e8e
-                        format: '#,##0'
-                        name: '# of Orders'
-                localIdentifier: dim_0
-            links:
-              executionResult: 3b0883f41d61487e9ece8ec61d291d54ce5ba75d:95e006dd6462e87df2de67fecea5e3181b6933a06f400b089bc55cea7e5f0222
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/3b0883f41d61487e9ece8ec61d291d54ce5ba75d%3A95e006dd6462e87df2de67fecea5e3181b6933a06f400b089bc55cea7e5f0222?offset=0&limit=2
       body: null
       headers:
         Accept:
@@ -101,10 +97,31 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_20?offset=0&limit=2
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            - 516058.34
+            - 3016
+          dimensionHeaders:
+            - headerGroups:
+                - headers:
+                    - measureHeader:
+                        measureIndex: 0
+                    - measureHeader:
+                        measureIndex: 1
+          grandTotals: []
+          metadata:
+            dataSourceMessages: []
+          paging:
+            count:
+              - 2
+            offset:
+              - 0
+            total:
+              - 2
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -128,25 +145,7 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
-      body:
-        string:
-          data:
-            - 516058.34
-            - 3016
-          dimensionHeaders:
-            - headerGroups:
-                - headers:
-                    - measureHeader:
-                        measureIndex: 0
-                    - measureHeader:
-                        measureIndex: 1
-          grandTotals: []
-          paging:
-            count:
-              - 2
-            offset:
-              - 0
-            total:
-              - 2
-          metadata:
-            dataSourceMessages: []
+      status:
+        code: 200
+        message: OK
+version: 1

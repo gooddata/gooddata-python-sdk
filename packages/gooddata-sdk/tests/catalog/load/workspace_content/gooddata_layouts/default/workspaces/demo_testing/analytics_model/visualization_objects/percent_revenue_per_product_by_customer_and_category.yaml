@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2026 GoodData Corporation
 content:
   buckets:
     - items:
@@ -72,5 +72,9 @@ content:
         direction: asc
   version: '2'
   visualizationUrl: local:table
+createdAt: 2025-08-07 11:45
+createdBy:
+  id: admin
+  type: user
 id: percent_revenue_per_product_by_customer_and_category
 title: '% Revenue per Product by Customer and Category'

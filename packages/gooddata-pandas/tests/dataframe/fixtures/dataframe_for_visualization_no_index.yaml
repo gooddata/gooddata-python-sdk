@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/visualizationObjects/revenue_and_quantity_by_product_and_category?include=ALL
       body: null
       headers:
         Accept:
@@ -14,39 +11,13 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/visualizationObjects/revenue_and_quantity_by_product_and_category?include=ALL
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '5096'
-        Content-Type:
-          - application/json
-        DATE: &id001
-          - PLACEHOLDER
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       body:
         string:
           data:
             attributes:
-              title: Revenue and Quantity by Product and Category
               areRelationsValid: true
               content:
                 buckets:
@@ -142,6 +113,7 @@ interactions:
                 version: '2'
                 visualizationUrl: local:table
               createdAt: 2025-08-07 11:45
+              title: Revenue and Quantity by Product and Category
             id: revenue_and_quantity_by_product_and_category
             meta:
               origin:
@@ -152,12 +124,6 @@ interactions:
                 data:
                   id: admin
                   type: userIdentifier
-              metrics:
-                data:
-                  - id: percent_revenue_in_category
-                    type: metric
-                  - id: revenue
-                    type: metric
               facts:
                 data:
                   - id: quantity
@@ -172,54 +138,60 @@ interactions:
                     type: label
                   - id: customer_name
                     type: label
+              metrics:
+                data:
+                  - id: percent_revenue_in_category
+                    type: metric
+                  - id: revenue
+                    type: metric
             type: visualizationObject
           included:
             - attributes:
-                title: Quantity
                 description: Quantity
-                tags:
-                  - Order lines
+                isNullable: true
                 sourceColumn: quantity
                 sourceColumnDataType: NUMERIC
-                isNullable: true
+                tags:
+                  - Order lines
+                title: Quantity
               id: quantity
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/quantity
               type: fact
             - attributes:
-                title: Revenue
-                description: ''
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
                 createdAt: 2025-08-07 11:45
+                description: ''
+                title: Revenue
               id: revenue
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue
               type: metric
             - attributes:
-                title: Price
                 description: Price
-                tags:
-                  - Order lines
+                isNullable: true
                 sourceColumn: price
                 sourceColumnDataType: NUMERIC
-                isNullable: true
+                tags:
+                  - Order lines
+                title: Price
               id: price
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/price
               type: fact
             - attributes:
-                title: Product name
                 description: Product name
-                tags:
-                  - Products
+                isNullable: true
                 primary: true
                 sourceColumn: product_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Product name
                 valueType: TEXT
-                isNullable: true
               id: product_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name
@@ -230,49 +202,74 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/userIdentifiers/admin
               type: userIdentifier
             - attributes:
-                title: Customer name
                 description: Customer name
-                tags:
-                  - Customers
+                isNullable: true
                 primary: true
                 sourceColumn: customer_name
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Customer name
                 valueType: TEXT
-                isNullable: true
               id: customer_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_name
               type: label
             - attributes:
-                title: '% Revenue in Category'
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
                 createdAt: 2025-08-07 11:45
+                title: '% Revenue in Category'
               id: percent_revenue_in_category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
               type: metric
             - attributes:
-                title: Category
                 description: Category
-                tags:
-                  - Products
+                isNullable: true
                 primary: true
                 sourceColumn: category
                 sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Category
                 valueType: TEXT
-                isNullable: true
               id: products.category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
               type: label
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/visualizationObjects/revenue_and_quantity_by_product_and_category?include=ALL
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '5096'
+        Content-Type:
+          - application/json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - '0'
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes:
@@ -290,41 +287,41 @@ interactions:
           measures:
             - definition:
                 measure:
+                  aggregation: SUM
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: quantity
                       type: fact
-                  aggregation: SUM
-                  computeRatio: false
-                  filters: []
               localIdentifier: 29486504dd0e4a36a18b0b2f792d3a46
             - definition:
                 measure:
+                  aggregation: AVG
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: price
                       type: fact
-                  aggregation: AVG
-                  computeRatio: false
-                  filters: []
               localIdentifier: aa6391acccf1452f8011201aef9af492
             - definition:
                 measure:
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: percent_revenue_in_category
                       type: metric
-                  computeRatio: false
-                  filters: []
               localIdentifier: 2cd39539d8da46c9883e63caa3ba7cc0
             - definition:
                 measure:
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: revenue
                       type: metric
-                  computeRatio: false
-                  filters: []
               localIdentifier: 9a0f08331c094c7facf2a0b4f418de0a
         resultSpec:
           dimensions:
@@ -346,10 +343,58 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          executionResponse:
+            dimensions:
+              - headers:
+                  - measureGroupHeaders:
+                      - localIdentifier: 29486504dd0e4a36a18b0b2f792d3a46
+                      - localIdentifier: aa6391acccf1452f8011201aef9af492
+                      - format: '#,##0.0%'
+                        localIdentifier: 2cd39539d8da46c9883e63caa3ba7cc0
+                        name: '% Revenue in Category'
+                      - format: $#,##0
+                        localIdentifier: 9a0f08331c094c7facf2a0b4f418de0a
+                        name: Revenue
+                localIdentifier: dim_0
+              - headers:
+                  - attributeHeader:
+                      attribute:
+                        id: products.category
+                        type: attribute
+                      attributeName: Category
+                      granularity: null
+                      label:
+                        id: products.category
+                        type: label
+                      labelName: Category
+                      localIdentifier: 06bc6b3b9949466494e4f594c11f1bff
+                      primaryLabel:
+                        id: products.category
+                        type: label
+                      valueType: TEXT
+                  - attributeHeader:
+                      attribute:
+                        id: product_name
+                        type: attribute
+                      attributeName: Product name
+                      granularity: null
+                      label:
+                        id: product_name
+                        type: label
+                      labelName: Product name
+                      localIdentifier: 192668bfb6a74e9ab7b5d1ce7cb68ea3
+                      primaryLabel:
+                        id: product_name
+                        type: label
+                      valueType: TEXT
+                localIdentifier: dim_1
+            links:
+              executionResult: EXECUTION_RESULT_10
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -370,63 +415,14 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Gdc-Cancel-Token:
-          - ccb9dd92-4b8a-4e1c-be32-9798bba1beab
+        X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
-      body:
-        string:
-          executionResponse:
-            dimensions:
-              - headers:
-                  - measureGroupHeaders:
-                      - localIdentifier: 29486504dd0e4a36a18b0b2f792d3a46
-                      - localIdentifier: aa6391acccf1452f8011201aef9af492
-                      - localIdentifier: 2cd39539d8da46c9883e63caa3ba7cc0
-                        format: '#,##0.0%'
-                        name: '% Revenue in Category'
-                      - localIdentifier: 9a0f08331c094c7facf2a0b4f418de0a
-                        format: $#,##0
-                        name: Revenue
-                localIdentifier: dim_0
-              - headers:
-                  - attributeHeader:
-                      localIdentifier: 06bc6b3b9949466494e4f594c11f1bff
-                      label:
-                        id: products.category
-                        type: label
-                      labelName: Category
-                      attribute:
-                        id: products.category
-                        type: attribute
-                      attributeName: Category
-                      granularity: null
-                      primaryLabel:
-                        id: products.category
-                        type: label
-                      valueType: TEXT
-                  - attributeHeader:
-                      localIdentifier: 192668bfb6a74e9ab7b5d1ce7cb68ea3
-                      label:
-                        id: product_name
-                        type: label
-                      labelName: Product name
-                      attribute:
-                        id: product_name
-                        type: attribute
-                      attributeName: Product name
-                      granularity: null
-                      primaryLabel:
-                        id: product_name
-                        type: label
-                      valueType: TEXT
-                localIdentifier: dim_1
-            links:
-              executionResult: 4eea8eeeafa569b6e9e5ec3a23e6f24f37fed284:e2c933e10be027fa413723c865dc7fbe3ed971587f9a5bab6ae7139572903dd2
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28products.category%2Cproduct_name%29&page=0&size=500
       body: null
       headers:
         Accept:
@@ -437,10 +433,113 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28products.category%2Cproduct_name%29&page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            - attributes:
+                areRelationsValid: true
+                description: Product name
+                isNullable: true
+                sourceColumn: product_name
+                sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Product name
+              id: product_name
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              relationships:
+                dataset:
+                  data:
+                    id: products
+                    type: dataset
+                labels:
+                  data:
+                    - id: product_name
+                      type: label
+              type: attribute
+            - attributes:
+                areRelationsValid: true
+                description: Category
+                isNullable: true
+                sourceColumn: category
+                sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Category
+              id: products.category
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              relationships:
+                dataset:
+                  data:
+                    id: products
+                    type: dataset
+                labels:
+                  data:
+                    - id: products.category
+                      type: label
+              type: attribute
+          included:
+            - attributes:
+                description: Product name
+                isNullable: true
+                primary: true
+                sourceColumn: product_name
+                sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Product name
+                valueType: TEXT
+              id: product_name
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name
+              type: label
+            - attributes:
+                description: Category
+                isNullable: true
+                primary: true
+                sourceColumn: category
+                sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Category
+                valueType: TEXT
+              id: products.category
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
+              type: label
+            - attributes:
+                dataSourceTableId: demo-test-ds:products
+                dataSourceTablePath:
+                  - demo
+                  - products
+                description: Products
+                grain:
+                  - id: product_id
+                    type: attribute
+                tags:
+                  - Products
+                title: Products
+                type: NORMAL
+              id: products
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
+              type: dataset
+          links:
+            next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28%27products.category%27%2C%27product_name%27%29&page=1&size=500
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28%27products.category%27%2C%27product_name%27%29&page=0&size=500
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -464,113 +563,10 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
-      body:
-        string:
-          data:
-            - attributes:
-                title: Product name
-                description: Product name
-                tags:
-                  - Products
-                areRelationsValid: true
-                sourceColumn: product_name
-                sourceColumnDataType: STRING
-                isNullable: true
-              id: product_name
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              relationships:
-                dataset:
-                  data:
-                    id: products
-                    type: dataset
-                labels:
-                  data:
-                    - id: product_name
-                      type: label
-              type: attribute
-            - attributes:
-                title: Category
-                description: Category
-                tags:
-                  - Products
-                areRelationsValid: true
-                sourceColumn: category
-                sourceColumnDataType: STRING
-                isNullable: true
-              id: products.category
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              relationships:
-                dataset:
-                  data:
-                    id: products
-                    type: dataset
-                labels:
-                  data:
-                    - id: products.category
-                      type: label
-              type: attribute
-          included:
-            - attributes:
-                title: Product name
-                description: Product name
-                tags:
-                  - Products
-                primary: true
-                sourceColumn: product_name
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                isNullable: true
-              id: product_name
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name
-              type: label
-            - attributes:
-                title: Category
-                description: Category
-                tags:
-                  - Products
-                primary: true
-                sourceColumn: category
-                sourceColumnDataType: STRING
-                valueType: TEXT
-                isNullable: true
-              id: products.category
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
-              type: label
-            - attributes:
-                title: Products
-                description: Products
-                tags:
-                  - Products
-                grain:
-                  - id: product_id
-                    type: attribute
-                dataSourceTableId: demo-test-ds:products
-                dataSourceTablePath:
-                  - demo
-                  - products
-                type: NORMAL
-              id: products
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
-              type: dataset
-          links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28%27products.category%27%2C%27product_name%27%29&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28%27products.category%27%2C%27product_name%27%29&page=1&size=500
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4eea8eeeafa569b6e9e5ec3a23e6f24f37fed284%3Ae2c933e10be027fa413723c865dc7fbe3ed971587f9a5bab6ae7139572903dd2?offset=0%2C0&limit=4%2C1000
       body: null
       headers:
         Accept:
@@ -581,33 +577,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_10?offset=0%2C0&limit=4%2C1000
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '4061'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       body:
         string:
           data:
@@ -806,6 +778,8 @@ interactions:
                         labelValue: Neptide
                         primaryLabelValue: Neptide
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 4
@@ -816,5 +790,30 @@ interactions:
             total:
               - 4
               - 18
-          metadata:
-            dataSourceMessages: []
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '4061'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - '0'
+      status:
+        code: 200
+        message: OK
+version: 1

@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources?page=0&size=500
       body: null
       headers:
         Accept:
@@ -14,17 +11,28 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/dataSources?page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            - attributes:
+                alternativeDataSourceId: ds-put-abc-id
+                authenticationType: USERNAME_PASSWORD
+                name: demo-test-ds
+                schema: demo
+                type: POSTGRESQL
+                url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
+                username: postgres
+              id: demo-test-ds
+              links:
+                self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
+              type: dataSource
+          links:
+            next: http://localhost:3000/api/v1/entities/dataSources?page=1&size=500
+            self: http://localhost:3000/api/v1/entities/dataSources?page=0&size=500
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '671'
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,40 +41,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            - attributes:
-                url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
-                username: postgres
-                authenticationType: USERNAME_PASSWORD
-                alternativeDataSourceId: ds-put-abc-id
-                name: demo-test-ds
-                type: POSTGRESQL
-                schema: demo
-              id: demo-test-ds
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/demo-test-ds
-              type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources?page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources?page=1&size=500
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body: null
       headers:
         Accept:
@@ -77,17 +58,17 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 404
-        message: Not Found
+      body:
+        string:
+          detail: The requested endpoint does not exist or you do not have permission
+            to access it.
+          status: 404
+          title: Not Found
+          traceId: 2cf28b73cbe1c2c4ff46e49ec40cad2f
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '172'
         Content-Type:
           - application/problem+json
         DATE: *id001
@@ -95,38 +76,22 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          detail: The requested endpoint does not exist or you do not have permission
-            to access it.
-          status: 404
-          title: Not Found
-          traceId: 0f7a4b8de462416994c63b25ac304a4c
+      status:
+        code: 404
+        message: Not Found
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources
       body:
         data:
           attributes:
             name: Test
+            password: demopass
             schema: demo
             type: POSTGRESQL
-            username: demouser
-            password: demopass
             url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
+            username: demouser
           id: test
           type: dataSource
       headers:
@@ -140,54 +105,38 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/dataSources
     response:
+      body:
+        string:
+          data:
+            attributes:
+              authenticationType: USERNAME_PASSWORD
+              name: Test
+              schema: demo
+              type: POSTGRESQL
+              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
+              username: demouser
+            id: test
+            type: dataSource
+          links:
+            self: http://localhost:3000/api/v1/entities/dataSources/test
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
       status:
         code: 201
         message: Created
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '356'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
-              username: demouser
-              authenticationType: USERNAME_PASSWORD
-              name: Test
-              type: POSTGRESQL
-              schema: demo
-            id: test
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body: null
       headers:
         Accept:
@@ -198,17 +147,24 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              authenticationType: USERNAME_PASSWORD
+              name: Test
+              schema: demo
+              type: POSTGRESQL
+              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
+              username: demouser
+            id: test
+            type: dataSource
+          links:
+            self: http://localhost:3000/api/v1/entities/dataSources/test
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '356'
         Content-Type:
           - application/json
         DATE: *id001
@@ -216,36 +172,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
-              username: demouser
-              authenticationType: USERNAME_PASSWORD
-              name: Test
-              type: POSTGRESQL
-              schema: demo
-            id: test
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body: null
       headers:
         Accept:
@@ -256,17 +189,24 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              authenticationType: USERNAME_PASSWORD
+              name: Test
+              schema: demo
+              type: POSTGRESQL
+              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
+              username: demouser
+            id: test
+            type: dataSource
+          links:
+            self: http://localhost:3000/api/v1/entities/dataSources/test
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '356'
         Content-Type:
           - application/json
         DATE: *id001
@@ -274,41 +214,18 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
-              username: demouser
-              authenticationType: USERNAME_PASSWORD
-              name: Test
-              type: POSTGRESQL
-              schema: demo
-            id: test
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
+      status:
+        code: 200
+        message: OK
   - request:
-      method: PATCH
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body:
         data:
           attributes:
-            name: Test2
             alternativeDataSourceId: ds-patch-abc-id
+            name: Test2
             type: POSTGRESQL
             url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
           id: test
@@ -324,17 +241,25 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: PATCH
+      uri: http://localhost:3000/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              alternativeDataSourceId: ds-patch-abc-id
+              authenticationType: USERNAME_PASSWORD
+              name: Test2
+              schema: demo
+              type: POSTGRESQL
+              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
+              username: demouser
+            id: test
+            type: dataSource
+          links:
+            self: http://localhost:3000/api/v1/entities/dataSources/test
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '401'
         Content-Type:
           - application/json
         DATE: *id001
@@ -342,37 +267,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
-              username: demouser
-              authenticationType: USERNAME_PASSWORD
-              alternativeDataSourceId: ds-patch-abc-id
-              name: Test2
-              type: POSTGRESQL
-              schema: demo
-            id: test
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body: null
       headers:
         Accept:
@@ -383,17 +284,25 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              alternativeDataSourceId: ds-patch-abc-id
+              authenticationType: USERNAME_PASSWORD
+              name: Test2
+              schema: demo
+              type: POSTGRESQL
+              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
+              username: demouser
+            id: test
+            type: dataSource
+          links:
+            self: http://localhost:3000/api/v1/entities/dataSources/test
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '401'
         Content-Type:
           - application/json
         DATE: *id001
@@ -401,37 +310,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:postgresql://localhost:5432/demo?autosave=true&sslmode=prefer
-              username: demouser
-              authenticationType: USERNAME_PASSWORD
-              alternativeDataSourceId: ds-patch-abc-id
-              name: Test2
-              type: POSTGRESQL
-              schema: demo
-            id: test
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
+      status:
+        code: 200
+        message: OK
   - request:
-      method: DELETE
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body: null
       headers:
         Accept-Encoding:
@@ -440,15 +325,12 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -456,18 +338,10 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
+version: 1

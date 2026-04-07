@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes: []
@@ -11,13 +8,13 @@ interactions:
           measures:
             - definition:
                 measure:
+                  aggregation: SUM
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: price
                       type: fact
-                  aggregation: SUM
-                  computeRatio: false
-                  filters: []
               localIdentifier: 27c4b665b9d047b1a66a149714f1c596
         resultSpec:
           dimensions:
@@ -35,10 +32,19 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          executionResponse:
+            dimensions:
+              - headers:
+                  - measureGroupHeaders:
+                      - localIdentifier: 27c4b665b9d047b1a66a149714f1c596
+                localIdentifier: dim_0
+            links:
+              executionResult: EXECUTION_RESULT_28
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -60,24 +66,14 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Gdc-Cancel-Token:
-          - cb592156-cfc1-4b96-a3f1-e87124227d53
+        X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
-      body:
-        string:
-          executionResponse:
-            dimensions:
-              - headers:
-                  - measureGroupHeaders:
-                      - localIdentifier: 27c4b665b9d047b1a66a149714f1c596
-                localIdentifier: dim_0
-            links:
-              executionResult: 0064d11186aa76b6a3ba289ecd36a860c83ccf0e:9b10cea7336ba4a258116d294439f40193e3eef0ce67889234d6638be906a4b0
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/0064d11186aa76b6a3ba289ecd36a860c83ccf0e%3A9b10cea7336ba4a258116d294439f40193e3eef0ce67889234d6638be906a4b0?offset=0&limit=1
       body: null
       headers:
         Accept:
@@ -88,10 +84,28 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_28?offset=0&limit=1
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            - 430464.45
+          dimensionHeaders:
+            - headerGroups:
+                - headers:
+                    - measureHeader:
+                        measureIndex: 0
+          grandTotals: []
+          metadata:
+            dataSourceMessages: []
+          paging:
+            count:
+              - 1
+            offset:
+              - 0
+            total:
+              - 1
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -115,28 +129,10 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
-      body:
-        string:
-          data:
-            - 430464.45
-          dimensionHeaders:
-            - headerGroups:
-                - headers:
-                    - measureHeader:
-                        measureIndex: 0
-          grandTotals: []
-          paging:
-            count:
-              - 1
-            offset:
-              - 0
-            total:
-              - 1
-          metadata:
-            dataSourceMessages: []
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes: []
@@ -152,13 +148,13 @@ interactions:
           measures:
             - definition:
                 measure:
+                  aggregation: SUM
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: price
                       type: fact
-                  aggregation: SUM
-                  computeRatio: false
-                  filters: []
               localIdentifier: 27c4b665b9d047b1a66a149714f1c596
         resultSpec:
           dimensions:
@@ -176,10 +172,19 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          executionResponse:
+            dimensions:
+              - headers:
+                  - measureGroupHeaders:
+                      - localIdentifier: 27c4b665b9d047b1a66a149714f1c596
+                localIdentifier: dim_0
+            links:
+              executionResult: EXECUTION_RESULT_30
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -200,24 +205,14 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Gdc-Cancel-Token:
-          - a8c6cb4f-a12f-4ae4-972a-d7ad2199ef2c
+        X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
-      body:
-        string:
-          executionResponse:
-            dimensions:
-              - headers:
-                  - measureGroupHeaders:
-                      - localIdentifier: 27c4b665b9d047b1a66a149714f1c596
-                localIdentifier: dim_0
-            links:
-              executionResult: e69ad6c1f888ca37fd7c6ed066873adf5148a2d2:8f96563bbc98787daa04982298c2b8917683b3ec00090018a0ef5a41fb497397
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/e69ad6c1f888ca37fd7c6ed066873adf5148a2d2%3A8f96563bbc98787daa04982298c2b8917683b3ec00090018a0ef5a41fb497397?offset=0&limit=1
       body: null
       headers:
         Accept:
@@ -228,10 +223,28 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_30?offset=0&limit=1
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            - 18.7
+          dimensionHeaders:
+            - headerGroups:
+                - headers:
+                    - measureHeader:
+                        measureIndex: 0
+          grandTotals: []
+          metadata:
+            dataSourceMessages: []
+          paging:
+            count:
+              - 1
+            offset:
+              - 0
+            total:
+              - 1
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -255,22 +268,7 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
-      body:
-        string:
-          data:
-            - 18.7
-          dimensionHeaders:
-            - headerGroups:
-                - headers:
-                    - measureHeader:
-                        measureIndex: 0
-          grandTotals: []
-          paging:
-            count:
-              - 1
-            offset:
-              - 0
-            total:
-              - 1
-          metadata:
-            dataSourceMessages: []
+      status:
+        code: 200
+        message: OK
+version: 1

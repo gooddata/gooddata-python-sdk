@@ -1,19 +1,16 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
       body:
-        - permissions:
-            - VIEW
-          assigneeIdentifier:
+        - assigneeIdentifier:
             id: visitorsGroup
             type: userGroup
-        - permissions:
+          permissions:
             - VIEW
-          assigneeRule:
+        - assigneeRule:
             type: allWorkspaceUsers
+          permissions:
+            - VIEW
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -23,39 +20,25 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
       body: null
       headers:
         Accept:
@@ -66,37 +49,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '209'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           rules:
@@ -111,9 +66,21 @@ interactions:
                 - level: VIEW
                   source: direct
           users: []
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo
       body: null
       headers:
         Accept:
@@ -124,40 +91,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           analytics:
@@ -169,48 +105,48 @@ interactions:
                       id: campaign_name_filter
                       type: filterContext
                   layout:
-                    type: IDashboardLayout
                     sections:
-                      - type: IDashboardLayoutSection
-                        header:
-                          title: Spend breakdown and Revenue
+                      - header:
                           description: The first insight shows a breakdown of spend
                             by category and campaign. The second shows revenue per
                             $ spend, for each campaign, to demonstrate, how campaigns
                             are successful.
+                          title: Spend breakdown and Revenue
                         items:
-                          - type: IDashboardLayoutItem
-                            size:
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Campaign Spend
                               description: ''
+                              drills: []
                               ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: campaign_spend
                                   type: visualizationObject
-                              drills: []
                               properties: {}
-                          - type: IDashboardLayoutItem
-                            size:
+                              title: Campaign Spend
+                              type: insight
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Revenue per $ vs Spend by Campaign
                               description: ''
+                              drills: []
                               ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: revenue_per_usd_vs_spend_by_campaign
                                   type: visualizationObject
-                              drills: []
                               properties: {}
+                              title: Revenue per $ vs Spend by Campaign
+                              type: insight
+                        type: IDashboardLayoutSection
+                    type: IDashboardLayout
                   version: '2'
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -257,7 +193,7 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -269,145 +205,145 @@ interactions:
                       id: region_filter
                       type: filterContext
                   layout:
-                    type: IDashboardLayout
                     sections:
-                      - type: IDashboardLayoutSection
-                        items:
-                          - type: IDashboardLayoutItem
-                            size:
+                      - items:
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Top 10 Products
-                              description: ''
-                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
+                              description: ''
+                              drills: []
+                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: top_10_products
                                   type: visualizationObject
-                              drills: []
                               properties: {}
-                          - type: IDashboardLayoutItem
-                            size:
+                              title: Top 10 Products
+                              type: insight
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Revenue Trend
-                              description: ''
-                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
+                              description: ''
+                              drills: []
+                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: revenue_trend
                                   type: visualizationObject
-                              drills: []
                               properties: {}
-                          - type: IDashboardLayoutItem
-                            size:
+                              title: Revenue Trend
+                              type: insight
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Customers Trend
-                              description: ''
-                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
+                              description: ''
+                              drills: []
+                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: customers_trend
                                   type: visualizationObject
-                              drills: []
                               properties: {}
-                          - type: IDashboardLayoutItem
-                            size:
+                              title: Customers Trend
+                              type: insight
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Product Categories Pie Chart
-                              description: ''
-                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
+                              description: ''
+                              drills: []
+                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: product_categories_pie_chart
                                   type: visualizationObject
-                              drills: []
                               properties: {}
-                          - type: IDashboardLayoutItem
-                            size:
+                              title: Product Categories Pie Chart
+                              type: insight
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Product Breakdown
-                              description: ''
-                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
+                              description: ''
+                              drills: []
+                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: product_breakdown
                                   type: visualizationObject
-                              drills: []
                               properties: {}
-                          - type: IDashboardLayoutItem
-                            size:
+                              title: Product Breakdown
+                              type: insight
+                          - size:
                               xl:
                                 gridWidth: 6
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: Product Saleability
-                              description: ''
-                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
+                              description: ''
+                              drills: []
+                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: product_saleability
                                   type: visualizationObject
-                              drills: []
                               properties: {}
-                          - type: IDashboardLayoutItem
-                            size:
+                              title: Product Saleability
+                              type: insight
+                          - size:
                               xl:
                                 gridWidth: 12
+                            type: IDashboardLayoutItem
                             widget:
-                              type: insight
-                              title: '% Revenue per Product by Customer and Category'
-                              description: ''
-                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
+                              description: ''
+                              drills: []
+                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: percent_revenue_per_product_by_customer_and_category
                                   type: visualizationObject
-                              drills: []
                               properties: {}
+                              title: '% Revenue per Product by Customer and Category'
+                              type: insight
+                        type: IDashboardLayoutSection
+                    type: IDashboardLayout
                   version: '2'
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -419,7 +355,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -429,7 +365,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -442,19 +378,19 @@ interactions:
                   filters:
                     - dateFilter:
                         from: '0'
-                        to: '0'
                         granularity: GDC.time.month
+                        to: '0'
                         type: relative
                     - attributeFilter:
+                        attributeElements:
+                          uris: []
                         displayForm:
                           identifier:
                             id: campaign_name
                             type: label
-                        negativeSelection: true
-                        attributeElements:
-                          uris: []
-                        localIdentifier: 14b0807447ef4bc28f43e4fc5c337d1d
                         filterElementsBy: []
+                        localIdentifier: 14b0807447ef4bc28f43e4fc5c337d1d
+                        negativeSelection: true
                   version: '2'
                 description: ''
                 id: campaign_name_filter
@@ -462,15 +398,15 @@ interactions:
               - content:
                   filters:
                     - attributeFilter:
+                        attributeElements:
+                          uris: []
                         displayForm:
                           identifier:
                             id: region
                             type: label
-                        negativeSelection: true
-                        attributeElements:
-                          uris: []
-                        localIdentifier: 2d5ef8df82444f6ba27b45f0990ee6af
                         filterElementsBy: []
+                        localIdentifier: 2d5ef8df82444f6ba27b45f0990ee6af
+                        negativeSelection: true
                   version: '2'
                 description: ''
                 id: region_filter
@@ -480,7 +416,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -489,7 +425,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -499,7 +435,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -509,7 +445,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -519,7 +455,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -528,7 +464,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -537,7 +473,7 @@ interactions:
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -547,7 +483,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -557,7 +493,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -567,7 +503,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -577,7 +513,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -587,7 +523,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -597,7 +533,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -607,7 +543,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -618,7 +554,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -628,7 +564,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -638,7 +574,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -648,7 +584,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -657,7 +593,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -666,7 +602,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -675,7 +611,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -684,7 +620,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -693,7 +629,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -702,12 +638,13 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
                 id: total_revenue-no_filters
                 title: Total Revenue (No Filters)
+            parameters: []
             visualizationObjects:
               - content:
                   buckets:
@@ -767,7 +704,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -843,7 +780,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -922,7 +859,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -981,7 +918,7 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -1038,7 +975,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -1056,9 +993,9 @@ interactions:
                                   identifier:
                                     id: revenue
                                     type: metric
+                            format: '#,##0.00%'
                             localIdentifier: 162b857af49d45769bc12604a5c192b9
                             title: '% Revenue'
-                            format: '#,##0.00%'
                       localIdentifier: measures
                     - items:
                         - attribute:
@@ -1091,7 +1028,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -1166,7 +1103,7 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -1223,7 +1160,7 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -1322,7 +1259,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -1378,7 +1315,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -1417,7 +1354,7 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -1473,7 +1410,7 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -1541,7 +1478,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -1598,7 +1535,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -1655,7 +1592,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
                   type: user
@@ -2052,17 +1989,29 @@ interactions:
                 tags:
                   - Date
                 title: Date
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
       body:
-        - permissions: []
-          assigneeIdentifier:
+        - assigneeIdentifier:
             id: visitorsGroup
             type: userGroup
-        - permissions: []
-          assigneeRule:
+          permissions: []
+        - assigneeRule:
             type: allWorkspaceUsers
+          permissions: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -2072,38 +2021,24 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         DATE: *id001
         Expires:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
       body: null
       headers:
         Accept:
@@ -2114,17 +2049,15 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          rules: []
+          userGroups: []
+          users: []
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '39'
         Content-Type:
           - application/json
         DATE: *id001
@@ -2132,21 +2065,10 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          rules: []
-          userGroups: []
-          users: []
+      status:
+        code: 200
+        message: OK
+version: 1

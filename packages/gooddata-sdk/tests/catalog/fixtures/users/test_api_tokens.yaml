@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo/apiTokens?page=0&size=500
       body: null
       headers:
         Accept:
@@ -14,17 +11,16 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/users/demo/apiTokens?page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data: []
+          links:
+            next: http://localhost:3000/api/v1/entities/users/demo/apiTokens?page=1&size=500
+            self: http://localhost:3000/api/v1/entities/users/demo/apiTokens?page=0&size=500
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '263'
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,28 +29,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data: []
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo/apiTokens?page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo/apiTokens?page=1&size=500
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo/apiTokens
       body:
         data:
           id: test_token
@@ -70,17 +51,19 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/users/demo/apiTokens
     response:
-      status:
-        code: 201
-        message: Created
+      body:
+        string:
+          data:
+            attributes:
+              bearerToken: ZGVtbzp0ZXN0X3Rva2VuOjJ1NG1ScVd2YndiZ09NVFRCMUdneUJlbHVVMVVrZUpz
+            id: test_token
+            type: apiToken
+          links:
+            self: http://localhost:3000/api/v1/entities/users/demo/apiTokens/test_token
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '268'
         Content-Type:
           - application/json
         DATE: *id001
@@ -88,31 +71,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              bearerToken: ZGVtbzp0ZXN0X3Rva2VuOlVvenRGaHVTNUZSQ2g3SHJHa21ZNTNmaGRkUkVuWmFv
-            id: test_token
-            type: apiToken
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo/apiTokens/test_token
+      status:
+        code: 201
+        message: Created
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo/apiTokens/test_token
       body: null
       headers:
         Accept:
@@ -123,37 +88,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/users/demo/apiTokens/test_token
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '188'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
@@ -161,10 +98,22 @@ interactions:
             id: test_token
             type: apiToken
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo/apiTokens/test_token
+            self: http://localhost:3000/api/v1/entities/users/demo/apiTokens/test_token
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo/apiTokens?page=0&size=500
       body: null
       headers:
         Accept:
@@ -175,17 +124,21 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/users/demo/apiTokens?page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            - attributes: {}
+              id: test_token
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo/apiTokens/test_token
+              type: apiToken
+          links:
+            next: http://localhost:3000/api/v1/entities/users/demo/apiTokens?page=1&size=500
+            self: http://localhost:3000/api/v1/entities/users/demo/apiTokens?page=0&size=500
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '442'
         Content-Type:
           - application/json
         DATE: *id001
@@ -193,33 +146,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            - attributes: {}
-              id: test_token
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo/apiTokens/test_token
-              type: apiToken
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo/apiTokens?page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo/apiTokens?page=1&size=500
+      status:
+        code: 200
+        message: OK
   - request:
-      method: DELETE
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/users/demo/apiTokens/test_token
       body: null
       headers:
         Accept-Encoding:
@@ -228,15 +161,12 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/users/demo/apiTokens/test_token
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -244,18 +174,10 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
+version: 1

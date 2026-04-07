@@ -28,7 +28,8 @@
                         "id": "campaign_id",
                         "type": "attribute"
                       },
-                      "data_type": "INT"
+                      "data_type": "INT",
+                      "is_nullable": true
                     }
                   ]
                 }
@@ -44,7 +45,8 @@
                   "description": "Campaign channel id",
                   "tags": [
                     "Campaign channels"
-                  ]
+                  ],
+                  "is_nullable": false
                 },
                 {
                   "id": "campaign_channels.category",
@@ -55,7 +57,8 @@
                   "description": "Category",
                   "tags": [
                     "Campaign channels"
-                  ]
+                  ],
+                  "is_nullable": true
                 },
                 {
                   "id": "type",
@@ -66,7 +69,8 @@
                   "description": "Type",
                   "tags": [
                     "Campaign channels"
-                  ]
+                  ],
+                  "is_nullable": true
                 }
               ],
               "facts": [
@@ -78,7 +82,8 @@
                   "description": "Budget",
                   "tags": [
                     "Campaign channels"
-                  ]
+                  ],
+                  "is_nullable": true
                 },
                 {
                   "id": "spend",
@@ -88,7 +93,8 @@
                   "description": "Spend",
                   "tags": [
                     "Campaign channels"
-                  ]
+                  ],
+                  "is_nullable": true
                 }
               ],
               "aggregated_facts": [],
@@ -121,7 +127,8 @@
                         "id": "campaign_channel_id",
                         "type": "attribute"
                       },
-                      "data_type": "STRING"
+                      "data_type": "STRING",
+                      "is_nullable": true
                     }
                   ]
                 }
@@ -132,9 +139,7 @@
               "aggregated_facts": [
                 {
                   "id": "budget_agg",
-                  "description": "Budget Agg",
                   "source_column": "budget",
-                  "source_column_data_type": "INT",
                   "source_fact_reference": {
                     "operation": "SUM",
                     "reference": {
@@ -142,6 +147,8 @@
                       "type": "fact"
                     }
                   },
+                  "source_column_data_type": "INT",
+                  "description": "Budget Agg",
                   "tags": [
                     "Campaign channels per category"
                   ]
@@ -149,8 +156,8 @@
               ],
               "precedence": 1,
               "sql": {
-                "data_source_id": "demo-test-ds",
-                "statement": "SELECT category, SUM(budget) FROM campaign_channels GROUP BY category"
+                "statement": "SELECT category, SUM(budget) FROM campaign_channels GROUP BY category",
+                "data_source_id": "demo-test-ds"
               },
               "tags": [
                 "Campaign channels per category"
@@ -177,7 +184,8 @@
                   "description": "Campaign id",
                   "tags": [
                     "Campaigns"
-                  ]
+                  ],
+                  "is_nullable": false
                 },
                 {
                   "id": "campaign_name",
@@ -188,7 +196,8 @@
                   "description": "Campaign name",
                   "tags": [
                     "Campaigns"
-                  ]
+                  ],
+                  "is_nullable": true
                 }
               ],
               "facts": [],
@@ -226,7 +235,8 @@
                   "description": "Customer id",
                   "tags": [
                     "Customers"
-                  ]
+                  ],
+                  "is_nullable": false
                 },
                 {
                   "id": "customer_name",
@@ -237,7 +247,8 @@
                   "description": "Customer name",
                   "tags": [
                     "Customers"
-                  ]
+                  ],
+                  "is_nullable": true
                 },
                 {
                   "id": "region",
@@ -248,7 +259,8 @@
                   "description": "Region",
                   "tags": [
                     "Customers"
-                  ]
+                  ],
+                  "is_nullable": true
                 },
                 {
                   "id": "state",
@@ -264,14 +276,16 @@
                       "tags": [
                         "Customers"
                       ],
-                      "value_type": "GEO"
+                      "value_type": "GEO",
+                      "is_nullable": true
                     }
                   ],
                   "source_column_data_type": "STRING",
                   "description": "State",
                   "tags": [
                     "Customers"
-                  ]
+                  ],
+                  "is_nullable": true
                 }
               ],
               "facts": [],
@@ -310,7 +324,8 @@
                         "id": "campaign_id",
                         "type": "attribute"
                       },
-                      "data_type": "INT"
+                      "data_type": "INT",
+                      "is_nullable": true
                     }
                   ]
                 },
@@ -326,7 +341,8 @@
                         "id": "customer_id",
                         "type": "attribute"
                       },
-                      "data_type": "INT"
+                      "data_type": "INT",
+                      "is_nullable": true
                     }
                   ]
                 },
@@ -342,7 +358,8 @@
                         "id": "date",
                         "type": "date"
                       },
-                      "data_type": "DATE"
+                      "data_type": "DATE",
+                      "is_nullable": true
                     }
                   ]
                 },
@@ -358,7 +375,8 @@
                         "id": "product_id",
                         "type": "attribute"
                       },
-                      "data_type": "INT"
+                      "data_type": "INT",
+                      "is_nullable": true
                     }
                   ]
                 }
@@ -374,7 +392,8 @@
                   "description": "Order id",
                   "tags": [
                     "Order lines"
-                  ]
+                  ],
+                  "is_nullable": true
                 },
                 {
                   "id": "order_line_id",
@@ -385,7 +404,8 @@
                   "description": "Order line id",
                   "tags": [
                     "Order lines"
-                  ]
+                  ],
+                  "is_nullable": false
                 },
                 {
                   "id": "order_status",
@@ -396,7 +416,8 @@
                   "description": "Order status",
                   "tags": [
                     "Order lines"
-                  ]
+                  ],
+                  "is_nullable": true
                 }
               ],
               "facts": [
@@ -408,7 +429,8 @@
                   "description": "Price",
                   "tags": [
                     "Order lines"
-                  ]
+                  ],
+                  "is_nullable": true
                 },
                 {
                   "id": "quantity",
@@ -418,7 +440,8 @@
                   "description": "Quantity",
                   "tags": [
                     "Order lines"
-                  ]
+                  ],
+                  "is_nullable": true
                 }
               ],
               "aggregated_facts": [],
@@ -474,7 +497,8 @@
                   "description": "Product id",
                   "tags": [
                     "Products"
-                  ]
+                  ],
+                  "is_nullable": false
                 },
                 {
                   "id": "product_name",
@@ -485,7 +509,8 @@
                   "description": "Product name",
                   "tags": [
                     "Products"
-                  ]
+                  ],
+                  "is_nullable": true
                 },
                 {
                   "id": "products.category",
@@ -496,7 +521,8 @@
                   "description": "Category",
                   "tags": [
                     "Products"
-                  ]
+                  ],
+                  "is_nullable": true
                 }
               ],
               "facts": [],
@@ -1365,9 +1391,9 @@
                           "type": "dataset"
                         }
                       },
-                      "from": -11,
+                      "from": -12,
                       "granularity": "GDC.time.month",
-                      "to": 0
+                      "to": -1
                     }
                   }
                 ],
@@ -2788,7 +2814,8 @@
             }
           ],
           "export_definitions": [],
-          "memory_items": []
+          "memory_items": [],
+          "parameters": []
         }
       },
       "permissions": [
@@ -2872,7 +2899,8 @@
           "metrics": [],
           "visualization_objects": [],
           "export_definitions": [],
-          "memory_items": []
+          "memory_items": [],
+          "parameters": []
         }
       },
       "parent": {
@@ -2903,7 +2931,8 @@
           "metrics": [],
           "visualization_objects": [],
           "export_definitions": [],
-          "memory_items": []
+          "memory_items": [],
+          "parameters": []
         }
       },
       "parent": {

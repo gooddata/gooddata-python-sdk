@@ -69,17 +69,17 @@
           },
           "version": "2"
         },
+        "id": "campaign",
+        "title": "Campaign",
+        "description": "",
         "permissions": [
           {
+            "name": "VIEW",
             "assigneeRule": {
               "type": "allWorkspaceUsers"
-            },
-            "name": "VIEW"
+            }
           }
-        ],
-        "description": "",
-        "id": "campaign",
-        "title": "Campaign"
+        ]
       },
       {
         "content": {
@@ -353,9 +353,9 @@
           },
           "version": "2"
         },
-        "description": "",
         "id": "product_and_category",
-        "title": "Product & Category"
+        "title": "Product & Category",
+        "description": ""
       }
     ],
     "analyticalDashboardExtensions": [],
@@ -366,18 +366,18 @@
           "url": "https://www.example.com",
           "version": "2"
         },
-        "description": "Testing record dashboard_plugin_1",
         "id": "dashboard_plugin_1",
-        "title": "dashboard_plugin_1"
+        "title": "dashboard_plugin_1",
+        "description": "Testing record dashboard_plugin_1"
       },
       {
         "content": {
           "url": "https://www.example.com",
           "version": "2"
         },
-        "description": "Testing record dashboard_plugin_2",
         "id": "dashboard_plugin_2",
-        "title": "dashboard_plugin_2"
+        "title": "dashboard_plugin_2",
+        "description": "Testing record dashboard_plugin_2"
       }
     ],
     "filterContexts": [
@@ -411,9 +411,9 @@
           ],
           "version": "2"
         },
-        "description": "",
         "id": "campaign_name_filter",
-        "title": "filterContext"
+        "title": "filterContext",
+        "description": ""
       },
       {
         "content": {
@@ -437,12 +437,11 @@
           ],
           "version": "2"
         },
-        "description": "",
         "id": "region_filter",
-        "title": "filterContext"
+        "title": "filterContext",
+        "description": ""
       }
     ],
-    "memoryItems": [],
     "metrics": [
       {
         "content": {
@@ -473,9 +472,9 @@
           "format": "#,##0.00",
           "maql": "SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status} IN (\"Returned\", \"Canceled\"))"
         },
-        "description": "",
         "id": "amount_of_valid_orders",
-        "title": "# of Valid Orders"
+        "title": "# of Valid Orders",
+        "description": ""
       },
       {
         "content": {
@@ -554,9 +553,9 @@
           "format": "$#,##0",
           "maql": "SELECT {metric/order_amount} WHERE NOT ({label/order_status} IN (\"Returned\", \"Canceled\"))"
         },
-        "description": "",
         "id": "revenue",
-        "title": "Revenue"
+        "title": "Revenue",
+        "description": ""
       },
       {
         "content": {
@@ -827,9 +826,9 @@
                     "type": "dataset"
                   }
                 },
-                "from": -11,
+                "from": -12,
                 "granularity": "GDC.time.month",
-                "to": 0
+                "to": -1
               }
             }
           ],
@@ -2251,6 +2250,8 @@
         "title": "Top 10 Products"
       }
     ],
-    "exportDefinitions": []
+    "exportDefinitions": [],
+    "memoryItems": [],
+    "parameters": []
   }
 }

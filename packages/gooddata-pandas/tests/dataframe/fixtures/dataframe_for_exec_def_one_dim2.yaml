@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes:
@@ -26,22 +23,22 @@ interactions:
           measures:
             - definition:
                 measure:
+                  aggregation: SUM
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: price
                       type: fact
-                  aggregation: SUM
-                  computeRatio: false
-                  filters: []
               localIdentifier: price
             - definition:
                 measure:
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: order_amount
                       type: metric
-                  computeRatio: false
-                  filters: []
               localIdentifier: order_amount
         resultSpec:
           dimensions:
@@ -64,10 +61,69 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          executionResponse:
+            dimensions:
+              - headers: []
+                localIdentifier: dim_0
+              - headers:
+                  - attributeHeader:
+                      attribute:
+                        id: region
+                        type: attribute
+                      attributeName: Region
+                      granularity: null
+                      label:
+                        id: region
+                        type: label
+                      labelName: Region
+                      localIdentifier: region
+                      primaryLabel:
+                        id: region
+                        type: label
+                      valueType: TEXT
+                  - attributeHeader:
+                      attribute:
+                        id: state
+                        type: attribute
+                      attributeName: State
+                      granularity: null
+                      label:
+                        id: state
+                        type: label
+                      labelName: State
+                      localIdentifier: state
+                      primaryLabel:
+                        id: state
+                        type: label
+                      valueType: TEXT
+                  - attributeHeader:
+                      attribute:
+                        id: products.category
+                        type: attribute
+                      attributeName: Category
+                      granularity: null
+                      label:
+                        id: products.category
+                        type: label
+                      labelName: Category
+                      localIdentifier: product_category
+                      primaryLabel:
+                        id: products.category
+                        type: label
+                      valueType: TEXT
+                  - measureGroupHeaders:
+                      - localIdentifier: price
+                      - format: $#,##0
+                        localIdentifier: order_amount
+                        name: Order Amount
+                localIdentifier: dim_1
+            links:
+              executionResult: EXECUTION_RESULT_8
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -89,74 +145,14 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Gdc-Cancel-Token:
-          - 639c538b-75b5-47ea-892b-a24919a46634
+        X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
-      body:
-        string:
-          executionResponse:
-            dimensions:
-              - headers: []
-                localIdentifier: dim_0
-              - headers:
-                  - attributeHeader:
-                      localIdentifier: region
-                      label:
-                        id: region
-                        type: label
-                      labelName: Region
-                      attribute:
-                        id: region
-                        type: attribute
-                      attributeName: Region
-                      granularity: null
-                      primaryLabel:
-                        id: region
-                        type: label
-                      valueType: TEXT
-                  - attributeHeader:
-                      localIdentifier: state
-                      label:
-                        id: state
-                        type: label
-                      labelName: State
-                      attribute:
-                        id: state
-                        type: attribute
-                      attributeName: State
-                      granularity: null
-                      primaryLabel:
-                        id: state
-                        type: label
-                      valueType: TEXT
-                  - attributeHeader:
-                      localIdentifier: product_category
-                      label:
-                        id: products.category
-                        type: label
-                      labelName: Category
-                      attribute:
-                        id: products.category
-                        type: attribute
-                      attributeName: Category
-                      granularity: null
-                      primaryLabel:
-                        id: products.category
-                        type: label
-                      valueType: TEXT
-                  - measureGroupHeaders:
-                      - localIdentifier: price
-                      - localIdentifier: order_amount
-                        format: $#,##0
-                        name: Order Amount
-                localIdentifier: dim_1
-            links:
-              executionResult: 4f7b311296f89a035148eb4b0bd58baf99173a92:5fce346b0f34ae7c711b81a4f44d4c5896c33378696bc0f000842cb1bd074c88
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4f7b311296f89a035148eb4b0bd58baf99173a92%3A5fce346b0f34ae7c711b81a4f44d4c5896c33378696bc0f000842cb1bd074c88/metadata
       body: null
       headers:
         Accept:
@@ -167,10 +163,126 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_8/metadata
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          afm:
+            attributes:
+              - label:
+                  identifier:
+                    id: region
+                    type: label
+                localIdentifier: region
+                showAllValues: false
+              - label:
+                  identifier:
+                    id: state
+                    type: label
+                localIdentifier: state
+                showAllValues: false
+              - label:
+                  identifier:
+                    id: products.category
+                    type: label
+                localIdentifier: product_category
+                showAllValues: false
+            auxMeasures: []
+            filters: []
+            measureDefinitionOverrides: []
+            measures:
+              - definition:
+                  measure:
+                    aggregation: SUM
+                    computeRatio: false
+                    filters: []
+                    item:
+                      identifier:
+                        id: price
+                        type: fact
+                localIdentifier: price
+              - definition:
+                  measure:
+                    computeRatio: false
+                    filters: []
+                    item:
+                      identifier:
+                        id: order_amount
+                        type: metric
+                localIdentifier: order_amount
+          executionResponse:
+            dimensions:
+              - headers: []
+                localIdentifier: dim_0
+              - headers:
+                  - attributeHeader:
+                      attribute:
+                        id: region
+                        type: attribute
+                      attributeName: Region
+                      granularity: null
+                      label:
+                        id: region
+                        type: label
+                      labelName: Region
+                      localIdentifier: region
+                      primaryLabel:
+                        id: region
+                        type: label
+                      valueType: TEXT
+                  - attributeHeader:
+                      attribute:
+                        id: state
+                        type: attribute
+                      attributeName: State
+                      granularity: null
+                      label:
+                        id: state
+                        type: label
+                      labelName: State
+                      localIdentifier: state
+                      primaryLabel:
+                        id: state
+                        type: label
+                      valueType: TEXT
+                  - attributeHeader:
+                      attribute:
+                        id: products.category
+                        type: attribute
+                      attributeName: Category
+                      granularity: null
+                      label:
+                        id: products.category
+                        type: label
+                      labelName: Category
+                      localIdentifier: product_category
+                      primaryLabel:
+                        id: products.category
+                        type: label
+                      valueType: TEXT
+                  - measureGroupHeaders:
+                      - localIdentifier: price
+                      - format: $#,##0
+                        localIdentifier: order_amount
+                        name: Order Amount
+                localIdentifier: dim_1
+            links:
+              executionResult: EXECUTION_RESULT_8
+          resultSize: 2913
+          resultSpec:
+            dimensions:
+              - itemIdentifiers: []
+                localIdentifier: dim_0
+                sorting: []
+              - itemIdentifiers:
+                  - region
+                  - state
+                  - product_category
+                  - measureGroup
+                localIdentifier: dim_1
+                sorting: []
+            totals: []
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -194,126 +306,10 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
-      body:
-        string:
-          afm:
-            attributes:
-              - localIdentifier: region
-                label:
-                  identifier:
-                    id: region
-                    type: label
-                showAllValues: false
-              - localIdentifier: state
-                label:
-                  identifier:
-                    id: state
-                    type: label
-                showAllValues: false
-              - localIdentifier: product_category
-                label:
-                  identifier:
-                    id: products.category
-                    type: label
-                showAllValues: false
-            filters: []
-            measures:
-              - localIdentifier: price
-                definition:
-                  measure:
-                    item:
-                      identifier:
-                        id: price
-                        type: fact
-                    aggregation: SUM
-                    computeRatio: false
-                    filters: []
-              - localIdentifier: order_amount
-                definition:
-                  measure:
-                    item:
-                      identifier:
-                        id: order_amount
-                        type: metric
-                    computeRatio: false
-                    filters: []
-            auxMeasures: []
-            measureDefinitionOverrides: []
-          executionResponse:
-            dimensions:
-              - headers: []
-                localIdentifier: dim_0
-              - headers:
-                  - attributeHeader:
-                      localIdentifier: region
-                      label:
-                        id: region
-                        type: label
-                      labelName: Region
-                      attribute:
-                        id: region
-                        type: attribute
-                      attributeName: Region
-                      granularity: null
-                      primaryLabel:
-                        id: region
-                        type: label
-                      valueType: TEXT
-                  - attributeHeader:
-                      localIdentifier: state
-                      label:
-                        id: state
-                        type: label
-                      labelName: State
-                      attribute:
-                        id: state
-                        type: attribute
-                      attributeName: State
-                      granularity: null
-                      primaryLabel:
-                        id: state
-                        type: label
-                      valueType: TEXT
-                  - attributeHeader:
-                      localIdentifier: product_category
-                      label:
-                        id: products.category
-                        type: label
-                      labelName: Category
-                      attribute:
-                        id: products.category
-                        type: attribute
-                      attributeName: Category
-                      granularity: null
-                      primaryLabel:
-                        id: products.category
-                        type: label
-                      valueType: TEXT
-                  - measureGroupHeaders:
-                      - localIdentifier: price
-                      - localIdentifier: order_amount
-                        format: $#,##0
-                        name: Order Amount
-                localIdentifier: dim_1
-            links:
-              executionResult: 4f7b311296f89a035148eb4b0bd58baf99173a92:5fce346b0f34ae7c711b81a4f44d4c5896c33378696bc0f000842cb1bd074c88
-          resultSpec:
-            dimensions:
-              - localIdentifier: dim_0
-                itemIdentifiers: []
-                sorting: []
-              - localIdentifier: dim_1
-                itemIdentifiers:
-                  - region
-                  - state
-                  - product_category
-                  - measureGroup
-                sorting: []
-            totals: []
-          resultSize: 2913
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4f7b311296f89a035148eb4b0bd58baf99173a92%3A5fce346b0f34ae7c711b81a4f44d4c5896c33378696bc0f000842cb1bd074c88?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -324,33 +320,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_8?offset=0%2C0&limit=100%2C100
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '27528'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       body:
         string:
           data:
@@ -1562,6 +1534,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -1572,30 +1546,11 @@ interactions:
             total:
               - 1
               - 364
-          metadata:
-            dataSourceMessages: []
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4f7b311296f89a035148eb4b0bd58baf99173a92%3A5fce346b0f34ae7c711b81a4f44d4c5896c33378696bc0f000842cb1bd074c88?offset=0%2C100&limit=100%2C100
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '27760'
+          - '27528'
         Content-Type:
           - application/json
         DATE: *id001
@@ -1614,6 +1569,23 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_8?offset=0%2C100&limit=100%2C100
+    response:
       body:
         string:
           data:
@@ -2825,6 +2797,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -2835,30 +2809,11 @@ interactions:
             total:
               - 1
               - 364
-          metadata:
-            dataSourceMessages: []
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4f7b311296f89a035148eb4b0bd58baf99173a92%3A5fce346b0f34ae7c711b81a4f44d4c5896c33378696bc0f000842cb1bd074c88?offset=0%2C200&limit=100%2C100
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '27352'
+          - '27760'
         Content-Type:
           - application/json
         DATE: *id001
@@ -2877,6 +2832,23 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_8?offset=0%2C200&limit=100%2C100
+    response:
       body:
         string:
           data:
@@ -4088,6 +4060,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -4098,30 +4072,11 @@ interactions:
             total:
               - 1
               - 364
-          metadata:
-            dataSourceMessages: []
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4f7b311296f89a035148eb4b0bd58baf99173a92%3A5fce346b0f34ae7c711b81a4f44d4c5896c33378696bc0f000842cb1bd074c88?offset=0%2C300&limit=100%2C100
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '17132'
+          - '27352'
         Content-Type:
           - application/json
         DATE: *id001
@@ -4140,6 +4095,23 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_8?offset=0%2C300&limit=100%2C100
+    response:
       body:
         string:
           data:
@@ -4919,6 +4891,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -4929,11 +4903,33 @@ interactions:
             total:
               - 1
               - 364
-          metadata:
-            dataSourceMessages: []
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '17132'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - '0'
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4f7b311296f89a035148eb4b0bd58baf99173a92%3A5fce346b0f34ae7c711b81a4f44d4c5896c33378696bc0f000842cb1bd074c88/metadata
       body: null
       headers:
         Accept:
@@ -4944,10 +4940,126 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_8/metadata
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          afm:
+            attributes:
+              - label:
+                  identifier:
+                    id: region
+                    type: label
+                localIdentifier: region
+                showAllValues: false
+              - label:
+                  identifier:
+                    id: state
+                    type: label
+                localIdentifier: state
+                showAllValues: false
+              - label:
+                  identifier:
+                    id: products.category
+                    type: label
+                localIdentifier: product_category
+                showAllValues: false
+            auxMeasures: []
+            filters: []
+            measureDefinitionOverrides: []
+            measures:
+              - definition:
+                  measure:
+                    aggregation: SUM
+                    computeRatio: false
+                    filters: []
+                    item:
+                      identifier:
+                        id: price
+                        type: fact
+                localIdentifier: price
+              - definition:
+                  measure:
+                    computeRatio: false
+                    filters: []
+                    item:
+                      identifier:
+                        id: order_amount
+                        type: metric
+                localIdentifier: order_amount
+          executionResponse:
+            dimensions:
+              - headers: []
+                localIdentifier: dim_0
+              - headers:
+                  - attributeHeader:
+                      attribute:
+                        id: region
+                        type: attribute
+                      attributeName: Region
+                      granularity: null
+                      label:
+                        id: region
+                        type: label
+                      labelName: Region
+                      localIdentifier: region
+                      primaryLabel:
+                        id: region
+                        type: label
+                      valueType: TEXT
+                  - attributeHeader:
+                      attribute:
+                        id: state
+                        type: attribute
+                      attributeName: State
+                      granularity: null
+                      label:
+                        id: state
+                        type: label
+                      labelName: State
+                      localIdentifier: state
+                      primaryLabel:
+                        id: state
+                        type: label
+                      valueType: TEXT
+                  - attributeHeader:
+                      attribute:
+                        id: products.category
+                        type: attribute
+                      attributeName: Category
+                      granularity: null
+                      label:
+                        id: products.category
+                        type: label
+                      labelName: Category
+                      localIdentifier: product_category
+                      primaryLabel:
+                        id: products.category
+                        type: label
+                      valueType: TEXT
+                  - measureGroupHeaders:
+                      - localIdentifier: price
+                      - format: $#,##0
+                        localIdentifier: order_amount
+                        name: Order Amount
+                localIdentifier: dim_1
+            links:
+              executionResult: EXECUTION_RESULT_8
+          resultSize: 2913
+          resultSpec:
+            dimensions:
+              - itemIdentifiers: []
+                localIdentifier: dim_0
+                sorting: []
+              - itemIdentifiers:
+                  - region
+                  - state
+                  - product_category
+                  - measureGroup
+                localIdentifier: dim_1
+                sorting: []
+            totals: []
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
@@ -4971,126 +5083,10 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
-      body:
-        string:
-          afm:
-            attributes:
-              - localIdentifier: region
-                label:
-                  identifier:
-                    id: region
-                    type: label
-                showAllValues: false
-              - localIdentifier: state
-                label:
-                  identifier:
-                    id: state
-                    type: label
-                showAllValues: false
-              - localIdentifier: product_category
-                label:
-                  identifier:
-                    id: products.category
-                    type: label
-                showAllValues: false
-            filters: []
-            measures:
-              - localIdentifier: price
-                definition:
-                  measure:
-                    item:
-                      identifier:
-                        id: price
-                        type: fact
-                    aggregation: SUM
-                    computeRatio: false
-                    filters: []
-              - localIdentifier: order_amount
-                definition:
-                  measure:
-                    item:
-                      identifier:
-                        id: order_amount
-                        type: metric
-                    computeRatio: false
-                    filters: []
-            auxMeasures: []
-            measureDefinitionOverrides: []
-          executionResponse:
-            dimensions:
-              - headers: []
-                localIdentifier: dim_0
-              - headers:
-                  - attributeHeader:
-                      localIdentifier: region
-                      label:
-                        id: region
-                        type: label
-                      labelName: Region
-                      attribute:
-                        id: region
-                        type: attribute
-                      attributeName: Region
-                      granularity: null
-                      primaryLabel:
-                        id: region
-                        type: label
-                      valueType: TEXT
-                  - attributeHeader:
-                      localIdentifier: state
-                      label:
-                        id: state
-                        type: label
-                      labelName: State
-                      attribute:
-                        id: state
-                        type: attribute
-                      attributeName: State
-                      granularity: null
-                      primaryLabel:
-                        id: state
-                        type: label
-                      valueType: TEXT
-                  - attributeHeader:
-                      localIdentifier: product_category
-                      label:
-                        id: products.category
-                        type: label
-                      labelName: Category
-                      attribute:
-                        id: products.category
-                        type: attribute
-                      attributeName: Category
-                      granularity: null
-                      primaryLabel:
-                        id: products.category
-                        type: label
-                      valueType: TEXT
-                  - measureGroupHeaders:
-                      - localIdentifier: price
-                      - localIdentifier: order_amount
-                        format: $#,##0
-                        name: Order Amount
-                localIdentifier: dim_1
-            links:
-              executionResult: 4f7b311296f89a035148eb4b0bd58baf99173a92:5fce346b0f34ae7c711b81a4f44d4c5896c33378696bc0f000842cb1bd074c88
-          resultSpec:
-            dimensions:
-              - localIdentifier: dim_0
-                itemIdentifiers: []
-                sorting: []
-              - localIdentifier: dim_1
-                itemIdentifiers:
-                  - region
-                  - state
-                  - product_category
-                  - measureGroup
-                sorting: []
-            totals: []
-          resultSize: 2913
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4f7b311296f89a035148eb4b0bd58baf99173a92%3A5fce346b0f34ae7c711b81a4f44d4c5896c33378696bc0f000842cb1bd074c88?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -5101,33 +5097,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_8?offset=0%2C0&limit=100%2C100
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '27528'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       body:
         string:
           data:
@@ -6339,6 +6311,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -6349,30 +6323,11 @@ interactions:
             total:
               - 1
               - 364
-          metadata:
-            dataSourceMessages: []
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4f7b311296f89a035148eb4b0bd58baf99173a92%3A5fce346b0f34ae7c711b81a4f44d4c5896c33378696bc0f000842cb1bd074c88?offset=0%2C100&limit=100%2C100
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '27760'
+          - '27528'
         Content-Type:
           - application/json
         DATE: *id001
@@ -6391,6 +6346,23 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_8?offset=0%2C100&limit=100%2C100
+    response:
       body:
         string:
           data:
@@ -7602,6 +7574,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -7612,30 +7586,11 @@ interactions:
             total:
               - 1
               - 364
-          metadata:
-            dataSourceMessages: []
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4f7b311296f89a035148eb4b0bd58baf99173a92%3A5fce346b0f34ae7c711b81a4f44d4c5896c33378696bc0f000842cb1bd074c88?offset=0%2C200&limit=100%2C100
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '27352'
+          - '27760'
         Content-Type:
           - application/json
         DATE: *id001
@@ -7654,6 +7609,23 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_8?offset=0%2C200&limit=100%2C100
+    response:
       body:
         string:
           data:
@@ -8865,6 +8837,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -8875,30 +8849,11 @@ interactions:
             total:
               - 1
               - 364
-          metadata:
-            dataSourceMessages: []
-  - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/4f7b311296f89a035148eb4b0bd58baf99173a92%3A5fce346b0f34ae7c711b81a4f44d4c5896c33378696bc0f000842cb1bd074c88?offset=0%2C300&limit=100%2C100
-      body: null
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
       headers:
         Cache-Control:
           - no-cache, no-store, max-age=0, must-revalidate
         Content-Length:
-          - '17132'
+          - '27352'
         Content-Type:
           - application/json
         DATE: *id001
@@ -8917,6 +8872,23 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-Xss-Protection:
           - '0'
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_8?offset=0%2C300&limit=100%2C100
+    response:
       body:
         string:
           data:
@@ -9696,6 +9668,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 1
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 1
@@ -9706,5 +9680,30 @@ interactions:
             total:
               - 1
               - 364
-          metadata:
-            dataSourceMessages: []
+      headers:
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Length:
+          - '17132'
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-Xss-Protection:
+          - '0'
+      status:
+        code: 200
+        message: OK
+version: 1

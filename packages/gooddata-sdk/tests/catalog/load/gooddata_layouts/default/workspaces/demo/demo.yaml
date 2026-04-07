@@ -1,4 +1,7 @@
-# (C) 2022 GoodData Corporation
+# (C) 2026 GoodData Corporation
+automations: []
+customApplicationSettings: []
+filterViews: []
 hierarchyPermissions:
   - assignee:
       id: demo2
@@ -20,3 +23,4 @@ permissions:
       type: userGroup
     name: VIEW
 settings: []
+userDataFilters: []

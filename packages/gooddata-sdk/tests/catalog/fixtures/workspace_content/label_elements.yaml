@@ -1,17 +1,14 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
-        label: order_status
         dependsOn:
-          - label: order_status
+          - complementFilter: false
+            label: order_status
             values:
               - Canceled
               - Delivered
-            complementFilter: false
+        label: order_status
         validateBy: []
       headers:
         Accept:
@@ -24,17 +21,26 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          cacheId: 705be4c36da0ada1169e25c10849125a
+          elements:
+            - primaryTitle: Canceled
+              title: Canceled
+            - primaryTitle: Delivered
+              title: Delivered
+          paging:
+            count: 2
+            next: null
+            offset: 0
+            total: 2
+          primaryLabel:
+            id: order_status
+            type: label
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '261'
         Content-Type:
           - application/json
         DATE: &id001
@@ -43,41 +49,16 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          primaryLabel:
-            id: order_status
-            type: label
-          elements:
-            - title: Canceled
-              primaryTitle: Canceled
-            - title: Delivered
-              primaryTitle: Delivered
-          paging:
-            total: 2
-            count: 2
-            offset: 0
-            next: null
-          cacheId: aa29ce0b0acfc72b7b488152b1dc394c
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
-        label: order_status
         dependsOn: []
+        label: order_status
         validateBy:
           - id: revenue_top_10_percent
             type: metric
@@ -92,17 +73,24 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          cacheId: 4a120b228812b55b3075312223e13207
+          elements:
+            - primaryTitle: Delivered
+              title: Delivered
+          paging:
+            count: 1
+            next: null
+            offset: 0
+            total: 1
+          primaryLabel:
+            id: order_status
+            type: label
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '214'
         Content-Type:
           - application/json
         DATE: *id001
@@ -110,39 +98,16 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          primaryLabel:
-            id: order_status
-            type: label
-          elements:
-            - title: Delivered
-              primaryTitle: Delivered
-          paging:
-            total: 1
-            count: 1
-            offset: 0
-            next: null
-          cacheId: 3c7c819807baf97f6bc15e014b9139e8
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
-        label: order_status
         dependsOn: []
+        label: order_status
         validateBy: []
       headers:
         Accept:
@@ -155,17 +120,28 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          cacheId: 6c2770df4bed0bec4f24875c4d78179c
+          elements:
+            - primaryTitle: Canceled
+              title: Canceled
+            - primaryTitle: Delivered
+              title: Delivered
+            - primaryTitle: Returned
+              title: Returned
+          paging:
+            count: 3
+            next: null
+            offset: 0
+            total: 3
+          primaryLabel:
+            id: order_status
+            type: label
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '308'
         Content-Type:
           - application/json
         DATE: *id001
@@ -173,42 +149,14 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          primaryLabel:
-            id: order_status
-            type: label
-          elements:
-            - title: Canceled
-              primaryTitle: Canceled
-            - title: Delivered
-              primaryTitle: Delivered
-            - title: Returned
-              primaryTitle: Returned
-          paging:
-            total: 3
-            count: 3
-            offset: 0
-            next: null
-          cacheId: 8fb034e5fd0dd18ae306dfacb1dd4f1f
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
-        label: order_status
         dependsOn:
           - dateFilter:
               absoluteDateFilter:
@@ -218,6 +166,7 @@ interactions:
                     type: dataset
                 from: '2150-07-01'
                 to: '2150-07-16'
+        label: order_status
         validateBy: []
       headers:
         Accept:
@@ -230,17 +179,22 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          cacheId: edd698aba8c6fc0696f194adea0deeb4
+          elements: []
+          paging:
+            count: 0
+            next: null
+            offset: 0
+            total: 0
+          primaryLabel:
+            id: order_status
+            type: label
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '166'
         Content-Type:
           - application/json
         DATE: *id001
@@ -248,36 +202,14 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          primaryLabel:
-            id: order_status
-            type: label
-          elements: []
-          paging:
-            total: 0
-            count: 0
-            offset: 0
-            next: null
-          cacheId: bae075546ebbe3012d270ac44be24d3d
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
-        label: order_status
         dependsOn:
           - dateFilter:
               relativeDateFilter:
@@ -288,6 +220,7 @@ interactions:
                 from: 3600
                 granularity: DAY
                 to: 3700
+        label: order_status
         validateBy: []
       headers:
         Accept:
@@ -300,17 +233,22 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          cacheId: 82c8ae4cc8562a46c266012c1ffb65a8
+          elements: []
+          paging:
+            count: 0
+            next: null
+            offset: 0
+            total: 0
+          primaryLabel:
+            id: order_status
+            type: label
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '166'
         Content-Type:
           - application/json
         DATE: *id001
@@ -318,109 +256,22 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          primaryLabel:
-            id: order_status
-            type: label
-          elements: []
-          paging:
-            total: 0
-            count: 0
-            offset: 0
-            next: null
-          cacheId: 02c087ef137761b52b78cb53e865d9b2
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
-        label: order_status
         dependsOn:
-          - label: order_status
+          - complementFilter: false
+            label: order_status
             values:
               - Canceled
               - Delivered
-            complementFilter: false
-        validateBy: []
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        Content-Type:
-          - application/json
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '261'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          primaryLabel:
-            id: order_status
-            type: label
-          elements:
-            - title: Canceled
-              primaryTitle: Canceled
-            - title: Delivered
-              primaryTitle: Delivered
-          paging:
-            total: 2
-            count: 2
-            offset: 0
-            next: null
-          cacheId: aa29ce0b0acfc72b7b488152b1dc394c
-  - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
-      body:
         label: order_status
-        dependsOn: []
         validateBy: []
-        patternFilter: Deli
       headers:
         Accept:
           - application/json
@@ -432,17 +283,26 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          cacheId: 705be4c36da0ada1169e25c10849125a
+          elements:
+            - primaryTitle: Canceled
+              title: Canceled
+            - primaryTitle: Delivered
+              title: Delivered
+          paging:
+            count: 2
+            next: null
+            offset: 0
+            total: 2
+          primaryLabel:
+            id: order_status
+            type: label
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '214'
         Content-Type:
           - application/json
         DATE: *id001
@@ -450,42 +310,67 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
+      status:
+        code: 200
+        message: OK
+  - request:
+      body:
+        dependsOn: []
+        label: order_status
+        patternFilter: Deli
+        validateBy: []
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
+    response:
       body:
         string:
-          primaryLabel:
-            id: order_status
-            type: label
+          cacheId: 21377f9980e1f5dd1349a532bbfca429
           elements:
-            - title: Delivered
-              primaryTitle: Delivered
+            - primaryTitle: Delivered
+              title: Delivered
           paging:
+            count: 1
+            next: null
+            offset: 0
             total: 1
-            count: 1
-            offset: 0
-            next: null
-          cacheId: aac53166877308a6883016dcb824971b
+          primaryLabel:
+            id: order_status
+            type: label
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
-        label: order_status
-        dependsOn: []
-        validateBy: []
-        patternFilter: Deli
         complementFilter: true
+        dependsOn: []
+        label: order_status
+        patternFilter: Deli
+        validateBy: []
       headers:
         Accept:
           - application/json
@@ -497,127 +382,44 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '259'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
-          primaryLabel:
-            id: order_status
-            type: label
+          cacheId: 163866e150432a9d47d92826d541b629
           elements:
-            - title: Canceled
-              primaryTitle: Canceled
-            - title: Returned
-              primaryTitle: Returned
+            - primaryTitle: Canceled
+              title: Canceled
+            - primaryTitle: Returned
+              title: Returned
           paging:
-            total: 2
             count: 2
-            offset: 0
             next: null
-          cacheId: efd977c2fe3f1e299ce49dd480cd6fc8
+            offset: 0
+            total: 2
+          primaryLabel:
+            id: order_status
+            type: label
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
-        label: order_status
         dependsOn: []
-        validateBy: []
+        label: order_status
         sortOrder: DESC
-      headers:
-        Accept:
-          - application/json
-        Accept-Encoding:
-          - br, gzip, deflate
-        Content-Type:
-          - application/json
-        X-GDC-VALIDATE-RELATIONS:
-          - 'true'
-        X-Requested-With:
-          - XMLHttpRequest
-    response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '308'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          primaryLabel:
-            id: order_status
-            type: label
-          elements:
-            - title: Returned
-              primaryTitle: Returned
-            - title: Delivered
-              primaryTitle: Delivered
-            - title: Canceled
-              primaryTitle: Canceled
-          paging:
-            total: 3
-            count: 3
-            offset: 0
-            next: null
-          cacheId: 411ad9655331584b50df58a262a29cf4
-  - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements?offset=1&limit=1
-      body:
-        label: order_status
-        dependsOn: []
         validateBy: []
       headers:
         Accept:
@@ -630,17 +432,28 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          cacheId: ec9617719f6b4f6969aa9ebe42639b44
+          elements:
+            - primaryTitle: Returned
+              title: Returned
+            - primaryTitle: Delivered
+              title: Delivered
+            - primaryTitle: Canceled
+              title: Canceled
+          paging:
+            count: 3
+            next: null
+            offset: 0
+            total: 3
+          primaryLabel:
+            id: order_status
+            type: label
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '349'
         Content-Type:
           - application/json
         DATE: *id001
@@ -648,30 +461,57 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
+      status:
+        code: 200
+        message: OK
+  - request:
+      body:
+        dependsOn: []
+        label: order_status
+        validateBy: []
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements?offset=1&limit=1
+    response:
       body:
         string:
+          cacheId: 6c2770df4bed0bec4f24875c4d78179c
+          elements:
+            - primaryTitle: Delivered
+              title: Delivered
+          paging:
+            count: 1
+            next: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements?limit=1&offset=2
+            offset: 1
+            total: 3
           primaryLabel:
             id: order_status
             type: label
-          elements:
-            - title: Delivered
-              primaryTitle: Delivered
-          paging:
-            total: 3
-            count: 1
-            offset: 1
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/execution/collectLabelElements?limit=1&offset=2
-          cacheId: 8fb034e5fd0dd18ae306dfacb1dd4f1f
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
+version: 1

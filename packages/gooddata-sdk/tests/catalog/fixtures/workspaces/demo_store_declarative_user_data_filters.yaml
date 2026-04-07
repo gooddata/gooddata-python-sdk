@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/userDataFilters
       body: null
       headers:
         Accept:
@@ -14,17 +11,13 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo/userDataFilters
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          userDataFilters: []
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '22'
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,25 +26,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          userDataFilters: []
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/workspaces/demo/userDataFilters
       body: null
       headers:
         Accept:
@@ -62,17 +43,13 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo/userDataFilters
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          userDataFilters: []
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '22'
         Content-Type:
           - application/json
         DATE: *id001
@@ -80,25 +57,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          userDataFilters: []
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
       body: null
       headers:
         Accept-Encoding:
@@ -107,44 +72,28 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/organization
     response:
-      status:
-        code: 302
-        message: Found
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '0'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
         Location:
-          - /api/v1/entities/admin/organizations/python-sdk-dex
+          - /api/v1/entities/admin/organizations/default
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 302
+        message: Found
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       body: null
       headers:
         Accept-Encoding:
@@ -153,44 +102,15 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/admin/organizations/default
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '564'
-        Content-Type:
-          - application/vnd.gooddata.api+json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
             attributes:
-              name: Python SDK Dex
-              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
               allowedOrigins: []
+              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -201,15 +121,28 @@ interactions:
                 - enableUserManagement
                 - enableRawExports
                 - enableFlexibleDashboardLayout
+              hostname: localhost
+              name: Default Organization
               region: ''
-              dataCenter: ''
-            id: python-sdk-dex
+            id: default
             type: organization
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
+            self: http://localhost:3000/api/v1/entities/admin/organizations/default
+      headers:
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
       body: null
       headers:
         Accept-Encoding:
@@ -218,44 +151,28 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/organization
     response:
-      status:
-        code: 302
-        message: Found
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '0'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
         Location:
-          - /api/v1/entities/admin/organizations/python-sdk-dex
+          - /api/v1/entities/admin/organizations/default
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 302
+        message: Found
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       body: null
       headers:
         Accept-Encoding:
@@ -264,44 +181,15 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/admin/organizations/default
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '564'
-        Content-Type:
-          - application/vnd.gooddata.api+json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
             attributes:
-              name: Python SDK Dex
-              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
               allowedOrigins: []
+              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -312,9 +200,25 @@ interactions:
                 - enableUserManagement
                 - enableRawExports
                 - enableFlexibleDashboardLayout
+              hostname: localhost
+              name: Default Organization
               region: ''
-              dataCenter: ''
-            id: python-sdk-dex
+            id: default
             type: organization
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
+            self: http://localhost:3000/api/v1/entities/admin/organizations/default
+      headers:
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
+version: 1

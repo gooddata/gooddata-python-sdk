@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2026 GoodData Corporation
 content:
   buckets:
     - items:
@@ -52,5 +52,9 @@ content:
       stackMeasuresToPercent: true
   version: '2'
   visualizationUrl: local:area
+createdAt: 2025-08-07 11:45
+createdBy:
+  id: admin
+  type: user
 id: percentage_of_customers_by_region
 title: Percentage of Customers by Region

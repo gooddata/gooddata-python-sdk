@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics?page=0&size=500
       body: null
       headers:
         Accept:
@@ -14,17 +11,391 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: '#,##0'
+                  maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
+                createdAt: 2000-01-01 00:00
+                title: '# of Active Customers'
+              id: amount_of_active_customers
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: '#,##0'
+                  maql: SELECT COUNT({attribute/order_id})
+                createdAt: 2000-01-01 00:00
+                title: '# of Orders'
+              id: amount_of_orders
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_orders
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: '#,##0'
+                  maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
+                    {metric/revenue} BY {attribute/customer_id}) >  10000 '
+                createdAt: 2000-01-01 00:00
+                title: '# of Top Customers'
+              id: amount_of_top_customers
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_top_customers
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: '#,##0.00'
+                  maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
+                    IN ("Returned", "Canceled"))
+                createdAt: 2000-01-01 00:00
+                description: ''
+                title: '# of Valid Orders'
+              id: amount_of_valid_orders
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_valid_orders
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT SUM({fact/spend})
+                createdAt: 2000-01-01 00:00
+                title: Campaign Spend
+              id: campaign_spend
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/campaign_spend
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT SUM({fact/price}*{fact/quantity})
+                createdAt: 2000-01-01 00:00
+                title: Order Amount
+              id: order_amount
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/order_amount
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: '#,##0.0%'
+                  maql: SELECT {metric/revenue} / {metric/total_revenue}
+                createdAt: 2000-01-01 00:00
+                title: '% Revenue'
+              id: percent_revenue
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: '#,##0.0%'
+                  maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
+                    \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2000-01-01 00:00
+                title: '% Revenue from Top 10 Customers'
+              id: percent_revenue_from_top_10_customers
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_customers
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: '#,##0.0%'
+                  maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
+                    \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2000-01-01 00:00
+                title: '% Revenue from Top 10% Customers'
+              id: percent_revenue_from_top_10_percent_customers
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_customers
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: '#,##0.0%'
+                  maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
+                    \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2000-01-01 00:00
+                title: '% Revenue from Top 10% Products'
+              id: percent_revenue_from_top_10_percent_products
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_products
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: '#,##0.0%'
+                  maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
+                    \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2000-01-01 00:00
+                title: '% Revenue from Top 10 Products'
+              id: percent_revenue_from_top_10_products
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_products
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: '#,##0.0%'
+                  maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
+                    ALL OTHER)
+                createdAt: 2000-01-01 00:00
+                title: '% Revenue in Category'
+              id: percent_revenue_in_category
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: '#,##0.0%'
+                  maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
+                    {attribute/product_id})
+                createdAt: 2000-01-01 00:00
+                title: '% Revenue per Product'
+              id: percent_revenue_per_product
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_per_product
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
+                    IN ("Returned", "Canceled"))
+                createdAt: 2000-01-01 00:00
+                description: ''
+                title: Revenue
+              id: revenue
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
+                    ("Clothing")
+                createdAt: 2000-01-01 00:00
+                title: Revenue (Clothing)
+              id: revenue-clothing
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-clothing
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
+                    ( "Electronics")
+                createdAt: 2000-01-01 00:00
+                title: Revenue (Electronic)
+              id: revenue-electronic
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-electronic
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
+                    ("Home")
+                createdAt: 2000-01-01 00:00
+                title: Revenue (Home)
+              id: revenue-home
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-home
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
+                    ("Outdoor")
+                createdAt: 2000-01-01 00:00
+                title: Revenue (Outdoor)
+              id: revenue-outdoor
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-outdoor
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: $#,##0.0
+                  maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
+                createdAt: 2000-01-01 00:00
+                title: Revenue per Customer
+              id: revenue_per_customer
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: $#,##0.0
+                  maql: SELECT {metric/revenue} / {metric/campaign_spend}
+                createdAt: 2000-01-01 00:00
+                title: Revenue per Dollar Spent
+              id: revenue_per_dollar_spent
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_dollar_spent
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
+                createdAt: 2000-01-01 00:00
+                title: Revenue / Top 10
+              id: revenue_top_10
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
+                createdAt: 2000-01-01 00:00
+                title: Revenue / Top 10%
+              id: revenue_top_10_percent
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10_percent
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} BY ALL OTHER
+                createdAt: 2000-01-01 00:00
+                title: Total Revenue
+              id: total_revenue
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+            - attributes:
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
+                createdAt: 2000-01-01 00:00
+                title: Total Revenue (No Filters)
+              id: total_revenue-no_filters
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue-no_filters
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: metric
+          links:
+            next: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=1&size=500
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=0&size=500
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,400 +404,10 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            - attributes:
-                title: '# of Active Customers'
-                areRelationsValid: true
-                content:
-                  format: '#,##0'
-                  maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2026-03-25 09:17
-              id: amount_of_active_customers
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: '# of Orders'
-                areRelationsValid: true
-                content:
-                  format: '#,##0'
-                  maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2026-03-25 09:17
-              id: amount_of_orders
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_orders
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: '# of Top Customers'
-                areRelationsValid: true
-                content:
-                  format: '#,##0'
-                  maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
-                    {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2026-03-25 09:17
-              id: amount_of_top_customers
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_top_customers
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: '# of Valid Orders'
-                description: ''
-                areRelationsValid: true
-                content:
-                  format: '#,##0.00'
-                  maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
-                    IN ("Returned", "Canceled"))
-                createdAt: 2026-03-25 09:17
-              id: amount_of_valid_orders
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/amount_of_valid_orders
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: Campaign Spend
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT SUM({fact/spend})
-                createdAt: 2026-03-25 09:17
-              id: campaign_spend
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/campaign_spend
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: Order Amount
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2026-03-25 09:17
-              id: order_amount
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/order_amount
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: '% Revenue'
-                areRelationsValid: true
-                content:
-                  format: '#,##0.0%'
-                  maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2026-03-25 09:17
-              id: percent_revenue
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: '% Revenue from Top 10 Customers'
-                areRelationsValid: true
-                content:
-                  format: '#,##0.0%'
-                  maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
-                    \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-25 09:17
-              id: percent_revenue_from_top_10_customers
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_customers
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: '% Revenue from Top 10% Customers'
-                areRelationsValid: true
-                content:
-                  format: '#,##0.0%'
-                  maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
-                    \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-25 09:17
-              id: percent_revenue_from_top_10_percent_customers
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_customers
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: '% Revenue from Top 10% Products'
-                areRelationsValid: true
-                content:
-                  format: '#,##0.0%'
-                  maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
-                    \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-25 09:17
-              id: percent_revenue_from_top_10_percent_products
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_products
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: '% Revenue from Top 10 Products'
-                areRelationsValid: true
-                content:
-                  format: '#,##0.0%'
-                  maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
-                    \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2026-03-25 09:17
-              id: percent_revenue_from_top_10_products
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_products
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: '% Revenue in Category'
-                areRelationsValid: true
-                content:
-                  format: '#,##0.0%'
-                  maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
-                    ALL OTHER)
-                createdAt: 2026-03-25 09:17
-              id: percent_revenue_in_category
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: '% Revenue per Product'
-                areRelationsValid: true
-                content:
-                  format: '#,##0.0%'
-                  maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
-                    {attribute/product_id})
-                createdAt: 2026-03-25 09:17
-              id: percent_revenue_per_product
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/percent_revenue_per_product
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: Revenue
-                description: ''
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
-                    IN ("Returned", "Canceled"))
-                createdAt: 2026-03-25 09:17
-              id: revenue
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: Revenue (Clothing)
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
-                    ("Clothing")
-                createdAt: 2026-03-25 09:17
-              id: revenue-clothing
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-clothing
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: Revenue (Electronic)
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
-                    ( "Electronics")
-                createdAt: 2026-03-25 09:17
-              id: revenue-electronic
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-electronic
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: Revenue (Home)
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
-                    ("Home")
-                createdAt: 2026-03-25 09:17
-              id: revenue-home
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-home
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: Revenue (Outdoor)
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
-                    ("Outdoor")
-                createdAt: 2026-03-25 09:17
-              id: revenue-outdoor
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue-outdoor
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: Revenue per Customer
-                areRelationsValid: true
-                content:
-                  format: $#,##0.0
-                  maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2026-03-25 09:17
-              id: revenue_per_customer
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: Revenue per Dollar Spent
-                areRelationsValid: true
-                content:
-                  format: $#,##0.0
-                  maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2026-03-25 09:17
-              id: revenue_per_dollar_spent
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_per_dollar_spent
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: Revenue / Top 10
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2026-03-25 09:17
-              id: revenue_top_10
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_top_10
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: Revenue / Top 10%
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2026-03-25 09:17
-              id: revenue_top_10_percent
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/revenue_top_10_percent
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: Total Revenue
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2026-03-25 09:17
-              id: total_revenue
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/total_revenue
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-            - attributes:
-                title: Total Revenue (No Filters)
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2026-03-25 09:17
-              id: total_revenue-no_filters
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics/total_revenue-no_filters
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: metric
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics?page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/metrics?page=1&size=500
+      status:
+        code: 200
+        message: OK
+version: 1

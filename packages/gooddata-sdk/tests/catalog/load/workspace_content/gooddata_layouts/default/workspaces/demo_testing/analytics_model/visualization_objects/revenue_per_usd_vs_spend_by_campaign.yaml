@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2026 GoodData Corporation
 content:
   buckets:
     - items:
@@ -49,5 +49,9 @@ content:
         min: '0'
   version: '2'
   visualizationUrl: local:scatter
+createdAt: 2025-08-07 11:45
+createdBy:
+  id: admin
+  type: user
 id: revenue_per_usd_vs_spend_by_campaign
 title: Revenue per $ vs Spend by Campaign

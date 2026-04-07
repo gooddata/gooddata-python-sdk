@@ -1,8 +1,9 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 aggregatedFacts: []
 attributes:
   - description: Order id
     id: order_id
+    isNullable: true
     labels: []
     sourceColumn: order_id
     sourceColumnDataType: STRING
@@ -11,6 +12,7 @@ attributes:
     title: Order id
   - description: Order line id
     id: order_line_id
+    isNullable: false
     labels: []
     sourceColumn: order_line_id
     sourceColumnDataType: STRING
@@ -19,6 +21,7 @@ attributes:
     title: Order line id
   - description: Order status
     id: order_status
+    isNullable: true
     labels: []
     sourceColumn: order_status
     sourceColumnDataType: STRING
@@ -36,6 +39,7 @@ description: Order lines
 facts:
   - description: Price
     id: price
+    isNullable: true
     sourceColumn: price
     sourceColumnDataType: NUMERIC
     tags:
@@ -43,6 +47,7 @@ facts:
     title: Price
   - description: Quantity
     id: quantity
+    isNullable: true
     sourceColumn: quantity
     sourceColumnDataType: NUMERIC
     tags:
@@ -60,6 +65,7 @@ references:
     sources:
       - column: campaign_id
         dataType: INT
+        isNullable: true
         target:
           id: campaign_id
           type: attribute
@@ -70,6 +76,7 @@ references:
     sources:
       - column: customer_id
         dataType: INT
+        isNullable: true
         target:
           id: customer_id
           type: attribute
@@ -80,6 +87,7 @@ references:
     sources:
       - column: date
         dataType: DATE
+        isNullable: true
         target:
           id: date
           type: date
@@ -90,6 +98,7 @@ references:
     sources:
       - column: product_id
         dataType: INT
+        isNullable: true
         target:
           id: product_id
           type: attribute
