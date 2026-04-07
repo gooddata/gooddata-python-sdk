@@ -11,6 +11,7 @@ from gooddata_sdk.catalog.workspace.aac import (
     aac_visualization_to_declarative,
     declarative_dataset_to_aac,
     declarative_metric_to_aac,
+    declarative_visualization_to_aac,
     detect_yaml_format,
     load_aac_workspace_from_disk,
     store_aac_workspace_to_disk,
@@ -176,6 +177,38 @@ class TestIndividualConversions:
         assert result["json"]["id"] == "orders"
         assert isinstance(result["content"], str)
 
+    def test_visualization_declarative_to_aac(self) -> None:
+        """Test declarative → AAC for visualizations (round-trip from fixture)."""
+        content = yaml.safe_load((_FIXTURES_DIR / "visualisations" / "ratings.yaml").read_text())
+        declarative = aac_visualization_to_declarative(content)
+        result = declarative_visualization_to_aac(declarative)
+        assert result["json"]["id"] == "71bdc379-384a-4eac-9627-364ea847d977"
+        assert isinstance(result["content"], str)
+        assert "Ratings" in result["content"]
+
+    def test_visualization_declarative_to_aac_inline(self) -> None:
+        """Test declarative → AAC for a visualization built from inline data."""
+        aac_input = {
+            "type": "table",
+            "id": "my_table",
+            "title": "My Table",
+            "query": {
+                "fields": {
+                    "m1": {
+                        "title": "Sum of Amount",
+                        "aggregation": "SUM",
+                        "using": "fact/amount",
+                    },
+                },
+            },
+            "metrics": [{"field": "m1", "format": "#,##0"}],
+        }
+        declarative = aac_visualization_to_declarative(aac_input)
+        result = declarative_visualization_to_aac(declarative)
+        assert result["json"]["id"] == "my_table"
+        assert isinstance(result["content"], str)
+        assert "my_table" in result["content"]
+
 
 # ---------------------------------------------------------------------------
 # Format detection tests
@@ -262,6 +295,68 @@ class TestWorkspaceLoadStore:
         reloaded = load_aac_workspace_from_disk(tmp_path)
         reloaded_dict = reloaded.to_dict(camel_case=True)
         assert len(reloaded_dict.get("analytics", {}).get("metrics", [])) == 2
+
+    def test_store_and_reload_visualizations(self, tmp_path: Path) -> None:
+        """Store visualization AAC files via store_aac_workspace_to_disk, then reload."""
+        aac_vis = {
+            "type": "table",
+            "id": "test_vis",
+            "title": "Test Visualization",
+            "query": {
+                "fields": {
+                    "m1": {
+                        "title": "Sum of Amount",
+                        "aggregation": "SUM",
+                        "using": "fact/amount",
+                    },
+                },
+            },
+            "metrics": [{"field": "m1", "format": "#,##0"}],
+        }
+        vis_declarative = [aac_visualization_to_declarative(aac_vis)]
+
+        model_dict = {"analytics": {"visualizationObjects": vis_declarative}}
+        from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+            CatalogDeclarativeWorkspaceModel,
+        )
+
+        model = CatalogDeclarativeWorkspaceModel.from_dict(model_dict)
+        store_aac_workspace_to_disk(model, tmp_path)
+
+        # Verify files were created
+        vis_files = list((tmp_path / "visualisations").glob("*.yaml"))
+        assert len(vis_files) == 1
+
+        # Reload
+        reloaded = load_aac_workspace_from_disk(tmp_path)
+        reloaded_dict = reloaded.to_dict(camel_case=True)
+        assert len(reloaded_dict.get("analytics", {}).get("visualizationObjects", [])) == 1
+
+    def test_store_and_reload_from_fixtures(self, tmp_path: Path) -> None:
+        """Load fixtures, store to disk, reload — full round-trip."""
+        import shutil
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            fixture_path = Path(tmp)
+            for subdir in ("datasets", "metrics", "visualisations"):
+                src = _FIXTURES_DIR / subdir
+                if src.exists():
+                    shutil.copytree(src, fixture_path / subdir)
+
+            model = load_aac_workspace_from_disk(fixture_path)
+
+        store_aac_workspace_to_disk(model, tmp_path)
+
+        # Verify visualization files exist
+        vis_files = list((tmp_path / "visualisations").glob("*.yaml"))
+        assert len(vis_files) == 2
+
+        # Reload and verify counts match
+        reloaded = load_aac_workspace_from_disk(tmp_path)
+        reloaded_dict = reloaded.to_dict(camel_case=True)
+        assert len(reloaded_dict.get("analytics", {}).get("visualizationObjects", [])) == 2
+        assert len(reloaded_dict.get("analytics", {}).get("metrics", [])) == 1
 
     def test_load_ignores_non_workspace_dirs(self, tmp_path: Path) -> None:
         """Ensure load skips declarative non-workspace directories."""

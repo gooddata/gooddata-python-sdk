@@ -188,14 +188,32 @@ def declarative_metric_to_aac(declarative: dict[str, Any]) -> dict[str, Any]:
     return declarative_metric_to_yaml(declarative)
 
 
-def declarative_visualization_to_aac(declarative: dict[str, Any]) -> dict[str, Any]:
-    """Convert a declarative visualization dict to AAC format."""
-    return declarative_visualisation_to_yaml(declarative)
+def declarative_visualization_to_aac(
+    declarative: dict[str, Any],
+    entities: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Convert a declarative visualization dict to AAC format.
+
+    Args:
+        declarative: The declarative visualization dict.
+        entities: Optional entities list for cross-reference resolution.
+    """
+    ent = entities if entities is not None else []
+    return declarative_visualisation_to_yaml(ent, declarative)
 
 
-def declarative_dashboard_to_aac(declarative: dict[str, Any]) -> dict[str, Any]:
-    """Convert a declarative dashboard dict to AAC format."""
-    return declarative_dashboard_to_yaml(declarative)
+def declarative_dashboard_to_aac(
+    declarative: dict[str, Any],
+    entities: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Convert a declarative dashboard dict to AAC format.
+
+    Args:
+        declarative: The declarative dashboard dict.
+        entities: Optional entities list for cross-reference resolution.
+    """
+    ent = entities if entities is not None else []
+    return declarative_dashboard_to_yaml(ent, declarative)
 
 
 def declarative_plugin_to_aac(declarative: dict[str, Any]) -> dict[str, Any]:
