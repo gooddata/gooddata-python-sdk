@@ -5,6 +5,7 @@ description = "Tests support for GoodData Python SDK"
 requires-python = ">=3.10"
 version = "1.0.0"
 dependencies = [
+    "orjson",
     "pyyaml>=6.0",
     "requests",
 ]

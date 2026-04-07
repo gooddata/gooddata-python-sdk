@@ -6,6 +6,7 @@ from unittest import mock
 
 import pytest
 import yaml
+from tests_support.vcrpy_utils import configure_normalization
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +55,10 @@ def test_config(request):
     env_ds_password = os.environ.get("DS_PASSWORD")
     if env_ds_password:
         config["ds_password"] = env_ds_password
+
+    # Initialize VCR cassette normalization so recordings from any environment
+    # produce identical cassette files (canonical localhost values).
+    configure_normalization(config)
 
     return config
 

@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 import yaml
 from gooddata_fdw.environment import ColumnDefinition
+from tests_support.vcrpy_utils import configure_normalization
 
 
 def pytest_addoption(parser):
@@ -23,6 +24,7 @@ def test_config(request):
     with open(config_path) as f:
         config = yaml.safe_load(f)
 
+    configure_normalization(config)
     return config
 
 
