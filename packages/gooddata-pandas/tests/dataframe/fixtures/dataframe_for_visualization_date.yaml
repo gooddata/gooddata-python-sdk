@@ -89,7 +89,7 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2025-08-07 11:45
+              createdAt: 2000-01-01 00:00
               title: Customers Trend
             id: customers_trend
             meta:
@@ -136,7 +136,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '# of Active Customers'
               id: amount_of_active_customers
               links:
@@ -146,7 +146,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue per Customer
               id: revenue_per_customer
               links:
@@ -166,10 +166,6 @@ interactions:
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/visualizationObjects/customers_trend?include=ALL
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '3322'
         Content-Type:
           - application/json
         DATE: &id001
@@ -178,17 +174,9 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       status:
         code: 200
         message: OK
@@ -288,10 +276,6 @@ interactions:
             links:
               executionResult: EXECUTION_RESULT_9
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '883'
         Content-Type:
           - application/json
         DATE: *id001
@@ -299,18 +283,10 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       status:
         code: 200
         message: OK
@@ -381,10 +357,6 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27date.month%27&page=1&size=500
             self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3D%3D%27date.month%27&page=0&size=500
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1261'
         Content-Type:
           - application/json
         DATE: *id001
@@ -392,17 +364,9 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       status:
         code: 200
         message: OK
@@ -506,10 +470,6 @@ interactions:
               - 2
               - 12
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1404'
         Content-Type:
           - application/json
         DATE: *id001
@@ -517,17 +477,9 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       status:
         code: 200
         message: OK

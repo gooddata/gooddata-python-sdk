@@ -502,9 +502,9 @@ interactions:
                     type: label
                 labels:
                   data:
-                    - id: geo__state__location
-                      type: label
                     - id: state
+                      type: label
+                    - id: geo__state__location
                       type: label
               type: attribute
             - attributes:
@@ -601,20 +601,6 @@ interactions:
                           id: product_id
                           type: attribute
                   - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sourceColumnDataTypes: null
-                    sourceColumns: null
-                    sources:
-                      - column: campaign_id
-                        dataType: INT
-                        isNullable: true
-                        nullValue: null
-                        target:
-                          id: campaign_id
-                          type: attribute
-                  - identifier:
                       id: date
                       type: dataset
                     multivalue: false
@@ -628,15 +614,29 @@ interactions:
                         target:
                           id: date
                           type: date
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        isNullable: true
+                        nullValue: null
+                        target:
+                          id: campaign_id
+                          type: attribute
                 tags:
                   - Order lines
                 title: Order lines
                 type: NORMAL
                 workspaceDataFilterColumns:
                   - dataType: STRING
-                    name: wdf__region
-                  - dataType: STRING
                     name: wdf__state
+                  - dataType: STRING
+                    name: wdf__region
                 workspaceDataFilterReferences:
                   - filterColumn: wdf__state
                     filterColumnDataType: STRING
@@ -1000,10 +1000,6 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=1&size=500
             self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=0&size=500
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '20717'
         Content-Type:
           - application/json
         DATE: &id001
@@ -1012,17 +1008,9 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       status:
         code: 200
         message: OK
@@ -1265,20 +1253,6 @@ interactions:
                           id: product_id
                           type: attribute
                   - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sourceColumnDataTypes: null
-                    sourceColumns: null
-                    sources:
-                      - column: campaign_id
-                        dataType: INT
-                        isNullable: true
-                        nullValue: null
-                        target:
-                          id: campaign_id
-                          type: attribute
-                  - identifier:
                       id: date
                       type: dataset
                     multivalue: false
@@ -1292,15 +1266,29 @@ interactions:
                         target:
                           id: date
                           type: date
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        isNullable: true
+                        nullValue: null
+                        target:
+                          id: campaign_id
+                          type: attribute
                 tags:
                   - Order lines
                 title: Order lines
                 type: NORMAL
                 workspaceDataFilterColumns:
                   - dataType: STRING
-                    name: wdf__region
-                  - dataType: STRING
                     name: wdf__state
+                  - dataType: STRING
+                    name: wdf__region
                 workspaceDataFilterReferences:
                   - filterColumn: wdf__state
                     filterColumnDataType: STRING
@@ -1660,10 +1648,6 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts%2CaggregatedFacts&page=1&size=500
             self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts%2CaggregatedFacts&page=0&size=500
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '13921'
         Content-Type:
           - application/json
         DATE: *id001
@@ -1671,17 +1655,9 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       status:
         code: 200
         message: OK
@@ -1707,7 +1683,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '# of Active Customers'
               id: amount_of_active_customers
               links:
@@ -1722,7 +1698,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '# of Orders'
               id: amount_of_orders
               links:
@@ -1738,7 +1714,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '# of Top Customers'
               id: amount_of_top_customers
               links:
@@ -1754,7 +1730,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 description: ''
                 title: '# of Valid Orders'
               id: amount_of_valid_orders
@@ -1770,7 +1746,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Campaign Spend
               id: campaign_spend
               links:
@@ -1785,7 +1761,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Order Amount
               id: order_amount
               links:
@@ -1800,7 +1776,7 @@ interactions:
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '% Revenue'
               id: percent_revenue
               links:
@@ -1816,7 +1792,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '% Revenue from Top 10 Customers'
               id: percent_revenue_from_top_10_customers
               links:
@@ -1832,7 +1808,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '% Revenue from Top 10% Customers'
               id: percent_revenue_from_top_10_percent_customers
               links:
@@ -1848,7 +1824,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '% Revenue from Top 10% Products'
               id: percent_revenue_from_top_10_percent_products
               links:
@@ -1864,7 +1840,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '% Revenue from Top 10 Products'
               id: percent_revenue_from_top_10_products
               links:
@@ -1880,7 +1856,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '% Revenue in Category'
               id: percent_revenue_in_category
               links:
@@ -1896,7 +1872,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '% Revenue per Product'
               id: percent_revenue_per_product
               links:
@@ -1912,7 +1888,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 description: ''
                 title: Revenue
               id: revenue
@@ -1929,7 +1905,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue (Clothing)
               id: revenue-clothing
               links:
@@ -1945,7 +1921,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue (Electronic)
               id: revenue-electronic
               links:
@@ -1961,7 +1937,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue (Home)
               id: revenue-home
               links:
@@ -1977,7 +1953,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue (Outdoor)
               id: revenue-outdoor
               links:
@@ -1992,7 +1968,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue per Customer
               id: revenue_per_customer
               links:
@@ -2007,7 +1983,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue per Dollar Spent
               id: revenue_per_dollar_spent
               links:
@@ -2022,7 +1998,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue / Top 10
               id: revenue_top_10
               links:
@@ -2037,7 +2013,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue / Top 10%
               id: revenue_top_10_percent
               links:
@@ -2052,7 +2028,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Total Revenue
               id: total_revenue
               links:
@@ -2067,7 +2043,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Total Revenue (No Filters)
               id: total_revenue-no_filters
               links:
@@ -2081,10 +2057,6 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=1&size=500
             self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=0&size=500
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '10543'
         Content-Type:
           - application/json
         DATE: *id001
@@ -2092,17 +2064,9 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       status:
         code: 200
         message: OK
@@ -2183,7 +2147,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Campaign Spend
               id: campaign_spend
               links:
@@ -2282,7 +2246,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Customers Trend
               id: customers_trend
               links:
@@ -2386,7 +2350,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '% Revenue per Product by Customer and Category'
               id: percent_revenue_per_product_by_customer_and_category
               links:
@@ -2470,7 +2434,7 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Percentage of Customers by Region
               id: percentage_of_customers_by_region
               links:
@@ -2552,7 +2516,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Product Breakdown
               id: product_breakdown
               links:
@@ -2626,7 +2590,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Product Categories Pie Chart
               id: product_categories_pie_chart
               links:
@@ -2722,7 +2686,7 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Product Revenue Comparison (over previous period)
               id: product_revenue_comparison-over_previous_period
               links:
@@ -2808,7 +2772,7 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Product Saleability
               id: product_saleability
               links:
@@ -2928,7 +2892,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue and Quantity by Product and Category
               id: revenue_and_quantity_by_product_and_category
               links:
@@ -3015,7 +2979,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue by Category Trend
               id: revenue_by_category_trend
               links:
@@ -3079,7 +3043,7 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue by Product
               id: revenue_by_product
               links:
@@ -3154,7 +3118,7 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue per $ vs Spend by Campaign
               id: revenue_per_usd_vs_spend_by_campaign
               links:
@@ -3243,7 +3207,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue Trend
               id: revenue_trend
               links:
@@ -3325,7 +3289,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Top 10 Customers
               id: top_10_customers
               links:
@@ -3403,7 +3367,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Top 10 Products
               id: top_10_products
               links:
@@ -3433,7 +3397,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '# of Orders'
               id: amount_of_orders
               links:
@@ -3444,7 +3408,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 description: ''
                 title: Revenue
               id: revenue
@@ -3506,7 +3470,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '% Revenue in Category'
               id: percent_revenue_in_category
               links:
@@ -3516,7 +3480,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue per Customer
               id: revenue_per_customer
               links:
@@ -3526,7 +3490,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue / Top 10
               id: revenue_top_10
               links:
@@ -3548,7 +3512,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '% Revenue per Product'
               id: percent_revenue_per_product
               links:
@@ -3655,7 +3619,7 @@ interactions:
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: '# of Active Customers'
               id: amount_of_active_customers
               links:
@@ -3679,7 +3643,7 @@ interactions:
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Campaign Spend
               id: campaign_spend
               links:
@@ -3689,7 +3653,7 @@ interactions:
                 content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2025-08-07 11:45
+                createdAt: 2000-01-01 00:00
                 title: Revenue per Dollar Spent
               id: revenue_per_dollar_spent
               links:
@@ -3699,10 +3663,6 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/visualizationObjects?include=ALL&page=1&size=500
             self: http://localhost:3000/api/v1/entities/workspaces/demo/visualizationObjects?include=ALL&page=0&size=500
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '33181'
         Content-Type:
           - application/json
         DATE: *id001
@@ -3710,17 +3670,9 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       status:
         code: 200
         message: OK

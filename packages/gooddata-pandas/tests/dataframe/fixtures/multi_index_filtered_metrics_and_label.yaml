@@ -139,10 +139,6 @@ interactions:
             links:
               executionResult: EXECUTION_RESULT_17
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1373'
         Content-Type:
           - application/json
         DATE: &id001
@@ -151,18 +147,10 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       status:
         code: 200
         message: OK
@@ -262,9 +250,9 @@ interactions:
                     type: label
                 labels:
                   data:
-                    - id: geo__state__location
-                      type: label
                     - id: state
+                      type: label
+                    - id: geo__state__location
                       type: label
               type: attribute
           included:
@@ -362,10 +350,6 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28%27state%27%2C%27region%27%2C%27products.category%27%29&page=1&size=500
             self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28%27state%27%2C%27region%27%2C%27products.category%27%29&page=0&size=500
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '4011'
         Content-Type:
           - application/json
         DATE: *id001
@@ -373,17 +357,9 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       status:
         code: 200
         message: OK
@@ -462,10 +438,6 @@ interactions:
               - 2
               - 3
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1042'
         Content-Type:
           - application/json
         DATE: *id001
@@ -473,17 +445,9 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       status:
         code: 200
         message: OK

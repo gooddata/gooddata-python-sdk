@@ -46,10 +46,6 @@ interactions:
             links:
               executionResult: EXECUTION_RESULT_28
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '295'
         Content-Type:
           - application/json
         DATE: &id001
@@ -58,18 +54,10 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       status:
         code: 200
         message: OK
@@ -107,10 +95,6 @@ interactions:
             total:
               - 1
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '213'
         Content-Type:
           - application/json
         DATE: *id001
@@ -118,17 +102,9 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       status:
         code: 200
         message: OK
