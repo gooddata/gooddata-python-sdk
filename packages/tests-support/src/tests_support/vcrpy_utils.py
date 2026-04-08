@@ -80,38 +80,14 @@ _EXPORT_HASH_URI_RE = re.compile(r"(?<=/export/tabular/)[0-9a-f]{40}(?![0-9a-f])
 _EXPORT_HASH_BODY_RE = re.compile(
     r'(?<=exportResult": ")[0-9a-f]{40}(?![0-9a-f])'  # JSON: "exportResult": "hash"
     r"|"
-    r"(?<=exportResult: )[0-9a-f]{40}(?![0-9a-f])"  # YAML: exportResult: hash
+    r'(?<=exportResult":")[0-9a-f]{40}(?![0-9a-f])'  # JSON (orjson)
+    r"|"
+    r"(?<=exportResult: )[0-9a-f]{40}(?![0-9a-f])"  # YAML
 )
 
 
-class _HashNormalizer:
-    """Maps server-computed hex hashes to deterministic placeholders.
-
-    Assigns stable placeholders (EXECUTION_RESULT_0, EXPORT_RESULT_0, etc.)
-    to dynamic hashes that differ between environments and re-recordings.
-    The same hash always maps to the same placeholder within a session.
-    """
-
-    def __init__(self) -> None:
-        self._exec_map: dict[str, str] = {}
-        self._export_map: dict[str, str] = {}
-        self._exec_counter: int = 0
-        self._export_counter: int = 0
-
-    def normalize_exec(self, full_hash: str) -> str:
-        if full_hash not in self._exec_map:
-            self._exec_map[full_hash] = f"EXECUTION_RESULT_{self._exec_counter}"
-            self._exec_counter += 1
-        return self._exec_map[full_hash]
-
-    def normalize_export(self, hex_hash: str) -> str:
-        if hex_hash not in self._export_map:
-            self._export_map[hex_hash] = f"EXPORT_RESULT_{self._export_counter}"
-            self._export_counter += 1
-        return self._export_map[hex_hash]
-
-
-_hash_normalizer = _HashNormalizer()
+_CANONICAL_EXECUTION_RESULT = "EXECUTION_NORMALIZED"
+_CANONICAL_EXPORT_RESULT = "EXPORT_NORMALIZED"
 
 
 def configure_normalization(test_config: dict[str, Any]) -> None:
@@ -214,23 +190,17 @@ def _apply_replacements(text: str) -> str:
 
 
 def _normalize_hashes_in_text(text: str) -> str:
-    """Replace executionResult/exportResult hashes and timestamps with deterministic placeholders."""
-    text = _EXEC_HASH_BODY_RE.sub(lambda m: _hash_normalizer.normalize_exec(m.group(0)), text)
-    text = _EXPORT_HASH_BODY_RE.sub(lambda m: _hash_normalizer.normalize_export(m.group(0)), text)
+    """Replace transient server values with deterministic placeholders."""
+    text = _EXEC_HASH_BODY_RE.sub(_CANONICAL_EXECUTION_RESULT, text)
+    text = _EXPORT_HASH_BODY_RE.sub(_CANONICAL_EXPORT_RESULT, text)
     text = _CREATED_AT_RE.sub(_CANONICAL_CREATED_AT, text)
     return text
 
 
 def _normalize_hashes_in_uri(uri: str) -> str:
     """Replace executionResult/exportResult hashes in a request URI."""
-
-    def _replace_exec_uri(m: re.Match) -> str:
-        # Convert URL-encoded %3A to plain colon for consistent mapping
-        plain = m.group(0).replace("%3A", ":").replace("%3a", ":")
-        return _hash_normalizer.normalize_exec(plain)
-
-    uri = _EXEC_HASH_URI_RE.sub(_replace_exec_uri, uri)
-    uri = _EXPORT_HASH_URI_RE.sub(lambda m: _hash_normalizer.normalize_export(m.group(0)), uri)
+    uri = _EXEC_HASH_URI_RE.sub(_CANONICAL_EXECUTION_RESULT, uri)
+    uri = _EXPORT_HASH_URI_RE.sub(_CANONICAL_EXPORT_RESULT, uri)
     return uri
 
 

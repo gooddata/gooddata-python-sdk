@@ -1,0 +1,32 @@
+# (C) 2026 GoodData Corporation
+# A Date dataset is a dataset in the logical data model(LDM)
+# that represents DATE / TIMESTAMP columns in your database.
+# Read more about date instances:
+# https://www.gooddata.com/developers/cloud-native/doc/cloud/model-data/concepts/dataset/#date-datasets
+
+type: date
+id: order_date
+
+title: Order date
+tags:
+    - Order date
+
+granularities:
+    - MINUTE
+    - HOUR
+    - DAY
+    - WEEK
+    - MONTH
+    - QUARTER
+    - YEAR
+    - MINUTE_OF_HOUR
+    - HOUR_OF_DAY
+    - DAY_OF_WEEK
+    - DAY_OF_MONTH
+    - DAY_OF_YEAR
+    - WEEK_OF_YEAR
+    - MONTH_OF_YEAR
+    - QUARTER_OF_YEAR
+
+title_base: ""
+title_pattern: "%titleBase - %granularityTitle"
