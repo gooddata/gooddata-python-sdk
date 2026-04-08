@@ -6,10 +6,10 @@
         "id": "campaign",
         "permissions": [
           {
+            "name": "VIEW",
             "assigneeRule": {
               "type": "allWorkspaceUsers"
-            },
-            "name": "VIEW"
+            }
           }
         ]
       }
@@ -17,9 +17,10 @@
     "attributeHierarchies": [],
     "dashboardPlugins": [],
     "filterContexts": [],
-    "memoryItems": [],
     "metrics": [],
     "visualizationObjects": [],
-    "exportDefinitions": []
+    "exportDefinitions": [],
+    "memoryItems": [],
+    "parameters": []
   }
 }

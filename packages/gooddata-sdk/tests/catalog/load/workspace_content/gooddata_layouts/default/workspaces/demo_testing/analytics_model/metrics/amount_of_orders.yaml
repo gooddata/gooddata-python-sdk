@@ -1,6 +1,10 @@
-# (C) 2022 GoodData Corporation
+# (C) 2026 GoodData Corporation
 content:
   format: '#,##0'
   maql: SELECT COUNT({attribute/order_id})
+createdAt: 2025-08-07 11:45
+createdBy:
+  id: admin
+  type: user
 id: amount_of_orders
 title: '# of Orders'

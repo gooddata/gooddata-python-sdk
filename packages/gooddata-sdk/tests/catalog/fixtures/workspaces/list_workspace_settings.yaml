@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
       body: null
       headers:
         Accept:
@@ -14,17 +11,17 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
     response:
-      status:
-        code: 404
-        message: Not Found
+      body:
+        string:
+          detail: The requested endpoint does not exist or you do not have permission
+            to access it.
+          status: 404
+          title: Not Found
+          traceId: 191f03a5fa7eec66404722d2a2e49085
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '172'
         Content-Type:
           - application/problem+json
         DATE: &id001
@@ -33,37 +30,21 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          detail: The requested endpoint does not exist or you do not have permission
-            to access it.
-          status: 404
-          title: Not Found
-          traceId: 5aab2cfc6796a4f4bc54f30d013c80a7
+      status:
+        code: 404
+        message: Not Found
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings
       body:
         data:
-          type: workspaceSetting
-          id: test_setting_1
           attributes:
             content:
               value: fr-FR
             type: LOCALE
+          id: test_setting_1
+          type: workspaceSetting
       headers:
         Accept:
           - application/json
@@ -75,37 +56,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings
     response:
-      status:
-        code: 201
-        message: Created
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '320'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
@@ -120,10 +73,22 @@ interactions:
                 originType: NATIVE
             type: workspaceSetting
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 201
+        message: Created
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
       body: null
       headers:
         Accept:
@@ -134,17 +99,17 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
     response:
-      status:
-        code: 404
-        message: Not Found
+      body:
+        string:
+          detail: The requested endpoint does not exist or you do not have permission
+            to access it.
+          status: 404
+          title: Not Found
+          traceId: d43fae3e0b183a7b61d18a8cdccdabeb
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '172'
         Content-Type:
           - application/problem+json
         DATE: *id001
@@ -152,37 +117,21 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          detail: The requested endpoint does not exist or you do not have permission
-            to access it.
-          status: 404
-          title: Not Found
-          traceId: 60a429950db2919f6fe9e37c15a8e874
+      status:
+        code: 404
+        message: Not Found
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings
       body:
         data:
-          type: workspaceSetting
-          id: test_setting_2
           attributes:
             content:
               value: en-US
             type: FORMAT_LOCALE
+          id: test_setting_2
+          type: workspaceSetting
       headers:
         Accept:
           - application/json
@@ -194,37 +143,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings
     response:
-      status:
-        code: 201
-        message: Created
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '327'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
@@ -239,10 +160,22 @@ interactions:
                 originType: NATIVE
             type: workspaceSetting
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 201
+        message: Created
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings?page=0&size=500
       body: null
       headers:
         Accept:
@@ -253,37 +186,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings?page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '919'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
@@ -293,7 +198,7 @@ interactions:
                 type: LOCALE
               id: test_setting_1
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
               meta:
                 origin:
                   originId: demo
@@ -305,18 +210,30 @@ interactions:
                 type: FORMAT_LOCALE
               id: test_setting_2
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
               meta:
                 origin:
                   originId: demo
                   originType: NATIVE
               type: workspaceSetting
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings?page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings?page=1&size=500
+            next: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings?page=1&size=500
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings?page=0&size=500
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: DELETE
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
       body: null
       headers:
         Accept-Encoding:
@@ -325,15 +242,12 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_1
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -341,24 +255,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
   - request:
-      method: DELETE
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
       body: null
       headers:
         Accept-Encoding:
@@ -367,15 +270,12 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/workspaceSettings/test_setting_2
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -383,18 +283,10 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
+version: 1

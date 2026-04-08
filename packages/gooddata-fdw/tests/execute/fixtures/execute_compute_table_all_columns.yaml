@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes:
@@ -21,41 +18,41 @@ interactions:
           measures:
             - definition:
                 measure:
+                  aggregation: SUM
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: quantity
                       type: fact
-                  aggregation: SUM
-                  computeRatio: false
-                  filters: []
               localIdentifier: quantity
             - definition:
                 measure:
+                  aggregation: SUM
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: price
                       type: fact
-                  aggregation: SUM
-                  computeRatio: false
-                  filters: []
               localIdentifier: price
             - definition:
                 measure:
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: percent_revenue_in_category
                       type: metric
-                  computeRatio: false
-                  filters: []
               localIdentifier: percent_revenue_in_category
             - definition:
                 measure:
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: revenue
                       type: metric
-                  computeRatio: false
-                  filters: []
               localIdentifier: revenue
         resultSpec:
           dimensions:
@@ -77,67 +74,40 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '1128'
-        Content-Type:
-          - application/json
-        DATE: &id001
-          - PLACEHOLDER
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-Gdc-Cancel-Token:
-          - 4b12a06a-487e-46d5-9d60-488e15b57c40
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       body:
         string:
           executionResponse:
             dimensions:
               - headers:
                   - attributeHeader:
-                      localIdentifier: products_category
-                      label:
-                        id: products.category
-                        type: label
-                      labelName: Category
                       attribute:
                         id: products.category
                         type: attribute
                       attributeName: Category
                       granularity: null
+                      label:
+                        id: products.category
+                        type: label
+                      labelName: Category
+                      localIdentifier: products_category
                       primaryLabel:
                         id: products.category
                         type: label
                       valueType: TEXT
                   - attributeHeader:
-                      localIdentifier: products_product_name
-                      label:
-                        id: product_name
-                        type: label
-                      labelName: Product name
                       attribute:
                         id: product_name
                         type: attribute
                       attributeName: Product name
                       granularity: null
+                      label:
+                        id: product_name
+                        type: label
+                      labelName: Product name
+                      localIdentifier: products_product_name
                       primaryLabel:
                         id: product_name
                         type: label
@@ -147,18 +117,32 @@ interactions:
                   - measureGroupHeaders:
                       - localIdentifier: quantity
                       - localIdentifier: price
-                      - localIdentifier: percent_revenue_in_category
-                        format: '#,##0.0%'
+                      - format: '#,##0.0%'
+                        localIdentifier: percent_revenue_in_category
                         name: '% Revenue in Category'
-                      - localIdentifier: revenue
-                        format: $#,##0
+                      - format: $#,##0
+                        localIdentifier: revenue
                         name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: f6a00a91124ea1040b01c1b8831adb92ba7f5ba4:e6b88a13de23c82db3678aa8f42c5d60a1b645f5fa3d308fbe393dd69ac4e41f
+              executionResult: EXECUTION_RESULT_0
+      headers:
+        Content-Type:
+          - application/json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-CANCEL-TOKEN: *id001
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/f6a00a91124ea1040b01c1b8831adb92ba7f5ba4%3Ae6b88a13de23c82db3678aa8f42c5d60a1b645f5fa3d308fbe393dd69ac4e41f?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -169,33 +153,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_0?offset=0%2C0&limit=512%2C256
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '3913'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       body:
         string:
           data:
@@ -394,6 +354,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 3
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 18
@@ -404,5 +366,18 @@ interactions:
             total:
               - 18
               - 4
-          metadata:
-            dataSourceMessages: []
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
+version: 1

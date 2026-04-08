@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/translations/clean
       body:
         locale: fr-FR
       headers:
@@ -15,39 +12,25 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/translations/clean
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/translations/retrieve
       body:
         locale: fr-FR
       headers:
@@ -61,40 +44,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/translations/retrieve
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/xml
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
           version="2.1" srcLang="en-US" trgLang="fr-FR"><file id="demo"><group id="analyticalDashboard"><group
@@ -512,9 +464,21 @@ interactions:
           id="filterContext.campaign_name_filter.description"><segment><source></source></segment></unit></group><group
           id="filterContext.region_filter"><unit id="filterContext.region_filter.title"><segment><source>filterContext</source></segment></unit><unit
           id="filterContext.region_filter.description"><segment><source></source></segment></unit></group></group></file></xliff>
+      headers:
+        Content-Type:
+          - application/xml
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/translations/retrieve
       body:
         locale: fr-FR
       headers:
@@ -528,40 +492,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/translations/retrieve
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/xml
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
           version="2.1" srcLang="en-US" trgLang="fr-FR"><file id="demo"><group id="analyticalDashboard"><group
@@ -979,9 +912,21 @@ interactions:
           id="filterContext.campaign_name_filter.description"><segment><source></source></segment></unit></group><group
           id="filterContext.region_filter"><unit id="filterContext.region_filter.title"><segment><source>filterContext</source></segment></unit><unit
           id="filterContext.region_filter.description"><segment><source></source></segment></unit></group></group></file></xliff>
+      headers:
+        Content-Type:
+          - application/xml
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/translations/set
       body: '<?xml version=''1.0'' encoding=''utf-8''?>
 
         <xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.1" srcLang="en-US"
@@ -1469,38 +1414,24 @@ interactions:
           - '48782'
         Content-Type:
           - application/xml
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/translations/set
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         DATE: *id001
         Expires:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/translations/retrieve
       body:
         locale: fr-FR
       headers:
@@ -1514,40 +1445,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/translations/retrieve
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/xml
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><xliff xmlns="urn:oasis:names:tc:xliff:document:2.0"
           version="2.1" srcLang="en-US" trgLang="fr-FR"><file id="demo"><group id="analyticalDashboard"><group
@@ -2024,9 +1924,21 @@ interactions:
           id="filterContext.campaign_name_filter.description"><segment><source></source></segment></unit></group><group
           id="filterContext.region_filter"><unit id="filterContext.region_filter.title"><segment><source>filterContext</source><target>filterContext.</target></segment></unit><unit
           id="filterContext.region_filter.description"><segment><source></source></segment></unit></group></group></file></xliff>
+      headers:
+        Content-Type:
+          - application/xml
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/workspaces/demo/translations/clean
       body:
         locale: fr-FR
       headers:
@@ -2038,32 +1950,21 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/translations/clean
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         DATE: *id001
         Expires:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
+version: 1

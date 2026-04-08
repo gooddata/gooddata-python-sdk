@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2026 GoodData Corporation
 content:
   buckets:
     - items:
@@ -92,5 +92,9 @@ content:
         direction: asc
   version: '2'
   visualizationUrl: local:table
+createdAt: 2025-08-07 11:45
+createdBy:
+  id: admin
+  type: user
 id: revenue_and_quantity_by_product_and_category
 title: Revenue and Quantity by Product and Category

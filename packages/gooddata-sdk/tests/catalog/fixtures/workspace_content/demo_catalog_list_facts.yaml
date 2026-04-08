@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts?page=0&size=500
       body: null
       headers:
         Accept:
@@ -14,17 +11,84 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/facts?page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            - attributes:
+                areRelationsValid: true
+                description: Budget
+                isNullable: true
+                sourceColumn: budget
+                sourceColumnDataType: NUMERIC
+                tags:
+                  - Campaign channels
+                title: Budget
+              id: budget
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/budget
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: fact
+            - attributes:
+                areRelationsValid: true
+                description: Price
+                isNullable: true
+                sourceColumn: price
+                sourceColumnDataType: NUMERIC
+                tags:
+                  - Order lines
+                title: Price
+              id: price
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/price
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: fact
+            - attributes:
+                areRelationsValid: true
+                description: Quantity
+                isNullable: true
+                sourceColumn: quantity
+                sourceColumnDataType: NUMERIC
+                tags:
+                  - Order lines
+                title: Quantity
+              id: quantity
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/quantity
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: fact
+            - attributes:
+                areRelationsValid: true
+                description: Spend
+                isNullable: true
+                sourceColumn: spend
+                sourceColumnDataType: NUMERIC
+                tags:
+                  - Campaign channels
+                title: Spend
+              id: spend
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/spend
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: fact
+          links:
+            next: http://localhost:3000/api/v1/entities/workspaces/demo/facts?page=1&size=500
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/facts?page=0&size=500
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,89 +97,10 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            - attributes:
-                title: Budget
-                description: Budget
-                tags:
-                  - Campaign channels
-                sourceColumn: budget
-                sourceColumnDataType: NUMERIC
-                areRelationsValid: true
-              id: budget
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/budget
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: fact
-            - attributes:
-                title: Price
-                description: Price
-                tags:
-                  - Order lines
-                sourceColumn: price
-                sourceColumnDataType: NUMERIC
-                areRelationsValid: true
-              id: price
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/price
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: fact
-            - attributes:
-                title: Quantity
-                description: Quantity
-                tags:
-                  - Order lines
-                sourceColumn: quantity
-                sourceColumnDataType: NUMERIC
-                areRelationsValid: true
-              id: quantity
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/quantity
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: fact
-            - attributes:
-                title: Spend
-                description: Spend
-                tags:
-                  - Campaign channels
-                sourceColumn: spend
-                sourceColumnDataType: NUMERIC
-                areRelationsValid: true
-              id: spend
-              links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts/spend
-              meta:
-                origin:
-                  originId: demo
-                  originType: NATIVE
-              type: fact
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts?page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/workspaces/demo/facts?page=1&size=500
+      status:
+        code: 200
+        message: OK
+version: 1

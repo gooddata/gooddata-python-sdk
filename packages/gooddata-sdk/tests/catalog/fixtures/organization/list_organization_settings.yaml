@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organizationSettings?page=0&size=500
       body: null
       headers:
         Accept:
@@ -14,17 +11,16 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/organizationSettings?page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data: []
+          links:
+            next: http://localhost:3000/api/v1/entities/organizationSettings?page=1&size=500
+            self: http://localhost:3000/api/v1/entities/organizationSettings?page=0&size=500
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '263'
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,36 +29,21 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data: []
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organizationSettings?page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organizationSettings?page=1&size=500
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organizationSettings
       body:
         data:
-          id: test_setting_1
-          type: organizationSetting
           attributes:
-            type: LOCALE
             content:
               value: fr-FR
+            type: LOCALE
+          id: test_setting_1
+          type: organizationSetting
       headers:
         Accept:
           - application/json
@@ -74,37 +55,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/organizationSettings
     response:
-      status:
-        code: 201
-        message: Created
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '250'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
@@ -115,18 +68,30 @@ interactions:
             id: test_setting_1
             type: organizationSetting
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organizationSettings/test_setting_1
+            self: http://localhost:3000/api/v1/entities/organizationSettings/test_setting_1
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 201
+        message: Created
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organizationSettings
       body:
         data:
-          id: test_setting_2
-          type: organizationSetting
           attributes:
-            type: FORMAT_LOCALE
             content:
               value: en-GB
+            type: FORMAT_LOCALE
+          id: test_setting_2
+          type: organizationSetting
       headers:
         Accept:
           - application/json
@@ -138,37 +103,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/organizationSettings
     response:
-      status:
-        code: 201
-        message: Created
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '257'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
@@ -179,10 +116,22 @@ interactions:
             id: test_setting_2
             type: organizationSetting
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organizationSettings/test_setting_2
+            self: http://localhost:3000/api/v1/entities/organizationSettings/test_setting_2
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 201
+        message: Created
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organizationSettings?page=0&size=500
       body: null
       headers:
         Accept:
@@ -193,37 +142,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/organizationSettings?page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '753'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
@@ -233,7 +154,7 @@ interactions:
                 type: LOCALE
               id: test_setting_1
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organizationSettings/test_setting_1
+                self: http://localhost:3000/api/v1/entities/organizationSettings/test_setting_1
               type: organizationSetting
             - attributes:
                 content:
@@ -241,14 +162,26 @@ interactions:
                 type: FORMAT_LOCALE
               id: test_setting_2
               links:
-                self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organizationSettings/test_setting_2
+                self: http://localhost:3000/api/v1/entities/organizationSettings/test_setting_2
               type: organizationSetting
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organizationSettings?page=0&size=500
-            next: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organizationSettings?page=1&size=500
+            next: http://localhost:3000/api/v1/entities/organizationSettings?page=1&size=500
+            self: http://localhost:3000/api/v1/entities/organizationSettings?page=0&size=500
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: DELETE
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organizationSettings/test_setting_1
       body: null
       headers:
         Accept-Encoding:
@@ -257,15 +190,12 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/organizationSettings/test_setting_1
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -273,24 +203,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
   - request:
-      method: DELETE
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organizationSettings/test_setting_2
       body: null
       headers:
         Accept-Encoding:
@@ -299,15 +218,12 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/organizationSettings/test_setting_2
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -315,18 +231,10 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
+version: 1

@@ -1,7 +1,11 @@
-# (C) 2022 GoodData Corporation
+# (C) 2026 GoodData Corporation
 content:
   url: https://www.example.com
   version: '2'
+createdAt: 2025-08-07 11:45
+createdBy:
+  id: admin
+  type: user
 description: Testing record dashboard_plugin_1
 id: dashboard_plugin_1
 title: dashboard_plugin_1
