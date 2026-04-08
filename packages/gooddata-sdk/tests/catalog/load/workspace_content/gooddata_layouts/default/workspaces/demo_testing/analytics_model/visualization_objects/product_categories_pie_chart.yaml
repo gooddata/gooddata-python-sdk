@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2026 GoodData Corporation
 content:
   buckets:
     - items:
@@ -46,5 +46,9 @@ content:
         position: bottom
   version: '2'
   visualizationUrl: local:donut
+createdAt: 2025-08-07 11:45
+createdBy:
+  id: admin
+  type: user
 id: product_categories_pie_chart
 title: Product Categories Pie Chart

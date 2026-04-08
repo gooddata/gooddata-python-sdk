@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body: null
       headers:
         Accept:
@@ -14,17 +11,17 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 404
-        message: Not Found
+      body:
+        string:
+          detail: The requested endpoint does not exist or you do not have permission
+            to access it.
+          status: 404
+          title: Not Found
+          traceId: 41a9b3c927f9983eea24783047954ef0
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '172'
         Content-Type:
           - application/problem+json
         DATE: &id001
@@ -33,38 +30,22 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          detail: The requested endpoint does not exist or you do not have permission
-            to access it.
-          status: 404
-          title: Not Found
-          traceId: a361270e77694e18b35d0389b9abd834
+      status:
+        code: 404
+        message: Not Found
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources
       body:
         data:
           attributes:
             name: Test
+            password: demopass
             schema: demo
             type: SNOWFLAKE
-            username: demouser
-            password: demopass
             url: jdbc:snowflake://gooddata.snowflakecomputing.com:443?warehouse=TIGER&db=TIGER&useProxy=true
+            username: demouser
           id: test
           type: dataSource
       headers:
@@ -78,17 +59,24 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/dataSources
     response:
-      status:
-        code: 201
-        message: Created
+      body:
+        string:
+          data:
+            attributes:
+              authenticationType: USERNAME_PASSWORD
+              name: Test
+              schema: demo
+              type: SNOWFLAKE
+              url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
+              username: demouser
+            id: test
+            type: dataSource
+          links:
+            self: http://localhost:3000/api/v1/entities/dataSources/test
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '413'
         Content-Type:
           - application/json
         DATE: *id001
@@ -96,36 +84,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
-              username: demouser
-              authenticationType: USERNAME_PASSWORD
-              name: Test
-              type: SNOWFLAKE
-              schema: demo
-            id: test
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
+      status:
+        code: 201
+        message: Created
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body: null
       headers:
         Accept:
@@ -136,17 +101,24 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              authenticationType: USERNAME_PASSWORD
+              name: Test
+              schema: demo
+              type: SNOWFLAKE
+              url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
+              username: demouser
+            id: test
+            type: dataSource
+          links:
+            self: http://localhost:3000/api/v1/entities/dataSources/test
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '413'
         Content-Type:
           - application/json
         DATE: *id001
@@ -154,36 +126,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
-              username: demouser
-              authenticationType: USERNAME_PASSWORD
-              name: Test
-              type: SNOWFLAKE
-              schema: demo
-            id: test
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
+      status:
+        code: 200
+        message: OK
   - request:
-      method: DELETE
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body: null
       headers:
         Accept-Encoding:
@@ -192,15 +141,12 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -208,24 +154,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body: null
       headers:
         Accept:
@@ -236,17 +171,17 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 404
-        message: Not Found
+      body:
+        string:
+          detail: The requested endpoint does not exist or you do not have permission
+            to access it.
+          status: 404
+          title: Not Found
+          traceId: 0d32c12a2b1542ea4224a363d2fd7499
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '172'
         Content-Type:
           - application/problem+json
         DATE: *id001
@@ -254,39 +189,23 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          detail: The requested endpoint does not exist or you do not have permission
-            to access it.
-          status: 404
-          title: Not Found
-          traceId: 65d6abccf753b88d6c4286a4046a8fe1
+      status:
+        code: 404
+        message: Not Found
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources
       body:
         data:
           attributes:
             name: Test
-            schema: demo
-            type: SNOWFLAKE
-            username: demouser
             privateKey: private_key
             privateKeyPassphrase: private_key_passphrase
+            schema: demo
+            type: SNOWFLAKE
             url: jdbc:snowflake://gooddata.snowflakecomputing.com:443?warehouse=TIGER&db=TIGER&useProxy=true
+            username: demouser
           id: test
           type: dataSource
       headers:
@@ -300,17 +219,24 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/dataSources
     response:
-      status:
-        code: 201
-        message: Created
+      body:
+        string:
+          data:
+            attributes:
+              authenticationType: KEY_PAIR
+              name: Test
+              schema: demo
+              type: SNOWFLAKE
+              url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
+              username: demouser
+            id: test
+            type: dataSource
+          links:
+            self: http://localhost:3000/api/v1/entities/dataSources/test
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '404'
         Content-Type:
           - application/json
         DATE: *id001
@@ -318,36 +244,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
-              username: demouser
-              authenticationType: KEY_PAIR
-              name: Test
-              type: SNOWFLAKE
-              schema: demo
-            id: test
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
+      status:
+        code: 201
+        message: Created
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body: null
       headers:
         Accept:
@@ -358,17 +261,24 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          data:
+            attributes:
+              authenticationType: KEY_PAIR
+              name: Test
+              schema: demo
+              type: SNOWFLAKE
+              url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
+              username: demouser
+            id: test
+            type: dataSource
+          links:
+            self: http://localhost:3000/api/v1/entities/dataSources/test
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '404'
         Content-Type:
           - application/json
         DATE: *id001
@@ -376,36 +286,13 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          data:
-            attributes:
-              url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
-              username: demouser
-              authenticationType: KEY_PAIR
-              name: Test
-              type: SNOWFLAKE
-              schema: demo
-            id: test
-            type: dataSource
-          links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
+      status:
+        code: 200
+        message: OK
   - request:
-      method: DELETE
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/dataSources/test
       body: null
       headers:
         Accept-Encoding:
@@ -414,15 +301,12 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/dataSources/test
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -430,18 +314,10 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
+version: 1

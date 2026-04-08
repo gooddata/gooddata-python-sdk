@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: PUT
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
       body:
         dataSources: []
       headers:
@@ -15,39 +12,25 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: PUT
+      uri: http://localhost:3000/api/v1/layout/dataSources
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/organization
       body: null
       headers:
         Accept-Encoding:
@@ -56,44 +39,28 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/organization
     response:
-      status:
-        code: 302
-        message: Found
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '0'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
         Location:
-          - /api/v1/entities/admin/organizations/python-sdk-dex
+          - /api/v1/entities/admin/organizations/default
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 302
+        message: Found
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
       body: null
       headers:
         Accept-Encoding:
@@ -102,44 +69,15 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/admin/organizations/default
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '564'
-        Content-Type:
-          - application/vnd.gooddata.api+json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           data:
             attributes:
-              name: Python SDK Dex
-              hostname: python-sdk-dex.dev-latest.stg11.panther.intgdc.com
               allowedOrigins: []
+              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -150,50 +88,62 @@ interactions:
                 - enableUserManagement
                 - enableRawExports
                 - enableFlexibleDashboardLayout
+              hostname: localhost
+              name: Default Organization
               region: ''
-              dataCenter: ''
-            id: python-sdk-dex
+            id: default
             type: organization
           links:
-            self: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/entities/admin/organizations/python-sdk-dex
+            self: http://localhost:3000/api/v1/entities/admin/organizations/default
+      headers:
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: PUT
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
       body:
         dataSources:
-          - id: demo-bigquery-ds
+          - decodedParameters:
+              - name: clientEmail
+                value: fake email
+            id: demo-bigquery-ds
             name: demo-bigquery-ds
-            schema: demo
-            type: BIGQUERY
             parameters:
               - name: projectId
                 value: projectId-value-override
-            decodedParameters:
-              - name: clientEmail
-                value: fake email
             permissions: []
+            schema: demo
             token: eyJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsICJwcm9qZWN0X2lkIjogIlBST0pFQ1RfSUQiLCAicHJpdmF0ZV9rZXlfaWQiOiAiS0VZX0lEIiwgInByaXZhdGVfa2V5IjogIi0tLS0tQkVHSU4gUFJJVkFURSBLRVktLS0tLVxuUFJJVkFURV9LRVlcbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS1cbiIsICJjbGllbnRfZW1haWwiOiAiU0VSVklDRV9BQ0NPVU5UX0VNQUlMIiwgImNsaWVudF9pZCI6ICJDTElFTlRfSUQiLCAiYXV0aF91cmkiOiAiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tL28vb2F1dGgyL2F1dGgiLCAidG9rZW5fdXJpIjogImh0dHBzOi8vYWNjb3VudHMuZ29vZ2xlLmNvbS9vL29hdXRoMi90b2tlbiIsICJhdXRoX3Byb3ZpZGVyX3g1MDlfY2VydF91cmwiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vb2F1dGgyL3YxL2NlcnRzIiwgImNsaWVudF94NTA5X2NlcnRfdXJsIjogImh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL3JvYm90L3YxL21ldGFkYXRhL3g1MDkvU0VSVklDRV9BQ0NPVU5UX0VNQUlMIn0=
+            type: BIGQUERY
           - id: demo-test-ds
             name: demo-test-ds
+            password: passw0rd
+            permissions:
+              - assignee:
+                  id: demo2
+                  type: user
+                name: MANAGE
+              - assignee:
+                  id: demoGroup
+                  type: userGroup
+                name: USE
             schema: demo
             type: POSTGRESQL
             url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
             username: postgres
-            permissions:
-              - assignee:
-                  id: demo2
-                  type: user
-                name: MANAGE
-              - assignee:
-                  id: demoGroup
-                  type: userGroup
-                name: USE
-            password: secret
-          - id: demo-test-ds-databricks-client-secret
+          - clientId: client-id
+            clientSecret: databricks-client-secret
+            id: demo-test-ds-databricks-client-secret
             name: demo-test-ds-databricks-client-secret
-            schema: demo
-            type: DATABRICKS
-            url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;
             parameters:
               - name: catalog
                 value: demo
@@ -206,13 +156,11 @@ interactions:
                   id: demoGroup
                   type: userGroup
                 name: USE
-            clientId: client-id
-            clientSecret: databricks-client-secret
+            schema: demo
+            type: DATABRICKS
+            url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;
           - id: demo-test-ds-databricks-token
             name: demo-test-ds-databricks-token
-            schema: demo
-            type: DATABRICKS
-            url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;
             parameters:
               - name: catalog
                 value: demo
@@ -225,13 +173,16 @@ interactions:
                   id: demoGroup
                   type: userGroup
                 name: USE
+            schema: demo
             token: databricks-token
+            type: DATABRICKS
+            url: jdbc:databricks://dbc-1234-abc.cloud.databricks.com:443;httpPath=/sql/1.0/warehouses/9876fdsa;
           - id: demo-vertica-ds
             name: demo-vertica-ds
+            permissions: []
             schema: demo
             type: VERTICA
             url: jdbc:vertica://localhost:5434/demo
-            permissions: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -241,38 +192,24 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: PUT
+      uri: http://localhost:3000/api/v1/layout/dataSources
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         DATE: *id001
         Expires:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
       body: null
       headers:
         Accept:
@@ -283,40 +220,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/layout/dataSources
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - br
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Transfer-Encoding:
-          - chunked
-        Vary:
-          - Accept-Encoding
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           dataSources:
@@ -395,17 +301,27 @@ interactions:
               schema: demo
               type: VERTICA
               url: jdbc:vertica://localhost:5434/demo
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: PUT
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
       body:
         dataSources:
-          - id: demo-test-ds
+          - alternativeDataSourceId: ds-put-abc-id
+            id: demo-test-ds
             name: demo-test-ds
-            schema: demo
-            type: POSTGRESQL
-            url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
-            username: postgres
+            password: passw0rd
             permissions:
               - assignee:
                   id: demo2
@@ -415,8 +331,10 @@ interactions:
                   id: demoGroup
                   type: userGroup
                 name: USE
-            alternativeDataSourceId: ds-put-abc-id
-            password: secret
+            schema: demo
+            type: POSTGRESQL
+            url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
+            username: postgres
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -426,32 +344,21 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: PUT
+      uri: http://localhost:3000/api/v1/layout/dataSources
     response:
-      status:
-        code: 204
-        message: No Content
+      body:
+        string: ''
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
         DATE: *id001
         Expires:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string: ''
+      status:
+        code: 204
+        message: No Content
+version: 1

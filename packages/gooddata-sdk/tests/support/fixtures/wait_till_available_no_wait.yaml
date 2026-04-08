@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/options
       body: null
       headers:
         Accept:
@@ -14,17 +11,16 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/options
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          options:
+            description: Options resources
+            links:
+              availableDrivers: /api/v1/options/availableDrivers
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '111'
         Content-Type:
           - application/json
         DATE: &id001
@@ -33,22 +29,10 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          options:
-            description: Options resources
-            links:
-              availableDrivers: /api/v1/options/availableDrivers
+      status:
+        code: 200
+        message: OK
+version: 1

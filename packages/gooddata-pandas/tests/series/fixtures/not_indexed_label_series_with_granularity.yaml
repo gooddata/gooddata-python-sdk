@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes:
@@ -36,15 +33,48 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          executionResponse:
+            dimensions:
+              - headers:
+                  - attributeHeader:
+                      attribute:
+                        id: products.category
+                        type: attribute
+                      attributeName: Category
+                      granularity: null
+                      label:
+                        id: products.category
+                        type: label
+                      labelName: Category
+                      localIdentifier: c1240b6ba5cdafa4dd2ef1c728f0cffa
+                      primaryLabel:
+                        id: products.category
+                        type: label
+                      valueType: TEXT
+                  - attributeHeader:
+                      attribute:
+                        id: region
+                        type: attribute
+                      attributeName: Region
+                      granularity: null
+                      label:
+                        id: region
+                        type: label
+                      labelName: Region
+                      localIdentifier: 2660733dfc018f739b0d142f19af7126
+                      primaryLabel:
+                        id: region
+                        type: label
+                      valueType: TEXT
+                localIdentifier: dim_0
+            links:
+              executionResult: EXECUTION_RESULT_29
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '833'
         Content-Type:
           - application/json
         DATE: &id001
@@ -53,60 +83,14 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Gdc-Cancel-Token:
-          - 076c98e1-2a2d-47af-93ac-95d3f8d673a4
+        X-GDC-CANCEL-TOKEN: *id001
         X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
-      body:
-        string:
-          executionResponse:
-            dimensions:
-              - headers:
-                  - attributeHeader:
-                      localIdentifier: c1240b6ba5cdafa4dd2ef1c728f0cffa
-                      label:
-                        id: products.category
-                        type: label
-                      labelName: Category
-                      attribute:
-                        id: products.category
-                        type: attribute
-                      attributeName: Category
-                      granularity: null
-                      primaryLabel:
-                        id: products.category
-                        type: label
-                      valueType: TEXT
-                  - attributeHeader:
-                      localIdentifier: 2660733dfc018f739b0d142f19af7126
-                      label:
-                        id: region
-                        type: label
-                      labelName: Region
-                      attribute:
-                        id: region
-                        type: attribute
-                      attributeName: Region
-                      granularity: null
-                      primaryLabel:
-                        id: region
-                        type: label
-                      valueType: TEXT
-                localIdentifier: dim_0
-            links:
-              executionResult: 04f3bf2d64cc39ca7b5c384b69f7268956e1cf68:d1490373eab1aaa480390a8061e4e1a95e3edc2b67c12f00a5481805116415c5
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28products.category%2Cregion%29&page=0&size=500
       body: null
       headers:
         Accept:
@@ -117,45 +101,21 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28products.category%2Cregion%29&page=0&size=500
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '2761'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       body:
         string:
           data:
             - attributes:
-                title: Category
-                description: Category
-                tags:
-                  - Products
                 areRelationsValid: true
+                description: Category
+                isNullable: true
                 sourceColumn: category
                 sourceColumnDataType: STRING
-                isNullable: true
+                tags:
+                  - Products
+                title: Category
               id: products.category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
@@ -174,14 +134,14 @@ interactions:
                       type: label
               type: attribute
             - attributes:
-                title: Region
-                description: Region
-                tags:
-                  - Customers
                 areRelationsValid: true
+                description: Region
+                isNullable: true
                 sourceColumn: region
                 sourceColumnDataType: STRING
-                isNullable: true
+                tags:
+                  - Customers
+                title: Region
               id: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
@@ -201,73 +161,85 @@ interactions:
               type: attribute
           included:
             - attributes:
-                title: Customers
-                description: Customers
-                tags:
-                  - Customers
-                grain:
-                  - id: customer_id
-                    type: attribute
                 dataSourceTableId: demo-test-ds:customers
                 dataSourceTablePath:
                   - demo
                   - customers
+                description: Customers
+                grain:
+                  - id: customer_id
+                    type: attribute
+                tags:
+                  - Customers
+                title: Customers
                 type: NORMAL
               id: customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
               type: dataset
             - attributes:
-                title: Region
                 description: Region
-                tags:
-                  - Customers
+                isNullable: true
                 primary: true
                 sourceColumn: region
                 sourceColumnDataType: STRING
+                tags:
+                  - Customers
+                title: Region
                 valueType: TEXT
-                isNullable: true
               id: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
               type: label
             - attributes:
-                title: Category
                 description: Category
-                tags:
-                  - Products
+                isNullable: true
                 primary: true
                 sourceColumn: category
                 sourceColumnDataType: STRING
+                tags:
+                  - Products
+                title: Category
                 valueType: TEXT
-                isNullable: true
               id: products.category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
               type: label
             - attributes:
-                title: Products
-                description: Products
-                tags:
-                  - Products
-                grain:
-                  - id: product_id
-                    type: attribute
                 dataSourceTableId: demo-test-ds:products
                 dataSourceTablePath:
                   - demo
                   - products
+                description: Products
+                grain:
+                  - id: product_id
+                    type: attribute
+                tags:
+                  - Products
+                title: Products
                 type: NORMAL
               id: products
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
               type: dataset
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28%27products.category%27%2C%27region%27%29&page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28%27products.category%27%2C%27region%27%29&page=1&size=500
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&filter=labels.id%3Din%3D%28%27products.category%27%2C%27region%27%29&page=0&size=500
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/04f3bf2d64cc39ca7b5c384b69f7268956e1cf68%3Ad1490373eab1aaa480390a8061e4e1a95e3edc2b67c12f00a5481805116415c5?offset=0&limit=1000
       body: null
       headers:
         Accept:
@@ -278,33 +250,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_29?offset=0&limit=1000
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '2727'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       body:
         string:
           data: []
@@ -415,6 +363,8 @@ interactions:
                         labelValue: West
                         primaryLabelValue: West
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 17
@@ -422,5 +372,18 @@ interactions:
               - 0
             total:
               - 17
-          metadata:
-            dataSourceMessages: []
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
+version: 1

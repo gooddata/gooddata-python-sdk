@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **title** | **str** | Widget title as displayed on the dashboard. | 
 **visualization_ids** | **[str]** | IDs of all visualizations available in the switcher. | 
 **widget_id** | **str** | Widget object ID. | 
+**filters** | [**[FilterDefinition]**](FilterDefinition.md) | Filters currently applied to the dashboard. | [optional] 
 **result_id** | **str** | Signed result ID for the currently active visualization&#39;s execution result. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

@@ -1,8 +1,9 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 aggregatedFacts: []
 attributes:
   - description: Campaign id
     id: campaign_id
+    isNullable: false
     labels: []
     sourceColumn: campaign_id
     sourceColumnDataType: INT
@@ -11,6 +12,7 @@ attributes:
     title: Campaign id
   - description: Campaign name
     id: campaign_name
+    isNullable: true
     labels: []
     sourceColumn: campaign_name
     sourceColumnDataType: STRING

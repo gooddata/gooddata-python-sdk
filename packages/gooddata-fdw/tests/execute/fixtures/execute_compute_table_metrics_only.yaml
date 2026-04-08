@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
       body:
         execution:
           attributes: []
@@ -11,41 +8,41 @@ interactions:
           measures:
             - definition:
                 measure:
+                  aggregation: SUM
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: quantity
                       type: fact
-                  aggregation: SUM
-                  computeRatio: false
-                  filters: []
               localIdentifier: quantity
             - definition:
                 measure:
+                  aggregation: SUM
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: price
                       type: fact
-                  aggregation: SUM
-                  computeRatio: false
-                  filters: []
               localIdentifier: price
             - definition:
                 measure:
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: percent_revenue_in_category
                       type: metric
-                  computeRatio: false
-                  filters: []
               localIdentifier: percent_revenue_in_category
             - definition:
                 measure:
+                  computeRatio: false
+                  filters: []
                   item:
                     identifier:
                       id: revenue
                       type: metric
-                  computeRatio: false
-                  filters: []
               localIdentifier: revenue
         resultSpec:
           dimensions:
@@ -63,36 +60,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '465'
-        Content-Type:
-          - application/json
-        DATE: &id001
-          - PLACEHOLDER
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-Gdc-Cancel-Token:
-          - 79955fb8-cc71-4521-9c15-675b013d1c74
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       body:
         string:
           executionResponse:
@@ -101,18 +71,32 @@ interactions:
                   - measureGroupHeaders:
                       - localIdentifier: quantity
                       - localIdentifier: price
-                      - localIdentifier: percent_revenue_in_category
-                        format: '#,##0.0%'
+                      - format: '#,##0.0%'
+                        localIdentifier: percent_revenue_in_category
                         name: '% Revenue in Category'
-                      - localIdentifier: revenue
-                        format: $#,##0
+                      - format: $#,##0
+                        localIdentifier: revenue
                         name: Revenue
                 localIdentifier: dim_0
             links:
-              executionResult: 56975cbe08024d150757b5a5de1b64c3e3948ff1:8e1cadd7ffa3122dec261230119d721fb0982535710e64bc682a98d4b800bd8a
+              executionResult: EXECUTION_RESULT_1
+      headers:
+        Content-Type:
+          - application/json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-CANCEL-TOKEN: *id001
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/56975cbe08024d150757b5a5de1b64c3e3948ff1%3A8e1cadd7ffa3122dec261230119d721fb0982535710e64bc682a98d4b800bd8a?offset=0&limit=256
       body: null
       headers:
         Accept:
@@ -123,33 +107,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_1?offset=0&limit=256
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Content-Length:
-          - '345'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-Xss-Protection:
-          - '0'
       body:
         string:
           data:
@@ -169,6 +129,8 @@ interactions:
                     - measureHeader:
                         measureIndex: 3
           grandTotals: []
+          metadata:
+            dataSourceMessages: []
           paging:
             count:
               - 4
@@ -176,5 +138,18 @@ interactions:
               - 0
             total:
               - 4
-          metadata:
-            dataSourceMessages: []
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
+version: 1

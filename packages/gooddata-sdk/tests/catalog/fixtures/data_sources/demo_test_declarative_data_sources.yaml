@@ -1,9 +1,6 @@
 # (C) 2026 GoodData Corporation
-version: 1
 interactions:
   - request:
-      method: GET
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/layout/dataSources
       body: null
       headers:
         Accept:
@@ -14,38 +11,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/layout/dataSources
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '428'
-        Content-Type:
-          - application/json
-        DATE: &id001
-          - PLACEHOLDER
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           dataSources:
@@ -64,15 +32,28 @@ interactions:
                   name: USE
               schema: demo
               type: POSTGRESQL
-              url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
+              url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
               username: postgres
+      headers:
+        Content-Type:
+          - application/json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSource/test
       body:
-        type: POSTGRESQL
-        url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
         schema: demo
+        type: POSTGRESQL
+        url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
         username: postgres
       headers:
         Accept:
@@ -85,37 +66,9 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/dataSource/test
     response:
-      status:
-        code: 200
-        message: OK
-      headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '373'
-        Content-Type:
-          - application/json
-        DATE: *id001
-        Expires:
-          - '0'
-        Pragma:
-          - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
-        X-Content-Type-Options:
-          - nosniff
-        X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
       body:
         string:
           error: 'DB request exception (state=GENERAL_ERROR dataSourceId=null vendorErrorState=08004
@@ -124,14 +77,26 @@ interactions:
             The server requested SCRAM-based authentication, but the password is an
             empty string.'
           successful: false
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
   - request:
-      method: POST
-      uri: https://python-sdk-dex.dev-latest.stg11.panther.intgdc.com/api/v1/actions/dataSource/test
       body:
-        type: POSTGRESQL
-        url: jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer
+        password: passw0rd
         schema: demo
-        password: secret
+        type: POSTGRESQL
+        url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
         username: postgres
       headers:
         Accept:
@@ -144,17 +109,16 @@ interactions:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/dataSource/test
     response:
-      status:
-        code: 200
-        message: OK
+      body:
+        string:
+          queryDurationMillis:
+            createCacheTable: 0
+            simpleSelect: 5
+          successful: true
       headers:
-        Cache-Control:
-          - no-cache, no-store, max-age=0, must-revalidate
-        Connection:
-          - keep-alive
-        Content-Length:
-          - '82'
         Content-Type:
           - application/json
         DATE: *id001
@@ -162,22 +126,10 @@ interactions:
           - '0'
         Pragma:
           - no-cache
-        Referrer-Policy:
-          - no-referrer
-        Strict-Transport-Security:
-          - max-age=63072000; includeSubDomains
-        Vary:
-          - Origin
-          - Access-Control-Request-Method
-          - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
-        X-XSS-Protection:
-          - '0'
-      body:
-        string:
-          queryDurationMillis:
-            createCacheTable: 0
-            simpleSelect: 11
-          successful: true
+      status:
+        code: 200
+        message: OK
+version: 1

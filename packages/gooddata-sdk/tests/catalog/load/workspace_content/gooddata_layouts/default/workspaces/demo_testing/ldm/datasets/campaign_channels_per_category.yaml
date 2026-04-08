@@ -1,4 +1,4 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 aggregatedFacts:
   - description: Budget Agg
     id: budget_agg
@@ -25,6 +25,7 @@ references:
     sources:
       - column: campaign_channel_id
         dataType: STRING
+        isNullable: true
         target:
           id: campaign_channel_id
           type: attribute

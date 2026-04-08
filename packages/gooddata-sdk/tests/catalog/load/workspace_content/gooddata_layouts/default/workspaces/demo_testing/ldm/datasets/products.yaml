@@ -1,8 +1,9 @@
-# (C) 2025 GoodData Corporation
+# (C) 2026 GoodData Corporation
 aggregatedFacts: []
 attributes:
   - description: Product id
     id: product_id
+    isNullable: false
     labels: []
     sourceColumn: product_id
     sourceColumnDataType: INT
@@ -11,6 +12,7 @@ attributes:
     title: Product id
   - description: Product name
     id: product_name
+    isNullable: true
     labels: []
     sourceColumn: product_name
     sourceColumnDataType: STRING
@@ -19,6 +21,7 @@ attributes:
     title: Product name
   - description: Category
     id: products.category
+    isNullable: true
     labels: []
     sourceColumn: category
     sourceColumnDataType: STRING
