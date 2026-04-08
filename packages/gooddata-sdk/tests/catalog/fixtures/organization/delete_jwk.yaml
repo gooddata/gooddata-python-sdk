@@ -20,7 +20,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: b73e3540a75d7da8ef0b6c71aaac424c
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
           - application/problem+json
@@ -146,7 +146,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 5a7605fca935a02eadecabe576034ada
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
           - application/problem+json

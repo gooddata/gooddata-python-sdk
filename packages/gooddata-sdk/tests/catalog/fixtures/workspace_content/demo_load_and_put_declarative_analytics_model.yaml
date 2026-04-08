@@ -20,7 +20,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: c7878c40e5bdc438d6051cfd25cb950f
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
           - application/problem+json
@@ -2309,7 +2309,6 @@ interactions:
           data:
             attributes:
               allowedOrigins: []
-              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -2322,7 +2321,6 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
-              region: ''
             id: default
             type: organization
           links:

@@ -573,20 +573,6 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: customers
-                      type: dataset
-                    multivalue: false
-                    sourceColumnDataTypes: null
-                    sourceColumns: null
-                    sources:
-                      - column: customer_id
-                        dataType: INT
-                        isNullable: true
-                        nullValue: null
-                        target:
-                          id: customer_id
-                          type: attribute
-                  - identifier:
                       id: products
                       type: dataset
                     multivalue: false
@@ -599,6 +585,20 @@ interactions:
                         nullValue: null
                         target:
                           id: product_id
+                          type: attribute
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        isNullable: true
+                        nullValue: null
+                        target:
+                          id: campaign_id
                           type: attribute
                   - identifier:
                       id: date
@@ -615,18 +615,18 @@ interactions:
                           id: date
                           type: date
                   - identifier:
-                      id: campaigns
+                      id: customers
                       type: dataset
                     multivalue: false
                     sourceColumnDataTypes: null
                     sourceColumns: null
                     sources:
-                      - column: campaign_id
+                      - column: customer_id
                         dataType: INT
                         isNullable: true
                         nullValue: null
                         target:
-                          id: campaign_id
+                          id: customer_id
                           type: attribute
                 tags:
                   - Order lines
@@ -1225,20 +1225,6 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: customers
-                      type: dataset
-                    multivalue: false
-                    sourceColumnDataTypes: null
-                    sourceColumns: null
-                    sources:
-                      - column: customer_id
-                        dataType: INT
-                        isNullable: true
-                        nullValue: null
-                        target:
-                          id: customer_id
-                          type: attribute
-                  - identifier:
                       id: products
                       type: dataset
                     multivalue: false
@@ -1251,6 +1237,20 @@ interactions:
                         nullValue: null
                         target:
                           id: product_id
+                          type: attribute
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        isNullable: true
+                        nullValue: null
+                        target:
+                          id: campaign_id
                           type: attribute
                   - identifier:
                       id: date
@@ -1267,18 +1267,18 @@ interactions:
                           id: date
                           type: date
                   - identifier:
-                      id: campaigns
+                      id: customers
                       type: dataset
                     multivalue: false
                     sourceColumnDataTypes: null
                     sourceColumns: null
                     sources:
-                      - column: campaign_id
+                      - column: customer_id
                         dataType: INT
                         isNullable: true
                         nullValue: null
                         target:
-                          id: campaign_id
+                          id: customer_id
                           type: attribute
                 tags:
                   - Order lines

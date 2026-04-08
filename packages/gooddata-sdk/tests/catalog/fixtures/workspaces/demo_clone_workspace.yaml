@@ -20,7 +20,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 876504a4d6dda70704a61e7b2f64d0e5
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
           - application/problem+json
@@ -2062,14 +2062,13 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 61918a8a605ab282f5420fdf7db48d14
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
-          - application/problem+json
+          - application/json
         DATE: *id001
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
       status:
         code: 404
         message: Not Found
@@ -2093,14 +2092,13 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 6a8c03a71babc8389bd91f91db574d6a
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
-          - application/problem+json
+          - application/json
         DATE: *id001
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
       status:
         code: 404
         message: Not Found
@@ -8202,14 +8200,13 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 59bd15743e828f28a363a77979211daf
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
-          - application/problem+json
+          - application/json
         DATE: *id001
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
       status:
         code: 404
         message: Not Found
@@ -8233,14 +8230,13 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 9c0823b8effb558c8adc35966555cbc0
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
-          - application/problem+json
+          - application/json
         DATE: *id001
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
       status:
         code: 404
         message: Not Found
@@ -12681,7 +12677,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: f3041d1c546e78328cb7bd5abe1817df
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
           - application/problem+json

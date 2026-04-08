@@ -67,7 +67,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 69d8eb4cff9ba06cc5e10f62a3b08224
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
           - application/problem+json

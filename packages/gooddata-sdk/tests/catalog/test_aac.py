@@ -18,7 +18,7 @@ from gooddata_sdk.catalog.workspace.aac import (
 )
 from gooddata_sdk.config import AacConfig
 
-_FIXTURES_DIR = Path(__file__).parent / "fixtures" / "aac"
+_FIXTURES_DIR = Path(__file__).parent / "unit_tests" / "aac_tests"
 
 
 # ---------------------------------------------------------------------------

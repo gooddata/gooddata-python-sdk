@@ -47,8 +47,6 @@ interactions:
         string:
           data:
             attributes:
-              allowedOrigins: []
-              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -61,7 +59,6 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
-              region: ''
             id: default
             type: organization
           links:
@@ -126,8 +123,6 @@ interactions:
         string:
           data:
             attributes:
-              allowedOrigins: []
-              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -140,7 +135,6 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
-              region: ''
             id: default
             type: organization
           links:
@@ -184,7 +178,6 @@ interactions:
         string:
           data:
             attributes:
-              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -261,8 +254,6 @@ interactions:
         string:
           data:
             attributes:
-              allowedOrigins: []
-              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -275,7 +266,6 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: test_organization
-              region: ''
             id: default
             type: organization
           links:
@@ -340,8 +330,6 @@ interactions:
         string:
           data:
             attributes:
-              allowedOrigins: []
-              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -354,7 +342,6 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: test_organization
-              region: ''
             id: default
             type: organization
           links:
@@ -398,7 +385,6 @@ interactions:
         string:
           data:
             attributes:
-              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting

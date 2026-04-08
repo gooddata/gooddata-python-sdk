@@ -2000,7 +2000,6 @@ interactions:
           data:
             attributes:
               allowedOrigins: []
-              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -2013,7 +2012,6 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
-              region: ''
             id: default
             type: organization
           links:
@@ -4004,14 +4002,13 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: c54bc34fe3fd2187c2e1d7c020c91b0f
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
-          - application/problem+json
+          - application/json
         DATE: *id001
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
       status:
         code: 404
         message: Not Found
@@ -6171,7 +6168,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: e4284046a3307bf547d6e4b8bf8b253d
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
           - application/problem+json
@@ -6258,7 +6255,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 4ae2e484cf8a0597a18abf76ce5442e3
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
           - application/problem+json

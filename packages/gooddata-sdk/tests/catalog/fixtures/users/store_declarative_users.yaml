@@ -23,14 +23,17 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
+            - authId: NORMALIZED_AUTH_ID
+              email: demo@example.com
+              firstname: Demo
               id: demo
+              lastname: User
               permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ5ZGMzNjU0MC1hYzMxLTQ2MTUtOThmNy1hYzJiZDE2NzZkYzUSBWxvY2Fs
+            - authId: NORMALIZED_AUTH_ID
               id: demo2
               permissions: []
               settings: []
@@ -75,14 +78,17 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
+            - authId: NORMALIZED_AUTH_ID
+              email: demo@example.com
+              firstname: Demo
               id: demo
+              lastname: User
               permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ5ZGMzNjU0MC1hYzMxLTQ2MTUtOThmNy1hYzJiZDE2NzZkYzUSBWxvY2Fs
+            - authId: NORMALIZED_AUTH_ID
               id: demo2
               permissions: []
               settings: []
@@ -150,7 +156,6 @@ interactions:
           data:
             attributes:
               allowedOrigins: []
-              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -163,7 +168,6 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
-              region: ''
             id: default
             type: organization
           links:
@@ -229,7 +233,6 @@ interactions:
           data:
             attributes:
               allowedOrigins: []
-              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -242,7 +245,6 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
-              region: ''
             id: default
             type: organization
           links:
