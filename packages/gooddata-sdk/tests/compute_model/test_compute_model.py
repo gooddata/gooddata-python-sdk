@@ -95,7 +95,7 @@ def test_attribute_filters_to_api_model(
     snapshot,
 ):
     # it is essential to define snapshot dir using absolute path, otherwise snapshots cannot be found when
-    # running in tox
+    # running from a different working directory
     snapshot.snapshot_dir = os.path.join(_current_dir, "afm")
 
     afm = compute_model_to_api_model(attributes, metrics, filters)

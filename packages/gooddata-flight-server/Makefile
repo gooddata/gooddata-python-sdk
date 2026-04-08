@@ -1,10 +1,6 @@
 # (C) 2024 GoodData Corporation
 include ../../project_common.mk
 
-.PHONY: docs
-docs:
-	tox $(TOX_FLAGS) -e docs
-
 
 .PHONY: dev-certs
 dev-certs:

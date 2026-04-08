@@ -58,7 +58,7 @@ test_pop_date_metrics = [
 @pytest.mark.parametrize("scenario,metric", test_pop_date_metrics)
 def test_simple_metric_to_api_model(scenario, metric: PopDateMetric, snapshot):
     # it is essential to define snapshot dir using absolute path, otherwise snapshots cannot be found when
-    # running in tox
+    # running from a different working directory
     snapshot.snapshot_dir = os.path.join(_current_dir, "pop_date_metric")
 
     snapshot.assert_match(

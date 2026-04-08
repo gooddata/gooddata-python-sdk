@@ -7,19 +7,13 @@ RUFF = ./.venv/bin/ruff
 TY = uv run ty
 PKG_PATH = packages/$(CURR_DIR_BASE_NAME)
 
-TOX_FLAGS =
-ifeq (1,$(RECREATE_ENVS))
-  TOX_FLAGS += -r
-endif
-
-LOCAL_TEST_ENVS =
-ifdef TEST_ENVS
-	LOCAL_TEST_ENVS := -e $(TEST_ENVS)
-endif
-
-LOCAL_ADD_ARGS =
-ifdef ADD_ARGS
-	LOCAL_ADD_ARGS := -- $(ADD_ARGS)
+# Optional: specify Python version (e.g. make test TEST_PYTHON=3.12)
+ifdef TEST_PYTHON
+  UV_PYTHON_FLAG = --python $(TEST_PYTHON)
+  REPORT_TAG = py$(subst .,,$(TEST_PYTHON))
+else
+  UV_PYTHON_FLAG =
+  REPORT_TAG = default
 endif
 
 # linting and formatting tools have configuration in root dir to support pre-commit - use it
@@ -59,17 +53,17 @@ types: type-check
 
 .PHONY: test
 test:
-	uv run tox -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
-
-.PHONY: test-ci
-test-ci:
-	TEST_CI_PROJECT=$(CURR_DIR_BASE_NAME) $(MAKE) -C ../.. -f ci_tests.mk test-ci
-
+	COVERAGE_CORE=sysmon uv run $(UV_PYTHON_FLAG) \
+		pytest -v --cov --cov-report=xml tests $(ADD_ARGS) \
+		--json-report --json-report-file=.json-report-$(REPORT_TAG).json
 
 .PHONY: test-staging
 test-staging:
 	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required." && exit 1)
-	TOKEN=$(TOKEN) DS_PASSWORD=$(DS_PASSWORD) GD_TEST_ENV=staging uv run tox -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
+	COVERAGE_CORE=sysmon TOKEN=$(TOKEN) DS_PASSWORD=$(DS_PASSWORD) GD_TEST_ENV=staging \
+		uv run $(UV_PYTHON_FLAG) \
+		pytest -v --cov --cov-report=xml tests $(ADD_ARGS) \
+		--json-report --json-report-file=.json-report-staging.json
 
 # this is effective for gooddata-sdk only now - it should be part of test fixtures
 # remove this target once implemented in pytest global fixture

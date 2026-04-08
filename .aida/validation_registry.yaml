@@ -40,9 +40,8 @@ registry:
       argv:
       - uv
       - run
-      - tox
-      - -c
-      - '{workspace_root}/gooddata-api-client/tox.ini'
+      - pytest
+      - --cov=gooddata_api_client
       cwd: '{workspace_root}/gooddata-api-client'
     aida-doctor:
       argv:

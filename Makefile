@@ -2,6 +2,10 @@
 # Load .env if it exists (staging secrets, gitignored)
 -include .env
 
+# Accept TOKEN directly (from CI env) or fall back to STAGING_ADMIN_TOKEN (from .env)
+TOKEN ?= $(STAGING_ADMIN_TOKEN)
+DS_PASSWORD ?= $(STAGING_DS_PASSWORD)
+
 # list all full paths to files and directories in CWD containing "gooddata", filter out ones ending by "client"
 NO_CLIENT_GD_PROJECTS_ABS = $(filter-out %client, $(wildcard $(CURDIR)/packages/*gooddata*))
 # for each path, take only the base name of the path
@@ -15,8 +19,6 @@ else
 BASE_URL="http://localhost:3000"
 endif
 URL="${BASE_URL}/api/${API_VERSION}/schemas"
-
-include ci_tests.mk
 
 # Common command components
 RUFF = .venv/bin/ruff
@@ -101,21 +103,18 @@ test:
 
 .PHONY: test-staging
 test-staging:
-	@test -n "$(STAGING_ADMIN_TOKEN)" || (echo "ERROR: STAGING_ADMIN_TOKEN is required. Set it in .env or pass on CLI." && exit 1)
-	@test -n "$(STAGING_DS_PASSWORD)" || (echo "ERROR: STAGING_DS_PASSWORD is required. Set it in .env or pass on CLI." && exit 1)
-	$(MAKE) -C packages/gooddata-sdk test-staging TOKEN=$(STAGING_ADMIN_TOKEN) DS_PASSWORD=$(STAGING_DS_PASSWORD)
+	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required. Set it in .env or pass on CLI." && exit 1)
+	$(MAKE) -C packages/gooddata-sdk test-staging TOKEN=$(TOKEN) DS_PASSWORD=$(DS_PASSWORD)
 
 .PHONY: clean-staging
 clean-staging:
-	@test -n "$(STAGING_ADMIN_TOKEN)" || (echo "ERROR: STAGING_ADMIN_TOKEN is required. Set it in .env or pass on CLI." && exit 1)
-	@test -n "$(STAGING_DS_PASSWORD)" || (echo "ERROR: STAGING_DS_PASSWORD is required. Set it in .env or pass on CLI." && exit 1)
-	cd packages/tests-support && STAGING=1 TOKEN="$(STAGING_ADMIN_TOKEN)" DS_PASSWORD="$(STAGING_DS_PASSWORD)" python clean_staging.py
+	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required. Set it in .env or pass on CLI." && exit 1)
+	cd packages/tests-support && STAGING=1 TOKEN="$(TOKEN)" DS_PASSWORD="$(DS_PASSWORD)" python clean_staging.py
 
 .PHONY: load-staging
 load-staging:
-	@test -n "$(STAGING_ADMIN_TOKEN)" || (echo "ERROR: STAGING_ADMIN_TOKEN is required. Set it in .env or pass on CLI." && exit 1)
-	@test -n "$(STAGING_DS_PASSWORD)" || (echo "ERROR: STAGING_DS_PASSWORD is required. Set it in .env or pass on CLI." && exit 1)
-	cd packages/tests-support && STAGING=1 TOKEN="$(STAGING_ADMIN_TOKEN)" DS_PASSWORD="$(STAGING_DS_PASSWORD)" python upload_demo_layout.py
+	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required. Set it in .env or pass on CLI." && exit 1)
+	cd packages/tests-support && STAGING=1 TOKEN="$(TOKEN)" DS_PASSWORD="$(DS_PASSWORD)" python upload_demo_layout.py
 
 .PHONY: release
 release:

@@ -2760,4 +2760,3 @@ requirements.txt
 setup.cfg
 setup.py
 test-requirements.txt
-tox.ini

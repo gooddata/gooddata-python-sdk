@@ -3,4 +3,4 @@ include ../../project_common.mk
 
 .PHONY: docs
 docs:
-	tox $(TOX_FLAGS) -e docs
+	uv run --group docs sphinx-build -b html docs docs/_build/html

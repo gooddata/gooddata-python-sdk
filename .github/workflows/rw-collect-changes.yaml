@@ -38,11 +38,9 @@ jobs:
               - 'packages/gooddata-sdk/**'
               - 'docs/**'
             python-modules:
-              - '.docker/**'
               - 'packages/**'
               - 'scripts/docs/**'
-              - '*.mk'
               - 'Makefile'
-              - Dockerfile
+              - 'project_common.mk'
               - pyproject.toml
               - 'gooddata-api-client/**'

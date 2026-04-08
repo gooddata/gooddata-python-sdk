@@ -10,10 +10,10 @@ on:
     types: [created]
   workflow_dispatch:
     inputs:
-      test_envs:
-        description: 'Tox test environments to run (e.g. py312)'
+      python_version:
+        description: 'Python version to test (e.g. 3.14)'
         required: false
-        default: 'py314'
+        default: '3.14'
       test_filter:
         description: 'Pytest filter expression (-k flag)'
         required: false
@@ -52,7 +52,7 @@ jobs:
       - name: Set up Python
         uses: astral-sh/setup-uv@v7
         with:
-          python-version: '3.14'
+          python-version: ${{ github.event.inputs.python_version || '3.14' }}
 
       - name: Install dependencies
         run: uv sync --group test --locked
@@ -70,7 +70,7 @@ jobs:
       - name: Run staging tests
         run: |
           make test-staging \
-            TEST_ENVS=${{ github.event.inputs.test_envs || 'py314' }} \
+            TEST_PYTHON=${{ github.event.inputs.python_version || '3.14' }} \
             ADD_ARGS="${{ github.event.inputs.test_filter && format('-k {0}', github.event.inputs.test_filter) || '' }}"
         env:
           TOKEN: ${{ secrets.PYTHON_SDK_STG_API_KEY }}

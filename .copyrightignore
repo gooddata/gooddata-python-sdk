@@ -28,7 +28,6 @@ gooddata-*-client/**
 **/*$py.class
 
 # Unit test / coverage reports
-**/.tox/**
 **/*.coverage
 **/*.cache
 **/coverage.xml

@@ -16,7 +16,6 @@ packages/gooddata-sdk/tests/catalog/translate
 **/.json-report-*.json
 
 # Python build artifacts
-.tox
 *.egg-info
 dist/
 build/

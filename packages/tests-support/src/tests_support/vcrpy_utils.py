@@ -122,10 +122,9 @@ def configure_normalization(test_config: dict[str, Any]) -> None:
     at session start, before any cassettes are recorded.
 
     IMPORTANT: This module is installed as the ``tests-support`` package.
-    When modifying normalization logic, you must clear the tox and uv caches
+    When modifying normalization logic, you must clear the uv cache
     so the updated code is picked up by test environments::
 
-        rm -rf packages/gooddata-sdk/.tox
         uv cache clean tests-support --force
     """
     global _normalization_replacements, _password_replacements, _normalization_configured

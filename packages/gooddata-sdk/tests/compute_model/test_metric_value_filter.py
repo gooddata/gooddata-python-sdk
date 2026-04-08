@@ -62,7 +62,7 @@ test_metric_value_filter = [
 @pytest.mark.parametrize("scenario,filter", [sublist[:2] for sublist in test_metric_value_filter])
 def test_attribute_filters_to_api_model(scenario, filter, snapshot):
     # it is essential to define snapshot dir using absolute path, otherwise snapshots cannot be found when
-    # running in tox
+    # running from a different working directory
     snapshot.snapshot_dir = os.path.join(_current_dir, "metric_value_filter")
 
     snapshot.assert_match(

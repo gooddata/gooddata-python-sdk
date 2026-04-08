@@ -24,7 +24,7 @@ def test_attribute_filters_to_api_model(filename, snapshot):
     visualization = Visualization(vis_obj)
 
     # it is essential to define snapshot dir using absolute path, otherwise snapshots cannot be found when
-    # running in tox
+    # running from a different working directory
     snapshot.snapshot_dir = os.path.join(_current_dir, "snapshots")
 
     attributes = [a.as_computable() for a in visualization.attributes]

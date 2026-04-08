@@ -71,9 +71,10 @@ release = [
     "tbump~=6.11.0",
     "tomlkit>=0.11"
 ]
-tox = [
-    "tox~=4.32.0",
-    "tox-uv~=1.29.0"
+docs = [
+    "Sphinx~=5.1.1",
+    "pallets-sphinx-themes",
+    "sphinx-rtd-theme",
 ]
 
 [tool.ruff]
@@ -81,7 +82,6 @@ exclude = [
     ".git",
     ".venv",
     "__pycache__",
-    ".tox",
     "build",
     "dist",
     "gooddata-api-client",

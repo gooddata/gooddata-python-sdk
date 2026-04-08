@@ -41,7 +41,7 @@ test_arithmetic_metric = [
 @pytest.mark.parametrize("scenario,metric", test_arithmetic_metric)
 def test_attribute_filters_to_api_model(scenario, metric, snapshot):
     # it is essential to define snapshot dir using absolute path, otherwise snapshots cannot be found when
-    # running in tox
+    # running from a different working directory
     snapshot.snapshot_dir = os.path.join(_current_dir, "arithmetic_metric")
 
     snapshot.assert_match(

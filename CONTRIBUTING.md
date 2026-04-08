@@ -2,11 +2,11 @@
 
 ## Getting Started
 
-1. Ensure you have at minimum Python 3.14 installed; Python 3.13, 3.12, 3.11 and 3.10 are optional for multi-environment tests
+1. Ensure you have at minimum Python 3.14 installed; Python 3.13, 3.12, 3.11 and 3.10 are optional for multi-version tests
 
-   This repo uses [tox](https://tox.readthedocs.io/en/latest/) and by default will try to run tests against all
-   supported versions. If you have only subset of supported python interpreters installed, see
-   [Run tests](#run-tests) section for information how to limit tests only to your subset.
+   This repo uses [uv](https://docs.astral.sh/uv/) for dependency management and test execution.
+   By default `make test` runs tests against the current Python version. Use `TEST_PYTHON=X.Y` to target
+   a specific version, or let CI test all supported versions via matrix.
 
 2. Create your fork of `gooddata-python-sdk` repository
 
@@ -31,8 +31,6 @@
    script so that you can run custom Python code using the packages container herein without installing them.
 
    To make sure you have successfully set up your environment run `make test` in virtualenv in the root of git repo.
-   Please note, that `make test` executes tests against all the supported python versions. If you need to specify only
-   subset of them, see section [Run tests](#Run tests)
 
 4. Develop the feature or the fix. Make sure your code follows [coding conventions](#coding-conventions). Create pull
    request.
@@ -56,9 +54,8 @@ When adding a new distributable package to this monorepo, update release automat
 When adding support for a new Python version:
 
 1. Update all `pyproject.toml` files to include the new Python version classifier
-2. Update all `tox.ini` files to include the new Python version in `envlist`
-3. Update CI/CD workflows to test against the new Python version
-4. **Run `uv lock --upgrade`** to upgrade the lock file and re-resolve dependencies for all Python versions, including the newly added one
+2. Update CI/CD workflows to test against the new Python version
+3. **Run `uv lock --upgrade`** to upgrade the lock file and re-resolve dependencies for all Python versions, including the newly added one
 
 The lock file upgrade is crucial as it allows `uv` to pick package versions that are compatible with all supported Python versions.
 
@@ -158,8 +155,7 @@ Steps:
 1. Lastly you contact someone from the documentation team for a proof-read and merge. Your changes should be visible in the preview in the PR job named `Netlify Deploy Preview`
 
 ## Run tests
-Tests use [tox](https://tox.wiki/en/latest/index.html) and [pytest](https://docs.pytest.org/en/6.2.x/contents.html)
-libraries. Each project has its own `tox.ini`.
+Tests use [uv](https://docs.astral.sh/uv/) and [pytest](https://docs.pytest.org/en/6.2.x/contents.html).
 **NOTE:** Tests are not executed for OpenAPI client projects.
 
 Here are the options how to run the tests:
@@ -169,28 +165,28 @@ Here are the options how to run the tests:
   cd packages/gooddata-sdk
   make test
   ```
-    - or execute `tox` command with arguments of your choice
+    - or run with a specific Python version
   ```bash
   cd packages/gooddata-sdk
-  tox -e py310
+  make test TEST_PYTHON=3.12
   ```
 - run tests for all non-client projects using `make test` in project root directory
 
 Tests triggered by `make` can be controlled via these environment variables:
-- `RECREATE_ENVS` - set environment variable `RECREATE_ENVS` to 1 and make will add `--recreate` flag, `--recreate`
-  flag is not used otherwise
+- `TEST_PYTHON` - specify a Python version to test against (e.g. `3.12`). If not set, the default
+  Python from your environment is used.
   ```bash
-  RECREATE_ENVS=1 make test
-  ```
-- `TEST_ENVS` - define tox test environments (targets) as comma-separated list, by default all tox default targets are
-  executed
-  ```bash
-  TEST_ENVS=py311,py310 make test
+  make test TEST_PYTHON=3.12
   ```
 - `ADD_ARGS` - send additional arguments to pytest tool, useful for pin-pointing just part of tests
   ```bash
   ADD_ARGS="-k http_headers" make test
   ```
+
+To install additional Python versions for local multi-version testing:
+```bash
+uv python install 3.10 3.11 3.12 3.13 3.14
+```
 
 ### How to update vcrpy tests
 Some tests include HTTP call(s) to GoodData instance. Those tests are executed through
@@ -303,7 +299,7 @@ The staging tests workflow (`.github/workflows/staging-tests.yaml`) can be trigg
 
 1. **Label** — Add the `test-staging` label to a PR targeting `master` or `rel/**`.
 2. **PR comment** — Post `/test-staging` as a comment on a PR.
-3. **Manual dispatch** — Trigger from the Actions tab with optional `test_envs` and `test_filter` inputs.
+3. **Manual dispatch** — Trigger from the Actions tab with optional `python_version` and `test_filter` inputs.
 
 Only one staging test run executes at a time (concurrency group `staging-tests`, non-cancelling).
 
@@ -323,43 +319,33 @@ make load-staging TOKEN=<your-staging-token>
 make test-staging TOKEN=<your-staging-token>
 
 # Optionally limit python version and test filter:
-make test-staging TOKEN=<your-staging-token> TEST_ENVS=py312 ADD_ARGS="-k test_catalog"
+make test-staging TOKEN=<your-staging-token> TEST_PYTHON=3.12 ADD_ARGS="-k test_catalog"
 ```
 
 The token is passed as a CLI argument (`--gd-test-token`) to pytest, **not** as an environment variable.
 
-## Run continuous integration tests
-Tests in pull request (PR) are executed using docker. The following is done to make test environment as close
-to reproducible as possible:
-- each supported python version has defined python base docker image
-- tox version installed to docker is frozen to specific version
-- all test dependencies specified in test-requirements.txt should be limited to some version range
+## Continuous Integration
 
-Above rules give a chance to execute tests on localhost in the same or very similar environment as used in PR.
-Orchestration is driven by `make test-ci`. Target `test-ci` supports the same features as `make test`, see
-[Run tests](#Run tests) for details.
-
-**NOTE:** docker tox tests and localhost tox tests are using the same .tox directory. Virtual environments for both test
-types are most likely incompatible due to different base python version. tox is able to recognize it and recreate
-venv automatically. So when docker tox tests are executed after localhost tests or vice-versa envs are recreated.
+Tests in pull requests are executed using GitHub Actions with a matrix of Python versions (3.10 through 3.14).
+Each version is set up using `astral-sh/setup-uv` and tests are run directly with `uv run pytest`.
 
 ### Examples
-- run all tests for all supported python environments
+- run all tests with default Python
   ```bash
-  make test-ci
+  make test
   ```
-- run all tests for all supported python environments and for one project
+- run all tests for a specific Python version
+  ```bash
+  make test TEST_PYTHON=3.12
+  ```
+- run all tests for one project
   ```bash
   cd packages/gooddata-sdk
-  make test-ci
+  make test
   ```
-- run all tests containing `http_headers` in name for py311 and py310 for all projects
+- run tests containing `http_headers` in name for Python 3.11
   ```bash
-  TEST_ENVS=py311,py310 ADD_ARGS="-k http_headers" make test-ci
-  ```
-- run tests on localhost against microservices started with docker-compose
-  ```bash
-  RECREATE_ENVS=1 HOST_NETWORK=1 make test-ci
+  TEST_PYTHON=3.11 ADD_ARGS="-k http_headers" make test
   ```
 
 # How to generate and maintain OpenAPI clients
