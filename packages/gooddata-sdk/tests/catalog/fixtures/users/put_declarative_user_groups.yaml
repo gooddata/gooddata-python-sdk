@@ -71,14 +71,17 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
+            - authId: NORMALIZED_AUTH_ID
+              email: demo@example.com
+              firstname: Demo
               id: demo
+              lastname: User
               permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ5ZGMzNjU0MC1hYzMxLTQ2MTUtOThmNy1hYzJiZDE2NzZkYzUSBWxvY2Fs
+            - authId: NORMALIZED_AUTH_ID
               id: demo2
               permissions: []
               settings: []
@@ -127,7 +130,10 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
+                authenticationId: NORMALIZED_AUTH_ID
+                email: demo@example.com
+                firstname: Demo
+                lastname: User
               id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo
@@ -138,7 +144,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQ5ZGMzNjU0MC1hYzMxLTQ2MTUtOThmNy1hYzJiZDE2NzZkYzUSBWxvY2Fs
+                authenticationId: NORMALIZED_AUTH_ID
               id: demo2
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2
@@ -356,14 +362,17 @@ interactions:
             userGroups:
               - id: adminGroup
                 type: userGroup
-          - authId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
+          - authId: NORMALIZED_AUTH_ID
+            email: demo@example.com
+            firstname: Demo
             id: demo
+            lastname: User
             permissions: []
             settings: []
             userGroups:
               - id: adminGroup
                 type: userGroup
-          - authId: CiQ5ZGMzNjU0MC1hYzMxLTQ2MTUtOThmNy1hYzJiZDE2NzZkYzUSBWxvY2Fs
+          - authId: NORMALIZED_AUTH_ID
             id: demo2
             permissions: []
             settings: []

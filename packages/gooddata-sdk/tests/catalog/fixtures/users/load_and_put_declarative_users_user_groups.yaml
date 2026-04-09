@@ -40,14 +40,17 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
+            - authId: NORMALIZED_AUTH_ID
+              email: demo@example.com
+              firstname: Demo
               id: demo
+              lastname: User
               permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ5ZGMzNjU0MC1hYzMxLTQ2MTUtOThmNy1hYzJiZDE2NzZkYzUSBWxvY2Fs
+            - authId: NORMALIZED_AUTH_ID
               id: demo2
               permissions: []
               settings: []
@@ -97,7 +100,10 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
+                authenticationId: NORMALIZED_AUTH_ID
+                email: demo@example.com
+                firstname: Demo
+                lastname: User
               id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo
@@ -108,7 +114,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQ5ZGMzNjU0MC1hYzMxLTQ2MTUtOThmNy1hYzJiZDE2NzZkYzUSBWxvY2Fs
+                authenticationId: NORMALIZED_AUTH_ID
               id: demo2
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2
@@ -227,7 +233,6 @@ interactions:
           data:
             attributes:
               allowedOrigins: []
-              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -240,7 +245,6 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
-              region: ''
             id: default
             type: organization
           links:
@@ -285,14 +289,14 @@ interactions:
             userGroups:
               - id: adminGroup
                 type: userGroup
-          - authId: CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs
+          - authId: NORMALIZED_AUTH_ID
             id: demo
             permissions: []
             settings: []
             userGroups:
               - id: adminGroup
                 type: userGroup
-          - authId: CiRmYmNhNDkwOS04YzYxLTRmMTYtODI3NC1iNzI0Njk1Y2FmNTESBWxvY2Fs
+          - authId: NORMALIZED_AUTH_ID
             id: demo2
             permissions: []
             settings: []
@@ -365,14 +369,14 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs
+            - authId: NORMALIZED_AUTH_ID
               id: demo
               permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRmYmNhNDkwOS04YzYxLTRmMTYtODI3NC1iNzI0Njk1Y2FmNTESBWxvY2Fs
+            - authId: NORMALIZED_AUTH_ID
               id: demo2
               permissions: []
               settings: []
@@ -419,14 +423,17 @@ interactions:
             userGroups:
               - id: adminGroup
                 type: userGroup
-          - authId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
+          - authId: NORMALIZED_AUTH_ID
+            email: demo@example.com
+            firstname: Demo
             id: demo
+            lastname: User
             permissions: []
             settings: []
             userGroups:
               - id: adminGroup
                 type: userGroup
-          - authId: CiQ5ZGMzNjU0MC1hYzMxLTQ2MTUtOThmNy1hYzJiZDE2NzZkYzUSBWxvY2Fs
+          - authId: NORMALIZED_AUTH_ID
             id: demo2
             permissions: []
             settings: []

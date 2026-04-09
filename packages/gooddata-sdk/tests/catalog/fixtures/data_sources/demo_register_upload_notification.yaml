@@ -455,7 +455,7 @@ interactions:
                         name: '# of Active Customers'
                 localIdentifier: dim_0
             links:
-              executionResult: EXECUTION_RESULT_0
+              executionResult: EXECUTION_NORMALIZED_1
       headers:
         Content-Type:
           - application/json
@@ -544,7 +544,7 @@ interactions:
                         name: '# of Active Customers'
                 localIdentifier: dim_0
             links:
-              executionResult: EXECUTION_RESULT_1
+              executionResult: EXECUTION_NORMALIZED_2
       headers:
         Content-Type:
           - application/json

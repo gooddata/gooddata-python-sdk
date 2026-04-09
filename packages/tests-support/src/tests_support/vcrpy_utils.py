@@ -4,6 +4,7 @@ from __future__ import annotations
 import os
 import re
 import typing
+import xml.etree.ElementTree as ET
 from typing import Any
 from urllib.parse import urlparse
 
@@ -69,6 +70,59 @@ _CREATED_AT_RE = re.compile(
 )
 _CANONICAL_CREATED_AT = "2000-01-01 00:00"
 
+# --- Transient server value normalization ---
+# All patterns need both stdlib JSON ("key": "val") and orjson ("key":"val") variants.
+# YAML variants are not needed — normalization runs on JSON bodies before YAML serialization.
+
+# traceId: 32-hex server trace ID (changes every request)
+_TRACE_ID_RE = re.compile(
+    r'(?<="traceId": ")[0-9a-f]{32}(?=")'  # JSON (stdlib)
+    r"|"
+    r'(?<="traceId":")[0-9a-f]{32}(?=")'  # JSON (orjson)
+)
+_CANONICAL_TRACE_ID = "NORMALIZED_TRACE_ID_000000000000"
+
+# authenticationId / authId: base64-encoded user UUID (differs between environments)
+# Only matches base64-like values (CiR...), not test-set values (newUser_auth_id)
+# The declarative API uses "authId", entity API uses "authenticationId"
+_AUTH_ID_RE = re.compile(
+    r'(?<="authenticationId": ")[A-Za-z0-9+/]{20,}={0,2}(?=")'
+    r"|"
+    r'(?<="authenticationId":")[A-Za-z0-9+/]{20,}={0,2}(?=")'
+    r"|"
+    r'(?<="authId": ")[A-Za-z0-9+/]{20,}={0,2}(?=")'
+    r"|"
+    r'(?<="authId":")[A-Za-z0-9+/]{20,}={0,2}(?=")'
+)
+_CANONICAL_AUTH_ID = "NORMALIZED_AUTH_ID"
+
+# bearerToken: base64-encoded token (differs between environments)
+_BEARER_TOKEN_RE = re.compile(
+    r'(?<="bearerToken": ")[A-Za-z0-9+/._-]{20,}(?=")'
+    r"|"
+    r'(?<="bearerToken":")[A-Za-z0-9+/._-]{20,}(?=")'
+)
+_CANONICAL_BEARER_TOKEN = "NORMALIZED_BEARER_TOKEN"
+
+# cacheId: 32-hex cache identifier (changes every request)
+_CACHE_ID_RE = re.compile(
+    r'(?<="cacheId": ")[0-9a-f]{32}(?=")'
+    r"|"
+    r'(?<="cacheId":")[0-9a-f]{32}(?=")'
+)
+_CANONICAL_CACHE_ID = "NORMALIZED_CACHE_ID_000000000000"
+
+# queryDurationMillis: runtime-dependent timing values
+_QUERY_DURATION_RE = re.compile(
+    r'(?<="simpleSelect": )\d+'  # JSON (stdlib)
+    r"|"
+    r'(?<="simpleSelect":)\d+'  # JSON (orjson)
+    r"|"
+    r'(?<="createCacheTable": )\d+'  # JSON (stdlib)
+    r"|"
+    r'(?<="createCacheTable":)\d+'  # JSON (orjson)
+)
+
 # --- Dynamic hash normalization ---
 # executionResult: 40-hex ":" 64-hex (body uses ":", URI uses "%3A")
 _EXEC_HASH_BODY_RE = re.compile(r"[0-9a-f]{40}:[0-9a-f]{64}")
@@ -80,38 +134,38 @@ _EXPORT_HASH_URI_RE = re.compile(r"(?<=/export/tabular/)[0-9a-f]{40}(?![0-9a-f])
 _EXPORT_HASH_BODY_RE = re.compile(
     r'(?<=exportResult": ")[0-9a-f]{40}(?![0-9a-f])'  # JSON: "exportResult": "hash"
     r"|"
-    r"(?<=exportResult: )[0-9a-f]{40}(?![0-9a-f])"  # YAML: exportResult: hash
+    r'(?<=exportResult":")[0-9a-f]{40}(?![0-9a-f])'  # JSON (orjson)
+    r"|"
+    r"(?<=exportResult: )[0-9a-f]{40}(?![0-9a-f])"  # YAML
 )
 
 
-class _HashNormalizer:
-    """Maps server-computed hex hashes to deterministic placeholders.
+_CANONICAL_EXECUTION_RESULT = "EXECUTION_NORMALIZED"
+_CANONICAL_EXPORT_RESULT = "EXPORT_NORMALIZED"
 
-    Assigns stable placeholders (EXECUTION_RESULT_0, EXPORT_RESULT_0, etc.)
-    to dynamic hashes that differ between environments and re-recordings.
-    The same hash always maps to the same placeholder within a session.
-    """
-
-    def __init__(self) -> None:
-        self._exec_map: dict[str, str] = {}
-        self._export_map: dict[str, str] = {}
-        self._exec_counter: int = 0
-        self._export_counter: int = 0
-
-    def normalize_exec(self, full_hash: str) -> str:
-        if full_hash not in self._exec_map:
-            self._exec_map[full_hash] = f"EXECUTION_RESULT_{self._exec_counter}"
-            self._exec_counter += 1
-        return self._exec_map[full_hash]
-
-    def normalize_export(self, hex_hash: str) -> str:
-        if hex_hash not in self._export_map:
-            self._export_map[hex_hash] = f"EXPORT_RESULT_{self._export_counter}"
-            self._export_counter += 1
-        return self._export_map[hex_hash]
+# Indexed hash maps: preserve distinctness across different hashes within a cassette.
+# Each unique hash gets a unique index (e.g. EXECUTION_NORMALIZED_1, _2, ...).
+_exec_hash_map: dict[str, str] = {}
+_export_hash_map: dict[str, str] = {}
 
 
-_hash_normalizer = _HashNormalizer()
+def _exec_hash_replacer(match: re.Match) -> str:
+    """Replace execution hash with an indexed placeholder, preserving distinctness."""
+    # Normalize URI-encoded variant (%3A → :) so both forms share the same map entry.
+    original = match.group(0).replace("%3A", ":").replace("%3a", ":")
+    if original not in _exec_hash_map:
+        idx = len(_exec_hash_map) + 1
+        _exec_hash_map[original] = f"{_CANONICAL_EXECUTION_RESULT}_{idx}"
+    return _exec_hash_map[original]
+
+
+def _export_hash_replacer(match: re.Match) -> str:
+    """Replace export hash with an indexed placeholder, preserving distinctness."""
+    original = match.group(0)
+    if original not in _export_hash_map:
+        idx = len(_export_hash_map) + 1
+        _export_hash_map[original] = f"{_CANONICAL_EXPORT_RESULT}_{idx}"
+    return _export_hash_map[original]
 
 
 def configure_normalization(test_config: dict[str, Any]) -> None:
@@ -131,6 +185,8 @@ def configure_normalization(test_config: dict[str, Any]) -> None:
     global _normalization_replacements, _password_replacements, _normalization_configured
     replacements: list[tuple[str, str]] = []
     _password_replacements = []
+    _exec_hash_map.clear()
+    _export_hash_map.clear()
 
     parsed = urlparse(test_config.get("host", _CANONICAL_HOST))
     active_scheme = parsed.scheme or "http"
@@ -214,23 +270,22 @@ def _apply_replacements(text: str) -> str:
 
 
 def _normalize_hashes_in_text(text: str) -> str:
-    """Replace executionResult/exportResult hashes and timestamps with deterministic placeholders."""
-    text = _EXEC_HASH_BODY_RE.sub(lambda m: _hash_normalizer.normalize_exec(m.group(0)), text)
-    text = _EXPORT_HASH_BODY_RE.sub(lambda m: _hash_normalizer.normalize_export(m.group(0)), text)
+    """Replace transient server values with deterministic placeholders."""
+    text = _EXEC_HASH_BODY_RE.sub(_exec_hash_replacer, text)
+    text = _EXPORT_HASH_BODY_RE.sub(_export_hash_replacer, text)
     text = _CREATED_AT_RE.sub(_CANONICAL_CREATED_AT, text)
+    text = _TRACE_ID_RE.sub(_CANONICAL_TRACE_ID, text)
+    text = _AUTH_ID_RE.sub(_CANONICAL_AUTH_ID, text)
+    text = _BEARER_TOKEN_RE.sub(_CANONICAL_BEARER_TOKEN, text)
+    text = _CACHE_ID_RE.sub(_CANONICAL_CACHE_ID, text)
+    text = _QUERY_DURATION_RE.sub("0", text)
     return text
 
 
 def _normalize_hashes_in_uri(uri: str) -> str:
     """Replace executionResult/exportResult hashes in a request URI."""
-
-    def _replace_exec_uri(m: re.Match) -> str:
-        # Convert URL-encoded %3A to plain colon for consistent mapping
-        plain = m.group(0).replace("%3A", ":").replace("%3a", ":")
-        return _hash_normalizer.normalize_exec(plain)
-
-    uri = _EXEC_HASH_URI_RE.sub(_replace_exec_uri, uri)
-    uri = _EXPORT_HASH_URI_RE.sub(lambda m: _hash_normalizer.normalize_export(m.group(0)), uri)
+    uri = _EXEC_HASH_URI_RE.sub(_exec_hash_replacer, uri)
+    uri = _EXPORT_HASH_URI_RE.sub(_export_hash_replacer, uri)
     return uri
 
 
@@ -288,6 +343,36 @@ class IndentDumper(yaml.SafeDumper):
     @typing.no_type_check
     def increase_indent(self, flow: bool = False, indentless: bool = False):
         return super().increase_indent(flow, False)
+
+
+def _sort_xml_groups(text: str) -> str:
+    """Sort <group> elements in XLIFF/XML localization responses by id attribute.
+
+    The server may return localization groups in non-deterministic order,
+    producing spurious diffs when cassettes are re-recorded.
+    """
+    if "<group " not in text:
+        return text
+    try:
+        ns = "urn:oasis:names:tc:xliff:document:2.0"
+        ET.register_namespace("", ns)
+        root = ET.fromstring(text)
+
+        def _sort_groups(parent: ET.Element) -> None:
+            groups = [c for c in parent if c.tag == f"{{{ns}}}group" or c.tag == "group"]
+            if len(groups) > 1:
+                groups_sorted = sorted(groups, key=lambda g: g.get("id", ""))
+                for g in groups:
+                    parent.remove(g)
+                for g in groups_sorted:
+                    parent.append(g)
+            for child in parent:
+                _sort_groups(child)
+
+        _sort_groups(root)
+        return ET.tostring(root, encoding="unicode", xml_declaration=True)
+    except ET.ParseError:
+        return text
 
 
 class CustomSerializerYaml:
@@ -361,6 +446,8 @@ def custom_before_request(request, headers_str: str = HEADERS_STR):
             if _normalization_replacements:
                 request.body = _apply_replacements(request.body)
             request.body = _normalize_hashes_in_text(request.body)
+            if request.body.startswith("<?xml"):
+                request.body = _sort_xml_groups(request.body)
 
     if hasattr(request, headers_str):
         request.headers = {header: request.headers[header] for header in sorted(request.headers)}
@@ -415,7 +502,10 @@ def custom_before_response(
             elif isinstance(body_string, str):
                 if _normalization_replacements:
                     body_string = _apply_replacements(body_string)
-                body["string"] = _normalize_hashes_in_text(body_string)
+                body_string = _normalize_hashes_in_text(body_string)
+                if body_string.startswith("<?xml"):
+                    body_string = _sort_xml_groups(body_string)
+                body["string"] = body_string
 
     return response
 

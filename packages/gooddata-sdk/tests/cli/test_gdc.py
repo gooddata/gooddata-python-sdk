@@ -9,7 +9,7 @@ from gooddata_sdk.cli.constants import DEFAULT_SOURCE_DIR
 from gooddata_sdk.cli.deploy import _get_workspace_id
 from gooddata_sdk.cli.gdc_core import _get_source_dir
 
-_FIXTURES_DIR = Path(__file__).parent.parent / "catalog" / "fixtures" / "aac"
+_FIXTURES_DIR = Path(__file__).parent.parent / "catalog" / "unit_tests" / "aac_tests"
 
 
 class TestCliConfig:
