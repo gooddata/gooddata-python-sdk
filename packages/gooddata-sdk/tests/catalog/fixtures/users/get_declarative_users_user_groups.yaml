@@ -41,10 +41,7 @@ interactions:
                 - id: adminGroup
                   type: userGroup
             - authId: NORMALIZED_AUTH_ID
-              email: demo@example.com
-              firstname: Demo
               id: demo
-              lastname: User
               permissions: []
               settings: []
               userGroups:
@@ -113,10 +110,7 @@ interactions:
                 - id: adminGroup
                   type: userGroup
             - authId: NORMALIZED_AUTH_ID
-              email: demo@example.com
-              firstname: Demo
               id: demo
-              lastname: User
               permissions: []
               settings: []
               userGroups:

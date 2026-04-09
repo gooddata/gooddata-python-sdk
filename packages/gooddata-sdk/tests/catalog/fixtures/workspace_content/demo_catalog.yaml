@@ -502,9 +502,9 @@ interactions:
                     type: label
                 labels:
                   data:
-                    - id: state
-                      type: label
                     - id: geo__state__location
+                      type: label
+                    - id: state
                       type: label
               type: attribute
             - attributes:
@@ -573,34 +573,6 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: products
-                      type: dataset
-                    multivalue: false
-                    sourceColumnDataTypes: null
-                    sourceColumns: null
-                    sources:
-                      - column: product_id
-                        dataType: INT
-                        isNullable: true
-                        nullValue: null
-                        target:
-                          id: product_id
-                          type: attribute
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sourceColumnDataTypes: null
-                    sourceColumns: null
-                    sources:
-                      - column: campaign_id
-                        dataType: INT
-                        isNullable: true
-                        nullValue: null
-                        target:
-                          id: campaign_id
-                          type: attribute
-                  - identifier:
                       id: date
                       type: dataset
                     multivalue: false
@@ -628,25 +600,53 @@ interactions:
                         target:
                           id: customer_id
                           type: attribute
+                  - identifier:
+                      id: products
+                      type: dataset
+                    multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
+                    sources:
+                      - column: product_id
+                        dataType: INT
+                        isNullable: true
+                        nullValue: null
+                        target:
+                          id: product_id
+                          type: attribute
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        isNullable: true
+                        nullValue: null
+                        target:
+                          id: campaign_id
+                          type: attribute
                 tags:
                   - Order lines
                 title: Order lines
                 type: NORMAL
                 workspaceDataFilterColumns:
                   - dataType: STRING
-                    name: wdf__state
-                  - dataType: STRING
                     name: wdf__region
+                  - dataType: STRING
+                    name: wdf__state
                 workspaceDataFilterReferences:
-                  - filterColumn: wdf__region
-                    filterColumnDataType: STRING
-                    filterId:
-                      id: wdf__region
-                      type: workspaceDataFilter
                   - filterColumn: wdf__state
                     filterColumnDataType: STRING
                     filterId:
                       id: wdf__state
+                      type: workspaceDataFilter
+                  - filterColumn: wdf__region
+                    filterColumnDataType: STRING
+                    filterId:
+                      id: wdf__region
                       type: workspaceDataFilter
               id: order_lines
               links:
@@ -1225,34 +1225,6 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: products
-                      type: dataset
-                    multivalue: false
-                    sourceColumnDataTypes: null
-                    sourceColumns: null
-                    sources:
-                      - column: product_id
-                        dataType: INT
-                        isNullable: true
-                        nullValue: null
-                        target:
-                          id: product_id
-                          type: attribute
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sourceColumnDataTypes: null
-                    sourceColumns: null
-                    sources:
-                      - column: campaign_id
-                        dataType: INT
-                        isNullable: true
-                        nullValue: null
-                        target:
-                          id: campaign_id
-                          type: attribute
-                  - identifier:
                       id: date
                       type: dataset
                     multivalue: false
@@ -1280,25 +1252,53 @@ interactions:
                         target:
                           id: customer_id
                           type: attribute
+                  - identifier:
+                      id: products
+                      type: dataset
+                    multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
+                    sources:
+                      - column: product_id
+                        dataType: INT
+                        isNullable: true
+                        nullValue: null
+                        target:
+                          id: product_id
+                          type: attribute
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sourceColumnDataTypes: null
+                    sourceColumns: null
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        isNullable: true
+                        nullValue: null
+                        target:
+                          id: campaign_id
+                          type: attribute
                 tags:
                   - Order lines
                 title: Order lines
                 type: NORMAL
                 workspaceDataFilterColumns:
                   - dataType: STRING
-                    name: wdf__state
-                  - dataType: STRING
                     name: wdf__region
+                  - dataType: STRING
+                    name: wdf__state
                 workspaceDataFilterReferences:
-                  - filterColumn: wdf__region
-                    filterColumnDataType: STRING
-                    filterId:
-                      id: wdf__region
-                      type: workspaceDataFilter
                   - filterColumn: wdf__state
                     filterColumnDataType: STRING
                     filterId:
                       id: wdf__state
+                      type: workspaceDataFilter
+                  - filterColumn: wdf__region
+                    filterColumnDataType: STRING
+                    filterId:
+                      id: wdf__region
                       type: workspaceDataFilter
               id: order_lines
               links:

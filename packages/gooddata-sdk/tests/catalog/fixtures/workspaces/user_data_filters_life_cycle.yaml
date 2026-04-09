@@ -180,9 +180,6 @@ interactions:
               type: label
             - attributes:
                 authenticationId: NORMALIZED_AUTH_ID
-                email: demo@example.com
-                firstname: Demo
-                lastname: User
               id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/users/demo
@@ -243,9 +240,6 @@ interactions:
           included:
             - attributes:
                 authenticationId: NORMALIZED_AUTH_ID
-                email: demo@example.com
-                firstname: Demo
-                lastname: User
               id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/users/demo

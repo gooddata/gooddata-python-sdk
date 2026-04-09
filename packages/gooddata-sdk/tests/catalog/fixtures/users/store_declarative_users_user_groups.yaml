@@ -41,10 +41,7 @@ interactions:
                 - id: adminGroup
                   type: userGroup
             - authId: NORMALIZED_AUTH_ID
-              email: demo@example.com
-              firstname: Demo
               id: demo
-              lastname: User
               permissions: []
               settings: []
               userGroups:
@@ -113,10 +110,7 @@ interactions:
                 - id: adminGroup
                   type: userGroup
             - authId: NORMALIZED_AUTH_ID
-              email: demo@example.com
-              firstname: Demo
               id: demo
-              lastname: User
               permissions: []
               settings: []
               userGroups:
@@ -190,6 +184,7 @@ interactions:
           data:
             attributes:
               allowedOrigins: []
+              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -202,6 +197,7 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
+              region: ''
             id: default
             type: organization
           links:
@@ -267,6 +263,7 @@ interactions:
           data:
             attributes:
               allowedOrigins: []
+              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -279,6 +276,7 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
+              region: ''
             id: default
             type: organization
           links:

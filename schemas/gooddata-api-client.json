@@ -4663,6 +4663,7 @@
         "properties": {
           "resultIdToCancelTokenPairs": {
             "additionalProperties": {
+              "description": "resultId to cancel token pairs",
               "type": "string"
             },
             "description": "resultId to cancel token pairs",
@@ -22991,7 +22992,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000.0
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -23043,7 +23044,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000.0
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -23165,7 +23166,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000.0
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -23221,7 +23222,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000.0
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -23431,7 +23432,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000.0
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -23483,7 +23484,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000.0
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -23597,7 +23598,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000.0
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -23649,7 +23650,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000.0
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -37106,79 +37107,6 @@
         ],
         "type": "object"
       },
-      "WorkflowDashboardSummaryRequestDto": {
-        "properties": {
-          "customUserPrompt": {
-            "type": "string"
-          },
-          "dashboardId": {
-            "type": "string"
-          },
-          "keyMetricIds": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "referenceQuarter": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "dashboardId"
-        ],
-        "type": "object"
-      },
-      "WorkflowDashboardSummaryResponseDto": {
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "runId": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "message",
-          "runId",
-          "status"
-        ],
-        "type": "object"
-      },
-      "WorkflowStatusResponseDto": {
-        "properties": {
-          "currentPhase": {
-            "type": "string"
-          },
-          "error": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "result": {
-            "additionalProperties": {
-              "type": "object"
-            },
-            "type": "object"
-          },
-          "runId": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "message",
-          "runId",
-          "status"
-        ],
-        "type": "object"
-      },
       "WorkspaceAutomationIdentifier": {
         "properties": {
           "id": {
@@ -40660,131 +40588,6 @@
         "summary": "(BETA) Semantic Search in Metadata",
         "tags": [
           "Smart Functions",
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/dashboardSummary": {
-      "post": {
-        "operationId": "generateDashboardSummary",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/WorkflowDashboardSummaryRequestDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowDashboardSummaryResponseDto"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/cancel": {
-      "post": {
-        "operationId": "cancelWorkflow",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "runId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/status": {
-      "get": {
-        "operationId": "getWorkflowStatus",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "runId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowStatusResponseDto"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
           "actions"
         ]
       }
@@ -50952,7 +50755,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,page,all",
+            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -50961,8 +50764,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "config",
                   "permissions",
+                  "config",
                   "hierarchy",
                   "dataModelDatasets",
                   "page",
@@ -51033,7 +50836,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
+            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -51042,8 +50845,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "config",
                   "permissions",
+                  "config",
                   "hierarchy",
                   "dataModelDatasets",
                   "all",
@@ -51168,7 +50971,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
+            "example": "metaInclude=permissions,config,hierarchy,dataModelDatasets,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -51177,8 +50980,8 @@
               "description": "Included meta objects",
               "items": {
                 "enum": [
-                  "config",
                   "permissions",
+                  "config",
                   "hierarchy",
                   "dataModelDatasets",
                   "all",

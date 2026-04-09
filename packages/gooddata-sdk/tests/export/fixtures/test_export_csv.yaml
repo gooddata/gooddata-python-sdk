@@ -102,7 +102,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: EXECUTION_NORMALIZED_3
+              executionResult: EXECUTION_NORMALIZED_1
       headers:
         Content-Type:
           - application/json
@@ -132,7 +132,7 @@ interactions:
             price:
               format: ''
               title: Sum Of Price
-        executionResult: EXECUTION_NORMALIZED_3
+        executionResult: EXECUTION_NORMALIZED_1
         fileName: test_csv
         format: CSV
       headers:
@@ -240,33 +240,26 @@ interactions:
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_1
     response:
       body:
-        string: "\uFEFF\"state\",\"Custom Title Region\",\"Sum Of Price\",\"Order\
-          \ Amount Metric\"\n\"Alabama\",\"South\",6198.55,6675.95\n\"Alaska\",\"\
-          West\",4983.36,5444.84\n\"Arizona\",\"West\",10279.68,10941.25\n\"Arkansas\"\
-          ,\"South\",4683.68,5000.96\n\"California\",\"West\",57411.81,67385.27\n\"\
-          Colorado\",\"West\",10012.02,10869.87\n\"Connecticut\",\"Northeast\",2892.16,3196.51\n\
-          \"Delaware\",\"South\",3239.72,3535.36\n\"District of Columbia\",\"South\"\
-          ,16394.17,18114.51\n\"Florida\",\"South\",41989.67,53493.27\n\"Georgia\"\
-          ,\"South\",9865.27,12035.21\n\"Hawaii\",\"West\",5219.91,5474.07\n\"Idaho\"\
-          ,\"West\",1840.64,4400.52\n\"Illinois\",\"Midwest\",8804.49,9733.34\n\"\
-          Indiana\",\"Midwest\",5982.7,6594.58\n\"Iowa\",\"Midwest\",8467.68,9771.41\n\
-          \"Kansas\",\"Midwest\",4503.79,4769.79\n\"Kentucky\",\"South\",2879.09,3582.94\n\
-          \"Louisiana\",\"South\",6511.79,7247.22\n\"Maryland\",\"South\",8417.93,12307.01\n\
-          \"Massachusetts\",\"Northeast\",4050.87,4828.45\n\"Michigan\",\"Midwest\"\
-          ,7745.42,11153.4\n\"Minnesota\",\"Midwest\",8189.13,9664.77\n\"Mississippi\"\
-          ,\"South\",3967.36,4446.13\n\"Missouri\",\"Midwest\",8546.58,10919.34\n\"\
-          Montana\",\"West\",1384.39,1671.55\n\"Nebraska\",\"Midwest\",2558.1,2714.19\n\
-          \"Nevada\",\"West\",1444.77,2036.04\n\"New Hampshire\",\"Northeast\",382.19,521.89\n\
-          \"New Jersey\",\"Northeast\",2132.86,2443.28\n\"New Mexico\",\"West\",1328.97,1505.25\n\
-          \"New York\",\"Northeast\",21687.02,30318.88\n\"North Carolina\",\"South\"\
-          ,8876.18,10445.63\n\"North Dakota\",\"Midwest\",176.71,176.71\n\"Ohio\"\
-          ,\"Midwest\",13572.17,19917.4\n\"Oklahoma\",\"South\",8748.77,9111.91\n\"\
-          Oregon\",\"West\",4465.11,5625.17\n\"Pennsylvania\",\"Northeast\",13555.43,15401.82\n\
-          \"Rhode Island\",\"Unknown\",18.7,18.7\n\"South Carolina\",\"South\",3435.73,3598.61\n\
-          \"South Dakota\",\"Midwest\",640.05,893.55\n\"Tennessee\",\"South\",5143.92,5790.24\n\
-          \"Texas\",\"South\",44253.95,52551.19\n\"Utah\",\"West\",8360.6,9701.28\n\
-          \"Virginia\",\"South\",15696.93,17324.89\n\"Washington\",\"West\",6219.38,7456.11\n\
-          \"West Virginia\",\"South\",2654.63,3131.36\n\"Wisconsin\",\"Midwest\",10650.42,12116.72\n"
+        string: "\uFEFF\"State\",\"Custom Title Region\",\"Sum Of Price\",\"Order\
+          \ Amount Metric\"\nAlabama,South,6198.55,6675.95\nAlaska,West,4983.36,5444.84\n\
+          Arizona,West,10279.68,10941.25\nArkansas,South,4683.68,5000.96\nCalifornia,West,57411.81,67385.27\n\
+          Colorado,West,10012.02,10869.87\nConnecticut,Northeast,2892.16,3196.51\n\
+          Delaware,South,3239.72,3535.36\nDistrict of Columbia,South,16394.17,18114.51\n\
+          Florida,South,41989.67,53493.27\nGeorgia,South,9865.27,12035.21\nHawaii,West,5219.91,5474.07\n\
+          Idaho,West,1840.64,4400.52\nIllinois,Midwest,8804.49,9733.34\nIndiana,Midwest,5982.7,6594.58\n\
+          Iowa,Midwest,8467.68,9771.41\nKansas,Midwest,4503.79,4769.79\nKentucky,South,2879.09,3582.94\n\
+          Louisiana,South,6511.79,7247.22\nMaryland,South,8417.93,12307.01\nMassachusetts,Northeast,4050.87,4828.45\n\
+          Michigan,Midwest,7745.42,11153.4\nMinnesota,Midwest,8189.13,9664.77\nMississippi,South,3967.36,4446.13\n\
+          Missouri,Midwest,8546.58,10919.34\nMontana,West,1384.39,1671.55\nNebraska,Midwest,2558.1,2714.19\n\
+          Nevada,West,1444.77,2036.04\nNew Hampshire,Northeast,382.19,521.89\nNew\
+          \ Jersey,Northeast,2132.86,2443.28\nNew Mexico,West,1328.97,1505.25\nNew\
+          \ York,Northeast,21687.02,30318.88\nNorth Carolina,South,8876.18,10445.63\n\
+          North Dakota,Midwest,176.71,176.71\nOhio,Midwest,13572.17,19917.4\nOklahoma,South,8748.77,9111.91\n\
+          Oregon,West,4465.11,5625.17\nPennsylvania,Northeast,13555.43,15401.82\n\
+          Rhode Island,Unknown,18.7,18.7\nSouth Carolina,South,3435.73,3598.61\nSouth\
+          \ Dakota,Midwest,640.05,893.55\nTennessee,South,5143.92,5790.24\nTexas,South,44253.95,52551.19\n\
+          Utah,West,8360.6,9701.28\nVirginia,South,15696.93,17324.89\nWashington,West,6219.38,7456.11\n\
+          West Virginia,South,2654.63,3131.36\nWisconsin,Midwest,10650.42,12116.72\n"
       headers:
         Content-Disposition:
           - attachment; filename="=?UTF-8?Q?test=5Fcsv.csv?="; filename*=UTF-8''test_csv.csv

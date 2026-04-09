@@ -24,10 +24,7 @@ interactions:
                 - id: adminGroup
                   type: userGroup
             - authId: NORMALIZED_AUTH_ID
-              email: demo@example.com
-              firstname: Demo
               id: demo
-              lastname: User
               permissions: []
               settings: []
               userGroups:
@@ -84,9 +81,6 @@ interactions:
               type: user
             - attributes:
                 authenticationId: NORMALIZED_AUTH_ID
-                email: demo@example.com
-                firstname: Demo
-                lastname: User
               id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo
@@ -183,6 +177,7 @@ interactions:
           data:
             attributes:
               allowedOrigins: []
+              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -195,6 +190,7 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
+              region: ''
             id: default
             type: organization
           links:
@@ -323,10 +319,7 @@ interactions:
               - id: adminGroup
                 type: userGroup
           - authId: NORMALIZED_AUTH_ID
-            email: demo@example.com
-            firstname: Demo
             id: demo
-            lastname: User
             permissions: []
             settings: []
             userGroups:
