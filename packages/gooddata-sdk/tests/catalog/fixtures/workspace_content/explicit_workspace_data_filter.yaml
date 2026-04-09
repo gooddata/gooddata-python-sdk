@@ -1776,9 +1776,9 @@ interactions:
                     type: label
                 labels:
                   data:
-                    - id: geo__state__location
-                      type: label
                     - id: state
+                      type: label
+                    - id: geo__state__location
                       type: label
               type: attribute
             - attributes:
