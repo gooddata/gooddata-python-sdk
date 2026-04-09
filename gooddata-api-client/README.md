@@ -540,7 +540,6 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**anomaly_detection_result**](docs/ActionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 *ActionsApi* | [**available_assignees**](docs/ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 *ActionsApi* | [**cancel_executions**](docs/ActionsApi.md#cancel_executions) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel | Applies all the given cancel tokens.
-*ActionsApi* | [**cancel_workflow**](docs/ActionsApi.md#cancel_workflow) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/cancel | 
 *ActionsApi* | [**change_analysis**](docs/ActionsApi.md#change_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis | Compute change analysis
 *ActionsApi* | [**change_analysis_result**](docs/ActionsApi.md#change_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis/result/{resultId} | Get change analysis result
 *ActionsApi* | [**check_entity_overrides**](docs/ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
@@ -569,7 +568,6 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**explain_afm**](docs/ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
 *ActionsApi* | [**forecast**](docs/ActionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
 *ActionsApi* | [**forecast_result**](docs/ActionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
-*ActionsApi* | [**generate_dashboard_summary**](docs/ActionsApi.md#generate_dashboard_summary) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/dashboardSummary | 
 *ActionsApi* | [**generate_description**](docs/ActionsApi.md#generate_description) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateDescription | Generate Description for Analytics Object
 *ActionsApi* | [**generate_logical_model**](docs/ActionsApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
 *ActionsApi* | [**generate_logical_model_aac**](docs/ActionsApi.md#generate_logical_model_aac) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModelAac | Generate logical data model in AAC format from physical data model (PDM)
@@ -589,7 +587,6 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_slides_export_metadata**](docs/ActionsApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 *ActionsApi* | [**get_tabular_export**](docs/ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 *ActionsApi* | [**get_translation_tags**](docs/ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
-*ActionsApi* | [**get_workflow_status**](docs/ActionsApi.md#get_workflow_status) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/status | 
 *ActionsApi* | [**import_csv**](docs/ActionsApi.md#import_csv) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/importCsv | Import CSV
 *ActionsApi* | [**import_custom_geo_collection**](docs/ActionsApi.md#import_custom_geo_collection) | **POST** /api/v1/actions/customGeoCollection/{collectionId}/import | Import custom geo collection
 *ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
@@ -2428,9 +2425,6 @@ Class | Method | HTTP request | Description
  - [WhatIfScenarioItem](docs/WhatIfScenarioItem.md)
  - [WidgetDescriptor](docs/WidgetDescriptor.md)
  - [WidgetSlidesTemplate](docs/WidgetSlidesTemplate.md)
- - [WorkflowDashboardSummaryRequestDto](docs/WorkflowDashboardSummaryRequestDto.md)
- - [WorkflowDashboardSummaryResponseDto](docs/WorkflowDashboardSummaryResponseDto.md)
- - [WorkflowStatusResponseDto](docs/WorkflowStatusResponseDto.md)
  - [WorkspaceAutomationIdentifier](docs/WorkspaceAutomationIdentifier.md)
  - [WorkspaceAutomationManagementBulkRequest](docs/WorkspaceAutomationManagementBulkRequest.md)
  - [WorkspaceCacheSettings](docs/WorkspaceCacheSettings.md)

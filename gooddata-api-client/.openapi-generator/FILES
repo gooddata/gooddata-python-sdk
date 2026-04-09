@@ -1350,9 +1350,6 @@ docs/WhatIfScenarioConfig.md
 docs/WhatIfScenarioItem.md
 docs/WidgetDescriptor.md
 docs/WidgetSlidesTemplate.md
-docs/WorkflowDashboardSummaryRequestDto.md
-docs/WorkflowDashboardSummaryResponseDto.md
-docs/WorkflowStatusResponseDto.md
 docs/WorkspaceAutomationIdentifier.md
 docs/WorkspaceAutomationManagementBulkRequest.md
 docs/WorkspaceCacheSettings.md
@@ -2737,9 +2734,6 @@ gooddata_api_client/model/what_if_scenario_config.py
 gooddata_api_client/model/what_if_scenario_item.py
 gooddata_api_client/model/widget_descriptor.py
 gooddata_api_client/model/widget_slides_template.py
-gooddata_api_client/model/workflow_dashboard_summary_request_dto.py
-gooddata_api_client/model/workflow_dashboard_summary_response_dto.py
-gooddata_api_client/model/workflow_status_response_dto.py
 gooddata_api_client/model/workspace_automation_identifier.py
 gooddata_api_client/model/workspace_automation_management_bulk_request.py
 gooddata_api_client/model/workspace_cache_settings.py
