@@ -45,7 +45,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_0
             links:
-              executionResult: EXECUTION_RESULT_4
+              executionResult: EXECUTION_NORMALIZED_5
       headers:
         Content-Type:
           - application/json
@@ -74,7 +74,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_RESULT_4?offset=0&limit=256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_NORMALIZED_5?offset=0&limit=256
     response:
       body:
         string:

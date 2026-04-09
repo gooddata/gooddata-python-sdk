@@ -55,7 +55,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 37612bd081201305c2d48d8f3afaaf48
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
           - application/problem+json
@@ -179,7 +179,10 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
               type: label
             - attributes:
-                authenticationId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
+                authenticationId: NORMALIZED_AUTH_ID
+                email: demo@example.com
+                firstname: Demo
+                lastname: User
               id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/users/demo
@@ -239,7 +242,10 @@ interactions:
             type: userDataFilter
           included:
             - attributes:
-                authenticationId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
+                authenticationId: NORMALIZED_AUTH_ID
+                email: demo@example.com
+                firstname: Demo
+                lastname: User
               id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/users/demo

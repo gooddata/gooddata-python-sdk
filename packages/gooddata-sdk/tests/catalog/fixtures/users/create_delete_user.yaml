@@ -28,7 +28,10 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
+                authenticationId: NORMALIZED_AUTH_ID
+                email: demo@example.com
+                firstname: Demo
+                lastname: User
               id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo
@@ -39,7 +42,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQ5ZGMzNjU0MC1hYzMxLTQ2MTUtOThmNy1hYzJiZDE2NzZkYzUSBWxvY2Fs
+                authenticationId: NORMALIZED_AUTH_ID
               id: demo2
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2
@@ -99,7 +102,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: cd3fb7919c01cbfd6e27515e24878359
+          traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
           - application/problem+json
@@ -249,7 +252,10 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiRhMzA4NmU3MS0zYjY2LTQ3NTItODIxMC0wN2VmODQ5NDNkOGESBWxvY2Fs
+                authenticationId: NORMALIZED_AUTH_ID
+                email: demo@example.com
+                firstname: Demo
+                lastname: User
               id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo
@@ -260,7 +266,7 @@ interactions:
                       type: userGroup
               type: user
             - attributes:
-                authenticationId: CiQ5ZGMzNjU0MC1hYzMxLTQ2MTUtOThmNy1hYzJiZDE2NzZkYzUSBWxvY2Fs
+                authenticationId: NORMALIZED_AUTH_ID
               id: demo2
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2

@@ -116,7 +116,7 @@ interactions:
         string:
           queryDurationMillis:
             createCacheTable: 0
-            simpleSelect: 5
+            simpleSelect: 0
           successful: true
       headers:
         Content-Type:
