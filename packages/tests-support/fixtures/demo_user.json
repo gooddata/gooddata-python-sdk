@@ -3,7 +3,10 @@
     "id": "demo",
     "type": "user",
     "attributes": {
-      "authenticationId": ""
+      "authenticationId": "",
+      "firstname": "Demo",
+      "lastname": "User",
+      "email": "demo@example.com"
     },
     "relationships": {
       "userGroups": {
