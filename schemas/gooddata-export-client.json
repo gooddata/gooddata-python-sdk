@@ -977,7 +977,7 @@
         "properties": {
           "exportInfo": {
             "default": false,
-            "description": "If true, the export will contain the information about the export – exported date, dashboard filters, etc.",
+            "description": "If true, the export will contain the information about the export \u2013 exported date, dashboard filters, etc.",
             "example": true,
             "type": "boolean"
           },
@@ -2119,7 +2119,7 @@
           },
           "exportInfo": {
             "default": false,
-            "description": "If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF)",
+            "description": "If true, the export will contain the information about the export \u2013 exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF)",
             "example": true,
             "type": "boolean"
           },

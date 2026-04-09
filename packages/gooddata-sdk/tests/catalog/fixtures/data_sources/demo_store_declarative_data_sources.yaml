@@ -23,13 +23,13 @@ interactions:
               name: demo-test-ds
               permissions:
                 - assignee:
-                    id: demoGroup
-                    type: userGroup
-                  name: USE
-                - assignee:
                     id: demo2
                     type: user
                   name: MANAGE
+                - assignee:
+                    id: demoGroup
+                    type: userGroup
+                  name: USE
               schema: demo
               type: POSTGRESQL
               url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
@@ -72,13 +72,13 @@ interactions:
               name: demo-test-ds
               permissions:
                 - assignee:
-                    id: demoGroup
-                    type: userGroup
-                  name: USE
-                - assignee:
                     id: demo2
                     type: user
                   name: MANAGE
+                - assignee:
+                    id: demoGroup
+                    type: userGroup
+                  name: USE
               schema: demo
               type: POSTGRESQL
               url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
@@ -144,6 +144,7 @@ interactions:
           data:
             attributes:
               allowedOrigins: []
+              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -156,6 +157,7 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
+              region: ''
             id: default
             type: organization
           links:
@@ -221,6 +223,7 @@ interactions:
           data:
             attributes:
               allowedOrigins: []
+              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -233,6 +236,7 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
+              region: ''
             id: default
             type: organization
           links:
