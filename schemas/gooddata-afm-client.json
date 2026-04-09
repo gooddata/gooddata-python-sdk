@@ -140,6 +140,7 @@
         "properties": {
           "resultIdToCancelTokenPairs": {
             "additionalProperties": {
+              "description": "resultId to cancel token pairs",
               "type": "string"
             },
             "description": "resultId to cancel token pairs",
@@ -3961,7 +3962,7 @@
             "type": "string"
           },
           "kind": {
-            "description": "Type of the long-running operation.\n* `provision-database` — Provisioning of an AI Lake database.\n* `deprovision-database` — Deprovisioning (deletion) of an AI Lake database.\n* `run-service-command` — Running a command in a particular AI Lake service.\n",
+            "description": "Type of the long-running operation.\n* `provision-database` \u2014 Provisioning of an AI Lake database.\n* `deprovision-database` \u2014 Deprovisioning (deletion) of an AI Lake database.\n* `run-service-command` \u2014 Running a command in a particular AI Lake service.\n",
             "enum": [
               "provision-database",
               "deprovision-database",
@@ -6088,79 +6089,6 @@
           "widgetType"
         ],
         "type": "object"
-      },
-      "WorkflowDashboardSummaryRequestDto": {
-        "properties": {
-          "customUserPrompt": {
-            "type": "string"
-          },
-          "dashboardId": {
-            "type": "string"
-          },
-          "keyMetricIds": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "referenceQuarter": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "dashboardId"
-        ],
-        "type": "object"
-      },
-      "WorkflowDashboardSummaryResponseDto": {
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "runId": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "message",
-          "runId",
-          "status"
-        ],
-        "type": "object"
-      },
-      "WorkflowStatusResponseDto": {
-        "properties": {
-          "currentPhase": {
-            "type": "string"
-          },
-          "error": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "result": {
-            "additionalProperties": {
-              "type": "object"
-            },
-            "type": "object"
-          },
-          "runId": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "message",
-          "runId",
-          "status"
-        ],
-        "type": "object"
       }
     }
   },
@@ -7016,131 +6944,6 @@
         "summary": "(BETA) Semantic Search in Metadata",
         "tags": [
           "Smart Functions",
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/dashboardSummary": {
-      "post": {
-        "operationId": "generateDashboardSummary",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/WorkflowDashboardSummaryRequestDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowDashboardSummaryResponseDto"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/cancel": {
-      "post": {
-        "operationId": "cancelWorkflow",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "runId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/status": {
-      "get": {
-        "operationId": "getWorkflowStatus",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "runId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowStatusResponseDto"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
           "actions"
         ]
       }

@@ -47,6 +47,8 @@ interactions:
         string:
           data:
             attributes:
+              allowedOrigins: []
+              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -59,6 +61,7 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
+              region: ''
             id: default
             type: organization
           links:
@@ -123,6 +126,8 @@ interactions:
         string:
           data:
             attributes:
+              allowedOrigins: []
+              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -135,6 +140,7 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
+              region: ''
             id: default
             type: organization
           links:
@@ -259,6 +265,7 @@ interactions:
             attributes:
               allowedOrigins:
                 - https://test.com
+              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -271,6 +278,7 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
+              region: ''
             id: default
             type: organization
           links:
@@ -337,6 +345,7 @@ interactions:
             attributes:
               allowedOrigins:
                 - https://test.com
+              dataCenter: ''
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -349,6 +358,7 @@ interactions:
                 - enableFlexibleDashboardLayout
               hostname: localhost
               name: Default Organization
+              region: ''
             id: default
             type: organization
           links:
