@@ -168,7 +168,7 @@ interactions:
       headers:
         Content-Type:
           - application/json
-        DATE: &id001
+        DATE:
           - PLACEHOLDER
         Expires:
           - '0'
@@ -176,7 +176,8 @@ interactions:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 200
         message: OK
@@ -201,18 +202,20 @@ interactions:
     response:
       body:
         string:
-          exportResult: EXPORT_NORMALIZED_3
+          exportResult: EXPORT_NORMALIZED_CSV
       headers:
         Content-Type:
           - application/json
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 201
         message: Created
@@ -229,19 +232,21 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_3
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_CSV
     response:
       body:
         string: ''
       headers:
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 202
         message: Accepted
@@ -258,19 +263,21 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_3
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_CSV
     response:
       body:
         string: ''
       headers:
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 202
         message: Accepted
@@ -287,19 +294,21 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_3
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_CSV
     response:
       body:
         string: ''
       headers:
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 202
         message: Accepted
@@ -316,19 +325,21 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_3
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_CSV
     response:
       body:
         string: ''
       headers:
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 202
         message: Accepted
@@ -345,7 +356,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_3
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_CSV
     response:
       body:
         string: "\uFEFF\"Date - Month/Year\",\"2025-04\",\"2025-05\",\"2025-06\",\"\
@@ -357,14 +368,16 @@ interactions:
           - attachment; filename="=?UTF-8?Q?Customers_Trend.csv?="; filename*=UTF-8''Customers%20Trend.csv
         Content-Type:
           - text/csv
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 200
         message: OK

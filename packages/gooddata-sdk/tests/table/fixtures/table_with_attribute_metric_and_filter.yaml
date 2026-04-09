@@ -77,11 +77,11 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: EXECUTION_NORMALIZED_7
+              executionResult: EXECUTION_NORMALIZED_1
       headers:
         Content-Type:
           - application/json
-        DATE: &id001
+        DATE:
           - PLACEHOLDER
         Expires:
           - '0'
@@ -89,8 +89,10 @@ interactions:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-CANCEL-TOKEN: *id001
-        X-GDC-TRACE-ID: *id001
+        X-GDC-CANCEL-TOKEN:
+          - PLACEHOLDER
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 200
         message: OK
@@ -106,7 +108,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_NORMALIZED_7?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_NORMALIZED_1?offset=0%2C0&limit=512%2C256
     response:
       body:
         string:
@@ -142,14 +144,16 @@ interactions:
       headers:
         Content-Type:
           - application/json
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 200
         message: OK
