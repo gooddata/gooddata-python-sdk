@@ -102,11 +102,11 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: EXECUTION_NORMALIZED_3
+              executionResult: EXECUTION_NORMALIZED_XLSX
       headers:
         Content-Type:
           - application/json
-        DATE: &id001
+        DATE:
           - PLACEHOLDER
         Expires:
           - '0'
@@ -114,8 +114,10 @@ interactions:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-CANCEL-TOKEN: *id001
-        X-GDC-TRACE-ID: *id001
+        X-GDC-CANCEL-TOKEN:
+          - PLACEHOLDER
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 200
         message: OK
@@ -132,7 +134,7 @@ interactions:
             price:
               format: ''
               title: Sum Of Price
-        executionResult: EXECUTION_NORMALIZED_3
+        executionResult: EXECUTION_NORMALIZED_XLSX
         fileName: test_xlsx
         format: XLSX
       headers:
@@ -151,18 +153,20 @@ interactions:
     response:
       body:
         string:
-          exportResult: EXPORT_NORMALIZED_2
+          exportResult: EXPORT_NORMALIZED_XLSX
       headers:
         Content-Type:
           - application/json
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 201
         message: Created
@@ -179,19 +183,21 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_2
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_XLSX
     response:
       body:
         string: ''
       headers:
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 202
         message: Accepted
@@ -208,7 +214,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_2
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_XLSX
     response:
       body:
         string: "PK\x03\x04\x14\0\0\0\b\0\0\0?\0a]I:O\x01\0\0\uFFFD\x04\0\0\x13\0\0\
@@ -490,72 +496,76 @@ interactions:
           ,\uFFFD\uFFFD\uFFFD\x10tni\uFFFDe\uFFFD\uFFFD\uFFFD1j\x11\uFFFD\u058Ax_\uFFFD\
           \uFFFD9\uFFFD\uFFFD\uFFFD\uFFFDg\uFFFD{sg{\x06_{g\uFFFD\uFFFD^.Q[;\uFFFD\
           \u4AE5?\uFFFD\uFFFD\uFFFD>\uFFFD\u0781\uFFFD\u0484)Y\uFFFDMz\0G\uFFFD\uFFFD\
-          \uFFFD/\x03\uFFFDc/H\uFFFD\uFFFD\x06PK\x03\x04\x14\0\0\0\b\0\0\0?\0yG\x05\
-          n%\x01\0\0P\x02\0\0\x11\0\0\0docProps/core.xml\uFFFD\uFFFD\uFFFDj\uFFFD\
-          0\x10\uFFFD\uFFFD}\n\uFFFD\uFFFD-\uFFFDiC\x10\uFFFD\x03m\u0269\uFFFDB]Zz\x13\
-          \uFFFD&\x11\uFFFD~\uFFFD\uFFFD:y\uFFFD*\uFFFD\uFFFD$\uFFFDSA\x17if\uFFFD\
-          \uFFFD]T.\uFFFD\uFFFDM~\uFFFDyit\uFFFD\uFFFD\x0447B\uFFFDm\uFFFD\u079BU\uFFFD\
-          @\uFFFD\x0FL\v\uFFFD\x1A\r\x15:\uFFFDG\uFFFD\uFFFD\uFFFD\uFFFDr\uFFFD\uFFFD\
-          \uFFFD\x19\v.H\uFFFDI\x04iO\uFFFD\uFFFD\uFFFD.\x04K1\uFFFD|\a\uFFFD\uFFFD\
-          ,:t\x147\uFFFD)\x16\uFFFD\uFFFDm\uFFFDe\uFFFD\uFFFDm\x01\x17\uFFFD\u0331\
-          \uFFFD\uFFFD\x04\v\f\x1F\uFFFD\uFFFD\uFFFD\uFFFDhD\n>!\uFFFDk{\uFFFD\uFFFD\
-          \x18ZP\uFFFD\uFFFD\uFFFDy\uFFFD\uFFFD7\uFFFDS\uFFFDfA\uFFFD\\8\uFFFD\f\a\
-          \v7\uFFFD'qr\uFF5C\uFFFD]\uFFFDe\u076C\uFFFD\uFFFD\uFFFD9\uFFFD\\\uFFFD\uFFFD\
-          \uFFFD\uFFFD\uFFFDR\x1FW\uFFFD\x01\u0565\uFFFD\uFFFD;`\uFFFD\uFFFD\uFFFD\
-          \u0117\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD+\uFFFDH\x10\uFFFD\uFFFD\
-          \uFFFD\uFFFDx\e\a\x19\uFFFD@$1\0\x1D\u2794\uFFFD\uFFFD\uFFFDs\uFFFDBuA\uFFFD\
-          yJ\uFFFDS\uFFFDh\nB\x1F\uFFFD)\uFFFD\uFFFD-\uFFFD\uFFFD\uFFFD@56\uFFFD7\uFFFD\
-          \x04\x18r_\x7F\uFFFD\uFFFD\x0FPK\x03\x04\x14\0\0\0\b\0\0\0?\0\x04qEc{\x01\
-          \0\0\x13\x03\0\0\x10\0\0\0docProps/app.xml\uFFFDR\uFFFDN\uFFFD0\x10\uFFFD\
-          \uFFFD\x15\uFFFD\uFFFD\uFFFDi\uFFFDZ\uFFFD\uFFFD1Z\uFFFD]\uFFFD\uFFFD\uFFFD\
-          J-p\\\x19g\uFFFDXul\uFFFD3D)_\uFFFD\uFFFD\uFFFD!\uFFFD=\uFFFD\u04DB7O\uFFFD\
-          \uFFFD3\x16\uFFFD]c\uFFFD\x16\"\x1A\uFFFD\n6\uFFFD\uFFFD,\x03\uFFFD}i\u073E\
-          `\uFFFD\uFFFD?\uFFFD7,CR\uFFFDT\uFFFD;(\uFFFD\x11\uFFFD\uFFFD\uFFFD+\uFFFD\
-          \uFFFD>@$\x03\uFFFD%\a\uFFFD\x05\uFFFD\uFFFD\x92s\uFFFD54\ng\uFFFD\uFFFD\
-          R\uFFFD\uFFFDQ\uFFFD\u02B8\u7FAA\uFFFD\uFFFD;\uFFFD_\ep\uFFFD\x17y\uFFFD\
-          \uFFFDCG\uFFFDJ(\uFFFD\uFFFDh\uFFFDN\uFFFD\u02D6\uFFFDkZz\uFFFD\uFFFD\xE7\
-          \uFFFD1$?)~\uFFFD`\uFFFDV\uFFFD\x1E)\uF34E\x1E}E\uFFFD\uFFFDN\uFFFD\x15\
-          |\uFFFD\x14\uFFFDh\v\uFFFD5\x1A:\uFFFD\\\uFFFDi)\uFFFDZYX%cY)\uFFFD \uFFFD\
-          \a!\u05A0\uFFFD\uFFFDm\uFFFD\uFFFD(EK\uFFFD\x164\uFFFD\uFFFD\uFFFDyKS[\uFFFD\
-          \uFFFDE!\uFFFDq\n\u05AAh\uFFFD#v\uFFFD\uFFFD\uFFFD\x01\u06C0\x14\u5CCF\a\
-          \uFFFD\x01\b\x05\x1F\uFFFD\x01N\uFFFDSl~\uFFFD\uFFFD H\uFFFDR\uFFFD\uFFFD\
-          \ \t_F\uFFFD\x19\uFFFD\uFFFD\x0F\uFFFDFE\uFFFDO\uFFFD\uFFFD4\uFFFDM2\x12\
-          \ \uFFFD\uFFFD,v_\"\uFFFD/\uFFFDd\uFFFD\uFFFDMP.\u0350\uFFFD\uFFFDq\a|\f\
-          ;\x7F\uFFFD\b\uFFFD\x13\uFFFD$\u0176V\x11\u02B4\uFFFDq\uFFFD#!\uFFFD)Z\uFFFD\
-          \uFFFD~U+\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFDt\uFFFD\uFFFDr\uFFFD\
-          \uFFFD\uFFFD\uFFFD\fk?s\uFFFD\x7F|g\uFFFD\x0EPK\x01\x02\x14\x03\x14\0\0\0\
-          \b\0\0\0?\0a]I:O\x01\0\0\uFFFD\x04\0\0\x13\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\
-          \0\0\0\0[Content_Types].xmlPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0?\0\uFFFD\
-          I\uFFFD\uFFFD\0\0\0K\x02\0\0\v\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x01\
-          \0\0_rels/.relsPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0?\0Du[\uFFFD\uFFFD\0\0\
-          \0\uFFFD\x02\0\0\x1A\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x02\0\0xl/_rels/workbook.xml.relsPK\x01\
-          \x02\x14\x03\x14\0\0\0\b\0\0\0?\0\f\uFFFD\uFFFD\fR\a\0\0 #\0\0\x18\0\0\0\
-          \0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x03\0\0xl/worksheets/sheet1.xmlPK\x01\
-          \x02\x14\x03\x14\0\0\0\b\0\0\0?\0\b\uFFFD\uFFFD\uFFFDL\x01\0\0)\x02\0\0\x0F\
-          \0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD:\v\0\0xl/workbook.xmlPK\x01\x02\x14\x03\
-          \x14\0\0\0\b\0\0\0?\0uW\x7F\uFFFD\x12\x02\0\00\x06\0\0\x14\0\0\0\0\0\0\0\
-          \0\0\0\0\uFFFD\uFFFD\uFFFD\f\0\0xl/sharedStrings.xmlPK\x01\x02\x14\x03\x14\
-          \0\0\0\b\0\0\0?\0]\uFFFD:4\uFFFD\x02\0\0\uFFFD\x0F\0\0\r\0\0\0\0\0\0\0\0\
-          \0\0\0\uFFFD\uFFFD\uFFFD\x0E\0\0xl/styles.xmlPK\x01\x02\x14\x03\x14\0\0\0\
-          \b\0\0\0?\0\x18\uFFFDFT\uFFFD\x05\0\0R\e\0\0\x13\0\0\0\0\0\0\0\0\0\0\0\uFFFD\
-          \uFFFD\x01\x12\0\0xl/theme/theme1.xmlPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0\
-          ?\0yG\x05n%\x01\0\0P\x02\0\0\x11\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\
-          \x17\0\0docProps/core.xmlPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0?\0\x04qEc{\x01\
-          \0\0\x13\x03\0\0\x10\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD6\x19\0\0docProps/app.xmlPK\x05\
-          \x06\0\0\0\0\n\0\n\0\uFFFD\x02\0\0\uFFFD\x1A\0\0\0\0"
+          \uFFFD/\x03\uFFFDc/H\uFFFD\uFFFD\x06PK\x03\x04\x14\0\0\0\b\0\0\0?\0\u04D2\
+          2(%\x01\0\0P\x02\0\0\x11\0\0\0docProps/core.xml\uFFFD\uFFFD\uFFFDn\uFFFD\
+          0\x10\uFFFD\uFFFD}\uFFFD\uFFFD\uFFFD\uFFFD\x0E\uFFFD\uFFFDXI\uFFFD\u068A\
+          S\uFFFD*\uFFFD\uFFFD\uFFFD7\uFFFD^\uFFFD\uFFFD\uFFFDG\uFFFD\u06D0\uFFFD\uFFFD\
+          \x13 \uFFFD\u0129\uFFFD\uFFFD\uFFFD~;\uFFFDr\uFFFD\u062B&\uFFFD\x05\uFFFD\
+          \uFFFD%\uFFFD3\uFFFD\x12\uFFFD\uFFFD\b\uFFFD\uFFFD\x12}\uFFFD\uFFFD\uFFFD\
+          #J|`Z\uFFFD\uFFFDh(Q\a\x1E-\uFFFD\uFFFD\uFFFD[\u028D\uFFFD7g,\uFFFD \uFFFD\
+          '\x11\uFFFD=\uFFFDD\uFFFD\x10,\uFFFD\uFFFD\uFFFD\x1D(\uFFFD\uFFFD\uFFFD\
+          Q\uFFFD\x1A\uFFFDX\uFFFD\uFFFD\uFFFD\uFFFDe\uFFFD\uFFFD\u0540'\uFFFD\u0330\
+          \uFFFD\uFFFD\x04\v\f\uFFFD\uFFFD\u050EDtD\n>\"\uFFFDk\x06\uFFFD\uFFFD\x18\
+          \x1AP\uFFFD\uFFFD\uFFFDy\uFFFD\uFFFD7\uFFFDS\uFFFDf\xE0\\8\uFFFD\f\uFFFD\
+          \uFFFD\uFFFD\u05938\uFFFD\uFFFD^\uFFFD\u01B6m\uFFFDv:Xc\uFFFD\x1CoV\uFFFD\
+          \uFFFD\xEA\uFFFD\uFFFD\uFFFD\uFFFD8\uFFFD\uFFFD\x10\uFFFDr\a,\x18W\x15\uFFFD\
+          \uFFFD\uFFFD\uFFFDk\uFFFD\x0F\uFFFDx\uFFFD\x04\uFFFD\uFFFDE\uFFFD\uFFFD\uFFFD\
+          q\uFFFDC\x1F\uFFFD$\x06\uFFFD\uFFFD\uFFFD'\uFFFDs\uFFFD\uFFFD\uFFFD^\uFFFD\
+          jB&\uFFFD\uFFFD\u0727d\uFFFD&s\uFFFD\uFFFD\uFFFD|\uFFFD#\uFFFD\uFFFD\uFFFD\
+          @u\x1C\uFFFDo\uFFFD\tp\uFFFD}\uFFFD\t\uFFFD?PK\x03\x04\x14\0\0\0\b\0\0\0\
+          ?\0\x04qEc{\x01\0\0\x13\x03\0\0\x10\0\0\0docProps/app.xml\uFFFDR\uFFFDN\uFFFD\
+          0\x10\uFFFD\uFFFD\x15\uFFFD\uFFFD\uFFFDi\uFFFDZ\uFFFD\uFFFD1Z\uFFFD]\uFFFD\
+          \uFFFD\uFFFDJ-p\\\x19g\uFFFDXul\uFFFD3D)_\uFFFD\uFFFD\uFFFD!\uFFFD=\uFFFD\
+          \u04DB7O\uFFFD\uFFFD3\x16\uFFFD]c\uFFFD\x16\"\x1A\uFFFD\n6\uFFFD\uFFFD,\x03\
+          \uFFFD}i\u073E`\uFFFD\uFFFD?\uFFFD7,CR\uFFFDT\uFFFD;(\uFFFD\x11\uFFFD\uFFFD\
+          \uFFFD+\uFFFD\uFFFD>@$\x03\uFFFD%\a\uFFFD\x05\uFFFD\uFFFD\x92s\uFFFD54\n\
+          g\uFFFD\uFFFDR\uFFFD\uFFFDQ\uFFFD\u02B8\u7FAA\uFFFD\uFFFD;\uFFFD_\ep\uFFFD\
+          \x17y\uFFFD\uFFFDCG\uFFFDJ(\uFFFD\uFFFDh\uFFFDN\uFFFD\u02D6\uFFFDkZz\uFFFD\
+          \uFFFD\xE7\uFFFD1$?)~\uFFFD`\uFFFDV\uFFFD\x1E)\uF34E\x1E}E\uFFFD\uFFFDN\uFFFD\
+          \x15|\uFFFD\x14\uFFFDh\v\uFFFD5\x1A:\uFFFD\\\uFFFDi)\uFFFDZYX%cY)\uFFFD\
+          \ \uFFFD\a!\u05A0\uFFFD\uFFFDm\uFFFD\uFFFD(EK\uFFFD\x164\uFFFD\uFFFD\uFFFD\
+          yKS[\uFFFD\uFFFDE!\uFFFDq\n\u05AAh\uFFFD#v\uFFFD\uFFFD\uFFFD\x01\u06C0\x14\
+          \u5CCF\a\uFFFD\x01\b\x05\x1F\uFFFD\x01N\uFFFDSl~\uFFFD\uFFFD H\uFFFDR\uFFFD\
+          \uFFFD \t_F\uFFFD\x19\uFFFD\uFFFD\x0F\uFFFDFE\uFFFDO\uFFFD\uFFFD4\uFFFD\
+          M2\x12 \uFFFD\uFFFD,v_\"\uFFFD/\uFFFDd\uFFFD\uFFFDMP.\u0350\uFFFD\uFFFD\
+          q\a|\f;\x7F\uFFFD\b\uFFFD\x13\uFFFD$\u0176V\x11\u02B4\uFFFDq\uFFFD#!\uFFFD\
+          )Z\uFFFD\uFFFD~U+\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFDt\uFFFD\
+          \uFFFDr\uFFFD\uFFFD\uFFFD\uFFFD\fk?s\uFFFD\x7F|g\uFFFD\x0EPK\x01\x02\x14\
+          \x03\x14\0\0\0\b\0\0\0?\0a]I:O\x01\0\0\uFFFD\x04\0\0\x13\0\0\0\0\0\0\0\0\
+          \0\0\0\uFFFD\uFFFD\0\0\0\0[Content_Types].xmlPK\x01\x02\x14\x03\x14\0\0\0\
+          \b\0\0\0?\0\uFFFDI\uFFFD\uFFFD\0\0\0K\x02\0\0\v\0\0\0\0\0\0\0\0\0\0\0\uFFFD\
+          \uFFFD\uFFFD\x01\0\0_rels/.relsPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0?\0Du[\uFFFD\
+          \uFFFD\0\0\0\uFFFD\x02\0\0\x1A\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x02\
+          \0\0xl/_rels/workbook.xml.relsPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0?\0\f\uFFFD\
+          \uFFFD\fR\a\0\0 #\0\0\x18\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x03\0\0\
+          xl/worksheets/sheet1.xmlPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0?\0\b\uFFFD\uFFFD\
+          \uFFFDL\x01\0\0)\x02\0\0\x0F\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD:\v\0\0xl/workbook.xmlPK\x01\
+          \x02\x14\x03\x14\0\0\0\b\0\0\0?\0uW\x7F\uFFFD\x12\x02\0\00\x06\0\0\x14\0\
+          \0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\f\0\0xl/sharedStrings.xmlPK\x01\x02\
+          \x14\x03\x14\0\0\0\b\0\0\0?\0]\uFFFD:4\uFFFD\x02\0\0\uFFFD\x0F\0\0\r\0\0\
+          \0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\x0E\0\0xl/styles.xmlPK\x01\x02\x14\x03\
+          \x14\0\0\0\b\0\0\0?\0\x18\uFFFDFT\uFFFD\x05\0\0R\e\0\0\x13\0\0\0\0\0\0\0\
+          \0\0\0\0\uFFFD\uFFFD\x01\x12\0\0xl/theme/theme1.xmlPK\x01\x02\x14\x03\x14\
+          \0\0\0\b\0\0\0?\0\u04D22(%\x01\0\0P\x02\0\0\x11\0\0\0\0\0\0\0\0\0\0\0\uFFFD\
+          \uFFFD\uFFFD\x17\0\0docProps/core.xmlPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0\
+          ?\0\x04qEc{\x01\0\0\x13\x03\0\0\x10\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD6\x19\
+          \0\0docProps/app.xmlPK\x05\x06\0\0\0\0\n\0\n\0\uFFFD\x02\0\0\uFFFD\x1A\0\
+          \0\0\0"
       headers:
         Content-Disposition:
           - attachment; filename="=?UTF-8?Q?test=5Fxlsx.xlsx?="; filename*=UTF-8''test_xlsx.xlsx
         Content-Type:
           - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 200
         message: OK

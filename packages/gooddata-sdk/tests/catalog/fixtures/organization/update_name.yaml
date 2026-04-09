@@ -47,6 +47,7 @@ interactions:
         string:
           data:
             attributes:
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -123,6 +124,7 @@ interactions:
         string:
           data:
             attributes:
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -178,6 +180,7 @@ interactions:
         string:
           data:
             attributes:
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -254,6 +257,7 @@ interactions:
         string:
           data:
             attributes:
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -330,6 +334,7 @@ interactions:
         string:
           data:
             attributes:
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting
@@ -385,6 +390,7 @@ interactions:
         string:
           data:
             attributes:
+              allowedOrigins: []
               earlyAccess: enableAlerting
               earlyAccessValues:
                 - enableAlerting

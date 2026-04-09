@@ -168,7 +168,7 @@ interactions:
       headers:
         Content-Type:
           - application/json
-        DATE: &id001
+        DATE:
           - PLACEHOLDER
         Expires:
           - '0'
@@ -176,7 +176,8 @@ interactions:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 200
         message: OK
@@ -201,18 +202,20 @@ interactions:
     response:
       body:
         string:
-          exportResult: EXPORT_NORMALIZED_4
+          exportResult: EXPORT_NORMALIZED_XLSX
       headers:
         Content-Type:
           - application/json
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 201
         message: Created
@@ -229,19 +232,21 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_XLSX
     response:
       body:
         string: ''
       headers:
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 202
         message: Accepted
@@ -258,19 +263,21 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_XLSX
     response:
       body:
         string: ''
       headers:
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 202
         message: Accepted
@@ -287,19 +294,21 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_XLSX
     response:
       body:
         string: ''
       headers:
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 202
         message: Accepted
@@ -316,19 +325,21 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_XLSX
     response:
       body:
         string: ''
       headers:
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 202
         message: Accepted
@@ -345,19 +356,21 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_XLSX
     response:
       body:
         string: ''
       headers:
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 202
         message: Accepted
@@ -374,7 +387,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_4
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_XLSX
     response:
       body:
         string: "PK\x03\x04\x14\0\0\0\b\0\0\0?\0a]I:O\x01\0\0\uFFFD\x04\0\0\x13\0\0\
@@ -588,21 +601,22 @@ interactions:
           ,\uFFFD\uFFFD\uFFFD\x10tni\uFFFDe\uFFFD\uFFFD\uFFFD1j\x11\uFFFD\u058Ax_\uFFFD\
           \uFFFD9\uFFFD\uFFFD\uFFFD\uFFFDg\uFFFD{sg{\x06_{g\uFFFD\uFFFD^.Q[;\uFFFD\
           \u4AE5?\uFFFD\uFFFD\uFFFD>\uFFFD\u0781\uFFFD\u0484)Y\uFFFDMz\0G\uFFFD\uFFFD\
-          \uFFFD/\x03\uFFFDc/H\uFFFD\uFFFD\x06PK\x03\x04\x14\0\0\0\b\0\0\0?\0\x11\uFFFD\
-          ,\uFFFD%\x01\0\0P\x02\0\0\x11\0\0\0docProps/core.xml\uFFFD\uFFFD\uFFFDj\uFFFD\
-          0\x10\uFFFD\uFFFD}\n\uFFFD\uFFFD-\uFFFDiC\x10\uFFFD\x03m\u0269\uFFFDBSZz\x13\
-          \uFFFD&\x11\uFFFD~\uFFFD\uFFFD:~\uFFFD\u028E\uFFFD$\uFFFDS\uFFFD\uFFFD\uFFFD\
-          \uFFFDvvQ\uFFFD<\uFFFD&\uFFFD\x05\uFFFD\uFFFD\x15\uFFFD3\uFFFD\x12\uFFFD\
-          \uFFFD\b\uFFFDw\x15z\u07EC\uFFFD\x05J|`Z\uFFFD\uFFFDh\uFFFDP\a\x1E-\uBED2\
-          [\u028D\uFFFDWg,\uFFFD \uFFFD'\x11\uFFFD=\uFFFDB\uFFFD\x10,\uFFFD\uFFFD\uFFFD\
-          =(\uFFFD\uFFFD\uFFFDQ\uFFFD\x1A\uFFFDX\uFFFD\uFFFD\uFFFDa\uFFFD\uFFFD7\uFFFD\
-          \x01.\b\uFFFDc\x05\uFFFD\t\x16\x18\uE069\uFFFD\uFFFDhD\n>!\uFFFDk\x06\uFFFD\
-          \uFFFD\x18\x1AP\uFFFD\uFFFD\uFFFDy\uFFFD\uFFFD7\uFFFDS\uFFFDf\xE0\\8\uFFFD\
-          \f\uFFFD\uFFFD\uFFFD\u05938\uFFFD\x0F^N\u01B6m\uFFFDv6Xc\uFFFD\x1C\x7F\uFFFD\
-          _\u0786US\uFFFD\uFFFDSq@u)8\uFFFD\x0EX0\uFFFD.\uFFFDe\x11\x0F\uFFFD0\x1F\
-          \uFFFD\uFFFD\uFFFD[\t\u2C4B\uFFFD\uFFFD\uFFFDq\uFFFDc\x1F\uFFFD$\x06\uFFFD\
-          \u01F8'\uFFFDc\uFFFD\uFFFD\uFFFDY\uFFFD\uFFFD \uFFFD<%\uFFFD)Yl\nB\x1FrJ\uFFFD\
-          W?\uFFFD\uFFFD\fT\uFFFD\x7F\x13O\uFFFDc\uFFFD\uFFFDOP\uFFFD\x01PK\x03\x04\
+          \uFFFD/\x03\uFFFDc/H\uFFFD\uFFFD\x06PK\x03\x04\x14\0\0\0\b\0\0\0?\0\0a]\uFFFD\
+          &\x01\0\0P\x02\0\0\x11\0\0\0docProps/core.xml\uFFFD\uFFFD\uFFFDn\uFFFD0\x10\
+          \uFFFD\uFFFD}\uFFFD\uFFFD\uFFFD\uFFFD\x0E\uFFFD\b\uFFFD$Hm\u0169H\uFFFD\
+          J\u056A7\uFFFD^\uFFFD\uFFFD\uFFFDG\uFFFD\u06D0\uFFFD\uFFFDI \uFFFD\u0129\
+          \uFFFD\uFFFD\uFFFD~;\uFFFDr\uFFFD\u072B&\uFFFD\x05\uFFFD\uFFFD%\uFFFD3\uFFFD\
+          \x12\uFFFD\uFFFD\b\uFFFD\uFFFD\x12\uFFFDoV\uFFFD\x1C%>0-Xc4\uFFFD\uFFFD\x03\
+          \uFFFD\uFFFD\uFFFD]\uFFFD-\uFFFD\uFFFD\uFFFD\uFFFD3\x16\\\uFFFD\uFFFD\uFFFD\
+          \b\u049Er[\uFFFD]\b\uFFFDb\uFFFD\uFFFD\x0E\x14\uFFFDYt\uFFFD(n\uFFFDS,\uFFFD\
+          \uFFFD\uFFFD\uFFFD2\uFFFD\uFFFDj\uFFFD\x13BfXA`\uFFFD\x05\uFFFD\x0F\uFFFD\
+          \u050EDtD\n>\"\uFFFDkz\uFFFD\uFFFD\x18\x1AP\uFFFD\uFFFD\uFFFDy\uFFFD\uFFFD\
+          7\uFFFDS\uFFFDfC\uFFFD\\8\uFFFD\f\uFFFD\uFFFD\uFFFD\u05938\uFFFD\uFFFD^\uFFFD\
+          \u01B6m\uFFFDv\uFFFD[c\uFFFD\x1C\x7F\uFFFD_\uFFFD\uFFFDUS\uFFFD\x0F\uFFFD\
+          \u202ABp\uFFFD\x1D\uFFFD`\\U\uFFFD\uFFFD\"\x1E\uFFFDa>\uFFFD\u3277\x12\uFFFD\
+          c\x17\uFFFD\eo\uFFFDE\uFFFD>\x10I\f@\uFFFD\uFFFD'\uFFFDc\uFFFD\uFFFD\uFFFD\
+          Y\uFFFDjB&\uFFFD\uFFFD\u0727d\uFFFD!\v\uFFFD\uFFFD\uFFFDa\uFFFDu\x18y\uFFFD\
+          \x7F\x06\uFFFD\uFFFD\x7F\x13O\uFFFD!\uFFFD\uFFFD'\uFFFD\uFFFD\0PK\x03\x04\
           \x14\0\0\0\b\0\0\0?\0\uFFFD\uFFFD2G~\x01\0\0\x19\x03\0\0\x10\0\0\0docProps/app.xml\uFFFD\
           R\uFFFDN\uFFFD0\x10\uFFFD\uFFFD\x15\uFFFD\uFFFD\uFFFDi\uFFFD\uFFFDS\uFFFD\
           \x18\uFFFD\x02\uFFFD\uFFFD\u04EB\uFFFD\0g\uFFFDl\x1A\v\u01F6\uFFFD\u06E8\
@@ -637,24 +651,26 @@ interactions:
           \0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\x02\t\0\0xl/styles.xmlPK\x01\x02\x14\x03\
           \x14\0\0\0\b\0\0\0?\0\x18\uFFFDFT\uFFFD\x05\0\0R\e\0\0\x13\0\0\0\0\0\0\0\
           \0\0\0\0\uFFFD\uFFFD\x1C\f\0\0xl/theme/theme1.xmlPK\x01\x02\x14\x03\x14\0\
-          \0\0\b\0\0\0?\0\x11\uFFFD,\uFFFD%\x01\0\0P\x02\0\0\x11\0\0\0\0\0\0\0\0\0\
-          \0\0\uFFFD\uFFFD\uFFFD\x11\0\0docProps/core.xmlPK\x01\x02\x14\x03\x14\0\0\
-          \0\b\0\0\0?\0\uFFFD\uFFFD2G~\x01\0\0\x19\x03\0\0\x10\0\0\0\0\0\0\0\0\0\0\
-          \0\uFFFD\uFFFDQ\x13\0\0docProps/app.xmlPK\x05\x06\0\0\0\0\n\0\n\0\uFFFD\x02\
-          \0\0\uFFFD\x14\0\0\0\0"
+          \0\0\b\0\0\0?\0\0a]\uFFFD&\x01\0\0P\x02\0\0\x11\0\0\0\0\0\0\0\0\0\0\0\uFFFD\
+          \uFFFD\uFFFD\x11\0\0docProps/core.xmlPK\x01\x02\x14\x03\x14\0\0\0\b\0\0\0\
+          ?\0\uFFFD\uFFFD2G~\x01\0\0\x19\x03\0\0\x10\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\
+          R\x13\0\0docProps/app.xmlPK\x05\x06\0\0\0\0\n\0\n\0\uFFFD\x02\0\0\uFFFD\x14\
+          \0\0\0\0"
       headers:
         Content-Disposition:
           - attachment; filename="=?UTF-8?Q?Customers_Trend.xlsx?="; filename*=UTF-8''Customers%20Trend.xlsx
         Content-Type:
           - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 200
         message: OK

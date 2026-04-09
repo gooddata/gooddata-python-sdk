@@ -102,11 +102,11 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: EXECUTION_NORMALIZED_3
+              executionResult: EXECUTION_NORMALIZED_CSV
       headers:
         Content-Type:
           - application/json
-        DATE: &id001
+        DATE:
           - PLACEHOLDER
         Expires:
           - '0'
@@ -114,8 +114,10 @@ interactions:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-CANCEL-TOKEN: *id001
-        X-GDC-TRACE-ID: *id001
+        X-GDC-CANCEL-TOKEN:
+          - PLACEHOLDER
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 200
         message: OK
@@ -132,7 +134,7 @@ interactions:
             price:
               format: ''
               title: Sum Of Price
-        executionResult: EXECUTION_NORMALIZED_3
+        executionResult: EXECUTION_NORMALIZED_CSV
         fileName: test_csv
         format: CSV
       headers:
@@ -151,18 +153,20 @@ interactions:
     response:
       body:
         string:
-          exportResult: EXPORT_NORMALIZED_1
+          exportResult: EXPORT_NORMALIZED_CSV
       headers:
         Content-Type:
           - application/json
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 201
         message: Created
@@ -179,19 +183,21 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_1
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_CSV
     response:
       body:
         string: ''
       headers:
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 202
         message: Accepted
@@ -208,19 +214,21 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_1
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_CSV
     response:
       body:
         string: ''
       headers:
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 202
         message: Accepted
@@ -237,7 +245,7 @@ interactions:
         X-Requested-With:
           - XMLHttpRequest
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_1
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/EXPORT_NORMALIZED_CSV
     response:
       body:
         string: "\uFEFF\"state\",\"Custom Title Region\",\"Sum Of Price\",\"Order\
@@ -272,14 +280,16 @@ interactions:
           - attachment; filename="=?UTF-8?Q?test=5Fcsv.csv?="; filename*=UTF-8''test_csv.csv
         Content-Type:
           - text/csv
-        DATE: *id001
+        DATE:
+          - PLACEHOLDER
         Expires:
           - '0'
         Pragma:
           - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
       status:
         code: 200
         message: OK
