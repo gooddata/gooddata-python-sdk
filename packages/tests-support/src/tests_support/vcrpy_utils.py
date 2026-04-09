@@ -145,8 +145,15 @@ _CANONICAL_EXPORT_RESULT = "EXPORT_NORMALIZED"
 
 # Indexed hash maps: preserve distinctness across different hashes within a cassette.
 # Each unique hash gets a unique index (e.g. EXECUTION_NORMALIZED_1, _2, ...).
+# NOTE: indices may be non-sequential within a single cassette because the maps
+# accumulate across a test session.  _reindex_cassette_hashes() fixes this at
+# serialization time so each cassette file is self-contained (starts from _1).
 _exec_hash_map: dict[str, str] = {}
 _export_hash_map: dict[str, str] = {}
+
+# Regex for re-indexing placeholders at serialization time
+_REINDEX_EXEC_RE = re.compile(r"EXECUTION_NORMALIZED_(\d+)")
+_REINDEX_EXPORT_RE = re.compile(r"EXPORT_NORMALIZED_(\d+)")
 
 
 def _exec_hash_replacer(match: re.Match) -> str:
@@ -339,6 +346,105 @@ def get_vcr() -> vcr.VCR:
     return gd_vcr
 
 
+def _stabilize_hash_placeholders(cassette_dict: dict[str, Any]) -> dict[str, str]:
+    """Build a rename map for hash placeholders based on export format context.
+
+    During recording, execution/export hashes get session-global numeric indices
+    (EXECUTION_NORMALIZED_3, EXPORT_NORMALIZED_5).  These indices shift when test
+    execution order changes, causing spurious cassette diffs.
+
+    This function scans the cassette for export context (POST /export/tabular with
+    a ``format`` field) and returns a mapping from old placeholder names to stable,
+    format-based names (e.g. EXECUTION_NORMALIZED_CSV, EXPORT_NORMALIZED_XLSX).
+
+    Non-export hashes (pure compute results) are re-indexed per-cassette starting
+    from 1.
+    """
+    exec_renames: dict[str, str] = {}  # old placeholder → new name
+    export_renames: dict[str, str] = {}
+    format_counts: dict[str, int] = {}  # format → count, for dedup
+
+    for interaction in cassette_dict.get("interactions", []):
+        req = interaction["request"]
+        resp = interaction["response"]
+
+        if req.get("method") != "POST":
+            continue
+        uri = req.get("uri", "")
+        if "/export/tabular" not in uri:
+            continue
+
+        body = req.get("body")
+        if not isinstance(body, dict):
+            continue
+        fmt = (body.get("format") or "").upper()
+        if not fmt:
+            continue
+
+        # Track how many exports of each format we've seen
+        format_counts[fmt] = format_counts.get(fmt, 0) + 1
+        suffix = fmt if format_counts[fmt] == 1 else f"{fmt}_{format_counts[fmt]}"
+
+        # Map execution hash placeholder → format name
+        exec_ref = body.get("executionResult")
+        if isinstance(exec_ref, str) and _REINDEX_EXEC_RE.match(exec_ref):
+            exec_renames[exec_ref] = f"{_CANONICAL_EXECUTION_RESULT}_{suffix}"
+
+        # Map export hash placeholder → format name (from response)
+        resp_body = resp.get("body", {}).get("string")
+        if isinstance(resp_body, dict):
+            export_ref = resp_body.get("exportResult")
+            if isinstance(export_ref, str) and _REINDEX_EXPORT_RE.match(export_ref):
+                export_renames[export_ref] = f"{_CANONICAL_EXPORT_RESULT}_{suffix}"
+
+    # Re-index any remaining non-export execution hashes per-cassette
+    all_exec_refs: list[str] = []
+    all_export_refs: list[str] = []
+    for interaction in cassette_dict.get("interactions", []):
+        for part in ("request", "response"):
+            _collect_placeholders(interaction[part], all_exec_refs, all_export_refs)
+
+    idx = 1
+    for ref in dict.fromkeys(all_exec_refs):  # preserves order, deduplicates
+        if ref not in exec_renames:
+            exec_renames[ref] = f"{_CANONICAL_EXECUTION_RESULT}_{idx}"
+            idx += 1
+
+    idx = 1
+    for ref in dict.fromkeys(all_export_refs):
+        if ref not in export_renames:
+            export_renames[ref] = f"{_CANONICAL_EXPORT_RESULT}_{idx}"
+            idx += 1
+
+    return {**exec_renames, **export_renames}
+
+
+def _collect_placeholders(obj: Any, exec_refs: list[str], export_refs: list[str]) -> None:
+    """Walk a nested structure and collect all hash placeholder strings."""
+    if isinstance(obj, str):
+        exec_refs.extend(m.group(0) for m in _REINDEX_EXEC_RE.finditer(obj))
+        export_refs.extend(m.group(0) for m in _REINDEX_EXPORT_RE.finditer(obj))
+    elif isinstance(obj, dict):
+        for v in obj.values():
+            _collect_placeholders(v, exec_refs, export_refs)
+    elif isinstance(obj, list):
+        for item in obj:
+            _collect_placeholders(item, exec_refs, export_refs)
+
+
+def _apply_hash_renames(obj: Any, renames: dict[str, str]) -> Any:
+    """Recursively apply placeholder renames across a nested structure."""
+    if isinstance(obj, str):
+        for old, new in renames.items():
+            obj = obj.replace(old, new)
+        return obj
+    if isinstance(obj, dict):
+        return {k: _apply_hash_renames(v, renames) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_apply_hash_renames(item, renames) for item in obj]
+    return obj
+
+
 class IndentDumper(yaml.SafeDumper):
     @typing.no_type_check
     def increase_indent(self, flow: bool = False, indentless: bool = False):
@@ -373,6 +479,52 @@ def _sort_xml_groups(text: str) -> str:
         return ET.tostring(root, encoding="unicode", xml_declaration=True)
     except ET.ParseError:
         return text
+
+
+# Keys whose array values are returned by the API in non-deterministic order.
+# Only these arrays are sorted during serialization — everything else keeps
+# the server's original order so that tests replaying from cassettes see the
+# same data that was recorded.
+_SORT_SAFE_KEYS: frozenset[str] = frozenset(
+    {
+        # Entity API: dataset reference properties (order varies between environments)
+        "referenceProperties",
+        # Entity API: workspace data filter columns & references
+        "workspaceDataFilterColumns",
+        "workspaceDataFilterReferences",
+        # Dependent entities graph: edge list (set semantics, no inherent order)
+        "edges",
+        # Available assignees: user/group lists (order varies)
+        "userGroups",
+    }
+)
+
+
+def _sort_known_arrays(obj: Any, parent_key: str | None = None) -> Any:
+    """Sort only arrays under known non-deterministic keys.
+
+    Unlike a blanket sort of all complex arrays, this only sorts arrays that
+    are children of keys listed in _SORT_SAFE_KEYS.  Everything else is left
+    in the server's original order so cassette replay matches recording.
+
+    Within the sorted scope, recursion sorts nested sub-arrays too (e.g.
+    ``referenceProperties[*].sources``).
+    """
+    if isinstance(obj, dict):
+        return {k: _sort_known_arrays(v, parent_key=k) for k, v in obj.items()}
+    if isinstance(obj, list):
+        if not obj:
+            return obj
+        # Recurse into children first
+        items = [_sort_known_arrays(item, parent_key=parent_key) for item in obj]
+        # Only sort if we are directly under a safe key
+        if parent_key in _SORT_SAFE_KEYS and isinstance(items[0], (dict, list)):
+            try:
+                return sorted(items, key=lambda x: orjson.dumps(x, option=orjson.OPT_SORT_KEYS))
+            except TypeError:
+                return items
+        return items
+    return obj
 
 
 class CustomSerializerYaml:
@@ -411,10 +563,18 @@ class CustomSerializerYaml:
                     interaction["request"]["body"] = request_body
             if response_body is not None and response_body["string"] != "":
                 try:
-                    interaction["response"]["body"]["string"] = orjson.loads(response_body["string"])
+                    parsed = orjson.loads(response_body["string"])
+                    interaction["response"]["body"]["string"] = _sort_known_arrays(parsed)
                 except (orjson.JSONDecodeError, UnicodeDecodeError):
                     # these exceptions are expected while getting file content
                     continue
+
+        # Stabilize hash placeholders: rename session-global numeric indices
+        # to format-based names (EXPORT_NORMALIZED_CSV) or per-cassette indices.
+        renames = _stabilize_hash_placeholders(cassette_dict)
+        if renames:
+            cassette_dict = _apply_hash_renames(cassette_dict, renames)
+
         return yaml.dump(cassette_dict, Dumper=IndentDumper, sort_keys=True)
 
 
@@ -441,6 +601,8 @@ def custom_before_request(request, headers_str: str = HEADERS_STR):
             if _normalization_replacements:
                 decoded = _apply_replacements(decoded)
             decoded = _normalize_hashes_in_text(decoded)
+            if decoded.startswith("<?xml"):
+                decoded = _sort_xml_groups(decoded)
             request.body = decoded.encode("utf-8")
         elif isinstance(request.body, str):
             if _normalization_replacements:
@@ -498,6 +660,8 @@ def custom_before_response(
                 if _normalization_replacements:
                     decoded = _apply_replacements(decoded)
                 decoded = _normalize_hashes_in_text(decoded)
+                if decoded.startswith("<?xml"):
+                    decoded = _sort_xml_groups(decoded)
                 body["string"] = decoded.encode("utf-8")
             elif isinstance(body_string, str):
                 if _normalization_replacements:
