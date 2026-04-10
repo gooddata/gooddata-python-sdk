@@ -755,19 +755,57 @@ class CatalogWorkspaceService(CatalogServiceBase):
         if workspace_object.tags:
             workspace_object.tags = [translated[x] for x in workspace_object.tags]
 
+    @staticmethod
+    def _iter_dashboard_sections(content: dict):
+        """Yield all sections from a dashboard content dict.
+
+        Handles both the legacy flat layout (content.layout.sections) and the
+        newer tabbed layout (content.tabs[*].layout.sections), including
+        dashboards that contain both structures.
+
+        Args:
+            content: Dashboard content dictionary
+        """
+        # Top-level layout sections (legacy / single-tab dashboards)
+        layout = content.get("layout")
+        if layout:
+            yield from layout.get("sections", [])
+
+        # Tab-level layout sections (tabbed dashboards)
+        for tab in content.get("tabs", []):
+            tab_layout = tab.get("layout")
+            if tab_layout:
+                yield from tab_layout.get("sections", [])
+
     def _extract_dashboard_date_filter_titles(self, to_translate: set[str], dashboard_content: dict) -> None:
         """Extract date filter titles from dashboard content for translation.
+
+        Handles both top-level and tab-level date filter configurations.
 
         Args:
             to_translate: Set to collect translatable strings
             dashboard_content: Dashboard content dictionary containing date filter configurations
         """
+        # Extract date filter titles from top-level content
+        self._extract_date_filter_titles_from_dict(to_translate, dashboard_content)
+
+        # Extract date filter titles from each tab
+        for tab in dashboard_content.get("tabs", []):
+            self._extract_date_filter_titles_from_dict(to_translate, tab)
+
+    def _extract_date_filter_titles_from_dict(self, to_translate: set[str], content_dict: dict) -> None:
+        """Extract date filter titles from a single content dictionary.
+
+        Args:
+            to_translate: Set to collect translatable strings
+            content_dict: Dictionary that may contain dateFilterConfig and dateFilterConfigs
+        """
         # Extract implicit date filter title
-        implicit_date_filter_title = dashboard_content.get("dateFilterConfig", {}).get("filterName")
+        implicit_date_filter_title = content_dict.get("dateFilterConfig", {}).get("filterName")
         self.add_title_description(to_translate, implicit_date_filter_title, None)
 
         # Extract explicit date filter titles
-        for date_filter_config in dashboard_content.get("dateFilterConfigs", []):
+        for date_filter_config in content_dict.get("dateFilterConfigs", []):
             explicit_date_filter_title = date_filter_config.get("config", {}).get("filterName")
             self.add_title_description(to_translate, explicit_date_filter_title, None)
 
@@ -808,9 +846,15 @@ class CatalogWorkspaceService(CatalogServiceBase):
                             to_translate.add(item["measure"]["alias"])
             for dashboard in workspace_content.analytics.analytical_dashboards or []:
                 self.add_title_description(to_translate, dashboard.title, dashboard.description)
-                # Extract date filter titles for translation
+                # Extract date filter titles for translation (top-level + tabs)
                 self._extract_dashboard_date_filter_titles(to_translate, dashboard.content)
-                for section in dashboard.content["layout"]["sections"]:
+                # Extract tab titles for translation
+                for tab in dashboard.content.get("tabs", []):
+                    tab_title = tab.get("title")
+                    if tab_title:
+                        to_translate.add(tab_title)
+                # Iterate sections from both top-level layout and tabs
+                for section in self._iter_dashboard_sections(dashboard.content):
                     for item in section["items"]:
                         widget = item["widget"]
                         title = widget.get("title")
@@ -877,8 +921,12 @@ class CatalogWorkspaceService(CatalogServiceBase):
                             item["measure"]["alias"] = translated[item["measure"]["alias"]]
             for dashboard in new_workspace_content.analytics.analytical_dashboards or []:
                 self.set_title_description(dashboard, translated)
+                # Translate tab titles
+                for tab in dashboard.content.get("tabs", []):
+                    if "title" in tab and tab["title"]:
+                        tab["title"] = translated.get(tab["title"], tab["title"])
                 # Hack: translate titles in free-form, which is not processed intentionally by this SDK
-                for section in dashboard.content["layout"]["sections"]:
+                for section in self._iter_dashboard_sections(dashboard.content):
                     for item in section["items"]:
                         if "title" in item["widget"]:
                             item["widget"]["title"] = translated.get(item["widget"]["title"])
