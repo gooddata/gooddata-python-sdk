@@ -188,3 +188,51 @@ def test_match_filter_inequality_different_case_sensitive():
     f1 = MatchAttributeFilter(label="test", literal="foo", match_type="CONTAINS")
     f2 = MatchAttributeFilter(label="test", literal="foo", match_type="CONTAINS", case_sensitive=True)
     assert f1 != f2
+
+
+def test_positive_filter_uses_arbitrary_values_true():
+    f = PositiveAttributeFilter(label="local_id", values=["val1"], uses_arbitrary_values=True)
+    assert f.uses_arbitrary_values is True
+    api_model = f.as_api_model()
+    body = api_model.positive_attribute_filter
+    assert body.uses_arbitrary_values is True
+
+
+def test_positive_filter_uses_arbitrary_values_false():
+    f = PositiveAttributeFilter(label="local_id", values=["val1"], uses_arbitrary_values=False)
+    assert f.uses_arbitrary_values is False
+    api_model = f.as_api_model()
+    body = api_model.positive_attribute_filter
+    assert body.uses_arbitrary_values is False
+
+
+def test_positive_filter_uses_arbitrary_values_default_none():
+    f = PositiveAttributeFilter(label="local_id", values=["val1"])
+    assert f.uses_arbitrary_values is None
+    api_model = f.as_api_model()
+    body = api_model.positive_attribute_filter
+    assert not hasattr(body, "uses_arbitrary_values") or body.uses_arbitrary_values is None
+
+
+def test_negative_filter_uses_arbitrary_values_true():
+    f = NegativeAttributeFilter(label="local_id", values=["val1"], uses_arbitrary_values=True)
+    assert f.uses_arbitrary_values is True
+    api_model = f.as_api_model()
+    body = api_model.negative_attribute_filter
+    assert body.uses_arbitrary_values is True
+
+
+def test_negative_filter_uses_arbitrary_values_false():
+    f = NegativeAttributeFilter(label="local_id", values=["val1"], uses_arbitrary_values=False)
+    assert f.uses_arbitrary_values is False
+    api_model = f.as_api_model()
+    body = api_model.negative_attribute_filter
+    assert body.uses_arbitrary_values is False
+
+
+def test_negative_filter_uses_arbitrary_values_default_none():
+    f = NegativeAttributeFilter(label="local_id", values=["val1"])
+    assert f.uses_arbitrary_values is None
+    api_model = f.as_api_model()
+    body = api_model.negative_attribute_filter
+    assert not hasattr(body, "uses_arbitrary_values") or body.uses_arbitrary_values is None

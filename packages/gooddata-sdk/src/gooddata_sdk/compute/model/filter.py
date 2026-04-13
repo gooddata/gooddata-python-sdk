@@ -96,11 +96,17 @@ def _to_identifier(val: Union[ObjId, str]) -> Union[afm_models.AfmLocalIdentifie
 
 
 class AttributeFilter(Filter):
-    def __init__(self, label: Union[ObjId, str, Attribute], values: list[str] | None = None) -> None:
+    def __init__(
+        self,
+        label: Union[ObjId, str, Attribute],
+        values: list[str] | None = None,
+        uses_arbitrary_values: bool | None = None,
+    ) -> None:
         super().__init__()
 
         self._label = _extract_id_or_local_id(label)
         self._values = values or []
+        self._uses_arbitrary_values = uses_arbitrary_values
 
     @property
     def label(self) -> Union[ObjId, str]:
@@ -113,6 +119,10 @@ class AttributeFilter(Filter):
     @property
     def values(self) -> list[str]:
         return self._values
+
+    @property
+    def uses_arbitrary_values(self) -> bool | None:
+        return self._uses_arbitrary_values
 
     def is_noop(self) -> bool:
         return False
@@ -128,7 +138,10 @@ class PositiveAttributeFilter(AttributeFilter):
     def as_api_model(self) -> afm_models.PositiveAttributeFilter:
         label_id = _to_identifier(self._label)
         elements = afm_models.AttributeFilterElements(values=self.values)
-        body = PositiveAttributeFilterBody(label=label_id, _in=elements, _check_type=False)
+        kwargs: dict[str, Any] = {}
+        if self._uses_arbitrary_values is not None:
+            kwargs["uses_arbitrary_values"] = self._uses_arbitrary_values
+        body = PositiveAttributeFilterBody(label=label_id, _in=elements, _check_type=False, **kwargs)
         return afm_models.PositiveAttributeFilter(body, _check_type=False)
 
     def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
@@ -144,7 +157,10 @@ class NegativeAttributeFilter(AttributeFilter):
     def as_api_model(self) -> afm_models.NegativeAttributeFilter:
         label_id = _to_identifier(self._label)
         elements = afm_models.AttributeFilterElements(values=self.values)
-        body = NegativeAttributeFilterBody(label=label_id, not_in=elements, _check_type=False)
+        kwargs: dict[str, Any] = {}
+        if self._uses_arbitrary_values is not None:
+            kwargs["uses_arbitrary_values"] = self._uses_arbitrary_values
+        body = NegativeAttributeFilterBody(label=label_id, not_in=elements, _check_type=False, **kwargs)
         return afm_models.NegativeAttributeFilter(body)
 
     def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
