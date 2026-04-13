@@ -1,0 +1,12 @@
+{
+  "status": "implemented",
+  "cluster_id": "C010",
+  "summary": "Added SDK wrapper methods for the new binary execution result endpoint (GET /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/binary). \n\nThree new methods were added:\n1. `BareExecutionResponse.read_result_binary(timeout)` in `execution.py` — calls `retrieve_result_binary` with `_preload_content=False` and returns raw `bytes` (Apache Arrow IPC binary data). Forwards cancel token when present.\n2. `Execution.read_result_binary(timeout)` in `execution.py` — delegates to `bare_exec_response.read_result_binary()` for consistent API on the primary user-facing class.\n3. `ComputeService.retrieve_result_binary(workspace_id, result_id, timeout)` in `service.py` — standalone method for retrieving binary results directly when only workspace_id and result_id are available.\n\nAll methods use `_check_return_type=False` and `_preload_content=False` following SDK conventions, and return `bytes`. Four unit tests were added to verify parameter forwarding including cancel token and timeout handling.",
+  "files_changed": [
+    "packages/gooddata-sdk/src/gooddata_sdk/compute/model/execution.py",
+    "packages/gooddata-sdk/src/gooddata_sdk/compute/service.py",
+    "packages/gooddata-sdk/tests/compute/test_retrieve_result_binary.py"
+  ],
+  "reason": "",
+  "cost_usd": 1.1491305
+}

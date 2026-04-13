@@ -1,0 +1,2 @@
+- `78be9c1` Merge pull request #21285 from gooddata/dho/cq-104-arrow-api
+- `81eb97a` Merge pull request #21382 from gooddata/dho/cq-104-arrow-api-2

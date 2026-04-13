@@ -1020,7 +1020,9 @@ dependencies = [
     { name = "gooddata-pandas" },
     { name = "gooddata-pipelines" },
     { name = "gooddata-sdk" },
+    { name = "pytest" },
     { name = "tests-support" },
+    { name = "vcrpy" },
 ]
 
 [package.dev-dependencies]
@@ -1070,7 +1072,9 @@ requires-dist = [
     { name = "gooddata-pandas", editable = "packages/gooddata-pandas" },
     { name = "gooddata-pipelines", editable = "packages/gooddata-pipelines" },
     { name = "gooddata-sdk", editable = "packages/gooddata-sdk" },
+    { name = "pytest", specifier = ">=8.3.5" },
     { name = "tests-support", editable = "packages/tests-support" },
+    { name = "vcrpy", specifier = ">=8.0.0" },
 ]
 
 [package.metadata.requires-dev]

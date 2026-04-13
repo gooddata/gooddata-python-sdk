@@ -73,6 +73,33 @@ class ComputeService:
             else None,
         )
 
+    def retrieve_result_binary(
+        self,
+        workspace_id: str,
+        result_id: str,
+        timeout: Union[int, float, tuple] | None = None,
+    ) -> bytes:
+        """
+        Gets a single execution result in Apache Arrow binary format (IPC File or Stream).
+
+        Args:
+            workspace_id (str): workspace identifier
+            result_id (str): execution result ID
+            timeout: request timeout in seconds. If a tuple is provided, it is used as
+                (connection timeout, read timeout).
+
+        Returns:
+            bytes: The execution result serialized as Apache Arrow IPC binary data.
+        """
+        response = self._actions_api.retrieve_result_binary(
+            workspace_id=workspace_id,
+            result_id=result_id,
+            _check_return_type=False,
+            _preload_content=False,
+            _request_timeout=timeout,
+        )
+        return response.data
+
     def retrieve_result_cache_metadata(self, workspace_id: str, result_id: str) -> ResultCacheMetadata:
         """
         Gets execution result's metadata from GoodData.CN workspace for given execution result ID.

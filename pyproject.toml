@@ -14,6 +14,8 @@ dependencies = [
     "gooddata-api-client",
     "gooddata-pipelines",
     "tests-support",
+    "pytest>=8.3.5",
+    "vcrpy>=8.0.0",
 ]
 
 [tool.uv]

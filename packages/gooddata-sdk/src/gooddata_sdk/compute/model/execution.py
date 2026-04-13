@@ -372,6 +372,30 @@ class BareExecutionResponse:
             )
         return ExecutionResult(execution_result)
 
+    def read_result_binary(
+        self,
+        timeout: Union[int, float, tuple] | None = None,
+    ) -> bytes:
+        """
+        Reads the execution result in Apache Arrow binary format (IPC File or Stream).
+
+        Args:
+            timeout: request timeout in seconds. If a tuple is provided, it is used as
+                (connection timeout, read timeout).
+
+        Returns:
+            bytes: The execution result serialized as Apache Arrow IPC binary data.
+        """
+        response = self._actions_api.retrieve_result_binary(
+            workspace_id=self._workspace_id,
+            result_id=self.result_id,
+            _check_return_type=False,
+            _preload_content=False,
+            _request_timeout=timeout,
+            **({"x_gdc_cancel_token": self.cancel_token} if self.cancel_token else {}),
+        )
+        return response.data
+
     def cancel(self) -> None:
         """
         Cancels the execution backing this execution result.
@@ -463,6 +487,22 @@ class Execution:
         timeout: Union[int, float, tuple] | None = None,
     ) -> ExecutionResult:
         return self.bare_exec_response.read_result(limit, offset, timeout)
+
+    def read_result_binary(
+        self,
+        timeout: Union[int, float, tuple] | None = None,
+    ) -> bytes:
+        """
+        Reads the execution result in Apache Arrow binary format (IPC File or Stream).
+
+        Args:
+            timeout: request timeout in seconds. If a tuple is provided, it is used as
+                (connection timeout, read timeout).
+
+        Returns:
+            bytes: The execution result serialized as Apache Arrow IPC binary data.
+        """
+        return self.bare_exec_response.read_result_binary(timeout)
 
     def cancel(self) -> None:
         """

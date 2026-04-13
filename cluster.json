@@ -1,0 +1,24 @@
+{
+  "id": "C010",
+  "title": "Add binary execution result endpoint for Apache Arrow format",
+  "services": [
+    "gooddata-afm-client"
+  ],
+  "commits": [
+    {
+      "sha": "78be9c10f3b9ec597f6282014708415e3527a3df",
+      "author": "Dan Homola",
+      "author_email": "dan.homola@gooddata.com",
+      "message": "Merge pull request #21285 from gooddata/dho/cq-104-arrow-api"
+    },
+    {
+      "sha": "81eb97a771c9c18c47c508df3970ccab19e28108",
+      "author": "Dan Homola",
+      "author_email": "dan.homola@gooddata.com",
+      "message": "Merge pull request #21382 from gooddata/dho/cq-104-arrow-api-2"
+    }
+  ],
+  "diff": "--- a/gooddata-afm-client.json\n+++ b/gooddata-afm-client.json\n+    \"/api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/binary\": {\n+      \"get\": {\n+        \"description\": \"(BETA) Gets a single execution result as an Apache Arrow IPC File or Stream format.\",\n+        \"operationId\": \"retrieveResultBinary\",\n+        \"responses\": {\n+          \"200\": {\n+            \"content\": {\n+              \"application/vnd.apache.arrow.file\": { \"schema\": { \"format\": \"binary\", \"type\": \"string\" } },\n+              \"application/vnd.apache.arrow.stream\": { \"schema\": { \"format\": \"binary\", \"type\": \"string\" } }\n+            },\n+            \"description\": \"Execution result was found and returned.\"\n+          }\n+        },\n+        \"summary\": \"(BETA) Get a single execution result in Apache Arrow File or Stream format\",\n+        \"x-gdc-security-info\": { \"permissions\": [\"VIEW\"] }\n+      }\n+    }",
+  "jira_tickets": [],
+  "sdk_impact": "new_feature"
+}
