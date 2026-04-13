@@ -210,8 +210,14 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
     CatalogDeclarativeExportDefinitionRequestPayload,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.automation import (
+    CatalogAutomationDashboardTabularExport,
     CatalogAutomationSchedule,
+    CatalogDashboardTabularExportRequestV2,
     CatalogDeclarativeAutomation,
+)
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.dashboard_filter import (
+    CatalogDashboardArbitraryAttributeFilter,
+    CatalogDashboardMatchAttributeFilter,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.data_filter_references import (
     CatalogDeclarativeWorkspaceDataFilterReferences,

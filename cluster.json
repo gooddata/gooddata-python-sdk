@@ -1,0 +1,33 @@
+{
+  "id": "C002",
+  "title": "Add new dashboard filter types: Arbitrary and Match attribute filters",
+  "services": [
+    "gooddata-afm-client",
+    "gooddata-automation-client",
+    "gooddata-export-client",
+    "gooddata-metadata-client"
+  ],
+  "commits": [
+    {
+      "sha": "af3e42ddf340409122c7c5c8d08395c1944a090f",
+      "author": "Dan Homola",
+      "author_email": "dan.homola@gooddata.com",
+      "message": "Merge pull request #21504 from gooddata/dho/cq-2114-automation-filters"
+    },
+    {
+      "sha": "0468f7fde58088d792640d31b82a9a71c96d1f71",
+      "author": "Dan Homola",
+      "author_email": "dan.homola@gooddata.com",
+      "message": "Merge pull request #21536 from gooddata/dho/cq-2114-prop"
+    },
+    {
+      "sha": "c9c966ba79b69c33f7cf09af252d4e2081308147",
+      "author": "Dan Homola",
+      "author_email": "dan.homola@gooddata.com",
+      "message": "Merge pull request #21589 from gooddata/dho/cq-2114-flag"
+    }
+  ],
+  "diff": "--- a/gooddata-automation-client.json\n+++ b/gooddata-automation-client.json\n+      \"DashboardArbitraryAttributeFilter\": {\n+        \"properties\": {\n+          \"arbitraryAttributeFilter\": {\n+            \"properties\": {\n+              \"displayForm\": { \"$ref\": \"#/components/schemas/IdentifierRef\" },\n+              \"negativeSelection\": { \"type\": \"boolean\" },\n+              \"values\": { \"items\": { \"type\": \"string\" }, \"type\": \"array\" }\n+            },\n+            \"required\": [\"displayForm\",\"negativeSelection\",\"values\"]\n+          }\n+        },\n+        \"required\": [\"arbitraryAttributeFilter\"]\n+      },\n+      \"DashboardMatchAttributeFilter\": {\n+        \"properties\": {\n+          \"matchAttributeFilter\": {\n+            \"properties\": {\n+              \"operator\": { \"enum\": [\"contains\",\"startsWith\",\"endsWith\"] },\n+              \"literal\": { \"type\": \"string\" }\n+            },\n+            \"required\": [\"caseSensitive\",\"displayForm\",\"literal\",\"negativeSelection\",\"operator\"]\n+          }\n+        },\n+        \"required\": [\"matchAttributeFilter\"]\n+      },\n+      \"usesArbitraryValues\": { \"description\": \"If true, values in notInElements were filled free-form.\", \"type\": \"boolean\" }",
+  "jira_tickets": [],
+  "sdk_impact": "new_feature"
+}

@@ -1,0 +1,3 @@
+- `af3e42d` Merge pull request #21504 from gooddata/dho/cq-2114-automation-filters
+- `0468f7f` Merge pull request #21536 from gooddata/dho/cq-2114-prop
+- `c9c966b` Merge pull request #21589 from gooddata/dho/cq-2114-flag

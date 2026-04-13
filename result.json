@@ -1,0 +1,13 @@
+{
+  "status": "implemented",
+  "cluster_id": "C002",
+  "summary": "Implemented SDK support for new dashboard filter types (DashboardArbitraryAttributeFilter and DashboardMatchAttributeFilter) and the associated dashboard tabular export chain in the automation module.\n\nChanges:\n1. Created new file `dashboard_filter.py` with `CatalogDashboardArbitraryAttributeFilter` and `CatalogDashboardMatchAttributeFilter` — SDK wrappers for the new filter bodies, enabling users to construct filter override dicts for dashboard exports.\n2. Updated `automation.py` to add `CatalogDashboardTabularExportRequestV2` (wraps `DashboardTabularExportRequestV2`) and `CatalogAutomationDashboardTabularExport` (wraps `AutomationDashboardTabularExport`).\n3. Added `dashboard_tabular_exports: list[CatalogAutomationDashboardTabularExport] | None = None` to `CatalogDeclarativeAutomation`, enabling round-trip preservation of dashboard tabular export configurations.\n4. Exported all four new public classes in `gooddata_sdk/__init__.py`.\n5. Added 20 unit tests in `tests/catalog/unit_tests/test_dashboard_filter.py` covering construction, serialization, and integration with `CatalogDeclarativeAutomation`.\n\nThe `usesArbitraryValues` property from the diff is an optional boolean field already present in the generated API client's `NegativeAttributeFilterNegativeAttributeFilter` and `PositiveAttributeFilterPositiveAttributeFilter` models. The SDK's `NegativeAttributeFilter` and `PositiveAttributeFilter` wrappers pass through the API call without exposing this optional field — no change needed there since the field is optional and the wrappers use `_check_type=False`.",
+  "files_changed": [
+    "gooddata-sdk/packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/dashboard_filter.py",
+    "gooddata-sdk/packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/automation.py",
+    "gooddata-sdk/packages/gooddata-sdk/src/gooddata_sdk/__init__.py",
+    "gooddata-sdk/packages/gooddata-sdk/tests/catalog/unit_tests/test_dashboard_filter.py"
+  ],
+  "reason": "",
+  "cost_usd": 5.23876245
+}
