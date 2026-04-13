@@ -1,6 +1,7 @@
 # (C) 2023 GoodData Corporation
 from __future__ import annotations
 
+import re
 from typing import Literal
 
 from attrs import define
@@ -15,6 +16,9 @@ from gooddata_api_client.model.visual_export_request import VisualExportRequest 
 from gooddata_sdk.catalog.base import Base
 
 GrandTotalsPosition = Literal["pinnedBottom", "pinnedTop", "bottom", "top"]
+
+# Pattern matching printable non-alphanumeric ASCII characters (tab, space, and special chars)
+_CSV_DELIMITER_PATTERN = re.compile(r"^[\t !#$%&()*+\-.,/:;<=>?@\[\\\]^_{|}~]$")
 
 
 @define(kw_only=True)
@@ -51,6 +55,15 @@ class ExportSettings(Base):
     merge_headers: bool
     show_filters: bool
     grand_totals_position: GrandTotalsPosition | None = None
+    delimiter: str | None = None
+
+    def __attrs_post_init__(self) -> None:
+        if self.delimiter is not None and not _CSV_DELIMITER_PATTERN.match(self.delimiter):
+            raise ValueError(
+                f"delimiter '{self.delimiter}' is not a valid CSV delimiter. "
+                "It must be a single printable non-alphanumeric ASCII character "
+                "(tab, space, or one of: !#$%&()*+\\-.,/:;<=>?@[\\\\]^_{{|}}~)."
+            )
 
     @staticmethod
     def client_class() -> type[ApiSettings]:

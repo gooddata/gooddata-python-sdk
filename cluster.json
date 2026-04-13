@@ -1,0 +1,25 @@
+{
+  "id": "C013",
+  "title": "Restrict CSV delimiter pattern to printable non-alphanumeric ASCII",
+  "services": [
+    "gooddata-automation-client",
+    "gooddata-export-client"
+  ],
+  "commits": [
+    {
+      "sha": "fcd19575046d93ed0c58976ceccf16d3f9e198f4",
+      "author": "Vladim\u00edr Kro\u010d\u00e1k",
+      "author_email": "vladimir.krocak@gooddata.com",
+      "message": "feat(export-controller): limit CSV delimiter to printable ASCII"
+    },
+    {
+      "sha": "fcc6ffb550c40f93db098662056ac819c41cb1a7",
+      "author": "Vladim\u00edr Kro\u010d\u00e1k",
+      "author_email": "vladimir.krocak@gooddata.com",
+      "message": "fix(export-controller): do not allow alfa-numeric CSV delimiters"
+    }
+  ],
+  "diff": "--- a/gooddata-automation-client.json\n+++ b/gooddata-automation-client.json\n@@ DashboardTabularExportRequest.csvDelimiter @@\n-            \"pattern\": \"^[^\\\\r\\\\n\\\"]$\",\n+            \"pattern\": \"^[\\\\t !#$%&()*+\\\\-.,/:;<=>?@\\\\[\\\\\\\\]^_{|}~]$\",\n--- a/gooddata-export-client.json\n+++ b/gooddata-export-client.json\n@@ TabularExportRequest.csvDelimiter @@\n-            \"pattern\": \"^[^\\\\r\\\\n\\\"]$\",\n+            \"pattern\": \"^[\\\\t !#$%&()*+\\\\-.,/:;<=>?@\\\\[\\\\\\\\]^_{|}~]$\"",
+  "jira_tickets": [],
+  "sdk_impact": "modification"
+}

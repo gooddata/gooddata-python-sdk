@@ -1,0 +1,10 @@
+{
+  "status": "implemented",
+  "cluster_id": "C013",
+  "summary": "Added `delimiter: str | None = None` field to `ExportSettings` in the SDK wrapper (`catalog/export/request.py`) to expose CSV delimiter functionality from the underlying `Settings.delimiter` API field. Added `__attrs_post_init__` validation using the new restricted pattern `^[\\t !#$%&()*+\\-.,/:;<=>?@\\[\\\\\\]^_{|}~]$` (printable non-alphanumeric ASCII only, excluding alphanumeric chars and control chars like CR/LF). Also added a module-level `_CSV_DELIMITER_PATTERN` regex constant and `import re`. The `Base.to_api()` serialization automatically includes `delimiter` when set and excludes it when `None`. No changes to `__init__.py` needed (ExportSettings was already exported).",
+  "files_changed": [
+    "packages/gooddata-sdk/src/gooddata_sdk/catalog/export/request.py"
+  ],
+  "reason": "",
+  "cost_usd": 1.2988483499999997
+}

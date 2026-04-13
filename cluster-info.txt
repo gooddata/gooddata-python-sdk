@@ -1,0 +1,2 @@
+- `fcd1957` feat(export-controller): limit CSV delimiter to printable ASCII
+- `fcc6ffb` fix(export-controller): do not allow alfa-numeric CSV delimiters
