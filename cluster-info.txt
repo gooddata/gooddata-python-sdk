@@ -1,0 +1,2 @@
+- `f9a6963` Merge pull request #21320 from Vojtasii/vto/geo-icon
+- `6faf4e2` Merge pull request #21484 from pcerny/pce/cq-2118_hll_sr

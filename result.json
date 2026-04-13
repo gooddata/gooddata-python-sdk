@@ -1,0 +1,10 @@
+{
+  "status": "implemented",
+  "cluster_id": "C003",
+  "summary": "Added HYPERLOGLOG to the GoodDataLabelType enum in the gooddata-dbt package. GEO_ICON was already present in the enum from a prior PR. The main gooddata-sdk package uses str | None for value_type fields so it requires no changes — all string values including GEO_ICON and HYPERLOGLOG are already accepted. The auto-generated gooddata-api-client already contains both new enum values.",
+  "files_changed": [
+    "packages/gooddata-dbt/src/gooddata_dbt/dbt/base.py"
+  ],
+  "reason": "The OpenAPI diff adds GEO_ICON and HYPERLOGLOG to AttributeLabelValueTypeDto (gooddata-afm-client) and AttributeLabel.valueType (gooddata-metadata-client). In the SDK: (1) the gooddata-api-client (auto-generated) already carries both new values — no changes there; (2) the main gooddata-sdk wrapper uses `value_type: str | None` throughout, accepting any string, so no Python code changes are required; (3) the gooddata-dbt package defines GoodDataLabelType as a Python Enum that gates which label types users can declare in dbt YAML files — GEO_ICON was already present but HYPERLOGLOG was missing, causing cattrs deserialization failures for users who try to use `label_type: HYPERLOGLOG`. Added HYPERLOGLOG = \"HYPERLOGLOG\" to the enum.",
+  "cost_usd": 0.8441104499999998
+}

@@ -1,0 +1,25 @@
+{
+  "id": "C003",
+  "title": "Add GEO_ICON and HYPERLOGLOG to attribute value type enums",
+  "services": [
+    "gooddata-afm-client",
+    "gooddata-metadata-client"
+  ],
+  "commits": [
+    {
+      "sha": "f9a6963e5a59c6dd1c6f6a9a46b9b5e2b0eab239",
+      "author": "Vojt\u011bch Tollar",
+      "author_email": "vojtech.tollar@gooddata.com",
+      "message": "Merge pull request #21320 from Vojtasii/vto/geo-icon"
+    },
+    {
+      "sha": "6faf4e20862d0b9b62ef3f8521dc942fa6afb230",
+      "author": "pcerny",
+      "author_email": "pavel.cerny@gooddata.com",
+      "message": "Merge pull request #21484 from pcerny/pce/cq-2118_hll_sr"
+    }
+  ],
+  "diff": "--- a/gooddata-afm-client.json\n+++ b/gooddata-afm-client.json\n@@ AttributeLabelValueTypeDto enum @@\n               \"GEO_LONGITUDE\",\n               \"GEO_LATITUDE\",\n               \"GEO_AREA\",\n-              \"IMAGE\"\n+              \"GEO_ICON\",\n+              \"IMAGE\",\n+              \"HYPERLOGLOG\"\n--- a/gooddata-metadata-client.json\n+++ b/gooddata-metadata-client.json\n@@ AttributeLabel valueType enum @@\n               \"GEO_LONGITUDE\",\n               \"GEO_LATITUDE\",\n               \"GEO_AREA\",\n-              \"IMAGE\"\n+              \"GEO_ICON\",\n+              \"IMAGE\",\n+              \"HYPERLOGLOG\"",
+  "jira_tickets": [],
+  "sdk_impact": "enum_addition"
+}
