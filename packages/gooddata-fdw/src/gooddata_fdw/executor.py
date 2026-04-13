@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from collections.abc import Generator
-from typing import Any, NamedTuple
+from typing import Any, ClassVar, NamedTuple
 
 from gooddata_sdk import GoodDataSdk
 
@@ -43,7 +43,10 @@ class Executor:
 
 
 class InsightExecutor(Executor):
-    _COLUMN_VALIDATORS = [col_val.LocalIdOptionValidator(), col_val.IdOptionValidator(mandatory=False)]
+    _COLUMN_VALIDATORS: ClassVar[list[col_val.ColumnValidator]] = [
+        col_val.LocalIdOptionValidator(),
+        col_val.IdOptionValidator(mandatory=False),
+    ]
 
     def __init__(self, inputs: InitData) -> None:
         super().__init__(inputs, self._COLUMN_VALIDATORS)

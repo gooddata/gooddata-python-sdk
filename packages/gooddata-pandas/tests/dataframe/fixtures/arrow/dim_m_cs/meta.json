@@ -1,0 +1,85 @@
+{
+  "result_id": "8168440bbfd910f40c33e06a804cb116bcf0f201:734518631e68f6b8d7415109b3dc2397635b3b39501cd9688d29005f76cdd125",
+  "row_totals_indexes": [
+    []
+  ],
+  "column_totals_indexes": [],
+  "primary_labels_from_index": {},
+  "primary_labels_from_columns": {
+    "0": {
+      "Clothing": "Clothing",
+      "Electronics": "Electronics",
+      "Home": "Home",
+      "Outdoor": "Outdoor"
+    },
+    "1": {
+      "Canceled": "Canceled",
+      "Delivered": "Delivered",
+      "Returned": "Returned"
+    }
+  },
+  "dimensions": [
+    {
+      "headers": [
+        {
+          "measureGroupHeaders": [
+            {
+              "localIdentifier": "price"
+            },
+            {
+              "localIdentifier": "order_amount",
+              "format": "$#,##0",
+              "name": "Order Amount"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "headers": [
+        {
+          "attributeHeader": {
+            "localIdentifier": "category",
+            "label": {
+              "id": "products.category",
+              "type": "label"
+            },
+            "labelName": "Category",
+            "attribute": {
+              "id": "products.category",
+              "type": "attribute"
+            },
+            "attributeName": "Category",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "products.category",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        },
+        {
+          "attributeHeader": {
+            "localIdentifier": "status",
+            "label": {
+              "id": "order_status",
+              "type": "label"
+            },
+            "labelName": "Order status",
+            "attribute": {
+              "id": "order_status",
+              "type": "attribute"
+            },
+            "attributeName": "Order status",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "order_status",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        }
+      ]
+    }
+  ]
+}
