@@ -34,6 +34,9 @@ from gooddata_sdk.catalog.workspace.entity_model.filter_view import (
     CatalogFilterView,
     CatalogFilterViewDocument,
 )
+from gooddata_sdk.catalog.workspace.entity_model.resolved_llm_provider import (
+    CatalogResolvedLlmProvider,
+)
 from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
     CatalogUserDataFilter,
     CatalogUserDataFilterDocument,
@@ -238,6 +241,30 @@ class CatalogWorkspaceService(CatalogServiceBase):
             )
         ]
         return {setting["type"]: setting for setting in resolved_workspace_settings}
+
+    def resolve_llm_providers(self, workspace_id: str) -> CatalogResolvedLlmProvider | None:
+        """Get the active LLM provider configuration for a workspace.
+
+        Resolves the LLM provider currently active for the given workspace and returns it
+        as a :class:`CatalogResolvedLlmProvider` object, or ``None`` if no LLM provider
+        is configured.
+
+        Args:
+            workspace_id (str): Workspace identification string e.g. ``"demo"``.
+
+        Returns:
+            CatalogResolvedLlmProvider | None:
+                The resolved LLM provider or ``None`` if none is configured.
+        """
+        response = self._client.actions_api.resolve_llm_providers(
+            workspace_id,
+            _check_return_type=False,
+        )
+        response_dict = response.to_dict()
+        data = response_dict.get("data")
+        if data is None:
+            return None
+        return CatalogResolvedLlmProvider.from_dict(data)
 
     # Declarative methods - workspaces
 
