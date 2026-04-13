@@ -1,6 +1,7 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
+import warnings
 from typing import Callable, Union
 
 import pandas
@@ -8,6 +9,13 @@ from gooddata_sdk import Attribute, Execution, Filter, GoodDataSdk, ObjId, Simpl
 
 from gooddata_pandas.data_access import compute_and_extract
 from gooddata_pandas.utils import IndexDef, LabelItemDef, make_pandas_index
+
+try:
+    import pyarrow  # noqa: F401
+
+    _ARROW_AVAILABLE = True
+except ImportError:
+    _ARROW_AVAILABLE = False
 
 
 class SeriesFactory:
@@ -31,6 +39,7 @@ class SeriesFactory:
         on_execution_submitted: Callable[[Execution], None] | None = None,
         is_cancellable: bool = False,
         result_page_len: int | None = None,
+        use_arrow: bool = False,
     ) -> pandas.Series:
         """Creates pandas Series from data points calculated from a single `data_by`.
 
@@ -60,11 +69,21 @@ class SeriesFactory:
                 is interrupted.
             result_page_len (Optional[int]): Optional page size for result pagination.
                 Defaults to 1000. Larger values can improve performance for large result sets.
+            use_arrow (bool, optional): When True, fetches via Arrow IPC in one shot. Requires pyarrow.
 
         Returns:
             pandas.Series: pandas series instance
         """
-
+        if use_arrow and not _ARROW_AVAILABLE:
+            raise ImportError(
+                "pyarrow is required to use use_arrow=True. Install it with: pip install gooddata-pandas[arrow]"
+            )
+        if use_arrow and result_page_len is not None:
+            warnings.warn(
+                "result_page_len is ignored when use_arrow=True (Arrow fetches the full result in one shot).",
+                UserWarning,
+                stacklevel=2,
+            )
         data, index = compute_and_extract(
             self._sdk,
             self._workspace_id,
@@ -74,6 +93,7 @@ class SeriesFactory:
             on_execution_submitted=on_execution_submitted,
             is_cancellable=is_cancellable,
             result_page_len=result_page_len,
+            use_arrow=use_arrow,
         )
 
         _idx = make_pandas_index(index)
@@ -88,6 +108,7 @@ class SeriesFactory:
         on_execution_submitted: Callable[[Execution], None] | None = None,
         is_cancellable: bool = False,
         result_page_len: int | None = None,
+        use_arrow: bool = False,
     ) -> pandas.Series:
         """
         Creates a pandas.Series from data points calculated from a single `data_by` without constructing an index.
@@ -119,11 +140,21 @@ class SeriesFactory:
             is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
             result_page_len (Optional[int]): Optional page size for result pagination.
                 Defaults to 1000. Larger values can improve performance for large result sets.
+            use_arrow (bool, optional): When True, fetches via Arrow IPC in one shot. Requires pyarrow.
 
         Returns:
             pandas.Series: The resulting pandas Series instance.
         """
-
+        if use_arrow and not _ARROW_AVAILABLE:
+            raise ImportError(
+                "pyarrow is required to use use_arrow=True. Install it with: pip install gooddata-pandas[arrow]"
+            )
+        if use_arrow and result_page_len is not None:
+            warnings.warn(
+                "result_page_len is ignored when use_arrow=True (Arrow fetches the full result in one shot).",
+                UserWarning,
+                stacklevel=2,
+            )
         if isinstance(granularity, list):
             _index: IndexDef | None = {str(idx): label for idx, label in enumerate(granularity)}
         else:
@@ -138,6 +169,7 @@ class SeriesFactory:
             on_execution_submitted=on_execution_submitted,
             is_cancellable=is_cancellable,
             result_page_len=result_page_len,
+            use_arrow=use_arrow,
         )
 
         return pandas.Series(data=data["_series"])

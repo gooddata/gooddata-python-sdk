@@ -1,0 +1,118 @@
+{
+  "result_id": "e0720d36b043b0ca22a0b9f28815270339eda948:a92a2acabe0c2451de87de371b267307d1916667f20a9344eee20e20a874ad46",
+  "row_totals_indexes": [
+    []
+  ],
+  "column_totals_indexes": [],
+  "primary_labels_from_index": {},
+  "primary_labels_from_columns": {
+    "0": {
+      "Clothing": "Clothing",
+      "Electronics": "Electronics",
+      "Home": "Home",
+      "Outdoor": "Outdoor"
+    },
+    "1": {
+      "Canceled": "Canceled",
+      "Delivered": "Delivered",
+      "Returned": "Returned"
+    },
+    "2": {
+      "2022": "2022",
+      "2023": "2023",
+      "2024": "2024",
+      "2025": "2025",
+      "2026": "2026"
+    }
+  },
+  "dimensions": [
+    {
+      "headers": [
+        {
+          "measureGroupHeaders": [
+            {
+              "localIdentifier": "price"
+            },
+            {
+              "localIdentifier": "order_amount",
+              "format": "$#,##0",
+              "name": "Order Amount"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "headers": [
+        {
+          "attributeHeader": {
+            "localIdentifier": "category",
+            "label": {
+              "id": "products.category",
+              "type": "label"
+            },
+            "labelName": "Category",
+            "attribute": {
+              "id": "products.category",
+              "type": "attribute"
+            },
+            "attributeName": "Category",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "products.category",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        },
+        {
+          "attributeHeader": {
+            "localIdentifier": "status",
+            "label": {
+              "id": "order_status",
+              "type": "label"
+            },
+            "labelName": "Order status",
+            "attribute": {
+              "id": "order_status",
+              "type": "attribute"
+            },
+            "attributeName": "Order status",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "order_status",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        },
+        {
+          "attributeHeader": {
+            "localIdentifier": "year",
+            "label": {
+              "id": "date.year",
+              "type": "label"
+            },
+            "labelName": "Date - Year",
+            "attribute": {
+              "id": "date.year",
+              "type": "attribute"
+            },
+            "attributeName": "Date - Year",
+            "granularity": "YEAR",
+            "primaryLabel": {
+              "id": "date.year",
+              "type": "label"
+            },
+            "format": {
+              "locale": "en-US",
+              "pattern": "y",
+              "timezone": "Etc/UTC"
+            },
+            "valueType": "TEXT"
+          }
+        }
+      ]
+    }
+  ]
+}

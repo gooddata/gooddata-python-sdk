@@ -18,6 +18,11 @@ from gooddata_sdk import (
 )
 from gooddata_sdk.utils import IdObjType
 
+try:
+    from gooddata_pandas.arrow_convertor import build_metric_field_index
+except ImportError:
+    pass  # Only needed when use_arrow=True; callers guard with _ARROW_AVAILABLE checks
+
 from gooddata_pandas.utils import (
     ColumnsDef,
     IndexDef,
@@ -418,6 +423,44 @@ def _extract_from_attributes_and_maybe_metrics(
     return data, index
 
 
+def _extract_from_arrow(
+    execution: Execution,
+    cols: list[str],
+    col_to_attr_idx: dict[str, int],
+    col_to_metric_idx: dict[str, int],
+    index_to_attr_idx: dict[str, int],
+) -> tuple[dict, dict]:
+    """
+    Arrow-path extraction for indexed() / not_indexed().
+
+    Reads the full result in one shot via the binary endpoint, then slices columns
+    by Arrow field name (metrics) or label id (attributes).  No catalog fetch needed.
+    """
+    table = execution.bare_exec_response.read_result_arrow()
+    exec_def = execution.exec_def
+
+    if table.num_rows == 0:
+        return {col: [] for col in cols}, {idx: [] for idx in index_to_attr_idx}
+
+    metric_dim_idx_to_field = build_metric_field_index(table)
+
+    data: dict[str, list] = {}
+    for col in cols:
+        if col in col_to_metric_idx:
+            field_name = metric_dim_idx_to_field[col_to_metric_idx[col]]
+            data[col] = table.column(field_name).to_pylist()
+        else:
+            attr = exec_def.attributes[col_to_attr_idx[col]]
+            data[col] = table.column(attr.label.id).to_pylist()
+
+    index: dict[str, list] = {}
+    for idx_name, attr_idx in index_to_attr_idx.items():
+        attr = exec_def.attributes[attr_idx]
+        index[idx_name] = table.column(attr.label.id).to_pylist()
+
+    return data, index
+
+
 def compute_and_extract(
     sdk: GoodDataSdk,
     workspace_id: str,
@@ -427,6 +470,7 @@ def compute_and_extract(
     on_execution_submitted: Callable[[Execution], None] | None = None,
     is_cancellable: bool = False,
     result_page_len: int | None = None,
+    use_arrow: bool = False,
 ) -> tuple[dict, dict]:
     """
     Convenience function that computes and extracts data from the execution response.
@@ -443,6 +487,8 @@ def compute_and_extract(
             the connection is interrupted.
         result_page_len (Optional[int]): Optional page size for result pagination.
             Defaults to 1000. Larger values can improve performance for large result sets.
+        use_arrow (bool, optional): When True, fetches the result via the Arrow IPC binary
+            endpoint in one shot instead of paginating through JSON. Requires pyarrow.
 
     Returns:
         tuple: A tuple containing the following dictionaries:
@@ -469,7 +515,15 @@ def compute_and_extract(
     exec_def = execution.exec_def
     cols = list(columns.keys())
 
-    if not exec_def.has_attributes():
+    if use_arrow:
+        return _extract_from_arrow(
+            execution,
+            cols,
+            col_to_attr_idx,
+            col_to_metric_idx,
+            index_to_attr_idx,
+        )
+    elif not exec_def.has_attributes():
         return _extract_for_metrics_only(execution, cols, col_to_metric_idx), dict()
     else:
         attributes = get_catalog_attributes_for_extract(sdk, workspace_id, exec_def.attributes)

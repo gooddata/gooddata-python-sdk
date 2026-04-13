@@ -1,0 +1,159 @@
+{
+  "result_id": "16c598b975e1507d58815eb8aa7c041fa87284ba:1c61fa90d6c69956cd02afaab527bf6ca9f76dab52dbac8e5a0a8f8df719c878",
+  "row_totals_indexes": [
+    []
+  ],
+  "column_totals_indexes": [],
+  "primary_labels_from_index": {
+    "0": {
+      "Clothing": "Clothing",
+      "Electronics": "Electronics",
+      "Home": "Home",
+      "Outdoor": "Outdoor"
+    }
+  },
+  "primary_labels_from_columns": {
+    "0": {
+      "Midwest": "Midwest",
+      "Northeast": "Northeast",
+      "South": "South",
+      "Unknown": "Unknown",
+      "West": "West"
+    },
+    "1": {
+      "Illinois": "Illinois",
+      "Indiana": "Indiana",
+      "Iowa": "Iowa",
+      "Kansas": "Kansas",
+      "Michigan": "Michigan",
+      "Minnesota": "Minnesota",
+      "Missouri": "Missouri",
+      "Nebraska": "Nebraska",
+      "North Dakota": "North Dakota",
+      "Ohio": "Ohio",
+      "South Dakota": "South Dakota",
+      "Wisconsin": "Wisconsin",
+      "Connecticut": "Connecticut",
+      "Massachusetts": "Massachusetts",
+      "New Hampshire": "New Hampshire",
+      "New Jersey": "New Jersey",
+      "New York": "New York",
+      "Pennsylvania": "Pennsylvania",
+      "Alabama": "Alabama",
+      "Arkansas": "Arkansas",
+      "Delaware": "Delaware",
+      "District of Columbia": "District of Columbia",
+      "Florida": "Florida",
+      "Georgia": "Georgia",
+      "Kentucky": "Kentucky",
+      "Louisiana": "Louisiana",
+      "Maryland": "Maryland",
+      "Mississippi": "Mississippi",
+      "North Carolina": "North Carolina",
+      "Oklahoma": "Oklahoma",
+      "South Carolina": "South Carolina",
+      "Tennessee": "Tennessee",
+      "Texas": "Texas",
+      "Virginia": "Virginia",
+      "West Virginia": "West Virginia",
+      "Rhode Island": "Rhode Island",
+      "Alaska": "Alaska",
+      "Arizona": "Arizona",
+      "California": "California",
+      "Colorado": "Colorado",
+      "Hawaii": "Hawaii",
+      "Idaho": "Idaho",
+      "Montana": "Montana",
+      "Nevada": "Nevada",
+      "New Mexico": "New Mexico",
+      "Oregon": "Oregon",
+      "Utah": "Utah",
+      "Washington": "Washington"
+    }
+  },
+  "dimensions": [
+    {
+      "headers": [
+        {
+          "attributeHeader": {
+            "localIdentifier": "product_category",
+            "label": {
+              "id": "products.category",
+              "type": "label"
+            },
+            "labelName": "Category",
+            "attribute": {
+              "id": "products.category",
+              "type": "attribute"
+            },
+            "attributeName": "Category",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "products.category",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        }
+      ]
+    },
+    {
+      "headers": [
+        {
+          "attributeHeader": {
+            "localIdentifier": "region",
+            "label": {
+              "id": "region",
+              "type": "label"
+            },
+            "labelName": "Region",
+            "attribute": {
+              "id": "region",
+              "type": "attribute"
+            },
+            "attributeName": "Region",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "region",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        },
+        {
+          "attributeHeader": {
+            "localIdentifier": "state",
+            "label": {
+              "id": "state",
+              "type": "label"
+            },
+            "labelName": "State",
+            "attribute": {
+              "id": "state",
+              "type": "attribute"
+            },
+            "attributeName": "State",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "state",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        },
+        {
+          "measureGroupHeaders": [
+            {
+              "localIdentifier": "price"
+            },
+            {
+              "localIdentifier": "order_amount",
+              "format": "$#,##0",
+              "name": "Order Amount"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

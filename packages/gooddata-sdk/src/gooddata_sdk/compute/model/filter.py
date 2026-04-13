@@ -9,7 +9,7 @@ from attrs import define
 from gooddata_api_client.model.inline_filter_definition_inline import InlineFilterDefinitionInline
 
 if find_spec("icu") is not None:
-    from icu import Locale, SimpleDateFormat  # type: ignore[import-not-found]
+    from icu import Locale, SimpleDateFormat  # type: ignore
 
 import gooddata_api_client.models as afm_models
 from gooddata_api_client.model_utils import OpenApiModel

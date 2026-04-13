@@ -1,0 +1,60 @@
+{
+  "result_id": "c28cd032661c390fe86d4fdbc81c6b21344a4c35:f25f85da5bb0610c481b84628109721e596b4a761de09e6fcc8627c510765679",
+  "row_totals_indexes": [
+    []
+  ],
+  "column_totals_indexes": [],
+  "primary_labels_from_index": {
+    "0": {
+      "Midwest": "Midwest",
+      "Northeast": "Northeast",
+      "South": "South",
+      "Unknown": "Unknown",
+      "West": "West"
+    }
+  },
+  "primary_labels_from_columns": {},
+  "dimensions": [
+    {
+      "headers": [
+        {
+          "attributeHeader": {
+            "localIdentifier": "region",
+            "label": {
+              "id": "region",
+              "type": "label"
+            },
+            "labelName": "Region",
+            "attribute": {
+              "id": "region",
+              "type": "attribute"
+            },
+            "attributeName": "Region",
+            "granularity": null,
+            "primaryLabel": {
+              "id": "region",
+              "type": "label"
+            },
+            "valueType": "TEXT"
+          }
+        }
+      ]
+    },
+    {
+      "headers": [
+        {
+          "measureGroupHeaders": [
+            {
+              "localIdentifier": "price"
+            },
+            {
+              "localIdentifier": "order_amount",
+              "format": "$#,##0",
+              "name": "Order Amount"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

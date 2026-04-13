@@ -5,6 +5,7 @@
 # (./packages/gooddata-sdk/tests/export -> /tmp/exports). Fix with: chmod -R 777 tests/export/exports/
 import os
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 import pytest
 from gooddata_sdk import (
@@ -20,6 +21,7 @@ from gooddata_sdk import (
     SimpleMetric,
     TableDimension,
 )
+from gooddata_sdk.catalog.export.service import ExportService
 from tests_support.vcrpy_utils import get_vcr
 
 gd_vcr = get_vcr()
@@ -105,6 +107,27 @@ def test_export_settings_grand_totals_position(grand_totals_position):
 def test_export_settings_grand_totals_position_defaults_to_none():
     settings = ExportSettings(merge_headers=True, show_filters=False)
     assert settings.grand_totals_position is None
+
+
+def test_get_raw_export_bytes_delegates_to_get_exported_content() -> None:
+    """get_raw_export_bytes delegates to _get_exported_content with the raw export func."""
+
+    mock_api_client = MagicMock()
+    svc = ExportService(mock_api_client)
+    fake_bytes = b"arrow_ipc"
+
+    with patch.object(ExportService, "_get_exported_content", return_value=fake_bytes) as mock_get:
+        result = svc.get_raw_export_bytes("ws-id", "export-id-123")
+
+    mock_get.assert_called_once_with(
+        workspace_id="ws-id",
+        export_id="export-id-123",
+        get_func=mock_api_client.actions_api.get_raw_export,
+        timeout=60.0,
+        retry=0.2,
+        max_retry=5.0,
+    )
+    assert result == fake_bytes
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "test_export_csv.yaml"))

@@ -442,7 +442,7 @@ class DataFrameMetadata:
 
     row_totals_indexes: list[list[int]]
     column_totals_indexes: list[list[int]]
-    execution_response: BareExecutionResponse
+    execution_response: BareExecutionResponse | None
     primary_labels_from_index: dict[int, dict[str, str]]
     primary_labels_from_columns: dict[int, dict[str, str]]
 
