@@ -8,6 +8,18 @@
       17
     ]
   ],
+  "column_totals_indexes": [
+    [],
+    [
+      10,
+      11,
+      22,
+      23,
+      34,
+      35
+    ],
+    []
+  ],
   "primary_labels_from_index": {
     "0": {
       "Midwest": "Midwest",

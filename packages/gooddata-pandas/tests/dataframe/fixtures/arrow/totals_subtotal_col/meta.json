@@ -5,6 +5,22 @@
       4
     ]
   ],
+  "column_totals_indexes": [
+    [],
+    [
+      24,
+      25,
+      38,
+      39,
+      74,
+      75,
+      78,
+      79,
+      104,
+      105
+    ],
+    []
+  ],
   "primary_labels_from_index": {
     "0": {
       "Clothing": "Clothing",
