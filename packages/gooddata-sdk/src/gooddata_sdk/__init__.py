@@ -272,6 +272,18 @@ from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.compute_to_sdk_converter import ComputeToSdkConverter
+from gooddata_sdk.compute.model.ai_context import (
+    CatalogActiveObjectIdentification,
+    CatalogDashboardContext,
+    CatalogInsightWidgetDescriptor,
+    CatalogObjectReference,
+    CatalogObjectReferenceGroup,
+    CatalogRichTextWidgetDescriptor,
+    CatalogUIContext,
+    CatalogUserContext,
+    CatalogVisualizationSwitcherWidgetDescriptor,
+    CatalogWidgetDescriptor,
+)
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ExecModelEntity, ObjId
 from gooddata_sdk.compute.model.execution import (
