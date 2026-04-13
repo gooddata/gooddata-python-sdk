@@ -31,6 +31,7 @@ from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
     CatalogDependentEntitiesRequest,
     CatalogDependentEntitiesResponse,
 )
+from gooddata_sdk.catalog.workspace.entity_model.resolved_llm import CatalogResolvedLlms
 from gooddata_sdk.catalog.workspace.model_container import CatalogWorkspaceContent
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
@@ -685,3 +686,21 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             workspace_id, request, _check_return_type=False, **paging_params
         )
         return [v["title"] for v in values["elements"]]
+
+    def resolve_llm_providers(self, workspace_id: str) -> CatalogResolvedLlms:
+        """Resolve the active LLM configuration for a given workspace.
+
+        Returns the active LLM configuration. When the ENABLE_LLM_ENDPOINT_REPLACEMENT feature
+        flag is enabled, returns LLM Providers with their associated models. Otherwise, falls
+        back to the legacy LLM Endpoints.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+
+        Returns:
+            CatalogResolvedLlms:
+                Object containing the resolved LLM configuration, or None if no LLM is configured.
+        """
+        response = self._actions_api.resolve_llm_providers(workspace_id, _check_return_type=False)
+        return CatalogResolvedLlms.from_api(response)

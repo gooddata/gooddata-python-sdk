@@ -18,6 +18,7 @@ from gooddata_sdk import (
     CatalogDependsOn,
     CatalogDependsOnDateFilter,
     CatalogEntityIdentifier,
+    CatalogResolvedLlms,
     CatalogValidateByItem,
     CatalogWorkspace,
     DataSourceValidator,
@@ -502,3 +503,10 @@ def test_export_definition_analytics_layout(test_config):
         assert deep_eq(analytics_o.analytics.export_definitions, analytics_e.analytics.export_definitions)
     finally:
         safe_delete(_refresh_workspaces, sdk)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_resolve_llm_providers.yaml"))
+def test_resolve_llm_providers(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    result = sdk.catalog_workspace_content.resolve_llm_providers(test_config["workspace"])
+    assert isinstance(result, CatalogResolvedLlms)
