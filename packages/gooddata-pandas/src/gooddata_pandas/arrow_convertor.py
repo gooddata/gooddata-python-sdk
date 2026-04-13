@@ -1,9 +1,9 @@
 # (C) 2026 GoodData Corporation
 from __future__ import annotations
 
-import json
 from typing import Callable
 
+import orjson
 import pandas
 
 from gooddata_pandas.arrow_types import TypesMapper
@@ -55,7 +55,7 @@ def build_metric_field_index(table: pa.Table) -> dict[int, str]:
     result: dict[int, str] = {}
     for field in table.schema:
         if field.name.startswith(_FIELD_METRIC_GROUP) and field.metadata and b"gdc" in field.metadata:
-            gdc = json.loads(field.metadata[b"gdc"])
+            gdc = orjson.loads(field.metadata[b"gdc"])
             if "index" not in gdc:
                 raise ValueError(
                     f"Metric field {field.name!r} 'gdc' metadata is missing required key 'index'. "
@@ -78,7 +78,7 @@ def _parse_schema_metadata(table: pa.Table) -> dict:
             "Arrow table has no schema metadata. Expected GoodData metadata keys: " + ", ".join(_REQUIRED_SCHEMA_KEYS)
         )
     schema_meta = {
-        k.decode(): json.loads(v) for k, v in table.schema.metadata.items() if k.decode() in _REQUIRED_SCHEMA_KEYS
+        k.decode(): orjson.loads(v) for k, v in table.schema.metadata.items() if k.decode() in _REQUIRED_SCHEMA_KEYS
     }
     missing = [k for k in _REQUIRED_SCHEMA_KEYS if k not in schema_meta]
     if missing:
@@ -281,7 +281,7 @@ def _build_field_index(
                 f"Data field {field.name!r} is missing required 'gdc' field metadata. "
                 "The Arrow table must originate from the GoodData /binary execution endpoint."
             )
-        gdc = json.loads(field.metadata[b"gdc"])
+        gdc = orjson.loads(field.metadata[b"gdc"])
         label_values: list = list(gdc.get("label_values", []))
 
         gdc_type = gdc.get("type")
@@ -416,9 +416,9 @@ def compute_column_totals_indexes(table: pa.Table, execution_dims: list) -> list
             {},
         )
 
-    # Pre-parse gdc metadata once to avoid O(N×M) json.loads calls in the header loop.
+    # Pre-parse gdc metadata once to avoid O(N×M) orjson.loads calls in the header loop.
     parsed_gdcs: list[dict | None] = [
-        json.loads(f.metadata[b"gdc"]) if f.metadata and b"gdc" in f.metadata else None for f in all_data_fields
+        orjson.loads(f.metadata[b"gdc"]) if f.metadata and b"gdc" in f.metadata else None for f in all_data_fields
     ]
 
     result: list[list[int]] = []
@@ -499,9 +499,9 @@ def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[li
             f for f in table.schema if f.name.startswith(_FIELD_METRIC_GROUP) or f.name.startswith(_FIELD_GRAND_TOTAL)
         ]
 
-        # Pre-parse gdc metadata once to avoid O(N×M) json.loads calls in the header loop.
+        # Pre-parse gdc metadata once to avoid O(N×M) orjson.loads calls in the header loop.
         parsed_gdcs: list[dict | None] = [
-            json.loads(f.metadata[b"gdc"]) if f.metadata and b"gdc" in f.metadata else None for f in all_data_fields
+            orjson.loads(f.metadata[b"gdc"]) if f.metadata and b"gdc" in f.metadata else None for f in all_data_fields
         ]
 
         result: list[list[int]] = []
@@ -610,7 +610,7 @@ def _compute_primary_labels_from_fields(
     for field in all_data_fields:
         if not field.metadata or b"gdc" not in field.metadata:
             continue
-        gdc = json.loads(field.metadata[b"gdc"])
+        gdc = orjson.loads(field.metadata[b"gdc"])
         if gdc["type"] != _GDC_TYPE_METRIC:
             continue
         label_values: list = gdc.get("label_values", [])

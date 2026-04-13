@@ -47,7 +47,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-arrow = ["pyarrow>=23.0.1"]
+arrow = ["pyarrow>=23.0.1", "orjson>=3.11.0"]
 
 [project.urls]
 Documentation = "https://gooddata-pandas.readthedocs.io/en/v1.62.0"
@@ -65,7 +65,7 @@ test = [
     "python-dotenv~=1.0.0",
     "pyyaml",
     "tests_support",
-    "pyarrow>=16.1.0",
+    "pyarrow>=23.0.1",
 ]
 
 [tool.ty.analysis]
