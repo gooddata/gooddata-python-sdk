@@ -188,3 +188,27 @@ def test_match_filter_inequality_different_case_sensitive():
     f1 = MatchAttributeFilter(label="test", literal="foo", match_type="CONTAINS")
     f2 = MatchAttributeFilter(label="test", literal="foo", match_type="CONTAINS", case_sensitive=True)
     assert f1 != f2
+
+
+def test_positive_filter_uses_arbitrary_values():
+    f = PositiveAttributeFilter(label="local_id", values=["val1"], uses_arbitrary_values=True)
+    api_dict = f.as_api_model().to_dict()
+    assert api_dict["positive_attribute_filter"]["uses_arbitrary_values"] is True
+
+
+def test_positive_filter_uses_arbitrary_values_not_set():
+    f = PositiveAttributeFilter(label="local_id", values=["val1"])
+    api_dict = f.as_api_model().to_dict()
+    assert "uses_arbitrary_values" not in api_dict["positive_attribute_filter"]
+
+
+def test_negative_filter_uses_arbitrary_values():
+    f = NegativeAttributeFilter(label="local_id", values=["val1"], uses_arbitrary_values=True)
+    api_dict = f.as_api_model().to_dict()
+    assert api_dict["negative_attribute_filter"]["uses_arbitrary_values"] is True
+
+
+def test_negative_filter_uses_arbitrary_values_not_set():
+    f = NegativeAttributeFilter(label="local_id", values=["val1"])
+    api_dict = f.as_api_model().to_dict()
+    assert "uses_arbitrary_values" not in api_dict["negative_attribute_filter"]
