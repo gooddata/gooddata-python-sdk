@@ -504,6 +504,15 @@ class Execution:
     ) -> ExecutionResult:
         return self.bare_exec_response.read_result(limit, offset, timeout)
 
+    def read_result_arrow(self) -> pyarrow.Table:
+        """
+        Reads the full execution result as a pyarrow Table.
+
+        The binary endpoint returns the complete result in one shot (no paging).
+        Requires pyarrow to be installed (pip install gooddata-sdk[arrow]).
+        """
+        return self.bare_exec_response.read_result_arrow()
+
     def cancel(self) -> None:
         """
         Cancels the execution.

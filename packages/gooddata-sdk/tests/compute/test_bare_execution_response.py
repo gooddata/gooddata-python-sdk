@@ -108,3 +108,57 @@ def test_read_result_arrow_no_pyarrow_raises() -> None:
 
     with patch.object(_exec_mod, "_ipc", None), pytest.raises(ImportError, match="pyarrow is required"):
         bare.read_result_arrow()
+
+
+def _make_execution(ipc_bytes: bytes):
+    """Return an Execution backed by a mock API client."""
+    from gooddata_sdk.compute.model.execution import Execution, ExecutionDefinition, TableDimension
+
+    mock_api_client = MagicMock()
+    mock_response = _FakeResponse(ipc_bytes)
+    mock_api_client.actions_api.api_client.call_api.return_value = mock_response
+    mock_api_client.executions_cancellable = False
+
+    afm_exec_response = {
+        "execution_response": {
+            "links": {"executionResult": "result-id-456"},
+            "dimensions": [],
+        }
+    }
+    exec_def = ExecutionDefinition(
+        attributes=None,
+        metrics=None,
+        filters=None,
+        dimensions=[TableDimension(item_ids=["measureGroup"])],
+    )
+    execution = Execution(
+        api_client=mock_api_client,
+        workspace_id="ws-id",
+        exec_def=exec_def,
+        response=afm_exec_response,
+    )
+    return execution, mock_response
+
+
+def test_execution_read_result_arrow_delegates() -> None:
+    """Execution.read_result_arrow() delegates to BareExecutionResponse.read_result_arrow()."""
+    import pyarrow as pa
+
+    ipc_bytes = _make_ipc_stream_bytes()
+    execution, mock_response = _make_execution(ipc_bytes)
+
+    result = execution.read_result_arrow()
+
+    assert isinstance(result, pa.Table)
+    mock_response.release_conn.assert_called_once()
+
+
+def test_execution_read_result_arrow_calls_binary_endpoint() -> None:
+    """Execution.read_result_arrow() calls the /binary endpoint via the API client."""
+    ipc_bytes = _make_ipc_stream_bytes()
+    execution, _ = _make_execution(ipc_bytes)
+
+    execution.read_result_arrow()
+
+    call_kwargs = execution.bare_exec_response._actions_api.api_client.call_api.call_args.kwargs
+    assert "binary" in call_kwargs["resource_path"]
