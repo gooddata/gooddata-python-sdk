@@ -1,0 +1,13 @@
+{
+  "status": "implemented",
+  "cluster_id": "C008",
+  "summary": "Implemented the `resolveLlmProviders` workspace action endpoint in the Python SDK. Created three new SDK model classes (`CatalogResolvedLlmModel`, `CatalogResolvedLlmProvider`, `CatalogResolvedLlms`) in a new file `catalog/workspace/entity_model/resolved_llm.py`. Added the `resolve_llm_providers(workspace_id)` service method to `CatalogWorkspaceContentService`. Exported the new classes from `gooddata_sdk/__init__.py`. Added 3 unit tests (mock-based) and 1 integration test (VCR cassette required). All 3 unit tests pass; ruff checks clean; import validation passes.",
+  "files_changed": [
+    "packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/entity_model/resolved_llm.py",
+    "packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/content_service.py",
+    "packages/gooddata-sdk/src/gooddata_sdk/__init__.py",
+    "packages/gooddata-sdk/tests/catalog/test_catalog_workspace_content.py"
+  ],
+  "reason": "",
+  "cost_usd": 2.806672049999999
+}

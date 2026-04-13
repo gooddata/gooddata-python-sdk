@@ -18,6 +18,9 @@ from gooddata_sdk import (
     CatalogDependsOn,
     CatalogDependsOnDateFilter,
     CatalogEntityIdentifier,
+    CatalogResolvedLlmModel,
+    CatalogResolvedLlmProvider,
+    CatalogResolvedLlms,
     CatalogValidateByItem,
     CatalogWorkspace,
     DataSourceValidator,
@@ -502,3 +505,67 @@ def test_export_definition_analytics_layout(test_config):
         assert deep_eq(analytics_o.analytics.export_definitions, analytics_e.analytics.export_definitions)
     finally:
         safe_delete(_refresh_workspaces, sdk)
+
+
+def test_resolve_llm_providers_with_provider_response():
+    """Unit test: resolve_llm_providers correctly deserializes a ResolvedLlmProvider response."""
+    mock_model = MagicMock()
+    mock_model.id = "gpt-4o"
+    mock_model.family = "GPT"
+
+    mock_data = MagicMock()
+    mock_data.id = "openai-provider"
+    mock_data.title = "OpenAI Provider"
+    mock_data.models = [mock_model]
+
+    mock_response = MagicMock()
+    mock_response.data = mock_data
+
+    result = CatalogResolvedLlms.from_api(mock_response)
+
+    assert isinstance(result, CatalogResolvedLlms)
+    assert isinstance(result.data, CatalogResolvedLlmProvider)
+    assert result.data.id == "openai-provider"
+    assert result.data.title == "OpenAI Provider"
+    assert len(result.data.models) == 1
+    assert isinstance(result.data.models[0], CatalogResolvedLlmModel)
+    assert result.data.models[0].id == "gpt-4o"
+    assert result.data.models[0].family == "GPT"
+
+
+def test_resolve_llm_providers_with_no_data():
+    """Unit test: resolve_llm_providers correctly handles a response with no data."""
+    mock_response = MagicMock()
+    mock_response.data = None
+
+    result = CatalogResolvedLlms.from_api(mock_response)
+
+    assert isinstance(result, CatalogResolvedLlms)
+    assert result.data is None
+
+
+def test_resolve_llm_providers_legacy_endpoint_fallback():
+    """Unit test: resolve_llm_providers handles legacy endpoint fallback (no models)."""
+    mock_data = MagicMock()
+    mock_data.id = "legacy-endpoint"
+    mock_data.title = "Legacy LLM Endpoint"
+    mock_data.models = None
+
+    mock_response = MagicMock()
+    mock_response.data = mock_data
+
+    result = CatalogResolvedLlms.from_api(mock_response)
+
+    assert isinstance(result, CatalogResolvedLlms)
+    assert isinstance(result.data, CatalogResolvedLlmProvider)
+    assert result.data.id == "legacy-endpoint"
+    assert result.data.title == "Legacy LLM Endpoint"
+    assert result.data.models == []
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_resolve_llm_providers.yaml"))
+def test_resolve_llm_providers_integration(test_config):
+    """Integration test: resolve_llm_providers calls the API and returns a valid response."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    result = sdk.catalog_workspace_content.resolve_llm_providers(test_config["workspace"])
+    assert isinstance(result, CatalogResolvedLlms)

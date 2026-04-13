@@ -1,0 +1,18 @@
+{
+  "id": "C008",
+  "title": "Add resolveLlmProviders endpoint and ResolvedLlmProvider schema",
+  "services": [
+    "gooddata-afm-client"
+  ],
+  "commits": [
+    {
+      "sha": "699c75ccef92ff64513b36268d088fb35dc2727b",
+      "author": "Jan Kadlec",
+      "author_email": "52755107+hkad98@users.noreply.github.com",
+      "message": "Merge pull request #21420 from hkad98/jkd/resolve-llm-provider"
+    }
+  ],
+  "diff": "--- a/gooddata-afm-client.json\n+++ b/gooddata-afm-client.json\n+      \"ResolvedLlm\": { \"description\": \"The resolved LLM configuration.\", \"properties\": { \"id\": {...}, \"title\": {...} }, \"required\": [\"id\",\"title\"] },\n+      \"ResolvedLlmProvider\": { \"allOf\": [ { \"$ref\": \"ResolvedLlm\" }, { \"properties\": { \"models\": { \"maxItems\": 1, \"minItems\": 1 } } } ], \"required\": [\"id\",\"models\",\"title\"] },\n+      \"ResolvedLlms\": { \"properties\": { \"data\": { \"oneOf\": [ { \"$ref\": \"ResolvedLlmEndpoint\" }, { \"$ref\": \"ResolvedLlmProvider\" } ] } } },\n+    \"/api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmProviders\": {\n+      \"get\": {\n+        \"description\": \"Resolves the active LLM configuration for the given workspace.\",\n+        \"operationId\": \"resolveLlmProviders\",\n+        \"responses\": { \"200\": { \"content\": { \"application/json\": { \"schema\": { \"$ref\": \"ResolvedLlms\" } } } } },\n+        \"summary\": \"Get Active LLM configuration for this workspace\"\n+      }\n+    }",
+  "jira_tickets": [],
+  "sdk_impact": "new_feature"
+}
