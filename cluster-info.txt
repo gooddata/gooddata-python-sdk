@@ -1,0 +1,4 @@
+- `3f2b607` Merge pull request #21274 from gooddata/smac/LX-2141
+- `63dd6bf` feat(gen-ai): refactor widgets polymorphism and enhance OpenAPI spec
+- `499bb70` feat(gen-ai): add support for filters for visualizations
+- `075d22d` Merge pull request #21389 from gooddata/dho/trivial-fix

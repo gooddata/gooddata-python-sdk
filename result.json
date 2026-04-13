@@ -1,0 +1,13 @@
+{
+  "status": "implemented",
+  "cluster_id": "C007",
+  "summary": "Added SDK wrapper classes for the new OpenAPI schemas (UIContext, DashboardContext, WidgetDescriptor variants, ObjectReference, ObjectReferenceGroup, UserContext) to support AI chatbot user context passing. Updated ComputeService.ai_chat() and ai_chat_stream() to accept an optional `user_context: UserContext | None = None` keyword-only parameter. All new public classes are exported from gooddata_sdk/__init__.py. 14 unit tests added and passing.",
+  "files_changed": [
+    "packages/gooddata-sdk/src/gooddata_sdk/compute/model/chat.py",
+    "packages/gooddata-sdk/src/gooddata_sdk/compute/service.py",
+    "packages/gooddata-sdk/src/gooddata_sdk/__init__.py",
+    "packages/gooddata-sdk/tests/compute/test_chat_models.py"
+  ],
+  "reason": "",
+  "cost_usd": 1.7839665
+}

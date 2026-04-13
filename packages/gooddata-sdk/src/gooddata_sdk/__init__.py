@@ -274,6 +274,18 @@ from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.compute_to_sdk_converter import ComputeToSdkConverter
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ExecModelEntity, ObjId
+from gooddata_sdk.compute.model.chat import (
+    DashboardContext,
+    InsightWidgetDescriptor,
+    ObjectReference,
+    ObjectReferenceGroup,
+    ObjectReferenceType,
+    RichTextWidgetDescriptor,
+    UIContext,
+    UserContext,
+    VisualizationSwitcherWidgetDescriptor,
+    WidgetDescriptor,
+)
 from gooddata_sdk.compute.model.execution import (
     BareExecutionResponse,
     Execution,

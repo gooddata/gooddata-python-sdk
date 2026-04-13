@@ -1,0 +1,38 @@
+{
+  "id": "C007",
+  "title": "Add UIContext, WidgetDescriptor schemas and UserContext for AI chatbot",
+  "services": [
+    "gooddata-afm-client"
+  ],
+  "commits": [
+    {
+      "sha": "3f2b607eb32bf10c55f66abb5438ff0c20f77873",
+      "author": "Mara3l",
+      "author_email": "110542281+Mara3l@users.noreply.github.com",
+      "message": "Merge pull request #21274 from gooddata/smac/LX-2141"
+    },
+    {
+      "sha": "63dd6bf3ce25565a27c5b78dbf92f6239a59ede3",
+      "author": "Roman Rakus",
+      "author_email": "roman.rakus@gooddata.com",
+      "message": "feat(gen-ai): refactor widgets polymorphism and enhance OpenAPI spec"
+    },
+    {
+      "sha": "499bb7071ee78cef0128b4cb1e414f42f6a5f7d4",
+      "author": "Roman Rakus",
+      "author_email": "roman.rakus@gooddata.com",
+      "message": "feat(gen-ai): add support for filters for visualizations"
+    },
+    {
+      "sha": "075d22d5fcdec6924d837217eef929d013a4d4cb",
+      "author": "Dan Homola",
+      "author_email": "dan.homola@gooddata.com",
+      "message": "Merge pull request #21389 from gooddata/dho/trivial-fix"
+    }
+  ],
+  "diff": "--- a/gooddata-afm-client.json\n+++ b/gooddata-afm-client.json\n+      \"DashboardContext\": { \"properties\": { \"id\": {...}, \"widgets\": { \"$ref\": \"WidgetDescriptor\" } }, \"required\": [\"id\",\"widgets\"] },\n+      \"InsightWidgetDescriptor\": { \"properties\": { \"filters\": {...}, \"resultId\": {...}, \"title\": {...}, \"visualizationId\": {...}, \"widgetId\": {...} }, \"required\": [\"title\",\"visualizationId\",\"widgetId\"] },\n+      \"ObjectReference\": { \"properties\": { \"id\": {...}, \"type\": { \"enum\": [\"WIDGET\",\"METRIC\",\"ATTRIBUTE\",\"DASHBOARD\"] } }, \"required\": [\"id\",\"type\"] },\n+      \"ObjectReferenceGroup\": { \"properties\": { \"context\": { \"$ref\": \"ObjectReference\" }, \"objects\": {...} }, \"required\": [\"objects\"] },\n+      \"RichTextWidgetDescriptor\": { \"properties\": { \"filters\": {...}, \"title\": {...}, \"widgetId\": {...} }, \"required\": [\"title\",\"widgetId\"] },\n+      \"UIContext\": { \"description\": \"Ambient UI state.\", \"properties\": { \"dashboard\": { \"$ref\": \"DashboardContext\" } } },\n+      \"VisualizationSwitcherWidgetDescriptor\": { \"required\": [\"activeVisualizationId\",\"title\",\"visualizationIds\",\"widgetId\"] },\n+      \"WidgetDescriptor\": { \"discriminator\": { \"propertyName\": \"widgetType\" }, ... },\n       \"UserContext\": {\n-        \"description\": \"User context affecting AI behavior.\",\n+        \"description\": \"User context with ambient UI state and explicitly referenced objects.\",\n+        \"referencedObjects\": { \"items\": { \"$ref\": \"ObjectReferenceGroup\" }, \"type\": \"array\" },\n+        \"view\": { \"$ref\": \"UIContext\" }\n       }",
+  "jira_tickets": [
+    "LX-2141"
+  ],
+  "sdk_impact": "new_feature"
+}
