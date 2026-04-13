@@ -34,6 +34,7 @@ from gooddata_sdk.catalog.workspace.entity_model.filter_view import (
     CatalogFilterView,
     CatalogFilterViewDocument,
 )
+from gooddata_sdk.catalog.workspace.entity_model.resolved_llm_provider import CatalogResolvedLlms
 from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
     CatalogUserDataFilter,
     CatalogUserDataFilterDocument,
@@ -238,6 +239,27 @@ class CatalogWorkspaceService(CatalogServiceBase):
             )
         ]
         return {setting["type"]: setting for setting in resolved_workspace_settings}
+
+    def resolve_llm_providers(self, workspace_id: str) -> CatalogResolvedLlms:
+        """Resolve the active LLM provider configuration for a workspace.
+
+        Returns the active LLM provider and its associated models configured
+        for the given workspace.  When the ENABLE_LLM_ENDPOINT_REPLACEMENT
+        feature flag is enabled on the server the response contains an LLM
+        Provider object; otherwise it falls back to the legacy LLM Endpoint
+        representation.
+
+        Args:
+            workspace_id: Workspace ID
+
+        Returns:
+            CatalogResolvedLlms: Resolved LLM provider configuration
+        """
+        response = self._client.actions_api.resolve_llm_providers(
+            workspace_id,
+            _check_return_type=False,
+        )
+        return CatalogResolvedLlms.from_api(response)
 
     # Declarative methods - workspaces
 

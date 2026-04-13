@@ -18,6 +18,9 @@ from gooddata_sdk import (
     CatalogDependsOn,
     CatalogDependsOnDateFilter,
     CatalogEntityIdentifier,
+    CatalogResolvedLlmModel,
+    CatalogResolvedLlmProvider,
+    CatalogResolvedLlms,
     CatalogValidateByItem,
     CatalogWorkspace,
     DataSourceValidator,
@@ -502,3 +505,50 @@ def test_export_definition_analytics_layout(test_config):
         assert deep_eq(analytics_o.analytics.export_definitions, analytics_e.analytics.export_definitions)
     finally:
         safe_delete(_refresh_workspaces, sdk)
+
+
+def test_resolved_llms_from_api_with_provider():
+    """Unit test: CatalogResolvedLlms.from_api deserializes a provider response correctly."""
+    response_dict = {
+        "data": {
+            "id": "my-provider",
+            "title": "My LLM Provider",
+            "models": [
+                {"id": "gpt-4o", "family": "OPENAI"},
+                {"id": "gpt-4o-mini", "family": "OPENAI"},
+            ],
+        }
+    }
+
+    class _FakeResponse:
+        def to_dict(self):
+            return response_dict
+
+    result = CatalogResolvedLlms.from_api(_FakeResponse())
+    assert result.data is not None
+    assert isinstance(result.data, CatalogResolvedLlmProvider)
+    assert result.data.id == "my-provider"
+    assert result.data.title == "My LLM Provider"
+    assert len(result.data.models) == 2
+    assert isinstance(result.data.models[0], CatalogResolvedLlmModel)
+    assert result.data.models[0].id == "gpt-4o"
+    assert result.data.models[0].family == "OPENAI"
+
+
+def test_resolved_llms_from_api_no_data():
+    """Unit test: CatalogResolvedLlms.from_api handles null data field."""
+    response_dict = {"data": None}
+
+    class _FakeResponse:
+        def to_dict(self):
+            return response_dict
+
+    result = CatalogResolvedLlms.from_api(_FakeResponse())
+    assert result.data is None
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_resolve_llm_providers.yaml"))
+def test_resolve_llm_providers_integration(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    result = sdk.catalog_workspace.resolve_llm_providers(test_config["workspace"])
+    assert isinstance(result, CatalogResolvedLlms)
