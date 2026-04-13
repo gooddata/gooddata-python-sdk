@@ -1,0 +1,40 @@
+# (C) 2026 GoodData Corporation
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - br, gzip, deflate
+      X-GDC-VALIDATE-RELATIONS:
+      - 'true'
+      X-Requested-With:
+      - XMLHttpRequest
+    method: GET
+    uri: http://localhost:3000/api/v1/actions/workspaces/demo/ai/resolveLlmProviders
+  response:
+    body:
+      string:
+        data:
+          id: openai-provider-id
+          models:
+          - family: OPENAI
+            id: gpt-4o
+          title: OpenAI Provider
+    headers:
+      Content-Type:
+      - application/json
+      DATE: &id001
+      - PLACEHOLDER
+      Expires:
+      - '0'
+      Pragma:
+      - no-cache
+      X-Content-Type-Options:
+      - nosniff
+      X-GDC-TRACE-ID: *id001
+    status:
+      code: 200
+      message: OK
+version: 1
