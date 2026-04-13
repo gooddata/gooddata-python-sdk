@@ -1,0 +1,144 @@
+# =============================================================================
+# Record Cassettes for Auto-Generated SDK PRs
+#
+# Runs specific integration tests against staging with OVERWRITE=1 to record
+# missing VCR cassettes, then commits them back to the PR branch.
+#
+# HOW IT RUNS
+# -----------
+# 1. Automatically — triggered by repository_dispatch from gdc-nas after the
+#    implement agent creates a PR with integration tests that need cassettes.
+#
+# 2. Manually — provide PR number and test node IDs:
+#    gh workflow run sdk-py-cassette-record.yml \
+#      -f pr_number=1530 \
+#      -f test_nodes="packages/gooddata-sdk/tests/catalog/test_catalog_workspace_content.py::test_resolve_llm_providers_integration"
+#
+# =============================================================================
+name: Record Cassettes
+
+on:
+  repository_dispatch:
+    types: [record-cassettes]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to record cassettes for'
+        required: true
+      test_nodes:
+        description: 'Space-separated pytest node IDs to run against staging'
+        required: true
+      branch:
+        description: 'PR branch name (auto-detected from PR if empty)'
+        required: false
+        default: ''
+
+concurrency:
+  group: cassette-record-${{ github.event.client_payload.pr_number || inputs.pr_number }}
+  cancel-in-progress: true
+
+jobs:
+  record:
+    name: "Record Cassettes"
+    runs-on:
+      group: infra1-runners-arc
+      labels: runners-small
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: read
+
+    steps:
+      - name: Resolve inputs
+        id: meta
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_PR: ${{ github.event.client_payload.pr_number }}
+          DISPATCH_BRANCH: ${{ github.event.client_payload.branch }}
+          DISPATCH_TESTS: ${{ github.event.client_payload.test_nodes }}
+          INPUT_PR: ${{ inputs.pr_number }}
+          INPUT_BRANCH: ${{ inputs.branch }}
+          INPUT_TESTS: ${{ inputs.test_nodes }}
+        run: |
+          if [ "$EVENT_NAME" = "repository_dispatch" ]; then
+            PR_NUMBER="$DISPATCH_PR"
+            BRANCH="$DISPATCH_BRANCH"
+            TEST_NODES="$DISPATCH_TESTS"
+          else
+            PR_NUMBER="$INPUT_PR"
+            BRANCH="$INPUT_BRANCH"
+            TEST_NODES="$INPUT_TESTS"
+          fi
+
+          if [ -z "$PR_NUMBER" ] || [ -z "$TEST_NODES" ]; then
+            echo "ERROR: pr_number and test_nodes are required"
+            exit 1
+          fi
+
+          # Auto-detect branch from PR if not provided
+          if [ -z "$BRANCH" ]; then
+            BRANCH=$(gh api repos/${{ github.repository }}/pulls/$PR_NUMBER --jq '.head.ref')
+          fi
+
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          echo "test_nodes=$TEST_NODES" >> "$GITHUB_OUTPUT"
+          echo "PR: #$PR_NUMBER | Branch: $BRANCH | Tests: $TEST_NODES"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout PR branch
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.meta.outputs.branch }}
+          token: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv sync --group test --locked
+
+      - name: Run targeted tests against staging
+        env:
+          OVERWRITE: "1"
+          TOKEN: ${{ secrets.PYTHON_SDK_STG_API_KEY }}
+          GD_TEST_ENV: staging
+        run: |
+          TEST_NODES="${{ steps.meta.outputs.test_nodes }}"
+          echo "Recording cassettes for: $TEST_NODES"
+
+          # Run tests — allow failure (some tests may fail if endpoint
+          # isn't deployed to staging yet, but cassettes still get recorded)
+          uv run tox -e py312 -- $TEST_NODES || {
+            echo "::warning::Some tests failed — cassettes may be partially recorded"
+          }
+
+      - name: Commit and push cassettes
+        run: |
+          # Stage only cassette YAML files
+          git add "packages/gooddata-sdk/tests/**/fixtures/**/*.yaml" \
+                  "packages/gooddata-sdk/tests/**/fixtures/*.yaml" || true
+
+          if git diff --cached --quiet; then
+            echo "No cassettes were recorded"
+            echo "::warning::No new cassette files found — tests may not have produced recordings"
+            exit 0
+          fi
+
+          CASSETTE_COUNT=$(git diff --cached --name-only | wc -l)
+          echo "Committing $CASSETTE_COUNT cassette file(s)"
+
+          git config user.name "yenkins-admin"
+          git config user.email "5391010+yenkins-admin@users.noreply.github.com"
+          git commit -m "chore(cassettes): record cassettes for auto-sync tests"
+          git push
+
+      - name: Write summary
+        if: always()
+        run: |
+          echo "### Cassette Recording" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "**PR:** #${{ steps.meta.outputs.pr_number }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Branch:** ${{ steps.meta.outputs.branch }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Tests:** \`${{ steps.meta.outputs.test_nodes }}\`" >> "$GITHUB_STEP_SUMMARY"
