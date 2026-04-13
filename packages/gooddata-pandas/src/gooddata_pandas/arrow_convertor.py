@@ -43,6 +43,28 @@ _GDC_TYPE_TOTAL = "total"
 _REQUIRED_SCHEMA_KEYS = (_META_XTAB, _META_MODEL, _META_VIEW)
 
 
+def build_metric_field_index(table: pa.Table) -> dict[int, str]:
+    """Return {metric_dimension_index: arrow_field_name} from the table schema.
+
+    Scans fields whose names start with the ``metric_group_`` prefix and reads
+    the ``gdc["index"]`` value from their field-level metadata.  The resulting
+    dict maps the zero-based metric dimension index to the Arrow field name,
+    which is needed to look up the correct column when the caller knows only the
+    position of a metric in the execution definition.
+    """
+    result: dict[int, str] = {}
+    for field in table.schema:
+        if field.name.startswith(_FIELD_METRIC_GROUP) and field.metadata and b"gdc" in field.metadata:
+            gdc = json.loads(field.metadata[b"gdc"])
+            if "index" not in gdc:
+                raise ValueError(
+                    f"Metric field {field.name!r} 'gdc' metadata is missing required key 'index'. "
+                    "The Arrow table must originate from the GoodData /binary execution endpoint."
+                )
+            result[gdc["index"]] = field.name
+    return result
+
+
 def _parse_schema_metadata(table: pa.Table) -> dict:
     """
     Decode and return all GoodData schema metadata keys from an Arrow table.
@@ -55,7 +77,9 @@ def _parse_schema_metadata(table: pa.Table) -> dict:
         raise ValueError(
             "Arrow table has no schema metadata. Expected GoodData metadata keys: " + ", ".join(_REQUIRED_SCHEMA_KEYS)
         )
-    schema_meta = {k.decode(): json.loads(v) for k, v in table.schema.metadata.items()}
+    schema_meta = {
+        k.decode(): json.loads(v) for k, v in table.schema.metadata.items() if k.decode() in _REQUIRED_SCHEMA_KEYS
+    }
     missing = [k for k in _REQUIRED_SCHEMA_KEYS if k not in schema_meta]
     if missing:
         raise ValueError(
@@ -85,7 +109,18 @@ def _label_ref_to_id_map(xtab_meta: dict) -> dict[str, str]:
     return {ref: info["labelId"] for ref, info in xtab_meta["labelMetadata"].items()}
 
 
-def _label_title(label_id: str, model_meta: dict) -> str | None:
+def _get_computed_shape(xtab_meta: dict) -> dict:
+    """Return computedShape from xtab metadata, raising ValueError when absent."""
+    computed_shape = xtab_meta.get("computedShape")
+    if computed_shape is None:
+        raise ValueError(
+            "Arrow table xtab metadata is missing required key 'computedShape'. "
+            "The table must originate from the GoodData /binary execution endpoint."
+        )
+    return computed_shape
+
+
+def _label_title(label_id: str, model_meta: dict) -> str:
     """Get the display title for a label from model metadata."""
     info = model_meta["labels"].get(label_id, {})
     return info.get("labelTitle") or info.get("attributeTitle") or label_id
@@ -99,9 +134,24 @@ def _metric_title(metric_idx: int, model_meta: dict, xtab_meta: dict) -> str:
     otherwise fall back to the local identifier.
     """
     local_ids = model_meta["requestedShape"]["metrics"]
+    if metric_idx >= len(local_ids):
+        raise ValueError(
+            f"metric_idx {metric_idx} is out of range for requestedShape.metrics "
+            f"(length {len(local_ids)}). The Arrow schema metadata may be inconsistent "
+            "with the model metadata."
+        )
     local_id = local_ids[metric_idx]
     info = model_meta["metrics"].get(local_id, {})
     return info.get("title") or local_id
+
+
+def _apply_label_override(base_title: str, local_id: str, overrides: dict) -> str:
+    """
+    Return the override title for local_id when present, otherwise base_title.
+
+    overrides is either label_overrides["labels"] or label_overrides["metrics"].
+    """
+    return overrides.get(local_id, {}).get("title", base_title)
 
 
 def _build_inline_index(
@@ -111,6 +161,7 @@ def _build_inline_index(
     model_meta: dict,
     xtab_meta: dict,
     resolved_mapper: Callable | None = None,
+    label_overrides: dict | None = None,
 ) -> pandas.Index | None:
     """
     Build the pandas index from Arrow row attribute columns.
@@ -175,7 +226,8 @@ def _build_inline_index(
                 processed.append(v)
         arrays.append(processed)
 
-    names = [_label_title(lid, model_meta) for lid in col_ids]
+    attr_overrides = (label_overrides or {}).get("labels", {})
+    names = [_apply_label_override(_label_title(lid, model_meta), lid, attr_overrides) for lid in col_ids]
 
     # Apply resolved_mapper to the string arrays if provided.
     string_dtype = resolved_mapper(pa.string()) if resolved_mapper else None
@@ -194,6 +246,7 @@ def _build_field_index(
     label_ref_to_id: dict[str, str],
     model_meta: dict,
     xtab_meta: dict,
+    label_overrides: dict | None = None,
 ) -> pandas.Index:
     """
     Build the pandas index from Arrow field (column) metadata.
@@ -217,19 +270,43 @@ def _build_field_index(
     """
     n_col_labels = len(col_label_refs)
     col_label_ids = [label_ref_to_id[ref] for ref in col_label_refs]
+    attr_overrides = (label_overrides or {}).get("labels", {})
+    metric_overrides = (label_overrides or {}).get("metrics", {})
+    metric_local_ids: list[str] = model_meta.get("requestedShape", {}).get("metrics", [])
 
     tuples: list = []
     for field in data_fields:
+        if not field.metadata or b"gdc" not in field.metadata:
+            raise ValueError(
+                f"Data field {field.name!r} is missing required 'gdc' field metadata. "
+                "The Arrow table must originate from the GoodData /binary execution endpoint."
+            )
         gdc = json.loads(field.metadata[b"gdc"])
         label_values: list = list(gdc.get("label_values", []))
 
-        if gdc["type"] == _GDC_TYPE_METRIC:
-            m_title = _metric_title(gdc["index"], model_meta, xtab_meta)
+        gdc_type = gdc.get("type")
+        if gdc_type is None:
+            raise ValueError(
+                f"Data field {field.name!r} 'gdc' metadata is missing required key 'type'. "
+                "The Arrow table must originate from the GoodData /binary execution endpoint."
+            )
+        if gdc_type == _GDC_TYPE_METRIC:
+            if "index" not in gdc:
+                raise ValueError(f"Metric field {field.name!r} 'gdc' metadata is missing required key 'index'.")
+            metric_idx = gdc["index"]
         else:  # "total"
-            m_title = _metric_title(gdc["metric_index"], model_meta, xtab_meta)
+            for _key in ("metric_index", "agg_function"):
+                if _key not in gdc:
+                    raise ValueError(f"Total field {field.name!r} 'gdc' metadata is missing required key {_key!r}.")
+            metric_idx = gdc["metric_index"]
             agg = gdc["agg_function"].upper()
-            # Pad remaining column-label levels with the aggregation name
-            label_values = label_values + [agg] * (n_col_labels - len(label_values))
+            # Truncate to n_col_labels first (guard against malformed schema),
+            # then pad remaining column-label levels with the aggregation name.
+            label_values = label_values[:n_col_labels] + [agg] * (n_col_labels - min(len(label_values), n_col_labels))
+
+        m_title = _metric_title(metric_idx, model_meta, xtab_meta)
+        if metric_overrides and metric_idx < len(metric_local_ids):
+            m_title = _apply_label_override(m_title, metric_local_ids[metric_idx], metric_overrides)
 
         if n_col_labels == 0:
             tuples.append(m_title)
@@ -240,7 +317,9 @@ def _build_field_index(
         # No column attribute labels — just a flat Index of metric names
         return pandas.Index(tuples, name=None)
 
-    names = [_label_title(lid, model_meta) for lid in col_label_ids] + [None]
+    names = [_apply_label_override(_label_title(lid, model_meta), lid, attr_overrides) for lid in col_label_ids] + [
+        None
+    ]
     return pandas.MultiIndex.from_tuples(tuples, names=names)
 
 
@@ -254,6 +333,114 @@ def _wrap_for_columns(idx: pandas.Index | None) -> pandas.Index | None:
     if idx is None or isinstance(idx, pandas.MultiIndex):
         return idx
     return pandas.Index([(v,) for v in idx])
+
+
+def reorder_grand_totals(
+    table: pa.Table,
+    grand_totals_position: str | None,
+) -> pa.Table:
+    """
+    Move grand total rows (``__row_type == 2``) to the top or leave them at the bottom.
+
+    Subtotal rows (``__row_type == 1``) are not repositioned — they remain adjacent to
+    their data group.  No-op when ``grand_totals_position`` is not ``"top"`` or
+    ``"pinnedTop"``, or when the table has no ``__row_type`` column (no row totals).
+    """
+    if grand_totals_position not in ("top", "pinnedTop"):
+        return table
+    if _COL_ROW_TYPE not in table.schema.names:
+        return table
+    row_type_vals = table.column(_COL_ROW_TYPE).to_pylist()
+    grand_mask = pa.array([v == 2 for v in row_type_vals], type=pa.bool_())
+    grand_total_rows = table.filter(grand_mask)
+    if grand_total_rows.num_rows == 0:
+        return table
+    data_and_sub_rows = table.filter(pa.array([v != 2 for v in row_type_vals], type=pa.bool_()))
+    return pa.concat_tables([grand_total_rows, data_and_sub_rows])
+
+
+def compute_column_totals_indexes(table: pa.Table, execution_dims: list) -> list[list[int]]:
+    """
+    Compute column_totals_indexes compatible with DataFrameMetadata from an Arrow table.
+
+    Returns a list with one inner list per header level in the output-column dimension,
+    matching the JSON-path DataFrameMetadata.column_totals_indexes format.  Each inner
+    list contains the zero-based positions of total columns at that header level.
+
+    Non-transposed case (Arrow fields = output columns):
+        grand_total_* fields at position k are a column total at attribute level j when
+        ``j >= len(gdc["label_values"])`` (the field aggregates that level and beyond).
+
+    Transposed / metrics-only case (Arrow fields = output rows):
+        grand_total_* fields become output rows and are already covered by
+        compute_row_totals_indexes.  Returns [] in that case.
+    """
+    schema_meta = _parse_schema_metadata(table)
+    xtab_meta = schema_meta[_META_XTAB]
+    is_transposed = schema_meta[_META_VIEW]["isTransposed"]
+
+    computed_shape = _get_computed_shape(xtab_meta)
+    row_label_refs: list[str] = computed_shape.get("rows", [])
+    col_label_refs: list[str] = computed_shape.get("cols", [])
+
+    # In the transposed / metrics-only layout grand_total_* fields become output rows
+    # (handled by compute_row_totals_indexes) → nothing to do here.
+    if is_transposed or not row_label_refs:
+        return []
+
+    all_data_fields = [
+        f for f in table.schema if f.name.startswith(_FIELD_METRIC_GROUP) or f.name.startswith(_FIELD_GRAND_TOTAL)
+    ]
+
+    # No grand_total_* fields → no column totals.
+    if not any(f.name.startswith(_FIELD_GRAND_TOTAL) for f in table.schema):
+        return []
+
+    label_ref_to_id = _label_ref_to_id_map(xtab_meta)
+    id_to_ref = {v: k for k, v in label_ref_to_id.items()}
+    col_ref_set = set(col_label_refs)
+
+    def _label_ids_in_dim(dim: dict) -> set:
+        return {h["attributeHeader"]["label"]["id"] for h in dim.get("headers", []) if "attributeHeader" in h}
+
+    # Find the column execution dimension.
+    if col_label_refs:
+        col_ref_label_ids = {label_ref_to_id[r] for r in col_label_refs}
+        col_dim = next(
+            (dim for dim in execution_dims if col_ref_label_ids <= _label_ids_in_dim(dim)),
+            {},
+        )
+    else:
+        col_dim = next(
+            (dim for dim in execution_dims if any("measureGroupHeaders" in h for h in dim.get("headers", []))),
+            {},
+        )
+
+    # Pre-parse gdc metadata once to avoid O(N×M) json.loads calls in the header loop.
+    parsed_gdcs: list[dict | None] = [
+        json.loads(f.metadata[b"gdc"]) if f.metadata and b"gdc" in f.metadata else None for f in all_data_fields
+    ]
+
+    result: list[list[int]] = []
+    attr_level = 0
+    for header in col_dim.get("headers", []):
+        if "measureGroupHeaders" in header:
+            result.append([])
+        else:
+            label_id = header["attributeHeader"]["label"]["id"]
+            ref = id_to_ref.get(label_id)
+            if ref is None or ref not in col_ref_set:
+                result.append([])
+            else:
+                j = attr_level
+                total_idxs = [
+                    k
+                    for k, gdc in enumerate(parsed_gdcs)
+                    if gdc is not None and gdc["type"] == _GDC_TYPE_TOTAL and j >= len(gdc.get("label_values", []))
+                ]
+                result.append(total_idxs)
+                attr_level += 1
+    return result
 
 
 def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[list[int]]:
@@ -276,8 +463,9 @@ def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[li
     xtab_meta = schema_meta[_META_XTAB]
     is_transposed = schema_meta[_META_VIEW]["isTransposed"]
 
-    row_label_refs: list[str] = xtab_meta["computedShape"]["rows"]
-    col_label_refs: list[str] = xtab_meta["computedShape"]["cols"]
+    computed_shape = _get_computed_shape(xtab_meta)
+    row_label_refs: list[str] = computed_shape.get("rows", [])
+    col_label_refs: list[str] = computed_shape.get("cols", [])
     label_ref_to_id = _label_ref_to_id_map(xtab_meta)
     id_to_ref = {v: k for k, v in label_ref_to_id.items()}
 
@@ -296,19 +484,24 @@ def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[li
         ref_label_ids = {label_ref_to_id[r] for r in output_row_refs}
         row_dim = next(
             (dim for dim in execution_dims if ref_label_ids <= _label_ids_in_dim(dim)),
-            execution_dims[0] if execution_dims else {},
+            {},
         )
     else:
         # Metrics-only: the dimension containing measureGroupHeaders is the output-row dim.
         row_dim = next(
             (dim for dim in execution_dims if any("measureGroupHeaders" in h for h in dim.get("headers", []))),
-            execution_dims[0] if execution_dims else {},
+            {},
         )
 
     if use_field_rows:
         # Output rows are the data fields in schema order.
         all_data_fields = [
             f for f in table.schema if f.name.startswith(_FIELD_METRIC_GROUP) or f.name.startswith(_FIELD_GRAND_TOTAL)
+        ]
+
+        # Pre-parse gdc metadata once to avoid O(N×M) json.loads calls in the header loop.
+        parsed_gdcs: list[dict | None] = [
+            json.loads(f.metadata[b"gdc"]) if f.metadata and b"gdc" in f.metadata else None for f in all_data_fields
         ]
 
         result: list[list[int]] = []
@@ -325,9 +518,8 @@ def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[li
                     j = attr_level
                     total_idxs = [
                         k
-                        for k, f in enumerate(all_data_fields)
-                        if (gdc := json.loads(f.metadata[b"gdc"]))["type"] == _GDC_TYPE_TOTAL
-                        and j >= len(gdc.get("label_values", []))
+                        for k, gdc in enumerate(parsed_gdcs)
+                        if gdc is not None and gdc["type"] == _GDC_TYPE_TOTAL and j >= len(gdc.get("label_values", []))
                     ]
                     result.append(total_idxs)
                     attr_level += 1
@@ -416,6 +608,8 @@ def _compute_primary_labels_from_fields(
         return result
 
     for field in all_data_fields:
+        if not field.metadata or b"gdc" not in field.metadata:
+            continue
         gdc = json.loads(field.metadata[b"gdc"])
         if gdc["type"] != _GDC_TYPE_METRIC:
             continue
@@ -450,8 +644,9 @@ def compute_primary_labels(
     is_transposed = schema_meta[_META_VIEW]["isTransposed"]
 
     label_ref_to_id = _label_ref_to_id_map(xtab_meta)
-    row_label_refs: list[str] = xtab_meta["computedShape"]["rows"]
-    col_label_refs: list[str] = xtab_meta["computedShape"]["cols"]
+    computed_shape = _get_computed_shape(xtab_meta)
+    row_label_refs: list[str] = computed_shape.get("rows", [])
+    col_label_refs: list[str] = computed_shape.get("cols", [])
 
     all_data_fields = [
         f for f in table.schema if f.name.startswith(_FIELD_METRIC_GROUP) or f.name.startswith(_FIELD_GRAND_TOTAL)
@@ -474,6 +669,7 @@ def convert_arrow_table_to_dataframe(
     self_destruct: bool = False,
     types_mapper: TypesMapper = TypesMapper.DEFAULT,
     custom_mapping: dict | None = None,
+    label_overrides: dict | None = None,
 ) -> pandas.DataFrame:
     """
     Convert a pyarrow Table returned by the GoodData /binary execution endpoint
@@ -547,11 +743,16 @@ def convert_arrow_table_to_dataframe(
 
     # computedShape.rows  → label refs for Arrow row attribute columns
     # computedShape.cols  → label refs encoded in field metadata
-    row_label_refs: list[str] = xtab_meta["computedShape"]["rows"]
-    col_label_refs: list[str] = xtab_meta["computedShape"]["cols"]
+    computed_shape = _get_computed_shape(xtab_meta)
+    row_label_refs: list[str] = computed_shape.get("rows", [])
+    col_label_refs: list[str] = computed_shape.get("cols", [])
 
-    inline_index = _build_inline_index(table, row_label_refs, label_ref_to_id, model_meta, xtab_meta, resolved_mapper)
-    field_index = _build_field_index(all_data_fields, col_label_refs, label_ref_to_id, model_meta, xtab_meta)
+    inline_index = _build_inline_index(
+        table, row_label_refs, label_ref_to_id, model_meta, xtab_meta, resolved_mapper, label_overrides
+    )
+    field_index = _build_field_index(
+        all_data_fields, col_label_refs, label_ref_to_id, model_meta, xtab_meta, label_overrides
+    )
 
     # When there are no row attribute labels (inline_index is None) the server
     # packs everything into the field dimension; always use field_index as rows.

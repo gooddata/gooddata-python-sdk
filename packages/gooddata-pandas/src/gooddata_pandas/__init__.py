@@ -1,7 +1,7 @@
 # (C) 2021 GoodData Corporation
 
 from gooddata_pandas._version import __version__
-from gooddata_pandas.arrow_types import TypesMapper
+from gooddata_pandas.arrow_types import ArrowConfig, TypesMapper
 
 try:
     from gooddata_pandas.arrow_convertor import convert_arrow_table_to_dataframe

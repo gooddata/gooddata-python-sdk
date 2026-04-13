@@ -1,6 +1,7 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
+import warnings
 from typing import TYPE_CHECKING, Callable, Literal, Union
 
 if TYPE_CHECKING:
@@ -19,14 +20,16 @@ from gooddata_sdk import (
     ResultSizeDimensions,
 )
 
-from gooddata_pandas.arrow_types import TypesMapper
+from gooddata_pandas.arrow_types import ArrowConfig
 from gooddata_pandas.data_access import compute_and_extract
 
 try:
     from gooddata_pandas.arrow_convertor import (
+        compute_column_totals_indexes,
         compute_primary_labels,
         compute_row_totals_indexes,
         convert_arrow_table_to_dataframe,
+        reorder_grand_totals,
     )
 
     _ARROW_AVAILABLE = True
@@ -81,15 +84,29 @@ class DataFrameFactory:
             -> Tuple[pandas.DataFrame, DataFrameMetadata]:
     """
 
-    def __init__(self, sdk: GoodDataSdk, workspace_id: str) -> None:
+    def __init__(
+        self,
+        sdk: GoodDataSdk,
+        workspace_id: str,
+        use_arrow: bool = False,
+        arrow_config: ArrowConfig | None = None,
+    ) -> None:
         """Create a new DataFrameFactory.
 
         Args:
             sdk (GoodDataSdk): GoodData SDK instance.
             workspace_id (str): Workspace identifier.
+            use_arrow (bool): When True, every factory method that supports an Arrow
+                path uses the Arrow IPC binary endpoint instead of the JSON execution
+                path. Requires pyarrow to be installed. Defaults to False.
+            arrow_config (Optional[ArrowConfig]): Arrow IPC conversion configuration
+                (self_destruct, types_mapper, custom_mapping). Defaults to
+                ArrowConfig() (safe defaults).
         """
         self._sdk = sdk
         self._workspace_id = workspace_id
+        self._use_arrow = use_arrow
+        self._arrow_config = arrow_config or ArrowConfig()
 
     def indexed(
         self,
@@ -116,10 +133,22 @@ class DataFrameFactory:
             is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
             result_page_len (Optional[int]): Optional page size for result pagination.
                 Defaults to 1000. Larger values can improve performance for large result sets.
+                Ignored when use_arrow=True.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
         """
+        use_arrow = self._use_arrow
+        if use_arrow and not _ARROW_AVAILABLE:
+            raise ImportError(
+                "pyarrow is required to use use_arrow=True. Install it with: pip install gooddata-pandas[arrow]"
+            )
+        if use_arrow and result_page_len is not None:
+            warnings.warn(
+                "result_page_len is ignored when use_arrow=True (Arrow fetches the full result in one shot).",
+                UserWarning,
+                stacklevel=2,
+            )
         data, index = compute_and_extract(
             self._sdk,
             self._workspace_id,
@@ -129,6 +158,7 @@ class DataFrameFactory:
             on_execution_submitted=on_execution_submitted,
             is_cancellable=is_cancellable,
             result_page_len=result_page_len,
+            use_arrow=use_arrow,
         )
 
         _idx = make_pandas_index(index)
@@ -155,11 +185,22 @@ class DataFrameFactory:
             is_cancellable (bool, optional): Whether the execution should be cancelled when the connection is interrupted.
             result_page_len (Optional[int]): Optional page size for result pagination.
                 Defaults to 1000. Larger values can improve performance for large result sets.
+                Ignored when use_arrow=True.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
         """
-
+        use_arrow = self._use_arrow
+        if use_arrow and not _ARROW_AVAILABLE:
+            raise ImportError(
+                "pyarrow is required to use use_arrow=True. Install it with: pip install gooddata-pandas[arrow]"
+            )
+        if use_arrow and result_page_len is not None:
+            warnings.warn(
+                "result_page_len is ignored when use_arrow=True (Arrow fetches the full result in one shot).",
+                UserWarning,
+                stacklevel=2,
+            )
         data, _ = compute_and_extract(
             self._sdk,
             self._workspace_id,
@@ -168,6 +209,7 @@ class DataFrameFactory:
             on_execution_submitted=on_execution_submitted,
             is_cancellable=is_cancellable,
             result_page_len=result_page_len,
+            use_arrow=use_arrow,
         )
 
         return pandas.DataFrame(data=data)
@@ -295,13 +337,13 @@ class DataFrameFactory:
             optimized (bool, default=False): Use memory optimized accumulator if True; by default, the accumulator stores
                 headers in memory as lists of dicts, which can consume a lot of memory for large results.
                 Optimized accumulator stores only unique values and story only reference to them in the list,
-                which can significantly reduce memory usage.
+                which can significantly reduce memory usage. Ignored when use_arrow=True.
             grand_totals_position (Literal["pinnedBottom", "pinnedTop", "bottom", "top"], optional):
                 Position where grand totals should be placed. "pinnedBottom" and "bottom" append totals,
                 "pinnedTop" and "top" prepend totals. Defaults to "bottom".
 
         Returns:
-            pandas.DataFrame: A DataFrame instance.
+            tuple[pandas.DataFrame, DataFrameMetadata]: DataFrame and metadata.
         """
         execution_definition = self._sdk.compute.build_exec_def_from_chat_result(
             created_visualizations_response,
@@ -343,6 +385,10 @@ class DataFrameFactory:
         Each dimension may be sliced by multiple labels. The factory will create MultiIndex for the dataframe's
         row index and the columns.
 
+        When the factory's ``use_arrow`` is True the result is fetched via the Arrow IPC
+        binary endpoint in one shot. In this mode ``result_size_dimensions_limits``,
+        ``result_size_bytes_limit``, ``page_size``, and ``optimized`` are ignored.
+
         Example of label_overrides structure:
 
         .. code-block:: python
@@ -364,14 +410,14 @@ class DataFrameFactory:
             exec_def (ExecutionDefinition): Execution definition.
             label_overrides (Optional[LabelOverrides]): Label overrides for metrics and attributes.
             result_size_dimensions_limits (ResultSizeDimensions): A tuple containing maximum size of result dimensions.
+                Ignored when use_arrow=True.
             result_size_bytes_limit (Optional[int]): Maximum size of result in bytes.
-            page_size (int): Number of records per page.
+                Ignored when use_arrow=True.
+            page_size (int): Number of records per page. Ignored when use_arrow=True.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback to call when the execution was
                 submitted to the backend.
-            optimized (bool, default=False): Use memory optimized accumulator if True; by default, the accumulator stores
-                headers in memory as lists of dicts, which can consume a lot of memory for large results.
-                Optimized accumulator stores only unique values and story only reference to them in the list,
-                which can significantly reduce memory usage.
+            optimized (bool, default=False): Use memory optimized accumulator.
+                Ignored when use_arrow=True.
             grand_totals_position (Literal["pinnedBottom", "pinnedTop", "bottom", "top"], optional):
                 Position where grand totals should be placed. "pinnedBottom" and "bottom" append totals,
                 "pinnedTop" and "top" prepend totals. Defaults to "bottom".
@@ -379,6 +425,14 @@ class DataFrameFactory:
         Returns:
             Tuple[pandas.DataFrame, DataFrameMetadata]: Tuple holding DataFrame and DataFrame metadata.
         """
+        if self._use_arrow:
+            return self.for_exec_def_arrow(
+                exec_def=exec_def,
+                label_overrides=label_overrides,
+                grand_totals_position=grand_totals_position,
+                on_execution_submitted=on_execution_submitted,
+            )
+
         if label_overrides is None:
             label_overrides = {}
 
@@ -399,13 +453,45 @@ class DataFrameFactory:
             grand_totals_position=grand_totals_position,
         )
 
+    def _table_to_df_and_metadata(
+        self,
+        table: pa.Table,
+        exec_response: BareExecutionResponse,
+        label_overrides: dict,
+        grand_totals_position: Literal["pinnedBottom", "pinnedTop", "bottom", "top"] | None,
+    ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
+        """Shared helper: reorder totals, convert table, build DataFrameMetadata.
+
+        Technical Arrow parameters (self_destruct, types_mapper, custom_mapping) are
+        read from self._arrow_config so they don't need to be threaded through every
+        call site.
+        """
+        table = reorder_grand_totals(table, grand_totals_position)
+        df = convert_arrow_table_to_dataframe(
+            table,
+            self_destruct=self._arrow_config.self_destruct,
+            types_mapper=self._arrow_config.types_mapper,
+            custom_mapping=self._arrow_config.custom_mapping,
+            label_overrides=label_overrides,
+        )
+        row_totals_indexes = compute_row_totals_indexes(table, exec_response.dimensions)
+        column_totals_indexes = compute_column_totals_indexes(table, exec_response.dimensions)
+        primary_labels_from_index, primary_labels_from_columns = compute_primary_labels(table)
+        metadata = DataFrameMetadata(
+            row_totals_indexes=row_totals_indexes,
+            column_totals_indexes=column_totals_indexes,
+            execution_response=exec_response,
+            primary_labels_from_index=primary_labels_from_index,
+            primary_labels_from_columns=primary_labels_from_columns,
+        )
+        return df, metadata
+
     def for_exec_def_arrow(
         self,
         exec_def: ExecutionDefinition,
+        label_overrides: LabelOverrides | None = None,
+        grand_totals_position: Literal["pinnedBottom", "pinnedTop", "bottom", "top"] | None = "bottom",
         on_execution_submitted: Callable[[Execution], None] | None = None,
-        self_destruct: bool = False,
-        types_mapper: TypesMapper = TypesMapper.DEFAULT,
-        custom_mapping: dict | None = None,
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a DataFrame from an execution definition using the Arrow IPC binary format.
@@ -413,26 +499,27 @@ class DataFrameFactory:
         Compared to for_exec_def(), this skips the page-by-page JSON deserialization and
         converts the result in one shot via pyarrow, which is significantly faster for large results.
 
-        Returns the same ``(DataFrame, DataFrameMetadata)`` tuple as :meth:`for_exec_def` so that
-        callers can switch between the two paths without changing their code.
+        Technical Arrow parameters (self_destruct, types_mapper, custom_mapping) are
+        configured on the factory via ArrowConfig rather than per call. Pass
+        ``arrow_config=ArrowConfig(...)`` when constructing DataFrameFactory.
+
+        Note: unlike :meth:`for_exec_def`, this method does not fetch ``result_cache_metadata``
+        from the server. ``DataFrameMetadata`` does not carry a cache-metadata field today, so
+        the returned tuple is structurally identical; if that field is added in future both paths
+        should be kept in sync.
 
         Requires pyarrow to be installed (pip install gooddata-pandas[arrow]).
 
         Args:
             exec_def (ExecutionDefinition): Execution definition.
+            label_overrides (Optional[LabelOverrides]): Label overrides for metrics and attributes.
+            grand_totals_position (Literal["pinnedBottom", "pinnedTop", "bottom", "top"], optional):
+                Position where grand total rows should be placed. ``"pinnedBottom"`` and ``"bottom"``
+                keep totals at the end (default). ``"pinnedTop"`` and ``"top"`` move grand total rows
+                to the beginning of the DataFrame. Subtotal rows are not repositioned.
+                Defaults to ``"bottom"``.
             on_execution_submitted (Optional[Callable[[Execution], None]]): Callback fired after
                 the execution is submitted to the backend.
-            self_destruct (bool): If True, Arrow buffers are freed during conversion, reducing
-                peak native memory at the cost of not being able to reuse the table.
-            types_mapper (TypesMapper): Controls how Arrow types are mapped to pandas dtypes.
-                ``TypesMapper.DEFAULT`` (default) — no mapping; produces float64 and object
-                    strings, identical to the JSON execution path.
-                ``TypesMapper.ARROW_STRINGS`` — strings use Arrow-backed StringDtype (lower
-                    memory, faster); all numeric types unchanged.
-                ``TypesMapper.CUSTOM`` — uses ``custom_mapping`` dict; raises ValueError if
-                    ``custom_mapping`` is not provided.
-            custom_mapping (Optional[dict]): Arrow type → pandas dtype mapping dict.
-                Only used when ``types_mapper=TypesMapper.CUSTOM``, ignored otherwise.
 
         Returns:
             Tuple[pandas.DataFrame, DataFrameMetadata]
@@ -443,6 +530,9 @@ class DataFrameFactory:
                 "pyarrow is required to use for_exec_def_arrow(). Install it with: pip install gooddata-pandas[arrow]"
             )
 
+        if label_overrides is None:
+            label_overrides = {}
+
         execution = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
 
         if on_execution_submitted is not None:
@@ -450,27 +540,14 @@ class DataFrameFactory:
 
         exec_response = execution.bare_exec_response
         table = exec_response.read_result_arrow()
-        df = convert_arrow_table_to_dataframe(
-            table, self_destruct=self_destruct, types_mapper=types_mapper, custom_mapping=custom_mapping
-        )
-        row_totals_indexes = compute_row_totals_indexes(table, exec_response.dimensions)
-        primary_labels_from_index, primary_labels_from_columns = compute_primary_labels(table)
-        metadata = DataFrameMetadata(
-            row_totals_indexes=row_totals_indexes,
-            column_totals_indexes=[],
-            execution_response=exec_response,
-            primary_labels_from_index=primary_labels_from_index,
-            primary_labels_from_columns=primary_labels_from_columns,
-        )
-        return df, metadata
+        return self._table_to_df_and_metadata(table, exec_response, label_overrides, grand_totals_position)
 
     def for_arrow_table(
         self,
         table: pa.Table,
         execution_response: BareExecutionResponse | None = None,
-        self_destruct: bool = False,
-        types_mapper: TypesMapper = TypesMapper.DEFAULT,
-        custom_mapping: dict | None = None,
+        label_overrides: LabelOverrides | None = None,
+        grand_totals_position: Literal["pinnedBottom", "pinnedTop", "bottom", "top"] | None = "bottom",
     ) -> tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a DataFrame from an already-obtained PyArrow Table.
@@ -480,18 +557,22 @@ class DataFrameFactory:
         For the common case of submitting an execution and reading the result in one call,
         use :meth:`for_exec_def_arrow` instead.
 
+        Technical Arrow parameters (self_destruct, types_mapper, custom_mapping) are
+        configured on the factory via ArrowConfig.
+
         Args:
             table: PyArrow Table as returned by the GoodData binary execution endpoint.
             execution_response: Optional ``BareExecutionResponse`` from the execution that
                 produced this table. When provided, ``DataFrameMetadata.row_totals_indexes``
-                is computed accurately and ``DataFrameMetadata.execution_response`` is
-                populated. When omitted, ``row_totals_indexes`` is an empty list and
-                ``execution_response`` is ``None`` in the returned metadata.
-            self_destruct: If True, Arrow buffers are freed during conversion, reducing
-                peak native memory at the cost of not being able to reuse the table.
-            types_mapper: Controls how Arrow types are mapped to pandas dtypes.
-            custom_mapping: Arrow type → pandas dtype mapping dict.
-                Only used when ``types_mapper=TypesMapper.CUSTOM``.
+                and ``DataFrameMetadata.column_totals_indexes`` are computed accurately and
+                ``DataFrameMetadata.execution_response`` is populated. When omitted, both
+                totals indexes are empty lists and ``execution_response`` is ``None``.
+            label_overrides (Optional[LabelOverrides]): Label overrides for metrics and attributes.
+            grand_totals_position (Literal["pinnedBottom", "pinnedTop", "bottom", "top"], optional):
+                Position where grand total rows should be placed. ``"pinnedBottom"`` and ``"bottom"``
+                keep totals at the end (default). ``"pinnedTop"`` and ``"top"`` move grand total rows
+                to the beginning of the DataFrame. Subtotal rows are not repositioned.
+                Defaults to ``"bottom"``.
 
         Returns:
             Tuple[pandas.DataFrame, DataFrameMetadata]
@@ -501,16 +582,29 @@ class DataFrameFactory:
                 "pyarrow is required to use for_arrow_table(). Install it with: pip install gooddata-pandas[arrow]"
             )
 
+        if label_overrides is None:
+            label_overrides = {}
+
+        table = reorder_grand_totals(table, grand_totals_position)
         df = convert_arrow_table_to_dataframe(
-            table, self_destruct=self_destruct, types_mapper=types_mapper, custom_mapping=custom_mapping
+            table,
+            self_destruct=self._arrow_config.self_destruct,
+            types_mapper=self._arrow_config.types_mapper,
+            custom_mapping=self._arrow_config.custom_mapping,
+            label_overrides=label_overrides,
         )
         row_totals_indexes = (
             compute_row_totals_indexes(table, execution_response.dimensions) if execution_response is not None else []
         )
+        column_totals_indexes = (
+            compute_column_totals_indexes(table, execution_response.dimensions)
+            if execution_response is not None
+            else []
+        )
         primary_labels_from_index, primary_labels_from_columns = compute_primary_labels(table)
         metadata = DataFrameMetadata(
             row_totals_indexes=row_totals_indexes,
-            column_totals_indexes=[],
+            column_totals_indexes=column_totals_indexes,
             execution_response=execution_response,
             primary_labels_from_index=primary_labels_from_index,
             primary_labels_from_columns=primary_labels_from_columns,
@@ -555,14 +649,16 @@ class DataFrameFactory:
             label_overrides (Optional[LabelOverrides]): Label overrides for metrics and attributes.
             result_cache_metadata (Optional[ResultCacheMetadata]): Cache metadata for the execution result.
             result_size_dimensions_limits (ResultSizeDimensions): A tuple containing maximum size of result dimensions.
+                Ignored when use_arrow=True.
             result_size_bytes_limit (Optional[int]): Maximum size of the result in bytes.
+                Ignored when use_arrow=True.
             use_local_ids_in_headers (bool): Use local identifier in headers.
+                Ignored when use_arrow=True.
             use_primary_labels_in_attributes (bool): Use primary labels in attributes.
-            page_size (int): Number of records per page.
-            optimized (bool, default=False): Use memory optimized accumulator if True; by default, the accumulator stores
-                headers in memory as lists of dicts, which can consume a lot of memory for large results.
-                Optimized accumulator stores only unique values and story only reference to them in the list,
-                which can significantly reduce memory usage.
+                Ignored when use_arrow=True.
+            page_size (int): Number of records per page. Ignored when use_arrow=True.
+            optimized (bool, default=False): Use memory optimized accumulator if True.
+                Ignored when use_arrow=True.
             grand_totals_position (Literal["pinnedBottom", "pinnedTop", "bottom", "top"], optional):
                 Position where grand totals should be placed. "pinnedBottom" and "bottom" append totals,
                 "pinnedTop" and "top" prepend totals. Defaults to "bottom".
@@ -575,6 +671,21 @@ class DataFrameFactory:
 
         if result_cache_metadata is None:
             result_cache_metadata = self.result_cache_metadata_for_exec_result_id(result_id=result_id)
+
+        if self._use_arrow:
+            if not _ARROW_AVAILABLE:
+                raise ImportError(
+                    "pyarrow is required to use use_arrow=True. Install it with: pip install gooddata-pandas[arrow]"
+                )
+            exec_response = BareExecutionResponse(
+                api_client=self._sdk.client,
+                workspace_id=self._workspace_id,
+                execution_response=models.AfmExecutionResponse(
+                    result_cache_metadata.execution_response, _check_type=False
+                ),
+            )
+            table = exec_response.read_result_arrow()
+            return self._table_to_df_and_metadata(table, exec_response, label_overrides, grand_totals_position)
 
         return convert_execution_response_to_dataframe(
             execution_response=BareExecutionResponse(
