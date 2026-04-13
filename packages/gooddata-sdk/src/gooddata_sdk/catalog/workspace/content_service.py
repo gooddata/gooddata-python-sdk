@@ -31,6 +31,7 @@ from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
     CatalogDependentEntitiesRequest,
     CatalogDependentEntitiesResponse,
 )
+from gooddata_sdk.catalog.workspace.entity_model.resolved_llm import CatalogResolvedLlms
 from gooddata_sdk.catalog.workspace.model_container import CatalogWorkspaceContent
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
@@ -248,6 +249,23 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
                 workspace_id=workspace_id, dependent_entities_request=dependent_entities_request.to_api()
             )
         )
+
+    def resolve_llm_providers(self, workspace_id: str) -> CatalogResolvedLlms:
+        """Resolve the active LLM configuration for a given workspace.
+
+        Returns the active LLM provider and its available models. When no LLM
+        is configured for the workspace, ``data`` will be ``None``.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+
+        Returns:
+            CatalogResolvedLlms:
+                Object containing the resolved LLM configuration for the workspace.
+        """
+        response = self._actions_api.resolve_llm_providers(workspace_id, _check_return_type=False)
+        return CatalogResolvedLlms.from_api(response)
 
     # Declarative methods for logical data model
 
