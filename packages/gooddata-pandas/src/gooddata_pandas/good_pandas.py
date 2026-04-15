@@ -7,6 +7,7 @@ from gooddata_sdk import GoodDataSdk
 from gooddata_sdk.utils import PROFILES_FILE_PATH, good_pandas_profile_content
 
 from gooddata_pandas import __version__
+from gooddata_pandas.arrow_types import ArrowConfig
 from gooddata_pandas.dataframe import DataFrameFactory
 from gooddata_pandas.series import SeriesFactory
 
@@ -24,6 +25,8 @@ class GoodPandas:
         host: str,
         token: str,
         headers_host: str | None = None,
+        use_arrow: bool = False,
+        arrow_config: ArrowConfig | None = None,
         **custom_headers_: str | None,
     ) -> None:
         """
@@ -33,12 +36,21 @@ class GoodPandas:
             host (str): Host for GoodDataSdk.
             token (str): Token for GoodDataSdk.
             headers_host (Optional[str]): Host header, if needed.
+            use_arrow (bool): When True, every DataFrameFactory created via
+                :meth:`data_frames` uses the Arrow IPC binary endpoint instead of
+                the JSON execution path. Requires pyarrow to be installed
+                (``pip install gooddata-pandas[arrow]``). Defaults to False.
+            arrow_config (Optional[ArrowConfig]): Arrow IPC conversion configuration
+                shared across all DataFrameFactory instances created by this
+                GoodPandas instance. Defaults to ArrowConfig() (safe defaults).
             **custom_headers_ (Optional[str]): Additional headers for GoodDataSdk.
 
         """
         if headers_host is not None:
             custom_headers_["Host"] = headers_host
         self._sdk = GoodDataSdk.create(host, token, USER_AGENT, executions_cancellable=False, **custom_headers_)
+        self._use_arrow = use_arrow
+        self._arrow_config = arrow_config
         self._series_per_ws: dict[str, SeriesFactory] = dict()
         self._frames_per_ws: dict[str, DataFrameFactory] = dict()
 
@@ -56,6 +68,8 @@ class GoodPandas:
 
         """
         content, custom_headers = good_pandas_profile_content(profile, profiles_path)
+        if isinstance(content.get("arrow_config"), dict):
+            content["arrow_config"] = ArrowConfig(**content["arrow_config"])
         return cls(**content, **custom_headers)
 
     @property
@@ -97,6 +111,11 @@ class GoodPandas:
 
         """
         if workspace_id not in self._frames_per_ws:
-            self._frames_per_ws[workspace_id] = DataFrameFactory(sdk=self._sdk, workspace_id=workspace_id)
+            self._frames_per_ws[workspace_id] = DataFrameFactory(
+                sdk=self._sdk,
+                workspace_id=workspace_id,
+                use_arrow=self._use_arrow,
+                arrow_config=self._arrow_config,
+            )
 
         return self._frames_per_ws[workspace_id]
