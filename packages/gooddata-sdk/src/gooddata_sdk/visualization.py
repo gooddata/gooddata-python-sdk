@@ -177,14 +177,22 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
         # fallback to use URIs; SDK may be able to create filter with attr elements as uris...
         in_values = f["in"]["values"] if "values" in f["in"] else f["in"]["uris"]
 
-        return PositiveAttributeFilter(label=ref_extract(f["displayForm"]), values=in_values)
+        return PositiveAttributeFilter(
+            label=ref_extract(f["displayForm"]),
+            values=in_values,
+            uses_arbitrary_values=f.get("usesArbitraryValues"),
+        )
 
     elif "negativeAttributeFilter" in filter_obj:
         f = filter_obj["negativeAttributeFilter"]
         # fallback to use URIs; SDK may be able to create filter with attr elements as uris...
         not_in_values = f["notIn"]["values"] if "values" in f["notIn"] else f["notIn"]["uris"]
 
-        return NegativeAttributeFilter(label=ref_extract(f["displayForm"]), values=not_in_values)
+        return NegativeAttributeFilter(
+            label=ref_extract(f["displayForm"]),
+            values=not_in_values,
+            uses_arbitrary_values=f.get("usesArbitraryValues"),
+        )
     elif "arbitraryAttributeFilter" in filter_obj:
         f = filter_obj["arbitraryAttributeFilter"]
         label = ref_extract(f["label"])

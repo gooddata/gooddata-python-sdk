@@ -188,3 +188,72 @@ def test_match_filter_inequality_different_case_sensitive():
     f1 = MatchAttributeFilter(label="test", literal="foo", match_type="CONTAINS")
     f2 = MatchAttributeFilter(label="test", literal="foo", match_type="CONTAINS", case_sensitive=True)
     assert f1 != f2
+
+
+# --- uses_arbitrary_values tests ---
+
+
+def test_positive_filter_uses_arbitrary_values_included_when_set():
+    f = PositiveAttributeFilter(
+        label=ObjId(type="label", id="label.id"),
+        values=["val1"],
+        uses_arbitrary_values=True,
+    )
+    api_dict = f.as_api_model().to_dict()
+    assert api_dict["positive_attribute_filter"]["uses_arbitrary_values"] is True
+
+
+def test_positive_filter_uses_arbitrary_values_false():
+    f = PositiveAttributeFilter(
+        label=ObjId(type="label", id="label.id"),
+        values=["val1"],
+        uses_arbitrary_values=False,
+    )
+    api_dict = f.as_api_model().to_dict()
+    assert api_dict["positive_attribute_filter"]["uses_arbitrary_values"] is False
+
+
+def test_positive_filter_uses_arbitrary_values_absent_by_default():
+    f = PositiveAttributeFilter(label=ObjId(type="label", id="label.id"), values=["val1"])
+    api_dict = f.as_api_model().to_dict()
+    assert "uses_arbitrary_values" not in api_dict["positive_attribute_filter"]
+
+
+def test_negative_filter_uses_arbitrary_values_included_when_set():
+    f = NegativeAttributeFilter(
+        label=ObjId(type="label", id="label.id"),
+        values=["val1"],
+        uses_arbitrary_values=True,
+    )
+    api_dict = f.as_api_model().to_dict()
+    assert api_dict["negative_attribute_filter"]["uses_arbitrary_values"] is True
+
+
+def test_negative_filter_uses_arbitrary_values_absent_by_default():
+    f = NegativeAttributeFilter(label=ObjId(type="label", id="label.id"), values=["val1"])
+    api_dict = f.as_api_model().to_dict()
+    assert "uses_arbitrary_values" not in api_dict["negative_attribute_filter"]
+
+
+def test_positive_filter_equality_with_uses_arbitrary_values():
+    f1 = PositiveAttributeFilter(label="test", values=["a"], uses_arbitrary_values=True)
+    f2 = PositiveAttributeFilter(label="test", values=["a"], uses_arbitrary_values=True)
+    assert f1 == f2
+
+
+def test_positive_filter_inequality_different_uses_arbitrary_values():
+    f1 = PositiveAttributeFilter(label="test", values=["a"], uses_arbitrary_values=True)
+    f2 = PositiveAttributeFilter(label="test", values=["a"], uses_arbitrary_values=None)
+    assert f1 != f2
+
+
+def test_negative_filter_equality_with_uses_arbitrary_values():
+    f1 = NegativeAttributeFilter(label="test", values=["a"], uses_arbitrary_values=True)
+    f2 = NegativeAttributeFilter(label="test", values=["a"], uses_arbitrary_values=True)
+    assert f1 == f2
+
+
+def test_negative_filter_inequality_different_uses_arbitrary_values():
+    f1 = NegativeAttributeFilter(label="test", values=["a"], uses_arbitrary_values=True)
+    f2 = NegativeAttributeFilter(label="test", values=["a"])
+    assert f1 != f2

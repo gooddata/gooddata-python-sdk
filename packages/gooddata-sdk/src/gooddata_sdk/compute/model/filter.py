@@ -125,10 +125,26 @@ class AttributeFilter(Filter):
 
 
 class PositiveAttributeFilter(AttributeFilter):
+    def __init__(
+        self,
+        label: Union[ObjId, str, Attribute],
+        values: list[str] | None = None,
+        uses_arbitrary_values: bool | None = None,
+    ) -> None:
+        super().__init__(label, values)
+        self._uses_arbitrary_values = uses_arbitrary_values
+
+    @property
+    def uses_arbitrary_values(self) -> bool | None:
+        return self._uses_arbitrary_values
+
     def as_api_model(self) -> afm_models.PositiveAttributeFilter:
         label_id = _to_identifier(self._label)
         elements = afm_models.AttributeFilterElements(values=self.values)
-        body = PositiveAttributeFilterBody(label=label_id, _in=elements, _check_type=False)
+        kwargs: dict[str, Any] = {"_check_type": False}
+        if self._uses_arbitrary_values is not None:
+            kwargs["uses_arbitrary_values"] = self._uses_arbitrary_values
+        body = PositiveAttributeFilterBody(label=label_id, _in=elements, **kwargs)
         return afm_models.PositiveAttributeFilter(body, _check_type=False)
 
     def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
@@ -136,21 +152,53 @@ class PositiveAttributeFilter(AttributeFilter):
         values = ", ".join(self.values) if len(self.values) else "All"
         return f"{labels.get(label_id, label_id)}: {values}"
 
+    def __eq__(self, other: object) -> bool:
+        return (
+            isinstance(other, PositiveAttributeFilter)
+            and self._label == other._label
+            and self._values == other._values
+            and self._uses_arbitrary_values == other._uses_arbitrary_values
+        )
+
 
 class NegativeAttributeFilter(AttributeFilter):
+    def __init__(
+        self,
+        label: Union[ObjId, str, Attribute],
+        values: list[str] | None = None,
+        uses_arbitrary_values: bool | None = None,
+    ) -> None:
+        super().__init__(label, values)
+        self._uses_arbitrary_values = uses_arbitrary_values
+
+    @property
+    def uses_arbitrary_values(self) -> bool | None:
+        return self._uses_arbitrary_values
+
     def is_noop(self) -> bool:
         return len(self.values) == 0
 
     def as_api_model(self) -> afm_models.NegativeAttributeFilter:
         label_id = _to_identifier(self._label)
         elements = afm_models.AttributeFilterElements(values=self.values)
-        body = NegativeAttributeFilterBody(label=label_id, not_in=elements, _check_type=False)
-        return afm_models.NegativeAttributeFilter(body)
+        kwargs: dict[str, Any] = {"_check_type": False}
+        if self._uses_arbitrary_values is not None:
+            kwargs["uses_arbitrary_values"] = self._uses_arbitrary_values
+        body = NegativeAttributeFilterBody(label=label_id, not_in=elements, **kwargs)
+        return afm_models.NegativeAttributeFilter(body, _check_type=False)
 
     def description(self, labels: dict[str, str], format_locale: str | None = None) -> str:
         label_id = self.label.id if isinstance(self.label, ObjId) else self.label
         values = "All except " + ", ".join(self.values) if len(self.values) else "All"
         return f"{labels.get(label_id, label_id)}: {values}"
+
+    def __eq__(self, other: object) -> bool:
+        return (
+            isinstance(other, NegativeAttributeFilter)
+            and self._label == other._label
+            and self._values == other._values
+            and self._uses_arbitrary_values == other._uses_arbitrary_values
+        )
 
 
 # mapping between the allowed match operators and their human-readable descriptions

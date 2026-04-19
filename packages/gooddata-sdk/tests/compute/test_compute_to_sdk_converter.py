@@ -89,6 +89,74 @@ def test_negative_attribute_filter_conversion():
     assert result.values == ["val1", "val2"]
 
 
+def test_positive_attribute_filter_conversion_with_uses_arbitrary_values():
+    filter_dict = json.loads(
+        """
+        {
+          "positiveAttributeFilter": {
+            "label": {
+              "identifier": { "id": "attribute1", "type": "label" }
+            },
+            "in": {
+              "values": [ "val1", "val2" ]
+            },
+            "usesArbitraryValues": true
+          }
+        }
+        """
+    )
+
+    result = ComputeToSdkConverter.convert_filter(filter_dict)
+
+    assert isinstance(result, PositiveAttributeFilter)
+    assert result.uses_arbitrary_values is True
+
+
+def test_negative_attribute_filter_conversion_with_uses_arbitrary_values():
+    filter_dict = json.loads(
+        """
+        {
+          "negativeAttributeFilter": {
+            "label": {
+              "identifier": { "id": "attribute1", "type": "label" }
+            },
+            "notIn": {
+              "values": [ "val1", "val2" ]
+            },
+            "usesArbitraryValues": true
+          }
+        }
+        """
+    )
+
+    result = ComputeToSdkConverter.convert_filter(filter_dict)
+
+    assert isinstance(result, NegativeAttributeFilter)
+    assert result.uses_arbitrary_values is True
+
+
+def test_positive_attribute_filter_conversion_no_uses_arbitrary_values():
+    filter_dict = json.loads(
+        """
+        {
+          "positiveAttributeFilter": {
+            "label": {
+              "identifier": { "id": "attribute1", "type": "label" }
+            },
+            "in": {
+              "values": [ "val1" ]
+            }
+          }
+        }
+        """
+    )
+
+    result = ComputeToSdkConverter.convert_filter(filter_dict)
+
+    assert isinstance(result, PositiveAttributeFilter)
+    assert result.uses_arbitrary_values is None
+
+
 def test_match_attribute_filter_conversion():
     filter_dict = json.loads(
         """

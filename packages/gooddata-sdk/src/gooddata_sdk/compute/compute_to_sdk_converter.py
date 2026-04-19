@@ -70,11 +70,19 @@ class ComputeToSdkConverter:
         """
         if "positiveAttributeFilter" in filter_dict:
             f = filter_dict["positiveAttributeFilter"]
-            return PositiveAttributeFilter(label=ref_extract(f["label"]), values=f["in"]["values"])
+            return PositiveAttributeFilter(
+                label=ref_extract(f["label"]),
+                values=f["in"]["values"],
+                uses_arbitrary_values=f.get("usesArbitraryValues"),
+            )
 
         if "negativeAttributeFilter" in filter_dict:
             f = filter_dict["negativeAttributeFilter"]
-            return NegativeAttributeFilter(label=ref_extract(f["label"]), values=f["notIn"]["values"])
+            return NegativeAttributeFilter(
+                label=ref_extract(f["label"]),
+                values=f["notIn"]["values"],
+                uses_arbitrary_values=f.get("usesArbitraryValues"),
+            )
 
         if "matchAttributeFilter" in filter_dict:
             f = filter_dict["matchAttributeFilter"]
