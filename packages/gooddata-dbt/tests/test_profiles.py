@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2023-2026 GoodData Corporation
 import argparse
 from pathlib import Path
 
