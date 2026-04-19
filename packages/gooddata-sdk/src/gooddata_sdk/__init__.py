@@ -264,6 +264,12 @@ from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
     CatalogDependentEntitiesResponse,
     CatalogEntityIdentifier,
 )
+from gooddata_sdk.catalog.workspace.entity_model.resolved_llm import (
+    CatalogResolvedLlmEndpoint,
+    CatalogResolvedLlmModel,
+    CatalogResolvedLlmProvider,
+    CatalogResolvedLlms,
+)
 from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
     CatalogUserDataFilter,
     CatalogUserDataFilterAttributes,

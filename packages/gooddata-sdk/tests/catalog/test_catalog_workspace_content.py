@@ -18,6 +18,10 @@ from gooddata_sdk import (
     CatalogDependsOn,
     CatalogDependsOnDateFilter,
     CatalogEntityIdentifier,
+    CatalogResolvedLlmEndpoint,
+    CatalogResolvedLlmModel,
+    CatalogResolvedLlmProvider,
+    CatalogResolvedLlms,
     CatalogValidateByItem,
     CatalogWorkspace,
     DataSourceValidator,
@@ -502,3 +506,67 @@ def test_export_definition_analytics_layout(test_config):
         assert deep_eq(analytics_o.analytics.export_definitions, analytics_e.analytics.export_definitions)
     finally:
         safe_delete(_refresh_workspaces, sdk)
+
+
+# ---------------------------------------------------------------------------
+# Unit tests for CatalogResolvedLlms model deserialization
+# ---------------------------------------------------------------------------
+
+
+def test_resolved_llms_from_api_provider():
+    """CatalogResolvedLlms.from_api returns a CatalogResolvedLlmProvider when 'models' is present."""
+    data = {
+        "data": {
+            "id": "my-provider",
+            "title": "My Provider",
+            "models": [
+                {"id": "gpt-5", "family": "OPENAI"},
+            ],
+        }
+    }
+    result = CatalogResolvedLlms.from_api(data)
+    assert isinstance(result.data, CatalogResolvedLlmProvider)
+    assert result.data.id == "my-provider"
+    assert result.data.title == "My Provider"
+    assert len(result.data.models) == 1
+    model = result.data.models[0]
+    assert isinstance(model, CatalogResolvedLlmModel)
+    assert model.id == "gpt-5"
+    assert model.family == "OPENAI"
+
+
+def test_resolved_llms_from_api_endpoint():
+    """CatalogResolvedLlms.from_api returns a CatalogResolvedLlmEndpoint when 'models' is absent."""
+    data = {
+        "data": {
+            "id": "legacy-endpoint",
+            "title": "Legacy Endpoint",
+        }
+    }
+    result = CatalogResolvedLlms.from_api(data)
+    assert isinstance(result.data, CatalogResolvedLlmEndpoint)
+    assert result.data.id == "legacy-endpoint"
+    assert result.data.title == "Legacy Endpoint"
+
+
+def test_resolved_llms_from_api_none():
+    """CatalogResolvedLlms.from_api handles a missing 'data' field (no LLM configured)."""
+    result = CatalogResolvedLlms.from_api({})
+    assert result.data is None
+
+
+# ---------------------------------------------------------------------------
+# Integration test – requires a VCR cassette recorded against a live server
+# ---------------------------------------------------------------------------
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_resolve_llm_providers.yaml"))
+def test_resolve_llm_providers_integration(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    result = sdk.catalog_workspace_content.resolve_llm_providers(test_config["workspace"])
+    assert isinstance(result, CatalogResolvedLlms)
+    # data may be None if no LLM provider is configured in the test environment
+    if result.data is not None:
+        assert isinstance(result.data, (CatalogResolvedLlmEndpoint, CatalogResolvedLlmProvider))
+        assert result.data.id
+        assert result.data.title
