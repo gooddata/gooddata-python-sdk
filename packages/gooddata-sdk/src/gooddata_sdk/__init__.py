@@ -316,6 +316,18 @@ from gooddata_sdk.compute.model.metric import (
     PopDatesetMetric,
     SimpleMetric,
 )
+from gooddata_sdk.compute.model.user_context import (
+    CatalogActiveObjectIdentification,
+    CatalogDashboardContext,
+    CatalogInsightWidgetDescriptor,
+    CatalogObjectReference,
+    CatalogObjectReferenceGroup,
+    CatalogRichTextWidgetDescriptor,
+    CatalogUIContext,
+    CatalogUserContext,
+    CatalogVisualizationSwitcherWidgetDescriptor,
+    CatalogWidgetDescriptor,
+)
 from gooddata_sdk.compute.service import ComputeService
 from gooddata_sdk.sdk import GoodDataSdk
 from gooddata_sdk.table import ExecutionTable, TableService

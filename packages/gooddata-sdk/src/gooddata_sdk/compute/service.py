@@ -23,6 +23,7 @@ from gooddata_sdk.compute.model.execution import (
     ResultCacheMetadata,
     TableDimension,
 )
+from gooddata_sdk.compute.model.user_context import CatalogUserContext
 from gooddata_sdk.compute.visualization_to_sdk_converter import VisualizationToSdkConverter
 
 logger = logging.getLogger(__name__)
@@ -135,17 +136,27 @@ class ComputeService:
             is_cancellable=is_cancellable,
         )
 
-    def ai_chat(self, workspace_id: str, question: str) -> ChatResult:
+    def ai_chat(
+        self,
+        workspace_id: str,
+        question: str,
+        user_context: CatalogUserContext | None = None,
+    ) -> ChatResult:
         """
         Chat with AI in GoodData workspace.
 
         Args:
             workspace_id (str): workspace identifier
             question (str): question for the AI
+            user_context (CatalogUserContext | None): optional user context providing ambient UI
+                state and explicitly referenced objects to influence the AI response.
         Returns:
             ChatResult: Chat response
         """
-        chat_request = ChatRequest(question=question)
+        kwargs: dict[str, Any] = {}
+        if user_context is not None:
+            kwargs["user_context"] = user_context.as_api_model()
+        chat_request = ChatRequest(question=question, **kwargs)
         response = self._actions_api.ai_chat(workspace_id, chat_request, _check_return_type=False)
         return response
 
@@ -160,17 +171,27 @@ class ComputeService:
                     except json.JSONDecodeError:
                         continue
 
-    def ai_chat_stream(self, workspace_id: str, question: str) -> Iterator[Any]:
+    def ai_chat_stream(
+        self,
+        workspace_id: str,
+        question: str,
+        user_context: CatalogUserContext | None = None,
+    ) -> Iterator[Any]:
         """
         Chat Stream with AI in GoodData workspace.
 
         Args:
             workspace_id (str): workspace identifier
             question (str): question for the AI
+            user_context (CatalogUserContext | None): optional user context providing ambient UI
+                state and explicitly referenced objects to influence the AI response.
         Returns:
             Iterator[Any]: Yields parsed JSON objects from each SSE event's data field
         """
-        chat_request = ChatRequest(question=question)
+        kwargs: dict[str, Any] = {}
+        if user_context is not None:
+            kwargs["user_context"] = user_context.as_api_model()
+        chat_request = ChatRequest(question=question, **kwargs)
         response = self._actions_api.ai_chat_stream(
             workspace_id, chat_request, _check_return_type=False, _preload_content=False
         )
