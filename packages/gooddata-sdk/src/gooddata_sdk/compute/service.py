@@ -17,6 +17,7 @@ from gooddata_api_client.model.search_request import SearchRequest
 from gooddata_api_client.model.search_result import SearchResult
 
 from gooddata_sdk.client import GoodDataApiClient
+from gooddata_sdk.compute.model.ai_chat import ConversationFeedback, ConversationResponseList
 from gooddata_sdk.compute.model.execution import (
     Execution,
     ExecutionDefinition,
@@ -350,3 +351,52 @@ class ComputeService:
             None
         """
         self._actions_api.metadata_sync(workspace_id, async_req=async_req, _check_return_type=False)
+
+    def get_conversation_responses(
+        self,
+        workspace_id: str,
+        conversation_id: str,
+    ) -> ConversationResponseList:
+        """
+        Get conversation turn responses for a specific conversation.
+
+        Args:
+            workspace_id (str): workspace identifier
+            conversation_id (str): conversation identifier
+
+        Returns:
+            ConversationResponseList: List of conversation turn responses with optional feedback
+        """
+        endpoint = f"api/v1/ai/workspaces/{workspace_id}/chat/conversations/{conversation_id}/responses"
+        response = self._api_client._do_get_request(endpoint)
+        response.raise_for_status()
+        return ConversationResponseList.from_api(response.json())
+
+    def set_conversation_response_feedback(
+        self,
+        workspace_id: str,
+        conversation_id: str,
+        response_id: str,
+        feedback_type: str,
+        *,
+        feedback_text: str | None = None,
+    ) -> None:
+        """
+        Set feedback for a specific conversation turn response.
+
+        Args:
+            workspace_id (str): workspace identifier
+            conversation_id (str): conversation identifier
+            response_id (str): response identifier
+            feedback_type (str): feedback type (``'POSITIVE'`` or ``'NEGATIVE'``)
+            feedback_text (str | None): optional free-form feedback comment. Defaults to None.
+        """
+        feedback = ConversationFeedback(type=feedback_type, text=feedback_text)
+        body: dict[str, Any] = {"feedback": feedback.to_api_dict()}
+        endpoint = f"api/v1/ai/workspaces/{workspace_id}/chat/conversations/{conversation_id}/responses/{response_id}"
+        raw_response = self._api_client._do_patch_request(
+            data=json.dumps(body).encode("utf-8"),
+            endpoint=endpoint,
+            content_type="application/json",
+        )
+        raw_response.raise_for_status()

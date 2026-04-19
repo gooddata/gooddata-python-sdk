@@ -103,6 +103,60 @@ class GoodDataApiClient:
 
         return response
 
+    def _do_get_request(
+        self,
+        endpoint: str,
+    ) -> requests.Response:
+        """Perform a GET request to a specified endpoint.
+
+        Args:
+            endpoint (str): The endpoint URL to which the request is made.
+
+        Returns:
+            requests.Response: The response from the HTTP GET request.
+        """
+        if not self._hostname.endswith("/"):
+            endpoint = f"/{endpoint}"
+
+        response = requests.get(
+            url=f"{self._hostname}{endpoint}",
+            headers={
+                "Authorization": f"Bearer {self._token}",
+            },
+        )
+
+        return response
+
+    def _do_patch_request(
+        self,
+        data: bytes,
+        endpoint: str,
+        content_type: str,
+    ) -> requests.Response:
+        """Perform a PATCH request to a specified endpoint.
+
+        Args:
+            data (bytes): The data to be sent in the PATCH request.
+            endpoint (str): The endpoint URL to which the request is made.
+            content_type (str): The content type of the data being sent.
+
+        Returns:
+            requests.Response: The response from the HTTP PATCH request.
+        """
+        if not self._hostname.endswith("/"):
+            endpoint = f"/{endpoint}"
+
+        response = requests.patch(
+            url=f"{self._hostname}{endpoint}",
+            headers={
+                "Content-Type": content_type,
+                "Authorization": f"Bearer {self._token}",
+            },
+            data=data,
+        )
+
+        return response
+
     def do_request(
         self,
         data: bytes,
@@ -126,8 +180,10 @@ class GoodDataApiClient:
         """
         if method == HttpMethod.POST:
             return self._do_post_request(data, endpoint, content_type)
+        elif method == HttpMethod.PATCH:
+            return self._do_patch_request(data, endpoint, content_type)
         else:
-            raise NotImplementedError("Currently only supports the POST method.")
+            raise NotImplementedError("Currently only supports the POST and PATCH methods.")
 
     @staticmethod
     def _set_default_headers(headers: dict) -> None:
