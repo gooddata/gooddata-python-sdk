@@ -31,6 +31,7 @@ from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
     CatalogDependentEntitiesRequest,
     CatalogDependentEntitiesResponse,
 )
+from gooddata_sdk.catalog.workspace.entity_model.resolved_llm import CatalogResolvedLlms
 from gooddata_sdk.catalog.workspace.model_container import CatalogWorkspaceContent
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
@@ -209,6 +210,24 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         agg_facts = load_all_entities(get_agg_facts)
         catalog_agg_facts = [CatalogAggregatedFact.from_api(agg_fact) for agg_fact in agg_facts.data]
         return catalog_agg_facts
+
+    def resolve_llm_providers(self, workspace_id: str) -> CatalogResolvedLlms:
+        """Resolve the active LLM configuration for the given workspace.
+
+        The returned :class:`~gooddata_sdk.CatalogResolvedLlms` object contains
+        the active LLM configuration (endpoint or provider) or ``None`` when no
+        LLM has been configured for the workspace.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+
+        Returns:
+            CatalogResolvedLlms:
+                Resolved LLM configuration for the workspace.
+        """
+        response = self._actions_api.resolve_llm_providers(workspace_id, _check_return_type=False)
+        return CatalogResolvedLlms.from_api(response)
 
     def get_dependent_entities_graph(self, workspace_id: str) -> CatalogDependentEntitiesResponse:
         """There are dependencies among all catalog objects, the chain is the following:
