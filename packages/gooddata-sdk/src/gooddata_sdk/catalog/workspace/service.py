@@ -34,6 +34,7 @@ from gooddata_sdk.catalog.workspace.entity_model.filter_view import (
     CatalogFilterView,
     CatalogFilterViewDocument,
 )
+from gooddata_sdk.catalog.workspace.entity_model.parameter import CatalogWorkspaceParameter
 from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
     CatalogUserDataFilter,
     CatalogUserDataFilterDocument,
@@ -676,6 +677,97 @@ class CatalogWorkspaceService(CatalogServiceBase):
         self.put_declarative_workspace_data_filters(new_filters)
 
         self.put_declarative_workspace(new_workspace.id, new_workspace_content)
+
+    # Parameters methods
+
+    def list_workspace_parameters(self, workspace_id: str) -> list[CatalogWorkspaceParameter]:
+        """Returns a list of all parameters defined in a workspace.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+
+        Returns:
+            list[CatalogWorkspaceParameter]:
+                List of workspace parameters.
+        """
+        get_parameters = functools.partial(
+            self._parameters_api.get_all_entities_parameters,
+            workspace_id,
+            _check_return_type=False,
+        )
+        parameters = load_all_entities(get_parameters)
+        return [CatalogWorkspaceParameter.from_api(p) for p in parameters.data]
+
+    def get_workspace_parameter(self, workspace_id: str, parameter_id: str) -> CatalogWorkspaceParameter:
+        """Get an individual workspace parameter.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+            parameter_id (str):
+                Parameter identification string e.g. "my-param"
+
+        Returns:
+            CatalogWorkspaceParameter:
+                Catalog workspace parameter object.
+        """
+        response = self._parameters_api.get_entity_parameters(workspace_id, parameter_id, _check_return_type=False)
+        return CatalogWorkspaceParameter.from_api(response.data)
+
+    def create_or_update_workspace_parameter(
+        self, workspace_id: str, parameter: CatalogWorkspaceParameter
+    ) -> CatalogWorkspaceParameter:
+        """Create a new workspace parameter or overwrite an existing one with the same id.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+            parameter (CatalogWorkspaceParameter):
+                Catalog workspace parameter object to be created or updated.
+
+        Returns:
+            CatalogWorkspaceParameter:
+                The created or updated catalog workspace parameter.
+        """
+        try:
+            self.get_workspace_parameter(workspace_id, parameter.id)
+            response = self._parameters_api.update_entity_parameters(
+                workspace_id,
+                parameter.id,
+                parameter.as_put_document(),
+                _check_return_type=False,
+            )
+        except NotFoundException:
+            response = self._parameters_api.create_entity_parameters(
+                workspace_id,
+                parameter.as_post_document(),
+                _check_return_type=False,
+            )
+        return CatalogWorkspaceParameter.from_api(response.data)
+
+    def delete_workspace_parameter(self, workspace_id: str, parameter_id: str) -> None:
+        """Delete a workspace parameter.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+            parameter_id (str):
+                Parameter identification string e.g. "my-param"
+
+        Returns:
+            None
+
+        Raises:
+            ValueError:
+                Parameter does not exist.
+        """
+        try:
+            self._parameters_api.delete_entity_parameters(workspace_id, parameter_id, _check_return_type=False)
+        except NotFoundException:
+            raise ValueError(
+                f"Cannot delete parameter {parameter_id} from workspace {workspace_id}. This parameter does not exist."
+            )
         # TODO - uncomment the copy after the fix is fully released
         #      - list_workspace_settings is failing with 500 error too :-(
         # Copy settings from source workspace
