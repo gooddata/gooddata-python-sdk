@@ -274,6 +274,16 @@ from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.compute_to_sdk_converter import ComputeToSdkConverter
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ExecModelEntity, ObjId
+from gooddata_sdk.compute.model.chat_context import (
+    CatalogActiveObjectIdentification,
+    CatalogDashboardContext,
+    CatalogObjectReference,
+    CatalogObjectReferenceGroup,
+    CatalogRichTextWidgetDescriptor,
+    CatalogUIContext,
+    CatalogUserContext,
+    CatalogWidgetDescriptor,
+)
 from gooddata_sdk.compute.model.execution import (
     BareExecutionResponse,
     Execution,
