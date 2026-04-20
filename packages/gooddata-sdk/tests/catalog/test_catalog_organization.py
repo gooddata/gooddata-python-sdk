@@ -3,9 +3,13 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import (
     CatalogCspDirective,
+    CatalogCustomGeoCollection,
+    CatalogCustomGeoCollectionAttributes,
+    CatalogDeclarativeCustomGeoCollection,
     CatalogDeclarativeNotificationChannel,
     CatalogJwk,
     CatalogOrganization,
@@ -523,6 +527,71 @@ def test_layout_notification_channels(test_config, snapshot_notification_channel
 #         assert patched_identity_provider.attributes.oauth_issuer_location == oauth_issuer_location
 #     finally:
 #         sdk.catalog_organization.delete_identity_provider(identity_provider_id)
+# Unit tests for CatalogCustomGeoCollection and CatalogDeclarativeCustomGeoCollection
+
+
+@pytest.mark.parametrize(
+    "collection_id, name, description",
+    [
+        ("geo-1", "My Collection", "A test geo collection"),
+        ("geo-2", None, None),
+        ("geo-3", "Named Only", None),
+        ("geo-4", None, "Desc Only"),
+    ],
+)
+def test_catalog_custom_geo_collection_init(collection_id, name, description):
+    collection = CatalogCustomGeoCollection.init(collection_id=collection_id, name=name, description=description)
+    assert collection.id == collection_id
+    assert collection.attributes is not None
+    assert collection.attributes.name == name
+    assert collection.attributes.description == description
+
+
+def test_catalog_custom_geo_collection_to_api():
+    collection = CatalogCustomGeoCollection.init(
+        collection_id="geo-test",
+        name="Test Collection",
+        description="Test description",
+    )
+    api_model = collection.to_api()
+    assert api_model.id == "geo-test"
+    assert api_model.attributes.name == "Test Collection"
+    assert api_model.attributes.description == "Test description"
+
+
+def test_catalog_custom_geo_collection_attributes():
+    attrs = CatalogCustomGeoCollectionAttributes(name="My Geo", description="My Desc")
+    assert attrs.name == "My Geo"
+    assert attrs.description == "My Desc"
+
+
+@pytest.mark.parametrize(
+    "geo_id, name, description",
+    [
+        ("declarative-geo-1", "Declarative Geo", "A declarative geo collection"),
+        ("declarative-geo-2", None, None),
+        ("declarative-geo-3", "Named", None),
+    ],
+)
+def test_catalog_declarative_custom_geo_collection(geo_id, name, description):
+    declarative = CatalogDeclarativeCustomGeoCollection(id=geo_id, name=name, description=description)
+    assert declarative.id == geo_id
+    assert declarative.name == name
+    assert declarative.description == description
+
+
+def test_catalog_declarative_custom_geo_collection_to_api():
+    declarative = CatalogDeclarativeCustomGeoCollection(
+        id="declarative-geo",
+        name="Declarative Collection",
+        description="Declarative description",
+    )
+    api_model = declarative.to_api()
+    assert api_model.id == "declarative-geo"
+    assert api_model.name == "Declarative Collection"
+    assert api_model.description == "Declarative description"
+
+
 #         assert len(sdk.catalog_organization.list_identity_providers()) == 0
 #
 #
