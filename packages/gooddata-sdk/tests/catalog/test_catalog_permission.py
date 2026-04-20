@@ -143,6 +143,10 @@ def test_data_source_permission(test_config):
     _validation_helper(CatalogDeclarativeDataSourcePermission, "name")
 
 
+def test_organization_permission_validation(test_config):
+    _validation_helper(CatalogDeclarativeOrganizationPermission, "name")
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "get_declarative_permissions.yaml"))
 def test_get_declarative_permissions(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
