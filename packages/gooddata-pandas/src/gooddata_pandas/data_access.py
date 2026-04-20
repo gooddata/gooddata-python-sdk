@@ -19,7 +19,7 @@ from gooddata_sdk import (
 from gooddata_sdk.utils import IdObjType
 
 try:
-    from gooddata_pandas.arrow_convertor import build_metric_field_index
+    from gooddata_pandas.arrow_convertor import build_metric_field_index, convert_label_values, read_model_labels
 except ImportError:
     pass  # Only needed when use_arrow=True; callers guard with _ARROW_AVAILABLE checks
 
@@ -434,7 +434,11 @@ def _extract_from_arrow(
     Arrow-path extraction for indexed() / not_indexed().
 
     Reads the full result in one shot via the binary endpoint, then slices columns
-    by Arrow field name (metrics) or label id (attributes).  No catalog fetch needed.
+    by Arrow field name (metrics) or label id (attributes).
+
+    Date-granularity attribute columns (year/month/day) are converted to
+    ``pandas.Timestamp`` to match the behaviour of the non-Arrow path.
+    Week and quarter values remain as strings (same as non-Arrow).
     """
     table = execution.bare_exec_response.read_result_arrow()
     exec_def = execution.exec_def
@@ -443,6 +447,7 @@ def _extract_from_arrow(
         return {col: [] for col in cols}, {idx: [] for idx in index_to_attr_idx}
 
     metric_dim_idx_to_field = build_metric_field_index(table)
+    model_labels = read_model_labels(table)
 
     data: dict[str, list] = {}
     for col in cols:
@@ -451,12 +456,14 @@ def _extract_from_arrow(
             data[col] = table.column(field_name).to_pylist()
         else:
             attr = exec_def.attributes[col_to_attr_idx[col]]
-            data[col] = table.column(attr.label.id).to_pylist()
+            label_id = attr.label.id
+            data[col] = convert_label_values(label_id, table.column(label_id).to_pylist(), model_labels)
 
     index: dict[str, list] = {}
     for idx_name, attr_idx in index_to_attr_idx.items():
         attr = exec_def.attributes[attr_idx]
-        index[idx_name] = table.column(attr.label.id).to_pylist()
+        label_id = attr.label.id
+        index[idx_name] = convert_label_values(label_id, table.column(label_id).to_pylist(), model_labels)
 
     return data, index
 

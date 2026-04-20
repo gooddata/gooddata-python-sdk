@@ -20,6 +20,8 @@ from gooddata_pandas.arrow_convertor import (
     compute_primary_labels,
     compute_row_totals_indexes,
     convert_arrow_table_to_dataframe,
+    convert_label_values,
+    read_model_labels,
     reorder_grand_totals,
 )
 from gooddata_pandas.arrow_types import ArrowConfig, TypesMapper
@@ -1390,3 +1392,370 @@ def test_for_exec_result_id_arrow_types_mapper(tmp_path: Path) -> None:
 
     # Shape must be identical; string columns differ in dtype only.
     assert df_default.shape == df_arrow_strings.shape
+
+
+# ---------------------------------------------------------------------------
+# convert_label_values — date granularity type conversion
+#
+# Mirrors the non-Arrow path (AttributeConverterStore in _typed_attribute_value):
+#   DAY / MONTH / YEAR → pandas.Timestamp
+#   WEEK / QUARTER     → str (unchanged)
+#   no granularity     → values unchanged (same object returned)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "granularity, raw, expected",
+    [
+        ("year", ["2023", "2024"], [pandas.Timestamp("2023-01-01"), pandas.Timestamp("2024-01-01")]),
+        ("month", ["2023-01", "2023-03"], [pandas.Timestamp("2023-01-01"), pandas.Timestamp("2023-03-01")]),
+        ("day", ["2023-01-15", "2024-06-30"], [pandas.Timestamp("2023-01-15"), pandas.Timestamp("2024-06-30")]),
+        ("week", ["2025-1", "2025-49"], ["2025-1", "2025-49"]),
+        ("quarter", ["2025-1", "2025-4"], ["2025-1", "2025-4"]),
+    ],
+)
+def test_convert_label_values_date_granularities(granularity: str, raw: list, expected: list) -> None:
+    """convert_label_values converts DAY/MONTH/YEAR to Timestamp; WEEK/QUARTER stays string."""
+    model_labels = {"date_attr": {"granularity": granularity}}
+    result = convert_label_values("date_attr", raw, model_labels)
+    assert result == expected
+
+
+def test_convert_label_values_no_granularity_returns_same_object() -> None:
+    """Plain text attributes (no granularity) are returned as the same list object — zero copy."""
+    model_labels = {"region": {"granularity": None, "labelType": "TEXT"}}
+    values = ["East", "West"]
+    assert convert_label_values("region", values, model_labels) is values
+
+
+def test_convert_label_values_unknown_label_id_returns_same_object() -> None:
+    """Label ID absent from model_labels (no metadata) is treated as no-op."""
+    values = ["foo", "bar"]
+    assert convert_label_values("unknown", values, {}) is values
+
+
+def test_convert_label_values_none_passthrough() -> None:
+    """None values inside a date column are preserved as None (sparse rows)."""
+    model_labels = {"date.year": {"granularity": "year"}}
+    result = convert_label_values("date.year", ["2023", None, "2025"], model_labels)
+    assert result[0] == pandas.Timestamp("2023-01-01")
+    assert result[1] is None
+    assert result[2] == pandas.Timestamp("2025-01-01")
+
+
+def test_convert_label_values_empty_list() -> None:
+    """Empty input list returns empty list without error."""
+    model_labels = {"date.year": {"granularity": "year"}}
+    assert convert_label_values("date.year", [], model_labels) == []
+
+
+# ---------------------------------------------------------------------------
+# read_model_labels — schema metadata parsing
+# ---------------------------------------------------------------------------
+
+
+def test_read_model_labels_returns_labels_dict() -> None:
+    """read_model_labels extracts the labels sub-dict from x-gdc-model-v1."""
+    model_meta = {"labels": {"region": {"granularity": None}}, "metrics": {}}
+    schema_meta = {b"x-gdc-model-v1": json.dumps(model_meta).encode()}
+    table = pa.table({"col": [1]}).replace_schema_metadata(schema_meta)
+    assert read_model_labels(table) == {"region": {"granularity": None}}
+
+
+def test_read_model_labels_missing_key_returns_empty_dict() -> None:
+    """read_model_labels returns {} when x-gdc-model-v1 is absent."""
+    table = pa.table({"col": [1]})
+    assert read_model_labels(table) == {}
+
+
+def test_read_model_labels_no_labels_key_returns_empty_dict() -> None:
+    """read_model_labels returns {} when model metadata has no 'labels' key."""
+    schema_meta = {b"x-gdc-model-v1": json.dumps({"metrics": {}}).encode()}
+    table = pa.table({"col": [1]}).replace_schema_metadata(schema_meta)
+    assert read_model_labels(table) == {}
+
+
+# ---------------------------------------------------------------------------
+# indexed() / not_indexed() with use_arrow=True — date granularity parity
+#
+# The non-Arrow path converts year/month/day → datetime via AttributeConverterStore.
+# The Arrow path must produce identical types for the same columns/index.
+#
+# We build a minimal synthetic Arrow table with the required schema metadata
+# (x-gdc-model-v1 with granularity field) and wire it into a mocked execution.
+# ---------------------------------------------------------------------------
+
+
+def _make_date_attr_table(
+    label_id: str,
+    granularity: str,
+    str_values: list,
+    metric_values: list[float] | None = None,
+) -> pa.Table:
+    """Build a minimal Arrow table for a single date attribute + one revenue metric.
+
+    The table has the schema metadata (x-gdc-model-v1, x-gdc-xtab-v1, x-gdc-view-v1)
+    that _extract_from_arrow reads to determine the label's granularity.
+
+    Args:
+        label_id:     GoodData label local ID (used as the Arrow column name).
+        granularity:  Lowercase granularity string, e.g. ``"year"``, ``"month"``.
+        str_values:   Raw string values for the date attribute column.
+        metric_values: Optional metric values; defaults to 0.0 per row.
+    """
+    n = len(str_values)
+    if metric_values is None:
+        metric_values = [float(i) for i in range(n)]
+
+    model_meta = {
+        "labels": {
+            label_id: {
+                "granularity": granularity,
+                "labelTitle": label_id.capitalize(),
+                "labelType": None,
+                "primaryLabelId": label_id,
+                "attributeId": label_id,
+            }
+        },
+        "requestedShape": {"metrics": ["revenue"]},
+        "metrics": {"revenue": {"title": "Revenue"}},
+    }
+    xtab_meta = {
+        "labelMetadata": {"l0": {"labelId": label_id, "primaryLabelId": label_id}},
+        "computedShape": {"metrics": ["m0"], "rows": [], "cols": []},
+        "totalsMetadata": {},
+    }
+    view_meta = {"isTransposed": False}
+    schema_meta = {
+        b"x-gdc-model-v1": json.dumps(model_meta).encode(),
+        b"x-gdc-xtab-v1": json.dumps(xtab_meta).encode(),
+        b"x-gdc-view-v1": json.dumps(view_meta).encode(),
+    }
+    gdc_metric = {b"gdc": json.dumps({"type": "metric", "index": 0}).encode()}
+    schema = pa.schema(
+        [
+            pa.field("__row_type", pa.int8()),
+            pa.field(label_id, pa.string()),
+            pa.field("metric_group_0", pa.float64(), metadata=gdc_metric),
+        ],
+        metadata=schema_meta,
+    )
+    return pa.table(
+        {
+            "__row_type": pa.array([0] * n, type=pa.int8()),
+            label_id: pa.array(str_values, type=pa.string()),
+            "metric_group_0": pa.array(metric_values, type=pa.float64()),
+        },
+        schema=schema,
+    )
+
+
+@pytest.mark.parametrize(
+    "case_name, index_by, columns, expected_timestamps",
+    [
+        (
+            "date_year_in_rows",
+            {"date": "label/date.year"},
+            {"revenue": "metric/revenue"},
+            [pandas.Timestamp("2023-01-01"), pandas.Timestamp("2024-01-01"), pandas.Timestamp("2025-01-01")],
+        ),
+        (
+            "date_month_in_rows",
+            {"date": "label/date.month"},
+            {"revenue": "metric/revenue"},
+            [pandas.Timestamp("2023-01-01"), pandas.Timestamp("2023-06-01"), pandas.Timestamp("2023-12-01")],
+        ),
+        (
+            "date_day_in_rows",
+            {"date": "label/date.day"},
+            {"revenue": "metric/revenue"},
+            [pandas.Timestamp("2023-01-15"), pandas.Timestamp("2023-06-30")],
+        ),
+    ],
+)
+def test_indexed_use_arrow_date_to_timestamp(
+    case_name: str,
+    index_by: dict,
+    columns: dict,
+    expected_timestamps: list,
+) -> None:
+    """indexed() with use_arrow=True converts DAY/MONTH/YEAR date attributes to Timestamp.
+
+    Matches the non-Arrow path behaviour where AttributeConverterStore applies
+    DateConverter → pandas.to_datetime for these granularities.
+    """
+    if case_name not in _cases():
+        pytest.skip(f"fixture {case_name!r} not available")
+    table, _, _ = _load_case(case_name)
+    mock_sdk, _, _ = _mock_execution(table, columns, index_by)
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", use_arrow=True)
+    df = gdf.indexed(index_by=index_by, columns=columns)
+
+    assert df.index.tolist() == expected_timestamps
+
+
+@pytest.mark.parametrize(
+    "case_name, index_by, columns, expected_strings",
+    [
+        (
+            "date_week_in_rows",
+            {"date": "label/date.week"},
+            {"revenue": "metric/revenue"},
+            ["2025-1", "2025-49"],
+        ),
+        (
+            "date_quarter_in_rows",
+            {"date": "label/date.quarter"},
+            {"revenue": "metric/revenue"},
+            ["2025-1", "2025-4"],
+        ),
+    ],
+)
+def test_indexed_use_arrow_week_quarter_stays_string(
+    case_name: str,
+    index_by: dict,
+    columns: dict,
+    expected_strings: list,
+) -> None:
+    """indexed() with use_arrow=True: WEEK and QUARTER values remain as strings.
+
+    Matches the non-Arrow path where StringConverter is registered for these granularities.
+    """
+    if case_name not in _cases():
+        pytest.skip(f"fixture {case_name!r} not available")
+    table, _, _ = _load_case(case_name)
+    mock_sdk, _, _ = _mock_execution(table, columns, index_by)
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", use_arrow=True)
+    df = gdf.indexed(index_by=index_by, columns=columns)
+
+    assert df.index.tolist() == expected_strings
+
+
+def test_not_indexed_use_arrow_year_column_to_timestamp() -> None:
+    """not_indexed() with use_arrow=True converts a year-granularity column to Timestamp."""
+    if "date_year_in_rows" not in _cases():
+        pytest.skip("fixture date_year_in_rows not available")
+    table, _, _ = _load_case("date_year_in_rows")
+    columns = {"year_col": "label/date.year", "revenue": "metric/revenue"}
+    mock_sdk, _, _ = _mock_execution(table, columns)
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", use_arrow=True)
+    df = gdf.not_indexed(columns=columns)
+
+    assert df["year_col"].tolist() == [
+        pandas.Timestamp("2023-01-01"),
+        pandas.Timestamp("2024-01-01"),
+        pandas.Timestamp("2025-01-01"),
+    ]
+
+
+def test_indexed_use_arrow_date_none_values_preserved() -> None:
+    """indexed() with use_arrow=True preserves None (null) entries in date columns."""
+    table = _make_date_attr_table("date.year", "year", ["2023", None, "2025"], metric_values=[1.0, 2.0, 3.0])
+    columns = {"revenue": "metric/revenue"}
+    index_by = {"date": "label/date.year"}
+    mock_sdk, _, _ = _mock_execution(table, columns, index_by)
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", use_arrow=True)
+    df = gdf.indexed(index_by=index_by, columns=columns)
+
+    idx = df.index.tolist()
+    assert idx[0] == pandas.Timestamp("2023-01-01")
+    assert idx[1] is None or pandas.isna(idx[1])
+    assert idx[2] == pandas.Timestamp("2025-01-01")
+
+
+def test_indexed_use_arrow_text_attr_unchanged() -> None:
+    """indexed() with use_arrow=True: text attributes (no granularity) stay as strings."""
+    # Use a fixture that has a plain text attribute (region).
+    if "dim_r_m" not in _cases():
+        pytest.skip("fixture dim_r_m not available")
+    table, _, _ = _load_case("dim_r_m")
+    columns = {"price": "metric/price", "order_amount": "metric/order_amount"}
+    index_by = {"region": "label/region"}
+    mock_sdk, _, _ = _mock_execution(table, columns, index_by)
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", use_arrow=True)
+    df = gdf.indexed(index_by=index_by, columns=columns)
+
+    # All index values should be plain strings.
+    assert all(isinstance(v, str) for v in df.index.tolist())
+
+
+def test_indexed_use_arrow_mixed_date_and_text_index() -> None:
+    """indexed() with use_arrow=True: date attr → Timestamp, text attr → str in MultiIndex."""
+    n = 3
+    year_values = ["2023", "2024", "2025"]
+    region_values = ["East", "West", "South"]
+
+    model_meta = {
+        "labels": {
+            "date.year": {
+                "granularity": "year",
+                "labelTitle": "Year",
+                "labelType": None,
+                "primaryLabelId": "date.year",
+                "attributeId": "date.year",
+            },
+            "region": {
+                "granularity": None,
+                "labelTitle": "Region",
+                "labelType": "TEXT",
+                "primaryLabelId": "region",
+                "attributeId": "region",
+            },
+        },
+        "requestedShape": {"metrics": ["revenue"]},
+        "metrics": {"revenue": {"title": "Revenue"}},
+    }
+    xtab_meta = {
+        "labelMetadata": {
+            "l0": {"labelId": "date.year", "primaryLabelId": "date.year"},
+            "l1": {"labelId": "region", "primaryLabelId": "region"},
+        },
+        "computedShape": {"metrics": ["m0"], "rows": [], "cols": []},
+        "totalsMetadata": {},
+    }
+    schema_meta = {
+        b"x-gdc-model-v1": json.dumps(model_meta).encode(),
+        b"x-gdc-xtab-v1": json.dumps(xtab_meta).encode(),
+        b"x-gdc-view-v1": json.dumps({"isTransposed": False}).encode(),
+    }
+    gdc_metric = {b"gdc": json.dumps({"type": "metric", "index": 0}).encode()}
+    schema = pa.schema(
+        [
+            pa.field("__row_type", pa.int8()),
+            pa.field("date.year", pa.string()),
+            pa.field("region", pa.string()),
+            pa.field("metric_group_0", pa.float64(), metadata=gdc_metric),
+        ],
+        metadata=schema_meta,
+    )
+    table = pa.table(
+        {
+            "__row_type": pa.array([0] * n, type=pa.int8()),
+            "date.year": pa.array(year_values, type=pa.string()),
+            "region": pa.array(region_values, type=pa.string()),
+            "metric_group_0": pa.array([10.0, 20.0, 30.0], type=pa.float64()),
+        },
+        schema=schema,
+    )
+
+    columns = {"revenue": "metric/revenue"}
+    index_by = {"year": "label/date.year", "region": "label/region"}
+    mock_sdk, _, _ = _mock_execution(table, columns, index_by)
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", use_arrow=True)
+    df = gdf.indexed(index_by=index_by, columns=columns)
+
+    assert isinstance(df.index, pandas.MultiIndex)
+    year_level = df.index.get_level_values("year").tolist()
+    region_level = df.index.get_level_values("region").tolist()
+    assert year_level == [
+        pandas.Timestamp("2023-01-01"),
+        pandas.Timestamp("2024-01-01"),
+        pandas.Timestamp("2025-01-01"),
+    ]
+    assert region_level == ["East", "West", "South"]

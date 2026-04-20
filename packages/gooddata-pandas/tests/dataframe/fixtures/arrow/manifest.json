@@ -1,7 +1,7 @@
 [
   {
     "name": "flat_attrs_and_metrics",
-    "description": "Single dim with attributes and measureGroup \u2014 flat table",
+    "description": "Single dim with attributes and measureGroup — flat table",
     "shape": [
       96,
       1
@@ -11,7 +11,7 @@
   },
   {
     "name": "two_dim_metrics_in_rows",
-    "description": "measureGroup in dim0 \u2192 each metric is a row; attributes fan out as columns",
+    "description": "measureGroup in dim0 → each metric is a row; attributes fan out as columns",
     "shape": [
       2,
       17
@@ -21,7 +21,7 @@
   },
   {
     "name": "two_dim_metrics_in_cols",
-    "description": "Attributes in dim0 (rows), measureGroup in dim1 (columns) \u2014 most common layout",
+    "description": "Attributes in dim0 (rows), measureGroup in dim1 (columns) — most common layout",
     "shape": [
       48,
       8
@@ -31,7 +31,7 @@
   },
   {
     "name": "wide_few_rows_many_cols",
-    "description": "Single attribute in dim0, multiple attributes + measureGroup in dim1 \u2192 wide DataFrame",
+    "description": "Single attribute in dim0, multiple attributes + measureGroup in dim1 → wide DataFrame",
     "shape": [
       4,
       96
@@ -41,7 +41,7 @@
   },
   {
     "name": "metrics_only",
-    "description": "No attributes \u2014 single row of aggregate metric values",
+    "description": "No attributes — single row of aggregate metric values",
     "shape": [
       2,
       1
@@ -51,7 +51,7 @@
   },
   {
     "name": "single_metric_many_rows",
-    "description": "Three attributes + one metric \u2014 tall narrow table",
+    "description": "Three attributes + one metric — tall narrow table",
     "shape": [
       182,
       1
@@ -81,7 +81,7 @@
   },
   {
     "name": "totals_grand_row_two_col_labels",
-    "description": "Grand total rows; column dim has two labels \u2014 tests index padding",
+    "description": "Grand total rows; column dim has two labels — tests index padding",
     "shape": [
       96,
       18
@@ -91,7 +91,7 @@
   },
   {
     "name": "totals_grand_col_two_row_labels",
-    "description": "Grand total columns; row dim has two labels \u2014 tests column index padding",
+    "description": "Grand total columns; row dim has two labels — tests column index padding",
     "shape": [
       18,
       96
@@ -131,7 +131,7 @@
   },
   {
     "name": "dim_r_m",
-    "description": "dim0=[region], dim1=[measureGroup] \u2014 1 row attr, metrics in cols",
+    "description": "dim0=[region], dim1=[measureGroup] — 1 row attr, metrics in cols",
     "shape": [
       5,
       2
@@ -161,7 +161,7 @@
   },
   {
     "name": "dim_m_c",
-    "description": "dim0=[measureGroup], dim1=[products.category] \u2014 metrics in rows, 1 col attr",
+    "description": "dim0=[measureGroup], dim1=[products.category] — metrics in rows, 1 col attr",
     "shape": [
       2,
       4
@@ -251,7 +251,7 @@
   },
   {
     "name": "tot_d0_sub",
-    "description": "Base A: subtotal per region (rolls up category) \u2192 extra rows in dim0",
+    "description": "Base A: subtotal per region (rolls up category) → extra rows in dim0",
     "shape": [
       44,
       4
@@ -261,7 +261,7 @@
   },
   {
     "name": "tot_d0_grand",
-    "description": "Base A: grand total of dim0 (all items) \u2192 extra column in dim1",
+    "description": "Base A: grand total of dim0 (all items) → extra column in dim1",
     "shape": [
       34,
       4
@@ -281,7 +281,7 @@
   },
   {
     "name": "tot_d1_sub",
-    "description": "Base B: subtotal per order_status (rolls up date.year) \u2192 extra columns in dim1",
+    "description": "Base B: subtotal per order_status (rolls up date.year) → extra columns in dim1",
     "shape": [
       18,
       36
@@ -291,7 +291,7 @@
   },
   {
     "name": "tot_d1_grand",
-    "description": "Base B: grand total of dim1 (all items) \u2192 extra row in dim0",
+    "description": "Base B: grand total of dim1 (all items) → extra row in dim0",
     "shape": [
       18,
       30
@@ -321,7 +321,7 @@
   },
   {
     "name": "tot_d0sub_d1grand",
-    "description": "Base C: row subtotals per region + grand total of dim1 \u2192 extra col rows + SUM row",
+    "description": "Base C: row subtotals per region + grand total of dim1 → extra col rows + SUM row",
     "shape": [
       44,
       16
@@ -358,5 +358,75 @@
     ],
     "result_id": "b592a3f77e55d5e3d4450891c0d5c1fbedcac173:f9ed5a4e4b8cf21716cc409cd87664ef7da3444d4f07c4864989916d420bf85f",
     "dir": "totals_both_dims"
+  },
+  {
+    "name": "date_year_in_rows",
+    "description": "Date attribute (YEAR granularity) in row dimension — Arrow path date→Timestamp parity",
+    "shape": [
+      3,
+      1
+    ],
+    "result_id": "0000000000000000000000000000000000000000:date_year_in_rows",
+    "dir": "date_year_in_rows"
+  },
+  {
+    "name": "date_month_in_rows",
+    "description": "Date attribute (MONTH granularity) in row dimension — Arrow path date→Timestamp parity",
+    "shape": [
+      3,
+      1
+    ],
+    "result_id": "0000000000000000000000000000000000000000:date_month_in_rows",
+    "dir": "date_month_in_rows"
+  },
+  {
+    "name": "date_day_in_rows",
+    "description": "Date attribute (DAY granularity) in row dimension — Arrow path date→Timestamp parity",
+    "shape": [
+      2,
+      1
+    ],
+    "result_id": "0000000000000000000000000000000000000000:date_day_in_rows",
+    "dir": "date_day_in_rows"
+  },
+  {
+    "name": "date_week_in_rows",
+    "description": "Date attribute (WEEK granularity) in row dimension — stays string, no Timestamp conversion",
+    "shape": [
+      2,
+      1
+    ],
+    "result_id": "0000000000000000000000000000000000000000:date_week_in_rows",
+    "dir": "date_week_in_rows"
+  },
+  {
+    "name": "date_quarter_in_rows",
+    "description": "Date attribute (QUARTER granularity) in row dimension — stays string, no Timestamp conversion",
+    "shape": [
+      2,
+      1
+    ],
+    "result_id": "0000000000000000000000000000000000000000:date_quarter_in_rows",
+    "dir": "date_quarter_in_rows"
+  },
+  {
+    "name": "empty_two_dim_attrs_metrics",
+    "description": "Standard two-dim layout (attr rows, metric cols), 0 data rows",
+    "shape": [
+      0,
+      2
+    ],
+    "result_id": "0000000000000000000000000000000000000000:empty_two_dim_attrs_metrics",
+    "dir": "empty_two_dim_attrs_metrics"
+  },
+  {
+    "name": "empty_flat_attrs_metrics",
+    "description": "Single-dim (flat) layout, attr and metrics co-dim, 0 data rows",
+    "shape": [
+      0,
+      2
+    ],
+    "result_id": "0000000000000000000000000000000000000000:empty_flat_attrs_metrics",
+    "dir": "empty_flat_attrs_metrics"
   }
 ]
