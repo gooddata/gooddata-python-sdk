@@ -40,10 +40,10 @@ attributes:
       - Customers
     title: State
 dataSourceTableId:
-  dataSourceId: pg_local_docker-demo
+  dataSourceId: demo-test-ds
   id: customers
   path:
-    - demo_6d9051d9069a8468
+    - demo
     - customers
   type: dataSource
 description: Customers

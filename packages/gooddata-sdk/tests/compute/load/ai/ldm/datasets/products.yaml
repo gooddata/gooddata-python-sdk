@@ -25,10 +25,10 @@ attributes:
       - Products
     title: Category
 dataSourceTableId:
-  dataSourceId: pg_local_docker-demo
+  dataSourceId: demo-test-ds
   id: products
   path:
-    - demo_6d9051d9069a8468
+    - demo
     - products
   type: dataSource
 description: Products
