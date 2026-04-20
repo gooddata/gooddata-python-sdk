@@ -53,6 +53,8 @@ class CatalogOrganization(Base):
             allowed_origins=safeget(ea, ["allowed_origins"]),
             oauth_issuer_location=safeget(ea, ["oauth_issuer_location"]),
             oauth_client_id=safeget(ea, ["oauth_client_id"]),
+            data_center=safeget(ea, ["data_center"]),
+            region=safeget(ea, ["region"]),
         )
 
         identity_provider_id = safeget(er, ["identityProvider", "data", "id"])
@@ -87,7 +89,24 @@ class CatalogOrganizationAttributes(Base):
     allowed_origins: list[str] | None = None
     oauth_issuer_location: str | None = None
     oauth_client_id: str | None = None
+    data_center: str | None = None
+    region: str | None = None
 
     @staticmethod
     def client_class() -> type[JsonApiOrganizationInAttributes]:
         return JsonApiOrganizationInAttributes
+
+    def to_api(self) -> JsonApiOrganizationInAttributes:
+        # data_center and region are read-only diagnostic fields — exclude them from write requests
+        kwargs: dict[str, Any] = {}
+        if self.name is not None:
+            kwargs["name"] = self.name
+        if self.hostname is not None:
+            kwargs["hostname"] = self.hostname
+        if self.allowed_origins is not None:
+            kwargs["allowed_origins"] = self.allowed_origins
+        if self.oauth_issuer_location is not None:
+            kwargs["oauth_issuer_location"] = self.oauth_issuer_location
+        if self.oauth_client_id is not None:
+            kwargs["oauth_client_id"] = self.oauth_client_id
+        return JsonApiOrganizationInAttributes(_check_type=False, **kwargs)

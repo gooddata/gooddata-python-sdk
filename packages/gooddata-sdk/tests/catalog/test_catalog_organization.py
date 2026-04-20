@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import (
     CatalogCspDirective,
@@ -14,6 +15,7 @@ from gooddata_sdk import (
     CatalogWebhook,
     GoodDataSdk,
 )
+from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganizationAttributes
 from tests_support.vcrpy_utils import get_vcr
 
 from .conftest import safe_delete
@@ -563,3 +565,89 @@ def test_layout_notification_channels(test_config, snapshot_notification_channel
 #         sdk.catalog_organization.put_declarative_identity_providers([])
 #         idps = sdk.catalog_organization.get_declarative_identity_providers()
 #         assert len(idps) == 0
+
+
+# Unit tests for deployment diagnostic fields (no cassettes needed)
+
+
+@pytest.mark.parametrize(
+    "scenario, data_center, region",
+    [
+        ("both_set", "us-east-1", "prod-cluster"),
+        ("only_data_center", "eu-west-1", None),
+        ("only_region", None, "staging"),
+        ("both_none", None, None),
+    ],
+)
+def test_organization_attributes_diagnostic_fields(scenario, data_center, region):
+    """data_center and region are stored on CatalogOrganizationAttributes."""
+    attrs = CatalogOrganizationAttributes(
+        name="TestOrg",
+        hostname="test.gooddata.com",
+        data_center=data_center,
+        region=region,
+    )
+    assert attrs.data_center == data_center
+    assert attrs.region == region
+
+
+@pytest.mark.parametrize(
+    "scenario, data_center, region",
+    [
+        ("both_set", "us-east-1", "prod-cluster"),
+        ("only_data_center", "eu-west-1", None),
+        ("only_region", None, "staging"),
+        ("both_none", None, None),
+    ],
+)
+def test_organization_attributes_to_api_excludes_diagnostic_fields(scenario, data_center, region):
+    """to_api() must not forward read-only diagnostic fields to the write model."""
+    attrs = CatalogOrganizationAttributes(
+        name="TestOrg",
+        hostname="test.gooddata.com",
+        data_center=data_center,
+        region=region,
+    )
+    api_model = attrs.to_api()
+    api_dict = api_model.to_dict()
+    assert "dataCenter" not in api_dict
+    assert "data_center" not in api_dict
+    assert "region" not in api_dict
+
+
+def test_catalog_organization_from_api_reads_diagnostic_fields():
+    """CatalogOrganization.from_api() populates data_center and region from the response.
+
+    The keys use snake_case as exposed by the OpenApiModel __getitem__ accessor
+    (camelCase keys are normalised to snake_case by the generated client).
+    """
+    entity = {
+        "id": "default",
+        "type": "organization",
+        "attributes": {
+            "name": "TestOrg",
+            "hostname": "test.gooddata.com",
+            "data_center": "us-east-1",
+            "region": "prod-cluster",
+        },
+        "relationships": {},
+    }
+    org = CatalogOrganization.from_api(entity)
+    assert org.attributes.data_center == "us-east-1"
+    assert org.attributes.region == "prod-cluster"
+
+
+def test_catalog_organization_from_api_handles_missing_diagnostic_fields():
+    """from_api() gracefully handles responses that lack data_center/region."""
+    entity = {
+        "id": "default",
+        "type": "organization",
+        "attributes": {
+            "name": "TestOrg",
+            "hostname": "test.gooddata.com",
+        },
+        "relationships": {},
+    }
+    org = CatalogOrganization.from_api(entity)
+    assert org.attributes.data_center is None
+    assert org.attributes.region is None
