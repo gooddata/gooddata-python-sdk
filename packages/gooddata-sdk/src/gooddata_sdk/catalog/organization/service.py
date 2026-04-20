@@ -5,9 +5,11 @@ import functools
 from typing import Any
 
 from gooddata_api_client.exceptions import NotFoundException
+from gooddata_api_client.model.declarative_custom_geo_collections import DeclarativeCustomGeoCollections
 from gooddata_api_client.model.declarative_export_templates import DeclarativeExportTemplates
 from gooddata_api_client.model.declarative_notification_channels import DeclarativeNotificationChannels
 from gooddata_api_client.model.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
+from gooddata_api_client.model.json_api_custom_geo_collection_in_document import JsonApiCustomGeoCollectionInDocument
 from gooddata_api_client.model.json_api_export_template_in_document import JsonApiExportTemplateInDocument
 from gooddata_api_client.model.json_api_export_template_post_optional_id_document import (
     JsonApiExportTemplatePostOptionalIdDocument,
@@ -20,6 +22,7 @@ from gooddata_api_client.model.switch_identity_provider_request import SwitchIde
 
 from gooddata_sdk import CatalogDeclarativeExportTemplate, CatalogExportTemplate
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
+from gooddata_sdk.catalog.organization.entity_model.custom_geo_collection import CatalogCustomGeoCollection
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
 from gooddata_sdk.catalog.organization.entity_model.identity_provider import CatalogIdentityProvider
 from gooddata_sdk.catalog.organization.entity_model.jwk import CatalogJwk, CatalogJwkDocument
@@ -30,6 +33,7 @@ from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
     CatalogLlmProviderPatchDocument,
 )
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
+from gooddata_sdk.catalog.organization.layout.custom_geo_collection import CatalogDeclarativeCustomGeoCollection
 from gooddata_sdk.catalog.organization.layout.identity_provider import CatalogDeclarativeIdentityProvider
 from gooddata_sdk.catalog.organization.layout.notification_channel import CatalogDeclarativeNotificationChannel
 from gooddata_sdk.client import GoodDataApiClient
@@ -698,3 +702,110 @@ class CatalogOrganizationService(CatalogServiceBase):
             )
         except Exception as e:
             raise ValueError(f"Error switching active identity provider: {str(e)}")
+
+    # Custom Geo Collection - Entity API
+
+    def list_custom_geo_collections(self) -> list[CatalogCustomGeoCollection]:
+        """Returns a list of all custom geo collections in the current organization.
+
+        Returns:
+            list[CatalogCustomGeoCollection]:
+                List of custom geo collections in the current organization.
+        """
+        get_custom_geo_collections = functools.partial(
+            self._entities_api.get_all_entities_custom_geo_collections,
+            _check_return_type=False,
+        )
+        custom_geo_collections = load_all_entities(get_custom_geo_collections)
+        return [CatalogCustomGeoCollection.from_api(collection) for collection in custom_geo_collections.data]
+
+    def get_custom_geo_collection(self, collection_id: str) -> CatalogCustomGeoCollection:
+        """Get an individual custom geo collection.
+
+        Args:
+            collection_id (str):
+                Custom geo collection identification string.
+
+        Returns:
+            CatalogCustomGeoCollection:
+                Catalog custom geo collection object.
+        """
+        collection_api = self._entities_api.get_entity_custom_geo_collections(
+            id=collection_id, _check_return_type=False
+        ).data
+        return CatalogCustomGeoCollection.from_api(collection_api)
+
+    def create_or_update_custom_geo_collection(self, collection: CatalogCustomGeoCollection) -> None:
+        """Create a new custom geo collection or overwrite an existing one with the same id.
+
+        Args:
+            collection (CatalogCustomGeoCollection):
+                Catalog custom geo collection object to be created or updated.
+
+        Returns:
+            None
+        """
+        document_api = JsonApiCustomGeoCollectionInDocument(data=collection.to_api())
+        try:
+            self.get_custom_geo_collection(collection.id)
+            self._entities_api.update_entity_custom_geo_collections(
+                id=collection.id,
+                json_api_custom_geo_collection_in_document=document_api,
+                _check_return_type=False,
+            )
+        except NotFoundException:
+            self._entities_api.create_entity_custom_geo_collections(
+                json_api_custom_geo_collection_in_document=document_api,
+                _check_return_type=False,
+            )
+
+    def delete_custom_geo_collection(self, collection_id: str) -> None:
+        """Delete a custom geo collection.
+
+        Args:
+            collection_id (str):
+                Custom geo collection identification string.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError:
+                Custom geo collection does not exist.
+        """
+        try:
+            self._entities_api.delete_entity_custom_geo_collections(collection_id)
+        except NotFoundException:
+            raise ValueError(
+                f"Can not delete {collection_id} custom geo collection. This custom geo collection does not exist."
+            )
+
+    # Custom Geo Collection - Layout API
+
+    def get_declarative_custom_geo_collections(self) -> list[CatalogDeclarativeCustomGeoCollection]:
+        """Get all declarative custom geo collections in the current organization.
+
+        Returns:
+            list[CatalogDeclarativeCustomGeoCollection]:
+                List of declarative custom geo collections.
+        """
+        result = self._layout_api.get_custom_geo_collections_layout(_check_return_type=False)
+        custom_geo_collections = result.custom_geo_collections if hasattr(result, "custom_geo_collections") else []
+        return [CatalogDeclarativeCustomGeoCollection.from_api(c) for c in custom_geo_collections]
+
+    def put_declarative_custom_geo_collections(
+        self, custom_geo_collections: list[CatalogDeclarativeCustomGeoCollection]
+    ) -> None:
+        """Put declarative custom geo collections in the current organization.
+
+        Args:
+            custom_geo_collections (list[CatalogDeclarativeCustomGeoCollection]):
+                List of declarative custom geo collections.
+
+        Returns:
+            None
+        """
+        api_collections = [c.to_api() for c in custom_geo_collections]
+        self._layout_api.set_custom_geo_collections(
+            declarative_custom_geo_collections=DeclarativeCustomGeoCollections(custom_geo_collections=api_collections)
+        )
