@@ -23,6 +23,8 @@ class GoodDataLabelType(Enum):
     GEO_LONGITUDE = "GEO_LONGITUDE"
     GEO_AREA = "GEO_AREA"
     GEO_ICON = "GEO_ICON"
+    HYPERLOGLOG = "HYPERLOGLOG"
+    AUXILIARY = "AUXILIARY"
 
 
 class GoodDataSortDirection(Enum):
