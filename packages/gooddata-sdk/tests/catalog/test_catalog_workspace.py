@@ -8,6 +8,7 @@ from xml.etree import ElementTree as ET
 import yaml
 from gooddata_sdk import (
     BasicCredentials,
+    CatalogAutomationAlert,
     CatalogAutomationSchedule,
     CatalogDataSourcePostgres,
     CatalogDeclarativeAutomation,
@@ -1032,3 +1033,41 @@ def test_layout_filter_views(test_config):
         assert filter_views_expected == filter_views_o
     finally:
         safe_delete(sdk.catalog_workspace.put_declarative_filter_views, workspace_id, [])
+
+
+def test_catalog_automation_alert_once_per_interval():
+    """Unit test: CatalogAutomationAlert round-trips ONCE_PER_INTERVAL + interval correctly."""
+    condition = {"type": "comparison", "operator": "GREATER_THAN", "right": {"value": 100}}
+    execution = {"measures": [{"localIdentifier": "m1", "definition": {"measure": {"item": {"identifier": {"id": "revenue", "type": "measure"}}}}}]}
+
+    alert = CatalogAutomationAlert(
+        condition=condition,
+        execution=execution,
+        trigger="ONCE_PER_INTERVAL",
+        interval="MONTH",
+    )
+
+    assert alert.trigger == "ONCE_PER_INTERVAL"
+    assert alert.interval == "MONTH"
+
+    # to_api should produce an AutomationAlert with interval and trigger set
+    api_model = alert.to_api()
+    api_dict = api_model.to_dict()
+    assert api_dict.get("trigger") == "ONCE_PER_INTERVAL"
+    assert api_dict.get("interval") == "MONTH"
+
+
+def test_catalog_automation_alert_defaults():
+    """Unit test: CatalogAutomationAlert trigger and interval are optional (None by default)."""
+    condition = {"type": "comparison", "operator": "GREATER_THAN", "right": {"value": 0}}
+    execution = {"measures": []}
+
+    alert = CatalogAutomationAlert(condition=condition, execution=execution)
+
+    assert alert.trigger is None
+    assert alert.interval is None
+
+    api_dict = alert.to_api().to_dict()
+    # trigger/interval should not appear when not set
+    assert "trigger" not in api_dict or api_dict.get("trigger") is None
+    assert "interval" not in api_dict or api_dict.get("interval") is None
