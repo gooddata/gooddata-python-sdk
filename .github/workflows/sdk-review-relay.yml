@@ -23,7 +23,7 @@ jobs:
       (github.event.review.state == 'changes_requested'
         || (github.event.review.state == 'commented' && github.event.review.body))
       && github.event.pull_request.user.login == 'yenkins-admin'
-      && startsWith(github.event.pull_request.head.ref, 'feature/auto-P')
+      && startsWith(github.event.pull_request.head.ref, 'auto/openapi-sync-')
       && github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
     runs-on: ubuntu-latest
     timeout-minutes: 2

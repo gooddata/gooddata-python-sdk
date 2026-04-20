@@ -1,0 +1,193 @@
+# =============================================================================
+# SDK Slash Commands
+#
+# Minimal relay that forwards `/fix` PR comments to gdc-nas's review-fix
+# pipeline, using the same repository_dispatch payload as sdk-review-relay.
+#
+# SECURITY
+# --------
+# A PR comment can be authored by anyone (public repo), so access is gated by
+# whether the commenter is a collaborator on gooddata/gdc-nas. The check is
+# performed via the GitHub API using TOKEN_GITHUB_YENKINS_ADMIN (which already
+# has access to gdc-nas); no new secret is introduced.
+#
+# SCOPE
+# -----
+# Only reacts to comments on open PRs authored by yenkins-admin whose head
+# branch starts with `auto/openapi-sync-` (the sync pipeline's auto-branches).
+# Anything else is a silent no-op.
+#
+# CONCURRENCY NOTES
+# -----------------
+# - A second `/fix` on the same PR dispatches a second event. The receiver
+#   (gdc-nas `sdk-py-review-fix.yml`) uses `cancel-in-progress: true` keyed
+#   on PR number, so an earlier in-progress review-fix run will be cancelled
+#   by a newer one. Acceptable at expected volume (single-digit/day).
+# - If a formal review (via sdk-review-relay.yml) and a `/fix` comment arrive
+#   within the receiver's concurrency window, the receiver picks one and
+#   cancels the other. Same mechanism.
+# =============================================================================
+name: SDK Slash Commands
+
+on:
+  issue_comment:
+    types: [created]
+
+# Default-deny for the whole workflow. Jobs must opt in to any scope they
+# actually need. Keeps future additions locked down by default.
+permissions: {}
+
+concurrency:
+  group: sdk-slash-fix-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  fix:
+    name: "/fix — forward to gdc-nas"
+    # Cheap gates first — anything that can be evaluated without an API call.
+    # Job-level match is coarse (`startsWith(body, '/fix')`); the strict
+    # "exact `/fix` token" check lives in the "Validate /fix syntax" step so
+    # we can express the full regex.
+    if: >-
+      github.event.issue.pull_request != null
+      && github.event.issue.state == 'open'
+      && github.event.issue.user.login == 'yenkins-admin'
+      && startsWith(github.event.comment.body, '/fix')
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    permissions:
+      # Only GITHUB_TOKEN use is `gh api repos/.../pulls/$PR_NUMBER` to read
+      # head.ref. Reactions and dispatch both go through the PAT.
+      pull-requests: read
+    steps:
+      - name: Validate /fix syntax
+        id: cmd
+        env:
+          BODY: ${{ github.event.comment.body }}
+        run: |
+          # Strict: first line must be exactly `/fix` or `/fix` + whitespace.
+          # Rejects `/fixme`, `/fix-review 42`, etc. Expanding the vocabulary
+          # is an explicit non-goal (see plan §3).
+          FIRST_LINE=$(printf '%s' "$BODY" | head -n1 | tr -d '\r')
+          if [[ "$FIRST_LINE" =~ ^/fix([[:space:]].*)?$ ]]; then
+            echo "matched=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "First line '$FIRST_LINE' is not an exact /fix command — ignoring."
+            echo "matched=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Resolve PR head branch
+        id: pr
+        if: steps.cmd.outputs.matched == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          HEAD_REF=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" \
+            --jq '.head.ref')
+          if [[ "$HEAD_REF" != auto/openapi-sync-* ]]; then
+            echo "Branch '$HEAD_REF' is not an auto/openapi-sync-* branch — ignoring."
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "head_ref=$HEAD_REF" >> "$GITHUB_OUTPUT"
+            echo "eligible=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify commenter has gdc-nas access
+        id: auth
+        if: steps.pr.outputs.eligible == 'true'
+        env:
+          # PAT scoped to read gdc-nas collaborator membership.
+          GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
+          USER: ${{ github.event.comment.user.login }}
+        run: |
+          if ! gh api "repos/gooddata/gdc-nas/collaborators/$USER" --silent 2>/dev/null; then
+            # Silent reject: no reply, no reaction, and run stays green so the
+            # public Actions tab does not leak who was denied.
+            echo "::warning::User '$USER' is not a gdc-nas collaborator — /fix denied."
+            echo "authorized=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "User '$USER' verified as gdc-nas collaborator."
+          echo "authorized=true" >> "$GITHUB_OUTPUT"
+
+      - name: Parse /fix arguments
+        id: parse
+        if: steps.pr.outputs.eligible == 'true' && steps.auth.outputs.authorized == 'true'
+        env:
+          BODY: ${{ github.event.comment.body }}
+        run: |
+          # Take only the first line, strip CRLF, strip leading `/fix` +
+          # whitespace, strip trailing whitespace. Remainder is review_body.
+          FIRST_LINE=$(printf '%s' "$BODY" | head -n1 | tr -d '\r')
+          ARGS=$(printf '%s' "$FIRST_LINE" | sed -E 's#^/fix[[:space:]]*##; s#[[:space:]]+$##')
+          {
+            echo "args<<EOF"
+            printf '%s\n' "$ARGS"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Dispatch to gdc-nas
+        id: dispatch
+        if: steps.pr.outputs.eligible == 'true' && steps.auth.outputs.authorized == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
+          PR_NUMBER: ${{ github.event.issue.number }}
+          HEAD_REF: ${{ steps.pr.outputs.head_ref }}
+          COMMENTER: ${{ github.event.comment.user.login }}
+          REVIEW_BODY: ${{ steps.parse.outputs.args }}
+        run: |
+          jq -nc \
+            --arg pr_number "$PR_NUMBER" \
+            --arg pr_branch "$HEAD_REF" \
+            --arg pr_author "yenkins-admin" \
+            --arg reviewer "$COMMENTER" \
+            --arg review_id "" \
+            --arg review_state "commented" \
+            --arg review_body "$REVIEW_BODY" \
+            '{
+              event_type: "sdk-review-submitted",
+              client_payload: {
+                pr_number: $pr_number,
+                pr_branch: $pr_branch,
+                pr_author: $pr_author,
+                reviewer: $reviewer,
+                review_id: $review_id,
+                review_state: $review_state,
+                review_body: $review_body
+              }
+            }' | gh api "repos/gooddata/gdc-nas/dispatches" \
+              --method POST \
+              --input -
+
+          {
+            echo "## /fix dispatched"
+            echo "- PR: #$PR_NUMBER"
+            echo "- Branch: \`$HEAD_REF\`"
+            echo "- Commenter: @$COMMENTER"
+            echo "- Review body: \`$REVIEW_BODY\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Add rocket reaction (ack on successful dispatch)
+        if: success() && steps.dispatch.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
+          COMMENT_ID: ${{ github.event.comment.id }}
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            "repos/${{ github.repository }}/issues/comments/$COMMENT_ID/reactions" \
+            -f content=rocket > /dev/null
+
+      - name: Add confused reaction (dispatch failed)
+        if: failure() && steps.dispatch.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
+          COMMENT_ID: ${{ github.event.comment.id }}
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            "repos/${{ github.repository }}/issues/comments/$COMMENT_ID/reactions" \
+            -f content=confused > /dev/null || true
