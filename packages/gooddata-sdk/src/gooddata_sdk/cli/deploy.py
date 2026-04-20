@@ -9,7 +9,6 @@ from gooddata_sdk import (
     CatalogDeclarativeWorkspaceDataFilters,
     GoodDataSdk,
 )
-from gooddata_sdk.catalog.workspace.aac import load_aac_workspace_from_disk
 from gooddata_sdk.cli.constants import (
     CONFIG_FILE,
     DATA_SOURCES,
@@ -19,7 +18,6 @@ from gooddata_sdk.cli.constants import (
     WORKSPACES_DATA_FILTERS,
 )
 from gooddata_sdk.cli.utils import measure_deploy
-from gooddata_sdk.config import AacConfig
 from gooddata_sdk.utils import read_layout_from_file
 
 
@@ -28,30 +26,26 @@ def _get_workspace_id(config_path: Path, profile: str = "default") -> str:
     content = read_layout_from_file(config_path)
     if not isinstance(content, dict):
         raise ValueError(f"Invalid config file: {config_path}")
-    config = AacConfig.from_dict(content)
-    selected_profile = config.default_profile if profile == "default" else profile
-    if selected_profile not in config.profiles:
-        raise ValueError(f"Profile '{selected_profile}' not found in config")
-    p = config.profiles[selected_profile]
-    if p.workspace_id is None:
+    profiles = content.get("profiles", {})
+    default_profile_name = content.get("default_profile", profile)
+    selected = default_profile_name if profile == "default" else profile
+    if selected not in profiles:
+        raise ValueError(f"Profile '{selected}' not found in config")
+    workspace_id = profiles[selected].get("workspace_id")
+    if workspace_id is None:
         raise ValueError(
-            f"Profile '{selected_profile}' does not have 'workspace_id' set. Required for deploying workspace objects."
+            f"Profile '{selected}' does not have 'workspace_id' set. Required for deploying workspace objects."
         )
-    return p.workspace_id
+    return workspace_id
 
 
 @measure_deploy(step=WORKSPACES)
 def _deploy_workspaces(sdk: GoodDataSdk, path: Path, source_dir: str) -> None:
-    source_path = path / source_dir
     config_path = path / CONFIG_FILE
     workspace_id = _get_workspace_id(config_path)
-    workspace_model = load_aac_workspace_from_disk(source_path)
-
-    # Preserve workspace data filters from declarative subdirs
-    wdf = CatalogDeclarativeWorkspaceDataFilters.load_from_disk(source_path)
-    if wdf.workspace_data_filters:
-        workspace_model.remove_wdf_refs()
-
+    workspace_model = sdk.catalog_workspace.load_declarative_workspace(
+        workspace_id=workspace_id, layout_root_path=path
+    )
     sdk.catalog_workspace.put_declarative_workspace(workspace_id=workspace_id, workspace=workspace_model)
 
 

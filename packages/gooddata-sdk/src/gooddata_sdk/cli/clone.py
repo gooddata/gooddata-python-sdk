@@ -4,7 +4,6 @@ import shutil
 from pathlib import Path
 
 from gooddata_sdk import GoodDataSdk
-from gooddata_sdk.catalog.workspace.aac import store_aac_workspace_to_disk
 from gooddata_sdk.cli.constants import (
     CONFIG_FILE,
     DATA_SOURCES,
@@ -21,9 +20,7 @@ from gooddata_sdk.cli.utils import measure_clone
 def _clone_workspaces(sdk: GoodDataSdk, path: Path, source_dir: str) -> None:
     config_path = path / CONFIG_FILE
     workspace_id = _get_workspace_id(config_path)
-    source_path = path / source_dir
-    workspace_model = sdk.catalog_workspace.get_declarative_workspace(workspace_id)
-    store_aac_workspace_to_disk(workspace_model, source_path)
+    sdk.catalog_workspace.store_declarative_workspace(workspace_id=workspace_id, layout_root_path=path)
 
 
 @measure_clone(step="data sources")

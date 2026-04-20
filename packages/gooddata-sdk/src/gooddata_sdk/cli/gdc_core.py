@@ -7,7 +7,6 @@ from gooddata_sdk.cli.clone import clone_all, clone_granular
 from gooddata_sdk.cli.constants import CONFIG_FILE, DEFAULT_SOURCE_DIR
 from gooddata_sdk.cli.deploy import deploy_all, deploy_granular
 from gooddata_sdk.cli.utils import _SUPPORTED, Bcolors
-from gooddata_sdk.config import AacConfig
 from gooddata_sdk.utils import read_layout_from_file
 
 
@@ -25,10 +24,10 @@ def _find_config_file() -> Path:
 def _get_source_dir(config_path: Path) -> str:
     """Get source_dir from config file, falling back to default."""
     content = read_layout_from_file(config_path)
-    if isinstance(content, dict) and AacConfig.can_structure(content):
-        config = AacConfig.from_dict(content)
-        if config.source_dir is not None:
-            return config.source_dir
+    if isinstance(content, dict):
+        source_dir = content.get("source_dir")
+        if source_dir is not None:
+            return source_dir
     return DEFAULT_SOURCE_DIR
 
 
