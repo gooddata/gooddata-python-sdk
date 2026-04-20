@@ -18,11 +18,6 @@ from gooddata_sdk import (
 )
 from gooddata_sdk.utils import IdObjType
 
-try:
-    from gooddata_pandas.arrow_convertor import build_metric_field_index, convert_label_values, read_model_labels
-except ImportError:
-    pass  # Only needed when use_arrow=True; callers guard with _ARROW_AVAILABLE checks
-
 from gooddata_pandas.utils import (
     ColumnsDef,
     IndexDef,
@@ -33,6 +28,12 @@ from gooddata_pandas.utils import (
     _typed_attribute_value,
     get_catalog_attributes_for_extract,
 )
+
+_ARROW_IMPORT_ERROR: ImportError | None = None
+try:
+    from gooddata_pandas.arrow_convertor import build_metric_field_index, convert_label_values, read_model_labels
+except ImportError as _e:  # pragma: no cover
+    _ARROW_IMPORT_ERROR = _e  # pragma: no cover
 
 
 class ExecutionDefinitionBuilder:
@@ -429,6 +430,7 @@ def _extract_from_arrow(
     col_to_attr_idx: dict[str, int],
     col_to_metric_idx: dict[str, int],
     index_to_attr_idx: dict[str, int],
+    max_bytes: int | None = None,
 ) -> tuple[dict, dict]:
     """
     Arrow-path extraction for indexed() / not_indexed().
@@ -440,7 +442,11 @@ def _extract_from_arrow(
     ``pandas.Timestamp`` to match the behaviour of the non-Arrow path.
     Week and quarter values remain as strings (same as non-Arrow).
     """
-    table = execution.bare_exec_response.read_result_arrow()
+    if _ARROW_IMPORT_ERROR is not None:
+        raise ImportError(
+            "pyarrow is required for Arrow support. Install it with: pip install gooddata-pandas[arrow]"
+        ) from _ARROW_IMPORT_ERROR
+    table = execution.bare_exec_response.read_result_arrow(max_bytes=max_bytes)
     exec_def = execution.exec_def
 
     if table.num_rows == 0:
@@ -478,6 +484,7 @@ def compute_and_extract(
     is_cancellable: bool = False,
     result_page_len: int | None = None,
     use_arrow: bool = False,
+    max_bytes: int | None = None,
 ) -> tuple[dict, dict]:
     """
     Convenience function that computes and extracts data from the execution response.
@@ -496,6 +503,8 @@ def compute_and_extract(
             Defaults to 1000. Larger values can improve performance for large result sets.
         use_arrow (bool, optional): When True, fetches the result via the Arrow IPC binary
             endpoint in one shot instead of paginating through JSON. Requires pyarrow.
+        max_bytes (Optional[int]): Maximum response body size in bytes for the Arrow path.
+            Raises ResultSizeBytesLimitExceeded when exceeded. Ignored when use_arrow=False.
 
     Returns:
         tuple: A tuple containing the following dictionaries:
@@ -529,6 +538,7 @@ def compute_and_extract(
             col_to_attr_idx,
             col_to_metric_idx,
             index_to_attr_idx,
+            max_bytes=max_bytes,
         )
     elif not exec_def.has_attributes():
         return _extract_for_metrics_only(execution, cols, col_to_metric_idx), dict()

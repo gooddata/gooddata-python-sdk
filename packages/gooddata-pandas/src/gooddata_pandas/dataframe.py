@@ -159,6 +159,7 @@ class DataFrameFactory:
             is_cancellable=is_cancellable,
             result_page_len=result_page_len,
             use_arrow=use_arrow,
+            max_bytes=self._arrow_config.max_bytes if use_arrow else None,
         )
 
         _idx = make_pandas_index(index)
@@ -210,6 +211,7 @@ class DataFrameFactory:
             is_cancellable=is_cancellable,
             result_page_len=result_page_len,
             use_arrow=use_arrow,
+            max_bytes=self._arrow_config.max_bytes if use_arrow else None,
         )
 
         return pandas.DataFrame(data=data)
@@ -539,7 +541,7 @@ class DataFrameFactory:
             on_execution_submitted(execution)
 
         exec_response = execution.bare_exec_response
-        table = exec_response.read_result_arrow()
+        table = exec_response.read_result_arrow(max_bytes=self._arrow_config.max_bytes)
         return self._table_to_df_and_metadata(table, exec_response, label_overrides, grand_totals_position)
 
     def for_arrow_table(
@@ -684,7 +686,7 @@ class DataFrameFactory:
                     result_cache_metadata.execution_response, _check_type=False
                 ),
             )
-            table = exec_response.read_result_arrow()
+            table = exec_response.read_result_arrow(max_bytes=self._arrow_config.max_bytes)
             return self._table_to_df_and_metadata(table, exec_response, label_overrides, grand_totals_position)
 
         return convert_execution_response_to_dataframe(

@@ -1,6 +1,7 @@
 # (C) 2026 GoodData Corporation
 from __future__ import annotations
 
+import logging
 from typing import Callable
 
 import orjson
@@ -42,6 +43,8 @@ _GDC_TYPE_METRIC = "metric"
 _GDC_TYPE_TOTAL = "total"
 
 _REQUIRED_SCHEMA_KEYS = (_META_XTAB, _META_MODEL, _META_VIEW)
+
+logger = logging.getLogger(__name__)
 
 
 def read_model_labels(table: pa.Table) -> dict:
@@ -133,9 +136,14 @@ def _parse_schema_metadata(table: pa.Table) -> dict:
         raise ValueError(
             "Arrow table has no schema metadata. Expected GoodData metadata keys: " + ", ".join(_REQUIRED_SCHEMA_KEYS)
         )
-    schema_meta = {
-        k.decode(): orjson.loads(v) for k, v in table.schema.metadata.items() if k.decode() in _REQUIRED_SCHEMA_KEYS
-    }
+    schema_meta = {}
+    for _k, _v in table.schema.metadata.items():
+        try:
+            _k_str = _k.decode()
+        except UnicodeDecodeError:
+            continue
+        if _k_str in _REQUIRED_SCHEMA_KEYS:
+            schema_meta[_k_str] = orjson.loads(_v)
     missing = [k for k in _REQUIRED_SCHEMA_KEYS if k not in schema_meta]
     if missing:
         raise ValueError(
@@ -242,10 +250,15 @@ def _build_inline_index(
     totals_meta = xtab_meta.get("totalsMetadata", {})
     total_ref_vals: list = [None] * table.num_rows
     if totals_meta:
-        for field in table.schema:
-            if field.name.startswith(_COL_TOTAL_REF_PREFIX):
-                total_ref_vals = table.column(field.name).to_pylist()
-                break
+        total_ref_cols = [f.name for f in table.schema if f.name.startswith(_COL_TOTAL_REF_PREFIX)]
+        if total_ref_cols:
+            if len(total_ref_cols) > 1:
+                logger.warning(
+                    "Arrow table has %d __total_ref* columns; only %r is used for aggregation names.",
+                    len(total_ref_cols),
+                    total_ref_cols[0],
+                )
+            total_ref_vals = table.column(total_ref_cols[0]).to_pylist()
 
     # Precompute per-row aggregation name and kept-label set for total rows.
     agg_for_row: list[str | None] = [None] * table.num_rows
@@ -268,16 +281,17 @@ def _build_inline_index(
         values = table.column(lid).to_pylist()
         processed = []
         for i, v in enumerate(values):
-            if row_types[i] != 0 and isinstance(v, str):
-                if ref in kept_labels_for_row[i]:
-                    # Outer label kept as real attribute value in a subtotal row.
-                    processed.append(v)
-                elif v == "":
-                    # Aggregated level left empty by the server — fill with agg name.
-                    processed.append(agg_for_row[i] if agg_for_row[i] else v)
+            if row_types[i] != 0:
+                if isinstance(v, str):
+                    if ref in kept_labels_for_row[i]:
+                        processed.append(v)
+                    elif v == "":
+                        processed.append(agg_for_row[i] if agg_for_row[i] else v)
+                    else:
+                        processed.append(v.upper())
                 else:
-                    # Aggregation function marker (e.g. 'sum') — uppercase it.
-                    processed.append(v.upper())
+                    # Non-string value in a total row — replace with the aggregation name when available.
+                    processed.append(agg_for_row[i] if agg_for_row[i] is not None else v)
             else:
                 processed.append(v)
         arrays.append(processed)
@@ -466,6 +480,11 @@ def compute_column_totals_indexes(table: pa.Table, execution_dims: list) -> list
             (dim for dim in execution_dims if col_ref_label_ids <= _label_ids_in_dim(dim)),
             {},
         )
+        if not col_dim and execution_dims:
+            logger.warning(
+                "No execution dimension contains column label IDs %s; column_totals_indexes will be empty.",
+                col_ref_label_ids,
+            )
     else:
         col_dim = next(
             (dim for dim in execution_dims if any("measureGroupHeaders" in h for h in dim.get("headers", []))),
@@ -542,6 +561,11 @@ def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[li
             (dim for dim in execution_dims if ref_label_ids <= _label_ids_in_dim(dim)),
             {},
         )
+        if not row_dim and execution_dims:
+            logger.warning(
+                "No execution dimension contains row label IDs %s; row_totals_indexes will be empty.",
+                ref_label_ids,
+            )
     else:
         # Metrics-only: the dimension containing measureGroupHeaders is the output-row dim.
         row_dim = next(

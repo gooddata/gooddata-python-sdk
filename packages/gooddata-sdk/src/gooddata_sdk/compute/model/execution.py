@@ -408,8 +408,14 @@ class BareExecutionResponse:
             _return_http_data_only=True,
         )
         try:
+            # Stream directly: Arrow reads chunk-by-chunk, never allocating the full
+            # payload as a Python bytes object (~1× payload peak instead of ~2×).
             return _ipc.open_stream(response).read_all()
         finally:
+            # Drain the HTTP chunked-encoding terminator (0\r\n\r\n) that Arrow
+            # leaves unread after the IPC EOS marker, so the connection is fully
+            # consumed before being returned to the urllib3 pool.
+            response.read()
             response.release_conn()
 
     def cancel(self) -> None:
