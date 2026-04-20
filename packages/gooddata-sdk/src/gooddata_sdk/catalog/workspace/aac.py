@@ -1,6 +1,7 @@
 # (C) 2026 GoodData Corporation
 from __future__ import annotations
 
+import warnings
 from pathlib import Path
 from typing import Any, Literal
 
@@ -23,6 +24,12 @@ from gooddata_code_convertors import (
 
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import CatalogDeclarativeWorkspaceModel
 from gooddata_sdk.utils import read_layout_from_file
+
+_AAC_DEPRECATION_MSG = (
+    "AAC analytics model support is deprecated and will be removed in a future version. "
+    "The AAC analytics model API endpoints have been removed from the GoodData platform. "
+    "Use the declarative workspace model API directly instead."
+)
 
 # AAC types that map to visualization objects (all go through yaml_visualisation_to_declarative)
 _VISUALIZATION_TYPES = frozenset(
@@ -95,11 +102,15 @@ def aac_dataset_to_declarative(
 ) -> dict[str, Any]:
     """Convert an AAC dataset dict to declarative format.
 
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+
     Args:
         aac: The AAC dataset dict (parsed YAML).
         entities: Optional list of all AAC objects for cross-reference resolution.
         data_source_id: Optional data source ID for table-based datasets.
     """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     ent = entities if entities is not None else _build_entities([aac])
     args: list[Any] = [ent, aac]
     if data_source_id is not None:
@@ -108,12 +119,22 @@ def aac_dataset_to_declarative(
 
 
 def aac_date_dataset_to_declarative(aac: dict[str, Any]) -> dict[str, Any]:
-    """Convert an AAC date dataset dict to declarative format."""
+    """Convert an AAC date dataset dict to declarative format.
+
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+    """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     return yaml_date_dataset_to_declarative(aac)
 
 
 def aac_metric_to_declarative(aac: dict[str, Any]) -> dict[str, Any]:
-    """Convert an AAC metric dict to declarative format."""
+    """Convert an AAC metric dict to declarative format.
+
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+    """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     return yaml_metric_to_declarative(aac)
 
 
@@ -123,10 +144,14 @@ def aac_visualization_to_declarative(
 ) -> dict[str, Any]:
     """Convert an AAC visualization dict to declarative format.
 
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+
     Args:
         aac: The AAC visualization dict (parsed YAML).
         entities: Optional list of all AAC objects for cross-reference resolution.
     """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     ent = entities if entities is not None else _build_entities([aac])
     return yaml_visualisation_to_declarative(ent, aac)
 
@@ -137,21 +162,35 @@ def aac_dashboard_to_declarative(
 ) -> dict[str, Any]:
     """Convert an AAC dashboard dict to declarative format.
 
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+
     Args:
         aac: The AAC dashboard dict (parsed YAML).
         entities: Optional list of all AAC objects for cross-reference resolution.
     """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     ent = entities if entities is not None else _build_entities([aac])
     return yaml_dashboard_to_declarative(ent, aac)
 
 
 def aac_plugin_to_declarative(aac: dict[str, Any]) -> dict[str, Any]:
-    """Convert an AAC plugin dict to declarative format."""
+    """Convert an AAC plugin dict to declarative format.
+
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+    """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     return yaml_plugin_to_declarative(aac)
 
 
 def aac_attribute_hierarchy_to_declarative(aac: dict[str, Any]) -> dict[str, Any]:
-    """Convert an AAC attribute hierarchy dict to declarative format."""
+    """Convert an AAC attribute hierarchy dict to declarative format.
+
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+    """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     return yaml_attribute_hierarchy_to_declarative(aac)
 
 
@@ -168,23 +207,37 @@ def declarative_dataset_to_aac(
 ) -> dict[str, Any]:
     """Convert a declarative dataset dict to AAC format.
 
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+
     Args:
         declarative: The declarative dataset dict.
         profile: Optional profile dict with host, token, workspace_id, data_source.
         tables_map: Optional mapping of data source ID to list of table definitions.
     """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     p = profile if profile is not None else {}
     t = tables_map if tables_map is not None else {}
     return declarative_dataset_to_yaml(declarative, p, t)
 
 
 def declarative_date_instance_to_aac(declarative: dict[str, Any]) -> dict[str, Any]:
-    """Convert a declarative date instance dict to AAC format."""
+    """Convert a declarative date instance dict to AAC format.
+
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+    """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     return declarative_date_instance_to_yaml(declarative)
 
 
 def declarative_metric_to_aac(declarative: dict[str, Any]) -> dict[str, Any]:
-    """Convert a declarative metric dict to AAC format."""
+    """Convert a declarative metric dict to AAC format.
+
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+    """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     return declarative_metric_to_yaml(declarative)
 
 
@@ -194,10 +247,14 @@ def declarative_visualization_to_aac(
 ) -> dict[str, Any]:
     """Convert a declarative visualization dict to AAC format.
 
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+
     Args:
         declarative: The declarative visualization dict.
         entities: Optional entities list for cross-reference resolution.
     """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     ent = entities if entities is not None else []
     return declarative_visualisation_to_yaml(ent, declarative)
 
@@ -208,21 +265,35 @@ def declarative_dashboard_to_aac(
 ) -> dict[str, Any]:
     """Convert a declarative dashboard dict to AAC format.
 
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+
     Args:
         declarative: The declarative dashboard dict.
         entities: Optional entities list for cross-reference resolution.
     """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     ent = entities if entities is not None else []
     return declarative_dashboard_to_yaml(ent, declarative)
 
 
 def declarative_plugin_to_aac(declarative: dict[str, Any]) -> dict[str, Any]:
-    """Convert a declarative plugin dict to AAC format."""
+    """Convert a declarative plugin dict to AAC format.
+
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+    """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     return declarative_plugin_to_yaml(declarative)
 
 
 def declarative_attribute_hierarchy_to_aac(declarative: dict[str, Any]) -> dict[str, Any]:
-    """Convert a declarative attribute hierarchy dict to AAC format."""
+    """Convert a declarative attribute hierarchy dict to AAC format.
+
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+    """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     return declarative_attribute_hierarchy_to_yaml(declarative)
 
 
@@ -234,12 +305,16 @@ def declarative_attribute_hierarchy_to_aac(declarative: dict[str, Any]) -> dict[
 def detect_yaml_format(path: Path) -> Literal["aac", "declarative"]:
     """Detect whether a directory contains AAC or declarative YAMLs.
 
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+
     AAC files have a top-level 'type' field (dataset, metric, line_chart, etc.)
     and live as flat files or in typed subdirectories (datasets/, metrics/, etc.).
 
     Declarative files follow a nested folder structure with
     workspaces/<id>/ldm/ and workspaces/<id>/analytics_model/.
     """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     # Check for declarative structure markers
     if (path / "workspaces").is_dir() or (path / "ldm").is_dir() or (path / "analytics_model").is_dir():
         return "declarative"
@@ -294,6 +369,9 @@ def load_aac_workspace_from_disk(
 ) -> CatalogDeclarativeWorkspaceModel:
     """Load AAC YAML files from source_dir and return a declarative workspace model.
 
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+
     Reads all .yaml/.yml files, detects object type from the 'type' field,
     converts each to declarative format, and assembles into a
     CatalogDeclarativeWorkspaceModel.
@@ -302,6 +380,7 @@ def load_aac_workspace_from_disk(
         source_dir: Path to directory containing AAC YAML files.
         data_source_id: Optional data source ID for table-based datasets.
     """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     # First pass: read all AAC objects and build entities list
     aac_objects: list[dict[str, Any]] = []
     for yaml_file in _collect_aac_yaml_files(source_dir):
@@ -387,9 +466,13 @@ def _write_aac_file(source_dir: Path, subdir: str, obj_id: str, content: str) ->
 def store_aac_workspace_to_disk(model: CatalogDeclarativeWorkspaceModel, source_dir: Path) -> None:
     """Convert a declarative workspace model to AAC YAML files and write to disk.
 
+    .. deprecated::
+        AAC analytics model support is deprecated. Use the declarative workspace model API directly.
+
     Creates typed subdirectories (datasets/, metrics/, visualisations/, dashboards/,
     plugins/, attributeHierarchies/) under source_dir.
     """
+    warnings.warn(_AAC_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
     source_dir.mkdir(parents=True, exist_ok=True)
     model_dict = model.to_dict(camel_case=True)
 

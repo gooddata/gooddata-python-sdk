@@ -1,5 +1,6 @@
 # (C) 2024 GoodData Corporation
 import os
+import warnings
 from typing import Any, TypeVar
 
 from attrs import asdict, define
@@ -52,12 +53,28 @@ class Profile(ConfigBase):
         return {**base, "token": os.environ[env_var]}
 
 
+_AAC_CONFIG_DEPRECATION_MSG = (
+    "AacConfig is deprecated and will be removed in a future version. "
+    "The AAC analytics model API endpoints have been removed from the GoodData platform."
+)
+
+
 @define
 class AacConfig(ConfigBase):
+    """Configuration for AAC deployments.
+
+    .. deprecated::
+        AacConfig is deprecated. The AAC analytics model API endpoints have been removed
+        from the GoodData platform.
+    """
+
     profiles: dict[str, Profile]
     default_profile: str
     access: dict[str, str] | None = None
     source_dir: str | None = None
+
+    def __attrs_post_init__(self) -> None:
+        warnings.warn(_AAC_CONFIG_DEPRECATION_MSG, DeprecationWarning, stacklevel=2)
 
     def ds_credentials(self) -> dict[str, str]:
         load_dotenv()
