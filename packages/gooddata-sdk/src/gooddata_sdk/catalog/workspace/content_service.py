@@ -20,6 +20,7 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import LAYOUT_WORKSPACES_DIR
+from gooddata_sdk.catalog.workspace.entity_model.certification import CatalogSetCertificationRequest
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
     CatalogAggregatedFact,
     CatalogAttribute,
@@ -175,6 +176,42 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         metrics = load_all_entities(get_metrics)
         catalog_metrics = [CatalogMetric.from_api(metric) for metric in metrics.data]
         return catalog_metrics
+
+    def set_metric_certification(
+        self,
+        workspace_id: str,
+        metric_id: str,
+        *,
+        message: str | None = None,
+        status: str | None = "CERTIFIED",
+    ) -> None:
+        """Set or clear the certification status of a metric.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+            metric_id (str):
+                ID of the metric to certify or decertify.
+            message (str | None):
+                Optional message to associate with the certification.
+            status (str | None):
+                Certification status. Use ``"CERTIFIED"`` (default) to certify,
+                or ``None`` to remove an existing certification.
+
+        Returns:
+            None
+        """
+        request = CatalogSetCertificationRequest(
+            id=metric_id,
+            type="metric",
+            message=message,
+            status=status,
+        )
+        self._actions_api.set_certification(
+            workspace_id=workspace_id,
+            set_certification_request=request.as_api_model(),
+            _check_return_type=False,
+        )
 
     def get_facts_catalog(self, workspace_id: str) -> list[CatalogFact]:
         """Retrieve all facts in a given workspace.

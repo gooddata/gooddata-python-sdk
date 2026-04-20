@@ -25,5 +25,20 @@ class CatalogMetric(AttrCatalogEntity):
     def is_hidden(self) -> bool | None:
         return safeget(self.json_api_attributes, ["isHidden"])
 
+    @property
+    def certification(self) -> str | None:
+        """Certification status of the metric (e.g. 'CERTIFIED'), or None if not certified."""
+        return safeget(self.json_api_attributes, ["certification"])
+
+    @property
+    def certification_message(self) -> str | None:
+        """Optional message associated with the certification."""
+        return safeget(self.json_api_attributes, ["certificationMessage"])
+
+    @property
+    def certified_at(self) -> str | None:
+        """ISO-8601 datetime string of when the certification was set, or None."""
+        return safeget(self.json_api_attributes, ["certifiedAt"])
+
     def as_computable(self) -> Metric:
         return SimpleMetric(local_id=self.id, item=self.obj_id)

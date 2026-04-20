@@ -249,6 +249,7 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import
     CatalogDeclarativeWorkspaceModel,
     CatalogDeclarativeWorkspaces,
 )
+from gooddata_sdk.catalog.workspace.entity_model.certification import CatalogSetCertificationRequest
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
     CatalogAttribute,
     CatalogDataset,
