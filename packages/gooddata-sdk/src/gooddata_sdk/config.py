@@ -52,3 +52,15 @@ class Profile(ConfigBase):
         return {**base, "token": os.environ[env_var]}
 
 
+@define
+class AacConfig(ConfigBase):
+    profiles: dict[str, Profile]
+    default_profile: str
+    access: dict[str, str] | None = None
+    source_dir: str | None = None
+
+    def ds_credentials(self) -> dict[str, str]:
+        load_dotenv()
+        if self.access is None:
+            return {}
+        return {k: os.environ.get(v[1:], v) for k, v in self.access.items()}
