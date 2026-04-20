@@ -95,7 +95,7 @@ def _tabular_by_visualization_id_base(test_config, export_format: str):
 
 @pytest.mark.parametrize(
     "grand_totals_position",
-    ["pinnedBottom", "pinnedTop", "bottom", "top"],
+    ["pinnedBottom", "pinnedTop", "bottom", "top", "TOP", "BOTTOM"],
 )
 def test_export_settings_grand_totals_position(grand_totals_position):
     settings = ExportSettings(merge_headers=True, show_filters=False, grand_totals_position=grand_totals_position)

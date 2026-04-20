@@ -14,7 +14,7 @@ from gooddata_api_client.model.visual_export_request import VisualExportRequest 
 
 from gooddata_sdk.catalog.base import Base
 
-GrandTotalsPosition = Literal["pinnedBottom", "pinnedTop", "bottom", "top"]
+GrandTotalsPosition = Literal["pinnedBottom", "pinnedTop", "bottom", "top", "TOP", "BOTTOM"]
 
 
 @define(kw_only=True)
