@@ -25,10 +25,10 @@ attributes:
       - Order lines
     title: Order status
 dataSourceTableId:
-  dataSourceId: pg_local_docker-demo
+  dataSourceId: demo-test-ds
   id: order_lines
   path:
-    - demo_6d9051d9069a8468
+    - demo
     - order_lines
   type: dataSource
 description: Order lines

@@ -17,10 +17,10 @@ attributes:
       - Campaigns
     title: Campaign name
 dataSourceTableId:
-  dataSourceId: pg_local_docker-demo
+  dataSourceId: demo-test-ds
   id: campaigns
   path:
-    - demo_6d9051d9069a8468
+    - demo
     - campaigns
   type: dataSource
 description: Campaigns

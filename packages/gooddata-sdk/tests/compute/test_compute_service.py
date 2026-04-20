@@ -1,16 +1,9 @@
 # (C) 2025 GoodData Corporation
 from pathlib import Path
 
-import pytest
 from gooddata_sdk import CatalogWorkspace
 from gooddata_sdk.sdk import GoodDataSdk
 from tests_support.vcrpy_utils import get_vcr
-
-# Skip all tests in this module
-pytest.skip(
-    "Skipping all tests in this module because it requires gen-ai which is not available in the test environment.",
-    allow_module_level=True,
-)
 
 gd_vcr = get_vcr()
 
@@ -217,6 +210,81 @@ def test_ai_chat_stream(test_config):
     finally:
         sdk.catalog_workspace.delete_workspace(test_workspace_id)
         sdk.compute.reset_ai_chat_history(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "ai_search_hybrid.yaml"))
+def test_search_ai_with_hybrid_search(test_config):
+    """Test AI search with enable_hybrid_search parameter."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        result = sdk.compute.search_ai(
+            workspace_id=test_workspace_id,
+            question="What is the total revenue?",
+            enable_hybrid_search=True,
+        )
+        assert result is not None
+        assert hasattr(result, "results")
+    finally:
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "generate_description.yaml"))
+def test_generate_description(test_config):
+    """Test generate description for an analytics catalog object."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        # Use a metric object type for description generation
+        result = sdk.compute.generate_description(
+            workspace_id=test_workspace_id,
+            object_id="revenue",
+            object_type="Metric",
+        )
+        assert result is not None
+    finally:
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "generate_title.yaml"))
+def test_generate_title(test_config):
+    """Test generate title for an analytics catalog object."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        result = sdk.compute.generate_title(
+            workspace_id=test_workspace_id,
+            object_id="revenue",
+            object_type="Metric",
+        )
+        assert result is not None
+    finally:
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "trending_objects.yaml"))
+def test_get_trending_objects(test_config):
+    """Test get trending analytics catalog objects."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "ai"
+    test_workspace_id = test_config["workspace_test"]
+
+    try:
+        _setup_test_workspace(sdk, test_workspace_id, path)
+        result = sdk.compute.get_trending_objects(test_workspace_id)
+        assert result is not None
+        assert hasattr(result, "objects")
+    finally:
+        sdk.catalog_workspace.delete_workspace(test_workspace_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "build_exec_def_from_chat_result.yaml"))

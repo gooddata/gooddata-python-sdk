@@ -12,9 +12,14 @@ from gooddata_api_client.model.chat_history_request import ChatHistoryRequest
 from gooddata_api_client.model.chat_history_result import ChatHistoryResult
 from gooddata_api_client.model.chat_request import ChatRequest
 from gooddata_api_client.model.chat_result import ChatResult
+from gooddata_api_client.model.generate_description_request import GenerateDescriptionRequest
+from gooddata_api_client.model.generate_description_response import GenerateDescriptionResponse
+from gooddata_api_client.model.generate_title_request import GenerateTitleRequest
+from gooddata_api_client.model.generate_title_response import GenerateTitleResponse
 from gooddata_api_client.model.saved_visualization import SavedVisualization
 from gooddata_api_client.model.search_request import SearchRequest
 from gooddata_api_client.model.search_result import SearchResult
+from gooddata_api_client.model.trending_objects_result import TrendingObjectsResult
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.execution import (
@@ -276,6 +281,7 @@ class ComputeService:
         workspace_id: str,
         question: str,
         deep_search: bool | None = None,
+        enable_hybrid_search: bool | None = None,
         limit: int | None = None,
         object_types: list[str] | None = None,
         relevant_score_threshold: float | None = None,
@@ -288,6 +294,8 @@ class ComputeService:
             workspace_id (str): workspace identifier
             question (str): keyword/sentence input for search
             deep_search (bool): turn on deep search - if true, content of complex objects will be searched as well
+            enable_hybrid_search (Optional[bool]): if true, enables hybrid search combining vector similarity and
+                keyword matching. Defaults to None.
             limit (Optional[int]): maximum number of results to return. Defaults to None.
             object_types (Optional[list[str]]): list of object types to search for. Enum items: "attribute", "metric", "fact",
                 "label", "date", "dataset", "visualization" and "dashboard". Defaults to None.
@@ -303,6 +311,8 @@ class ComputeService:
         search_params: dict[str, Any] = {}
         if deep_search is not None:
             search_params["deep_search"] = deep_search
+        if enable_hybrid_search is not None:
+            search_params["enable_hybrid_search"] = enable_hybrid_search
         if limit is not None:
             search_params["limit"] = limit
         if object_types is not None:
@@ -313,6 +323,63 @@ class ComputeService:
             search_params["title_to_descriptor_ratio"] = title_to_descriptor_ratio
         search_request = SearchRequest(question=question, **search_params)
         response = self._actions_api.ai_search(workspace_id, search_request, _check_return_type=False)
+        return response
+
+    def generate_description(
+        self,
+        workspace_id: str,
+        object_id: str,
+        object_type: str,
+    ) -> GenerateDescriptionResponse:
+        """
+        Generate a description for an analytics catalog object.
+
+        Args:
+            workspace_id (str): workspace identifier
+            object_id (str): identifier of the object to describe
+            object_type (str): type of the object to describe.
+                One of: "Visualization", "Dashboard", "Metric", "Fact", "Attribute"
+
+        Returns:
+            GenerateDescriptionResponse: Generated description and optional note
+        """
+        request = GenerateDescriptionRequest(object_id=object_id, object_type=object_type, _check_type=False)
+        response = self._actions_api.generate_description(workspace_id, request, _check_return_type=False)
+        return response
+
+    def generate_title(
+        self,
+        workspace_id: str,
+        object_id: str,
+        object_type: str,
+    ) -> GenerateTitleResponse:
+        """
+        Generate a title for an analytics catalog object.
+
+        Args:
+            workspace_id (str): workspace identifier
+            object_id (str): identifier of the object to generate a title for
+            object_type (str): type of the object to generate a title for.
+                One of: "Visualization", "Dashboard", "Metric", "Fact", "Attribute"
+
+        Returns:
+            GenerateTitleResponse: Generated title and optional note
+        """
+        request = GenerateTitleRequest(object_id=object_id, object_type=object_type, _check_type=False)
+        response = self._actions_api.generate_title(workspace_id, request, _check_return_type=False)
+        return response
+
+    def get_trending_objects(self, workspace_id: str) -> TrendingObjectsResult:
+        """
+        Get trending analytics catalog objects for a workspace.
+
+        Args:
+            workspace_id (str): workspace identifier
+
+        Returns:
+            TrendingObjectsResult: List of trending analytics catalog objects
+        """
+        response = self._actions_api.trending_objects(workspace_id, _check_return_type=False)
         return response
 
     def cancel_executions(self, executions: dict[str, dict[str, str]]) -> None:

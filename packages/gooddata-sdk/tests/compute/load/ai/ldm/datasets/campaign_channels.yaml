@@ -25,10 +25,10 @@ attributes:
       - Campaign channels
     title: Type
 dataSourceTableId:
-  dataSourceId: pg_local_docker-demo
+  dataSourceId: demo-test-ds
   id: campaign_channels
   path:
-    - demo_6d9051d9069a8468
+    - demo
     - campaign_channels
   type: dataSource
 description: Campaign channels
