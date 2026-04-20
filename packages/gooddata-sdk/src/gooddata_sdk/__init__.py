@@ -280,6 +280,7 @@ from gooddata_sdk.compute.model.execution import (
     ExecutionDefinition,
     ExecutionResponse,
     ExecutionResult,
+    MetricDefinitionOverride,
     ResultCacheMetadata,
     ResultSizeBytesLimitExceeded,
     ResultSizeDimensions,
@@ -315,6 +316,11 @@ from gooddata_sdk.compute.model.metric import (
     PopDateMetric,
     PopDatesetMetric,
     SimpleMetric,
+)
+from gooddata_sdk.compute.model.what_if import (
+    AfmWhatIfMeasureAdjustmentConfig,
+    AfmWhatIfScenarioConfig,
+    AfmWhatIfScenarioItem,
 )
 from gooddata_sdk.compute.service import ComputeService
 from gooddata_sdk.sdk import GoodDataSdk
