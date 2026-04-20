@@ -18,6 +18,7 @@ from gooddata_sdk import (
     CatalogDependsOn,
     CatalogDependsOnDateFilter,
     CatalogEntityIdentifier,
+    CatalogSetCertificationRequest,
     CatalogValidateByItem,
     CatalogWorkspace,
     DataSourceValidator,
@@ -502,3 +503,62 @@ def test_export_definition_analytics_layout(test_config):
         assert deep_eq(analytics_o.analytics.export_definitions, analytics_e.analytics.export_definitions)
     finally:
         safe_delete(_refresh_workspaces, sdk)
+
+
+# --- Certification unit tests ---
+
+
+def test_set_certification_request_as_api_model_certified():
+    """CatalogSetCertificationRequest serialises correctly for a CERTIFIED request."""
+    req = CatalogSetCertificationRequest(id="my-metric", type="metric", message="Approved", status="CERTIFIED")
+    api_model = req.as_api_model()
+    assert api_model.id == "my-metric"
+    assert api_model.type == "metric"
+    assert api_model.message == "Approved"
+    assert api_model.status == "CERTIFIED"
+
+
+def test_set_certification_request_as_api_model_clear():
+    """CatalogSetCertificationRequest serialises correctly when clearing certification (status=None)."""
+    req = CatalogSetCertificationRequest(id="my-metric", type="metric", status=None)
+    api_model = req.as_api_model()
+    assert api_model.id == "my-metric"
+    assert api_model.type == "metric"
+    assert api_model.status is None
+
+
+def test_set_certification_request_defaults():
+    """Default status is 'CERTIFIED' and message defaults to None."""
+    req = CatalogSetCertificationRequest(id="m1", type="metric")
+    assert req.status == "CERTIFIED"
+    assert req.message is None
+
+
+def test_set_metric_certification_calls_api():
+    """set_metric_certification forwards the correct request to the actions API."""
+    from unittest.mock import MagicMock
+
+    from gooddata_sdk.catalog.workspace.content_service import CatalogWorkspaceContentService
+
+    mock_api_client = MagicMock()
+    mock_api_client.entities_api = MagicMock()
+    mock_api_client.layout_api = MagicMock()
+    mock_api_client.actions_api = MagicMock()
+    mock_api_client.user_management_api = MagicMock()
+
+    service = CatalogWorkspaceContentService(mock_api_client)
+    service.set_metric_certification(
+        workspace_id="demo",
+        metric_id="total-revenue",
+        message="Verified by data team",
+        status="CERTIFIED",
+    )
+
+    mock_api_client.actions_api.set_certification.assert_called_once()
+    call_kwargs = mock_api_client.actions_api.set_certification.call_args
+    assert call_kwargs.kwargs["workspace_id"] == "demo"
+    api_req = call_kwargs.kwargs["set_certification_request"]
+    assert api_req.id == "total-revenue"
+    assert api_req.type == "metric"
+    assert api_req.message == "Verified by data team"
+    assert api_req.status == "CERTIFIED"
