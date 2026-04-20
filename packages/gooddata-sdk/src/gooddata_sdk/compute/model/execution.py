@@ -1,6 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import io
 import logging
 from typing import TYPE_CHECKING, Any, Union
 
@@ -382,12 +383,16 @@ class BareExecutionResponse:
             )
         return ExecutionResult(execution_result)
 
-    def read_result_arrow(self) -> pyarrow.Table:
+    def read_result_arrow(self, max_bytes: int | None = None) -> pyarrow.Table:
         """
         Reads the full execution result as a pyarrow Table.
 
         The binary endpoint returns the complete result in one shot (no paging).
         Requires pyarrow to be installed (pip install gooddata-sdk[arrow]).
+
+        Args:
+            max_bytes: Optional byte-size limit. Raises ResultSizeBytesLimitExceeded when
+                the response body exceeds this value.
         """
         if _ipc is None:
             raise ImportError(
@@ -408,12 +413,19 @@ class BareExecutionResponse:
             _return_http_data_only=True,
         )
         try:
-            # Stream directly: Arrow reads chunk-by-chunk, never allocating the full
-            # payload as a Python bytes object (~1× payload peak instead of ~2×).
+            if max_bytes is not None:
+                # Buffer first so we can check size before parsing.
+                data = response.read()
+                if len(data) > max_bytes:
+                    raise ResultSizeBytesLimitExceeded(
+                        result_size_bytes_limit=max_bytes,
+                        actual_result_bytes_size=len(data),
+                    )
+                return _ipc.open_stream(io.BytesIO(data)).read_all()
             return _ipc.open_stream(response).read_all()
         finally:
-            # Drain the HTTP chunked-encoding terminator (0\r\n\r\n) that Arrow
-            # leaves unread after the IPC EOS marker, so the connection is fully
+            # Drain the HTTP chunked-encoding terminator (0\r\n\r\n) that pyarrow might
+            # leave unread after the IPC EOS marker, so the connection is fully
             # consumed before being returned to the urllib3 pool.
             response.read()
             response.release_conn()
