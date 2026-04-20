@@ -8,6 +8,7 @@ from pathlib import Path
 import gooddata_api_client as api_client
 import requests
 from gooddata_api_client import apis
+from gooddata_api_client.api.ai_agents_api import AIAgentsApi
 
 from gooddata_sdk import __version__
 from gooddata_sdk.utils import HttpMethod
@@ -71,6 +72,7 @@ class GoodDataApiClient:
         self._actions_api = apis.ActionsApi(self._api_client)
         self._user_management_api = apis.UserManagementApi(self._api_client)
         self._appearance_api = apis.AppearanceApi(self._api_client)
+        self._ai_agents_api = AIAgentsApi(self._api_client)
         self._executions_cancellable = executions_cancellable
 
     def _do_post_request(
@@ -157,6 +159,10 @@ class GoodDataApiClient:
     @property
     def appearance_api(self) -> apis.AppearanceApi:
         return self._appearance_api
+
+    @property
+    def ai_agents_api(self) -> AIAgentsApi:
+        return self._ai_agents_api
 
     @property
     def executions_cancellable(self) -> bool:
