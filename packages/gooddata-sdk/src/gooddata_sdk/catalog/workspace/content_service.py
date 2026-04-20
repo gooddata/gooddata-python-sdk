@@ -13,6 +13,7 @@ from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
 from gooddata_sdk.catalog.depends_on import CatalogDependsOn, CatalogDependsOnDateFilter
 from gooddata_sdk.catalog.filter_by import CatalogFilterBy
+from gooddata_sdk.catalog.organization.entity_model.llm_provider import CatalogResolvedLlm
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.validate_by_item import CatalogValidateByItem
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
@@ -685,3 +686,26 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             workspace_id, request, _check_return_type=False, **paging_params
         )
         return [v["title"] for v in values["elements"]]
+
+    def resolve_llm_providers(self, workspace_id: str) -> CatalogResolvedLlm | None:
+        """Resolve the active LLM configuration for a workspace.
+
+        When the ENABLE_LLM_ENDPOINT_REPLACEMENT feature flag is enabled, returns
+        the active LLM provider with its associated models. Otherwise, falls back
+        to the legacy LLM endpoint response format.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo".
+
+        Returns:
+            CatalogResolvedLlm | None:
+                Resolved LLM configuration, or None if no active configuration exists.
+        """
+        response = self._actions_api.resolve_llm_providers(workspace_id, _check_return_type=False)
+        if response is None:
+            return None
+        data = response.data if hasattr(response, "data") else None
+        if data is None:
+            return None
+        return CatalogResolvedLlm.from_api(data)

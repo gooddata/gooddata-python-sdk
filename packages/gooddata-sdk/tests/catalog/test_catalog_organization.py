@@ -3,13 +3,16 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import (
     CatalogCspDirective,
     CatalogDeclarativeNotificationChannel,
     CatalogJwk,
+    CatalogListLlmProviderModelsResponse,
     CatalogOrganization,
     CatalogOrganizationSetting,
+    CatalogResolvedLlm,
     CatalogRsaSpecification,
     CatalogWebhook,
     GoodDataSdk,
@@ -563,3 +566,85 @@ def test_layout_notification_channels(test_config, snapshot_notification_channel
 #         sdk.catalog_organization.put_declarative_identity_providers([])
 #         idps = sdk.catalog_organization.get_declarative_identity_providers()
 #         assert len(idps) == 0
+
+
+# ---------------------------------------------------------------------------
+# Unit tests for LLM provider response model classes (no cassettes needed)
+# ---------------------------------------------------------------------------
+
+
+def test_catalog_resolved_llm_from_api():
+    """CatalogResolvedLlm.from_api deserializes a plain dict correctly."""
+    data = {
+        "id": "my-provider",
+        "title": "My LLM Provider",
+        "models": [
+            {"id": "gpt-4o", "family": "OPENAI"},
+            {"id": "gpt-4-turbo", "family": "OPENAI"},
+        ],
+    }
+    result = CatalogResolvedLlm.from_api(data)
+    assert result.id == "my-provider"
+    assert result.title == "My LLM Provider"
+    assert len(result.models) == 2
+    assert result.models[0].id == "gpt-4o"
+    assert result.models[0].family == "OPENAI"
+    assert result.models[1].id == "gpt-4-turbo"
+
+
+def test_catalog_resolved_llm_from_api_empty_models():
+    """CatalogResolvedLlm.from_api handles missing models gracefully."""
+    data = {"id": "provider-no-models", "title": "Provider"}
+    result = CatalogResolvedLlm.from_api(data)
+    assert result.id == "provider-no-models"
+    assert result.title == "Provider"
+    assert result.models == []
+
+
+def test_catalog_list_llm_provider_models_response_from_api():
+    """CatalogListLlmProviderModelsResponse.from_api deserializes correctly."""
+    data = {
+        "success": True,
+        "message": "Models listed successfully.",
+        "models": [
+            {"id": "claude-3-5-sonnet-20241022", "family": "ANTHROPIC"},
+        ],
+    }
+    result = CatalogListLlmProviderModelsResponse.from_api(data)
+    assert result.success is True
+    assert result.message == "Models listed successfully."
+    assert len(result.models) == 1
+    assert result.models[0].id == "claude-3-5-sonnet-20241022"
+    assert result.models[0].family == "ANTHROPIC"
+
+
+def test_catalog_list_llm_provider_models_response_failure():
+    """CatalogListLlmProviderModelsResponse.from_api handles failure response."""
+    data = {
+        "success": False,
+        "message": "Authentication failed.",
+        "models": [],
+    }
+    result = CatalogListLlmProviderModelsResponse.from_api(data)
+    assert result.success is False
+    assert result.message == "Authentication failed."
+    assert result.models == []
+
+
+# ---------------------------------------------------------------------------
+# Integration tests for LLM provider CRUD and action methods
+# (cassettes to be recorded against a live server)
+# ---------------------------------------------------------------------------
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "list_llm_provider_models_by_id.yaml"))
+def test_list_llm_provider_models_by_id(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    providers = sdk.catalog_organization.list_llm_providers()
+    if not providers:
+        pytest.skip("No LLM providers configured — cannot test list_llm_provider_models_by_id")
+    provider_id = providers[0].id
+    response = sdk.catalog_organization.list_llm_provider_models_by_id(provider_id)
+    assert isinstance(response, CatalogListLlmProviderModelsResponse)
+    assert isinstance(response.success, bool)
+    assert isinstance(response.message, str)

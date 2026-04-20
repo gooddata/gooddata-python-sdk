@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from typing import Any, Union
 
+import attrs
 from attr import define
 from gooddata_api_client.model.aws_bedrock_provider_config import AwsBedrockProviderConfig
 from gooddata_api_client.model.azure_foundry_provider_auth import AzureFoundryProviderAuth
@@ -337,3 +338,54 @@ class CatalogLlmProviderPatchAttributes(Base):
     @staticmethod
     def client_class() -> type[JsonApiLlmProviderInAttributes]:
         return JsonApiLlmProviderInAttributes
+
+
+# --- Resolved LLM response types (read-only, from action API) ---
+
+
+@attrs.define(kw_only=True)
+class CatalogResolvedLlm:
+    """Represents a resolved LLM configuration (provider or legacy endpoint) for a workspace."""
+
+    id: str
+    title: str
+    models: list[CatalogLlmProviderModel] = attrs.field(factory=list)
+
+    @classmethod
+    def from_api(cls, entity: Any) -> CatalogResolvedLlm:
+        raw_models = safeget(entity, ["models"]) or []
+        return cls(
+            id=safeget(entity, ["id"]) or "",
+            title=safeget(entity, ["title"]) or "",
+            models=[
+                CatalogLlmProviderModel(
+                    id=safeget(m, ["id"]) or "",
+                    family=safeget(m, ["family"]) or "",
+                )
+                for m in raw_models
+            ],
+        )
+
+
+@attrs.define(kw_only=True)
+class CatalogListLlmProviderModelsResponse:
+    """Response from listing available models for an LLM provider."""
+
+    success: bool
+    message: str
+    models: list[CatalogLlmProviderModel] = attrs.field(factory=list)
+
+    @classmethod
+    def from_api(cls, entity: Any) -> CatalogListLlmProviderModelsResponse:
+        raw_models = safeget(entity, ["models"]) or []
+        return cls(
+            success=safeget(entity, ["success"]) or False,
+            message=safeget(entity, ["message"]) or "",
+            models=[
+                CatalogLlmProviderModel(
+                    id=safeget(m, ["id"]) or "",
+                    family=safeget(m, ["family"]) or "",
+                )
+                for m in raw_models
+            ],
+        )

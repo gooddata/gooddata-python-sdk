@@ -24,6 +24,7 @@ from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspD
 from gooddata_sdk.catalog.organization.entity_model.identity_provider import CatalogIdentityProvider
 from gooddata_sdk.catalog.organization.entity_model.jwk import CatalogJwk, CatalogJwkDocument
 from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
+    CatalogListLlmProviderModelsResponse,
     CatalogLlmProvider,
     CatalogLlmProviderDocument,
     CatalogLlmProviderPatch,
@@ -583,6 +584,19 @@ class CatalogOrganizationService(CatalogServiceBase):
             id: LLM provider identifier
         """
         self._entities_api.delete_entity_llm_providers(id, _check_return_type=False)
+
+    def list_llm_provider_models_by_id(self, llm_provider_id: str) -> CatalogListLlmProviderModelsResponse:
+        """List available models for an existing LLM provider by its ID.
+
+        Args:
+            llm_provider_id: LLM provider identifier
+
+        Returns:
+            CatalogListLlmProviderModelsResponse: Response containing available models
+                and a success flag.
+        """
+        response = self._actions_api.list_llm_provider_models_by_id(llm_provider_id, _check_return_type=False)
+        return CatalogListLlmProviderModelsResponse.from_api(response)
 
     # Layout APIs
 
