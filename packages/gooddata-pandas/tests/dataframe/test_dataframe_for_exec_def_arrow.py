@@ -2,11 +2,14 @@
 from __future__ import annotations
 
 import ast
+import io
 import json
+import logging
 import re
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+import gooddata_pandas.data_access as _da
 import numpy
 import pandas
 import pyarrow as pa
@@ -16,15 +19,20 @@ from gooddata_pandas.arrow_convertor import (
     _build_inline_index,
     _compute_primary_labels_from_fields,
     _compute_primary_labels_from_inline,
+    _metric_title,
     compute_column_totals_indexes,
     compute_primary_labels,
     compute_row_totals_indexes,
     convert_arrow_table_to_dataframe,
+    convert_label_values,
+    read_model_labels,
     reorder_grand_totals,
 )
 from gooddata_pandas.arrow_types import ArrowConfig, TypesMapper
 from gooddata_pandas.data_access import ExecutionDefinitionBuilder
 from gooddata_pandas.dataframe import DataFrameFactory
+from gooddata_sdk import ExecutionDefinition
+from gooddata_sdk.compute.model.execution import BareExecutionResponse, ResultSizeBytesLimitExceeded
 from pyarrow import ipc
 
 _ARROW_FIXTURES = Path(__file__).parent / "fixtures" / "arrow"
@@ -1180,8 +1188,6 @@ def test_for_exec_def_arrow_label_overrides_none_equivalent_to_empty() -> None:
     mock_sdk.compute.for_exec_def.return_value = mock_exec
 
     gdf = DataFrameFactory(mock_sdk, "workspace")
-    from gooddata_sdk import ExecutionDefinition
-
     exec_def = MagicMock(spec=ExecutionDefinition)
     df_none, _ = gdf.for_exec_def_arrow(exec_def, label_overrides=None)
     df_empty, _ = gdf.for_exec_def_arrow(exec_def, label_overrides={})
@@ -1212,8 +1218,6 @@ def test_compute_row_totals_indexes_tolerates_field_without_metadata() -> None:
     table, _, meta = _load_case("tot_d0_sub")
 
     # Strip metadata from one grand_total field to simulate the defensive path.
-    import pyarrow as _pa
-
     fields = []
     for i in range(len(table.schema)):
         f = table.schema.field(i)
@@ -1223,12 +1227,10 @@ def test_compute_row_totals_indexes_tolerates_field_without_metadata() -> None:
             fields.append(f.with_metadata(None))
         else:
             fields.append(f)
-    new_schema = _pa.schema(fields, metadata=table.schema.metadata)
+    new_schema = pa.schema(fields, metadata=table.schema.metadata)
     table_no_meta = table.cast(new_schema)
 
     # Should not raise; total indexes for the stripped field will be empty.
-    from gooddata_pandas.arrow_convertor import compute_row_totals_indexes
-
     result = compute_row_totals_indexes(table_no_meta, meta["dimensions"])
     assert isinstance(result, list)
 
@@ -1334,8 +1336,6 @@ def test_build_field_index_label_values_overflow() -> None:
 
 def test_metric_title_out_of_range_raises() -> None:
     """_metric_title raises ValueError when metric_idx exceeds requestedShape.metrics length."""
-    from gooddata_pandas.arrow_convertor import _metric_title
-
     model_meta = {"requestedShape": {"metrics": ["price"]}, "metrics": {}}
     with pytest.raises(ValueError, match="out of range"):
         _metric_title(5, model_meta, {})
@@ -1390,3 +1390,571 @@ def test_for_exec_result_id_arrow_types_mapper(tmp_path: Path) -> None:
 
     # Shape must be identical; string columns differ in dtype only.
     assert df_default.shape == df_arrow_strings.shape
+
+
+# ---------------------------------------------------------------------------
+# convert_label_values — date granularity type conversion
+#
+# Mirrors the non-Arrow path (AttributeConverterStore in _typed_attribute_value):
+#   DAY / MONTH / YEAR → pandas.Timestamp
+#   WEEK / QUARTER     → str (unchanged)
+#   no granularity     → values unchanged (same object returned)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "granularity, raw, expected",
+    [
+        ("year", ["2023", "2024"], [pandas.Timestamp("2023-01-01"), pandas.Timestamp("2024-01-01")]),
+        ("month", ["2023-01", "2023-03"], [pandas.Timestamp("2023-01-01"), pandas.Timestamp("2023-03-01")]),
+        ("day", ["2023-01-15", "2024-06-30"], [pandas.Timestamp("2023-01-15"), pandas.Timestamp("2024-06-30")]),
+        ("week", ["2025-1", "2025-49"], ["2025-1", "2025-49"]),
+        ("quarter", ["2025-1", "2025-4"], ["2025-1", "2025-4"]),
+    ],
+)
+def test_convert_label_values_date_granularities(granularity: str, raw: list, expected: list) -> None:
+    """convert_label_values converts DAY/MONTH/YEAR to Timestamp; WEEK/QUARTER stays string."""
+    model_labels = {"date_attr": {"granularity": granularity}}
+    result = convert_label_values("date_attr", raw, model_labels)
+    assert result == expected
+
+
+def test_convert_label_values_no_granularity_returns_same_object() -> None:
+    """Plain text attributes (no granularity) are returned as the same list object — zero copy."""
+    model_labels = {"region": {"granularity": None, "labelType": "TEXT"}}
+    values = ["East", "West"]
+    assert convert_label_values("region", values, model_labels) is values
+
+
+def test_convert_label_values_unknown_label_id_returns_same_object() -> None:
+    """Label ID absent from model_labels (no metadata) is treated as no-op."""
+    values = ["foo", "bar"]
+    assert convert_label_values("unknown", values, {}) is values
+
+
+def test_convert_label_values_none_passthrough() -> None:
+    """None values inside a date column are preserved as None (sparse rows)."""
+    model_labels = {"date.year": {"granularity": "year"}}
+    result = convert_label_values("date.year", ["2023", None, "2025"], model_labels)
+    assert result[0] == pandas.Timestamp("2023-01-01")
+    assert result[1] is None
+    assert result[2] == pandas.Timestamp("2025-01-01")
+
+
+def test_convert_label_values_empty_list() -> None:
+    """Empty input list returns empty list without error."""
+    model_labels = {"date.year": {"granularity": "year"}}
+    assert convert_label_values("date.year", [], model_labels) == []
+
+
+# ---------------------------------------------------------------------------
+# read_model_labels — schema metadata parsing
+# ---------------------------------------------------------------------------
+
+
+def test_read_model_labels_returns_labels_dict() -> None:
+    """read_model_labels extracts the labels sub-dict from x-gdc-model-v1."""
+    model_meta = {"labels": {"region": {"granularity": None}}, "metrics": {}}
+    schema_meta = {b"x-gdc-model-v1": json.dumps(model_meta).encode()}
+    table = pa.table({"col": [1]}).replace_schema_metadata(schema_meta)
+    assert read_model_labels(table) == {"region": {"granularity": None}}
+
+
+def test_read_model_labels_missing_key_returns_empty_dict() -> None:
+    """read_model_labels returns {} when x-gdc-model-v1 is absent."""
+    table = pa.table({"col": [1]})
+    assert read_model_labels(table) == {}
+
+
+def test_read_model_labels_no_labels_key_returns_empty_dict() -> None:
+    """read_model_labels returns {} when model metadata has no 'labels' key."""
+    schema_meta = {b"x-gdc-model-v1": json.dumps({"metrics": {}}).encode()}
+    table = pa.table({"col": [1]}).replace_schema_metadata(schema_meta)
+    assert read_model_labels(table) == {}
+
+
+# ---------------------------------------------------------------------------
+# indexed() / not_indexed() with use_arrow=True — date granularity parity
+#
+# The non-Arrow path converts year/month/day → datetime via AttributeConverterStore.
+# The Arrow path must produce identical types for the same columns/index.
+#
+# We build a minimal synthetic Arrow table with the required schema metadata
+# (x-gdc-model-v1 with granularity field) and wire it into a mocked execution.
+# ---------------------------------------------------------------------------
+
+
+def _make_date_attr_table(
+    label_id: str,
+    granularity: str,
+    str_values: list,
+    metric_values: list[float] | None = None,
+) -> pa.Table:
+    """Build a minimal Arrow table for a single date attribute + one revenue metric.
+
+    The table has the schema metadata (x-gdc-model-v1, x-gdc-xtab-v1, x-gdc-view-v1)
+    that _extract_from_arrow reads to determine the label's granularity.
+
+    Args:
+        label_id:     GoodData label local ID (used as the Arrow column name).
+        granularity:  Lowercase granularity string, e.g. ``"year"``, ``"month"``.
+        str_values:   Raw string values for the date attribute column.
+        metric_values: Optional metric values; defaults to 0.0 per row.
+    """
+    n = len(str_values)
+    if metric_values is None:
+        metric_values = [float(i) for i in range(n)]
+
+    model_meta = {
+        "labels": {
+            label_id: {
+                "granularity": granularity,
+                "labelTitle": label_id.capitalize(),
+                "labelType": None,
+                "primaryLabelId": label_id,
+                "attributeId": label_id,
+            }
+        },
+        "requestedShape": {"metrics": ["revenue"]},
+        "metrics": {"revenue": {"title": "Revenue"}},
+    }
+    xtab_meta = {
+        "labelMetadata": {"l0": {"labelId": label_id, "primaryLabelId": label_id}},
+        "computedShape": {"metrics": ["m0"], "rows": [], "cols": []},
+        "totalsMetadata": {},
+    }
+    view_meta = {"isTransposed": False}
+    schema_meta = {
+        b"x-gdc-model-v1": json.dumps(model_meta).encode(),
+        b"x-gdc-xtab-v1": json.dumps(xtab_meta).encode(),
+        b"x-gdc-view-v1": json.dumps(view_meta).encode(),
+    }
+    gdc_metric = {b"gdc": json.dumps({"type": "metric", "index": 0}).encode()}
+    schema = pa.schema(
+        [
+            pa.field("__row_type", pa.int8()),
+            pa.field(label_id, pa.string()),
+            pa.field("metric_group_0", pa.float64(), metadata=gdc_metric),
+        ],
+        metadata=schema_meta,
+    )
+    return pa.table(
+        {
+            "__row_type": pa.array([0] * n, type=pa.int8()),
+            label_id: pa.array(str_values, type=pa.string()),
+            "metric_group_0": pa.array(metric_values, type=pa.float64()),
+        },
+        schema=schema,
+    )
+
+
+@pytest.mark.parametrize(
+    "case_name, index_by, columns, expected_timestamps",
+    [
+        (
+            "date_year_in_rows",
+            {"date": "label/date.year"},
+            {"revenue": "metric/revenue"},
+            [pandas.Timestamp("2023-01-01"), pandas.Timestamp("2024-01-01"), pandas.Timestamp("2025-01-01")],
+        ),
+        (
+            "date_month_in_rows",
+            {"date": "label/date.month"},
+            {"revenue": "metric/revenue"},
+            [pandas.Timestamp("2023-01-01"), pandas.Timestamp("2023-06-01"), pandas.Timestamp("2023-12-01")],
+        ),
+        (
+            "date_day_in_rows",
+            {"date": "label/date.day"},
+            {"revenue": "metric/revenue"},
+            [pandas.Timestamp("2023-01-15"), pandas.Timestamp("2023-06-30")],
+        ),
+    ],
+)
+def test_indexed_use_arrow_date_to_timestamp(
+    case_name: str,
+    index_by: dict,
+    columns: dict,
+    expected_timestamps: list,
+) -> None:
+    """indexed() with use_arrow=True converts DAY/MONTH/YEAR date attributes to Timestamp.
+
+    Matches the non-Arrow path behaviour where AttributeConverterStore applies
+    DateConverter → pandas.to_datetime for these granularities.
+    """
+    if case_name not in _cases():
+        pytest.skip(f"fixture {case_name!r} not available")
+    table, _, _ = _load_case(case_name)
+    mock_sdk, _, _ = _mock_execution(table, columns, index_by)
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", use_arrow=True)
+    df = gdf.indexed(index_by=index_by, columns=columns)
+
+    assert df.index.tolist() == expected_timestamps
+
+
+@pytest.mark.parametrize(
+    "case_name, index_by, columns, expected_strings",
+    [
+        (
+            "date_week_in_rows",
+            {"date": "label/date.week"},
+            {"revenue": "metric/revenue"},
+            ["2025-1", "2025-49"],
+        ),
+        (
+            "date_quarter_in_rows",
+            {"date": "label/date.quarter"},
+            {"revenue": "metric/revenue"},
+            ["2025-1", "2025-4"],
+        ),
+    ],
+)
+def test_indexed_use_arrow_week_quarter_stays_string(
+    case_name: str,
+    index_by: dict,
+    columns: dict,
+    expected_strings: list,
+) -> None:
+    """indexed() with use_arrow=True: WEEK and QUARTER values remain as strings.
+
+    Matches the non-Arrow path where StringConverter is registered for these granularities.
+    """
+    if case_name not in _cases():
+        pytest.skip(f"fixture {case_name!r} not available")
+    table, _, _ = _load_case(case_name)
+    mock_sdk, _, _ = _mock_execution(table, columns, index_by)
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", use_arrow=True)
+    df = gdf.indexed(index_by=index_by, columns=columns)
+
+    assert df.index.tolist() == expected_strings
+
+
+def test_not_indexed_use_arrow_year_column_to_timestamp() -> None:
+    """not_indexed() with use_arrow=True converts a year-granularity column to Timestamp."""
+    if "date_year_in_rows" not in _cases():
+        pytest.skip("fixture date_year_in_rows not available")
+    table, _, _ = _load_case("date_year_in_rows")
+    columns = {"year_col": "label/date.year", "revenue": "metric/revenue"}
+    mock_sdk, _, _ = _mock_execution(table, columns)
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", use_arrow=True)
+    df = gdf.not_indexed(columns=columns)
+
+    assert df["year_col"].tolist() == [
+        pandas.Timestamp("2023-01-01"),
+        pandas.Timestamp("2024-01-01"),
+        pandas.Timestamp("2025-01-01"),
+    ]
+
+
+def test_indexed_use_arrow_date_none_values_preserved() -> None:
+    """indexed() with use_arrow=True preserves None (null) entries in date columns."""
+    table = _make_date_attr_table("date.year", "year", ["2023", None, "2025"], metric_values=[1.0, 2.0, 3.0])
+    columns = {"revenue": "metric/revenue"}
+    index_by = {"date": "label/date.year"}
+    mock_sdk, _, _ = _mock_execution(table, columns, index_by)
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", use_arrow=True)
+    df = gdf.indexed(index_by=index_by, columns=columns)
+
+    idx = df.index.tolist()
+    assert idx[0] == pandas.Timestamp("2023-01-01")
+    assert idx[1] is None or pandas.isna(idx[1])
+    assert idx[2] == pandas.Timestamp("2025-01-01")
+
+
+def test_indexed_use_arrow_text_attr_unchanged() -> None:
+    """indexed() with use_arrow=True: text attributes (no granularity) stay as strings."""
+    # Use a fixture that has a plain text attribute (region).
+    if "dim_r_m" not in _cases():
+        pytest.skip("fixture dim_r_m not available")
+    table, _, _ = _load_case("dim_r_m")
+    columns = {"price": "metric/price", "order_amount": "metric/order_amount"}
+    index_by = {"region": "label/region"}
+    mock_sdk, _, _ = _mock_execution(table, columns, index_by)
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", use_arrow=True)
+    df = gdf.indexed(index_by=index_by, columns=columns)
+
+    # All index values should be plain strings.
+    assert all(isinstance(v, str) for v in df.index.tolist())
+
+
+def test_indexed_use_arrow_empty_result_preserves_structure() -> None:
+    """indexed(use_arrow=True) on a zero-row Arrow table returns empty DataFrame with correct names."""
+    model_meta = {
+        "labels": {"region": {"granularity": None, "labelTitle": "Region", "primaryLabelId": "region"}},
+        "requestedShape": {"metrics": ["revenue"]},
+        "metrics": {"revenue": {"title": "Revenue"}},
+    }
+    xtab_meta = {
+        "labelMetadata": {"l0": {"labelId": "region", "primaryLabelId": "region"}},
+        "computedShape": {"rows": [], "cols": [], "metrics": ["m0"]},
+        "totalsMetadata": {},
+    }
+    schema_meta = {
+        b"x-gdc-model-v1": json.dumps(model_meta).encode(),
+        b"x-gdc-xtab-v1": json.dumps(xtab_meta).encode(),
+        b"x-gdc-view-v1": json.dumps({"isTransposed": False}).encode(),
+    }
+    gdc_metric = {b"gdc": json.dumps({"type": "metric", "index": 0}).encode()}
+    schema = pa.schema(
+        [
+            pa.field("__row_type", pa.int8()),
+            pa.field("region", pa.string()),
+            pa.field("metric_group_0", pa.float64(), metadata=gdc_metric),
+        ],
+        metadata=schema_meta,
+    )
+    empty_table = pa.table(
+        {
+            "__row_type": pa.array([], type=pa.int8()),
+            "region": pa.array([], type=pa.string()),
+            "metric_group_0": pa.array([], type=pa.float64()),
+        },
+        schema=schema,
+    )
+
+    columns = {"revenue": "metric/revenue"}
+    index_by = {"reg": "label/region"}
+    mock_sdk, _, _ = _mock_execution(empty_table, columns, index_by)
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", use_arrow=True)
+    df = gdf.indexed(index_by=index_by, columns=columns)
+
+    assert len(df) == 0
+    assert list(df.columns) == ["revenue"]
+    assert df.index.name == "reg"
+
+
+def test_extract_from_arrow_without_pyarrow_raises_import_error() -> None:
+    """_extract_from_arrow raises ImportError (not NameError) when pyarrow is unavailable."""
+    original = _da._ARROW_IMPORT_ERROR
+    try:
+        _da._ARROW_IMPORT_ERROR = ImportError("pyarrow not installed")
+        with pytest.raises(ImportError, match="pyarrow"):
+            _da._extract_from_arrow(MagicMock(), [], {}, {}, {})
+    finally:
+        _da._ARROW_IMPORT_ERROR = original
+
+
+def test_parse_schema_metadata_non_utf8_key_is_skipped() -> None:
+    """_parse_schema_metadata skips non-UTF-8 byte keys without raising UnicodeDecodeError."""
+    if "dim_r_m" not in _cases():
+        pytest.skip("fixture dim_r_m not available")
+    table, _, _ = _load_case("dim_r_m")
+    non_utf8_meta = {b"\xff\xfe": b"some value", **table.schema.metadata}
+    table_with_bad_key = table.replace_schema_metadata(non_utf8_meta)
+    # Should not raise despite the non-UTF-8 key.
+    df = convert_arrow_table_to_dataframe(table_with_bad_key)
+    assert df is not None
+
+
+def test_build_inline_index_total_row_numeric_label_uses_agg_name() -> None:
+    """Total rows with non-string (numeric/null) label values are replaced with the aggregation name."""
+    table = pa.table(
+        {
+            "__row_type": pa.array([0, 2], type=pa.int8()),
+            "year": pa.array([2023.0, None], type=pa.float64()),
+            # Data row has no total ref; total row refers to "t0" in totalsMetadata.
+            "__total_ref": pa.array([None, [0]], type=pa.list_(pa.int32())),
+        }
+    )
+    xtab_meta = {
+        "labelMetadata": {"l0": {"labelId": "year", "primaryLabelId": "year"}},
+        "totalsMetadata": {"t0": {"aggregation": "sum", "rowLabels": []}},
+    }
+    model_meta = {
+        "labels": {"year": {"labelTitle": "Year"}},
+        "requestedShape": {"metrics": []},
+    }
+    idx = _build_inline_index(
+        table,
+        row_label_refs=["l0"],
+        label_ref_to_id={"l0": "year"},
+        model_meta=model_meta,
+        xtab_meta=xtab_meta,
+    )
+    assert idx is not None
+    assert idx[0] == 2023.0
+    assert idx[1] == "SUM"
+
+
+def test_arrow_config_max_bytes_forwarded_to_read_result_arrow() -> None:
+    """ArrowConfig.max_bytes is passed through to read_result_arrow() by for_exec_def_arrow()."""
+    if "dim_r_m" not in _cases():
+        pytest.skip("fixture dim_r_m not available")
+    table, _, meta = _load_case("dim_r_m")
+
+    mock_exec = MagicMock()
+    mock_exec.bare_exec_response.read_result_arrow.return_value = table
+    mock_exec.bare_exec_response.dimensions = meta["dimensions"]
+    mock_sdk = MagicMock()
+    mock_sdk.compute.for_exec_def.return_value = mock_exec
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", arrow_config=ArrowConfig(max_bytes=10_000_000))
+    gdf.for_exec_def_arrow(MagicMock(spec=ExecutionDefinition))
+
+    mock_exec.bare_exec_response.read_result_arrow.assert_called_once_with(max_bytes=10_000_000)
+
+
+def test_arrow_config_max_bytes_raises_when_exceeded() -> None:
+    """ResultSizeBytesLimitExceeded from read_result_arrow propagates out of for_exec_def_arrow()."""
+    mock_exec = MagicMock()
+    mock_exec.bare_exec_response.read_result_arrow.side_effect = ResultSizeBytesLimitExceeded(100, 200)
+    mock_sdk = MagicMock()
+    mock_sdk.compute.for_exec_def.return_value = mock_exec
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", arrow_config=ArrowConfig(max_bytes=100))
+    with pytest.raises(ResultSizeBytesLimitExceeded):
+        gdf.for_exec_def_arrow(MagicMock(spec=ExecutionDefinition))
+
+
+def test_build_inline_index_multiple_total_ref_columns_warns(caplog: pytest.LogCaptureFixture) -> None:
+    """_build_inline_index warns when the Arrow table has more than one __total_ref* column."""
+    table = pa.table(
+        {
+            "__row_type": pa.array([0, 2], type=pa.int8()),
+            "region": pa.array(["East", "sum"], type=pa.string()),
+            "__total_ref": pa.array([None, [0]], type=pa.list_(pa.int32())),
+            "__total_ref_x": pa.array([None, [0]], type=pa.list_(pa.int32())),
+        }
+    )
+    xtab_meta = {
+        "labelMetadata": {"l0": {"labelId": "region", "primaryLabelId": "region"}},
+        "totalsMetadata": {"t0": {"aggregation": "sum", "rowLabels": []}},
+    }
+    model_meta = {"labels": {"region": {"labelTitle": "Region"}}, "requestedShape": {"metrics": []}}
+
+    with caplog.at_level(logging.WARNING, logger="gooddata_pandas.arrow_convertor"):
+        idx = _build_inline_index(table, ["l0"], {"l0": "region"}, model_meta, xtab_meta)
+
+    assert idx is not None
+    assert idx[1] == "SUM"
+    assert any("__total_ref" in msg for msg in caplog.messages)
+
+
+def test_compute_row_totals_indexes_no_matching_dim_warns(caplog: pytest.LogCaptureFixture) -> None:
+    """compute_row_totals_indexes warns when execution_dims is non-empty but no dim contains the row labels."""
+    if "dim_r_m" not in _cases():
+        pytest.skip("fixture dim_r_m not available")
+    table, _, _ = _load_case("dim_r_m")
+    bogus_dims = [{"headers": [{"measureGroupHeaders": [{"localIdentifier": "price"}]}]}]
+
+    with caplog.at_level(logging.WARNING, logger="gooddata_pandas.arrow_convertor"):
+        result = compute_row_totals_indexes(table, bogus_dims)
+
+    assert result == []
+    assert any("row label IDs" in msg for msg in caplog.messages)
+
+
+def test_read_result_arrow_max_bytes_raises_when_exceeded() -> None:
+    """read_result_arrow raises ResultSizeBytesLimitExceeded when the payload exceeds max_bytes."""
+    # Build a valid Arrow IPC payload to pass through open_stream.
+    tiny_table = pa.table({"x": pa.array([1, 2, 3], type=pa.int32())})
+    buf = io.BytesIO()
+    with ipc.new_stream(buf, tiny_table.schema) as writer:
+        writer.write_table(tiny_table)
+    payload = buf.getvalue()
+
+    mock_response = MagicMock()
+    mock_response.read.return_value = payload
+
+    mock_api_client = MagicMock()
+    mock_api_client.call_api.return_value = mock_response
+
+    bare = object.__new__(BareExecutionResponse)
+    bare._actions_api = MagicMock()
+    bare._actions_api.api_client = mock_api_client
+    bare._workspace_id = "ws"
+    bare._exec_response = {"links": {"executionResult": "result-id"}}
+    bare._cancel_token = None
+
+    # Below limit: succeeds and returns the table.
+    result = bare.read_result_arrow(max_bytes=len(payload) + 1000)
+    assert result.num_rows == 3
+
+    # At or below payload size: raises.
+    with pytest.raises(ResultSizeBytesLimitExceeded) as exc_info:
+        bare.read_result_arrow(max_bytes=1)
+    assert exc_info.value.result_size_bytes_limit == 1
+    assert exc_info.value.actual_result_bytes_size == len(payload)
+
+
+def test_indexed_use_arrow_mixed_date_and_text_index() -> None:
+    """indexed() with use_arrow=True: date attr → Timestamp, text attr → str in MultiIndex."""
+    n = 3
+    year_values = ["2023", "2024", "2025"]
+    region_values = ["East", "West", "South"]
+
+    model_meta = {
+        "labels": {
+            "date.year": {
+                "granularity": "year",
+                "labelTitle": "Year",
+                "labelType": None,
+                "primaryLabelId": "date.year",
+                "attributeId": "date.year",
+            },
+            "region": {
+                "granularity": None,
+                "labelTitle": "Region",
+                "labelType": "TEXT",
+                "primaryLabelId": "region",
+                "attributeId": "region",
+            },
+        },
+        "requestedShape": {"metrics": ["revenue"]},
+        "metrics": {"revenue": {"title": "Revenue"}},
+    }
+    xtab_meta = {
+        "labelMetadata": {
+            "l0": {"labelId": "date.year", "primaryLabelId": "date.year"},
+            "l1": {"labelId": "region", "primaryLabelId": "region"},
+        },
+        "computedShape": {"metrics": ["m0"], "rows": [], "cols": []},
+        "totalsMetadata": {},
+    }
+    schema_meta = {
+        b"x-gdc-model-v1": json.dumps(model_meta).encode(),
+        b"x-gdc-xtab-v1": json.dumps(xtab_meta).encode(),
+        b"x-gdc-view-v1": json.dumps({"isTransposed": False}).encode(),
+    }
+    gdc_metric = {b"gdc": json.dumps({"type": "metric", "index": 0}).encode()}
+    schema = pa.schema(
+        [
+            pa.field("__row_type", pa.int8()),
+            pa.field("date.year", pa.string()),
+            pa.field("region", pa.string()),
+            pa.field("metric_group_0", pa.float64(), metadata=gdc_metric),
+        ],
+        metadata=schema_meta,
+    )
+    table = pa.table(
+        {
+            "__row_type": pa.array([0] * n, type=pa.int8()),
+            "date.year": pa.array(year_values, type=pa.string()),
+            "region": pa.array(region_values, type=pa.string()),
+            "metric_group_0": pa.array([10.0, 20.0, 30.0], type=pa.float64()),
+        },
+        schema=schema,
+    )
+
+    columns = {"revenue": "metric/revenue"}
+    index_by = {"year": "label/date.year", "region": "label/region"}
+    mock_sdk, _, _ = _mock_execution(table, columns, index_by)
+
+    gdf = DataFrameFactory(mock_sdk, "workspace", use_arrow=True)
+    df = gdf.indexed(index_by=index_by, columns=columns)
+
+    assert isinstance(df.index, pandas.MultiIndex)
+    year_level = df.index.get_level_values("year").tolist()
+    region_level = df.index.get_level_values("region").tolist()
+    assert year_level == [
+        pandas.Timestamp("2023-01-01"),
+        pandas.Timestamp("2024-01-01"),
+        pandas.Timestamp("2025-01-01"),
+    ]
+    assert region_level == ["East", "West", "South"]

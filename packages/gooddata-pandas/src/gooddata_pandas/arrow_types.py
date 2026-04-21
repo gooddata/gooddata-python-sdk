@@ -47,8 +47,12 @@ class ArrowConfig:
                 custom_mapping is not provided.
         custom_mapping: Arrow type → pandas dtype mapping dict. Only used when
             types_mapper=TypesMapper.CUSTOM, ignored otherwise.
+        max_bytes: Optional byte-size limit for the Arrow response body. When set,
+            ``read_result_arrow`` raises ``ResultSizeBytesLimitExceeded`` if the
+            raw IPC payload exceeds this value before parsing begins.
     """
 
     self_destruct: bool = False
     types_mapper: TypesMapper = TypesMapper.DEFAULT
     custom_mapping: dict | None = field(default=None)
+    max_bytes: int | None = field(default=None)

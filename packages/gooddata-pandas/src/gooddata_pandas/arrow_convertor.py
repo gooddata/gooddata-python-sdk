@@ -1,10 +1,12 @@
 # (C) 2026 GoodData Corporation
 from __future__ import annotations
 
+import logging
 from typing import Callable
 
 import orjson
 import pandas
+from gooddata_sdk.type_converter import AttributeConverterStore
 
 from gooddata_pandas.arrow_types import TypesMapper
 
@@ -42,6 +44,63 @@ _GDC_TYPE_TOTAL = "total"
 
 _REQUIRED_SCHEMA_KEYS = (_META_XTAB, _META_MODEL, _META_VIEW)
 
+logger = logging.getLogger(__name__)
+
+
+def read_model_labels(table: pa.Table) -> dict:
+    """Return the ``labels`` dict from the Arrow table's ``x-gdc-model-v1`` schema metadata.
+
+    Returns an empty dict when the metadata key is absent so callers can use it
+    unconditionally without extra None-checks.
+    """
+    if not table.schema.metadata or b"x-gdc-model-v1" not in table.schema.metadata:
+        return {}
+    return orjson.loads(table.schema.metadata[b"x-gdc-model-v1"]).get("labels", {})
+
+
+def _get_date_converter_for_label(label_id: str, model_labels: dict):
+    """Return a type Converter for date-granularity labels, or None for plain text attributes.
+
+    Reads the ``granularity`` field from Arrow model metadata (``x-gdc-model-v1``) and
+    looks up the matching converter in ``AttributeConverterStore``.
+
+    - ``DAY`` / ``MONTH`` / ``YEAR`` → ``DateConverter``  (→ ``pandas.Timestamp`` via external fn)
+    - ``WEEK`` / ``QUARTER``         → ``StringConverter`` (no-op)
+    - ``MINUTE`` / ``HOUR``          → ``DatetimeConverter``
+    - No granularity (text attrs)    → ``None`` (caller skips conversion)
+    """
+    info = model_labels.get(label_id, {})
+    granularity = info.get("granularity")
+    if not granularity:
+        return None
+    return AttributeConverterStore.find_converter("DATE", granularity.upper())
+
+
+def convert_label_values(label_id: str, values: list, model_labels: dict) -> list:
+    """Apply date-granularity type conversion to a list of attribute values from an Arrow column.
+
+    Mirrors the non-Arrow execution path (``AttributeConverterStore`` in ``_typed_attribute_value``):
+
+    - ``DAY`` / ``MONTH`` / ``YEAR`` granularity → ``pandas.Timestamp``
+    - ``WEEK`` / ``QUARTER``                     → ``str`` (unchanged)
+    - No granularity (text attributes)            → values returned as the **same object**
+
+    ``None`` values are passed through unchanged.
+
+    Args:
+        label_id:     Arrow column name / GoodData label local ID.
+        values:       Raw values from ``table.column(label_id).to_pylist()``.
+        model_labels: The ``labels`` dict from ``x-gdc-model-v1`` schema metadata
+                      (as returned by :func:`read_model_labels`).
+
+    Returns:
+        Converted list, or the original *values* object when no conversion is needed.
+    """
+    converter = _get_date_converter_for_label(label_id, model_labels)
+    if converter is None:
+        return values
+    return [converter.to_external_type(v) if v is not None else None for v in values]
+
 
 def build_metric_field_index(table: pa.Table) -> dict[int, str]:
     """Return {metric_dimension_index: arrow_field_name} from the table schema.
@@ -77,9 +136,14 @@ def _parse_schema_metadata(table: pa.Table) -> dict:
         raise ValueError(
             "Arrow table has no schema metadata. Expected GoodData metadata keys: " + ", ".join(_REQUIRED_SCHEMA_KEYS)
         )
-    schema_meta = {
-        k.decode(): orjson.loads(v) for k, v in table.schema.metadata.items() if k.decode() in _REQUIRED_SCHEMA_KEYS
-    }
+    schema_meta = {}
+    for _k, _v in table.schema.metadata.items():
+        try:
+            _k_str = _k.decode()
+        except UnicodeDecodeError:
+            continue
+        if _k_str in _REQUIRED_SCHEMA_KEYS:
+            schema_meta[_k_str] = orjson.loads(_v)
     missing = [k for k in _REQUIRED_SCHEMA_KEYS if k not in schema_meta]
     if missing:
         raise ValueError(
@@ -186,10 +250,15 @@ def _build_inline_index(
     totals_meta = xtab_meta.get("totalsMetadata", {})
     total_ref_vals: list = [None] * table.num_rows
     if totals_meta:
-        for field in table.schema:
-            if field.name.startswith(_COL_TOTAL_REF_PREFIX):
-                total_ref_vals = table.column(field.name).to_pylist()
-                break
+        total_ref_cols = [f.name for f in table.schema if f.name.startswith(_COL_TOTAL_REF_PREFIX)]
+        if total_ref_cols:
+            if len(total_ref_cols) > 1:
+                logger.warning(
+                    "Arrow table has %d __total_ref* columns; only %r is used for aggregation names.",
+                    len(total_ref_cols),
+                    total_ref_cols[0],
+                )
+            total_ref_vals = table.column(total_ref_cols[0]).to_pylist()
 
     # Precompute per-row aggregation name and kept-label set for total rows.
     agg_for_row: list[str | None] = [None] * table.num_rows
@@ -212,16 +281,17 @@ def _build_inline_index(
         values = table.column(lid).to_pylist()
         processed = []
         for i, v in enumerate(values):
-            if row_types[i] != 0 and isinstance(v, str):
-                if ref in kept_labels_for_row[i]:
-                    # Outer label kept as real attribute value in a subtotal row.
-                    processed.append(v)
-                elif v == "":
-                    # Aggregated level left empty by the server — fill with agg name.
-                    processed.append(agg_for_row[i] if agg_for_row[i] else v)
+            if row_types[i] != 0:
+                if isinstance(v, str):
+                    if ref in kept_labels_for_row[i]:
+                        processed.append(v)
+                    elif v == "":
+                        processed.append(agg_for_row[i] if agg_for_row[i] else v)
+                    else:
+                        processed.append(v.upper())
                 else:
-                    # Aggregation function marker (e.g. 'sum') — uppercase it.
-                    processed.append(v.upper())
+                    # Non-string value in a total row — replace with the aggregation name when available.
+                    processed.append(agg_for_row[i] if agg_for_row[i] is not None else v)
             else:
                 processed.append(v)
         arrays.append(processed)
@@ -410,6 +480,11 @@ def compute_column_totals_indexes(table: pa.Table, execution_dims: list) -> list
             (dim for dim in execution_dims if col_ref_label_ids <= _label_ids_in_dim(dim)),
             {},
         )
+        if not col_dim and execution_dims:
+            logger.warning(
+                "No execution dimension contains column label IDs %s; column_totals_indexes will be empty.",
+                col_ref_label_ids,
+            )
     else:
         col_dim = next(
             (dim for dim in execution_dims if any("measureGroupHeaders" in h for h in dim.get("headers", []))),
@@ -486,6 +561,11 @@ def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[li
             (dim for dim in execution_dims if ref_label_ids <= _label_ids_in_dim(dim)),
             {},
         )
+        if not row_dim and execution_dims:
+            logger.warning(
+                "No execution dimension contains row label IDs %s; row_totals_indexes will be empty.",
+                ref_label_ids,
+            )
     else:
         # Metrics-only: the dimension containing measureGroupHeaders is the output-row dim.
         row_dim = next(
