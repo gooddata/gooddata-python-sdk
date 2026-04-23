@@ -1,90 +1,13 @@
 # (C) 2025 GoodData Corporation
-import pytest
-
 from gooddata_pipelines.ldm_extension.input_processor import (
     LdmExtensionDataProcessor,
 )
 from gooddata_pipelines.ldm_extension.models.custom_data_object import (
     ColumnDataType,
     CustomDataset,
-    CustomDatasetDefinition,
     CustomFieldDefinition,
     CustomFieldType,
 )
-
-
-@pytest.fixture
-def mock_custom_field_attribute():
-    return CustomFieldDefinition(
-        workspace_id="workspace1",
-        dataset_id="ds1",
-        custom_field_id="attr1",
-        custom_field_name="Attribute 1",
-        custom_field_type=CustomFieldType.ATTRIBUTE,
-        custom_field_source_column="col_attr1",
-        custom_field_source_column_data_type=ColumnDataType.STRING,
-    )
-
-
-@pytest.fixture
-def mock_custom_field_fact():
-    return CustomFieldDefinition(
-        workspace_id="workspace1",
-        dataset_id="ds1",
-        custom_field_id="fact1",
-        custom_field_name="Fact 1",
-        custom_field_type=CustomFieldType.FACT,
-        custom_field_source_column="col_fact1",
-        custom_field_source_column_data_type=ColumnDataType.INT,
-    )
-
-
-@pytest.fixture
-def mock_custom_field_date():
-    return CustomFieldDefinition(
-        workspace_id="workspace1",
-        dataset_id="ds1",
-        custom_field_id="date1",
-        custom_field_name="Date 1",
-        custom_field_type=CustomFieldType.DATE,
-        custom_field_source_column="col_date1",
-        custom_field_source_column_data_type=ColumnDataType.DATE,
-    )
-
-
-@pytest.fixture
-def mock_dataset_definition():
-    return CustomDatasetDefinition(
-        workspace_id="workspace1",
-        dataset_id="ds1",
-        dataset_name="Dataset 1",
-        dataset_source_table="table1",
-        dataset_datasource_id="ds_source",
-        dataset_source_sql=None,
-        parent_dataset_reference="parent_ds",
-        parent_dataset_reference_attribute_id="parent_attr",
-        dataset_reference_source_column="ref_col",
-        dataset_reference_source_column_data_type=ColumnDataType.STRING,
-        workspace_data_filter_id="wdf1",
-        workspace_data_filter_column_name="col1",
-    )
-
-
-@pytest.fixture
-def mock_custom_dataset(
-    mock_dataset_definition,
-    mock_custom_field_attribute,
-    mock_custom_field_fact,
-    mock_custom_field_date,
-):
-    return CustomDataset(
-        definition=mock_dataset_definition,
-        custom_fields=[
-            mock_custom_field_attribute,
-            mock_custom_field_fact,
-            mock_custom_field_date,
-        ],
-    )
 
 
 def test_attribute_from_field(mock_custom_field_attribute):
@@ -96,6 +19,26 @@ def test_attribute_from_field(mock_custom_field_attribute):
     assert attr.source_column == "col_attr1"
     assert attr.source_column_data_type == ColumnDataType.STRING.value
     assert attr.tags == ["dataset_name"]
+    assert attr.description is None
+
+
+def test_attribute_from_field_custom_tags_and_description():
+    field = CustomFieldDefinition(
+        workspace_id="workspace1",
+        dataset_id="ds1",
+        custom_field_id="attr1",
+        custom_field_name="Attribute 1",
+        custom_field_type=CustomFieldType.ATTRIBUTE,
+        custom_field_source_column="col_attr1",
+        custom_field_source_column_data_type=ColumnDataType.STRING,
+        tags=["t1", "t2"],
+        description="Attr desc",
+    )
+    attr = LdmExtensionDataProcessor._attribute_from_field(
+        "dataset_name", field
+    )
+    assert attr.tags == ["t1", "t2"]
+    assert attr.description == "Attr desc"
 
 
 def test_fact_from_field(mock_custom_field_fact):
@@ -147,6 +90,20 @@ def test_get_sources_sql_only(mock_dataset_definition):
     assert table_id is None
     assert sql is not None
     assert sql.statement == "SELECT * FROM foo"
+
+
+def test_datasets_to_ldm_dataset_tags_and_description(mock_dataset_definition):
+    mock_dataset_definition.dataset_tags = ["managed", "extra"]
+    mock_dataset_definition.dataset_description = "DS desc"
+    mock_dataset_definition.dataset_source_sql = "SELECT 1"
+    mock_dataset_definition.dataset_source_table = None
+    ds = CustomDataset(definition=mock_dataset_definition, custom_fields=[])
+    processor = LdmExtensionDataProcessor()
+    model = processor.datasets_to_ldm({"ds1": ds})
+    d = model.ldm.datasets[0]
+    assert d.description == "DS desc"
+    assert d.tags == ["managed", "extra"]
+    assert d.sql is not None
 
 
 def test_datasets_to_ldm(mock_custom_dataset):

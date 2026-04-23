@@ -7,7 +7,7 @@ further processing.
 
 from enum import Enum
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, Field, model_validator
 
 
 class CustomFieldType(str, Enum):
@@ -42,6 +42,14 @@ class CustomFieldDefinition(BaseModel):
     custom_field_type: CustomFieldType
     custom_field_source_column: str
     custom_field_source_column_data_type: ColumnDataType
+    description: str | None = Field(
+        default=None,
+        description="Declarative description on the attribute, fact, or date dataset.",
+    )
+    tags: list[str] | None = Field(
+        default=None,
+        description="If set, replaces the default tag list (dataset display name only).",
+    )
 
     @model_validator(mode="after")
     def check_ids_not_equal(self) -> "CustomFieldDefinition":
@@ -68,6 +76,14 @@ class CustomDatasetDefinition(BaseModel):
     dataset_reference_source_column_data_type: ColumnDataType
     workspace_data_filter_id: str
     workspace_data_filter_column_name: str
+    dataset_description: str | None = Field(
+        default=None,
+        description="Declarative description on the custom dataset.",
+    )
+    dataset_tags: list[str] | None = Field(
+        default=None,
+        description="If set, replaces the default tag list (dataset display name only).",
+    )
 
     @model_validator(mode="after")
     def check_source(self) -> "CustomDatasetDefinition":
