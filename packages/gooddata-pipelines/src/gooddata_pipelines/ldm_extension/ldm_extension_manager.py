@@ -3,6 +3,9 @@
 
 from pathlib import Path
 
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import (
+    CatalogDeclarativeModel,
+)
 from gooddata_sdk.sdk import GoodDataSdk
 from gooddata_sdk.utils import PROFILES_FILE_PATH, profile_content
 
@@ -147,9 +150,35 @@ class LdmExtensionManager:
         # If the set of new invalid relations is a subset of the current one,
         return set_new_invalid_relations.issubset(set_current_invalid_relations)
 
+    def _ldm_payload_for_workspace(
+        self,
+        workspace_id: str,
+        datasets: dict[DatasetId, CustomDataset],
+        *,
+        merge_into_existing_ldm: bool,
+        remove_managed_datasets_missing_from_input: bool,
+        management_tag: str | None,
+    ) -> CatalogDeclarativeModel:
+        """Build the declarative LDM payload to upload for one workspace."""
+        if not merge_into_existing_ldm:
+            return self._processor.datasets_to_ldm(datasets)
+        current = self._sdk.catalog_workspace_content.get_declarative_ldm(
+            workspace_id
+        )
+        return self._processor.merge_custom_ldm_into_existing(
+            current,
+            datasets,
+            remove_managed_datasets_missing_from_input=remove_managed_datasets_missing_from_input,
+            management_tag=management_tag,
+        )
+
     def _process_with_relations_check(
         self,
         validated_data: dict[WorkspaceId, dict[DatasetId, CustomDataset]],
+        *,
+        merge_into_existing_ldm: bool = False,
+        remove_managed_datasets_missing_from_input: bool = False,
+        management_tag: str | None = None,
     ) -> None:
         """Check whether relations of analytical objects are valid before and after
         updating the LDM in the GoodData workspace.
@@ -173,7 +202,13 @@ class LdmExtensionManager:
             # Put the LDM with custom datasets into the GoodData workspace.
             self._sdk.catalog_workspace_content.put_declarative_ldm(
                 workspace_id=workspace_id,
-                ldm=self._processor.datasets_to_ldm(datasets),
+                ldm=self._ldm_payload_for_workspace(
+                    workspace_id,
+                    datasets,
+                    merge_into_existing_ldm=merge_into_existing_ldm,
+                    remove_managed_datasets_missing_from_input=remove_managed_datasets_missing_from_input,
+                    management_tag=management_tag,
+                ),
             )
 
             # Get a set of objects with invalid relations from the new workspace state
@@ -232,13 +267,23 @@ class LdmExtensionManager:
     def _process_without_relations_check(
         self,
         validated_data: dict[WorkspaceId, dict[DatasetId, CustomDataset]],
+        *,
+        merge_into_existing_ldm: bool = False,
+        remove_managed_datasets_missing_from_input: bool = False,
+        management_tag: str | None = None,
     ) -> None:
         """Update the LDM in the GoodData workspace without checking relations."""
         for workspace_id, datasets in validated_data.items():
             # Put the LDM with custom datasets into the GoodData workspace.
             self._sdk.catalog_workspace_content.put_declarative_ldm(
                 workspace_id=workspace_id,
-                ldm=self._processor.datasets_to_ldm(datasets),
+                ldm=self._ldm_payload_for_workspace(
+                    workspace_id,
+                    datasets,
+                    merge_into_existing_ldm=merge_into_existing_ldm,
+                    remove_managed_datasets_missing_from_input=remove_managed_datasets_missing_from_input,
+                    management_tag=management_tag,
+                ),
             )
             self._log_success_message(workspace_id)
 
@@ -251,6 +296,9 @@ class LdmExtensionManager:
         custom_datasets: list[CustomDatasetDefinition],
         custom_fields: list[CustomFieldDefinition],
         check_relations: bool = True,
+        merge_into_existing_ldm: bool = False,
+        remove_managed_datasets_missing_from_input: bool = False,
+        management_tag: str | None = None,
     ) -> None:
         """Create custom datasets and fields in GoodData workspaces.
 
@@ -266,6 +314,14 @@ class LdmExtensionManager:
                 after updating the LDM. If the number of invalid relations increases,
                 the LDM will be reverted to its previous state. If False, the check
                 is skiped and the LDM is updated directly. Defaults to True.
+            merge_into_existing_ldm (bool): When True, load the workspace LDM first and merge
+                the generated custom datasets and date instances into it instead of uploading
+                only the extension fragment. Defaults to False for backward compatibility.
+            remove_managed_datasets_missing_from_input (bool): When ``merge_into_existing_ldm``
+                is True, remove existing datasets that contain ``management_tag`` but whose
+                dataset id is not present in this ``process`` call (tooling cleanup).
+            management_tag (str | None): Tag value used with
+                ``remove_managed_datasets_missing_from_input``.
 
         Raises:
             ValueError: If there are validation errors in the dataset or field definitions.
@@ -278,6 +334,16 @@ class LdmExtensionManager:
 
         if check_relations:
             # Process the validated data with relations check.
-            self._process_with_relations_check(validated_data)
+            self._process_with_relations_check(
+                validated_data,
+                merge_into_existing_ldm=merge_into_existing_ldm,
+                remove_managed_datasets_missing_from_input=remove_managed_datasets_missing_from_input,
+                management_tag=management_tag,
+            )
         else:
-            self._process_without_relations_check(validated_data)
+            self._process_without_relations_check(
+                validated_data,
+                merge_into_existing_ldm=merge_into_existing_ldm,
+                remove_managed_datasets_missing_from_input=remove_managed_datasets_missing_from_input,
+                management_tag=management_tag,
+            )
