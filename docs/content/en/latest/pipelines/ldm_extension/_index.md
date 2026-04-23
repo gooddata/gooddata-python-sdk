@@ -45,6 +45,8 @@ The custom dataset represents a new dataset appended to the child LDM. It is def
 | dataset_reference_source_column_data_type | [ColumnDataType](#columndatatype) | Column data type. |
 | workspace_data_filter_id | string | ID of the workspace data filter to use. |
 | workspace_data_filter_column_name | string | Name of the column in custom dataset used for filtering. |
+| dataset_description | string \| None | Optional declarative description on the custom dataset. |
+| dataset_tags | string[] \| None | Optional tag list; when omitted, defaults to a single tag derived from the dataset display name. |
 
 #### Validity constraints
 
@@ -63,6 +65,8 @@ The custom fields define the individual fields in the custom datasets defined ab
 | custom_field_type | [CustomFieldType](#customfieldtype) | Indicates whether the field represents an attribute, a date, or a fact. |
 | custom_field_source_column | string | Name of the column in the physical data model. |
 | custom_field_source_column_data_type | [ColumnDataType](#columndatatype) | Data type of the field. |
+| description | string \| None | Optional declarative description on the attribute, fact, or date dataset. |
+| tags | string[] \| None | Optional tag list; when omitted, defaults to a single tag derived from the dataset display name. |
 
 #### Validity constraints
 
@@ -126,6 +130,25 @@ ldm_extension_manager.process(
     check_relations=False,
 )
 
+```
+
+### Merging into an existing child workspace LDM
+
+By default, `process` **replaces** the child workspace LDM with the declarative fragment built from your inputs. Any prior custom datasets or date instances that aren't in the current call are lost.
+
+Set `merge_into_existing_ldm=True` to switch to an **append / update** behaviour: `process` loads the current workspace LDM first, replaces any dataset or date instance whose `id` matches one in your input, and keeps the rest of the model as is (including previously uploaded custom extensions).
+
+Optional cleanup: when `remove_managed_datasets_missing_from_input=True` and `management_tag` is set, datasets that carry that tag but are **not** in the current `process` call are removed from the merged LDM before the upload. This lets tools such as BCA reliably delete their own obsolete custom datasets without touching anything else.
+
+```python
+ldm_extension_manager.process(
+    custom_datasets=custom_dataset_definitions,
+    custom_fields=custom_field_definitions,
+    check_relations=False,
+    merge_into_existing_ldm=True,
+    remove_managed_datasets_missing_from_input=True,
+    management_tag="bca_tooling_managed",
+)
 ```
 
 ## Example
