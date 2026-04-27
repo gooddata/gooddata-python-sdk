@@ -1,6 +1,8 @@
 # (C) 2026 GoodData Corporation
 from __future__ import annotations
 
+from pathlib import Path
+
 from gooddata_sdk import (
     CatalogCreatePipeTableRequest,
     CatalogDatabaseInstance,
@@ -8,8 +10,20 @@ from gooddata_sdk import (
     CatalogPipeTableSummary,
     CatalogProvisionDatabaseInstanceRequest,
     CatalogServiceInfo,
+    GoodDataSdk,
 )
 from gooddata_sdk.catalog.data_source.entity_model.data_source import CatalogDataSourceAiLakehouse
+from tests_support.vcrpy_utils import get_vcr
+
+from .conftest import safe_delete
+
+gd_vcr = get_vcr()
+
+_current_dir = Path(__file__).parent.absolute()
+_fixtures_dir = _current_dir / "fixtures" / "ai_lake"
+
+_TEST_INSTANCE_ID = "test-instance"
+_TEST_TABLE_NAME = "test_pipe_table"
 
 
 class TestCatalogDatabaseInstance:
@@ -142,3 +156,80 @@ class TestCatalogDataSourceAiLakehouse:
         )
         assert ds.type == "AILAKEHOUSE"
         assert ds.schema == ""
+
+
+# ---------------------------------------------------------------------------
+# Integration tests — cassettes recorded against a live GoodData backend.
+# Run with OVERWRITE=1 to record; subsequent runs replay from cassette.
+# ---------------------------------------------------------------------------
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "list_database_instances.yaml"))
+def test_list_database_instances(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    instances = sdk.catalog_ai_lake.list_database_instances()
+    assert isinstance(instances, list)
+    for instance in instances:
+        assert isinstance(instance, CatalogDatabaseInstance)
+        assert instance.id
+        assert instance.name
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "provision_get_deprovision_database_instance.yaml"))
+def test_provision_get_deprovision_database_instance(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    request = CatalogProvisionDatabaseInstanceRequest(name=_TEST_INSTANCE_ID)
+    try:
+        sdk.catalog_ai_lake.provision_database_instance(request)
+        instance = sdk.catalog_ai_lake.get_database_instance(_TEST_INSTANCE_ID)
+        assert isinstance(instance, CatalogDatabaseInstance)
+        assert instance.name == _TEST_INSTANCE_ID
+    finally:
+        safe_delete(sdk.catalog_ai_lake.deprovision_database_instance, _TEST_INSTANCE_ID)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "list_pipe_tables.yaml"))
+def test_list_pipe_tables(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    instances = sdk.catalog_ai_lake.list_database_instances()
+    if not instances:
+        return
+    instance_id = instances[0].id
+    pipe_tables = sdk.catalog_ai_lake.list_pipe_tables(instance_id)
+    assert isinstance(pipe_tables, list)
+    for pt in pipe_tables:
+        assert isinstance(pt, CatalogPipeTableSummary)
+        assert pt.table_name
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "create_get_delete_pipe_table.yaml"))
+def test_create_get_delete_pipe_table(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    instances = sdk.catalog_ai_lake.list_database_instances()
+    assert instances, "Need at least one database instance to test pipe table operations"
+    instance_id = instances[0].id
+    request = CatalogCreatePipeTableRequest(
+        path_prefix="test/data/",
+        source_storage_name="test-storage",
+        table_name=_TEST_TABLE_NAME,
+    )
+    try:
+        sdk.catalog_ai_lake.create_pipe_table(instance_id, request)
+        table = sdk.catalog_ai_lake.get_pipe_table(instance_id, _TEST_TABLE_NAME)
+        assert isinstance(table, CatalogPipeTable)
+        assert table.table_name == _TEST_TABLE_NAME
+        pipe_tables = sdk.catalog_ai_lake.list_pipe_tables(instance_id)
+        table_names = [pt.table_name for pt in pipe_tables]
+        assert _TEST_TABLE_NAME in table_names
+    finally:
+        safe_delete(sdk.catalog_ai_lake.delete_pipe_table, instance_id, _TEST_TABLE_NAME)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "list_services.yaml"))
+def test_list_services(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    services = sdk.catalog_ai_lake.list_services()
+    assert isinstance(services, list)
+    for svc in services:
+        assert isinstance(svc, CatalogServiceInfo)
+        assert svc.name
