@@ -16,12 +16,13 @@ from xml.etree import ElementTree as ET
 import yaml
 from cattrs import structure
 from cattrs.errors import ClassValidationError
+from dotenv import load_dotenv
 from gooddata_api_client import ApiAttributeError
 from gooddata_api_client.model_utils import OpenApiModel
 
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ObjId
-from gooddata_sdk.config import AacConfig, Profile
+from gooddata_sdk.config import Profile
 
 # Use typing collection types to support python < py3.9
 IdObjType = Union[str, ObjId, dict[str, dict[str, str]], dict[str, str]]
@@ -271,29 +272,27 @@ def _create_profile_legacy(content: dict) -> dict:
         raise ValueError(msg)
 
 
-def _create_profile_aac(profile: str, content: dict) -> dict:
-    aac_config = AacConfig.from_dict(content)
-    selected_profile = aac_config.default_profile if profile == "default" else profile
-    if selected_profile not in aac_config.profiles:
-        raise ValueError(f"Profile file does not contain the specified profile: {profile}")
-    return aac_config.profiles[selected_profile].to_dict(use_env=True)
-
-
 def _get_profile(profile: str, content: dict) -> dict[str, Any]:
-    is_aac_config = AacConfig.can_structure(content)
-    if not is_aac_config and profile not in content:
-        raise ValueError(
-            "Configuration is invalid. Please check the documentation for the valid configuration: https://www.gooddata.com/docs/python-sdk/latest/getting-started/"
-        )
-    if is_aac_config:
-        return _create_profile_aac(profile, content)
-    else:
+    if "profiles" in content and "default_profile" in content:
+        # New config format: {profiles: {name: {...}}, default_profile: name}
+        profiles = content["profiles"]
+        default_profile = content["default_profile"]
+        selected = default_profile if profile == "default" else profile
+        if selected not in profiles:
+            raise ValueError(f"Profile file does not contain the specified profile: {profile}")
+        return structure(profiles[selected], Profile).to_dict(use_env=True)
+    elif profile in content:
+        # Legacy format: {profile_name: {...}}
         warn(
             "Used configuration is deprecated and will be removed in the future. Please use the new configuration: https://www.gooddata.com/docs/python-sdk/latest/getting-started/",
             DeprecationWarning,
             stacklevel=2,
         )
         return _create_profile_legacy(content[profile])
+    else:
+        raise ValueError(
+            "Configuration is invalid. Please check the documentation for the valid configuration: https://www.gooddata.com/docs/python-sdk/latest/getting-started/"
+        )
 
 
 def _get_config_content(path: Union[str, Path]) -> Any:
@@ -331,8 +330,13 @@ def profile_content(profile: str = "default", profiles_path: Path = PROFILES_FIL
 
 def get_ds_credentials(config_file: Union[str, Path]) -> dict[str, str]:
     content = _get_config_content(config_file)
-    config = AacConfig.from_dict(content)
-    return config.ds_credentials()
+    if not isinstance(content, dict):
+        return {}
+    access = content.get("access")
+    if not access:
+        return {}
+    load_dotenv()
+    return {k: os.environ.get(v[1:], v) for k, v in access.items()}
 
 
 def good_pandas_profile_content(
