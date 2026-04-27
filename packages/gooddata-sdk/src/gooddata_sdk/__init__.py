@@ -7,6 +7,17 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 import logging
 
 from gooddata_sdk._version import __version__
+from gooddata_sdk.catalog.ai_lake.entity_model.database_instance import (
+    CatalogDatabaseInstance,
+    CatalogProvisionDatabaseInstanceRequest,
+)
+from gooddata_sdk.catalog.ai_lake.entity_model.pipe_table import (
+    CatalogCreatePipeTableRequest,
+    CatalogPipeTable,
+    CatalogPipeTableSummary,
+)
+from gooddata_sdk.catalog.ai_lake.entity_model.service_info import CatalogServiceInfo
+from gooddata_sdk.catalog.ai_lake.service import CatalogAiLakeService
 from gooddata_sdk.catalog.appearance.entity_model.color_palette import (
     CatalogColorPalette,
     CatalogColorPaletteAttributes,
@@ -36,6 +47,7 @@ from gooddata_sdk.catalog.data_source.declarative_model.physical_model.table imp
 )
 from gooddata_sdk.catalog.data_source.entity_model.data_source import (
     CatalogDataSource,
+    CatalogDataSourceAiLakehouse,
     CatalogDataSourceBigQuery,
     CatalogDataSourceDatabricks,
     CatalogDataSourceGdStorage,
