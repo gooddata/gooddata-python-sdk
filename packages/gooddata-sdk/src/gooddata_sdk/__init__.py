@@ -115,6 +115,7 @@ from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
     CatalogAzureFoundryApiKeyAuth,
     CatalogAzureFoundryProviderConfig,
     CatalogBedrockAccessKeyAuth,
+    CatalogListLlmProviderModelsResponse,
     CatalogLlmProvider,
     CatalogLlmProviderDocument,
     CatalogLlmProviderModel,
@@ -122,6 +123,7 @@ from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
     CatalogLlmProviderPatchDocument,
     CatalogOpenAiApiKeyAuth,
     CatalogOpenAiProviderConfig,
+    CatalogResolvedLlm,
 )
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
