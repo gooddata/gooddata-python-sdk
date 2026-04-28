@@ -4,7 +4,7 @@ linkTitle: "Pipelines Overview"
 weight: 14
 ---
 
-GoodData Pipelines contains tools for automating GoodData lifecycle management. Built on top of [GoodData Python SDK](https://www.gooddata.com/docs/python-sdk/latest/), it enables you to programmatically provision and manage workspaces, users, user groups, and their permissions.
+GoodData Pipelines contains tools for automating GoodData lifecycle management. Built on top of [GoodData Python SDK](https://www.gooddata.ai/docs/python-sdk/latest/), it enables you to programmatically provision and manage workspaces, users, user groups, and their permissions.
 
 For further information, refer to the PIPELINES section in the left navigation menu.
 

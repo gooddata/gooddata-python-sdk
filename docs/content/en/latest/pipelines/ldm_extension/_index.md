@@ -5,9 +5,9 @@ weight: 3
 no_list: true
 ---
 
-Child workspaces inherit [Logical Data Model](https://www.gooddata.com/docs/cloud/model-data/concepts/logical-data-model/) (LDM) from their parent. You can use GoodData Pipelines to extend child workspace's LDM with extra datasets specific to the tenant requirements.
+Child workspaces inherit [Logical Data Model](https://www.gooddata.ai/docs/cloud/model-data/concepts/logical-data-model/) (LDM) from their parent. You can use GoodData Pipelines to extend child workspace's LDM with extra datasets specific to the tenant requirements.
 
-{{% alert color="info" %}} See [Set Up Multiple Tenants](https://www.gooddata.com/docs/cloud/workspaces/) to learn more about leveraging multitenancy in GoodData.{{% /alert %}}
+{{% alert color="info" %}} See [Set Up Multiple Tenants](https://www.gooddata.ai/docs/cloud/workspaces/) to learn more about leveraging multitenancy in GoodData.{{% /alert %}}
 
 This documentation operates with terms like *custom datasets* and *custom fields*. Within this context, *custom* refers to extension of the LDM beyond inherited datasets.
 

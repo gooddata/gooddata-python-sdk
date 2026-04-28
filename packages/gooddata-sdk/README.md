@@ -1,6 +1,6 @@
 # GoodData Python SDK
 
-The `gooddata-sdk` package provides a clean and convenient Python API to interact with [GoodData](https://www.gooddata.com/).
+The `gooddata-sdk` package provides a clean and convenient Python API to interact with [GoodData](https://www.gooddata.ai/).
 
 At the moment the SDK provides services to inspect and interact with the Semantic Model and consume analytics:
 * Catalog Workspaces Service
@@ -14,7 +14,7 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 * Compute Service
 * Table Service
 
-See [DOCUMENTATION](https://www.gooddata.com/docs/python-sdk/1.64.0) for more details.
+See [DOCUMENTATION](https://www.gooddata.ai/docs/python-sdk/1.64.0) for more details.
 
 ## Requirements
 

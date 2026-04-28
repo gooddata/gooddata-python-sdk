@@ -251,11 +251,11 @@ src = ".openapi-generator/configs/gooddata-*-client.yaml"
 
 [[tool.tbump.file]]
 src = "packages/gooddata-sdk/pyproject.toml"
-search = 'Documentation = "https://www.gooddata.com/docs/python-sdk/{current_version}"'
+search = 'Documentation = "https://www.gooddata.ai/docs/python-sdk/{current_version}"'
 
 [[tool.tbump.file]]
 src = "packages/gooddata-sdk/README.md"
-search = "https://www.gooddata.com/docs/python-sdk/{current_version}"
+search = "https://www.gooddata.ai/docs/python-sdk/{current_version}"
 
 [[tool.tbump.file]]
 src = "packages/gooddata-pandas/pyproject.toml"

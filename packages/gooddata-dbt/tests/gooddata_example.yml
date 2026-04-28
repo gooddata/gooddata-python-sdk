@@ -44,7 +44,7 @@ data_products:
 
 # It is possible to deliver to multiple GoodData organizations
 # You have to set up a gooddata profile file and configure all organizations there
-# Related DOC - https://www.gooddata.com/docs/python-sdk/latest/getting-started/
+# Related DOC - https://www.gooddata.ai/docs/python-sdk/latest/getting-started/
 organizations:
   - gooddata_profile: local
     data_product_ids:

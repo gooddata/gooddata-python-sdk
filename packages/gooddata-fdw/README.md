@@ -1,14 +1,14 @@
 # GoodData Foreign Data Wrapper
 
 This project delivers PostgreSQL foreign data wrapper extension built on top of [multicorn](https://multicorn.org/).
-The extension makes [GoodData](https://www.gooddata.com/docs/cloud/) insights, computations and ad-hoc report data available in PostgreSQL as tables.
+The extension makes [GoodData](https://www.gooddata.ai/docs/cloud/) insights, computations and ad-hoc report data available in PostgreSQL as tables.
 It can be selected like any other table using SQL language.
 
 See [DOCUMENTATION](https://gooddata-fdw.readthedocs.io/en/latest/) for more details.
 
 ## Requirements
 
--  [GoodData](https://www.gooddata.com/docs/cloud/) installation; either running on your cloud
+-  [GoodData](https://www.gooddata.ai/docs/cloud/) installation; either running on your cloud
    infrastructure or the free Community Edition running on your workstation
 
 -  Python 3.10 or newer
