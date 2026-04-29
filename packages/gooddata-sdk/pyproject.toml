@@ -54,7 +54,7 @@ classifiers = [
 arrow = ["pyarrow>=23.0.1"]
 
 [project.urls]
-Documentation = "https://www.gooddata.com/docs/python-sdk/1.64.0"
+Documentation = "https://www.gooddata.ai/docs/python-sdk/1.64.0"
 Source = "https://github.com/gooddata/gooddata-python-sdk"
 
 [project.scripts]

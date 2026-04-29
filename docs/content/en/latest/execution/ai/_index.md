@@ -7,7 +7,7 @@ no_list: true
 
 GoodData AI is a feature that allows you to ask questions about your data in natural language.
 
-For more information on how to use and setup GoodData AI, see the [GoodData AI documentation](https://www.gooddata.com/docs/cloud/ai/).
+For more information on how to use and setup GoodData AI, see the [GoodData AI documentation](https://www.gooddata.ai/docs/cloud/ai/).
 
 ## Methods
 

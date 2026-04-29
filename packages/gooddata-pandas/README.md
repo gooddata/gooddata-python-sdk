@@ -1,7 +1,7 @@
 # GoodData Pandas
 
 This package contains a thin layer that utilizes gooddata-sdk and allows you to conveniently create pandas series and
-data frames from the computations done against semantic model in your [GoodData.CN](https://www.gooddata.com/developers/cloud-native/) workspace.
+data frames from the computations done against semantic model in your [GoodData.CN](https://www.gooddata.ai/developers/cloud-native/) workspace.
 
 See [DOCUMENTATION](https://gooddata-pandas.readthedocs.io/en/latest/) for more details.
 

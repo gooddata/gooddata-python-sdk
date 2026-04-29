@@ -4,7 +4,7 @@
 # The visualizations are executed over and over as fresh data gets loaded.
 # Interpreting the content of a visualization is up to the user (the consumer of the visualization).
 # Read more about visualisations:
-# https://www.gooddata.com/developers/cloud-native/doc/cloud/create-visualizations/concepts/visualization/
+# https://www.gooddata.ai/developers/cloud-native/doc/cloud/create-visualizations/concepts/visualization/
 
 id: 4c2002a4-a60c-4f4a-a440-d2a6a35887cf
 type: column_chart

@@ -38,7 +38,7 @@ The models expect the following fields:
 - _**is_active**:_ Deletion flag. Present only in the IncrementalLoad models.
 
 {{% alert color="info" title="Note on IDs"%}}
-Each ID can only contain allowed characters. See [Workspace Object Identification](https://www.gooddata.com/docs/cloud/create-workspaces/objects-identification/) to learn more about object identifiers.
+Each ID can only contain allowed characters. See [Workspace Object Identification](https://www.gooddata.ai/docs/cloud/create-workspaces/objects-identification/) to learn more about object identifiers.
 {{% /alert %}}
 
 Use the appropriate model to validate your data:

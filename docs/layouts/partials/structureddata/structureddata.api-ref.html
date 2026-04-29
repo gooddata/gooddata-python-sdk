@@ -1,7 +1,7 @@
 {{- $pageData := .Page -}}
 {{- $siteData := .Site -}}
 
-{{- $pageUrl := printf "https://www.gooddata.com/docs/python-sdk%s" $pageData.RelPermalink -}}
+{{- $pageUrl := printf "https://www.gooddata.ai/docs/python-sdk%s" $pageData.RelPermalink -}}
 {{- $breadcrumbsJson := partial "parseUrlBreadcrumbs.html" $pageUrl -}}
 {{- $breadcrumbs := $breadcrumbsJson | unmarshal -}}
 
@@ -22,33 +22,33 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://www.gooddata.com/docs/python-sdk/latest/#website",
-      "url": "https://www.gooddata.com/docs/python-sdk/latest/"
+      "@id": "https://www.gooddata.ai/docs/python-sdk/latest/#website",
+      "url": "https://www.gooddata.ai/docs/python-sdk/latest/"
     },
     {
       "@type": "Organization",
-      "@id": "https://www.gooddata.com/#organization",
+      "@id": "https://www.gooddata.ai/#organization",
       "name": "GoodData",
-      "url": "https://www.gooddata.com"
+      "url": "https://www.gooddata.ai"
     },
     {
       "@type": "TechArticle",
-      "@id": "https://www.gooddata.com/docs/python-sdk{{ $latestPath }}#article",
+      "@id": "https://www.gooddata.ai/docs/python-sdk{{ $latestPath }}#article",
       "headline": "{{ $pageData.Params.title }} | GoodData Python SDK",
       "description": {{ if $pageData.Params.description }}{{ $pageData.Params.description | jsonify }}{{ else }}{{ $pageData.Summary | jsonify }}{{ end }},
-      "url": "https://www.gooddata.com/docs/python-sdk{{ $latestPath }}",
+      "url": "https://www.gooddata.ai/docs/python-sdk{{ $latestPath }}",
       "dateModified": {{ $pageData.Params.lastmod | jsonify }},
       "author": {
-        "@id": "https://www.gooddata.com/#organization"
+        "@id": "https://www.gooddata.ai/#organization"
       },
       "publisher": {
-        "@id": "https://www.gooddata.com/#organization"
+        "@id": "https://www.gooddata.ai/#organization"
       },
       "isPartOf": {
-        "@id": "https://www.gooddata.com/docs/python-sdk/latest/#website"
+        "@id": "https://www.gooddata.ai/docs/python-sdk/latest/#website"
       },
       "about": {
-        "@id": "https://www.gooddata.com/docs/python-sdk/latest/#software"
+        "@id": "https://www.gooddata.ai/docs/python-sdk/latest/#software"
       },
       "articleSection": {{ $pageData.Parent.Title | jsonify }},
       "inLanguage": "en",
@@ -61,43 +61,43 @@
         "codeRepository": "https://github.com/gooddata/gooddata-python-sdk",
         "runtimePlatform": "Python 3.13+",
         "targetProduct": {
-          "@id": "https://www.gooddata.com/docs/python-sdk/latest/#software"
+          "@id": "https://www.gooddata.ai/docs/python-sdk/latest/#software"
         }
       }
     },
     {
       "@type": "WebPage",
-      "@id": "https://www.gooddata.com/docs/python-sdk{{ $latestPath }}#webpage",
-      "url": "https://www.gooddata.com/docs/python-sdk{{ $latestPath }}",
+      "@id": "https://www.gooddata.ai/docs/python-sdk{{ $latestPath }}#webpage",
+      "url": "https://www.gooddata.ai/docs/python-sdk{{ $latestPath }}",
       "name": "{{ $pageData.Params.title }} | GoodData Python SDK",
       "isPartOf": {
-        "@id": "https://www.gooddata.com/docs/python-sdk/latest/#website"
+        "@id": "https://www.gooddata.ai/docs/python-sdk/latest/#website"
       },
       "breadcrumb": {
-        "@id": "https://www.gooddata.com/docs/python-sdk{{ $latestPath }}#breadcrumb"
+        "@id": "https://www.gooddata.ai/docs/python-sdk{{ $latestPath }}#breadcrumb"
       }
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://www.gooddata.com/docs/python-sdk{{ $latestPath }}#breadcrumb",
+      "@id": "https://www.gooddata.ai/docs/python-sdk{{ $latestPath }}#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://www.gooddata.com"
+          "item": "https://www.gooddata.ai"
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": "Documentation",
-          "item": "https://www.gooddata.com/docs/"
+          "item": "https://www.gooddata.ai/docs/"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "Python SDK",
-          "item": "https://www.gooddata.com/docs/python-sdk/latest/"
+          "item": "https://www.gooddata.ai/docs/python-sdk/latest/"
         }
         {{- range $index, $breadcrumb := $breadcrumbs }}
         {{- if ge $index 3 }}
@@ -107,11 +107,11 @@
         {{- range $seg := $segments }}
           {{- if or (eq $seg "latest") (findRE `^\d+\.\d+` $seg) (eq $seg "dev") (eq $seg "master") }}
             {{- $latestBreadcrumb = printf "%s/latest" $latestBreadcrumb }}
-          {{- else if and (ne $seg "") (ne $seg "https:") (ne $seg "www.gooddata.com") }}
+          {{- else if and (ne $seg "") (ne $seg "https:") (ne $seg "www.gooddata.ai") }}
             {{- $latestBreadcrumb = printf "%s/%s" $latestBreadcrumb $seg }}
           {{- end }}
         {{- end }}
-        {{- $latestBreadcrumb = printf "https://www.gooddata.com%s/" $latestBreadcrumb }},
+        {{- $latestBreadcrumb = printf "https://www.gooddata.ai%s/" $latestBreadcrumb }},
         {
           "@type": "ListItem",
           "position": {{ add $index 1 }},

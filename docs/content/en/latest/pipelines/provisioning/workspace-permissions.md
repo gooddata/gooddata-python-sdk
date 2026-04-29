@@ -4,7 +4,7 @@ linkTitle: "Workspace Permissions"
 weight: 5
 ---
 
-Workspace permission provisioning allows you to create, update, or delete user permissions. See [Manage Workspace Permissions](https://www.gooddata.com/docs/cloud/manage-organization/manage-permissions/set-permissions-for-workspace/) to learn more about workspace permissions in GoodData Cloud.
+Workspace permission provisioning allows you to create, update, or delete user permissions. See [Manage Workspace Permissions](https://www.gooddata.ai/docs/cloud/manage-organization/manage-permissions/set-permissions-for-workspace/) to learn more about workspace permissions in GoodData Cloud.
 
 You can provision workspace permissions using full or incremental load methods. Each of these methods requires a specific input type.
 
@@ -37,7 +37,7 @@ The models expect the following fields:
 - _**is_active**:_ Deletion flag. Present only in the IncrementalLoad models.
 
 {{% alert color="info" title="Note on IDs"%}}
-Each ID can only contain allowed characters. See [Workspace Object Identification](https://www.gooddata.com/docs/cloud/create-workspaces/objects-identification/) to learn more about object identifiers.
+Each ID can only contain allowed characters. See [Workspace Object Identification](https://www.gooddata.ai/docs/cloud/create-workspaces/objects-identification/) to learn more about object identifiers.
 {{% /alert %}}
 
 Use the appropriate model to validate your data:

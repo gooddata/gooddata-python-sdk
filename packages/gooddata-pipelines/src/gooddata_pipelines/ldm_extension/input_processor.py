@@ -5,6 +5,8 @@ This module is responsible for converting validated custom datasets and fields
 into objects defined in the GoodData Python SDK.
 """
 
+import copy
+
 from gooddata_sdk.catalog.identifier import (
     CatalogDatasetWorkspaceDataFilterIdentifier,
     CatalogGrainIdentifier,
@@ -36,9 +38,24 @@ from gooddata_pipelines.ldm_extension.models.aliases import DatasetId
 from gooddata_pipelines.ldm_extension.models.custom_data_object import (
     ColumnDataType,
     CustomDataset,
+    CustomDatasetDefinition,
     CustomFieldDefinition,
     CustomFieldType,
 )
+
+
+def _effective_field_tags(
+    dataset_name: str, custom_field: CustomFieldDefinition
+) -> list[str]:
+    if custom_field.tags is not None:
+        return list(custom_field.tags)
+    return [dataset_name]
+
+
+def _effective_dataset_tags(definition: CustomDatasetDefinition) -> list[str]:
+    if definition.dataset_tags is not None:
+        return list(definition.dataset_tags)
+    return [definition.dataset_name]
 
 
 class LdmExtensionDataProcessor:
@@ -77,7 +94,8 @@ class LdmExtensionDataProcessor:
             source_column=custom_field.custom_field_source_column,
             labels=[],
             source_column_data_type=custom_field.custom_field_source_column_data_type.value,
-            tags=[dataset_name],
+            description=custom_field.description,
+            tags=_effective_field_tags(dataset_name, custom_field),
         )
 
     @staticmethod
@@ -91,7 +109,8 @@ class LdmExtensionDataProcessor:
             title=custom_field.custom_field_name,
             source_column=custom_field.custom_field_source_column,
             source_column_data_type=custom_field.custom_field_source_column_data_type.value,
-            tags=[dataset_name],
+            description=custom_field.description,
+            tags=_effective_field_tags(dataset_name, custom_field),
         )
 
     def _date_from_field(
@@ -109,7 +128,8 @@ class LdmExtensionDataProcessor:
                 title_pattern="%titleBase - %granularityTitle",
             ),
             granularities=self.DATE_GRANULARITIES,
-            tags=[dataset_name],
+            description=custom_field.description,
+            tags=_effective_field_tags(dataset_name, custom_field),
         )
 
     @staticmethod
@@ -258,7 +278,7 @@ class LdmExtensionDataProcessor:
                         ),
                     ]
                     + date_references,
-                    description=None,
+                    description=dataset.definition.dataset_description,
                     attributes=attributes,
                     facts=facts,
                     data_source_table_id=dataset_source_table_id,
@@ -278,7 +298,7 @@ class LdmExtensionDataProcessor:
                             filter_column_data_type=ColumnDataType.STRING.value,
                         )
                     ],
-                    tags=[dataset.definition.dataset_name],
+                    tags=_effective_dataset_tags(dataset.definition),
                 )
             )
 
@@ -287,3 +307,60 @@ class LdmExtensionDataProcessor:
             datasets=declarative_datasets, date_instances=date_instances
         )
         return CatalogDeclarativeModel(ldm=ldm)
+
+    def merge_custom_ldm_into_existing(
+        self,
+        existing: CatalogDeclarativeModel,
+        custom_datasets: dict[DatasetId, CustomDataset],
+        *,
+        remove_managed_datasets_missing_from_input: bool = False,
+        management_tag: str | None = None,
+    ) -> CatalogDeclarativeModel:
+        """Merge datasets produced from ``custom_datasets`` into an existing declarative LDM.
+
+        Custom datasets and date instances that share an ``id`` with the fragment replace
+        their previous definitions. When ``remove_managed_datasets_missing_from_input`` is
+        set, datasets that carry ``management_tag`` but are absent from the incoming
+        fragment are removed first (typical for tooling-owned extension datasets).
+
+        Any other pre-existing LDM objects (previously uploaded extensions whose ids
+        are not in the incoming fragment) are preserved unchanged.
+        """
+        fragment = self.datasets_to_ldm(custom_datasets)
+        fragment_ldm = fragment.ldm or CatalogDeclarativeLdm(
+            datasets=[], date_instances=[]
+        )
+
+        result = copy.deepcopy(existing)
+        result_ldm = result.ldm or CatalogDeclarativeLdm(
+            datasets=[], date_instances=[]
+        )
+        result.ldm = result_ldm
+
+        incoming_dataset_ids = {d.id for d in fragment_ldm.datasets}
+        incoming_date_ids = {d.id for d in fragment_ldm.date_instances}
+
+        datasets = list(result_ldm.datasets)
+        if remove_managed_datasets_missing_from_input and management_tag:
+            datasets = [
+                d
+                for d in datasets
+                if not (
+                    d.tags
+                    and management_tag in d.tags
+                    and d.id not in incoming_dataset_ids
+                )
+            ]
+        datasets = [d for d in datasets if d.id not in incoming_dataset_ids]
+        datasets.extend(fragment_ldm.datasets)
+        result_ldm.datasets = datasets
+
+        date_instances = [
+            d
+            for d in result_ldm.date_instances
+            if d.id not in incoming_date_ids
+        ]
+        date_instances.extend(fragment_ldm.date_instances)
+        result_ldm.date_instances = date_instances
+
+        return result
