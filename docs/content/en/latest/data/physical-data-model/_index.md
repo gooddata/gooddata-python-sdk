@@ -7,7 +7,7 @@ no_list: true
 
 Manage physical data models.
 
-See [Create a Physical Data Model](https://www.gooddata.com/docs/cloud/model-data/create-pdm/) to about the physical data model in GoodData.
+See [Create a Physical Data Model](https://www.gooddata.ai/docs/cloud/model-data/create-pdm/) to about the physical data model in GoodData.
 
 ## Methods
 

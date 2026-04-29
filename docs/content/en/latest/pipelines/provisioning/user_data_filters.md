@@ -10,7 +10,7 @@ UDFs are currently managed only in full load mode, meaning your input overwrites
 
 This tool currently supports only the `{column} IN (udf_value)` MAQL pattern. UDFs using more complex MAQL expressions must be set up manually.
 
-{{% alert color="info" %}} Visit [Set Up Data Filters for Users](https://www.gooddata.com/docs/cloud/workspaces/user-data-filters/) to learn more about User Data Filters setup and use cases in GoodData. {{% /alert %}}
+{{% alert color="info" %}} Visit [Set Up Data Filters for Users](https://www.gooddata.ai/docs/cloud/workspaces/user-data-filters/) to learn more about User Data Filters setup and use cases in GoodData. {{% /alert %}}
 
 ## Usage
 
@@ -47,7 +47,7 @@ The model expects the following fields:
 | udf_value     | Value for the UDF.                                                                          |
 
 {{% alert color="info" title="Note on IDs"%}}
-Each ID can only contain allowed characters. See [Workspace Object Identification](https://www.gooddata.com/docs/cloud/create-workspaces/objects-identification/) to learn more about object identifiers.
+Each ID can only contain allowed characters. See [Workspace Object Identification](https://www.gooddata.ai/docs/cloud/create-workspaces/objects-identification/) to learn more about object identifiers.
 {{% /alert %}}
 
 Add the model to your imports and create validated instances:

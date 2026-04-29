@@ -7,7 +7,7 @@ weight: 1
 Workspace provisioning allows you to create, update or delete child workspaces.
 
 {{% alert color="info" title="Multitenancy in GoodData"%}}
-See [Multitenancy: One Platform, Many Customers](https://www.gooddata.com/resources/multitenancy-product-tour/) to learn more about how to leverage child workspaces in GoodData.
+See [Multitenancy: One Platform, Many Customers](https://www.gooddata.ai/resources/multitenancy-product-tour/) to learn more about how to leverage child workspaces in GoodData.
 {{% /alert %}}
 
 You can provision child workspaces using full or incremental load methods. Each of these methods requires a specific input type.
@@ -42,7 +42,7 @@ The models expect the following fields:
 - _**is_active**:_ Deletion flag. Present only in the IncrementalLoad models.
 
 {{% alert color="info" title="Note on IDs"%}}
-Each ID can only contain allowed characters. See [Workspace Object Identification](https://www.gooddata.com/docs/cloud/create-workspaces/objects-identification/) to learn more about object identifiers.
+Each ID can only contain allowed characters. See [Workspace Object Identification](https://www.gooddata.ai/docs/cloud/create-workspaces/objects-identification/) to learn more about object identifiers.
 {{% /alert %}}
 
 Use the appropriate model to validate your data:
@@ -98,7 +98,7 @@ provisioner.full_load(validated_data)
 If you want to apply Workspace Data Filters to a child workspace, the filter must be set up on the parent workspace before you run the provisioning.
 
 {{% alert color="info" title="Workspace Data Filters"%}}
-See [Set Up Data Filters in Workspaces](https://www.gooddata.com/docs/cloud/workspaces/workspace-data-filters/) to learn how workspace data filters work in GoodData.
+See [Set Up Data Filters in Workspaces](https://www.gooddata.ai/docs/cloud/workspaces/workspace-data-filters/) to learn how workspace data filters work in GoodData.
 {{% /alert %}}
 
 ## Examples

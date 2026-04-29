@@ -5,7 +5,7 @@
 
 # GoodData Cloud Python Foundations
 
-This repository contains Python packages useful for integration with [GoodData Cloud](https://www.gooddata.com/docs/cloud/).
+This repository contains Python packages useful for integration with [GoodData Cloud](https://www.gooddata.ai/docs/cloud/).
 
 ## Available packages
 
@@ -18,7 +18,7 @@ Python. Learn more about the clients in their [dedicated readme](./clients_READM
 
 The [gooddata-sdk](./packages/gooddata-sdk) package provides a clean and convenient Python API to interact with GoodData.CN.
 
-Check out the GoodData Python SDK [documentation](https://www.gooddata.com/docs/python-sdk) to learn more and get started.
+Check out the GoodData Python SDK [documentation](https://www.gooddata.ai/docs/python-sdk) to learn more and get started.
 
 ### GoodData Pandas
 
@@ -31,13 +31,13 @@ Check out the GoodData Pandas [documentation](https://gooddata-pandas.readthedoc
 
 The [gooddata-pipelines](./packages/gooddata-pipelines/) package provides easy ways to manage the lifecycle of GoodData Cloud.
 
-Check out the GoodData Pipelines [documentation](https://www.gooddata.com/docs/python-sdk/latest/pipelines-overview/) to learn more and get started.
+Check out the GoodData Pipelines [documentation](https://www.gooddata.ai/docs/python-sdk/latest/pipelines-overview/) to learn more and get started.
 
 ### GoodData FlexConnect
 
 The [gooddata-flexconnect](./packages/gooddata-flexconnect) package is the foundation for writing custom FlexConnect data sources.
 
-Check out the GoodData FlexConnect [documentation](https://www.gooddata.com/docs/cloud/connect-data/create-data-sources/flexconnect/) to learn more and get started.
+Check out the GoodData FlexConnect [documentation](https://www.gooddata.ai/docs/cloud/connect-data/create-data-sources/flexconnect/) to learn more and get started.
 
 ### GoodData Foreign Data Wrapper
 

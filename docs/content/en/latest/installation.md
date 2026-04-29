@@ -7,7 +7,7 @@ weight: 11
 Before installing, ensure you are using:
 
 * Python `3.10` or newer
-* [GoodData.CN](https://www.gooddata.com/docs/cloud-native/latest/install/) or [GoodData Cloud](https://www.gooddata.com/docs/cloud/getting-started/)
+* [GoodData.CN](https://www.gooddata.ai/docs/cloud-native/latest/install/) or [GoodData Cloud](https://www.gooddata.ai/docs/cloud/getting-started/)
 * The [pip](https://pypi.org/project/pip/) package management tool
 
 
@@ -28,7 +28,7 @@ it is likely caused by Python, and it occurs if you have installed Python direct
 To mitigate, please install your SSL certificates in __HD -> Applications -> Python -> Install Certificates.command__.
 {{% /alert %}}
 
-To make use of the package, you need a running instance of GoodData. If you do not have GoodData yet, sign up for a [trial of GoodData Cloud](https://www.gooddata.com/trial/).
+To make use of the package, you need a running instance of GoodData. If you do not have GoodData yet, sign up for a [trial of GoodData Cloud](https://www.gooddata.ai/trial/).
 
 ### Versioning
 
@@ -44,4 +44,4 @@ The Python SDK follows the [official Python release cycle](https://devguide.pyth
 
 ### Troubleshooting
 
-In case of any issues with Python SDK, feel free to reach out to us on our [community slack](https://www.gooddata.com/slack/) or create a [GitHub issue](https://github.com/gooddata/gooddata-python-sdk/issues).
+In case of any issues with Python SDK, feel free to reach out to us on our [community slack](https://www.gooddata.ai/slack/) or create a [GitHub issue](https://github.com/gooddata/gooddata-python-sdk/issues).

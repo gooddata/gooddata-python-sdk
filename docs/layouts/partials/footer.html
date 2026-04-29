@@ -1,4 +1,4 @@
-{{ $footer := getJSON "https://www.gooddata.com/learn-assets/js/footer-definition.json" }}
+{{ $footer := getJSON "https://www.gooddata.ai/learn-assets/js/footer-definition.json" }}
 
 <footer class="gd-footer" aria-label="Page footer">
   {{ if $footer.footer.bannerLinks }}
@@ -96,7 +96,7 @@
 
 {{ define "absolute-link" }}
   {{ $urlParse := urls.Parse .url }}
-  {{ $url := print (cond (and (gt (len $urlParse.Path) 0) (eq (len $urlParse.Host) 0)) "https://www.gooddata.com" "") .url }}
+  {{ $url := print (cond (and (gt (len $urlParse.Path) 0) (eq (len $urlParse.Host) 0)) "https://www.gooddata.ai" "") .url }}
   {{ $id := replace (lower .text) " " "-" }}
   {{ $content := cond (isset . "icon") .icon .text }}
 

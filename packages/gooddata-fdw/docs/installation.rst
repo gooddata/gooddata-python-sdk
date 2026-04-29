@@ -58,7 +58,7 @@ into gooddata-cn-ce. You can use this as a starting point.
 
 But the ``gooddata-cn-ce`` service is not limited only to the demo content. You can fill the ``gooddata-cn-ce`` with your own
 content (LDM, metrics, insights). Follow
-our `Getting Started documentation <https://www.gooddata.com/developers/cloud-native/doc/1.6/getting-started/>`_ if you
+our `Getting Started documentation <https://www.gooddata.ai/developers/cloud-native/doc/1.6/getting-started/>`_ if you
 need help with that.
 
 Connect with existing GoddData.CN installation

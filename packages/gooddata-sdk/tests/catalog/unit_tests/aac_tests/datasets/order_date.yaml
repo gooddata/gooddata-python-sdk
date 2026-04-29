@@ -2,7 +2,7 @@
 # A Date dataset is a dataset in the logical data model(LDM)
 # that represents DATE / TIMESTAMP columns in your database.
 # Read more about date instances:
-# https://www.gooddata.com/developers/cloud-native/doc/cloud/model-data/concepts/dataset/#date-datasets
+# https://www.gooddata.ai/developers/cloud-native/doc/cloud/model-data/concepts/dataset/#date-datasets
 
 type: date
 id: order_date
