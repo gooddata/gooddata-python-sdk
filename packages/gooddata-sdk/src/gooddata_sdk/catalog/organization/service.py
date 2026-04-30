@@ -20,6 +20,11 @@ from gooddata_api_client.model.switch_identity_provider_request import SwitchIde
 
 from gooddata_sdk import CatalogDeclarativeExportTemplate, CatalogExportTemplate
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
+from gooddata_sdk.catalog.organization.entity_model.agent import (
+    CatalogAgent,
+    CatalogAgentDocument,
+    CatalogAgentPatchDocument,
+)
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
 from gooddata_sdk.catalog.organization.entity_model.identity_provider import CatalogIdentityProvider
 from gooddata_sdk.catalog.organization.entity_model.jwk import CatalogJwk, CatalogJwkDocument
@@ -583,6 +588,103 @@ class CatalogOrganizationService(CatalogServiceBase):
             id: LLM provider identifier
         """
         self._entities_api.delete_entity_llm_providers(id, _check_return_type=False)
+
+    # Agent APIs
+
+    def get_agent(self, id: str) -> CatalogAgent:
+        """Get an AI agent by ID.
+
+        Args:
+            id: Agent identifier
+
+        Returns:
+            CatalogAgent: Retrieved agent
+        """
+        response = self._ai_agents_api.get_entity_agents(id, _check_return_type=False)
+        return CatalogAgent.from_api(response.data)
+
+    def list_agents(
+        self,
+        filter: str | None = None,
+        page: int | None = None,
+        size: int | None = None,
+        sort: list[str] | None = None,
+    ) -> list[CatalogAgent]:
+        """List all AI agents.
+
+        Args:
+            filter: Optional filter string
+            page: Zero-based page index (0..N)
+            size: The size of the page to be returned
+            sort: Sorting criteria in the format: property,(asc|desc).
+
+        Returns:
+            list[CatalogAgent]: List of agents
+        """
+        kwargs: dict[str, Any] = {}
+        if filter is not None:
+            kwargs["filter"] = filter
+        if page is not None:
+            kwargs["page"] = page
+        if size is not None:
+            kwargs["size"] = size
+        if sort is not None:
+            kwargs["sort"] = sort
+        kwargs["_check_return_type"] = False
+
+        response = self._ai_agents_api.get_all_entities_agents(**kwargs)
+        return [CatalogAgent.from_api(agent) for agent in response.data]
+
+    def create_agent(self, agent: CatalogAgent) -> CatalogAgent:
+        """Create a new AI agent.
+
+        Args:
+            agent: Agent object to create
+
+        Returns:
+            CatalogAgent: Created agent
+        """
+        agent_document = CatalogAgentDocument(data=agent)
+        response = self._ai_agents_api.create_entity_agents(
+            json_api_agent_in_document=agent_document.to_api(), _check_return_type=False
+        )
+        return CatalogAgent.from_api(response.data)
+
+    def update_agent(self, agent: CatalogAgent) -> CatalogAgent:
+        """Update an existing AI agent using PUT semantics.
+
+        Args:
+            agent: Agent object with updated values
+
+        Returns:
+            CatalogAgent: Updated agent
+        """
+        agent_document = CatalogAgentDocument(data=agent)
+        response = self._ai_agents_api.update_entity_agents(agent.id, agent_document.to_api(), _check_return_type=False)
+        return CatalogAgent.from_api(response.data)
+
+    def patch_agent(self, agent: CatalogAgent) -> CatalogAgent:
+        """Patch an existing AI agent using PATCH semantics.
+
+        Args:
+            agent: Agent object with fields to patch
+
+        Returns:
+            CatalogAgent: Updated agent
+        """
+        agent_patch_document = CatalogAgentPatchDocument(data=agent)
+        response = self._ai_agents_api.patch_entity_agents(
+            agent.id, agent_patch_document.to_api(), _check_return_type=False
+        )
+        return CatalogAgent.from_api(response.data)
+
+    def delete_agent(self, id: str) -> None:
+        """Delete an AI agent.
+
+        Args:
+            id: Agent identifier
+        """
+        self._ai_agents_api.delete_entity_agents(id, _check_return_type=False)
 
     # Layout APIs
 

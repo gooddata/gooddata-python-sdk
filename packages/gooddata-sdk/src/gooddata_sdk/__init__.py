@@ -99,6 +99,12 @@ from gooddata_sdk.catalog.organization.common.slide_template import (
     CatalogSectionSlideTemplate,
 )
 from gooddata_sdk.catalog.organization.common.widget_slides_template import CatalogWidgetSlidesTemplate
+from gooddata_sdk.catalog.organization.entity_model.agent import (
+    CatalogAgent,
+    CatalogAgentAttributes,
+    CatalogAgentDocument,
+    CatalogAgentPatchDocument,
+)
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
 from gooddata_sdk.catalog.organization.entity_model.export_template import (
     CatalogExportTemplate,
