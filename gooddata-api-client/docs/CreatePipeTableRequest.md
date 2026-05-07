@@ -7,7 +7,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **path_prefix** | **str** | Path prefix to the parquet files (e.g. &#39;my-dataset/year&#x3D;2024/&#39;). All parquet files must be at a uniform depth under the prefix — either all directly under the prefix, or all under a consistent Hive partition hierarchy (e.g. year&#x3D;2024/month&#x3D;01/). Mixed layouts (files at multiple depths) are not supported. | 
 **source_storage_name** | **str** | Name of the pre-configured S3/MinIO ObjectStorage source | 
-**table_name** | **str** | Name of the OLAP table to create. Must match ^[a-z][a-z0-9_]{0,62}$ | 
+**table_name** | **str** | Name of the OLAP table to create. Must match ^[a-z][a-z0-9_-]{0,62}$ | 
+**aggregation_overrides** | **{str: (str,)}** | Maps non-key column names to their StarRocks aggregation function (SUM, MIN, MAX, REPLACE, REPLACE_IF_NOT_NULL, HLL_UNION, BITMAP_UNION, PERCENTILE_UNION). Required for every non-key column when keyConfig type is &#39;aggregate&#39;. Ignored for other key types. | [optional] 
+**column_expressions** | [**{str: (ColumnExpression,)}**](ColumnExpression.md) | Per-target-column projection overrides. Each entry emits &#x60;&lt;function&gt;(&lt;column&gt;) AS &lt;key&gt;&#x60; in the SELECT list of the generated CREATE PIPE ... AS INSERT; keys absent from the map are projected as-is. Required for AGGREGATE-KEY tables that include native HLL columns (StarRocks rejects raw VARBINARY into HLL columns). | [optional] 
 **column_overrides** | **{str: (str,)}** | Override inferred column types. Maps column names to SQL type strings (e.g. {\&quot;year\&quot;: \&quot;INT\&quot;, \&quot;event_date\&quot;: \&quot;DATE\&quot;}). Applied after parquet schema inference. | [optional] 
 **distribution_config** | [**DistributionConfig**](DistributionConfig.md) |  | [optional] 
 **key_config** | [**KeyConfig**](KeyConfig.md) |  | [optional] 

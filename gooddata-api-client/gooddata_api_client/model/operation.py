@@ -68,6 +68,9 @@ class Operation(ModelNormal):
             'PROVISION-DATABASE': "provision-database",
             'DEPROVISION-DATABASE': "deprovision-database",
             'RUN-SERVICE-COMMAND': "run-service-command",
+            'CREATE-PIPE-TABLE': "create-pipe-table",
+            'DELETE-PIPE-TABLE': "delete-pipe-table",
+            'ANALYZE-STATISTICS': "analyze-statistics",
         },
     }
 
@@ -132,7 +135,7 @@ class Operation(ModelNormal):
 
         Args:
             id (str): Id of the operation
-            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. 
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `create-pipe-table` — Creating a pipe table backed by an S3 data source. * `delete-pipe-table` — Deleting a pipe table. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. 
             status (str):
 
         Keyword Args:
@@ -225,7 +228,7 @@ class Operation(ModelNormal):
 
         Args:
             id (str): Id of the operation
-            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. 
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `create-pipe-table` — Creating a pipe table backed by an S3 data source. * `delete-pipe-table` — Deleting a pipe table. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. 
             status (str):
 
         Keyword Args:

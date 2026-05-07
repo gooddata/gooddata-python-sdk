@@ -5,6 +5,7 @@ A single AI Lake Database instance
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**data_sources** | [**[DataSourceInfo]**](DataSourceInfo.md) | All data source associations for this database instance. | 
 **id** | **str** | Id of the AI Lake Database instance | 
 **name** | **str** | Name of the AI Lake Database instance | 
 **storage_ids** | **[str]** | Set of ids of the storage instances this database instance should access. | 

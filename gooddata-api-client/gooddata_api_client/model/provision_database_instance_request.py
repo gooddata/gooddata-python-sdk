@@ -86,6 +86,8 @@ class ProvisionDatabaseInstanceRequest(ModelNormal):
         return {
             'name': (str,),  # noqa: E501
             'storage_ids': ([str],),  # noqa: E501
+            'data_source_id': (str,),  # noqa: E501
+            'data_source_name': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -96,6 +98,8 @@ class ProvisionDatabaseInstanceRequest(ModelNormal):
     attribute_map = {
         'name': 'name',  # noqa: E501
         'storage_ids': 'storageIds',  # noqa: E501
+        'data_source_id': 'dataSourceId',  # noqa: E501
+        'data_source_name': 'dataSourceName',  # noqa: E501
     }
 
     read_only_vars = {
@@ -143,6 +147,8 @@ class ProvisionDatabaseInstanceRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            data_source_id (str): Identifier for the data source created in metadata-api. Defaults to the database name.. [optional]  # noqa: E501
+            data_source_name (str): Display name for the data source created in metadata-api. Defaults to the database name.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -234,6 +240,8 @@ class ProvisionDatabaseInstanceRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            data_source_id (str): Identifier for the data source created in metadata-api. Defaults to the database name.. [optional]  # noqa: E501
+            data_source_name (str): Display name for the data source created in metadata-api. Defaults to the database name.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

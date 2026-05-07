@@ -111,6 +111,7 @@ class ResolvedSetting(ModelNormal):
             'ENABLE_QUERY_TAGS': "ENABLE_QUERY_TAGS",
             'RESTRICT_BASE_UI': "RESTRICT_BASE_UI",
             'CERTIFY_PARENT_OBJECTS': "CERTIFY_PARENT_OBJECTS",
+            'HLL_TYPE': "HLL_TYPE",
         },
     }
 

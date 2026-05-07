@@ -1,6 +1,6 @@
 # DataSourceTableIdentifier
 
-An id of the table. Including ID of data source.
+An id of the table. Including ID of data source. Must NOT be set on AUXILIARY datasets.
 
 ## Properties
 Name | Type | Description | Notes

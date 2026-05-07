@@ -5,8 +5,8 @@ A dataset reference source column description.
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**column** | **str** | A name of the source column in the table. | 
 **target** | [**GrainIdentifier**](GrainIdentifier.md) |  | 
+**column** | **str** | A name of the source column in the table. | [optional] 
 **data_type** | **str** | A type of the source column. | [optional] 
 **is_nullable** | **bool** | Flag indicating whether the associated source column allows null values. | [optional] 
 **null_value** | **str** | Value used in coalesce during joins instead of null. | [optional] 

@@ -141,9 +141,9 @@ with gooddata_api_client.ApiClient() as api_client:
                             null_value="0",
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
-                            source_fact_reference=DeclarativeSourceFactReference(
+                            source_fact_reference=DeclarativeSourceReference(
                                 operation="SUM",
-                                reference=FactIdentifier(
+                                reference=SourceReferenceIdentifier(
                                     id="fact_id",
                                     type="fact",
                                 ),
@@ -257,6 +257,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                     tags=["Customers"],
                     title="Customers",
+                    type="NORMAL",
                     workspace_data_filter_columns=[
                         DeclarativeWorkspaceDataFilterColumn(
                             data_type="INT",

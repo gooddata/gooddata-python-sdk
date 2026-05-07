@@ -35,10 +35,12 @@ def lazy_import():
     from gooddata_api_client.model.attribute_item import AttributeItem
     from gooddata_api_client.model.measure_item import MeasureItem
     from gooddata_api_client.model.metric_definition_override import MetricDefinitionOverride
+    from gooddata_api_client.model.parameter_item import ParameterItem
     globals()['AFMFiltersInner'] = AFMFiltersInner
     globals()['AttributeItem'] = AttributeItem
     globals()['MeasureItem'] = MeasureItem
     globals()['MetricDefinitionOverride'] = MetricDefinitionOverride
+    globals()['ParameterItem'] = ParameterItem
 
 
 class AFM(ModelNormal):
@@ -99,6 +101,7 @@ class AFM(ModelNormal):
             'measures': ([MeasureItem],),  # noqa: E501
             'aux_measures': ([MeasureItem],),  # noqa: E501
             'measure_definition_overrides': ([MetricDefinitionOverride],),  # noqa: E501
+            'parameters': ([ParameterItem],),  # noqa: E501
         }
 
     @cached_property
@@ -112,6 +115,7 @@ class AFM(ModelNormal):
         'measures': 'measures',  # noqa: E501
         'aux_measures': 'auxMeasures',  # noqa: E501
         'measure_definition_overrides': 'measureDefinitionOverrides',  # noqa: E501
+        'parameters': 'parameters',  # noqa: E501
     }
 
     read_only_vars = {
@@ -162,6 +166,7 @@ class AFM(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             aux_measures ([MeasureItem]): Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.. [optional]  # noqa: E501
             measure_definition_overrides ([MetricDefinitionOverride]): (EXPERIMENTAL) Override definitions of catalog metrics for this request. Allows substituting a catalog metric's MAQL definition without modifying the stored definition.. [optional]  # noqa: E501
+            parameters ([ParameterItem]): (EXPERIMENTAL) Parameter values to use for this execution.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -257,6 +262,7 @@ class AFM(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             aux_measures ([MeasureItem]): Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.. [optional]  # noqa: E501
             measure_definition_overrides ([MetricDefinitionOverride]): (EXPERIMENTAL) Override definitions of catalog metrics for this request. Allows substituting a catalog metric's MAQL definition without modifying the stored definition.. [optional]  # noqa: E501
+            parameters ([ParameterItem]): (EXPERIMENTAL) Parameter values to use for this execution.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

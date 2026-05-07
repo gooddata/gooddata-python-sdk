@@ -34,9 +34,13 @@ def lazy_import():
     from gooddata_api_client.model.date_filter import DateFilter
     from gooddata_api_client.model.depends_on import DependsOn
     from gooddata_api_client.model.depends_on_date_filter import DependsOnDateFilter
+    from gooddata_api_client.model.depends_on_match_filter import DependsOnMatchFilter
+    from gooddata_api_client.model.match_attribute_filter import MatchAttributeFilter
     globals()['DateFilter'] = DateFilter
     globals()['DependsOn'] = DependsOn
     globals()['DependsOnDateFilter'] = DependsOnDateFilter
+    globals()['DependsOnMatchFilter'] = DependsOnMatchFilter
+    globals()['MatchAttributeFilter'] = MatchAttributeFilter
 
 
 class ElementsRequestDependsOnInner(ModelComposed):
@@ -96,6 +100,7 @@ class ElementsRequestDependsOnInner(ModelComposed):
             'label': (str,),  # noqa: E501
             'values': ([str, none_type],),  # noqa: E501
             'date_filter': (DateFilter,),  # noqa: E501
+            'match_filter': (MatchAttributeFilter,),  # noqa: E501
         }
 
     @cached_property
@@ -108,6 +113,7 @@ class ElementsRequestDependsOnInner(ModelComposed):
         'label': 'label',  # noqa: E501
         'values': 'values',  # noqa: E501
         'date_filter': 'dateFilter',  # noqa: E501
+        'match_filter': 'matchFilter',  # noqa: E501
     }
 
     read_only_vars = {
@@ -153,6 +159,7 @@ class ElementsRequestDependsOnInner(ModelComposed):
             label (str): Specifies on which label the filter depends on.. [optional]  # noqa: E501
             values ([str, none_type]): Specifies values of the label for element filtering.. [optional]  # noqa: E501
             date_filter (DateFilter): [optional]  # noqa: E501
+            match_filter (MatchAttributeFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -260,6 +267,7 @@ class ElementsRequestDependsOnInner(ModelComposed):
             label (str): Specifies on which label the filter depends on.. [optional]  # noqa: E501
             values ([str, none_type]): Specifies values of the label for element filtering.. [optional]  # noqa: E501
             date_filter (DateFilter): [optional]  # noqa: E501
+            match_filter (MatchAttributeFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -333,5 +341,6 @@ class ElementsRequestDependsOnInner(ModelComposed):
           'oneOf': [
               DependsOn,
               DependsOnDateFilter,
+              DependsOnMatchFilter,
           ],
         }

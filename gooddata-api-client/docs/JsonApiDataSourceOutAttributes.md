@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **authentication_type** | **str, none_type** | Type of authentication used to connect to the database. | [optional] 
 **cache_strategy** | **str, none_type** | Determines how the results coming from a particular datasource should be cached. | [optional] 
 **client_id** | **str, none_type** | The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account). | [optional] 
+**date_time_semantics** | **str, none_type** | Determines how datetime values are interpreted in data sources without native support for specifying this. Only StarRocks and AI Lakehouse data sources currently support this. | [optional] 
 **decoded_parameters** | [**[JsonApiDataSourceInAttributesParametersInner], none_type**](JsonApiDataSourceInAttributesParametersInner.md) | Decoded parameters to be used when connecting to the database providing the data for the data source. | [optional] 
 **parameters** | [**[JsonApiDataSourceInAttributesParametersInner], none_type**](JsonApiDataSourceInAttributesParametersInner.md) | Additional parameters to be used when connecting to the database providing the data for the data source. | [optional] 
 **url** | **str, none_type** | The URL of the database providing the data for the data source. | [optional] 

@@ -4,11 +4,76 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**get_agents_layout**](OrganizationDeclarativeAPIsApi.md#get_agents_layout) | **GET** /api/v1/layout/agents | Get all AI agent configurations layout
 [**get_custom_geo_collections_layout**](OrganizationDeclarativeAPIsApi.md#get_custom_geo_collections_layout) | **GET** /api/v1/layout/customGeoCollections | Get all custom geo collections layout
 [**get_organization_layout**](OrganizationDeclarativeAPIsApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
+[**set_agents_layout**](OrganizationDeclarativeAPIsApi.md#set_agents_layout) | **PUT** /api/v1/layout/agents | Set all AI agent configurations
 [**set_custom_geo_collections**](OrganizationDeclarativeAPIsApi.md#set_custom_geo_collections) | **PUT** /api/v1/layout/customGeoCollections | Set all custom geo collections
 [**set_organization_layout**](OrganizationDeclarativeAPIsApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
 
+
+# **get_agents_layout**
+> DeclarativeAgents get_agents_layout()
+
+Get all AI agent configurations layout
+
+Gets complete layout of AI agent configurations.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_declarative_apis_api
+from gooddata_api_client.model.declarative_agents import DeclarativeAgents
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_declarative_apis_api.OrganizationDeclarativeAPIsApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Get all AI agent configurations layout
+        api_response = api_instance.get_agents_layout()
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationDeclarativeAPIsApi->get_agents_layout: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**DeclarativeAgents**](DeclarativeAgents.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved layout of all AI agent configurations. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_custom_geo_collections_layout**
 > DeclarativeCustomGeoCollections get_custom_geo_collections_layout()
@@ -143,6 +208,104 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **set_agents_layout**
+> set_agents_layout(declarative_agents)
+
+Set all AI agent configurations
+
+Sets AI agent configurations in organization.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_declarative_apis_api
+from gooddata_api_client.model.declarative_agents import DeclarativeAgents
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_declarative_apis_api.OrganizationDeclarativeAPIsApi(api_client)
+    declarative_agents = DeclarativeAgents(
+        agents=[
+            DeclarativeAgent(
+                ai_knowledge=True,
+                available_to_all=True,
+                created_at="2023-07-20 12:30",
+                created_by=DeclarativeUserIdentifier(
+                    id="employee123",
+                    type="user",
+                ),
+                custom_skills=[
+                    "alert",
+                ],
+                description="description_example",
+                enabled=True,
+                id="default-ai-assistant",
+                modified_at="2023-07-20 12:30",
+                modified_by=DeclarativeUserIdentifier(
+                    id="employee123",
+                    type="user",
+                ),
+                name="Default GoodData AI Assistant",
+                personality="personality_example",
+                skills_mode="all",
+                user_groups=[
+                    DeclarativeUserGroupIdentifier(
+                        id="group.admins",
+                        type="userGroup",
+                    ),
+                ],
+            ),
+        ],
+    ) # DeclarativeAgents | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set all AI agent configurations
+        api_instance.set_agents_layout(declarative_agents)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationDeclarativeAPIsApi->set_agents_layout: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **declarative_agents** | [**DeclarativeAgents**](DeclarativeAgents.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | All AI agent configurations set. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **set_custom_geo_collections**
 > set_custom_geo_collections(declarative_custom_geo_collections)
 
@@ -245,6 +408,37 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = organization_declarative_apis_api.OrganizationDeclarativeAPIsApi(api_client)
     declarative_organization = DeclarativeOrganization(
+        agents=[
+            DeclarativeAgent(
+                ai_knowledge=True,
+                available_to_all=True,
+                created_at="2023-07-20 12:30",
+                created_by=DeclarativeUserIdentifier(
+                    id="employee123",
+                    type="user",
+                ),
+                custom_skills=[
+                    "alert",
+                ],
+                description="description_example",
+                enabled=True,
+                id="default-ai-assistant",
+                modified_at="2023-07-20 12:30",
+                modified_by=DeclarativeUserIdentifier(
+                    id="employee123",
+                    type="user",
+                ),
+                name="Default GoodData AI Assistant",
+                personality="personality_example",
+                skills_mode="all",
+                user_groups=[
+                    DeclarativeUserGroupIdentifier(
+                        id="group.admins",
+                        type="userGroup",
+                    ),
+                ],
+            ),
+        ],
         custom_geo_collections=[
             DeclarativeCustomGeoCollection(
                 description="description_example",
@@ -259,6 +453,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_strategy="ALWAYS",
                 client_id="client1234",
                 client_secret="client_secret_example",
+                date_time_semantics="LOCAL",
                 decoded_parameters=[
                     Parameter(
                         name="name_example",
@@ -708,6 +903,17 @@ with gooddata_api_client.ApiClient() as api_client:
                                                 local_identifier="metric_1",
                                             ),
                                         ],
+                                        parameters=[
+                                            ParameterItem(
+                                                parameter=AfmObjectIdentifierParameter(
+                                                    identifier=AfmObjectIdentifierParameterIdentifier(
+                                                        id="sample_item.price",
+                                                        type="parameter",
+                                                    ),
+                                                ),
+                                                value="value_example",
+                                            ),
+                                        ],
                                     ),
                                     execution_settings=ExecutionSettings(
                                         data_sampling_percentage=0,
@@ -1021,6 +1227,25 @@ with gooddata_api_client.ApiClient() as api_client:
                                 title="Total sales",
                             ),
                         ],
+                        parameters=[
+                            DeclarativeParameter(
+                                content=DeclarativeParameterContent(None),
+                                created_at="2023-07-20 12:30",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                description="Rate applied to discounted items.",
+                                id="discount-rate",
+                                modified_at="2023-07-20 12:30",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                tags=["Finance"],
+                                title="Discount Rate",
+                            ),
+                        ],
                         visualization_objects=[
                             DeclarativeVisualizationObject(
                                 certification="CERTIFIED",
@@ -1075,9 +1300,9 @@ with gooddata_api_client.ApiClient() as api_client:
                                         null_value="0",
                                         source_column="customer_order_count",
                                         source_column_data_type="NUMERIC",
-                                        source_fact_reference=DeclarativeSourceFactReference(
+                                        source_fact_reference=DeclarativeSourceReference(
                                             operation="SUM",
-                                            reference=FactIdentifier(
+                                            reference=SourceReferenceIdentifier(
                                                 id="fact_id",
                                                 type="fact",
                                             ),
@@ -1191,6 +1416,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                                 tags=["Customers"],
                                 title="Customers",
+                                type="NORMAL",
                                 workspace_data_filter_columns=[
                                     DeclarativeWorkspaceDataFilterColumn(
                                         data_type="INT",

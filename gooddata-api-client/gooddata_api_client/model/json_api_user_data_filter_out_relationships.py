@@ -34,6 +34,7 @@ def lazy_import():
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_datasets import JsonApiAnalyticalDashboardOutRelationshipsDatasets
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_labels import JsonApiAnalyticalDashboardOutRelationshipsLabels
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_metrics import JsonApiAnalyticalDashboardOutRelationshipsMetrics
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_parameters import JsonApiAnalyticalDashboardOutRelationshipsParameters
     from gooddata_api_client.model.json_api_attribute_hierarchy_out_relationships_attributes import JsonApiAttributeHierarchyOutRelationshipsAttributes
     from gooddata_api_client.model.json_api_dataset_out_relationships_facts import JsonApiDatasetOutRelationshipsFacts
     from gooddata_api_client.model.json_api_filter_view_in_relationships_user import JsonApiFilterViewInRelationshipsUser
@@ -41,6 +42,7 @@ def lazy_import():
     globals()['JsonApiAnalyticalDashboardOutRelationshipsDatasets'] = JsonApiAnalyticalDashboardOutRelationshipsDatasets
     globals()['JsonApiAnalyticalDashboardOutRelationshipsLabels'] = JsonApiAnalyticalDashboardOutRelationshipsLabels
     globals()['JsonApiAnalyticalDashboardOutRelationshipsMetrics'] = JsonApiAnalyticalDashboardOutRelationshipsMetrics
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsParameters'] = JsonApiAnalyticalDashboardOutRelationshipsParameters
     globals()['JsonApiAttributeHierarchyOutRelationshipsAttributes'] = JsonApiAttributeHierarchyOutRelationshipsAttributes
     globals()['JsonApiDatasetOutRelationshipsFacts'] = JsonApiDatasetOutRelationshipsFacts
     globals()['JsonApiFilterViewInRelationshipsUser'] = JsonApiFilterViewInRelationshipsUser
@@ -105,6 +107,7 @@ class JsonApiUserDataFilterOutRelationships(ModelNormal):
             'facts': (JsonApiDatasetOutRelationshipsFacts,),  # noqa: E501
             'labels': (JsonApiAnalyticalDashboardOutRelationshipsLabels,),  # noqa: E501
             'metrics': (JsonApiAnalyticalDashboardOutRelationshipsMetrics,),  # noqa: E501
+            'parameters': (JsonApiAnalyticalDashboardOutRelationshipsParameters,),  # noqa: E501
             'user': (JsonApiFilterViewInRelationshipsUser,),  # noqa: E501
             'user_group': (JsonApiOrganizationOutRelationshipsBootstrapUserGroup,),  # noqa: E501
         }
@@ -120,6 +123,7 @@ class JsonApiUserDataFilterOutRelationships(ModelNormal):
         'facts': 'facts',  # noqa: E501
         'labels': 'labels',  # noqa: E501
         'metrics': 'metrics',  # noqa: E501
+        'parameters': 'parameters',  # noqa: E501
         'user': 'user',  # noqa: E501
         'user_group': 'userGroup',  # noqa: E501
     }
@@ -170,6 +174,7 @@ class JsonApiUserDataFilterOutRelationships(ModelNormal):
             facts (JsonApiDatasetOutRelationshipsFacts): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
             metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
+            parameters (JsonApiAnalyticalDashboardOutRelationshipsParameters): [optional]  # noqa: E501
             user (JsonApiFilterViewInRelationshipsUser): [optional]  # noqa: E501
             user_group (JsonApiOrganizationOutRelationshipsBootstrapUserGroup): [optional]  # noqa: E501
         """
@@ -262,6 +267,7 @@ class JsonApiUserDataFilterOutRelationships(ModelNormal):
             facts (JsonApiDatasetOutRelationshipsFacts): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
             metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
+            parameters (JsonApiAnalyticalDashboardOutRelationshipsParameters): [optional]  # noqa: E501
             user (JsonApiFilterViewInRelationshipsUser): [optional]  # noqa: E501
             user_group (JsonApiOrganizationOutRelationshipsBootstrapUserGroup): [optional]  # noqa: E501
         """

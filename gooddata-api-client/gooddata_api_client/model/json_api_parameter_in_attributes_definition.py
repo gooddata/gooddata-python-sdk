@@ -31,10 +31,12 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.number_constraints import NumberConstraints
     from gooddata_api_client.model.number_parameter_definition import NumberParameterDefinition
-    globals()['NumberConstraints'] = NumberConstraints
+    from gooddata_api_client.model.string_constraints import StringConstraints
+    from gooddata_api_client.model.string_parameter_definition import StringParameterDefinition
     globals()['NumberParameterDefinition'] = NumberParameterDefinition
+    globals()['StringConstraints'] = StringConstraints
+    globals()['StringParameterDefinition'] = StringParameterDefinition
 
 
 class JsonApiParameterInAttributesDefinition(ModelComposed):
@@ -91,8 +93,8 @@ class JsonApiParameterInAttributesDefinition(ModelComposed):
         lazy_import()
         return {
             'type': (str,),  # noqa: E501
-            'default_value': (float,),  # noqa: E501
-            'constraints': (NumberConstraints,),  # noqa: E501
+            'default_value': (str,),  # noqa: E501
+            'constraints': (StringConstraints,),  # noqa: E501
         }
 
     @cached_property
@@ -116,7 +118,7 @@ class JsonApiParameterInAttributesDefinition(ModelComposed):
 
         Keyword Args:
             type (str):
-            default_value (float):
+            default_value (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -147,7 +149,7 @@ class JsonApiParameterInAttributesDefinition(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            constraints (NumberConstraints): [optional]  # noqa: E501
+            constraints (StringConstraints): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -222,7 +224,7 @@ class JsonApiParameterInAttributesDefinition(ModelComposed):
 
         Keyword Args:
             type (str):
-            default_value (float):
+            default_value (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -253,7 +255,7 @@ class JsonApiParameterInAttributesDefinition(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            constraints (NumberConstraints): [optional]  # noqa: E501
+            constraints (StringConstraints): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -326,5 +328,6 @@ class JsonApiParameterInAttributesDefinition(ModelComposed):
           ],
           'oneOf': [
               NumberParameterDefinition,
+              StringParameterDefinition,
           ],
         }

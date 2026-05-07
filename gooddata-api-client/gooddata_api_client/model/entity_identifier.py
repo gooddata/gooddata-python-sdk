@@ -66,7 +66,9 @@ class EntityIdentifier(ModelNormal):
             'LABEL': "label",
             'METRIC': "metric",
             'USERDATAFILTER': "userDataFilter",
+            'PARAMETER': "parameter",
             'AUTOMATION': "automation",
+            'MEMORYITEM': "memoryItem",
             'KNOWLEDGERECOMMENDATION': "knowledgeRecommendation",
             'VISUALIZATIONOBJECT': "visualizationObject",
             'FILTERCONTEXT': "filterContext",
@@ -129,7 +131,7 @@ class EntityIdentifier(ModelNormal):
 
         Args:
             id (str): Object identifier.
-            type (str):
+            type (str): Object type in the graph.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -220,7 +222,7 @@ class EntityIdentifier(ModelNormal):
 
         Args:
             id (str): Object identifier.
-            type (str):
+            type (str): Object type in the graph.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

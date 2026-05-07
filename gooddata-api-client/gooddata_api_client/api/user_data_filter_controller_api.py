@@ -87,6 +87,7 @@ class UserDataFilterControllerApi(object):
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "PARAMETERS": "parameters",
                         "USER": "user",
                         "USERGROUP": "userGroup",
                         "ALL": "ALL"
@@ -246,6 +247,7 @@ class UserDataFilterControllerApi(object):
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "PARAMETERS": "parameters",
                         "USER": "user",
                         "USERGROUP": "userGroup",
                         "ALL": "ALL"
@@ -363,6 +365,7 @@ class UserDataFilterControllerApi(object):
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "PARAMETERS": "parameters",
                         "USER": "user",
                         "USERGROUP": "userGroup",
                         "ALL": "ALL"
@@ -461,6 +464,7 @@ class UserDataFilterControllerApi(object):
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "PARAMETERS": "parameters",
                         "USER": "user",
                         "USERGROUP": "userGroup",
                         "ALL": "ALL"
@@ -624,6 +628,7 @@ class UserDataFilterControllerApi(object):
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "PARAMETERS": "parameters",
                         "USER": "user",
                         "USERGROUP": "userGroup",
                         "ALL": "ALL"

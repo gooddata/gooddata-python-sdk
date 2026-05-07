@@ -38,6 +38,13 @@
               "$ref": "#/components/schemas/MeasureItem"
             },
             "type": "array"
+          },
+          "parameters": {
+            "description": "(EXPERIMENTAL) Parameter values to use for this execution.",
+            "items": {
+              "$ref": "#/components/schemas/ParameterItem"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -135,12 +142,40 @@
         ],
         "type": "object"
       },
+      "AddDatabaseDataSourceRequest": {
+        "description": "Request to add a data source to an AI Lake Database instance",
+        "properties": {
+          "dataSourceId": {
+            "description": "Identifier for the new data source in metadata-api. Must be unique within the organization.",
+            "type": "string"
+          },
+          "dataSourceName": {
+            "description": "Display name for the new data source in metadata-api. Defaults to dataSourceId when omitted.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dataSourceId"
+        ],
+        "type": "object"
+      },
+      "AddDatabaseDataSourceResponse": {
+        "description": "Newly created data source association for an AI Lake Database instance",
+        "properties": {
+          "dataSource": {
+            "$ref": "#/components/schemas/DataSourceInfo"
+          }
+        },
+        "required": [
+          "dataSource"
+        ],
+        "type": "object"
+      },
       "AfmCancelTokens": {
         "description": "Any information related to cancellation.",
         "properties": {
           "resultIdToCancelTokenPairs": {
             "additionalProperties": {
-              "description": "resultId to cancel token pairs",
               "type": "string"
             },
             "description": "resultId to cancel token pairs",
@@ -364,6 +399,35 @@
         ],
         "type": "object"
       },
+      "AfmObjectIdentifierParameter": {
+        "description": "Reference to the parameter.",
+        "properties": {
+          "identifier": {
+            "properties": {
+              "id": {
+                "example": "sample_item.price",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "parameter"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "type"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "identifier"
+        ],
+        "type": "object"
+      },
       "AfmValidDescendantsQuery": {
         "description": "Entity describing the valid descendants request.",
         "properties": {
@@ -440,6 +504,20 @@
         "required": [
           "items"
         ],
+        "type": "object"
+      },
+      "AggregateKeyConfig": {
+        "description": "Aggregate key model — pre-aggregates rows sharing the same key columns.",
+        "properties": {
+          "columns": {
+            "description": "Key columns. Defaults to first inferred column.",
+            "items": {
+              "description": "Key columns. Defaults to first inferred column.",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
         "type": "object"
       },
       "AiUsageMetadataItem": {
@@ -629,6 +707,20 @@
           "lastname",
           "userId"
         ],
+        "type": "object"
+      },
+      "AnalyzeStatisticsRequest": {
+        "description": "Request to run ANALYZE TABLE for tables in a database instance",
+        "properties": {
+          "tableNames": {
+            "description": "Table names to analyze. If empty or null, all tables in the database are analyzed.",
+            "items": {
+              "description": "Table names to analyze. If empty or null, all tables in the database are analyzed.",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
         "type": "object"
       },
       "AnomalyDetectionConfig": {
@@ -1729,6 +1821,65 @@
         ],
         "type": "object"
       },
+      "ColumnExpression": {
+        "description": "Single column projection override: applies `function(column)` to a source column.",
+        "properties": {
+          "column": {
+            "description": "Source column produced by parquet schema inference (after columnOverrides).",
+            "type": "string"
+          },
+          "function": {
+            "description": "StarRocks transform applied to a source column when projecting it through the generated CREATE PIPE ... AS INSERT statement.",
+            "enum": [
+              "HLL_HASH",
+              "BITMAP_HASH",
+              "BITMAP_HASH64",
+              "TO_BITMAP"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "column",
+          "function"
+        ],
+        "type": "object"
+      },
+      "ColumnInfo": {
+        "description": "A single column definition inferred from the parquet schema",
+        "properties": {
+          "name": {
+            "description": "Column name",
+            "type": "string"
+          },
+          "type": {
+            "description": "SQL column type (e.g. VARCHAR(200), BIGINT, DOUBLE)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ],
+        "type": "object"
+      },
+      "ColumnPartitionConfig": {
+        "description": "Partition by column expression.",
+        "properties": {
+          "columns": {
+            "description": "Columns to partition by.",
+            "items": {
+              "description": "Columns to partition by.",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "columns"
+        ],
+        "type": "object"
+      },
       "ComparisonCondition": {
         "description": "Condition that compares the metric value to a given constant value using a comparison operator.",
         "properties": {
@@ -1862,6 +2013,79 @@
         },
         "required": [
           "compoundMeasureValueFilter"
+        ],
+        "type": "object"
+      },
+      "CreatePipeTableRequest": {
+        "description": "Request to create a new pipe-backed OLAP table in the AI Lake",
+        "properties": {
+          "aggregationOverrides": {
+            "additionalProperties": {
+              "description": "Maps non-key column names to their StarRocks aggregation function (SUM, MIN, MAX, REPLACE, REPLACE_IF_NOT_NULL, HLL_UNION, BITMAP_UNION, PERCENTILE_UNION). Required for every non-key column when keyConfig type is 'aggregate'. Ignored for other key types.",
+              "type": "string"
+            },
+            "description": "Maps non-key column names to their StarRocks aggregation function (SUM, MIN, MAX, REPLACE, REPLACE_IF_NOT_NULL, HLL_UNION, BITMAP_UNION, PERCENTILE_UNION). Required for every non-key column when keyConfig type is 'aggregate'. Ignored for other key types.",
+            "type": "object"
+          },
+          "columnExpressions": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ColumnExpression"
+            },
+            "description": "Per-target-column projection overrides. Each entry emits `<function>(<column>) AS <key>` in the SELECT list of the generated CREATE PIPE ... AS INSERT; keys absent from the map are projected as-is. Required for AGGREGATE-KEY tables that include native HLL columns (StarRocks rejects raw VARBINARY into HLL columns).",
+            "type": "object"
+          },
+          "columnOverrides": {
+            "additionalProperties": {
+              "description": "Override inferred column types. Maps column names to SQL type strings (e.g. {\"year\": \"INT\", \"event_date\": \"DATE\"}). Applied after parquet schema inference.",
+              "type": "string"
+            },
+            "description": "Override inferred column types. Maps column names to SQL type strings (e.g. {\"year\": \"INT\", \"event_date\": \"DATE\"}). Applied after parquet schema inference.",
+            "type": "object"
+          },
+          "distributionConfig": {
+            "$ref": "#/components/schemas/DistributionConfig"
+          },
+          "keyConfig": {
+            "$ref": "#/components/schemas/KeyConfig"
+          },
+          "maxVarcharLength": {
+            "description": "Cap VARCHAR(N) to this length when N exceeds it. 0 = no cap.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "partitionConfig": {
+            "$ref": "#/components/schemas/PartitionConfig"
+          },
+          "pathPrefix": {
+            "description": "Path prefix to the parquet files (e.g. 'my-dataset/year=2024/'). All parquet files must be at a uniform depth under the prefix — either all directly under the prefix, or all under a consistent Hive partition hierarchy (e.g. year=2024/month=01/). Mixed layouts (files at multiple depths) are not supported.",
+            "type": "string"
+          },
+          "pollingIntervalSeconds": {
+            "description": "How often (in seconds) the pipe polls for new files. 0 or null = use server default.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "sourceStorageName": {
+            "description": "Name of the pre-configured S3/MinIO ObjectStorage source",
+            "type": "string"
+          },
+          "tableName": {
+            "description": "Name of the OLAP table to create. Must match ^[a-z][a-z0-9_-]{0,62}$",
+            "type": "string"
+          },
+          "tableProperties": {
+            "additionalProperties": {
+              "description": "CREATE TABLE PROPERTIES key-value pairs. Defaults to {\"replication_num\": \"1\"}.",
+              "type": "string"
+            },
+            "description": "CREATE TABLE PROPERTIES key-value pairs. Defaults to {\"replication_num\": \"1\"}.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "pathPrefix",
+          "sourceStorageName",
+          "tableName"
         ],
         "type": "object"
       },
@@ -2052,9 +2276,39 @@
         },
         "type": "object"
       },
+      "DataSourceInfo": {
+        "description": "A single data source association for an AI Lake Database instance",
+        "properties": {
+          "dataSourceId": {
+            "description": "Identifier of the data source in metadata-api.",
+            "type": "string"
+          },
+          "dataSourceName": {
+            "description": "Display name of the data source in metadata-api.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Id of the data source association record.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dataSourceId",
+          "dataSourceName",
+          "id"
+        ],
+        "type": "object"
+      },
       "DatabaseInstance": {
         "description": "A single AI Lake Database instance",
         "properties": {
+          "dataSources": {
+            "description": "All data source associations for this database instance.",
+            "items": {
+              "$ref": "#/components/schemas/DataSourceInfo"
+            },
+            "type": "array"
+          },
           "id": {
             "description": "Id of the AI Lake Database instance",
             "type": "string"
@@ -2074,6 +2328,7 @@
           }
         },
         "required": [
+          "dataSources",
           "id",
           "name",
           "storageIds"
@@ -2176,6 +2431,36 @@
         ],
         "type": "object"
       },
+      "DateTruncPartitionConfig": {
+        "description": "Partition by date_trunc() expression.",
+        "properties": {
+          "column": {
+            "description": "Column to partition on.",
+            "type": "string"
+          },
+          "unit": {
+            "description": "Date/time unit for partition granularity",
+            "enum": [
+              "year",
+              "quarter",
+              "month",
+              "week",
+              "day",
+              "hour",
+              "minute",
+              "second",
+              "millisecond",
+              "microsecond"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "column",
+          "unit"
+        ],
+        "type": "object"
+      },
       "DependsOn": {
         "allOf": [
           {
@@ -2233,6 +2518,26 @@
       },
       "DependsOnItem": {
         "nullable": true,
+        "type": "object"
+      },
+      "DependsOnMatchFilter": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DependsOnItem"
+          },
+          {
+            "properties": {
+              "matchFilter": {
+                "$ref": "#/components/schemas/MatchAttributeFilter"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Filter definition for string matching.",
+        "required": [
+          "matchFilter"
+        ],
         "type": "object"
       },
       "DimAttribute": {
@@ -2312,6 +2617,39 @@
         ],
         "type": "object"
       },
+      "DistributionConfig": {
+        "description": "Distribution configuration for the OLAP table.",
+        "discriminator": {
+          "mapping": {
+            "hash": "#/components/schemas/HashDistributionConfig",
+            "random": "#/components/schemas/RandomDistributionConfig"
+          },
+          "propertyName": "type"
+        },
+        "properties": {
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "DuplicateKeyConfig": {
+        "description": "Duplicate key model — allows duplicate rows for the given key columns.",
+        "properties": {
+          "columns": {
+            "description": "Key columns. Defaults to first inferred column.",
+            "items": {
+              "description": "Key columns. Defaults to first inferred column.",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "Element": {
         "description": "List of returned elements.",
         "properties": {
@@ -2357,6 +2695,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/DependsOnDateFilter"
+                },
+                {
+                  "$ref": "#/components/schemas/DependsOnMatchFilter"
                 }
               ]
             },
@@ -2462,6 +2803,27 @@
           "elements",
           "paging",
           "primaryLabel"
+        ],
+        "type": "object"
+      },
+      "ErrorInfo": {
+        "description": "Structured error, present when the search could not run (e.g. metadata sync in progress). Absent on success.",
+        "properties": {
+          "reason": {
+            "description": "Stable machine-readable error code. Switch on this for localized client messages.",
+            "example": "METADATA_SYNC_IN_PROGRESS",
+            "type": "string"
+          },
+          "statusCode": {
+            "description": "HTTP-like semantic status (e.g. 503 when the workspace is still syncing).",
+            "example": 503,
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "reason",
+          "statusCode"
         ],
         "type": "object"
       },
@@ -3080,6 +3442,26 @@
         ],
         "type": "object"
       },
+      "HashDistributionConfig": {
+        "description": "Hash-based distribution across buckets.",
+        "properties": {
+          "buckets": {
+            "description": "Number of hash buckets. Defaults to 1.",
+            "format": "int32",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "columns": {
+            "description": "Columns to distribute by. Defaults to first column.",
+            "items": {
+              "description": "Columns to distribute by. Defaults to first column.",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "HeaderGroup": {
         "description": "Contains the information specific for a group of headers. These groups correlate to attributes and metric groups.",
         "properties": {
@@ -3181,6 +3563,27 @@
       "JsonNode": {
         "description": "The payload to pass to the command",
         "nullable": true,
+        "type": "object"
+      },
+      "KeyConfig": {
+        "description": "Key configuration for the table data model.",
+        "discriminator": {
+          "mapping": {
+            "aggregate": "#/components/schemas/AggregateKeyConfig",
+            "duplicate": "#/components/schemas/DuplicateKeyConfig",
+            "primary": "#/components/schemas/PrimaryKeyConfig",
+            "unique": "#/components/schemas/UniqueKeyConfig"
+          },
+          "propertyName": "type"
+        },
+        "properties": {
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
         "type": "object"
       },
       "KeyDriversDimension": {
@@ -3303,6 +3706,22 @@
         ],
         "type": "object"
       },
+      "ListDatabaseDataSourcesResponse": {
+        "description": "All data source associations for an AI Lake Database instance",
+        "properties": {
+          "dataSources": {
+            "description": "List of data source associations.",
+            "items": {
+              "$ref": "#/components/schemas/DataSourceInfo"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "dataSources"
+        ],
+        "type": "object"
+      },
       "ListDatabaseInstancesResponse": {
         "description": "Paged response for listing AI Lake database instances",
         "properties": {
@@ -3367,6 +3786,38 @@
           "message",
           "models",
           "success"
+        ],
+        "type": "object"
+      },
+      "ListObjectStoragesResponse": {
+        "description": "Response for listing ObjectStorages registered for the organization.",
+        "properties": {
+          "storages": {
+            "description": "Registered storages, ordered by name.",
+            "items": {
+              "$ref": "#/components/schemas/ObjectStorageInfo"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "storages"
+        ],
+        "type": "object"
+      },
+      "ListPipeTablesResponse": {
+        "description": "List of pipe tables for a database instance",
+        "properties": {
+          "pipeTables": {
+            "description": "Pipe tables in the requested database",
+            "items": {
+              "$ref": "#/components/schemas/PipeTableSummary"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "pipeTables"
         ],
         "type": "object"
       },
@@ -3878,6 +4329,40 @@
         ],
         "type": "object"
       },
+      "ObjectStorageInfo": {
+        "description": "Descriptor of a registered ObjectStorage. Provider credentials are stripped — only fields useful for identifying the storage are returned.",
+        "properties": {
+          "name": {
+            "description": "Human-readable name. Use this as `sourceStorageName` in CreatePipeTable, or pass `storageId` to ProvisionDatabase.storageIds.",
+            "example": "s3-data-lake",
+            "type": "string"
+          },
+          "storageConfig": {
+            "additionalProperties": {
+              "description": "Provider-specific descriptors (e.g. bucket, region, endpoint, container). Credential references (any keys ending in `_env`) are stripped server-side.",
+              "type": "string"
+            },
+            "description": "Provider-specific descriptors (e.g. bucket, region, endpoint, container). Credential references (any keys ending in `_env`) are stripped server-side.",
+            "type": "object"
+          },
+          "storageId": {
+            "description": "Stable identifier of the storage configuration (UUID).",
+            "type": "string"
+          },
+          "storageType": {
+            "description": "Provider type.",
+            "example": "s3",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "storageConfig",
+          "storageId",
+          "storageType"
+        ],
+        "type": "object"
+      },
       "OpenAIProviderConfig": {
         "description": "Configuration for OpenAI provider.",
         "properties": {
@@ -3962,11 +4447,14 @@
             "type": "string"
           },
           "kind": {
-            "description": "Type of the long-running operation.\n* `provision-database` \u2014 Provisioning of an AI Lake database.\n* `deprovision-database` \u2014 Deprovisioning (deletion) of an AI Lake database.\n* `run-service-command` \u2014 Running a command in a particular AI Lake service.\n",
+            "description": "Type of the long-running operation.\n* `provision-database` — Provisioning of an AI Lake database.\n* `deprovision-database` — Deprovisioning (deletion) of an AI Lake database.\n* `run-service-command` — Running a command in a particular AI Lake service.\n* `create-pipe-table` — Creating a pipe table backed by an S3 data source.\n* `delete-pipe-table` — Deleting a pipe table.\n* `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection.\n",
             "enum": [
               "provision-database",
               "deprovision-database",
-              "run-service-command"
+              "run-service-command",
+              "create-pipe-table",
+              "delete-pipe-table",
+              "analyze-statistics"
             ],
             "type": "string"
           },
@@ -4153,6 +4641,43 @@
         ],
         "type": "object"
       },
+      "ParameterItem": {
+        "description": "(EXPERIMENTAL) Parameter value for this execution.",
+        "properties": {
+          "parameter": {
+            "$ref": "#/components/schemas/AfmObjectIdentifierParameter"
+          },
+          "value": {
+            "description": "Value to use for this parameter instead of its default.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parameter",
+          "value"
+        ],
+        "type": "object"
+      },
+      "PartitionConfig": {
+        "description": "Partition configuration for the table.",
+        "discriminator": {
+          "mapping": {
+            "column": "#/components/schemas/ColumnPartitionConfig",
+            "dateTrunc": "#/components/schemas/DateTruncPartitionConfig",
+            "timeSlice": "#/components/schemas/TimeSlicePartitionConfig"
+          },
+          "propertyName": "type"
+        },
+        "properties": {
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
       "PendingOperation": {
         "allOf": [
           {
@@ -4163,6 +4688,143 @@
         "required": [
           "id",
           "kind"
+        ],
+        "type": "object"
+      },
+      "PipeTable": {
+        "description": "Full details of a pipe-backed OLAP table",
+        "properties": {
+          "columns": {
+            "description": "Inferred column schema",
+            "items": {
+              "$ref": "#/components/schemas/ColumnInfo"
+            },
+            "type": "array"
+          },
+          "databaseName": {
+            "description": "Database name",
+            "type": "string"
+          },
+          "distributionConfig": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/HashDistributionConfig"
+              },
+              {
+                "$ref": "#/components/schemas/RandomDistributionConfig"
+              }
+            ]
+          },
+          "keyConfig": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AggregateKeyConfig"
+              },
+              {
+                "$ref": "#/components/schemas/DuplicateKeyConfig"
+              },
+              {
+                "$ref": "#/components/schemas/PrimaryKeyConfig"
+              },
+              {
+                "$ref": "#/components/schemas/UniqueKeyConfig"
+              }
+            ]
+          },
+          "partitionColumns": {
+            "description": "Hive partition columns detected from the path structure",
+            "items": {
+              "description": "Hive partition columns detected from the path structure",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "partitionConfig": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ColumnPartitionConfig"
+              },
+              {
+                "$ref": "#/components/schemas/DateTruncPartitionConfig"
+              },
+              {
+                "$ref": "#/components/schemas/TimeSlicePartitionConfig"
+              }
+            ]
+          },
+          "pathPrefix": {
+            "description": "Path prefix to the parquet files",
+            "type": "string"
+          },
+          "pipeTableId": {
+            "description": "Internal UUID of the pipe table record",
+            "type": "string"
+          },
+          "pollingIntervalSeconds": {
+            "description": "How often (in seconds) the pipe polls for new files. 0 = server default.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "sourceStorageName": {
+            "description": "Source ObjectStorage name",
+            "type": "string"
+          },
+          "tableName": {
+            "description": "OLAP table name",
+            "type": "string"
+          },
+          "tableProperties": {
+            "additionalProperties": {
+              "description": "CREATE TABLE PROPERTIES key-value pairs",
+              "type": "string"
+            },
+            "description": "CREATE TABLE PROPERTIES key-value pairs",
+            "type": "object"
+          }
+        },
+        "required": [
+          "columns",
+          "databaseName",
+          "distributionConfig",
+          "keyConfig",
+          "partitionColumns",
+          "pathPrefix",
+          "pipeTableId",
+          "pollingIntervalSeconds",
+          "sourceStorageName",
+          "tableName",
+          "tableProperties"
+        ],
+        "type": "object"
+      },
+      "PipeTableSummary": {
+        "description": "Lightweight pipe table entry used in list responses",
+        "properties": {
+          "columns": {
+            "description": "Inferred column schema",
+            "items": {
+              "$ref": "#/components/schemas/ColumnInfo"
+            },
+            "type": "array"
+          },
+          "pathPrefix": {
+            "description": "Path prefix to the parquet files",
+            "type": "string"
+          },
+          "pipeTableId": {
+            "description": "Internal UUID of the pipe table record",
+            "type": "string"
+          },
+          "tableName": {
+            "description": "OLAP table name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "columns",
+          "pathPrefix",
+          "pipeTableId",
+          "tableName"
         ],
         "type": "object"
       },
@@ -4305,9 +4967,31 @@
         ],
         "type": "object"
       },
+      "PrimaryKeyConfig": {
+        "description": "Primary key model — enforces uniqueness, replaces on conflict.",
+        "properties": {
+          "columns": {
+            "description": "Key columns. Defaults to first inferred column.",
+            "items": {
+              "description": "Key columns. Defaults to first inferred column.",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "ProvisionDatabaseInstanceRequest": {
         "description": "Request to provision a new AILake Database instance",
         "properties": {
+          "dataSourceId": {
+            "description": "Identifier for the data source created in metadata-api. Defaults to the database name.",
+            "type": "string"
+          },
+          "dataSourceName": {
+            "description": "Display name for the data source created in metadata-api. Defaults to the database name.",
+            "type": "string"
+          },
           "name": {
             "description": "Name of the database instance",
             "type": "string"
@@ -4435,6 +5119,18 @@
         "required": [
           "status"
         ],
+        "type": "object"
+      },
+      "RandomDistributionConfig": {
+        "description": "Random distribution across buckets.",
+        "properties": {
+          "buckets": {
+            "description": "Number of random distribution buckets. Defaults to 1.",
+            "format": "int32",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
         "type": "object"
       },
       "RangeCondition": {
@@ -4700,6 +5396,19 @@
         },
         "required": [
           "relativeDateFilter"
+        ],
+        "type": "object"
+      },
+      "RemoveDatabaseDataSourceResponse": {
+        "description": "Confirmation of data source removal from an AI Lake Database instance",
+        "properties": {
+          "dataSourceId": {
+            "description": "Identifier of the removed data source in metadata-api.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dataSourceId"
         ],
         "type": "object"
       },
@@ -5130,6 +5839,9 @@
       },
       "SearchResult": {
         "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ErrorInfo"
+          },
           "reasoning": {
             "description": "DEPRECATED: Use top-level reasoning.steps instead. If something is not working properly this field will contain explanation.",
             "type": "string"
@@ -5557,6 +6269,43 @@
         ],
         "type": "object"
       },
+      "TimeSlicePartitionConfig": {
+        "description": "Partition by time_slice() expression.",
+        "properties": {
+          "column": {
+            "description": "Column to partition on.",
+            "type": "string"
+          },
+          "slices": {
+            "description": "How many units per slice.",
+            "format": "int32",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "unit": {
+            "description": "Date/time unit for partition granularity",
+            "enum": [
+              "year",
+              "quarter",
+              "month",
+              "week",
+              "day",
+              "hour",
+              "minute",
+              "second",
+              "millisecond",
+              "microsecond"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "column",
+          "slices",
+          "unit"
+        ],
+        "type": "object"
+      },
       "ToolCallEventResult": {
         "description": "Tool call events emitted during the agentic loop (only present when GEN_AI_YIELD_TOOL_CALL_EVENTS is enabled).",
         "properties": {
@@ -5809,7 +6558,61 @@
         },
         "type": "object"
       },
+      "UniqueKeyConfig": {
+        "description": "Unique key model — enforces uniqueness, replaces on conflict.",
+        "properties": {
+          "columns": {
+            "description": "Key columns. Defaults to first inferred column.",
+            "items": {
+              "description": "Key columns. Defaults to first inferred column.",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "Unit": {
+        "type": "object"
+      },
+      "UpdateDatabaseDataSourceRequest": {
+        "description": "Request to update the data source associated with an AI Lake Database instance",
+        "properties": {
+          "dataSourceId": {
+            "description": "New identifier for the data source in metadata-api. Must be unique within the organization.",
+            "type": "string"
+          },
+          "dataSourceName": {
+            "description": "New display name for the data source in metadata-api. Defaults to dataSourceId when omitted.",
+            "type": "string"
+          },
+          "oldDataSourceId": {
+            "description": "Identifier of the existing data source to replace.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dataSourceId",
+          "oldDataSourceId"
+        ],
+        "type": "object"
+      },
+      "UpdateDatabaseDataSourceResponse": {
+        "description": "Updated data source details for an AI Lake Database instance",
+        "properties": {
+          "dataSourceId": {
+            "description": "New identifier of the data source in metadata-api.",
+            "type": "string"
+          },
+          "dataSourceName": {
+            "description": "New display name of the data source in metadata-api.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dataSourceId",
+          "dataSourceName"
+        ],
         "type": "object"
       },
       "UserContext": {
@@ -5935,6 +6738,21 @@
           },
           "whatIf": {
             "$ref": "#/components/schemas/WhatIfScenarioConfig"
+          }
+        },
+        "type": "object"
+      },
+      "VisualizationObjectExecution": {
+        "properties": {
+          "filters": {
+            "description": "Additional AFM filters merged on top of the visualization object's own filters.",
+            "items": {
+              "$ref": "#/components/schemas/FilterDefinition"
+            },
+            "type": "array"
+          },
+          "settings": {
+            "$ref": "#/components/schemas/ExecutionSettings"
           }
         },
         "type": "object"
@@ -6087,6 +6905,79 @@
           "title",
           "widgetId",
           "widgetType"
+        ],
+        "type": "object"
+      },
+      "WorkflowDashboardSummaryRequestDto": {
+        "properties": {
+          "customUserPrompt": {
+            "type": "string"
+          },
+          "dashboardId": {
+            "type": "string"
+          },
+          "keyMetricIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "referenceQuarter": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "dashboardId"
+        ],
+        "type": "object"
+      },
+      "WorkflowDashboardSummaryResponseDto": {
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "runId",
+          "status"
+        ],
+        "type": "object"
+      },
+      "WorkflowStatusResponseDto": {
+        "properties": {
+          "currentPhase": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "runId",
+          "status"
         ],
         "type": "object"
       }
@@ -6948,6 +7839,131 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/dashboardSummary": {
+      "post": {
+        "operationId": "generateDashboardSummary",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkflowDashboardSummaryRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowDashboardSummaryResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/cancel": {
+      "post": {
+        "operationId": "cancelWorkflow",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/status": {
+      "get": {
+        "operationId": "getWorkflowStatus",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "runId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowStatusResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel": {
       "post": {
         "description": "Each cancel token corresponds to one unique execution request for the same result id. If all cancel tokens for the same result id are applied, the execution for this result id is cancelled.",
@@ -7425,7 +8441,7 @@
             }
           },
           {
-            "description": "Requested explain type. If not specified all types are bundled in a ZIP archive.\n\n`MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info\n\n`GRPC_MODEL` - Datasets used in execution\n\n`GRPC_MODEL_SVG` - Generated SVG image of the datasets\n\n`COMPRESSED_GRPC_MODEL_SVG` - Generated SVG image of the model fragment used in the query\n\n`WDF` - Workspace data filters in execution workspace context\n\n`QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL\n\n`QT_SVG` - Generated SVG image of the Query Tree\n\n`OPT_QT` - Optimized Query Tree\n\n`OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree\n\n`SQL` - Final SQL to be executed\n\n`COMPRESSED_SQL` - Final SQL to be executed with rolled SQL datasets\n\n`SETTINGS` - Settings used to execute explain request",
+            "description": "Requested explain type. If not specified all types are bundled in a ZIP archive.\n\n`MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info\n\n`GRPC_MODEL` - Datasets used in execution\n\n`GRPC_MODEL_SVG` - Generated SVG image of the datasets\n\n`COMPRESSED_GRPC_MODEL_SVG` - Generated SVG image of the model fragment used in the query\n\n`WDF` - Workspace data filters in execution workspace context\n\n`QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL\n\n`QT_SVG` - Generated SVG image of the Query Tree\n\n`OPT_QT` - Optimized Query Tree\n\n`OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree\n\n`SQL` - Final SQL to be executed\n\n`COMPRESSED_SQL` - Final SQL to be executed with rolled SQL datasets\n\n`SETTINGS` - Settings used to execute explain request\n\n`GIT` - Git properties of current build",
             "in": "query",
             "name": "explainType",
             "required": false,
@@ -7441,7 +8457,9 @@
                 "OPT_QT_SVG",
                 "SQL",
                 "SETTINGS",
-                "COMPRESSED_SQL"
+                "COMPRESSED_SQL",
+                "COMPRESSED_GRPC_MODEL_SVG",
+                "GIT"
               ],
               "type": "string"
             }
@@ -7902,6 +8920,7 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId}": {
       "get": {
+        "deprecated": true,
         "description": "(EXPERIMENTAL) Gets anomalies.",
         "operationId": "anomalyDetectionResult",
         "parameters": [
@@ -7965,6 +8984,7 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId}": {
       "post": {
+        "deprecated": true,
         "description": "(EXPERIMENTAL) Computes anomaly detection.",
         "operationId": "anomalyDetection",
         "parameters": [
@@ -8284,6 +9304,83 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/visualization/{visualizationObjectId}/execute": {
+      "post": {
+        "description": "(BETA) Fetches a stored visualization object by ID, converts it to an AFM execution, and returns a link to the result. Optionally accepts additional AFM filters merged on top of the visualization's own filters.",
+        "operationId": "computeReportForVisualizationObject",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "visualizationObjectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Ignore all caches during execution of current request.",
+            "in": "header",
+            "name": "skip-cache",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VisualizationObjectExecution"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AfmExecutionResponse"
+                }
+              }
+            },
+            "description": "AFM Execution response with links to the result and server-enhanced dimensions.",
+            "headers": {
+              "X-GDC-CANCEL-TOKEN": {
+                "description": "A token that can be used to cancel this execution",
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          }
+        },
+        "summary": "(BETA) Executes a visualization object and returns link to the result",
+        "tags": [
+          "Computation",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Requires workspace VIEW permission.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
     "/api/v1/ailake/database/instances": {
       "get": {
         "description": "(BETA) Lists database instances in the organization's AI Lake. Supports paging via size and offset query parameters. Use metaInclude=page to get total count.",
@@ -8336,6 +9433,7 @@
         },
         "summary": "(BETA) List AI Lake Database instances",
         "tags": [
+          "AI Lake - Databases",
           "AI Lake"
         ],
         "x-gdc-security-info": {
@@ -8402,6 +9500,7 @@
         },
         "summary": "(BETA) Create a new AILake Database instance",
         "tags": [
+          "AI Lake - Databases",
           "AI Lake"
         ],
         "x-gdc-security-info": {
@@ -8470,6 +9569,7 @@
         },
         "summary": "(BETA) Delete an existing AILake Database instance",
         "tags": [
+          "AI Lake - Databases",
           "AI Lake"
         ],
         "x-gdc-security-info": {
@@ -8508,10 +9608,546 @@
         },
         "summary": "(BETA) Get the specified AILake Database instance",
         "tags": [
+          "AI Lake - Databases",
           "AI Lake"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to get an AI Lake database instance.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/database/instances/{instanceId}/analyzeStatistics": {
+      "post": {
+        "description": "(BETA) Collects CBO statistics for tables in a StarRocks database. Works for both internal (native/PIPE) and external (Iceberg) catalogs. If tableNames is empty, all tables are analyzed.",
+        "operationId": "analyzeStatistics",
+        "parameters": [
+          {
+            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "schema": {
+              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "operation-id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalyzeStatisticsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unit"
+                }
+              }
+            },
+            "description": "Statistics analysis scheduled.",
+            "headers": {
+              "operation-id": {
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          }
+        },
+        "summary": "(BETA) Run ANALYZE TABLE for tables in a database instance",
+        "tags": [
+          "AI Lake",
+          "AI Lake - Pipe Tables"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to analyze statistics.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/database/instances/{instanceId}/dataSource": {
+      "patch": {
+        "description": "(BETA) Updates the data source ID and name for an existing AI Lake database instance without deleting the underlying database. Use this to recover from a wrong data source ID provisioned on an existing database instance.",
+        "operationId": "updateAiLakeDatabaseDataSource",
+        "parameters": [
+          {
+            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "schema": {
+              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDatabaseDataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateDatabaseDataSourceResponse"
+                }
+              }
+            },
+            "description": "Data source successfully updated"
+          }
+        },
+        "summary": "(BETA) Update the data source of an AILake Database instance",
+        "tags": [
+          "AI Lake - Databases",
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to update the data source of an AI Lake database instance.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/database/instances/{instanceId}/dataSources": {
+      "get": {
+        "description": "(BETA) Returns all data source associations for the specified AI Lake database instance.",
+        "operationId": "listAiLakeDatabaseDataSources",
+        "parameters": [
+          {
+            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "schema": {
+              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListDatabaseDataSourcesResponse"
+                }
+              }
+            },
+            "description": "Data sources successfully retrieved"
+          }
+        },
+        "summary": "(BETA) List data sources of an AILake Database instance",
+        "tags": [
+          "AI Lake - Databases",
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to list data sources of an AI Lake database instance.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "post": {
+        "description": "(BETA) Associates an additional metadata-api data source with an existing AI Lake database instance. The new data source uses the same StarRocks connection details as the primary data source.",
+        "operationId": "addAiLakeDatabaseDataSource",
+        "parameters": [
+          {
+            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "schema": {
+              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddDatabaseDataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddDatabaseDataSourceResponse"
+                }
+              }
+            },
+            "description": "Data source successfully added"
+          }
+        },
+        "summary": "(BETA) Add a data source to an AILake Database instance",
+        "tags": [
+          "AI Lake - Databases",
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to add a data source to an AI Lake database instance.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/database/instances/{instanceId}/dataSources/{dataSourceId}": {
+      "delete": {
+        "description": "(BETA) Removes a data source association from an AI Lake database instance and deletes the corresponding data source from metadata-api. Fails if removing the data source would leave the instance with no data sources.",
+        "operationId": "removeAiLakeDatabaseDataSource",
+        "parameters": [
+          {
+            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "schema": {
+              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Identifier of the data source to remove.",
+            "in": "path",
+            "name": "dataSourceId",
+            "required": true,
+            "schema": {
+              "description": "Identifier of the data source to remove.",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemoveDatabaseDataSourceResponse"
+                }
+              }
+            },
+            "description": "Data source successfully removed"
+          }
+        },
+        "summary": "(BETA) Remove a data source from an AILake Database instance",
+        "tags": [
+          "AI Lake - Databases",
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to remove a data source from an AI Lake database instance.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/database/instances/{instanceId}/pipeTables": {
+      "get": {
+        "description": "(BETA) Lists all active pipe tables in the given AI Lake database instance.",
+        "operationId": "listAiLakePipeTables",
+        "parameters": [
+          {
+            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "schema": {
+              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListPipeTablesResponse"
+                }
+              }
+            },
+            "description": "AI Lake pipe tables successfully retrieved"
+          }
+        },
+        "summary": "(BETA) List AI Lake pipe tables",
+        "tags": [
+          "AI Lake",
+          "AI Lake - Pipe Tables"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to list AI Lake pipe tables.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "post": {
+        "description": "(BETA) Creates a pipe-backed OLAP table in the given AI Lake database instance. Infers schema from parquet files. Returns an operation-id header the client can use to poll for progress.",
+        "operationId": "createAiLakePipeTable",
+        "parameters": [
+          {
+            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "schema": {
+              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "operation-id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePipeTableRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unit"
+                }
+              }
+            },
+            "description": "Accepted",
+            "headers": {
+              "operation-id": {
+                "description": "Operation ID to use for polling.",
+                "example": "e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              },
+              "operation-location": {
+                "description": "Operation location URL.",
+                "example": "/api/v1/ailake/operations/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          }
+        },
+        "summary": "(BETA) Create a new AI Lake pipe table",
+        "tags": [
+          "AI Lake",
+          "AI Lake - Pipe Tables"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to create an AI Lake pipe table.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName}": {
+      "delete": {
+        "description": "(BETA) Drops the pipe and OLAP table and removes the record. Returns an operation-id header the client can use to poll for progress.",
+        "operationId": "deleteAiLakePipeTable",
+        "parameters": [
+          {
+            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "schema": {
+              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Pipe table name.",
+            "in": "path",
+            "name": "tableName",
+            "required": true,
+            "schema": {
+              "description": "Pipe table name.",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "operation-id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unit"
+                }
+              }
+            },
+            "description": "Accepted",
+            "headers": {
+              "operation-id": {
+                "description": "Operation ID to use for polling.",
+                "example": "e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              },
+              "operation-location": {
+                "description": "Operation location URL.",
+                "example": "/api/v1/ailake/operations/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          }
+        },
+        "summary": "(BETA) Delete an AI Lake pipe table",
+        "tags": [
+          "AI Lake",
+          "AI Lake - Pipe Tables"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to delete an AI Lake pipe table.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "get": {
+        "description": "(BETA) Returns full details of the specified pipe table.",
+        "operationId": "getAiLakePipeTable",
+        "parameters": [
+          {
+            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "schema": {
+              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Pipe table name.",
+            "in": "path",
+            "name": "tableName",
+            "required": true,
+            "schema": {
+              "description": "Pipe table name.",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PipeTable"
+                }
+              }
+            },
+            "description": "AI Lake pipe table successfully retrieved"
+          }
+        },
+        "summary": "(BETA) Get an AI Lake pipe table",
+        "tags": [
+          "AI Lake",
+          "AI Lake - Pipe Tables"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to get an AI Lake pipe table.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/ailake/object-storages": {
+      "get": {
+        "description": "(BETA) Lists ObjectStorages registered for the organization. Use the returned `name` as `sourceStorageName` in CreatePipeTable, or pass `storageId` to the ProvisionDatabase `storageIds` list. Provider credentials are stripped — only safe descriptors (id, name, type, bucket, region, endpoint, …) are returned.",
+        "operationId": "listAiLakeObjectStorages",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListObjectStoragesResponse"
+                }
+              }
+            },
+            "description": "AI Lake ObjectStorages successfully retrieved"
+          }
+        },
+        "summary": "(BETA) List registered AI Lake ObjectStorages",
+        "tags": [
+          "AI Lake - Databases",
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to list registered AI Lake ObjectStorages.",
           "permissions": [
             "MANAGE"
           ]
@@ -8558,6 +10194,7 @@
         },
         "summary": "(BETA) Get Long Running Operation details",
         "tags": [
+          "AI Lake - Services & Operations",
           "AI Lake"
         ],
         "x-gdc-security-info": {
@@ -8620,6 +10257,7 @@
         },
         "summary": "(BETA) List AI Lake services",
         "tags": [
+          "AI Lake - Services & Operations",
           "AI Lake"
         ],
         "x-gdc-security-info": {
@@ -8704,6 +10342,7 @@
         },
         "summary": "(BETA) Run an AI Lake services command",
         "tags": [
+          "AI Lake - Services & Operations",
           "AI Lake"
         ],
         "x-gdc-security-info": {
@@ -8742,6 +10381,7 @@
         },
         "summary": "(BETA) Get AI Lake service status",
         "tags": [
+          "AI Lake - Services & Operations",
           "AI Lake"
         ],
         "x-gdc-security-info": {

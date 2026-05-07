@@ -64,6 +64,9 @@ class PendingOperation(ModelComposed):
             'PROVISION-DATABASE': "provision-database",
             'DEPROVISION-DATABASE': "deprovision-database",
             'RUN-SERVICE-COMMAND': "run-service-command",
+            'CREATE-PIPE-TABLE': "create-pipe-table",
+            'DELETE-PIPE-TABLE': "delete-pipe-table",
+            'ANALYZE-STATISTICS': "analyze-statistics",
         },
     }
 
@@ -122,7 +125,7 @@ class PendingOperation(ModelComposed):
 
         Keyword Args:
             id (str): Id of the operation
-            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. 
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `create-pipe-table` — Creating a pipe table backed by an S3 data source. * `delete-pipe-table` — Deleting a pipe table. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. 
             status (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
@@ -228,7 +231,7 @@ class PendingOperation(ModelComposed):
 
         Keyword Args:
             id (str): Id of the operation
-            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. 
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `create-pipe-table` — Creating a pipe table backed by an S3 data source. * `delete-pipe-table` — Deleting a pipe table. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. 
             status (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be

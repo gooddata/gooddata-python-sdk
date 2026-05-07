@@ -31,16 +31,18 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_certified_by import JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy
+    from gooddata_api_client.model.json_api_agent_out_relationships_created_by import JsonApiAgentOutRelationshipsCreatedBy
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_datasets import JsonApiAnalyticalDashboardOutRelationshipsDatasets
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_labels import JsonApiAnalyticalDashboardOutRelationshipsLabels
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_metrics import JsonApiAnalyticalDashboardOutRelationshipsMetrics
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_parameters import JsonApiAnalyticalDashboardOutRelationshipsParameters
     from gooddata_api_client.model.json_api_attribute_hierarchy_out_relationships_attributes import JsonApiAttributeHierarchyOutRelationshipsAttributes
     from gooddata_api_client.model.json_api_dataset_out_relationships_facts import JsonApiDatasetOutRelationshipsFacts
-    globals()['JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy'] = JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy
+    globals()['JsonApiAgentOutRelationshipsCreatedBy'] = JsonApiAgentOutRelationshipsCreatedBy
     globals()['JsonApiAnalyticalDashboardOutRelationshipsDatasets'] = JsonApiAnalyticalDashboardOutRelationshipsDatasets
     globals()['JsonApiAnalyticalDashboardOutRelationshipsLabels'] = JsonApiAnalyticalDashboardOutRelationshipsLabels
     globals()['JsonApiAnalyticalDashboardOutRelationshipsMetrics'] = JsonApiAnalyticalDashboardOutRelationshipsMetrics
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsParameters'] = JsonApiAnalyticalDashboardOutRelationshipsParameters
     globals()['JsonApiAttributeHierarchyOutRelationshipsAttributes'] = JsonApiAttributeHierarchyOutRelationshipsAttributes
     globals()['JsonApiDatasetOutRelationshipsFacts'] = JsonApiDatasetOutRelationshipsFacts
 
@@ -99,13 +101,14 @@ class JsonApiMetricOutRelationships(ModelNormal):
         lazy_import()
         return {
             'attributes': (JsonApiAttributeHierarchyOutRelationshipsAttributes,),  # noqa: E501
-            'certified_by': (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy,),  # noqa: E501
-            'created_by': (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy,),  # noqa: E501
+            'certified_by': (JsonApiAgentOutRelationshipsCreatedBy,),  # noqa: E501
+            'created_by': (JsonApiAgentOutRelationshipsCreatedBy,),  # noqa: E501
             'datasets': (JsonApiAnalyticalDashboardOutRelationshipsDatasets,),  # noqa: E501
             'facts': (JsonApiDatasetOutRelationshipsFacts,),  # noqa: E501
             'labels': (JsonApiAnalyticalDashboardOutRelationshipsLabels,),  # noqa: E501
             'metrics': (JsonApiAnalyticalDashboardOutRelationshipsMetrics,),  # noqa: E501
-            'modified_by': (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy,),  # noqa: E501
+            'modified_by': (JsonApiAgentOutRelationshipsCreatedBy,),  # noqa: E501
+            'parameters': (JsonApiAnalyticalDashboardOutRelationshipsParameters,),  # noqa: E501
         }
 
     @cached_property
@@ -122,6 +125,7 @@ class JsonApiMetricOutRelationships(ModelNormal):
         'labels': 'labels',  # noqa: E501
         'metrics': 'metrics',  # noqa: E501
         'modified_by': 'modifiedBy',  # noqa: E501
+        'parameters': 'parameters',  # noqa: E501
     }
 
     read_only_vars = {
@@ -166,13 +170,14 @@ class JsonApiMetricOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiAttributeHierarchyOutRelationshipsAttributes): [optional]  # noqa: E501
-            certified_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
-            created_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
+            certified_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            created_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
             datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
             facts (JsonApiDatasetOutRelationshipsFacts): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
             metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
-            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
+            modified_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            parameters (JsonApiAnalyticalDashboardOutRelationshipsParameters): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -259,13 +264,14 @@ class JsonApiMetricOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiAttributeHierarchyOutRelationshipsAttributes): [optional]  # noqa: E501
-            certified_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
-            created_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
+            certified_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            created_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
             datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
             facts (JsonApiDatasetOutRelationshipsFacts): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
             metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
-            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
+            modified_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            parameters (JsonApiAnalyticalDashboardOutRelationshipsParameters): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -31,9 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.column_expression import ColumnExpression
     from gooddata_api_client.model.distribution_config import DistributionConfig
     from gooddata_api_client.model.key_config import KeyConfig
     from gooddata_api_client.model.partition_config import PartitionConfig
+    globals()['ColumnExpression'] = ColumnExpression
     globals()['DistributionConfig'] = DistributionConfig
     globals()['KeyConfig'] = KeyConfig
     globals()['PartitionConfig'] = PartitionConfig
@@ -95,6 +97,8 @@ class CreatePipeTableRequest(ModelNormal):
             'path_prefix': (str,),  # noqa: E501
             'source_storage_name': (str,),  # noqa: E501
             'table_name': (str,),  # noqa: E501
+            'aggregation_overrides': ({str: (str,)},),  # noqa: E501
+            'column_expressions': ({str: (ColumnExpression,)},),  # noqa: E501
             'column_overrides': ({str: (str,)},),  # noqa: E501
             'distribution_config': (DistributionConfig,),  # noqa: E501
             'key_config': (KeyConfig,),  # noqa: E501
@@ -113,6 +117,8 @@ class CreatePipeTableRequest(ModelNormal):
         'path_prefix': 'pathPrefix',  # noqa: E501
         'source_storage_name': 'sourceStorageName',  # noqa: E501
         'table_name': 'tableName',  # noqa: E501
+        'aggregation_overrides': 'aggregationOverrides',  # noqa: E501
+        'column_expressions': 'columnExpressions',  # noqa: E501
         'column_overrides': 'columnOverrides',  # noqa: E501
         'distribution_config': 'distributionConfig',  # noqa: E501
         'key_config': 'keyConfig',  # noqa: E501
@@ -135,7 +141,7 @@ class CreatePipeTableRequest(ModelNormal):
         Args:
             path_prefix (str): Path prefix to the parquet files (e.g. 'my-dataset/year=2024/'). All parquet files must be at a uniform depth under the prefix — either all directly under the prefix, or all under a consistent Hive partition hierarchy (e.g. year=2024/month=01/). Mixed layouts (files at multiple depths) are not supported.
             source_storage_name (str): Name of the pre-configured S3/MinIO ObjectStorage source
-            table_name (str): Name of the OLAP table to create. Must match ^[a-z][a-z0-9_]{0,62}$
+            table_name (str): Name of the OLAP table to create. Must match ^[a-z][a-z0-9_-]{0,62}$
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -168,6 +174,8 @@ class CreatePipeTableRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            aggregation_overrides ({str: (str,)}): Maps non-key column names to their StarRocks aggregation function (SUM, MIN, MAX, REPLACE, REPLACE_IF_NOT_NULL, HLL_UNION, BITMAP_UNION, PERCENTILE_UNION). Required for every non-key column when keyConfig type is 'aggregate'. Ignored for other key types.. [optional]  # noqa: E501
+            column_expressions ({str: (ColumnExpression,)}): Per-target-column projection overrides. Each entry emits `<function>(<column>) AS <key>` in the SELECT list of the generated CREATE PIPE ... AS INSERT; keys absent from the map are projected as-is. Required for AGGREGATE-KEY tables that include native HLL columns (StarRocks rejects raw VARBINARY into HLL columns).. [optional]  # noqa: E501
             column_overrides ({str: (str,)}): Override inferred column types. Maps column names to SQL type strings (e.g. {\"year\": \"INT\", \"event_date\": \"DATE\"}). Applied after parquet schema inference.. [optional]  # noqa: E501
             distribution_config (DistributionConfig): [optional]  # noqa: E501
             key_config (KeyConfig): [optional]  # noqa: E501
@@ -235,7 +243,7 @@ class CreatePipeTableRequest(ModelNormal):
         Args:
             path_prefix (str): Path prefix to the parquet files (e.g. 'my-dataset/year=2024/'). All parquet files must be at a uniform depth under the prefix — either all directly under the prefix, or all under a consistent Hive partition hierarchy (e.g. year=2024/month=01/). Mixed layouts (files at multiple depths) are not supported.
             source_storage_name (str): Name of the pre-configured S3/MinIO ObjectStorage source
-            table_name (str): Name of the OLAP table to create. Must match ^[a-z][a-z0-9_]{0,62}$
+            table_name (str): Name of the OLAP table to create. Must match ^[a-z][a-z0-9_-]{0,62}$
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -268,6 +276,8 @@ class CreatePipeTableRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            aggregation_overrides ({str: (str,)}): Maps non-key column names to their StarRocks aggregation function (SUM, MIN, MAX, REPLACE, REPLACE_IF_NOT_NULL, HLL_UNION, BITMAP_UNION, PERCENTILE_UNION). Required for every non-key column when keyConfig type is 'aggregate'. Ignored for other key types.. [optional]  # noqa: E501
+            column_expressions ({str: (ColumnExpression,)}): Per-target-column projection overrides. Each entry emits `<function>(<column>) AS <key>` in the SELECT list of the generated CREATE PIPE ... AS INSERT; keys absent from the map are projected as-is. Required for AGGREGATE-KEY tables that include native HLL columns (StarRocks rejects raw VARBINARY into HLL columns).. [optional]  # noqa: E501
             column_overrides ({str: (str,)}): Override inferred column types. Maps column names to SQL type strings (e.g. {\"year\": \"INT\", \"event_date\": \"DATE\"}). Applied after parquet schema inference.. [optional]  # noqa: E501
             distribution_config (DistributionConfig): [optional]  # noqa: E501
             key_config (KeyConfig): [optional]  # noqa: E501

@@ -31,8 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.error_info import ErrorInfo
     from gooddata_api_client.model.search_relationship_object import SearchRelationshipObject
     from gooddata_api_client.model.search_result_object import SearchResultObject
+    globals()['ErrorInfo'] = ErrorInfo
     globals()['SearchRelationshipObject'] = SearchRelationshipObject
     globals()['SearchResultObject'] = SearchResultObject
 
@@ -93,6 +95,7 @@ class SearchResult(ModelNormal):
             'reasoning': (str,),  # noqa: E501
             'relationships': ([SearchRelationshipObject],),  # noqa: E501
             'results': ([SearchResultObject],),  # noqa: E501
+            'error': (ErrorInfo,),  # noqa: E501
         }
 
     @cached_property
@@ -104,6 +107,7 @@ class SearchResult(ModelNormal):
         'reasoning': 'reasoning',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'results': 'results',  # noqa: E501
+        'error': 'error',  # noqa: E501
     }
 
     read_only_vars = {
@@ -152,6 +156,7 @@ class SearchResult(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            error (ErrorInfo): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -245,6 +250,7 @@ class SearchResult(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            error (ErrorInfo): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

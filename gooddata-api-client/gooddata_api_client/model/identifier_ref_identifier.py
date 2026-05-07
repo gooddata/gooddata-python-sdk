@@ -67,6 +67,7 @@ class IdentifierRefIdentifier(ModelNormal):
             'LABEL': "label",
             'METRIC': "metric",
             'USERDATAFILTER': "userDataFilter",
+            'PARAMETER': "parameter",
             'EXPORTDEFINITION': "exportDefinition",
             'AUTOMATION': "automation",
             'AUTOMATIONRESULT': "automationResult",

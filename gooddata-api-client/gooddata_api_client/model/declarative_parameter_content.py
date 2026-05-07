@@ -31,10 +31,12 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.number_constraints import NumberConstraints
     from gooddata_api_client.model.number_parameter_definition import NumberParameterDefinition
-    globals()['NumberConstraints'] = NumberConstraints
+    from gooddata_api_client.model.string_constraints import StringConstraints
+    from gooddata_api_client.model.string_parameter_definition import StringParameterDefinition
     globals()['NumberParameterDefinition'] = NumberParameterDefinition
+    globals()['StringConstraints'] = StringConstraints
+    globals()['StringParameterDefinition'] = StringParameterDefinition
 
 
 class DeclarativeParameterContent(ModelComposed):
@@ -63,7 +65,7 @@ class DeclarativeParameterContent(ModelComposed):
 
     allowed_values = {
         ('type',): {
-            'NUMBER': "NUMBER",
+            'STRING': "STRING",
         },
     }
 
@@ -93,8 +95,8 @@ class DeclarativeParameterContent(ModelComposed):
         """
         lazy_import()
         return {
-            'constraints': (NumberConstraints,),  # noqa: E501
-            'default_value': (float,),  # noqa: E501
+            'constraints': (StringConstraints,),  # noqa: E501
+            'default_value': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
 
@@ -148,9 +150,9 @@ class DeclarativeParameterContent(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            constraints (NumberConstraints): [optional]  # noqa: E501
-            default_value (float): [optional]  # noqa: E501
-            type (str): The parameter type.. [optional] if omitted the server will use the default value of "NUMBER"  # noqa: E501
+            constraints (StringConstraints): [optional]  # noqa: E501
+            default_value (str): [optional]  # noqa: E501
+            type (str): The parameter type.. [optional] if omitted the server will use the default value of "STRING"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -254,9 +256,9 @@ class DeclarativeParameterContent(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            constraints (NumberConstraints): [optional]  # noqa: E501
-            default_value (float): [optional]  # noqa: E501
-            type (str): The parameter type.. [optional] if omitted the server will use the default value of "NUMBER"  # noqa: E501
+            constraints (StringConstraints): [optional]  # noqa: E501
+            default_value (str): [optional]  # noqa: E501
+            type (str): The parameter type.. [optional] if omitted the server will use the default value of "STRING"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -329,5 +331,6 @@ class DeclarativeParameterContent(ModelComposed):
           ],
           'oneOf': [
               NumberParameterDefinition,
+              StringParameterDefinition,
           ],
         }

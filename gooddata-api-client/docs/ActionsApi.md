@@ -15,6 +15,7 @@ Method | HTTP request | Description
 [**anomaly_detection_result**](ActionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 [**available_assignees**](ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 [**cancel_executions**](ActionsApi.md#cancel_executions) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel | Applies all the given cancel tokens.
+[**cancel_workflow**](ActionsApi.md#cancel_workflow) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/cancel | 
 [**change_analysis**](ActionsApi.md#change_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis | Compute change analysis
 [**change_analysis_result**](ActionsApi.md#change_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis/result/{resultId} | Get change analysis result
 [**check_entity_overrides**](ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
@@ -25,6 +26,7 @@ Method | HTTP request | Description
 [**column_statistics**](ActionsApi.md#column_statistics) | **POST** /api/v1/actions/dataSources/{dataSourceId}/computeColumnStatistics | (EXPERIMENTAL) Compute column statistics
 [**compute_label_elements_post**](ActionsApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 [**compute_report**](ActionsApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
+[**compute_report_for_visualization_object**](ActionsApi.md#compute_report_for_visualization_object) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/visualization/{visualizationObjectId}/execute | (BETA) Executes a visualization object and returns link to the result
 [**compute_valid_descendants**](ActionsApi.md#compute_valid_descendants) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants | (BETA) Valid descendants
 [**compute_valid_objects**](ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
 [**convert_geo_file**](ActionsApi.md#convert_geo_file) | **POST** /api/v1/actions/customGeoCollection/convert | Convert a geo file to GeoParquet format
@@ -43,9 +45,9 @@ Method | HTTP request | Description
 [**explain_afm**](ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
 [**forecast**](ActionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
 [**forecast_result**](ActionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
+[**generate_dashboard_summary**](ActionsApi.md#generate_dashboard_summary) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/dashboardSummary | 
 [**generate_description**](ActionsApi.md#generate_description) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateDescription | Generate Description for Analytics Object
 [**generate_logical_model**](ActionsApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
-[**generate_logical_model_aac**](ActionsApi.md#generate_logical_model_aac) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModelAac | Generate logical data model in AAC format from physical data model (PDM)
 [**generate_title**](ActionsApi.md#generate_title) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateTitle | Generate Title for Analytics Object
 [**get_data_source_schemata**](ActionsApi.md#get_data_source_schemata) | **GET** /api/v1/actions/dataSources/{dataSourceId}/scanSchemata | Get a list of schema names of a database
 [**get_dependent_entities_graph**](ActionsApi.md#get_dependent_entities_graph) | **GET** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph
@@ -62,6 +64,7 @@ Method | HTTP request | Description
 [**get_slides_export_metadata**](ActionsApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 [**get_tabular_export**](ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 [**get_translation_tags**](ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
+[**get_workflow_status**](ActionsApi.md#get_workflow_status) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/status | 
 [**import_csv**](ActionsApi.md#import_csv) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/importCsv | Import CSV
 [**import_custom_geo_collection**](ActionsApi.md#import_custom_geo_collection) | **POST** /api/v1/actions/customGeoCollection/{collectionId}/import | Import custom geo collection
 [**inherited_entity_conflicts**](ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
@@ -90,6 +93,7 @@ Method | HTTP request | Description
 [**pause_workspace_automations**](ActionsApi.md#pause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/pause | Pause selected automations in the workspace
 [**read_csv_file_manifests**](ActionsApi.md#read_csv_file_manifests) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/readCsvFileManifests | Read CSV file manifests
 [**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
+[**register_workspace_upload_notification**](ActionsApi.md#register_workspace_upload_notification) | **POST** /api/v1/actions/workspaces/{workspaceId}/uploadNotification | Register an upload notification
 [**resolve_all_entitlements**](ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 [**resolve_all_settings_without_workspace**](ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
 [**resolve_llm_endpoints**](ActionsApi.md#resolve_llm_endpoints) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints | Get Active LLM Endpoints for this workspace
@@ -102,6 +106,7 @@ Method | HTTP request | Description
 [**retrieve_translations**](ActionsApi.md#retrieve_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/retrieve | Retrieve translations for entities.
 [**scan_data_source**](ActionsApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
 [**scan_sql**](ActionsApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
+[**scan_statistics**](ActionsApi.md#scan_statistics) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanStatistics | (BETA) Collect physical table and column statistics from a StarRocks data source
 [**set_certification**](ActionsApi.md#set_certification) | **POST** /api/v1/actions/workspaces/{workspaceId}/setCertification | Set Certification
 [**set_translations**](ActionsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
 [**staging_upload**](ActionsApi.md#staging_upload) | **POST** /api/v1/actions/fileStorage/staging/upload | Upload a file to the staging area
@@ -1075,6 +1080,71 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **cancel_workflow**
+> {str: (str,)} cancel_workflow(workspace_id, run_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    run_id = "runId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.cancel_workflow(workspace_id, run_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->cancel_workflow: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **run_id** | **str**|  |
+
+### Return type
+
+**{str: (str,)}**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **change_analysis**
 > ChangeAnalysisResponse change_analysis(workspace_id, change_analysis_request)
 
@@ -1898,6 +1968,17 @@ with gooddata_api_client.ApiClient() as api_client:
                     local_identifier="metric_1",
                 ),
             ],
+            parameters=[
+                ParameterItem(
+                    parameter=AfmObjectIdentifierParameter(
+                        identifier=AfmObjectIdentifierParameterIdentifier(
+                            id="sample_item.price",
+                            type="parameter",
+                        ),
+                    ),
+                    value="value_example",
+                ),
+            ],
         ),
         result_spec=ResultSpec(
             dimensions=[
@@ -1978,6 +2059,97 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | AFM Execution response with links to the result and server-enhanced dimensions from the original request. |  * X-GDC-CANCEL-TOKEN - A token that can be used to cancel this execution <br>  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **compute_report_for_visualization_object**
+> AfmExecutionResponse compute_report_for_visualization_object(workspace_id, visualization_object_id)
+
+(BETA) Executes a visualization object and returns link to the result
+
+(BETA) Fetches a stored visualization object by ID, converts it to an AFM execution, and returns a link to the result. Optionally accepts additional AFM filters merged on top of the visualization's own filters.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.afm_execution_response import AfmExecutionResponse
+from gooddata_api_client.model.visualization_object_execution import VisualizationObjectExecution
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    visualization_object_id = "visualizationObjectId_example" # str | 
+    skip_cache = False # bool | Ignore all caches during execution of current request. (optional) if omitted the server will use the default value of False
+    visualization_object_execution = VisualizationObjectExecution(
+        filters=[
+            FilterDefinition(),
+        ],
+        settings=ExecutionSettings(
+            data_sampling_percentage=0,
+            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+        ),
+    ) # VisualizationObjectExecution |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Executes a visualization object and returns link to the result
+        api_response = api_instance.compute_report_for_visualization_object(workspace_id, visualization_object_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->compute_report_for_visualization_object: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (BETA) Executes a visualization object and returns link to the result
+        api_response = api_instance.compute_report_for_visualization_object(workspace_id, visualization_object_id, skip_cache=skip_cache, visualization_object_execution=visualization_object_execution)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->compute_report_for_visualization_object: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **visualization_object_id** | **str**|  |
+ **skip_cache** | **bool**| Ignore all caches during execution of current request. | [optional] if omitted the server will use the default value of False
+ **visualization_object_execution** | [**VisualizationObjectExecution**](VisualizationObjectExecution.md)|  | [optional]
+
+### Return type
+
+[**AfmExecutionResponse**](AfmExecutionResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | AFM Execution response with links to the result and server-enhanced dimensions. |  * X-GDC-CANCEL-TOKEN - A token that can be used to cancel this execution <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2131,6 +2303,17 @@ with gooddata_api_client.ApiClient() as api_client:
                 MeasureItem(
                     definition=MeasureDefinition(),
                     local_identifier="metric_1",
+                ),
+            ],
+            parameters=[
+                ParameterItem(
+                    parameter=AfmObjectIdentifierParameter(
+                        identifier=AfmObjectIdentifierParameterIdentifier(
+                            id="sample_item.price",
+                            type="parameter",
+                        ),
+                    ),
+                    value="value_example",
                 ),
             ],
         ),
@@ -2588,6 +2771,17 @@ with gooddata_api_client.ApiClient() as api_client:
                 MeasureItem(
                     definition=MeasureDefinition(),
                     local_identifier="metric_1",
+                ),
+            ],
+            parameters=[
+                ParameterItem(
+                    parameter=AfmObjectIdentifierParameter(
+                        identifier=AfmObjectIdentifierParameterIdentifier(
+                            id="sample_item.price",
+                            type="parameter",
+                        ),
+                    ),
+                    value="value_example",
                 ),
             ],
         ),
@@ -3335,6 +3529,17 @@ with gooddata_api_client.ApiClient() as api_client:
                     local_identifier="metric_1",
                 ),
             ],
+            parameters=[
+                ParameterItem(
+                    parameter=AfmObjectIdentifierParameter(
+                        identifier=AfmObjectIdentifierParameterIdentifier(
+                            id="sample_item.price",
+                            type="parameter",
+                        ),
+                    ),
+                    value="value_example",
+                ),
+            ],
         ),
         result_spec=ResultSpec(
             dimensions=[
@@ -3365,7 +3570,7 @@ with gooddata_api_client.ApiClient() as api_client:
             timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
         ),
     ) # AfmExecution | 
-    explain_type = "MAQL" # str | Requested explain type. If not specified all types are bundled in a ZIP archive.  `MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info  `GRPC_MODEL` - Datasets used in execution  `GRPC_MODEL_SVG` - Generated SVG image of the datasets  `COMPRESSED_GRPC_MODEL_SVG` - Generated SVG image of the model fragment used in the query  `WDF` - Workspace data filters in execution workspace context  `QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL  `QT_SVG` - Generated SVG image of the Query Tree  `OPT_QT` - Optimized Query Tree  `OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree  `SQL` - Final SQL to be executed  `COMPRESSED_SQL` - Final SQL to be executed with rolled SQL datasets  `SETTINGS` - Settings used to execute explain request (optional)
+    explain_type = "MAQL" # str | Requested explain type. If not specified all types are bundled in a ZIP archive.  `MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info  `GRPC_MODEL` - Datasets used in execution  `GRPC_MODEL_SVG` - Generated SVG image of the datasets  `COMPRESSED_GRPC_MODEL_SVG` - Generated SVG image of the model fragment used in the query  `WDF` - Workspace data filters in execution workspace context  `QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL  `QT_SVG` - Generated SVG image of the Query Tree  `OPT_QT` - Optimized Query Tree  `OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree  `SQL` - Final SQL to be executed  `COMPRESSED_SQL` - Final SQL to be executed with rolled SQL datasets  `SETTINGS` - Settings used to execute explain request  `GIT` - Git properties of current build (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -3390,7 +3595,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**| Workspace identifier |
  **afm_execution** | [**AfmExecution**](AfmExecution.md)|  |
- **explain_type** | **str**| Requested explain type. If not specified all types are bundled in a ZIP archive.  &#x60;MAQL&#x60; - MAQL Abstract Syntax Tree, execution dimensions and related info  &#x60;GRPC_MODEL&#x60; - Datasets used in execution  &#x60;GRPC_MODEL_SVG&#x60; - Generated SVG image of the datasets  &#x60;COMPRESSED_GRPC_MODEL_SVG&#x60; - Generated SVG image of the model fragment used in the query  &#x60;WDF&#x60; - Workspace data filters in execution workspace context  &#x60;QT&#x60; - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL  &#x60;QT_SVG&#x60; - Generated SVG image of the Query Tree  &#x60;OPT_QT&#x60; - Optimized Query Tree  &#x60;OPT_QT_SVG&#x60; - Generated SVG image of the Optimized Query Tree  &#x60;SQL&#x60; - Final SQL to be executed  &#x60;COMPRESSED_SQL&#x60; - Final SQL to be executed with rolled SQL datasets  &#x60;SETTINGS&#x60; - Settings used to execute explain request | [optional]
+ **explain_type** | **str**| Requested explain type. If not specified all types are bundled in a ZIP archive.  &#x60;MAQL&#x60; - MAQL Abstract Syntax Tree, execution dimensions and related info  &#x60;GRPC_MODEL&#x60; - Datasets used in execution  &#x60;GRPC_MODEL_SVG&#x60; - Generated SVG image of the datasets  &#x60;COMPRESSED_GRPC_MODEL_SVG&#x60; - Generated SVG image of the model fragment used in the query  &#x60;WDF&#x60; - Workspace data filters in execution workspace context  &#x60;QT&#x60; - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL  &#x60;QT_SVG&#x60; - Generated SVG image of the Query Tree  &#x60;OPT_QT&#x60; - Optimized Query Tree  &#x60;OPT_QT_SVG&#x60; - Generated SVG image of the Optimized Query Tree  &#x60;SQL&#x60; - Final SQL to be executed  &#x60;COMPRESSED_SQL&#x60; - Final SQL to be executed with rolled SQL datasets  &#x60;SETTINGS&#x60; - Settings used to execute explain request  &#x60;GIT&#x60; - Git properties of current build | [optional]
 
 ### Return type
 
@@ -3572,6 +3777,80 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **generate_dashboard_summary**
+> WorkflowDashboardSummaryResponseDto generate_dashboard_summary(workspace_id, workflow_dashboard_summary_request_dto)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.workflow_dashboard_summary_request_dto import WorkflowDashboardSummaryRequestDto
+from gooddata_api_client.model.workflow_dashboard_summary_response_dto import WorkflowDashboardSummaryResponseDto
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    workflow_dashboard_summary_request_dto = WorkflowDashboardSummaryRequestDto(
+        custom_user_prompt="custom_user_prompt_example",
+        dashboard_id="dashboard_id_example",
+        key_metric_ids=[
+            "key_metric_ids_example",
+        ],
+        reference_quarter="reference_quarter_example",
+    ) # WorkflowDashboardSummaryRequestDto | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.generate_dashboard_summary(workspace_id, workflow_dashboard_summary_request_dto)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->generate_dashboard_summary: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **workflow_dashboard_summary_request_dto** | [**WorkflowDashboardSummaryRequestDto**](WorkflowDashboardSummaryRequestDto.md)|  |
+
+### Return type
+
+[**WorkflowDashboardSummaryResponseDto**](WorkflowDashboardSummaryResponseDto.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 
@@ -3790,143 +4069,6 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | LDM generated successfully. |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **generate_logical_model_aac**
-> AacLogicalModel generate_logical_model_aac(data_source_id, generate_ldm_request)
-
-Generate logical data model in AAC format from physical data model (PDM)
-
-             Generate logical data model (LDM) from physical data model (PDM) stored in data source,             returning the result in Analytics as Code (AAC) format compatible with the GoodData              VSCode extension YAML definitions.         
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.generate_ldm_request import GenerateLdmRequest
-from gooddata_api_client.model.aac_logical_model import AacLogicalModel
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-    data_source_id = "dataSourceId_example" # str | 
-    generate_ldm_request = GenerateLdmRequest(
-        aggregated_fact_prefix="aggr",
-        date_granularities="all",
-        date_reference_prefix="d",
-        denorm_prefix="dr",
-        fact_prefix="f",
-        generate_long_ids=False,
-        grain_multivalue_reference_prefix="grmr",
-        grain_prefix="gr",
-        grain_reference_prefix="grr",
-        multivalue_reference_prefix="mr",
-        pdm=PdmLdmRequest(
-            sqls=[
-                PdmSql(
-                    columns=[
-                        SqlColumn(
-                            data_type="INT",
-                            description="Customer unique identifier",
-                            name="customer_id",
-                        ),
-                    ],
-                    statement="select * from abc",
-                    title="My special dataset",
-                ),
-            ],
-            table_overrides=[
-                TableOverride(
-                    columns=[
-                        ColumnOverride(
-                            label_target_column="users",
-                            label_type="HYPERLINK",
-                            ldm_type_override="FACT",
-                            name="column_name",
-                        ),
-                    ],
-                    path=["schema","table_name"],
-                ),
-            ],
-            tables=[
-                DeclarativeTable(
-                    columns=[
-                        DeclarativeColumn(
-                            data_type="INT",
-                            description="Customer unique identifier",
-                            is_nullable=True,
-                            is_primary_key=True,
-                            name="customer_id",
-                            referenced_table_column="customer_id",
-                            referenced_table_id="customers",
-                        ),
-                    ],
-                    id="customers",
-                    name_prefix="out_gooddata",
-                    path=["table_schema","table_name"],
-                    type="TABLE",
-                ),
-            ],
-        ),
-        primary_label_prefix="pl",
-        reference_prefix="r",
-        secondary_label_prefix="ls",
-        separator="__",
-        table_prefix="out_table",
-        translation_prefix="tr",
-        view_prefix="out_view",
-        wdf_prefix="wdf",
-        workspace_id="workspace_id_example",
-    ) # GenerateLdmRequest | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        # Generate logical data model in AAC format from physical data model (PDM)
-        api_response = api_instance.generate_logical_model_aac(data_source_id, generate_ldm_request)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->generate_logical_model_aac: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **data_source_id** | **str**|  |
- **generate_ldm_request** | [**GenerateLdmRequest**](GenerateLdmRequest.md)|  |
-
-### Return type
-
-[**AacLogicalModel**](AacLogicalModel.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | LDM generated successfully in AAC format. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -5040,6 +5182,72 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved list of translation tags. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_workflow_status**
+> WorkflowStatusResponseDto get_workflow_status(workspace_id, run_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.workflow_status_response_dto import WorkflowStatusResponseDto
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    run_id = "runId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_workflow_status(workspace_id, run_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_workflow_status: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **run_id** | **str**|  |
+
+### Return type
+
+[**WorkflowStatusResponseDto**](WorkflowStatusResponseDto.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -7163,6 +7371,71 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **register_workspace_upload_notification**
+> register_workspace_upload_notification(workspace_id)
+
+Register an upload notification
+
+Notification sets up all reports to be computed again with new data.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Register an upload notification
+        api_instance.register_workspace_upload_notification(workspace_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->register_workspace_upload_notification: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | An upload notification has been successfully registered. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **resolve_all_entitlements**
 > [ApiEntitlement] resolve_all_entitlements()
 
@@ -8039,6 +8312,83 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | The result of the scan. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **scan_statistics**
+> TableStatisticsResponse scan_statistics(data_source_id, table_statistics_request)
+
+(BETA) Collect physical table and column statistics from a StarRocks data source
+
+(BETA) Reads pre-computed CBO statistics from StarRocks. Supports both internal catalog (native/PIPE tables) and external catalog (Iceberg tables). Statistics include row counts, data sizes, NDV (number of distinct values), null counts, and min/max values.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.table_statistics_request import TableStatisticsRequest
+from gooddata_api_client.model.table_statistics_response import TableStatisticsResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+    table_statistics_request = TableStatisticsRequest(
+        schemata=[
+            "schemata_example",
+        ],
+        table_names=[
+            "table_names_example",
+        ],
+    ) # TableStatisticsRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Collect physical table and column statistics from a StarRocks data source
+        api_response = api_instance.scan_statistics(data_source_id, table_statistics_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->scan_statistics: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+ **table_statistics_request** | [**TableStatisticsRequest**](TableStatisticsRequest.md)|  |
+
+### Return type
+
+[**TableStatisticsResponse**](TableStatisticsResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -9173,6 +9523,17 @@ with gooddata_api_client.ApiClient() as api_client:
                                 MeasureItem(
                                     definition=MeasureDefinition(),
                                     local_identifier="metric_1",
+                                ),
+                            ],
+                            parameters=[
+                                ParameterItem(
+                                    parameter=AfmObjectIdentifierParameter(
+                                        identifier=AfmObjectIdentifierParameterIdentifier(
+                                            id="sample_item.price",
+                                            type="parameter",
+                                        ),
+                                    ),
+                                    value="value_example",
                                 ),
                             ],
                         ),
