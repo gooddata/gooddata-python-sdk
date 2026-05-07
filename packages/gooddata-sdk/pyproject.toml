@@ -34,7 +34,7 @@ dependencies = [
     "brotli==1.2.0",
     "requests~=2.32.0",
     "python-dotenv>=1.0.0,<2.0.0",
-    "gooddata-code-convertors",
+    "gooddata-code-convertors>=11.35.0a2",
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",

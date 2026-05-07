@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **cache_strategy** | **str** | Determines how the results coming from a particular datasource should be cached. - ALWAYS: The results from the datasource should be cached normally (the default). - NEVER: The results from the datasource should never be cached. | [optional] 
 **client_id** | **str** | Id of client with permission to connect to the data source. | [optional] 
 **client_secret** | **str** | The client secret to use to connect to the database providing the data for the data source. | [optional] 
+**date_time_semantics** | **str, none_type** | Determines how datetime values are interpreted in data sources without native support for specifying this. - LOCAL: The values are assumed to be in local timezone and they are not converted to the user&#39;s timezone. - UTC: The values are assumed to be in UTC and they are converted to the user&#39;s timezone. | [optional] 
 **decoded_parameters** | [**[Parameter]**](Parameter.md) |  | [optional] 
 **parameters** | [**[Parameter]**](Parameter.md) |  | [optional] 
 **password** | **str** | Password for the data-source user, property is never returned back. | [optional] 

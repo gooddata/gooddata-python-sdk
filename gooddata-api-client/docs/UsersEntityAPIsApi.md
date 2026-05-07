@@ -49,8 +49,8 @@ with gooddata_api_client.ApiClient() as api_client:
                 lastname="lastname_example",
             ),
             id="id1",
-            relationships=JsonApiUserInRelationships(
-                user_groups=JsonApiUserGroupInRelationshipsParents(
+            relationships=JsonApiAgentInRelationships(
+                user_groups=JsonApiAgentInRelationshipsUserGroups(
                     data=JsonApiUserGroupToManyLinkage([
                         JsonApiUserGroupLinkage(
                             id="id_example",
@@ -383,8 +383,8 @@ with gooddata_api_client.ApiClient() as api_client:
                 lastname="lastname_example",
             ),
             id="id1",
-            relationships=JsonApiUserInRelationships(
-                user_groups=JsonApiUserGroupInRelationshipsParents(
+            relationships=JsonApiAgentInRelationships(
+                user_groups=JsonApiAgentInRelationshipsUserGroups(
                     data=JsonApiUserGroupToManyLinkage([
                         JsonApiUserGroupLinkage(
                             id="id_example",
@@ -489,8 +489,8 @@ with gooddata_api_client.ApiClient() as api_client:
                 lastname="lastname_example",
             ),
             id="id1",
-            relationships=JsonApiUserInRelationships(
-                user_groups=JsonApiUserGroupInRelationshipsParents(
+            relationships=JsonApiAgentInRelationships(
+                user_groups=JsonApiAgentInRelationshipsUserGroups(
                     data=JsonApiUserGroupToManyLinkage([
                         JsonApiUserGroupLinkage(
                             id="id_example",

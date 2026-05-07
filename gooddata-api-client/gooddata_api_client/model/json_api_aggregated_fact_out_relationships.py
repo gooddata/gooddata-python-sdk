@@ -32,8 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_relationships_dataset import JsonApiAggregatedFactOutRelationshipsDataset
+    from gooddata_api_client.model.json_api_aggregated_fact_out_relationships_source_attribute import JsonApiAggregatedFactOutRelationshipsSourceAttribute
     from gooddata_api_client.model.json_api_aggregated_fact_out_relationships_source_fact import JsonApiAggregatedFactOutRelationshipsSourceFact
     globals()['JsonApiAggregatedFactOutRelationshipsDataset'] = JsonApiAggregatedFactOutRelationshipsDataset
+    globals()['JsonApiAggregatedFactOutRelationshipsSourceAttribute'] = JsonApiAggregatedFactOutRelationshipsSourceAttribute
     globals()['JsonApiAggregatedFactOutRelationshipsSourceFact'] = JsonApiAggregatedFactOutRelationshipsSourceFact
 
 
@@ -91,6 +93,7 @@ class JsonApiAggregatedFactOutRelationships(ModelNormal):
         lazy_import()
         return {
             'dataset': (JsonApiAggregatedFactOutRelationshipsDataset,),  # noqa: E501
+            'source_attribute': (JsonApiAggregatedFactOutRelationshipsSourceAttribute,),  # noqa: E501
             'source_fact': (JsonApiAggregatedFactOutRelationshipsSourceFact,),  # noqa: E501
         }
 
@@ -101,6 +104,7 @@ class JsonApiAggregatedFactOutRelationships(ModelNormal):
 
     attribute_map = {
         'dataset': 'dataset',  # noqa: E501
+        'source_attribute': 'sourceAttribute',  # noqa: E501
         'source_fact': 'sourceFact',  # noqa: E501
     }
 
@@ -146,6 +150,7 @@ class JsonApiAggregatedFactOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             dataset (JsonApiAggregatedFactOutRelationshipsDataset): [optional]  # noqa: E501
+            source_attribute (JsonApiAggregatedFactOutRelationshipsSourceAttribute): [optional]  # noqa: E501
             source_fact (JsonApiAggregatedFactOutRelationshipsSourceFact): [optional]  # noqa: E501
         """
 
@@ -233,6 +238,7 @@ class JsonApiAggregatedFactOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             dataset (JsonApiAggregatedFactOutRelationshipsDataset): [optional]  # noqa: E501
+            source_attribute (JsonApiAggregatedFactOutRelationshipsSourceAttribute): [optional]  # noqa: E501
             source_fact (JsonApiAggregatedFactOutRelationshipsSourceFact): [optional]  # noqa: E501
         """
 

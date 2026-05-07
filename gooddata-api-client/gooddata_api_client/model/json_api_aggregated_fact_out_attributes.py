@@ -60,6 +60,7 @@ class JsonApiAggregatedFactOutAttributes(ModelNormal):
             'SUM': "SUM",
             'MIN': "MIN",
             'MAX': "MAX",
+            'APPROXIMATE_COUNT': "APPROXIMATE_COUNT",
         },
         ('source_column_data_type',): {
             'INT': "INT",
@@ -69,6 +70,7 @@ class JsonApiAggregatedFactOutAttributes(ModelNormal):
             'TIMESTAMP': "TIMESTAMP",
             'TIMESTAMP_TZ': "TIMESTAMP_TZ",
             'BOOLEAN': "BOOLEAN",
+            'HLL': "HLL",
         },
     }
 

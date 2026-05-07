@@ -6,7 +6,7 @@
 # raise a `RecursionError`.
 # In order to avoid this, import only the API that you directly need like:
 #
-#   from gooddata_api_client.api.aac_analytics_model_api import AACAnalyticsModelApi
+#   from gooddata_api_client.api.ai_api import AIApi
 #
 # or import this package, but before doing it, use:
 #
@@ -14,10 +14,12 @@
 #   sys.setrecursionlimit(n)
 
 # Import APIs into API package:
-from gooddata_api_client.api.aac_analytics_model_api import AACAnalyticsModelApi
-from gooddata_api_client.api.aac_logical_data_model_api import AACLogicalDataModelApi
 from gooddata_api_client.api.ai_api import AIApi
+from gooddata_api_client.api.ai_agents_api import AIAgentsApi
 from gooddata_api_client.api.ai_lake_api import AILakeApi
+from gooddata_api_client.api.ai_lake_databases_api import AILakeDatabasesApi
+from gooddata_api_client.api.ai_lake_pipe_tables_api import AILakePipeTablesApi
+from gooddata_api_client.api.ai_lake_services_operations_api import AILakeServicesOperationsApi
 from gooddata_api_client.api.api_tokens_api import APITokensApi
 from gooddata_api_client.api.analytics_model_api import AnalyticsModelApi
 from gooddata_api_client.api.appearance_api import AppearanceApi
@@ -34,6 +36,7 @@ from gooddata_api_client.api.dashboards_api import DashboardsApi
 from gooddata_api_client.api.data_filters_api import DataFiltersApi
 from gooddata_api_client.api.data_source_declarative_apis_api import DataSourceDeclarativeAPIsApi
 from gooddata_api_client.api.data_source_entity_apis_api import DataSourceEntityAPIsApi
+from gooddata_api_client.api.data_source_statistics_api import DataSourceStatisticsApi
 from gooddata_api_client.api.data_source_files_analysis_api import DataSourceFilesAnalysisApi
 from gooddata_api_client.api.data_source_files_deletion_api import DataSourceFilesDeletionApi
 from gooddata_api_client.api.data_source_files_import_api import DataSourceFilesImportApi
@@ -65,9 +68,9 @@ from gooddata_api_client.api.metrics_api import MetricsApi
 from gooddata_api_client.api.notification_channels_api import NotificationChannelsApi
 from gooddata_api_client.api.ogcapi_features_api import OGCAPIFeaturesApi
 from gooddata_api_client.api.options_api import OptionsApi
-from gooddata_api_client.api.organization_api import OrganizationApi
 from gooddata_api_client.api.organization_declarative_apis_api import OrganizationDeclarativeAPIsApi
 from gooddata_api_client.api.organization_entity_apis_api import OrganizationEntityAPIsApi
+from gooddata_api_client.api.parameters_api import ParametersApi
 from gooddata_api_client.api.permissions_api import PermissionsApi
 from gooddata_api_client.api.plugins_api import PluginsApi
 from gooddata_api_client.api.raw_export_api import RawExportApi
@@ -81,6 +84,7 @@ from gooddata_api_client.api.translations_api import TranslationsApi
 from gooddata_api_client.api.usage_api import UsageApi
 from gooddata_api_client.api.user_groups_declarative_apis_api import UserGroupsDeclarativeAPIsApi
 from gooddata_api_client.api.user_groups_entity_apis_api import UserGroupsEntityAPIsApi
+from gooddata_api_client.api.user_authorization_api import UserAuthorizationApi
 from gooddata_api_client.api.user_data_filters_api import UserDataFiltersApi
 from gooddata_api_client.api.user_identifiers_api import UserIdentifiersApi
 from gooddata_api_client.api.user_settings_api import UserSettingsApi
@@ -92,13 +96,14 @@ from gooddata_api_client.api.visualization_object_api import VisualizationObject
 from gooddata_api_client.api.workspaces_declarative_apis_api import WorkspacesDeclarativeAPIsApi
 from gooddata_api_client.api.workspaces_entity_apis_api import WorkspacesEntityAPIsApi
 from gooddata_api_client.api.workspaces_settings_api import WorkspacesSettingsApi
-from gooddata_api_client.api.aac_api import AacApi
 from gooddata_api_client.api.actions_api import ActionsApi
+from gooddata_api_client.api.agent_controller_api import AgentControllerApi
 from gooddata_api_client.api.aggregated_fact_controller_api import AggregatedFactControllerApi
 from gooddata_api_client.api.analytical_dashboard_controller_api import AnalyticalDashboardControllerApi
 from gooddata_api_client.api.api_token_controller_api import ApiTokenControllerApi
 from gooddata_api_client.api.attribute_controller_api import AttributeControllerApi
 from gooddata_api_client.api.attribute_hierarchy_controller_api import AttributeHierarchyControllerApi
+from gooddata_api_client.api.authentication_api import AuthenticationApi
 from gooddata_api_client.api.automation_controller_api import AutomationControllerApi
 from gooddata_api_client.api.automation_organization_view_controller_api import AutomationOrganizationViewControllerApi
 from gooddata_api_client.api.automation_result_controller_api import AutomationResultControllerApi
@@ -107,6 +112,7 @@ from gooddata_api_client.api.cookie_security_configuration_controller_api import
 from gooddata_api_client.api.csp_directive_controller_api import CspDirectiveControllerApi
 from gooddata_api_client.api.custom_application_setting_controller_api import CustomApplicationSettingControllerApi
 from gooddata_api_client.api.custom_geo_collection_controller_api import CustomGeoCollectionControllerApi
+from gooddata_api_client.api.custom_user_application_setting_controller_api import CustomUserApplicationSettingControllerApi
 from gooddata_api_client.api.dashboard_plugin_controller_api import DashboardPluginControllerApi
 from gooddata_api_client.api.data_source_controller_api import DataSourceControllerApi
 from gooddata_api_client.api.data_source_identifier_controller_api import DataSourceIdentifierControllerApi
@@ -131,6 +137,7 @@ from gooddata_api_client.api.notification_channel_controller_api import Notifica
 from gooddata_api_client.api.notification_channel_identifier_controller_api import NotificationChannelIdentifierControllerApi
 from gooddata_api_client.api.organization_entity_controller_api import OrganizationEntityControllerApi
 from gooddata_api_client.api.organization_setting_controller_api import OrganizationSettingControllerApi
+from gooddata_api_client.api.parameter_controller_api import ParameterControllerApi
 from gooddata_api_client.api.theme_controller_api import ThemeControllerApi
 from gooddata_api_client.api.user_controller_api import UserControllerApi
 from gooddata_api_client.api.user_data_filter_controller_api import UserDataFilterControllerApi

@@ -274,6 +274,25 @@ with gooddata_api_client.ApiClient() as api_client:
                     title="Total sales",
                 ),
             ],
+            parameters=[
+                DeclarativeParameter(
+                    content=DeclarativeParameterContent(None),
+                    created_at="2023-07-20 12:30",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    description="Rate applied to discounted items.",
+                    id="discount-rate",
+                    modified_at="2023-07-20 12:30",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    tags=["Finance"],
+                    title="Discount Rate",
+                ),
+            ],
             visualization_objects=[
                 DeclarativeVisualizationObject(
                     certification="CERTIFIED",

@@ -70,6 +70,7 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
             'TIMESTAMP': "TIMESTAMP",
             'TIMESTAMP_TZ': "TIMESTAMP_TZ",
             'BOOLEAN': "BOOLEAN",
+            'HLL': "HLL",
         },
     }
 

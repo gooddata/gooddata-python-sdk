@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **meta** | [**JsonApiAnalyticalDashboardOutMeta**](JsonApiAnalyticalDashboardOutMeta.md) |  | [optional] 
-**relationships** | [**JsonApiUserInRelationships**](JsonApiUserInRelationships.md) |  | [optional] 
+**relationships** | [**JsonApiAgentInRelationships**](JsonApiAgentInRelationships.md) |  | [optional] 
 **links** | [**ObjectLinks**](ObjectLinks.md) |  | [optional] 
 **attributes** | [**JsonApiUserInAttributes**](JsonApiUserInAttributes.md) |  | [optional] 
 **id** | **str** | API identifier of an object | [optional] 

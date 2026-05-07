@@ -346,6 +346,25 @@ with gooddata_api_client.ApiClient() as api_client:
                     title="Total sales",
                 ),
             ],
+            parameters=[
+                DeclarativeParameter(
+                    content=DeclarativeParameterContent(None),
+                    created_at="2023-07-20 12:30",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    description="Rate applied to discounted items.",
+                    id="discount-rate",
+                    modified_at="2023-07-20 12:30",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    tags=["Finance"],
+                    title="Discount Rate",
+                ),
+            ],
             visualization_objects=[
                 DeclarativeVisualizationObject(
                     certification="CERTIFIED",
@@ -400,9 +419,9 @@ with gooddata_api_client.ApiClient() as api_client:
                             null_value="0",
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
-                            source_fact_reference=DeclarativeSourceFactReference(
+                            source_fact_reference=DeclarativeSourceReference(
                                 operation="SUM",
-                                reference=FactIdentifier(
+                                reference=SourceReferenceIdentifier(
                                     id="fact_id",
                                     type="fact",
                                 ),
@@ -516,6 +535,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                     tags=["Customers"],
                     title="Customers",
+                    type="NORMAL",
                     workspace_data_filter_columns=[
                         DeclarativeWorkspaceDataFilterColumn(
                             data_type="INT",
@@ -812,6 +832,17 @@ with gooddata_api_client.ApiClient() as api_client:
                                             MeasureItem(
                                                 definition=MeasureDefinition(),
                                                 local_identifier="metric_1",
+                                            ),
+                                        ],
+                                        parameters=[
+                                            ParameterItem(
+                                                parameter=AfmObjectIdentifierParameter(
+                                                    identifier=AfmObjectIdentifierParameterIdentifier(
+                                                        id="sample_item.price",
+                                                        type="parameter",
+                                                    ),
+                                                ),
+                                                value="value_example",
                                             ),
                                         ],
                                     ),
@@ -1127,6 +1158,25 @@ with gooddata_api_client.ApiClient() as api_client:
                                 title="Total sales",
                             ),
                         ],
+                        parameters=[
+                            DeclarativeParameter(
+                                content=DeclarativeParameterContent(None),
+                                created_at="2023-07-20 12:30",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                description="Rate applied to discounted items.",
+                                id="discount-rate",
+                                modified_at="2023-07-20 12:30",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                tags=["Finance"],
+                                title="Discount Rate",
+                            ),
+                        ],
                         visualization_objects=[
                             DeclarativeVisualizationObject(
                                 certification="CERTIFIED",
@@ -1181,9 +1231,9 @@ with gooddata_api_client.ApiClient() as api_client:
                                         null_value="0",
                                         source_column="customer_order_count",
                                         source_column_data_type="NUMERIC",
-                                        source_fact_reference=DeclarativeSourceFactReference(
+                                        source_fact_reference=DeclarativeSourceReference(
                                             operation="SUM",
-                                            reference=FactIdentifier(
+                                            reference=SourceReferenceIdentifier(
                                                 id="fact_id",
                                                 type="fact",
                                             ),
@@ -1297,6 +1347,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                                 tags=["Customers"],
                                 title="Customers",
+                                type="NORMAL",
                                 workspace_data_filter_columns=[
                                     DeclarativeWorkspaceDataFilterColumn(
                                         data_type="INT",

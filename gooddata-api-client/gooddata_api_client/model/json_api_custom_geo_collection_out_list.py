@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_aggregated_fact_out_list_meta import JsonApiAggregatedFactOutListMeta
+    from gooddata_api_client.model.json_api_agent_out_list_meta import JsonApiAgentOutListMeta
     from gooddata_api_client.model.json_api_custom_geo_collection_out_with_links import JsonApiCustomGeoCollectionOutWithLinks
     from gooddata_api_client.model.list_links import ListLinks
-    globals()['JsonApiAggregatedFactOutListMeta'] = JsonApiAggregatedFactOutListMeta
+    globals()['JsonApiAgentOutListMeta'] = JsonApiAgentOutListMeta
     globals()['JsonApiCustomGeoCollectionOutWithLinks'] = JsonApiCustomGeoCollectionOutWithLinks
     globals()['ListLinks'] = ListLinks
 
@@ -96,7 +96,7 @@ class JsonApiCustomGeoCollectionOutList(ModelNormal):
         return {
             'data': ([JsonApiCustomGeoCollectionOutWithLinks],),  # noqa: E501
             'links': (ListLinks,),  # noqa: E501
-            'meta': (JsonApiAggregatedFactOutListMeta,),  # noqa: E501
+            'meta': (JsonApiAgentOutListMeta,),  # noqa: E501
         }
 
     @cached_property
@@ -155,7 +155,7 @@ class JsonApiCustomGeoCollectionOutList(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ListLinks): [optional]  # noqa: E501
-            meta (JsonApiAggregatedFactOutListMeta): [optional]  # noqa: E501
+            meta (JsonApiAgentOutListMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -246,7 +246,7 @@ class JsonApiCustomGeoCollectionOutList(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ListLinks): [optional]  # noqa: E501
-            meta (JsonApiAggregatedFactOutListMeta): [optional]  # noqa: E501
+            meta (JsonApiAgentOutListMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

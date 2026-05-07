@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **cache_strategy** | **str, none_type** | Determines how the results coming from a particular datasource should be cached. | [optional] 
 **client_id** | **str, none_type** | The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account). | [optional] 
 **client_secret** | **str, none_type** | The client secret to use to connect to the database providing the data for the data source (for example a Databricks Service Account). | [optional] 
+**date_time_semantics** | **str, none_type** | Determines how datetime values are interpreted in data sources without native support for specifying this. Only StarRocks and AI Lakehouse data sources currently support this. | [optional] 
 **name** | **str** | User-facing name of the data source. | [optional] 
 **parameters** | [**[JsonApiDataSourceInAttributesParametersInner], none_type**](JsonApiDataSourceInAttributesParametersInner.md) | Additional parameters to be used when connecting to the database providing the data for the data source. | [optional] 
 **password** | **str, none_type** | The password to use to connect to the database providing the data for the data source. | [optional] 

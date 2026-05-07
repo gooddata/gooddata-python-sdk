@@ -106,6 +106,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_strategy="ALWAYS",
                 client_id="client1234",
                 client_secret="client_secret_example",
+                date_time_semantics="LOCAL",
                 decoded_parameters=[
                     Parameter(
                         name="name_example",

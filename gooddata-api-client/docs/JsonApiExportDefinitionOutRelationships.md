@@ -6,8 +6,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **analytical_dashboard** | [**JsonApiAutomationInRelationshipsAnalyticalDashboard**](JsonApiAutomationInRelationshipsAnalyticalDashboard.md) |  | [optional] 
 **automation** | [**JsonApiAutomationResultOutRelationshipsAutomation**](JsonApiAutomationResultOutRelationshipsAutomation.md) |  | [optional] 
-**created_by** | [**JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy**](JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy.md) |  | [optional] 
-**modified_by** | [**JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy**](JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy.md) |  | [optional] 
+**created_by** | [**JsonApiAgentOutRelationshipsCreatedBy**](JsonApiAgentOutRelationshipsCreatedBy.md) |  | [optional] 
+**modified_by** | [**JsonApiAgentOutRelationshipsCreatedBy**](JsonApiAgentOutRelationshipsCreatedBy.md) |  | [optional] 
 **visualization_object** | [**JsonApiExportDefinitionInRelationshipsVisualizationObject**](JsonApiExportDefinitionInRelationshipsVisualizationObject.md) |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

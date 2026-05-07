@@ -4,8 +4,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**column** | **str** |  | 
 **target** | [**DatasetGrain**](DatasetGrain.md) |  | 
+**column** | **str** |  | [optional] 
 **data_type** | **str** |  | [optional] 
 **is_nullable** | **bool** |  | [optional] 
 **null_value** | **str** |  | [optional] 

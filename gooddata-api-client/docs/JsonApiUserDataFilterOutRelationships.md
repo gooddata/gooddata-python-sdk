@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **facts** | [**JsonApiDatasetOutRelationshipsFacts**](JsonApiDatasetOutRelationshipsFacts.md) |  | [optional] 
 **labels** | [**JsonApiAnalyticalDashboardOutRelationshipsLabels**](JsonApiAnalyticalDashboardOutRelationshipsLabels.md) |  | [optional] 
 **metrics** | [**JsonApiAnalyticalDashboardOutRelationshipsMetrics**](JsonApiAnalyticalDashboardOutRelationshipsMetrics.md) |  | [optional] 
+**parameters** | [**JsonApiAnalyticalDashboardOutRelationshipsParameters**](JsonApiAnalyticalDashboardOutRelationshipsParameters.md) |  | [optional] 
 **user** | [**JsonApiFilterViewInRelationshipsUser**](JsonApiFilterViewInRelationshipsUser.md) |  | [optional] 
 **user_group** | [**JsonApiOrganizationOutRelationshipsBootstrapUserGroup**](JsonApiOrganizationOutRelationshipsBootstrapUserGroup.md) |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]

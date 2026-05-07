@@ -39,6 +39,7 @@ def lazy_import():
     from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
     from gooddata_api_client.model.declarative_memory_item import DeclarativeMemoryItem
     from gooddata_api_client.model.declarative_metric import DeclarativeMetric
+    from gooddata_api_client.model.declarative_parameter import DeclarativeParameter
     from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
     globals()['DeclarativeAnalyticalDashboard'] = DeclarativeAnalyticalDashboard
     globals()['DeclarativeAnalyticalDashboardExtension'] = DeclarativeAnalyticalDashboardExtension
@@ -48,6 +49,7 @@ def lazy_import():
     globals()['DeclarativeFilterContext'] = DeclarativeFilterContext
     globals()['DeclarativeMemoryItem'] = DeclarativeMemoryItem
     globals()['DeclarativeMetric'] = DeclarativeMetric
+    globals()['DeclarativeParameter'] = DeclarativeParameter
     globals()['DeclarativeVisualizationObject'] = DeclarativeVisualizationObject
 
 
@@ -112,6 +114,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
             'filter_contexts': ([DeclarativeFilterContext],),  # noqa: E501
             'memory_items': ([DeclarativeMemoryItem],),  # noqa: E501
             'metrics': ([DeclarativeMetric],),  # noqa: E501
+            'parameters': ([DeclarativeParameter],),  # noqa: E501
             'visualization_objects': ([DeclarativeVisualizationObject],),  # noqa: E501
         }
 
@@ -129,6 +132,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
         'filter_contexts': 'filterContexts',  # noqa: E501
         'memory_items': 'memoryItems',  # noqa: E501
         'metrics': 'metrics',  # noqa: E501
+        'parameters': 'parameters',  # noqa: E501
         'visualization_objects': 'visualizationObjects',  # noqa: E501
     }
 
@@ -181,6 +185,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
             filter_contexts ([DeclarativeFilterContext]): A list of filter contexts available in the model.. [optional]  # noqa: E501
             memory_items ([DeclarativeMemoryItem]): A list of AI memory items available in the workspace.. [optional]  # noqa: E501
             metrics ([DeclarativeMetric]): A list of metrics available in the model.. [optional]  # noqa: E501
+            parameters ([DeclarativeParameter]): A list of parameters available in the model.. [optional]  # noqa: E501
             visualization_objects ([DeclarativeVisualizationObject]): A list of visualization objects available in the model.. [optional]  # noqa: E501
         """
 
@@ -275,6 +280,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
             filter_contexts ([DeclarativeFilterContext]): A list of filter contexts available in the model.. [optional]  # noqa: E501
             memory_items ([DeclarativeMemoryItem]): A list of AI memory items available in the workspace.. [optional]  # noqa: E501
             metrics ([DeclarativeMetric]): A list of metrics available in the model.. [optional]  # noqa: E501
+            parameters ([DeclarativeParameter]): A list of parameters available in the model.. [optional]  # noqa: E501
             visualization_objects ([DeclarativeVisualizationObject]): A list of visualization objects available in the model.. [optional]  # noqa: E501
         """
 

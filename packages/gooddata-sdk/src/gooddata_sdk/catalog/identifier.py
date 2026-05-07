@@ -15,10 +15,10 @@ from gooddata_api_client.model.declarative_notification_channel_identifier impor
 )
 from gooddata_api_client.model.declarative_user_group_identifier import DeclarativeUserGroupIdentifier
 from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
-from gooddata_api_client.model.fact_identifier import FactIdentifier
 from gooddata_api_client.model.grain_identifier import GrainIdentifier
 from gooddata_api_client.model.label_identifier import LabelIdentifier
 from gooddata_api_client.model.reference_identifier import ReferenceIdentifier
+from gooddata_api_client.model.source_reference_identifier import SourceReferenceIdentifier
 from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
 
 from gooddata_sdk.catalog.base import Base, value_in_allowed
@@ -84,12 +84,16 @@ class CatalogUserIdentifier(Base):
 
 @define(kw_only=True)
 class CatalogFactIdentifier(Base):
+    # Backed by SourceReferenceIdentifier on the API side: the backend
+    # consolidated FactIdentifier into a polymorphic identifier whose `type`
+    # is FACT or ATTRIBUTE, so a single reference shape now covers both
+    # plain facts and HLL APPROXIMATE_COUNT targets (which point at attributes).
     id: str
     type: str = field(validator=value_in_allowed)
 
     @staticmethod
-    def client_class() -> builtins.type[FactIdentifier]:
-        return FactIdentifier
+    def client_class() -> builtins.type[SourceReferenceIdentifier]:
+        return SourceReferenceIdentifier
 
 
 @define(kw_only=True)

@@ -31,16 +31,16 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_agent_in_relationships import JsonApiAgentInRelationships
     from gooddata_api_client.model.json_api_analytical_dashboard_out_meta import JsonApiAnalyticalDashboardOutMeta
     from gooddata_api_client.model.json_api_analytical_dashboard_out_with_links import JsonApiAnalyticalDashboardOutWithLinks
     from gooddata_api_client.model.json_api_user_in_attributes import JsonApiUserInAttributes
-    from gooddata_api_client.model.json_api_user_in_relationships import JsonApiUserInRelationships
     from gooddata_api_client.model.json_api_user_out_with_links import JsonApiUserOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
+    globals()['JsonApiAgentInRelationships'] = JsonApiAgentInRelationships
     globals()['JsonApiAnalyticalDashboardOutMeta'] = JsonApiAnalyticalDashboardOutMeta
     globals()['JsonApiAnalyticalDashboardOutWithLinks'] = JsonApiAnalyticalDashboardOutWithLinks
     globals()['JsonApiUserInAttributes'] = JsonApiUserInAttributes
-    globals()['JsonApiUserInRelationships'] = JsonApiUserInRelationships
     globals()['JsonApiUserOutWithLinks'] = JsonApiUserOutWithLinks
     globals()['ObjectLinks'] = ObjectLinks
 
@@ -107,7 +107,7 @@ class JsonApiFilterViewOutIncludes(ModelComposed):
         lazy_import()
         return {
             'meta': (JsonApiAnalyticalDashboardOutMeta,),  # noqa: E501
-            'relationships': (JsonApiUserInRelationships,),  # noqa: E501
+            'relationships': (JsonApiAgentInRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
             'attributes': (JsonApiUserInAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
@@ -168,7 +168,7 @@ class JsonApiFilterViewOutIncludes(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             meta (JsonApiAnalyticalDashboardOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiUserInRelationships): [optional]  # noqa: E501
+            relationships (JsonApiAgentInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
             attributes (JsonApiUserInAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
@@ -277,7 +277,7 @@ class JsonApiFilterViewOutIncludes(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             meta (JsonApiAnalyticalDashboardOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiUserInRelationships): [optional]  # noqa: E501
+            relationships (JsonApiAgentInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
             attributes (JsonApiUserInAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501

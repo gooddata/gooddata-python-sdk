@@ -47,6 +47,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_strategy="ALWAYS",
                 client_id="client_id_example",
                 client_secret="client_secret_example",
+                date_time_semantics="LOCAL",
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(
@@ -382,6 +383,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_strategy="ALWAYS",
                 client_id="client_id_example",
                 client_secret="client_secret_example",
+                date_time_semantics="LOCAL",
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(
@@ -489,6 +491,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_strategy="ALWAYS",
                 client_id="client_id_example",
                 client_secret="client_secret_example",
+                date_time_semantics="LOCAL",
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(

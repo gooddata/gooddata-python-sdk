@@ -76,6 +76,10 @@ class DeclarativeDataset(ModelNormal):
     """
 
     allowed_values = {
+        ('type',): {
+            'NORMAL': "NORMAL",
+            'AUXILIARY': "AUXILIARY",
+        },
     }
 
     validations = {
@@ -132,6 +136,7 @@ class DeclarativeDataset(ModelNormal):
             'precedence': (int,),  # noqa: E501
             'sql': (DeclarativeDatasetSql,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
+            'type': (str,),  # noqa: E501
             'workspace_data_filter_columns': ([DeclarativeWorkspaceDataFilterColumn],),  # noqa: E501
             'workspace_data_filter_references': ([DeclarativeWorkspaceDataFilterReferences],),  # noqa: E501
         }
@@ -154,6 +159,7 @@ class DeclarativeDataset(ModelNormal):
         'precedence': 'precedence',  # noqa: E501
         'sql': 'sql',  # noqa: E501
         'tags': 'tags',  # noqa: E501
+        'type': 'type',  # noqa: E501
         'workspace_data_filter_columns': 'workspaceDataFilterColumns',  # noqa: E501
         'workspace_data_filter_references': 'workspaceDataFilterReferences',  # noqa: E501
     }
@@ -171,7 +177,7 @@ class DeclarativeDataset(ModelNormal):
         Args:
             grain ([GrainIdentifier]): An array of grain identifiers.
             id (str): The Dataset ID. This ID is further used to refer to this instance of dataset.
-            references ([DeclarativeReference]): An array of references.
+            references ([DeclarativeReference]): An array of references. The semantics of `sources` depends on the dataset shape: for NORMAL→NORMAL references, `sources` is a compound foreign key to the target dataset's grain (one source per grain component, dataType-matched). For pre-aggregation datasets (NORMAL with `aggregatedFacts`), `sources` is reinterpreted as independent column→attribute mappings — one entry per source — and targets are NOT required to be grain components.
             title (str): A dataset title.
 
         Keyword Args:
@@ -205,16 +211,17 @@ class DeclarativeDataset(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            aggregated_facts ([DeclarativeAggregatedFact]): An array of aggregated facts.. [optional]  # noqa: E501
+            aggregated_facts ([DeclarativeAggregatedFact]): An array of aggregated facts. Presence makes the dataset a pre-aggregation dataset, which requires `precedence > 0` and must NOT be set on AUXILIARY datasets.. [optional]  # noqa: E501
             attributes ([DeclarativeAttribute]): An array of attributes.. [optional]  # noqa: E501
             data_source_table_id (DataSourceTableIdentifier): [optional]  # noqa: E501
             description (str): A dataset description.. [optional]  # noqa: E501
             facts ([DeclarativeFact]): An array of facts.. [optional]  # noqa: E501
-            precedence (int): Precedence used in aggregate awareness.. [optional]  # noqa: E501
+            precedence (int): Precedence used in aggregate awareness. Pre-aggregation datasets (NORMAL with `aggregatedFacts`) MUST set `precedence > 0`; non-pre-aggregation datasets MUST leave it null. Must NOT be set on AUXILIARY datasets.. [optional]  # noqa: E501
             sql (DeclarativeDatasetSql): [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
+            type (str): Dataset type. NORMAL is the standard fact/dim dataset. AUXILIARY denotes a synthetic dataset used as a reference target by pre-aggregation datasets (keystone of the aggregate-awareness design); AUX datasets must not carry `aggregatedFacts`, `sql`, `dataSourceTableId`, `workspaceDataFilterReferences` or `precedence`. Date datasets use a separate schema and are not represented by this enum.. [optional]  # noqa: E501
             workspace_data_filter_columns ([DeclarativeWorkspaceDataFilterColumn]): An array of columns which are available for match to implicit workspace data filters.. [optional]  # noqa: E501
-            workspace_data_filter_references ([DeclarativeWorkspaceDataFilterReferences]): An array of explicit workspace data filters.. [optional]  # noqa: E501
+            workspace_data_filter_references ([DeclarativeWorkspaceDataFilterReferences]): An array of explicit workspace data filters. Must NOT be set on AUXILIARY datasets.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -276,7 +283,7 @@ class DeclarativeDataset(ModelNormal):
         Args:
             grain ([GrainIdentifier]): An array of grain identifiers.
             id (str): The Dataset ID. This ID is further used to refer to this instance of dataset.
-            references ([DeclarativeReference]): An array of references.
+            references ([DeclarativeReference]): An array of references. The semantics of `sources` depends on the dataset shape: for NORMAL→NORMAL references, `sources` is a compound foreign key to the target dataset's grain (one source per grain component, dataType-matched). For pre-aggregation datasets (NORMAL with `aggregatedFacts`), `sources` is reinterpreted as independent column→attribute mappings — one entry per source — and targets are NOT required to be grain components.
             title (str): A dataset title.
 
         Keyword Args:
@@ -310,16 +317,17 @@ class DeclarativeDataset(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            aggregated_facts ([DeclarativeAggregatedFact]): An array of aggregated facts.. [optional]  # noqa: E501
+            aggregated_facts ([DeclarativeAggregatedFact]): An array of aggregated facts. Presence makes the dataset a pre-aggregation dataset, which requires `precedence > 0` and must NOT be set on AUXILIARY datasets.. [optional]  # noqa: E501
             attributes ([DeclarativeAttribute]): An array of attributes.. [optional]  # noqa: E501
             data_source_table_id (DataSourceTableIdentifier): [optional]  # noqa: E501
             description (str): A dataset description.. [optional]  # noqa: E501
             facts ([DeclarativeFact]): An array of facts.. [optional]  # noqa: E501
-            precedence (int): Precedence used in aggregate awareness.. [optional]  # noqa: E501
+            precedence (int): Precedence used in aggregate awareness. Pre-aggregation datasets (NORMAL with `aggregatedFacts`) MUST set `precedence > 0`; non-pre-aggregation datasets MUST leave it null. Must NOT be set on AUXILIARY datasets.. [optional]  # noqa: E501
             sql (DeclarativeDatasetSql): [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
+            type (str): Dataset type. NORMAL is the standard fact/dim dataset. AUXILIARY denotes a synthetic dataset used as a reference target by pre-aggregation datasets (keystone of the aggregate-awareness design); AUX datasets must not carry `aggregatedFacts`, `sql`, `dataSourceTableId`, `workspaceDataFilterReferences` or `precedence`. Date datasets use a separate schema and are not represented by this enum.. [optional]  # noqa: E501
             workspace_data_filter_columns ([DeclarativeWorkspaceDataFilterColumn]): An array of columns which are available for match to implicit workspace data filters.. [optional]  # noqa: E501
-            workspace_data_filter_references ([DeclarativeWorkspaceDataFilterReferences]): An array of explicit workspace data filters.. [optional]  # noqa: E501
+            workspace_data_filter_references ([DeclarativeWorkspaceDataFilterReferences]): An array of explicit workspace data filters. Must NOT be set on AUXILIARY datasets.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

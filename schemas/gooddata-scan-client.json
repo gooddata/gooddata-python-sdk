@@ -45,6 +45,40 @@
         ],
         "type": "object"
       },
+      "ColumnStatisticsEntry": {
+        "properties": {
+          "columnName": {
+            "type": "string"
+          },
+          "dataSize": {
+            "description": "Total data size of the column in bytes.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "max": {
+            "description": "Maximum value in the column (string-encoded).",
+            "type": "string"
+          },
+          "min": {
+            "description": "Minimum value in the column (string-encoded).",
+            "type": "string"
+          },
+          "ndv": {
+            "description": "NDV (Number of Distinct Values) — approximate cardinality of the column.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "nullCount": {
+            "description": "Number of NULL values in the column.",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "columnName"
+        ],
+        "type": "object"
+      },
       "ColumnStatisticsRequest": {
         "description": "A request to retrieve statistics for a column.",
         "properties": {
@@ -179,7 +213,8 @@
               "NUMERIC",
               "TIMESTAMP",
               "TIMESTAMP_TZ",
-              "BOOLEAN"
+              "BOOLEAN",
+              "HLL"
             ],
             "example": "INT",
             "type": "string"
@@ -495,7 +530,8 @@
               "NUMERIC",
               "TIMESTAMP",
               "TIMESTAMP_TZ",
-              "BOOLEAN"
+              "BOOLEAN",
+              "HLL"
             ],
             "example": "INT",
             "type": "string"
@@ -552,6 +588,93 @@
         ],
         "required": [
           "tableName"
+        ],
+        "type": "object"
+      },
+      "TableStatisticsEntry": {
+        "properties": {
+          "columns": {
+            "items": {
+              "$ref": "#/components/schemas/ColumnStatisticsEntry"
+            },
+            "type": "array"
+          },
+          "dataSize": {
+            "description": "Total data size of the table in bytes.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "rowCount": {
+            "description": "Total number of rows in the table.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "schemaName": {
+            "type": "string"
+          },
+          "tableName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "columns",
+          "schemaName",
+          "tableName"
+        ],
+        "type": "object"
+      },
+      "TableStatisticsRequest": {
+        "properties": {
+          "schemata": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "tableNames": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "schemata"
+        ],
+        "type": "object"
+      },
+      "TableStatisticsResponse": {
+        "properties": {
+          "tables": {
+            "items": {
+              "$ref": "#/components/schemas/TableStatisticsEntry"
+            },
+            "type": "array"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/components/schemas/TableStatisticsWarning"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "tables",
+          "warnings"
+        ],
+        "type": "object"
+      },
+      "TableStatisticsWarning": {
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "tableName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
         ],
         "type": "object"
       },
@@ -1096,6 +1219,55 @@
           "description": "Minimal permission required to use this endpoint.",
           "permissions": [
             "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/dataSources/{dataSourceId}/scanStatistics": {
+      "post": {
+        "description": "(BETA) Reads pre-computed CBO statistics from StarRocks. Supports both internal catalog (native/PIPE tables) and external catalog (Iceberg tables). Statistics include row counts, data sizes, NDV (number of distinct values), null counts, and min/max values.",
+        "operationId": "scanStatistics",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dataSourceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TableStatisticsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TableStatisticsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(BETA) Collect physical table and column statistics from a StarRocks data source",
+        "tags": [
+          "Data Source - Statistics",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permission required to scan statistics.",
+          "permissions": [
+            "USE"
           ]
         }
       }

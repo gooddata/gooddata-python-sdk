@@ -6,7 +6,6 @@ A attribute label.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Label ID. | 
-**source_column** | **str** | A name of the source column in the table. | 
 **title** | **str** | Label title. | 
 **description** | **str** | Label description. | [optional] 
 **geo_area_config** | [**GeoAreaConfig**](GeoAreaConfig.md) |  | [optional] 
@@ -14,6 +13,7 @@ Name | Type | Description | Notes
 **is_nullable** | **bool** | Flag indicating whether the associated source column allows null values. | [optional] 
 **locale** | **str** | Default label locale. | [optional] 
 **null_value** | **str** | Value used in coalesce during joins instead of null. | [optional] 
+**source_column** | **str** | A name of the source column in the table. | [optional] 
 **source_column_data_type** | **str** | A type of the source column | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 
 **translations** | [**[DeclarativeLabelTranslation]**](DeclarativeLabelTranslation.md) | Other translations. | [optional] 

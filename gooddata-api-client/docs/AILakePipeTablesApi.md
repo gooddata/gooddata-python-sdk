@@ -4,11 +4,96 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**analyze_statistics**](AILakePipeTablesApi.md#analyze_statistics) | **POST** /api/v1/ailake/database/instances/{instanceId}/analyzeStatistics | (BETA) Run ANALYZE TABLE for tables in a database instance
 [**create_ai_lake_pipe_table**](AILakePipeTablesApi.md#create_ai_lake_pipe_table) | **POST** /api/v1/ailake/database/instances/{instanceId}/pipeTables | (BETA) Create a new AI Lake pipe table
 [**delete_ai_lake_pipe_table**](AILakePipeTablesApi.md#delete_ai_lake_pipe_table) | **DELETE** /api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName} | (BETA) Delete an AI Lake pipe table
 [**get_ai_lake_pipe_table**](AILakePipeTablesApi.md#get_ai_lake_pipe_table) | **GET** /api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName} | (BETA) Get an AI Lake pipe table
 [**list_ai_lake_pipe_tables**](AILakePipeTablesApi.md#list_ai_lake_pipe_tables) | **GET** /api/v1/ailake/database/instances/{instanceId}/pipeTables | (BETA) List AI Lake pipe tables
 
+
+# **analyze_statistics**
+> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} analyze_statistics(instance_id, analyze_statistics_request)
+
+(BETA) Run ANALYZE TABLE for tables in a database instance
+
+(BETA) Collects CBO statistics for tables in a StarRocks database. Works for both internal (native/PIPE) and external (Iceberg) catalogs. If tableNames is empty, all tables are analyzed.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import ai_lake_pipe_tables_api
+from gooddata_api_client.model.analyze_statistics_request import AnalyzeStatisticsRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = ai_lake_pipe_tables_api.AILakePipeTablesApi(api_client)
+    instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
+    analyze_statistics_request = AnalyzeStatisticsRequest(
+        table_names=[
+            "table_names_example",
+        ],
+    ) # AnalyzeStatisticsRequest | 
+    operation_id = "operation-id_example" # str |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Run ANALYZE TABLE for tables in a database instance
+        api_response = api_instance.analyze_statistics(instance_id, analyze_statistics_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AILakePipeTablesApi->analyze_statistics: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (BETA) Run ANALYZE TABLE for tables in a database instance
+        api_response = api_instance.analyze_statistics(instance_id, analyze_statistics_request, operation_id=operation_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AILakePipeTablesApi->analyze_statistics: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
+ **analyze_statistics_request** | [**AnalyzeStatisticsRequest**](AnalyzeStatisticsRequest.md)|  |
+ **operation_id** | **str**|  | [optional]
+
+### Return type
+
+**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**202** | Statistics analysis scheduled. |  * operation-id -  <br>  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_ai_lake_pipe_table**
 > {str: (bool, date, datetime, dict, float, int, list, str, none_type)} create_ai_lake_pipe_table(instance_id, create_pipe_table_request)
@@ -39,6 +124,15 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = ai_lake_pipe_tables_api.AILakePipeTablesApi(api_client)
     instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
     create_pipe_table_request = CreatePipeTableRequest(
+        aggregation_overrides={
+            "key": "key_example",
+        },
+        column_expressions={
+            "key": ColumnExpression(
+                column="column_example",
+                function="HLL_HASH",
+            ),
+        },
         column_overrides={
             "key": "key_example",
         },

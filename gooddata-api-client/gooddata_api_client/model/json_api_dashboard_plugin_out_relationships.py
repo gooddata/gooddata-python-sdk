@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_certified_by import JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy
-    globals()['JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy'] = JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy
+    from gooddata_api_client.model.json_api_agent_out_relationships_created_by import JsonApiAgentOutRelationshipsCreatedBy
+    globals()['JsonApiAgentOutRelationshipsCreatedBy'] = JsonApiAgentOutRelationshipsCreatedBy
 
 
 class JsonApiDashboardPluginOutRelationships(ModelNormal):
@@ -88,8 +88,8 @@ class JsonApiDashboardPluginOutRelationships(ModelNormal):
         """
         lazy_import()
         return {
-            'created_by': (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy,),  # noqa: E501
-            'modified_by': (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy,),  # noqa: E501
+            'created_by': (JsonApiAgentOutRelationshipsCreatedBy,),  # noqa: E501
+            'modified_by': (JsonApiAgentOutRelationshipsCreatedBy,),  # noqa: E501
         }
 
     @cached_property
@@ -143,8 +143,8 @@ class JsonApiDashboardPluginOutRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            created_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
-            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
+            created_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            modified_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -230,8 +230,8 @@ class JsonApiDashboardPluginOutRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            created_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
-            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
+            created_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            modified_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -86,14 +86,18 @@ class DbtModelMetrics:
             if table_id is not None and table_id.id.lower() == table_name.lower():
                 attributes = dataset.attributes if dataset.attributes else []
                 facts = dataset.facts if dataset.facts else []
+                # `source_column` is optional on the SDK side — AUXILIARY
+                # datasets carry synthetic attributes/labels/facts with no
+                # physical column. Skip those entries here, since they have
+                # no source column to match against.
                 for attribute in attributes:
-                    if attribute.source_column.lower() == expression_entity_cmp:
+                    if attribute.source_column and attribute.source_column.lower() == expression_entity_cmp:
                         result = "label"
                     for label in attribute.labels:
-                        if label.source_column.lower() == expression_entity_cmp:
+                        if label.source_column and label.source_column.lower() == expression_entity_cmp:
                             result = "label"
                 for fact in facts:
-                    if fact.source_column.lower() == expression_entity_cmp:
+                    if fact.source_column and fact.source_column.lower() == expression_entity_cmp:
                         result = "fact"
         for date_dataset in self.ldm.ldm.date_instances:
             if date_dataset.id.lower() == expression_entity_cmp:

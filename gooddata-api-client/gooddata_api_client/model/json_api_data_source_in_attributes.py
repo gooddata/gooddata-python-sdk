@@ -95,6 +95,11 @@ class JsonApiDataSourceInAttributes(ModelNormal):
             'ALWAYS': "ALWAYS",
             'NEVER': "NEVER",
         },
+        ('date_time_semantics',): {
+            'None': None,
+            'LOCAL': "LOCAL",
+            'UTC': "UTC",
+        },
     }
 
     validations = {
@@ -165,6 +170,7 @@ class JsonApiDataSourceInAttributes(ModelNormal):
             'cache_strategy': (str, none_type,),  # noqa: E501
             'client_id': (str, none_type,),  # noqa: E501
             'client_secret': (str, none_type,),  # noqa: E501
+            'date_time_semantics': (str, none_type,),  # noqa: E501
             'parameters': ([JsonApiDataSourceInAttributesParametersInner], none_type,),  # noqa: E501
             'password': (str, none_type,),  # noqa: E501
             'private_key': (str, none_type,),  # noqa: E501
@@ -187,6 +193,7 @@ class JsonApiDataSourceInAttributes(ModelNormal):
         'cache_strategy': 'cacheStrategy',  # noqa: E501
         'client_id': 'clientId',  # noqa: E501
         'client_secret': 'clientSecret',  # noqa: E501
+        'date_time_semantics': 'dateTimeSemantics',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
         'password': 'password',  # noqa: E501
         'private_key': 'privateKey',  # noqa: E501
@@ -246,6 +253,7 @@ class JsonApiDataSourceInAttributes(ModelNormal):
             cache_strategy (str, none_type): Determines how the results coming from a particular datasource should be cached.. [optional]  # noqa: E501
             client_id (str, none_type): The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501
             client_secret (str, none_type): The client secret to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501
+            date_time_semantics (str, none_type): Determines how datetime values are interpreted in data sources without native support for specifying this. Only StarRocks and AI Lakehouse data sources currently support this.. [optional]  # noqa: E501
             parameters ([JsonApiDataSourceInAttributesParametersInner], none_type): Additional parameters to be used when connecting to the database providing the data for the data source.. [optional]  # noqa: E501
             password (str, none_type): The password to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501
             private_key (str, none_type): The private key to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501
@@ -350,6 +358,7 @@ class JsonApiDataSourceInAttributes(ModelNormal):
             cache_strategy (str, none_type): Determines how the results coming from a particular datasource should be cached.. [optional]  # noqa: E501
             client_id (str, none_type): The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501
             client_secret (str, none_type): The client secret to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501
+            date_time_semantics (str, none_type): Determines how datetime values are interpreted in data sources without native support for specifying this. Only StarRocks and AI Lakehouse data sources currently support this.. [optional]  # noqa: E501
             parameters ([JsonApiDataSourceInAttributesParametersInner], none_type): Additional parameters to be used when connecting to the database providing the data for the data source.. [optional]  # noqa: E501
             password (str, none_type): The password to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501
             private_key (str, none_type): The private key to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501

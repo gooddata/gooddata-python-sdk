@@ -1,7 +1,9 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import builtins
 from pathlib import Path
+from typing import Literal
 
 from attrs import define, field
 from gooddata_api_client.model.data_source_table_identifier import DataSourceTableIdentifier
@@ -14,7 +16,7 @@ from gooddata_api_client.model.declarative_label import DeclarativeLabel
 from gooddata_api_client.model.declarative_label_translation import DeclarativeLabelTranslation
 from gooddata_api_client.model.declarative_reference import DeclarativeReference
 from gooddata_api_client.model.declarative_reference_source import DeclarativeReferenceSource
-from gooddata_api_client.model.declarative_source_fact_reference import DeclarativeSourceFactReference
+from gooddata_api_client.model.declarative_source_reference import DeclarativeSourceReference
 from gooddata_api_client.model.declarative_workspace_data_filter_column import DeclarativeWorkspaceDataFilterColumn
 from gooddata_api_client.model.geo_area_config import GeoAreaConfig
 from gooddata_api_client.model.geo_collection_identifier import GeoCollectionIdentifier
@@ -36,6 +38,16 @@ LAYOUT_DATASETS_DIR = "datasets"
 
 @define(kw_only=True)
 class CatalogDeclarativeDataset(Base):
+    # NOTE: this single class models both NORMAL and AUXILIARY datasets, mirroring
+    # the api-client schema where the two are distinguished only by the `type`
+    # discriminator. The platform validator enforces field exclusions per type
+    # (e.g. AUXILIARY must NOT have `aggregatedFacts`, `sql`, `dataSourceTableId`,
+    # `workspaceDataFilterReferences`, or `precedence`); they are not type-checked
+    # here. TODO: optionally add typed factory constructors
+    # `CatalogDeclarativeDataset.normal(...)` / `.auxiliary(...)` that set
+    # type-appropriate defaults and reject contradictory args, giving consumers
+    # safer construction without splitting into two classes (which would diverge
+    # from the api-client one-schema-with-discriminator design).
     id: str
     title: str
     grain: list[CatalogGrainIdentifier]
@@ -48,11 +60,18 @@ class CatalogDeclarativeDataset(Base):
     data_source_table_id: CatalogDataSourceTableIdentifier | None = None
     sql: CatalogDeclarativeDatasetSql | None = None
     tags: list[str] | None = None
+    # Mirrors the api-client `DeclarativeDataset.allowed_values["type"]`. Kept as
+    # a Literal for IDE / mypy autocomplete; if the platform adds a new dataset
+    # type, regenerate the api-client and extend this Literal in lockstep.
+    type: Literal["NORMAL", "AUXILIARY"] | None = None
     workspace_data_filter_columns: list[CatalogDeclarativeWorkspaceDataFilterColumn] | None = None
     workspace_data_filter_references: list[CatalogDeclarativeWorkspaceDataFilterReferences] | None = None
 
     @staticmethod
-    def client_class() -> type[DeclarativeDataset]:
+    def client_class() -> builtins.type[DeclarativeDataset]:
+        # `builtins.type[...]` (not bare `type[...]`) because the class
+        # defines a `type: Literal[...]` field that shadows the builtin
+        # inside the class body, which trips ty.
         return DeclarativeDataset
 
     def store_to_disk(self, datasets_folder: Path, sort: bool = False) -> None:
@@ -69,8 +88,10 @@ class CatalogDeclarativeDataset(Base):
 class CatalogDeclarativeAttribute(Base):
     id: str
     title: str
-    source_column: str
-    labels: list[CatalogDeclarativeLabel]
+    # `source_column` is optional in the OpenAPI spec and must be omitted on
+    # AUXILIARY datasets, where attributes are synthetic (no physical column).
+    source_column: str | None = None
+    labels: list[CatalogDeclarativeLabel] = field(factory=list)
     source_column_data_type: str | None = None
     default_view: CatalogLabelIdentifier | None = None
     sort_column: str | None = None
@@ -91,7 +112,9 @@ class CatalogDeclarativeAttribute(Base):
 class CatalogDeclarativeFact(Base):
     id: str
     title: str
-    source_column: str
+    # Optional in the OpenAPI spec and omitted on AUXILIARY datasets, whose
+    # facts are synthetic (no physical column on the AUX itself).
+    source_column: str | None = None
     source_column_data_type: str | None = None
     description: str | None = None
     tags: list[str] | None = None
@@ -106,12 +129,15 @@ class CatalogDeclarativeFact(Base):
 
 @define(kw_only=True)
 class CatalogDeclarativeSourceFactReference(Base):
+    # Backed by DeclarativeSourceReference on the API side: the reference now
+    # accepts both FACT and ATTRIBUTE targets (the latter is required for HLL
+    # APPROXIMATE_COUNT, which aggregates over an attribute).
     operation: str
     reference: CatalogFactIdentifier
 
     @staticmethod
-    def client_class() -> type[DeclarativeSourceFactReference]:
-        return DeclarativeSourceFactReference
+    def client_class() -> type[DeclarativeSourceReference]:
+        return DeclarativeSourceReference
 
 
 @define(kw_only=True)
@@ -165,7 +191,9 @@ class CatalogDeclarativeLabelTranslation(Base):
 class CatalogDeclarativeLabel(Base):
     id: str
     title: str
-    source_column: str
+    # Optional in the OpenAPI spec; AUXILIARY datasets don't carry physical
+    # columns, so labels there must be representable without `source_column`.
+    source_column: str | None = None
     source_column_data_type: str | None = None
     description: str | None = None
     tags: list[str] | None = None

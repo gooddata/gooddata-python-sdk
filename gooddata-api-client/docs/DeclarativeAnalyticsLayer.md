@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **filter_contexts** | [**[DeclarativeFilterContext]**](DeclarativeFilterContext.md) | A list of filter contexts available in the model. | [optional] 
 **memory_items** | [**[DeclarativeMemoryItem]**](DeclarativeMemoryItem.md) | A list of AI memory items available in the workspace. | [optional] 
 **metrics** | [**[DeclarativeMetric]**](DeclarativeMetric.md) | A list of metrics available in the model. | [optional] 
+**parameters** | [**[DeclarativeParameter]**](DeclarativeParameter.md) | A list of parameters available in the model. | [optional] 
 **visualization_objects** | [**[DeclarativeVisualizationObject]**](DeclarativeVisualizationObject.md) | A list of visualization objects available in the model. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

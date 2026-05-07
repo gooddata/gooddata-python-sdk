@@ -1,0 +1,15 @@
+# TelemetryContext
+
+The telemetry context.
+
+## Properties
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**deployment_id** | **str** | Identification of the deployment. | 
+**organization_hash** | **str** | Organization hash. | 
+**user_hash** | **str** | User hash. | 
+**any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

@@ -39,6 +39,8 @@ def lazy_import():
     from gooddata_api_client.model.dashboard_date_filter_date_filter import DashboardDateFilterDateFilter
     from gooddata_api_client.model.dashboard_match_attribute_filter import DashboardMatchAttributeFilter
     from gooddata_api_client.model.dashboard_match_attribute_filter_match_attribute_filter import DashboardMatchAttributeFilterMatchAttributeFilter
+    from gooddata_api_client.model.dashboard_measure_value_filter import DashboardMeasureValueFilter
+    from gooddata_api_client.model.dashboard_measure_value_filter_measure_value_filter import DashboardMeasureValueFilterMeasureValueFilter
     globals()['DashboardArbitraryAttributeFilter'] = DashboardArbitraryAttributeFilter
     globals()['DashboardArbitraryAttributeFilterArbitraryAttributeFilter'] = DashboardArbitraryAttributeFilterArbitraryAttributeFilter
     globals()['DashboardAttributeFilter'] = DashboardAttributeFilter
@@ -47,6 +49,8 @@ def lazy_import():
     globals()['DashboardDateFilterDateFilter'] = DashboardDateFilterDateFilter
     globals()['DashboardMatchAttributeFilter'] = DashboardMatchAttributeFilter
     globals()['DashboardMatchAttributeFilterMatchAttributeFilter'] = DashboardMatchAttributeFilterMatchAttributeFilter
+    globals()['DashboardMeasureValueFilter'] = DashboardMeasureValueFilter
+    globals()['DashboardMeasureValueFilterMeasureValueFilter'] = DashboardMeasureValueFilterMeasureValueFilter
 
 
 class DashboardFilter(ModelComposed):
@@ -106,6 +110,7 @@ class DashboardFilter(ModelComposed):
             'date_filter': (DashboardDateFilterDateFilter,),  # noqa: E501
             'arbitrary_attribute_filter': (DashboardArbitraryAttributeFilterArbitraryAttributeFilter,),  # noqa: E501
             'match_attribute_filter': (DashboardMatchAttributeFilterMatchAttributeFilter,),  # noqa: E501
+            'measure_value_filter': (DashboardMeasureValueFilterMeasureValueFilter,),  # noqa: E501
         }
 
     @cached_property
@@ -118,6 +123,7 @@ class DashboardFilter(ModelComposed):
         'date_filter': 'dateFilter',  # noqa: E501
         'arbitrary_attribute_filter': 'arbitraryAttributeFilter',  # noqa: E501
         'match_attribute_filter': 'matchAttributeFilter',  # noqa: E501
+        'measure_value_filter': 'measureValueFilter',  # noqa: E501
     }
 
     read_only_vars = {
@@ -163,6 +169,7 @@ class DashboardFilter(ModelComposed):
             date_filter (DashboardDateFilterDateFilter): [optional]  # noqa: E501
             arbitrary_attribute_filter (DashboardArbitraryAttributeFilterArbitraryAttributeFilter): [optional]  # noqa: E501
             match_attribute_filter (DashboardMatchAttributeFilterMatchAttributeFilter): [optional]  # noqa: E501
+            measure_value_filter (DashboardMeasureValueFilterMeasureValueFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -270,6 +277,7 @@ class DashboardFilter(ModelComposed):
             date_filter (DashboardDateFilterDateFilter): [optional]  # noqa: E501
             arbitrary_attribute_filter (DashboardArbitraryAttributeFilterArbitraryAttributeFilter): [optional]  # noqa: E501
             match_attribute_filter (DashboardMatchAttributeFilterMatchAttributeFilter): [optional]  # noqa: E501
+            measure_value_filter (DashboardMeasureValueFilterMeasureValueFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -345,5 +353,6 @@ class DashboardFilter(ModelComposed):
               DashboardAttributeFilter,
               DashboardDateFilter,
               DashboardMatchAttributeFilter,
+              DashboardMeasureValueFilter,
           ],
         }

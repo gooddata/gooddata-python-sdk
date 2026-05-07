@@ -70,6 +70,7 @@ class DeclarativeLabel(ModelNormal):
             'TIMESTAMP': "TIMESTAMP",
             'TIMESTAMP_TZ': "TIMESTAMP_TZ",
             'BOOLEAN': "BOOLEAN",
+            'HLL': "HLL",
         },
         ('value_type',): {
             'TEXT': "TEXT",
@@ -90,14 +91,14 @@ class DeclarativeLabel(ModelNormal):
                 'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
-        ('source_column',): {
-            'max_length': 255,
-        },
         ('title',): {
             'max_length': 255,
         },
         ('description',): {
             'max_length': 10000,
+        },
+        ('source_column',): {
+            'max_length': 255,
         },
         ('source_column_data_type',): {
             'max_length': 255,
@@ -130,7 +131,6 @@ class DeclarativeLabel(ModelNormal):
         lazy_import()
         return {
             'id': (str,),  # noqa: E501
-            'source_column': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'geo_area_config': (GeoAreaConfig,),  # noqa: E501
@@ -138,6 +138,7 @@ class DeclarativeLabel(ModelNormal):
             'is_nullable': (bool,),  # noqa: E501
             'locale': (str,),  # noqa: E501
             'null_value': (str,),  # noqa: E501
+            'source_column': (str,),  # noqa: E501
             'source_column_data_type': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'translations': ([DeclarativeLabelTranslation],),  # noqa: E501
@@ -151,7 +152,6 @@ class DeclarativeLabel(ModelNormal):
 
     attribute_map = {
         'id': 'id',  # noqa: E501
-        'source_column': 'sourceColumn',  # noqa: E501
         'title': 'title',  # noqa: E501
         'description': 'description',  # noqa: E501
         'geo_area_config': 'geoAreaConfig',  # noqa: E501
@@ -159,6 +159,7 @@ class DeclarativeLabel(ModelNormal):
         'is_nullable': 'isNullable',  # noqa: E501
         'locale': 'locale',  # noqa: E501
         'null_value': 'nullValue',  # noqa: E501
+        'source_column': 'sourceColumn',  # noqa: E501
         'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'translations': 'translations',  # noqa: E501
@@ -172,12 +173,11 @@ class DeclarativeLabel(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, source_column, title, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, title, *args, **kwargs):  # noqa: E501
         """DeclarativeLabel - a model defined in OpenAPI
 
         Args:
             id (str): Label ID.
-            source_column (str): A name of the source column in the table.
             title (str): Label title.
 
         Keyword Args:
@@ -217,6 +217,7 @@ class DeclarativeLabel(ModelNormal):
             is_nullable (bool): Flag indicating whether the associated source column allows null values.. [optional]  # noqa: E501
             locale (str): Default label locale.. [optional]  # noqa: E501
             null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
+            source_column (str): A name of the source column in the table.. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
             translations ([DeclarativeLabelTranslation]): Other translations.. [optional]  # noqa: E501
@@ -253,7 +254,6 @@ class DeclarativeLabel(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.id = id
-        self.source_column = source_column
         self.title = title
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -275,12 +275,11 @@ class DeclarativeLabel(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, source_column, title, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, title, *args, **kwargs):  # noqa: E501
         """DeclarativeLabel - a model defined in OpenAPI
 
         Args:
             id (str): Label ID.
-            source_column (str): A name of the source column in the table.
             title (str): Label title.
 
         Keyword Args:
@@ -320,6 +319,7 @@ class DeclarativeLabel(ModelNormal):
             is_nullable (bool): Flag indicating whether the associated source column allows null values.. [optional]  # noqa: E501
             locale (str): Default label locale.. [optional]  # noqa: E501
             null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
+            source_column (str): A name of the source column in the table.. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
             translations ([DeclarativeLabelTranslation]): Other translations.. [optional]  # noqa: E501
@@ -354,7 +354,6 @@ class DeclarativeLabel(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.id = id
-        self.source_column = source_column
         self.title = title
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

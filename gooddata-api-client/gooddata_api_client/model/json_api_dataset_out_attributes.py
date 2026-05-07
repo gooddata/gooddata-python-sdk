@@ -71,6 +71,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
         ('type',): {
             'NORMAL': "NORMAL",
             'DATE': "DATE",
+            'AUXILIARY': "AUXILIARY",
         },
     }
 
