@@ -137,7 +137,12 @@ from gooddata_sdk.catalog.organization.layout.notification_channel import (
     CatalogDeclarativeNotificationChannel,
     CatalogWebhook,
 )
-from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
+from gooddata_sdk.catalog.organization.service import (
+    HLL_TYPE_SETTING_ID,
+    HLL_TYPE_SETTING_TYPE,
+    CatalogOrganizationService,
+    HLLType,
+)
 from gooddata_sdk.catalog.permission.declarative_model.dashboard_assignees import (
     CatalogAvailableAssignees,
     CatalogUserAssignee,

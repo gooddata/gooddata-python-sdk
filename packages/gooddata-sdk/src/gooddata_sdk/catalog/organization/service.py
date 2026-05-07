@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import functools
-from typing import Any
+from typing import Any, Literal
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.declarative_export_templates import DeclarativeExportTemplates
@@ -34,6 +34,16 @@ from gooddata_sdk.catalog.organization.layout.identity_provider import CatalogDe
 from gooddata_sdk.catalog.organization.layout.notification_channel import CatalogDeclarativeNotificationChannel
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.utils import load_all_entities, load_all_entities_dict
+
+# Org-level setting controlling which HLL function family calcique uses when
+# generating SQL over HLL synopses. `Native` (default) emits StarRocks-native
+# `HLL_*` functions; `Presto` emits the Presto-compatible HLL function family
+# and assumes the StarRocks deployment carries the Presto HLL UDFs. Pick
+# `Presto` when synopses are produced by an upstream Presto pipeline (the
+# binary layout / hash family differ between the two).
+HLLType = Literal["Native", "Presto"]
+HLL_TYPE_SETTING_ID = "hyperLogLogType"
+HLL_TYPE_SETTING_TYPE = "HLL_TYPE"
 
 
 class CatalogOrganizationService(CatalogServiceBase):
@@ -216,6 +226,40 @@ class CatalogOrganizationService(CatalogServiceBase):
                 f"Can not delete {organization_setting_id} organization setting. "
                 f"This organization setting does not exist."
             )
+
+    def set_hll_type(self, value: HLLType) -> None:
+        """Set the organization-level HyperLogLog function family.
+
+        Idempotent: creates the `hyperLogLogType` setting if missing,
+        otherwise updates the existing one. The platform exposes this as
+        the `HLL_TYPE` org setting (gdc-nas `HLL_TYPE("hyperLogLogType",
+        SettingConfiguration.HyperLogLogType)`).
+
+        Args:
+            value: `"Native"` for StarRocks-native HLL functions (default
+                on the platform side), or `"Presto"` for Presto-compatible
+                HLL functions (use when synopses come from a Presto
+                pipeline; requires the Presto HLL UDFs registered in
+                StarRocks).
+        """
+        setting = CatalogOrganizationSetting.init(
+            setting_id=HLL_TYPE_SETTING_ID,
+            setting_type=HLL_TYPE_SETTING_TYPE,
+            content={"value": value},
+        )
+        try:
+            self.update_organization_setting(setting)
+        except ValueError:
+            self.create_organization_setting(setting)
+
+    def get_hll_type(self) -> HLLType | None:
+        """Return the current `hyperLogLogType` value, or `None` if unset."""
+        try:
+            setting = self.get_organization_setting(HLL_TYPE_SETTING_ID)
+        except NotFoundException:
+            return None
+        value = setting.attributes.content.get("value")
+        return value if value in ("Native", "Presto") else None
 
     def update_organization_setting(self, organization_setting: CatalogOrganizationSetting) -> None:
         """Update an organization setting.
