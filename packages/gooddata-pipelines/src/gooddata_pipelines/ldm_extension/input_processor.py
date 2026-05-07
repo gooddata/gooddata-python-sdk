@@ -155,6 +155,49 @@ class LdmExtensionDataProcessor:
         )
 
     @staticmethod
+    def _build_parent_reference_sources(
+        definition: CustomDatasetDefinition,
+    ) -> list[CatalogDeclarativeReferenceSource]:
+        """Resolve the list of parent reference sources.
+
+        Precedence:
+        * If ``parent_dataset_references`` is set and non-empty, use it as-is.
+        * Otherwise fall back to the legacy single-column fields wrapped in a
+          one-element list. Missing legacy fields yield an empty list, which
+          will be rejected downstream by the GoodData API.
+        """
+        if definition.parent_dataset_references:
+            return [
+                CatalogDeclarativeReferenceSource(
+                    column=ref.source_column,
+                    data_type=ref.data_type.value,
+                    target=CatalogGrainIdentifier(
+                        id=ref.attribute_id,
+                        type=CustomFieldType.ATTRIBUTE.value,
+                    ),
+                )
+                for ref in definition.parent_dataset_references
+            ]
+
+        if (
+            definition.dataset_reference_source_column is not None
+            and definition.dataset_reference_source_column_data_type is not None
+            and definition.parent_dataset_reference_attribute_id is not None
+        ):
+            return [
+                CatalogDeclarativeReferenceSource(
+                    column=definition.dataset_reference_source_column,
+                    data_type=definition.dataset_reference_source_column_data_type.value,
+                    target=CatalogGrainIdentifier(
+                        id=definition.parent_dataset_reference_attribute_id,
+                        type=CustomFieldType.ATTRIBUTE.value,
+                    ),
+                )
+            ]
+
+        return []
+
+    @staticmethod
     def _get_sources(
         dataset: CustomDataset,
     ) -> tuple[
@@ -253,6 +296,41 @@ class LdmExtensionDataProcessor:
             # Get the data source info
             dataset_source_table_id, dataset_sql = self._get_sources(dataset)
 
+            # Build the parent reference source list. The composite-friendly
+            # `parent_dataset_references` list takes precedence when set and
+            # non-empty; otherwise fall back to the legacy single-column fields.
+            parent_reference_sources = self._build_parent_reference_sources(
+                dataset.definition
+            )
+
+            # Workspace data filter fields are optional and must be set together
+            # (validated on the input model). Emit columns/references only when
+            # both are provided.
+            wdf_columns: list[CatalogDeclarativeWorkspaceDataFilterColumn] = []
+            wdf_references: list[
+                CatalogDeclarativeWorkspaceDataFilterReferences
+            ] = []
+            if (
+                dataset.definition.workspace_data_filter_id is not None
+                and dataset.definition.workspace_data_filter_column_name
+                is not None
+            ):
+                wdf_columns.append(
+                    CatalogDeclarativeWorkspaceDataFilterColumn(
+                        name=dataset.definition.workspace_data_filter_column_name,
+                        data_type=ColumnDataType.STRING.value,
+                    )
+                )
+                wdf_references.append(
+                    CatalogDeclarativeWorkspaceDataFilterReferences(
+                        filter_id=CatalogDatasetWorkspaceDataFilterIdentifier(
+                            id=dataset.definition.workspace_data_filter_id
+                        ),
+                        filter_column=dataset.definition.workspace_data_filter_column_name,
+                        filter_column_data_type=ColumnDataType.STRING.value,
+                    )
+                )
+
             # Construct the declarative dataset object and append it to the list.
             declarative_datasets.append(
                 CatalogDeclarativeDataset(
@@ -265,16 +343,7 @@ class LdmExtensionDataProcessor:
                                 id=dataset.definition.parent_dataset_reference,
                             ),
                             multivalue=True,
-                            sources=[
-                                CatalogDeclarativeReferenceSource(
-                                    column=dataset.definition.dataset_reference_source_column,
-                                    data_type=dataset.definition.dataset_reference_source_column_data_type.value,
-                                    target=CatalogGrainIdentifier(
-                                        id=dataset.definition.parent_dataset_reference_attribute_id,
-                                        type=CustomFieldType.ATTRIBUTE.value,
-                                    ),
-                                )
-                            ],
+                            sources=parent_reference_sources,
                         ),
                     ]
                     + date_references,
@@ -283,21 +352,8 @@ class LdmExtensionDataProcessor:
                     facts=facts,
                     data_source_table_id=dataset_source_table_id,
                     sql=dataset_sql,
-                    workspace_data_filter_columns=[
-                        CatalogDeclarativeWorkspaceDataFilterColumn(
-                            name=dataset.definition.workspace_data_filter_column_name,
-                            data_type=ColumnDataType.STRING.value,
-                        )
-                    ],
-                    workspace_data_filter_references=[
-                        CatalogDeclarativeWorkspaceDataFilterReferences(
-                            filter_id=CatalogDatasetWorkspaceDataFilterIdentifier(
-                                id=dataset.definition.workspace_data_filter_id
-                            ),
-                            filter_column=dataset.definition.workspace_data_filter_column_name,
-                            filter_column_data_type=ColumnDataType.STRING.value,
-                        )
-                    ],
+                    workspace_data_filter_columns=wdf_columns or None,
+                    workspace_data_filter_references=wdf_references or None,
                     tags=_effective_dataset_tags(dataset.definition),
                 )
             )
