@@ -68,6 +68,7 @@ class DeclarativeReferenceSource(ModelNormal):
             'TIMESTAMP': "TIMESTAMP",
             'TIMESTAMP_TZ': "TIMESTAMP_TZ",
             'BOOLEAN': "BOOLEAN",
+            'HLL': "HLL",
         },
     }
 
@@ -103,8 +104,8 @@ class DeclarativeReferenceSource(ModelNormal):
         """
         lazy_import()
         return {
-            'column': (str,),  # noqa: E501
             'target': (GrainIdentifier,),  # noqa: E501
+            'column': (str,),  # noqa: E501
             'data_type': (str,),  # noqa: E501
             'is_nullable': (bool,),  # noqa: E501
             'null_value': (str,),  # noqa: E501
@@ -116,8 +117,8 @@ class DeclarativeReferenceSource(ModelNormal):
 
 
     attribute_map = {
-        'column': 'column',  # noqa: E501
         'target': 'target',  # noqa: E501
+        'column': 'column',  # noqa: E501
         'data_type': 'dataType',  # noqa: E501
         'is_nullable': 'isNullable',  # noqa: E501
         'null_value': 'nullValue',  # noqa: E501
@@ -130,11 +131,10 @@ class DeclarativeReferenceSource(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, column, target, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, target, *args, **kwargs):  # noqa: E501
         """DeclarativeReferenceSource - a model defined in OpenAPI
 
         Args:
-            column (str): A name of the source column in the table.
             target (GrainIdentifier):
 
         Keyword Args:
@@ -168,6 +168,7 @@ class DeclarativeReferenceSource(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            column (str): A name of the source column in the table.. [optional]  # noqa: E501
             data_type (str): A type of the source column.. [optional]  # noqa: E501
             is_nullable (bool): Flag indicating whether the associated source column allows null values.. [optional]  # noqa: E501
             null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
@@ -202,7 +203,6 @@ class DeclarativeReferenceSource(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.column = column
         self.target = target
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -224,11 +224,10 @@ class DeclarativeReferenceSource(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, column, target, *args, **kwargs):  # noqa: E501
+    def __init__(self, target, *args, **kwargs):  # noqa: E501
         """DeclarativeReferenceSource - a model defined in OpenAPI
 
         Args:
-            column (str): A name of the source column in the table.
             target (GrainIdentifier):
 
         Keyword Args:
@@ -262,6 +261,7 @@ class DeclarativeReferenceSource(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            column (str): A name of the source column in the table.. [optional]  # noqa: E501
             data_type (str): A type of the source column.. [optional]  # noqa: E501
             is_nullable (bool): Flag indicating whether the associated source column allows null values.. [optional]  # noqa: E501
             null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
@@ -294,7 +294,6 @@ class DeclarativeReferenceSource(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.column = column
         self.target = target
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

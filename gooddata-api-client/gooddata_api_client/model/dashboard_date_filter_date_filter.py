@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.aac_dashboard_filter_from import AacDashboardFilterFrom
+    from gooddata_api_client.model.dashboard_date_filter_date_filter_from import DashboardDateFilterDateFilterFrom
     from gooddata_api_client.model.identifier_ref import IdentifierRef
     from gooddata_api_client.model.relative_bounded_date_filter import RelativeBoundedDateFilter
-    globals()['AacDashboardFilterFrom'] = AacDashboardFilterFrom
+    globals()['DashboardDateFilterDateFilterFrom'] = DashboardDateFilterDateFilterFrom
     globals()['IdentifierRef'] = IdentifierRef
     globals()['RelativeBoundedDateFilter'] = RelativeBoundedDateFilter
 
@@ -135,9 +135,9 @@ class DashboardDateFilterDateFilter(ModelNormal):
             'bounded_filter': (RelativeBoundedDateFilter,),  # noqa: E501
             'data_set': (IdentifierRef,),  # noqa: E501
             'empty_value_handling': (str,),  # noqa: E501
-            '_from': (AacDashboardFilterFrom,),  # noqa: E501
+            '_from': (DashboardDateFilterDateFilterFrom,),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
-            'to': (AacDashboardFilterFrom,),  # noqa: E501
+            'to': (DashboardDateFilterDateFilterFrom,),  # noqa: E501
         }
 
     @cached_property
@@ -206,9 +206,9 @@ class DashboardDateFilterDateFilter(ModelNormal):
             bounded_filter (RelativeBoundedDateFilter): [optional]  # noqa: E501
             data_set (IdentifierRef): [optional]  # noqa: E501
             empty_value_handling (str): [optional]  # noqa: E501
-            _from (AacDashboardFilterFrom): [optional]  # noqa: E501
+            _from (DashboardDateFilterDateFilterFrom): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
-            to (AacDashboardFilterFrom): [optional]  # noqa: E501
+            to (DashboardDateFilterDateFilterFrom): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -304,9 +304,9 @@ class DashboardDateFilterDateFilter(ModelNormal):
             bounded_filter (RelativeBoundedDateFilter): [optional]  # noqa: E501
             data_set (IdentifierRef): [optional]  # noqa: E501
             empty_value_handling (str): [optional]  # noqa: E501
-            _from (AacDashboardFilterFrom): [optional]  # noqa: E501
+            _from (DashboardDateFilterDateFilterFrom): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
-            to (AacDashboardFilterFrom): [optional]  # noqa: E501
+            to (DashboardDateFilterDateFilterFrom): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

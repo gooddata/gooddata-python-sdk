@@ -1,6 +1,6 @@
 # DeclarativeDatasetSql
 
-SQL defining this dataset.
+SQL defining this dataset. Must NOT be set on AUXILIARY datasets.
 
 ## Properties
 Name | Type | Description | Notes

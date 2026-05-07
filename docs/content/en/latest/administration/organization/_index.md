@@ -16,6 +16,8 @@ See [Manage Organizations](https://www.gooddata.ai/docs/cloud/manage-deployment/
 * [delete_jwk](./delete_jwk/)
 * [get_jwk](./get_jwk/)
 * [list_jwks](./list_jwks/)
+* [set_hll_type](./set_hll_type/)
+* [get_hll_type](./get_hll_type/)
 
 ## Example
 

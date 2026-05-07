@@ -22,6 +22,7 @@ from gooddata_api_client.model_utils import (  # noqa: F401
     none_type,
     validate_and_convert_types
 )
+from gooddata_api_client.model.analyze_statistics_request import AnalyzeStatisticsRequest
 from gooddata_api_client.model.create_pipe_table_request import CreatePipeTableRequest
 from gooddata_api_client.model.list_pipe_tables_response import ListPipeTablesResponse
 from gooddata_api_client.model.pipe_table import PipeTable
@@ -38,6 +39,67 @@ class AILakePipeTablesApi(object):
         if api_client is None:
             api_client = ApiClient()
         self.api_client = api_client
+        self.analyze_statistics_endpoint = _Endpoint(
+            settings={
+                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                'auth': [],
+                'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/analyzeStatistics',
+                'operation_id': 'analyze_statistics',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'instance_id',
+                    'analyze_statistics_request',
+                    'operation_id',
+                ],
+                'required': [
+                    'instance_id',
+                    'analyze_statistics_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'instance_id':
+                        (str,),
+                    'analyze_statistics_request':
+                        (AnalyzeStatisticsRequest,),
+                    'operation_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'instance_id': 'instanceId',
+                    'operation_id': 'operation-id',
+                },
+                'location_map': {
+                    'instance_id': 'path',
+                    'analyze_statistics_request': 'body',
+                    'operation_id': 'header',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
         self.create_ai_lake_pipe_table_endpoint = _Endpoint(
             settings={
                 'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
@@ -263,6 +325,94 @@ class AILakePipeTablesApi(object):
             },
             api_client=api_client
         )
+
+    def analyze_statistics(
+        self,
+        instance_id,
+        analyze_statistics_request,
+        **kwargs
+    ):
+        """(BETA) Run ANALYZE TABLE for tables in a database instance  # noqa: E501
+
+        (BETA) Collects CBO statistics for tables in a StarRocks database. Works for both internal (native/PIPE) and external (Iceberg) catalogs. If tableNames is empty, all tables are analyzed.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.analyze_statistics(instance_id, analyze_statistics_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
+            analyze_statistics_request (AnalyzeStatisticsRequest):
+
+        Keyword Args:
+            operation_id (str): [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['instance_id'] = \
+            instance_id
+        kwargs['analyze_statistics_request'] = \
+            analyze_statistics_request
+        return self.analyze_statistics_endpoint.call_with_http_info(**kwargs)
 
     def create_ai_lake_pipe_table(
         self,

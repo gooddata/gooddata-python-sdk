@@ -39,6 +39,7 @@ def lazy_import():
     from gooddata_api_client.model.json_api_label_out_with_links import JsonApiLabelOutWithLinks
     from gooddata_api_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
     from gooddata_api_client.model.json_api_metric_out_with_links import JsonApiMetricOutWithLinks
+    from gooddata_api_client.model.json_api_parameter_out_with_links import JsonApiParameterOutWithLinks
     from gooddata_api_client.model.json_api_user_identifier_out_with_links import JsonApiUserIdentifierOutWithLinks
     from gooddata_api_client.model.json_api_visualization_object_out_attributes import JsonApiVisualizationObjectOutAttributes
     from gooddata_api_client.model.json_api_visualization_object_out_with_links import JsonApiVisualizationObjectOutWithLinks
@@ -51,6 +52,7 @@ def lazy_import():
     globals()['JsonApiLabelOutWithLinks'] = JsonApiLabelOutWithLinks
     globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
     globals()['JsonApiMetricOutWithLinks'] = JsonApiMetricOutWithLinks
+    globals()['JsonApiParameterOutWithLinks'] = JsonApiParameterOutWithLinks
     globals()['JsonApiUserIdentifierOutWithLinks'] = JsonApiUserIdentifierOutWithLinks
     globals()['JsonApiVisualizationObjectOutAttributes'] = JsonApiVisualizationObjectOutAttributes
     globals()['JsonApiVisualizationObjectOutWithLinks'] = JsonApiVisualizationObjectOutWithLinks
@@ -371,6 +373,7 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
               JsonApiFilterContextOutWithLinks,
               JsonApiLabelOutWithLinks,
               JsonApiMetricOutWithLinks,
+              JsonApiParameterOutWithLinks,
               JsonApiUserIdentifierOutWithLinks,
               JsonApiVisualizationObjectOutWithLinks,
           ],

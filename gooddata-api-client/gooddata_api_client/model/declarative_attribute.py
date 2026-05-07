@@ -74,6 +74,7 @@ class DeclarativeAttribute(ModelNormal):
             'TIMESTAMP': "TIMESTAMP",
             'TIMESTAMP_TZ': "TIMESTAMP_TZ",
             'BOOLEAN': "BOOLEAN",
+            'HLL': "HLL",
         },
     }
 
@@ -83,9 +84,6 @@ class DeclarativeAttribute(ModelNormal):
                 'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
-        ('source_column',): {
-            'max_length': 255,
-        },
         ('title',): {
             'max_length': 255,
         },
@@ -93,6 +91,9 @@ class DeclarativeAttribute(ModelNormal):
             'max_length': 10000,
         },
         ('sort_column',): {
+            'max_length': 255,
+        },
+        ('source_column',): {
             'max_length': 255,
         },
         ('source_column_data_type',): {
@@ -127,7 +128,6 @@ class DeclarativeAttribute(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'labels': ([DeclarativeLabel],),  # noqa: E501
-            'source_column': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
             'default_view': (LabelIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
@@ -137,6 +137,7 @@ class DeclarativeAttribute(ModelNormal):
             'null_value': (str,),  # noqa: E501
             'sort_column': (str,),  # noqa: E501
             'sort_direction': (str,),  # noqa: E501
+            'source_column': (str,),  # noqa: E501
             'source_column_data_type': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
         }
@@ -149,7 +150,6 @@ class DeclarativeAttribute(ModelNormal):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'labels': 'labels',  # noqa: E501
-        'source_column': 'sourceColumn',  # noqa: E501
         'title': 'title',  # noqa: E501
         'default_view': 'defaultView',  # noqa: E501
         'description': 'description',  # noqa: E501
@@ -159,6 +159,7 @@ class DeclarativeAttribute(ModelNormal):
         'null_value': 'nullValue',  # noqa: E501
         'sort_column': 'sortColumn',  # noqa: E501
         'sort_direction': 'sortDirection',  # noqa: E501
+        'source_column': 'sourceColumn',  # noqa: E501
         'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
         'tags': 'tags',  # noqa: E501
     }
@@ -170,13 +171,12 @@ class DeclarativeAttribute(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, labels, source_column, title, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, labels, title, *args, **kwargs):  # noqa: E501
         """DeclarativeAttribute - a model defined in OpenAPI
 
         Args:
             id (str): Attribute ID.
             labels ([DeclarativeLabel]): An array of attribute labels.
-            source_column (str): A name of the source column that is the primary label
             title (str): Attribute title.
 
         Keyword Args:
@@ -218,6 +218,7 @@ class DeclarativeAttribute(ModelNormal):
             null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
             sort_column (str): Attribute sort column.. [optional]  # noqa: E501
             sort_direction (str): Attribute sort direction.. [optional]  # noqa: E501
+            source_column (str): A name of the source column that is the primary label. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
@@ -253,7 +254,6 @@ class DeclarativeAttribute(ModelNormal):
 
         self.id = id
         self.labels = labels
-        self.source_column = source_column
         self.title = title
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -275,13 +275,12 @@ class DeclarativeAttribute(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, labels, source_column, title, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, labels, title, *args, **kwargs):  # noqa: E501
         """DeclarativeAttribute - a model defined in OpenAPI
 
         Args:
             id (str): Attribute ID.
             labels ([DeclarativeLabel]): An array of attribute labels.
-            source_column (str): A name of the source column that is the primary label
             title (str): Attribute title.
 
         Keyword Args:
@@ -323,6 +322,7 @@ class DeclarativeAttribute(ModelNormal):
             null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
             sort_column (str): Attribute sort column.. [optional]  # noqa: E501
             sort_direction (str): Attribute sort direction.. [optional]  # noqa: E501
+            source_column (str): A name of the source column that is the primary label. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
@@ -356,7 +356,6 @@ class DeclarativeAttribute(ModelNormal):
 
         self.id = id
         self.labels = labels
-        self.source_column = source_column
         self.title = title
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

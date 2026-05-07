@@ -31,21 +31,23 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_agent_out_relationships_created_by import JsonApiAgentOutRelationshipsCreatedBy
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_analytical_dashboards import JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards
-    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_certified_by import JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_dashboard_plugins import JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_datasets import JsonApiAnalyticalDashboardOutRelationshipsDatasets
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_filter_contexts import JsonApiAnalyticalDashboardOutRelationshipsFilterContexts
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_labels import JsonApiAnalyticalDashboardOutRelationshipsLabels
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_metrics import JsonApiAnalyticalDashboardOutRelationshipsMetrics
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_parameters import JsonApiAnalyticalDashboardOutRelationshipsParameters
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_visualization_objects import JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects
+    globals()['JsonApiAgentOutRelationshipsCreatedBy'] = JsonApiAgentOutRelationshipsCreatedBy
     globals()['JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards'] = JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards
-    globals()['JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy'] = JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy
     globals()['JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins'] = JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins
     globals()['JsonApiAnalyticalDashboardOutRelationshipsDatasets'] = JsonApiAnalyticalDashboardOutRelationshipsDatasets
     globals()['JsonApiAnalyticalDashboardOutRelationshipsFilterContexts'] = JsonApiAnalyticalDashboardOutRelationshipsFilterContexts
     globals()['JsonApiAnalyticalDashboardOutRelationshipsLabels'] = JsonApiAnalyticalDashboardOutRelationshipsLabels
     globals()['JsonApiAnalyticalDashboardOutRelationshipsMetrics'] = JsonApiAnalyticalDashboardOutRelationshipsMetrics
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsParameters'] = JsonApiAnalyticalDashboardOutRelationshipsParameters
     globals()['JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects'] = JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects
 
 
@@ -103,14 +105,15 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
         lazy_import()
         return {
             'analytical_dashboards': (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards,),  # noqa: E501
-            'certified_by': (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy,),  # noqa: E501
-            'created_by': (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy,),  # noqa: E501
+            'certified_by': (JsonApiAgentOutRelationshipsCreatedBy,),  # noqa: E501
+            'created_by': (JsonApiAgentOutRelationshipsCreatedBy,),  # noqa: E501
             'dashboard_plugins': (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins,),  # noqa: E501
             'datasets': (JsonApiAnalyticalDashboardOutRelationshipsDatasets,),  # noqa: E501
             'filter_contexts': (JsonApiAnalyticalDashboardOutRelationshipsFilterContexts,),  # noqa: E501
             'labels': (JsonApiAnalyticalDashboardOutRelationshipsLabels,),  # noqa: E501
             'metrics': (JsonApiAnalyticalDashboardOutRelationshipsMetrics,),  # noqa: E501
-            'modified_by': (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy,),  # noqa: E501
+            'modified_by': (JsonApiAgentOutRelationshipsCreatedBy,),  # noqa: E501
+            'parameters': (JsonApiAnalyticalDashboardOutRelationshipsParameters,),  # noqa: E501
             'visualization_objects': (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects,),  # noqa: E501
         }
 
@@ -129,6 +132,7 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
         'labels': 'labels',  # noqa: E501
         'metrics': 'metrics',  # noqa: E501
         'modified_by': 'modifiedBy',  # noqa: E501
+        'parameters': 'parameters',  # noqa: E501
         'visualization_objects': 'visualizationObjects',  # noqa: E501
     }
 
@@ -174,14 +178,15 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             analytical_dashboards (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards): [optional]  # noqa: E501
-            certified_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
-            created_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
+            certified_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            created_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
             dashboard_plugins (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins): [optional]  # noqa: E501
             datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
             filter_contexts (JsonApiAnalyticalDashboardOutRelationshipsFilterContexts): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
             metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
-            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
+            modified_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            parameters (JsonApiAnalyticalDashboardOutRelationshipsParameters): [optional]  # noqa: E501
             visualization_objects (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects): [optional]  # noqa: E501
         """
 
@@ -269,14 +274,15 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             analytical_dashboards (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards): [optional]  # noqa: E501
-            certified_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
-            created_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
+            certified_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            created_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
             dashboard_plugins (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins): [optional]  # noqa: E501
             datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
             filter_contexts (JsonApiAnalyticalDashboardOutRelationshipsFilterContexts): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
             metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
-            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCertifiedBy): [optional]  # noqa: E501
+            modified_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            parameters (JsonApiAnalyticalDashboardOutRelationshipsParameters): [optional]  # noqa: E501
             visualization_objects (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects): [optional]  # noqa: E501
         """
 

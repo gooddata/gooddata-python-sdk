@@ -44,6 +44,7 @@ from gooddata_api_client.model.outlier_detection_request import OutlierDetection
 from gooddata_api_client.model.outlier_detection_response import OutlierDetectionResponse
 from gooddata_api_client.model.outlier_detection_result import OutlierDetectionResult
 from gooddata_api_client.model.result_cache_metadata import ResultCacheMetadata
+from gooddata_api_client.model.visualization_object_execution import VisualizationObjectExecution
 
 
 class ComputationApi(object):
@@ -464,6 +465,79 @@ class ComputationApi(object):
             },
             api_client=api_client
         )
+        self.compute_report_for_visualization_object_endpoint = _Endpoint(
+            settings={
+                'response_type': (AfmExecutionResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/execution/visualization/{visualizationObjectId}/execute',
+                'operation_id': 'compute_report_for_visualization_object',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'visualization_object_id',
+                    'skip_cache',
+                    'visualization_object_execution',
+                ],
+                'required': [
+                    'workspace_id',
+                    'visualization_object_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'workspace_id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('workspace_id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'visualization_object_id':
+                        (str,),
+                    'skip_cache':
+                        (bool,),
+                    'visualization_object_execution':
+                        (VisualizationObjectExecution,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'visualization_object_id': 'visualizationObjectId',
+                    'skip_cache': 'skip-cache',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'visualization_object_id': 'path',
+                    'skip_cache': 'header',
+                    'visualization_object_execution': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
         self.compute_valid_descendants_endpoint = _Endpoint(
             settings={
                 'response_type': (AfmValidDescendantsResponse,),
@@ -640,7 +714,9 @@ class ComputationApi(object):
                         "OPT_QT_SVG": "OPT_QT_SVG",
                         "SQL": "SQL",
                         "SETTINGS": "SETTINGS",
-                        "COMPRESSED_SQL": "COMPRESSED_SQL"
+                        "COMPRESSED_SQL": "COMPRESSED_SQL",
+                        "COMPRESSED_GRPC_MODEL_SVG": "COMPRESSED_GRPC_MODEL_SVG",
+                        "GIT": "GIT"
                     },
                 },
                 'openapi_types': {
@@ -1699,6 +1775,95 @@ class ComputationApi(object):
             afm_execution
         return self.compute_report_endpoint.call_with_http_info(**kwargs)
 
+    def compute_report_for_visualization_object(
+        self,
+        workspace_id,
+        visualization_object_id,
+        **kwargs
+    ):
+        """(BETA) Executes a visualization object and returns link to the result  # noqa: E501
+
+        (BETA) Fetches a stored visualization object by ID, converts it to an AFM execution, and returns a link to the result. Optionally accepts additional AFM filters merged on top of the visualization's own filters.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.compute_report_for_visualization_object(workspace_id, visualization_object_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str): Workspace identifier
+            visualization_object_id (str):
+
+        Keyword Args:
+            skip_cache (bool): Ignore all caches during execution of current request.. [optional] if omitted the server will use the default value of False
+            visualization_object_execution (VisualizationObjectExecution): [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            AfmExecutionResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['visualization_object_id'] = \
+            visualization_object_id
+        return self.compute_report_for_visualization_object_endpoint.call_with_http_info(**kwargs)
+
     def compute_valid_descendants(
         self,
         workspace_id,
@@ -1893,7 +2058,7 @@ class ComputationApi(object):
             afm_execution (AfmExecution):
 
         Keyword Args:
-            explain_type (str): Requested explain type. If not specified all types are bundled in a ZIP archive.  `MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info  `GRPC_MODEL` - Datasets used in execution  `GRPC_MODEL_SVG` - Generated SVG image of the datasets  `COMPRESSED_GRPC_MODEL_SVG` - Generated SVG image of the model fragment used in the query  `WDF` - Workspace data filters in execution workspace context  `QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL  `QT_SVG` - Generated SVG image of the Query Tree  `OPT_QT` - Optimized Query Tree  `OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree  `SQL` - Final SQL to be executed  `COMPRESSED_SQL` - Final SQL to be executed with rolled SQL datasets  `SETTINGS` - Settings used to execute explain request. [optional]
+            explain_type (str): Requested explain type. If not specified all types are bundled in a ZIP archive.  `MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info  `GRPC_MODEL` - Datasets used in execution  `GRPC_MODEL_SVG` - Generated SVG image of the datasets  `COMPRESSED_GRPC_MODEL_SVG` - Generated SVG image of the model fragment used in the query  `WDF` - Workspace data filters in execution workspace context  `QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL  `QT_SVG` - Generated SVG image of the Query Tree  `OPT_QT` - Optimized Query Tree  `OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree  `SQL` - Final SQL to be executed  `COMPRESSED_SQL` - Final SQL to be executed with rolled SQL datasets  `SETTINGS` - Settings used to execute explain request  `GIT` - Git properties of current build. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

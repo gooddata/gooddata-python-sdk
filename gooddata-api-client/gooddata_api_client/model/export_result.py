@@ -95,6 +95,7 @@ class ExportResult(ModelNormal):
             'expires_at': (datetime,),  # noqa: E501
             'file_size': (int,),  # noqa: E501
             'file_uri': (str,),  # noqa: E501
+            'finished_at': (datetime,),  # noqa: E501
             'trace_id': (str,),  # noqa: E501
             'triggered_at': (datetime,),  # noqa: E501
         }
@@ -112,6 +113,7 @@ class ExportResult(ModelNormal):
         'expires_at': 'expiresAt',  # noqa: E501
         'file_size': 'fileSize',  # noqa: E501
         'file_uri': 'fileUri',  # noqa: E501
+        'finished_at': 'finishedAt',  # noqa: E501
         'trace_id': 'traceId',  # noqa: E501
         'triggered_at': 'triggeredAt',  # noqa: E501
     }
@@ -166,6 +168,7 @@ class ExportResult(ModelNormal):
             expires_at (datetime): [optional]  # noqa: E501
             file_size (int): [optional]  # noqa: E501
             file_uri (str): [optional]  # noqa: E501
+            finished_at (datetime): [optional]  # noqa: E501
             trace_id (str): [optional]  # noqa: E501
             triggered_at (datetime): [optional]  # noqa: E501
         """
@@ -265,6 +268,7 @@ class ExportResult(ModelNormal):
             expires_at (datetime): [optional]  # noqa: E501
             file_size (int): [optional]  # noqa: E501
             file_uri (str): [optional]  # noqa: E501
+            finished_at (datetime): [optional]  # noqa: E501
             trace_id (str): [optional]  # noqa: E501
             triggered_at (datetime): [optional]  # noqa: E501
         """

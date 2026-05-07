@@ -64,12 +64,16 @@ class DeclarativeColumn(ModelNormal):
             'TIMESTAMP': "TIMESTAMP",
             'TIMESTAMP_TZ': "TIMESTAMP_TZ",
             'BOOLEAN': "BOOLEAN",
+            'HLL': "HLL",
         },
     }
 
     validations = {
         ('name',): {
             'max_length': 255,
+            'regex': {
+                'pattern': r'^[^\x00]*$',  # noqa: E501
+            },
         },
         ('description',): {
             'max_length': 10000,

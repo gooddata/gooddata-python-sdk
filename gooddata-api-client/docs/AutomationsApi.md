@@ -202,6 +202,17 @@ with gooddata_api_client.ApiClient() as api_client:
                                         local_identifier="metric_1",
                                     ),
                                 ],
+                                parameters=[
+                                    ParameterItem(
+                                        parameter=AfmObjectIdentifierParameter(
+                                            identifier=AfmObjectIdentifierParameterIdentifier(
+                                                id="sample_item.price",
+                                                type="parameter",
+                                            ),
+                                        ),
+                                        value="value_example",
+                                    ),
+                                ],
                             ),
                             execution_settings=ExecutionSettings(
                                 data_sampling_percentage=0,
@@ -1113,6 +1124,17 @@ with gooddata_api_client.ApiClient() as api_client:
                                         local_identifier="metric_1",
                                     ),
                                 ],
+                                parameters=[
+                                    ParameterItem(
+                                        parameter=AfmObjectIdentifierParameter(
+                                            identifier=AfmObjectIdentifierParameterIdentifier(
+                                                id="sample_item.price",
+                                                type="parameter",
+                                            ),
+                                        ),
+                                        value="value_example",
+                                    ),
+                                ],
                             ),
                             execution_settings=ExecutionSettings(
                                 data_sampling_percentage=0,
@@ -1835,6 +1857,17 @@ with gooddata_api_client.ApiClient() as api_client:
                                     local_identifier="metric_1",
                                 ),
                             ],
+                            parameters=[
+                                ParameterItem(
+                                    parameter=AfmObjectIdentifierParameter(
+                                        identifier=AfmObjectIdentifierParameterIdentifier(
+                                            id="sample_item.price",
+                                            type="parameter",
+                                        ),
+                                    ),
+                                    value="value_example",
+                                ),
+                            ],
                         ),
                         execution_settings=ExecutionSettings(
                             data_sampling_percentage=0,
@@ -2158,6 +2191,17 @@ with gooddata_api_client.ApiClient() as api_client:
                                 MeasureItem(
                                     definition=MeasureDefinition(),
                                     local_identifier="metric_1",
+                                ),
+                            ],
+                            parameters=[
+                                ParameterItem(
+                                    parameter=AfmObjectIdentifierParameter(
+                                        identifier=AfmObjectIdentifierParameterIdentifier(
+                                            id="sample_item.price",
+                                            type="parameter",
+                                        ),
+                                    ),
+                                    value="value_example",
                                 ),
                             ],
                         ),
@@ -3008,6 +3052,17 @@ with gooddata_api_client.ApiClient() as api_client:
                                     MeasureItem(
                                         definition=MeasureDefinition(),
                                         local_identifier="metric_1",
+                                    ),
+                                ],
+                                parameters=[
+                                    ParameterItem(
+                                        parameter=AfmObjectIdentifierParameter(
+                                            identifier=AfmObjectIdentifierParameterIdentifier(
+                                                id="sample_item.price",
+                                                type="parameter",
+                                            ),
+                                        ),
+                                        value="value_example",
                                     ),
                                 ],
                             ),

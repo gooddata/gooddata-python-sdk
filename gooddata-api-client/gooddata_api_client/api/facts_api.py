@@ -93,8 +93,10 @@ class FactsApi(object):
 
                         "DATASETS": "datasets",
                         "FACTS": "facts",
+                        "ATTRIBUTES": "attributes",
                         "DATASET": "dataset",
                         "SOURCEFACT": "sourceFact",
+                        "SOURCEATTRIBUTE": "sourceAttribute",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -324,8 +326,10 @@ class FactsApi(object):
 
                         "DATASETS": "datasets",
                         "FACTS": "facts",
+                        "ATTRIBUTES": "attributes",
                         "DATASET": "dataset",
                         "SOURCEFACT": "sourceFact",
+                        "SOURCEATTRIBUTE": "sourceAttribute",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {

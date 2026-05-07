@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.declarative_source_fact_reference import DeclarativeSourceFactReference
-    globals()['DeclarativeSourceFactReference'] = DeclarativeSourceFactReference
+    from gooddata_api_client.model.declarative_source_reference import DeclarativeSourceReference
+    globals()['DeclarativeSourceReference'] = DeclarativeSourceReference
 
 
 class DeclarativeAggregatedFact(ModelNormal):
@@ -68,6 +68,7 @@ class DeclarativeAggregatedFact(ModelNormal):
             'TIMESTAMP': "TIMESTAMP",
             'TIMESTAMP_TZ': "TIMESTAMP_TZ",
             'BOOLEAN': "BOOLEAN",
+            'HLL': "HLL",
         },
     }
 
@@ -77,11 +78,11 @@ class DeclarativeAggregatedFact(ModelNormal):
                 'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
-        ('source_column',): {
-            'max_length': 255,
-        },
         ('description',): {
             'max_length': 10000,
+        },
+        ('source_column',): {
+            'max_length': 255,
         },
         ('source_column_data_type',): {
             'max_length': 255,
@@ -114,11 +115,11 @@ class DeclarativeAggregatedFact(ModelNormal):
         lazy_import()
         return {
             'id': (str,),  # noqa: E501
-            'source_column': (str,),  # noqa: E501
-            'source_fact_reference': (DeclarativeSourceFactReference,),  # noqa: E501
+            'source_fact_reference': (DeclarativeSourceReference,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'is_nullable': (bool,),  # noqa: E501
             'null_value': (str,),  # noqa: E501
+            'source_column': (str,),  # noqa: E501
             'source_column_data_type': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
         }
@@ -130,11 +131,11 @@ class DeclarativeAggregatedFact(ModelNormal):
 
     attribute_map = {
         'id': 'id',  # noqa: E501
-        'source_column': 'sourceColumn',  # noqa: E501
         'source_fact_reference': 'sourceFactReference',  # noqa: E501
         'description': 'description',  # noqa: E501
         'is_nullable': 'isNullable',  # noqa: E501
         'null_value': 'nullValue',  # noqa: E501
+        'source_column': 'sourceColumn',  # noqa: E501
         'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
         'tags': 'tags',  # noqa: E501
     }
@@ -146,13 +147,12 @@ class DeclarativeAggregatedFact(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, source_column, source_fact_reference, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, source_fact_reference, *args, **kwargs):  # noqa: E501
         """DeclarativeAggregatedFact - a model defined in OpenAPI
 
         Args:
             id (str): Fact ID.
-            source_column (str): A name of the source column in the table.
-            source_fact_reference (DeclarativeSourceFactReference):
+            source_fact_reference (DeclarativeSourceReference):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -188,6 +188,7 @@ class DeclarativeAggregatedFact(ModelNormal):
             description (str): Fact description.. [optional]  # noqa: E501
             is_nullable (bool): Flag indicating whether the associated source column allows null values.. [optional]  # noqa: E501
             null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
+            source_column (str): A name of the source column in the table.. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
@@ -222,7 +223,6 @@ class DeclarativeAggregatedFact(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.id = id
-        self.source_column = source_column
         self.source_fact_reference = source_fact_reference
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -244,13 +244,12 @@ class DeclarativeAggregatedFact(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, source_column, source_fact_reference, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, source_fact_reference, *args, **kwargs):  # noqa: E501
         """DeclarativeAggregatedFact - a model defined in OpenAPI
 
         Args:
             id (str): Fact ID.
-            source_column (str): A name of the source column in the table.
-            source_fact_reference (DeclarativeSourceFactReference):
+            source_fact_reference (DeclarativeSourceReference):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -286,6 +285,7 @@ class DeclarativeAggregatedFact(ModelNormal):
             description (str): Fact description.. [optional]  # noqa: E501
             is_nullable (bool): Flag indicating whether the associated source column allows null values.. [optional]  # noqa: E501
             null_value (str): Value used in coalesce during joins instead of null.. [optional]  # noqa: E501
+            source_column (str): A name of the source column in the table.. [optional]  # noqa: E501
             source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
@@ -318,7 +318,6 @@ class DeclarativeAggregatedFact(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.id = id
-        self.source_column = source_column
         self.source_fact_reference = source_fact_reference
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

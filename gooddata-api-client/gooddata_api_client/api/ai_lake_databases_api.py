@@ -22,9 +22,16 @@ from gooddata_api_client.model_utils import (  # noqa: F401
     none_type,
     validate_and_convert_types
 )
+from gooddata_api_client.model.add_database_data_source_request import AddDatabaseDataSourceRequest
+from gooddata_api_client.model.add_database_data_source_response import AddDatabaseDataSourceResponse
 from gooddata_api_client.model.database_instance import DatabaseInstance
+from gooddata_api_client.model.list_database_data_sources_response import ListDatabaseDataSourcesResponse
 from gooddata_api_client.model.list_database_instances_response import ListDatabaseInstancesResponse
+from gooddata_api_client.model.list_object_storages_response import ListObjectStoragesResponse
 from gooddata_api_client.model.provision_database_instance_request import ProvisionDatabaseInstanceRequest
+from gooddata_api_client.model.remove_database_data_source_response import RemoveDatabaseDataSourceResponse
+from gooddata_api_client.model.update_database_data_source_request import UpdateDatabaseDataSourceRequest
+from gooddata_api_client.model.update_database_data_source_response import UpdateDatabaseDataSourceResponse
 
 
 class AILakeDatabasesApi(object):
@@ -38,6 +45,62 @@ class AILakeDatabasesApi(object):
         if api_client is None:
             api_client = ApiClient()
         self.api_client = api_client
+        self.add_ai_lake_database_data_source_endpoint = _Endpoint(
+            settings={
+                'response_type': (AddDatabaseDataSourceResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/dataSources',
+                'operation_id': 'add_ai_lake_database_data_source',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'instance_id',
+                    'add_database_data_source_request',
+                ],
+                'required': [
+                    'instance_id',
+                    'add_database_data_source_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'instance_id':
+                        (str,),
+                    'add_database_data_source_request':
+                        (AddDatabaseDataSourceRequest,),
+                },
+                'attribute_map': {
+                    'instance_id': 'instanceId',
+                },
+                'location_map': {
+                    'instance_id': 'path',
+                    'add_database_data_source_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
         self.deprovision_ai_lake_database_instance_endpoint = _Endpoint(
             settings={
                 'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
@@ -98,6 +161,55 @@ class AILakeDatabasesApi(object):
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}',
                 'operation_id': 'get_ai_lake_database_instance',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'instance_id',
+                ],
+                'required': [
+                    'instance_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'instance_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'instance_id': 'instanceId',
+                },
+                'location_map': {
+                    'instance_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.list_ai_lake_database_data_sources_endpoint = _Endpoint(
+            settings={
+                'response_type': (ListDatabaseDataSourcesResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/dataSources',
+                'operation_id': 'list_ai_lake_database_data_sources',
                 'http_method': 'GET',
                 'servers': None,
             },
@@ -203,6 +315,48 @@ class AILakeDatabasesApi(object):
             },
             api_client=api_client
         )
+        self.list_ai_lake_object_storages_endpoint = _Endpoint(
+            settings={
+                'response_type': (ListObjectStoragesResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/ailake/object-storages',
+                'operation_id': 'list_ai_lake_object_storages',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.provision_ai_lake_database_instance_endpoint = _Endpoint(
             settings={
                 'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
@@ -258,6 +412,204 @@ class AILakeDatabasesApi(object):
             },
             api_client=api_client
         )
+        self.remove_ai_lake_database_data_source_endpoint = _Endpoint(
+            settings={
+                'response_type': (RemoveDatabaseDataSourceResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/dataSources/{dataSourceId}',
+                'operation_id': 'remove_ai_lake_database_data_source',
+                'http_method': 'DELETE',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'instance_id',
+                    'data_source_id',
+                ],
+                'required': [
+                    'instance_id',
+                    'data_source_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'instance_id':
+                        (str,),
+                    'data_source_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'instance_id': 'instanceId',
+                    'data_source_id': 'dataSourceId',
+                },
+                'location_map': {
+                    'instance_id': 'path',
+                    'data_source_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.update_ai_lake_database_data_source_endpoint = _Endpoint(
+            settings={
+                'response_type': (UpdateDatabaseDataSourceResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/dataSource',
+                'operation_id': 'update_ai_lake_database_data_source',
+                'http_method': 'PATCH',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'instance_id',
+                    'update_database_data_source_request',
+                ],
+                'required': [
+                    'instance_id',
+                    'update_database_data_source_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'instance_id':
+                        (str,),
+                    'update_database_data_source_request':
+                        (UpdateDatabaseDataSourceRequest,),
+                },
+                'attribute_map': {
+                    'instance_id': 'instanceId',
+                },
+                'location_map': {
+                    'instance_id': 'path',
+                    'update_database_data_source_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+
+    def add_ai_lake_database_data_source(
+        self,
+        instance_id,
+        add_database_data_source_request,
+        **kwargs
+    ):
+        """(BETA) Add a data source to an AILake Database instance  # noqa: E501
+
+        (BETA) Associates an additional metadata-api data source with an existing AI Lake database instance. The new data source uses the same StarRocks connection details as the primary data source.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.add_ai_lake_database_data_source(instance_id, add_database_data_source_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
+            add_database_data_source_request (AddDatabaseDataSourceRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            AddDatabaseDataSourceResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['instance_id'] = \
+            instance_id
+        kwargs['add_database_data_source_request'] = \
+            add_database_data_source_request
+        return self.add_ai_lake_database_data_source_endpoint.call_with_http_info(**kwargs)
 
     def deprovision_ai_lake_database_instance(
         self,
@@ -426,6 +778,89 @@ class AILakeDatabasesApi(object):
             instance_id
         return self.get_ai_lake_database_instance_endpoint.call_with_http_info(**kwargs)
 
+    def list_ai_lake_database_data_sources(
+        self,
+        instance_id,
+        **kwargs
+    ):
+        """(BETA) List data sources of an AILake Database instance  # noqa: E501
+
+        (BETA) Returns all data source associations for the specified AI Lake database instance.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.list_ai_lake_database_data_sources(instance_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ListDatabaseDataSourcesResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['instance_id'] = \
+            instance_id
+        return self.list_ai_lake_database_data_sources_endpoint.call_with_http_info(**kwargs)
+
     def list_ai_lake_database_instances(
         self,
         **kwargs
@@ -506,6 +941,84 @@ class AILakeDatabasesApi(object):
         kwargs['_host_index'] = kwargs.get('_host_index')
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.list_ai_lake_database_instances_endpoint.call_with_http_info(**kwargs)
+
+    def list_ai_lake_object_storages(
+        self,
+        **kwargs
+    ):
+        """(BETA) List registered AI Lake ObjectStorages  # noqa: E501
+
+        (BETA) Lists ObjectStorages registered for the organization. Use the returned `name` as `sourceStorageName` in CreatePipeTable, or pass `storageId` to the ProvisionDatabase `storageIds` list. Provider credentials are stripped — only safe descriptors (id, name, type, bucket, region, endpoint, …) are returned.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.list_ai_lake_object_storages(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ListObjectStoragesResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        return self.list_ai_lake_object_storages_endpoint.call_with_http_info(**kwargs)
 
     def provision_ai_lake_database_instance(
         self,
@@ -590,4 +1103,178 @@ class AILakeDatabasesApi(object):
         kwargs['provision_database_instance_request'] = \
             provision_database_instance_request
         return self.provision_ai_lake_database_instance_endpoint.call_with_http_info(**kwargs)
+
+    def remove_ai_lake_database_data_source(
+        self,
+        instance_id,
+        data_source_id,
+        **kwargs
+    ):
+        """(BETA) Remove a data source from an AILake Database instance  # noqa: E501
+
+        (BETA) Removes a data source association from an AI Lake database instance and deletes the corresponding data source from metadata-api. Fails if removing the data source would leave the instance with no data sources.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.remove_ai_lake_database_data_source(instance_id, data_source_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
+            data_source_id (str): Identifier of the data source to remove.
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            RemoveDatabaseDataSourceResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['instance_id'] = \
+            instance_id
+        kwargs['data_source_id'] = \
+            data_source_id
+        return self.remove_ai_lake_database_data_source_endpoint.call_with_http_info(**kwargs)
+
+    def update_ai_lake_database_data_source(
+        self,
+        instance_id,
+        update_database_data_source_request,
+        **kwargs
+    ):
+        """(BETA) Update the data source of an AILake Database instance  # noqa: E501
+
+        (BETA) Updates the data source ID and name for an existing AI Lake database instance without deleting the underlying database. Use this to recover from a wrong data source ID provisioned on an existing database instance.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.update_ai_lake_database_data_source(instance_id, update_database_data_source_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
+            update_database_data_source_request (UpdateDatabaseDataSourceRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            UpdateDatabaseDataSourceResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['instance_id'] = \
+            instance_id
+        kwargs['update_database_data_source_request'] = \
+            update_database_data_source_request
+        return self.update_ai_lake_database_data_source_endpoint.call_with_http_info(**kwargs)
 

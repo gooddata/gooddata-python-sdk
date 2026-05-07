@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_user_group_in_relationships_parents import JsonApiUserGroupInRelationshipsParents
-    globals()['JsonApiUserGroupInRelationshipsParents'] = JsonApiUserGroupInRelationshipsParents
+    from gooddata_api_client.model.json_api_agent_in_relationships_user_groups import JsonApiAgentInRelationshipsUserGroups
+    globals()['JsonApiAgentInRelationshipsUserGroups'] = JsonApiAgentInRelationshipsUserGroups
 
 
 class JsonApiUserGroupInRelationships(ModelNormal):
@@ -88,7 +88,7 @@ class JsonApiUserGroupInRelationships(ModelNormal):
         """
         lazy_import()
         return {
-            'parents': (JsonApiUserGroupInRelationshipsParents,),  # noqa: E501
+            'parents': (JsonApiAgentInRelationshipsUserGroups,),  # noqa: E501
         }
 
     @cached_property
@@ -141,7 +141,7 @@ class JsonApiUserGroupInRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            parents (JsonApiUserGroupInRelationshipsParents): [optional]  # noqa: E501
+            parents (JsonApiAgentInRelationshipsUserGroups): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -227,7 +227,7 @@ class JsonApiUserGroupInRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            parents (JsonApiUserGroupInRelationshipsParents): [optional]  # noqa: E501
+            parents (JsonApiAgentInRelationshipsUserGroups): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

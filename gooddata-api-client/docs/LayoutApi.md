@@ -4,10 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**delete_data_source_statistics**](LayoutApi.md#delete_data_source_statistics) | **DELETE** /api/v1/layout/dataSources/{dataSourceId}/statistics | (BETA) Delete stored physical statistics for a data source
+[**get_agents_layout**](LayoutApi.md#get_agents_layout) | **GET** /api/v1/layout/agents | Get all AI agent configurations layout
 [**get_analytics_model**](LayoutApi.md#get_analytics_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Get analytics model
 [**get_automations**](LayoutApi.md#get_automations) | **GET** /api/v1/layout/workspaces/{workspaceId}/automations | Get automations
 [**get_custom_geo_collections_layout**](LayoutApi.md#get_custom_geo_collections_layout) | **GET** /api/v1/layout/customGeoCollections | Get all custom geo collections layout
 [**get_data_source_permissions**](LayoutApi.md#get_data_source_permissions) | **GET** /api/v1/layout/dataSources/{dataSourceId}/permissions | Get permissions for the data source
+[**get_data_source_statistics**](LayoutApi.md#get_data_source_statistics) | **GET** /api/v1/layout/dataSources/{dataSourceId}/statistics | (BETA) Retrieve stored physical statistics for a data source
 [**get_data_sources_layout**](LayoutApi.md#get_data_sources_layout) | **GET** /api/v1/layout/dataSources | Get all data sources
 [**get_export_templates_layout**](LayoutApi.md#get_export_templates_layout) | **GET** /api/v1/layout/exportTemplates | Get all export templates layout
 [**get_filter_views**](LayoutApi.md#get_filter_views) | **GET** /api/v1/layout/workspaces/{workspaceId}/filterViews | Get filter views
@@ -26,11 +29,13 @@ Method | HTTP request | Description
 [**get_workspace_layout**](LayoutApi.md#get_workspace_layout) | **GET** /api/v1/layout/workspaces/{workspaceId} | Get workspace layout
 [**get_workspace_permissions**](LayoutApi.md#get_workspace_permissions) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
 [**get_workspaces_layout**](LayoutApi.md#get_workspaces_layout) | **GET** /api/v1/layout/workspaces | Get all workspaces layout
+[**put_data_source_statistics**](LayoutApi.md#put_data_source_statistics) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/statistics | (BETA) Store physical table and column statistics for a data source
 [**put_data_sources_layout**](LayoutApi.md#put_data_sources_layout) | **PUT** /api/v1/layout/dataSources | Put all data sources
 [**put_user_groups_layout**](LayoutApi.md#put_user_groups_layout) | **PUT** /api/v1/layout/userGroups | Put all user groups
 [**put_users_layout**](LayoutApi.md#put_users_layout) | **PUT** /api/v1/layout/users | Put all users
 [**put_users_user_groups_layout**](LayoutApi.md#put_users_user_groups_layout) | **PUT** /api/v1/layout/usersAndUserGroups | Put all users and user groups
 [**put_workspace_layout**](LayoutApi.md#put_workspace_layout) | **PUT** /api/v1/layout/workspaces/{workspaceId} | Set workspace layout
+[**set_agents_layout**](LayoutApi.md#set_agents_layout) | **PUT** /api/v1/layout/agents | Set all AI agent configurations
 [**set_analytics_model**](LayoutApi.md#set_analytics_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Set analytics model
 [**set_automations**](LayoutApi.md#set_automations) | **PUT** /api/v1/layout/workspaces/{workspaceId}/automations | Set automations
 [**set_custom_geo_collections**](LayoutApi.md#set_custom_geo_collections) | **PUT** /api/v1/layout/customGeoCollections | Set all custom geo collections
@@ -49,6 +54,134 @@ Method | HTTP request | Description
 [**set_workspace_permissions**](LayoutApi.md#set_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
 [**set_workspaces_layout**](LayoutApi.md#set_workspaces_layout) | **PUT** /api/v1/layout/workspaces | Set all workspaces layout
 
+
+# **delete_data_source_statistics**
+> delete_data_source_statistics(data_source_id)
+
+(BETA) Delete stored physical statistics for a data source
+
+(BETA) Removes all stored physical statistics for the specified data source.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Delete stored physical statistics for a data source
+        api_instance.delete_data_source_statistics(data_source_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->delete_data_source_statistics: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Statistics deleted. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_agents_layout**
+> DeclarativeAgents get_agents_layout()
+
+Get all AI agent configurations layout
+
+Gets complete layout of AI agent configurations.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_agents import DeclarativeAgents
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Get all AI agent configurations layout
+        api_response = api_instance.get_agents_layout()
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_agents_layout: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**DeclarativeAgents**](DeclarativeAgents.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved layout of all AI agent configurations. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_analytics_model**
 > DeclarativeAnalytics get_analytics_model(workspace_id)
@@ -337,6 +470,86 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved current set of permissions. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_data_source_statistics**
+> DataSourceStatisticsResponse get_data_source_statistics(data_source_id)
+
+(BETA) Retrieve stored physical statistics for a data source
+
+(BETA) Returns previously stored physical table and column statistics. Supports optional filtering by schema and table name.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.data_source_statistics_response import DataSourceStatisticsResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+    schema_name = "schemaName_example" # str |  (optional)
+    table_name = "tableName_example" # str |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Retrieve stored physical statistics for a data source
+        api_response = api_instance.get_data_source_statistics(data_source_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_data_source_statistics: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (BETA) Retrieve stored physical statistics for a data source
+        api_response = api_instance.get_data_source_statistics(data_source_id, schema_name=schema_name, table_name=table_name)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_data_source_statistics: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+ **schema_name** | **str**|  | [optional]
+ **table_name** | **str**|  | [optional]
+
+### Return type
+
+[**DataSourceStatisticsResponse**](DataSourceStatisticsResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1553,6 +1766,93 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **put_data_source_statistics**
+> put_data_source_statistics(data_source_id, data_source_statistics_request)
+
+(BETA) Store physical table and column statistics for a data source
+
+(BETA) Stores or replaces physical statistics (row counts, NDV, null counts, min/max) for tables and columns of a data source.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.data_source_statistics_request import DataSourceStatisticsRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+    data_source_statistics_request = DataSourceStatisticsRequest(
+        tables=[
+            TableStatisticsEntry(
+                columns=[
+                    ColumnStatisticsEntry(
+                        column_name="column_name_example",
+                        data_size=1,
+                        max="max_example",
+                        min="min_example",
+                        ndv=1,
+                        null_count=1,
+                    ),
+                ],
+                data_size=1,
+                row_count=1,
+                schema_name="schema_name_example",
+                table_name="table_name_example",
+            ),
+        ],
+    ) # DataSourceStatisticsRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Store physical table and column statistics for a data source
+        api_instance.put_data_source_statistics(data_source_id, data_source_statistics_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->put_data_source_statistics: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+ **data_source_statistics_request** | [**DataSourceStatisticsRequest**](DataSourceStatisticsRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Statistics stored successfully. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **put_data_sources_layout**
 > put_data_sources_layout(declarative_data_sources)
 
@@ -1588,6 +1888,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_strategy="ALWAYS",
                 client_id="client1234",
                 client_secret="client_secret_example",
+                date_time_semantics="LOCAL",
                 decoded_parameters=[
                     Parameter(
                         name="name_example",
@@ -2151,6 +2452,25 @@ with gooddata_api_client.ApiClient() as api_client:
                     title="Total sales",
                 ),
             ],
+            parameters=[
+                DeclarativeParameter(
+                    content=DeclarativeParameterContent(None),
+                    created_at="2023-07-20 12:30",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    description="Rate applied to discounted items.",
+                    id="discount-rate",
+                    modified_at="2023-07-20 12:30",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    tags=["Finance"],
+                    title="Discount Rate",
+                ),
+            ],
             visualization_objects=[
                 DeclarativeVisualizationObject(
                     certification="CERTIFIED",
@@ -2205,9 +2525,9 @@ with gooddata_api_client.ApiClient() as api_client:
                             null_value="0",
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
-                            source_fact_reference=DeclarativeSourceFactReference(
+                            source_fact_reference=DeclarativeSourceReference(
                                 operation="SUM",
-                                reference=FactIdentifier(
+                                reference=SourceReferenceIdentifier(
                                     id="fact_id",
                                     type="fact",
                                 ),
@@ -2321,6 +2641,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                     tags=["Customers"],
                     title="Customers",
+                    type="NORMAL",
                     workspace_data_filter_columns=[
                         DeclarativeWorkspaceDataFilterColumn(
                             data_type="INT",
@@ -2392,6 +2713,104 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | The model of the workspace was set. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **set_agents_layout**
+> set_agents_layout(declarative_agents)
+
+Set all AI agent configurations
+
+Sets AI agent configurations in organization.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_agents import DeclarativeAgents
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    declarative_agents = DeclarativeAgents(
+        agents=[
+            DeclarativeAgent(
+                ai_knowledge=True,
+                available_to_all=True,
+                created_at="2023-07-20 12:30",
+                created_by=DeclarativeUserIdentifier(
+                    id="employee123",
+                    type="user",
+                ),
+                custom_skills=[
+                    "alert",
+                ],
+                description="description_example",
+                enabled=True,
+                id="default-ai-assistant",
+                modified_at="2023-07-20 12:30",
+                modified_by=DeclarativeUserIdentifier(
+                    id="employee123",
+                    type="user",
+                ),
+                name="Default GoodData AI Assistant",
+                personality="personality_example",
+                skills_mode="all",
+                user_groups=[
+                    DeclarativeUserGroupIdentifier(
+                        id="group.admins",
+                        type="userGroup",
+                    ),
+                ],
+            ),
+        ],
+    ) # DeclarativeAgents | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set all AI agent configurations
+        api_instance.set_agents_layout(declarative_agents)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->set_agents_layout: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **declarative_agents** | [**DeclarativeAgents**](DeclarativeAgents.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | All AI agent configurations set. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2579,6 +2998,25 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                     tags=["Revenues"],
                     title="Total sales",
+                ),
+            ],
+            parameters=[
+                DeclarativeParameter(
+                    content=DeclarativeParameterContent(None),
+                    created_at="2023-07-20 12:30",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    description="Rate applied to discounted items.",
+                    id="discount-rate",
+                    modified_at="2023-07-20 12:30",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    tags=["Finance"],
+                    title="Discount Rate",
                 ),
             ],
             visualization_objects=[
@@ -2845,6 +3283,17 @@ with gooddata_api_client.ApiClient() as api_client:
                                 MeasureItem(
                                     definition=MeasureDefinition(),
                                     local_identifier="metric_1",
+                                ),
+                            ],
+                            parameters=[
+                                ParameterItem(
+                                    parameter=AfmObjectIdentifierParameter(
+                                        identifier=AfmObjectIdentifierParameterIdentifier(
+                                            id="sample_item.price",
+                                            type="parameter",
+                                        ),
+                                    ),
+                                    value="value_example",
                                 ),
                             ],
                         ),
@@ -3513,9 +3962,9 @@ with gooddata_api_client.ApiClient() as api_client:
                             null_value="0",
                             source_column="customer_order_count",
                             source_column_data_type="NUMERIC",
-                            source_fact_reference=DeclarativeSourceFactReference(
+                            source_fact_reference=DeclarativeSourceReference(
                                 operation="SUM",
-                                reference=FactIdentifier(
+                                reference=SourceReferenceIdentifier(
                                     id="fact_id",
                                     type="fact",
                                 ),
@@ -3629,6 +4078,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                     tags=["Customers"],
                     title="Customers",
+                    type="NORMAL",
                     workspace_data_filter_columns=[
                         DeclarativeWorkspaceDataFilterColumn(
                             data_type="INT",
@@ -3811,6 +4261,37 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = layout_api.LayoutApi(api_client)
     declarative_organization = DeclarativeOrganization(
+        agents=[
+            DeclarativeAgent(
+                ai_knowledge=True,
+                available_to_all=True,
+                created_at="2023-07-20 12:30",
+                created_by=DeclarativeUserIdentifier(
+                    id="employee123",
+                    type="user",
+                ),
+                custom_skills=[
+                    "alert",
+                ],
+                description="description_example",
+                enabled=True,
+                id="default-ai-assistant",
+                modified_at="2023-07-20 12:30",
+                modified_by=DeclarativeUserIdentifier(
+                    id="employee123",
+                    type="user",
+                ),
+                name="Default GoodData AI Assistant",
+                personality="personality_example",
+                skills_mode="all",
+                user_groups=[
+                    DeclarativeUserGroupIdentifier(
+                        id="group.admins",
+                        type="userGroup",
+                    ),
+                ],
+            ),
+        ],
         custom_geo_collections=[
             DeclarativeCustomGeoCollection(
                 description="description_example",
@@ -3825,6 +4306,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_strategy="ALWAYS",
                 client_id="client1234",
                 client_secret="client_secret_example",
+                date_time_semantics="LOCAL",
                 decoded_parameters=[
                     Parameter(
                         name="name_example",
@@ -4274,6 +4756,17 @@ with gooddata_api_client.ApiClient() as api_client:
                                                 local_identifier="metric_1",
                                             ),
                                         ],
+                                        parameters=[
+                                            ParameterItem(
+                                                parameter=AfmObjectIdentifierParameter(
+                                                    identifier=AfmObjectIdentifierParameterIdentifier(
+                                                        id="sample_item.price",
+                                                        type="parameter",
+                                                    ),
+                                                ),
+                                                value="value_example",
+                                            ),
+                                        ],
                                     ),
                                     execution_settings=ExecutionSettings(
                                         data_sampling_percentage=0,
@@ -4587,6 +5080,25 @@ with gooddata_api_client.ApiClient() as api_client:
                                 title="Total sales",
                             ),
                         ],
+                        parameters=[
+                            DeclarativeParameter(
+                                content=DeclarativeParameterContent(None),
+                                created_at="2023-07-20 12:30",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                description="Rate applied to discounted items.",
+                                id="discount-rate",
+                                modified_at="2023-07-20 12:30",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                tags=["Finance"],
+                                title="Discount Rate",
+                            ),
+                        ],
                         visualization_objects=[
                             DeclarativeVisualizationObject(
                                 certification="CERTIFIED",
@@ -4641,9 +5153,9 @@ with gooddata_api_client.ApiClient() as api_client:
                                         null_value="0",
                                         source_column="customer_order_count",
                                         source_column_data_type="NUMERIC",
-                                        source_fact_reference=DeclarativeSourceFactReference(
+                                        source_fact_reference=DeclarativeSourceReference(
                                             operation="SUM",
-                                            reference=FactIdentifier(
+                                            reference=SourceReferenceIdentifier(
                                                 id="fact_id",
                                                 type="fact",
                                             ),
@@ -4757,6 +5269,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                                 tags=["Customers"],
                                 title="Customers",
+                                type="NORMAL",
                                 workspace_data_filter_columns=[
                                     DeclarativeWorkspaceDataFilterColumn(
                                         data_type="INT",
@@ -5590,6 +6103,17 @@ with gooddata_api_client.ApiClient() as api_client:
                                                 local_identifier="metric_1",
                                             ),
                                         ],
+                                        parameters=[
+                                            ParameterItem(
+                                                parameter=AfmObjectIdentifierParameter(
+                                                    identifier=AfmObjectIdentifierParameterIdentifier(
+                                                        id="sample_item.price",
+                                                        type="parameter",
+                                                    ),
+                                                ),
+                                                value="value_example",
+                                            ),
+                                        ],
                                     ),
                                     execution_settings=ExecutionSettings(
                                         data_sampling_percentage=0,
@@ -5903,6 +6427,25 @@ with gooddata_api_client.ApiClient() as api_client:
                                 title="Total sales",
                             ),
                         ],
+                        parameters=[
+                            DeclarativeParameter(
+                                content=DeclarativeParameterContent(None),
+                                created_at="2023-07-20 12:30",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                description="Rate applied to discounted items.",
+                                id="discount-rate",
+                                modified_at="2023-07-20 12:30",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                tags=["Finance"],
+                                title="Discount Rate",
+                            ),
+                        ],
                         visualization_objects=[
                             DeclarativeVisualizationObject(
                                 certification="CERTIFIED",
@@ -5957,9 +6500,9 @@ with gooddata_api_client.ApiClient() as api_client:
                                         null_value="0",
                                         source_column="customer_order_count",
                                         source_column_data_type="NUMERIC",
-                                        source_fact_reference=DeclarativeSourceFactReference(
+                                        source_fact_reference=DeclarativeSourceReference(
                                             operation="SUM",
-                                            reference=FactIdentifier(
+                                            reference=SourceReferenceIdentifier(
                                                 id="fact_id",
                                                 type="fact",
                                             ),
@@ -6073,6 +6616,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                                 tags=["Customers"],
                                 title="Customers",
+                                type="NORMAL",
                                 workspace_data_filter_columns=[
                                     DeclarativeWorkspaceDataFilterColumn(
                                         data_type="INT",

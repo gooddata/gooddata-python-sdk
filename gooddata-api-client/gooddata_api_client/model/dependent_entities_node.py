@@ -66,6 +66,7 @@ class DependentEntitiesNode(ModelNormal):
             'LABEL': "label",
             'METRIC': "metric",
             'USERDATAFILTER': "userDataFilter",
+            'PARAMETER': "parameter",
             'AUTOMATION': "automation",
             'MEMORYITEM': "memoryItem",
             'KNOWLEDGERECOMMENDATION': "knowledgeRecommendation",
@@ -127,7 +128,7 @@ class DependentEntitiesNode(ModelNormal):
 
         Args:
             id (str):
-            type (str):
+            type (str): Object type in the graph.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -219,7 +220,7 @@ class DependentEntitiesNode(ModelNormal):
 
         Args:
             id (str):
-            type (str):
+            type (str): Object type in the graph.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

@@ -82,8 +82,8 @@ class WorkspaceControllerApi(object):
                     },
                     ('meta_include',): {
 
-                        "PERMISSIONS": "permissions",
                         "CONFIG": "config",
+                        "PERMISSIONS": "permissions",
                         "HIERARCHY": "hierarchy",
                         "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",
@@ -222,8 +222,8 @@ class WorkspaceControllerApi(object):
                     },
                     ('meta_include',): {
 
-                        "PERMISSIONS": "permissions",
                         "CONFIG": "config",
+                        "PERMISSIONS": "permissions",
                         "HIERARCHY": "hierarchy",
                         "DATAMODELDATASETS": "dataModelDatasets",
                         "PAGE": "page",
@@ -327,8 +327,8 @@ class WorkspaceControllerApi(object):
                     },
                     ('meta_include',): {
 
-                        "PERMISSIONS": "permissions",
                         "CONFIG": "config",
+                        "PERMISSIONS": "permissions",
                         "HIERARCHY": "hierarchy",
                         "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",

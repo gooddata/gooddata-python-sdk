@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_agent_in_relationships import JsonApiAgentInRelationships
     from gooddata_api_client.model.json_api_user_in_attributes import JsonApiUserInAttributes
-    from gooddata_api_client.model.json_api_user_in_relationships import JsonApiUserInRelationships
+    globals()['JsonApiAgentInRelationships'] = JsonApiAgentInRelationships
     globals()['JsonApiUserInAttributes'] = JsonApiUserInAttributes
-    globals()['JsonApiUserInRelationships'] = JsonApiUserInRelationships
 
 
 class JsonApiUserOut(ModelNormal):
@@ -101,7 +101,7 @@ class JsonApiUserOut(ModelNormal):
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'attributes': (JsonApiUserInAttributes,),  # noqa: E501
-            'relationships': (JsonApiUserInRelationships,),  # noqa: E501
+            'relationships': (JsonApiAgentInRelationships,),  # noqa: E501
         }
 
     @cached_property
@@ -162,7 +162,7 @@ class JsonApiUserOut(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiUserInAttributes): [optional]  # noqa: E501
-            relationships (JsonApiUserInRelationships): [optional]  # noqa: E501
+            relationships (JsonApiAgentInRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "user")
@@ -256,7 +256,7 @@ class JsonApiUserOut(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiUserInAttributes): [optional]  # noqa: E501
-            relationships (JsonApiUserInRelationships): [optional]  # noqa: E501
+            relationships (JsonApiAgentInRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "user")

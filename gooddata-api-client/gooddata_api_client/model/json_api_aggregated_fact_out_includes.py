@@ -32,12 +32,14 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
+    from gooddata_api_client.model.json_api_attribute_out_with_links import JsonApiAttributeOutWithLinks
     from gooddata_api_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
     from gooddata_api_client.model.json_api_fact_out_attributes import JsonApiFactOutAttributes
     from gooddata_api_client.model.json_api_fact_out_relationships import JsonApiFactOutRelationships
     from gooddata_api_client.model.json_api_fact_out_with_links import JsonApiFactOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
     globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
+    globals()['JsonApiAttributeOutWithLinks'] = JsonApiAttributeOutWithLinks
     globals()['JsonApiDatasetOutWithLinks'] = JsonApiDatasetOutWithLinks
     globals()['JsonApiFactOutAttributes'] = JsonApiFactOutAttributes
     globals()['JsonApiFactOutRelationships'] = JsonApiFactOutRelationships
@@ -353,6 +355,7 @@ class JsonApiAggregatedFactOutIncludes(ModelComposed):
           'allOf': [
           ],
           'oneOf': [
+              JsonApiAttributeOutWithLinks,
               JsonApiDatasetOutWithLinks,
               JsonApiFactOutWithLinks,
           ],

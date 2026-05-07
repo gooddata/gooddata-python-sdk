@@ -1,0 +1,107 @@
+{
+  "datasets": [
+    {
+      "id": "orders",
+      "title": "Orders",
+      "type": "AUXILIARY",
+      "attributes": [
+        {
+          "id": "orders.unique_customer",
+          "title": "Unique Customer",
+          "labels": []
+        }
+      ],
+      "facts": [
+        {"id": "orders.revenue", "title": "Revenue"},
+        {"id": "orders.quantity", "title": "Quantity"}
+      ],
+      "aggregatedFacts": [],
+      "references": [
+        {
+          "identifier": {"id": "dim_country", "type": "dataset"},
+          "sources": [
+            {"column": "country", "target": {"id": "dim_country.country", "type": "attribute"}}
+          ],
+          "multivalue": false
+        }
+      ],
+      "grain": [
+        {"id": "orders.unique_customer", "type": "attribute"}
+      ]
+    },
+    {
+      "id": "agg_orders_country_daily",
+      "title": "Orders by country (daily)",
+      "type": "NORMAL",
+      "dataSourceTableId": {
+        "dataSourceId": "demo-ds",
+        "id": "agg_orders_country_daily",
+        "type": "dataSource"
+      },
+      "precedence": 1,
+      "aggregatedFacts": [
+        {
+          "id": "agg_orders_country_daily.revenue",
+          "sourceColumn": "revenue",
+          "sourceFactReference": {
+            "operation": "SUM",
+            "reference": {"id": "orders.revenue", "type": "fact"}
+          }
+        },
+        {
+          "id": "agg_orders_country_daily.unique_customers_hll",
+          "sourceColumn": "unique_customers_hll",
+          "sourceColumnDataType": "HLL",
+          "sourceFactReference": {
+            "operation": "APPROXIMATE_COUNT",
+            "reference": {"id": "orders.unique_customer", "type": "attribute"}
+          }
+        }
+      ],
+      "attributes": [],
+      "facts": [],
+      "grain": [],
+      "references": [
+        {
+          "identifier": {"id": "dim_country", "type": "dataset"},
+          "sources": [
+            {"column": "country", "target": {"id": "dim_country.country", "type": "attribute"}}
+          ],
+          "multivalue": false
+        }
+      ]
+    },
+    {
+      "id": "dim_country",
+      "title": "Country",
+      "type": "NORMAL",
+      "sql": {
+        "statement": "SELECT DISTINCT country FROM agg_orders_country_daily",
+        "dataSourceId": "demo-ds"
+      },
+      "attributes": [
+        {
+          "id": "dim_country.country",
+          "title": "Country",
+          "sourceColumn": "country",
+          "sourceColumnDataType": "STRING",
+          "labels": [
+            {
+              "id": "dim_country.country",
+              "title": "Country",
+              "sourceColumn": "country",
+              "sourceColumnDataType": "STRING"
+            }
+          ]
+        }
+      ],
+      "facts": [],
+      "aggregatedFacts": [],
+      "grain": [
+        {"id": "dim_country.country", "type": "attribute"}
+      ],
+      "references": []
+    }
+  ],
+  "dateInstances": []
+}

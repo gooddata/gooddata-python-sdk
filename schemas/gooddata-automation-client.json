@@ -48,6 +48,13 @@
               "$ref": "#/components/schemas/MeasureItem"
             },
             "type": "array"
+          },
+          "parameters": {
+            "description": "(EXPERIMENTAL) Parameter values to use for this execution.",
+            "items": {
+              "$ref": "#/components/schemas/ParameterItem"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -408,6 +415,35 @@
         ],
         "type": "object"
       },
+      "AfmObjectIdentifierParameter": {
+        "description": "Reference to the parameter.",
+        "properties": {
+          "identifier": {
+            "properties": {
+              "id": {
+                "example": "sample_item.price",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "parameter"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "type"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "identifier"
+        ],
+        "type": "object"
+      },
       "AlertAfm": {
         "properties": {
           "attributes": {
@@ -683,7 +719,7 @@
             "$ref": "#/components/schemas/LocalIdentifier"
           },
           "operator": {
-            "description": "Arithmetic operator.\nDIFFERENCE - m\u2081\u2212m\u2082 - the difference between two metrics.\nCHANGE - (m\u2081\u2212m\u2082)\u00f7m\u2082 - the relative difference between two metrics.\n",
+            "description": "Arithmetic operator.\nDIFFERENCE - m₁−m₂ - the difference between two metrics.\nCHANGE - (m₁−m₂)÷m₂ - the relative difference between two metrics.\n",
             "enum": [
               "DIFFERENCE",
               "CHANGE"
@@ -956,6 +992,7 @@
         "type": "object"
       },
       "AutomationMetadata": {
+        "additionalProperties": true,
         "description": "Additional information for the automation.",
         "maxLength": 250000,
         "nullable": true,
@@ -1421,6 +1458,82 @@
         ],
         "type": "object"
       },
+      "DashboardCompoundComparisonCondition": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DashboardCompoundConditionItem"
+          },
+          {
+            "properties": {
+              "operator": {
+                "enum": [
+                  "GREATER_THAN",
+                  "GREATER_THAN_OR_EQUAL_TO",
+                  "LESS_THAN",
+                  "LESS_THAN_OR_EQUAL_TO",
+                  "EQUAL_TO",
+                  "NOT_EQUAL_TO"
+                ],
+                "type": "string"
+              },
+              "value": {
+                "format": "double",
+                "type": "number"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "operator",
+          "value"
+        ],
+        "type": "object"
+      },
+      "DashboardCompoundConditionItem": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/DashboardCompoundComparisonCondition"
+          },
+          {
+            "$ref": "#/components/schemas/DashboardCompoundRangeCondition"
+          }
+        ],
+        "type": "object"
+      },
+      "DashboardCompoundRangeCondition": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DashboardCompoundConditionItem"
+          },
+          {
+            "properties": {
+              "from": {
+                "format": "double",
+                "type": "number"
+              },
+              "operator": {
+                "enum": [
+                  "BETWEEN",
+                  "NOT_BETWEEN"
+                ],
+                "type": "string"
+              },
+              "to": {
+                "format": "double",
+                "type": "number"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "from",
+          "operator",
+          "to"
+        ],
+        "type": "object"
+      },
       "DashboardDateFilter": {
         "properties": {
           "dateFilter": {
@@ -1523,7 +1636,7 @@
         "properties": {
           "exportInfo": {
             "default": false,
-            "description": "If true, the export will contain the information about the export \u2013 exported date, dashboard filters, etc.",
+            "description": "If true, the export will contain the information about the export – exported date, dashboard filters, etc.",
             "example": true,
             "type": "boolean"
           },
@@ -1568,6 +1681,9 @@
           },
           {
             "$ref": "#/components/schemas/DashboardMatchAttributeFilter"
+          },
+          {
+            "$ref": "#/components/schemas/DashboardMeasureValueFilter"
           }
         ],
         "type": "object"
@@ -1615,6 +1731,38 @@
         },
         "required": [
           "matchAttributeFilter"
+        ],
+        "type": "object"
+      },
+      "DashboardMeasureValueFilter": {
+        "properties": {
+          "measureValueFilter": {
+            "properties": {
+              "conditions": {
+                "items": {
+                  "$ref": "#/components/schemas/DashboardCompoundConditionItem"
+                },
+                "type": "array"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "measure": {
+                "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "conditions",
+              "measure"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "measureValueFilter"
         ],
         "type": "object"
       },
@@ -1844,6 +1992,10 @@
           "fileUri": {
             "type": "string"
           },
+          "finishedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
           "status": {
             "enum": [
               "SUCCESS",
@@ -1938,6 +2090,7 @@
                   "label",
                   "metric",
                   "userDataFilter",
+                  "parameter",
                   "exportDefinition",
                   "automation",
                   "automationResult",
@@ -2457,6 +2610,23 @@
         },
         "required": [
           "attributes"
+        ],
+        "type": "object"
+      },
+      "ParameterItem": {
+        "description": "(EXPERIMENTAL) Parameter value for this execution.",
+        "properties": {
+          "parameter": {
+            "$ref": "#/components/schemas/AfmObjectIdentifierParameter"
+          },
+          "value": {
+            "description": "Value to use for this parameter instead of its default.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parameter",
+          "value"
         ],
         "type": "object"
       },
@@ -3098,7 +3268,7 @@
           },
           "exportInfo": {
             "default": false,
-            "description": "If true, the export will contain the information about the export \u2013 exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF)",
+            "description": "If true, the export will contain the information about the export – exported date, filters, etc. Works only with `visualizationObject`. (XLSX, PDF)",
             "example": true,
             "type": "boolean"
           },

@@ -37,6 +37,7 @@ def lazy_import():
     from gooddata_api_client.model.json_api_fact_out_with_links import JsonApiFactOutWithLinks
     from gooddata_api_client.model.json_api_label_out_with_links import JsonApiLabelOutWithLinks
     from gooddata_api_client.model.json_api_metric_out_with_links import JsonApiMetricOutWithLinks
+    from gooddata_api_client.model.json_api_parameter_out_with_links import JsonApiParameterOutWithLinks
     from gooddata_api_client.model.json_api_user_group_in_attributes import JsonApiUserGroupInAttributes
     from gooddata_api_client.model.json_api_user_group_in_relationships import JsonApiUserGroupInRelationships
     from gooddata_api_client.model.json_api_user_group_out_with_links import JsonApiUserGroupOutWithLinks
@@ -48,6 +49,7 @@ def lazy_import():
     globals()['JsonApiFactOutWithLinks'] = JsonApiFactOutWithLinks
     globals()['JsonApiLabelOutWithLinks'] = JsonApiLabelOutWithLinks
     globals()['JsonApiMetricOutWithLinks'] = JsonApiMetricOutWithLinks
+    globals()['JsonApiParameterOutWithLinks'] = JsonApiParameterOutWithLinks
     globals()['JsonApiUserGroupInAttributes'] = JsonApiUserGroupInAttributes
     globals()['JsonApiUserGroupInRelationships'] = JsonApiUserGroupInRelationships
     globals()['JsonApiUserGroupOutWithLinks'] = JsonApiUserGroupOutWithLinks
@@ -368,6 +370,7 @@ class JsonApiUserDataFilterOutIncludes(ModelComposed):
               JsonApiFactOutWithLinks,
               JsonApiLabelOutWithLinks,
               JsonApiMetricOutWithLinks,
+              JsonApiParameterOutWithLinks,
               JsonApiUserGroupOutWithLinks,
               JsonApiUserOutWithLinks,
           ],

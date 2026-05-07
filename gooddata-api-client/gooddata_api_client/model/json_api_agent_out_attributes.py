@@ -67,6 +67,7 @@ class JsonApiAgentOutAttributes(ModelNormal):
             'SCHEDULE_EXPORT': "schedule_export",
             'VISUALIZATION': "visualization",
             'VISUALIZATION_SUMMARY': "visualization_summary",
+            'DASHBOARD_SUMMARY': "dashboard_summary",
             'WHAT_IF_ANALYSIS': "what_if_analysis",
             'KNOWLEDGE': "knowledge",
         },
@@ -77,6 +78,15 @@ class JsonApiAgentOutAttributes(ModelNormal):
     }
 
     validations = {
+        ('description',): {
+            'max_length': 10000,
+        },
+        ('name',): {
+            'max_length': 255,
+        },
+        ('personality',): {
+            'max_length': 10000,
+        },
     }
 
     @cached_property
@@ -104,12 +114,13 @@ class JsonApiAgentOutAttributes(ModelNormal):
             'available_to_all': (bool,),  # noqa: E501
             'created_at': (datetime,),  # noqa: E501
             'custom_skills': ([str], none_type,),  # noqa: E501
-            'description': (str,),  # noqa: E501
+            'description': (str, none_type,),  # noqa: E501
             'enabled': (bool,),  # noqa: E501
+            'is_preview': (bool,),  # noqa: E501
             'modified_at': (datetime,),  # noqa: E501
-            'personality': (str,),  # noqa: E501
+            'name': (str, none_type,),  # noqa: E501
+            'personality': (str, none_type,),  # noqa: E501
             'skills_mode': (str,),  # noqa: E501
-            'title': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -124,10 +135,11 @@ class JsonApiAgentOutAttributes(ModelNormal):
         'custom_skills': 'customSkills',  # noqa: E501
         'description': 'description',  # noqa: E501
         'enabled': 'enabled',  # noqa: E501
+        'is_preview': 'isPreview',  # noqa: E501
         'modified_at': 'modifiedAt',  # noqa: E501
+        'name': 'name',  # noqa: E501
         'personality': 'personality',  # noqa: E501
         'skills_mode': 'skillsMode',  # noqa: E501
-        'title': 'title',  # noqa: E501
     }
 
     read_only_vars = {
@@ -175,12 +187,13 @@ class JsonApiAgentOutAttributes(ModelNormal):
             available_to_all (bool): [optional]  # noqa: E501
             created_at (datetime): [optional]  # noqa: E501
             custom_skills ([str], none_type): [optional]  # noqa: E501
-            description (str): [optional]  # noqa: E501
+            description (str, none_type): [optional]  # noqa: E501
             enabled (bool): [optional]  # noqa: E501
+            is_preview (bool): [optional]  # noqa: E501
             modified_at (datetime): [optional]  # noqa: E501
-            personality (str): [optional]  # noqa: E501
+            name (str, none_type): [optional]  # noqa: E501
+            personality (str, none_type): [optional]  # noqa: E501
             skills_mode (str): [optional]  # noqa: E501
-            title (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -270,12 +283,13 @@ class JsonApiAgentOutAttributes(ModelNormal):
             available_to_all (bool): [optional]  # noqa: E501
             created_at (datetime): [optional]  # noqa: E501
             custom_skills ([str], none_type): [optional]  # noqa: E501
-            description (str): [optional]  # noqa: E501
+            description (str, none_type): [optional]  # noqa: E501
             enabled (bool): [optional]  # noqa: E501
+            is_preview (bool): [optional]  # noqa: E501
             modified_at (datetime): [optional]  # noqa: E501
-            personality (str): [optional]  # noqa: E501
+            name (str, none_type): [optional]  # noqa: E501
+            personality (str, none_type): [optional]  # noqa: E501
             skills_mode (str): [optional]  # noqa: E501
-            title (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
