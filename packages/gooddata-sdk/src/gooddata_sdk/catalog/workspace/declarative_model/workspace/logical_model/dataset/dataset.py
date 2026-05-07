@@ -14,7 +14,7 @@ from gooddata_api_client.model.declarative_label import DeclarativeLabel
 from gooddata_api_client.model.declarative_label_translation import DeclarativeLabelTranslation
 from gooddata_api_client.model.declarative_reference import DeclarativeReference
 from gooddata_api_client.model.declarative_reference_source import DeclarativeReferenceSource
-from gooddata_api_client.model.declarative_source_fact_reference import DeclarativeSourceFactReference
+from gooddata_api_client.model.declarative_source_reference import DeclarativeSourceReference
 from gooddata_api_client.model.declarative_workspace_data_filter_column import DeclarativeWorkspaceDataFilterColumn
 from gooddata_api_client.model.geo_area_config import GeoAreaConfig
 from gooddata_api_client.model.geo_collection_identifier import GeoCollectionIdentifier
@@ -106,12 +106,15 @@ class CatalogDeclarativeFact(Base):
 
 @define(kw_only=True)
 class CatalogDeclarativeSourceFactReference(Base):
+    # Backed by DeclarativeSourceReference on the API side: the reference now
+    # accepts both FACT and ATTRIBUTE targets (the latter is required for HLL
+    # APPROXIMATE_COUNT, which aggregates over an attribute).
     operation: str
     reference: CatalogFactIdentifier
 
     @staticmethod
-    def client_class() -> type[DeclarativeSourceFactReference]:
-        return DeclarativeSourceFactReference
+    def client_class() -> type[DeclarativeSourceReference]:
+        return DeclarativeSourceReference
 
 
 @define(kw_only=True)
