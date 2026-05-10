@@ -50,12 +50,17 @@ class GoodDataSdk:
         *,
         ssl_ca_cert: str | None = None,
         executions_cancellable: bool = False,
+        proxy: str | None = None,
         **custom_headers_: str | None,
     ) -> GoodDataSdk:
         """
         Create common GoodDataApiClient and return new GoodDataSdk instance.
         Custom headers are filtered. Headers with None value are removed. It simplifies usage because headers
         can be created directly from optional values.
+
+        ``proxy`` is an optional HTTP(S) proxy URL (e.g. ``http://proxy:8080``).
+        When not set, the standard ``HTTPS_PROXY`` / ``https_proxy`` / ``HTTP_PROXY``
+        / ``http_proxy`` environment variables are checked automatically.
 
         This is preferred way of creating GoodDataSdk, when no tweaks are needed.
         """
@@ -67,6 +72,7 @@ class GoodDataSdk:
             extra_user_agent=extra_user_agent_,
             executions_cancellable=executions_cancellable,
             ssl_ca_cert=ssl_ca_cert,
+            proxy=proxy,
         )
         return cls(client)
 
