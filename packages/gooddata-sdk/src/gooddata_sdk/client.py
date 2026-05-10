@@ -26,6 +26,7 @@ class GoodDataApiClient:
         extra_user_agent: str | None = None,
         executions_cancellable: bool = False,
         ssl_ca_cert: str | None = None,
+        proxy: str | None = None,
     ) -> None:
         """Take url, token for connecting to GoodData.CN.
 
@@ -38,6 +39,10 @@ class GoodDataApiClient:
         `executions_cancellable` is a flag that sets all executions computed through this client as cancellable.
         In case a request for a result is interrupted, the GD server will try to free resources like killing sql queries
         related to the given execution.
+
+        `proxy` is optional URL of an HTTP(S) proxy (e.g. ``http://proxy:8080``).
+        When not set, the standard ``HTTPS_PROXY`` / ``https_proxy`` / ``HTTP_PROXY`` /
+        ``http_proxy`` environment variables are checked automatically.
         """
         self._hostname = host
         self._token = token
@@ -53,7 +58,20 @@ class GoodDataApiClient:
                     f"ssl_ca_cert file path specified but the file does not exist. Path: {ssl_ca_cert_path}."
                 )
 
+        if proxy is None:
+            import os
+
+            proxy = (
+                os.environ.get("HTTPS_PROXY")
+                or os.environ.get("https_proxy")
+                or os.environ.get("HTTP_PROXY")
+                or os.environ.get("http_proxy")
+                or None
+            )
+
         self._api_config = api_client.Configuration(host=host, ssl_ca_cert=ssl_ca_cert)
+        if proxy:
+            self._api_config.proxy = proxy
         self._api_client = api_client.ApiClient(
             configuration=self._api_config,
             header_name="Authorization",
