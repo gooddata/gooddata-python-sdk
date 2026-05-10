@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import gooddata_api_client as api_client
@@ -59,8 +60,6 @@ class GoodDataApiClient:
                 )
 
         if proxy is None:
-            import os
-
             proxy = (
                 os.environ.get("HTTPS_PROXY")
                 or os.environ.get("https_proxy")

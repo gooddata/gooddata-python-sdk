@@ -23,7 +23,7 @@ def _chdir_to_docs(monkeypatch: pytest.MonkeyPatch) -> None:
 @pytest.fixture()
 def _mod():
     """Lazily import the module (after cwd/syspath are set)."""
-    import python_ref_builder as mod
+    import python_ref_builder as mod  # noqa: PLC0415
 
     return mod
 

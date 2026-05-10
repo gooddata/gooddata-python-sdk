@@ -93,6 +93,7 @@ lint.select = [
     "I",       # isort
     "PERF",    # perflint
     "PIE",
+    "PLC0415", # force imports at module top level
     "PLR0402", # prevent unnecessary manual import aliases
     "PLR1711", # prevent useless returns
     "SIM",

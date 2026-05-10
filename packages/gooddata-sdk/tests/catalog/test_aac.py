@@ -1,6 +1,8 @@
 # (C) 2026 GoodData Corporation
 from __future__ import annotations
 
+import shutil
+import tempfile
 from pathlib import Path
 
 import yaml
@@ -15,6 +17,9 @@ from gooddata_sdk.catalog.workspace.aac import (
     detect_yaml_format,
     load_aac_workspace_from_disk,
     store_aac_workspace_to_disk,
+)
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+    CatalogDeclarativeWorkspaceModel,
 )
 from gooddata_sdk.config import AacConfig
 
@@ -243,9 +248,6 @@ class TestWorkspaceLoadStore:
     def test_load_aac_workspace_from_fixtures(self) -> None:
         """Load fixtures excluding dashboards (WASM crypto limitation)."""
         # Use a temp dir with only datasets, metrics, visualizations
-        import shutil
-        import tempfile
-
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
             for subdir in ("datasets", "metrics", "visualisations"):
@@ -280,10 +282,6 @@ class TestWorkspaceLoadStore:
         metrics_declarative = [aac_metric_to_declarative(m) for m in aac_metrics]
 
         model_dict = {"analytics": {"metrics": metrics_declarative}}
-        from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
-            CatalogDeclarativeWorkspaceModel,
-        )
-
         model = CatalogDeclarativeWorkspaceModel.from_dict(model_dict)
         store_aac_workspace_to_disk(model, tmp_path)
 
@@ -316,10 +314,6 @@ class TestWorkspaceLoadStore:
         vis_declarative = [aac_visualization_to_declarative(aac_vis)]
 
         model_dict = {"analytics": {"visualizationObjects": vis_declarative}}
-        from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
-            CatalogDeclarativeWorkspaceModel,
-        )
-
         model = CatalogDeclarativeWorkspaceModel.from_dict(model_dict)
         store_aac_workspace_to_disk(model, tmp_path)
 
@@ -334,9 +328,6 @@ class TestWorkspaceLoadStore:
 
     def test_store_and_reload_from_fixtures(self, tmp_path: Path) -> None:
         """Load fixtures, store to disk, reload — full round-trip."""
-        import shutil
-        import tempfile
-
         with tempfile.TemporaryDirectory() as tmp:
             fixture_path = Path(tmp)
             for subdir in ("datasets", "metrics", "visualisations"):

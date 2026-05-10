@@ -12,6 +12,7 @@ get_texts_to_translate and set_translated_texts handle all three cases.
 
 from __future__ import annotations
 
+import copy
 from unittest.mock import MagicMock
 
 from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceService
@@ -309,7 +310,6 @@ class TestSetTranslatedTextsTabbed:
 
     def test_translates_tab_titles(self):
         """Tab titles are translated."""
-        import copy
 
         content = {
             "tabs": [
@@ -349,7 +349,6 @@ class TestSetTranslatedTextsTabbed:
 
     def test_translates_widgets_in_tabs(self):
         """Widget titles/descriptions inside tabs are translated."""
-        import copy
 
         content = {
             "tabs": [
@@ -392,7 +391,6 @@ class TestSetTranslatedTextsTabbed:
 
     def test_legacy_layout_still_works(self):
         """Legacy layout dashboards still get their widgets translated."""
-        import copy
 
         content = {
             "layout": {

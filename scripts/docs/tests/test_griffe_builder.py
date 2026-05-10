@@ -19,7 +19,7 @@ def _setup_path(monkeypatch: pytest.MonkeyPatch) -> None:
 
 @pytest.fixture()
 def _mod():
-    import griffe_builder as mod
+    import griffe_builder as mod  # noqa: PLC0415
 
     return mod
 

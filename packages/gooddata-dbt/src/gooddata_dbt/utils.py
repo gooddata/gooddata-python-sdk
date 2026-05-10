@@ -28,7 +28,7 @@ def report_message_to_merge_request(token: str, merge_request_id: str, text: str
 
 def report_message_to_pull_request(logger: Logger, token: str, pull_request_id: int, text: str) -> None:
     try:
-        from github import Auth, Github
+        from github import Auth, Github  # noqa: PLC0415
 
         auth = Auth.Token(token)
         g = Github(auth=auth)
