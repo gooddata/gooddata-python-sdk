@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **data_sources** | [**[DeclarativeDataSource]**](DeclarativeDataSource.md) |  | [optional] 
 **export_templates** | [**[DeclarativeExportTemplate]**](DeclarativeExportTemplate.md) |  | [optional] 
 **identity_providers** | [**[DeclarativeIdentityProvider]**](DeclarativeIdentityProvider.md) |  | [optional] 
+**ip_allowlist_policies** | [**[DeclarativeIpAllowlistPolicy]**](DeclarativeIpAllowlistPolicy.md) |  | [optional] 
 **jwks** | [**[DeclarativeJwk]**](DeclarativeJwk.md) |  | [optional] 
 **notification_channels** | [**[DeclarativeNotificationChannel]**](DeclarativeNotificationChannel.md) |  | [optional] 
 **user_groups** | [**[DeclarativeUserGroup]**](DeclarativeUserGroup.md) |  | [optional] 

@@ -71,9 +71,6 @@ class DeclarativeColumn(ModelNormal):
     validations = {
         ('name',): {
             'max_length': 255,
-            'regex': {
-                'pattern': r'^[^\x00]*$',  # noqa: E501
-            },
         },
         ('description',): {
             'max_length': 10000,
@@ -143,7 +140,7 @@ class DeclarativeColumn(ModelNormal):
 
         Args:
             data_type (str): Column type
-            name (str): Column name
+            name (str): Column name. Must not contain NUL (0x00) characters.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -239,7 +236,7 @@ class DeclarativeColumn(ModelNormal):
 
         Args:
             data_type (str): Column type
-            name (str): Column name
+            name (str): Column name. Must not contain NUL (0x00) characters.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

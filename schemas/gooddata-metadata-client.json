@@ -1714,9 +1714,6 @@
       "DashboardCompoundComparisonCondition": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/DashboardCompoundConditionItem"
-          },
-          {
             "properties": {
               "operator": {
                 "enum": [
@@ -1756,9 +1753,6 @@
       },
       "DashboardCompoundRangeCondition": {
         "allOf": [
-          {
-            "$ref": "#/components/schemas/DashboardCompoundConditionItem"
-          },
           {
             "properties": {
               "from": {
@@ -3223,10 +3217,9 @@
             "type": "boolean"
           },
           "name": {
-            "description": "Column name",
+            "description": "Column name. Must not contain NUL (0x00) characters.",
             "example": "customer_id",
             "maxLength": 255,
-            "pattern": "^[^\u0000]*$",
             "type": "string"
           },
           "referencedTableColumn": {
@@ -4272,6 +4265,49 @@
         ],
         "type": "object"
       },
+      "DeclarativeIpAllowlistPolicy": {
+        "description": "A declarative form of an IP allowlist policy.",
+        "properties": {
+          "allowedSources": {
+            "description": "Allowed source IP addresses or CIDR ranges.",
+            "example": [
+              "203.0.113.10/32",
+              "198.51.100.0/24"
+            ],
+            "items": {
+              "description": "Allowed source IP addresses or CIDR ranges.",
+              "example": "[\"203.0.113.10/32\",\"198.51.100.0/24\"]",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "Identifier of an IP allowlist policy.",
+            "example": "admin-vpn-only",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "userGroups": {
+            "description": "Target user groups this policy applies to.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeUserGroupIdentifier"
+            },
+            "type": "array"
+          },
+          "users": {
+            "description": "Target users this policy applies to.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "allowedSources",
+          "id"
+        ],
+        "type": "object"
+      },
       "DeclarativeJwk": {
         "description": "A declarative form of the JWK.",
         "properties": {
@@ -4812,6 +4848,12 @@
           "identityProviders": {
             "items": {
               "$ref": "#/components/schemas/DeclarativeIdentityProvider"
+            },
+            "type": "array"
+          },
+          "ipAllowlistPolicies": {
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeIpAllowlistPolicy"
             },
             "type": "array"
           },

@@ -1577,6 +1577,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeFilterView](docs/DeclarativeFilterView.md)
  - [DeclarativeIdentityProvider](docs/DeclarativeIdentityProvider.md)
  - [DeclarativeIdentityProviderIdentifier](docs/DeclarativeIdentityProviderIdentifier.md)
+ - [DeclarativeIpAllowlistPolicy](docs/DeclarativeIpAllowlistPolicy.md)
  - [DeclarativeJwk](docs/DeclarativeJwk.md)
  - [DeclarativeJwkSpecification](docs/DeclarativeJwkSpecification.md)
  - [DeclarativeLabel](docs/DeclarativeLabel.md)
