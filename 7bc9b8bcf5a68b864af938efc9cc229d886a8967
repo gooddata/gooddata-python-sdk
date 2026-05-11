@@ -1,0 +1,47 @@
+packages/gooddata-sdk/src/gooddata_sdk/config.py
+  4ae20b1ad5b5317e 35-36,55-56,60-61
+packages/gooddata-sdk/tests/catalog/fixtures/aac/gooddata.yaml
+  4ae20b1ad5b5317e 2-9
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/service.py
+  4ae20b1ad5b5317e 420-449
+packages/gooddata-sdk/pyproject.toml
+  4ae20b1ad5b5317e 37
+packages/gooddata-sdk/src/gooddata_sdk/cli/deploy.py
+  4ae20b1ad5b5317e 12,22-37,39-40,43-48,50-53,55,59,61,82-85,87-88,91-92,95-97,99,101,109
+packages/gooddata-sdk/src/gooddata_sdk/cli/constants.py
+  4ae20b1ad5b5317e 12
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/aac.py
+  4ae20b1ad5b5317e 1-55,57,59-409
+packages/gooddata-sdk/src/gooddata_sdk/cli/clone.py
+  4ae20b1ad5b5317e 6-7,16-17,21-26,53-56,63,68-69,72-75,86
+packages/gooddata-sdk/tests/catalog/test_aac.py
+  4ae20b1ad5b5317e 1-282
+packages/gooddata-sdk/src/gooddata_sdk/cli/gdc_core.py
+  4ae20b1ad5b5317e 7,10-11,14-21,24-32,35,39,41,44,46,48,54,60-63,65,67
+packages/gooddata-sdk/src/gooddata_sdk/__init__.py
+  4ae20b1ad5b5317e 183-201
+packages/gooddata-sdk/tests/cli/__init__.py
+  4ae20b1ad5b5317e 1
+packages/gooddata-sdk/tests/cli/test_gdc.py
+  4ae20b1ad5b5317e 1-7,9-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "7bc9b8bcf5a68b864af938efc9cc229d886a8967",
+  "prompts": {
+    "4ae20b1ad5b5317e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c1a16e11-2c02-4f84-92fa-3f303de4930c",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>",
+      "messages": [],
+      "total_additions": 1054,
+      "total_deletions": 326,
+      "accepted_lines": 909,
+      "overriden_lines": 4
+    }
+  }
+}
