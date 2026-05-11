@@ -234,10 +234,9 @@
             "type": "boolean"
           },
           "name": {
-            "description": "Column name",
+            "description": "Column name. Must not contain NUL (0x00) characters.",
             "example": "customer_id",
             "maxLength": 255,
-            "pattern": "^[^\u0000]*$",
             "type": "string"
           },
           "referencedTableColumn": {

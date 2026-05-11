@@ -6,7 +6,7 @@ A table column.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **data_type** | **str** | Column type | 
-**name** | **str** | Column name | 
+**name** | **str** | Column name. Must not contain NUL (0x00) characters. | 
 **description** | **str** | Column description/comment from database | [optional] 
 **is_nullable** | **bool** | Column is nullable | [optional] 
 **is_primary_key** | **bool** | Is column part of primary key? | [optional] 
