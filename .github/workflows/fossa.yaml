@@ -1,0 +1,50 @@
+# (C) 2026 GoodData Corporation
+name: FOSSA scan
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch label to attach to the FOSSA scan.
+        required: false
+        default: master
+
+concurrency:
+  group: fossa-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fossa:
+    name: FOSSA scan
+    runs-on:
+      group: infra1-runners-arc
+      labels: runners-small
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check that .fossa.yml exists
+        shell: bash
+        run: |
+          [ -f ./.fossa.yml ] || { echo "Missing .fossa.yml in repo root; FOSSA needs it for project id." >&2; exit 1; }
+
+      - name: Workaround for "no targets found" error
+        shell: bash
+        run: |
+          [ -f ./requirements.txt ] || touch ./requirements.txt
+
+      - name: Run FOSSA analyze
+        uses: fossas/fossa-action@v1.9.0
+        with:
+          api-key: ${{ secrets.FOSSA_API_KEY }}
+          branch: ${{ inputs.branch }}
+
+      - name: Run FOSSA test (policy gate)
+        uses: fossas/fossa-action@v1.9.0
+        with:
+          api-key: ${{ secrets.FOSSA_API_KEY }}
+          run-tests: true
