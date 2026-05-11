@@ -37,11 +37,12 @@ from gooddata_sdk import (
     GoodDataApiClient,
     GoodDataSdk,
 )
+from gooddata_sdk.catalog.permission.declarative_model.permission import CatalogDeclarativeWorkspacePermissions
 from gooddata_sdk.utils import recreate_directory
 from tests_support.file_utils import load_json
 from tests_support.vcrpy_utils import get_vcr
 
-from .conftest import safe_delete
+from .conftest import load_expected_data_sources, safe_delete
 
 gd_vcr = get_vcr()
 
@@ -194,8 +195,6 @@ def _restore_demo2_permissions(sdk: GoodDataSdk, test_config: dict) -> None:
     Note: This function makes HTTP calls. When used in tests with VCR cassettes,
     ensure the cassette includes the restoration calls (in finally blocks).
     """
-    from .conftest import load_expected_data_sources
-
     # Restore data source permissions
     expected_ds_path = _current_dir / "expected" / "declarative_data_sources.json"
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
@@ -203,8 +202,6 @@ def _restore_demo2_permissions(sdk: GoodDataSdk, test_config: dict) -> None:
     sdk.catalog_data_source.put_declarative_data_sources(data_sources, credentials_path)
 
     # Restore workspace permissions
-    from gooddata_sdk.catalog.permission.declarative_model.permission import CatalogDeclarativeWorkspacePermissions
-
     expected_ws_path = _current_dir / "expected" / "declarative_workspace_permissions.json"
     ws_data = load_json(expected_ws_path)
     ws_permissions = CatalogDeclarativeWorkspacePermissions.from_dict(ws_data, camel_case=True)

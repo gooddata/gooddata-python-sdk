@@ -17,7 +17,7 @@ def _setup_path(monkeypatch: pytest.MonkeyPatch) -> None:
 
 @pytest.fixture()
 def _mod():
-    import method_page_renderer as mod
+    import method_page_renderer as mod  # noqa: PLC0415
 
     return mod
 

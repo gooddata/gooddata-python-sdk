@@ -216,7 +216,7 @@ def create_localized_workspaces(
     if data_product.localization is None:
         return
     try:
-        from deep_translator import GoogleTranslator
+        from deep_translator import GoogleTranslator  # noqa: PLC0415
     except ImportError:
         logger.warning(
             "create_localized_workspaces: deep_translator module not found, will not be able to localize workspaces"

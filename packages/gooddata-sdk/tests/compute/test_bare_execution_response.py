@@ -8,12 +8,14 @@ import pytest
 
 pyarrow = pytest.importorskip("pyarrow")
 
+import pyarrow as pa  # noqa: E402
+from gooddata_sdk.compute.model import execution as _exec_mod  # noqa: E402
+from gooddata_sdk.compute.model.execution import BareExecutionResponse  # noqa: E402
+from pyarrow import ipc  # noqa: E402
+
 
 def _make_ipc_stream_bytes() -> bytes:
     """Return minimal Arrow IPC stream bytes for a one-row table."""
-    import pyarrow as pa
-    from pyarrow import ipc
-
     table = pa.table({"x": pa.array([1.0])})
     buf = io.BytesIO()
     with ipc.new_stream(buf, table.schema) as writer:
@@ -44,8 +46,6 @@ class _FakeResponse(io.RawIOBase):
 
 def _make_bare(ipc_bytes: bytes):
     """Return a BareExecutionResponse backed by a mock API client."""
-    from gooddata_sdk.compute.model.execution import BareExecutionResponse
-
     mock_api_client = MagicMock()
     mock_response = _FakeResponse(ipc_bytes)
     mock_api_client.actions_api.api_client.call_api.return_value = mock_response
@@ -66,8 +66,6 @@ def _make_bare(ipc_bytes: bytes):
 
 def test_read_result_arrow_returns_table() -> None:
     """read_result_arrow reads the stream from the binary endpoint and returns a pa.Table."""
-    import pyarrow as pa
-
     ipc_bytes = _make_ipc_stream_bytes()
     bare, mock_response = _make_bare(ipc_bytes)
 
@@ -101,8 +99,6 @@ def test_read_result_arrow_without_cancel_token() -> None:
 
 def test_read_result_arrow_no_pyarrow_raises() -> None:
     """When pyarrow is not installed, read_result_arrow raises ImportError."""
-    from gooddata_sdk.compute.model import execution as _exec_mod
-
     ipc_bytes = _make_ipc_stream_bytes()
     bare, _ = _make_bare(ipc_bytes)
 
