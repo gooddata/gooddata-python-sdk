@@ -8,9 +8,9 @@ NO_CLIENT_GD_PROJECTS_ABS = $(filter-out %client, $(wildcard $(CURDIR)/packages/
 NO_CLIENT_GD_PROJECTS_DIRS = $(foreach dir, $(NO_CLIENT_GD_PROJECTS_ABS), $(notdir $(dir)))
 # TODO: replace API_VERSION in the future by call to API
 API_VERSION="v1"
-# Default: generate from localhost; use `make api-client STAGING=1` to download from remote
+# Default: generate from localhost; use `make api-client STAGING=1` to download from staging
 ifdef STAGING
-BASE_URL="https://demo-cicd.cloud.gooddata.com"
+BASE_URL="https://staging.dev-latest.stg11.panther.intgdc.com"
 else
 BASE_URL="http://localhost:3000"
 endif
@@ -61,22 +61,8 @@ endef
 .PHONY: _api-client-generate
 _api-client-generate:
 	rm -f schemas/gooddata-api-client.json
-	# Merge per-domain specs and strip literal NUL bytes that jq decoded from
-	#   escapes in the source (the previous `sed '/.../d'` pattern was a no-op:
-	# sed BRE/ERE doesn't interpret \uNNNN, so it never matched anything).
-	cat schemas/gooddata-*.json | jq -S -s 'reduce .[] as $$item ({}; . * $$item) + { tags : ( reduce .[].tags as $$item (null; . + $$item) | unique_by(.name) ) }' | tr -d '\000' > "schemas/gooddata-api-client.json"
-	# Break the DashboardCompoundConditionItem ↔ children oneOf/allOf cycle that
-	# crashes openapi-generator-cli v6.6.0 with StackOverflowError in
-	# recursiveGetDiscriminator (its walker has no visited-set). Parent has no
-	# own properties, so dropping the redundant `allOf: [{$$ref: parent}]` from
-	# each child is semantically a no-op.
-	jq '(.components.schemas.DashboardCompoundComparisonCondition.allOf) |= map(select(.["$$ref"] != "#/components/schemas/DashboardCompoundConditionItem")) | (.components.schemas.DashboardCompoundRangeCondition.allOf) |= map(select(.["$$ref"] != "#/components/schemas/DashboardCompoundConditionItem"))' schemas/gooddata-api-client.json > schemas/gooddata-api-client.json.tmp && mv schemas/gooddata-api-client.json.tmp schemas/gooddata-api-client.json
+	cat schemas/gooddata-*.json | jq -S -s 'reduce .[] as $$item ({}; . * $$item) + { tags : ( reduce .[].tags as $$item (null; . + $$item) | unique_by(.name) ) }' > "schemas/gooddata-api-client.json"
 	$(call generate_client,api)
-	# Repair regex patterns of the form ^[^\x00]*$ that openapi-generator mangles
-	# in two ways: sometimes it drops the NUL (leaving the invalid `^[^]*$`),
-	# sometimes it embeds a literal NUL byte (producing a Python source that
-	# fails to import with SyntaxError). The helper handles both shapes.
-	./scripts/postprocess_api_client.py gooddata-api-client/gooddata_api_client
 
 .PHONY: api-client
 api-client: download _api-client-generate
