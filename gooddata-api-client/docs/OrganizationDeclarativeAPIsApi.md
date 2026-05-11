@@ -582,6 +582,24 @@ with gooddata_api_client.ApiClient() as api_client:
                 saml_metadata="saml_metadata_example",
             ),
         ],
+        ip_allowlist_policies=[
+            DeclarativeIpAllowlistPolicy(
+                allowed_sources=["203.0.113.10/32","198.51.100.0/24"],
+                id="admin-vpn-only",
+                user_groups=[
+                    DeclarativeUserGroupIdentifier(
+                        id="group.admins",
+                        type="userGroup",
+                    ),
+                ],
+                users=[
+                    DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                ],
+            ),
+        ],
         jwks=[
             DeclarativeJwk(
                 content=DeclarativeJwkSpecification(),

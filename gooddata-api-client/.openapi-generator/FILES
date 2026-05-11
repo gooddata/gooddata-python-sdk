@@ -291,6 +291,7 @@ docs/DeclarativeFilterContext.md
 docs/DeclarativeFilterView.md
 docs/DeclarativeIdentityProvider.md
 docs/DeclarativeIdentityProviderIdentifier.md
+docs/DeclarativeIpAllowlistPolicy.md
 docs/DeclarativeJwk.md
 docs/DeclarativeJwkSpecification.md
 docs/DeclarativeLabel.md
@@ -1831,6 +1832,7 @@ gooddata_api_client/model/declarative_filter_context.py
 gooddata_api_client/model/declarative_filter_view.py
 gooddata_api_client/model/declarative_identity_provider.py
 gooddata_api_client/model/declarative_identity_provider_identifier.py
+gooddata_api_client/model/declarative_ip_allowlist_policy.py
 gooddata_api_client/model/declarative_jwk.py
 gooddata_api_client/model/declarative_jwk_specification.py
 gooddata_api_client/model/declarative_label.py

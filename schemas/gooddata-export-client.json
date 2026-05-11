@@ -914,9 +914,6 @@
       "DashboardCompoundComparisonCondition": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/DashboardCompoundConditionItem"
-          },
-          {
             "properties": {
               "operator": {
                 "enum": [
@@ -956,9 +953,6 @@
       },
       "DashboardCompoundRangeCondition": {
         "allOf": [
-          {
-            "$ref": "#/components/schemas/DashboardCompoundConditionItem"
-          },
           {
             "properties": {
               "from": {
