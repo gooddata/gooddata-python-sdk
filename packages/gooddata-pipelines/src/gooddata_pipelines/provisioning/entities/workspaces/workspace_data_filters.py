@@ -3,6 +3,7 @@
 """Module for managing workspace data filter settings in GoodData Cloud."""
 
 import json
+import os
 from typing import Any
 from uuid import uuid4
 
@@ -39,8 +40,6 @@ class WorkspaceDataFilterManager:
     ) -> dict[str, Any]:
         """Loads a JSON template of a WDF setting and fills it with the given values."""
         values = [str(value) for value in wdf_values]
-
-        import os
 
         wdf_setting_path = os.path.join(
             os.path.dirname(__file__), "../../assets/wdf_setting.json"

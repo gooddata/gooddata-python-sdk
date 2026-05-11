@@ -41,7 +41,7 @@ def _create_console_span_exporter() -> SpanExporter:
 
 
 def _create_zipkin_span_exporter() -> SpanExporter:
-    from opentelemetry.exporter.zipkin.json import (
+    from opentelemetry.exporter.zipkin.json import (  # noqa: PLC0415
         ZipkinExporter,
     )
 
@@ -49,7 +49,7 @@ def _create_zipkin_span_exporter() -> SpanExporter:
 
 
 def _create_otlp_grpc_exporter() -> SpanExporter:
-    from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
+    from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (  # noqa: PLC0415
         OTLPSpanExporter,
     )
 
@@ -57,7 +57,7 @@ def _create_otlp_grpc_exporter() -> SpanExporter:
 
 
 def _create_otlp_http_exporter() -> SpanExporter:
-    from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
+    from opentelemetry.exporter.otlp.proto.http.trace_exporter import (  # noqa: PLC0415
         OTLPSpanExporter,
     )
 

@@ -33,6 +33,7 @@ except ImportError as e:
     # package-specific global variable would inevitably lead to evaluation of __init__ which imports the FDW code
     # which will then try to import from this file before the variable is even set
     import sys
+    from logging import getLevelName
 
     if "pytest" not in sys.modules and "sphinx" not in sys.modules:
         # multicorn stuff cannot be imported & the FDW code is not currently under test or as documentation build.
@@ -40,8 +41,6 @@ except ImportError as e:
         raise e
 
     def _log_to_console(msg: str, level: int) -> None:
-        from logging import getLevelName
-
         print(f"{getLevelName(level)}: {msg}")
 
     log_to_postgres = _log_to_console

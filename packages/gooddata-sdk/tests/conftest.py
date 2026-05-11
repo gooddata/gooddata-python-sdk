@@ -6,6 +6,8 @@ from unittest import mock
 
 import pytest
 import yaml
+from gooddata_sdk import GoodDataSdk
+from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from tests_support.vcrpy_utils import configure_normalization
 
 logger = logging.getLogger(__name__)
@@ -77,8 +79,6 @@ def _patch_ds_credentials(test_config):
         yield
         return
 
-    from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
-
     original = CatalogDataSourceService._credentials_from_file
 
     @staticmethod
@@ -120,8 +120,6 @@ def staging_preflight(test_config, _patch_ds_credentials):
     if not test_config.get("staging", False):
         yield
         return
-
-    from gooddata_sdk import GoodDataSdk
 
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
 
@@ -234,8 +232,6 @@ def staging_session_snapshot(test_config, staging_preflight):
     if not test_config.get("staging", False):
         yield
         return
-
-    from gooddata_sdk import GoodDataSdk
 
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
 
