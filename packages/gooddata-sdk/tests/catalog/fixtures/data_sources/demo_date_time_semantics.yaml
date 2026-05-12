@@ -1,0 +1,136 @@
+interactions:
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
+    response:
+      body:
+        string:
+          data:
+            attributes:
+              alternativeDataSourceId: ds-put-abc-id
+              authenticationType: USERNAME_PASSWORD
+              name: demo-test-ds
+              schema: demo
+              type: POSTGRESQL
+              url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
+              username: postgres
+            id: demo-test-ds
+            type: dataSource
+          links:
+            self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
+      headers:
+        Content-Type:
+          - application/json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
+  - request:
+      body:
+        data:
+          attributes:
+            dateTimeSemantics: LOCAL
+            type: POSTGRESQL
+            url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
+          id: demo-test-ds
+          type: dataSource
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: PATCH
+      uri: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
+    response:
+      body:
+        string:
+          detail: Date time semantics setting is not supported for the given database
+            type
+          status: 400
+          title: Bad Request
+          traceId: NORMALIZED_TRACE_ID_000000000000
+      headers:
+        Content-Type:
+          - application/problem+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 400
+        message: Bad Request
+  - request:
+      body:
+        dataSources:
+          - alternativeDataSourceId: ds-put-abc-id
+            id: demo-test-ds
+            name: demo-test-ds
+            password: passw0rd
+            permissions:
+              - assignee:
+                  id: demo2
+                  type: user
+                name: MANAGE
+              - assignee:
+                  id: demoGroup
+                  type: userGroup
+                name: USE
+            schema: demo
+            type: POSTGRESQL
+            url: jdbc:postgresql://postgres:5432/tiger?sslmode=prefer
+            username: postgres
+      headers:
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: PUT
+      uri: http://localhost:3000/api/v1/layout/dataSources
+    response:
+      body:
+        string: ''
+      headers:
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 204
+        message: No Content
+version: 1

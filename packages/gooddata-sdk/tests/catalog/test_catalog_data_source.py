@@ -667,30 +667,52 @@ def test_cache_strategy(test_config: dict, snapshot_data_sources):
     # snapshot_data_sources fixture also restores in teardown
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_date_time_semantics.yaml"))
-def test_date_time_semantics(test_config: dict, snapshot_data_sources):
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    data_source_id = test_config["data_source"]
-    path = _current_dir / "expected" / "declarative_data_sources.json"
-    credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
+def test_date_time_semantics():
+    """Unit test: date_time_semantics round-trips through SDK models.
 
-    def token_from_file_side_effect(file_path, base64_encode: bool):
-        if file_path == "~/home/secrets.json":
-            return test_config["bigquery_token"]
-        elif file_path == "databricks-token":
-            return test_config["databricks_token"]
-        else:
-            raise ValueError(f"Unexpected argument: {file_path}")
+    dateTimeSemantics is only supported for StarRocks/AI Lakehouse backends, so
+    this test validates SDK-level serialization and deserialization without hitting
+    the real API.
+    """
+    # 1. Deserialization: CatalogDataSource.from_api populates date_time_semantics
+    entity = {
+        "id": "test-ds",
+        "type": "dataSource",
+        "attributes": {
+            "name": "test-ds",
+            "type": "POSTGRESQL",
+            "schema": "demo",
+            "url": "jdbc:postgresql://localhost:5432/demo",
+            "date_time_semantics": "LOCAL",
+        },
+    }
+    ds = CatalogDataSource.from_api(entity)
+    assert ds.date_time_semantics == "LOCAL"
 
-    TokenCredentialsFromFile.token_from_file = MagicMock(side_effect=token_from_file_side_effect)
+    # 2. Absent by default when not present in the API response
+    entity_no_dts = {
+        "id": "test-ds",
+        "type": "dataSource",
+        "attributes": {
+            "name": "test-ds",
+            "type": "POSTGRESQL",
+            "schema": "demo",
+            "url": "jdbc:postgresql://localhost:5432/demo",
+        },
+    }
+    ds_no_dts = CatalogDataSource.from_api(entity_no_dts)
+    assert ds_no_dts.date_time_semantics is None
 
-    try:
-        sdk.catalog_data_source.patch_data_source_attributes(data_source_id, {"date_time_semantics": "LOCAL"})
-        updated = sdk.catalog_data_source.get_data_source(data_source_id=data_source_id)
-        assert updated.date_time_semantics == "LOCAL"
-    finally:
-        data_sources_o = load_expected_data_sources(path, test_config)
-        safe_delete(sdk.catalog_data_source.put_declarative_data_sources, data_sources_o, credentials_path)
+    # 3. Serialization: to_api_patch includes date_time_semantics in the PATCH body
+    patch_doc = CatalogDataSource.to_api_patch(
+        "test-ds",
+        {
+            "date_time_semantics": "LOCAL",
+            "type": "POSTGRESQL",
+            "url": "jdbc:postgresql://localhost:5432/demo",
+        },
+    )
+    assert patch_doc.data.attributes.date_time_semantics == "LOCAL"
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_scan_model.yaml"))
