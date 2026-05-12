@@ -8,6 +8,10 @@ from unittest.mock import MagicMock
 
 import attrs
 from gooddata_sdk import (
+    CatalogDashboardCompoundComparisonCondition,
+    CatalogDashboardCompoundRangeCondition,
+    CatalogDashboardMeasureValueFilter,
+    CatalogDashboardMeasureValueFilterBody,
     CatalogDatasetWorkspaceDataFilterIdentifier,
     CatalogDeclarativeAnalytics,
     CatalogDeclarativeExportDefinition,
@@ -502,3 +506,86 @@ def test_export_definition_analytics_layout(test_config):
         assert deep_eq(analytics_o.analytics.export_definitions, analytics_e.analytics.export_definitions)
     finally:
         safe_delete(_refresh_workspaces, sdk)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_dashboard_measure_value_filter.yaml"))
+def test_dashboard_measure_value_filter(test_config):
+    """Verify that DashboardMeasureValueFilter can be embedded in a dashboard and round-trips
+    correctly through the declarative analytics model endpoints.
+
+    The test:
+    1. Gets the current analytics model.
+    2. Injects a measureValueFilter (comparison + range) into the first dashboard's content.
+    3. Puts the updated model back.
+    4. Gets it again and verifies the filters are preserved.
+    5. Restores the original model in `finally`.
+    """
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    workspace_id = test_config["workspace"]
+
+    original = sdk.catalog_workspace_content.get_declarative_analytics_model(workspace_id, exclude=["ACTIVITY_INFO"])
+    try:
+        modified = copy.deepcopy(original)
+        assert modified.analytics is not None and modified.analytics.analytical_dashboards, (
+            "Workspace must have at least one analytical dashboard for this test"
+        )
+
+        dashboard = modified.analytics.analytical_dashboards[0]
+
+        # Build a comparison-condition measure value filter (operator + single value).
+        comparison_filter = CatalogDashboardMeasureValueFilter(
+            measure_value_filter=CatalogDashboardMeasureValueFilterBody(
+                conditions=[
+                    CatalogDashboardCompoundComparisonCondition(
+                        operator="GREATER_THAN",
+                        value=1000.0,
+                    )
+                ],
+                measure={"identifier": {"id": "order_amount", "type": "metric"}},
+                title="Order Amount > 1000",
+            )
+        )
+
+        # Build a range-condition measure value filter (from + operator + to).
+        range_filter = CatalogDashboardMeasureValueFilter(
+            measure_value_filter=CatalogDashboardMeasureValueFilterBody(
+                conditions=[
+                    CatalogDashboardCompoundRangeCondition(
+                        from_value=500.0,
+                        operator="BETWEEN",
+                        to=2000.0,
+                    )
+                ],
+                measure={"identifier": {"id": "order_amount", "type": "metric"}},
+                title="Order Amount 500-2000",
+            )
+        )
+
+        # Verify SDK → API serialization before touching the server.
+        comp_api = comparison_filter.to_api()
+        assert comp_api.measure_value_filter.conditions[0].operator == "GREATER_THAN"
+        assert comp_api.measure_value_filter.conditions[0].value == 1000.0
+
+        range_api = range_filter.to_api()
+        assert range_api.measure_value_filter.conditions[0].operator == "BETWEEN"
+
+        # Inject the filters into the dashboard content.
+        existing_filters = dashboard.content.get("filters", [])
+        dashboard.content["filters"] = existing_filters + [
+            comparison_filter.to_api().to_dict(camel_case=True),
+            range_filter.to_api().to_dict(camel_case=True),
+        ]
+
+        sdk.catalog_workspace_content.put_declarative_analytics_model(workspace_id, modified)
+
+        retrieved = sdk.catalog_workspace_content.get_declarative_analytics_model(
+            workspace_id, exclude=["ACTIVITY_INFO"]
+        )
+        retrieved_dashboard = retrieved.analytics.analytical_dashboards[0]
+        retrieved_filters = retrieved_dashboard.content.get("filters", [])
+
+        # The two newly injected measure value filters must be present.
+        mvf_filters = [f for f in retrieved_filters if "measureValueFilter" in f]
+        assert len(mvf_filters) == 2, f"Expected 2 measureValueFilter entries, got {len(mvf_filters)}"
+    finally:
+        sdk.catalog_workspace_content.put_declarative_analytics_model(workspace_id, original)
