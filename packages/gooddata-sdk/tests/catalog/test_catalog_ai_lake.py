@@ -22,13 +22,11 @@ _fixtures_dir = _current_dir / "fixtures" / "ai_lake"
 _cassette_list_object_storages = _fixtures_dir / "test_list_ai_lake_object_storages.yaml"
 
 
-@pytest.mark.skipif(
-    not _cassette_list_object_storages.exists(),
-    reason="Cassette not yet recorded — requires an AI Lake-enabled environment",
-)
 @gd_vcr.use_cassette(str(_cassette_list_object_storages))
 def test_list_ai_lake_object_storages(test_config):
     """List registered AI Lake ObjectStorages and verify the response shape."""
+    if not _cassette_list_object_storages.exists():
+        pytest.skip("Cassette not yet recorded — requires an AI Lake-enabled environment")
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     storages = sdk.catalog_ai_lake.list_object_storages()
 
