@@ -42,6 +42,7 @@ environments:
     ds_url: "jdbc:postgresql://postgres:5432/tiger?sslmode=prefer"
     ds_username: "postgres"
     ds_password: "passw0rd"
+    ai_lake_instance_id: "demo-ai-lake"
 
   staging:
     staging: true
@@ -54,3 +55,4 @@ environments:
     ds_url: "jdbc:postgresql://postgresql-ha-pgpool.postgresql-ha/tiger_tests?sslmode=prefer"
     ds_username: "postgres"
     ds_password: ""  # overridden from DS_PASSWORD env var
+    ai_lake_instance_id: "demo-ai-lake"  # override with real staging AI Lake instance ID if needed
