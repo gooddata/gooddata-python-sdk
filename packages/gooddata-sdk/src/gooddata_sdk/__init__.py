@@ -7,6 +7,11 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 import logging
 
 from gooddata_sdk._version import __version__
+from gooddata_sdk.catalog.ai_lake.entity_model.column_expression import (
+    CatalogColumnExpression,
+    ColumnExpressionFunction,
+)
+from gooddata_sdk.catalog.ai_lake.entity_model.object_storage import CatalogObjectStorageInfo
 from gooddata_sdk.catalog.ai_lake.service import (
     CatalogAILakeOperation,
     CatalogAILakeOperationError,
