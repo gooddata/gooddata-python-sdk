@@ -191,6 +191,18 @@ class CatalogWorkspaceService(CatalogServiceBase):
         workspace_settings = load_all_entities(get_workspace_settings).data
         return [CatalogWorkspaceSetting.from_api(ws) for ws in workspace_settings]
 
+    def register_workspace_upload_notification(self, workspace_id: str) -> None:
+        """Invalidate cache of computed reports in a workspace to force recomputation with new data.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+
+        Returns:
+            None
+        """
+        self._actions_api.register_workspace_upload_notification(workspace_id)
+
     def resolve_all_workspace_settings(self, workspace_id: str) -> dict:
         """Resolve values for all settings in a workspace.
 

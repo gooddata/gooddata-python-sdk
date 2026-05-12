@@ -1032,3 +1032,10 @@ def test_layout_filter_views(test_config):
         assert filter_views_expected == filter_views_o
     finally:
         safe_delete(sdk.catalog_workspace.put_declarative_filter_views, workspace_id, [])
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "register_workspace_upload_notification.yaml"))
+def test_register_workspace_upload_notification(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    # Calling register_workspace_upload_notification should succeed (HTTP 204, no body)
+    sdk.catalog_workspace.register_workspace_upload_notification(test_config["workspace"])
