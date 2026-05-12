@@ -26,6 +26,7 @@ from .ldm_extension.models.custom_data_object import (
     CustomDatasetDefinition,
     CustomFieldDefinition,
     CustomFieldType,
+    ParentDatasetReference,
 )
 
 # -------- Provisioning --------
@@ -93,6 +94,7 @@ __all__ = [
     "CustomFieldDefinition",
     "ColumnDataType",
     "CustomFieldType",
+    "ParentDatasetReference",
     "provision",
     "WorkflowType",
     "__version__",
