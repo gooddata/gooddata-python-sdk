@@ -23,6 +23,7 @@ from gooddata_sdk import (
     DataSourceValidator,
     GoodDataSdk,
     ObjId,
+    Visualization,
 )
 from gooddata_sdk.compute.model.filter import AbsoluteDateFilter, RelativeDateFilter
 from gooddata_sdk.utils import recreate_directory
@@ -502,3 +503,18 @@ def test_export_definition_analytics_layout(test_config):
         assert deep_eq(analytics_o.analytics.export_definitions, analytics_e.analytics.export_definitions)
     finally:
         safe_delete(_refresh_workspaces, sdk)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_get_visualizations_with_parameters.yaml"))
+def test_get_visualizations_with_parameters(test_config):
+    """Verify that visualization objects entity endpoint works correctly after
+    the parameters relationship was added to JsonApiVisualizationObjectOut.
+    The included array type changed from JsonApiVisualizationObjectOutIncludes
+    to JsonApiMetricOutIncludes which now includes JsonApiParameterOutWithLinks.
+    """
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    visualizations = sdk.visualizations.get_visualizations(test_config["workspace"])
+    assert len(visualizations) > 0
+    for vis in visualizations:
+        assert isinstance(vis, Visualization)
+        assert vis.id is not None
