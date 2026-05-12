@@ -667,6 +667,32 @@ def test_cache_strategy(test_config: dict, snapshot_data_sources):
     # snapshot_data_sources fixture also restores in teardown
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_date_time_semantics.yaml"))
+def test_date_time_semantics(test_config: dict, snapshot_data_sources):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_source_id = test_config["data_source"]
+    path = _current_dir / "expected" / "declarative_data_sources.json"
+    credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
+
+    def token_from_file_side_effect(file_path, base64_encode: bool):
+        if file_path == "~/home/secrets.json":
+            return test_config["bigquery_token"]
+        elif file_path == "databricks-token":
+            return test_config["databricks_token"]
+        else:
+            raise ValueError(f"Unexpected argument: {file_path}")
+
+    TokenCredentialsFromFile.token_from_file = MagicMock(side_effect=token_from_file_side_effect)
+
+    try:
+        sdk.catalog_data_source.patch_data_source_attributes(data_source_id, {"date_time_semantics": "LOCAL"})
+        updated = sdk.catalog_data_source.get_data_source(data_source_id=data_source_id)
+        assert updated.date_time_semantics == "LOCAL"
+    finally:
+        data_sources_o = load_expected_data_sources(path, test_config)
+        safe_delete(sdk.catalog_data_source.put_declarative_data_sources, data_sources_o, credentials_path)
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_scan_model.yaml"))
 def test_scan_model(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])

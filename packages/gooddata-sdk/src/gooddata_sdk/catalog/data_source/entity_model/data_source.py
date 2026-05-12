@@ -49,6 +49,7 @@ class CatalogDataSourceBase(Base):
         "type",
         "schema",
         "alternative_data_source_id",
+        "date_time_semantics",
     ]
 
     id: str
@@ -61,6 +62,7 @@ class CatalogDataSourceBase(Base):
     decoded_parameters: list[dict[str, str]] | None = None
     credentials: Credentials = field(repr=False)
     alternative_data_source_id: str | None = None
+    date_time_semantics: str | None = None
 
     @type.validator  # type: ignore
     def _check_allowed_values(self, attribute: Attribute, value: str) -> None:
