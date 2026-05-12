@@ -31,6 +31,7 @@ from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
 )
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
 from gooddata_sdk.catalog.organization.layout.identity_provider import CatalogDeclarativeIdentityProvider
+from gooddata_sdk.catalog.organization.layout.ip_allowlist_policy import CatalogDeclarativeIpAllowlistPolicy
 from gooddata_sdk.catalog.organization.layout.notification_channel import CatalogDeclarativeNotificationChannel
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.utils import load_all_entities, load_all_entities_dict
@@ -742,3 +743,35 @@ class CatalogOrganizationService(CatalogServiceBase):
             )
         except Exception as e:
             raise ValueError(f"Error switching active identity provider: {str(e)}")
+
+    def get_declarative_ip_allowlist_policies(self) -> list[CatalogDeclarativeIpAllowlistPolicy]:
+        """Get all declarative IP allowlist policies for the current organization.
+
+        IP allowlist policies are returned as part of the full organization layout.
+
+        Returns:
+            list[CatalogDeclarativeIpAllowlistPolicy]:
+                List of declarative IP allowlist policies.
+        """
+        org_layout = self._layout_api.get_organization_layout(_check_return_type=False)
+        policies = getattr(org_layout, "ip_allowlist_policies", None) or []
+        return [CatalogDeclarativeIpAllowlistPolicy.from_api(policy) for policy in policies]
+
+    def put_declarative_ip_allowlist_policies(
+        self, ip_allowlist_policies: list[CatalogDeclarativeIpAllowlistPolicy]
+    ) -> None:
+        """Put declarative IP allowlist policies for the current organization.
+
+        Reads the full organization layout, replaces the ip_allowlist_policies field,
+        and writes the full layout back. All other organization settings are preserved.
+
+        Args:
+            ip_allowlist_policies (list[CatalogDeclarativeIpAllowlistPolicy]):
+                List of declarative IP allowlist policies to set.
+
+        Returns:
+            None
+        """
+        org_layout = self._layout_api.get_organization_layout(_check_return_type=False)
+        org_layout.ip_allowlist_policies = [policy.to_api() for policy in ip_allowlist_policies]
+        self._layout_api.set_organization_layout(org_layout, _check_return_type=False)
