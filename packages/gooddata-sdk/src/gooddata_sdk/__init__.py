@@ -11,6 +11,7 @@ from gooddata_sdk.catalog.ai_lake.service import (
     CatalogAILakeOperation,
     CatalogAILakeOperationError,
     CatalogAILakeService,
+    CatalogDataSourceInfo,
 )
 from gooddata_sdk.catalog.appearance.entity_model.color_palette import (
     CatalogColorPalette,
