@@ -13,6 +13,9 @@ from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeU
 from gooddata_sdk.catalog.user.declarative_model.user_and_user_groups import CatalogDeclarativeUsersUserGroups
 from gooddata_sdk.catalog.user.declarative_model.user_group import CatalogDeclarativeUserGroups
 from gooddata_sdk.catalog.user.entity_model.api_token import CatalogApiToken
+from gooddata_sdk.catalog.user.entity_model.custom_user_application_setting import (
+    CatalogCustomUserApplicationSetting,
+)
 from gooddata_sdk.catalog.user.entity_model.user import CatalogUser, CatalogUserDocument
 from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup, CatalogUserGroupDocument
 from gooddata_sdk.catalog.user.management_model.management import (
@@ -458,3 +461,98 @@ class CatalogUserService(CatalogServiceBase):
 
     def delete_user_api_token(self, user_id: str, api_token_id: str) -> None:
         self._entities_api.delete_entity_api_tokens(user_id, api_token_id)
+
+    # Custom user application settings
+
+    def list_custom_user_application_settings(self, user_id: str) -> list[CatalogCustomUserApplicationSetting]:
+        """List all custom application settings for a user.
+
+        Args:
+            user_id (str):
+                User identification string.
+
+        Returns:
+            list[CatalogCustomUserApplicationSetting]:
+                List of custom user application setting entities.
+        """
+        get_settings = functools.partial(
+            self._entities_api.get_all_entities_custom_user_application_settings,
+            user_id,
+            _check_return_type=False,
+        )
+        settings = load_all_entities(get_settings)
+        return [CatalogCustomUserApplicationSetting.from_api(v) for v in settings.data]
+
+    def get_custom_user_application_setting(self, user_id: str, setting_id: str) -> CatalogCustomUserApplicationSetting:
+        """Get a single custom application setting for a user.
+
+        Args:
+            user_id (str):
+                User identification string.
+            setting_id (str):
+                Setting identification string.
+
+        Returns:
+            CatalogCustomUserApplicationSetting:
+                Custom user application setting entity.
+        """
+        result = self._entities_api.get_entity_custom_user_application_settings(
+            user_id, setting_id, _check_return_type=False
+        )
+        return CatalogCustomUserApplicationSetting.from_api(result.data)
+
+    def create_custom_user_application_setting(
+        self, user_id: str, setting: CatalogCustomUserApplicationSetting
+    ) -> CatalogCustomUserApplicationSetting:
+        """Create a custom application setting for a user.
+
+        Args:
+            user_id (str):
+                User identification string.
+            setting (CatalogCustomUserApplicationSetting):
+                Setting entity to create.
+
+        Returns:
+            CatalogCustomUserApplicationSetting:
+                The newly created custom user application setting entity.
+        """
+        document = setting.as_post_document()
+        result = self._entities_api.create_entity_custom_user_application_settings(
+            user_id, document, _check_return_type=False
+        )
+        return CatalogCustomUserApplicationSetting.from_api(result.data)
+
+    def update_custom_user_application_setting(
+        self, user_id: str, setting: CatalogCustomUserApplicationSetting
+    ) -> CatalogCustomUserApplicationSetting:
+        """Update (patch) a custom application setting for a user.
+
+        Args:
+            user_id (str):
+                User identification string.
+            setting (CatalogCustomUserApplicationSetting):
+                Setting entity with updated values.
+
+        Returns:
+            CatalogCustomUserApplicationSetting:
+                The updated custom user application setting entity.
+        """
+        document = setting.as_patch_document()
+        result = self._entities_api.update_entity_custom_user_application_settings(
+            user_id, setting.id, document, _check_return_type=False
+        )
+        return CatalogCustomUserApplicationSetting.from_api(result.data)
+
+    def delete_custom_user_application_setting(self, user_id: str, setting_id: str) -> None:
+        """Delete a custom application setting for a user.
+
+        Args:
+            user_id (str):
+                User identification string.
+            setting_id (str):
+                Setting identification string.
+
+        Returns:
+            None
+        """
+        self._entities_api.delete_entity_custom_user_application_settings(user_id, setting_id)

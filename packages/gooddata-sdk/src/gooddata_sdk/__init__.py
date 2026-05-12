@@ -181,6 +181,10 @@ from gooddata_sdk.catalog.user.declarative_model.user_group import (
     CatalogDeclarativeUserGroupPermission,
     CatalogDeclarativeUserGroups,
 )
+from gooddata_sdk.catalog.user.entity_model.custom_user_application_setting import (
+    CatalogCustomUserApplicationSetting,
+    CatalogCustomUserApplicationSettingAttributes,
+)
 from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
 from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup
 from gooddata_sdk.catalog.user.management_model.management import (

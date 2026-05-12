@@ -27,6 +27,7 @@ from pathlib import Path
 import pytest
 from gooddata_sdk import (
     CatalogAssigneeIdentifier,
+    CatalogCustomUserApplicationSetting,
     CatalogDeclarativeUser,
     CatalogDeclarativeUserGroup,
     CatalogDeclarativeUserGroups,
@@ -774,6 +775,63 @@ def test_api_tokens(test_config):
         assert tokens[0].bearer_token is None
     finally:
         safe_delete(sdk.catalog_user.delete_user_api_token, test_config["demo_user"], token_id)
+
+
+# Custom user application settings
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_custom_user_application_settings.yaml"))
+def test_custom_user_application_settings(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    user_id = test_config["demo_user"]
+    setting_id = "test-setting-1"
+    application_name = "my-app"
+    content = {"theme": "dark", "language": "en"}
+    updated_content = {"theme": "light", "language": "fr"}
+
+    initial_settings = sdk.catalog_user.list_custom_user_application_settings(user_id)
+    initial_count = len(initial_settings)
+
+    try:
+        # Create
+        setting = CatalogCustomUserApplicationSetting.init(
+            setting_id=setting_id,
+            application_name=application_name,
+            content=content,
+        )
+        created = sdk.catalog_user.create_custom_user_application_setting(user_id, setting)
+        assert created.id == setting_id
+        assert created.attributes.application_name == application_name
+        assert created.attributes.content == content
+        assert created.attributes.workspace_id is None
+
+        # Get
+        fetched = sdk.catalog_user.get_custom_user_application_setting(user_id, setting_id)
+        assert fetched.id == setting_id
+        assert fetched.attributes.application_name == application_name
+        assert fetched.attributes.content == content
+
+        # List
+        all_settings = sdk.catalog_user.list_custom_user_application_settings(user_id)
+        assert len(all_settings) == initial_count + 1
+        assert any(s.id == setting_id for s in all_settings)
+
+        # Update
+        updated_setting = CatalogCustomUserApplicationSetting.init(
+            setting_id=setting_id,
+            application_name=application_name,
+            content=updated_content,
+        )
+        updated = sdk.catalog_user.update_custom_user_application_setting(user_id, updated_setting)
+        assert updated.id == setting_id
+        assert updated.attributes.content == updated_content
+
+        # Verify update
+        re_fetched = sdk.catalog_user.get_custom_user_application_setting(user_id, setting_id)
+        assert re_fetched.attributes.content == updated_content
+
+    finally:
+        safe_delete(sdk.catalog_user.delete_custom_user_application_setting, user_id, setting_id)
 
 
 # Help functions
