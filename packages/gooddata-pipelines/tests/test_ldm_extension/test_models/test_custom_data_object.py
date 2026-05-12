@@ -179,3 +179,30 @@ def test_custom_dataset_definition_legacy_reference_fields_optional():
     ds = CustomDatasetDefinition(**data)
     assert ds.dataset_reference_source_column is None
     assert ds.parent_dataset_references is not None
+
+
+def test_custom_dataset_definition_wdf_optional_both_none():
+    data = make_valid_dataset_def(
+        workspace_data_filter_id=None, workspace_data_filter_column_name=None
+    )
+    ds = CustomDatasetDefinition(**data)
+    assert ds.workspace_data_filter_id is None
+    assert ds.workspace_data_filter_column_name is None
+
+
+def test_custom_dataset_definition_wdf_only_id_raises():
+    data = make_valid_dataset_def(
+        workspace_data_filter_id="wdf1", workspace_data_filter_column_name=None
+    )
+    with pytest.raises(ValidationError) as exc:
+        CustomDatasetDefinition(**data)
+    assert "both be set or both be omitted" in str(exc.value)
+
+
+def test_custom_dataset_definition_wdf_only_column_raises():
+    data = make_valid_dataset_def(
+        workspace_data_filter_id=None, workspace_data_filter_column_name="col1"
+    )
+    with pytest.raises(ValidationError) as exc:
+        CustomDatasetDefinition(**data)
+    assert "both be set or both be omitted" in str(exc.value)

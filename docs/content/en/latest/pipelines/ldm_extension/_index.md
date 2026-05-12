@@ -44,8 +44,8 @@ The custom dataset represents a new dataset appended to the child LDM. It is def
 | dataset_reference_source_column | string \| None | **Deprecated** — use `parent_dataset_references` instead. |
 | dataset_reference_source_column_data_type | [ColumnDataType](#columndatatype) \| None | **Deprecated** — use `parent_dataset_references` instead. |
 | parent_dataset_references | [ParentDatasetReference](#parentdatasetreference)[] \| None | List of references to the parent dataset. |
-| workspace_data_filter_id | string | ID of the workspace data filter to use. |
-| workspace_data_filter_column_name | string | Name of the column in custom dataset used for filtering. |
+| workspace_data_filter_id | string \| None | ID of the workspace data filter to use. Optional; when omitted the dataset participates in no workspace data filter. |
+| workspace_data_filter_column_name | string \| None | Name of the column in custom dataset used for filtering. Optional; must be set whenever `workspace_data_filter_id` is set. |
 | dataset_description | string \| None | Optional declarative description on the custom dataset. |
 | dataset_tags | string[] \| None | Optional tag list; when omitted, defaults to a single tag derived from the dataset display name. |
 
@@ -54,6 +54,8 @@ The custom dataset represents a new dataset appended to the child LDM. It is def
 Either `dataset_source_table` or `dataset_source_sql` must be specified with a truthy value, but not both. An exception will be raised if both parameters are falsy or if both have truthy values.
 
 `parent_dataset_references` must contain at least one entry.
+
+`workspace_data_filter_id` and `workspace_data_filter_column_name` must be provided together or both left unset. Setting only one of them raises a `ValidationError`. When both are unset, the resulting dataset is emitted without a workspace data filter binding.
 
 #### ParentDatasetReference
 
