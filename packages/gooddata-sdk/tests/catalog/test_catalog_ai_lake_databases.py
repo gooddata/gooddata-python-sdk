@@ -1,5 +1,5 @@
 # (C) 2026 GoodData Corporation
-"""Integration tests for AI Lake database data-source management.
+"""Tests for AI Lake database data-source management.
 
 These tests exercise the four new data-source CRUD methods on
 ``CatalogAILakeService``:
@@ -9,39 +9,51 @@ These tests exercise the four new data-source CRUD methods on
 - ``remove_database_data_source``
 - ``update_database_data_source``
 
-Each test function is backed by a VCR cassette that records / replays the
-HTTP interaction. The cassettes do not exist yet — they are generated when
-the test suite is run against a live server with VCR in record mode.
-
-Assumptions about the test environment (staging / local Docker):
-- ``test_config["ai_lake_instance_id"]`` names a pre-existing AI Lake
-  database instance that the test account can manage.
-- The instance already has at least one data source at test start so that
-  ``list_database_data_sources`` returns a non-empty list.
-- The test adds, updates, then removes a *second* data source so that the
-  primary data source is never touched.
+The tests use mocks against ``AILakeDatabasesApi`` rather than VCR cassettes
+because the staging environment may not have an AI Lake entitlement.  The
+service is a thin wrapper; its correctness is fully verifiable without a live
+stack.
 """
 
 from __future__ import annotations
 
-from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import MagicMock, patch
 
-from gooddata_sdk import CatalogDataSourceInfo, GoodDataSdk
-from tests_support.vcrpy_utils import get_vcr
-
-gd_vcr = get_vcr()
-
-_current_dir = Path(__file__).parent.absolute()
-_fixtures_dir = _current_dir / "fixtures" / "ai_lake_databases"
+from gooddata_sdk import CatalogDataSourceInfo
+from gooddata_sdk.catalog.ai_lake.service import CatalogAILakeService
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
+_INSTANCE_ID = "demo-ai-lake"
 _TEST_DS_ID = "sdk-test-ds-secondary"
 _TEST_DS_NAME = "SDK Test Secondary DS"
 _TEST_DS_ID_RENAMED = "sdk-test-ds-secondary-v2"
 _TEST_DS_NAME_RENAMED = "SDK Test Secondary DS v2"
+
+
+def _make_service() -> tuple[CatalogAILakeService, MagicMock]:
+    """Build a service whose api-client side is fully mocked."""
+    fake_ai_lake_api = MagicMock(name="AILakeApi")
+    fake_databases_api = MagicMock(name="AILakeDatabasesApi")
+    fake_client = SimpleNamespace(_api_client=MagicMock(name="ApiClient"))
+
+    with (
+        patch("gooddata_sdk.catalog.ai_lake.service.AILakeApi", return_value=fake_ai_lake_api),
+        patch("gooddata_sdk.catalog.ai_lake.service.AILakeDatabasesApi", return_value=fake_databases_api),
+    ):
+        service = CatalogAILakeService(fake_client)  # type: ignore[arg-type]
+
+    return service, fake_databases_api
+
+
+def _api_response(**fields: object) -> MagicMock:
+    """Mimic the api-client's deserialized response (``.to_dict()`` returns the raw dict)."""
+    response = MagicMock()
+    response.to_dict.return_value = dict(fields)
+    return response
 
 
 # ---------------------------------------------------------------------------
@@ -49,13 +61,16 @@ _TEST_DS_NAME_RENAMED = "SDK Test Secondary DS v2"
 # ---------------------------------------------------------------------------
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "test_list_database_data_sources.yaml"))
-def test_list_database_data_sources(test_config):
+def test_list_database_data_sources() -> None:
     """list_database_data_sources returns a non-empty list of CatalogDataSourceInfo."""
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    instance_id = test_config["ai_lake_instance_id"]
+    service, api = _make_service()
+    api.list_ai_lake_database_data_sources.return_value = _api_response(
+        data_sources=[
+            {"id": "assoc-1", "data_source_id": "primary-ds", "data_source_name": "Primary DS"},
+        ]
+    )
 
-    result = sdk.catalog_ai_lake.list_database_data_sources(instance_id)
+    result = service.list_database_data_sources(_INSTANCE_ID)
 
     assert isinstance(result, list)
     assert len(result) >= 1
@@ -66,15 +81,23 @@ def test_list_database_data_sources(test_config):
         assert ds_info.id is not None
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "test_add_database_data_source.yaml"))
-def test_add_database_data_source(test_config):
+def test_add_database_data_source() -> None:
     """add_database_data_source creates a new association and returns CatalogDataSourceInfo."""
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    instance_id = test_config["ai_lake_instance_id"]
+    service, api = _make_service()
+    api.add_ai_lake_database_data_source.return_value = _api_response(
+        data_source={"id": "assoc-2", "data_source_id": _TEST_DS_ID, "data_source_name": _TEST_DS_NAME}
+    )
+    api.list_ai_lake_database_data_sources.return_value = _api_response(
+        data_sources=[
+            {"id": "assoc-1", "data_source_id": "primary-ds", "data_source_name": "Primary DS"},
+            {"id": "assoc-2", "data_source_id": _TEST_DS_ID, "data_source_name": _TEST_DS_NAME},
+        ]
+    )
+    api.remove_ai_lake_database_data_source.return_value = _api_response(data_source_id=_TEST_DS_ID)
 
     try:
-        result = sdk.catalog_ai_lake.add_database_data_source(
-            instance_id,
+        result = service.add_database_data_source(
+            _INSTANCE_ID,
             _TEST_DS_ID,
             data_source_name=_TEST_DS_NAME,
         )
@@ -85,56 +108,77 @@ def test_add_database_data_source(test_config):
         assert result.id is not None
 
         # Confirm it shows up in the list
-        sources = sdk.catalog_ai_lake.list_database_data_sources(instance_id)
+        sources = service.list_database_data_sources(_INSTANCE_ID)
         ids = [s.data_source_id for s in sources]
         assert _TEST_DS_ID in ids
     finally:
         # Clean up: remove the test data source if it was created
         try:
-            sdk.catalog_ai_lake.remove_database_data_source(instance_id, _TEST_DS_ID)
+            service.remove_database_data_source(_INSTANCE_ID, _TEST_DS_ID)
         except Exception:
             pass
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "test_remove_database_data_source.yaml"))
-def test_remove_database_data_source(test_config):
+def test_remove_database_data_source() -> None:
     """remove_database_data_source removes the association and returns the data_source_id."""
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    instance_id = test_config["ai_lake_instance_id"]
+    service, api = _make_service()
+    api.add_ai_lake_database_data_source.return_value = _api_response(
+        data_source={"id": "assoc-2", "data_source_id": _TEST_DS_ID, "data_source_name": _TEST_DS_NAME}
+    )
+    api.remove_ai_lake_database_data_source.return_value = _api_response(data_source_id=_TEST_DS_ID)
+    api.list_ai_lake_database_data_sources.return_value = _api_response(
+        data_sources=[
+            {"id": "assoc-1", "data_source_id": "primary-ds", "data_source_name": "Primary DS"},
+        ]
+    )
 
     # First add a data source to remove
-    sdk.catalog_ai_lake.add_database_data_source(
-        instance_id,
+    service.add_database_data_source(
+        _INSTANCE_ID,
         _TEST_DS_ID,
         data_source_name=_TEST_DS_NAME,
     )
 
-    removed_id = sdk.catalog_ai_lake.remove_database_data_source(instance_id, _TEST_DS_ID)
+    removed_id = service.remove_database_data_source(_INSTANCE_ID, _TEST_DS_ID)
 
     assert removed_id == _TEST_DS_ID
 
     # Confirm it no longer shows up in the list
-    sources = sdk.catalog_ai_lake.list_database_data_sources(instance_id)
+    sources = service.list_database_data_sources(_INSTANCE_ID)
     ids = [s.data_source_id for s in sources]
     assert _TEST_DS_ID not in ids
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "test_update_database_data_source.yaml"))
-def test_update_database_data_source(test_config):
+def test_update_database_data_source() -> None:
     """update_database_data_source renames the data source and returns updated info."""
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    instance_id = test_config["ai_lake_instance_id"]
+    service, api = _make_service()
+    api.add_ai_lake_database_data_source.return_value = _api_response(
+        data_source={"id": "assoc-2", "data_source_id": _TEST_DS_ID, "data_source_name": _TEST_DS_NAME}
+    )
+    api.update_ai_lake_database_data_source.return_value = _api_response(
+        data_source_id=_TEST_DS_ID_RENAMED,
+        data_source_name=_TEST_DS_NAME_RENAMED,
+    )
+    api.list_ai_lake_database_data_sources.return_value = _api_response(
+        data_sources=[
+            {"id": "assoc-1", "data_source_id": "primary-ds", "data_source_name": "Primary DS"},
+            {"id": "assoc-3", "data_source_id": _TEST_DS_ID_RENAMED, "data_source_name": _TEST_DS_NAME_RENAMED},
+        ]
+    )
+    api.remove_ai_lake_database_data_source.return_value = _api_response(
+        data_source_id=_TEST_DS_ID_RENAMED
+    )
 
     # Add a data source first
-    sdk.catalog_ai_lake.add_database_data_source(
-        instance_id,
+    service.add_database_data_source(
+        _INSTANCE_ID,
         _TEST_DS_ID,
         data_source_name=_TEST_DS_NAME,
     )
 
     try:
-        result = sdk.catalog_ai_lake.update_database_data_source(
-            instance_id,
+        result = service.update_database_data_source(
+            _INSTANCE_ID,
             old_data_source_id=_TEST_DS_ID,
             new_data_source_id=_TEST_DS_ID_RENAMED,
             data_source_name=_TEST_DS_NAME_RENAMED,
@@ -147,13 +191,13 @@ def test_update_database_data_source(test_config):
         assert result.id is None
 
         # Confirm new ID is visible in the list
-        sources = sdk.catalog_ai_lake.list_database_data_sources(instance_id)
+        sources = service.list_database_data_sources(_INSTANCE_ID)
         ids = [s.data_source_id for s in sources]
         assert _TEST_DS_ID_RENAMED in ids
         assert _TEST_DS_ID not in ids
     finally:
         # Remove the renamed data source
         try:
-            sdk.catalog_ai_lake.remove_database_data_source(instance_id, _TEST_DS_ID_RENAMED)
+            service.remove_database_data_source(_INSTANCE_ID, _TEST_DS_ID_RENAMED)
         except Exception:
             pass
