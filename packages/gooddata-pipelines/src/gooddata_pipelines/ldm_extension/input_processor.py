@@ -155,6 +155,46 @@ class LdmExtensionDataProcessor:
         )
 
     @staticmethod
+    def _build_parent_reference_sources(
+        definition: CustomDatasetDefinition,
+    ) -> list[CatalogDeclarativeReferenceSource]:
+        """Build the reference sources from either the new list or the legacy triple."""
+        if definition.parent_dataset_references:
+            return [
+                CatalogDeclarativeReferenceSource(
+                    column=ref.source_column,
+                    data_type=ref.data_type.value,
+                    target=CatalogGrainIdentifier(
+                        id=ref.attribute_id,
+                        type=CustomFieldType.ATTRIBUTE.value,
+                    ),
+                )
+                for ref in definition.parent_dataset_references
+            ]
+
+        # `check_reference_form` on the model guarantees all three legacy
+        # fields are set when `parent_dataset_references` is empty.
+        if (
+            definition.parent_dataset_reference_attribute_id is None
+            or definition.dataset_reference_source_column is None
+            or definition.dataset_reference_source_column_data_type is None
+        ):
+            raise ValueError(
+                "Legacy reference fields must be set when "
+                "`parent_dataset_references` is not provided."
+            )
+        return [
+            CatalogDeclarativeReferenceSource(
+                column=definition.dataset_reference_source_column,
+                data_type=definition.dataset_reference_source_column_data_type.value,
+                target=CatalogGrainIdentifier(
+                    id=definition.parent_dataset_reference_attribute_id,
+                    type=CustomFieldType.ATTRIBUTE.value,
+                ),
+            )
+        ]
+
+    @staticmethod
     def _get_sources(
         dataset: CustomDataset,
     ) -> tuple[
@@ -253,6 +293,10 @@ class LdmExtensionDataProcessor:
             # Get the data source info
             dataset_source_table_id, dataset_sql = self._get_sources(dataset)
 
+            parent_reference_sources = self._build_parent_reference_sources(
+                dataset.definition
+            )
+
             # Construct the declarative dataset object and append it to the list.
             declarative_datasets.append(
                 CatalogDeclarativeDataset(
@@ -265,16 +309,7 @@ class LdmExtensionDataProcessor:
                                 id=dataset.definition.parent_dataset_reference,
                             ),
                             multivalue=True,
-                            sources=[
-                                CatalogDeclarativeReferenceSource(
-                                    column=dataset.definition.dataset_reference_source_column,
-                                    data_type=dataset.definition.dataset_reference_source_column_data_type.value,
-                                    target=CatalogGrainIdentifier(
-                                        id=dataset.definition.parent_dataset_reference_attribute_id,
-                                        type=CustomFieldType.ATTRIBUTE.value,
-                                    ),
-                                )
-                            ],
+                            sources=parent_reference_sources,
                         ),
                     ]
                     + date_references,

@@ -129,3 +129,52 @@ def test_datasets_to_ldm(mock_custom_dataset):
     assert ds.workspace_data_filter_references[0].filter_id.id == "wdf1"
     assert len(ldm.date_instances) == 1
     assert ldm.date_instances[0].id == "date1"
+
+
+def test_datasets_to_ldm_parent_dataset_references_composite():
+    """Multi-column references via `parent_dataset_references` produce N sources."""
+    from gooddata_pipelines.ldm_extension.models.custom_data_object import (
+        CustomDatasetDefinition,
+        ParentDatasetReference,
+    )
+
+    definition = CustomDatasetDefinition(
+        workspace_id="workspace1",
+        dataset_id="ds_composite",
+        dataset_name="Composite Dataset",
+        dataset_source_table="table1",
+        dataset_datasource_id="ds_source",
+        dataset_source_sql=None,
+        parent_dataset_reference="parent_ds",
+        parent_dataset_references=[
+            ParentDatasetReference(
+                attribute_id="parent_pk1",
+                source_column="src_col1",
+                data_type=ColumnDataType.STRING,
+            ),
+            ParentDatasetReference(
+                attribute_id="parent_pk2",
+                source_column="src_col2",
+                data_type=ColumnDataType.INT,
+            ),
+        ],
+        workspace_data_filter_id="wdf1",
+        workspace_data_filter_column_name="col1",
+    )
+    ds = CustomDataset(definition=definition, custom_fields=[])
+    processor = LdmExtensionDataProcessor()
+    model = processor.datasets_to_ldm({"ds_composite": ds})
+    parent_ref = model.ldm.datasets[0].references[0]
+    assert len(parent_ref.sources) == 2
+    assert [s.column for s in parent_ref.sources] == ["src_col1", "src_col2"]
+
+
+def test_datasets_to_ldm_legacy_reference_fallback(mock_dataset_definition):
+    """When `parent_dataset_references` is not set, fall back to legacy fields."""
+    mock_dataset_definition.parent_dataset_references = None
+    ds = CustomDataset(definition=mock_dataset_definition, custom_fields=[])
+    processor = LdmExtensionDataProcessor()
+    model = processor.datasets_to_ldm({"ds1": ds})
+    parent_ref = model.ldm.datasets[0].references[0]
+    assert len(parent_ref.sources) == 1
+    assert parent_ref.sources[0].column == "ref_col"

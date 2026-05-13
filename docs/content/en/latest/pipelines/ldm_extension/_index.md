@@ -40,9 +40,10 @@ The custom dataset represents a new dataset appended to the child LDM. It is def
 | dataset_source_table | string | Name of the table in the Physical Data Model. |
 | dataset_source_sql | string \| None | SQL query defining the dataset. |
 | parent_dataset_reference | string \| None | ID of the parent dataset to which the custom one will be connected. |
-| parent_dataset_reference_attribute_id | string | ID of the attribute used for creating the relationship in the parent dataset. |
-| dataset_reference_source_column | string | Name of the column used for creating the relationship in the custom dataset. |
-| dataset_reference_source_column_data_type | [ColumnDataType](#columndatatype) | Column data type. |
+| parent_dataset_reference_attribute_id | string \| None | **Deprecated** — use `parent_dataset_references` instead. |
+| dataset_reference_source_column | string \| None | **Deprecated** — use `parent_dataset_references` instead. |
+| dataset_reference_source_column_data_type | [ColumnDataType](#columndatatype) \| None | **Deprecated** — use `parent_dataset_references` instead. |
+| parent_dataset_references | [ParentDatasetReference](#parentdatasetreference)[] \| None | List of references to the parent dataset. |
 | workspace_data_filter_id | string | ID of the workspace data filter to use. |
 | workspace_data_filter_column_name | string | Name of the column in custom dataset used for filtering. |
 | dataset_description | string \| None | Optional declarative description on the custom dataset. |
@@ -51,6 +52,18 @@ The custom dataset represents a new dataset appended to the child LDM. It is def
 #### Validity constraints
 
 Either `dataset_source_table` or `dataset_source_sql` must be specified with a truthy value, but not both. An exception will be raised if both parameters are falsy or if both have truthy values.
+
+`parent_dataset_references` must contain at least one entry.
+
+#### ParentDatasetReference
+
+Bundles one column of a (possibly composite) join to the parent dataset. Pass a list of these on `CustomDatasetDefinition.parent_dataset_references`, one entry per join column.
+
+| name | type | description |
+|------|------|-------------|
+| attribute_id | string | ID of the attribute on the parent dataset that this column joins to. |
+| source_column | string | Name of the column on this dataset used to join to the parent. |
+| data_type | [ColumnDataType](#columndatatype) | Data type of the source column. |
 
 ### Custom Field Definitions
 
@@ -162,6 +175,7 @@ from gooddata_pipelines import (
     CustomFieldDefinition,
     CustomFieldType,
     LdmExtensionManager,
+    ParentDatasetReference,
 )
 
 import logging
@@ -188,9 +202,13 @@ custom_dataset_definitions = [
         dataset_source_table="products_custom",
         dataset_source_sql=None,
         parent_dataset_reference="products",
-        parent_dataset_reference_attribute_id="products.product_id",
-        dataset_reference_source_column="product_id",
-        dataset_reference_source_column_data_type=ColumnDataType.INT,
+        parent_dataset_references=[
+            ParentDatasetReference(
+                attribute_id="products.product_id",
+                source_column="product_id",
+                data_type=ColumnDataType.INT,
+            ),
+        ],
         workspace_data_filter_id="wdf_id",
         workspace_data_filter_column_name="wdf_column",
     )
