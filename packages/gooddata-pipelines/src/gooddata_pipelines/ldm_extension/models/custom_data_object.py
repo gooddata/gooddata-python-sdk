@@ -61,6 +61,25 @@ class CustomFieldDefinition(BaseModel):
         return self
 
 
+class ParentDatasetReference(BaseModel):
+    """One column of a (possibly composite) join to the parent dataset.
+
+    A list of these on ``CustomDatasetDefinition.parent_dataset_references``
+    supports multi-column foreign keys. Each entry binds a source column on the
+    new dataset to a grain attribute on the parent.
+    """
+
+    attribute_id: str = Field(
+        description="Attribute ID on the parent dataset that this column joins to.",
+    )
+    source_column: str = Field(
+        description="Column name on this dataset used to join to the parent.",
+    )
+    data_type: ColumnDataType = Field(
+        description="Data type of the source column.",
+    )
+
+
 class CustomDatasetDefinition(BaseModel):
     """Input model for custom dataset definition."""
 
@@ -71,9 +90,31 @@ class CustomDatasetDefinition(BaseModel):
     dataset_source_table: str | None
     dataset_source_sql: str | None
     parent_dataset_reference: str
-    parent_dataset_reference_attribute_id: str
-    dataset_reference_source_column: str
-    dataset_reference_source_column_data_type: ColumnDataType
+    parent_dataset_reference_attribute_id: str | None = Field(
+        default=None,
+        deprecated=(
+            "Use `parent_dataset_references` instead. "
+            "This field will be removed in a future release."
+        ),
+    )
+    dataset_reference_source_column: str | None = Field(
+        default=None,
+        deprecated=(
+            "Use `parent_dataset_references` instead. "
+            "This field will be removed in a future release."
+        ),
+    )
+    dataset_reference_source_column_data_type: ColumnDataType | None = Field(
+        default=None,
+        deprecated=(
+            "Use `parent_dataset_references` instead. "
+            "This field will be removed in a future release."
+        ),
+    )
+    parent_dataset_references: list[ParentDatasetReference] | None = Field(
+        default=None,
+        description="List of references to the parent dataset.",
+    )
     workspace_data_filter_id: str
     workspace_data_filter_column_name: str
     dataset_description: str | None = Field(
@@ -95,6 +136,31 @@ class CustomDatasetDefinition(BaseModel):
         if self.dataset_source_table and self.dataset_source_sql:
             raise ValueError(
                 "Only one of dataset_source_table and dataset_source_sql can be provided"
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_reference_form(self) -> "CustomDatasetDefinition":
+        """Exactly one reference form must be set: either the new list or the legacy triple."""
+        has_new = bool(self.parent_dataset_references)
+        has_legacy = (
+            self.parent_dataset_reference_attribute_id is not None
+            or self.dataset_reference_source_column is not None
+            or self.dataset_reference_source_column_data_type is not None
+        )
+        if has_new and has_legacy:
+            raise ValueError(
+                "Set either `parent_dataset_references` or the legacy single-column "
+                "fields (`parent_dataset_reference_attribute_id`, "
+                "`dataset_reference_source_column`, "
+                "`dataset_reference_source_column_data_type`), not both."
+            )
+        if not has_new and not has_legacy:
+            raise ValueError(
+                "Provide either `parent_dataset_references` or the legacy single-column "
+                "fields (`parent_dataset_reference_attribute_id`, "
+                "`dataset_reference_source_column`, "
+                "`dataset_reference_source_column_data_type`)."
             )
         return self
 
