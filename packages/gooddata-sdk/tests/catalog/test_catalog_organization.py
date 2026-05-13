@@ -578,10 +578,10 @@ def test_layout_ip_allowlist_policies(test_config):
             id="admin-vpn-only",
             allowed_sources=["203.0.113.10/32", "198.51.100.0/24"],
             user_groups=[
-                CatalogDeclarativeUserGroupIdentifier(id="group.admins", type="userGroup"),
+                CatalogDeclarativeUserGroupIdentifier(id="adminGroup", type="userGroup"),
             ],
             users=[
-                CatalogUserIdentifier(id="employee123", type="user"),
+                CatalogUserIdentifier(id="demo", type="user"),
             ],
         ),
     ]
@@ -593,8 +593,8 @@ def test_layout_ip_allowlist_policies(test_config):
         assert result[0].id == "admin-vpn-only"
         assert result[0].allowed_sources == ["203.0.113.10/32", "198.51.100.0/24"]
         assert len(result[0].user_groups) == 1
-        assert result[0].user_groups[0].id == "group.admins"
+        assert result[0].user_groups[0].id == "adminGroup"
         assert len(result[0].users) == 1
-        assert result[0].users[0].id == "employee123"
+        assert result[0].users[0].id == "demo"
     finally:
         sdk.catalog_organization.put_declarative_ip_allowlist_policies(original_policies)
