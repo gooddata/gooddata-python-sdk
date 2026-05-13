@@ -30,6 +30,7 @@ class ColumnDataType(str, Enum):
     TIMESTAMP = "TIMESTAMP"
     TIMESTAMP_TZ = "TIMESTAMP_TZ"
     BOOLEAN = "BOOLEAN"
+    HLL = "HLL"
 
 
 class CustomFieldDefinition(BaseModel):
