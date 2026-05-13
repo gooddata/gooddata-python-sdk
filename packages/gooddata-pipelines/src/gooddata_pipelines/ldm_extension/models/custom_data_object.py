@@ -115,8 +115,8 @@ class CustomDatasetDefinition(BaseModel):
         default=None,
         description="List of references to the parent dataset.",
     )
-    workspace_data_filter_id: str
-    workspace_data_filter_column_name: str
+    workspace_data_filter_id: str | None = None
+    workspace_data_filter_column_name: str | None = None
     dataset_description: str | None = Field(
         default=None,
         description="Declarative description on the custom dataset.",
@@ -161,6 +161,18 @@ class CustomDatasetDefinition(BaseModel):
                 "fields (`parent_dataset_reference_attribute_id`, "
                 "`dataset_reference_source_column`, "
                 "`dataset_reference_source_column_data_type`)."
+            )
+        return self
+
+    @model_validator(mode="after")
+    def check_wdf_pair(self) -> "CustomDatasetDefinition":
+        """Workspace data filter id and column name must be provided together or both omitted."""
+        has_id = self.workspace_data_filter_id is not None
+        has_col = self.workspace_data_filter_column_name is not None
+        if has_id != has_col:
+            raise ValueError(
+                "workspace_data_filter_id and workspace_data_filter_column_name "
+                "must both be set or both be omitted"
             )
         return self
 

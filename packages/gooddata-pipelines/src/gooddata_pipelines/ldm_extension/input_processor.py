@@ -297,6 +297,35 @@ class LdmExtensionDataProcessor:
                 dataset.definition
             )
 
+            wdf_columns: (
+                list[CatalogDeclarativeWorkspaceDataFilterColumn] | None
+            ) = None
+            wdf_references: (
+                list[CatalogDeclarativeWorkspaceDataFilterReferences] | None
+            ) = None
+            wdf_id = dataset.definition.workspace_data_filter_id
+            wdf_column_name = (
+                dataset.definition.workspace_data_filter_column_name
+            )
+            # `check_wdf_pair` on the model guarantees both fields are set
+            # together or both omitted.
+            if wdf_id is not None and wdf_column_name is not None:
+                wdf_columns = [
+                    CatalogDeclarativeWorkspaceDataFilterColumn(
+                        name=wdf_column_name,
+                        data_type=ColumnDataType.STRING.value,
+                    )
+                ]
+                wdf_references = [
+                    CatalogDeclarativeWorkspaceDataFilterReferences(
+                        filter_id=CatalogDatasetWorkspaceDataFilterIdentifier(
+                            id=wdf_id
+                        ),
+                        filter_column=wdf_column_name,
+                        filter_column_data_type=ColumnDataType.STRING.value,
+                    )
+                ]
+
             # Construct the declarative dataset object and append it to the list.
             declarative_datasets.append(
                 CatalogDeclarativeDataset(
@@ -318,21 +347,8 @@ class LdmExtensionDataProcessor:
                     facts=facts,
                     data_source_table_id=dataset_source_table_id,
                     sql=dataset_sql,
-                    workspace_data_filter_columns=[
-                        CatalogDeclarativeWorkspaceDataFilterColumn(
-                            name=dataset.definition.workspace_data_filter_column_name,
-                            data_type=ColumnDataType.STRING.value,
-                        )
-                    ],
-                    workspace_data_filter_references=[
-                        CatalogDeclarativeWorkspaceDataFilterReferences(
-                            filter_id=CatalogDatasetWorkspaceDataFilterIdentifier(
-                                id=dataset.definition.workspace_data_filter_id
-                            ),
-                            filter_column=dataset.definition.workspace_data_filter_column_name,
-                            filter_column_data_type=ColumnDataType.STRING.value,
-                        )
-                    ],
+                    workspace_data_filter_columns=wdf_columns,
+                    workspace_data_filter_references=wdf_references,
                     tags=_effective_dataset_tags(dataset.definition),
                 )
             )
