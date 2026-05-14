@@ -14,7 +14,7 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 * Compute Service
 * Table Service
 
-See [DOCUMENTATION](https://www.gooddata.ai/docs/python-sdk/1.65.0) for more details.
+See [DOCUMENTATION](https://www.gooddata.ai/docs/python-sdk/1.66.0) for more details.
 
 ## Requirements
 
