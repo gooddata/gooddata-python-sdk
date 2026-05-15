@@ -13,6 +13,8 @@ from types import SimpleNamespace
 from unittest.mock import MagicMock, call, patch
 
 import pytest
+from gooddata_sdk.catalog.ai_lake.entity_model.column_expression import CatalogColumnExpression
+from gooddata_sdk.catalog.ai_lake.entity_model.object_storage import CatalogObjectStorageInfo
 from gooddata_sdk.catalog.ai_lake.service import (
     CatalogAILakeOperation,
     CatalogAILakeOperationError,
@@ -144,3 +146,146 @@ class TestWaitForOperation:
         ):
             service.wait_for_operation("op", timeout_s=10.0, poll_s=0.1)
         assert "did not finish within 10.0s" in str(exc_info.value)
+
+
+class TestListObjectStorages:
+    """Unit tests for `CatalogAILakeService.list_object_storages`."""
+
+    def _storages_response(self, storages: list[dict]) -> MagicMock:
+        response = MagicMock()
+        response.to_dict.return_value = {"storages": storages}
+        return response
+
+    def test_returns_list_of_storage_infos(self) -> None:
+        service, api = _make_service()
+        api.list_ai_lake_object_storages.return_value = self._storages_response(
+            [
+                {
+                    "name": "my-s3",
+                    "storage_id": "11111111-2222-3333-4444-555555555555",
+                    "storage_type": "S3",
+                    "storage_config": {"bucket": "my-bucket", "region": "us-east-1"},
+                },
+                {
+                    "name": "my-minio",
+                    "storage_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+                    "storage_type": "MINIO",
+                    "storage_config": {},
+                },
+            ]
+        )
+        storages = service.list_object_storages()
+
+        assert len(storages) == 2
+        assert all(isinstance(s, CatalogObjectStorageInfo) for s in storages)
+
+        s0 = storages[0]
+        assert s0.name == "my-s3"
+        assert s0.storage_id == "11111111-2222-3333-4444-555555555555"
+        assert s0.storage_type == "S3"
+        assert s0.storage_config == {"bucket": "my-bucket", "region": "us-east-1"}
+
+        s1 = storages[1]
+        assert s1.name == "my-minio"
+        assert s1.storage_config == {}
+
+    def test_empty_storages_list(self) -> None:
+        service, api = _make_service()
+        api.list_ai_lake_object_storages.return_value = self._storages_response([])
+        storages = service.list_object_storages()
+        assert storages == []
+
+    def test_passes_check_return_type_false(self) -> None:
+        service, api = _make_service()
+        api.list_ai_lake_object_storages.return_value = self._storages_response([])
+        service.list_object_storages()
+        api.list_ai_lake_object_storages.assert_called_once_with(_check_return_type=False)
+
+
+class TestCreatePipeTable:
+    """Unit tests for `CatalogAILakeService.create_pipe_table`."""
+
+    def test_basic_create_pipe_table(self) -> None:
+        service, api = _make_service()
+        service.create_pipe_table(
+            instance_id="demo-db",
+            table_name="fact_events",
+            source_storage_name="my-s3",
+            path_prefix="events/year=2024/",
+        )
+        assert api.create_ai_lake_pipe_table.call_count == 1
+        call_args = api.create_ai_lake_pipe_table.call_args
+        assert call_args.args[0] == "demo-db"
+        request = call_args.args[1]
+        assert request.table_name == "fact_events"
+        assert request.source_storage_name == "my-s3"
+        assert request.path_prefix == "events/year=2024/"
+
+    def test_column_expressions_are_serialized(self) -> None:
+        service, api = _make_service()
+        service.create_pipe_table(
+            instance_id="demo-db",
+            table_name="fact_events",
+            source_storage_name="my-s3",
+            path_prefix="events/",
+            column_expressions={
+                "user_hll": CatalogColumnExpression(column="user_id", function="HLL_HASH"),
+                "page_bmp": CatalogColumnExpression(column="page_id", function="TO_BITMAP"),
+            },
+        )
+        request = api.create_ai_lake_pipe_table.call_args.args[1]
+        exprs = request.column_expressions
+        assert set(exprs.keys()) == {"user_hll", "page_bmp"}
+        # Verify the API model values
+        assert exprs["user_hll"].column == "user_id"
+        assert exprs["user_hll"].function == "HLL_HASH"
+        assert exprs["page_bmp"].column == "page_id"
+        assert exprs["page_bmp"].function == "TO_BITMAP"
+
+    def test_optional_kwargs_not_sent_when_none(self) -> None:
+        service, api = _make_service()
+        service.create_pipe_table(
+            instance_id="demo-db",
+            table_name="fact_events",
+            source_storage_name="my-s3",
+            path_prefix="events/",
+        )
+        request = api.create_ai_lake_pipe_table.call_args.args[1]
+        # Optional fields should not be set
+        assert "column_expressions" not in request._data_store
+        assert "column_overrides" not in request._data_store
+        assert "aggregation_overrides" not in request._data_store
+
+    def test_all_optional_kwargs_forwarded(self) -> None:
+        service, api = _make_service()
+        service.create_pipe_table(
+            instance_id="demo-db",
+            table_name="fact_events",
+            source_storage_name="my-s3",
+            path_prefix="events/",
+            column_overrides={"year": "INT"},
+            aggregation_overrides={"revenue": "SUM"},
+            max_varchar_length=256,
+            polling_interval_seconds=60,
+            table_properties={"replication_num": "3"},
+        )
+        request = api.create_ai_lake_pipe_table.call_args.args[1]
+        assert request.column_overrides == {"year": "INT"}
+        assert request.aggregation_overrides == {"revenue": "SUM"}
+        assert request.max_varchar_length == 256
+        assert request.polling_interval_seconds == 60
+        assert request.table_properties == {"replication_num": "3"}
+
+
+class TestCatalogColumnExpression:
+    """Unit tests for `CatalogColumnExpression`."""
+
+    @pytest.mark.parametrize(
+        "function",
+        ["HLL_HASH", "BITMAP_HASH", "BITMAP_HASH64", "TO_BITMAP"],
+    )
+    def test_as_api_model_roundtrip(self, function: str) -> None:
+        expr = CatalogColumnExpression(column="src_col", function=function)  # type: ignore[arg-type]
+        api_model = expr.as_api_model()
+        assert api_model.column == "src_col"
+        assert api_model.function == function

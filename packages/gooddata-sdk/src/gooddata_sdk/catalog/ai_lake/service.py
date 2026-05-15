@@ -1,19 +1,16 @@
 # (C) 2026 GoodData Corporation
-"""SDK wrapper for the AI Lake long-running-operation surface.
+"""SDK wrapper for the AI Lake API surface.
 
-Today this exposes only the operations needed by aggregate-aware LDMs:
+Currently exposed operations:
 
-- `analyze_statistics` triggers `ANALYZE TABLE` over a database instance so
-  CBO statistics catch up after a schema or data change. Required after
-  registering a pre-aggregation table whose dim attributes the platform will
-  later resolve via filter pushdown.
+- `list_object_storages` lists ObjectStorages registered for the organization.
+  Use the returned names as ``source_storage_name`` in `create_pipe_table`.
+- `create_pipe_table` registers a pipe table in a database instance, with
+  optional `CatalogColumnExpression` overrides for HLL / BITMAP columns.
+- `analyze_statistics` triggers ``ANALYZE TABLE`` over a database instance so
+  CBO statistics catch up after a schema or data change.
 - `get_operation` and `wait_for_operation` cover the polling side of the
   long-running operation contract that `analyze_statistics` returns.
-
-The full AI Lake API surface (database provisioning, pipe-table
-registration, service commands) is not yet wrapped here; consumers that
-need those should call `client.ai_lake_api.<method>` directly until a
-ticket adds typed wrappers.
 """
 
 from __future__ import annotations
@@ -25,7 +22,10 @@ from typing import Any, Literal
 from attrs import define
 from gooddata_api_client.api.ai_lake_api import AILakeApi
 from gooddata_api_client.model.analyze_statistics_request import AnalyzeStatisticsRequest
+from gooddata_api_client.model.create_pipe_table_request import CreatePipeTableRequest
 
+from gooddata_sdk.catalog.ai_lake.entity_model.column_expression import CatalogColumnExpression
+from gooddata_sdk.catalog.ai_lake.entity_model.object_storage import CatalogObjectStorageInfo
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.client import GoodDataApiClient
 
@@ -75,6 +75,105 @@ class CatalogAILakeService:
     def __init__(self, api_client: GoodDataApiClient) -> None:
         self._client = api_client
         self._ai_lake_api: AILakeApi = AILakeApi(api_client._api_client)
+
+    # ------------------------------------------------------------------
+    # ObjectStorage listing
+    # ------------------------------------------------------------------
+
+    def list_object_storages(self) -> list[CatalogObjectStorageInfo]:
+        """List ObjectStorages registered for the organization.
+
+        Provider credentials are stripped server-side — only safe descriptors
+        (id, name, type, bucket, region, endpoint, …) are returned.
+
+        Use the returned :attr:`~CatalogObjectStorageInfo.name` as
+        ``source_storage_name`` when calling :meth:`create_pipe_table`, or
+        pass :attr:`~CatalogObjectStorageInfo.storage_id` to the
+        ``ProvisionDatabase`` ``storageIds`` list.
+
+        Returns:
+            List of :class:`CatalogObjectStorageInfo`, ordered by name.
+        """
+        response = self._ai_lake_api.list_ai_lake_object_storages(_check_return_type=False)
+        data = response.to_dict() if hasattr(response, "to_dict") else dict(response)
+        return [CatalogObjectStorageInfo.from_dict(s) for s in data.get("storages", [])]
+
+    # ------------------------------------------------------------------
+    # Pipe-table management
+    # ------------------------------------------------------------------
+
+    def create_pipe_table(
+        self,
+        instance_id: str,
+        table_name: str,
+        source_storage_name: str,
+        path_prefix: str,
+        *,
+        column_expressions: dict[str, CatalogColumnExpression] | None = None,
+        column_overrides: dict[str, str] | None = None,
+        aggregation_overrides: dict[str, str] | None = None,
+        max_varchar_length: int | None = None,
+        polling_interval_seconds: int | None = None,
+        table_properties: dict[str, str] | None = None,
+    ) -> None:
+        """Register a new pipe table in an AI Lake database instance.
+
+        Args:
+            instance_id: Database instance name (preferred) or UUID.
+            table_name: OLAP table name. Must match ``^[a-z][a-z0-9_-]{0,62}$``.
+            source_storage_name: Name of a registered ObjectStorage (use
+                :meth:`list_object_storages` to discover available names).
+            path_prefix: Path prefix to the parquet files in the storage
+                (e.g. ``'my-dataset/year=2024/'``).
+            column_expressions: Per-target-column projection overrides.  Each
+                key is the target column name; the value is a
+                :class:`CatalogColumnExpression` that emits
+                ``<function>(<column>) AS <key>`` in the generated
+                ``CREATE PIPE … AS INSERT`` SELECT list.  Required for
+                AGGREGATE-KEY tables that include native HLL or BITMAP columns.
+            column_overrides: Override inferred column types, e.g.
+                ``{"year": "INT", "event_date": "DATE"}``.
+            aggregation_overrides: Maps non-key column names to their StarRocks
+                aggregation function (``SUM``, ``MIN``, ``MAX``, ``REPLACE``,
+                ``HLL_UNION``, ``BITMAP_UNION``, …).  Required for every
+                non-key column when ``key_config`` type is ``'aggregate'``.
+            max_varchar_length: Cap VARCHAR(N) columns to this length; 0 means
+                no cap.
+            polling_interval_seconds: How often (in seconds) the pipe polls for
+                new files; 0 or ``None`` uses the server default.
+            table_properties: ``CREATE TABLE PROPERTIES`` key-value pairs.
+                Defaults to ``{"replication_num": "1"}`` server-side.
+        """
+        kwargs: dict[str, Any] = {}
+        if column_expressions is not None:
+            kwargs["column_expressions"] = {k: v.as_api_model() for k, v in column_expressions.items()}
+        if column_overrides is not None:
+            kwargs["column_overrides"] = column_overrides
+        if aggregation_overrides is not None:
+            kwargs["aggregation_overrides"] = aggregation_overrides
+        if max_varchar_length is not None:
+            kwargs["max_varchar_length"] = max_varchar_length
+        if polling_interval_seconds is not None:
+            kwargs["polling_interval_seconds"] = polling_interval_seconds
+        if table_properties is not None:
+            kwargs["table_properties"] = table_properties
+
+        request = CreatePipeTableRequest(
+            table_name=table_name,
+            source_storage_name=source_storage_name,
+            path_prefix=path_prefix,
+            _check_type=False,
+            **kwargs,
+        )
+        self._ai_lake_api.create_ai_lake_pipe_table(
+            instance_id,
+            request,
+            _check_return_type=False,
+        )
+
+    # ------------------------------------------------------------------
+    # Statistics
+    # ------------------------------------------------------------------
 
     def analyze_statistics(
         self,
