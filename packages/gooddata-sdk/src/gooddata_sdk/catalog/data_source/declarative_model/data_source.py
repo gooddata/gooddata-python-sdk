@@ -142,6 +142,7 @@ class CatalogDeclarativeDataSource(Base):
     client_id: str | None = None
     authentication_type: str | None = None
     alternative_data_source_id: str | None = None
+    date_time_semantics: str | None = None
 
     def to_test_request(
         self,
