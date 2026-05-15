@@ -1,0 +1,77 @@
+interactions:
+  - request:
+      body:
+        dataSourceId: sdk-test-ds-secondary
+        dataSourceName: SDK Test Secondary DS
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/ailake/database/instances/demo-ai-lake/dataSources
+    response:
+      body:
+        string:
+          detail: Your organization does not have the necessary entitlement to use
+            AI Lake APIs.
+          status: 403
+          title: Forbidden
+          traceId: NORMALIZED_TRACE_ID_000000000000
+      headers:
+        Content-Type:
+          - application/problem+json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 403
+        message: Forbidden
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/ailake/database/instances/demo-ai-lake/dataSources/sdk-test-ds-secondary
+    response:
+      body:
+        string:
+          detail: Your organization does not have the necessary entitlement to use
+            AI Lake APIs.
+          status: 403
+          title: Forbidden
+          traceId: NORMALIZED_TRACE_ID_000000000000
+      headers:
+        Content-Type:
+          - application/problem+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 403
+        message: Forbidden
+version: 1
