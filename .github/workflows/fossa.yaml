@@ -5,32 +5,68 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: Branch label to attach to the FOSSA scan.
+        description: Override the FOSSA branch label (defaults to the dispatched git ref).
         required: false
-        default: master
+        default: ""
 
 concurrency:
   group: fossa-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Each PyPI artifact is scanned as its own FOSSA project so license inventory,
+# policy gates, and attribution reports match what is actually shipped. The
+# FOSSA "branch" axis is left to its intended purpose (track license drift
+# across git branches over time).
 jobs:
   fossa:
-    name: FOSSA scan
+    name: FOSSA ${{ matrix.package.project }}
     runs-on:
       group: infra1-runners-arc
       labels: runners-small
     permissions:
       contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - { path: packages/gooddata-sdk,           project: gooddata-sdk }
+          - { path: packages/gooddata-pandas,        project: gooddata-pandas }
+          - { path: packages/gooddata-dbt,           project: gooddata-dbt }
+          - { path: packages/gooddata-fdw,           project: gooddata-fdw }
+          - { path: packages/gooddata-flight-server, project: gooddata-flight-server }
+          - { path: packages/gooddata-flexconnect,   project: gooddata-flexconnect }
+          - { path: packages/gooddata-pipelines,     project: gooddata-pipelines }
+          - { path: gooddata-api-client,             project: gooddata-api-client }
     steps:
       - name: Checkout the code
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Check that .fossa.yml exists
+      - name: Scope .fossa.yml to ${{ matrix.package.project }}
         shell: bash
         run: |
-          [ -f ./.fossa.yml ] || { echo "Missing .fossa.yml in repo root; FOSSA needs it for project id." >&2; exit 1; }
+          # Read the workspace version from the root pyproject.toml so the
+          # FOSSA release in the gooddata-python-sdk release group tracks
+          # the SDK version we ship.
+          VERSION=$(awk -F'"' '/^version = /{print $2; exit}' pyproject.toml)
+          if [ -z "$VERSION" ]; then
+            echo "Could not parse workspace version from pyproject.toml" >&2
+            exit 1
+          fi
+          cat > .fossa.yml <<EOF
+          version: 3
+          project:
+            id: ${{ matrix.package.project }}
+            releaseGroup:
+              name: gooddata-python-sdk
+              release: "${VERSION}"
+          telemetry:
+            scope: 'off'
+          paths:
+            only:
+              - ${{ matrix.package.path }}
+          EOF
 
       - name: Workaround for "no targets found" error
         shell: bash
@@ -41,10 +77,11 @@ jobs:
         uses: fossas/fossa-action@v1.9.0
         with:
           api-key: ${{ secrets.FOSSA_API_KEY }}
-          branch: ${{ inputs.branch }}
+          branch: ${{ inputs.branch != '' && inputs.branch || github.ref_name }}
 
       - name: Run FOSSA test (policy gate)
         uses: fossas/fossa-action@v1.9.0
         with:
           api-key: ${{ secrets.FOSSA_API_KEY }}
           run-tests: true
+          branch: ${{ inputs.branch != '' && inputs.branch || github.ref_name }}
