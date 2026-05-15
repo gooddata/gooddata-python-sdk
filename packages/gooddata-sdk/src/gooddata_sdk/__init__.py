@@ -133,6 +133,9 @@ from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrgani
 from gooddata_sdk.catalog.organization.layout.export_template import (
     CatalogDeclarativeExportTemplate,
 )
+from gooddata_sdk.catalog.organization.layout.ip_allowlist_policy import (
+    CatalogDeclarativeIpAllowlistPolicy,
+)
 from gooddata_sdk.catalog.organization.layout.notification_channel import (
     CatalogDeclarativeNotificationChannel,
     CatalogWebhook,

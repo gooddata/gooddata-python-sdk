@@ -6,6 +6,7 @@ from pathlib import Path
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import (
     CatalogCspDirective,
+    CatalogDeclarativeIpAllowlistPolicy,
     CatalogDeclarativeNotificationChannel,
     CatalogJwk,
     CatalogOrganization,
@@ -14,6 +15,7 @@ from gooddata_sdk import (
     CatalogWebhook,
     GoodDataSdk,
 )
+from gooddata_sdk.catalog.identifier import CatalogDeclarativeUserGroupIdentifier, CatalogUserIdentifier
 from tests_support.vcrpy_utils import get_vcr
 
 from .conftest import safe_delete
@@ -563,3 +565,36 @@ def test_layout_notification_channels(test_config, snapshot_notification_channel
 #         sdk.catalog_organization.put_declarative_identity_providers([])
 #         idps = sdk.catalog_organization.get_declarative_identity_providers()
 #         assert len(idps) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "layout_ip_allowlist_policies.yaml"))
+def test_layout_ip_allowlist_policies(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    original_policies = sdk.catalog_organization.get_declarative_ip_allowlist_policies()
+
+    new_policies = [
+        CatalogDeclarativeIpAllowlistPolicy(
+            id="admin-vpn-only",
+            allowed_sources=["203.0.113.10/32", "198.51.100.0/24"],
+            user_groups=[
+                CatalogDeclarativeUserGroupIdentifier(id="adminGroup", type="userGroup"),
+            ],
+            users=[
+                CatalogUserIdentifier(id="demo", type="user"),
+            ],
+        ),
+    ]
+
+    try:
+        sdk.catalog_organization.put_declarative_ip_allowlist_policies(new_policies)
+        result = sdk.catalog_organization.get_declarative_ip_allowlist_policies()
+        assert len(result) == 1
+        assert result[0].id == "admin-vpn-only"
+        assert result[0].allowed_sources == ["203.0.113.10/32", "198.51.100.0/24"]
+        assert len(result[0].user_groups) == 1
+        assert result[0].user_groups[0].id == "adminGroup"
+        assert len(result[0].users) == 1
+        assert result[0].users[0].id == "demo"
+    finally:
+        sdk.catalog_organization.put_declarative_ip_allowlist_policies(original_policies)
