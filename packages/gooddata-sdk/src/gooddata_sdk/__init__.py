@@ -116,6 +116,8 @@ from gooddata_sdk.catalog.organization.entity_model.jwk import (
     CatalogRsaSpecification,
 )
 from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
+    CatalogAnthropicApiKeyAuth,
+    CatalogAnthropicProviderConfig,
     CatalogAwsBedrockProviderConfig,
     CatalogAzureFoundryApiKeyAuth,
     CatalogAzureFoundryProviderConfig,

@@ -5,9 +5,13 @@ from pathlib import Path
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import (
+    CatalogAnthropicApiKeyAuth,
+    CatalogAnthropicProviderConfig,
     CatalogCspDirective,
     CatalogDeclarativeNotificationChannel,
     CatalogJwk,
+    CatalogLlmProvider,
+    CatalogLlmProviderModel,
     CatalogOrganization,
     CatalogOrganizationSetting,
     CatalogRsaSpecification,
@@ -332,6 +336,29 @@ def test_layout_notification_channels(test_config, snapshot_notification_channel
     assert notification_channels_e[0].custom_dashboard_url == notification_channels_o[0].custom_dashboard_url
     assert notification_channels_e[0].allowed_recipients == notification_channels_o[0].allowed_recipients
     # snapshot_notification_channels fixture restores original state in teardown
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_anthropic_llm_provider.yaml"))
+def test_create_anthropic_llm_provider(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    provider_id = "test-anthropic-provider"
+    new_provider = CatalogLlmProvider.init(
+        id=provider_id,
+        models=[CatalogLlmProviderModel(id="claude-3-5-sonnet-20241022", family="ANTHROPIC")],
+        provider_config=CatalogAnthropicProviderConfig(
+            auth=CatalogAnthropicApiKeyAuth(api_key="sk-ant-test-key"),
+            base_url="https://api.anthropic.com",
+        ),
+        name="Test Anthropic Provider",
+    )
+    try:
+        created = sdk.catalog_organization.create_llm_provider(new_provider)
+        assert created.id == provider_id
+        fetched = sdk.catalog_organization.get_llm_provider(provider_id)
+        assert fetched.id == provider_id
+        assert isinstance(fetched.attributes.provider_config, CatalogAnthropicProviderConfig)
+    finally:
+        safe_delete(sdk.catalog_organization.delete_llm_provider, provider_id)
 
 
 #
