@@ -13,6 +13,7 @@ from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
 from gooddata_sdk.catalog.depends_on import CatalogDependsOn, CatalogDependsOnDateFilter
 from gooddata_sdk.catalog.filter_by import CatalogFilterBy
+from gooddata_sdk.catalog.organization.entity_model.llm_provider import CatalogResolvedLlmProvider
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.validate_by_item import CatalogValidateByItem
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
@@ -38,7 +39,7 @@ from gooddata_sdk.compute.model.base import ObjId
 from gooddata_sdk.compute.model.execution import ExecutionDefinition, compute_model_to_api_model
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
-from gooddata_sdk.utils import load_all_entities
+from gooddata_sdk.utils import load_all_entities, safeget
 
 ValidObjectTypes = Union[Attribute, Metric, Filter, CatalogLabel, CatalogFact, CatalogMetric]
 
@@ -685,3 +686,27 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             workspace_id, request, _check_return_type=False, **paging_params
         )
         return [v["title"] for v in values["elements"]]
+
+    def resolve_llm_providers(self, workspace_id: str) -> CatalogResolvedLlmProvider | None:
+        """Resolve the active LLM provider configuration for a workspace.
+
+        Calls ``GET /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmProviders``
+        and returns the resolved active LLM provider, or ``None`` when no LLM
+        provider is configured for the workspace.
+
+        This is the replacement for the now-removed ``resolveLlmEndpoints`` endpoint.
+
+        Args:
+            workspace_id (str):
+                Workspace identifier e.g. ``"demo"``.
+
+        Returns:
+            CatalogResolvedLlmProvider | None:
+                The resolved active LLM provider, or ``None`` if the workspace
+                has no LLM provider configured.
+        """
+        response = self._actions_api.resolve_llm_providers(workspace_id, _check_return_type=False)
+        data = safeget(response, ["data"])
+        if data is None:
+            return None
+        return CatalogResolvedLlmProvider.from_api(data)

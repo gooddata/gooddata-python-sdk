@@ -18,6 +18,7 @@ from gooddata_sdk import (
     CatalogDependsOn,
     CatalogDependsOnDateFilter,
     CatalogEntityIdentifier,
+    CatalogResolvedLlmProvider,
     CatalogValidateByItem,
     CatalogWorkspace,
     DataSourceValidator,
@@ -502,3 +503,21 @@ def test_export_definition_analytics_layout(test_config):
         assert deep_eq(analytics_o.analytics.export_definitions, analytics_e.analytics.export_definitions)
     finally:
         safe_delete(_refresh_workspaces, sdk)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_resolve_llm_providers.yaml"))
+def test_resolve_llm_providers_integration(test_config):
+    """Exercise the resolveLlmProviders action (replaces the removed resolveLlmEndpoints).
+
+    The endpoint returns the active LLM provider for the workspace, or None when
+    no LLM provider is configured.  Both outcomes are valid — the test just
+    verifies the SDK can call the endpoint without error and that the return
+    value is either None or a well-formed CatalogResolvedLlmProvider.
+    """
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    result = sdk.catalog_workspace_content.resolve_llm_providers(test_config["workspace"])
+    assert result is None or isinstance(result, CatalogResolvedLlmProvider)
+    if result is not None:
+        assert result.id
+        assert result.title
+        assert isinstance(result.models, list)

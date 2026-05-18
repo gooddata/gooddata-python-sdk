@@ -127,6 +127,7 @@ from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
     CatalogLlmProviderPatchDocument,
     CatalogOpenAiApiKeyAuth,
     CatalogOpenAiProviderConfig,
+    CatalogResolvedLlmProvider,
 )
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
