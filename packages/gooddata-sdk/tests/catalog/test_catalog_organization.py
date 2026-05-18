@@ -5,9 +5,13 @@ from pathlib import Path
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import (
+    CatalogAnthropicApiKeyAuth,
+    CatalogAnthropicProviderConfig,
     CatalogCspDirective,
     CatalogDeclarativeNotificationChannel,
     CatalogJwk,
+    CatalogLlmProvider,
+    CatalogLlmProviderModel,
     CatalogOrganization,
     CatalogOrganizationSetting,
     CatalogRsaSpecification,
@@ -563,3 +567,29 @@ def test_layout_notification_channels(test_config, snapshot_notification_channel
 #         sdk.catalog_organization.put_declarative_identity_providers([])
 #         idps = sdk.catalog_organization.get_declarative_identity_providers()
 #         assert len(idps) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_create_anthropic_llm_provider.yaml"))
+def test_create_anthropic_llm_provider(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    provider_id = "test-anthropic-provider"
+    provider = CatalogLlmProvider.init(
+        id=provider_id,
+        models=[CatalogLlmProviderModel(id="claude-3-5-sonnet-20241022", family="claude-3-5-sonnet")],
+        provider_config=CatalogAnthropicProviderConfig(
+            auth=CatalogAnthropicApiKeyAuth(api_key="sk-ant-test-key"),
+            base_url="https://api.anthropic.com",
+        ),
+        name="Test Anthropic Provider",
+    )
+
+    try:
+        created = sdk.catalog_organization.create_llm_provider(provider)
+        assert created.id == provider_id
+        assert created.attributes is not None
+        assert created.attributes.provider_config is not None
+        assert isinstance(created.attributes.provider_config, CatalogAnthropicProviderConfig)
+        assert created.attributes.provider_config.type == "ANTHROPIC"
+    finally:
+        safe_delete(sdk.catalog_organization.delete_llm_provider, provider_id)
