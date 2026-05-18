@@ -200,6 +200,25 @@ def _anthropic_auth_from_api(data: dict[str, Any]) -> CatalogAnthropicAuth:
     raise ValueError(f"Unknown Anthropic auth type: {auth_type}")
 
 
+def _anthropic_config_to_camel_dict(config: CatalogAnthropicProviderConfig) -> dict[str, Any]:
+    """Convert CatalogAnthropicProviderConfig to a camelCase dict for direct _data_store injection.
+
+    The generated API client's JsonApiLlmProviderInAttributesProviderConfig oneOf does not yet
+    include AnthropicProviderConfig.  We bypass schema validation by storing the config as a
+    plain camelCase dict in _data_store; model_to_dict(serialize=True) serialises it correctly.
+    """
+    result: dict[str, Any] = {"type": config.type}
+    if config.base_url is not None:
+        result["baseUrl"] = config.base_url
+    if config.auth is not None:
+        auth = config.auth
+        auth_dict: dict[str, Any] = {"type": auth.type}
+        if isinstance(auth, CatalogAnthropicApiKeyAuth) and auth.api_key is not None:
+            auth_dict["apiKey"] = auth.api_key
+        result["auth"] = auth_dict
+    return result
+
+
 def _provider_config_from_api(data: dict[str, Any]) -> CatalogLlmProviderConfig:
     provider_type = safeget(data, ["type"]) or "OPENAI"
     auth_data = safeget(data, ["auth"])
@@ -240,6 +259,30 @@ class CatalogLlmProviderDocument(Base):
     @staticmethod
     def client_class() -> type[JsonApiLlmProviderInDocument]:
         return JsonApiLlmProviderInDocument
+
+    def to_api(self) -> JsonApiLlmProviderInDocument:
+        """Build the API model with special handling for Anthropic provider config.
+
+        The generated API client's JsonApiLlmProviderInAttributesProviderConfig oneOf schema
+        does not yet include AnthropicProviderConfig, so the normal Base.to_api() / from_dict()
+        path raises ApiValueError for type='ANTHROPIC'.  When the provider config is Anthropic,
+        we build the document without providerConfig (it is optional in the API), then inject
+        the config as a raw camelCase dict directly into _data_store to bypass schema validation.
+        """
+        provider_config = (
+            self.data.attributes.provider_config if self.data.attributes is not None else None
+        )
+        if isinstance(provider_config, CatalogAnthropicProviderConfig):
+            snake_dict = self._get_snake_dict()
+            # Remove provider_config to avoid the oneOf validation failure in the generated client
+            snake_dict["data"]["attributes"].pop("provider_config", None)
+            api_doc = self.client_class().from_dict(snake_dict, camel_case=False)
+            # Inject provider_config directly as a raw camelCase dict, bypassing oneOf schema
+            api_doc.data.attributes._data_store["provider_config"] = (
+                _anthropic_config_to_camel_dict(provider_config)
+            )
+            return api_doc
+        return super().to_api()
 
 
 @define(kw_only=True)
