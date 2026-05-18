@@ -1,0 +1,67 @@
+interactions:
+  - request:
+      body: null
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate, br
+        Connection:
+          - keep-alive
+      method: GET
+      uri: http://localhost:3000/api/v1/ailake/objectStorages
+    response:
+      body:
+        string:
+          detail: Server-side problem. Contact support.
+          status: 500
+          title: Internal Server Error
+          traceId: NORMALIZED_TRACE_ID_000000000000
+      headers:
+        Content-Type:
+          - application/problem+json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 500
+        message: Internal Server Error
+  - request:
+      body: null
+      headers:
+        Accept:
+          - '*/*'
+        Accept-Encoding:
+          - gzip, deflate, br
+        Connection:
+          - keep-alive
+      method: GET
+      uri: http://localhost:3000/api/v1/ailake/objectStorages
+    response:
+      body:
+        string:
+          detail: Server-side problem. Contact support.
+          status: 500
+          title: Internal Server Error
+          traceId: NORMALIZED_TRACE_ID_000000000000
+      headers:
+        Content-Type:
+          - application/problem+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 500
+        message: Internal Server Error
+version: 1

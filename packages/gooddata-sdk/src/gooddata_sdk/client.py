@@ -91,6 +91,30 @@ class GoodDataApiClient:
         self._ai_lake_api = apis.AILakeApi(self._api_client)
         self._executions_cancellable = executions_cancellable
 
+    def _do_get_request(
+        self,
+        endpoint: str,
+    ) -> requests.Response:
+        """Perform a GET request to a specified endpoint.
+
+        Args:
+            endpoint (str): The endpoint URL to which the request is made.
+
+        Returns:
+            requests.Response: The response from the HTTP request.
+        """
+        if not self._hostname.endswith("/"):
+            endpoint = f"/{endpoint}"
+
+        response = requests.get(
+            url=f"{self._hostname}{endpoint}",
+            headers={
+                "Authorization": f"Bearer {self._token}",
+            },
+        )
+
+        return response
+
     def _do_post_request(
         self,
         data: bytes,

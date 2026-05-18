@@ -58,6 +58,25 @@ class CatalogAILakeOperation(Base):
         return self.status == "failed"
 
 
+@define(kw_only=True)
+class CatalogObjectStorageInfo(Base):
+    """Information about a registered AI Lake object storage."""
+
+    name: str
+    storage_config: dict[str, str]
+    storage_id: str
+    storage_type: str
+
+    @classmethod
+    def from_api(cls, entity: dict[str, Any]) -> CatalogObjectStorageInfo:
+        return cls(
+            name=entity["name"],
+            storage_config=entity.get("storageConfig") or {},
+            storage_id=entity["storageId"],
+            storage_type=entity["storageType"],
+        )
+
+
 class CatalogAILakeOperationError(RuntimeError):
     """Raised when an AI Lake long-running operation finishes in `failed` state."""
 
@@ -75,6 +94,23 @@ class CatalogAILakeService:
     def __init__(self, api_client: GoodDataApiClient) -> None:
         self._client = api_client
         self._ai_lake_api: AILakeApi = AILakeApi(api_client._api_client)
+
+    def list_object_storages(self) -> list[CatalogObjectStorageInfo]:
+        """List all object storages registered for the organization.
+
+        Returns:
+            List of `CatalogObjectStorageInfo` objects, ordered by name.
+        """
+        response = self._ai_lake_api.list_ai_lake_object_storages()
+        return [
+            CatalogObjectStorageInfo(
+                name=s.name,
+                storage_config=s.storage_config or {},
+                storage_id=s.storage_id,
+                storage_type=s.storage_type,
+            )
+            for s in response.storages
+        ]
 
     def analyze_statistics(
         self,
