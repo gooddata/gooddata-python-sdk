@@ -1,0 +1,180 @@
+{
+  "reads": [
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/tests/catalog/test_catalog_organization.py",
+      "count": 11
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/entity_model/llm_provider.py",
+      "count": 4
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/src/gooddata_sdk/__init__.py",
+      "count": 3
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/cluster.json",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/gooddata-api-client/gooddata_api_client/model/open_ai_provider_config.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/gooddata-api-client/gooddata_api_client/model/llm_provider_config.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/src/gooddata_sdk/catalog/base.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/service.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/pyproject.toml",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/gooddata-api-client/gooddata_api_client/model/azure_foundry_provider_config.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/gooddata-api-client/gooddata_api_client/model/azure_foundry_api_key_auth.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/gooddata-api-client/gooddata_api_client/model/azure_foundry_provider_auth.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/gooddata-api-client/gooddata_api_client/model/azure_foundry_api_key_auth_all_of.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/tests/catalog/test_catalog_workspace_content.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/.python-version",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/pyproject.toml",
+      "count": 1
+    }
+  ],
+  "globs": [
+    {
+      "pattern": "/home/runner/_work/_tool/Python/3.12.13/x64/lib/python3.12/site-packages/gooddata*",
+      "count": 2
+    },
+    {
+      "pattern": "cluster.json",
+      "count": 1
+    },
+    {
+      "pattern": "gooddata-sdk/**/*.py",
+      "count": 1
+    },
+    {
+      "pattern": "**/gooddata_sdk/**/*.py",
+      "count": 1
+    },
+    {
+      "pattern": "**/gooddata_api_client/model/anthropic*.py",
+      "count": 1
+    },
+    {
+      "pattern": "packages/gooddata-sdk/tests/**/*llm*",
+      "count": 1
+    },
+    {
+      "pattern": "gooddata-api-client/**/*.py",
+      "count": 1
+    },
+    {
+      "pattern": "gooddata-api-client/gooddata_api_client/model/anthropic*.py",
+      "count": 1
+    },
+    {
+      "pattern": "packages/gooddata-sdk/tests/catalog/**/*.py",
+      "count": 1
+    },
+    {
+      "pattern": "gooddata-api-client/gooddata_api_client/model/open_ai*.py",
+      "count": 1
+    },
+    {
+      "pattern": "gooddata-api-client/gooddata_api_client/model/aws_bedrock*.py",
+      "count": 1
+    },
+    {
+      "pattern": "gooddata-api-client/gooddata_api_client/model/*llm*.py",
+      "count": 1
+    },
+    {
+      "pattern": "gooddata-api-client/gooddata_api_client/model/azure*.py",
+      "count": 1
+    },
+    {
+      "pattern": "packages/gooddata-sdk/tests/catalog/fixtures/*llm*",
+      "count": 1
+    },
+    {
+      "pattern": "packages/gooddata-sdk/tests/catalog/fixtures/**",
+      "count": 1
+    },
+    {
+      "pattern": "schemas/**/*.json",
+      "count": 1
+    },
+    {
+      "pattern": "gooddata-api-client/gooddata_api_client/model/*.py",
+      "count": 1
+    },
+    {
+      "pattern": "**/.venv/bin/python*",
+      "count": 1
+    },
+    {
+      "pattern": "*",
+      "count": 1
+    },
+    {
+      "pattern": "venv/bin/python*",
+      "count": 1
+    }
+  ],
+  "greps": [
+    {
+      "pattern": "anthropic|Anthropic",
+      "scope": "gooddata-api-client/gooddata_api_client"
+    },
+    {
+      "pattern": "llm_provider|LlmProvider|llm provider",
+      "scope": "packages/gooddata-sdk/tests"
+    },
+    {
+      "pattern": "CatalogLlm|llm_provider",
+      "scope": "packages/gooddata-sdk/src/gooddata_sdk/__init__.py"
+    },
+    {
+      "pattern": "AnthropicProviderConfig|AnthropicApiKeyAuth|AnthropicProviderAuth",
+      "scope": "schemas"
+    },
+    {
+      "pattern": "AnthropicProviderConfig|AnthropicApiKeyAuth",
+      "scope": "gooddata-api-client"
+    },
+    {
+      "pattern": "azure_foundry|AzureFoundry",
+      "scope": "gooddata-api-client/gooddata_api_client/model/__init__.py"
+    },
+    {
+      "pattern": "llm_provider|LlmProvider",
+      "scope": "packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/service.py"
+    }
+  ]
+}

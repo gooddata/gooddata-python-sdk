@@ -576,7 +576,7 @@ def test_create_anthropic_llm_provider(test_config):
     provider_id = "test-anthropic-provider"
     provider = CatalogLlmProvider.init(
         id=provider_id,
-        models=[CatalogLlmProviderModel(id="claude-3-5-sonnet-20241022", family="claude-3-5-sonnet")],
+        models=[CatalogLlmProviderModel(id="claude-3-5-sonnet-20241022", family="ANTHROPIC")],
         provider_config=CatalogAnthropicProviderConfig(
             auth=CatalogAnthropicApiKeyAuth(api_key="sk-ant-test-key"),
             base_url="https://api.anthropic.com",
