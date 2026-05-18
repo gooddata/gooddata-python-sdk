@@ -105,7 +105,7 @@ class GoodDataApiClient:
             content_type (str): The content type of the data being sent.
 
         Returns:
-            None
+            requests.Response
         """
         if not self._hostname.endswith("/"):
             endpoint = f"/{endpoint}"
@@ -120,6 +120,72 @@ class GoodDataApiClient:
         )
 
         return response
+
+    def _do_get_request(self, endpoint: str) -> requests.Response:
+        """Perform a GET request to a specified endpoint.
+
+        Args:
+            endpoint (str): The endpoint path (without leading slash) to call.
+
+        Returns:
+            requests.Response
+        """
+        if not self._hostname.endswith("/"):
+            endpoint = f"/{endpoint}"
+
+        return requests.get(
+            url=f"{self._hostname}{endpoint}",
+            headers={
+                "Authorization": f"Bearer {self._token}",
+            },
+        )
+
+    def _do_put_request(
+        self,
+        data: bytes,
+        endpoint: str,
+        content_type: str,
+    ) -> requests.Response:
+        """Perform a PUT request to a specified endpoint.
+
+        Args:
+            data (bytes): The data to be sent in the PUT request.
+            endpoint (str): The endpoint path (without leading slash) to call.
+            content_type (str): The content type of the data being sent.
+
+        Returns:
+            requests.Response
+        """
+        if not self._hostname.endswith("/"):
+            endpoint = f"/{endpoint}"
+
+        return requests.put(
+            url=f"{self._hostname}{endpoint}",
+            headers={
+                "Content-Type": content_type,
+                "Authorization": f"Bearer {self._token}",
+            },
+            data=data,
+        )
+
+    def _do_delete_request(self, endpoint: str) -> requests.Response:
+        """Perform a DELETE request to a specified endpoint.
+
+        Args:
+            endpoint (str): The endpoint path (without leading slash) to call.
+
+        Returns:
+            requests.Response
+        """
+        if not self._hostname.endswith("/"):
+            endpoint = f"/{endpoint}"
+
+        return requests.delete(
+            url=f"{self._hostname}{endpoint}",
+            headers={
+                "Authorization": f"Bearer {self._token}",
+            },
+        )
 
     def do_request(
         self,

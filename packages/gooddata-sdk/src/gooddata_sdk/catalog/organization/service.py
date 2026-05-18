@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import functools
+import json
 from typing import Any, Literal
+from urllib.parse import urlparse
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.declarative_export_templates import DeclarativeExportTemplates
@@ -22,6 +24,10 @@ from gooddata_sdk import CatalogDeclarativeExportTemplate, CatalogExportTemplate
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
 from gooddata_sdk.catalog.organization.entity_model.identity_provider import CatalogIdentityProvider
+from gooddata_sdk.catalog.organization.entity_model.ip_allowlist_policy import (
+    CatalogIpAllowlistPolicy,
+    CatalogIpAllowlistPolicyTargets,
+)
 from gooddata_sdk.catalog.organization.entity_model.jwk import CatalogJwk, CatalogJwkDocument
 from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
     CatalogLlmProvider,
@@ -44,6 +50,10 @@ from gooddata_sdk.utils import load_all_entities, load_all_entities_dict
 HLLType = Literal["Native", "Presto"]
 HLL_TYPE_SETTING_ID = "hyperLogLogType"
 HLL_TYPE_SETTING_TYPE = "HLL_TYPE"
+
+_IP_ALLOWLIST_ENTITIES_BASE = "api/v1/entities/ipAllowlistPolicies"
+_IP_ALLOWLIST_ACTIONS_BASE = "api/v1/actions/ipAllowlistPolicies"
+_JSON_CONTENT_TYPE = "application/json"
 
 
 class CatalogOrganizationService(CatalogServiceBase):
@@ -627,6 +637,150 @@ class CatalogOrganizationService(CatalogServiceBase):
             id: LLM provider identifier
         """
         self._entities_api.delete_entity_llm_providers(id, _check_return_type=False)
+
+    # IP Allowlist Policy APIs
+
+    @staticmethod
+    def _ip_policy_to_body(policy: CatalogIpAllowlistPolicy) -> bytes:
+        """Serialize a policy to a JSON:API request body."""
+        data: dict[str, Any] = {
+            "type": "ipAllowlistPolicy",
+            "id": policy.id,
+            "attributes": {"allowedSources": policy.allowed_sources},
+        }
+        rels: dict[str, Any] = {}
+        if policy.users:
+            rels["users"] = {"data": [{"id": u.id, "type": u.type} for u in policy.users]}
+        if policy.user_groups:
+            rels["userGroups"] = {"data": [{"id": g.id, "type": g.type} for g in policy.user_groups]}
+        if rels:
+            data["relationships"] = rels
+        return json.dumps({"data": data}).encode("utf-8")
+
+    def get_ip_allowlist_policy(self, policy_id: str) -> CatalogIpAllowlistPolicy:
+        """Get an IP allowlist policy by ID.
+
+        Args:
+            policy_id (str): Policy identifier.
+
+        Returns:
+            CatalogIpAllowlistPolicy: Retrieved policy.
+
+        Raises:
+            NotFoundException: Policy does not exist.
+        """
+        response = self._client._do_get_request(f"{_IP_ALLOWLIST_ENTITIES_BASE}/{policy_id}")
+        if response.status_code == 404:
+            raise NotFoundException(status=404, reason=response.reason)
+        response.raise_for_status()
+        return CatalogIpAllowlistPolicy.from_api(response.json()["data"])
+
+    def list_ip_allowlist_policies(self) -> list[CatalogIpAllowlistPolicy]:
+        """Return all IP allowlist policies in the organization.
+
+        Follows JSON:API ``links.next`` pagination transparently.
+
+        Returns:
+            list[CatalogIpAllowlistPolicy]: All policies.
+        """
+        policies: list[CatalogIpAllowlistPolicy] = []
+        endpoint = _IP_ALLOWLIST_ENTITIES_BASE
+        while True:
+            response = self._client._do_get_request(endpoint)
+            response.raise_for_status()
+            body = response.json()
+            policies.extend(CatalogIpAllowlistPolicy.from_api(item) for item in body["data"])
+            next_url = (body.get("links") or {}).get("next")
+            if not next_url:
+                break
+            parsed = urlparse(str(next_url))
+            endpoint = parsed.path.lstrip("/")
+            if parsed.query:
+                endpoint = f"{endpoint}?{parsed.query}"
+        return policies
+
+    def create_ip_allowlist_policy(self, policy: CatalogIpAllowlistPolicy) -> CatalogIpAllowlistPolicy:
+        """Create a new IP allowlist policy.
+
+        Args:
+            policy (CatalogIpAllowlistPolicy): Policy to create.
+
+        Returns:
+            CatalogIpAllowlistPolicy: Newly created policy as returned by the server.
+        """
+        response = self._client._do_post_request(
+            data=self._ip_policy_to_body(policy),
+            endpoint=_IP_ALLOWLIST_ENTITIES_BASE,
+            content_type=_JSON_CONTENT_TYPE,
+        )
+        response.raise_for_status()
+        return CatalogIpAllowlistPolicy.from_api(response.json()["data"])
+
+    def update_ip_allowlist_policy(self, policy: CatalogIpAllowlistPolicy) -> CatalogIpAllowlistPolicy:
+        """Replace an existing IP allowlist policy (full PUT).
+
+        Args:
+            policy (CatalogIpAllowlistPolicy): Updated policy object.
+
+        Returns:
+            CatalogIpAllowlistPolicy: Policy as returned by the server after update.
+
+        Raises:
+            NotFoundException: Policy does not exist.
+        """
+        response = self._client._do_put_request(
+            data=self._ip_policy_to_body(policy),
+            endpoint=f"{_IP_ALLOWLIST_ENTITIES_BASE}/{policy.id}",
+            content_type=_JSON_CONTENT_TYPE,
+        )
+        if response.status_code == 404:
+            raise NotFoundException(status=404, reason=response.reason)
+        response.raise_for_status()
+        return CatalogIpAllowlistPolicy.from_api(response.json()["data"])
+
+    def delete_ip_allowlist_policy(self, policy_id: str) -> None:
+        """Delete an IP allowlist policy.
+
+        Args:
+            policy_id (str): Policy identifier.
+
+        Raises:
+            ValueError: Policy does not exist.
+        """
+        response = self._client._do_delete_request(f"{_IP_ALLOWLIST_ENTITIES_BASE}/{policy_id}")
+        if response.status_code == 404:
+            raise ValueError(f"Cannot delete IP allowlist policy {policy_id!r}. This policy does not exist.")
+        response.raise_for_status()
+
+    def add_targets_to_ip_allowlist_policy(self, policy_id: str, targets: CatalogIpAllowlistPolicyTargets) -> None:
+        """Add users or user-groups to an existing IP allowlist policy.
+
+        Args:
+            policy_id (str): Policy identifier.
+            targets (CatalogIpAllowlistPolicyTargets): Targets to add.
+        """
+        body = json.dumps({"targets": [{"id": t.id, "type": t.type} for t in targets.targets]}).encode("utf-8")
+        response = self._client._do_post_request(
+            data=body,
+            endpoint=f"{_IP_ALLOWLIST_ACTIONS_BASE}/{policy_id}/addTargets",
+            content_type=_JSON_CONTENT_TYPE,
+        )
+        response.raise_for_status()
+
+    def remove_targets_from_ip_allowlist_policy(self, policy_id: str, targets: CatalogIpAllowlistPolicyTargets) -> None:
+        """Remove users or user-groups from an existing IP allowlist policy.
+
+        Args:
+            policy_id (str): Policy identifier.
+            targets (CatalogIpAllowlistPolicyTargets): Targets to remove.
+        """
+        body = json.dumps({"targets": [{"id": t.id, "type": t.type} for t in targets.targets]}).encode("utf-8")
+        response = self._client._do_post_request(
+            data=body,
+            endpoint=f"{_IP_ALLOWLIST_ACTIONS_BASE}/{policy_id}/removeTargets",
+            content_type=_JSON_CONTENT_TYPE,
+        )
+        response.raise_for_status()
 
     # Layout APIs
 
