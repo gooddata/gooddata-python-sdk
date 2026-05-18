@@ -29,6 +29,8 @@ from gooddata_api_client.model.analyze_statistics_request import AnalyzeStatisti
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.client import GoodDataApiClient
 
+_OBJECT_STORAGES_PATH = "api/v1/ailake/objectStorages"
+
 # AI Lake operation status values (lower-case on the wire — these are the
 # discriminator values of the `Operation` oneOf on the OpenAPI side).
 OperationStatus = Literal["pending", "succeeded", "failed"]
@@ -58,6 +60,25 @@ class CatalogAILakeOperation(Base):
         return self.status == "failed"
 
 
+@define(kw_only=True)
+class CatalogObjectStorageInfo(Base):
+    """Information about a registered AI Lake object storage."""
+
+    name: str
+    storage_config: dict[str, str]
+    storage_id: str
+    storage_type: str
+
+    @classmethod
+    def from_api(cls, entity: dict[str, Any]) -> CatalogObjectStorageInfo:
+        return cls(
+            name=entity["name"],
+            storage_config=entity.get("storageConfig") or {},
+            storage_id=entity["storageId"],
+            storage_type=entity["storageType"],
+        )
+
+
 class CatalogAILakeOperationError(RuntimeError):
     """Raised when an AI Lake long-running operation finishes in `failed` state."""
 
@@ -75,6 +96,22 @@ class CatalogAILakeService:
     def __init__(self, api_client: GoodDataApiClient) -> None:
         self._client = api_client
         self._ai_lake_api: AILakeApi = AILakeApi(api_client._api_client)
+
+    def list_object_storages(self) -> list[CatalogObjectStorageInfo]:
+        """List all object storages registered for the organization.
+
+        Uses the new `/api/v1/ailake/objectStorages` path (renamed from
+        the legacy `/api/v1/ailake/object-storages`).  The generated
+        api-client still references the old path, so this method bypasses
+        it and calls the endpoint directly.
+
+        Returns:
+            List of `CatalogObjectStorageInfo` objects, ordered by name.
+        """
+        response = self._client._do_get_request(_OBJECT_STORAGES_PATH)
+        response.raise_for_status()
+        data: dict[str, Any] = response.json()
+        return [CatalogObjectStorageInfo.from_api(s) for s in data.get("storages", [])]
 
     def analyze_statistics(
         self,

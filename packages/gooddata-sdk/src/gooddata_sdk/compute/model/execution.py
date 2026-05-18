@@ -19,8 +19,8 @@ try:
     import pyarrow as _pyarrow
     from pyarrow import ipc as _ipc
 except ImportError:
-    _pyarrow = None  # type: ignore
-    _ipc = None  # type: ignore
+    _pyarrow = None
+    _ipc = None
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
