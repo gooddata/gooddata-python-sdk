@@ -7,6 +7,7 @@ from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import (
     CatalogCspDirective,
     CatalogDeclarativeNotificationChannel,
+    CatalogIpAllowlistPolicy,
     CatalogJwk,
     CatalogOrganization,
     CatalogOrganizationSetting,
@@ -563,3 +564,41 @@ def test_layout_notification_channels(test_config, snapshot_notification_channel
 #         sdk.catalog_organization.put_declarative_identity_providers([])
 #         idps = sdk.catalog_organization.get_declarative_identity_providers()
 #         assert len(idps) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "ip_allowlist_policy_crud.yaml"))
+def test_ip_allowlist_policy_crud(test_config):
+    """Integration test: create, read, update, and delete an IP allowlist policy."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    policy_id = "test-ip-allowlist-policy"
+    policy = CatalogIpAllowlistPolicy(
+        id=policy_id,
+        allowed_sources=["192.168.1.0/24", "10.0.0.1"],
+    )
+
+    try:
+        # Create
+        created = sdk.catalog_organization.create_ip_allowlist_policy(policy)
+        assert created.id == policy_id
+        assert "192.168.1.0/24" in created.allowed_sources
+
+        # Get
+        fetched = sdk.catalog_organization.get_ip_allowlist_policy(policy_id)
+        assert fetched.id == policy_id
+        assert set(fetched.allowed_sources) == set(policy.allowed_sources)
+
+        # Update
+        updated_policy = CatalogIpAllowlistPolicy(
+            id=policy_id,
+            allowed_sources=["10.0.0.0/8"],
+        )
+        updated = sdk.catalog_organization.update_ip_allowlist_policy(updated_policy)
+        assert updated.id == policy_id
+        assert updated.allowed_sources == ["10.0.0.0/8"]
+
+        # List
+        all_policies = sdk.catalog_organization.list_ip_allowlist_policies()
+        assert any(p.id == policy_id for p in all_policies)
+    finally:
+        safe_delete(sdk.catalog_organization.delete_ip_allowlist_policy, policy_id)
