@@ -7,6 +7,7 @@ from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import (
     CatalogCspDirective,
     CatalogDeclarativeNotificationChannel,
+    CatalogIpAllowlistPolicy,
     CatalogJwk,
     CatalogOrganization,
     CatalogOrganizationSetting,
@@ -563,3 +564,39 @@ def test_layout_notification_channels(test_config, snapshot_notification_channel
 #         sdk.catalog_organization.put_declarative_identity_providers([])
 #         idps = sdk.catalog_organization.get_declarative_identity_providers()
 #         assert len(idps) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "ip_allowlist_policy_crud.yaml"))
+def test_ip_allowlist_policy_crud(test_config):
+    """Integration test covering the full IP allowlist policy CRUD lifecycle."""
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    policy_id = "testIpPolicy"
+    policy = CatalogIpAllowlistPolicy(
+        id=policy_id,
+        allowed_sources=["192.168.0.0/16"],
+    )
+    updated_policy = CatalogIpAllowlistPolicy(
+        id=policy_id,
+        allowed_sources=["10.0.0.0/8", "192.168.0.0/16"],
+    )
+    try:
+        # Create
+        created = sdk.catalog_organization.create_ip_allowlist_policy(policy)
+        assert created.id == policy_id
+        assert created.allowed_sources == ["192.168.0.0/16"]
+
+        # Get
+        fetched = sdk.catalog_organization.get_ip_allowlist_policy(policy_id)
+        assert fetched.id == policy_id
+        assert fetched.allowed_sources == ["192.168.0.0/16"]
+
+        # List — policy must appear in the full list
+        policies = sdk.catalog_organization.list_ip_allowlist_policies()
+        assert any(p.id == policy_id for p in policies)
+
+        # Update
+        updated = sdk.catalog_organization.update_ip_allowlist_policy(updated_policy)
+        assert updated.id == policy_id
+        assert set(updated.allowed_sources) == {"10.0.0.0/8", "192.168.0.0/16"}
+    finally:
+        safe_delete(sdk.catalog_organization.delete_ip_allowlist_policy, policy_id)
