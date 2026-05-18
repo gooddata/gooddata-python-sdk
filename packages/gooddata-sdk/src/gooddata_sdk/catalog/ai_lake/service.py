@@ -29,8 +29,6 @@ from gooddata_api_client.model.analyze_statistics_request import AnalyzeStatisti
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.client import GoodDataApiClient
 
-_OBJECT_STORAGES_PATH = "api/v1/ailake/objectStorages"
-
 # AI Lake operation status values (lower-case on the wire — these are the
 # discriminator values of the `Operation` oneOf on the OpenAPI side).
 OperationStatus = Literal["pending", "succeeded", "failed"]
@@ -100,18 +98,19 @@ class CatalogAILakeService:
     def list_object_storages(self) -> list[CatalogObjectStorageInfo]:
         """List all object storages registered for the organization.
 
-        Uses the new `/api/v1/ailake/objectStorages` path (renamed from
-        the legacy `/api/v1/ailake/object-storages`).  The generated
-        api-client still references the old path, so this method bypasses
-        it and calls the endpoint directly.
-
         Returns:
             List of `CatalogObjectStorageInfo` objects, ordered by name.
         """
-        response = self._client._do_get_request(_OBJECT_STORAGES_PATH)
-        response.raise_for_status()
-        data: dict[str, Any] = response.json()
-        return [CatalogObjectStorageInfo.from_api(s) for s in data.get("storages", [])]
+        response = self._ai_lake_api.list_ai_lake_object_storages()
+        return [
+            CatalogObjectStorageInfo(
+                name=s.name,
+                storage_config=s.storage_config or {},
+                storage_id=s.storage_id,
+                storage_type=s.storage_type,
+            )
+            for s in response.storages
+        ]
 
     def analyze_statistics(
         self,
