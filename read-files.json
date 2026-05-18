@@ -1,0 +1,240 @@
+{
+  "reads": [
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/src/gooddata_sdk/compute/model/execution.py",
+      "count": 5
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/tests/compute/test_bare_execution_response.py",
+      "count": 4
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/gooddata-api-client/gooddata_api_client/model/execution_result.py",
+      "count": 2
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/schemas/gooddata-afm-client.json",
+      "count": 2
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/tests/table/test_table.py",
+      "count": 2
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/cluster.json",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/src/gooddata_sdk/compute/compute_to_sdk_converter.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/gooddata-api-client/gooddata_api_client/model/execution_result_grand_total.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/gooddata-api-client/gooddata_api_client/model/execution_result_metadata.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/src/gooddata_sdk/table.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/tests/compute/test_compute_service.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/tests/conftest.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/src/gooddata_sdk/__init__.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/tests/compute/test_compute_to_sdk_converter.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/gooddata-api-client/gooddata_api_client/model_utils.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/pyproject.toml",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/src/gooddata_sdk/compute/__init__.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/src/gooddata_sdk/compute/model/__init__.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/tests/compute_model/test_compute_model.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/src/gooddata_sdk/compute/service.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/tests-support/src/tests_support/vcrpy_utils.py",
+      "count": 1
+    },
+    {
+      "path": "/home/runner/_work/gdc-nas/gdc-nas/sdk/packages/gooddata-sdk/tests/compute/test_execution_result_limit_break.py",
+      "count": 1
+    }
+  ],
+  "globs": [
+    {
+      "pattern": "packages/gooddata-sdk/gooddata_sdk/**/*.py",
+      "count": 2
+    },
+    {
+      "pattern": "cluster.json",
+      "count": 1
+    },
+    {
+      "pattern": "gooddata-sdk/gooddata_sdk/**/*.py",
+      "count": 1
+    },
+    {
+      "pattern": "gooddata-api-client/**/*.py",
+      "count": 1
+    },
+    {
+      "pattern": "packages/**/*.py",
+      "count": 1
+    },
+    {
+      "pattern": "packages/gooddata-sdk/src/**/*.py",
+      "count": 1
+    },
+    {
+      "pattern": "packages/gooddata-sdk/src/gooddata_sdk/compute/**/*.py",
+      "count": 1
+    },
+    {
+      "pattern": "gooddata-afm-client/**/*.py",
+      "count": 1
+    },
+    {
+      "pattern": "packages/gooddata-api-client/**/*.py",
+      "count": 1
+    },
+    {
+      "pattern": "gooddata-api-client/gooddata_api_client/models/__init__.py",
+      "count": 1
+    },
+    {
+      "pattern": "schemas/*.json",
+      "count": 1
+    },
+    {
+      "pattern": "**/gooddata-afm-client.json",
+      "count": 1
+    },
+    {
+      "pattern": "packages/gooddata-sdk/tests/**/*.py",
+      "count": 1
+    },
+    {
+      "pattern": "packages/gooddata-sdk/tests/compute/**/*",
+      "count": 1
+    },
+    {
+      "pattern": "packages/gooddata-sdk/tests/compute_model/test_compute_model.py",
+      "count": 1
+    },
+    {
+      "pattern": "packages/gooddata-sdk/tests/table/fixtures/*.yaml",
+      "count": 1
+    },
+    {
+      "pattern": "packages/gooddata-sdk/tests/compute/fixtures/*.yaml",
+      "count": 1
+    },
+    {
+      "pattern": "/home/runner/_work/_tool/Python/3.12.13/x64/lib/python3.12/site-packages/gooddata*",
+      "count": 1
+    },
+    {
+      "pattern": "/home/runner/**/*.pth",
+      "count": 1
+    },
+    {
+      "pattern": "packages/gooddata-sdk/tests/compute/*",
+      "count": 1
+    }
+  ],
+  "greps": [
+    {
+      "pattern": "ExecutionResult|execution_result|compute_to_sdk|LimitBreak|limit_break",
+      "scope": "packages/gooddata-sdk/src"
+    },
+    {
+      "pattern": "ExecutionResultLimitBreak|limit_break|limitBreak",
+      "scope": "gooddata-api-client"
+    },
+    {
+      "pattern": "ExecutionResultLimitBreak|limit_break|limitBreak",
+      "scope": "packages/gooddata-sdk"
+    },
+    {
+      "pattern": "ExecutionResult|execution_result_limit|LimitBreak|limit_break",
+      "scope": "gooddata-api-client/gooddata_api_client/models/__init__.py"
+    },
+    {
+      "pattern": "ExecutionResultLimitBreak|limitBreaks|limit_breaks",
+      "scope": "schemas/gooddata-afm-client.json"
+    },
+    {
+      "pattern": "ExecutionResultLimitBreak|limitBreaks|limit_breaks",
+      "scope": "schemas"
+    },
+    {
+      "pattern": "limitBreaks|limit_breaks|ExecutionResultLimitBreak",
+      "scope": "schemas/gooddata-afm-client.json"
+    },
+    {
+      "pattern": "\\\"ExecutionResult\\\"",
+      "scope": "schemas/gooddata-afm-client.json"
+    },
+    {
+      "pattern": "limitBreak|LimitBreak|limit_break",
+      "scope": "schemas"
+    },
+    {
+      "pattern": "limitBreak|LimitBreak|limit_break",
+      "scope": "gooddata-api-client"
+    },
+    {
+      "pattern": "def __getitem__",
+      "scope": "gooddata-api-client/gooddata_api_client/model_utils.py"
+    },
+    {
+      "pattern": "def set_attribute",
+      "scope": "gooddata-api-client/gooddata_api_client/model_utils.py"
+    },
+    {
+      "pattern": "def change_keys_js_to_python",
+      "scope": "gooddata-api-client/gooddata_api_client/model_utils.py"
+    },
+    {
+      "pattern": "def deserialize_model",
+      "scope": "gooddata-api-client"
+    },
+    {
+      "pattern": "def convert_js_args_to_python_args",
+      "scope": "gooddata-api-client/gooddata_api_client/model_utils.py"
+    },
+    {
+      "pattern": "RecordMode|OVERWRITE|makedirs|mkdir",
+      "scope": "packages/tests-support/src/tests_support/vcrpy_utils.py"
+    }
+  ]
+}

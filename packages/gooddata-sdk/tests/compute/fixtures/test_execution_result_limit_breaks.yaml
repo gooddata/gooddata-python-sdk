@@ -1,0 +1,129 @@
+interactions:
+  - request:
+      body:
+        execution:
+          attributes:
+            - label:
+                identifier:
+                  id: region
+                  type: label
+              localIdentifier: a1
+          filters: []
+          measures:
+            - definition:
+                measure:
+                  computeRatio: false
+                  filters: []
+                  item:
+                    identifier:
+                      id: order_amount
+                      type: metric
+              localIdentifier: m1
+        resultSpec:
+          dimensions:
+            - itemIdentifiers:
+                - a1
+              localIdentifier: dim_0
+            - itemIdentifiers:
+                - measureGroup
+              localIdentifier: dim_1
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
+    response:
+      body:
+        string:
+          executionResponse:
+            dimensions:
+              - headers:
+                  - attributeHeader:
+                      attribute:
+                        id: region
+                        type: attribute
+                      attributeName: Region
+                      granularity: null
+                      label:
+                        id: region
+                        type: label
+                      labelName: Region
+                      localIdentifier: a1
+                      primaryLabel:
+                        id: region
+                        type: label
+                      valueType: TEXT
+                localIdentifier: dim_0
+              - headers:
+                  - measureGroupHeaders:
+                      - format: $#,##0
+                        localIdentifier: m1
+                        name: Order Amount
+                localIdentifier: dim_1
+            links:
+              executionResult: EXECUTION_NORMALIZED_1
+      headers:
+        Content-Type:
+          - application/json
+        DATE:
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-CANCEL-TOKEN:
+          - PLACEHOLDER
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/EXECUTION_NORMALIZED_1?offset=0%2C0&limit=100%2C100
+    response:
+      body:
+        string:
+          detail: An error has occurred while calculating the result
+          reason: Cannot reach the URL
+          resultId: 6e49101dcdb52337d1094da18f1727bcd11a9fe9
+          status: 400
+          title: Bad Request
+          traceId: NORMALIZED_TRACE_ID_000000000000
+      headers:
+        Content-Type:
+          - application/problem+json
+        DATE:
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID:
+          - PLACEHOLDER
+      status:
+        code: 400
+        message: Bad Request
+version: 1
