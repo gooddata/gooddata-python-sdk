@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Any, Union
 
-from attr import define
+from attr import define, field
 from gooddata_api_client.model.aws_bedrock_provider_config import AwsBedrockProviderConfig
 from gooddata_api_client.model.azure_foundry_provider_auth import AzureFoundryProviderAuth
 from gooddata_api_client.model.azure_foundry_provider_config import AzureFoundryProviderConfig
@@ -337,3 +337,35 @@ class CatalogLlmProviderPatchAttributes(Base):
     @staticmethod
     def client_class() -> type[JsonApiLlmProviderInAttributes]:
         return JsonApiLlmProviderInAttributes
+
+
+# --- Resolved provider (read-only, returned by workspace-level resolution) ---
+
+
+@define(kw_only=True)
+class CatalogResolvedLlmProvider(Base):
+    """Active LLM provider resolved for a workspace.
+
+    Returned by :meth:`CatalogWorkspaceContentService.resolve_llm_providers`.
+    This is a read-only object — it represents the live configuration resolved
+    for the workspace, not the stored entity.
+    """
+
+    id: str
+    title: str
+    models: list[CatalogLlmProviderModel] = field(factory=list)
+
+    @classmethod
+    def from_api(cls, entity: dict[str, Any]) -> CatalogResolvedLlmProvider:
+        raw_models = safeget(entity, ["models"]) or []
+        return cls(
+            id=entity["id"],
+            title=entity["title"],
+            models=[
+                CatalogLlmProviderModel(
+                    id=safeget(m, ["id"]) or "",
+                    family=safeget(m, ["family"]) or "",
+                )
+                for m in raw_models
+            ],
+        )
