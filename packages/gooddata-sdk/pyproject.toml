@@ -76,7 +76,7 @@ test = [
 ]
 
 [tool.ty.analysis]
-allowed-unresolved-imports = ["gooddata_api_client.**"]
+allowed-unresolved-imports = ["gooddata_api_client.**", "pyarrow.**"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/gooddata_sdk"]

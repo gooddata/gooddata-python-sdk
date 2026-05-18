@@ -19,8 +19,8 @@ try:
     import pyarrow as _pyarrow
     from pyarrow import ipc as _ipc
 except ImportError:
-    _pyarrow = None  # type: ignore
-    _ipc = None  # type: ignore
+    _pyarrow = None
+    _ipc = None
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
@@ -28,6 +28,29 @@ from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
 
 logger = logging.getLogger(__name__)
+
+
+@define
+class ExecutionResultLimitBreak:
+    """Describes a limit that was broken, resulting in partial data being returned."""
+
+    limit: int
+    """The configured threshold value."""
+
+    limit_type: str
+    """Type of the limit that was broken, e.g. 'rowCount'."""
+
+    value: int | None = None
+    """The actual value that triggered the limit; None when it cannot be determined exactly."""
+
+    @classmethod
+    def from_api(cls, data: dict[str, Any]) -> ExecutionResultLimitBreak:
+        raw_value = data.get("value")
+        return cls(
+            limit=int(data["limit"]),
+            limit_type=str(data["limitType"]),
+            value=int(raw_value) if raw_value is not None else None,
+        )
 
 
 @define
@@ -270,6 +293,18 @@ class ExecutionResult:
     @property
     def metadata(self) -> models.ExecutionResultMetadata:
         return self._metadata
+
+    @property
+    def limit_breaks(self) -> list[ExecutionResultLimitBreak]:
+        """Returns limits that were broken during result computation.
+
+        When no limits were broken (result is complete), returns an empty list.
+        The ``limitBreaks`` field is absent from the API response in that case.
+        """
+        raw = self._metadata.get("limitBreaks")
+        if not raw:
+            return []
+        return [ExecutionResultLimitBreak.from_api(item) for item in raw]
 
     def is_complete(self, dim: int = 0) -> bool:
         return self.paging_offset[dim] + self.paging_count[dim] >= self.paging_total[dim]
