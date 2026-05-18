@@ -5,6 +5,7 @@ import io
 from unittest.mock import MagicMock, patch
 
 import pytest
+from gooddata_sdk.compute.model.execution import ExecutionResultLimitBreak
 
 pyarrow = pytest.importorskip("pyarrow")
 
@@ -104,3 +105,44 @@ def test_read_result_arrow_no_pyarrow_raises() -> None:
 
     with patch.object(_exec_mod, "_ipc", None), pytest.raises(ImportError, match="pyarrow is required"):
         bare.read_result_arrow()
+
+
+@pytest.mark.parametrize(
+    "scenario, raw, expected_limit, expected_limit_type, expected_value",
+    [
+        (
+            "with_value",
+            {"limit": 1000, "limitType": "rowCount", "value": 1500},
+            1000,
+            "rowCount",
+            1500,
+        ),
+        (
+            "value_none",
+            {"limit": 500, "limitType": "columnCount"},
+            500,
+            "columnCount",
+            None,
+        ),
+        (
+            "value_explicit_none",
+            {"limit": 200, "limitType": "cellCount", "value": None},
+            200,
+            "cellCount",
+            None,
+        ),
+    ],
+)
+def test_execution_result_limit_break_from_dict(
+    scenario: str,
+    raw: dict,
+    expected_limit: int,
+    expected_limit_type: str,
+    expected_value: int | None,
+) -> None:
+    """ExecutionResultLimitBreak.from_dict correctly maps camelCase keys and handles optional value."""
+    lb = ExecutionResultLimitBreak.from_dict(raw)
+
+    assert lb.limit == expected_limit
+    assert lb.limit_type == expected_limit_type
+    assert lb.value == expected_value

@@ -31,6 +31,30 @@ logger = logging.getLogger(__name__)
 
 
 @define
+class ExecutionResultLimitBreak:
+    """Describes a limit that was broken, resulting in partial data being returned."""
+
+    limit: int
+    """The configured threshold value."""
+
+    limit_type: str
+    """Type of the limit that was broken, e.g. 'rowCount'."""
+
+    value: int | None = None
+    """The actual value that triggered the limit; null when it cannot be determined exactly."""
+
+    @classmethod
+    def from_dict(cls, d: dict[str, Any]) -> ExecutionResultLimitBreak:
+        """Construct from a raw API response dict (camelCase keys)."""
+        raw_value = d.get("value")
+        return cls(
+            limit=int(d["limit"]),
+            limit_type=str(d["limitType"]),
+            value=int(raw_value) if raw_value is not None else None,
+        )
+
+
+@define
 class TotalDimension:
     idx: int
     """index of dimension in which to calculate the total"""
@@ -238,6 +262,12 @@ class ExecutionResult:
         self._grand_totals: list[models.ExecutionResultGrandTotal] = result["grand_totals"]
         self._paging: models.ExecutionResultPaging = result["paging"]
         self._metadata: models.ExecutionResultMetadata = result["metadata"]
+        raw_limit_breaks = result.get("limitBreaks")
+        self._limit_breaks: list[ExecutionResultLimitBreak] = (
+            [ExecutionResultLimitBreak.from_dict(item) for item in raw_limit_breaks]
+            if raw_limit_breaks is not None
+            else []
+        )
 
     @property
     def data(self) -> list[Any]:
@@ -270,6 +300,14 @@ class ExecutionResult:
     @property
     def metadata(self) -> models.ExecutionResultMetadata:
         return self._metadata
+
+    @property
+    def limit_breaks(self) -> list[ExecutionResultLimitBreak]:
+        """Limits that were broken during result computation, causing the result to be partial.
+
+        Returns an empty list when the result is complete (no limits were broken).
+        """
+        return self._limit_breaks
 
     def is_complete(self, dim: int = 0) -> bool:
         return self.paging_offset[dim] + self.paging_count[dim] >= self.paging_total[dim]
