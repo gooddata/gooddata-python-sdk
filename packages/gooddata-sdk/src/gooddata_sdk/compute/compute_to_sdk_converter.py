@@ -31,6 +31,14 @@ from gooddata_sdk.compute.model.metric import (
 from gooddata_sdk.utils import ref_extract, ref_extract_obj_id
 
 
+def _extract_dimensionality(f: dict[str, Any]) -> list[Union[str, ObjId, Attribute, Metric]] | None:
+    # mypy is unable to automatically convert Union[str, ObjId] to Union[str, ObjId, Attribute, Metric]
+    # so use explicit cast here
+    if "dimensionality" not in f:
+        return None
+    return [cast(Union[str, ObjId, Attribute, Metric], ref_extract(a)) for a in f["dimensionality"]]
+
+
 class ComputeToSdkConverter:
     """
     Provides functions to convert Compute API model objects represented as dictionaries to the SDK Compute model.
@@ -142,6 +150,7 @@ class ComputeToSdkConverter:
                 operator=f["operator"],
                 values=f["value"],
                 treat_nulls_as=f.get("treatNullValuesAs"),
+                dimensionality=_extract_dimensionality(f),
             )
 
         if "rangeMeasureValueFilter" in filter_dict:
@@ -152,6 +161,7 @@ class ComputeToSdkConverter:
                 operator=f["operator"],
                 values=(f["from"], f["to"]),
                 treat_nulls_as=f.get("treatNullValuesAs"),
+                dimensionality=_extract_dimensionality(f),
             )
 
         if "compoundMeasureValueFilter" in filter_dict:
@@ -174,22 +184,15 @@ class ComputeToSdkConverter:
                 metric=ref_extract(f["measure"]),
                 conditions=conditions,
                 treat_nulls_as=f.get("treatNullValuesAs"),
+                dimensionality=_extract_dimensionality(f),
             )
 
         if "rankingFilter" in filter_dict:
             f = filter_dict["rankingFilter"]
 
-            # mypy is unable to automatically convert Union[str, ObjId] to Union[str, ObjId, Attribute, Metric]
-            # so use explicit cast here
-            dimensionality = (
-                [cast(Union[str, ObjId, Attribute, Metric], ref_extract(a)) for a in f["dimensionality"]]
-                if "dimensionality" in f
-                else None
-            )
-
             return RankingFilter(
                 metrics=[ref_extract(m) for m in f["measures"]],
-                dimensionality=dimensionality,
+                dimensionality=_extract_dimensionality(f),
                 operator=f["operator"],
                 value=f["value"],
             )

@@ -1,0 +1,18 @@
+{
+    "range_measure_value_filter": {
+        "_from": 2,
+        "dimensionality": [
+            {
+                "local_identifier": "local_id3"
+            },
+            {
+                "local_identifier": "local_id4"
+            }
+        ],
+        "measure": {
+            "local_identifier": "local_id1"
+        },
+        "operator": "BETWEEN",
+        "to": 3
+    }
+}

@@ -586,6 +586,7 @@ class MetricValueFilter(Filter):
         operator: str,
         values: Union[float, int, tuple[float, float]],
         treat_nulls_as: Union[float, None] = None,
+        dimensionality: list[Union[str, ObjId, Attribute, Metric]] | None = None,
     ) -> None:
         super().__init__()
 
@@ -611,6 +612,7 @@ class MetricValueFilter(Filter):
         self._metric = _extract_id_or_local_id(metric)
         self._operator = operator
         self._treat_nulls_as = treat_nulls_as
+        self._dimensionality = [_extract_id_or_local_id(d) for d in dimensionality] if dimensionality else None
 
     @property
     def metric(self) -> Union[ObjId, str]:
@@ -632,19 +634,25 @@ class MetricValueFilter(Filter):
     def treat_nulls_as(self) -> Union[float, None]:
         return self._treat_nulls_as
 
+    @property
+    def dimensionality(self) -> list[Union[ObjId, str]] | None:
+        return self._dimensionality
+
     def is_noop(self) -> bool:
         return False
 
     def as_api_model(self) -> Union[afm_models.ComparisonMeasureValueFilter, afm_models.RangeMeasureValueFilter]:
         measure = _to_identifier(self._metric)
 
-        kwargs = dict(
+        kwargs: dict[str, Any] = dict(
             measure=measure,
             operator=self.operator,
             _check_type=False,
         )
         if self.treat_nulls_as is not None:
             kwargs["treat_null_values_as"] = self.treat_nulls_as
+        if self._dimensionality is not None:
+            kwargs["dimensionality"] = [_to_identifier(d) for d in self._dimensionality]
 
         if _METRIC_VALUE_FILTER_OPERATORS[self.operator] == "comparison":
             kwargs["value"] = self.values[0]
@@ -727,11 +735,13 @@ class CompoundMetricValueFilter(Filter):
         metric: Union[ObjId, str, Metric],
         conditions: list[MetricValueCondition],
         treat_nulls_as: Union[float, None] = None,
+        dimensionality: list[Union[str, ObjId, Attribute, Metric]] | None = None,
     ) -> None:
         super().__init__()
         self._metric = _extract_id_or_local_id(metric)
         self._conditions = conditions
         self._treat_nulls_as = treat_nulls_as
+        self._dimensionality = [_extract_id_or_local_id(d) for d in dimensionality] if dimensionality else None
 
     @property
     def metric(self) -> Union[ObjId, str]:
@@ -744,6 +754,10 @@ class CompoundMetricValueFilter(Filter):
     @property
     def treat_nulls_as(self) -> Union[float, None]:
         return self._treat_nulls_as
+
+    @property
+    def dimensionality(self) -> list[Union[ObjId, str]] | None:
+        return self._dimensionality
 
     def is_noop(self) -> bool:
         return len(self.conditions) == 0
@@ -758,6 +772,8 @@ class CompoundMetricValueFilter(Filter):
         )
         if self.treat_nulls_as is not None:
             kwargs["treat_null_values_as"] = self.treat_nulls_as
+        if self._dimensionality is not None:
+            kwargs["dimensionality"] = [_to_identifier(d) for d in self._dimensionality]
 
         body = CompoundMeasureValueFilterBody(**kwargs)
         return afm_models.CompoundMeasureValueFilter(body, _check_type=False)
