@@ -23,3 +23,35 @@ packages/gooddata-sdk/tests/compute_model/metric_value_filter/comparison_filter_
     }
   }
 }
+
+packages/gooddata-sdk/src/gooddata_sdk/compute/model/filter.py
+  s_abf2acc50ea177::t_edfc22490b85ec 738,744,758-761,775-776
+  s_abf2acc50ea177::t_05f81e3096af52 589,615,637-640,647,654-655
+packages/gooddata-sdk/src/gooddata_sdk/compute/compute_to_sdk_converter.py
+  s_abf2acc50ea177::t_a71c9da6582b6c 34-41
+  s_abf2acc50ea177::t_fe588b12db6243 195
+  s_abf2acc50ea177::t_be03bd4adf40c0 153,164,187
+packages/gooddata-sdk/tests/compute/test_compute_to_sdk_converter.py
+  s_abf2acc50ea177::t_39ad43689916dc 16
+  s_abf2acc50ea177::t_64bb1e8dd66cee 274-344
+packages/gooddata-sdk/tests/compute_model/test_metric_value_filter.py
+  s_abf2acc50ea177::t_534c69af1e9589 59-99
+packages/gooddata-sdk/tests/compute_model/test_compound_metric_value_filter.py
+  s_abf2acc50ea177::t_fe6016834dffcd 5,39-99
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.10",
+  "base_commit_sha": "d54f6390715a0c1a7a669ef4ccdaa3653f015fa2",
+  "prompts": {},
+  "sessions": {
+    "s_abf2acc50ea177": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3515b316-1544-4491-9c3f-6b947c609f7a",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}
