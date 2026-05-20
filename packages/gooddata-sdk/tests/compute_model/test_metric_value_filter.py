@@ -56,6 +56,47 @@ test_metric_value_filter = [
         MetricValueFilter(metric="local_id1", operator="BETWEEN", values=(2, 3), treat_nulls_as=1),
         "Local ID: between 2 - 3",
     ],
+    [
+        "comparison filter with dimensionality using local ids",
+        MetricValueFilter(
+            metric="local_id1",
+            operator="GREATER_THAN",
+            values=10,
+            dimensionality=["local_id3", _attribute],
+        ),
+        "Local ID: > 10.0",
+    ],
+    [
+        "comparison filter with dimensionality using mix of ids",
+        MetricValueFilter(
+            metric="local_id1",
+            operator="GREATER_THAN",
+            values=10,
+            dimensionality=["local_id3", ObjId(type="label", id="label.id")],
+        ),
+        "Local ID: > 10.0",
+    ],
+    [
+        "range filter with dimensionality",
+        MetricValueFilter(
+            metric="local_id1",
+            operator="BETWEEN",
+            values=(2, 3),
+            dimensionality=["local_id3", _attribute],
+        ),
+        "Local ID: between 2 - 3",
+    ],
+    [
+        "comparison filter with dimensionality and treat nulls as",
+        MetricValueFilter(
+            metric="local_id1",
+            operator="GREATER_THAN",
+            values=10,
+            treat_nulls_as=0,
+            dimensionality=["local_id3"],
+        ),
+        "Local ID: > 10.0",
+    ],
 ]
 
 
