@@ -1,0 +1,17 @@
+{
+    "comparison_measure_value_filter": {
+        "dimensionality": [
+            {
+                "local_identifier": "local_id3"
+            },
+            {
+                "local_identifier": "local_id4"
+            }
+        ],
+        "measure": {
+            "local_identifier": "local_id1"
+        },
+        "operator": "GREATER_THAN",
+        "value": 10.0
+    }
+}

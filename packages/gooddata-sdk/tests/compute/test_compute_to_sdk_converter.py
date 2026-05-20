@@ -13,6 +13,7 @@ from gooddata_sdk import (
     MetricValueFilter,
     MetricValueRangeCondition,
     NegativeAttributeFilter,
+    ObjId,
     PopDateMetric,
     PopDatesetMetric,
     PositiveAttributeFilter,
@@ -268,6 +269,77 @@ def test_compound_measure_value_filter_conversion():
     assert result.conditions[1].operator == "BETWEEN"
     assert result.conditions[1].from_value == 10
     assert result.conditions[1].to_value == 20
+
+
+def test_comparison_measure_value_filter_with_dimensionality_conversion():
+    filter_dict = json.loads(
+        """
+        {
+          "comparisonMeasureValueFilter": {
+            "measure": { "localIdentifier": "measureLocalId" },
+            "operator": "GREATER_THAN",
+            "value": 100,
+            "dimensionality": [
+                { "localIdentifier": "attributeLocalId" },
+                { "identifier": { "id": "label.id", "type": "label" } }
+            ]
+          }
+        }
+        """
+    )
+
+    result = ComputeToSdkConverter.convert_filter(filter_dict)
+
+    assert isinstance(result, MetricValueFilter)
+    assert result.dimensionality is not None
+    assert result.dimensionality[0] == "attributeLocalId"
+    assert result.dimensionality[1] == ObjId(type="label", id="label.id")
+
+
+def test_range_measure_value_filter_with_dimensionality_conversion():
+    filter_dict = json.loads(
+        """
+        {
+          "rangeMeasureValueFilter": {
+            "measure": { "localIdentifier": "measureLocalId" },
+            "operator": "BETWEEN",
+            "from": 100,
+            "to": 200,
+            "dimensionality": [
+                { "localIdentifier": "attributeLocalId" }
+            ]
+          }
+        }
+        """
+    )
+
+    result = ComputeToSdkConverter.convert_filter(filter_dict)
+
+    assert isinstance(result, MetricValueFilter)
+    assert result.dimensionality == ["attributeLocalId"]
+
+
+def test_compound_measure_value_filter_with_dimensionality_conversion():
+    filter_dict = json.loads(
+        """
+        {
+          "compoundMeasureValueFilter": {
+            "measure": { "localIdentifier": "measureLocalId" },
+            "conditions": [
+              { "comparison": { "operator": "GREATER_THAN", "value": 100 } }
+            ],
+            "dimensionality": [
+                { "localIdentifier": "attributeLocalId" }
+            ]
+          }
+        }
+        """
+    )
+
+    result = ComputeToSdkConverter.convert_filter(filter_dict)
+
+    assert isinstance(result, CompoundMetricValueFilter)
+    assert result.dimensionality == ["attributeLocalId"]
 
 
 def test_ranking_filter_conversion():
