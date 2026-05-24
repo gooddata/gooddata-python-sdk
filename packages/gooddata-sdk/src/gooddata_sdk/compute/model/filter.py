@@ -326,7 +326,7 @@ class RelativeDateFilter(Filter):
         self._from_shift = from_shift
         self._to_shift = to_shift
         self._bounded_filter = bounded_filter
-        self._empty_value_handling: EmptyValueHandling | None = empty_value_handling
+        self._empty_value_handling = empty_value_handling
 
     @property
     def dataset(self) -> ObjId:
@@ -435,7 +435,7 @@ class AllTimeDateFilter(Filter):
 
         self._dataset = dataset
         self._granularity = granularity
-        self._empty_value_handling: EmptyValueHandling | None = empty_value_handling
+        self._empty_value_handling = empty_value_handling
 
     @property
     def dataset(self) -> ObjId:
@@ -490,7 +490,7 @@ class AbsoluteDateFilter(Filter):
         self._dataset = dataset
         self._from_date = from_date
         self._to_date = to_date
-        self._empty_value_handling: EmptyValueHandling | None = empty_value_handling
+        self._empty_value_handling = empty_value_handling
 
     @property
     def dataset(self) -> ObjId:
