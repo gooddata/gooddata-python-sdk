@@ -8,6 +8,7 @@ from gooddata_sdk import (
     CatalogCspDirective,
     CatalogDeclarativeNotificationChannel,
     CatalogJwk,
+    CatalogLlmProvider,
     CatalogOrganization,
     CatalogOrganizationSetting,
     CatalogRsaSpecification,
@@ -563,3 +564,19 @@ def test_layout_notification_channels(test_config, snapshot_notification_channel
 #         sdk.catalog_organization.put_declarative_identity_providers([])
 #         idps = sdk.catalog_organization.get_declarative_identity_providers()
 #         assert len(idps) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "list_llm_providers.yaml"))
+def test_list_llm_providers(test_config):
+    """LLM provider entities replace the permanently-removed llmEndpoints API.
+
+    Exercises ``catalog_organization.list_llm_providers`` and verifies that
+    the response is deserialized into a proper list of ``CatalogLlmProvider``
+    objects.  The list may be empty on a fresh staging environment.
+    """
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    providers = sdk.catalog_organization.list_llm_providers()
+    assert isinstance(providers, list)
+    for provider in providers:
+        assert isinstance(provider, CatalogLlmProvider)
+        assert provider.id
