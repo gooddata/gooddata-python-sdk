@@ -1,0 +1,65 @@
+interactions:
+  - request:
+      body:
+        execution:
+          attributes:
+            - label:
+                identifier:
+                  id: region
+                  type: label
+              localIdentifier: a_region
+          filters: []
+          measures:
+            - definition:
+                measure:
+                  computeRatio: false
+                  filters: []
+                  item:
+                    identifier:
+                      id: order_amount
+                      type: metric
+              localIdentifier: m_order_amount
+        resultSpec:
+          dimensions:
+            - itemIdentifiers:
+                - a_region
+              localIdentifier: dim_0
+            - itemIdentifiers:
+                - m_order_amount
+              localIdentifier: dim_1
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
+    response:
+      body:
+        string:
+          detail: Result specification refers to unknown attributes ([m_order_amount]).
+          status: 400
+          title: Bad Request
+          traceId: NORMALIZED_TRACE_ID_000000000000
+      headers:
+        Content-Type:
+          - application/problem+json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 400
+        message: Bad Request
+version: 1
