@@ -316,6 +316,7 @@ from gooddata_sdk.compute.model.filter import (
     RankingFilter,
     RelativeDateFilter,
 )
+from gooddata_sdk.compute.model.limit_break import ExecutionResultLimitBreak
 from gooddata_sdk.compute.model.metric import (
     ArithmeticMetric,
     InlineMetric,
