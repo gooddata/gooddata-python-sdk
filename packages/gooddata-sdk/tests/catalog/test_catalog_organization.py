@@ -582,6 +582,7 @@ def test_create_llm_provider_anthropic(test_config):
             auth=CatalogAnthropicApiKeyAuth(api_key="test-api-key"),
         ),
         name="Test Anthropic Provider",
+        default_model_id="claude-3-5-sonnet-20241022",
     )
 
     try:
