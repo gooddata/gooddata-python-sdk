@@ -7,6 +7,8 @@ from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import (
     CatalogCspDirective,
     CatalogDeclarativeNotificationChannel,
+    CatalogIpAllowlistPolicy,
+    CatalogIpAllowlistPolicyAttributes,
     CatalogJwk,
     CatalogOrganization,
     CatalogOrganizationSetting,
@@ -563,3 +565,45 @@ def test_layout_notification_channels(test_config, snapshot_notification_channel
 #         sdk.catalog_organization.put_declarative_identity_providers([])
 #         idps = sdk.catalog_organization.get_declarative_identity_providers()
 #         assert len(idps) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_ip_allowlist_policy_crud.yaml"))
+def test_ip_allowlist_policy_crud(test_config):
+    """Verify full CRUD lifecycle for IP allowlist policies.
+
+    Creates a policy, reads it back, updates the allowed sources, verifies
+    the list endpoint includes it, then removes it in the finally block so
+    the staging environment is always restored.
+    """
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    policy_id = "sdk-test-ip-policy"
+
+    policy = CatalogIpAllowlistPolicy(
+        id=policy_id,
+        attributes=CatalogIpAllowlistPolicyAttributes(
+            allowed_sources=["192.168.1.0/24"],
+        ),
+    )
+    try:
+        created = sdk.catalog_organization.create_ip_allowlist_policy(policy)
+        assert created.id == policy_id
+        assert created.attributes is not None
+        assert "192.168.1.0/24" in created.attributes.allowed_sources
+
+        retrieved = sdk.catalog_organization.get_ip_allowlist_policy(policy_id)
+        assert retrieved.id == policy_id
+
+        all_policies = sdk.catalog_organization.list_ip_allowlist_policies()
+        assert any(p.id == policy_id for p in all_policies)
+
+        updated_policy = CatalogIpAllowlistPolicy(
+            id=policy_id,
+            attributes=CatalogIpAllowlistPolicyAttributes(
+                allowed_sources=["10.0.0.0/8"],
+            ),
+        )
+        updated = sdk.catalog_organization.update_ip_allowlist_policy(updated_policy)
+        assert updated.attributes is not None
+        assert "10.0.0.0/8" in updated.attributes.allowed_sources
+    finally:
+        safe_delete(sdk.catalog_organization.delete_ip_allowlist_policy, policy_id)

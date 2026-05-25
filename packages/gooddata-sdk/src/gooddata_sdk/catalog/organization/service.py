@@ -20,8 +20,10 @@ from gooddata_api_client.model.switch_identity_provider_request import SwitchIde
 
 from gooddata_sdk import CatalogDeclarativeExportTemplate, CatalogExportTemplate
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
+from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
 from gooddata_sdk.catalog.organization.entity_model.identity_provider import CatalogIdentityProvider
+from gooddata_sdk.catalog.organization.entity_model.ip_allowlist_policy import CatalogIpAllowlistPolicy
 from gooddata_sdk.catalog.organization.entity_model.jwk import CatalogJwk, CatalogJwkDocument
 from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
     CatalogLlmProvider,
@@ -627,6 +629,121 @@ class CatalogOrganizationService(CatalogServiceBase):
             id: LLM provider identifier
         """
         self._entities_api.delete_entity_llm_providers(id, _check_return_type=False)
+
+    # IP Allowlist Policy APIs
+
+    def get_ip_allowlist_policy(self, policy_id: str) -> CatalogIpAllowlistPolicy:
+        """Get an IP allowlist policy by ID.
+
+        Args:
+            policy_id (str): IP allowlist policy identifier.
+
+        Returns:
+            CatalogIpAllowlistPolicy: The retrieved policy.
+        """
+        response = self._client._do_json_request(
+            "GET",
+            f"api/v1/entities/ipAllowlistPolicies/{policy_id}",
+        )
+        response.raise_for_status()
+        return CatalogIpAllowlistPolicy.from_api(response.json()["data"])
+
+    def list_ip_allowlist_policies(self) -> list[CatalogIpAllowlistPolicy]:
+        """List all IP allowlist policies in the organization.
+
+        Returns:
+            list[CatalogIpAllowlistPolicy]: List of IP allowlist policies.
+        """
+        response = self._client._do_json_request(
+            "GET",
+            "api/v1/entities/ipAllowlistPolicies",
+        )
+        response.raise_for_status()
+        return [CatalogIpAllowlistPolicy.from_api(item) for item in response.json().get("data", [])]
+
+    def create_ip_allowlist_policy(self, policy: CatalogIpAllowlistPolicy) -> CatalogIpAllowlistPolicy:
+        """Create a new IP allowlist policy.
+
+        Args:
+            policy (CatalogIpAllowlistPolicy): The policy to create.
+
+        Returns:
+            CatalogIpAllowlistPolicy: The created policy as returned by the server.
+        """
+        response = self._client._do_json_request(
+            "POST",
+            "api/v1/entities/ipAllowlistPolicies",
+            json_body=policy.to_api(),
+        )
+        response.raise_for_status()
+        return CatalogIpAllowlistPolicy.from_api(response.json()["data"])
+
+    def update_ip_allowlist_policy(self, policy: CatalogIpAllowlistPolicy) -> CatalogIpAllowlistPolicy:
+        """Replace an existing IP allowlist policy (full PUT).
+
+        Args:
+            policy (CatalogIpAllowlistPolicy): The policy with updated values.
+
+        Returns:
+            CatalogIpAllowlistPolicy: The updated policy as returned by the server.
+        """
+        response = self._client._do_json_request(
+            "PUT",
+            f"api/v1/entities/ipAllowlistPolicies/{policy.id}",
+            json_body=policy.to_api(),
+        )
+        response.raise_for_status()
+        return CatalogIpAllowlistPolicy.from_api(response.json()["data"])
+
+    def delete_ip_allowlist_policy(self, policy_id: str) -> None:
+        """Delete an IP allowlist policy.
+
+        Args:
+            policy_id (str): IP allowlist policy identifier.
+        """
+        response = self._client._do_json_request(
+            "DELETE",
+            f"api/v1/entities/ipAllowlistPolicies/{policy_id}",
+        )
+        response.raise_for_status()
+
+    def add_targets_to_ip_allowlist_policy(
+        self,
+        policy_id: str,
+        targets: list[CatalogAssigneeIdentifier],
+    ) -> None:
+        """Add user or user-group targets to an IP allowlist policy.
+
+        Args:
+            policy_id (str): IP allowlist policy identifier.
+            targets (list[CatalogAssigneeIdentifier]): Users or user groups to add.
+        """
+        request_body = {"targets": [{"id": t.id, "type": t.type} for t in targets]}
+        response = self._client._do_json_request(
+            "POST",
+            f"api/v1/actions/ipAllowlistPolicies/{policy_id}/addTargets",
+            json_body=request_body,
+        )
+        response.raise_for_status()
+
+    def remove_targets_from_ip_allowlist_policy(
+        self,
+        policy_id: str,
+        targets: list[CatalogAssigneeIdentifier],
+    ) -> None:
+        """Remove user or user-group targets from an IP allowlist policy.
+
+        Args:
+            policy_id (str): IP allowlist policy identifier.
+            targets (list[CatalogAssigneeIdentifier]): Users or user groups to remove.
+        """
+        request_body = {"targets": [{"id": t.id, "type": t.type} for t in targets]}
+        response = self._client._do_json_request(
+            "POST",
+            f"api/v1/actions/ipAllowlistPolicies/{policy_id}/removeTargets",
+            json_body=request_body,
+        )
+        response.raise_for_status()
 
     # Layout APIs
 

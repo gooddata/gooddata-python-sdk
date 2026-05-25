@@ -91,6 +91,55 @@ class GoodDataApiClient:
         self._ai_lake_api = apis.AILakeApi(self._api_client)
         self._executions_cancellable = executions_cancellable
 
+    def _do_json_request(
+        self,
+        method: str,
+        endpoint: str,
+        json_body: dict | None = None,
+    ) -> requests.Response:
+        """Perform a JSON:API HTTP request.
+
+        Used as a low-level escape hatch when the generated API client does not
+        yet have the endpoint models (e.g. immediately after a new endpoint is
+        added to the OpenAPI spec but before the client is regenerated).
+
+        The standard GoodData request headers (Authorization, X-Requested-With,
+        X-GDC-VALIDATE-RELATIONS) are added automatically.  Any custom headers
+        provided at client construction time are merged in as well.
+
+        Args:
+            method (str): HTTP method string, e.g. ``"GET"``, ``"POST"``,
+                ``"PUT"``, ``"DELETE"``.
+            endpoint (str): API endpoint path without a leading slash, e.g.
+                ``"api/v1/entities/ipAllowlistPolicies"``.
+            json_body (dict | None): Optional dict to be serialised as the JSON
+                request body.  When given, ``Content-Type`` is set to
+                ``application/vnd.gooddata.api+json``.
+
+        Returns:
+            requests.Response: The HTTP response.  The caller is responsible
+            for checking the status code (e.g. ``response.raise_for_status()``).
+        """
+        if not self._hostname.endswith("/"):
+            endpoint = f"/{endpoint}"
+
+        headers: dict[str, str] = {
+            "Authorization": f"Bearer {self._token}",
+            "Accept": "application/vnd.gooddata.api+json",
+            "X-Requested-With": "XMLHttpRequest",
+            "X-GDC-VALIDATE-RELATIONS": "true",
+        }
+        if json_body is not None:
+            headers["Content-Type"] = "application/vnd.gooddata.api+json"
+        headers.update(self._custom_headers)
+
+        return requests.request(
+            method=method,
+            url=f"{self._hostname}{endpoint}",
+            headers=headers,
+            json=json_body,
+        )
+
     def _do_post_request(
         self,
         data: bytes,
