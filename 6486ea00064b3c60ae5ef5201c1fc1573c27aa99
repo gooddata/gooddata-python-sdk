@@ -1,0 +1,29 @@
+packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/service.py
+  s_61f6f3745f96ee::t_c95459ba02e497 230-263
+  s_61f6f3745f96ee::t_669d91d96b364b 5
+  s_61f6f3745f96ee::t_48c6b521d960a5 38-47
+packages/gooddata-sdk/tests/catalog/unit_tests/test_hll_type_setting.py
+  s_61f6f3745f96ee::t_e66d28f93a3c4e 13,18
+  s_61f6f3745f96ee::t_912199ac358348 105-108
+  s_61f6f3745f96ee::t_b7099e4b2b135b 1-12,14-17,19-40,42-79,84-89,94-104,109-115
+  s_61f6f3745f96ee::t_1c39969313c25c 80-83
+  s_61f6f3745f96ee::t_698cfb7256b0cf 90-93
+packages/gooddata-sdk/src/gooddata_sdk/__init__.py
+  s_61f6f3745f96ee::t_75025ed408ce94 140-145
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.1",
+  "base_commit_sha": "6486ea00064b3c60ae5ef5201c1fc1573c27aa99",
+  "prompts": {},
+  "sessions": {
+    "s_61f6f3745f96ee": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c8e7346f-ecd6-42b4-950d-02aa766e7181",
+        "model": "unknown"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>"
+    }
+  }
+}

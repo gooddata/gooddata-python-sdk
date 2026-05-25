@@ -1,0 +1,9 @@
+packages/gooddata-sdk/pyproject.toml
+  s_61f6f3745f96ee::t_bb24c97baed547 37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.1",
+  "base_commit_sha": "228d6c0397a70b3843c4a843dde406ac4dd2f967",
+  "prompts": {}
+}

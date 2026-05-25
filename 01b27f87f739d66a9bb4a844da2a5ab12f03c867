@@ -1,0 +1,33 @@
+packages/gooddata-sdk/src/gooddata_sdk/client.py
+  s_61f6f3745f96ee::t_208e83742eccfb 74
+  s_61f6f3745f96ee::t_f399fe1856a28d 163-165
+packages/gooddata-sdk/src/gooddata_sdk/sdk.py
+  s_61f6f3745f96ee::t_d8b5ecdfabe5b6 6
+  s_61f6f3745f96ee::t_12c151908c7ab0 144-146
+  s_61f6f3745f96ee::t_1e5ae613a199f5 92
+packages/gooddata-sdk/tests/catalog/unit_tests/test_ai_lake_service.py
+  s_61f6f3745f96ee::t_23e29d38505c5d 143,145
+  s_61f6f3745f96ee::t_96cd4673c5613c 1-121,127-136,138-140,144,146
+  s_61f6f3745f96ee::t_8a5345145e6fb6 122-126
+packages/gooddata-sdk/src/gooddata_sdk/__init__.py
+  s_61f6f3745f96ee::t_23e29d38505c5d 10-14
+packages/gooddata-sdk/src/gooddata_sdk/catalog/ai_lake/service.py
+  s_61f6f3745f96ee::t_7431fec51c3f90 25
+  s_61f6f3745f96ee::t_7b6b98b1bb7b27 1-24,26-141,143-144
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.1",
+  "base_commit_sha": "01b27f87f739d66a9bb4a844da2a5ab12f03c867",
+  "prompts": {},
+  "sessions": {
+    "s_61f6f3745f96ee": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c8e7346f-ecd6-42b4-950d-02aa766e7181",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>"
+    }
+  }
+}

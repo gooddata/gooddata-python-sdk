@@ -1,0 +1,10 @@
+packages/gooddata-sdk/tests/catalog/unit_tests/test_aac_agg_aware.py
+  s_61f6f3745f96ee::t_74606677a047fb 1-18,20-196
+  s_61f6f3745f96ee::t_4c0930092d85e7 19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.1",
+  "base_commit_sha": "617270f9a8bea24f00d9170922b05c2da0e03f9e",
+  "prompts": {}
+}

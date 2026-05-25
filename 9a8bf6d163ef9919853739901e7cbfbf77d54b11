@@ -1,0 +1,23 @@
+.aida/rules_selection.yaml
+  b709c4d83eec74be 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.8",
+  "base_commit_sha": "9a8bf6d163ef9919853739901e7cbfbf77d54b11",
+  "prompts": {
+    "b709c4d83eec74be": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "d341e963-2dea-4674-8b12-da554e193386",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 0,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}
