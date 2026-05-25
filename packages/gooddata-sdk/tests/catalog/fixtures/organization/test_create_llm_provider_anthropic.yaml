@@ -133,4 +133,140 @@ interactions:
       status:
         code: 204
         message: No Content
+  - request:
+      body:
+        data:
+          attributes:
+            defaultModelId: claude-3-5-sonnet-20241022
+            models:
+              - family: ANTHROPIC
+                id: claude-3-5-sonnet-20241022
+            name: Test Anthropic Provider
+            providerConfig:
+              auth:
+                apiKey: test-api-key
+                type: API_KEY
+              type: ANTHROPIC
+          id: test-anthropic-provider
+          type: llmProvider
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/llmProviders
+    response:
+      body:
+        string:
+          data:
+            attributes:
+              defaultModelId: claude-3-5-sonnet-20241022
+              models:
+                - family: ANTHROPIC
+                  id: claude-3-5-sonnet-20241022
+              name: Test Anthropic Provider
+              providerConfig:
+                auth:
+                  type: API_KEY
+                baseUrl: https://api.anthropic.com
+                type: ANTHROPIC
+            id: test-anthropic-provider
+            type: llmProvider
+          links:
+            self: http://localhost:3000/api/v1/entities/llmProviders/test-anthropic-provider
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 201
+        message: Created
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/llmProviders/test-anthropic-provider
+    response:
+      body:
+        string:
+          data:
+            attributes:
+              defaultModelId: claude-3-5-sonnet-20241022
+              models:
+                - family: ANTHROPIC
+                  id: claude-3-5-sonnet-20241022
+              name: Test Anthropic Provider
+              providerConfig:
+                auth:
+                  type: API_KEY
+                baseUrl: https://api.anthropic.com
+                type: ANTHROPIC
+            id: test-anthropic-provider
+            type: llmProvider
+          links:
+            self: http://localhost:3000/api/v1/entities/llmProviders/test-anthropic-provider
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/llmProviders/test-anthropic-provider
+    response:
+      body:
+        string: ''
+      headers:
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 204
+        message: No Content
 version: 1
