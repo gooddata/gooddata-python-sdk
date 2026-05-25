@@ -109,6 +109,10 @@ from gooddata_sdk.catalog.organization.entity_model.export_template import (
     CatalogExportTemplate,
     CatalogExportTemplateAttributes,
 )
+from gooddata_sdk.catalog.organization.entity_model.ip_allowlist_policy import (
+    CatalogIpAllowlistPolicy,
+    CatalogIpAllowlistPolicyAttributes,
+)
 from gooddata_sdk.catalog.organization.entity_model.jwk import (
     CatalogJwk,
     CatalogJwkAttributes,

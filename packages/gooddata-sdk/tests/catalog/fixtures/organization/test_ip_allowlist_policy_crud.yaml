@@ -1,0 +1,227 @@
+interactions:
+  - request:
+      body:
+        data:
+          attributes:
+            allowedSources:
+              - 192.168.1.0/24
+          id: sdk-test-ip-policy
+          type: ipAllowlistPolicy
+      headers:
+        Accept:
+          - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - gzip, deflate, br
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '121'
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/ipAllowlistPolicies
+    response:
+      body:
+        string:
+          data:
+            attributes:
+              allowedSources:
+                - 192.168.1.0/24
+            id: sdk-test-ip-policy
+            type: ipAllowlistPolicy
+          links:
+            self: http://localhost:3000/api/v1/entities/ipAllowlistPolicies/sdk-test-ip-policy
+      headers:
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 201
+        message: Created
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - gzip, deflate, br
+        Connection:
+          - keep-alive
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/ipAllowlistPolicies/sdk-test-ip-policy
+    response:
+      body:
+        string:
+          data:
+            attributes:
+              allowedSources:
+                - 192.168.1.0/24
+            id: sdk-test-ip-policy
+            type: ipAllowlistPolicy
+          links:
+            self: http://localhost:3000/api/v1/entities/ipAllowlistPolicies/sdk-test-ip-policy
+      headers:
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - gzip, deflate, br
+        Connection:
+          - keep-alive
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/ipAllowlistPolicies
+    response:
+      body:
+        string:
+          data:
+            - attributes:
+                allowedSources:
+                  - 192.168.1.0/24
+              id: sdk-test-ip-policy
+              links:
+                self: http://localhost:3000/api/v1/entities/ipAllowlistPolicies/sdk-test-ip-policy
+              type: ipAllowlistPolicy
+            - attributes:
+                allowedSources:
+                  - 192.168.0.0/16
+              id: testIpPolicy
+              links:
+                self: http://localhost:3000/api/v1/entities/ipAllowlistPolicies/testIpPolicy
+              type: ipAllowlistPolicy
+          links:
+            next: http://localhost:3000/api/v1/entities/ipAllowlistPolicies?page=1&size=20
+            self: http://localhost:3000/api/v1/entities/ipAllowlistPolicies?page=0&size=20
+      headers:
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
+  - request:
+      body:
+        data:
+          attributes:
+            allowedSources:
+              - 10.0.0.0/8
+          id: sdk-test-ip-policy
+          type: ipAllowlistPolicy
+      headers:
+        Accept:
+          - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - gzip, deflate, br
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '117'
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: PUT
+      uri: http://localhost:3000/api/v1/entities/ipAllowlistPolicies/sdk-test-ip-policy
+    response:
+      body:
+        string:
+          data:
+            attributes:
+              allowedSources:
+                - 10.0.0.0/8
+            id: sdk-test-ip-policy
+            type: ipAllowlistPolicy
+          links:
+            self: http://localhost:3000/api/v1/entities/ipAllowlistPolicies/sdk-test-ip-policy
+      headers:
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - gzip, deflate, br
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '0'
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/ipAllowlistPolicies/sdk-test-ip-policy
+    response:
+      body:
+        string: ''
+      headers:
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 204
+        message: No Content
+version: 1
