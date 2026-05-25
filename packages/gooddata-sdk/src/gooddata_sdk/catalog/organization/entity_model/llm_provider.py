@@ -3,7 +3,9 @@ from __future__ import annotations
 
 from typing import Any, Union
 
-from attr import define
+from attrs import define
+from gooddata_api_client.model.anthropic_provider_auth import AnthropicProviderAuth
+from gooddata_api_client.model.anthropic_provider_config import AnthropicProviderConfig
 from gooddata_api_client.model.aws_bedrock_provider_config import AwsBedrockProviderConfig
 from gooddata_api_client.model.azure_foundry_provider_auth import AzureFoundryProviderAuth
 from gooddata_api_client.model.azure_foundry_provider_config import AzureFoundryProviderConfig
@@ -85,6 +87,10 @@ class CatalogAnthropicApiKeyAuth(Base):
     api_key: str | None = None
     type: str = "API_KEY"
 
+    @staticmethod
+    def client_class() -> type[AnthropicProviderAuth]:
+        return AnthropicProviderAuth
+
 
 CatalogAnthropicAuth = Union[CatalogAnthropicApiKeyAuth]
 
@@ -138,6 +144,10 @@ class CatalogAnthropicProviderConfig(Base):
     auth: CatalogAnthropicAuth | None = None
     base_url: str | None = None
     type: str = "ANTHROPIC"
+
+    @staticmethod
+    def client_class() -> type[AnthropicProviderConfig]:
+        return AnthropicProviderConfig
 
 
 CatalogLlmProviderConfig = Union[
