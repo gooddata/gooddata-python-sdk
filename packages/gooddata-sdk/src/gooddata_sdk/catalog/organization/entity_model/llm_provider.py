@@ -75,6 +75,19 @@ class CatalogAzureFoundryApiKeyAuth(Base):
 
 CatalogAzureFoundryAuth = Union[CatalogAzureFoundryApiKeyAuth]
 
+# --- Anthropic auth ---
+
+
+@define(kw_only=True)
+class CatalogAnthropicApiKeyAuth(Base):
+    """API key authentication for the Anthropic provider."""
+
+    api_key: str | None = None
+    type: str = "API_KEY"
+
+
+CatalogAnthropicAuth = Union[CatalogAnthropicApiKeyAuth]
+
 # --- Provider config types ---
 
 
@@ -118,10 +131,20 @@ class CatalogAzureFoundryProviderConfig(Base):
         return AzureFoundryProviderConfig
 
 
+@define(kw_only=True)
+class CatalogAnthropicProviderConfig(Base):
+    """Anthropic provider configuration."""
+
+    auth: CatalogAnthropicAuth | None = None
+    base_url: str | None = None
+    type: str = "ANTHROPIC"
+
+
 CatalogLlmProviderConfig = Union[
     CatalogOpenAiProviderConfig,
     CatalogAwsBedrockProviderConfig,
     CatalogAzureFoundryProviderConfig,
+    CatalogAnthropicProviderConfig,
 ]
 
 
@@ -157,6 +180,16 @@ def _azure_foundry_auth_from_api(data: dict[str, Any]) -> CatalogAzureFoundryAut
     raise ValueError(f"Unknown Azure Foundry auth type: {auth_type}")
 
 
+def _anthropic_auth_from_api(data: dict[str, Any]) -> CatalogAnthropicAuth:
+    auth_type = safeget(data, ["type"]) or "API_KEY"
+    if auth_type == "API_KEY":
+        return CatalogAnthropicApiKeyAuth(
+            api_key="",  # Credentials are not returned for security reasons
+            type=auth_type,
+        )
+    raise ValueError(f"Unknown Anthropic auth type: {auth_type}")
+
+
 def _provider_config_from_api(data: dict[str, Any]) -> CatalogLlmProviderConfig:
     provider_type = safeget(data, ["type"]) or "OPENAI"
     auth_data = safeget(data, ["auth"])
@@ -171,6 +204,12 @@ def _provider_config_from_api(data: dict[str, Any]) -> CatalogLlmProviderConfig:
         return CatalogAzureFoundryProviderConfig(
             auth=_azure_foundry_auth_from_api(auth_data) if auth_data is not None else None,
             endpoint=safeget(data, ["endpoint"]),
+        )
+
+    if provider_type == "ANTHROPIC":
+        return CatalogAnthropicProviderConfig(
+            auth=_anthropic_auth_from_api(auth_data) if auth_data is not None else None,
+            base_url=safeget(data, ["baseUrl"]),
         )
 
     # Default: OpenAI
