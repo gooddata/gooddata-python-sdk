@@ -280,7 +280,7 @@ from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
     CatalogUserDataFilterRelationships,
 )
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
-from gooddata_sdk.client import GoodDataApiClient
+from gooddata_sdk.client import GoodDataApiClient, GoodDataApiClientRetryConfig
 from gooddata_sdk.compute.compute_to_sdk_converter import ComputeToSdkConverter
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ExecModelEntity, ObjId
