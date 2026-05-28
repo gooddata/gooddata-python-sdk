@@ -31,10 +31,12 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.anthropic_provider_config import AnthropicProviderConfig
     from gooddata_api_client.model.aws_bedrock_provider_config import AwsBedrockProviderConfig
     from gooddata_api_client.model.azure_foundry_provider_config import AzureFoundryProviderConfig
     from gooddata_api_client.model.open_ai_provider_auth import OpenAiProviderAuth
     from gooddata_api_client.model.open_ai_provider_config import OpenAIProviderConfig
+    globals()['AnthropicProviderConfig'] = AnthropicProviderConfig
     globals()['AwsBedrockProviderConfig'] = AwsBedrockProviderConfig
     globals()['AzureFoundryProviderConfig'] = AzureFoundryProviderConfig
     globals()['OpenAIProviderConfig'] = OpenAIProviderConfig
@@ -68,6 +70,7 @@ class JsonApiLlmProviderInAttributesProviderConfig(ModelComposed):
     allowed_values = {
         ('type',): {
             'OPENAI': "OPENAI",
+            'ANTHROPIC': "ANTHROPIC",
         },
     }
 
@@ -356,6 +359,7 @@ class JsonApiLlmProviderInAttributesProviderConfig(ModelComposed):
           'allOf': [
           ],
           'oneOf': [
+              AnthropicProviderConfig,
               AwsBedrockProviderConfig,
               AzureFoundryProviderConfig,
               OpenAIProviderConfig,
