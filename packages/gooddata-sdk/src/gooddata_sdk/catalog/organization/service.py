@@ -16,7 +16,10 @@ from gooddata_api_client.model.json_api_identity_provider_in_document import Jso
 from gooddata_api_client.model.json_api_organization_patch import JsonApiOrganizationPatch
 from gooddata_api_client.model.json_api_organization_patch_document import JsonApiOrganizationPatchDocument
 from gooddata_api_client.model.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
+from gooddata_api_client.model.list_llm_provider_models_request import ListLlmProviderModelsRequest
 from gooddata_api_client.model.switch_identity_provider_request import SwitchIdentityProviderRequest
+from gooddata_api_client.model.test_llm_provider_by_id_request import TestLlmProviderByIdRequest
+from gooddata_api_client.model.test_llm_provider_definition_request import TestLlmProviderDefinitionRequest
 
 from gooddata_sdk import CatalogDeclarativeExportTemplate, CatalogExportTemplate
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
@@ -25,9 +28,13 @@ from gooddata_sdk.catalog.organization.entity_model.identity_provider import Cat
 from gooddata_sdk.catalog.organization.entity_model.jwk import CatalogJwk, CatalogJwkDocument
 from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
     CatalogLlmProvider,
+    CatalogLlmProviderConfig,
     CatalogLlmProviderDocument,
+    CatalogLlmProviderModel,
+    CatalogLlmProviderModelsResult,
     CatalogLlmProviderPatch,
     CatalogLlmProviderPatchDocument,
+    CatalogLlmProviderTestResult,
 )
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
 from gooddata_sdk.catalog.organization.layout.identity_provider import CatalogDeclarativeIdentityProvider
@@ -627,6 +634,77 @@ class CatalogOrganizationService(CatalogServiceBase):
             id: LLM provider identifier
         """
         self._entities_api.delete_entity_llm_providers(id, _check_return_type=False)
+
+    def test_llm_provider(
+        self,
+        provider_config: CatalogLlmProviderConfig,
+        models: list[CatalogLlmProviderModel] | None = None,
+    ) -> CatalogLlmProviderTestResult:
+        """Test connectivity to an unsaved LLM provider configuration.
+
+        Args:
+            provider_config: Provider configuration to test (OpenAI, AWS Bedrock, or Azure Foundry).
+            models: Optional list of models to test against the provider.
+
+        Returns:
+            CatalogLlmProviderTestResult: Reachability and per-model test results.
+        """
+        payload: dict = {"providerConfig": provider_config.to_api().to_dict()}
+        if models is not None:
+            payload["models"] = [m.to_api().to_dict() for m in models]
+        request = TestLlmProviderDefinitionRequest.from_dict(payload)
+        response = self._actions_api.test_llm_provider(request)
+        return CatalogLlmProviderTestResult.from_api(response)
+
+    def test_llm_provider_by_id(
+        self,
+        id: str,
+        models: list[CatalogLlmProviderModel] | None = None,
+    ) -> CatalogLlmProviderTestResult:
+        """Test connectivity to a saved LLM provider by its identifier.
+
+        Args:
+            id: LLM provider identifier.
+            models: Optional list of models to test (overrides the provider's models).
+
+        Returns:
+            CatalogLlmProviderTestResult: Reachability and per-model test results.
+        """
+        kwargs: dict = {}
+        if models is not None:
+            kwargs["test_llm_provider_by_id_request"] = TestLlmProviderByIdRequest.from_dict(
+                {"models": [m.to_api().to_dict() for m in models]}
+            )
+        response = self._actions_api.test_llm_provider_by_id(id, **kwargs)
+        return CatalogLlmProviderTestResult.from_api(response)
+
+    def list_llm_provider_models(
+        self,
+        provider_config: CatalogLlmProviderConfig,
+    ) -> CatalogLlmProviderModelsResult:
+        """List the models available for an unsaved LLM provider configuration.
+
+        Args:
+            provider_config: Provider configuration to query.
+
+        Returns:
+            CatalogLlmProviderModelsResult: Available models and query status.
+        """
+        request = ListLlmProviderModelsRequest.from_dict({"providerConfig": provider_config.to_api().to_dict()})
+        response = self._actions_api.list_llm_provider_models(request)
+        return CatalogLlmProviderModelsResult.from_api(response)
+
+    def list_llm_provider_models_by_id(self, id: str) -> CatalogLlmProviderModelsResult:
+        """List the models available for a saved LLM provider by its identifier.
+
+        Args:
+            id: LLM provider identifier.
+
+        Returns:
+            CatalogLlmProviderModelsResult: Available models and query status.
+        """
+        response = self._actions_api.list_llm_provider_models_by_id(id)
+        return CatalogLlmProviderModelsResult.from_api(response)
 
     # Layout APIs
 

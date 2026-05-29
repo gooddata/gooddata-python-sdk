@@ -16,8 +16,11 @@ from gooddata_api_client.model.json_api_llm_provider_in_attributes_models_inner 
 from gooddata_api_client.model.json_api_llm_provider_in_document import JsonApiLlmProviderInDocument
 from gooddata_api_client.model.json_api_llm_provider_patch import JsonApiLlmProviderPatch
 from gooddata_api_client.model.json_api_llm_provider_patch_document import JsonApiLlmProviderPatchDocument
+from gooddata_api_client.model.list_llm_provider_models_response import ListLlmProviderModelsResponse
+from gooddata_api_client.model.model_test_result import ModelTestResult
 from gooddata_api_client.model.open_ai_provider_auth import OpenAiProviderAuth
 from gooddata_api_client.model.open_ai_provider_config import OpenAIProviderConfig
+from gooddata_api_client.model.test_llm_provider_response import TestLlmProviderResponse
 
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.utils import safeget
@@ -337,3 +340,45 @@ class CatalogLlmProviderPatchAttributes(Base):
     @staticmethod
     def client_class() -> type[JsonApiLlmProviderInAttributes]:
         return JsonApiLlmProviderInAttributes
+
+
+# --- Action result types ---
+
+
+@define(kw_only=True)
+class CatalogModelTestResult(Base):
+    """Result of testing a single model on an LLM provider."""
+
+    model_id: str
+    successful: bool
+    message: str | None = None
+
+    @staticmethod
+    def client_class() -> type[ModelTestResult]:
+        return ModelTestResult
+
+
+@define(kw_only=True)
+class CatalogLlmProviderTestResult(Base):
+    """Result of testing connectivity to an LLM provider."""
+
+    provider_reachable: bool
+    provider_message: str | None = None
+    model_results: list[CatalogModelTestResult] | None = None
+
+    @staticmethod
+    def client_class() -> type[TestLlmProviderResponse]:
+        return TestLlmProviderResponse
+
+
+@define(kw_only=True)
+class CatalogLlmProviderModelsResult(Base):
+    """Result of listing the models available for an LLM provider."""
+
+    success: bool
+    message: str | None = None
+    models: list[CatalogLlmProviderModel] | None = None
+
+    @staticmethod
+    def client_class() -> type[ListLlmProviderModelsResponse]:
+        return ListLlmProviderModelsResponse
