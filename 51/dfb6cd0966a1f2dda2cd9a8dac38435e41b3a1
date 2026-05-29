@@ -1,27 +1,27 @@
-packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/service.py
-  s_f80e55457e973d::t_a2bd194a636abc 31,33-34,37
-  s_f80e55457e973d::t_afa8d53334dd85 19,21-22
-  s_f80e55457e973d::t_b3a3779f98f54c 638-708
-packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/entity_model/llm_provider.py
-  s_f80e55457e973d::t_bbae9f89f1cea0 19-20,23
-  s_f80e55457e973d::t_90af2929f94215 343-347,367-377,387-400,412,414-424
-  s_f80e55457e973d::t_e7a9844436bd22 348-366,378-386,401-411,413,425-444
 packages/gooddata-sdk/src/gooddata_sdk/__init__.py
   s_f80e55457e973d::t_80e183073a859a 126,129-130
 packages/gooddata-sdk/tests/catalog/test_catalog_llm_provider.py
-  s_f80e55457e973d::t_16d02f7ad43eec 4-5,15-16,18
-  s_f80e55457e973d::t_73a34f1bfd1e34 136
-  s_f80e55457e973d::t_f8e36b90380f9a 104-105
   s_f80e55457e973d::t_d3adbc0c7c6f8a 71
-  s_f80e55457e973d::t_d368f62799752a 39-56
-  s_f80e55457e973d::t_24be41158f3826 61
   s_f80e55457e973d::t_84542d0a49432f 72-103,106-135,137-143
+  s_f80e55457e973d::t_f8e36b90380f9a 104-105
+  s_f80e55457e973d::t_73a34f1bfd1e34 136
+  s_f80e55457e973d::t_d368f62799752a 39-56
+  s_f80e55457e973d::t_16d02f7ad43eec 4-5,15-16,18
   s_f80e55457e973d::t_338bf4b2fe479f 1-3,6-14,17,19-38,57-60,62-70
+  s_f80e55457e973d::t_24be41158f3826 61
+packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/entity_model/llm_provider.py
+  s_f80e55457e973d::t_90af2929f94215 343-347,367-377,387-400,412,414-424
+  s_f80e55457e973d::t_bbae9f89f1cea0 19-20,23
+  s_f80e55457e973d::t_e7a9844436bd22 348-366,378-386,401-411,413,425-444
+packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/service.py
+  s_f80e55457e973d::t_a2bd194a636abc 31,33-34,37
+  s_f80e55457e973d::t_b3a3779f98f54c 638-708
+  s_f80e55457e973d::t_afa8d53334dd85 19,21-22
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.5.2",
-  "base_commit_sha": "fdabc490f24f13a74109dad547a3f91a3db73ba1",
+  "base_commit_sha": "51dfb6cd0966a1f2dda2cd9a8dac38435e41b3a1",
   "prompts": {},
   "sessions": {
     "s_f80e55457e973d": {
