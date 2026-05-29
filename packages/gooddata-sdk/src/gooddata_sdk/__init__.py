@@ -123,8 +123,11 @@ from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
     CatalogLlmProvider,
     CatalogLlmProviderDocument,
     CatalogLlmProviderModel,
+    CatalogLlmProviderModelsResult,
     CatalogLlmProviderPatch,
     CatalogLlmProviderPatchDocument,
+    CatalogLlmProviderTestResult,
+    CatalogModelTestResult,
     CatalogOpenAiApiKeyAuth,
     CatalogOpenAiProviderConfig,
 )
