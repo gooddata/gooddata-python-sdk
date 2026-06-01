@@ -9,17 +9,18 @@ the `LoggerLike` protocol.
 """
 
 from enum import Enum
-from typing import Any, Protocol
+from typing import Any, Protocol, TypeVar
+
+_T = TypeVar("_T")
 
 
 class SingletonMeta(type):
-    _instances: dict = {}
+    _instances: dict[type, Any] = {}
 
-    def __call__(cls, *args: Any, **kwargs: Any) -> "SingletonMeta":
-        if cls not in cls._instances:
-            instance = super().__call__(*args, **kwargs)
-            cls._instances[cls] = instance
-        return cls._instances[cls]
+    def __call__(cls: type[_T], *args: Any, **kwargs: Any) -> _T:
+        if cls not in SingletonMeta._instances:
+            SingletonMeta._instances[cls] = type.__call__(cls, *args, **kwargs)
+        return SingletonMeta._instances[cls]
 
 
 class Severity(Enum):
