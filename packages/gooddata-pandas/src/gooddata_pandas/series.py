@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import warnings
-from typing import Callable, Union
+from typing import Callable, Union, cast
 
 import pandas
 from gooddata_sdk import Attribute, Execution, Filter, GoodDataSdk, ObjId, SimpleMetric
@@ -156,7 +156,8 @@ class SeriesFactory:
                 stacklevel=2,
             )
         if isinstance(granularity, list):
-            _index: IndexDef | None = {str(idx): label for idx, label in enumerate(granularity)}
+            granularity_items = cast("list[LabelItemDef]", granularity)
+            _index: IndexDef | None = {str(idx): label for idx, label in enumerate(granularity_items)}
         else:
             _index = granularity
 

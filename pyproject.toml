@@ -40,10 +40,10 @@ dev = [
     "gitlint~=0.19.1",
 ]
 lint = [
-    "ruff~=0.15.1",
+    "ruff~=0.15.15",
 ]
 type = [
-    "ty~=0.0.14",
+    "ty~=0.0.40",
 ]
 test = [
     # Common test dependencies used across all workspace packages
