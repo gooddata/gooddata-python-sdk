@@ -1,0 +1,25 @@
+packages/gooddata-eval/tests/fixtures/sample_dataset/visualization_revenue.json
+  s_90905292b36e6b::t_20d534cfd776b9 1-23
+packages/gooddata-eval/tests/test_local_loader.py
+  s_90905292b36e6b::t_783e75f9a6c315 1-23
+packages/gooddata-eval/src/gooddata_eval/core/dataset/__init__.py
+  s_90905292b36e6b::t_1b68211bcf9fcf 1
+packages/gooddata-eval/src/gooddata_eval/core/dataset/local.py
+  s_90905292b36e6b::t_1c70a71fb9e427 1-38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "c678a8e508ee355d3ab92c8d25d122786f65706f",
+  "prompts": {},
+  "sessions": {
+    "s_90905292b36e6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4819d826-2ce0-4f89-89e2-8b5af18493a9",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}
