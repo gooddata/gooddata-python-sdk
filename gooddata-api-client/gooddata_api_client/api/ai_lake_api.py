@@ -26,16 +26,17 @@ from gooddata_api_client.model.add_database_data_source_request import AddDataba
 from gooddata_api_client.model.add_database_data_source_response import AddDatabaseDataSourceResponse
 from gooddata_api_client.model.analyze_statistics_request import AnalyzeStatisticsRequest
 from gooddata_api_client.model.create_pipe_table_request import CreatePipeTableRequest
-from gooddata_api_client.model.database_instance import DatabaseInstance
 from gooddata_api_client.model.get_ai_lake_operation200_response import GetAiLakeOperation200Response
 from gooddata_api_client.model.get_service_status_response import GetServiceStatusResponse
-from gooddata_api_client.model.list_database_data_sources_response import ListDatabaseDataSourcesResponse
-from gooddata_api_client.model.list_database_instances_response import ListDatabaseInstancesResponse
-from gooddata_api_client.model.list_object_storages_response import ListObjectStoragesResponse
-from gooddata_api_client.model.list_pipe_tables_response import ListPipeTablesResponse
-from gooddata_api_client.model.list_services_response import ListServicesResponse
-from gooddata_api_client.model.pipe_table import PipeTable
+from gooddata_api_client.model.json_api_document_database_instance import JsonApiDocumentDatabaseInstance
+from gooddata_api_client.model.json_api_document_pipe_table import JsonApiDocumentPipeTable
+from gooddata_api_client.model.json_api_list_document_data_source_info import JsonApiListDocumentDataSourceInfo
+from gooddata_api_client.model.json_api_list_document_database_instance import JsonApiListDocumentDatabaseInstance
+from gooddata_api_client.model.json_api_list_document_object_storage_info import JsonApiListDocumentObjectStorageInfo
+from gooddata_api_client.model.json_api_list_document_pipe_table_summary import JsonApiListDocumentPipeTableSummary
+from gooddata_api_client.model.json_api_list_document_service_info import JsonApiListDocumentServiceInfo
 from gooddata_api_client.model.provision_database_instance_request import ProvisionDatabaseInstanceRequest
+from gooddata_api_client.model.refresh_partition_request import RefreshPartitionRequest
 from gooddata_api_client.model.remove_database_data_source_response import RemoveDatabaseDataSourceResponse
 from gooddata_api_client.model.run_service_command_request import RunServiceCommandRequest
 from gooddata_api_client.model.update_database_data_source_request import UpdateDatabaseDataSourceRequest
@@ -347,7 +348,7 @@ class AILakeApi(object):
         )
         self.get_ai_lake_database_instance_endpoint = _Endpoint(
             settings={
-                'response_type': (DatabaseInstance,),
+                'response_type': (JsonApiDocumentDatabaseInstance,),
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}',
                 'operation_id': 'get_ai_lake_database_instance',
@@ -445,7 +446,7 @@ class AILakeApi(object):
         )
         self.get_ai_lake_pipe_table_endpoint = _Endpoint(
             settings={
-                'response_type': (PipeTable,),
+                'response_type': (JsonApiDocumentPipeTable,),
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName}',
                 'operation_id': 'get_ai_lake_pipe_table',
@@ -549,7 +550,7 @@ class AILakeApi(object):
         )
         self.list_ai_lake_database_data_sources_endpoint = _Endpoint(
             settings={
-                'response_type': (ListDatabaseDataSourcesResponse,),
+                'response_type': (JsonApiListDocumentDataSourceInfo,),
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/dataSources',
                 'operation_id': 'list_ai_lake_database_data_sources',
@@ -559,6 +560,9 @@ class AILakeApi(object):
             params_map={
                 'all': [
                     'instance_id',
+                    'page',
+                    'size',
+                    'meta_include',
                 ],
                 'required': [
                     'instance_id',
@@ -568,24 +572,49 @@ class AILakeApi(object):
                 'enum': [
                 ],
                 'validation': [
+                    'page',
+                    'size',
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('page',): {
+
+                    },
+                    ('size',): {
+
+                    },
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                 },
                 'openapi_types': {
                     'instance_id':
                         (str,),
+                    'page':
+                        (str,),
+                    'size':
+                        (str,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'instance_id': 'instanceId',
+                    'page': 'page',
+                    'size': 'size',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'instance_id': 'path',
+                    'page': 'query',
+                    'size': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'meta_include': 'multi',
                 }
             },
             headers_map={
@@ -598,7 +627,7 @@ class AILakeApi(object):
         )
         self.list_ai_lake_database_instances_endpoint = _Endpoint(
             settings={
-                'response_type': (ListDatabaseInstancesResponse,),
+                'response_type': (JsonApiListDocumentDatabaseInstance,),
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances',
                 'operation_id': 'list_ai_lake_database_instances',
@@ -607,8 +636,8 @@ class AILakeApi(object):
             },
             params_map={
                 'all': [
+                    'page',
                     'size',
-                    'offset',
                     'meta_include',
                 ],
                 'required': [],
@@ -617,11 +646,19 @@ class AILakeApi(object):
                 'enum': [
                 ],
                 'validation': [
+                    'page',
+                    'size',
                     'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('page',): {
+
+                    },
+                    ('size',): {
+
+                    },
                     ('meta_include',): {
 
                     },
@@ -629,21 +666,21 @@ class AILakeApi(object):
                 'allowed_values': {
                 },
                 'openapi_types': {
+                    'page':
+                        (str,),
                     'size':
-                        (int,),
-                    'offset':
-                        (int,),
+                        (str,),
                     'meta_include':
                         ([str],),
                 },
                 'attribute_map': {
+                    'page': 'page',
                     'size': 'size',
-                    'offset': 'offset',
                     'meta_include': 'metaInclude',
                 },
                 'location_map': {
+                    'page': 'query',
                     'size': 'query',
-                    'offset': 'query',
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
@@ -660,15 +697,18 @@ class AILakeApi(object):
         )
         self.list_ai_lake_object_storages_endpoint = _Endpoint(
             settings={
-                'response_type': (ListObjectStoragesResponse,),
+                'response_type': (JsonApiListDocumentObjectStorageInfo,),
                 'auth': [],
-                'endpoint_path': '/api/v1/ailake/object-storages',
+                'endpoint_path': '/api/v1/ailake/objectStorages',
                 'operation_id': 'list_ai_lake_object_storages',
                 'http_method': 'GET',
                 'servers': None,
             },
             params_map={
                 'all': [
+                    'page',
+                    'size',
+                    'meta_include',
                 ],
                 'required': [],
                 'nullable': [
@@ -676,20 +716,45 @@ class AILakeApi(object):
                 'enum': [
                 ],
                 'validation': [
+                    'page',
+                    'size',
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('page',): {
+
+                    },
+                    ('size',): {
+
+                    },
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                 },
                 'openapi_types': {
+                    'page':
+                        (str,),
+                    'size':
+                        (str,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
+                    'page': 'page',
+                    'size': 'size',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
+                    'page': 'query',
+                    'size': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'meta_include': 'multi',
                 }
             },
             headers_map={
@@ -702,7 +767,7 @@ class AILakeApi(object):
         )
         self.list_ai_lake_pipe_tables_endpoint = _Endpoint(
             settings={
-                'response_type': (ListPipeTablesResponse,),
+                'response_type': (JsonApiListDocumentPipeTableSummary,),
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/pipeTables',
                 'operation_id': 'list_ai_lake_pipe_tables',
@@ -712,6 +777,9 @@ class AILakeApi(object):
             params_map={
                 'all': [
                     'instance_id',
+                    'page',
+                    'size',
+                    'meta_include',
                 ],
                 'required': [
                     'instance_id',
@@ -721,24 +789,49 @@ class AILakeApi(object):
                 'enum': [
                 ],
                 'validation': [
+                    'page',
+                    'size',
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('page',): {
+
+                    },
+                    ('size',): {
+
+                    },
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                 },
                 'openapi_types': {
                     'instance_id':
                         (str,),
+                    'page':
+                        (str,),
+                    'size':
+                        (str,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'instance_id': 'instanceId',
+                    'page': 'page',
+                    'size': 'size',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'instance_id': 'path',
+                    'page': 'query',
+                    'size': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'meta_include': 'multi',
                 }
             },
             headers_map={
@@ -751,7 +844,7 @@ class AILakeApi(object):
         )
         self.list_ai_lake_services_endpoint = _Endpoint(
             settings={
-                'response_type': (ListServicesResponse,),
+                'response_type': (JsonApiListDocumentServiceInfo,),
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/services',
                 'operation_id': 'list_ai_lake_services',
@@ -760,8 +853,8 @@ class AILakeApi(object):
             },
             params_map={
                 'all': [
+                    'page',
                     'size',
-                    'offset',
                     'meta_include',
                 ],
                 'required': [],
@@ -770,11 +863,19 @@ class AILakeApi(object):
                 'enum': [
                 ],
                 'validation': [
+                    'page',
+                    'size',
                     'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('page',): {
+
+                    },
+                    ('size',): {
+
+                    },
                     ('meta_include',): {
 
                     },
@@ -782,21 +883,21 @@ class AILakeApi(object):
                 'allowed_values': {
                 },
                 'openapi_types': {
+                    'page':
+                        (str,),
                     'size':
-                        (int,),
-                    'offset':
-                        (int,),
+                        (str,),
                     'meta_include':
                         ([str],),
                 },
                 'attribute_map': {
+                    'page': 'page',
                     'size': 'size',
-                    'offset': 'offset',
                     'meta_include': 'metaInclude',
                 },
                 'location_map': {
+                    'page': 'query',
                     'size': 'query',
-                    'offset': 'query',
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
@@ -851,6 +952,73 @@ class AILakeApi(object):
                 },
                 'location_map': {
                     'provision_database_instance_request': 'body',
+                    'operation_id': 'header',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.refresh_ai_lake_pipe_table_partition_endpoint = _Endpoint(
+            settings={
+                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                'auth': [],
+                'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName}/refresh',
+                'operation_id': 'refresh_ai_lake_pipe_table_partition',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'instance_id',
+                    'table_name',
+                    'refresh_partition_request',
+                    'operation_id',
+                ],
+                'required': [
+                    'instance_id',
+                    'table_name',
+                    'refresh_partition_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'instance_id':
+                        (str,),
+                    'table_name':
+                        (str,),
+                    'refresh_partition_request':
+                        (RefreshPartitionRequest,),
+                    'operation_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'instance_id': 'instanceId',
+                    'table_name': 'tableName',
+                    'operation_id': 'operation-id',
+                },
+                'location_map': {
+                    'instance_id': 'path',
+                    'table_name': 'path',
+                    'refresh_partition_request': 'body',
                     'operation_id': 'header',
                 },
                 'collection_format_map': {
@@ -1530,7 +1698,7 @@ class AILakeApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            DatabaseInstance
+            JsonApiDocumentDatabaseInstance
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -1698,7 +1866,7 @@ class AILakeApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            PipeTable
+            JsonApiDocumentPipeTable
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -1823,7 +1991,7 @@ class AILakeApi(object):
     ):
         """(BETA) List data sources of an AILake Database instance  # noqa: E501
 
-        (BETA) Returns all data source associations for the specified AI Lake database instance.  # noqa: E501
+        (BETA) Returns data source associations for the specified AI Lake database instance.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -1834,6 +2002,9 @@ class AILakeApi(object):
             instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
 
         Keyword Args:
+            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
+            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
+            meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -1866,7 +2037,7 @@ class AILakeApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ListDatabaseDataSourcesResponse
+            JsonApiListDocumentDataSourceInfo
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -1905,7 +2076,7 @@ class AILakeApi(object):
     ):
         """(BETA) List AI Lake Database instances  # noqa: E501
 
-        (BETA) Lists database instances in the organization's AI Lake. Supports paging via size and offset query parameters. Use metaInclude=page to get total count.  # noqa: E501
+        (BETA) Lists database instances in the organization's AI Lake.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -1914,8 +2085,8 @@ class AILakeApi(object):
 
 
         Keyword Args:
-            size (int): [optional] if omitted the server will use the default value of 50
-            offset (int): [optional] if omitted the server will use the default value of 0
+            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
+            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
             meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -1949,7 +2120,7 @@ class AILakeApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ListDatabaseInstancesResponse
+            JsonApiListDocumentDatabaseInstance
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -1995,6 +2166,9 @@ class AILakeApi(object):
 
 
         Keyword Args:
+            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
+            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
+            meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -2027,7 +2201,7 @@ class AILakeApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ListObjectStoragesResponse
+            JsonApiListDocumentObjectStorageInfo
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -2065,7 +2239,7 @@ class AILakeApi(object):
     ):
         """(BETA) List AI Lake pipe tables  # noqa: E501
 
-        (BETA) Lists all active pipe tables in the given AI Lake database instance.  # noqa: E501
+        (BETA) Lists active pipe tables in the given AI Lake database instance.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -2076,6 +2250,9 @@ class AILakeApi(object):
             instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
 
         Keyword Args:
+            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
+            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
+            meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -2108,7 +2285,7 @@ class AILakeApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ListPipeTablesResponse
+            JsonApiListDocumentPipeTableSummary
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -2147,7 +2324,7 @@ class AILakeApi(object):
     ):
         """(BETA) List AI Lake services  # noqa: E501
 
-        (BETA) Lists services configured for the organization's AI Lake. Returns only non-sensitive fields (id, name). Supports paging via size and offset query parameters. Use metaInclude=page to get total count.  # noqa: E501
+        (BETA) Lists services configured for the organization's AI Lake. Returns only non-sensitive fields (id, name).  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -2156,8 +2333,8 @@ class AILakeApi(object):
 
 
         Keyword Args:
-            size (int): [optional] if omitted the server will use the default value of 50
-            offset (int): [optional] if omitted the server will use the default value of 0
+            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
+            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
             meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -2191,7 +2368,7 @@ class AILakeApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ListServicesResponse
+            JsonApiListDocumentServiceInfo
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -2305,6 +2482,98 @@ class AILakeApi(object):
         kwargs['provision_database_instance_request'] = \
             provision_database_instance_request
         return self.provision_ai_lake_database_instance_endpoint.call_with_http_info(**kwargs)
+
+    def refresh_ai_lake_pipe_table_partition(
+        self,
+        instance_id,
+        table_name,
+        refresh_partition_request,
+        **kwargs
+    ):
+        """(BETA) Refresh a pipe table partition  # noqa: E501
+
+        (BETA) Deletes all rows for the specified Hive partition and re-loads them from S3. Use after overwriting a partition file in object storage with corrected data. Returns an operation-id header the client can use to poll for progress.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.refresh_ai_lake_pipe_table_partition(instance_id, table_name, refresh_partition_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
+            table_name (str): Pipe table name.
+            refresh_partition_request (RefreshPartitionRequest):
+
+        Keyword Args:
+            operation_id (str): [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['instance_id'] = \
+            instance_id
+        kwargs['table_name'] = \
+            table_name
+        kwargs['refresh_partition_request'] = \
+            refresh_partition_request
+        return self.refresh_ai_lake_pipe_table_partition_endpoint.call_with_http_info(**kwargs)
 
     def remove_ai_lake_database_data_source(
         self,

@@ -89,6 +89,7 @@ class EntitlementsRequest(ModelNormal):
             'AIQUERYLIMIT': "AiQueryLimit",
             'AIKNOWLEDGESTORAGELIMIT': "AiKnowledgeStorageLimit",
             'AIAGENTLIMIT': "AiAgentLimit",
+            'AIWORKSPACELIMIT': "AiWorkspaceLimit",
         },
     }
 

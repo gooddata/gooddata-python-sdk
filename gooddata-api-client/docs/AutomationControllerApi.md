@@ -85,9 +85,25 @@ with gooddata_api_client.ApiClient() as api_client:
                                 DashboardFilter(),
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            dashboard_parameters_override=[
+                                DashboardParameterValue(
+                                    id="year",
+                                    title="Year",
+                                    value="2026",
+                                ),
+                            ],
                             dashboard_tabs_filters_overrides={
                                 "key": [
                                     DashboardFilter(),
+                                ],
+                            },
+                            dashboard_tabs_parameters_overrides={
+                                "key": [
+                                    DashboardParameterValue(
+                                        id="year",
+                                        title="Year",
+                                        value="2026",
+                                    ),
                                 ],
                             },
                             file_name="result",
@@ -702,9 +718,25 @@ with gooddata_api_client.ApiClient() as api_client:
                                 DashboardFilter(),
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            dashboard_parameters_override=[
+                                DashboardParameterValue(
+                                    id="year",
+                                    title="Year",
+                                    value="2026",
+                                ),
+                            ],
                             dashboard_tabs_filters_overrides={
                                 "key": [
                                     DashboardFilter(),
+                                ],
+                            },
+                            dashboard_tabs_parameters_overrides={
+                                "key": [
+                                    DashboardParameterValue(
+                                        id="year",
+                                        title="Year",
+                                        value="2026",
+                                    ),
                                 ],
                             },
                             file_name="result",
@@ -1168,9 +1200,25 @@ with gooddata_api_client.ApiClient() as api_client:
                                 DashboardFilter(),
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            dashboard_parameters_override=[
+                                DashboardParameterValue(
+                                    id="year",
+                                    title="Year",
+                                    value="2026",
+                                ),
+                            ],
                             dashboard_tabs_filters_overrides={
                                 "key": [
                                     DashboardFilter(),
+                                ],
+                            },
+                            dashboard_tabs_parameters_overrides={
+                                "key": [
+                                    DashboardParameterValue(
+                                        id="year",
+                                        title="Year",
+                                        value="2026",
+                                    ),
                                 ],
                             },
                             file_name="result",

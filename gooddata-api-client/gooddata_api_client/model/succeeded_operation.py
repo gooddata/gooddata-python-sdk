@@ -69,6 +69,7 @@ class SucceededOperation(ModelComposed):
             'CREATE-PIPE-TABLE': "create-pipe-table",
             'DELETE-PIPE-TABLE': "delete-pipe-table",
             'ANALYZE-STATISTICS': "analyze-statistics",
+            'REFRESH-PARTITION': "refresh-partition",
         },
     }
 
@@ -129,7 +130,7 @@ class SucceededOperation(ModelComposed):
 
         Keyword Args:
             id (str): Id of the operation
-            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `create-pipe-table` — Creating a pipe table backed by an S3 data source. * `delete-pipe-table` — Deleting a pipe table. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. 
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `create-pipe-table` — Creating a pipe table backed by an S3 data source. * `delete-pipe-table` — Deleting a pipe table. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. * `refresh-partition` — Refreshing a specific Hive partition (delete + re-load from S3). 
             status (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
@@ -236,7 +237,7 @@ class SucceededOperation(ModelComposed):
 
         Keyword Args:
             id (str): Id of the operation
-            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `create-pipe-table` — Creating a pipe table backed by an S3 data source. * `delete-pipe-table` — Deleting a pipe table. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. 
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `create-pipe-table` — Creating a pipe table backed by an S3 data source. * `delete-pipe-table` — Deleting a pipe table. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. * `refresh-partition` — Refreshing a specific Hive partition (delete + re-load from S3). 
             status (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be

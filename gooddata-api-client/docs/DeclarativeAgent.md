@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **available_to_all** | **bool** | Whether the agent is available to all users. | [optional] 
 **created_at** | **str, none_type** | Time of the entity creation. | [optional] 
 **created_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
-**custom_skills** | **[str, none_type], none_type** | List of custom skills when skillsMode is CUSTOM. | [optional] 
+**custom_skills** | **[str]** | List of custom skills when skillsMode is CUSTOM. | [optional] 
 **description** | **str** | Description of the agent. | [optional] 
 **enabled** | **bool** | Whether the agent is enabled. | [optional] 
 **modified_at** | **str, none_type** | Time of the last entity modification. | [optional] 

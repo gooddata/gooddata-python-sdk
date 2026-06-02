@@ -64,6 +64,9 @@ class JsonApiParameterInAttributesDefinition(ModelComposed):
     """
 
     allowed_values = {
+        ('type',): {
+            'STRING': "STRING",
+        },
     }
 
     validations = {
@@ -92,9 +95,9 @@ class JsonApiParameterInAttributesDefinition(ModelComposed):
         """
         lazy_import()
         return {
-            'type': (str,),  # noqa: E501
-            'default_value': (str,),  # noqa: E501
             'constraints': (StringConstraints,),  # noqa: E501
+            'default_value': (str,),  # noqa: E501
+            'type': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -103,9 +106,9 @@ class JsonApiParameterInAttributesDefinition(ModelComposed):
 
 
     attribute_map = {
-        'type': 'type',  # noqa: E501
-        'default_value': 'defaultValue',  # noqa: E501
         'constraints': 'constraints',  # noqa: E501
+        'default_value': 'defaultValue',  # noqa: E501
+        'type': 'type',  # noqa: E501
     }
 
     read_only_vars = {
@@ -117,8 +120,6 @@ class JsonApiParameterInAttributesDefinition(ModelComposed):
         """JsonApiParameterInAttributesDefinition - a model defined in OpenAPI
 
         Keyword Args:
-            type (str):
-            default_value (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -150,6 +151,8 @@ class JsonApiParameterInAttributesDefinition(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             constraints (StringConstraints): [optional]  # noqa: E501
+            default_value (str): [optional]  # noqa: E501
+            type (str): The parameter type.. [optional] if omitted the server will use the default value of "STRING"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -223,8 +226,6 @@ class JsonApiParameterInAttributesDefinition(ModelComposed):
         """JsonApiParameterInAttributesDefinition - a model defined in OpenAPI
 
         Keyword Args:
-            type (str):
-            default_value (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -256,6 +257,8 @@ class JsonApiParameterInAttributesDefinition(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             constraints (StringConstraints): [optional]  # noqa: E501
+            default_value (str): [optional]  # noqa: E501
+            type (str): The parameter type.. [optional] if omitted the server will use the default value of "STRING"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

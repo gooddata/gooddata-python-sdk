@@ -90,6 +90,7 @@ class RichTextWidgetDescriptor(ModelNormal):
         return {
             'title': (str,),  # noqa: E501
             'widget_id': (str,),  # noqa: E501
+            'content': (str,),  # noqa: E501
             'filters': ([FilterDefinition],),  # noqa: E501
         }
 
@@ -101,6 +102,7 @@ class RichTextWidgetDescriptor(ModelNormal):
     attribute_map = {
         'title': 'title',  # noqa: E501
         'widget_id': 'widgetId',  # noqa: E501
+        'content': 'content',  # noqa: E501
         'filters': 'filters',  # noqa: E501
     }
 
@@ -149,6 +151,7 @@ class RichTextWidgetDescriptor(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            content (str): Markdown/text content of the rich text widget.. [optional]  # noqa: E501
             filters ([FilterDefinition]): Filters currently applied to the dashboard.. [optional]  # noqa: E501
         """
 
@@ -241,6 +244,7 @@ class RichTextWidgetDescriptor(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            content (str): Markdown/text content of the rich text widget.. [optional]  # noqa: E501
             filters ([FilterDefinition]): Filters currently applied to the dashboard.. [optional]  # noqa: E501
         """
 

@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **data_sources** | [**[UserManagementDataSourcePermissionAssignment]**](UserManagementDataSourcePermissionAssignment.md) |  | 
 **id** | **str** |  | 
 **organization_admin** | **bool** | Is user organization admin | 
+**system_account** | **bool** | Is user system account | 
 **user_groups** | [**[UserGroupIdentifier]**](UserGroupIdentifier.md) |  | 
 **workspaces** | [**[UserManagementWorkspacePermissionAssignment]**](UserManagementWorkspacePermissionAssignment.md) |  | 
 **email** | **str** | User email address | [optional] 

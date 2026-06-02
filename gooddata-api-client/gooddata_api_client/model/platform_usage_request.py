@@ -59,6 +59,7 @@ class PlatformUsageRequest(ModelNormal):
         ('usage_item_names',): {
             'USERCOUNT': "UserCount",
             'WORKSPACECOUNT': "WorkspaceCount",
+            'AIWORKSPACECOUNT': "AiWorkspaceCount",
         },
     }
 
