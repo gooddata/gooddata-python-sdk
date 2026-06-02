@@ -1,0 +1,25 @@
+packages/gooddata-sdk/tests/compute_model/metric_value_filter/range_filter_with_dimensionality.snapshot.json
+  s_abf2acc50ea177::t_232a76e834c83c 1-18
+packages/gooddata-sdk/tests/compute_model/metric_value_filter/comparison_filter_with_dimensionality_using_local_ids.snapshot.json
+  s_abf2acc50ea177::t_232a76e834c83c 1-17
+packages/gooddata-sdk/tests/compute_model/metric_value_filter/comparison_filter_with_dimensionality_and_treat_nulls_as.snapshot.json
+  s_abf2acc50ea177::t_232a76e834c83c 1-15
+packages/gooddata-sdk/tests/compute_model/metric_value_filter/comparison_filter_with_dimensionality_using_mix_of_ids.snapshot.json
+  s_abf2acc50ea177::t_232a76e834c83c 1-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.10",
+  "base_commit_sha": "0013cdd0dcc0532105db15971b9a210be0392dbe",
+  "prompts": {},
+  "sessions": {
+    "s_abf2acc50ea177": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3515b316-1544-4491-9c3f-6b947c609f7a",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}
