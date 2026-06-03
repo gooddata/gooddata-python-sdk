@@ -13,6 +13,7 @@ dependencies = [
     "gooddata-flexconnect",
     "gooddata-api-client",
     "gooddata-pipelines",
+    "gooddata-eval",
     "tests-support",
 ]
 
@@ -27,6 +28,7 @@ gooddata-fdw = { workspace = true }
 gooddata-flight-server = { workspace = true }
 gooddata-flexconnect = { workspace = true }
 gooddata-pipelines = { workspace = true }
+gooddata-eval = { workspace = true }
 tests-support = { workspace = true }
 gooddata-api-client = { path = "gooddata-api-client", editable = true }
 
@@ -122,6 +124,7 @@ target-version = "py310"
 "packages/gooddata-fdw/src/gooddata_fdw/__init__.py" = ["F401"]
 "packages/gooddata-flight-server/src/gooddata_flight_server/__init__.py" = ["F401"]
 "packages/gooddata-flexconnect/src/gooddata_flexconnect/__init__.py" = ["F401"]
+"packages/gooddata-eval/src/gooddata_eval/*/__init__.py" = ["F401"]
 
 [tool.ruff.format]
 exclude = ['(gooddata-api-client|.*\.snapshot\..*)']
@@ -282,6 +285,16 @@ search = 'version = "{current_version}"'
 [[tool.tbump.file]]
 # gooddata-sdk version in gooddata-pipelines dependencies
 src = "packages/gooddata-pipelines/pyproject.toml"
+search = "gooddata-sdk~={current_version}"
+
+[[tool.tbump.file]]
+# gooddata-eval version
+src = "packages/gooddata-eval/pyproject.toml"
+search = 'version = "{current_version}"'
+
+[[tool.tbump.file]]
+# gooddata-sdk dependency in gooddata-eval
+src = "packages/gooddata-eval/pyproject.toml"
 search = "gooddata-sdk~={current_version}"
 
 # You can specify a list of commands to

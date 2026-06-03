@@ -1,0 +1,3 @@
+event: message
+data: {"item": {"role": "assistant", "content": {"type": "reasoning", "summary": "thinking"}}}
+data: {"item": {"role": "assistant", "content": {"type": "multipart", "parts": [{"type": "text", "text": "Here is your chart"}, {"type": "visualization", "visualization": {"id": "v1", "type": "column_chart", "query": {"fields": {"m_rev": {"using": "metric/revenue"}}, "filter_by": {}}, "metrics": ["m_rev"], "view_by": []}}]}}}
