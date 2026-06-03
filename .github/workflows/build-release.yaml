@@ -15,7 +15,7 @@ on:
       - v*.*.*
 
 env:
-  COMPONENTS: '["gooddata-api-client","gooddata-pandas","gooddata-fdw","gooddata-sdk","gooddata-dbt","gooddata-flight-server","gooddata-flexconnect","gooddata-pipelines"]'
+  COMPONENTS: '["gooddata-api-client","gooddata-pandas","gooddata-fdw","gooddata-sdk","gooddata-dbt","gooddata-flight-server","gooddata-flexconnect","gooddata-pipelines","gooddata-eval"]'
 
 jobs:
   matrix-components:

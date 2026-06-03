@@ -36,6 +36,7 @@ jobs:
           - { path: packages/gooddata-flight-server, project: gooddata-flight-server }
           - { path: packages/gooddata-flexconnect,   project: gooddata-flexconnect }
           - { path: packages/gooddata-pipelines,     project: gooddata-pipelines }
+          - { path: packages/gooddata-eval,          project: gooddata-eval }
           - { path: gooddata-api-client,             project: gooddata-api-client }
     steps:
       - name: Checkout the code

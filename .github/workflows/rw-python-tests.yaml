@@ -24,7 +24,7 @@ jobs:
         if: ${{ matrix.python_version == 'py314' }}
         uses: codecov/codecov-action@v5
         with:
-          files: ./packages/gooddata-sdk/coverage.xml,./packages/gooddata-pandas/coverage.xml,./packages/gooddata-fdw/coverage.xml,./packages/gooddata-flight-server/coverage.xml,./packages/gooddata-flexconnect/coverage.xml,./packages/gooddata-dbt/coverage.xml,./packages/gooddata-pipelines/coverage.xml
+          files: ./packages/gooddata-sdk/coverage.xml,./packages/gooddata-pandas/coverage.xml,./packages/gooddata-fdw/coverage.xml,./packages/gooddata-flight-server/coverage.xml,./packages/gooddata-flexconnect/coverage.xml,./packages/gooddata-dbt/coverage.xml,./packages/gooddata-pipelines/coverage.xml,./packages/gooddata-eval/coverage.xml
           token: ${{ secrets.CODECOV_TOKEN }}
           override_commit: ${{ github.event.pull_request.head.sha || github.sha }}
           override_pr: ${{ github.event.number }}

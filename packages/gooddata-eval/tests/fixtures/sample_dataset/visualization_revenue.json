@@ -1,0 +1,23 @@
+{
+  "id": "acme-001",
+  "dataset_name": "acme_q1_pilot",
+  "test_kind": "visualization",
+  "question": "Show revenue by quarter for the last 2 years.",
+  "expected_output": {
+    "visualization": {
+      "id": "revenue_by_quarter",
+      "type": "column_chart",
+      "title": "Revenue by Quarter",
+      "query": {
+        "fields": {
+          "d_order_date_quarter": { "using": "label/order_date.quarter" },
+          "m_revenue": { "using": "metric/revenue" }
+        },
+        "filter_by": {}
+      },
+      "metrics": ["m_revenue"],
+      "view_by": ["d_order_date_quarter"],
+      "segment_by": [], "columns": [], "rows": []
+    }
+  }
+}
