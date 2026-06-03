@@ -1,0 +1,16 @@
+{
+  "id": "metric-001",
+  "dataset_name": "sample_metrics",
+  "test_kind": "metric_skill",
+  "question": "Create a metric for average order value.",
+  "expected_output": {
+    "maql": "SELECT AVG({metric/order_value})",
+    "format": "#,##0.00",
+    "metric_id": "avg_order_value",
+    "title": "Average Order Value",
+    "description": "Average value per order",
+    "tags": [],
+    "created_new": true,
+    "message": "Created metric 'Average Order Value'"
+  }
+}
