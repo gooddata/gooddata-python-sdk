@@ -30,6 +30,13 @@ jobs:
       matrix:
         package:
           - { path: packages/gooddata-sdk,           project: gooddata-sdk }
+          - { path: packages/gooddata-pandas,        project: gooddata-pandas }
+          - { path: packages/gooddata-dbt,           project: gooddata-dbt }
+          - { path: packages/gooddata-fdw,           project: gooddata-fdw }
+          - { path: packages/gooddata-flight-server, project: gooddata-flight-server }
+          - { path: packages/gooddata-flexconnect,   project: gooddata-flexconnect }
+          - { path: packages/gooddata-pipelines,     project: gooddata-pipelines }
+          - { path: gooddata-api-client,             project: gooddata-api-client }
     steps:
       - name: Checkout the code
         uses: actions/checkout@v6
