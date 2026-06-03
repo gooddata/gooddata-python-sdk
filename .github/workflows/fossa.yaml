@@ -69,9 +69,11 @@ jobs:
           api-key: ${{ secrets.FOSSA_API_KEY }}
           branch: ${{ inputs.branch != '' && inputs.branch || github.ref_name }}
 
+      # `fossa test` resolves the revision by VCS hash and does not accept a
+      # --branch flag (only `fossa analyze` does), so the branch input is
+      # intentionally omitted here to avoid an "Invalid option `--branch'" error.
       - name: Run FOSSA test (policy gate)
         uses: fossas/fossa-action@v1.9.0
         with:
           api-key: ${{ secrets.FOSSA_API_KEY }}
           run-tests: true
-          branch: ${{ inputs.branch != '' && inputs.branch || github.ref_name }}
