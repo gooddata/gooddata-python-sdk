@@ -39,21 +39,18 @@ jobs:
       - name: Scope .fossa.yml to ${{ matrix.package.project }}
         shell: bash
         run: |
-          # Read the workspace version from the root pyproject.toml so the
-          # FOSSA release in the gooddata-python-sdk release group tracks
-          # the SDK version we ship.
-          VERSION=$(awk -F'"' '/^version = /{print $2; exit}' pyproject.toml)
-          if [ -z "$VERSION" ]; then
-            echo "Could not parse workspace version from pyproject.toml" >&2
-            exit 1
-          fi
+          # Target the existing "1.0" release of the gooddata-python-sdk
+          # release group. FOSSA does not auto-create releases during analyze,
+          # so the release must already exist; "1.0" is the one currently in
+          # app.fossa.com. (TODO: create a per-version release before switching
+          # the release label back to the workspace version.)
           cat > .fossa.yml <<EOF
           version: 3
           project:
             id: ${{ matrix.package.project }}
             releaseGroup:
               name: gooddata-python-sdk
-              release: "${VERSION}"
+              release: "1.0"
           telemetry:
             scope: 'off'
           paths:
