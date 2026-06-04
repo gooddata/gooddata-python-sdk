@@ -209,6 +209,7 @@ class WorkspaceModelController:
         if requested_model is None and requested_provider is None:
             provider_id, model_id = resolve_model(None, active)
             provider_name = ""
+            provider_type = ""
         else:
             info = self._provider_info()
             providers_models = {

@@ -160,6 +160,20 @@ def test_activate_creates_with_default_id_when_absent():
     assert written.id == "activeLlmProvider"
 
 
+def test_resolve_and_activate_default_path_sets_empty_provider_type():
+    # No --model/--provider: the default branch must still populate provider_type
+    # (regression: it was left unbound -> UnboundLocalError).
+    ctrl = WorkspaceModelController.__new__(WorkspaceModelController)
+    ctrl._workspace_id = "ws"
+    ctrl._sdk = MagicMock()
+    ctrl.get_active = lambda: ActiveLlmProvider(provider_id="prov_1", default_model_id="gpt-5.2")
+    ctrl.activate = lambda pid, mid: None
+    resolved = ctrl.resolve_and_activate(None, None)
+    assert (resolved.provider_id, resolved.model_id) == ("prov_1", "gpt-5.2")
+    assert resolved.provider_type == ""
+    assert resolved.provider_name == ""
+
+
 def test_workspace_controller_restore_calls_activate():
     ctrl = WorkspaceModelController.__new__(WorkspaceModelController)
     ctrl._workspace_id = "ws"
