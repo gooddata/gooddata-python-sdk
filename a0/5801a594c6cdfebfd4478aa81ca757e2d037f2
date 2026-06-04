@@ -1,0 +1,37 @@
+packages/gooddata-eval/tests/test_cli.py
+  ai_agent 11,31-33,39,51,88,107-109,113,138-140,144,158,210-212,216,242-244,248,258-259,271,273,279-280,301-409
+packages/gooddata-eval/tests/test_reporting.py
+  ai_agent 3-9,57,66-164
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/sink.py
+  ai_agent 51,54-55,67-69,100-101,103,161-169
+packages/gooddata-eval/src/gooddata_eval/core/reporting/json_report.py
+  ai_agent 2,11,42-73,75
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  ai_agent 12,20-21,42-52,62-69,81-97,140-190,200-202,205,207-210,212,214-292,294,296-301,304-305,313-314,321
+packages/gooddata-eval/src/gooddata_eval/core/config.py
+  ai_agent 4,15
+packages/gooddata-eval/src/gooddata_eval/core/runner.py
+  ai_agent 51-53,149-150,166-168
+packages/gooddata-eval/tests/test_workspace.py
+  ai_agent 2-3,8,112-134
+packages/gooddata-eval/src/gooddata_eval/core/workspace.py
+  s_90905292b36e6b::t_5815139fa06734 100-101
+packages/gooddata-eval/src/gooddata_eval/core/reporting/console.py
+  ai_agent 56-108
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "e66169ed28b776fea7f6116a6860b0cae9844546",
+  "prompts": {},
+  "sessions": {
+    "s_90905292b36e6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4819d826-2ce0-4f89-89e2-8b5af18493a9",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": null
+    }
+  }
+}
