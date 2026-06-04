@@ -12,7 +12,9 @@ from gooddata_eval.core.models import ChatResult, DatasetItem
 
 
 class ChatBackend(Protocol):
-    def ask(self, question: str) -> ChatResult: ...
+    # Receives the whole item so backends can use per-item context beyond the
+    # question text (e.g. dashboard_summary needs item.summary_input).
+    def ask(self, item: DatasetItem) -> ChatResult: ...
 
 
 @dataclass
@@ -104,7 +106,7 @@ def _run_one_item(
     try:
         for run_index in range(1, runs + 1):
             t0 = time.perf_counter()
-            chat_result = backend.ask(item.question)
+            chat_result = backend.ask(item)
             evaluation = evaluator.evaluate(item, chat_result)
             latency = time.perf_counter() - t0
             report.runs += 1

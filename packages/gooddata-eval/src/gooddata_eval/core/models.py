@@ -85,6 +85,23 @@ class ChatResult(BaseModel):
     tool_call_events: list[ToolCallEvent] = Field(default_factory=list, alias="toolCallEvents")
 
 
+class SummaryInput(BaseModel):
+    """Structured input for the `dashboard_summary` test kind.
+
+    Maps onto the dedicated summary endpoint's request body
+    (`POST /api/v1/ai/workspaces/{ws}/summary`). Authored in snake_case in the
+    dataset; the SummaryClient maps it to the endpoint's camelCase fields.
+    """
+
+    model_config = ConfigDict(extra="ignore")
+
+    dashboard_id: str
+    visualizations: list[str] | None = None
+    filter_context: list[dict] | None = None
+    tab_id: str | None = None
+    format_hint: str | None = None
+
+
 class DatasetItem(BaseModel):
     """Common dataset envelope. `expected_output` stays raw; each evaluator parses its own shape."""
 
@@ -95,3 +112,5 @@ class DatasetItem(BaseModel):
     test_kind: str
     question: str
     expected_output: Any
+    # Only used by the `dashboard_summary` test kind; ignored by all others.
+    summary_input: SummaryInput | None = None

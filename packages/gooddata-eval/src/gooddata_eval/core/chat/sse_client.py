@@ -19,7 +19,7 @@ from typing import Any, Iterable
 
 import httpx
 
-from gooddata_eval.core.models import ChatResult
+from gooddata_eval.core.models import ChatResult, DatasetItem
 
 SSE_DATA_PREFIX = "data: "
 
@@ -169,11 +169,11 @@ class ChatClient:
             resp.raise_for_status()
             return parse_sse_lines(resp.iter_lines())
 
-    def ask(self, question: str) -> ChatResult:
+    def ask(self, item: DatasetItem) -> ChatResult:
         """Run one single-turn conversation: create, send, parse, clean up."""
         conversation_id = self._create_conversation()
         try:
-            return self._send_message(conversation_id, question)
+            return self._send_message(conversation_id, item.question)
         finally:
             self._delete_conversation(conversation_id)
 

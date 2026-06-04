@@ -1,0 +1,22 @@
+{
+  "id": "summary-001",
+  "dataset_name": "summary_pilot",
+  "test_kind": "dashboard_summary",
+  "question": "Summarize the Sales Overview dashboard.",
+  "summary_input": {
+    "dashboard_id": "REPLACE_WITH_DASHBOARD_ID"
+  },
+  "expected_output": {
+    "must_include": [
+      "States the overall revenue trend direction",
+      "Identifies the top-performing segment"
+    ],
+    "must_not_include": [
+      "Numbers or segments that are not present in the shown visualizations"
+    ],
+    "rubric": [
+      "Is concise and uses the requested 3-bullet format",
+      "Reads as a coherent business summary, not a list of raw values"
+    ]
+  }
+}

@@ -20,15 +20,18 @@ _EAGER_EVALUATORS: dict[str, Evaluator] = {
     )
 }
 
-# LLM-judge evaluators (general_question, guardrail) require the [llm-judge] extra.
-# Their modules are imported lazily on first use so the CLI starts without openai.
+# LLM-judge evaluators (general_question, guardrail, dashboard_summary) require the
+# [llm-judge] extra. Their modules are imported lazily on first use so the CLI
+# starts without openai.
 _LAZY_EVALUATOR_MODULES: dict[str, str] = {
     "general_question": "gooddata_eval.core.evaluators.general_question",
     "guardrail": "gooddata_eval.core.evaluators.guardrail",
+    "dashboard_summary": "gooddata_eval.core.evaluators.summary",
 }
 _LAZY_EVALUATOR_CLASSES: dict[str, str] = {
     "general_question": "GeneralQuestionEvaluator",
     "guardrail": "GuardrailEvaluator",
+    "dashboard_summary": "DashboardSummaryEvaluator",
 }
 
 
