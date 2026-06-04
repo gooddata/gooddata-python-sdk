@@ -3,7 +3,8 @@
 
 from dataclasses import dataclass, field
 
-from gooddata_api_client.exceptions import NotFoundException
+import httpx
+from gooddata_api_client.exceptions import ApiException, NotFoundException
 from gooddata_sdk import CatalogWorkspaceSetting, GoodDataSdk
 
 _SETTING_ID = "activeLlmProvider"
@@ -22,6 +23,7 @@ class ResolvedModel:
     model_id: str
     switched: bool  # True when activation changed the workspace's active provider
     provider_name: str = field(default="")  # human-readable name, empty if not available
+    provider_type: str = field(default="")  # API gateway type: OPENAI, AWS_BEDROCK, AZURE_FOUNDRY
 
 
 class ModelResolutionError(Exception):
@@ -96,7 +98,8 @@ def select_provider_and_model(
         if len(candidates) > 1:
             raise ModelResolutionError(
                 f"Model '{requested_model}' is offered by multiple providers: {', '.join(candidates)}. "
-                "Pass --provider to choose one."
+                f"Use the provider/model syntax to pick one "
+                f"(e.g. --model '{candidates[0]}/{requested_model}')."
             )
         available = sorted({m for models in providers_models.values() for m in (models or [])})
         raise ModelResolutionError(
@@ -157,15 +160,20 @@ class WorkspaceModelController:
         for p in providers:
             attrs = p.attributes
             models = (attrs.models if attrs else None) or []
+            cfg = attrs.provider_config if attrs else None
             result[p.id] = {
                 "name": (attrs.name if attrs else None) or p.id,
-                "models": [m.id for m in models],
+                "models": [{"id": m.id, "family": m.family} for m in models],
+                "type": (cfg.type if cfg else "") or "",
             }
         return result
 
     def all_provider_models(self) -> dict[str, list[str]]:
         """Map each configured LLM provider id to the model ids it offers."""
-        return {pid: info["models"] for pid, info in self._provider_info().items()}
+        return {
+            pid: [m["id"] if isinstance(m, dict) else m for m in info["models"]]
+            for pid, info in self._provider_info().items()
+        }
 
     def activate(self, provider_id: str, model_id: str) -> None:
         setting = CatalogWorkspaceSetting(
@@ -175,6 +183,12 @@ class WorkspaceModelController:
         )
         self._sdk.catalog_workspace.create_or_update_workspace_setting(self._workspace_id, setting)
 
+    def restore(self, original: ActiveLlmProvider | None) -> None:
+        """Restore the workspace active model to a previously saved state."""
+        if original is None:
+            return
+        self.activate(original.provider_id, original.default_model_id)
+
     def resolve_and_activate(self, requested_model: str | None, requested_provider: str | None = None) -> ResolvedModel:
         """Resolve provider+model (by name or id), activate them, and report what was chosen."""
         active = self.get_active()
@@ -183,7 +197,9 @@ class WorkspaceModelController:
             provider_name = ""
         else:
             info = self._provider_info()
-            providers_models = {pid: d["models"] for pid, d in info.items()}
+            providers_models = {
+                pid: [m["id"] if isinstance(m, dict) else m for m in d["models"]] for pid, d in info.items()
+            }
             resolved_provider = None
             if requested_provider is not None:
                 resolved_provider = _resolve_provider_ref(requested_provider, info)
@@ -191,6 +207,35 @@ class WorkspaceModelController:
                 requested_model, resolved_provider, active, providers_models
             )
             provider_name = info.get(provider_id, {}).get("name", "")
+            _pinfo = info.get(provider_id, {})
+            _models = _pinfo.get("models", [])
+            _family = next(
+                (m["family"] for m in _models if isinstance(m, dict) and m.get("id") == model_id),
+                "",
+            )
+            _gateway = _pinfo.get("type", "")
+            # Always fetch live model info from the provider — correct for any new family
+            # without requiring code changes. One call per run, non-fatal on failure.
+            if model_id:
+                try:
+                    live = self._sdk.catalog_organization.list_llm_provider_models_by_id(provider_id)
+                    if live.success and live.models:
+                        _live_family = next(
+                            (m.family for m in live.models if m.id == model_id),
+                            "",
+                        )
+                        _family = _live_family or _family
+                except (httpx.HTTPError, ApiException, OSError, AttributeError):  # non-fatal
+                    pass
+            # Build a label that preserves both infrastructure and model vendor:
+            #   OPENAI gateway  → family only (direct API, gateway is just protocol)
+            #   AWS_BEDROCK     → BEDROCK/family  (e.g. BEDROCK/ANTHROPIC)
+            #   AZURE_FOUNDRY   → AZURE/family    (e.g. AZURE/OPENAI)
+            if _gateway in ("AWS_BEDROCK", "AZURE_FOUNDRY") and _family:
+                _prefix = "BEDROCK" if _gateway == "AWS_BEDROCK" else "AZURE"
+                provider_type = f"{_prefix}/{_family}"
+            else:
+                provider_type = _family or _gateway
         switched = active is None or provider_id != active.provider_id
         self.activate(provider_id, model_id)
         return ResolvedModel(
@@ -198,4 +243,5 @@ class WorkspaceModelController:
             model_id=model_id,
             switched=switched,
             provider_name=provider_name,
+            provider_type=provider_type,
         )

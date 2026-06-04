@@ -1,8 +1,11 @@
 # (C) 2026 GoodData Corporation
+from unittest.mock import MagicMock
+
 import pytest
 from gooddata_eval.core.workspace import (
     ActiveLlmProvider,
     ModelResolutionError,
+    WorkspaceModelController,
     _resolve_provider_ref,
     active_provider_content,
     resolve_model,
@@ -106,3 +109,26 @@ def test_resolve_provider_ref_ambiguous_name():
     }
     with pytest.raises(ModelResolutionError, match="Multiple"):
         _resolve_provider_ref("Shared Name", info)
+
+
+def test_workspace_controller_restore_calls_activate():
+    ctrl = WorkspaceModelController.__new__(WorkspaceModelController)
+    ctrl._workspace_id = "ws"
+    ctrl._host = "https://h"
+    ctrl._headers = {}
+    ctrl._sdk = MagicMock()
+
+    activated = []
+    ctrl.activate = lambda pid, mid: activated.append((pid, mid))
+
+    original = ActiveLlmProvider(provider_id="orig-prov", default_model_id="gpt-5.2")
+    ctrl.restore(original)
+    assert activated == [("orig-prov", "gpt-5.2")]
+
+
+def test_workspace_controller_restore_skips_when_none():
+    ctrl = WorkspaceModelController.__new__(WorkspaceModelController)
+    activated = []
+    ctrl.activate = lambda pid, mid: activated.append((pid, mid))
+    ctrl.restore(None)
+    assert activated == []
