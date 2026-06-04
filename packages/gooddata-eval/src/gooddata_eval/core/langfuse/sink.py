@@ -48,9 +48,11 @@ def compute_scores(
 class LangfuseSink:
     """Posts evaluation results to Langfuse via the ingestion REST API."""
 
-    def __init__(self, dataset_name: str, run_name: str):
+    def __init__(self, dataset_name: str, run_name: str, model_id: str = "", provider_type: str = ""):
         self._dataset_name = dataset_name
         self._run_name = run_name
+        self._model_id = model_id
+        self._provider_type = provider_type
         host = os.environ.get("LANGFUSE_HOST", "https://cloud.langfuse.com").rstrip("/")
         pub = os.environ.get("LANGFUSE_PUBLIC_KEY", "")
         sec = os.environ.get("LANGFUSE_SECRET_KEY", "")
@@ -93,8 +95,10 @@ class LangfuseSink:
                         "dataset_name": report.dataset_name,
                         "test_kind": report.test_kind,
                         "item_id": report.id,
+                        "model": self._model_id,
+                        "provider_type": self._provider_type,
                     },
-                    "tags": [report.test_kind],
+                    "tags": [t for t in [report.test_kind, self._provider_type] if t],
                 },
             ),
         ]
@@ -152,6 +156,15 @@ class LangfuseSink:
                     "/api/public/dataset-run-items",
                     json={
                         "runName": self._run_name,
+                        "runDescription": (
+                            f"{self._provider_type}/{self._model_id}"
+                            if self._provider_type and self._model_id
+                            else self._model_id or ""
+                        ),
+                        "metadata": {
+                            "model": self._model_id,
+                            "provider_type": self._provider_type,
+                        },
                         "datasetItemId": dataset_item_id,
                         "traceId": trace_id,
                     },
