@@ -1,0 +1,26 @@
+{
+  "id": "summary-format-hint-brief",
+  "dataset_name": "summary_pilot",
+  "question": "Give a brief executive summary of the Top 10 Products.",
+  "test_kind": "dashboard_summary",
+  "summary_input": {
+    "dashboard_id": "b2f2d436-9831-4fe0-81df-8c59fd33242b",
+    "visualizations": ["top_10_products"],
+    "format_hint": "A brief executive summary: at most 3 sentences, no headings or bullet points."
+  },
+  "expected_output": {
+    "must_include": [
+      "Cites specific numeric values from the Top 10 Products data"
+    ],
+    "must_not_include": [
+      "Uses section headings (such as 'Summary' or 'Key Insights') or bullet/numbered lists",
+      "Reports specific data or findings about visualizations other than Top 10 Products"
+    ],
+    "rubric": [
+      "Respects the requested brevity (roughly three sentences or fewer)",
+      "Conveys the main product or category concentration insight (e.g. Outdoor or Neptide dominance)",
+      "Notes that only the Top 10 Products visualization was analyzed",
+      "Reads as fluent prose rather than a list of raw values"
+    ]
+  }
+}

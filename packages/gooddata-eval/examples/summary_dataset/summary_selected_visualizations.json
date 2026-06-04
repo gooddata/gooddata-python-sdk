@@ -1,0 +1,26 @@
+{
+  "id": "summary-selected-visualizations",
+  "dataset_name": "summary_pilot",
+  "test_kind": "dashboard_summary",
+  "question": "Summarize only the Top 10 Customers and Top 10 Products on the dashboard.",
+  "summary_input": {
+    "dashboard_id": "b2f2d436-9831-4fe0-81df-8c59fd33242b",
+    "visualizations": ["top_10_customers", "top_10_products"]
+  },
+  "expected_output": {
+    "must_include": [
+      "Includes a Summary, Key Insights, and Areas to Watch section",
+      "Cites specific numeric values for both the customers and the products data"
+    ],
+    "must_not_include": [
+      "Reports specific data or findings about dashboard visualizations other than Top 10 Customers and Top 10 Products"
+    ],
+    "rubric": [
+      "Identifies the top customer (highest-revenue account) with their revenue or contribution",
+      "Identifies the top product with its revenue and share",
+      "Highlights product or category concentration (e.g. a single product or category dominating)",
+      "Notes that only the two requested visualizations were analyzed and other dashboard data was not included",
+      "Reads as a cohesive business narrative connecting customers and products, not a list of raw values"
+    ]
+  }
+}

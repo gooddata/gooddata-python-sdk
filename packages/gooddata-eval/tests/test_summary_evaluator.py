@@ -27,7 +27,7 @@ def _chat(text: str = "Revenue grew QoQ; West is the top region.") -> ChatResult
 def test_passes_when_all_criteria_satisfied():
     ev = _make_evaluator()
     ev._positive_judge.score = MagicMock(return_value=(True, "ok"))
-    ev._negative_judge.score = MagicMock(return_value=(True, "avoided"))
+    ev._violation_judge.score = MagicMock(return_value=(False, "characteristic absent"))
 
     item = _item({"must_include": ["a", "b"], "must_not_include": ["x"], "rubric": ["r"]})
     res = ev.evaluate(item, _chat())
@@ -40,7 +40,8 @@ def test_passes_when_all_criteria_satisfied():
 def test_fails_when_must_not_include_violated():
     ev = _make_evaluator()
     ev._positive_judge.score = MagicMock(return_value=(True, "ok"))
-    ev._negative_judge.score = MagicMock(return_value=(False, "hallucinated a number"))
+    # violation judge detects the forbidden characteristic is present -> avoided=False
+    ev._violation_judge.score = MagicMock(return_value=(True, "has a separate filter section"))
 
     item = _item({"must_include": ["a"], "must_not_include": ["x"]})
     res = ev.evaluate(item, _chat())
@@ -53,7 +54,7 @@ def test_fails_when_must_not_include_violated():
 def test_fails_when_a_must_include_is_missing():
     ev = _make_evaluator()
     ev._positive_judge.score = MagicMock(side_effect=[(True, "ok"), (False, "missing")])
-    ev._negative_judge.score = MagicMock(return_value=(True, "avoided"))
+    ev._violation_judge.score = MagicMock(return_value=(False, "characteristic absent"))
 
     item = _item({"must_include": ["a", "b"]})
     res = ev.evaluate(item, _chat())

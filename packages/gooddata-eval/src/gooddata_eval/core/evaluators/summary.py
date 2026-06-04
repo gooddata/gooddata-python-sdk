@@ -33,11 +33,16 @@ _POSITIVE_STEPS = [
     "Score 0 if the criterion is missing, contradicted, or only partially addressed.",
 ]
 
-_NEGATIVE_STEPS = [
-    "Read the INPUT (the user's request) and the EXPECTED OUTPUT, which describes something the summary must NOT do.",
+# For must_not_include we ask the judge a plain presence question and invert the
+# result in code. Scoring "does the summary AVOID X?" via a field labelled
+# EXPECTED OUTPUT is unreliable: the model reads the forbidden behaviour as
+# desired and flips the verdict. Detecting presence (no negation, no
+# contradictory label) is far more robust.
+_VIOLATION_STEPS = [
+    "Read the CHARACTERISTIC described in EXPECTED OUTPUT.",
     "Read the ACTUAL OUTPUT (the generated summary).",
-    "Score 1 if the actual output correctly AVOIDS the described issue.",
-    "Score 0 if the actual output violates it (e.g. invents numbers or mentions segments not in the data).",
+    "Score 1 if the actual output clearly exhibits the described characteristic.",
+    "Score 0 if it does not exhibit it.",
 ]
 
 
@@ -46,7 +51,7 @@ class DashboardSummaryEvaluator:
 
     def __init__(self):
         self._positive_judge = LLMJudge(evaluation_steps=_POSITIVE_STEPS)
-        self._negative_judge = LLMJudge(evaluation_steps=_NEGATIVE_STEPS)
+        self._violation_judge = LLMJudge(evaluation_steps=_VIOLATION_STEPS)
 
     @staticmethod
     def _criteria(expected_output: Any) -> tuple[list[str], list[str], list[str]]:
@@ -74,8 +79,9 @@ class DashboardSummaryEvaluator:
             passed = passed and ok
 
         for i, criterion in enumerate(must_not_include):
-            ok, reason = self._negative_judge.score(item.question, criterion, actual)
-            detail[f"exclude_{i}"] = ok  # True == correctly avoided
+            violated, reason = self._violation_judge.score(item.question, criterion, actual)
+            ok = not violated  # True == characteristic absent == correctly avoided
+            detail[f"exclude_{i}"] = ok
             detail[f"exclude_{i}_reason"] = reason
             passed = passed and ok
 

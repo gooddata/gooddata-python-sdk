@@ -32,13 +32,11 @@ def render_console(report: EvalReport, *, console: Console | None = None) -> str
         elif item.pass_at_k:
             result, notes = "PASS", ""
         else:
-            d = item.best_detail
-            failing = [
-                k
-                for k in ("metrics_correct", "dimensions_correct", "filters_correct", "viz_type_hard")
-                if d.get(k) is False
-            ]
-            notes = "failed: " + ", ".join(failing) if failing else "no visualization created"
+            # Evaluator-agnostic: report whichever boolean checks came back False
+            # (visualization uses metrics_correct/…; dashboard_summary uses
+            # include_*/exclude_*/rubric_*). Falls back to a generic message.
+            failing = [k for k, v in item.best_detail.items() if v is False]
+            notes = "failed: " + ", ".join(failing) if failing else "did not pass strict checks"
             result = "FAIL"
         latency = "-" if item.runs == 0 else f"{item.latency_s:.2f}s"
         avg = "-" if item.runs == 0 else f"{item.avg_latency_s:.2f}s"
