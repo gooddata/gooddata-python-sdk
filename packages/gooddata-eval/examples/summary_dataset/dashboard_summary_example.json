@@ -2,9 +2,9 @@
   "id": "summary-001",
   "dataset_name": "summary_pilot",
   "test_kind": "dashboard_summary",
-  "question": "Summarize the Sales Overview dashboard.",
+  "question": "Summarize the All visualizations 1 with custom filter dashboard.",
   "summary_input": {
-    "dashboard_id": "REPLACE_WITH_DASHBOARD_ID"
+    "dashboard_id": "b2f2d436-9831-4fe0-81df-8c59fd33242b"
   },
   "expected_output": {
     "must_include": [
