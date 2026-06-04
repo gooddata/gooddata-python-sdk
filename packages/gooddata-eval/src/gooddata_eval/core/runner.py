@@ -48,7 +48,9 @@ class ItemReport:
 @dataclass
 class EvalReport:
     model: str | None
-    workspace_id: str
+    provider_name: str = ""
+    provider_type: str = ""
+    workspace_id: str = ""
     items: list[ItemReport] = field(default_factory=list)
 
     @property
@@ -144,6 +146,8 @@ def run_items(
     *,
     runs: int = 2,
     model: str | None = None,
+    provider_name: str = "",
+    provider_type: str = "",
     workspace_id: str = "",
     on_item_start: Callable[[int, int, DatasetItem], None] | None = None,
     on_run_done: Callable[[int, int, int, int, bool, float], None] | None = None,
@@ -159,7 +163,9 @@ def run_items(
       - on_item_done(index, total, report)                         after an item is fully evaluated
       - on_langfuse_item_done(index, total, report)                after non-skipped, non-errored items only
     """
-    report = EvalReport(model=model, workspace_id=workspace_id)
+    report = EvalReport(
+        model=model, provider_name=provider_name, provider_type=provider_type, workspace_id=workspace_id
+    )
     total = len(items)
     for index, item in enumerate(items, start=1):
         if on_item_start is not None:
