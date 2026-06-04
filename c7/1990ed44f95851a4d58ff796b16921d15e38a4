@@ -1,12 +1,19 @@
+packages/gooddata-eval/src/gooddata_eval/core/workspace.py
+  s_90905292b36e6b::t_398f0ab11bf6cf 227
+  s_90905292b36e6b::t_5815139fa06734 100-101
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/sink.py
+  s_90905292b36e6b::t_398f0ab11bf6cf 100-101,103
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  s_90905292b36e6b::t_398f0ab11bf6cf 257-287,289-295
 packages/gooddata-eval/README.md
   s_90905292b36e6b::t_0ac3b40a0534ef 4,14-25,32,35,39-61,63-67,71,73,76,80-81,83,87,89,93,95,99-100,102,106-146,150,180-181,184-185,189,195,204,206
-packages/gooddata-eval/src/gooddata_eval/core/workspace.py
-  s_90905292b36e6b::t_5815139fa06734 100-101
+packages/gooddata-eval/src/gooddata_eval/core/reporting/json_report.py
+  s_90905292b36e6b::t_398f0ab11bf6cf 56-66
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.5.3",
-  "base_commit_sha": "a05801a594c6cdfebfd4478aa81ca757e2d037f2",
+  "base_commit_sha": "c71990ed44f95851a4d58ff796b16921d15e38a4",
   "prompts": {},
   "sessions": {
     "s_90905292b36e6b": {
