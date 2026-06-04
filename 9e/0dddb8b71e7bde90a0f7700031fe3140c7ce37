@@ -1,0 +1,14 @@
+packages/gooddata-eval/LICENSE.txt
+  h_4a925d05b9a6b7 1,3,5,7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "9e0dddb8b71e7bde90a0f7700031fe3140c7ce37",
+  "prompts": {},
+  "humans": {
+    "h_4a925d05b9a6b7": {
+      "author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}
