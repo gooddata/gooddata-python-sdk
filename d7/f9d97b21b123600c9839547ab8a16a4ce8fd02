@@ -1,0 +1,21 @@
+packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
+  s_22fd5fea75407c::t_079699ff117f2e 50-66,80
+packages/gooddata-eval/tests/test_langfuse_source.py
+  s_22fd5fea75407c::t_4f0193f76f0128 37-69
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "d7f9d97b21b123600c9839547ab8a16a4ce8fd02",
+  "prompts": {},
+  "sessions": {
+    "s_22fd5fea75407c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d24a9eb5-c031-4c30-a864-ae48fd8fcc20",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}
