@@ -91,6 +91,7 @@ Both provider name and provider id are accepted as the prefix.
 | Flag | Default | Description |
 |---|---|---|
 | `--runs K` | `2` | Independent runs per item (pass@K). An item passes if any run passes. |
+| `--concurrency K` | `1` | Number of items evaluated concurrently. `1` = sequential (default). Increase to load-test the agent under simultaneous requests. Progress output interleaves when K > 1. |
 
 #### Output
 

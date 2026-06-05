@@ -46,11 +46,16 @@ def render_console(report: EvalReport, *, console: Console | None = None) -> str
         table.add_row(item.id, item.test_kind, result, str(item.runs), latency, avg, quality, notes)
 
     out.print(table)
+    _wall = report.wall_clock_s
+    _agent = report.latency_s
+    if _wall > 0 and abs(_wall - _agent) > 1:  # concurrency > 1: show both
+        timing = f"{_wall:.2f}s wall-clock, {_agent:.2f}s agent time (avg {report.avg_latency_s:.2f}s/run)"
+    else:
+        timing = f"{_agent:.2f}s (avg {report.avg_latency_s:.2f}s/run)"
     out.print(
         f"\nSummary: {report.passed}/{report.total} passed "
         f"({report.skipped} skipped, {report.errored} errored) "
-        f"avg quality {report.avg_quality_score:.0%} "
-        f"in {report.latency_s:.2f}s (avg {report.avg_latency_s:.2f}s/run)"
+        f"avg quality {report.avg_quality_score:.0%} in {timing}"
     )
     return out.export_text() if out.record else ""
 

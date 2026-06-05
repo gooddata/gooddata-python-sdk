@@ -52,6 +52,13 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
     )
     run.add_argument("--runs", type=int, default=2, help="Independent runs per item (pass@K). Default 2.")
+    run.add_argument(
+        "--concurrency",
+        type=int,
+        default=1,
+        help="Number of items evaluated concurrently (default 1 = sequential). "
+        "Increase to load-test the agent under simultaneous requests.",
+    )
     run.add_argument("--json", dest="json_path", help="Write a JSON report to this path.")
     run.add_argument("--quiet", action="store_true", help="Suppress per-item progress output.")
     run.add_argument(
@@ -270,6 +277,7 @@ def _run(config: RunConfig) -> int:
                     on_run_done=on_run_done,
                     on_item_done=on_item_done,
                     on_langfuse_item_done=on_langfuse_item_done,
+                    concurrency=config.concurrency,
                 )
             finally:
                 if hasattr(backend, "close"):
@@ -309,6 +317,9 @@ def _run(config: RunConfig) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv if argv is not None else sys.argv[1:])
+    if hasattr(args, "concurrency") and args.concurrency < 1:
+        print("error: --concurrency must be >= 1.", file=sys.stderr)
+        return _EXIT_OPERATIONAL_ERROR
     try:
         host, token = resolve_connection(host=args.host, token=args.token, profile=args.profile)
         if args.command == "models":
@@ -321,6 +332,7 @@ def main(argv: list[str] | None = None) -> int:
             langfuse_dataset=args.langfuse_dataset,
             models=args.models or [],
             runs=args.runs,
+            concurrency=args.concurrency,
             json_path=Path(args.json_path) if args.json_path else None,
             log_to_langfuse=args.langfuse,
             quiet=args.quiet,
