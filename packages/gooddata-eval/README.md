@@ -199,8 +199,7 @@ The `expected_output` rubric:
 - `rubric` — soft quality dimensions; they affect `quality_score` but do not gate pass/fail.
 
 Each criterion is scored independently by the LLM judge, so `quality_score`
-is the fraction of satisfied criteria. Runnable examples live in
-[`examples/summary_dataset/`](examples/summary_dataset/).
+is the fraction of satisfied criteria.
 
 ## Supported test kinds
 
