@@ -1,22 +1,31 @@
+packages/gooddata-eval/src/gooddata_eval/core/reporting/json_report.py
+  s_90905292b36e6b::t_99db68b7d9b873 23
+packages/gooddata-eval/tests/test_cli.py
+  s_90905292b36e6b::t_b8fafd95c6a2aa 493-532
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  s_90905292b36e6b::t_1b1a82c2070ad4 320-322
+  s_90905292b36e6b::t_eb158b6a389e2a 55-61,280,335
 packages/gooddata-eval/README.md
   s_90905292b36e6b::t_627fbe69797066 94
-packages/gooddata-eval/src/gooddata_eval/core/runner.py
-  s_90905292b36e6b::t_eb158b6a389e2a 5,157,167-170,176-177,192-206
-  s_90905292b36e6b::t_1b1a82c2070ad4 178-182,185-191
 packages/gooddata-eval/tests/test_runner.py
-  s_90905292b36e6b::t_447efceb6fdccf 2-3,6
   s_90905292b36e6b::t_c8d2d8e5bf215a 140-144,152-163,171-178
+  s_90905292b36e6b::t_b8fafd95c6a2aa 226-248
   s_90905292b36e6b::t_df64305dba87b7 145-151,164-170,179-225
+  s_90905292b36e6b::t_447efceb6fdccf 2-3,6
+packages/gooddata-eval/src/gooddata_eval/core/reporting/console.py
+  s_90905292b36e6b::t_e3c76340acd281 49-51,53-54,58
+  s_90905292b36e6b::t_99db68b7d9b873 52
 packages/gooddata-eval/src/gooddata_eval/core/config.py
   s_90905292b36e6b::t_eb158b6a389e2a 17
-packages/gooddata-eval/src/gooddata_eval/cli/main.py
-  s_90905292b36e6b::t_eb158b6a389e2a 55-61,280,335
-  s_90905292b36e6b::t_1b1a82c2070ad4 320-322
+packages/gooddata-eval/src/gooddata_eval/core/runner.py
+  s_90905292b36e6b::t_e3c76340acd281 5,57,174,185,193-194,197,211
+  s_90905292b36e6b::t_eb158b6a389e2a 6,159,169-172,179-180,195-196,198-210
+  s_90905292b36e6b::t_1b1a82c2070ad4 181-184,188-192
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.5.3",
-  "base_commit_sha": "147f1841fb7a087362545d7f103cba8acd562a2b",
+  "base_commit_sha": "360f2741d2d8590a6d12fcc3fa25c367e48ab5f6",
   "prompts": {},
   "sessions": {
     "s_90905292b36e6b": {
