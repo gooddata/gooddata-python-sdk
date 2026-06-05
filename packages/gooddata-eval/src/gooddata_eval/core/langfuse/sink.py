@@ -89,6 +89,10 @@ class LangfuseSink:
                     "id": trace_id,
                     "timestamp": now,
                     "name": f"gd-eval: {report.question[:80]}",
+                    # Expose the model on a first-class trace field so Langfuse
+                    # dashboards can filter / break down by it ("Version"); trace
+                    # metadata is not available as a breakdown dimension.
+                    "version": self._model_id or None,
                     "input": {"question": report.question},
                     "output": report.best_detail,
                     "metadata": {
