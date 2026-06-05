@@ -490,3 +490,43 @@ def test_parse_model_arg_plain_model_no_strip():
     # The no-slash path does not strip whitespace; argparse never passes
     # whitespace through, so this documents the current behaviour.
     assert _parse_model_arg(" gpt-5.2 ") == (None, " gpt-5.2 ")
+
+
+def test_cli_rejects_zero_concurrency(monkeypatch, fixtures_dir):
+    monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--dataset",
+            str(fixtures_dir / "sample_dataset"),
+            "--concurrency",
+            "0",
+        ]
+    )
+    assert exit_code == 2
+
+
+def test_cli_rejects_negative_concurrency(monkeypatch, fixtures_dir):
+    monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--dataset",
+            str(fixtures_dir / "sample_dataset"),
+            "--concurrency",
+            "-1",
+        ]
+    )
+    assert exit_code == 2
