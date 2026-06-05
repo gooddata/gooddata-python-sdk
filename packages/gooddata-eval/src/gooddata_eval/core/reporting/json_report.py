@@ -20,6 +20,7 @@ def _build_run_dict(report: EvalReport) -> dict:
             "errored": report.errored,
             "latency_s": round(report.latency_s, 3),
             "avg_latency_s": round(report.avg_latency_s, 3),
+            "wall_clock_s": round(report.wall_clock_s, 3),
         },
         "items": {
             item.id: {

@@ -14,6 +14,7 @@ class RunConfig:
     langfuse_dataset: str | None = None
     models: list[str] = field(default_factory=list)
     runs: int = 2
+    concurrency: int = 1
     json_path: Path | None = None
     log_to_langfuse: bool = False
     quiet: bool = False

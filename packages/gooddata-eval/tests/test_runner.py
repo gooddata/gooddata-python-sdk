@@ -1,7 +1,9 @@
 # (C) 2026 GoodData Corporation
+import threading
+
 from gooddata_eval.core.evaluators import supported_test_kinds
 from gooddata_eval.core.models import ChatResult, DatasetItem
-from gooddata_eval.core.runner import run_items
+from gooddata_eval.core.runner import ItemReport, run_items
 
 
 def _viz_obj():
@@ -135,3 +137,112 @@ def test_run_items_does_not_invoke_langfuse_callback_for_skipped_items():
         on_langfuse_item_done=lambda idx, total, r: langfuse_calls.append(r.id),
     )
     assert langfuse_calls == []
+
+
+def test_run_items_concurrency_produces_all_results_in_order():
+    """With concurrency > 1 all items still appear in input order."""
+    items = [
+        DatasetItem(
+            id=f"item-{i}",
+            dataset_name="d",
+            test_kind="visualization",
+            question=f"q{i}",
+            expected_output={"visualization": _viz_obj()},
+        )
+        for i in range(6)
+    ]
+    backend = _FakeBackend([_chat_with(_viz_obj())] * 6)
+    report = run_items(items, backend, runs=1, concurrency=3)
+    assert report.total == 6
+    assert [r.id for r in report.items] == [f"item-{i}" for i in range(6)]
+    assert all(r.pass_at_k for r in report.items)
+
+
+def test_run_items_concurrency_1_and_sequential_produce_same_results():
+    """concurrency=1 and the default sequential path give identical reports."""
+    items = [
+        DatasetItem(
+            id=f"i{i}",
+            dataset_name="d",
+            test_kind="visualization",
+            question="q",
+            expected_output={"visualization": _viz_obj()},
+        )
+        for i in range(4)
+    ]
+    backend_a = _FakeBackend([_chat_with(_viz_obj())] * 4)
+    backend_b = _FakeBackend([_chat_with(_viz_obj())] * 4)
+    report_seq = run_items(items, backend_a, runs=1)
+    report_par = run_items(items, backend_b, runs=1, concurrency=1)
+    assert [r.id for r in report_seq.items] == [r.id for r in report_par.items]
+    assert [r.pass_at_k for r in report_seq.items] == [r.pass_at_k for r in report_par.items]
+
+
+def test_run_items_concurrency_errored_item_does_not_crash_pool():
+    """An errored item is recorded but does not abort a concurrent run."""
+
+    class _BoomBackend:
+        def ask(self, question: str) -> ChatResult:
+            raise RuntimeError("agent down")
+
+    items = [
+        DatasetItem(
+            id=f"e{i}",
+            dataset_name="d",
+            test_kind="visualization",
+            question="q",
+            expected_output={"visualization": _viz_obj()},
+        )
+        for i in range(4)
+    ]
+    report = run_items(items, _BoomBackend(), runs=1, concurrency=3)
+    assert report.total == 4
+    assert report.errored == 4
+    assert [r.id for r in report.items] == [f"e{i}" for i in range(4)]
+
+
+def test_run_items_concurrency_callbacks_fire_for_all_items():
+    """on_item_done is called exactly once per item under concurrency > 1."""
+    backend = _FakeBackend([_chat_with(_viz_obj())] * 5)
+    lock = threading.Lock()
+    done_ids: list = []
+
+    def on_done(index: int, total: int, report: ItemReport) -> None:
+        with lock:
+            done_ids.append(report.id)
+
+    items = [
+        DatasetItem(
+            id=f"c{i}",
+            dataset_name="d",
+            test_kind="visualization",
+            question="q",
+            expected_output={"visualization": _viz_obj()},
+        )
+        for i in range(5)
+    ]
+    run_items(items, backend, runs=1, concurrency=3, on_item_done=on_done)
+    assert sorted(done_ids) == [f"c{i}" for i in range(5)]
+
+
+def test_run_items_callback_exception_is_logged_not_swallowed(capsys):
+    """A raising callback prints a traceback to stderr but the run continues."""
+    backend = _FakeBackend([_chat_with(_viz_obj())] * 2)
+    items = [
+        DatasetItem(
+            id=f"x{i}",
+            dataset_name="d",
+            test_kind="visualization",
+            question="q",
+            expected_output={"visualization": _viz_obj()},
+        )
+        for i in range(2)
+    ]
+
+    def bad_callback(index, total, report):
+        raise RuntimeError("callback bug")
+
+    result = run_items(items, backend, runs=1, on_item_done=bad_callback)
+    assert result.total == 2  # run did not abort
+    err = capsys.readouterr().err
+    assert "RuntimeError" in err or "callback bug" in err  # traceback was printed
