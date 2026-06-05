@@ -47,6 +47,23 @@ def _question_from_input(raw_input: Any) -> str:
     raise ValueError(f"Unsupported Langfuse item input shape: {raw_input!r}")
 
 
+def _summary_input_from_raw(raw: dict, expected_output: Any) -> dict | None:
+    """Locate a dashboard_summary item's `summary_input`.
+
+    Langfuse items have no dedicated field for it, so accept it (in priority
+    order) from the item input object, the item metadata, or the expectedOutput.
+    """
+    raw_input = raw.get("input")
+    if isinstance(raw_input, dict) and isinstance(raw_input.get("summary_input"), dict):
+        return raw_input["summary_input"]
+    metadata = raw.get("metadata")
+    if isinstance(metadata, dict) and isinstance(metadata.get("summary_input"), dict):
+        return metadata["summary_input"]
+    if isinstance(expected_output, dict) and isinstance(expected_output.get("summary_input"), dict):
+        return expected_output["summary_input"]
+    return None
+
+
 def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetItem:
     """Map a Langfuse REST API dataset-item dict to a DatasetItem."""
     # REST API returns camelCase: expectedOutput, not expected_output
@@ -60,6 +77,7 @@ def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetIt
         test_kind=resolved_kind,
         question=_question_from_input(raw.get("input")),
         expected_output=expected_output,
+        summary_input=_summary_input_from_raw(raw, expected_output),
     )
 
 

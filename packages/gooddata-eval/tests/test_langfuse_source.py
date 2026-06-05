@@ -34,6 +34,39 @@ def test_item_from_raw_plain_string_input():
     assert item.question == "Show orders"
 
 
+def test_item_from_raw_maps_summary_input_from_input_object():
+    raw = {
+        "id": "lf-sum-1",
+        "datasetName": "ds",
+        "input": {"question": "Summarize the dashboard", "summary_input": {"dashboard_id": "dash1"}},
+        "expectedOutput": {"test_kind": "dashboard_summary", "must_include": ["x"]},
+    }
+    item = _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+    assert item.test_kind == "dashboard_summary"
+    assert item.question == "Summarize the dashboard"
+    assert item.summary_input is not None
+    assert item.summary_input.dashboard_id == "dash1"
+
+
+def test_item_from_raw_maps_summary_input_from_metadata():
+    raw = {
+        "id": "lf-sum-2",
+        "datasetName": "ds",
+        "input": "Summarize it",
+        "metadata": {"summary_input": {"dashboard_id": "dash2", "visualizations": ["v1"]}},
+        "expectedOutput": {"test_kind": "dashboard_summary"},
+    }
+    item = _item_from_raw(raw, dataset_name="ds", test_kind="dashboard_summary")
+    assert item.summary_input.dashboard_id == "dash2"
+    assert item.summary_input.visualizations == ["v1"]
+
+
+def test_item_from_raw_summary_input_absent_is_none():
+    raw = _raw_item("lf-3", "Show revenue", {"visualization": {"id": "x", "type": "", "query": {"fields": {}}}})
+    item = _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+    assert item.summary_input is None
+
+
 def test_load_langfuse_dataset_calls_rest_api(monkeypatch):
     monkeypatch.setenv("LANGFUSE_PUBLIC_KEY", "pk-test")
     monkeypatch.setenv("LANGFUSE_SECRET_KEY", "sk-test")
