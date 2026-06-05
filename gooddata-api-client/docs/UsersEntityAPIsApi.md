@@ -47,6 +47,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 email="email_example",
                 firstname="firstname_example",
                 lastname="lastname_example",
+                system_account=True,
             ),
             id="id1",
             relationships=JsonApiAgentInRelationships(
@@ -381,6 +382,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 email="email_example",
                 firstname="firstname_example",
                 lastname="lastname_example",
+                system_account=True,
             ),
             id="id1",
             relationships=JsonApiAgentInRelationships(
@@ -487,6 +489,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 email="email_example",
                 firstname="firstname_example",
                 lastname="lastname_example",
+                system_account=True,
             ),
             id="id1",
             relationships=JsonApiAgentInRelationships(

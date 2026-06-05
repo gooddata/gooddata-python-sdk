@@ -23,15 +23,15 @@ Method | HTTP request | Description
 [**list_llm_provider_models**](SmartFunctionsApi.md#list_llm_provider_models) | **POST** /api/v1/actions/ai/llmProvider/listModels | List LLM Provider Models
 [**list_llm_provider_models_by_id**](SmartFunctionsApi.md#list_llm_provider_models_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/listModels | List LLM Provider Models By Id
 [**memory_created_by_users**](SmartFunctionsApi.md#memory_created_by_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory/createdBy | Get AI Memory CreatedBy Users
-[**resolve_llm_endpoints**](SmartFunctionsApi.md#resolve_llm_endpoints) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints | Get Active LLM Endpoints for this workspace
+[**resolve_llm_endpoints**](SmartFunctionsApi.md#resolve_llm_endpoints) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints | Get Active LLM Endpoints for this workspace (Removed)
 [**resolve_llm_providers**](SmartFunctionsApi.md#resolve_llm_providers) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmProviders | Get Active LLM configuration for this workspace
 [**tags**](SmartFunctionsApi.md#tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags | Get Analytics Catalog Tags
 [**test_llm_provider**](SmartFunctionsApi.md#test_llm_provider) | **POST** /api/v1/actions/ai/llmProvider/test | Test LLM Provider
 [**test_llm_provider_by_id**](SmartFunctionsApi.md#test_llm_provider_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/test | Test LLM Provider By Id
 [**trending_objects**](SmartFunctionsApi.md#trending_objects) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/trendingObjects | Get Trending Analytics Catalog Objects
 [**trigger_quality_issues_calculation**](SmartFunctionsApi.md#trigger_quality_issues_calculation) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/issues/triggerCheck | Trigger Quality Issues Calculation
-[**validate_llm_endpoint**](SmartFunctionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint
-[**validate_llm_endpoint_by_id**](SmartFunctionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id
+[**validate_llm_endpoint**](SmartFunctionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint (Removed)
+[**validate_llm_endpoint_by_id**](SmartFunctionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id (Removed)
 
 
 # **ai_chat**
@@ -1585,11 +1585,11 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **resolve_llm_endpoints**
-> ResolvedLlmEndpoints resolve_llm_endpoints(workspace_id)
+> resolve_llm_endpoints(workspace_id)
 
-Get Active LLM Endpoints for this workspace
+Get Active LLM Endpoints for this workspace (Removed)
 
-Will be soon removed and replaced by LlmProvider-based resolution.
+Permanently removed. Use GET /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmProviders instead. Always returns 410 Gone.
 
 ### Example
 
@@ -1598,7 +1598,6 @@ Will be soon removed and replaced by LlmProvider-based resolution.
 import time
 import gooddata_api_client
 from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.resolved_llm_endpoints import ResolvedLlmEndpoints
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1615,9 +1614,8 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Get Active LLM Endpoints for this workspace
-        api_response = api_instance.resolve_llm_endpoints(workspace_id)
-        pprint(api_response)
+        # Get Active LLM Endpoints for this workspace (Removed)
+        api_instance.resolve_llm_endpoints(workspace_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling SmartFunctionsApi->resolve_llm_endpoints: %s\n" % e)
 ```
@@ -1631,7 +1629,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**ResolvedLlmEndpoints**](ResolvedLlmEndpoints.md)
+void (empty response body)
 
 ### Authorization
 
@@ -1640,14 +1638,14 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
+**410** | Gone |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1656,7 +1654,7 @@ No authorization required
 
 Get Active LLM configuration for this workspace
 
-Resolves the active LLM configuration for the given workspace. When the ENABLE_LLM_ENDPOINT_REPLACEMENT feature flag is enabled, returns LLM Providers with their associated models. Otherwise, falls back to the legacy LLM Endpoints.
+Resolves the active LLM provider configuration for the given workspace.
 
 ### Example
 
@@ -2083,11 +2081,11 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **validate_llm_endpoint**
-> ValidateLLMEndpointResponse validate_llm_endpoint(validate_llm_endpoint_request)
+> validate_llm_endpoint()
 
-Validate LLM Endpoint
+Validate LLM Endpoint (Removed)
 
-Will be soon removed and replaced by testLlmProvider.
+Permanently removed. Use POST /api/v1/actions/ai/llmProvider/test instead. Always returns 410 Gone.
 
 ### Example
 
@@ -2096,8 +2094,6 @@ Will be soon removed and replaced by testLlmProvider.
 import time
 import gooddata_api_client
 from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.validate_llm_endpoint_response import ValidateLLMEndpointResponse
-from gooddata_api_client.model.validate_llm_endpoint_request import ValidateLLMEndpointRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2110,33 +2106,22 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    validate_llm_endpoint_request = ValidateLLMEndpointRequest(
-        base_url="base_url_example",
-        llm_model="llm_model_example",
-        llm_organization="llm_organization_example",
-        provider="provider_example",
-        token="token_example",
-    ) # ValidateLLMEndpointRequest | 
 
-    # example passing only required values which don't have defaults set
+    # example, this endpoint has no required or optional parameters
     try:
-        # Validate LLM Endpoint
-        api_response = api_instance.validate_llm_endpoint(validate_llm_endpoint_request)
-        pprint(api_response)
+        # Validate LLM Endpoint (Removed)
+        api_instance.validate_llm_endpoint()
     except gooddata_api_client.ApiException as e:
         print("Exception when calling SmartFunctionsApi->validate_llm_endpoint: %s\n" % e)
 ```
 
 
 ### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **validate_llm_endpoint_request** | [**ValidateLLMEndpointRequest**](ValidateLLMEndpointRequest.md)|  |
+This endpoint does not need any parameter.
 
 ### Return type
 
-[**ValidateLLMEndpointResponse**](ValidateLLMEndpointResponse.md)
+void (empty response body)
 
 ### Authorization
 
@@ -2144,24 +2129,24 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
+**410** | Gone |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **validate_llm_endpoint_by_id**
-> ValidateLLMEndpointResponse validate_llm_endpoint_by_id(llm_endpoint_id)
+> validate_llm_endpoint_by_id(llm_endpoint_id)
 
-Validate LLM Endpoint By Id
+Validate LLM Endpoint By Id (Removed)
 
-Will be soon removed and replaced by testLlmProviderById.
+Permanently removed. Use POST /api/v1/actions/ai/llmProvider/{llmProviderId}/test instead. Always returns 410 Gone.
 
 ### Example
 
@@ -2170,8 +2155,6 @@ Will be soon removed and replaced by testLlmProviderById.
 import time
 import gooddata_api_client
 from gooddata_api_client.api import smart_functions_api
-from gooddata_api_client.model.validate_llm_endpoint_response import ValidateLLMEndpointResponse
-from gooddata_api_client.model.validate_llm_endpoint_by_id_request import ValidateLLMEndpointByIdRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2185,28 +2168,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = smart_functions_api.SmartFunctionsApi(api_client)
     llm_endpoint_id = "llmEndpointId_example" # str | 
-    validate_llm_endpoint_by_id_request = ValidateLLMEndpointByIdRequest(
-        base_url="base_url_example",
-        llm_model="llm_model_example",
-        llm_organization="llm_organization_example",
-        provider="provider_example",
-        token="token_example",
-    ) # ValidateLLMEndpointByIdRequest |  (optional)
 
     # example passing only required values which don't have defaults set
     try:
-        # Validate LLM Endpoint By Id
-        api_response = api_instance.validate_llm_endpoint_by_id(llm_endpoint_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling SmartFunctionsApi->validate_llm_endpoint_by_id: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Validate LLM Endpoint By Id
-        api_response = api_instance.validate_llm_endpoint_by_id(llm_endpoint_id, validate_llm_endpoint_by_id_request=validate_llm_endpoint_by_id_request)
-        pprint(api_response)
+        # Validate LLM Endpoint By Id (Removed)
+        api_instance.validate_llm_endpoint_by_id(llm_endpoint_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling SmartFunctionsApi->validate_llm_endpoint_by_id: %s\n" % e)
 ```
@@ -2217,11 +2183,10 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **llm_endpoint_id** | **str**|  |
- **validate_llm_endpoint_by_id_request** | [**ValidateLLMEndpointByIdRequest**](ValidateLLMEndpointByIdRequest.md)|  | [optional]
 
 ### Return type
 
-[**ValidateLLMEndpointResponse**](ValidateLLMEndpointResponse.md)
+void (empty response body)
 
 ### Authorization
 
@@ -2229,15 +2194,15 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
+**410** | Gone |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

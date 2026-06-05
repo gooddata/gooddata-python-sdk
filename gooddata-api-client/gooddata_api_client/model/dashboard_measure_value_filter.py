@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.dashboard_measure_value_filter_measure_value_filter import DashboardMeasureValueFilterMeasureValueFilter
-    globals()['DashboardMeasureValueFilterMeasureValueFilter'] = DashboardMeasureValueFilterMeasureValueFilter
+    from gooddata_api_client.model.dashboard_measure_value_filter_dashboard_measure_value_filter import DashboardMeasureValueFilterDashboardMeasureValueFilter
+    globals()['DashboardMeasureValueFilterDashboardMeasureValueFilter'] = DashboardMeasureValueFilterDashboardMeasureValueFilter
 
 
 class DashboardMeasureValueFilter(ModelNormal):
@@ -88,7 +88,7 @@ class DashboardMeasureValueFilter(ModelNormal):
         """
         lazy_import()
         return {
-            'measure_value_filter': (DashboardMeasureValueFilterMeasureValueFilter,),  # noqa: E501
+            'dashboard_measure_value_filter': (DashboardMeasureValueFilterDashboardMeasureValueFilter,),  # noqa: E501
         }
 
     @cached_property
@@ -97,7 +97,7 @@ class DashboardMeasureValueFilter(ModelNormal):
 
 
     attribute_map = {
-        'measure_value_filter': 'measureValueFilter',  # noqa: E501
+        'dashboard_measure_value_filter': 'dashboardMeasureValueFilter',  # noqa: E501
     }
 
     read_only_vars = {
@@ -107,11 +107,11 @@ class DashboardMeasureValueFilter(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, measure_value_filter, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, dashboard_measure_value_filter, *args, **kwargs):  # noqa: E501
         """DashboardMeasureValueFilter - a model defined in OpenAPI
 
         Args:
-            measure_value_filter (DashboardMeasureValueFilterMeasureValueFilter):
+            dashboard_measure_value_filter (DashboardMeasureValueFilterDashboardMeasureValueFilter):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -175,7 +175,7 @@ class DashboardMeasureValueFilter(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.measure_value_filter = measure_value_filter
+        self.dashboard_measure_value_filter = dashboard_measure_value_filter
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -196,11 +196,11 @@ class DashboardMeasureValueFilter(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, measure_value_filter, *args, **kwargs):  # noqa: E501
+    def __init__(self, dashboard_measure_value_filter, *args, **kwargs):  # noqa: E501
         """DashboardMeasureValueFilter - a model defined in OpenAPI
 
         Args:
-            measure_value_filter (DashboardMeasureValueFilterMeasureValueFilter):
+            dashboard_measure_value_filter (DashboardMeasureValueFilterDashboardMeasureValueFilter):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -262,7 +262,7 @@ class DashboardMeasureValueFilter(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.measure_value_filter = measure_value_filter
+        self.dashboard_measure_value_filter = dashboard_measure_value_filter
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

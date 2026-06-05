@@ -43,9 +43,25 @@ with gooddata_api_client.ApiClient() as api_client:
         dashboard_filters_override=[
             DashboardFilter(),
         ],
+        dashboard_parameters_override=[
+            DashboardParameterValue(
+                id="year",
+                title="Year",
+                value="2026",
+            ),
+        ],
         dashboard_tabs_filters_overrides={
             "key": [
                 DashboardFilter(),
+            ],
+        },
+        dashboard_tabs_parameters_overrides={
+            "key": [
+                DashboardParameterValue(
+                    id="year",
+                    title="Year",
+                    value="2026",
+                ),
             ],
         },
         file_name="result",

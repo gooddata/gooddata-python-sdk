@@ -25,6 +25,10 @@ from gooddata_sdk import CatalogDeclarativeExportTemplate, CatalogExportTemplate
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
 from gooddata_sdk.catalog.organization.entity_model.identity_provider import CatalogIdentityProvider
+from gooddata_sdk.catalog.organization.entity_model.ip_allowlist_policy import (
+    CatalogIpAllowlistPolicy,
+    CatalogIpAllowlistPolicyTargets,
+)
 from gooddata_sdk.catalog.organization.entity_model.jwk import CatalogJwk, CatalogJwkDocument
 from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
     CatalogLlmProvider,
@@ -705,6 +709,62 @@ class CatalogOrganizationService(CatalogServiceBase):
         """
         response = self._actions_api.list_llm_provider_models_by_id(id)
         return CatalogLlmProviderModelsResult.from_api(response)
+
+    # IP Allowlist Policy APIs
+
+    def get_ip_allowlist_policy(self, policy_id: str) -> CatalogIpAllowlistPolicy:
+        """Get an IP allowlist policy by ID.
+
+        Args:
+            policy_id: IP allowlist policy identifier.
+
+        Returns:
+            CatalogIpAllowlistPolicy: Retrieved policy.
+        """
+        response = self._entities_api.get_entity_ip_allowlist_policies(policy_id, _check_return_type=False)
+        return CatalogIpAllowlistPolicy.from_api(response.data)
+
+    def list_ip_allowlist_policies(self) -> list[CatalogIpAllowlistPolicy]:
+        """Return all IP allowlist policies in the organization."""
+        get_policies = functools.partial(
+            self._entities_api.get_all_entities_ip_allowlist_policies, _check_return_type=False
+        )
+        policies = load_all_entities(get_policies)
+        return [CatalogIpAllowlistPolicy.from_api(policy) for policy in policies.data]
+
+    def create_ip_allowlist_policy(self, policy: CatalogIpAllowlistPolicy) -> CatalogIpAllowlistPolicy:
+        """Create a new IP allowlist policy."""
+        response = self._entities_api.create_entity_ip_allowlist_policies(
+            json_api_ip_allowlist_policy_in_document=policy.to_api(), _check_return_type=False
+        )
+        return CatalogIpAllowlistPolicy.from_api(response.data)
+
+    def update_ip_allowlist_policy(self, policy: CatalogIpAllowlistPolicy) -> CatalogIpAllowlistPolicy:
+        """Replace an existing IP allowlist policy."""
+        response = self._entities_api.update_entity_ip_allowlist_policies(
+            policy.id, policy.to_api(), _check_return_type=False
+        )
+        return CatalogIpAllowlistPolicy.from_api(response.data)
+
+    def delete_ip_allowlist_policy(self, policy_id: str) -> None:
+        """Delete an IP allowlist policy."""
+        self._entities_api.delete_entity_ip_allowlist_policies(policy_id, _check_return_type=False)
+
+    def add_targets_to_ip_allowlist_policy(
+        self,
+        policy_id: str,
+        targets: CatalogIpAllowlistPolicyTargets,
+    ) -> None:
+        """Add users or user groups to an IP allowlist policy."""
+        self._actions_api.add_targets(policy_id, targets.to_api())
+
+    def remove_targets_from_ip_allowlist_policy(
+        self,
+        policy_id: str,
+        targets: CatalogIpAllowlistPolicyTargets,
+    ) -> None:
+        """Remove users or user groups from an IP allowlist policy."""
+        self._actions_api.remove_targets(policy_id, targets.to_api())
 
     # Layout APIs
 

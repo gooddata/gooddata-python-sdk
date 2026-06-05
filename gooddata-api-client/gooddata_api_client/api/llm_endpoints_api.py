@@ -22,10 +22,6 @@ from gooddata_api_client.model_utils import (  # noqa: F401
     none_type,
     validate_and_convert_types
 )
-from gooddata_api_client.model.json_api_llm_endpoint_in_document import JsonApiLlmEndpointInDocument
-from gooddata_api_client.model.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
-from gooddata_api_client.model.json_api_llm_endpoint_out_list import JsonApiLlmEndpointOutList
-from gooddata_api_client.model.json_api_llm_endpoint_patch_document import JsonApiLlmEndpointPatchDocument
 
 
 class LLMEndpointsApi(object):
@@ -39,22 +35,19 @@ class LLMEndpointsApi(object):
         if api_client is None:
             api_client = ApiClient()
         self.api_client = api_client
-        self.create_entity_llm_endpoints_endpoint = _Endpoint(
+        self.create_entity_endpoint = _Endpoint(
             settings={
-                'response_type': (JsonApiLlmEndpointOutDocument,),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/entities/llmEndpoints',
-                'operation_id': 'create_entity_llm_endpoints',
+                'operation_id': 'create_entity',
                 'http_method': 'POST',
                 'servers': None,
             },
             params_map={
                 'all': [
-                    'json_api_llm_endpoint_in_document',
                 ],
-                'required': [
-                    'json_api_llm_endpoint_in_document',
-                ],
+                'required': [],
                 'nullable': [
                 ],
                 'enum': [
@@ -68,35 +61,26 @@ class LLMEndpointsApi(object):
                 'allowed_values': {
                 },
                 'openapi_types': {
-                    'json_api_llm_endpoint_in_document':
-                        (JsonApiLlmEndpointInDocument,),
                 },
                 'attribute_map': {
                 },
                 'location_map': {
-                    'json_api_llm_endpoint_in_document': 'body',
                 },
                 'collection_format_map': {
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json',
-                    'application/vnd.gooddata.api+json'
-                ],
-                'content_type': [
-                    'application/json',
-                    'application/vnd.gooddata.api+json'
-                ]
+                'accept': [],
+                'content_type': [],
             },
             api_client=api_client
         )
-        self.delete_entity_llm_endpoints_endpoint = _Endpoint(
+        self.delete_entity_endpoint = _Endpoint(
             settings={
                 'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/entities/llmEndpoints/{id}',
-                'operation_id': 'delete_entity_llm_endpoints',
+                'operation_id': 'delete_entity',
                 'http_method': 'DELETE',
                 'servers': None,
             },
@@ -112,17 +96,10 @@ class LLMEndpointsApi(object):
                 'enum': [
                 ],
                 'validation': [
-                    'id',
                 ]
             },
             root_map={
                 'validations': {
-                    ('id',): {
-
-                        'regex': {
-                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
-                        },
-                    },
                 },
                 'allowed_values': {
                 },
@@ -145,100 +122,58 @@ class LLMEndpointsApi(object):
             },
             api_client=api_client
         )
-        self.get_all_entities_llm_endpoints_endpoint = _Endpoint(
+        self.get_all_entities_endpoint = _Endpoint(
             settings={
-                'response_type': (JsonApiLlmEndpointOutList,),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/entities/llmEndpoints',
-                'operation_id': 'get_all_entities_llm_endpoints',
+                'operation_id': 'get_all_entities',
                 'http_method': 'GET',
                 'servers': None,
             },
             params_map={
                 'all': [
-                    'filter',
-                    'page',
-                    'size',
-                    'sort',
-                    'meta_include',
                 ],
                 'required': [],
                 'nullable': [
                 ],
                 'enum': [
-                    'meta_include',
                 ],
                 'validation': [
-                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
-                    ('meta_include',): {
-
-                    },
                 },
                 'allowed_values': {
-                    ('meta_include',): {
-
-                        "PAGE": "page",
-                        "ALL": "all",
-                        "ALL": "ALL"
-                    },
                 },
                 'openapi_types': {
-                    'filter':
-                        (str,),
-                    'page':
-                        (int,),
-                    'size':
-                        (int,),
-                    'sort':
-                        ([str],),
-                    'meta_include':
-                        ([str],),
                 },
                 'attribute_map': {
-                    'filter': 'filter',
-                    'page': 'page',
-                    'size': 'size',
-                    'sort': 'sort',
-                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
-                    'filter': 'query',
-                    'page': 'query',
-                    'size': 'query',
-                    'sort': 'query',
-                    'meta_include': 'query',
                 },
                 'collection_format_map': {
-                    'sort': 'multi',
-                    'meta_include': 'csv',
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json',
-                    'application/vnd.gooddata.api+json'
-                ],
+                'accept': [],
                 'content_type': [],
             },
             api_client=api_client
         )
-        self.get_entity_llm_endpoints_endpoint = _Endpoint(
+        self.get_entity_endpoint = _Endpoint(
             settings={
-                'response_type': (JsonApiLlmEndpointOutDocument,),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/entities/llmEndpoints/{id}',
-                'operation_id': 'get_entity_llm_endpoints',
+                'operation_id': 'get_entity',
                 'http_method': 'GET',
                 'servers': None,
             },
             params_map={
                 'all': [
                     'id',
-                    'filter',
                 ],
                 'required': [
                     'id',
@@ -248,203 +183,140 @@ class LLMEndpointsApi(object):
                 'enum': [
                 ],
                 'validation': [
-                    'id',
                 ]
             },
             root_map={
                 'validations': {
-                    ('id',): {
-
-                        'regex': {
-                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
-                        },
-                    },
                 },
                 'allowed_values': {
                 },
                 'openapi_types': {
                     'id':
                         (str,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json',
-                    'application/vnd.gooddata.api+json'
-                ],
+                'accept': [],
                 'content_type': [],
             },
             api_client=api_client
         )
-        self.patch_entity_llm_endpoints_endpoint = _Endpoint(
+        self.patch_entity_endpoint = _Endpoint(
             settings={
-                'response_type': (JsonApiLlmEndpointOutDocument,),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/entities/llmEndpoints/{id}',
-                'operation_id': 'patch_entity_llm_endpoints',
+                'operation_id': 'patch_entity',
                 'http_method': 'PATCH',
                 'servers': None,
             },
             params_map={
                 'all': [
                     'id',
-                    'json_api_llm_endpoint_patch_document',
-                    'filter',
                 ],
                 'required': [
                     'id',
-                    'json_api_llm_endpoint_patch_document',
                 ],
                 'nullable': [
                 ],
                 'enum': [
                 ],
                 'validation': [
-                    'id',
                 ]
             },
             root_map={
                 'validations': {
-                    ('id',): {
-
-                        'regex': {
-                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
-                        },
-                    },
                 },
                 'allowed_values': {
                 },
                 'openapi_types': {
                     'id':
                         (str,),
-                    'json_api_llm_endpoint_patch_document':
-                        (JsonApiLlmEndpointPatchDocument,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'json_api_llm_endpoint_patch_document': 'body',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json',
-                    'application/vnd.gooddata.api+json'
-                ],
-                'content_type': [
-                    'application/json',
-                    'application/vnd.gooddata.api+json'
-                ]
+                'accept': [],
+                'content_type': [],
             },
             api_client=api_client
         )
-        self.update_entity_llm_endpoints_endpoint = _Endpoint(
+        self.update_entity_endpoint = _Endpoint(
             settings={
-                'response_type': (JsonApiLlmEndpointOutDocument,),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/entities/llmEndpoints/{id}',
-                'operation_id': 'update_entity_llm_endpoints',
+                'operation_id': 'update_entity',
                 'http_method': 'PUT',
                 'servers': None,
             },
             params_map={
                 'all': [
                     'id',
-                    'json_api_llm_endpoint_in_document',
-                    'filter',
                 ],
                 'required': [
                     'id',
-                    'json_api_llm_endpoint_in_document',
                 ],
                 'nullable': [
                 ],
                 'enum': [
                 ],
                 'validation': [
-                    'id',
                 ]
             },
             root_map={
                 'validations': {
-                    ('id',): {
-
-                        'regex': {
-                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
-                        },
-                    },
                 },
                 'allowed_values': {
                 },
                 'openapi_types': {
                     'id':
                         (str,),
-                    'json_api_llm_endpoint_in_document':
-                        (JsonApiLlmEndpointInDocument,),
-                    'filter':
-                        (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'json_api_llm_endpoint_in_document': 'body',
-                    'filter': 'query',
                 },
                 'collection_format_map': {
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json',
-                    'application/vnd.gooddata.api+json'
-                ],
-                'content_type': [
-                    'application/json',
-                    'application/vnd.gooddata.api+json'
-                ]
+                'accept': [],
+                'content_type': [],
             },
             api_client=api_client
         )
 
-    def create_entity_llm_endpoints(
+    def create_entity(
         self,
-        json_api_llm_endpoint_in_document,
         **kwargs
     ):
-        """Post LLM endpoint entities  # noqa: E501
+        """Post LLM endpoint entities (Removed)  # noqa: E501
 
-        Will be soon removed and replaced by LlmProvider.  # noqa: E501
+        Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_entity_llm_endpoints(json_api_llm_endpoint_in_document, async_req=True)
+        >>> thread = api.create_entity(async_req=True)
         >>> result = thread.get()
 
-        Args:
-            json_api_llm_endpoint_in_document (JsonApiLlmEndpointInDocument):
 
         Keyword Args:
             _return_http_data_only (bool): response data without head status
@@ -479,7 +351,7 @@ class LLMEndpointsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            JsonApiLlmEndpointOutDocument
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -508,22 +380,20 @@ class LLMEndpointsApi(object):
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
-        kwargs['json_api_llm_endpoint_in_document'] = \
-            json_api_llm_endpoint_in_document
-        return self.create_entity_llm_endpoints_endpoint.call_with_http_info(**kwargs)
+        return self.create_entity_endpoint.call_with_http_info(**kwargs)
 
-    def delete_entity_llm_endpoints(
+    def delete_entity(
         self,
         id,
         **kwargs
     ):
-        """Delete LLM endpoint entity  # noqa: E501
+        """Delete LLM endpoint entity (Removed)  # noqa: E501
 
-        Will be soon removed and replaced by LlmProvider.  # noqa: E501
+        Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.delete_entity_llm_endpoints(id, async_req=True)
+        >>> thread = api.delete_entity(id, async_req=True)
         >>> result = thread.get()
 
         Args:
@@ -593,28 +463,23 @@ class LLMEndpointsApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
-        return self.delete_entity_llm_endpoints_endpoint.call_with_http_info(**kwargs)
+        return self.delete_entity_endpoint.call_with_http_info(**kwargs)
 
-    def get_all_entities_llm_endpoints(
+    def get_all_entities(
         self,
         **kwargs
     ):
-        """Get all LLM endpoint entities  # noqa: E501
+        """Get all LLM endpoint entities (Removed)  # noqa: E501
 
-        Will be soon removed and replaced by LlmProvider.  # noqa: E501
+        Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.get_all_entities_llm_endpoints(async_req=True)
+        >>> thread = api.get_all_entities(async_req=True)
         >>> result = thread.get()
 
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
-            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
-            size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
-            sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
-            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -647,7 +512,7 @@ class LLMEndpointsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            JsonApiLlmEndpointOutList
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -676,27 +541,26 @@ class LLMEndpointsApi(object):
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
-        return self.get_all_entities_llm_endpoints_endpoint.call_with_http_info(**kwargs)
+        return self.get_all_entities_endpoint.call_with_http_info(**kwargs)
 
-    def get_entity_llm_endpoints(
+    def get_entity(
         self,
         id,
         **kwargs
     ):
-        """Get LLM endpoint entity  # noqa: E501
+        """Get LLM endpoint entity (Removed)  # noqa: E501
 
-        Will be soon removed and replaced by LlmProvider.  # noqa: E501
+        Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.get_entity_llm_endpoints(id, async_req=True)
+        >>> thread = api.get_entity(id, async_req=True)
         >>> result = thread.get()
 
         Args:
             id (str):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -729,7 +593,7 @@ class LLMEndpointsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            JsonApiLlmEndpointOutDocument
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -760,29 +624,26 @@ class LLMEndpointsApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
-        return self.get_entity_llm_endpoints_endpoint.call_with_http_info(**kwargs)
+        return self.get_entity_endpoint.call_with_http_info(**kwargs)
 
-    def patch_entity_llm_endpoints(
+    def patch_entity(
         self,
         id,
-        json_api_llm_endpoint_patch_document,
         **kwargs
     ):
-        """Patch LLM endpoint entity  # noqa: E501
+        """Patch LLM endpoint entity (Removed)  # noqa: E501
 
-        Will be soon removed and replaced by LlmProvider.  # noqa: E501
+        Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.patch_entity_llm_endpoints(id, json_api_llm_endpoint_patch_document, async_req=True)
+        >>> thread = api.patch_entity(id, async_req=True)
         >>> result = thread.get()
 
         Args:
             id (str):
-            json_api_llm_endpoint_patch_document (JsonApiLlmEndpointPatchDocument):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -815,7 +676,7 @@ class LLMEndpointsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            JsonApiLlmEndpointOutDocument
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -846,31 +707,26 @@ class LLMEndpointsApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
-        kwargs['json_api_llm_endpoint_patch_document'] = \
-            json_api_llm_endpoint_patch_document
-        return self.patch_entity_llm_endpoints_endpoint.call_with_http_info(**kwargs)
+        return self.patch_entity_endpoint.call_with_http_info(**kwargs)
 
-    def update_entity_llm_endpoints(
+    def update_entity(
         self,
         id,
-        json_api_llm_endpoint_in_document,
         **kwargs
     ):
-        """PUT LLM endpoint entity  # noqa: E501
+        """PUT LLM endpoint entity (Removed)  # noqa: E501
 
-        Will be soon removed and replaced by LlmProvider.  # noqa: E501
+        Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.update_entity_llm_endpoints(id, json_api_llm_endpoint_in_document, async_req=True)
+        >>> thread = api.update_entity(id, async_req=True)
         >>> result = thread.get()
 
         Args:
             id (str):
-            json_api_llm_endpoint_in_document (JsonApiLlmEndpointInDocument):
 
         Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -903,7 +759,7 @@ class LLMEndpointsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            JsonApiLlmEndpointOutDocument
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -934,7 +790,5 @@ class LLMEndpointsApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
-        kwargs['json_api_llm_endpoint_in_document'] = \
-            json_api_llm_endpoint_in_document
-        return self.update_entity_llm_endpoints_endpoint.call_with_http_info(**kwargs)
+        return self.update_entity_endpoint.call_with_http_info(**kwargs)
 

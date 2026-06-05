@@ -82,12 +82,15 @@ from gooddata_api_client.model.import_csv_request import ImportCsvRequest
 from gooddata_api_client.model.import_csv_response import ImportCsvResponse
 from gooddata_api_client.model.import_geo_collection_request import ImportGeoCollectionRequest
 from gooddata_api_client.model.import_geo_collection_response import ImportGeoCollectionResponse
+from gooddata_api_client.model.ip_allowlist_policy_targets import IpAllowlistPolicyTargets
 from gooddata_api_client.model.key_drivers_request import KeyDriversRequest
 from gooddata_api_client.model.key_drivers_response import KeyDriversResponse
 from gooddata_api_client.model.key_drivers_result import KeyDriversResult
+from gooddata_api_client.model.ldm_object_permissions import LdmObjectPermissions
 from gooddata_api_client.model.list_llm_provider_models_request import ListLlmProviderModelsRequest
 from gooddata_api_client.model.list_llm_provider_models_response import ListLlmProviderModelsResponse
 from gooddata_api_client.model.locale_request import LocaleRequest
+from gooddata_api_client.model.manage_attribute_permissions_request_inner import ManageAttributePermissionsRequestInner
 from gooddata_api_client.model.manage_dashboard_permissions_request_inner import ManageDashboardPermissionsRequestInner
 from gooddata_api_client.model.memory_item_created_by_users import MemoryItemCreatedByUsers
 from gooddata_api_client.model.notifications import Notifications
@@ -103,7 +106,6 @@ from gooddata_api_client.model.raw_export_request import RawExportRequest
 from gooddata_api_client.model.read_csv_file_manifests_request import ReadCsvFileManifestsRequest
 from gooddata_api_client.model.read_csv_file_manifests_response import ReadCsvFileManifestsResponse
 from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
-from gooddata_api_client.model.resolved_llm_endpoints import ResolvedLlmEndpoints
 from gooddata_api_client.model.resolved_llms import ResolvedLlms
 from gooddata_api_client.model.resolved_setting import ResolvedSetting
 from gooddata_api_client.model.result_cache_metadata import ResultCacheMetadata
@@ -132,9 +134,6 @@ from gooddata_api_client.model.trigger_automation_request import TriggerAutomati
 from gooddata_api_client.model.trigger_quality_issues_calculation_response import TriggerQualityIssuesCalculationResponse
 from gooddata_api_client.model.upload_file_response import UploadFileResponse
 from gooddata_api_client.model.upload_geo_collection_file_response import UploadGeoCollectionFileResponse
-from gooddata_api_client.model.validate_llm_endpoint_by_id_request import ValidateLLMEndpointByIdRequest
-from gooddata_api_client.model.validate_llm_endpoint_request import ValidateLLMEndpointRequest
-from gooddata_api_client.model.validate_llm_endpoint_response import ValidateLLMEndpointResponse
 from gooddata_api_client.model.visual_export_request import VisualExportRequest
 from gooddata_api_client.model.visualization_object_execution import VisualizationObjectExecution
 from gooddata_api_client.model.workflow_dashboard_summary_request_dto import WorkflowDashboardSummaryRequestDto
@@ -158,6 +157,60 @@ class ActionsApi(object):
         if api_client is None:
             api_client = ApiClient()
         self.api_client = api_client
+        self.add_targets_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/ipAllowlistPolicies/{id}/addTargets',
+                'operation_id': 'add_targets',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'ip_allowlist_policy_targets',
+                ],
+                'required': [
+                    'id',
+                    'ip_allowlist_policy_targets',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'ip_allowlist_policy_targets':
+                        (IpAllowlistPolicyTargets,),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'ip_allowlist_policy_targets': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
         self.ai_chat_endpoint = _Endpoint(
             settings={
                 'response_type': (ChatResult,),
@@ -692,6 +745,61 @@ class ActionsApi(object):
                     'result_id': 'path',
                     'offset': 'query',
                     'limit': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.attribute_permissions_endpoint = _Endpoint(
+            settings={
+                'response_type': (LdmObjectPermissions,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/permissions',
+                'operation_id': 'attribute_permissions',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'attribute_id',
+                ],
+                'required': [
+                    'workspace_id',
+                    'attribute_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'attribute_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'attribute_id': 'attributeId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'attribute_id': 'path',
                 },
                 'collection_format_map': {
                 }
@@ -2533,6 +2641,61 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.fact_permissions_endpoint = _Endpoint(
+            settings={
+                'response_type': (LdmObjectPermissions,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/facts/{factId}/permissions',
+                'operation_id': 'fact_permissions',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'fact_id',
+                ],
+                'required': [
+                    'workspace_id',
+                    'fact_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'fact_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'fact_id': 'factId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'fact_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.forecast_endpoint = _Endpoint(
             settings={
                 'response_type': (SmartFunctionResponse,),
@@ -4199,6 +4362,61 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.label_permissions_endpoint = _Endpoint(
+            settings={
+                'response_type': (LdmObjectPermissions,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/permissions',
+                'operation_id': 'label_permissions',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'label_id',
+                ],
+                'required': [
+                    'workspace_id',
+                    'label_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'label_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'label_id': 'labelId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'label_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.list_files_endpoint = _Endpoint(
             settings={
                 'response_type': ([GdStorageFile],),
@@ -4475,6 +4693,66 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.manage_attribute_permissions_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/managePermissions',
+                'operation_id': 'manage_attribute_permissions',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'attribute_id',
+                    'manage_attribute_permissions_request_inner',
+                ],
+                'required': [
+                    'workspace_id',
+                    'attribute_id',
+                    'manage_attribute_permissions_request_inner',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'attribute_id':
+                        (str,),
+                    'manage_attribute_permissions_request_inner':
+                        ([ManageAttributePermissionsRequestInner],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'attribute_id': 'attributeId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'attribute_id': 'path',
+                    'manage_attribute_permissions_request_inner': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
         self.manage_dashboard_permissions_endpoint = _Endpoint(
             settings={
                 'response_type': None,
@@ -4577,6 +4855,126 @@ class ActionsApi(object):
                 'location_map': {
                     'data_source_id': 'path',
                     'data_source_permission_assignment': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.manage_fact_permissions_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/facts/{factId}/managePermissions',
+                'operation_id': 'manage_fact_permissions',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'fact_id',
+                    'manage_attribute_permissions_request_inner',
+                ],
+                'required': [
+                    'workspace_id',
+                    'fact_id',
+                    'manage_attribute_permissions_request_inner',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'fact_id':
+                        (str,),
+                    'manage_attribute_permissions_request_inner':
+                        ([ManageAttributePermissionsRequestInner],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'fact_id': 'factId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'fact_id': 'path',
+                    'manage_attribute_permissions_request_inner': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.manage_label_permissions_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/managePermissions',
+                'operation_id': 'manage_label_permissions',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'label_id',
+                    'manage_attribute_permissions_request_inner',
+                ],
+                'required': [
+                    'workspace_id',
+                    'label_id',
+                    'manage_attribute_permissions_request_inner',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'label_id':
+                        (str,),
+                    'manage_attribute_permissions_request_inner':
+                        ([ManageAttributePermissionsRequestInner],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'label_id': 'labelId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'label_id': 'path',
+                    'manage_attribute_permissions_request_inner': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -5417,6 +5815,60 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.remove_targets_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/ipAllowlistPolicies/{id}/removeTargets',
+                'operation_id': 'remove_targets',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'ip_allowlist_policy_targets',
+                ],
+                'required': [
+                    'id',
+                    'ip_allowlist_policy_targets',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'ip_allowlist_policy_targets':
+                        (IpAllowlistPolicyTargets,),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'ip_allowlist_policy_targets': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
         self.resolve_all_entitlements_endpoint = _Endpoint(
             settings={
                 'response_type': ([ApiEntitlement],),
@@ -5508,7 +5960,7 @@ class ActionsApi(object):
         )
         self.resolve_llm_endpoints_endpoint = _Endpoint(
             settings={
-                'response_type': (ResolvedLlmEndpoints,),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints',
                 'operation_id': 'resolve_llm_endpoints',
@@ -5555,9 +6007,7 @@ class ActionsApi(object):
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
+                'accept': [],
                 'content_type': [],
             },
             api_client=api_client
@@ -7327,7 +7777,7 @@ class ActionsApi(object):
         )
         self.validate_llm_endpoint_endpoint = _Endpoint(
             settings={
-                'response_type': (ValidateLLMEndpointResponse,),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/ai/llmEndpoint/test',
                 'operation_id': 'validate_llm_endpoint',
@@ -7336,11 +7786,8 @@ class ActionsApi(object):
             },
             params_map={
                 'all': [
-                    'validate_llm_endpoint_request',
                 ],
-                'required': [
-                    'validate_llm_endpoint_request',
-                ],
+                'required': [],
                 'nullable': [
                 ],
                 'enum': [
@@ -7354,30 +7801,23 @@ class ActionsApi(object):
                 'allowed_values': {
                 },
                 'openapi_types': {
-                    'validate_llm_endpoint_request':
-                        (ValidateLLMEndpointRequest,),
                 },
                 'attribute_map': {
                 },
                 'location_map': {
-                    'validate_llm_endpoint_request': 'body',
                 },
                 'collection_format_map': {
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
-                'content_type': [
-                    'application/json'
-                ]
+                'accept': [],
+                'content_type': [],
             },
             api_client=api_client
         )
         self.validate_llm_endpoint_by_id_endpoint = _Endpoint(
             settings={
-                'response_type': (ValidateLLMEndpointResponse,),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test',
                 'operation_id': 'validate_llm_endpoint_by_id',
@@ -7387,7 +7827,6 @@ class ActionsApi(object):
             params_map={
                 'all': [
                     'llm_endpoint_id',
-                    'validate_llm_endpoint_by_id_request',
                 ],
                 'required': [
                     'llm_endpoint_id',
@@ -7407,26 +7846,19 @@ class ActionsApi(object):
                 'openapi_types': {
                     'llm_endpoint_id':
                         (str,),
-                    'validate_llm_endpoint_by_id_request':
-                        (ValidateLLMEndpointByIdRequest,),
                 },
                 'attribute_map': {
                     'llm_endpoint_id': 'llmEndpointId',
                 },
                 'location_map': {
                     'llm_endpoint_id': 'path',
-                    'validate_llm_endpoint_by_id_request': 'body',
                 },
                 'collection_format_map': {
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
-                'content_type': [
-                    'application/json'
-                ]
+                'accept': [],
+                'content_type': [],
             },
             api_client=api_client
         )
@@ -7545,6 +7977,92 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+
+    def add_targets(
+        self,
+        id,
+        ip_allowlist_policy_targets,
+        **kwargs
+    ):
+        """Add targets to IP allowlist policy  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.add_targets(id, ip_allowlist_policy_targets, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+            ip_allowlist_policy_targets (IpAllowlistPolicyTargets):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['id'] = \
+            id
+        kwargs['ip_allowlist_policy_targets'] = \
+            ip_allowlist_policy_targets
+        return self.add_targets_endpoint.call_with_http_info(**kwargs)
 
     def ai_chat(
         self,
@@ -8318,6 +8836,92 @@ class ActionsApi(object):
         kwargs['result_id'] = \
             result_id
         return self.anomaly_detection_result_endpoint.call_with_http_info(**kwargs)
+
+    def attribute_permissions(
+        self,
+        workspace_id,
+        attribute_id,
+        **kwargs
+    ):
+        """Get Attribute Permissions  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.attribute_permissions(workspace_id, attribute_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            attribute_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            LdmObjectPermissions
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['attribute_id'] = \
+            attribute_id
+        return self.attribute_permissions_endpoint.call_with_http_info(**kwargs)
 
     def available_assignees(
         self,
@@ -10920,6 +11524,92 @@ class ActionsApi(object):
             afm_execution
         return self.explain_afm_endpoint.call_with_http_info(**kwargs)
 
+    def fact_permissions(
+        self,
+        workspace_id,
+        fact_id,
+        **kwargs
+    ):
+        """Get Fact Permissions  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.fact_permissions(workspace_id, fact_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            fact_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            LdmObjectPermissions
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['fact_id'] = \
+            fact_id
+        return self.fact_permissions_endpoint.call_with_http_info(**kwargs)
+
     def forecast(
         self,
         workspace_id,
@@ -13336,6 +14026,92 @@ class ActionsApi(object):
             result_id
         return self.key_driver_analysis_result_endpoint.call_with_http_info(**kwargs)
 
+    def label_permissions(
+        self,
+        workspace_id,
+        label_id,
+        **kwargs
+    ):
+        """Get Label Permissions  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.label_permissions(workspace_id, label_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            label_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            LdmObjectPermissions
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['label_id'] = \
+            label_id
+        return self.label_permissions_endpoint.call_with_http_info(**kwargs)
+
     def list_files(
         self,
         data_source_id,
@@ -13755,6 +14531,96 @@ class ActionsApi(object):
             workspace_id
         return self.list_workspace_users_endpoint.call_with_http_info(**kwargs)
 
+    def manage_attribute_permissions(
+        self,
+        workspace_id,
+        attribute_id,
+        manage_attribute_permissions_request_inner,
+        **kwargs
+    ):
+        """Manage Permissions for an Attribute  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.manage_attribute_permissions(workspace_id, attribute_id, manage_attribute_permissions_request_inner, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            attribute_id (str):
+            manage_attribute_permissions_request_inner ([ManageAttributePermissionsRequestInner]):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['attribute_id'] = \
+            attribute_id
+        kwargs['manage_attribute_permissions_request_inner'] = \
+            manage_attribute_permissions_request_inner
+        return self.manage_attribute_permissions_endpoint.call_with_http_info(**kwargs)
+
     def manage_dashboard_permissions(
         self,
         workspace_id,
@@ -13931,6 +14797,186 @@ class ActionsApi(object):
         kwargs['data_source_permission_assignment'] = \
             data_source_permission_assignment
         return self.manage_data_source_permissions_endpoint.call_with_http_info(**kwargs)
+
+    def manage_fact_permissions(
+        self,
+        workspace_id,
+        fact_id,
+        manage_attribute_permissions_request_inner,
+        **kwargs
+    ):
+        """Manage Permissions for a Fact  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.manage_fact_permissions(workspace_id, fact_id, manage_attribute_permissions_request_inner, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            fact_id (str):
+            manage_attribute_permissions_request_inner ([ManageAttributePermissionsRequestInner]):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['fact_id'] = \
+            fact_id
+        kwargs['manage_attribute_permissions_request_inner'] = \
+            manage_attribute_permissions_request_inner
+        return self.manage_fact_permissions_endpoint.call_with_http_info(**kwargs)
+
+    def manage_label_permissions(
+        self,
+        workspace_id,
+        label_id,
+        manage_attribute_permissions_request_inner,
+        **kwargs
+    ):
+        """Manage Permissions for a Label  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.manage_label_permissions(workspace_id, label_id, manage_attribute_permissions_request_inner, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            label_id (str):
+            manage_attribute_permissions_request_inner ([ManageAttributePermissionsRequestInner]):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['label_id'] = \
+            label_id
+        kwargs['manage_attribute_permissions_request_inner'] = \
+            manage_attribute_permissions_request_inner
+        return self.manage_label_permissions_endpoint.call_with_http_info(**kwargs)
 
     def manage_organization_permissions(
         self,
@@ -15272,6 +16318,92 @@ class ActionsApi(object):
             workspace_id
         return self.register_workspace_upload_notification_endpoint.call_with_http_info(**kwargs)
 
+    def remove_targets(
+        self,
+        id,
+        ip_allowlist_policy_targets,
+        **kwargs
+    ):
+        """Remove targets from IP allowlist policy  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.remove_targets(id, ip_allowlist_policy_targets, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+            ip_allowlist_policy_targets (IpAllowlistPolicyTargets):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['id'] = \
+            id
+        kwargs['ip_allowlist_policy_targets'] = \
+            ip_allowlist_policy_targets
+        return self.remove_targets_endpoint.call_with_http_info(**kwargs)
+
     def resolve_all_entitlements(
         self,
         **kwargs
@@ -15434,9 +16566,9 @@ class ActionsApi(object):
         workspace_id,
         **kwargs
     ):
-        """Get Active LLM Endpoints for this workspace  # noqa: E501
+        """Get Active LLM Endpoints for this workspace (Removed)  # noqa: E501
 
-        Will be soon removed and replaced by LlmProvider-based resolution.  # noqa: E501
+        Permanently removed. Use GET /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmProviders instead. Always returns 410 Gone.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -15479,7 +16611,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ResolvedLlmEndpoints
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -15519,7 +16651,7 @@ class ActionsApi(object):
     ):
         """Get Active LLM configuration for this workspace  # noqa: E501
 
-        Resolves the active LLM configuration for the given workspace. When the ENABLE_LLM_ENDPOINT_REPLACEMENT feature flag is enabled, returns LLM Providers with their associated models. Otherwise, falls back to the legacy LLM Endpoints.  # noqa: E501
+        Resolves the active LLM provider configuration for the given workspace.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -18226,20 +19358,17 @@ class ActionsApi(object):
 
     def validate_llm_endpoint(
         self,
-        validate_llm_endpoint_request,
         **kwargs
     ):
-        """Validate LLM Endpoint  # noqa: E501
+        """Validate LLM Endpoint (Removed)  # noqa: E501
 
-        Will be soon removed and replaced by testLlmProvider.  # noqa: E501
+        Permanently removed. Use POST /api/v1/actions/ai/llmProvider/test instead. Always returns 410 Gone.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.validate_llm_endpoint(validate_llm_endpoint_request, async_req=True)
+        >>> thread = api.validate_llm_endpoint(async_req=True)
         >>> result = thread.get()
 
-        Args:
-            validate_llm_endpoint_request (ValidateLLMEndpointRequest):
 
         Keyword Args:
             _return_http_data_only (bool): response data without head status
@@ -18274,7 +19403,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ValidateLLMEndpointResponse
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -18303,8 +19432,6 @@ class ActionsApi(object):
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
-        kwargs['validate_llm_endpoint_request'] = \
-            validate_llm_endpoint_request
         return self.validate_llm_endpoint_endpoint.call_with_http_info(**kwargs)
 
     def validate_llm_endpoint_by_id(
@@ -18312,9 +19439,9 @@ class ActionsApi(object):
         llm_endpoint_id,
         **kwargs
     ):
-        """Validate LLM Endpoint By Id  # noqa: E501
+        """Validate LLM Endpoint By Id (Removed)  # noqa: E501
 
-        Will be soon removed and replaced by testLlmProviderById.  # noqa: E501
+        Permanently removed. Use POST /api/v1/actions/ai/llmProvider/{llmProviderId}/test instead. Always returns 410 Gone.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -18325,7 +19452,6 @@ class ActionsApi(object):
             llm_endpoint_id (str):
 
         Keyword Args:
-            validate_llm_endpoint_by_id_request (ValidateLLMEndpointByIdRequest): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -18358,7 +19484,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ValidateLLMEndpointResponse
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """

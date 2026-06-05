@@ -5,7 +5,7 @@ A declarative form of an IP allowlist policy.
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**allowed_sources** | **[str]** | Allowed source IP addresses or CIDR ranges. | 
+**allowed_sources** | **[str]** | Allowed source IPv4 addresses or CIDR ranges. Only IPv4 is supported; IPv6 are rejected. The /0 prefix is not allowed. | 
 **id** | **str** | Identifier of an IP allowlist policy. | 
 **user_groups** | [**[DeclarativeUserGroupIdentifier]**](DeclarativeUserGroupIdentifier.md) | Target user groups this policy applies to. | [optional] 
 **users** | [**[DeclarativeUserIdentifier]**](DeclarativeUserIdentifier.md) | Target users this policy applies to. | [optional] 

@@ -124,7 +124,7 @@ class DeclarativeIpAllowlistPolicy(ModelNormal):
         """DeclarativeIpAllowlistPolicy - a model defined in OpenAPI
 
         Args:
-            allowed_sources ([str]): Allowed source IP addresses or CIDR ranges.
+            allowed_sources ([str]): Allowed source IPv4 addresses or CIDR ranges. Only IPv4 is supported; IPv6 are rejected. The /0 prefix is not allowed.
             id (str): Identifier of an IP allowlist policy.
 
         Keyword Args:
@@ -217,7 +217,7 @@ class DeclarativeIpAllowlistPolicy(ModelNormal):
         """DeclarativeIpAllowlistPolicy - a model defined in OpenAPI
 
         Args:
-            allowed_sources ([str]): Allowed source IP addresses or CIDR ranges.
+            allowed_sources ([str]): Allowed source IPv4 addresses or CIDR ranges. Only IPv4 is supported; IPv6 are rejected. The /0 prefix is not allowed.
             id (str): Identifier of an IP allowlist policy.
 
         Keyword Args:

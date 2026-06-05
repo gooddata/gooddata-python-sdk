@@ -89,6 +89,7 @@ class ApiEntitlement(ModelNormal):
             'AIQUERYLIMIT': "AiQueryLimit",
             'AIKNOWLEDGESTORAGELIMIT': "AiKnowledgeStorageLimit",
             'AIAGENTLIMIT': "AiAgentLimit",
+            'AIWORKSPACELIMIT': "AiWorkspaceLimit",
         },
     }
 

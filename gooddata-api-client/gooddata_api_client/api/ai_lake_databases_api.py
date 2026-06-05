@@ -24,10 +24,10 @@ from gooddata_api_client.model_utils import (  # noqa: F401
 )
 from gooddata_api_client.model.add_database_data_source_request import AddDatabaseDataSourceRequest
 from gooddata_api_client.model.add_database_data_source_response import AddDatabaseDataSourceResponse
-from gooddata_api_client.model.database_instance import DatabaseInstance
-from gooddata_api_client.model.list_database_data_sources_response import ListDatabaseDataSourcesResponse
-from gooddata_api_client.model.list_database_instances_response import ListDatabaseInstancesResponse
-from gooddata_api_client.model.list_object_storages_response import ListObjectStoragesResponse
+from gooddata_api_client.model.json_api_document_database_instance import JsonApiDocumentDatabaseInstance
+from gooddata_api_client.model.json_api_list_document_data_source_info import JsonApiListDocumentDataSourceInfo
+from gooddata_api_client.model.json_api_list_document_database_instance import JsonApiListDocumentDatabaseInstance
+from gooddata_api_client.model.json_api_list_document_object_storage_info import JsonApiListDocumentObjectStorageInfo
 from gooddata_api_client.model.provision_database_instance_request import ProvisionDatabaseInstanceRequest
 from gooddata_api_client.model.remove_database_data_source_response import RemoveDatabaseDataSourceResponse
 from gooddata_api_client.model.update_database_data_source_request import UpdateDatabaseDataSourceRequest
@@ -157,7 +157,7 @@ class AILakeDatabasesApi(object):
         )
         self.get_ai_lake_database_instance_endpoint = _Endpoint(
             settings={
-                'response_type': (DatabaseInstance,),
+                'response_type': (JsonApiDocumentDatabaseInstance,),
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}',
                 'operation_id': 'get_ai_lake_database_instance',
@@ -206,7 +206,7 @@ class AILakeDatabasesApi(object):
         )
         self.list_ai_lake_database_data_sources_endpoint = _Endpoint(
             settings={
-                'response_type': (ListDatabaseDataSourcesResponse,),
+                'response_type': (JsonApiListDocumentDataSourceInfo,),
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/dataSources',
                 'operation_id': 'list_ai_lake_database_data_sources',
@@ -216,6 +216,9 @@ class AILakeDatabasesApi(object):
             params_map={
                 'all': [
                     'instance_id',
+                    'page',
+                    'size',
+                    'meta_include',
                 ],
                 'required': [
                     'instance_id',
@@ -225,24 +228,49 @@ class AILakeDatabasesApi(object):
                 'enum': [
                 ],
                 'validation': [
+                    'page',
+                    'size',
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('page',): {
+
+                    },
+                    ('size',): {
+
+                    },
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                 },
                 'openapi_types': {
                     'instance_id':
                         (str,),
+                    'page':
+                        (str,),
+                    'size':
+                        (str,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'instance_id': 'instanceId',
+                    'page': 'page',
+                    'size': 'size',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'instance_id': 'path',
+                    'page': 'query',
+                    'size': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'meta_include': 'multi',
                 }
             },
             headers_map={
@@ -255,7 +283,7 @@ class AILakeDatabasesApi(object):
         )
         self.list_ai_lake_database_instances_endpoint = _Endpoint(
             settings={
-                'response_type': (ListDatabaseInstancesResponse,),
+                'response_type': (JsonApiListDocumentDatabaseInstance,),
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances',
                 'operation_id': 'list_ai_lake_database_instances',
@@ -264,8 +292,8 @@ class AILakeDatabasesApi(object):
             },
             params_map={
                 'all': [
+                    'page',
                     'size',
-                    'offset',
                     'meta_include',
                 ],
                 'required': [],
@@ -274,11 +302,19 @@ class AILakeDatabasesApi(object):
                 'enum': [
                 ],
                 'validation': [
+                    'page',
+                    'size',
                     'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('page',): {
+
+                    },
+                    ('size',): {
+
+                    },
                     ('meta_include',): {
 
                     },
@@ -286,21 +322,21 @@ class AILakeDatabasesApi(object):
                 'allowed_values': {
                 },
                 'openapi_types': {
+                    'page':
+                        (str,),
                     'size':
-                        (int,),
-                    'offset':
-                        (int,),
+                        (str,),
                     'meta_include':
                         ([str],),
                 },
                 'attribute_map': {
+                    'page': 'page',
                     'size': 'size',
-                    'offset': 'offset',
                     'meta_include': 'metaInclude',
                 },
                 'location_map': {
+                    'page': 'query',
                     'size': 'query',
-                    'offset': 'query',
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
@@ -317,15 +353,18 @@ class AILakeDatabasesApi(object):
         )
         self.list_ai_lake_object_storages_endpoint = _Endpoint(
             settings={
-                'response_type': (ListObjectStoragesResponse,),
+                'response_type': (JsonApiListDocumentObjectStorageInfo,),
                 'auth': [],
-                'endpoint_path': '/api/v1/ailake/object-storages',
+                'endpoint_path': '/api/v1/ailake/objectStorages',
                 'operation_id': 'list_ai_lake_object_storages',
                 'http_method': 'GET',
                 'servers': None,
             },
             params_map={
                 'all': [
+                    'page',
+                    'size',
+                    'meta_include',
                 ],
                 'required': [],
                 'nullable': [
@@ -333,20 +372,45 @@ class AILakeDatabasesApi(object):
                 'enum': [
                 ],
                 'validation': [
+                    'page',
+                    'size',
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('page',): {
+
+                    },
+                    ('size',): {
+
+                    },
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                 },
                 'openapi_types': {
+                    'page':
+                        (str,),
+                    'size':
+                        (str,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
+                    'page': 'page',
+                    'size': 'size',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
+                    'page': 'query',
+                    'size': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'meta_include': 'multi',
                 }
             },
             headers_map={
@@ -745,7 +809,7 @@ class AILakeDatabasesApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            DatabaseInstance
+            JsonApiDocumentDatabaseInstance
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -785,7 +849,7 @@ class AILakeDatabasesApi(object):
     ):
         """(BETA) List data sources of an AILake Database instance  # noqa: E501
 
-        (BETA) Returns all data source associations for the specified AI Lake database instance.  # noqa: E501
+        (BETA) Returns data source associations for the specified AI Lake database instance.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -796,6 +860,9 @@ class AILakeDatabasesApi(object):
             instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
 
         Keyword Args:
+            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
+            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
+            meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -828,7 +895,7 @@ class AILakeDatabasesApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ListDatabaseDataSourcesResponse
+            JsonApiListDocumentDataSourceInfo
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -867,7 +934,7 @@ class AILakeDatabasesApi(object):
     ):
         """(BETA) List AI Lake Database instances  # noqa: E501
 
-        (BETA) Lists database instances in the organization's AI Lake. Supports paging via size and offset query parameters. Use metaInclude=page to get total count.  # noqa: E501
+        (BETA) Lists database instances in the organization's AI Lake.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -876,8 +943,8 @@ class AILakeDatabasesApi(object):
 
 
         Keyword Args:
-            size (int): [optional] if omitted the server will use the default value of 50
-            offset (int): [optional] if omitted the server will use the default value of 0
+            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
+            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
             meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -911,7 +978,7 @@ class AILakeDatabasesApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ListDatabaseInstancesResponse
+            JsonApiListDocumentDatabaseInstance
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -957,6 +1024,9 @@ class AILakeDatabasesApi(object):
 
 
         Keyword Args:
+            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
+            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
+            meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -989,7 +1059,7 @@ class AILakeDatabasesApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ListObjectStoragesResponse
+            JsonApiListDocumentObjectStorageInfo
                 If the method is called asynchronously, returns the request
                 thread.
         """

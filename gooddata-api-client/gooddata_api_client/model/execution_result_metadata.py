@@ -32,7 +32,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.execution_result_data_source_message import ExecutionResultDataSourceMessage
+    from gooddata_api_client.model.execution_result_limit_break import ExecutionResultLimitBreak
     globals()['ExecutionResultDataSourceMessage'] = ExecutionResultDataSourceMessage
+    globals()['ExecutionResultLimitBreak'] = ExecutionResultLimitBreak
 
 
 class ExecutionResultMetadata(ModelNormal):
@@ -89,6 +91,7 @@ class ExecutionResultMetadata(ModelNormal):
         lazy_import()
         return {
             'data_source_messages': ([ExecutionResultDataSourceMessage],),  # noqa: E501
+            'limit_breaks': ([ExecutionResultLimitBreak],),  # noqa: E501
         }
 
     @cached_property
@@ -98,6 +101,7 @@ class ExecutionResultMetadata(ModelNormal):
 
     attribute_map = {
         'data_source_messages': 'dataSourceMessages',  # noqa: E501
+        'limit_breaks': 'limitBreaks',  # noqa: E501
     }
 
     read_only_vars = {
@@ -144,6 +148,7 @@ class ExecutionResultMetadata(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            limit_breaks ([ExecutionResultLimitBreak]): Limits that were broken during result computation, causing the result to be partial. Absent when the result is complete.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -233,6 +238,7 @@ class ExecutionResultMetadata(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            limit_breaks ([ExecutionResultLimitBreak]): Limits that were broken during result computation, causing the result to be partial. Absent when the result is complete.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

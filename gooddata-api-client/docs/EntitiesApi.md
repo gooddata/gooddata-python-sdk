@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**create_entity**](EntitiesApi.md#create_entity) | **POST** /api/v1/entities/llmEndpoints | Post LLM endpoint entities (Removed)
 [**create_entity_agents**](EntitiesApi.md#create_entity_agents) | **POST** /api/v1/entities/agents | Post Agent entities
 [**create_entity_analytical_dashboards**](EntitiesApi.md#create_entity_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | Post Dashboards
 [**create_entity_api_tokens**](EntitiesApi.md#create_entity_api_tokens) | **POST** /api/v1/entities/users/{userId}/apiTokens | Post a new API token for the user
@@ -21,9 +22,9 @@ Method | HTTP request | Description
 [**create_entity_filter_contexts**](EntitiesApi.md#create_entity_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Post Filter Context
 [**create_entity_filter_views**](EntitiesApi.md#create_entity_filter_views) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterViews | Post Filter views
 [**create_entity_identity_providers**](EntitiesApi.md#create_entity_identity_providers) | **POST** /api/v1/entities/identityProviders | Post Identity Providers
+[**create_entity_ip_allowlist_policies**](EntitiesApi.md#create_entity_ip_allowlist_policies) | **POST** /api/v1/entities/ipAllowlistPolicies | Post IpAllowlistPolicy entities
 [**create_entity_jwks**](EntitiesApi.md#create_entity_jwks) | **POST** /api/v1/entities/jwks | Post Jwks
 [**create_entity_knowledge_recommendations**](EntitiesApi.md#create_entity_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | Post Knowledge Recommendations
-[**create_entity_llm_endpoints**](EntitiesApi.md#create_entity_llm_endpoints) | **POST** /api/v1/entities/llmEndpoints | Post LLM endpoint entities
 [**create_entity_llm_providers**](EntitiesApi.md#create_entity_llm_providers) | **POST** /api/v1/entities/llmProviders | Post LLM Provider entities
 [**create_entity_memory_items**](EntitiesApi.md#create_entity_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems | Post Memory Items
 [**create_entity_metrics**](EntitiesApi.md#create_entity_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics | Post Metrics
@@ -40,6 +41,7 @@ Method | HTTP request | Description
 [**create_entity_workspace_data_filters**](EntitiesApi.md#create_entity_workspace_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters | Post Workspace Data Filters
 [**create_entity_workspace_settings**](EntitiesApi.md#create_entity_workspace_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings | Post Settings for Workspaces
 [**create_entity_workspaces**](EntitiesApi.md#create_entity_workspaces) | **POST** /api/v1/entities/workspaces | Post Workspace entities
+[**delete_entity**](EntitiesApi.md#delete_entity) | **DELETE** /api/v1/entities/llmEndpoints/{id} | Delete LLM endpoint entity (Removed)
 [**delete_entity_agents**](EntitiesApi.md#delete_entity_agents) | **DELETE** /api/v1/entities/agents/{id} | Delete Agent entity
 [**delete_entity_analytical_dashboards**](EntitiesApi.md#delete_entity_analytical_dashboards) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Delete a Dashboard
 [**delete_entity_api_tokens**](EntitiesApi.md#delete_entity_api_tokens) | **DELETE** /api/v1/entities/users/{userId}/apiTokens/{id} | Delete an API Token for a user
@@ -57,9 +59,9 @@ Method | HTTP request | Description
 [**delete_entity_filter_contexts**](EntitiesApi.md#delete_entity_filter_contexts) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Delete a Filter Context
 [**delete_entity_filter_views**](EntitiesApi.md#delete_entity_filter_views) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Delete Filter view
 [**delete_entity_identity_providers**](EntitiesApi.md#delete_entity_identity_providers) | **DELETE** /api/v1/entities/identityProviders/{id} | Delete Identity Provider
+[**delete_entity_ip_allowlist_policies**](EntitiesApi.md#delete_entity_ip_allowlist_policies) | **DELETE** /api/v1/entities/ipAllowlistPolicies/{id} | Delete IpAllowlistPolicy entity
 [**delete_entity_jwks**](EntitiesApi.md#delete_entity_jwks) | **DELETE** /api/v1/entities/jwks/{id} | Delete Jwk
 [**delete_entity_knowledge_recommendations**](EntitiesApi.md#delete_entity_knowledge_recommendations) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Delete a Knowledge Recommendation
-[**delete_entity_llm_endpoints**](EntitiesApi.md#delete_entity_llm_endpoints) | **DELETE** /api/v1/entities/llmEndpoints/{id} | Delete LLM endpoint entity
 [**delete_entity_llm_providers**](EntitiesApi.md#delete_entity_llm_providers) | **DELETE** /api/v1/entities/llmProviders/{id} | Delete LLM Provider entity
 [**delete_entity_memory_items**](EntitiesApi.md#delete_entity_memory_items) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Delete a Memory Item
 [**delete_entity_metrics**](EntitiesApi.md#delete_entity_metrics) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Delete a Metric
@@ -77,6 +79,7 @@ Method | HTTP request | Description
 [**delete_entity_workspace_settings**](EntitiesApi.md#delete_entity_workspace_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Delete a Setting for Workspace
 [**delete_entity_workspaces**](EntitiesApi.md#delete_entity_workspaces) | **DELETE** /api/v1/entities/workspaces/{id} | Delete Workspace entity
 [**get_all_automations_workspace_automations**](EntitiesApi.md#get_all_automations_workspace_automations) | **GET** /api/v1/entities/organization/workspaceAutomations | Get all Automations across all Workspaces
+[**get_all_entities**](EntitiesApi.md#get_all_entities) | **GET** /api/v1/entities/llmEndpoints | Get all LLM endpoint entities (Removed)
 [**get_all_entities_agents**](EntitiesApi.md#get_all_entities_agents) | **GET** /api/v1/entities/agents | Get all Agent entities
 [**get_all_entities_aggregated_facts**](EntitiesApi.md#get_all_entities_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts | Get all Aggregated Facts
 [**get_all_entities_analytical_dashboards**](EntitiesApi.md#get_all_entities_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | Get all Dashboards
@@ -100,10 +103,10 @@ Method | HTTP request | Description
 [**get_all_entities_filter_contexts**](EntitiesApi.md#get_all_entities_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Get all Filter Context
 [**get_all_entities_filter_views**](EntitiesApi.md#get_all_entities_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews | Get all Filter views
 [**get_all_entities_identity_providers**](EntitiesApi.md#get_all_entities_identity_providers) | **GET** /api/v1/entities/identityProviders | Get all Identity Providers
+[**get_all_entities_ip_allowlist_policies**](EntitiesApi.md#get_all_entities_ip_allowlist_policies) | **GET** /api/v1/entities/ipAllowlistPolicies | Get all IpAllowlistPolicy entities
 [**get_all_entities_jwks**](EntitiesApi.md#get_all_entities_jwks) | **GET** /api/v1/entities/jwks | Get all Jwks
 [**get_all_entities_knowledge_recommendations**](EntitiesApi.md#get_all_entities_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | Get all Knowledge Recommendations
 [**get_all_entities_labels**](EntitiesApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | Get all Labels
-[**get_all_entities_llm_endpoints**](EntitiesApi.md#get_all_entities_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints | Get all LLM endpoint entities
 [**get_all_entities_llm_providers**](EntitiesApi.md#get_all_entities_llm_providers) | **GET** /api/v1/entities/llmProviders | Get all LLM Provider entities
 [**get_all_entities_memory_items**](EntitiesApi.md#get_all_entities_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems | Get all Memory Items
 [**get_all_entities_metrics**](EntitiesApi.md#get_all_entities_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics | Get all Metrics
@@ -124,6 +127,7 @@ Method | HTTP request | Description
 [**get_all_entities_workspaces**](EntitiesApi.md#get_all_entities_workspaces) | **GET** /api/v1/entities/workspaces | Get Workspace entities
 [**get_all_options**](EntitiesApi.md#get_all_options) | **GET** /api/v1/options | Links for all configuration options
 [**get_data_source_drivers**](EntitiesApi.md#get_data_source_drivers) | **GET** /api/v1/options/availableDrivers | Get all available data source drivers
+[**get_entity**](EntitiesApi.md#get_entity) | **GET** /api/v1/entities/llmEndpoints/{id} | Get LLM endpoint entity (Removed)
 [**get_entity_agents**](EntitiesApi.md#get_entity_agents) | **GET** /api/v1/entities/agents/{id} | Get Agent entity
 [**get_entity_aggregated_facts**](EntitiesApi.md#get_entity_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/{objectId} | Get an Aggregated Fact
 [**get_entity_analytical_dashboards**](EntitiesApi.md#get_entity_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Get a Dashboard
@@ -148,10 +152,10 @@ Method | HTTP request | Description
 [**get_entity_filter_contexts**](EntitiesApi.md#get_entity_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Get a Filter Context
 [**get_entity_filter_views**](EntitiesApi.md#get_entity_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Get Filter view
 [**get_entity_identity_providers**](EntitiesApi.md#get_entity_identity_providers) | **GET** /api/v1/entities/identityProviders/{id} | Get Identity Provider
+[**get_entity_ip_allowlist_policies**](EntitiesApi.md#get_entity_ip_allowlist_policies) | **GET** /api/v1/entities/ipAllowlistPolicies/{id} | Get IpAllowlistPolicy entity
 [**get_entity_jwks**](EntitiesApi.md#get_entity_jwks) | **GET** /api/v1/entities/jwks/{id} | Get Jwk
 [**get_entity_knowledge_recommendations**](EntitiesApi.md#get_entity_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Get a Knowledge Recommendation
 [**get_entity_labels**](EntitiesApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Get a Label
-[**get_entity_llm_endpoints**](EntitiesApi.md#get_entity_llm_endpoints) | **GET** /api/v1/entities/llmEndpoints/{id} | Get LLM endpoint entity
 [**get_entity_llm_providers**](EntitiesApi.md#get_entity_llm_providers) | **GET** /api/v1/entities/llmProviders/{id} | Get LLM Provider entity
 [**get_entity_memory_items**](EntitiesApi.md#get_entity_memory_items) | **GET** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Get a Memory Item
 [**get_entity_metrics**](EntitiesApi.md#get_entity_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Get a Metric
@@ -172,6 +176,7 @@ Method | HTTP request | Description
 [**get_entity_workspace_settings**](EntitiesApi.md#get_entity_workspace_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Get a Setting for Workspace
 [**get_entity_workspaces**](EntitiesApi.md#get_entity_workspaces) | **GET** /api/v1/entities/workspaces/{id} | Get Workspace entity
 [**get_organization**](EntitiesApi.md#get_organization) | **GET** /api/v1/entities/organization | Get current organization info
+[**patch_entity**](EntitiesApi.md#patch_entity) | **PATCH** /api/v1/entities/llmEndpoints/{id} | Patch LLM endpoint entity (Removed)
 [**patch_entity_agents**](EntitiesApi.md#patch_entity_agents) | **PATCH** /api/v1/entities/agents/{id} | Patch Agent entity
 [**patch_entity_analytical_dashboards**](EntitiesApi.md#patch_entity_analytical_dashboards) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Patch a Dashboard
 [**patch_entity_attribute_hierarchies**](EntitiesApi.md#patch_entity_attribute_hierarchies) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Patch an Attribute Hierarchy
@@ -194,7 +199,6 @@ Method | HTTP request | Description
 [**patch_entity_jwks**](EntitiesApi.md#patch_entity_jwks) | **PATCH** /api/v1/entities/jwks/{id} | Patch Jwk
 [**patch_entity_knowledge_recommendations**](EntitiesApi.md#patch_entity_knowledge_recommendations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Patch a Knowledge Recommendation
 [**patch_entity_labels**](EntitiesApi.md#patch_entity_labels) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Patch a Label (beta)
-[**patch_entity_llm_endpoints**](EntitiesApi.md#patch_entity_llm_endpoints) | **PATCH** /api/v1/entities/llmEndpoints/{id} | Patch LLM endpoint entity
 [**patch_entity_llm_providers**](EntitiesApi.md#patch_entity_llm_providers) | **PATCH** /api/v1/entities/llmProviders/{id} | Patch LLM Provider entity
 [**patch_entity_memory_items**](EntitiesApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Patch a Memory Item
 [**patch_entity_metrics**](EntitiesApi.md#patch_entity_metrics) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Patch a Metric
@@ -234,6 +238,7 @@ Method | HTTP request | Description
 [**search_entities_workspace_data_filter_settings**](EntitiesApi.md#search_entities_workspace_data_filter_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/search | The search endpoint (beta)
 [**search_entities_workspace_data_filters**](EntitiesApi.md#search_entities_workspace_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/search | The search endpoint (beta)
 [**search_entities_workspace_settings**](EntitiesApi.md#search_entities_workspace_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/search | The search endpoint (beta)
+[**update_entity**](EntitiesApi.md#update_entity) | **PUT** /api/v1/entities/llmEndpoints/{id} | PUT LLM endpoint entity (Removed)
 [**update_entity_agents**](EntitiesApi.md#update_entity_agents) | **PUT** /api/v1/entities/agents/{id} | Put Agent entity
 [**update_entity_analytical_dashboards**](EntitiesApi.md#update_entity_analytical_dashboards) | **PUT** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Put Dashboards
 [**update_entity_attribute_hierarchies**](EntitiesApi.md#update_entity_attribute_hierarchies) | **PUT** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Put an Attribute Hierarchy
@@ -251,9 +256,9 @@ Method | HTTP request | Description
 [**update_entity_filter_contexts**](EntitiesApi.md#update_entity_filter_contexts) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Put a Filter Context
 [**update_entity_filter_views**](EntitiesApi.md#update_entity_filter_views) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Put Filter views
 [**update_entity_identity_providers**](EntitiesApi.md#update_entity_identity_providers) | **PUT** /api/v1/entities/identityProviders/{id} | Put Identity Provider
+[**update_entity_ip_allowlist_policies**](EntitiesApi.md#update_entity_ip_allowlist_policies) | **PUT** /api/v1/entities/ipAllowlistPolicies/{id} | Put IpAllowlistPolicy entity
 [**update_entity_jwks**](EntitiesApi.md#update_entity_jwks) | **PUT** /api/v1/entities/jwks/{id} | Put Jwk
 [**update_entity_knowledge_recommendations**](EntitiesApi.md#update_entity_knowledge_recommendations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Put a Knowledge Recommendation
-[**update_entity_llm_endpoints**](EntitiesApi.md#update_entity_llm_endpoints) | **PUT** /api/v1/entities/llmEndpoints/{id} | PUT LLM endpoint entity
 [**update_entity_llm_providers**](EntitiesApi.md#update_entity_llm_providers) | **PUT** /api/v1/entities/llmProviders/{id} | PUT LLM Provider entity
 [**update_entity_memory_items**](EntitiesApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Put a Memory Item
 [**update_entity_metrics**](EntitiesApi.md#update_entity_metrics) | **PUT** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Put a Metric
@@ -272,6 +277,67 @@ Method | HTTP request | Description
 [**update_entity_workspace_settings**](EntitiesApi.md#update_entity_workspace_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Put a Setting for a Workspace
 [**update_entity_workspaces**](EntitiesApi.md#update_entity_workspaces) | **PUT** /api/v1/entities/workspaces/{id} | Put Workspace entity
 
+
+# **create_entity**
+> create_entity()
+
+Post LLM endpoint entities (Removed)
+
+Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Post LLM endpoint entities (Removed)
+        api_instance.create_entity()
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**410** | Gone |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_entity_agents**
 > JsonApiAgentOutDocument create_entity_agents(json_api_agent_in_document)
@@ -726,9 +792,25 @@ with gooddata_api_client.ApiClient() as api_client:
                                 DashboardFilter(),
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            dashboard_parameters_override=[
+                                DashboardParameterValue(
+                                    id="year",
+                                    title="Year",
+                                    value="2026",
+                                ),
+                            ],
                             dashboard_tabs_filters_overrides={
                                 "key": [
                                     DashboardFilter(),
+                                ],
+                            },
+                            dashboard_tabs_parameters_overrides={
+                                "key": [
+                                    DashboardParameterValue(
+                                        id="year",
+                                        title="Year",
+                                        value="2026",
+                                    ),
                                 ],
                             },
                             file_name="result",
@@ -2165,6 +2247,113 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **create_entity_ip_allowlist_policies**
+> JsonApiIpAllowlistPolicyOutDocument create_entity_ip_allowlist_policies(json_api_ip_allowlist_policy_in_document)
+
+Post IpAllowlistPolicy entities
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_ip_allowlist_policy_out_document import JsonApiIpAllowlistPolicyOutDocument
+from gooddata_api_client.model.json_api_ip_allowlist_policy_in_document import JsonApiIpAllowlistPolicyInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    json_api_ip_allowlist_policy_in_document = JsonApiIpAllowlistPolicyInDocument(
+        data=JsonApiIpAllowlistPolicyIn(
+            attributes=JsonApiIpAllowlistPolicyInAttributes(
+                allowed_sources=[
+                    "allowed_sources_example",
+                ],
+            ),
+            id="id1",
+            relationships=JsonApiIpAllowlistPolicyInRelationships(
+                user_groups=JsonApiAgentInRelationshipsUserGroups(
+                    data=JsonApiUserGroupToManyLinkage([
+                        JsonApiUserGroupLinkage(
+                            id="id_example",
+                            type="userGroup",
+                        ),
+                    ]),
+                ),
+                users=JsonApiAutomationInRelationshipsRecipients(
+                    data=JsonApiUserToManyLinkage([
+                        JsonApiUserLinkage(
+                            id="id_example",
+                            type="user",
+                        ),
+                    ]),
+                ),
+            ),
+            type="ipAllowlistPolicy",
+        ),
+    ) # JsonApiIpAllowlistPolicyInDocument | 
+    include = [
+        "users,userGroups",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Post IpAllowlistPolicy entities
+        api_response = api_instance.create_entity_ip_allowlist_policies(json_api_ip_allowlist_policy_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_ip_allowlist_policies: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Post IpAllowlistPolicy entities
+        api_response = api_instance.create_entity_ip_allowlist_policies(json_api_ip_allowlist_policy_in_document, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_ip_allowlist_policies: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **json_api_ip_allowlist_policy_in_document** | [**JsonApiIpAllowlistPolicyInDocument**](JsonApiIpAllowlistPolicyInDocument.md)|  |
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiIpAllowlistPolicyOutDocument**](JsonApiIpAllowlistPolicyOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **create_entity_jwks**
 > JsonApiJwkOutDocument create_entity_jwks(json_api_jwk_in_document)
 
@@ -2360,87 +2549,6 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **create_entity_llm_endpoints**
-> JsonApiLlmEndpointOutDocument create_entity_llm_endpoints(json_api_llm_endpoint_in_document)
-
-Post LLM endpoint entities
-
-Will be soon removed and replaced by LlmProvider.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import entities_api
-from gooddata_api_client.model.json_api_llm_endpoint_in_document import JsonApiLlmEndpointInDocument
-from gooddata_api_client.model.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = entities_api.EntitiesApi(api_client)
-    json_api_llm_endpoint_in_document = JsonApiLlmEndpointInDocument(
-        data=JsonApiLlmEndpointIn(
-            attributes=JsonApiLlmEndpointInAttributes(
-                base_url="base_url_example",
-                llm_model="llm_model_example",
-                llm_organization="llm_organization_example",
-                provider="OPENAI",
-                title="title_example",
-                token="token_example",
-            ),
-            id="id1",
-            type="llmEndpoint",
-        ),
-    ) # JsonApiLlmEndpointInDocument | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        # Post LLM endpoint entities
-        api_response = api_instance.create_entity_llm_endpoints(json_api_llm_endpoint_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->create_entity_llm_endpoints: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **json_api_llm_endpoint_in_document** | [**JsonApiLlmEndpointInDocument**](JsonApiLlmEndpointInDocument.md)|  |
-
-### Return type
-
-[**JsonApiLlmEndpointOutDocument**](JsonApiLlmEndpointOutDocument.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json, application/vnd.gooddata.api+json
- - **Accept**: application/json, application/vnd.gooddata.api+json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**201** | Request successfully processed |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **create_entity_llm_providers**
 > JsonApiLlmProviderOutDocument create_entity_llm_providers(json_api_llm_provider_in_document)
 
@@ -2481,7 +2589,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ],
                 name="name_example",
-                provider_config=JsonApiLlmProviderInAttributesProviderConfig(None),
+                provider_config=JsonApiLlmProviderInAttributesProviderConfig(),
             ),
             id="id1",
             type="llmProvider",
@@ -2922,9 +3030,7 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiParameterPostOptionalId(
             attributes=JsonApiParameterInAttributes(
                 are_relations_valid=True,
-                definition=JsonApiParameterInAttributesDefinition(
-                    type="type_example",
-                ),
+                definition=JsonApiParameterInAttributesDefinition(),
                 description="description_example",
                 tags=[
                     "tags_example",
@@ -3385,6 +3491,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 email="email_example",
                 firstname="firstname_example",
                 lastname="lastname_example",
+                system_account=True,
             ),
             id="id1",
             relationships=JsonApiAgentInRelationships(
@@ -3957,6 +4064,71 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_entity**
+> delete_entity(id)
+
+Delete LLM endpoint entity (Removed)
+
+Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "id_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete LLM endpoint entity (Removed)
+        api_instance.delete_entity(id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**410** | Gone |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -5055,6 +5227,69 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **delete_entity_ip_allowlist_policies**
+> delete_entity_ip_allowlist_policies(id)
+
+Delete IpAllowlistPolicy entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete IpAllowlistPolicy entity
+        api_instance.delete_entity_ip_allowlist_policies(id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_ip_allowlist_policies: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **delete_entity_jwks**
 > delete_entity_jwks(id)
 
@@ -5162,71 +5397,6 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **object_id** | **str**|  |
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**204** | Successfully deleted |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **delete_entity_llm_endpoints**
-> delete_entity_llm_endpoints(id)
-
-Delete LLM endpoint entity
-
-Will be soon removed and replaced by LlmProvider.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import entities_api
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = entities_api.EntitiesApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        # Delete LLM endpoint entity
-        api_instance.delete_entity_llm_endpoints(id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->delete_entity_llm_endpoints: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
 
 ### Return type
 
@@ -6361,6 +6531,67 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_all_entities**
+> get_all_entities()
+
+Get all LLM endpoint entities (Removed)
+
+Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Get all LLM endpoint entities (Removed)
+        api_instance.get_all_entities()
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**410** | Gone |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -8400,6 +8631,88 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_all_entities_ip_allowlist_policies**
+> JsonApiIpAllowlistPolicyOutList get_all_entities_ip_allowlist_policies()
+
+Get all IpAllowlistPolicy entities
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_ip_allowlist_policy_out_list import JsonApiIpAllowlistPolicyOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    filter = "allowedSources==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "users,userGroups",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get all IpAllowlistPolicy entities
+        api_response = api_instance.get_all_entities_ip_allowlist_policies(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_ip_allowlist_policies: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiIpAllowlistPolicyOutList**](JsonApiIpAllowlistPolicyOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_all_entities_jwks**
 > JsonApiJwkOutList get_all_entities_jwks()
 
@@ -8653,86 +8966,6 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiLabelOutList**](JsonApiLabelOutList.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/vnd.gooddata.api+json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Request successfully processed |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **get_all_entities_llm_endpoints**
-> JsonApiLlmEndpointOutList get_all_entities_llm_endpoints()
-
-Get all LLM endpoint entities
-
-Will be soon removed and replaced by LlmProvider.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import entities_api
-from gooddata_api_client.model.json_api_llm_endpoint_out_list import JsonApiLlmEndpointOutList
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = entities_api.EntitiesApi(api_client)
-    filter = "title==someString;provider==LlmEndpointProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
-    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
-    sort = [
-        "sort_example",
-    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
-    meta_include = [
-        "metaInclude=page,all",
-    ] # [str] | Include Meta objects. (optional)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Get all LLM endpoint entities
-        api_response = api_instance.get_all_entities_llm_endpoints(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->get_all_entities_llm_endpoints: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
- **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
- **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
- **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
- **meta_include** | **[str]**| Include Meta objects. | [optional]
-
-### Return type
-
-[**JsonApiLlmEndpointOutList**](JsonApiLlmEndpointOutList.md)
 
 ### Authorization
 
@@ -10447,6 +10680,71 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A list of all available data source drivers. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_entity**
+> get_entity(id)
+
+Get LLM endpoint entity (Removed)
+
+Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "id_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get LLM endpoint entity (Removed)
+        api_instance.get_entity(id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**410** | Gone |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -12432,6 +12730,86 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_entity_ip_allowlist_policies**
+> JsonApiIpAllowlistPolicyOutDocument get_entity_ip_allowlist_policies(id)
+
+Get IpAllowlistPolicy entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_ip_allowlist_policy_out_document import JsonApiIpAllowlistPolicyOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "allowedSources==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "users,userGroups",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get IpAllowlistPolicy entity
+        api_response = api_instance.get_entity_ip_allowlist_policies(id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_ip_allowlist_policies: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get IpAllowlistPolicy entity
+        api_response = api_instance.get_entity_ip_allowlist_policies(id, filter=filter, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_ip_allowlist_policies: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiIpAllowlistPolicyOutDocument**](JsonApiIpAllowlistPolicyOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_entity_jwks**
 > JsonApiJwkOutDocument get_entity_jwks(id)
 
@@ -12667,84 +13045,6 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiLabelOutDocument**](JsonApiLabelOutDocument.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/vnd.gooddata.api+json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Request successfully processed |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **get_entity_llm_endpoints**
-> JsonApiLlmEndpointOutDocument get_entity_llm_endpoints(id)
-
-Get LLM endpoint entity
-
-Will be soon removed and replaced by LlmProvider.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import entities_api
-from gooddata_api_client.model.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = entities_api.EntitiesApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "title==someString;provider==LlmEndpointProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-
-    # example passing only required values which don't have defaults set
-    try:
-        # Get LLM endpoint entity
-        api_response = api_instance.get_entity_llm_endpoints(id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->get_entity_llm_endpoints: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Get LLM endpoint entity
-        api_response = api_instance.get_entity_llm_endpoints(id, filter=filter)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->get_entity_llm_endpoints: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
-
-### Return type
-
-[**JsonApiLlmEndpointOutDocument**](JsonApiLlmEndpointOutDocument.md)
 
 ### Authorization
 
@@ -14402,6 +14702,71 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **patch_entity**
+> patch_entity(id)
+
+Patch LLM endpoint entity (Removed)
+
+Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "id_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Patch LLM endpoint entity (Removed)
+        api_instance.patch_entity(id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**410** | Gone |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **patch_entity_agents**
 > JsonApiAgentOutDocument patch_entity_agents(id, json_api_agent_patch_document)
 
@@ -14887,9 +15252,25 @@ with gooddata_api_client.ApiClient() as api_client:
                                 DashboardFilter(),
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            dashboard_parameters_override=[
+                                DashboardParameterValue(
+                                    id="year",
+                                    title="Year",
+                                    value="2026",
+                                ),
+                            ],
                             dashboard_tabs_filters_overrides={
                                 "key": [
                                     DashboardFilter(),
+                                ],
+                            },
+                            dashboard_tabs_parameters_overrides={
+                                "key": [
+                                    DashboardParameterValue(
+                                        id="year",
+                                        title="Year",
+                                        value="2026",
+                                    ),
                                 ],
                             },
                             file_name="result",
@@ -16903,100 +17284,6 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **patch_entity_llm_endpoints**
-> JsonApiLlmEndpointOutDocument patch_entity_llm_endpoints(id, json_api_llm_endpoint_patch_document)
-
-Patch LLM endpoint entity
-
-Will be soon removed and replaced by LlmProvider.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import entities_api
-from gooddata_api_client.model.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
-from gooddata_api_client.model.json_api_llm_endpoint_patch_document import JsonApiLlmEndpointPatchDocument
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = entities_api.EntitiesApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_llm_endpoint_patch_document = JsonApiLlmEndpointPatchDocument(
-        data=JsonApiLlmEndpointPatch(
-            attributes=JsonApiLlmEndpointPatchAttributes(
-                base_url="base_url_example",
-                llm_model="llm_model_example",
-                llm_organization="llm_organization_example",
-                provider="OPENAI",
-                title="title_example",
-                token="token_example",
-            ),
-            id="id1",
-            type="llmEndpoint",
-        ),
-    ) # JsonApiLlmEndpointPatchDocument | 
-    filter = "title==someString;provider==LlmEndpointProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-
-    # example passing only required values which don't have defaults set
-    try:
-        # Patch LLM endpoint entity
-        api_response = api_instance.patch_entity_llm_endpoints(id, json_api_llm_endpoint_patch_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->patch_entity_llm_endpoints: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Patch LLM endpoint entity
-        api_response = api_instance.patch_entity_llm_endpoints(id, json_api_llm_endpoint_patch_document, filter=filter)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->patch_entity_llm_endpoints: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_llm_endpoint_patch_document** | [**JsonApiLlmEndpointPatchDocument**](JsonApiLlmEndpointPatchDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
-
-### Return type
-
-[**JsonApiLlmEndpointOutDocument**](JsonApiLlmEndpointOutDocument.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json, application/vnd.gooddata.api+json
- - **Accept**: application/json, application/vnd.gooddata.api+json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Request successfully processed |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **patch_entity_llm_providers**
 > JsonApiLlmProviderOutDocument patch_entity_llm_providers(id, json_api_llm_provider_patch_document)
 
@@ -17036,7 +17323,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ],
                 name="name_example",
-                provider_config=JsonApiLlmProviderInAttributesProviderConfig(None),
+                provider_config=JsonApiLlmProviderInAttributesProviderConfig(),
             ),
             id="id1",
             type="llmProvider",
@@ -17620,9 +17907,7 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiParameterPatch(
             attributes=JsonApiParameterPatchAttributes(
                 are_relations_valid=True,
-                definition=JsonApiParameterInAttributesDefinition(
-                    type="type_example",
-                ),
+                definition=JsonApiParameterInAttributesDefinition(),
                 description="description_example",
                 tags=[
                     "tags_example",
@@ -18023,6 +18308,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 email="email_example",
                 firstname="firstname_example",
                 lastname="lastname_example",
+                system_account=True,
             ),
             id="id1",
             relationships=JsonApiAgentInRelationships(
@@ -20878,6 +21164,71 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **update_entity**
+> update_entity(id)
+
+PUT LLM endpoint entity (Removed)
+
+Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "id_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # PUT LLM endpoint entity (Removed)
+        api_instance.update_entity(id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**410** | Gone |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **update_entity_agents**
 > JsonApiAgentOutDocument update_entity_agents(id, json_api_agent_in_document)
 
@@ -21261,9 +21612,25 @@ with gooddata_api_client.ApiClient() as api_client:
                                 DashboardFilter(),
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                            dashboard_parameters_override=[
+                                DashboardParameterValue(
+                                    id="year",
+                                    title="Year",
+                                    value="2026",
+                                ),
+                            ],
                             dashboard_tabs_filters_overrides={
                                 "key": [
                                     DashboardFilter(),
+                                ],
+                            },
+                            dashboard_tabs_parameters_overrides={
+                                "key": [
+                                    DashboardParameterValue(
+                                        id="year",
+                                        title="Year",
+                                        value="2026",
+                                    ),
                                 ],
                             },
                             file_name="result",
@@ -22869,6 +23236,117 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **update_entity_ip_allowlist_policies**
+> JsonApiIpAllowlistPolicyOutDocument update_entity_ip_allowlist_policies(id, json_api_ip_allowlist_policy_in_document)
+
+Put IpAllowlistPolicy entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_ip_allowlist_policy_out_document import JsonApiIpAllowlistPolicyOutDocument
+from gooddata_api_client.model.json_api_ip_allowlist_policy_in_document import JsonApiIpAllowlistPolicyInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_ip_allowlist_policy_in_document = JsonApiIpAllowlistPolicyInDocument(
+        data=JsonApiIpAllowlistPolicyIn(
+            attributes=JsonApiIpAllowlistPolicyInAttributes(
+                allowed_sources=[
+                    "allowed_sources_example",
+                ],
+            ),
+            id="id1",
+            relationships=JsonApiIpAllowlistPolicyInRelationships(
+                user_groups=JsonApiAgentInRelationshipsUserGroups(
+                    data=JsonApiUserGroupToManyLinkage([
+                        JsonApiUserGroupLinkage(
+                            id="id_example",
+                            type="userGroup",
+                        ),
+                    ]),
+                ),
+                users=JsonApiAutomationInRelationshipsRecipients(
+                    data=JsonApiUserToManyLinkage([
+                        JsonApiUserLinkage(
+                            id="id_example",
+                            type="user",
+                        ),
+                    ]),
+                ),
+            ),
+            type="ipAllowlistPolicy",
+        ),
+    ) # JsonApiIpAllowlistPolicyInDocument | 
+    filter = "allowedSources==v1,v2,v3" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "users,userGroups",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Put IpAllowlistPolicy entity
+        api_response = api_instance.update_entity_ip_allowlist_policies(id, json_api_ip_allowlist_policy_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_ip_allowlist_policies: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Put IpAllowlistPolicy entity
+        api_response = api_instance.update_entity_ip_allowlist_policies(id, json_api_ip_allowlist_policy_in_document, filter=filter, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_ip_allowlist_policies: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_ip_allowlist_policy_in_document** | [**JsonApiIpAllowlistPolicyInDocument**](JsonApiIpAllowlistPolicyInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiIpAllowlistPolicyOutDocument**](JsonApiIpAllowlistPolicyOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **update_entity_jwks**
 > JsonApiJwkOutDocument update_entity_jwks(id, json_api_jwk_in_document)
 
@@ -23077,100 +23555,6 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **update_entity_llm_endpoints**
-> JsonApiLlmEndpointOutDocument update_entity_llm_endpoints(id, json_api_llm_endpoint_in_document)
-
-PUT LLM endpoint entity
-
-Will be soon removed and replaced by LlmProvider.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import entities_api
-from gooddata_api_client.model.json_api_llm_endpoint_in_document import JsonApiLlmEndpointInDocument
-from gooddata_api_client.model.json_api_llm_endpoint_out_document import JsonApiLlmEndpointOutDocument
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = entities_api.EntitiesApi(api_client)
-    id = "/6bUUGjjNSwg0_bs" # str | 
-    json_api_llm_endpoint_in_document = JsonApiLlmEndpointInDocument(
-        data=JsonApiLlmEndpointIn(
-            attributes=JsonApiLlmEndpointInAttributes(
-                base_url="base_url_example",
-                llm_model="llm_model_example",
-                llm_organization="llm_organization_example",
-                provider="OPENAI",
-                title="title_example",
-                token="token_example",
-            ),
-            id="id1",
-            type="llmEndpoint",
-        ),
-    ) # JsonApiLlmEndpointInDocument | 
-    filter = "title==someString;provider==LlmEndpointProviderValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
-
-    # example passing only required values which don't have defaults set
-    try:
-        # PUT LLM endpoint entity
-        api_response = api_instance.update_entity_llm_endpoints(id, json_api_llm_endpoint_in_document)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->update_entity_llm_endpoints: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # PUT LLM endpoint entity
-        api_response = api_instance.update_entity_llm_endpoints(id, json_api_llm_endpoint_in_document, filter=filter)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling EntitiesApi->update_entity_llm_endpoints: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **id** | **str**|  |
- **json_api_llm_endpoint_in_document** | [**JsonApiLlmEndpointInDocument**](JsonApiLlmEndpointInDocument.md)|  |
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
-
-### Return type
-
-[**JsonApiLlmEndpointOutDocument**](JsonApiLlmEndpointOutDocument.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json, application/vnd.gooddata.api+json
- - **Accept**: application/json, application/vnd.gooddata.api+json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Request successfully processed |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **update_entity_llm_providers**
 > JsonApiLlmProviderOutDocument update_entity_llm_providers(id, json_api_llm_provider_in_document)
 
@@ -23210,7 +23594,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ],
                 name="name_example",
-                provider_config=JsonApiLlmProviderInAttributesProviderConfig(None),
+                provider_config=JsonApiLlmProviderInAttributesProviderConfig(),
             ),
             id="id1",
             type="llmProvider",
@@ -23794,9 +24178,7 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiParameterIn(
             attributes=JsonApiParameterInAttributes(
                 are_relations_valid=True,
-                definition=JsonApiParameterInAttributesDefinition(
-                    type="type_example",
-                ),
+                definition=JsonApiParameterInAttributesDefinition(),
                 description="description_example",
                 tags=[
                     "tags_example",
@@ -24287,6 +24669,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 email="email_example",
                 firstname="firstname_example",
                 lastname="lastname_example",
+                system_account=True,
             ),
             id="id1",
             relationships=JsonApiAgentInRelationships(

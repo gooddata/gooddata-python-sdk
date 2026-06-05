@@ -32,10 +32,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.llm_model import LlmModel
-    from gooddata_api_client.model.resolved_llm_endpoint import ResolvedLlmEndpoint
     from gooddata_api_client.model.resolved_llm_provider import ResolvedLlmProvider
     globals()['LlmModel'] = LlmModel
-    globals()['ResolvedLlmEndpoint'] = ResolvedLlmEndpoint
     globals()['ResolvedLlmProvider'] = ResolvedLlmProvider
 
 
@@ -331,7 +329,6 @@ class ResolvedLlmsData(ModelComposed):
           'allOf': [
           ],
           'oneOf': [
-              ResolvedLlmEndpoint,
               ResolvedLlmProvider,
           ],
         }

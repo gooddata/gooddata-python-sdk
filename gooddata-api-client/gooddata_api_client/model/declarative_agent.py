@@ -63,7 +63,6 @@ class DeclarativeAgent(ModelNormal):
 
     allowed_values = {
         ('custom_skills',): {
-            'None': None,
             'ALERT': "alert",
             'ANOMALY_DETECTION': "anomaly_detection",
             'CLUSTERING': "clustering",
@@ -125,7 +124,7 @@ class DeclarativeAgent(ModelNormal):
             'available_to_all': (bool,),  # noqa: E501
             'created_at': (str, none_type,),  # noqa: E501
             'created_by': (DeclarativeUserIdentifier,),  # noqa: E501
-            'custom_skills': ([str, none_type], none_type,),  # noqa: E501
+            'custom_skills': ([str],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'enabled': (bool,),  # noqa: E501
             'modified_at': (str, none_type,),  # noqa: E501
@@ -206,7 +205,7 @@ class DeclarativeAgent(ModelNormal):
             available_to_all (bool): Whether the agent is available to all users.. [optional]  # noqa: E501
             created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
             created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
-            custom_skills ([str, none_type], none_type): List of custom skills when skillsMode is CUSTOM.. [optional]  # noqa: E501
+            custom_skills ([str]): List of custom skills when skillsMode is CUSTOM.. [optional]  # noqa: E501
             description (str): Description of the agent.. [optional]  # noqa: E501
             enabled (bool): Whether the agent is enabled.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
@@ -308,7 +307,7 @@ class DeclarativeAgent(ModelNormal):
             available_to_all (bool): Whether the agent is available to all users.. [optional]  # noqa: E501
             created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
             created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
-            custom_skills ([str, none_type], none_type): List of custom skills when skillsMode is CUSTOM.. [optional]  # noqa: E501
+            custom_skills ([str]): List of custom skills when skillsMode is CUSTOM.. [optional]  # noqa: E501
             description (str): Description of the agent.. [optional]  # noqa: E501
             enabled (bool): Whether the agent is enabled.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501

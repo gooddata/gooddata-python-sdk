@@ -89,6 +89,7 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
             'MONGODB': "MONGODB",
             'CRATEDB': "CRATEDB",
             'AILAKEHOUSE': "AILAKEHOUSE",
+            'DENODO': "DENODO",
         },
         ('authentication_type',): {
             'None': None,

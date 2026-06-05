@@ -44,9 +44,7 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiParameterPostOptionalId(
             attributes=JsonApiParameterInAttributes(
                 are_relations_valid=True,
-                definition=JsonApiParameterInAttributesDefinition(
-                    type="type_example",
-                ),
+                definition=JsonApiParameterInAttributesDefinition(),
                 description="description_example",
                 tags=[
                     "tags_example",
@@ -395,9 +393,7 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiParameterPatch(
             attributes=JsonApiParameterPatchAttributes(
                 are_relations_valid=True,
-                definition=JsonApiParameterInAttributesDefinition(
-                    type="type_example",
-                ),
+                definition=JsonApiParameterInAttributesDefinition(),
                 description="description_example",
                 tags=[
                     "tags_example",
@@ -595,9 +591,7 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiParameterIn(
             attributes=JsonApiParameterInAttributes(
                 are_relations_valid=True,
-                definition=JsonApiParameterInAttributesDefinition(
-                    type="type_example",
-                ),
+                definition=JsonApiParameterInAttributesDefinition(),
                 description="description_example",
                 tags=[
                     "tags_example",

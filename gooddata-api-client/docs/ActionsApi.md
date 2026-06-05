@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**add_targets**](ActionsApi.md#add_targets) | **POST** /api/v1/actions/ipAllowlistPolicies/{id}/addTargets | Add targets to IP allowlist policy
 [**ai_chat**](ActionsApi.md#ai_chat) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chat | (BETA) Chat with AI
 [**ai_chat_history**](ActionsApi.md#ai_chat_history) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatHistory | (BETA) Get Chat History
 [**ai_chat_stream**](ActionsApi.md#ai_chat_stream) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatStream | (BETA) Chat with AI
@@ -13,6 +14,7 @@ Method | HTTP request | Description
 [**analyze_csv**](ActionsApi.md#analyze_csv) | **POST** /api/v1/actions/fileStorage/staging/analyzeCsv | Analyze CSV
 [**anomaly_detection**](ActionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
 [**anomaly_detection_result**](ActionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
+[**attribute_permissions**](ActionsApi.md#attribute_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/permissions | Get Attribute Permissions
 [**available_assignees**](ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 [**cancel_executions**](ActionsApi.md#cancel_executions) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel | Applies all the given cancel tokens.
 [**cancel_workflow**](ActionsApi.md#cancel_workflow) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/cancel | 
@@ -43,6 +45,7 @@ Method | HTTP request | Description
 [**delete_organization_automations**](ActionsApi.md#delete_organization_automations) | **POST** /api/v1/actions/organization/automations/delete | Delete selected automations across all workspaces
 [**delete_workspace_automations**](ActionsApi.md#delete_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/delete | Delete selected automations in the workspace
 [**explain_afm**](ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
+[**fact_permissions**](ActionsApi.md#fact_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/facts/{factId}/permissions | Get Fact Permissions
 [**forecast**](ActionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
 [**forecast_result**](ActionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
 [**generate_dashboard_summary**](ActionsApi.md#generate_dashboard_summary) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/dashboardSummary | 
@@ -71,13 +74,17 @@ Method | HTTP request | Description
 [**inherited_entity_prefixes**](ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
 [**key_driver_analysis**](ActionsApi.md#key_driver_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers | (EXPERIMENTAL) Compute key driver analysis
 [**key_driver_analysis_result**](ActionsApi.md#key_driver_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId} | (EXPERIMENTAL) Get key driver analysis result
+[**label_permissions**](ActionsApi.md#label_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/permissions | Get Label Permissions
 [**list_files**](ActionsApi.md#list_files) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/listFiles | List datasource files
 [**list_llm_provider_models**](ActionsApi.md#list_llm_provider_models) | **POST** /api/v1/actions/ai/llmProvider/listModels | List LLM Provider Models
 [**list_llm_provider_models_by_id**](ActionsApi.md#list_llm_provider_models_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/listModels | List LLM Provider Models By Id
 [**list_workspace_user_groups**](ActionsApi.md#list_workspace_user_groups) | **GET** /api/v1/actions/workspaces/{workspaceId}/userGroups | 
 [**list_workspace_users**](ActionsApi.md#list_workspace_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/users | 
+[**manage_attribute_permissions**](ActionsApi.md#manage_attribute_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/managePermissions | Manage Permissions for an Attribute
 [**manage_dashboard_permissions**](ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 [**manage_data_source_permissions**](ActionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
+[**manage_fact_permissions**](ActionsApi.md#manage_fact_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/facts/{factId}/managePermissions | Manage Permissions for a Fact
+[**manage_label_permissions**](ActionsApi.md#manage_label_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/managePermissions | Manage Permissions for a Label
 [**manage_organization_permissions**](ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
 [**manage_workspace_permissions**](ActionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
 [**mark_as_read_notification**](ActionsApi.md#mark_as_read_notification) | **POST** /api/v1/actions/notifications/{notificationId}/markAsRead | Mark notification as read.
@@ -94,9 +101,10 @@ Method | HTTP request | Description
 [**read_csv_file_manifests**](ActionsApi.md#read_csv_file_manifests) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/readCsvFileManifests | Read CSV file manifests
 [**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 [**register_workspace_upload_notification**](ActionsApi.md#register_workspace_upload_notification) | **POST** /api/v1/actions/workspaces/{workspaceId}/uploadNotification | Register an upload notification
+[**remove_targets**](ActionsApi.md#remove_targets) | **POST** /api/v1/actions/ipAllowlistPolicies/{id}/removeTargets | Remove targets from IP allowlist policy
 [**resolve_all_entitlements**](ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 [**resolve_all_settings_without_workspace**](ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
-[**resolve_llm_endpoints**](ActionsApi.md#resolve_llm_endpoints) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints | Get Active LLM Endpoints for this workspace
+[**resolve_llm_endpoints**](ActionsApi.md#resolve_llm_endpoints) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints | Get Active LLM Endpoints for this workspace (Removed)
 [**resolve_llm_providers**](ActionsApi.md#resolve_llm_providers) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmProviders | Get Active LLM configuration for this workspace
 [**resolve_requested_entitlements**](ActionsApi.md#resolve_requested_entitlements) | **POST** /api/v1/actions/resolveEntitlements | Values for requested public entitlements.
 [**resolve_settings_without_workspace**](ActionsApi.md#resolve_settings_without_workspace) | **POST** /api/v1/actions/resolveSettings | Values for selected settings without workspace.
@@ -129,11 +137,84 @@ Method | HTTP request | Description
 [**unsubscribe_organization_automations**](ActionsApi.md#unsubscribe_organization_automations) | **POST** /api/v1/actions/organization/automations/unsubscribe | Unsubscribe from selected automations across all workspaces
 [**unsubscribe_selected_workspace_automations**](ActionsApi.md#unsubscribe_selected_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from selected automations in the workspace
 [**unsubscribe_workspace_automations**](ActionsApi.md#unsubscribe_workspace_automations) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from all automations in the workspace
-[**validate_llm_endpoint**](ActionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint
-[**validate_llm_endpoint_by_id**](ActionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id
+[**validate_llm_endpoint**](ActionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint (Removed)
+[**validate_llm_endpoint_by_id**](ActionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id (Removed)
 [**workspace_resolve_all_settings**](ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 [**workspace_resolve_settings**](ActionsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
 
+
+# **add_targets**
+> add_targets(id, ip_allowlist_policy_targets)
+
+Add targets to IP allowlist policy
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.ip_allowlist_policy_targets import IpAllowlistPolicyTargets
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    id = "id_example" # str | 
+    ip_allowlist_policy_targets = IpAllowlistPolicyTargets(
+        targets=[
+            AssigneeIdentifier(
+                id="id_example",
+                type="user",
+            ),
+        ],
+    ) # IpAllowlistPolicyTargets | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Add targets to IP allowlist policy
+        api_instance.add_targets(id, ip_allowlist_policy_targets)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->add_targets: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **ip_allowlist_policy_targets** | [**IpAllowlistPolicyTargets**](IpAllowlistPolicyTargets.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **ai_chat**
 > ChatResult ai_chat(workspace_id, chat_request)
@@ -921,6 +1002,73 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**AnomalyDetectionResult**](AnomalyDetectionResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **attribute_permissions**
+> LdmObjectPermissions attribute_permissions(workspace_id, attribute_id)
+
+Get Attribute Permissions
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.ldm_object_permissions import LdmObjectPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    attribute_id = "attributeId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Attribute Permissions
+        api_response = api_instance.attribute_permissions(workspace_id, attribute_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->attribute_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **attribute_id** | **str**|  |
+
+### Return type
+
+[**LdmObjectPermissions**](LdmObjectPermissions.md)
 
 ### Authorization
 
@@ -2466,9 +2614,25 @@ with gooddata_api_client.ApiClient() as api_client:
         dashboard_filters_override=[
             DashboardFilter(),
         ],
+        dashboard_parameters_override=[
+            DashboardParameterValue(
+                id="year",
+                title="Year",
+                value="2026",
+            ),
+        ],
         dashboard_tabs_filters_overrides={
             "key": [
                 DashboardFilter(),
+            ],
+        },
+        dashboard_tabs_parameters_overrides={
+            "key": [
+                DashboardParameterValue(
+                    id="year",
+                    title="Year",
+                    value="2026",
+                ),
             ],
         },
         file_name="result",
@@ -3616,6 +3780,73 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Requested resource |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **fact_permissions**
+> LdmObjectPermissions fact_permissions(workspace_id, fact_id)
+
+Get Fact Permissions
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.ldm_object_permissions import LdmObjectPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    fact_id = "factId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Fact Permissions
+        api_response = api_instance.fact_permissions(workspace_id, fact_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->fact_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **fact_id** | **str**|  |
+
+### Return type
+
+[**LdmObjectPermissions**](LdmObjectPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -5765,6 +5996,73 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **label_permissions**
+> LdmObjectPermissions label_permissions(workspace_id, label_id)
+
+Get Label Permissions
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.ldm_object_permissions import LdmObjectPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    label_id = "labelId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Label Permissions
+        api_response = api_instance.label_permissions(workspace_id, label_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->label_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **label_id** | **str**|  |
+
+### Return type
+
+[**LdmObjectPermissions**](LdmObjectPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **list_files**
 > [GdStorageFile] list_files(data_source_id)
 
@@ -6125,6 +6423,76 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **manage_attribute_permissions**
+> manage_attribute_permissions(workspace_id, attribute_id, manage_attribute_permissions_request_inner)
+
+Manage Permissions for an Attribute
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.manage_attribute_permissions_request_inner import ManageAttributePermissionsRequestInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    attribute_id = "attributeId_example" # str | 
+    manage_attribute_permissions_request_inner = [
+        ManageAttributePermissionsRequestInner(None),
+    ] # [ManageAttributePermissionsRequestInner] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Manage Permissions for an Attribute
+        api_instance.manage_attribute_permissions(workspace_id, attribute_id, manage_attribute_permissions_request_inner)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->manage_attribute_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **attribute_id** | **str**|  |
+ **manage_attribute_permissions_request_inner** | [**[ManageAttributePermissionsRequestInner]**](ManageAttributePermissionsRequestInner.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **manage_dashboard_permissions**
 > manage_dashboard_permissions(workspace_id, dashboard_id, manage_dashboard_permissions_request_inner)
 
@@ -6250,6 +6618,146 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **data_source_id** | **str**|  |
  **data_source_permission_assignment** | [**[DataSourcePermissionAssignment]**](DataSourcePermissionAssignment.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **manage_fact_permissions**
+> manage_fact_permissions(workspace_id, fact_id, manage_attribute_permissions_request_inner)
+
+Manage Permissions for a Fact
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.manage_attribute_permissions_request_inner import ManageAttributePermissionsRequestInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    fact_id = "factId_example" # str | 
+    manage_attribute_permissions_request_inner = [
+        ManageAttributePermissionsRequestInner(None),
+    ] # [ManageAttributePermissionsRequestInner] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Manage Permissions for a Fact
+        api_instance.manage_fact_permissions(workspace_id, fact_id, manage_attribute_permissions_request_inner)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->manage_fact_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **fact_id** | **str**|  |
+ **manage_attribute_permissions_request_inner** | [**[ManageAttributePermissionsRequestInner]**](ManageAttributePermissionsRequestInner.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **manage_label_permissions**
+> manage_label_permissions(workspace_id, label_id, manage_attribute_permissions_request_inner)
+
+Manage Permissions for a Label
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.manage_attribute_permissions_request_inner import ManageAttributePermissionsRequestInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    label_id = "labelId_example" # str | 
+    manage_attribute_permissions_request_inner = [
+        ManageAttributePermissionsRequestInner(None),
+    ] # [ManageAttributePermissionsRequestInner] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Manage Permissions for a Label
+        api_instance.manage_label_permissions(workspace_id, label_id, manage_attribute_permissions_request_inner)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->manage_label_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **label_id** | **str**|  |
+ **manage_attribute_permissions_request_inner** | [**[ManageAttributePermissionsRequestInner]**](ManageAttributePermissionsRequestInner.md)|  |
 
 ### Return type
 
@@ -7436,6 +7944,79 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **remove_targets**
+> remove_targets(id, ip_allowlist_policy_targets)
+
+Remove targets from IP allowlist policy
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.ip_allowlist_policy_targets import IpAllowlistPolicyTargets
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    id = "id_example" # str | 
+    ip_allowlist_policy_targets = IpAllowlistPolicyTargets(
+        targets=[
+            AssigneeIdentifier(
+                id="id_example",
+                type="user",
+            ),
+        ],
+    ) # IpAllowlistPolicyTargets | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Remove targets from IP allowlist policy
+        api_instance.remove_targets(id, ip_allowlist_policy_targets)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->remove_targets: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **ip_allowlist_policy_targets** | [**IpAllowlistPolicyTargets**](IpAllowlistPolicyTargets.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **resolve_all_entitlements**
 > [ApiEntitlement] resolve_all_entitlements()
 
@@ -7568,11 +8149,11 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **resolve_llm_endpoints**
-> ResolvedLlmEndpoints resolve_llm_endpoints(workspace_id)
+> resolve_llm_endpoints(workspace_id)
 
-Get Active LLM Endpoints for this workspace
+Get Active LLM Endpoints for this workspace (Removed)
 
-Will be soon removed and replaced by LlmProvider-based resolution.
+Permanently removed. Use GET /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmProviders instead. Always returns 410 Gone.
 
 ### Example
 
@@ -7581,7 +8162,6 @@ Will be soon removed and replaced by LlmProvider-based resolution.
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.resolved_llm_endpoints import ResolvedLlmEndpoints
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -7598,9 +8178,8 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Get Active LLM Endpoints for this workspace
-        api_response = api_instance.resolve_llm_endpoints(workspace_id)
-        pprint(api_response)
+        # Get Active LLM Endpoints for this workspace (Removed)
+        api_instance.resolve_llm_endpoints(workspace_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->resolve_llm_endpoints: %s\n" % e)
 ```
@@ -7614,7 +8193,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**ResolvedLlmEndpoints**](ResolvedLlmEndpoints.md)
+void (empty response body)
 
 ### Authorization
 
@@ -7623,14 +8202,14 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
+**410** | Gone |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -7639,7 +8218,7 @@ No authorization required
 
 Get Active LLM configuration for this workspace
 
-Resolves the active LLM configuration for the given workspace. When the ENABLE_LLM_ENDPOINT_REPLACEMENT feature flag is enabled, returns LLM Providers with their associated models. Otherwise, falls back to the legacy LLM Endpoints.
+Resolves the active LLM provider configuration for the given workspace.
 
 ### Example
 
@@ -9420,9 +9999,25 @@ with gooddata_api_client.ApiClient() as api_client:
                             DashboardFilter(),
                         ],
                         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+                        dashboard_parameters_override=[
+                            DashboardParameterValue(
+                                id="year",
+                                title="Year",
+                                value="2026",
+                            ),
+                        ],
                         dashboard_tabs_filters_overrides={
                             "key": [
                                 DashboardFilter(),
+                            ],
+                        },
+                        dashboard_tabs_parameters_overrides={
+                            "key": [
+                                DashboardParameterValue(
+                                    id="year",
+                                    title="Year",
+                                    value="2026",
+                                ),
                             ],
                         },
                         file_name="result",
@@ -10281,11 +10876,11 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **validate_llm_endpoint**
-> ValidateLLMEndpointResponse validate_llm_endpoint(validate_llm_endpoint_request)
+> validate_llm_endpoint()
 
-Validate LLM Endpoint
+Validate LLM Endpoint (Removed)
 
-Will be soon removed and replaced by testLlmProvider.
+Permanently removed. Use POST /api/v1/actions/ai/llmProvider/test instead. Always returns 410 Gone.
 
 ### Example
 
@@ -10294,8 +10889,6 @@ Will be soon removed and replaced by testLlmProvider.
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.validate_llm_endpoint_response import ValidateLLMEndpointResponse
-from gooddata_api_client.model.validate_llm_endpoint_request import ValidateLLMEndpointRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -10308,33 +10901,22 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
-    validate_llm_endpoint_request = ValidateLLMEndpointRequest(
-        base_url="base_url_example",
-        llm_model="llm_model_example",
-        llm_organization="llm_organization_example",
-        provider="provider_example",
-        token="token_example",
-    ) # ValidateLLMEndpointRequest | 
 
-    # example passing only required values which don't have defaults set
+    # example, this endpoint has no required or optional parameters
     try:
-        # Validate LLM Endpoint
-        api_response = api_instance.validate_llm_endpoint(validate_llm_endpoint_request)
-        pprint(api_response)
+        # Validate LLM Endpoint (Removed)
+        api_instance.validate_llm_endpoint()
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->validate_llm_endpoint: %s\n" % e)
 ```
 
 
 ### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **validate_llm_endpoint_request** | [**ValidateLLMEndpointRequest**](ValidateLLMEndpointRequest.md)|  |
+This endpoint does not need any parameter.
 
 ### Return type
 
-[**ValidateLLMEndpointResponse**](ValidateLLMEndpointResponse.md)
+void (empty response body)
 
 ### Authorization
 
@@ -10342,24 +10924,24 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
+**410** | Gone |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **validate_llm_endpoint_by_id**
-> ValidateLLMEndpointResponse validate_llm_endpoint_by_id(llm_endpoint_id)
+> validate_llm_endpoint_by_id(llm_endpoint_id)
 
-Validate LLM Endpoint By Id
+Validate LLM Endpoint By Id (Removed)
 
-Will be soon removed and replaced by testLlmProviderById.
+Permanently removed. Use POST /api/v1/actions/ai/llmProvider/{llmProviderId}/test instead. Always returns 410 Gone.
 
 ### Example
 
@@ -10368,8 +10950,6 @@ Will be soon removed and replaced by testLlmProviderById.
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.validate_llm_endpoint_response import ValidateLLMEndpointResponse
-from gooddata_api_client.model.validate_llm_endpoint_by_id_request import ValidateLLMEndpointByIdRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -10383,28 +10963,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     llm_endpoint_id = "llmEndpointId_example" # str | 
-    validate_llm_endpoint_by_id_request = ValidateLLMEndpointByIdRequest(
-        base_url="base_url_example",
-        llm_model="llm_model_example",
-        llm_organization="llm_organization_example",
-        provider="provider_example",
-        token="token_example",
-    ) # ValidateLLMEndpointByIdRequest |  (optional)
 
     # example passing only required values which don't have defaults set
     try:
-        # Validate LLM Endpoint By Id
-        api_response = api_instance.validate_llm_endpoint_by_id(llm_endpoint_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->validate_llm_endpoint_by_id: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Validate LLM Endpoint By Id
-        api_response = api_instance.validate_llm_endpoint_by_id(llm_endpoint_id, validate_llm_endpoint_by_id_request=validate_llm_endpoint_by_id_request)
-        pprint(api_response)
+        # Validate LLM Endpoint By Id (Removed)
+        api_instance.validate_llm_endpoint_by_id(llm_endpoint_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->validate_llm_endpoint_by_id: %s\n" % e)
 ```
@@ -10415,11 +10978,10 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **llm_endpoint_id** | **str**|  |
- **validate_llm_endpoint_by_id_request** | [**ValidateLLMEndpointByIdRequest**](ValidateLLMEndpointByIdRequest.md)|  | [optional]
 
 ### Return type
 
-[**ValidateLLMEndpointResponse**](ValidateLLMEndpointResponse.md)
+void (empty response body)
 
 ### Authorization
 
@@ -10427,15 +10989,15 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
+**410** | Gone |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

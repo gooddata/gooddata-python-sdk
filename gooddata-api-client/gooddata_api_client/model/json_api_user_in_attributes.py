@@ -98,6 +98,7 @@ class JsonApiUserInAttributes(ModelNormal):
             'email': (str,),  # noqa: E501
             'firstname': (str,),  # noqa: E501
             'lastname': (str,),  # noqa: E501
+            'system_account': (bool,),  # noqa: E501
         }
 
     @cached_property
@@ -110,6 +111,7 @@ class JsonApiUserInAttributes(ModelNormal):
         'email': 'email',  # noqa: E501
         'firstname': 'firstname',  # noqa: E501
         'lastname': 'lastname',  # noqa: E501
+        'system_account': 'systemAccount',  # noqa: E501
     }
 
     read_only_vars = {
@@ -157,6 +159,7 @@ class JsonApiUserInAttributes(ModelNormal):
             email (str): [optional]  # noqa: E501
             firstname (str): [optional]  # noqa: E501
             lastname (str): [optional]  # noqa: E501
+            system_account (bool): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -246,6 +249,7 @@ class JsonApiUserInAttributes(ModelNormal):
             email (str): [optional]  # noqa: E501
             firstname (str): [optional]  # noqa: E501
             lastname (str): [optional]  # noqa: E501
+            system_account (bool): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

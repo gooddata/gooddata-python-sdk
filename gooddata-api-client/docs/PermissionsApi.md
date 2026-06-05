@@ -4,14 +4,20 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**attribute_permissions**](PermissionsApi.md#attribute_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/permissions | Get Attribute Permissions
 [**available_assignees**](PermissionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 [**dashboard_permissions**](PermissionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
+[**fact_permissions**](PermissionsApi.md#fact_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/facts/{factId}/permissions | Get Fact Permissions
 [**get_organization_permissions**](PermissionsApi.md#get_organization_permissions) | **GET** /api/v1/layout/organization/permissions | Get organization permissions
 [**get_user_group_permissions**](PermissionsApi.md#get_user_group_permissions) | **GET** /api/v1/layout/userGroups/{userGroupId}/permissions | Get permissions for the user-group
 [**get_user_permissions**](PermissionsApi.md#get_user_permissions) | **GET** /api/v1/layout/users/{userId}/permissions | Get permissions for the user
 [**get_workspace_permissions**](PermissionsApi.md#get_workspace_permissions) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
+[**label_permissions**](PermissionsApi.md#label_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/permissions | Get Label Permissions
+[**manage_attribute_permissions**](PermissionsApi.md#manage_attribute_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/managePermissions | Manage Permissions for an Attribute
 [**manage_dashboard_permissions**](PermissionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 [**manage_data_source_permissions**](PermissionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
+[**manage_fact_permissions**](PermissionsApi.md#manage_fact_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/facts/{factId}/managePermissions | Manage Permissions for a Fact
+[**manage_label_permissions**](PermissionsApi.md#manage_label_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/managePermissions | Manage Permissions for a Label
 [**manage_organization_permissions**](PermissionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
 [**manage_workspace_permissions**](PermissionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
 [**set_organization_permissions**](PermissionsApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
@@ -19,6 +25,73 @@ Method | HTTP request | Description
 [**set_user_permissions**](PermissionsApi.md#set_user_permissions) | **PUT** /api/v1/layout/users/{userId}/permissions | Set permissions for the user
 [**set_workspace_permissions**](PermissionsApi.md#set_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
 
+
+# **attribute_permissions**
+> LdmObjectPermissions attribute_permissions(workspace_id, attribute_id)
+
+Get Attribute Permissions
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.ldm_object_permissions import LdmObjectPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    attribute_id = "attributeId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Attribute Permissions
+        api_response = api_instance.attribute_permissions(workspace_id, attribute_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->attribute_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **attribute_id** | **str**|  |
+
+### Return type
+
+[**LdmObjectPermissions**](LdmObjectPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **available_assignees**
 > AvailableAssignees available_assignees(workspace_id, dashboard_id)
@@ -135,6 +208,73 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**DashboardPermissions**](DashboardPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **fact_permissions**
+> LdmObjectPermissions fact_permissions(workspace_id, fact_id)
+
+Get Fact Permissions
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.ldm_object_permissions import LdmObjectPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    fact_id = "factId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Fact Permissions
+        api_response = api_instance.fact_permissions(workspace_id, fact_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->fact_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **fact_id** | **str**|  |
+
+### Return type
+
+[**LdmObjectPermissions**](LdmObjectPermissions.md)
 
 ### Authorization
 
@@ -418,6 +558,143 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **label_permissions**
+> LdmObjectPermissions label_permissions(workspace_id, label_id)
+
+Get Label Permissions
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.ldm_object_permissions import LdmObjectPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    label_id = "labelId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get Label Permissions
+        api_response = api_instance.label_permissions(workspace_id, label_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->label_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **label_id** | **str**|  |
+
+### Return type
+
+[**LdmObjectPermissions**](LdmObjectPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **manage_attribute_permissions**
+> manage_attribute_permissions(workspace_id, attribute_id, manage_attribute_permissions_request_inner)
+
+Manage Permissions for an Attribute
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.manage_attribute_permissions_request_inner import ManageAttributePermissionsRequestInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    attribute_id = "attributeId_example" # str | 
+    manage_attribute_permissions_request_inner = [
+        ManageAttributePermissionsRequestInner(None),
+    ] # [ManageAttributePermissionsRequestInner] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Manage Permissions for an Attribute
+        api_instance.manage_attribute_permissions(workspace_id, attribute_id, manage_attribute_permissions_request_inner)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->manage_attribute_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **attribute_id** | **str**|  |
+ **manage_attribute_permissions_request_inner** | [**[ManageAttributePermissionsRequestInner]**](ManageAttributePermissionsRequestInner.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **manage_dashboard_permissions**
 > manage_dashboard_permissions(workspace_id, dashboard_id, manage_dashboard_permissions_request_inner)
 
@@ -543,6 +820,146 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **data_source_id** | **str**|  |
  **data_source_permission_assignment** | [**[DataSourcePermissionAssignment]**](DataSourcePermissionAssignment.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **manage_fact_permissions**
+> manage_fact_permissions(workspace_id, fact_id, manage_attribute_permissions_request_inner)
+
+Manage Permissions for a Fact
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.manage_attribute_permissions_request_inner import ManageAttributePermissionsRequestInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    fact_id = "factId_example" # str | 
+    manage_attribute_permissions_request_inner = [
+        ManageAttributePermissionsRequestInner(None),
+    ] # [ManageAttributePermissionsRequestInner] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Manage Permissions for a Fact
+        api_instance.manage_fact_permissions(workspace_id, fact_id, manage_attribute_permissions_request_inner)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->manage_fact_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **fact_id** | **str**|  |
+ **manage_attribute_permissions_request_inner** | [**[ManageAttributePermissionsRequestInner]**](ManageAttributePermissionsRequestInner.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **manage_label_permissions**
+> manage_label_permissions(workspace_id, label_id, manage_attribute_permissions_request_inner)
+
+Manage Permissions for a Label
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.manage_attribute_permissions_request_inner import ManageAttributePermissionsRequestInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    label_id = "labelId_example" # str | 
+    manage_attribute_permissions_request_inner = [
+        ManageAttributePermissionsRequestInner(None),
+    ] # [ManageAttributePermissionsRequestInner] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Manage Permissions for a Label
+        api_instance.manage_label_permissions(workspace_id, label_id, manage_attribute_permissions_request_inner)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->manage_label_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **label_id** | **str**|  |
+ **manage_attribute_permissions_request_inner** | [**[ManageAttributePermissionsRequestInner]**](ManageAttributePermissionsRequestInner.md)|  |
 
 ### Return type
 

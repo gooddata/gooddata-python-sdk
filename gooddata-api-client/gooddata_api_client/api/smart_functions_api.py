@@ -44,7 +44,6 @@ from gooddata_api_client.model.list_llm_provider_models_request import ListLlmPr
 from gooddata_api_client.model.list_llm_provider_models_response import ListLlmProviderModelsResponse
 from gooddata_api_client.model.memory_item_created_by_users import MemoryItemCreatedByUsers
 from gooddata_api_client.model.quality_issues_calculation_status_response import QualityIssuesCalculationStatusResponse
-from gooddata_api_client.model.resolved_llm_endpoints import ResolvedLlmEndpoints
 from gooddata_api_client.model.resolved_llms import ResolvedLlms
 from gooddata_api_client.model.search_request import SearchRequest
 from gooddata_api_client.model.search_result import SearchResult
@@ -54,9 +53,6 @@ from gooddata_api_client.model.test_llm_provider_definition_request import TestL
 from gooddata_api_client.model.test_llm_provider_response import TestLlmProviderResponse
 from gooddata_api_client.model.trending_objects_result import TrendingObjectsResult
 from gooddata_api_client.model.trigger_quality_issues_calculation_response import TriggerQualityIssuesCalculationResponse
-from gooddata_api_client.model.validate_llm_endpoint_by_id_request import ValidateLLMEndpointByIdRequest
-from gooddata_api_client.model.validate_llm_endpoint_request import ValidateLLMEndpointRequest
-from gooddata_api_client.model.validate_llm_endpoint_response import ValidateLLMEndpointResponse
 
 
 class SmartFunctionsApi(object):
@@ -1273,7 +1269,7 @@ class SmartFunctionsApi(object):
         )
         self.resolve_llm_endpoints_endpoint = _Endpoint(
             settings={
-                'response_type': (ResolvedLlmEndpoints,),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints',
                 'operation_id': 'resolve_llm_endpoints',
@@ -1320,9 +1316,7 @@ class SmartFunctionsApi(object):
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
+                'accept': [],
                 'content_type': [],
             },
             api_client=api_client
@@ -1658,7 +1652,7 @@ class SmartFunctionsApi(object):
         )
         self.validate_llm_endpoint_endpoint = _Endpoint(
             settings={
-                'response_type': (ValidateLLMEndpointResponse,),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/ai/llmEndpoint/test',
                 'operation_id': 'validate_llm_endpoint',
@@ -1667,11 +1661,8 @@ class SmartFunctionsApi(object):
             },
             params_map={
                 'all': [
-                    'validate_llm_endpoint_request',
                 ],
-                'required': [
-                    'validate_llm_endpoint_request',
-                ],
+                'required': [],
                 'nullable': [
                 ],
                 'enum': [
@@ -1685,30 +1676,23 @@ class SmartFunctionsApi(object):
                 'allowed_values': {
                 },
                 'openapi_types': {
-                    'validate_llm_endpoint_request':
-                        (ValidateLLMEndpointRequest,),
                 },
                 'attribute_map': {
                 },
                 'location_map': {
-                    'validate_llm_endpoint_request': 'body',
                 },
                 'collection_format_map': {
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
-                'content_type': [
-                    'application/json'
-                ]
+                'accept': [],
+                'content_type': [],
             },
             api_client=api_client
         )
         self.validate_llm_endpoint_by_id_endpoint = _Endpoint(
             settings={
-                'response_type': (ValidateLLMEndpointResponse,),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test',
                 'operation_id': 'validate_llm_endpoint_by_id',
@@ -1718,7 +1702,6 @@ class SmartFunctionsApi(object):
             params_map={
                 'all': [
                     'llm_endpoint_id',
-                    'validate_llm_endpoint_by_id_request',
                 ],
                 'required': [
                     'llm_endpoint_id',
@@ -1738,26 +1721,19 @@ class SmartFunctionsApi(object):
                 'openapi_types': {
                     'llm_endpoint_id':
                         (str,),
-                    'validate_llm_endpoint_by_id_request':
-                        (ValidateLLMEndpointByIdRequest,),
                 },
                 'attribute_map': {
                     'llm_endpoint_id': 'llmEndpointId',
                 },
                 'location_map': {
                     'llm_endpoint_id': 'path',
-                    'validate_llm_endpoint_by_id_request': 'body',
                 },
                 'collection_format_map': {
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
-                'content_type': [
-                    'application/json'
-                ]
+                'accept': [],
+                'content_type': [],
             },
             api_client=api_client
         )
@@ -3417,9 +3393,9 @@ class SmartFunctionsApi(object):
         workspace_id,
         **kwargs
     ):
-        """Get Active LLM Endpoints for this workspace  # noqa: E501
+        """Get Active LLM Endpoints for this workspace (Removed)  # noqa: E501
 
-        Will be soon removed and replaced by LlmProvider-based resolution.  # noqa: E501
+        Permanently removed. Use GET /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmProviders instead. Always returns 410 Gone.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -3462,7 +3438,7 @@ class SmartFunctionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ResolvedLlmEndpoints
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -3502,7 +3478,7 @@ class SmartFunctionsApi(object):
     ):
         """Get Active LLM configuration for this workspace  # noqa: E501
 
-        Resolves the active LLM configuration for the given workspace. When the ENABLE_LLM_ENDPOINT_REPLACEMENT feature flag is enabled, returns LLM Providers with their associated models. Otherwise, falls back to the legacy LLM Endpoints.  # noqa: E501
+        Resolves the active LLM provider configuration for the given workspace.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -3996,20 +3972,17 @@ class SmartFunctionsApi(object):
 
     def validate_llm_endpoint(
         self,
-        validate_llm_endpoint_request,
         **kwargs
     ):
-        """Validate LLM Endpoint  # noqa: E501
+        """Validate LLM Endpoint (Removed)  # noqa: E501
 
-        Will be soon removed and replaced by testLlmProvider.  # noqa: E501
+        Permanently removed. Use POST /api/v1/actions/ai/llmProvider/test instead. Always returns 410 Gone.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.validate_llm_endpoint(validate_llm_endpoint_request, async_req=True)
+        >>> thread = api.validate_llm_endpoint(async_req=True)
         >>> result = thread.get()
 
-        Args:
-            validate_llm_endpoint_request (ValidateLLMEndpointRequest):
 
         Keyword Args:
             _return_http_data_only (bool): response data without head status
@@ -4044,7 +4017,7 @@ class SmartFunctionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ValidateLLMEndpointResponse
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -4073,8 +4046,6 @@ class SmartFunctionsApi(object):
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
-        kwargs['validate_llm_endpoint_request'] = \
-            validate_llm_endpoint_request
         return self.validate_llm_endpoint_endpoint.call_with_http_info(**kwargs)
 
     def validate_llm_endpoint_by_id(
@@ -4082,9 +4053,9 @@ class SmartFunctionsApi(object):
         llm_endpoint_id,
         **kwargs
     ):
-        """Validate LLM Endpoint By Id  # noqa: E501
+        """Validate LLM Endpoint By Id (Removed)  # noqa: E501
 
-        Will be soon removed and replaced by testLlmProviderById.  # noqa: E501
+        Permanently removed. Use POST /api/v1/actions/ai/llmProvider/{llmProviderId}/test instead. Always returns 410 Gone.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -4095,7 +4066,6 @@ class SmartFunctionsApi(object):
             llm_endpoint_id (str):
 
         Keyword Args:
-            validate_llm_endpoint_by_id_request (ValidateLLMEndpointByIdRequest): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -4128,7 +4098,7 @@ class SmartFunctionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ValidateLLMEndpointResponse
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """

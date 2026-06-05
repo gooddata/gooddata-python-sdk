@@ -32,9 +32,13 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.dashboard_compound_comparison_condition import DashboardCompoundComparisonCondition
+    from gooddata_api_client.model.dashboard_compound_comparison_condition_comparison import DashboardCompoundComparisonConditionComparison
     from gooddata_api_client.model.dashboard_compound_range_condition import DashboardCompoundRangeCondition
+    from gooddata_api_client.model.dashboard_compound_range_condition_range import DashboardCompoundRangeConditionRange
     globals()['DashboardCompoundComparisonCondition'] = DashboardCompoundComparisonCondition
+    globals()['DashboardCompoundComparisonConditionComparison'] = DashboardCompoundComparisonConditionComparison
     globals()['DashboardCompoundRangeCondition'] = DashboardCompoundRangeCondition
+    globals()['DashboardCompoundRangeConditionRange'] = DashboardCompoundRangeConditionRange
 
 
 class DashboardCompoundConditionItem(ModelComposed):
@@ -62,10 +66,6 @@ class DashboardCompoundConditionItem(ModelComposed):
     """
 
     allowed_values = {
-        ('operator',): {
-            'BETWEEN': "BETWEEN",
-            'NOT_BETWEEN': "NOT_BETWEEN",
-        },
     }
 
     validations = {
@@ -94,10 +94,8 @@ class DashboardCompoundConditionItem(ModelComposed):
         """
         lazy_import()
         return {
-            'operator': (str,),  # noqa: E501
-            'value': (float,),  # noqa: E501
-            '_from': (float,),  # noqa: E501
-            'to': (float,),  # noqa: E501
+            'comparison': (DashboardCompoundComparisonConditionComparison,),  # noqa: E501
+            'range': (DashboardCompoundRangeConditionRange,),  # noqa: E501
         }
 
     @cached_property
@@ -106,10 +104,8 @@ class DashboardCompoundConditionItem(ModelComposed):
 
 
     attribute_map = {
-        'operator': 'operator',  # noqa: E501
-        'value': 'value',  # noqa: E501
-        '_from': 'from',  # noqa: E501
-        'to': 'to',  # noqa: E501
+        'comparison': 'comparison',  # noqa: E501
+        'range': 'range',  # noqa: E501
     }
 
     read_only_vars = {
@@ -151,10 +147,8 @@ class DashboardCompoundConditionItem(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            operator (str): [optional]  # noqa: E501
-            value (float): [optional]  # noqa: E501
-            _from (float): [optional]  # noqa: E501
-            to (float): [optional]  # noqa: E501
+            comparison (DashboardCompoundComparisonConditionComparison): [optional]  # noqa: E501
+            range (DashboardCompoundRangeConditionRange): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -258,10 +252,8 @@ class DashboardCompoundConditionItem(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            operator (str): [optional]  # noqa: E501
-            value (float): [optional]  # noqa: E501
-            _from (float): [optional]  # noqa: E501
-            to (float): [optional]  # noqa: E501
+            comparison (DashboardCompoundComparisonConditionComparison): [optional]  # noqa: E501
+            range (DashboardCompoundRangeConditionRange): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
