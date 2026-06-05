@@ -770,7 +770,8 @@
               "ATHENA",
               "MONGODB",
               "CRATEDB",
-              "AILAKEHOUSE"
+              "AILAKEHOUSE",
+              "DENODO"
             ],
             "example": "POSTGRESQL",
             "type": "string"

@@ -584,6 +584,68 @@
         ],
         "type": "object"
       },
+      "AnthropicApiKeyAuth": {
+        "allOf": [
+          {
+            "properties": {
+              "apiKey": {
+                "description": "Anthropic API key.",
+                "maxLength": 255,
+                "nullable": true,
+                "type": "string",
+                "writeOnly": true
+              },
+              "type": {
+                "description": "Authentication type.",
+                "enum": [
+                  "API_KEY"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "AnthropicProviderAuth": {
+        "description": "Authentication configuration.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/AnthropicApiKeyAuth"
+          }
+        ],
+        "type": "object"
+      },
+      "AnthropicProviderConfig": {
+        "description": "Configuration for Anthropic provider.",
+        "properties": {
+          "auth": {
+            "$ref": "#/components/schemas/AnthropicProviderAuth"
+          },
+          "baseUrl": {
+            "default": "https://api.anthropic.com",
+            "description": "Custom base URL for the Anthropic API. Defaults to the official endpoint; override only for enterprise proxies or compatible gateways.",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "type": {
+            "description": "Provider type.",
+            "enum": [
+              "ANTHROPIC"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "auth",
+          "type"
+        ],
+        "type": "object"
+      },
       "ApiEntitlement": {
         "properties": {
           "expiry": {
@@ -623,7 +685,8 @@
               "AiModule",
               "AiQueryLimit",
               "AiKnowledgeStorageLimit",
-              "AiAgentLimit"
+              "AiAgentLimit",
+              "AiWorkspaceLimit"
             ],
             "type": "string"
           },
@@ -1712,8 +1775,8 @@
         "type": "object"
       },
       "DashboardCompoundComparisonCondition": {
-        "allOf": [
-          {
+        "properties": {
+          "comparison": {
             "properties": {
               "operator": {
                 "enum": [
@@ -1726,17 +1789,24 @@
                 ],
                 "type": "string"
               },
+              "treatNullValuesAs": {
+                "format": "double",
+                "type": "number"
+              },
               "value": {
                 "format": "double",
                 "type": "number"
               }
             },
+            "required": [
+              "operator",
+              "value"
+            ],
             "type": "object"
           }
-        ],
+        },
         "required": [
-          "operator",
-          "value"
+          "comparison"
         ],
         "type": "object"
       },
@@ -1752,8 +1822,8 @@
         "type": "object"
       },
       "DashboardCompoundRangeCondition": {
-        "allOf": [
-          {
+        "properties": {
+          "range": {
             "properties": {
               "from": {
                 "format": "double",
@@ -1769,15 +1839,22 @@
               "to": {
                 "format": "double",
                 "type": "number"
+              },
+              "treatNullValuesAs": {
+                "format": "double",
+                "type": "number"
               }
             },
+            "required": [
+              "from",
+              "operator",
+              "to"
+            ],
             "type": "object"
           }
-        ],
+        },
         "required": [
-          "from",
-          "operator",
-          "to"
+          "range"
         ],
         "type": "object"
       },
@@ -1983,11 +2060,17 @@
       },
       "DashboardMeasureValueFilter": {
         "properties": {
-          "measureValueFilter": {
+          "dashboardMeasureValueFilter": {
             "properties": {
               "conditions": {
                 "items": {
                   "$ref": "#/components/schemas/DashboardCompoundConditionItem"
+                },
+                "type": "array"
+              },
+              "dimensionality": {
+                "items": {
+                  "$ref": "#/components/schemas/IdentifierRef"
                 },
                 "type": "array"
               },
@@ -2009,7 +2092,33 @@
           }
         },
         "required": [
-          "measureValueFilter"
+          "dashboardMeasureValueFilter"
+        ],
+        "type": "object"
+      },
+      "DashboardParameterValue": {
+        "description": "Parameter value override applied to the export. The (id, value) pair drives the execution; the title is FE-supplied for info-sheet display.",
+        "properties": {
+          "id": {
+            "description": "Identifier of the workspace parameter (matches the parameter entity id).",
+            "example": "year",
+            "type": "string"
+          },
+          "title": {
+            "description": "Display title of the parameter as the client wants it rendered on the info sheet.",
+            "example": "Year",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value to use for this parameter when executing the export.",
+            "example": "2026",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "value"
         ],
         "type": "object"
       },
@@ -2117,6 +2226,13 @@
             "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
             "type": "string"
           },
+          "dashboardParametersOverride": {
+            "description": "Parameter value overrides applied to the export's executions. Each entry carries the parameter id (used as an AFM execution override) plus the FE-supplied title for the info sheet. Applied uniformly across all tabs; use dashboardTabsParametersOverrides for tab-scoped overrides.",
+            "items": {
+              "$ref": "#/components/schemas/DashboardParameterValue"
+            },
+            "type": "array"
+          },
           "dashboardTabsFiltersOverrides": {
             "additionalProperties": {
               "items": {
@@ -2125,6 +2241,16 @@
               "type": "array"
             },
             "description": "Map of tab-specific filter overrides. Key is tabId, value is list of filters for that tab.",
+            "type": "object"
+          },
+          "dashboardTabsParametersOverrides": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/DashboardParameterValue"
+              },
+              "type": "array"
+            },
+            "description": "Map of tab-specific parameter overrides. Key is tabId, value is a list of (id, value, title) entries that override the dashboard-level parameters for that tab only. Mirrors dashboardTabsFiltersOverrides. When a tab is present in this map, its entries take precedence over dashboardParametersOverride for that tab's executions and info-sheet display.",
             "type": "object"
           },
           "fileName": {
@@ -2386,10 +2512,8 @@
                 "what_if_analysis",
                 "knowledge"
               ],
-              "nullable": true,
               "type": "string"
             },
-            "nullable": true,
             "type": "array"
           },
           "description": {
@@ -3535,7 +3659,8 @@
               "ATHENA",
               "MONGODB",
               "CRATEDB",
-              "AILAKEHOUSE"
+              "AILAKEHOUSE",
+              "DENODO"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -4269,13 +4394,13 @@
         "description": "A declarative form of an IP allowlist policy.",
         "properties": {
           "allowedSources": {
-            "description": "Allowed source IP addresses or CIDR ranges.",
+            "description": "Allowed source IPv4 addresses or CIDR ranges. Only IPv4 is supported; IPv6 are rejected. The /0 prefix is not allowed.",
             "example": [
               "203.0.113.10/32",
               "198.51.100.0/24"
             ],
             "items": {
-              "description": "Allowed source IP addresses or CIDR ranges.",
+              "description": "Allowed source IPv4 addresses or CIDR ranges. Only IPv4 is supported; IPv6 are rejected. The /0 prefix is not allowed.",
               "example": "[\"203.0.113.10/32\",\"198.51.100.0/24\"]",
               "type": "string"
             },
@@ -5264,7 +5389,6 @@
               "TIMEZONE",
               "ACTIVE_THEME",
               "ACTIVE_COLOR_PALETTE",
-              "ACTIVE_LLM_ENDPOINT",
               "ACTIVE_LLM_PROVIDER",
               "ACTIVE_CALENDARS",
               "WHITE_LABELING",
@@ -5306,6 +5430,7 @@
               "SORT_COLLATION",
               "METRIC_FORMAT_OVERRIDE",
               "ENABLE_AI_ON_DATA",
+              "ENABLE_PARTIAL_DATA_RESULTS",
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
               "EXPORT_CSV_CUSTOM_DELIMITER",
               "ENABLE_QUERY_TAGS",
@@ -6388,7 +6513,8 @@
                 "AiModule",
                 "AiQueryLimit",
                 "AiKnowledgeStorageLimit",
-                "AiAgentLimit"
+                "AiAgentLimit",
+                "AiWorkspaceLimit"
               ],
               "type": "string"
             },
@@ -7173,6 +7299,21 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "IpAllowlistPolicyTargets": {
+        "description": "Target delta for IP allowlist policy actions.",
+        "properties": {
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/AssigneeIdentifier"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "targets"
+        ],
         "type": "object"
       },
       "JsonApiAgentIn": {
@@ -12316,7 +12457,8 @@
                   "ATHENA",
                   "MONGODB",
                   "CRATEDB",
-                  "AILAKEHOUSE"
+                  "AILAKEHOUSE",
+                  "DENODO"
                 ],
                 "type": "string"
               }
@@ -12543,7 +12685,8 @@
                   "ATHENA",
                   "MONGODB",
                   "CRATEDB",
-                  "AILAKEHOUSE"
+                  "AILAKEHOUSE",
+                  "DENODO"
                 ],
                 "type": "string"
               },
@@ -12728,7 +12871,8 @@
                   "ATHENA",
                   "MONGODB",
                   "CRATEDB",
-                  "AILAKEHOUSE"
+                  "AILAKEHOUSE",
+                  "DENODO"
                 ],
                 "type": "string"
               },
@@ -12967,7 +13111,8 @@
                   "ATHENA",
                   "MONGODB",
                   "CRATEDB",
-                  "AILAKEHOUSE"
+                  "AILAKEHOUSE",
+                  "DENODO"
                 ],
                 "type": "string"
               },
@@ -16121,6 +16266,230 @@
           }
         ]
       },
+      "JsonApiIpAllowlistPolicyIn": {
+        "description": "JSON:API representation of ipAllowlistPolicy entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "allowedSources": {
+                "description": "Allowed source IPv4 addresses or CIDR ranges. Only IPv4 is supported; IPv6 are rejected. The /0 prefix is not allowed.",
+                "items": {
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
+              }
+            },
+            "required": [
+              "allowedSources"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "userGroups": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserGroupToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "users": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "ipAllowlistPolicy"
+            ],
+            "example": "ipAllowlistPolicy",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiIpAllowlistPolicyInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiIpAllowlistPolicyOut": {
+        "description": "JSON:API representation of ipAllowlistPolicy entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "allowedSources": {
+                "description": "Allowed source IPv4 addresses or CIDR ranges. Only IPv4 is supported; IPv6 are rejected. The /0 prefix is not allowed.",
+                "items": {
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
+              }
+            },
+            "required": [
+              "allowedSources"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "userGroups": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserGroupToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "users": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "ipAllowlistPolicy"
+            ],
+            "example": "ipAllowlistPolicy",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiIpAllowlistPolicyOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyOut"
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiIpAllowlistPolicyOutIncludes": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiUserOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiUserGroupOutWithLinks"
+          }
+        ]
+      },
+      "JsonApiIpAllowlistPolicyOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiIpAllowlistPolicyOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
       "JsonApiJwkIn": {
         "description": "JSON:API representation of jwk entity.",
         "properties": {
@@ -17422,282 +17791,6 @@
           }
         ]
       },
-      "JsonApiLlmEndpointIn": {
-        "deprecated": true,
-        "description": "Will be soon removed and replaced by LlmProvider.",
-        "properties": {
-          "attributes": {
-            "properties": {
-              "baseUrl": {
-                "description": "Custom LLM endpoint.",
-                "maxLength": 255,
-                "nullable": true,
-                "type": "string"
-              },
-              "llmModel": {
-                "description": "LLM Model. We provide a default model for each provider, but you can override it here.",
-                "maxLength": 255,
-                "type": "string"
-              },
-              "llmOrganization": {
-                "description": "Organization in LLM provider.",
-                "maxLength": 255,
-                "nullable": true,
-                "type": "string"
-              },
-              "provider": {
-                "deprecated": true,
-                "description": "LLM Provider.",
-                "enum": [
-                  "OPENAI",
-                  "AZURE_OPENAI"
-                ],
-                "type": "string"
-              },
-              "title": {
-                "description": "User-facing title of the LLM Provider.",
-                "maxLength": 255,
-                "type": "string"
-              },
-              "token": {
-                "description": "The token to use to connect to the LLM provider.",
-                "maxLength": 10000,
-                "type": "string"
-              }
-            },
-            "required": [
-              "title",
-              "token"
-            ],
-            "type": "object"
-          },
-          "id": {
-            "description": "API identifier of an object",
-            "example": "id1",
-            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-            "type": "string"
-          },
-          "type": {
-            "description": "Object type",
-            "enum": [
-              "llmEndpoint"
-            ],
-            "example": "llmEndpoint",
-            "type": "string"
-          }
-        },
-        "required": [
-          "attributes",
-          "id",
-          "type"
-        ],
-        "type": "object"
-      },
-      "JsonApiLlmEndpointInDocument": {
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/JsonApiLlmEndpointIn"
-          }
-        },
-        "required": [
-          "data"
-        ],
-        "type": "object"
-      },
-      "JsonApiLlmEndpointOut": {
-        "deprecated": true,
-        "description": "Will be soon removed and replaced by LlmProvider.",
-        "properties": {
-          "attributes": {
-            "properties": {
-              "baseUrl": {
-                "description": "Custom LLM endpoint.",
-                "maxLength": 255,
-                "nullable": true,
-                "type": "string"
-              },
-              "llmModel": {
-                "description": "LLM Model. We provide a default model for each provider, but you can override it here.",
-                "maxLength": 255,
-                "type": "string"
-              },
-              "llmOrganization": {
-                "description": "Organization in LLM provider.",
-                "maxLength": 255,
-                "nullable": true,
-                "type": "string"
-              },
-              "provider": {
-                "deprecated": true,
-                "description": "LLM Provider.",
-                "enum": [
-                  "OPENAI",
-                  "AZURE_OPENAI"
-                ],
-                "type": "string"
-              },
-              "title": {
-                "description": "User-facing title of the LLM Provider.",
-                "maxLength": 255,
-                "type": "string"
-              }
-            },
-            "required": [
-              "title"
-            ],
-            "type": "object"
-          },
-          "id": {
-            "description": "API identifier of an object",
-            "example": "id1",
-            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-            "type": "string"
-          },
-          "type": {
-            "description": "Object type",
-            "enum": [
-              "llmEndpoint"
-            ],
-            "example": "llmEndpoint",
-            "type": "string"
-          }
-        },
-        "required": [
-          "attributes",
-          "id",
-          "type"
-        ],
-        "type": "object"
-      },
-      "JsonApiLlmEndpointOutDocument": {
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/JsonApiLlmEndpointOut"
-          },
-          "links": {
-            "$ref": "#/components/schemas/ObjectLinks"
-          }
-        },
-        "required": [
-          "data"
-        ],
-        "type": "object"
-      },
-      "JsonApiLlmEndpointOutList": {
-        "description": "A JSON:API document with a list of resources",
-        "properties": {
-          "data": {
-            "items": {
-              "$ref": "#/components/schemas/JsonApiLlmEndpointOutWithLinks"
-            },
-            "type": "array",
-            "uniqueItems": true
-          },
-          "links": {
-            "$ref": "#/components/schemas/ListLinks"
-          },
-          "meta": {
-            "properties": {
-              "page": {
-                "$ref": "#/components/schemas/PageMetadata"
-              }
-            },
-            "type": "object"
-          }
-        },
-        "required": [
-          "data"
-        ],
-        "type": "object"
-      },
-      "JsonApiLlmEndpointOutWithLinks": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/JsonApiLlmEndpointOut"
-          },
-          {
-            "$ref": "#/components/schemas/ObjectLinksContainer"
-          }
-        ]
-      },
-      "JsonApiLlmEndpointPatch": {
-        "deprecated": true,
-        "description": "Will be soon removed and replaced by LlmProvider.",
-        "properties": {
-          "attributes": {
-            "properties": {
-              "baseUrl": {
-                "description": "Custom LLM endpoint.",
-                "maxLength": 255,
-                "nullable": true,
-                "type": "string"
-              },
-              "llmModel": {
-                "description": "LLM Model. We provide a default model for each provider, but you can override it here.",
-                "maxLength": 255,
-                "type": "string"
-              },
-              "llmOrganization": {
-                "description": "Organization in LLM provider.",
-                "maxLength": 255,
-                "nullable": true,
-                "type": "string"
-              },
-              "provider": {
-                "deprecated": true,
-                "description": "LLM Provider.",
-                "enum": [
-                  "OPENAI",
-                  "AZURE_OPENAI"
-                ],
-                "type": "string"
-              },
-              "title": {
-                "description": "User-facing title of the LLM Provider.",
-                "maxLength": 255,
-                "type": "string"
-              },
-              "token": {
-                "description": "The token to use to connect to the LLM provider.",
-                "maxLength": 10000,
-                "type": "string"
-              }
-            },
-            "type": "object"
-          },
-          "id": {
-            "description": "API identifier of an object",
-            "example": "id1",
-            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-            "type": "string"
-          },
-          "type": {
-            "description": "Object type",
-            "enum": [
-              "llmEndpoint"
-            ],
-            "example": "llmEndpoint",
-            "type": "string"
-          }
-        },
-        "required": [
-          "attributes",
-          "id",
-          "type"
-        ],
-        "type": "object"
-      },
-      "JsonApiLlmEndpointPatchDocument": {
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/JsonApiLlmEndpointPatch"
-          }
-        },
-        "required": [
-          "data"
-        ],
-        "type": "object"
-      },
       "JsonApiLlmProviderIn": {
         "description": "LLM Provider configuration for connecting to LLM services.",
         "properties": {
@@ -17759,15 +17852,19 @@
                 "nullable": true,
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+                    "$ref": "#/components/schemas/OpenAIProviderConfig"
                   },
                   {
                     "$ref": "#/components/schemas/AzureFoundryProviderConfig"
                   },
                   {
-                    "$ref": "#/components/schemas/OpenAIProviderConfig"
+                    "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+                  },
+                  {
+                    "$ref": "#/components/schemas/AnthropicProviderConfig"
                   }
-                ]
+                ],
+                "type": "object"
               }
             },
             "type": "object"
@@ -17865,15 +17962,19 @@
                 "nullable": true,
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+                    "$ref": "#/components/schemas/OpenAIProviderConfig"
                   },
                   {
                     "$ref": "#/components/schemas/AzureFoundryProviderConfig"
                   },
                   {
-                    "$ref": "#/components/schemas/OpenAIProviderConfig"
+                    "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+                  },
+                  {
+                    "$ref": "#/components/schemas/AnthropicProviderConfig"
                   }
-                ]
+                ],
+                "type": "object"
               }
             },
             "type": "object"
@@ -18011,15 +18112,19 @@
                 "nullable": true,
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+                    "$ref": "#/components/schemas/OpenAIProviderConfig"
                   },
                   {
                     "$ref": "#/components/schemas/AzureFoundryProviderConfig"
                   },
                   {
-                    "$ref": "#/components/schemas/OpenAIProviderConfig"
+                    "$ref": "#/components/schemas/AwsBedrockProviderConfig"
+                  },
+                  {
+                    "$ref": "#/components/schemas/AnthropicProviderConfig"
                   }
-                ]
+                ],
+                "type": "object"
               }
             },
             "type": "object"
@@ -20133,7 +20238,6 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
-                  "ACTIVE_LLM_ENDPOINT",
                   "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
@@ -20175,6 +20279,7 @@
                   "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
+                  "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
@@ -20234,7 +20339,6 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
-                  "ACTIVE_LLM_ENDPOINT",
                   "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
@@ -20276,6 +20380,7 @@
                   "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
+                  "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
@@ -20375,7 +20480,6 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
-                  "ACTIVE_LLM_ENDPOINT",
                   "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
@@ -20417,6 +20521,7 @@
                   "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
+                  "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
@@ -20477,14 +20582,6 @@
                   {
                     "$ref": "#/components/schemas/StringParameterDefinition"
                   }
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "type"
                 ],
                 "type": "object"
               },
@@ -20584,14 +20681,6 @@
                   {
                     "$ref": "#/components/schemas/StringParameterDefinition"
                   }
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "type"
                 ],
                 "type": "object"
               },
@@ -20782,14 +20871,6 @@
                     "$ref": "#/components/schemas/StringParameterDefinition"
                   }
                 ],
-                "properties": {
-                  "type": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "type"
-                ],
                 "type": "object"
               },
               "description": {
@@ -20858,14 +20939,6 @@
                   {
                     "$ref": "#/components/schemas/StringParameterDefinition"
                   }
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "type"
                 ],
                 "type": "object"
               },
@@ -22077,6 +22150,9 @@
               "lastname": {
                 "maxLength": 255,
                 "type": "string"
+              },
+              "systemAccount": {
+                "type": "boolean"
               }
             },
             "type": "object"
@@ -22168,6 +22244,9 @@
               "lastname": {
                 "maxLength": 255,
                 "type": "string"
+              },
+              "systemAccount": {
+                "type": "boolean"
               }
             },
             "type": "object"
@@ -22296,6 +22375,9 @@
               "lastname": {
                 "maxLength": 255,
                 "type": "string"
+              },
+              "systemAccount": {
+                "type": "boolean"
               }
             },
             "type": "object"
@@ -22363,7 +22445,6 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
-                  "ACTIVE_LLM_ENDPOINT",
                   "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
@@ -22405,6 +22486,7 @@
                   "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
+                  "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
@@ -22464,7 +22546,6 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
-                  "ACTIVE_LLM_ENDPOINT",
                   "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
@@ -22506,6 +22587,7 @@
                   "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
+                  "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
@@ -24732,7 +24814,6 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
-                  "ACTIVE_LLM_ENDPOINT",
                   "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
@@ -24774,6 +24855,7 @@
                   "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
+                  "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
@@ -24833,7 +24915,6 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
-                  "ACTIVE_LLM_ENDPOINT",
                   "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
@@ -24875,6 +24956,7 @@
                   "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
+                  "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
@@ -25000,7 +25082,6 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
-                  "ACTIVE_LLM_ENDPOINT",
                   "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
@@ -25042,6 +25123,7 @@
                   "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
+                  "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
@@ -25101,7 +25183,6 @@
                   "TIMEZONE",
                   "ACTIVE_THEME",
                   "ACTIVE_COLOR_PALETTE",
-                  "ACTIVE_LLM_ENDPOINT",
                   "ACTIVE_LLM_PROVIDER",
                   "ACTIVE_CALENDARS",
                   "WHITE_LABELING",
@@ -25143,6 +25224,7 @@
                   "SORT_COLLATION",
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
+                  "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "EXPORT_CSV_CUSTOM_DELIMITER",
                   "ENABLE_QUERY_TAGS",
@@ -25223,6 +25305,99 @@
         "required": [
           "id",
           "type"
+        ],
+        "type": "object"
+      },
+      "LdmObjectPermissions": {
+        "properties": {
+          "rules": {
+            "description": "List of rules",
+            "items": {
+              "$ref": "#/components/schemas/RulePermission"
+            },
+            "type": "array"
+          },
+          "userGroups": {
+            "description": "List of user groups",
+            "items": {
+              "$ref": "#/components/schemas/UserGroupPermission"
+            },
+            "type": "array"
+          },
+          "users": {
+            "description": "List of users",
+            "items": {
+              "$ref": "#/components/schemas/UserPermission"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "rules",
+          "userGroups",
+          "users"
+        ],
+        "type": "object"
+      },
+      "LdmObjectPermissionsAssignment": {
+        "description": "Desired levels of permissions on an LDM object (attribute, label, fact) for an assignee.",
+        "properties": {
+          "permissions": {
+            "items": {
+              "enum": [
+                "EDIT",
+                "SHARE",
+                "VIEW"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "permissions"
+        ],
+        "type": "object"
+      },
+      "LdmObjectPermissionsForAssignee": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LdmObjectPermissionsAssignment"
+          },
+          {
+            "properties": {
+              "assigneeIdentifier": {
+                "$ref": "#/components/schemas/AssigneeIdentifier"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Desired levels of LDM-object permissions for an assignee identified by an identifier.",
+        "required": [
+          "assigneeIdentifier",
+          "permissions"
+        ],
+        "type": "object"
+      },
+      "LdmObjectPermissionsForAssigneeRule": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LdmObjectPermissionsAssignment"
+          },
+          {
+            "properties": {
+              "assigneeRule": {
+                "$ref": "#/components/schemas/AssigneeRule"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Desired levels of LDM-object permissions for a collection of assignees identified by a rule.",
+        "required": [
+          "assigneeRule",
+          "permissions"
         ],
         "type": "object"
       },
@@ -25577,14 +25752,6 @@
             "$ref": "#/components/schemas/InPlatform"
           }
         ],
-        "properties": {
-          "type": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "type"
-        ],
         "type": "object"
       },
       "NumberConstraints": {
@@ -25842,14 +26009,6 @@
             "$ref": "#/components/schemas/StringParameterDefinition"
           }
         ],
-        "properties": {
-          "type": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "type"
-        ],
         "type": "object"
       },
       "ParameterItem": {
@@ -26050,7 +26209,8 @@
           "name": {
             "enum": [
               "UserCount",
-              "WorkspaceCount"
+              "WorkspaceCount",
+              "AiWorkspaceCount"
             ],
             "type": "string"
           }
@@ -26066,7 +26226,8 @@
             "items": {
               "enum": [
                 "UserCount",
-                "WorkspaceCount"
+                "WorkspaceCount",
+                "AiWorkspaceCount"
               ],
               "type": "string"
             },
@@ -26828,7 +26989,6 @@
               "TIMEZONE",
               "ACTIVE_THEME",
               "ACTIVE_COLOR_PALETTE",
-              "ACTIVE_LLM_ENDPOINT",
               "ACTIVE_LLM_PROVIDER",
               "ACTIVE_CALENDARS",
               "WHITE_LABELING",
@@ -26870,6 +27030,7 @@
               "SORT_COLLATION",
               "METRIC_FORMAT_OVERRIDE",
               "ENABLE_AI_ON_DATA",
+              "ENABLE_PARTIAL_DATA_RESULTS",
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
               "EXPORT_CSV_CUSTOM_DELIMITER",
               "ENABLE_QUERY_TAGS",
@@ -27872,6 +28033,11 @@
             "example": false,
             "type": "boolean"
           },
+          "systemAccount": {
+            "description": "Is user system account",
+            "example": false,
+            "type": "boolean"
+          },
           "userGroups": {
             "items": {
               "$ref": "#/components/schemas/UserGroupIdentifier"
@@ -27889,6 +28055,7 @@
           "dataSources",
           "id",
           "organizationAdmin",
+          "systemAccount",
           "userGroups",
           "workspaces"
         ],
@@ -28551,6 +28718,76 @@
             "MANAGE"
           ]
         }
+      }
+    },
+    "/api/v1/actions/ipAllowlistPolicies/{id}/addTargets": {
+      "post": {
+        "operationId": "addTargets",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IpAllowlistPolicyTargets"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Add targets to IP allowlist policy",
+        "tags": [
+          "Organization - Entity APIs",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/ipAllowlistPolicies/{id}/removeTargets": {
+      "post": {
+        "operationId": "removeTargets",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IpAllowlistPolicyTargets"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Remove targets from IP allowlist policy",
+        "tags": [
+          "Organization - Entity APIs",
+          "actions"
+        ]
       }
     },
     "/api/v1/actions/organization/automations/delete": {
@@ -29492,6 +29729,100 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/managePermissions": {
+      "post": {
+        "operationId": "manageAttributePermissions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "attributeId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "An array of attribute-permission assignments.",
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/LdmObjectPermissionsForAssignee"
+                    },
+                    {
+                      "$ref": "#/components/schemas/LdmObjectPermissionsForAssigneeRule"
+                    }
+                  ]
+                },
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Manage Permissions for an Attribute",
+        "tags": [
+          "Permissions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/permissions": {
+      "get": {
+        "operationId": "attributePermissions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "attributeId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LdmObjectPermissions"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get Attribute Permissions",
+        "tags": [
+          "Permissions",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/automations/delete": {
       "post": {
         "operationId": "deleteWorkspaceAutomations",
@@ -29830,6 +30161,100 @@
         }
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/facts/{factId}/managePermissions": {
+      "post": {
+        "operationId": "manageFactPermissions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "factId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "An array of fact-permission assignments.",
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/LdmObjectPermissionsForAssignee"
+                    },
+                    {
+                      "$ref": "#/components/schemas/LdmObjectPermissionsForAssigneeRule"
+                    }
+                  ]
+                },
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Manage Permissions for a Fact",
+        "tags": [
+          "Permissions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/facts/{factId}/permissions": {
+      "get": {
+        "operationId": "factPermissions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "factId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LdmObjectPermissions"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get Fact Permissions",
+        "tags": [
+          "Permissions",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts": {
       "get": {
         "description": "Finds API identifier conflicts in given workspace hierarchy.",
@@ -29912,6 +30337,100 @@
             "VIEW"
           ]
         }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/managePermissions": {
+      "post": {
+        "operationId": "manageLabelPermissions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "labelId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "An array of label-permission assignments.",
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/LdmObjectPermissionsForAssignee"
+                    },
+                    {
+                      "$ref": "#/components/schemas/LdmObjectPermissionsForAssigneeRule"
+                    }
+                  ]
+                },
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Manage Permissions for a Label",
+        "tags": [
+          "Permissions",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/permissions": {
+      "get": {
+        "operationId": "labelPermissions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "labelId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LdmObjectPermissions"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get Label Permissions",
+        "tags": [
+          "Permissions",
+          "actions"
+        ]
       }
     },
     "/api/v1/actions/workspaces/{workspaceId}/managePermissions": {
@@ -33499,6 +34018,345 @@
         }
       }
     },
+    "/api/v1/entities/ipAllowlistPolicies": {
+      "get": {
+        "operationId": "getAllEntities@IpAllowlistPolicies",
+        "parameters": [
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "allowedSources==v1,v2,v3",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "users,userGroups",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "users",
+                  "userGroups",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyOutList"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get all IpAllowlistPolicy entities",
+        "tags": [
+          "Organization - Entity APIs",
+          "entities",
+          "ip-allowlist-policy-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      },
+      "post": {
+        "operationId": "createEntity@IpAllowlistPolicies",
+        "parameters": [
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "users,userGroups",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "users",
+                  "userGroups",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyInDocument"
+              }
+            },
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyOutDocument"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Post IpAllowlistPolicy entities",
+        "tags": [
+          "Organization - Entity APIs",
+          "entities",
+          "ip-allowlist-policy-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/ipAllowlistPolicies/{id}": {
+      "delete": {
+        "operationId": "deleteEntity@IpAllowlistPolicies",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "summary": "Delete IpAllowlistPolicy entity",
+        "tags": [
+          "Organization - Entity APIs",
+          "entities",
+          "ip-allowlist-policy-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "get": {
+        "operationId": "getEntity@IpAllowlistPolicies",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "allowedSources==v1,v2,v3",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "users,userGroups",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "users",
+                  "userGroups",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyOutDocument"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get IpAllowlistPolicy entity",
+        "tags": [
+          "Organization - Entity APIs",
+          "entities",
+          "ip-allowlist-policy-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      },
+      "put": {
+        "operationId": "updateEntity@IpAllowlistPolicies",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "allowedSources==v1,v2,v3",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "users,userGroups",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "users",
+                  "userGroups",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyInDocument"
+              }
+            },
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyOutDocument"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiIpAllowlistPolicyOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Put IpAllowlistPolicy entity",
+        "tags": [
+          "Organization - Entity APIs",
+          "entities",
+          "ip-allowlist-policy-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
     "/api/v1/entities/jwks": {
       "get": {
         "description": "Returns all JSON web keys - used to verify JSON web tokens (Jwts)",
@@ -33814,331 +34672,135 @@
     "/api/v1/entities/llmEndpoints": {
       "get": {
         "deprecated": true,
-        "description": "Will be soon removed and replaced by LlmProvider.",
-        "operationId": "getAllEntities@LlmEndpoints",
-        "parameters": [
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;provider==LlmEndpointProviderValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "$ref": "#/components/parameters/page"
-          },
-          {
-            "$ref": "#/components/parameters/size"
-          },
-          {
-            "$ref": "#/components/parameters/sort"
-          },
-          {
-            "description": "Include Meta objects.",
-            "example": "metaInclude=page,all",
-            "explode": false,
-            "in": "query",
-            "name": "metaInclude",
-            "required": false,
-            "schema": {
-              "description": "Included meta objects",
-              "items": {
-                "enum": [
-                  "page",
-                  "all",
-                  "ALL"
-                ],
-                "type": "string"
-              },
-              "type": "array",
-              "uniqueItems": true
-            },
-            "style": "form"
-          }
-        ],
+        "description": "Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.",
+        "operationId": "getAllEntities",
         "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiLlmEndpointOutList"
-                }
-              },
-              "application/vnd.gooddata.api+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiLlmEndpointOutList"
-                }
-              }
-            },
-            "description": "Request successfully processed"
+          "410": {
+            "description": "Gone"
           }
         },
-        "summary": "Get all LLM endpoint entities",
+        "summary": "Get all LLM endpoint entities (Removed)",
         "tags": [
           "LLM Endpoints",
-          "entities",
-          "llm-endpoint-controller"
-        ],
-        "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
-          "permissions": [
-            "MANAGE"
-          ]
-        }
+          "entities"
+        ]
       },
       "post": {
         "deprecated": true,
-        "description": "Will be soon removed and replaced by LlmProvider.",
-        "operationId": "createEntity@LlmEndpoints",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/JsonApiLlmEndpointInDocument"
-              }
-            },
-            "application/vnd.gooddata.api+json": {
-              "schema": {
-                "$ref": "#/components/schemas/JsonApiLlmEndpointInDocument"
-              }
-            }
-          },
-          "required": true
-        },
+        "description": "Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.",
+        "operationId": "createEntity",
         "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiLlmEndpointOutDocument"
-                }
-              },
-              "application/vnd.gooddata.api+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiLlmEndpointOutDocument"
-                }
-              }
-            },
-            "description": "Request successfully processed"
+          "410": {
+            "description": "Gone"
           }
         },
-        "summary": "Post LLM endpoint entities",
+        "summary": "Post LLM endpoint entities (Removed)",
         "tags": [
           "LLM Endpoints",
-          "entities",
-          "llm-endpoint-controller"
-        ],
-        "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
-          "permissions": [
-            "MANAGE"
-          ]
-        }
+          "entities"
+        ]
       }
     },
     "/api/v1/entities/llmEndpoints/{id}": {
       "delete": {
         "deprecated": true,
-        "description": "Will be soon removed and replaced by LlmProvider.",
-        "operationId": "deleteEntity@LlmEndpoints",
+        "description": "Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.",
+        "operationId": "deleteEntity",
         "parameters": [
           {
-            "$ref": "#/components/parameters/idPathParameter"
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
-          "204": {
-            "$ref": "#/components/responses/Deleted"
+          "410": {
+            "description": "Gone"
           }
         },
-        "summary": "Delete LLM endpoint entity",
+        "summary": "Delete LLM endpoint entity (Removed)",
         "tags": [
           "LLM Endpoints",
-          "entities",
-          "llm-endpoint-controller"
-        ],
-        "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
-          "permissions": [
-            "MANAGE"
-          ]
-        }
+          "entities"
+        ]
       },
       "get": {
         "deprecated": true,
-        "description": "Will be soon removed and replaced by LlmProvider.",
-        "operationId": "getEntity@LlmEndpoints",
+        "description": "Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.",
+        "operationId": "getEntity",
         "parameters": [
           {
-            "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;provider==LlmEndpointProviderValue",
-            "in": "query",
-            "name": "filter",
+            "in": "path",
+            "name": "id",
+            "required": true,
             "schema": {
               "type": "string"
             }
           }
         ],
         "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiLlmEndpointOutDocument"
-                }
-              },
-              "application/vnd.gooddata.api+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiLlmEndpointOutDocument"
-                }
-              }
-            },
-            "description": "Request successfully processed"
+          "410": {
+            "description": "Gone"
           }
         },
-        "summary": "Get LLM endpoint entity",
+        "summary": "Get LLM endpoint entity (Removed)",
         "tags": [
           "LLM Endpoints",
-          "entities",
-          "llm-endpoint-controller"
-        ],
-        "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
-          "permissions": [
-            "MANAGE"
-          ]
-        }
+          "entities"
+        ]
       },
       "patch": {
         "deprecated": true,
-        "description": "Will be soon removed and replaced by LlmProvider.",
-        "operationId": "patchEntity@LlmEndpoints",
+        "description": "Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.",
+        "operationId": "patchEntity",
         "parameters": [
           {
-            "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;provider==LlmEndpointProviderValue",
-            "in": "query",
-            "name": "filter",
+            "in": "path",
+            "name": "id",
+            "required": true,
             "schema": {
               "type": "string"
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/JsonApiLlmEndpointPatchDocument"
-              }
-            },
-            "application/vnd.gooddata.api+json": {
-              "schema": {
-                "$ref": "#/components/schemas/JsonApiLlmEndpointPatchDocument"
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiLlmEndpointOutDocument"
-                }
-              },
-              "application/vnd.gooddata.api+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiLlmEndpointOutDocument"
-                }
-              }
-            },
-            "description": "Request successfully processed"
+          "410": {
+            "description": "Gone"
           }
         },
-        "summary": "Patch LLM endpoint entity",
+        "summary": "Patch LLM endpoint entity (Removed)",
         "tags": [
           "LLM Endpoints",
-          "entities",
-          "llm-endpoint-controller"
-        ],
-        "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
-          "permissions": [
-            "MANAGE"
-          ]
-        }
+          "entities"
+        ]
       },
       "put": {
         "deprecated": true,
-        "description": "Will be soon removed and replaced by LlmProvider.",
-        "operationId": "updateEntity@LlmEndpoints",
+        "description": "Permanently removed. Use /api/v1/entities/llmProviders instead. Always returns 410 Gone.",
+        "operationId": "updateEntity",
         "parameters": [
           {
-            "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "title==someString;provider==LlmEndpointProviderValue",
-            "in": "query",
-            "name": "filter",
+            "in": "path",
+            "name": "id",
+            "required": true,
             "schema": {
               "type": "string"
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/JsonApiLlmEndpointInDocument"
-              }
-            },
-            "application/vnd.gooddata.api+json": {
-              "schema": {
-                "$ref": "#/components/schemas/JsonApiLlmEndpointInDocument"
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiLlmEndpointOutDocument"
-                }
-              },
-              "application/vnd.gooddata.api+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiLlmEndpointOutDocument"
-                }
-              }
-            },
-            "description": "Request successfully processed"
+          "410": {
+            "description": "Gone"
           }
         },
-        "summary": "PUT LLM endpoint entity",
+        "summary": "PUT LLM endpoint entity (Removed)",
         "tags": [
           "LLM Endpoints",
-          "entities",
-          "llm-endpoint-controller"
-        ],
-        "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
-          "permissions": [
-            "MANAGE"
-          ]
-        }
+          "entities"
+        ]
       }
     },
     "/api/v1/entities/llmProviders": {

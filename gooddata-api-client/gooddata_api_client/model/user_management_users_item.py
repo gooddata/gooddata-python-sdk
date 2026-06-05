@@ -95,6 +95,7 @@ class UserManagementUsersItem(ModelNormal):
             'data_sources': ([UserManagementDataSourcePermissionAssignment],),  # noqa: E501
             'id': (str,),  # noqa: E501
             'organization_admin': (bool,),  # noqa: E501
+            'system_account': (bool,),  # noqa: E501
             'user_groups': ([UserGroupIdentifier],),  # noqa: E501
             'workspaces': ([UserManagementWorkspacePermissionAssignment],),  # noqa: E501
             'email': (str,),  # noqa: E501
@@ -110,6 +111,7 @@ class UserManagementUsersItem(ModelNormal):
         'data_sources': 'dataSources',  # noqa: E501
         'id': 'id',  # noqa: E501
         'organization_admin': 'organizationAdmin',  # noqa: E501
+        'system_account': 'systemAccount',  # noqa: E501
         'user_groups': 'userGroups',  # noqa: E501
         'workspaces': 'workspaces',  # noqa: E501
         'email': 'email',  # noqa: E501
@@ -123,13 +125,14 @@ class UserManagementUsersItem(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, data_sources, id, organization_admin, user_groups, workspaces, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, data_sources, id, organization_admin, system_account, user_groups, workspaces, *args, **kwargs):  # noqa: E501
         """UserManagementUsersItem - a model defined in OpenAPI
 
         Args:
             data_sources ([UserManagementDataSourcePermissionAssignment]):
             id (str):
             organization_admin (bool): Is user organization admin
+            system_account (bool): Is user system account
             user_groups ([UserGroupIdentifier]):
             workspaces ([UserManagementWorkspacePermissionAssignment]):
 
@@ -200,6 +203,7 @@ class UserManagementUsersItem(ModelNormal):
         self.data_sources = data_sources
         self.id = id
         self.organization_admin = organization_admin
+        self.system_account = system_account
         self.user_groups = user_groups
         self.workspaces = workspaces
         for var_name, var_value in kwargs.items():
@@ -222,13 +226,14 @@ class UserManagementUsersItem(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, data_sources, id, organization_admin, user_groups, workspaces, *args, **kwargs):  # noqa: E501
+    def __init__(self, data_sources, id, organization_admin, system_account, user_groups, workspaces, *args, **kwargs):  # noqa: E501
         """UserManagementUsersItem - a model defined in OpenAPI
 
         Args:
             data_sources ([UserManagementDataSourcePermissionAssignment]):
             id (str):
             organization_admin (bool): Is user organization admin
+            system_account (bool): Is user system account
             user_groups ([UserGroupIdentifier]):
             workspaces ([UserManagementWorkspacePermissionAssignment]):
 
@@ -297,6 +302,7 @@ class UserManagementUsersItem(ModelNormal):
         self.data_sources = data_sources
         self.id = id
         self.organization_admin = organization_admin
+        self.system_account = system_account
         self.user_groups = user_groups
         self.workspaces = workspaces
         for var_name, var_value in kwargs.items():

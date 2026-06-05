@@ -145,11 +145,11 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_ai_lake_services**
-> ListServicesResponse list_ai_lake_services()
+> JsonApiListDocumentServiceInfo list_ai_lake_services()
 
 (BETA) List AI Lake services
 
-(BETA) Lists services configured for the organization's AI Lake. Returns only non-sensitive fields (id, name). Supports paging via size and offset query parameters. Use metaInclude=page to get total count.
+(BETA) Lists services configured for the organization's AI Lake. Returns only non-sensitive fields (id, name).
 
 ### Example
 
@@ -158,7 +158,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import ai_lake_services_operations_api
-from gooddata_api_client.model.list_services_response import ListServicesResponse
+from gooddata_api_client.model.json_api_list_document_service_info import JsonApiListDocumentServiceInfo
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -171,8 +171,8 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = ai_lake_services_operations_api.AILakeServicesOperationsApi(api_client)
-    size = 50 # int |  (optional) if omitted the server will use the default value of 50
-    offset = 0 # int |  (optional) if omitted the server will use the default value of 0
+    page = "0" # str | Zero-based page number. (optional) if omitted the server will use the default value of "0"
+    size = "50" # str | Number of items per page. (optional) if omitted the server will use the default value of "50"
     meta_include = [
         "metaInclude_example",
     ] # [str] |  (optional)
@@ -181,7 +181,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # (BETA) List AI Lake services
-        api_response = api_instance.list_ai_lake_services(size=size, offset=offset, meta_include=meta_include)
+        api_response = api_instance.list_ai_lake_services(page=page, size=size, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakeServicesOperationsApi->list_ai_lake_services: %s\n" % e)
@@ -192,13 +192,13 @@ with gooddata_api_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **size** | **int**|  | [optional] if omitted the server will use the default value of 50
- **offset** | **int**|  | [optional] if omitted the server will use the default value of 0
+ **page** | **str**| Zero-based page number. | [optional] if omitted the server will use the default value of "0"
+ **size** | **str**| Number of items per page. | [optional] if omitted the server will use the default value of "50"
  **meta_include** | **[str]**|  | [optional]
 
 ### Return type
 
-[**ListServicesResponse**](ListServicesResponse.md)
+[**JsonApiListDocumentServiceInfo**](JsonApiListDocumentServiceInfo.md)
 
 ### Authorization
 

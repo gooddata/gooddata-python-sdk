@@ -9,7 +9,7 @@ Method | HTTP request | Description
 [**get_ai_lake_database_instance**](AILakeDatabasesApi.md#get_ai_lake_database_instance) | **GET** /api/v1/ailake/database/instances/{instanceId} | (BETA) Get the specified AILake Database instance
 [**list_ai_lake_database_data_sources**](AILakeDatabasesApi.md#list_ai_lake_database_data_sources) | **GET** /api/v1/ailake/database/instances/{instanceId}/dataSources | (BETA) List data sources of an AILake Database instance
 [**list_ai_lake_database_instances**](AILakeDatabasesApi.md#list_ai_lake_database_instances) | **GET** /api/v1/ailake/database/instances | (BETA) List AI Lake Database instances
-[**list_ai_lake_object_storages**](AILakeDatabasesApi.md#list_ai_lake_object_storages) | **GET** /api/v1/ailake/object-storages | (BETA) List registered AI Lake ObjectStorages
+[**list_ai_lake_object_storages**](AILakeDatabasesApi.md#list_ai_lake_object_storages) | **GET** /api/v1/ailake/objectStorages | (BETA) List registered AI Lake ObjectStorages
 [**provision_ai_lake_database_instance**](AILakeDatabasesApi.md#provision_ai_lake_database_instance) | **POST** /api/v1/ailake/database/instances | (BETA) Create a new AILake Database instance
 [**remove_ai_lake_database_data_source**](AILakeDatabasesApi.md#remove_ai_lake_database_data_source) | **DELETE** /api/v1/ailake/database/instances/{instanceId}/dataSources/{dataSourceId} | (BETA) Remove a data source from an AILake Database instance
 [**update_ai_lake_database_data_source**](AILakeDatabasesApi.md#update_ai_lake_database_data_source) | **PATCH** /api/v1/ailake/database/instances/{instanceId}/dataSource | (BETA) Update the data source of an AILake Database instance
@@ -166,7 +166,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_ai_lake_database_instance**
-> DatabaseInstance get_ai_lake_database_instance(instance_id)
+> JsonApiDocumentDatabaseInstance get_ai_lake_database_instance(instance_id)
 
 (BETA) Get the specified AILake Database instance
 
@@ -179,7 +179,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import ai_lake_databases_api
-from gooddata_api_client.model.database_instance import DatabaseInstance
+from gooddata_api_client.model.json_api_document_database_instance import JsonApiDocumentDatabaseInstance
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -212,7 +212,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**DatabaseInstance**](DatabaseInstance.md)
+[**JsonApiDocumentDatabaseInstance**](JsonApiDocumentDatabaseInstance.md)
 
 ### Authorization
 
@@ -233,11 +233,11 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_ai_lake_database_data_sources**
-> ListDatabaseDataSourcesResponse list_ai_lake_database_data_sources(instance_id)
+> JsonApiListDocumentDataSourceInfo list_ai_lake_database_data_sources(instance_id)
 
 (BETA) List data sources of an AILake Database instance
 
-(BETA) Returns all data source associations for the specified AI Lake database instance.
+(BETA) Returns data source associations for the specified AI Lake database instance.
 
 ### Example
 
@@ -246,7 +246,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import ai_lake_databases_api
-from gooddata_api_client.model.list_database_data_sources_response import ListDatabaseDataSourcesResponse
+from gooddata_api_client.model.json_api_list_document_data_source_info import JsonApiListDocumentDataSourceInfo
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -260,11 +260,25 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = ai_lake_databases_api.AILakeDatabasesApi(api_client)
     instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
+    page = "0" # str | Zero-based page number. (optional) if omitted the server will use the default value of "0"
+    size = "50" # str | Number of items per page. (optional) if omitted the server will use the default value of "50"
+    meta_include = [
+        "metaInclude_example",
+    ] # [str] |  (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # (BETA) List data sources of an AILake Database instance
         api_response = api_instance.list_ai_lake_database_data_sources(instance_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AILakeDatabasesApi->list_ai_lake_database_data_sources: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (BETA) List data sources of an AILake Database instance
+        api_response = api_instance.list_ai_lake_database_data_sources(instance_id, page=page, size=size, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakeDatabasesApi->list_ai_lake_database_data_sources: %s\n" % e)
@@ -276,10 +290,13 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
+ **page** | **str**| Zero-based page number. | [optional] if omitted the server will use the default value of "0"
+ **size** | **str**| Number of items per page. | [optional] if omitted the server will use the default value of "50"
+ **meta_include** | **[str]**|  | [optional]
 
 ### Return type
 
-[**ListDatabaseDataSourcesResponse**](ListDatabaseDataSourcesResponse.md)
+[**JsonApiListDocumentDataSourceInfo**](JsonApiListDocumentDataSourceInfo.md)
 
 ### Authorization
 
@@ -300,11 +317,11 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_ai_lake_database_instances**
-> ListDatabaseInstancesResponse list_ai_lake_database_instances()
+> JsonApiListDocumentDatabaseInstance list_ai_lake_database_instances()
 
 (BETA) List AI Lake Database instances
 
-(BETA) Lists database instances in the organization's AI Lake. Supports paging via size and offset query parameters. Use metaInclude=page to get total count.
+(BETA) Lists database instances in the organization's AI Lake.
 
 ### Example
 
@@ -313,7 +330,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import ai_lake_databases_api
-from gooddata_api_client.model.list_database_instances_response import ListDatabaseInstancesResponse
+from gooddata_api_client.model.json_api_list_document_database_instance import JsonApiListDocumentDatabaseInstance
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -326,8 +343,8 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = ai_lake_databases_api.AILakeDatabasesApi(api_client)
-    size = 50 # int |  (optional) if omitted the server will use the default value of 50
-    offset = 0 # int |  (optional) if omitted the server will use the default value of 0
+    page = "0" # str | Zero-based page number. (optional) if omitted the server will use the default value of "0"
+    size = "50" # str | Number of items per page. (optional) if omitted the server will use the default value of "50"
     meta_include = [
         "metaInclude_example",
     ] # [str] |  (optional)
@@ -336,7 +353,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # (BETA) List AI Lake Database instances
-        api_response = api_instance.list_ai_lake_database_instances(size=size, offset=offset, meta_include=meta_include)
+        api_response = api_instance.list_ai_lake_database_instances(page=page, size=size, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakeDatabasesApi->list_ai_lake_database_instances: %s\n" % e)
@@ -347,13 +364,13 @@ with gooddata_api_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **size** | **int**|  | [optional] if omitted the server will use the default value of 50
- **offset** | **int**|  | [optional] if omitted the server will use the default value of 0
+ **page** | **str**| Zero-based page number. | [optional] if omitted the server will use the default value of "0"
+ **size** | **str**| Number of items per page. | [optional] if omitted the server will use the default value of "50"
  **meta_include** | **[str]**|  | [optional]
 
 ### Return type
 
-[**ListDatabaseInstancesResponse**](ListDatabaseInstancesResponse.md)
+[**JsonApiListDocumentDatabaseInstance**](JsonApiListDocumentDatabaseInstance.md)
 
 ### Authorization
 
@@ -374,7 +391,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_ai_lake_object_storages**
-> ListObjectStoragesResponse list_ai_lake_object_storages()
+> JsonApiListDocumentObjectStorageInfo list_ai_lake_object_storages()
 
 (BETA) List registered AI Lake ObjectStorages
 
@@ -387,7 +404,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import ai_lake_databases_api
-from gooddata_api_client.model.list_object_storages_response import ListObjectStoragesResponse
+from gooddata_api_client.model.json_api_list_document_object_storage_info import JsonApiListDocumentObjectStorageInfo
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -400,11 +417,17 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = ai_lake_databases_api.AILakeDatabasesApi(api_client)
+    page = "0" # str | Zero-based page number. (optional) if omitted the server will use the default value of "0"
+    size = "50" # str | Number of items per page. (optional) if omitted the server will use the default value of "50"
+    meta_include = [
+        "metaInclude_example",
+    ] # [str] |  (optional)
 
-    # example, this endpoint has no required or optional parameters
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # (BETA) List registered AI Lake ObjectStorages
-        api_response = api_instance.list_ai_lake_object_storages()
+        api_response = api_instance.list_ai_lake_object_storages(page=page, size=size, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakeDatabasesApi->list_ai_lake_object_storages: %s\n" % e)
@@ -412,11 +435,16 @@ with gooddata_api_client.ApiClient() as api_client:
 
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **page** | **str**| Zero-based page number. | [optional] if omitted the server will use the default value of "0"
+ **size** | **str**| Number of items per page. | [optional] if omitted the server will use the default value of "50"
+ **meta_include** | **[str]**|  | [optional]
 
 ### Return type
 
-[**ListObjectStoragesResponse**](ListObjectStoragesResponse.md)
+[**JsonApiListDocumentObjectStorageInfo**](JsonApiListDocumentObjectStorageInfo.md)
 
 ### Authorization
 

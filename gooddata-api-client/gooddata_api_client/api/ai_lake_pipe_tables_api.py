@@ -24,8 +24,9 @@ from gooddata_api_client.model_utils import (  # noqa: F401
 )
 from gooddata_api_client.model.analyze_statistics_request import AnalyzeStatisticsRequest
 from gooddata_api_client.model.create_pipe_table_request import CreatePipeTableRequest
-from gooddata_api_client.model.list_pipe_tables_response import ListPipeTablesResponse
-from gooddata_api_client.model.pipe_table import PipeTable
+from gooddata_api_client.model.json_api_document_pipe_table import JsonApiDocumentPipeTable
+from gooddata_api_client.model.json_api_list_document_pipe_table_summary import JsonApiListDocumentPipeTableSummary
+from gooddata_api_client.model.refresh_partition_request import RefreshPartitionRequest
 
 
 class AILakePipeTablesApi(object):
@@ -223,7 +224,7 @@ class AILakePipeTablesApi(object):
         )
         self.get_ai_lake_pipe_table_endpoint = _Endpoint(
             settings={
-                'response_type': (PipeTable,),
+                'response_type': (JsonApiDocumentPipeTable,),
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName}',
                 'operation_id': 'get_ai_lake_pipe_table',
@@ -278,7 +279,7 @@ class AILakePipeTablesApi(object):
         )
         self.list_ai_lake_pipe_tables_endpoint = _Endpoint(
             settings={
-                'response_type': (ListPipeTablesResponse,),
+                'response_type': (JsonApiListDocumentPipeTableSummary,),
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/pipeTables',
                 'operation_id': 'list_ai_lake_pipe_tables',
@@ -288,9 +289,91 @@ class AILakePipeTablesApi(object):
             params_map={
                 'all': [
                     'instance_id',
+                    'page',
+                    'size',
+                    'meta_include',
                 ],
                 'required': [
                     'instance_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'page',
+                    'size',
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('page',): {
+
+                    },
+                    ('size',): {
+
+                    },
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'instance_id':
+                        (str,),
+                    'page':
+                        (str,),
+                    'size':
+                        (str,),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'instance_id': 'instanceId',
+                    'page': 'page',
+                    'size': 'size',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'instance_id': 'path',
+                    'page': 'query',
+                    'size': 'query',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'meta_include': 'multi',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.refresh_ai_lake_pipe_table_partition_endpoint = _Endpoint(
+            settings={
+                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                'auth': [],
+                'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName}/refresh',
+                'operation_id': 'refresh_ai_lake_pipe_table_partition',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'instance_id',
+                    'table_name',
+                    'refresh_partition_request',
+                    'operation_id',
+                ],
+                'required': [
+                    'instance_id',
+                    'table_name',
+                    'refresh_partition_request',
                 ],
                 'nullable': [
                 ],
@@ -307,12 +390,23 @@ class AILakePipeTablesApi(object):
                 'openapi_types': {
                     'instance_id':
                         (str,),
+                    'table_name':
+                        (str,),
+                    'refresh_partition_request':
+                        (RefreshPartitionRequest,),
+                    'operation_id':
+                        (str,),
                 },
                 'attribute_map': {
                     'instance_id': 'instanceId',
+                    'table_name': 'tableName',
+                    'operation_id': 'operation-id',
                 },
                 'location_map': {
                     'instance_id': 'path',
+                    'table_name': 'path',
+                    'refresh_partition_request': 'body',
+                    'operation_id': 'header',
                 },
                 'collection_format_map': {
                 }
@@ -321,7 +415,9 @@ class AILakePipeTablesApi(object):
                 'accept': [
                     'application/json'
                 ],
-                'content_type': [],
+                'content_type': [
+                    'application/json'
+                ]
             },
             api_client=api_client
         )
@@ -642,7 +738,7 @@ class AILakePipeTablesApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            PipeTable
+            JsonApiDocumentPipeTable
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -684,7 +780,7 @@ class AILakePipeTablesApi(object):
     ):
         """(BETA) List AI Lake pipe tables  # noqa: E501
 
-        (BETA) Lists all active pipe tables in the given AI Lake database instance.  # noqa: E501
+        (BETA) Lists active pipe tables in the given AI Lake database instance.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -695,6 +791,9 @@ class AILakePipeTablesApi(object):
             instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
 
         Keyword Args:
+            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
+            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
+            meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -727,7 +826,7 @@ class AILakePipeTablesApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ListPipeTablesResponse
+            JsonApiListDocumentPipeTableSummary
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -759,4 +858,96 @@ class AILakePipeTablesApi(object):
         kwargs['instance_id'] = \
             instance_id
         return self.list_ai_lake_pipe_tables_endpoint.call_with_http_info(**kwargs)
+
+    def refresh_ai_lake_pipe_table_partition(
+        self,
+        instance_id,
+        table_name,
+        refresh_partition_request,
+        **kwargs
+    ):
+        """(BETA) Refresh a pipe table partition  # noqa: E501
+
+        (BETA) Deletes all rows for the specified Hive partition and re-loads them from S3. Use after overwriting a partition file in object storage with corrected data. Returns an operation-id header the client can use to poll for progress.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.refresh_ai_lake_pipe_table_partition(instance_id, table_name, refresh_partition_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
+            table_name (str): Pipe table name.
+            refresh_partition_request (RefreshPartitionRequest):
+
+        Keyword Args:
+            operation_id (str): [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['instance_id'] = \
+            instance_id
+        kwargs['table_name'] = \
+            table_name
+        kwargs['refresh_partition_request'] = \
+            refresh_partition_request
+        return self.refresh_ai_lake_pipe_table_partition_endpoint.call_with_http_info(**kwargs)
 

@@ -24,7 +24,7 @@ from gooddata_api_client.model_utils import (  # noqa: F401
 )
 from gooddata_api_client.model.get_ai_lake_operation200_response import GetAiLakeOperation200Response
 from gooddata_api_client.model.get_service_status_response import GetServiceStatusResponse
-from gooddata_api_client.model.list_services_response import ListServicesResponse
+from gooddata_api_client.model.json_api_list_document_service_info import JsonApiListDocumentServiceInfo
 from gooddata_api_client.model.run_service_command_request import RunServiceCommandRequest
 
 
@@ -139,7 +139,7 @@ class AILakeServicesOperationsApi(object):
         )
         self.list_ai_lake_services_endpoint = _Endpoint(
             settings={
-                'response_type': (ListServicesResponse,),
+                'response_type': (JsonApiListDocumentServiceInfo,),
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/services',
                 'operation_id': 'list_ai_lake_services',
@@ -148,8 +148,8 @@ class AILakeServicesOperationsApi(object):
             },
             params_map={
                 'all': [
+                    'page',
                     'size',
-                    'offset',
                     'meta_include',
                 ],
                 'required': [],
@@ -158,11 +158,19 @@ class AILakeServicesOperationsApi(object):
                 'enum': [
                 ],
                 'validation': [
+                    'page',
+                    'size',
                     'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('page',): {
+
+                    },
+                    ('size',): {
+
+                    },
                     ('meta_include',): {
 
                     },
@@ -170,21 +178,21 @@ class AILakeServicesOperationsApi(object):
                 'allowed_values': {
                 },
                 'openapi_types': {
+                    'page':
+                        (str,),
                     'size':
-                        (int,),
-                    'offset':
-                        (int,),
+                        (str,),
                     'meta_include':
                         ([str],),
                 },
                 'attribute_map': {
+                    'page': 'page',
                     'size': 'size',
-                    'offset': 'offset',
                     'meta_include': 'metaInclude',
                 },
                 'location_map': {
+                    'page': 'query',
                     'size': 'query',
-                    'offset': 'query',
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
@@ -439,7 +447,7 @@ class AILakeServicesOperationsApi(object):
     ):
         """(BETA) List AI Lake services  # noqa: E501
 
-        (BETA) Lists services configured for the organization's AI Lake. Returns only non-sensitive fields (id, name). Supports paging via size and offset query parameters. Use metaInclude=page to get total count.  # noqa: E501
+        (BETA) Lists services configured for the organization's AI Lake. Returns only non-sensitive fields (id, name).  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -448,8 +456,8 @@ class AILakeServicesOperationsApi(object):
 
 
         Keyword Args:
-            size (int): [optional] if omitted the server will use the default value of 50
-            offset (int): [optional] if omitted the server will use the default value of 0
+            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
+            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
             meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -483,7 +491,7 @@ class AILakeServicesOperationsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            ListServicesResponse
+            JsonApiListDocumentServiceInfo
                 If the method is called asynchronously, returns the request
                 thread.
         """

@@ -31,10 +31,12 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.anthropic_provider_config import AnthropicProviderConfig
     from gooddata_api_client.model.aws_bedrock_provider_config import AwsBedrockProviderConfig
     from gooddata_api_client.model.azure_foundry_provider_config import AzureFoundryProviderConfig
     from gooddata_api_client.model.open_ai_provider_auth import OpenAiProviderAuth
     from gooddata_api_client.model.open_ai_provider_config import OpenAIProviderConfig
+    globals()['AnthropicProviderConfig'] = AnthropicProviderConfig
     globals()['AwsBedrockProviderConfig'] = AwsBedrockProviderConfig
     globals()['AzureFoundryProviderConfig'] = AzureFoundryProviderConfig
     globals()['OpenAIProviderConfig'] = OpenAIProviderConfig
@@ -112,8 +114,8 @@ class ListLlmProviderModelsRequestProviderConfig(ModelComposed):
             'base_url': (str,),  # noqa: E501
             'organization': (str, none_type,),  # noqa: E501
             'auth': (OpenAiProviderAuth,),  # noqa: E501
-            'region': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'region': (str,),  # noqa: E501
             'endpoint': (str,),  # noqa: E501
         }
 
@@ -126,8 +128,8 @@ class ListLlmProviderModelsRequestProviderConfig(ModelComposed):
         'base_url': 'baseUrl',  # noqa: E501
         'organization': 'organization',  # noqa: E501
         'auth': 'auth',  # noqa: E501
-        'region': 'region',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'region': 'region',  # noqa: E501
         'endpoint': 'endpoint',  # noqa: E501
     }
 
@@ -173,8 +175,8 @@ class ListLlmProviderModelsRequestProviderConfig(ModelComposed):
             base_url (str): Custom base URL for OpenAI API.. [optional] if omitted the server will use the default value of "https://api.openai.com/v1"  # noqa: E501
             organization (str, none_type): OpenAI organization ID.. [optional]  # noqa: E501
             auth (OpenAiProviderAuth): [optional]  # noqa: E501
-            region (str): AWS region for Bedrock.. [optional]  # noqa: E501
             type (str): Provider type.. [optional] if omitted the server will use the default value of "OPENAI"  # noqa: E501
+            region (str): AWS region for Bedrock.. [optional]  # noqa: E501
             endpoint (str): Azure OpenAI endpoint URL.. [optional]  # noqa: E501
         """
 
@@ -282,8 +284,8 @@ class ListLlmProviderModelsRequestProviderConfig(ModelComposed):
             base_url (str): Custom base URL for OpenAI API.. [optional] if omitted the server will use the default value of "https://api.openai.com/v1"  # noqa: E501
             organization (str, none_type): OpenAI organization ID.. [optional]  # noqa: E501
             auth (OpenAiProviderAuth): [optional]  # noqa: E501
-            region (str): AWS region for Bedrock.. [optional]  # noqa: E501
             type (str): Provider type.. [optional] if omitted the server will use the default value of "OPENAI"  # noqa: E501
+            region (str): AWS region for Bedrock.. [optional]  # noqa: E501
             endpoint (str): Azure OpenAI endpoint URL.. [optional]  # noqa: E501
         """
 
@@ -356,6 +358,7 @@ class ListLlmProviderModelsRequestProviderConfig(ModelComposed):
           'allOf': [
           ],
           'oneOf': [
+              AnthropicProviderConfig,
               AwsBedrockProviderConfig,
               AzureFoundryProviderConfig,
               OpenAIProviderConfig,

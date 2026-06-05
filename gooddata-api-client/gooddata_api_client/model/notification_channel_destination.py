@@ -72,6 +72,9 @@ class NotificationChannelDestination(ModelComposed):
             '587': 587,
             '2525': 2525,
         },
+        ('type',): {
+            'IN_PLATFORM': "IN_PLATFORM",
+        },
     }
 
     validations = {
@@ -116,7 +119,6 @@ class NotificationChannelDestination(ModelComposed):
         """
         lazy_import()
         return {
-            'type': (str,),  # noqa: E501
             'has_secret_key': (bool, none_type,),  # noqa: E501
             'has_token': (bool, none_type,),  # noqa: E501
             'secret_key': (str, none_type,),  # noqa: E501
@@ -128,6 +130,7 @@ class NotificationChannelDestination(ModelComposed):
             'password': (str,),  # noqa: E501
             'port': (int,),  # noqa: E501
             'username': (str,),  # noqa: E501
+            'type': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -136,7 +139,6 @@ class NotificationChannelDestination(ModelComposed):
 
 
     attribute_map = {
-        'type': 'type',  # noqa: E501
         'has_secret_key': 'hasSecretKey',  # noqa: E501
         'has_token': 'hasToken',  # noqa: E501
         'secret_key': 'secretKey',  # noqa: E501
@@ -148,6 +150,7 @@ class NotificationChannelDestination(ModelComposed):
         'password': 'password',  # noqa: E501
         'port': 'port',  # noqa: E501
         'username': 'username',  # noqa: E501
+        'type': 'type',  # noqa: E501
     }
 
     read_only_vars = {
@@ -161,7 +164,6 @@ class NotificationChannelDestination(ModelComposed):
         """NotificationChannelDestination - a model defined in OpenAPI
 
         Keyword Args:
-            type (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -203,6 +205,7 @@ class NotificationChannelDestination(ModelComposed):
             password (str): The SMTP server password.. [optional]  # noqa: E501
             port (int): The SMTP server port.. [optional]  # noqa: E501
             username (str): The SMTP server username.. [optional]  # noqa: E501
+            type (str): The destination type.. [optional] if omitted the server will use the default value of "IN_PLATFORM"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -276,7 +279,6 @@ class NotificationChannelDestination(ModelComposed):
         """NotificationChannelDestination - a model defined in OpenAPI
 
         Keyword Args:
-            type (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -318,6 +320,7 @@ class NotificationChannelDestination(ModelComposed):
             password (str): The SMTP server password.. [optional]  # noqa: E501
             port (int): The SMTP server port.. [optional]  # noqa: E501
             username (str): The SMTP server username.. [optional]  # noqa: E501
+            type (str): The destination type.. [optional] if omitted the server will use the default value of "IN_PLATFORM"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -912,8 +912,8 @@
         "type": "object"
       },
       "DashboardCompoundComparisonCondition": {
-        "allOf": [
-          {
+        "properties": {
+          "comparison": {
             "properties": {
               "operator": {
                 "enum": [
@@ -926,17 +926,24 @@
                 ],
                 "type": "string"
               },
+              "treatNullValuesAs": {
+                "format": "double",
+                "type": "number"
+              },
               "value": {
                 "format": "double",
                 "type": "number"
               }
             },
+            "required": [
+              "operator",
+              "value"
+            ],
             "type": "object"
           }
-        ],
+        },
         "required": [
-          "operator",
-          "value"
+          "comparison"
         ],
         "type": "object"
       },
@@ -952,8 +959,8 @@
         "type": "object"
       },
       "DashboardCompoundRangeCondition": {
-        "allOf": [
-          {
+        "properties": {
+          "range": {
             "properties": {
               "from": {
                 "format": "double",
@@ -969,15 +976,22 @@
               "to": {
                 "format": "double",
                 "type": "number"
+              },
+              "treatNullValuesAs": {
+                "format": "double",
+                "type": "number"
               }
             },
+            "required": [
+              "from",
+              "operator",
+              "to"
+            ],
             "type": "object"
           }
-        ],
+        },
         "required": [
-          "from",
-          "operator",
-          "to"
+          "range"
         ],
         "type": "object"
       },
@@ -1183,11 +1197,17 @@
       },
       "DashboardMeasureValueFilter": {
         "properties": {
-          "measureValueFilter": {
+          "dashboardMeasureValueFilter": {
             "properties": {
               "conditions": {
                 "items": {
                   "$ref": "#/components/schemas/DashboardCompoundConditionItem"
+                },
+                "type": "array"
+              },
+              "dimensionality": {
+                "items": {
+                  "$ref": "#/components/schemas/IdentifierRef"
                 },
                 "type": "array"
               },
@@ -1209,7 +1229,33 @@
           }
         },
         "required": [
-          "measureValueFilter"
+          "dashboardMeasureValueFilter"
+        ],
+        "type": "object"
+      },
+      "DashboardParameterValue": {
+        "description": "Parameter value override applied to the export. The (id, value) pair drives the execution; the title is FE-supplied for info-sheet display.",
+        "properties": {
+          "id": {
+            "description": "Identifier of the workspace parameter (matches the parameter entity id).",
+            "example": "year",
+            "type": "string"
+          },
+          "title": {
+            "description": "Display title of the parameter as the client wants it rendered on the info sheet.",
+            "example": "Year",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value to use for this parameter when executing the export.",
+            "example": "2026",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "value"
         ],
         "type": "object"
       },
@@ -1223,6 +1269,13 @@
             },
             "type": "array"
           },
+          "dashboardParametersOverride": {
+            "description": "Parameter value overrides applied to the export's executions. Each entry carries the parameter id (used as an AFM execution override) plus the FE-supplied title for the info sheet. Applied uniformly across all tabs; use dashboardTabsParametersOverrides for tab-scoped overrides.",
+            "items": {
+              "$ref": "#/components/schemas/DashboardParameterValue"
+            },
+            "type": "array"
+          },
           "dashboardTabsFiltersOverrides": {
             "additionalProperties": {
               "items": {
@@ -1231,6 +1284,16 @@
               "type": "array"
             },
             "description": "Map of tab-specific filter overrides. Key is tabId, value is list of filters for that tab.",
+            "type": "object"
+          },
+          "dashboardTabsParametersOverrides": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/DashboardParameterValue"
+              },
+              "type": "array"
+            },
+            "description": "Map of tab-specific parameter overrides. Key is tabId, value is a list of (id, value, title) entries that override the dashboard-level parameters for that tab only. Mirrors dashboardTabsFiltersOverrides. When a tab is present in this map, its entries take precedence over dashboardParametersOverride for that tab's executions and info-sheet display.",
             "type": "object"
           },
           "fileName": {

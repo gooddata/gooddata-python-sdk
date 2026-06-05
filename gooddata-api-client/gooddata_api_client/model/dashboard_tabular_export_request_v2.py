@@ -33,8 +33,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.dashboard_export_settings import DashboardExportSettings
     from gooddata_api_client.model.dashboard_filter import DashboardFilter
+    from gooddata_api_client.model.dashboard_parameter_value import DashboardParameterValue
     globals()['DashboardExportSettings'] = DashboardExportSettings
     globals()['DashboardFilter'] = DashboardFilter
+    globals()['DashboardParameterValue'] = DashboardParameterValue
 
 
 class DashboardTabularExportRequestV2(ModelNormal):
@@ -101,7 +103,9 @@ class DashboardTabularExportRequestV2(ModelNormal):
             'file_name': (str,),  # noqa: E501
             'format': (str,),  # noqa: E501
             'dashboard_filters_override': ([DashboardFilter],),  # noqa: E501
+            'dashboard_parameters_override': ([DashboardParameterValue],),  # noqa: E501
             'dashboard_tabs_filters_overrides': ({str: ([DashboardFilter],)},),  # noqa: E501
+            'dashboard_tabs_parameters_overrides': ({str: ([DashboardParameterValue],)},),  # noqa: E501
             'settings': (DashboardExportSettings,),  # noqa: E501
             'widget_ids': ([str],),  # noqa: E501
         }
@@ -116,7 +120,9 @@ class DashboardTabularExportRequestV2(ModelNormal):
         'file_name': 'fileName',  # noqa: E501
         'format': 'format',  # noqa: E501
         'dashboard_filters_override': 'dashboardFiltersOverride',  # noqa: E501
+        'dashboard_parameters_override': 'dashboardParametersOverride',  # noqa: E501
         'dashboard_tabs_filters_overrides': 'dashboardTabsFiltersOverrides',  # noqa: E501
+        'dashboard_tabs_parameters_overrides': 'dashboardTabsParametersOverrides',  # noqa: E501
         'settings': 'settings',  # noqa: E501
         'widget_ids': 'widgetIds',  # noqa: E501
     }
@@ -168,7 +174,9 @@ class DashboardTabularExportRequestV2(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             dashboard_filters_override ([DashboardFilter]): List of filters that will be used instead of the default dashboard filters.. [optional]  # noqa: E501
+            dashboard_parameters_override ([DashboardParameterValue]): Parameter value overrides applied to the export's executions. Each entry carries the parameter id (used as an AFM execution override) plus the FE-supplied title for the info sheet. Applied uniformly across all tabs; use dashboardTabsParametersOverrides for tab-scoped overrides.. [optional]  # noqa: E501
             dashboard_tabs_filters_overrides ({str: ([DashboardFilter],)}): Map of tab-specific filter overrides. Key is tabId, value is list of filters for that tab.. [optional]  # noqa: E501
+            dashboard_tabs_parameters_overrides ({str: ([DashboardParameterValue],)}): Map of tab-specific parameter overrides. Key is tabId, value is a list of (id, value, title) entries that override the dashboard-level parameters for that tab only. Mirrors dashboardTabsFiltersOverrides. When a tab is present in this map, its entries take precedence over dashboardParametersOverride for that tab's executions and info-sheet display.. [optional]  # noqa: E501
             settings (DashboardExportSettings): [optional]  # noqa: E501
             widget_ids ([str]): List of widget identifiers to be exported. Note that only one widget is currently supported.. [optional]  # noqa: E501
         """
@@ -265,7 +273,9 @@ class DashboardTabularExportRequestV2(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             dashboard_filters_override ([DashboardFilter]): List of filters that will be used instead of the default dashboard filters.. [optional]  # noqa: E501
+            dashboard_parameters_override ([DashboardParameterValue]): Parameter value overrides applied to the export's executions. Each entry carries the parameter id (used as an AFM execution override) plus the FE-supplied title for the info sheet. Applied uniformly across all tabs; use dashboardTabsParametersOverrides for tab-scoped overrides.. [optional]  # noqa: E501
             dashboard_tabs_filters_overrides ({str: ([DashboardFilter],)}): Map of tab-specific filter overrides. Key is tabId, value is list of filters for that tab.. [optional]  # noqa: E501
+            dashboard_tabs_parameters_overrides ({str: ([DashboardParameterValue],)}): Map of tab-specific parameter overrides. Key is tabId, value is a list of (id, value, title) entries that override the dashboard-level parameters for that tab only. Mirrors dashboardTabsFiltersOverrides. When a tab is present in this map, its entries take precedence over dashboardParametersOverride for that tab's executions and info-sheet display.. [optional]  # noqa: E501
             settings (DashboardExportSettings): [optional]  # noqa: E501
             widget_ids ([str]): List of widget identifiers to be exported. Note that only one widget is currently supported.. [optional]  # noqa: E501
         """

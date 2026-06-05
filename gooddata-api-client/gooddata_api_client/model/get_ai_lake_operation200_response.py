@@ -73,6 +73,7 @@ class GetAiLakeOperation200Response(ModelComposed):
             'CREATE-PIPE-TABLE': "create-pipe-table",
             'DELETE-PIPE-TABLE': "delete-pipe-table",
             'ANALYZE-STATISTICS': "analyze-statistics",
+            'REFRESH-PARTITION': "refresh-partition",
         },
     }
 
@@ -174,7 +175,7 @@ class GetAiLakeOperation200Response(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             result ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Operation-specific result payload, can be missing for operations like delete. [optional]  # noqa: E501
             id (str): Id of the operation. [optional]  # noqa: E501
-            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `create-pipe-table` — Creating a pipe table backed by an S3 data source. * `delete-pipe-table` — Deleting a pipe table. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. . [optional]  # noqa: E501
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `create-pipe-table` — Creating a pipe table backed by an S3 data source. * `delete-pipe-table` — Deleting a pipe table. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. * `refresh-partition` — Refreshing a specific Hive partition (delete + re-load from S3). . [optional]  # noqa: E501
             error (OperationError): [optional]  # noqa: E501
         """
 
@@ -282,7 +283,7 @@ class GetAiLakeOperation200Response(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             result ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Operation-specific result payload, can be missing for operations like delete. [optional]  # noqa: E501
             id (str): Id of the operation. [optional]  # noqa: E501
-            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `create-pipe-table` — Creating a pipe table backed by an S3 data source. * `delete-pipe-table` — Deleting a pipe table. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. . [optional]  # noqa: E501
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `create-pipe-table` — Creating a pipe table backed by an S3 data source. * `delete-pipe-table` — Deleting a pipe table. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. * `refresh-partition` — Refreshing a specific Hive partition (delete + re-load from S3). . [optional]  # noqa: E501
             error (OperationError): [optional]  # noqa: E501
         """
 
