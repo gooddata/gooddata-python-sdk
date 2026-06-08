@@ -60,7 +60,12 @@ def generate_simulated_response(agent_message: str, expected_output: CreatedVisu
             "Install the [llm-judge] extra: pip install 'gooddata-eval[llm-judge]'"
         ) from exc
 
-    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY", ""))
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        raise OSError(
+            "OPENAI_API_KEY environment variable is required for multi-turn agentic evaluation."
+        )
+    client = OpenAI(api_key=api_key)
 
     metric_uris = sorted(get_metric_uri_set(expected_output))
     dim_uris = sorted(get_dimension_uri_set(expected_output))
@@ -156,7 +161,7 @@ def _execute_single_run(
     total_turns = 0.0
     total_steps = 0.0
     all_tool_call_events: list[ToolCallEvent] = []
-    simulated_response_guide = expected_outputs[0]
+    simulated_response_guide = expected_outputs[0]  # primary candidate guides the simulated user
 
     current_result = client.send_message(conversation_id, question)
 
