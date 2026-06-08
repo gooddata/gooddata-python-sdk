@@ -34,7 +34,7 @@ class _FakeBackend:
         self._results = results
         self.calls = 0
 
-    def ask(self, question: str) -> ChatResult:
+    def ask(self, item: DatasetItem) -> ChatResult:
         r = self._results[min(self.calls, len(self._results) - 1)]
         self.calls += 1
         return r
@@ -68,7 +68,7 @@ def test_run_items_marks_unsupported_test_kind_skipped():
 
 def test_run_items_records_agent_error_without_passing():
     class _BoomBackend:
-        def ask(self, question: str) -> ChatResult:
+        def ask(self, item: DatasetItem) -> ChatResult:
             raise RuntimeError("network down")
 
     report = run_items([_item()], _BoomBackend(), runs=1)
@@ -111,7 +111,15 @@ def test_run_items_reports_latency_and_per_run_callback():
 
 
 def test_run_items_routes_all_supported_kinds():
-    expected_kinds = {"visualization", "metric_skill", "alert_skill", "search_tool", "general_question", "guardrail"}
+    expected_kinds = {
+        "visualization",
+        "metric_skill",
+        "alert_skill",
+        "search_tool",
+        "general_question",
+        "guardrail",
+        "dashboard_summary",
+    }
     assert expected_kinds == supported_test_kinds()
 
 

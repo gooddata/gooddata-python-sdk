@@ -16,14 +16,38 @@ from gooddata_eval.core.config import RunConfig
 from gooddata_eval.core.connection import ConnectionError_, resolve_connection
 from gooddata_eval.core.dataset.local import load_local_dataset
 from gooddata_eval.core.langfuse.sink import LangfuseSink
-from gooddata_eval.core.models import DatasetItem
+from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.reporting.console import render_comparison, render_console
 from gooddata_eval.core.reporting.json_report import write_multi_model_report
 from gooddata_eval.core.runner import ItemReport, run_items
+from gooddata_eval.core.summary.http_client import SummaryClient
 from gooddata_eval.core.workspace import ModelResolutionError, WorkspaceModelController
 
 _EXIT_OK = 0
 _EXIT_OPERATIONAL_ERROR = 2
+_SUMMARY_TEST_KIND = "dashboard_summary"
+
+
+class _RoutingBackend:
+    """Dispatch each item to the right backend by test_kind.
+
+    `dashboard_summary` items go to the dedicated summary endpoint; everything
+    else uses the conversational chat endpoint.
+    """
+
+    def __init__(self, chat: ChatClient, summary: SummaryClient):
+        self._chat = chat
+        self._summary = summary
+
+    def ask(self, item: DatasetItem) -> ChatResult:
+        if item.test_kind == _SUMMARY_TEST_KIND:
+            return self._summary.ask(item)
+        return self._chat.ask(item)
+
+    def close(self) -> None:
+        for backend in (self._chat, self._summary):
+            if hasattr(backend, "close"):
+                backend.close()
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -263,7 +287,10 @@ def _run(config: RunConfig) -> int:
                 ) -> None:
                     _sink.log_item(report, dataset_item_id=report.id)
 
-            backend = ChatClient(host=config.host, token=config.token, workspace_id=config.workspace_id)
+            backend = _RoutingBackend(
+                ChatClient(host=config.host, token=config.token, workspace_id=config.workspace_id),
+                SummaryClient(host=config.host, token=config.token, workspace_id=config.workspace_id),
+            )
             try:
                 report = run_items(
                     items,

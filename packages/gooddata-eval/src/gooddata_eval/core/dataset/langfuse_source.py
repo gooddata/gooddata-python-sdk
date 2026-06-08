@@ -17,7 +17,7 @@ from typing import Any
 
 import httpx
 
-from gooddata_eval.core.models import DatasetItem
+from gooddata_eval.core.models import DatasetItem, SummaryInput
 
 _DEFAULT_HOST = "https://cloud.langfuse.com"
 _PAGE_SIZE = 100
@@ -47,6 +47,24 @@ def _question_from_input(raw_input: Any) -> str:
     raise ValueError(f"Unsupported Langfuse item input shape: {raw_input!r}")
 
 
+def _summary_input_from_raw(raw: dict, expected_output: Any) -> SummaryInput | None:
+    """Locate a dashboard_summary item's `summary_input`.
+
+    Langfuse items have no dedicated field for it, so accept it (in priority
+    order) from the item input object, the item metadata, or the expectedOutput.
+    """
+    candidate: Any = None
+    raw_input = raw.get("input")
+    metadata = raw.get("metadata")
+    if isinstance(raw_input, dict) and isinstance(raw_input.get("summary_input"), dict):
+        candidate = raw_input["summary_input"]
+    elif isinstance(metadata, dict) and isinstance(metadata.get("summary_input"), dict):
+        candidate = metadata["summary_input"]
+    elif isinstance(expected_output, dict) and isinstance(expected_output.get("summary_input"), dict):
+        candidate = expected_output["summary_input"]
+    return SummaryInput.model_validate(candidate) if candidate is not None else None
+
+
 def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetItem:
     """Map a Langfuse REST API dataset-item dict to a DatasetItem."""
     # REST API returns camelCase: expectedOutput, not expected_output
@@ -60,6 +78,7 @@ def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetIt
         test_kind=resolved_kind,
         question=_question_from_input(raw.get("input")),
         expected_output=expected_output,
+        summary_input=_summary_input_from_raw(raw, expected_output),
     )
 
 

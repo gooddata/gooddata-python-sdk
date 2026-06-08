@@ -11,6 +11,7 @@ from gooddata_eval.core.workspace import (
     resolve_model,
     select_provider_and_model,
 )
+from gooddata_sdk import CatalogWorkspaceSetting
 
 
 def test_active_provider_content_shape():
@@ -109,6 +110,68 @@ def test_resolve_provider_ref_ambiguous_name():
     }
     with pytest.raises(ModelResolutionError, match="Multiple"):
         _resolve_provider_ref("Shared Name", info)
+
+
+def _controller_with_settings(settings: list[CatalogWorkspaceSetting]) -> WorkspaceModelController:
+    controller = WorkspaceModelController.__new__(WorkspaceModelController)
+    controller._workspace_id = "demo"
+    controller._sdk = MagicMock()
+    controller._sdk.catalog_workspace.list_workspace_settings.return_value = settings
+    return controller
+
+
+def _setting(setting_id: str, setting_type: str, content: dict) -> CatalogWorkspaceSetting:
+    return CatalogWorkspaceSetting(id=setting_id, setting_type=setting_type, content=content)
+
+
+def test_get_active_finds_setting_by_type_regardless_of_id():
+    # The setting exists under a non-default id (e.g. a UI-generated one).
+    controller = _controller_with_settings(
+        [
+            _setting("some-other-setting", "OTHER_TYPE", {}),
+            _setting("uuid-1234", "ACTIVE_LLM_PROVIDER", {"id": "prov_1", "defaultModelId": "gpt-5.2"}),
+        ]
+    )
+    active = controller.get_active()
+    assert active == ActiveLlmProvider(provider_id="prov_1", default_model_id="gpt-5.2")
+
+
+def test_get_active_returns_none_when_no_setting_of_type():
+    controller = _controller_with_settings([_setting("x", "OTHER_TYPE", {})])
+    assert controller.get_active() is None
+
+
+def test_activate_updates_existing_setting_using_its_real_id():
+    controller = _controller_with_settings(
+        [_setting("uuid-1234", "ACTIVE_LLM_PROVIDER", {"id": "prov_1", "defaultModelId": "gpt-5.2"})]
+    )
+    controller.activate("prov_2", "gpt-4o")
+    args, _ = controller._sdk.catalog_workspace.create_or_update_workspace_setting.call_args
+    _, written = args
+    assert written.id == "uuid-1234"  # reuses existing id -> UPDATE, no 409
+    assert written.content == active_provider_content("prov_2", "gpt-4o")
+
+
+def test_activate_creates_with_default_id_when_absent():
+    controller = _controller_with_settings([])
+    controller.activate("prov_1", "gpt-5.2")
+    args, _ = controller._sdk.catalog_workspace.create_or_update_workspace_setting.call_args
+    _, written = args
+    assert written.id == "activeLlmProvider"
+
+
+def test_resolve_and_activate_default_path_sets_empty_provider_type():
+    # No --model/--provider: the default branch must still populate provider_type
+    # (regression: it was left unbound -> UnboundLocalError).
+    ctrl = WorkspaceModelController.__new__(WorkspaceModelController)
+    ctrl._workspace_id = "ws"
+    ctrl._sdk = MagicMock()
+    ctrl.get_active = lambda: ActiveLlmProvider(provider_id="prov_1", default_model_id="gpt-5.2")
+    ctrl.activate = lambda pid, mid: None
+    resolved = ctrl.resolve_and_activate(None, None)
+    assert (resolved.provider_id, resolved.model_id) == ("prov_1", "gpt-5.2")
+    assert resolved.provider_type == ""
+    assert resolved.provider_name == ""
 
 
 def test_workspace_controller_restore_calls_activate():

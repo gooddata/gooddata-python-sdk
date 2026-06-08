@@ -4,9 +4,13 @@
 from dataclasses import dataclass, field
 
 import httpx
-from gooddata_api_client.exceptions import ApiException, NotFoundException
+from gooddata_api_client.exceptions import ApiException
 from gooddata_sdk import CatalogWorkspaceSetting, GoodDataSdk
 
+# Default id used only when creating the setting for the first time. The backend
+# enforces a single setting per *type* (ACTIVE_LLM_PROVIDER), and an existing
+# setting may have been created with any id (e.g. by the UI), so reads and
+# updates must locate it by type rather than by this id.
 _SETTING_ID = "activeLlmProvider"
 _SETTING_TYPE = "ACTIVE_LLM_PROVIDER"
 
@@ -142,10 +146,16 @@ class WorkspaceModelController:
         self._workspace_id = workspace_id
         self._sdk = GoodDataSdk.create(host, token)
 
+    def _active_setting(self) -> CatalogWorkspaceSetting | None:
+        """Find the workspace's ACTIVE_LLM_PROVIDER setting by type (id may vary)."""
+        for setting in self._sdk.catalog_workspace.list_workspace_settings(self._workspace_id):
+            if setting.setting_type == _SETTING_TYPE:
+                return setting
+        return None
+
     def get_active(self) -> ActiveLlmProvider | None:
-        try:
-            setting = self._sdk.catalog_workspace.get_workspace_setting(self._workspace_id, _SETTING_ID)
-        except NotFoundException:
+        setting = self._active_setting()
+        if setting is None:
             return None
         content = setting.content or {}
         return ActiveLlmProvider(
@@ -176,8 +186,12 @@ class WorkspaceModelController:
         }
 
     def activate(self, provider_id: str, model_id: str) -> None:
+        # Reuse the existing setting's id so create_or_update performs an UPDATE.
+        # Creating a second ACTIVE_LLM_PROVIDER setting (under a different id)
+        # would be rejected by the backend with HTTP 409 (one per type).
+        existing = self._active_setting()
         setting = CatalogWorkspaceSetting(
-            id=_SETTING_ID,
+            id=existing.id if existing is not None else _SETTING_ID,
             setting_type=_SETTING_TYPE,
             content=active_provider_content(provider_id, model_id),
         )
@@ -195,6 +209,7 @@ class WorkspaceModelController:
         if requested_model is None and requested_provider is None:
             provider_id, model_id = resolve_model(None, active)
             provider_name = ""
+            provider_type = ""
         else:
             info = self._provider_info()
             providers_models = {
