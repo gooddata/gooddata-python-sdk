@@ -16,7 +16,7 @@ from gooddata_eval.core.evaluators.visualization import (
     _check_visualization_skill_activated,
     _evaluate_against_candidates,
 )
-from gooddata_eval.core.models import ChatResult, CreatedVisualization, ToolCallEvent
+from gooddata_eval.core.models import CreatedVisualization, ToolCallEvent
 from gooddata_eval.core.scoring import get_dimension_uri_set, get_metric_uri_set, uri_to_display_name
 
 _DEFAULT_K = 2
