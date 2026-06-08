@@ -102,6 +102,29 @@ def test_langfuse_sink_posts_batch_with_four_event_types(monkeypatch):
     assert "/api/public/dataset-run-items" in str(run_item_call)
 
 
+def test_langfuse_sink_sets_trace_version_to_model(monkeypatch):
+    # The model id is exposed on the trace `version` field so Langfuse dashboards
+    # can break down / filter by it ("Version").
+    monkeypatch.setenv("LANGFUSE_PUBLIC_KEY", "pk-test")
+    monkeypatch.setenv("LANGFUSE_SECRET_KEY", "sk-test")
+    monkeypatch.setenv("LANGFUSE_HOST", "https://cloud.langfuse.com")
+    sink = LangfuseSink(dataset_name="ds", run_name="gd-eval-r", model_id="gpt-5.4-mini")
+
+    mock_resp = MagicMock()
+    mock_resp.status_code = 200
+    mock_client = MagicMock()
+    mock_client.__enter__ = MagicMock(return_value=mock_client)
+    mock_client.__exit__ = MagicMock(return_value=False)
+    mock_client.post.return_value = mock_resp
+
+    with patch("gooddata_eval.core.langfuse.sink.httpx.Client", return_value=mock_client):
+        sink.log_item(_passing_report(), dataset_item_id="item-1")
+
+    batch = mock_client.post.call_args_list[0][1]["json"]["batch"]
+    trace = next(e for e in batch if e["type"] == "trace-create")
+    assert trace["body"]["version"] == "gpt-5.4-mini"
+
+
 def test_langfuse_sink_run_item_links_correct_dataset_item(monkeypatch):
     sink = _make_sink(monkeypatch)
     mock_resp = MagicMock()

@@ -163,7 +163,44 @@ A dataset is a folder of `.json` files, one per question:
 ```
 
 Supported `test_kind` values: `visualization`, `metric_skill`, `alert_skill`,
-`search_tool`, `general_question`, `guardrail`.
+`search_tool`, `general_question`, `guardrail`, `dashboard_summary`.
+
+### `dashboard_summary` items
+
+Summary items call the dedicated summary endpoint
+(`POST /api/v1/ai/workspaces/{ws}/summary`) instead of the chat endpoint, so
+they carry an extra `summary_input` block, and the `expected_output` is a
+**rubric** rather than an exact answer (summaries are free text):
+
+```json
+{
+  "id": "summary-001",
+  "dataset_name": "summary_pilot",
+  "test_kind": "dashboard_summary",
+  "question": "Summarize the Sales Overview dashboard.",
+  "summary_input": {
+    "dashboard_id": "sales_overview"
+  },
+  "expected_output": {
+    "must_include":     ["States the overall revenue trend", "Identifies the top segment"],
+    "must_not_include": ["Numbers or segments not present in the visualizations"],
+    "rubric":           ["Reads as a coherent business summary"]
+  }
+}
+```
+
+`summary_input` requires only `dashboard_id` (the endpoint summarizes the whole
+dashboard). Optional fields narrow the scope: `visualizations` (list of ids),
+`filter_context` (AFM filters), `tab_id`, and `format_hint`.
+
+The `expected_output` rubric:
+
+- `must_include` — facts a good summary must contain; **all** must pass for the item to pass.
+- `must_not_include` — hallucination/accuracy guards; **any** violation fails the item.
+- `rubric` — soft quality dimensions; they affect `quality_score` but do not gate pass/fail.
+
+Each criterion is scored independently by the LLM judge, so `quality_score`
+is the fraction of satisfied criteria.
 
 ## Supported test kinds
 
@@ -175,6 +212,7 @@ Supported `test_kind` values: `visualization`, `metric_skill`, `alert_skill`,
 | `search_tool` | `search_objects` tool call (correct function called = pass; correct arguments = quality score) | — |
 | `general_question` | Text answer judged by LLM | `[llm-judge]` |
 | `guardrail` | Refusal/redirect (visualization response auto-fails) | `[llm-judge]` |
+| `dashboard_summary` | Dashboard summary (via `/summary` endpoint) scored against a rubric by LLM | `[llm-judge]` |
 
 ## Optional extras
 
