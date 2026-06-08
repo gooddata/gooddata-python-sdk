@@ -61,7 +61,8 @@ def _check_visualization_skill_activated(tool_call_events: list[ToolCallEvent]) 
     for tc in tool_call_events:
         if tc.function_name == "set_skills":
             args = tc.parsed_arguments()
-            if "visualization" in args.get("skill_names", []):
+            skill_names = args.get("skill_names", [])
+            if isinstance(skill_names, list) and "visualization" in skill_names:
                 return True
     return False
 
