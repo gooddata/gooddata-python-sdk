@@ -4,7 +4,7 @@
 from dataclasses import dataclass
 
 from gooddata_eval.core.evaluators.base import ItemEvaluation
-from gooddata_eval.core.models import ChatResult, CreatedVisualization, DatasetItem
+from gooddata_eval.core.models import ChatResult, CreatedVisualization, DatasetItem, ToolCallEvent
 from gooddata_eval.core.scoring import (
     check_filters,
     check_viz_type,
@@ -25,6 +25,7 @@ class EvaluationResult:
     filter_date_score: bool
     filter_ranking_score: bool
     filter_attribute_score: bool
+    skill_activated: bool
     cross_ref_errors: list[str]
     expected_metric_uris: set[str]
     actual_metric_uris: set[str]
@@ -55,7 +56,21 @@ class EvaluationResult:
         )
 
 
-def _evaluate_visualization(expected: CreatedVisualization, actual: CreatedVisualization | None) -> EvaluationResult:
+def _check_visualization_skill_activated(tool_call_events: list[ToolCallEvent]) -> bool:
+    """Return True if set_skills was called with 'visualization' in skill_names."""
+    for tc in tool_call_events:
+        if tc.function_name == "set_skills":
+            args = tc.parsed_arguments()
+            if "visualization" in args.get("skill_names", []):
+                return True
+    return False
+
+
+def _evaluate_visualization(
+    expected: CreatedVisualization,
+    actual: CreatedVisualization | None,
+    skill_activated: bool = False,
+) -> EvaluationResult:
     exp_metric_uris = get_metric_uri_set(expected)
     exp_dim_uris = get_dimension_uri_set(expected)
     if actual is None:
@@ -69,6 +84,7 @@ def _evaluate_visualization(expected: CreatedVisualization, actual: CreatedVisua
             filter_date_score=False,
             filter_ranking_score=False,
             filter_attribute_score=False,
+            skill_activated=skill_activated,
             cross_ref_errors=["No visualization was created"],
             expected_metric_uris=exp_metric_uris,
             actual_metric_uris=set(),
@@ -89,6 +105,7 @@ def _evaluate_visualization(expected: CreatedVisualization, actual: CreatedVisua
         filter_date_score=filter_scores.date_ok,
         filter_ranking_score=filter_scores.ranking_ok,
         filter_attribute_score=filter_scores.attribute_ok,
+        skill_activated=skill_activated,
         cross_ref_errors=cross_ref_errors,
         expected_metric_uris=exp_metric_uris,
         actual_metric_uris=act_metric_uris,
@@ -98,9 +115,11 @@ def _evaluate_visualization(expected: CreatedVisualization, actual: CreatedVisua
 
 
 def _evaluate_against_candidates(
-    expected_outputs: list[CreatedVisualization], actual: CreatedVisualization | None
+    expected_outputs: list[CreatedVisualization],
+    actual: CreatedVisualization | None,
+    skill_activated: bool = False,
 ) -> tuple[EvaluationResult, CreatedVisualization]:
-    pairs = [(_evaluate_visualization(exp, actual), exp) for exp in expected_outputs]
+    pairs = [(_evaluate_visualization(exp, actual, skill_activated), exp) for exp in expected_outputs]
     best_result, best_expected = max(pairs, key=lambda p: (p[0].strict_pass, p[0].strict_checks_passed_count))
     return best_result, best_expected
 
@@ -133,7 +152,8 @@ class VisualizationEvaluator:
     def evaluate(self, item: DatasetItem, chat_result: ChatResult) -> ItemEvaluation:
         candidates = _parse_expected(item.expected_output)
         actual = _extract_actual(chat_result)
-        ev, _best_expected = _evaluate_against_candidates(candidates, actual)
+        skill_activated = _check_visualization_skill_activated(chat_result.tool_call_events)
+        ev, _best_expected = _evaluate_against_candidates(candidates, actual, skill_activated)
         return ItemEvaluation(
             passed=ev.strict_pass,
             rank_key=(ev.strict_pass, ev.strict_checks_passed_count),
@@ -148,6 +168,7 @@ class VisualizationEvaluator:
                 "filter_ranking_score": ev.filter_ranking_score,
                 "filter_attribute_score": ev.filter_attribute_score,
                 "viz_type_hard": ev.viz_type_hard,
+                "skill_activated": ev.skill_activated,
                 "expected_metric_uris": sorted(ev.expected_metric_uris),
                 "actual_metric_uris": sorted(ev.actual_metric_uris),
                 "expected_dim_uris": sorted(ev.expected_dim_uris),
