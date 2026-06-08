@@ -148,7 +148,7 @@ class ChatClient:
         self._auth = {"Authorization": f"Bearer {token}"}
         self._client = httpx.Client(timeout=timeout)
 
-    def _create_conversation(self) -> str:
+    def create_conversation(self) -> str:
         resp = self._client.post(self._base, headers={**self._auth, "Content-Type": "application/json"})
         resp.raise_for_status()
         body = resp.json()
@@ -156,13 +156,13 @@ class ChatClient:
             raise ValueError(f"GoodData /chat/conversations response missing 'conversationId': {body}")
         return body["conversationId"]
 
-    def _delete_conversation(self, conversation_id: str) -> None:
+    def delete_conversation(self, conversation_id: str) -> None:
         try:
             self._client.delete(f"{self._base}/{conversation_id}", headers=self._auth)
         except httpx.HTTPError:
             pass  # best-effort cleanup
 
-    def _send_message(self, conversation_id: str, question: str) -> ChatResult:
+    def send_message(self, conversation_id: str, question: str) -> ChatResult:
         url = f"{self._base}/{conversation_id}/messages"
         headers = {**self._auth, "Accept": "text/event-stream", "Content-Type": "application/json"}
         body = {"item": {"role": "user", "content": {"type": "text", "text": question}}}
@@ -172,11 +172,11 @@ class ChatClient:
 
     def ask(self, question: str) -> ChatResult:
         """Run one single-turn conversation: create, send, parse, clean up."""
-        conversation_id = self._create_conversation()
+        conversation_id = self.create_conversation()
         try:
-            return self._send_message(conversation_id, question)
+            return self.send_message(conversation_id, question)
         finally:
-            self._delete_conversation(conversation_id)
+            self.delete_conversation(conversation_id)
 
     def close(self) -> None:
         self._client.close()
