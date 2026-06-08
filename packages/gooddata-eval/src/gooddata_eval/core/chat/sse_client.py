@@ -88,6 +88,7 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
     payload: dict[str, Any] = {
         "textResponse": "\n".join(acc.text_parts) or None,
         "toolCallEvents": acc.tool_call_events,
+        "reasoningStepCount": len(acc.reasoning_steps),
     }
     if acc.visualizations:
         payload["createdVisualizations"] = {

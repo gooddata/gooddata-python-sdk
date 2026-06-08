@@ -83,6 +83,7 @@ class ChatResult(BaseModel):
     text_response: str | None = Field(default=None, alias="textResponse")
     created_visualizations: CreatedVisualizations | None = Field(default=None, alias="createdVisualizations")
     tool_call_events: list[ToolCallEvent] = Field(default_factory=list, alias="toolCallEvents")
+    reasoning_step_count: int = Field(default=0, alias="reasoningStepCount")
 
 
 class DatasetItem(BaseModel):
