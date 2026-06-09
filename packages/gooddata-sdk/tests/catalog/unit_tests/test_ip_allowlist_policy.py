@@ -120,11 +120,15 @@ def test_ip_allowlist_policy_crud_methods_call_generated_client() -> None:
     service.delete_ip_allowlist_policy("corp-vpn-only")
 
     assert entities_api.get_entity_ip_allowlist_policies.call_args.args[0] == "corp-vpn-only"
+    # Relationship data is stripped unless explicitly requested via the JSON:API include param.
+    assert entities_api.get_entity_ip_allowlist_policies.call_args.kwargs["include"] == ["users", "userGroups"]
     create_doc = entities_api.create_entity_ip_allowlist_policies.call_args.kwargs[
         "json_api_ip_allowlist_policy_in_document"
     ]
     assert create_doc.data.id == "corp-vpn-only"
+    assert entities_api.create_entity_ip_allowlist_policies.call_args.kwargs["include"] == ["users", "userGroups"]
     assert entities_api.update_entity_ip_allowlist_policies.call_args.args[0] == "corp-vpn-only"
+    assert entities_api.update_entity_ip_allowlist_policies.call_args.kwargs["include"] == ["users", "userGroups"]
     assert entities_api.delete_entity_ip_allowlist_policies.call_args.args[0] == "corp-vpn-only"
 
 
@@ -143,6 +147,7 @@ def test_list_ip_allowlist_policies_loads_all_entities() -> None:
 
     assert [policy.id for policy in policies] == ["first", "second"]
     assert entities_api.get_all_entities_ip_allowlist_policies.called
+    assert entities_api.get_all_entities_ip_allowlist_policies.call_args.kwargs["include"] == ["users", "userGroups"]
 
 
 def test_ip_allowlist_target_actions_call_generated_client() -> None:
