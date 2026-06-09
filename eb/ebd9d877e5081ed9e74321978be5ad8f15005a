@@ -1,0 +1,25 @@
+packages/gooddata-eval/src/gooddata_eval/core/runner.py
+  s_90905292b36e6b::t_db8cbf500b12eb 51-52,148,164
+packages/gooddata-eval/src/gooddata_eval/core/reporting/console.py
+  s_90905292b36e6b::t_db8cbf500b12eb 78,80,105-106
+packages/gooddata-eval/src/gooddata_eval/core/reporting/json_report.py
+  s_90905292b36e6b::t_db8cbf500b12eb 46
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  s_90905292b36e6b::t_db8cbf500b12eb 261
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "ebebd9d877e5081ed9e74321978be5ad8f15005a",
+  "prompts": {},
+  "sessions": {
+    "s_90905292b36e6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4819d826-2ce0-4f89-89e2-8b5af18493a9",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+packages/gooddata-eval/tests/test_cli.py
+  s_90905292b36e6b::t_22ba1e350b6ba7 6
+  s_90905292b36e6b::t_03212aa82dcd06 487-492
+  s_90905292b36e6b::t_8e051017be808d 411-413,416-420,423,425-426,428-429,431-433,452-470,486
+  s_90905292b36e6b::t_599f006b1b2280 421,424,427,430,434-449,475-485
+  s_90905292b36e6b::t_082c70ff805f74 414-415,422,450-451,471-472,474
+  s_90905292b36e6b::t_0833619e91cd2d 473
+packages/gooddata-eval/src/gooddata_eval/core/workspace.py
+  s_90905292b36e6b::t_beb09055249f9c 6-7
+  s_90905292b36e6b::t_5815139fa06734 101-102
+  s_90905292b36e6b::t_83699fbcf47ee3 228
+packages/gooddata-eval/src/gooddata_eval/core/reporting/json_report.py
+  s_90905292b36e6b::t_398f0ab11bf6cf 56-66
+packages/gooddata-eval/README.md
+  s_90905292b36e6b::t_0ac3b40a0534ef 4,14-25,32,35,39-61,63-67,71,73,76,80-81,83,87,89,93,95,99-100,102,106-146,150,180-181,184-185,189,195,204,206
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/sink.py
+  s_90905292b36e6b::t_398f0ab11bf6cf 98-99,101
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  s_90905292b36e6b::t_398f0ab11bf6cf 257-287,289-295
+packages/gooddata-eval/tests/test_reporting.py
+  s_90905292b36e6b::t_8e051017be808d 165-168,185-191
+  s_90905292b36e6b::t_599f006b1b2280 169-184
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "bf9a5241df7a34033f084eaf0a717d18a68b234d",
+  "prompts": {},
+  "sessions": {
+    "s_90905292b36e6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4819d826-2ce0-4f89-89e2-8b5af18493a9",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": null
+    }
+  }
+}
