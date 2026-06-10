@@ -721,13 +721,17 @@ class CatalogOrganizationService(CatalogServiceBase):
         Returns:
             CatalogIpAllowlistPolicy: Retrieved policy.
         """
-        response = self._entities_api.get_entity_ip_allowlist_policies(policy_id, _check_return_type=False)
+        response = self._entities_api.get_entity_ip_allowlist_policies(
+            policy_id, include=["users", "userGroups"], _check_return_type=False
+        )
         return CatalogIpAllowlistPolicy.from_api(response.data)
 
     def list_ip_allowlist_policies(self) -> list[CatalogIpAllowlistPolicy]:
         """Return all IP allowlist policies in the organization."""
         get_policies = functools.partial(
-            self._entities_api.get_all_entities_ip_allowlist_policies, _check_return_type=False
+            self._entities_api.get_all_entities_ip_allowlist_policies,
+            include=["users", "userGroups"],
+            _check_return_type=False,
         )
         policies = load_all_entities(get_policies)
         return [CatalogIpAllowlistPolicy.from_api(policy) for policy in policies.data]
@@ -735,14 +739,16 @@ class CatalogOrganizationService(CatalogServiceBase):
     def create_ip_allowlist_policy(self, policy: CatalogIpAllowlistPolicy) -> CatalogIpAllowlistPolicy:
         """Create a new IP allowlist policy."""
         response = self._entities_api.create_entity_ip_allowlist_policies(
-            json_api_ip_allowlist_policy_in_document=policy.to_api(), _check_return_type=False
+            json_api_ip_allowlist_policy_in_document=policy.to_api(),
+            include=["users", "userGroups"],
+            _check_return_type=False,
         )
         return CatalogIpAllowlistPolicy.from_api(response.data)
 
     def update_ip_allowlist_policy(self, policy: CatalogIpAllowlistPolicy) -> CatalogIpAllowlistPolicy:
         """Replace an existing IP allowlist policy."""
         response = self._entities_api.update_entity_ip_allowlist_policies(
-            policy.id, policy.to_api(), _check_return_type=False
+            policy.id, policy.to_api(), include=["users", "userGroups"], _check_return_type=False
         )
         return CatalogIpAllowlistPolicy.from_api(response.data)
 
