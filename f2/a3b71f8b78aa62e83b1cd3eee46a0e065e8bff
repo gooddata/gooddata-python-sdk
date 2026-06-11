@@ -1,0 +1,29 @@
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  s_90905292b36e6b::t_eb158b6a389e2a 55-61,280,335
+  s_90905292b36e6b::t_1b1a82c2070ad4 320-322
+packages/gooddata-eval/src/gooddata_eval/core/runner.py
+  s_90905292b36e6b::t_eb158b6a389e2a 5,157,167-170,176-177,192-206
+  s_90905292b36e6b::t_1b1a82c2070ad4 178-182,185-191
+packages/gooddata-eval/tests/test_runner.py
+  s_90905292b36e6b::t_447efceb6fdccf 2-3,6
+  s_90905292b36e6b::t_c8d2d8e5bf215a 140-144,152-163,171-178
+  s_90905292b36e6b::t_df64305dba87b7 145-151,164-170,179-225
+packages/gooddata-eval/src/gooddata_eval/core/config.py
+  s_90905292b36e6b::t_eb158b6a389e2a 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "f2a3b71f8b78aa62e83b1cd3eee46a0e065e8bff",
+  "prompts": {},
+  "sessions": {
+    "s_90905292b36e6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4819d826-2ce0-4f89-89e2-8b5af18493a9",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": null
+    }
+  }
+}
