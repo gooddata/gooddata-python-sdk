@@ -1,0 +1,27 @@
+packages/gooddata-sdk/tests/catalog/fixtures/data_sources/scan_sql_with_nulls_in_preview.yaml
+  s_acf76bf6318714::t_1341179b5da441 26
+packages/gooddata-sdk/tests/catalog/test_catalog_data_source.py
+  s_acf76bf6318714::t_8a796e204b5d04 731-733
+  s_acf76bf6318714::t_9cf7b14bd68e8e 749
+  s_acf76bf6318714::t_42029a4e680519 766
+packages/gooddata-sdk/tests/catalog/fixtures/data_sources/scan_scan_sql_without_preview.yaml
+  s_acf76bf6318714::t_c4824f993a5aab 25
+packages/gooddata-sdk/tests/catalog/fixtures/data_sources/scan_sql.yaml
+  s_acf76bf6318714::t_b7f4561285848c 25,28,31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "f79eac5d893946095121447cc9d447503ae3572b",
+  "prompts": {},
+  "sessions": {
+    "s_acf76bf6318714": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f10e55c2-d81a-43bd-9aae-6b6236c5235c",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Ondřej Krčma <ondrej.krcma@gooddata.com>"
+    }
+  }
+}
