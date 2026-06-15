@@ -239,6 +239,10 @@
             "maxLength": 255,
             "type": "string"
           },
+          "nullValue": {
+            "description": "Value used as sentinel for nullable columns",
+            "type": "string"
+          },
           "referencedTableColumn": {
             "description": "Referenced table (Foreign key)",
             "example": "customer_id",
@@ -543,6 +547,10 @@
           "name": {
             "description": "Column name",
             "example": "customer_id",
+            "type": "string"
+          },
+          "nullValue": {
+            "description": "Value used as sentinel for null values in the column",
             "type": "string"
           }
         },
