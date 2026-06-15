@@ -891,6 +891,9 @@ llm-judge = [
 ]
 
 [package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
 test = [
     { name = "pytest" },
     { name = "pytest-cov" },
@@ -909,6 +912,7 @@ requires-dist = [
 provides-extras = ["llm-judge"]
 
 [package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.3.5" }]
 test = [
     { name = "pytest", specifier = "~=8.3.4" },
     { name = "pytest-cov", specifier = "~=6.0.0" },

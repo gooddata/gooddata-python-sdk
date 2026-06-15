@@ -33,9 +33,10 @@ def _resolve_alias_to_uri(alias: str, fields: dict[str, AacQueryField | str]) ->
     field = fields.get(alias)
     if field is None:
         return alias
-    if isinstance(field, AacQueryField):
-        return field.using
-    return field
+    if isinstance(field, str):
+        return field
+    # Duck-type: works even when field is from a different module's AacQueryField class
+    return field.using
 
 
 def _resolve_bucket_to_uri_set(bucket: list[AacBucketRef | str], fields: dict[str, AacQueryField | str]) -> set[str]:
