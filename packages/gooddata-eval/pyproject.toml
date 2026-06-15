@@ -39,6 +39,9 @@ gd-eval = "gooddata_eval.cli.main:main"
 Source = "https://github.com/gooddata/gooddata-python-sdk"
 
 [dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+]
 test = [
     "pytest~=8.3.4",
     "pytest-cov~=6.0.0",

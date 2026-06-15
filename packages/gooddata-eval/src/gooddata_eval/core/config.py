@@ -18,3 +18,4 @@ class RunConfig:
     json_path: Path | None = None
     log_to_langfuse: bool = False
     quiet: bool = False
+    kind: str = "visualization"
