@@ -1,0 +1,23 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_ee5cc41b994920::t_23e94b2f1155a4 306-307
+  s_ee5cc41b994920::t_5c4118b25f239c 170
+  s_ee5cc41b994920::t_d56f9cc8eb488c 255-256,267-268
+  s_ee5cc41b994920::t_8bb89bb5ffb625 298
+  s_ee5cc41b994920::t_59d0dbeeecc4d1 326-332
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "636425b83577ff3a9c72ba3a702d6a21d38e9ca3",
+  "prompts": {},
+  "sessions": {
+    "s_ee5cc41b994920": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a4aa36d-5864-4014-bd73-a9160c2f8d78",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}
