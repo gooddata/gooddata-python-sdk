@@ -22,10 +22,13 @@ interactions:
           columns:
             - dataType: INT
               name: product_id
+              nullValue: '0'
             - dataType: STRING
               name: product_name
+              nullValue: _
             - dataType: STRING
               name: category
+              nullValue: _
           dataPreview:
             - - '150'
               - Skirt

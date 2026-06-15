@@ -109,6 +109,7 @@ class DeclarativeColumn(ModelNormal):
             'description': (str,),  # noqa: E501
             'is_nullable': (bool,),  # noqa: E501
             'is_primary_key': (bool,),  # noqa: E501
+            'null_value': (str,),  # noqa: E501
             'referenced_table_column': (str,),  # noqa: E501
             'referenced_table_id': (str,),  # noqa: E501
         }
@@ -124,6 +125,7 @@ class DeclarativeColumn(ModelNormal):
         'description': 'description',  # noqa: E501
         'is_nullable': 'isNullable',  # noqa: E501
         'is_primary_key': 'isPrimaryKey',  # noqa: E501
+        'null_value': 'nullValue',  # noqa: E501
         'referenced_table_column': 'referencedTableColumn',  # noqa: E501
         'referenced_table_id': 'referencedTableId',  # noqa: E501
     }
@@ -176,6 +178,7 @@ class DeclarativeColumn(ModelNormal):
             description (str): Column description/comment from database. [optional]  # noqa: E501
             is_nullable (bool): Column is nullable. [optional]  # noqa: E501
             is_primary_key (bool): Is column part of primary key?. [optional]  # noqa: E501
+            null_value (str): Value used as sentinel for nullable columns. [optional]  # noqa: E501
             referenced_table_column (str): Referenced table (Foreign key). [optional]  # noqa: E501
             referenced_table_id (str): Referenced table (Foreign key). [optional]  # noqa: E501
         """
@@ -272,6 +275,7 @@ class DeclarativeColumn(ModelNormal):
             description (str): Column description/comment from database. [optional]  # noqa: E501
             is_nullable (bool): Column is nullable. [optional]  # noqa: E501
             is_primary_key (bool): Is column part of primary key?. [optional]  # noqa: E501
+            null_value (str): Value used as sentinel for nullable columns. [optional]  # noqa: E501
             referenced_table_column (str): Referenced table (Foreign key). [optional]  # noqa: E501
             referenced_table_id (str): Referenced table (Foreign key). [optional]  # noqa: E501
         """

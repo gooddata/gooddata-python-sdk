@@ -23,6 +23,7 @@ interactions:
           columns:
             - dataType: INT
               name: campaign_id
+              nullValue: '0'
           dataPreview:
             - - null
             - - null

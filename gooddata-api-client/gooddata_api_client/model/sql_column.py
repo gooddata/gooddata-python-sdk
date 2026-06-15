@@ -95,6 +95,7 @@ class SqlColumn(ModelNormal):
             'data_type': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
             'description': (str,),  # noqa: E501
+            'null_value': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -106,6 +107,7 @@ class SqlColumn(ModelNormal):
         'data_type': 'dataType',  # noqa: E501
         'name': 'name',  # noqa: E501
         'description': 'description',  # noqa: E501
+        'null_value': 'nullValue',  # noqa: E501
     }
 
     read_only_vars = {
@@ -154,6 +156,7 @@ class SqlColumn(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             description (str): Column description/comment from database. [optional]  # noqa: E501
+            null_value (str): Value used as sentinel for null values in the column. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -246,6 +249,7 @@ class SqlColumn(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             description (str): Column description/comment from database. [optional]  # noqa: E501
+            null_value (str): Value used as sentinel for null values in the column. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
