@@ -728,9 +728,9 @@ def test_scan_sql(test_config: dict):
 
     assert len(response.columns) == 3
     assert response.columns == [
-        SqlColumn(name="category", data_type="STRING"),
-        SqlColumn(name="product_id", data_type="INT"),
-        SqlColumn(name="product_name", data_type="STRING"),
+        SqlColumn(name="category", data_type="STRING", null_value="_"),
+        SqlColumn(name="product_id", data_type="INT", null_value="0"),
+        SqlColumn(name="product_name", data_type="STRING", null_value="_"),
     ]
     assert len(response.data_preview) == 10
 
@@ -746,7 +746,7 @@ def test_scan_sql_with_nulls_in_preview(test_config: dict):
 
     assert len(response.columns) == 1
     assert response.columns == [
-        SqlColumn(name="campaign_id", data_type="INT"),
+        SqlColumn(name="campaign_id", data_type="INT", null_value="0"),
     ]
     assert len(response.data_preview) == 5
     assert [None] in response.data_preview
@@ -763,7 +763,7 @@ def test_scan_sql_without_preview(test_config: dict):
 
     assert len(response.columns) == 1
     assert response.columns == [
-        SqlColumn(name="campaign_id", data_type="INT"),
+        SqlColumn(name="campaign_id", data_type="INT", null_value="0"),
     ]
     assert response.data_preview is None
 

@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **description** | **str** | Column description/comment from database | [optional] 
 **is_nullable** | **bool** | Column is nullable | [optional] 
 **is_primary_key** | **bool** | Is column part of primary key? | [optional] 
+**null_value** | **str** | Value used as sentinel for nullable columns | [optional] 
 **referenced_table_column** | **str** | Referenced table (Foreign key) | [optional] 
 **referenced_table_id** | **str** | Referenced table (Foreign key) | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
