@@ -5140,6 +5140,13 @@
       "DeclarativeParameter": {
         "properties": {
           "content": {
+            "discriminator": {
+              "mapping": {
+                "NUMBER": "#/components/schemas/NumberParameterDefinition",
+                "STRING": "#/components/schemas/StringParameterDefinition"
+              },
+              "propertyName": "type"
+            },
             "oneOf": [
               {
                 "$ref": "#/components/schemas/NumberParameterDefinition"
@@ -20575,6 +20582,13 @@
                 "type": "boolean"
               },
               "definition": {
+                "discriminator": {
+                  "mapping": {
+                    "NUMBER": "#/components/schemas/NumberParameterDefinition",
+                    "STRING": "#/components/schemas/StringParameterDefinition"
+                  },
+                  "propertyName": "type"
+                },
                 "oneOf": [
                   {
                     "$ref": "#/components/schemas/NumberParameterDefinition"
@@ -20674,6 +20688,13 @@
                 "type": "string"
               },
               "definition": {
+                "discriminator": {
+                  "mapping": {
+                    "NUMBER": "#/components/schemas/NumberParameterDefinition",
+                    "STRING": "#/components/schemas/StringParameterDefinition"
+                  },
+                  "propertyName": "type"
+                },
                 "oneOf": [
                   {
                     "$ref": "#/components/schemas/NumberParameterDefinition"
@@ -20863,6 +20884,13 @@
                 "type": "boolean"
               },
               "definition": {
+                "discriminator": {
+                  "mapping": {
+                    "NUMBER": "#/components/schemas/NumberParameterDefinition",
+                    "STRING": "#/components/schemas/StringParameterDefinition"
+                  },
+                  "propertyName": "type"
+                },
                 "oneOf": [
                   {
                     "$ref": "#/components/schemas/NumberParameterDefinition"
@@ -20932,6 +20960,13 @@
                 "type": "boolean"
               },
               "definition": {
+                "discriminator": {
+                  "mapping": {
+                    "NUMBER": "#/components/schemas/NumberParameterDefinition",
+                    "STRING": "#/components/schemas/StringParameterDefinition"
+                  },
+                  "propertyName": "type"
+                },
                 "oneOf": [
                   {
                     "$ref": "#/components/schemas/NumberParameterDefinition"
@@ -26001,6 +26036,13 @@
       },
       "ParameterDefinition": {
         "description": "Parameter content (type-discriminated).",
+        "discriminator": {
+          "mapping": {
+            "NUMBER": "#/components/schemas/NumberParameterDefinition",
+            "STRING": "#/components/schemas/StringParameterDefinition"
+          },
+          "propertyName": "type"
+        },
         "oneOf": [
           {
             "$ref": "#/components/schemas/NumberParameterDefinition"

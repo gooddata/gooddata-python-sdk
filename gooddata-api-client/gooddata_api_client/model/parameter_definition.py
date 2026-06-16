@@ -95,20 +95,28 @@ class ParameterDefinition(ModelComposed):
         """
         lazy_import()
         return {
+            'type': (str,),  # noqa: E501
             'constraints': (StringConstraints,),  # noqa: E501
             'default_value': (str,),  # noqa: E501
-            'type': (str,),  # noqa: E501
         }
 
     @cached_property
     def discriminator():
-        return None
-
+        lazy_import()
+        val = {
+            'NUMBER': NumberParameterDefinition,
+            'NumberParameterDefinition': NumberParameterDefinition,
+            'STRING': StringParameterDefinition,
+            'StringParameterDefinition': StringParameterDefinition,
+        }
+        if not val:
+            return None
+        return {'type': val}
 
     attribute_map = {
+        'type': 'type',  # noqa: E501
         'constraints': 'constraints',  # noqa: E501
         'default_value': 'defaultValue',  # noqa: E501
-        'type': 'type',  # noqa: E501
     }
 
     read_only_vars = {
@@ -120,6 +128,7 @@ class ParameterDefinition(ModelComposed):
         """ParameterDefinition - a model defined in OpenAPI
 
         Keyword Args:
+            type (str): The parameter type.. defaults to "STRING", must be one of ["STRING", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -152,9 +161,9 @@ class ParameterDefinition(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             constraints (StringConstraints): [optional]  # noqa: E501
             default_value (str): [optional]  # noqa: E501
-            type (str): The parameter type.. [optional] if omitted the server will use the default value of "STRING"  # noqa: E501
         """
 
+        type = kwargs.get('type', "STRING")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -226,6 +235,7 @@ class ParameterDefinition(ModelComposed):
         """ParameterDefinition - a model defined in OpenAPI
 
         Keyword Args:
+            type (str): The parameter type.. defaults to "STRING", must be one of ["STRING", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -258,9 +268,9 @@ class ParameterDefinition(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             constraints (StringConstraints): [optional]  # noqa: E501
             default_value (str): [optional]  # noqa: E501
-            type (str): The parameter type.. [optional] if omitted the server will use the default value of "STRING"  # noqa: E501
         """
 
+        type = kwargs.get('type', "STRING")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())

@@ -15,10 +15,10 @@ from gooddata_api_client.model.declarative_dashboard_plugin import DeclarativeDa
 from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
 from gooddata_api_client.model.declarative_memory_item import DeclarativeMemoryItem
 from gooddata_api_client.model.declarative_metric import DeclarativeMetric
+from gooddata_api_client.model.declarative_parameter import DeclarativeParameter
 from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
 
 from gooddata_sdk.catalog.base import Base
-from gooddata_sdk.catalog.parameter import CatalogParameter
 from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeDashboardPermissionsForAssignee,
     CatalogDeclarativeDashboardPermissionsForAssigneeRule,
@@ -51,6 +51,7 @@ LAYOUT_VISUALIZATION_OBJECTS_DIR = "visualization_objects"
 ATTRIBUTE_HIERARCHY_OBJECTS_DIR = "attribute_hierarchy_objects"
 EXPORT_DEFINITION_DIR = "export_definitions"
 MEMORY_ITEMS_DIR = "memory_items"
+PARAMETERS_DIR = "parameters"
 
 
 @define(kw_only=True)
@@ -82,7 +83,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
     visualization_objects: list[CatalogDeclarativeVisualizationObject] = field(factory=list)
     export_definitions: list[CatalogDeclarativeExportDefinition] = field(factory=list)
     memory_items: list[CatalogDeclarativeMemoryItem] = field(factory=list)
-    parameters: list[CatalogParameter] = field(factory=list)
+    parameters: list[CatalogDeclarativeParameter] = field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeAnalyticsLayer]:
@@ -148,6 +149,12 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         create_directory(folder)
         return folder
 
+    @staticmethod
+    def get_parameters_folder(analytics_model_folder: Path) -> Path:
+        folder = analytics_model_folder / PARAMETERS_DIR
+        create_directory(folder)
+        return folder
+
     def store_to_disk(self, workspace_folder: Path, sort: bool = False) -> None:
         analytics_model_folder = self.get_analytics_model_folder(workspace_folder)
 
@@ -160,6 +167,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         attribute_hierarchy_folder = self.get_attribute_hierarchy_folder(analytics_model_folder)
         export_definition_folder = self.get_export_definition_folder(analytical_dashboards_folder)
         memory_item_folder = self.get_memory_item_folder(analytics_model_folder)
+        parameters_folder = self.get_parameters_folder(analytics_model_folder)
 
         for analytical_dashboard in self.analytical_dashboards:
             analytical_dashboard.store_to_disk(analytical_dashboards_folder, sort=sort)
@@ -188,6 +196,9 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         for memory_item in self.memory_items:
             memory_item.store_to_disk(memory_item_folder, sort=sort)
 
+        for parameter in self.parameters:
+            parameter.store_to_disk(parameters_folder, sort=sort)
+
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeAnalyticsLayer:
         analytics_model_folder = cls.get_analytics_model_folder(workspace_folder)
@@ -200,6 +211,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         attribute_hierarchy_folder = cls.get_attribute_hierarchy_folder(analytics_model_folder)
         export_definition_folder = cls.get_export_definition_folder(analytical_dashboards_folder)
         memory_item_folder = cls.get_memory_item_folder(analytics_model_folder)
+        parameters_folder = cls.get_parameters_folder(analytics_model_folder)
 
         analytical_dashboard_files = get_sorted_yaml_files(analytical_dashboards_folder)
         analytical_dashboard_extension_files = get_sorted_yaml_files(analytical_dashboard_extensions_folder)
@@ -210,6 +222,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         attribute_hierarchy_files = get_sorted_yaml_files(attribute_hierarchy_folder)
         export_definition_files = get_sorted_yaml_files(export_definition_folder)
         memory_item_files = get_sorted_yaml_files(memory_item_folder)
+        parameter_files = get_sorted_yaml_files(parameters_folder)
 
         analytical_dashboards = [
             CatalogDeclarativeAnalyticalDashboard.load_from_disk(analytical_dashboard_file)
@@ -243,6 +256,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         memory_items = [
             CatalogDeclarativeMemoryItem.load_from_disk(memory_item_file) for memory_item_file in memory_item_files
         ]
+        parameters = [CatalogDeclarativeParameter.load_from_disk(parameter_file) for parameter_file in parameter_files]
         return cls(
             analytical_dashboards=analytical_dashboards,
             analytical_dashboard_extensions=analytical_dashboard_extensions,
@@ -253,6 +267,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
             visualization_objects=visualization_objects,
             export_definitions=export_definitions,
             memory_items=memory_items,
+            parameters=parameters,
         )
 
 
@@ -348,3 +363,10 @@ class CatalogDeclarativeMemoryItem(CatalogAnalyticsBaseMeta):
     @staticmethod
     def client_class() -> type[DeclarativeMemoryItem]:
         return DeclarativeMemoryItem
+
+
+@define(kw_only=True)
+class CatalogDeclarativeParameter(CatalogAnalyticsBase):
+    @staticmethod
+    def client_class() -> type[DeclarativeParameter]:
+        return DeclarativeParameter
