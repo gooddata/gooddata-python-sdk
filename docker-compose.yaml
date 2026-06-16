@@ -783,7 +783,7 @@ services:
   ## ============================================
 
   quiver:
-    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/quiver:v0.361.1
+    image: 020413372491.dkr.ecr.us-east-1.amazonaws.com/nas/quiver:v0.418.0
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://quiver:8877/ready"]
       interval: 10s
