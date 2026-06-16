@@ -98,6 +98,7 @@ class RankingFilterRankingFilter(ModelNormal):
             'apply_on_result': (bool,),  # noqa: E501
             'dimensionality': ([AfmIdentifier],),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
+            'strict_limit_of_rows': (bool,),  # noqa: E501
         }
 
     @cached_property
@@ -112,6 +113,7 @@ class RankingFilterRankingFilter(ModelNormal):
         'apply_on_result': 'applyOnResult',  # noqa: E501
         'dimensionality': 'dimensionality',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
+        'strict_limit_of_rows': 'strictLimitOfRows',  # noqa: E501
     }
 
     read_only_vars = {
@@ -163,6 +165,7 @@ class RankingFilterRankingFilter(ModelNormal):
             apply_on_result (bool): [optional]  # noqa: E501
             dimensionality ([AfmIdentifier]): References to the attributes to be used when filtering.. [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
+            strict_limit_of_rows (bool): When true, filter returns requested number of rows at most. Default is false.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -259,6 +262,7 @@ class RankingFilterRankingFilter(ModelNormal):
             apply_on_result (bool): [optional]  # noqa: E501
             dimensionality ([AfmIdentifier]): References to the attributes to be used when filtering.. [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
+            strict_limit_of_rows (bool): When true, filter returns requested number of rows at most. Default is false.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

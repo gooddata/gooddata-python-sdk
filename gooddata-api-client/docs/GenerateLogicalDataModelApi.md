@@ -55,7 +55,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             data_type="INT",
                             description="Customer unique identifier",
                             name="customer_id",
-                            null_value="null_value_example",
+                            null_value="_",
                         ),
                     ],
                     statement="select * from abc",

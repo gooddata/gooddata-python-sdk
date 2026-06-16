@@ -116,6 +116,7 @@ class DeclarativeUser(ModelNormal):
             'lastname': (str,),  # noqa: E501
             'permissions': ([DeclarativeUserPermission],),  # noqa: E501
             'settings': ([DeclarativeSetting],),  # noqa: E501
+            'system_account': (bool,),  # noqa: E501
             'user_groups': ([DeclarativeUserGroupIdentifier],),  # noqa: E501
         }
 
@@ -132,6 +133,7 @@ class DeclarativeUser(ModelNormal):
         'lastname': 'lastname',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
         'settings': 'settings',  # noqa: E501
+        'system_account': 'systemAccount',  # noqa: E501
         'user_groups': 'userGroups',  # noqa: E501
     }
 
@@ -185,6 +187,7 @@ class DeclarativeUser(ModelNormal):
             lastname (str): User last name. [optional]  # noqa: E501
             permissions ([DeclarativeUserPermission]): [optional]  # noqa: E501
             settings ([DeclarativeSetting]): A list of user settings.. [optional]  # noqa: E501
+            system_account (bool): Is user system account. [optional]  # noqa: E501
             user_groups ([DeclarativeUserGroupIdentifier]): [optional]  # noqa: E501
         """
 
@@ -281,6 +284,7 @@ class DeclarativeUser(ModelNormal):
             lastname (str): User last name. [optional]  # noqa: E501
             permissions ([DeclarativeUserPermission]): [optional]  # noqa: E501
             settings ([DeclarativeSetting]): A list of user settings.. [optional]  # noqa: E501
+            system_account (bool): Is user system account. [optional]  # noqa: E501
             user_groups ([DeclarativeUserGroupIdentifier]): [optional]  # noqa: E501
         """
 

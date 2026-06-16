@@ -4214,7 +4214,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             data_type="INT",
                             description="Customer unique identifier",
                             name="customer_id",
-                            null_value="null_value_example",
+                            null_value="_",
                         ),
                     ],
                     statement="select * from abc",
@@ -9984,6 +9984,17 @@ with gooddata_api_client.ApiClient() as api_client:
                         MeasureItem(
                             definition=MeasureDefinition(),
                             local_identifier="metric_1",
+                        ),
+                    ],
+                    parameters=[
+                        ParameterItem(
+                            parameter=AfmObjectIdentifierParameter(
+                                identifier=AfmObjectIdentifierParameterIdentifier(
+                                    id="sample_item.price",
+                                    type="parameter",
+                                ),
+                            ),
+                            value="value_example",
                         ),
                     ],
                 ),
