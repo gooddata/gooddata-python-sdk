@@ -34,9 +34,11 @@ def lazy_import():
     from gooddata_api_client.model.attribute_item import AttributeItem
     from gooddata_api_client.model.filter_definition import FilterDefinition
     from gooddata_api_client.model.measure_item import MeasureItem
+    from gooddata_api_client.model.parameter_item import ParameterItem
     globals()['AttributeItem'] = AttributeItem
     globals()['FilterDefinition'] = FilterDefinition
     globals()['MeasureItem'] = MeasureItem
+    globals()['ParameterItem'] = ParameterItem
 
 
 class AlertAfm(ModelNormal):
@@ -100,6 +102,7 @@ class AlertAfm(ModelNormal):
             'measures': ([MeasureItem],),  # noqa: E501
             'attributes': ([AttributeItem],),  # noqa: E501
             'aux_measures': ([MeasureItem],),  # noqa: E501
+            'parameters': ([ParameterItem],),  # noqa: E501
         }
 
     @cached_property
@@ -112,6 +115,7 @@ class AlertAfm(ModelNormal):
         'measures': 'measures',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
         'aux_measures': 'auxMeasures',  # noqa: E501
+        'parameters': 'parameters',  # noqa: E501
     }
 
     read_only_vars = {
@@ -161,6 +165,7 @@ class AlertAfm(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             attributes ([AttributeItem]): Attributes to be used in the computation.. [optional]  # noqa: E501
             aux_measures ([MeasureItem]): Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.. [optional]  # noqa: E501
+            parameters ([ParameterItem]): Parameters to be used in the computation.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -254,6 +259,7 @@ class AlertAfm(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             attributes ([AttributeItem]): Attributes to be used in the computation.. [optional]  # noqa: E501
             aux_measures ([MeasureItem]): Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.. [optional]  # noqa: E501
+            parameters ([ParameterItem]): Parameters to be used in the computation.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

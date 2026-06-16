@@ -122,6 +122,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         type="TIMEZONE",
                     ),
                 ],
+                system_account=False,
                 user_groups=[
                     DeclarativeUserGroupIdentifier(
                         id="group.admins",

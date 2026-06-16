@@ -105,7 +105,7 @@ class JsonApiIpAllowlistPolicyInAttributes(ModelNormal):
         """JsonApiIpAllowlistPolicyInAttributes - a model defined in OpenAPI
 
         Args:
-            allowed_sources ([str], none_type): Allowed source IPv4 addresses or CIDR ranges. Only IPv4 is supported; IPv6 are rejected. The /0 prefix is not allowed.
+            allowed_sources ([str], none_type): Allowed source IPv4 or IPv6 addresses or CIDR ranges. The /0 and ::/0 prefixes are not allowed.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -194,7 +194,7 @@ class JsonApiIpAllowlistPolicyInAttributes(ModelNormal):
         """JsonApiIpAllowlistPolicyInAttributes - a model defined in OpenAPI
 
         Args:
-            allowed_sources ([str], none_type): Allowed source IPv4 addresses or CIDR ranges. Only IPv4 is supported; IPv6 are rejected. The /0 prefix is not allowed.
+            allowed_sources ([str], none_type): Allowed source IPv4 or IPv6 addresses or CIDR ranges. The /0 and ::/0 prefixes are not allowed.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

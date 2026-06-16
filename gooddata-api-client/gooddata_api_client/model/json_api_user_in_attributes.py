@@ -159,7 +159,7 @@ class JsonApiUserInAttributes(ModelNormal):
             email (str): [optional]  # noqa: E501
             firstname (str): [optional]  # noqa: E501
             lastname (str): [optional]  # noqa: E501
-            system_account (bool): [optional]  # noqa: E501
+            system_account (bool): Is user system account. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -249,7 +249,7 @@ class JsonApiUserInAttributes(ModelNormal):
             email (str): [optional]  # noqa: E501
             firstname (str): [optional]  # noqa: E501
             lastname (str): [optional]  # noqa: E501
-            system_account (bool): [optional]  # noqa: E501
+            system_account (bool): Is user system account. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

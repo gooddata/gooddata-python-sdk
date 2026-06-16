@@ -2100,6 +2100,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         type="TIMEZONE",
                     ),
                 ],
+                system_account=False,
                 user_groups=[
                     DeclarativeUserGroupIdentifier(
                         id="group.admins",
@@ -2219,6 +2220,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         type="TIMEZONE",
                     ),
                 ],
+                system_account=False,
                 user_groups=[
                     DeclarativeUserGroupIdentifier(
                         id="group.admins",
@@ -3145,6 +3147,17 @@ with gooddata_api_client.ApiClient() as api_client:
                         MeasureItem(
                             definition=MeasureDefinition(),
                             local_identifier="metric_1",
+                        ),
+                    ],
+                    parameters=[
+                        ParameterItem(
+                            parameter=AfmObjectIdentifierParameter(
+                                identifier=AfmObjectIdentifierParameterIdentifier(
+                                    id="sample_item.price",
+                                    type="parameter",
+                                ),
+                            ),
+                            value="value_example",
                         ),
                     ],
                 ),
@@ -4586,6 +4599,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         type="TIMEZONE",
                     ),
                 ],
+                system_account=False,
                 user_groups=[
                     DeclarativeUserGroupIdentifier(
                         id="group.admins",
@@ -4650,6 +4664,17 @@ with gooddata_api_client.ApiClient() as api_client:
                                     MeasureItem(
                                         definition=MeasureDefinition(),
                                         local_identifier="metric_1",
+                                    ),
+                                ],
+                                parameters=[
+                                    ParameterItem(
+                                        parameter=AfmObjectIdentifierParameter(
+                                            identifier=AfmObjectIdentifierParameterIdentifier(
+                                                id="sample_item.price",
+                                                type="parameter",
+                                            ),
+                                        ),
+                                        value="value_example",
                                     ),
                                 ],
                             ),
@@ -6013,6 +6038,17 @@ with gooddata_api_client.ApiClient() as api_client:
                                     MeasureItem(
                                         definition=MeasureDefinition(),
                                         local_identifier="metric_1",
+                                    ),
+                                ],
+                                parameters=[
+                                    ParameterItem(
+                                        parameter=AfmObjectIdentifierParameter(
+                                            identifier=AfmObjectIdentifierParameterIdentifier(
+                                                id="sample_item.price",
+                                                type="parameter",
+                                            ),
+                                        ),
+                                        value="value_example",
                                     ),
                                 ],
                             ),
