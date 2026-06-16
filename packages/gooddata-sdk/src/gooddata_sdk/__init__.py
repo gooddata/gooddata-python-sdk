@@ -221,6 +221,7 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
     CatalogDeclarativeAnalytics,
     CatalogDeclarativeMemoryItem,
     CatalogDeclarativeMetric,
+    CatalogDeclarativeParameter,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.export_definition import (
     CatalogDeclarativeExportDefinition,
