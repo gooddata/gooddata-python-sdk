@@ -7,7 +7,7 @@ Ported from gdc-nas tavern-e2e app/llm_as_judge/schemas/chat.py.
 import json
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class AacQueryField(BaseModel):
@@ -28,6 +28,11 @@ class AacQuery(BaseModel):
     fields: dict[str, AacQueryField | str]
     filter_by: dict[str, dict] = Field(default_factory=dict)
 
+    @field_validator("filter_by", mode="before")
+    @classmethod
+    def _coerce_filter_by(cls, v: object) -> object:
+        return v if v is not None else {}
+
 
 class CreatedVisualization(BaseModel):
     """Visualization in the AAC format (agent output and dataset expected output)."""
@@ -44,6 +49,11 @@ class CreatedVisualization(BaseModel):
     rows: list[AacBucketRef | str] = Field(default_factory=list)
     columns: list[AacBucketRef | str] = Field(default_factory=list)
     config: dict | None = None
+
+    @field_validator("metrics", "view_by", "segment_by", "rows", "columns", mode="before")
+    @classmethod
+    def _coerce_list_fields(cls, v: object) -> object:
+        return v if v is not None else []
 
 
 class CreatedVisualizations(BaseModel):
@@ -83,6 +93,7 @@ class ChatResult(BaseModel):
     text_response: str | None = Field(default=None, alias="textResponse")
     created_visualizations: CreatedVisualizations | None = Field(default=None, alias="createdVisualizations")
     tool_call_events: list[ToolCallEvent] = Field(default_factory=list, alias="toolCallEvents")
+    reasoning_step_count: int = Field(default=0, alias="reasoningStepCount")
 
 
 class SummaryInput(BaseModel):
