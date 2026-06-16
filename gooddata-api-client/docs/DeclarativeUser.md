@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **lastname** | **str** | User last name | [optional] 
 **permissions** | [**[DeclarativeUserPermission]**](DeclarativeUserPermission.md) |  | [optional] 
 **settings** | [**[DeclarativeSetting]**](DeclarativeSetting.md) | A list of user settings. | [optional] 
+**system_account** | **bool** | Is user system account | [optional] 
 **user_groups** | [**[DeclarativeUserGroupIdentifier]**](DeclarativeUserGroupIdentifier.md) |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

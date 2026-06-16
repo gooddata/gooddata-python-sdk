@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **apply_on_result** | **bool** |  | [optional] 
 **dimensionality** | [**[AfmIdentifier]**](AfmIdentifier.md) | References to the attributes to be used when filtering. | [optional] 
 **local_identifier** | **str** |  | [optional] 
+**strict_limit_of_rows** | **bool** | When true, filter returns requested number of rows at most. Default is false. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

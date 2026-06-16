@@ -737,6 +737,13 @@
             "maximum": 2,
             "minimum": 1,
             "type": "array"
+          },
+          "parameters": {
+            "description": "Parameters to be used in the computation.",
+            "items": {
+              "$ref": "#/components/schemas/ParameterItem"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -7634,6 +7641,13 @@
       "DeclarativeParameter": {
         "properties": {
           "content": {
+            "discriminator": {
+              "mapping": {
+                "NUMBER": "#/components/schemas/NumberParameterDefinition",
+                "STRING": "#/components/schemas/StringParameterDefinition"
+              },
+              "propertyName": "type"
+            },
             "oneOf": [
               {
                 "$ref": "#/components/schemas/NumberParameterDefinition"
@@ -8123,6 +8137,11 @@
               "$ref": "#/components/schemas/DeclarativeSetting"
             },
             "type": "array"
+          },
+          "systemAccount": {
+            "description": "Is user system account",
+            "example": false,
+            "type": "boolean"
           },
           "userGroups": {
             "items": {
@@ -20205,7 +20224,7 @@
           "attributes": {
             "properties": {
               "allowedSources": {
-                "description": "Allowed source IPv4 addresses or CIDR ranges. Only IPv4 is supported; IPv6 are rejected. The /0 prefix is not allowed.",
+                "description": "Allowed source IPv4 or IPv6 addresses or CIDR ranges. The /0 and ::/0 prefixes are not allowed.",
                 "items": {
                   "type": "string"
                 },
@@ -20284,7 +20303,7 @@
           "attributes": {
             "properties": {
               "allowedSources": {
-                "description": "Allowed source IPv4 addresses or CIDR ranges. Only IPv4 is supported; IPv6 are rejected. The /0 prefix is not allowed.",
+                "description": "Allowed source IPv4 or IPv6 addresses or CIDR ranges. The /0 and ::/0 prefixes are not allowed.",
                 "items": {
                   "type": "string"
                 },
@@ -24810,6 +24829,13 @@
                 "type": "boolean"
               },
               "definition": {
+                "discriminator": {
+                  "mapping": {
+                    "NUMBER": "#/components/schemas/NumberParameterDefinition",
+                    "STRING": "#/components/schemas/StringParameterDefinition"
+                  },
+                  "propertyName": "type"
+                },
                 "oneOf": [
                   {
                     "$ref": "#/components/schemas/NumberParameterDefinition"
@@ -24909,6 +24935,13 @@
                 "type": "string"
               },
               "definition": {
+                "discriminator": {
+                  "mapping": {
+                    "NUMBER": "#/components/schemas/NumberParameterDefinition",
+                    "STRING": "#/components/schemas/StringParameterDefinition"
+                  },
+                  "propertyName": "type"
+                },
                 "oneOf": [
                   {
                     "$ref": "#/components/schemas/NumberParameterDefinition"
@@ -25098,6 +25131,13 @@
                 "type": "boolean"
               },
               "definition": {
+                "discriminator": {
+                  "mapping": {
+                    "NUMBER": "#/components/schemas/NumberParameterDefinition",
+                    "STRING": "#/components/schemas/StringParameterDefinition"
+                  },
+                  "propertyName": "type"
+                },
                 "oneOf": [
                   {
                     "$ref": "#/components/schemas/NumberParameterDefinition"
@@ -25167,6 +25207,13 @@
                 "type": "boolean"
               },
               "definition": {
+                "discriminator": {
+                  "mapping": {
+                    "NUMBER": "#/components/schemas/NumberParameterDefinition",
+                    "STRING": "#/components/schemas/StringParameterDefinition"
+                  },
+                  "propertyName": "type"
+                },
                 "oneOf": [
                   {
                     "$ref": "#/components/schemas/NumberParameterDefinition"
@@ -26387,6 +26434,8 @@
                 "type": "string"
               },
               "systemAccount": {
+                "description": "Is user system account",
+                "example": false,
                 "type": "boolean"
               }
             },
@@ -26481,6 +26530,8 @@
                 "type": "string"
               },
               "systemAccount": {
+                "description": "Is user system account",
+                "example": false,
                 "type": "boolean"
               }
             },
@@ -26612,6 +26663,8 @@
                 "type": "string"
               },
               "systemAccount": {
+                "description": "Is user system account",
+                "example": false,
                 "type": "boolean"
               }
             },
@@ -31206,6 +31259,13 @@
       },
       "ParameterDefinition": {
         "description": "Parameter content (type-discriminated).",
+        "discriminator": {
+          "mapping": {
+            "NUMBER": "#/components/schemas/NumberParameterDefinition",
+            "STRING": "#/components/schemas/StringParameterDefinition"
+          },
+          "propertyName": "type"
+        },
         "oneOf": [
           {
             "$ref": "#/components/schemas/NumberParameterDefinition"
@@ -32162,6 +32222,10 @@
                   "BOTTOM"
                 ],
                 "type": "string"
+              },
+              "strictLimitOfRows": {
+                "description": "When true, filter returns requested number of rows at most. Default is false.",
+                "type": "boolean"
               },
               "value": {
                 "description": "Number of top/bottom values to filter.",
@@ -34024,6 +34088,7 @@
           },
           "nullValue": {
             "description": "Value used as sentinel for null values in the column",
+            "example": "_",
             "type": "string"
           }
         },

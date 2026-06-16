@@ -476,6 +476,13 @@
             "maximum": 2,
             "minimum": 1,
             "type": "array"
+          },
+          "parameters": {
+            "description": "Parameters to be used in the computation.",
+            "items": {
+              "$ref": "#/components/schemas/ParameterItem"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -3030,6 +3037,10 @@
                   "BOTTOM"
                 ],
                 "type": "string"
+              },
+              "strictLimitOfRows": {
+                "description": "When true, filter returns requested number of rows at most. Default is false.",
+                "type": "boolean"
               },
               "value": {
                 "description": "Number of top/bottom values to filter.",
