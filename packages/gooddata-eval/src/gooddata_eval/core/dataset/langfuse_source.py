@@ -13,7 +13,7 @@ Credentials are read from the standard Langfuse environment variables:
 
 import base64
 import os
-from typing import Any
+from typing import Any, cast
 
 import httpx
 
@@ -65,13 +65,28 @@ def _summary_input_from_raw(raw: dict, expected_output: Any) -> SummaryInput | N
     return SummaryInput.model_validate(candidate) if candidate is not None else None
 
 
+def _infer_test_kind(expected_output: object, default: str) -> str:
+    """Infer test_kind from expected_output structure when not explicitly set."""
+    if not isinstance(expected_output, dict):
+        return default
+    eo: dict[str, Any] = cast("dict[str, Any]", expected_output)
+    # Explicit override wins
+    if isinstance(eo.get("test_kind"), str):
+        return eo["test_kind"]
+    # {"visualization": {...}} or {"visualization": [...]} → production agentic vis
+    if eo.get("visualization") is not None:
+        return "vis_agentic"
+    # {"expected_outputs": [...]} → experimental multi-candidate agentic vis
+    if isinstance(eo.get("expected_outputs"), list):
+        return "agentic_visualization"
+    return default
+
+
 def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetItem:
     """Map a Langfuse REST API dataset-item dict to a DatasetItem."""
     # REST API returns camelCase: expectedOutput, not expected_output
     expected_output = raw.get("expectedOutput") or raw.get("expected_output")
-    resolved_kind = test_kind
-    if isinstance(expected_output, dict) and isinstance(expected_output.get("test_kind"), str):
-        resolved_kind = expected_output["test_kind"]
+    resolved_kind = _infer_test_kind(expected_output, test_kind)
     return DatasetItem(
         id=str(raw["id"]),
         dataset_name=raw.get("datasetName") or dataset_name,

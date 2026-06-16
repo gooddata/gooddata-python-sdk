@@ -55,3 +55,47 @@ def test_evaluator_matches_any_candidate_in_list():
     item = _item([wrong, right])
     result = ev.evaluate(item, _chat_result_with(dict(_expected())))
     assert result.passed is True
+
+
+def test_evaluator_detects_skill_activated():
+    ev = get_evaluator("visualization")
+    chat = ChatResult.model_validate(
+        {
+            "createdVisualizations": {"objects": [_expected()], "reasoning": ""},
+            "toolCallEvents": [
+                {
+                    "functionName": "set_skills",
+                    "functionArguments": '{"skill_names": ["visualization"]}',
+                    "result": None,
+                }
+            ],
+        }
+    )
+    result = ev.evaluate(_item(_expected()), chat)
+    assert result.detail["skill_activated"] is True
+
+
+def test_evaluator_skill_not_activated_when_set_skills_absent():
+    ev = get_evaluator("visualization")
+    chat = ChatResult.model_validate(
+        {
+            "createdVisualizations": {"objects": [_expected()], "reasoning": ""},
+            "toolCallEvents": [],
+        }
+    )
+    result = ev.evaluate(_item(_expected()), chat)
+    assert result.detail["skill_activated"] is False
+
+
+def test_evaluator_skill_not_activated_when_wrong_skill_name():
+    ev = get_evaluator("visualization")
+    chat = ChatResult.model_validate(
+        {
+            "createdVisualizations": {"objects": [_expected()], "reasoning": ""},
+            "toolCallEvents": [
+                {"functionName": "set_skills", "functionArguments": '{"skill_names": ["search"]}', "result": None}
+            ],
+        }
+    )
+    result = ev.evaluate(_item(_expected()), chat)
+    assert result.detail["skill_activated"] is False

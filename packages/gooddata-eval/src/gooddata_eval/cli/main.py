@@ -19,6 +19,7 @@ from gooddata_eval.core.langfuse.sink import LangfuseSink
 from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.reporting.console import render_comparison, render_console
 from gooddata_eval.core.reporting.json_report import write_multi_model_report
+from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, run_agentic_items
 from gooddata_eval.core.runner import ItemReport, run_items
 from gooddata_eval.core.summary.http_client import SummaryClient
 from gooddata_eval.core.workspace import ModelResolutionError, WorkspaceModelController
@@ -62,6 +63,17 @@ def _build_parser() -> argparse.ArgumentParser:
     source = run.add_mutually_exclusive_group(required=True)
     source.add_argument("--dataset", help="Path to a folder of dataset JSON files.")
     source.add_argument("--langfuse-dataset", dest="langfuse_dataset", help="Langfuse dataset name.")
+    run.add_argument(
+        "--kind",
+        dest="kind",
+        default="visualization",
+        metavar="TEST_KIND",
+        help=(
+            "Default test kind for dataset items that don't embed one. "
+            "Use 'vis_agentic', 'agentic_visualization', 'agentic_metric_skill', etc. for multi-turn agentic eval. "
+            "(default: visualization)"
+        ),
+    )
     run.add_argument(
         "--model",
         action="append",
@@ -165,7 +177,7 @@ def _load_dataset(config: RunConfig):
 
     if config.langfuse_dataset is None:  # pragma: no cover - argparse mutually-exclusive group guarantees one is set
         raise ValueError("Either --dataset or --langfuse-dataset is required.")
-    return load_langfuse_dataset(config.langfuse_dataset)
+    return load_langfuse_dataset(config.langfuse_dataset, default_test_kind=config.kind)
 
 
 def _list_models(host: str, token: str, workspace_id: str | None) -> int:
@@ -228,6 +240,8 @@ def _run(config: RunConfig) -> int:
         return _EXIT_OPERATIONAL_ERROR
 
     items = _load_dataset(config)
+    agentic_items = [i for i in items if i.test_kind in AGENTIC_TEST_KINDS]
+    non_agentic_items = [i for i in items if i.test_kind not in AGENTIC_TEST_KINDS]
     models = config.models or []
     run_ts = datetime.now(timezone.utc).strftime("%Y-%m-%d-%H-%M")
     n_models = len(models) if models else 1
@@ -287,13 +301,30 @@ def _run(config: RunConfig) -> int:
                 ) -> None:
                     _sink.log_item(report, dataset_item_id=report.id)
 
+            # --- agentic items (multi-turn, use evaluate_agentic_*) ---
+            agentic_report = None
+            if agentic_items:
+                agentic_report = run_agentic_items(
+                    agentic_items,
+                    host=config.host,
+                    token=config.token,
+                    workspace_id=config.workspace_id,
+                    k=config.runs,
+                    model_version=resolved.model_id,
+                    use_langfuse=config.log_to_langfuse,
+                    run_ts=run_ts,
+                    on_item_start=on_item_start,
+                    on_item_done=on_item_done,
+                )
+
+            # --- non-agentic items (single-turn, use Evaluator) ---
             backend = _RoutingBackend(
                 ChatClient(host=config.host, token=config.token, workspace_id=config.workspace_id),
                 SummaryClient(host=config.host, token=config.token, workspace_id=config.workspace_id),
             )
             try:
-                report = run_items(
-                    items,
+                single_report = run_items(
+                    non_agentic_items,
                     backend,
                     runs=config.runs,
                     model=resolved.model_id,
@@ -309,6 +340,20 @@ def _run(config: RunConfig) -> int:
             finally:
                 if hasattr(backend, "close"):
                     backend.close()
+
+            # merge into a single report for display/export
+            from gooddata_eval.core.runner import EvalReport  # noqa: PLC0415
+
+            report = EvalReport(
+                model=resolved.model_id,
+                provider_name=resolved.provider_name or resolved.provider_id,
+                provider_type=resolved.provider_type,
+                workspace_id=config.workspace_id,
+            )
+            if agentic_report is not None:
+                report.items.extend(agentic_report.items)
+            report.items.extend(single_report.items)
+            report.wall_clock_s = (agentic_report.wall_clock_s if agentic_report else 0.0) + single_report.wall_clock_s
 
             skipped_kinds = sorted({i.test_kind for i in report.items if i.skipped})
             if skipped_kinds:
@@ -363,6 +408,7 @@ def main(argv: list[str] | None = None) -> int:
             json_path=Path(args.json_path) if args.json_path else None,
             log_to_langfuse=args.langfuse,
             quiet=args.quiet,
+            kind=args.kind,
         )
         return _run(config)
     except (
