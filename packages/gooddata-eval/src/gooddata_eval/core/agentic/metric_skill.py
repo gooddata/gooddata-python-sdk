@@ -57,6 +57,19 @@ def _normalize_maql(maql: str) -> str:
     return m.strip()
 
 
+def _best_maql_match(actual_maql: str, expected_outputs: list[dict]) -> tuple[bool, str]:
+    """Try actual MAQL against every candidate; return (matched, best_expected_maql).
+
+    First match wins. First candidate is used for error reporting when none match.
+    """
+    normalized_actual = _normalize_maql(actual_maql)
+    for candidate in expected_outputs:
+        expected_maql = candidate.get("maql", "")
+        if normalized_actual == _normalize_maql(expected_maql):
+            return True, expected_maql
+    return False, expected_outputs[0].get("maql", "") if expected_outputs else ""
+
+
 def generate_simulated_response(agent_message: str, expected_output: dict) -> str:
     """Generate a user reply to keep the metric-skill conversation going (gpt-4o-mini)."""
     try:
@@ -126,11 +139,11 @@ def _execute_single_metric_run(
     client: ChatClient,
     conversation_id: str,
     question: str,
-    expected_output: dict,
-    expected_maql: str,
+    expected_outputs: list[dict],
     max_iterations: int,
 ) -> MetricRunResult:
     """Drive one full multi-turn metric-skill conversation and evaluate the result."""
+    primary_expected = expected_outputs[0] if expected_outputs else {}
     metric_result: dict | None = None
     turns = 0
     current_question = question
@@ -144,13 +157,13 @@ def _execute_single_metric_run(
             break
         response_text = (chat_result.text_response or "").strip()
         if _is_asking_clarification(response_text):
-            current_question = generate_simulated_response(response_text, expected_output)
+            current_question = generate_simulated_response(response_text, primary_expected)
         else:
             break
 
     actual_maql = (metric_result or {}).get("maql", "")
     metric_created = metric_result is not None
-    maql_correct = metric_created and (_normalize_maql(actual_maql) == _normalize_maql(expected_maql))
+    maql_correct, _ = _best_maql_match(actual_maql, expected_outputs) if metric_created else (False, "")
     return MetricRunResult(
         conversation_id=conversation_id,
         metric_result=metric_result,
@@ -166,13 +179,17 @@ def run_agentic_metric_skill(
     token: str,
     workspace_id: str,
     question: str,
-    expected_output: dict,
+    expected_output: dict | list,
     k: int = _DEFAULT_K,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
 ) -> AgenticMetricSummary:
-    """Run the metric-skill agentic evaluation K times and return a summary."""
-    expected_maql = expected_output.get("maql", "")
+    """Run the metric-skill agentic evaluation K times and return a summary.
+
+    ``expected_output`` may be a single candidate dict or a list of candidate dicts.
+    The run passes when the actual MAQL matches any candidate after normalisation.
+    """
+    expected_outputs: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
     run_results: list[MetricRunResult] = []
     client = ChatClient(host=host, token=token, workspace_id=workspace_id)
 
@@ -180,7 +197,7 @@ def run_agentic_metric_skill(
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
             run_results.append(
-                _execute_single_metric_run(client, conv_id_0, question, expected_output, expected_maql, max_iterations)
+                _execute_single_metric_run(client, conv_id_0, question, expected_outputs, max_iterations)
             )
         finally:
             if initial_conversation_id is None:  # only delete conversations we created
@@ -190,9 +207,7 @@ def run_agentic_metric_skill(
             conv_id = client.create_conversation()
             try:
                 run_results.append(
-                    _execute_single_metric_run(
-                        client, conv_id, question, expected_output, expected_maql, max_iterations
-                    )
+                    _execute_single_metric_run(client, conv_id, question, expected_outputs, max_iterations)
                 )
             finally:
                 client.delete_conversation(conv_id)
@@ -221,7 +236,7 @@ def evaluate_agentic_metric_skill(
     token: str,
     workspace_id: str,
     question: str,
-    expected_output: dict,
+    expected_output: dict | list,
     k: int = _DEFAULT_K,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
@@ -288,9 +303,11 @@ def evaluate_agentic_metric_skill(
 
     if not summary.pass_at_k:
         best = summary.best
+        expected_outputs_list: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
+        candidates_str = "; ".join(repr(c.get("maql", "")) for c in expected_outputs_list)
         raise MetricSkillAssertionError(
             f"Metric skill assertion failed. "
             f"metric_created={best.metric_created}, maql_correct={best.maql_correct}. "
-            f"Expected MAQL: {expected_output.get('maql')}. "
+            f"Expected MAQL (candidates): {candidates_str}. "
             f"Actual MAQL: {best.actual_maql}."
         )
