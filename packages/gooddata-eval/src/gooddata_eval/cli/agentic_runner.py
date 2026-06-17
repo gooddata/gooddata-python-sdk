@@ -111,7 +111,7 @@ def _dispatch_agentic(
             token=token,
             workspace_id=workspace_id,
             question=item.question,
-            expected_output=eo if isinstance(eo, dict) else {},
+            expected_output=eo if isinstance(eo, (dict, list)) else {},
             k=k,
             **lf_kw,
         )
