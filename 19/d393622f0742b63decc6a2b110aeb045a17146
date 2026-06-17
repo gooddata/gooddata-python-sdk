@@ -1,10 +1,12 @@
 packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
   s_ee5cc41b994920::t_a1d8e561700b29 60-72,142,146,160,166,182,187-192,200,210,239,306-307,311
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_ee5cc41b994920::t_5289c81b5b1425 114
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.5.8",
-  "base_commit_sha": "f02cc4f8da8c9ea7577c088711922ec094ad6bf5",
+  "base_commit_sha": "19d393622f0742b63decc6a2b110aeb045a17146",
   "prompts": {},
   "sessions": {
     "s_ee5cc41b994920": {
@@ -13,7 +15,7 @@ packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
         "id": "2a4aa36d-5864-4014-bd73-a9160c2f8d78",
         "model": "claude-sonnet-4-6"
       },
-      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+      "human_author": null
     }
   }
 }
