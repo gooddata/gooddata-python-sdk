@@ -154,7 +154,8 @@ def test_run_agentic_visualization_uses_initial_conversation_for_run_0():
     # create_conversation should NOT be called for run 0
     instance.create_conversation.assert_not_called()
     instance.send_message.assert_called_once_with("existing-conv", "Show revenue")
-    instance.delete_conversation.assert_called_once_with("existing-conv")
+    # caller-supplied conversations are not deleted by this function
+    instance.delete_conversation.assert_not_called()
     assert len(summary.run_results) == 1
 
 
@@ -176,7 +177,7 @@ def test_run_agentic_visualization_creates_fresh_conversations_for_remaining_run
         )
 
     assert instance.create_conversation.call_count == 1  # only for run 1
-    assert instance.delete_conversation.call_count == 2  # existing-conv + fresh-1
+    assert instance.delete_conversation.call_count == 1  # only fresh-1; caller-supplied conv is not deleted
     assert len(summary.run_results) == 2
 
 

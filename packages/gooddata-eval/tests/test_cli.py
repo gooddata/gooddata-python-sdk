@@ -86,7 +86,7 @@ def test_cli_run_end_to_end(monkeypatch, tmp_path, fixtures_dir):
         ]
     )
     assert exit_code == 0
-    assert orjson.loads(out.read_bytes())["runs"]["gpt-5.2"]["summary"]["passed"] == 1
+    assert orjson.loads(out.read_bytes())["runs"]["Test Provider/gpt-5.2"]["summary"]["passed"] == 1
 
 
 def test_cli_operational_error_exits_nonzero(monkeypatch, fixtures_dir):
@@ -405,9 +405,9 @@ def test_cli_multimodel_writes_nested_json(monkeypatch, tmp_path, fixtures_dir):
         ]
     )
     data = orjson.loads(out.read_bytes())
-    assert data["models"] == ["gpt-5.2", "gpt-4o"]
+    assert data["models"] == ["P/gpt-5.2", "P/gpt-4o"]
     assert "runs" in data and "comparison" in data
-    assert data["comparison"]["gpt-5.2"]["passed"] == 1
+    assert data["comparison"]["P/gpt-5.2"]["passed"] == 1
 
 
 def test_cli_restore_fires_even_when_model_loop_raises(monkeypatch, fixtures_dir):

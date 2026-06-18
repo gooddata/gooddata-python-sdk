@@ -19,7 +19,7 @@ def test_item_from_raw_dict_input():
     item = _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
     assert item.id == "lf-1"
     assert item.question == "Show revenue"
-    assert item.test_kind == "visualization"
+    assert item.test_kind == "vis_agentic"  # {"visualization": {...}} infers vis_agentic
     assert item.dataset_name == "ds"
 
 
