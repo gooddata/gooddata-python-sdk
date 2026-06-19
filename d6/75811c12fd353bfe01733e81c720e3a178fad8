@@ -6,7 +6,7 @@ packages/gooddata-eval/tests/test_sse_client.py
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.5.8",
-  "base_commit_sha": "f77ae377e01bd32996dcd925662eeb923db2a7c9",
+  "base_commit_sha": "d675811c12fd353bfe01733e81c720e3a178fad8",
   "prompts": {},
   "sessions": {
     "s_e6c884eec37467": {
