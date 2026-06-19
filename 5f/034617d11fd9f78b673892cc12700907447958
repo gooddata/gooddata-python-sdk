@@ -1,0 +1,22 @@
+packages/gooddata-eval/tests/test_sse_client.py
+  s_e6c884eec37467::t_31bc09562e3313 96-101
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_e6c884eec37467::t_b100fae19b191e 178-179,181-184
+  s_e6c884eec37467::t_ee73147cea6c19 229-230
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "5f034617d11fd9f78b673892cc12700907447958",
+  "prompts": {},
+  "sessions": {
+    "s_e6c884eec37467": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "344e2547-ffc7-4a6d-b168-745374c4524f",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}
