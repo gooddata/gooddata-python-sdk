@@ -85,6 +85,25 @@ class ToolCallEvent(BaseModel):
             return None
 
 
+class ConversationStep(BaseModel):
+    """One ordered event in the assistant's response timeline.
+
+    Captures every event the agent emits while answering a turn — text,
+    reasoning summaries, tool calls, tool results, and produced visualizations —
+    in arrival order, so downstream consumers can inspect each step the
+    assistant took rather than only the final text. Used by the synthetic
+    conversations generator (gdc-nas Misc FEAT-002)."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    kind: str  # "text" | "reasoning" | "tool_call" | "tool_result" | "visualization"
+    text: str | None = None  # text body or reasoning summary
+    tool_name: str | None = Field(default=None, alias="toolName")
+    tool_arguments: str | None = Field(default=None, alias="toolArguments")
+    call_id: str | None = Field(default=None, alias="callId")
+    result: str | None = None  # tool result payload
+
+
 class ChatResult(BaseModel):
     """Subset of the agent chat response needed for Phase 1 evaluation."""
 
@@ -94,6 +113,10 @@ class ChatResult(BaseModel):
     created_visualizations: CreatedVisualizations | None = Field(default=None, alias="createdVisualizations")
     tool_call_events: list[ToolCallEvent] = Field(default_factory=list, alias="toolCallEvents")
     reasoning_step_count: int = Field(default=0, alias="reasoningStepCount")
+    # Full reasoning summary text (the parser used to keep only the count).
+    reasoning_steps: list[str] = Field(default_factory=list, alias="reasoningSteps")
+    # Ordered timeline of every event the agent emitted for this turn.
+    steps: list[ConversationStep] = Field(default_factory=list)
 
 
 class SummaryInput(BaseModel):

@@ -33,12 +33,16 @@ class _SseAccumulator:
     call_id_to_event_index: dict[str, int] = field(default_factory=dict)
     reasoning_steps: list[dict[str, Any]] = field(default_factory=list)
     adhoc_viz_args: list[dict[str, Any]] = field(default_factory=list)
+    # Ordered timeline of every handled event (text/reasoning/tool_call/
+    # tool_result/visualization), in arrival order.
+    steps: list[dict[str, Any]] = field(default_factory=list)
 
 
 def _handle_text(content: dict[str, Any], acc: _SseAccumulator) -> None:
     text = content.get("text", "")
     if text:
         acc.text_parts.append(text)
+        acc.steps.append({"kind": "text", "text": text})
 
 
 def _handle_multipart(content: dict[str, Any], acc: _SseAccumulator) -> None:
@@ -49,24 +53,36 @@ def _handle_multipart(content: dict[str, Any], acc: _SseAccumulator) -> None:
             if t:
                 acc.text_parts.append(t)
                 acc.viz_reasoning_parts.append(t)
+                acc.steps.append({"kind": "text", "text": t})
         elif ptype == "visualization" and part.get("visualization"):
             acc.visualizations.append(part["visualization"])
+            acc.steps.append({"kind": "visualization", "text": part["visualization"].get("title")})
 
 
 def _handle_reasoning(content: dict[str, Any], acc: _SseAccumulator) -> None:
     summary = content.get("summary", "")
     if summary:
         acc.reasoning_steps.append({"summary": summary})
+        acc.steps.append({"kind": "reasoning", "text": summary})
 
 
 def _handle_tool_call(content: dict[str, Any], acc: _SseAccumulator) -> None:
     call_id = content.get("callId", "")
     acc.call_id_to_event_index[call_id] = len(acc.tool_call_events)
+    arguments = json.dumps(content.get("arguments", {}))
     acc.tool_call_events.append(
         {
             "functionName": content.get("name", ""),
-            "functionArguments": json.dumps(content.get("arguments", {})),
+            "functionArguments": arguments,
             "result": None,
+        }
+    )
+    acc.steps.append(
+        {
+            "kind": "tool_call",
+            "toolName": content.get("name", ""),
+            "toolArguments": arguments,
+            "callId": call_id,
         }
     )
     # Stash visualization definition from create_adhoc_visualization so we can
@@ -80,8 +96,10 @@ def _handle_tool_call(content: dict[str, Any], acc: _SseAccumulator) -> None:
 def _handle_tool_result(content: dict[str, Any], acc: _SseAccumulator) -> None:
     call_id = content.get("callId", "")
     idx = acc.call_id_to_event_index.get(call_id)
+    result = content.get("result", "")
     if idx is not None:
-        acc.tool_call_events[idx]["result"] = content.get("result", "")
+        acc.tool_call_events[idx]["result"] = result
+    acc.steps.append({"kind": "tool_result", "callId": call_id, "result": result})
 
 
 def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
@@ -89,6 +107,8 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
         "textResponse": "\n".join(acc.text_parts) or None,
         "toolCallEvents": acc.tool_call_events,
         "reasoningStepCount": len(acc.reasoning_steps),
+        "reasoningSteps": [step["summary"] for step in acc.reasoning_steps],
+        "steps": acc.steps,
     }
     if acc.visualizations:
         payload["createdVisualizations"] = {
