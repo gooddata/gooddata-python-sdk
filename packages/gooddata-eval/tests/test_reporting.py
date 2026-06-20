@@ -189,3 +189,62 @@ def test_build_multi_model_report_no_key_collision_same_model_different_provider
     assert "HN_Anthropic/claude-opus" in data["runs"]
     assert data["runs"]["DirectAnthropic/claude-opus"]["summary"]["passed"] == 1
     assert data["runs"]["HN_Anthropic/claude-opus"]["summary"]["passed"] == 0
+
+
+def _single_item_report(model: str, *, passed: bool, latency_s: float, best_detail: dict | None = None) -> EvalReport:
+    return EvalReport(
+        model=model,
+        workspace_id="ws",
+        items=[
+            ItemReport(
+                id="i1",
+                dataset_name="d",
+                test_kind="visualization",
+                question="q",
+                pass_at_k=passed,
+                runs=1,
+                latency_s=latency_s,
+                best_detail=best_detail or {},
+            )
+        ],
+    )
+
+
+def test_render_comparison_winner_breaks_pass_rate_tie_by_latency():
+    """Equal pass rate and quality → lower average latency wins."""
+    fast = _single_item_report("fast", passed=True, latency_s=1.0)
+    slow = _single_item_report("slow", passed=True, latency_s=5.0)
+    # sanity: both tie on pass rate and quality
+    assert fast.passed / fast.total == slow.passed / slow.total
+    assert fast.avg_quality_score == slow.avg_quality_score
+
+    text = render_comparison([slow, fast])  # order must not decide the winner
+    assert "fast" in text.split("Winner")[1]
+
+
+def test_render_comparison_winner_prefers_quality_over_latency():
+    """Quality outranks latency: higher quality wins even with worse latency."""
+    hi_q = _single_item_report("hi_q", passed=True, latency_s=9.0)  # quality 1.0
+    lo_q = _single_item_report("lo_q", passed=True, latency_s=1.0, best_detail={"a": True, "b": False})  # quality 0.5
+    assert hi_q.passed / hi_q.total == lo_q.passed / lo_q.total  # pass rate ties
+    assert hi_q.avg_quality_score > lo_q.avg_quality_score
+    assert hi_q.avg_latency_s > lo_q.avg_latency_s  # hi_q is slower
+
+    text = render_comparison([lo_q, hi_q])
+    assert "hi_q" in text.split("Winner")[1]
+
+
+def test_build_multi_model_comparison_entry_shape():
+    """Each comparison entry exposes the keys the report consumers rely on."""
+    data = build_multi_model_report(
+        [
+            _single_item_report("gpt-5.2", passed=True, latency_s=2.0),
+            _single_item_report("gpt-4o", passed=False, latency_s=3.0),
+        ]
+    )
+    assert data["models"] == ["gpt-5.2", "gpt-4o"]
+    assert set(data["runs"]) == {"gpt-5.2", "gpt-4o"}
+    entry = data["comparison"]["gpt-5.2"]
+    assert set(entry) >= {"passed", "total", "pass_rate", "avg_quality_score", "avg_latency_s"}
+    assert entry["pass_rate"] == 1.0
+    assert data["comparison"]["gpt-4o"]["pass_rate"] == 0.0

@@ -1,0 +1,21 @@
+{
+  "id": "summary-001",
+  "dataset_name": "sample_summary",
+  "test_kind": "dashboard_summary",
+  "question": "Summarize the Sales Overview dashboard.",
+  "summary_input": {
+    "dashboard_id": "sales_overview"
+  },
+  "expected_output": {
+    "must_include": [
+      "States the overall revenue trend",
+      "Identifies the top-performing segment"
+    ],
+    "must_not_include": [
+      "Numbers or segments not present in the visualizations"
+    ],
+    "rubric": [
+      "Reads as a coherent business summary"
+    ]
+  }
+}

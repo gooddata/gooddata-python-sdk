@@ -1,0 +1,7 @@
+{
+  "id": "general-001",
+  "dataset_name": "sample_general",
+  "test_kind": "general_question",
+  "question": "What is a metric in GoodData?",
+  "expected_output": "Explains that a metric is a reusable, named numeric calculation defined in MAQL over the semantic model, and that it can be reused across visualizations and dashboards."
+}

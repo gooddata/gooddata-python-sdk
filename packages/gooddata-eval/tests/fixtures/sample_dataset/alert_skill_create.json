@@ -1,0 +1,13 @@
+{
+  "id": "alert-001",
+  "dataset_name": "sample_alerts",
+  "test_kind": "alert_skill",
+  "question": "Alert me every time revenue drops below 10000.",
+  "expected_output": {
+    "Operator": "LESS_THAN",
+    "Threshold": 10000,
+    "Trigger": "Every time",
+    "Metric": "Revenue (revenue)",
+    "Recipient(s)": "analyst@example.com"
+  }
+}

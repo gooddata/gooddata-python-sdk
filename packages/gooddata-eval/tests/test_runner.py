@@ -1,7 +1,11 @@
 # (C) 2026 GoodData Corporation
 import threading
+from pathlib import Path
+from unittest.mock import patch
 
+from gooddata_eval.core.dataset.local import load_local_dataset
 from gooddata_eval.core.evaluators import supported_test_kinds
+from gooddata_eval.core.evaluators.summary import _VIOLATION_STEPS
 from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.runner import ItemReport, run_items
 
@@ -254,3 +258,42 @@ def test_run_items_callback_exception_is_logged_not_swallowed(capsys):
     assert result.total == 2  # run did not abort
     err = capsys.readouterr().err
     assert "RuntimeError" in err or "callback bug" in err  # traceback was printed
+
+
+class _FakeJudge:
+    """Stand-in LLM judge keyed off the evaluation_steps it is built with.
+
+    The summary evaluator builds a positive judge (must_include / rubric) and a
+    violation judge (must_not_include). The violation judge must report the
+    forbidden characteristic as ABSENT for the item to pass, so it returns
+    ``(False, ...)``; every other judge reports a pass.
+    """
+
+    def __init__(self, evaluation_steps):
+        self._is_violation = evaluation_steps == _VIOLATION_STEPS
+
+    def score(self, *_args, **_kwargs):
+        return (False, "absent") if self._is_violation else (True, "ok")
+
+
+def test_run_items_covers_all_test_kinds_end_to_end(fixtures_dir, passing_backend):
+    """Full pipeline over a dataset spanning all 7 test_kinds: runner routes each
+    kind to its evaluator and scoring, no item skipped or errored, all pass."""
+    items = load_local_dataset(Path(fixtures_dir) / "sample_dataset")
+    assert {i.test_kind for i in items} == set(supported_test_kinds())
+
+    with (
+        patch("gooddata_eval.core.evaluators.general_question.LLMJudge", _FakeJudge),
+        patch("gooddata_eval.core.evaluators.guardrail.LLMJudge", _FakeJudge),
+        patch("gooddata_eval.core.evaluators.summary.LLMJudge", _FakeJudge),
+    ):
+        report = run_items(items, passing_backend, runs=1)
+
+    assert report.total == len(supported_test_kinds())
+    assert report.skipped == 0
+    assert report.errored == 0
+    assert report.passed == report.total, [(i.test_kind, i.pass_at_k, i.error) for i in report.items]
+    assert sorted(passing_backend.calls) == sorted(i.id for i in items)
+    for item_report in report.items:
+        assert item_report.pass_at_k is True
+        assert item_report.quality_score > 0.0

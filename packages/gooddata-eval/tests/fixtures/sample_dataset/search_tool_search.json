@@ -1,0 +1,17 @@
+{
+  "id": "search-001",
+  "dataset_name": "sample_search",
+  "test_kind": "search_tool",
+  "question": "Find metrics and facts related to revenue.",
+  "expected_output": {
+    "tool_call": {
+      "function_name": "search_objects",
+      "function_arguments": {
+        "keywords": ["revenue"],
+        "object_types": ["metric", "fact"],
+        "limit": 10,
+        "emit_widget": false
+      }
+    }
+  }
+}
