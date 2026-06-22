@@ -21,6 +21,52 @@ from gooddata_eval.core.scoring import (
 
 _REF_PATTERN = re.compile(r"\$ref:([\w_]+)\.([\w_]+)")
 
+_DASHBOARD_SUMMARY_EVALUATION_STEPS: list[str] = [
+    (
+        "Read the EXPECTED OUTPUT carefully. It describes which analytical insights a correct "
+        "dashboard summary should cover across all the dashboard's visualizations."
+    ),
+    (
+        "Check that the ACTUAL OUTPUT provides a genuine business-level summary — not just a "
+        "list of chart titles or axis labels."
+    ),
+    (
+        "Check that the key insights described in the EXPECTED OUTPUT are present and "
+        "correctly represented in the ACTUAL OUTPUT. Exact wording is not required."
+    ),
+    (
+        "Return FAIL (0) if the response refuses to summarize, produces only chart mechanics, "
+        "or misses the key insights listed in the EXPECTED OUTPUT."
+    ),
+    (
+        "Return PASS (1) if the summary is factually aligned with the EXPECTED OUTPUT criteria "
+        "and provides genuine analytical insight about the dashboard's data."
+    ),
+]
+
+_VIZ_SUMMARY_EVALUATION_STEPS: list[str] = [
+    (
+        "Read the EXPECTED OUTPUT carefully. It describes which analytical insights a correct "
+        "summary should cover (e.g. top performers, trends, comparisons, outliers)."
+    ),
+    (
+        "Check that the ACTUAL OUTPUT provides a genuine business-level summary — not just a "
+        "description of chart mechanics, axis labels, or metadata."
+    ),
+    (
+        "Check that the key insights described in the EXPECTED OUTPUT are present and "
+        "correctly represented in the ACTUAL OUTPUT. Exact wording is not required."
+    ),
+    (
+        "Return FAIL (0) if the response refuses to summarize, produces only chart mechanics, "
+        "or misses the key insights listed in the EXPECTED OUTPUT."
+    ),
+    (
+        "Return PASS (1) if the summary is factually aligned with the EXPECTED OUTPUT criteria "
+        "and provides genuine analytical insight about the data."
+    ),
+]
+
 
 class TurnDefinition(BaseModel):
     """Definition of a single turn in a multi-turn conversation evaluation."""
@@ -28,7 +74,7 @@ class TurnDefinition(BaseModel):
     turn_id: str
     message: str
     expected_skill: str
-    expected_output_type: Literal["visualization", "tool_call", "metric"] = "visualization"
+    expected_output_type: Literal["visualization", "tool_call", "metric", "alert", "visualization_summary", "search", "dashboard_summary", "key_driver_analysis", "what_if_analysis", "anomaly_detection", "clustering", "forecasting"] = "visualization"
     expected_tool_name: str | None = None
     expected_output: dict | None = None
 
@@ -40,6 +86,8 @@ class ConversationFixture(BaseModel):
     dataset_name: str = "conversation"
     expected_skills: list[str]
     turns: list[TurnDefinition]
+    workspace_id: str | None = None
+    category: str | None = None
 
 
 class TurnResult(BaseModel):
@@ -124,6 +172,24 @@ def _check_output_present(turn: TurnDefinition, chat_result: ChatResult) -> bool
         )
     if otype == "metric":
         return any(tc.function_name == "create_metric" for tc in (chat_result.tool_call_events or []))
+    if otype == "alert":
+        return any(tc.function_name == "create_metric_alert" for tc in (chat_result.tool_call_events or []))
+    if otype == "visualization_summary":
+        return bool(chat_result.text_response and chat_result.text_response.strip())
+    if otype == "dashboard_summary":
+        return bool(chat_result.text_response and chat_result.text_response.strip())
+    if otype == "search":
+        return any(tc.function_name == "search_objects" for tc in (chat_result.tool_call_events or []))
+    if otype == "key_driver_analysis":
+        return any(tc.function_name == "create_key_driver_analysis" for tc in (chat_result.tool_call_events or []))
+    if otype == "what_if_analysis":
+        return any(tc.function_name == "create_what_if_scenario" for tc in (chat_result.tool_call_events or []))
+    if otype == "anomaly_detection":
+        return any(tc.function_name == "execute_anomaly_detection" for tc in (chat_result.tool_call_events or []))
+    if otype == "clustering":
+        return any(tc.function_name == "execute_clustering" for tc in (chat_result.tool_call_events or []))
+    if otype == "forecasting":
+        return any(tc.function_name == "execute_forecast" for tc in (chat_result.tool_call_events or []))
     if otype == "tool_call":
         expected_tool = turn.expected_tool_name
         if not expected_tool:
@@ -194,6 +260,145 @@ def _check_output_correct(turn: TurnDefinition, chat_result: ChatResult) -> bool
             return False
         return _normalize_maql(metric_result.get("maql", "")) == _normalize_maql(expected.get("maql", ""))
 
+    if otype == "alert":
+        from gooddata_eval.core.agentic.alert_skill import (  # noqa: PLC0415
+            _check_filters,
+            _check_metric,
+            _check_threshold,
+            _check_trigger,
+            _extract_alert_call,
+            _normalize_expected_output,
+        )
+
+        _, actual_args, tool_called = _extract_alert_call(chat_result.tool_call_events or [])
+        if not tool_called:
+            return False
+        exp_alert = _normalize_expected_output(expected)
+        return all(
+            [
+                exp_alert.operator == actual_args.get("operator"),
+                _check_threshold(exp_alert, actual_args),
+                _check_trigger(exp_alert, actual_args),
+                _check_filters(exp_alert, actual_args),
+                _check_metric(exp_alert, actual_args),
+            ]
+        )
+
+    if otype == "visualization_summary":
+        rubric = expected.get("rubric") if isinstance(expected, dict) else None
+        if not rubric:
+            return None
+        actual_text = (chat_result.text_response or "").strip()
+        if not actual_text:
+            return False
+        from gooddata_eval.core.evaluators._llm_judge import LLMJudge  # noqa: PLC0415
+
+        judge = LLMJudge(_VIZ_SUMMARY_EVALUATION_STEPS)
+        passed, _ = judge.score(
+            input=turn.message,
+            expected_output=rubric,
+            actual_output=actual_text,
+        )
+        return passed
+
+    if otype == "dashboard_summary":
+        rubric = expected.get("rubric") if isinstance(expected, dict) else None
+        if not rubric:
+            return None
+        actual_text = (chat_result.text_response or "").strip()
+        if not actual_text:
+            return False
+        from gooddata_eval.core.evaluators._llm_judge import LLMJudge  # noqa: PLC0415
+
+        judge = LLMJudge(_DASHBOARD_SUMMARY_EVALUATION_STEPS)
+        passed, _ = judge.score(
+            input=turn.message,
+            expected_output=rubric,
+            actual_output=actual_text,
+        )
+        return passed
+
+    if otype == "search":
+        matching = [tc for tc in (chat_result.tool_call_events or []) if tc.function_name == "search_objects"]
+        if not matching:
+            return False
+        exp_keywords = sorted(expected.get("keywords") or [])
+        exp_types = sorted(expected.get("object_types") or [])
+        return any(
+            sorted((tc.parsed_arguments() or {}).get("keywords") or []) == exp_keywords
+            and sorted((tc.parsed_arguments() or {}).get("object_types") or []) == exp_types
+            for tc in matching
+        )
+
+    if otype == "key_driver_analysis":
+        exp_metric = expected.get("metric_id")
+        if not exp_metric:
+            return None
+        for tc in chat_result.tool_call_events or []:
+            if tc.function_name != "create_key_driver_analysis":
+                continue
+            args = tc.parsed_arguments() or {}
+            measure = args.get("measure") or {}
+            if isinstance(measure, dict) and measure.get("id") == exp_metric:
+                return True
+        return False
+
+    if otype == "what_if_analysis":
+        exp_metric = expected.get("metric_id")
+        if not exp_metric:
+            return None
+        for tc in chat_result.tool_call_events or []:
+            if tc.function_name != "create_what_if_scenario":
+                continue
+            args = tc.parsed_arguments() or {}
+            for scenario in args.get("scenarios") or []:
+                for adj in (scenario.get("adjustments") or []):
+                    if adj.get("metric_id") == exp_metric:
+                        return True
+        return False
+
+    if otype in {"anomaly_detection", "clustering", "forecasting"}:
+        exp_metric = expected.get("metric_id")
+        if not exp_metric:
+            return None
+        execute_fn = {
+            "anomaly_detection": "execute_anomaly_detection",
+            "clustering": "execute_clustering",
+            "forecasting": "execute_forecast",
+        }[otype]
+        # Build a map: viz ref → metrics list (from create_adhoc_visualization result)
+        viz_metrics: dict[str, list[str]] = {}
+        for tc in chat_result.tool_call_events or []:
+            if tc.function_name != "create_adhoc_visualization":
+                continue
+            if not tc.result:
+                continue
+            try:
+                result_data = json.loads(tc.result)
+                ref = result_data.get("ref")
+                if not ref:
+                    continue
+                args = tc.parsed_arguments() or {}
+                viz = args.get("visualization") or {}
+                raw_metrics = viz.get("metrics") or []
+                viz_metrics[ref] = [
+                    m.split("/", 1)[-1] if isinstance(m, str) else m
+                    for m in raw_metrics
+                ]
+            except Exception:
+                continue
+        for tc in chat_result.tool_call_events or []:
+            if tc.function_name != execute_fn:
+                continue
+            args = tc.parsed_arguments() or {}
+            viz_ref = args.get("visualization_ref")
+            if not viz_ref:
+                continue
+            metrics = viz_metrics.get(viz_ref)
+            if metrics is not None and exp_metric in metrics:
+                return True
+        return False
+
     return None
 
 
@@ -228,6 +433,10 @@ def _get_sim_user_response(agent_message: str, turn: TurnDefinition, expected_ou
             return generate_simulated_response(agent_message, expected_output)
         except Exception:
             pass
+    elif otype in {"key_driver_analysis", "what_if_analysis", "anomaly_detection", "clustering", "forecasting"} and expected_output:
+        metric_id = expected_output.get("metric_id")
+        if metric_id:
+            return f"Use {{metric/{metric_id}}}. Please proceed with that metric."
 
     # Generic fallback for other skill types or when expected_output is absent
     import os  # noqa: PLC0415
