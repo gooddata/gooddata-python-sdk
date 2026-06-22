@@ -327,12 +327,16 @@ def run_agentic_conversation(
                     break
 
                 response_text = (chat_result.text_response or "").strip()
-                if _is_asking_clarification(response_text) and clarification_turns < max_clarification_turns:
-                    clarification_turns += 1
-                    total_clarification_turns += 1
+                if clarification_turns >= max_clarification_turns:
+                    break
+                clarification_turns += 1
+                total_clarification_turns += 1
+                if _is_asking_clarification(response_text):
                     current_message = _get_sim_user_response(response_text, resolved_turn, resolved_expected)
                 else:
-                    break
+                    # Model produced no expected output and asked no question —
+                    # nudge it to continue rather than stopping prematurely.
+                    current_message = "Please proceed and complete the task."
 
             activated = _activated_skills(all_tool_calls)
             all_tool_call_names = [tc.function_name for tc in all_tool_calls]
