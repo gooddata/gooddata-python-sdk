@@ -8,7 +8,7 @@ from typing import Any, TypedDict
 
 from gooddata_eval.core.agentic._langfuse import HttpxLangfuseClient, make_langfuse_client
 from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
-from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluate_agentic_conversation
+from gooddata_eval.core.agentic.conversation import ConversationFixture, run_agentic_conversation
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.metric_skill import evaluate_agentic_metric_skill
@@ -83,8 +83,12 @@ def _dispatch_agentic(
     langfuse: Any,
     run_ts: str,
     model_version_override: str | None,
-) -> None:
-    """Call the appropriate evaluate_agentic_* function for the item's test_kind."""
+) -> dict | None:
+    """Call the appropriate evaluate_agentic_* function for the item's test_kind.
+
+    Returns a detail dict for agentic_conversation (pass/fail encoded in the dict),
+    or None for all other kinds (which raise AssertionError on failure).
+    """
     kind = item.test_kind
     eo = item.expected_output
     lf_kw: _LfKw = {
@@ -160,13 +164,32 @@ def _dispatch_agentic(
         )
     elif kind == "agentic_conversation":
         fixture_data = eo.get("fixture") or eo if isinstance(eo, dict) else {}
-        evaluate_agentic_conversation(
+        fixture = ConversationFixture.model_validate(fixture_data)
+        result = run_agentic_conversation(
             host=host,
             token=token,
             workspace_id=workspace_id,
-            fixture=ConversationFixture.model_validate(fixture_data),
-            **lf_kw,
+            fixture=fixture,
         )
+        return {
+            "conversation_success": result.conversation_success,
+            "full_skill_coverage": result.full_skill_coverage,
+            "total_clarification_turns": result.total_clarification_turns,
+            "turns": [
+                {
+                    "turn_id": tr.turn_id,
+                    "expected_skill": tr.expected_skill,
+                    "activated_skills": tr.activated_skills,
+                    "skill_routing": tr.skill_routing,
+                    "output_present": tr.output_present,
+                    "no_error": tr.no_error,
+                    "skill_success": tr.skill_success,
+                    "output_correct": tr.output_correct,
+                    "clarification_turns_used": tr.clarification_turns_used,
+                }
+                for tr in result.turn_results
+            ],
+        }
     else:
         raise ValueError(f"Unknown agentic test kind: {kind!r}")
 
@@ -205,9 +228,14 @@ def run_agentic_items(
         )
         t0 = time.perf_counter()
         try:
-            _dispatch_agentic(item, host, token, workspace_id, k, langfuse, run_ts, model_version)
-            item_report.pass_at_k = True
-            item_report.runs = k
+            conv_detail = _dispatch_agentic(item, host, token, workspace_id, k, langfuse, run_ts, model_version)
+            if conv_detail is not None:
+                item_report.best_detail = conv_detail
+                item_report.pass_at_k = bool(conv_detail.get("conversation_success", False))
+                item_report.runs = 1
+            else:
+                item_report.pass_at_k = True
+                item_report.runs = k
         except AssertionError as exc:
             item_report.pass_at_k = False
             item_report.runs = k

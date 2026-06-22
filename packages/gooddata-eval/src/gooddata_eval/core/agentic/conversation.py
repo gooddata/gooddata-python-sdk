@@ -102,7 +102,7 @@ def _activated_skills(tool_call_events: list[ToolCallEvent]) -> list[str]:
         if tc.function_name != "set_skills":
             continue
         args = tc.parsed_arguments() or {}
-        skills.extend(args.get("skills", []))
+        skills.extend(args.get("skill_names", []))
     return list(set(skills))
 
 

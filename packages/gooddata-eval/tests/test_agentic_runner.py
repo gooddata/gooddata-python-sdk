@@ -76,7 +76,7 @@ def _dispatch(item: DatasetItem):
         ("agentic_search", {"tool_call": {"function_arguments": {"keywords": ["x"]}}}, "evaluate_agentic_search_tool"),
         ("agentic_general_question", "an answer", "evaluate_agentic_general_question"),
         ("agentic_guardrail", "a refusal", "evaluate_agentic_guardrail"),
-        ("agentic_conversation", {"fixture": {"id": "c1", "expected_skills": [], "turns": []}}, "evaluate_agentic_conversation"),
+        ("agentic_conversation", {"fixture": {"id": "c1", "expected_skills": [], "turns": []}}, "run_agentic_conversation"),
     ],
 )
 def test_dispatch_routes_each_agentic_kind(kind, expected_output, target):

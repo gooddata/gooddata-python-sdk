@@ -19,7 +19,7 @@ from gooddata_eval.core.models import ChatResult, ToolCallEvent
 
 def _set_skills_event(skills):
     return ToolCallEvent.model_validate(
-        {"functionName": "set_skills", "functionArguments": f'{{"skills": {skills!r}}}'.replace("'", '"')}
+        {"functionName": "set_skills", "functionArguments": f'{{"skill_names": {skills!r}}}'.replace("'", '"')}
     )
 
 
