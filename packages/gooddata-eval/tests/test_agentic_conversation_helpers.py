@@ -99,12 +99,13 @@ def test_extract_metric_from_turn():
 
 
 def test_is_asking_clarification():
-    # genuine clarification — response ends with a question mark
+    # any "?" in the text counts — we only check when output is absent,
+    # so a "?" reliably means the model is awaiting input.
     assert _is_asking_clarification("Which metric?") is True
     assert _is_asking_clarification("Could you clarify which dimension to use?") is True
     assert _is_asking_clarification("I need more info.\nWhich time period should I use?") is True
 
-    # question followed by bullet options (common agent pattern)
+    # question + bullet options (common agent pattern)
     assert _is_asking_clarification(
         "Which metric should I use?\n- {metric/metric_a}\n- {metric/metric_b}"
     ) is True
@@ -112,11 +113,17 @@ def test_is_asking_clarification():
         "I found multiple options. Which one?\n1) Option A\n2) Option B"
     ) is True
 
-    # false positives the old heuristic fired on
-    assert _is_asking_clarification("Please clarify") is False        # no trailing "?"
+    # question mid-sentence with follow-up text on the last line
+    assert _is_asking_clarification(
+        "Which version?\n\nIf you choose option 2, tell me the metric ID."
+    ) is True
+    assert _is_asking_clarification(
+        "Could you let me know which metric you'd like? Or I can proceed with the default."
+    ) is True
+
+    # no "?" at all — not a clarification question
+    assert _is_asking_clarification("Please clarify") is False
     assert _is_asking_clarification("I'll create the metric now, please wait.") is False
     assert _is_asking_clarification("Here is your chart! Let me know if you need changes.") is False
-
-    # unambiguous non-questions
     assert _is_asking_clarification("") is False
     assert _is_asking_clarification("All set.") is False

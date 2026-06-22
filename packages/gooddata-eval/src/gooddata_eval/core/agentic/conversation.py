@@ -198,25 +198,13 @@ def _check_output_correct(turn: TurnDefinition, chat_result: ChatResult) -> bool
 
 
 def _is_asking_clarification(text: str) -> bool:
-    """Return True when the agent's response is a clarification question.
+    """Return True when the agent response contains a question (awaiting user input).
 
-    Walk backwards through non-empty lines, skipping trailing bullet or
-    numbered-list items (common when the agent offers options after the
-    question).  The first non-list line is treated as the effective last line;
-    it must end with "?" to count as a clarification request.
+    We only reach this check when no expected output was produced, so any "?"
+    in the text reliably signals the model needs user guidance rather than
+    being a rhetorical flourish inside an otherwise complete answer.
     """
-    if not text:
-        return False
-    lines = [line.strip() for line in text.strip().splitlines() if line.strip()]
-    _bullet_prefixes = ("-", "*", "•")
-    _numbered = re.compile(r"^\d+[.)]\s")
-    for line in reversed(lines):
-        is_list_item = any(line.startswith(p + " ") or line.startswith(p) for p in _bullet_prefixes) or bool(
-            _numbered.match(line)
-        )
-        if not is_list_item:
-            return line.endswith("?")
-    return False
+    return bool(text) and "?" in text
 
 
 def _get_sim_user_response(agent_message: str, turn: TurnDefinition, expected_output: dict | None) -> str:
