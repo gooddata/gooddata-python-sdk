@@ -104,6 +104,14 @@ def test_is_asking_clarification():
     assert _is_asking_clarification("Could you clarify which dimension to use?") is True
     assert _is_asking_clarification("I need more info.\nWhich time period should I use?") is True
 
+    # question followed by bullet options (common agent pattern)
+    assert _is_asking_clarification(
+        "Which metric should I use?\n- {metric/metric_a}\n- {metric/metric_b}"
+    ) is True
+    assert _is_asking_clarification(
+        "I found multiple options. Which one?\n1) Option A\n2) Option B"
+    ) is True
+
     # false positives the old heuristic fired on
     assert _is_asking_clarification("Please clarify") is False        # no trailing "?"
     assert _is_asking_clarification("I'll create the metric now, please wait.") is False

@@ -183,12 +183,14 @@ def _dispatch_agentic(
                     "turn_index": tr.turn_index,
                     "expected_skill": tr.expected_skill,
                     "activated_skills": tr.activated_skills,
+                    "all_tool_calls": tr.all_tool_calls,
                     "skill_routing": tr.skill_routing,
                     "output_present": tr.output_present,
                     "no_error": tr.no_error,
                     "skill_success": tr.skill_success,
                     "output_correct": tr.output_correct,
                     "clarification_turns_used": tr.clarification_turns_used,
+                    "text_response": tr.text_response,
                 }
                 for tr in result.turn_results
             ],

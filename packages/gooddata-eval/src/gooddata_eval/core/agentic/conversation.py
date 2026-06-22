@@ -52,6 +52,8 @@ class TurnResult(BaseModel):
     output_present: bool
     no_error: bool
     activated_skills: list[str]
+    all_tool_calls: list[str] = []
+    text_response: str | None = None
     clarification_turns_used: int = 0
     output_correct: bool | None = None
 
@@ -196,10 +198,25 @@ def _check_output_correct(turn: TurnDefinition, chat_result: ChatResult) -> bool
 
 
 def _is_asking_clarification(text: str) -> bool:
+    """Return True when the agent's response is a clarification question.
+
+    Walk backwards through non-empty lines, skipping trailing bullet or
+    numbered-list items (common when the agent offers options after the
+    question).  The first non-list line is treated as the effective last line;
+    it must end with "?" to count as a clarification request.
+    """
     if not text:
         return False
-    last_line = next((l.strip() for l in reversed(text.strip().splitlines()) if l.strip()), "")
-    return last_line.endswith("?")
+    lines = [line.strip() for line in text.strip().splitlines() if line.strip()]
+    _bullet_prefixes = ("-", "*", "•")
+    _numbered = re.compile(r"^\d+[.)]\s")
+    for line in reversed(lines):
+        is_list_item = any(line.startswith(p + " ") or line.startswith(p) for p in _bullet_prefixes) or bool(
+            _numbered.match(line)
+        )
+        if not is_list_item:
+            return line.endswith("?")
+    return False
 
 
 def _get_sim_user_response(agent_message: str, turn: TurnDefinition, expected_output: dict | None) -> str:
@@ -330,11 +347,13 @@ def run_agentic_conversation(
                     break
 
             activated = _activated_skills(all_tool_calls)
+            all_tool_call_names = [tc.function_name for tc in all_tool_calls]
             skill_routing = turn.expected_skill in activated if activated else False
             output_present = _check_output_present(resolved_turn, final_result) if final_result else False
             output_correct = (
                 _check_output_correct(resolved_turn, final_result) if (final_result and output_present) else None
             )
+            final_text = (final_result.text_response or "").strip() if final_result else None
 
             # Capture metric output for $ref resolution in subsequent turns.
             if final_result and turn.expected_output_type == "metric":
@@ -351,6 +370,8 @@ def run_agentic_conversation(
                     output_present=output_present,
                     no_error=True,  # SDK raises on errors; reaching here means no critical error.
                     activated_skills=activated,
+                    all_tool_calls=all_tool_call_names,
+                    text_response=final_text,
                     clarification_turns_used=clarification_turns,
                     output_correct=output_correct,
                 )
