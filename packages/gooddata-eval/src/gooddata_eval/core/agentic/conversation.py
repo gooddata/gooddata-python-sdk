@@ -198,8 +198,8 @@ def _check_output_correct(turn: TurnDefinition, chat_result: ChatResult) -> bool
 def _is_asking_clarification(text: str) -> bool:
     if not text:
         return False
-    t = text.lower()
-    return "?" in t or "could you" in t or "please" in t or "clarif" in t
+    last_line = next((l.strip() for l in reversed(text.strip().splitlines()) if l.strip()), "")
+    return last_line.endswith("?")
 
 
 def _get_sim_user_response(agent_message: str, turn: TurnDefinition, expected_output: dict | None) -> str:
