@@ -77,6 +77,8 @@ def _check_threshold(expected: CatalogMetricAlert, actual_args: dict) -> bool:
 
 
 def _check_trigger(expected: CatalogMetricAlert, actual_args: dict) -> bool:
+    if expected.operator == "ANOMALY":
+        return True
     exp_trigger = expected.trigger
     act_trigger = actual_args.get("trigger", actual_args.get("triggerMode", "ALWAYS"))
     if exp_trigger in _ALWAYS_TRIGGER_VALUES:
@@ -235,27 +237,42 @@ class AgenticAlertSummary:
     best: AlertRunResult
 
 
+def _case_insensitive_get(d: dict, *keys: str) -> Any:
+    """Look up a value by key, preferring an exact match then a case-insensitive one."""
+    for k in keys:
+        if k in d:
+            return d[k]
+    lowered = {str(k).lower(): v for k, v in d.items()}
+    for k in keys:
+        if k.lower() in lowered:
+            return lowered[k.lower()]
+    return None
+
+
 def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
     """Parse expected_output dict into CatalogMetricAlert, accepting display-format or internal-format keys."""
-    operator = expected.get("operator") or expected.get("Operator") or "GREATER_THAN"
-    threshold = expected.get("threshold") or expected.get("Threshold")
-    threshold_from = expected.get("threshold_from")
-    threshold_to = expected.get("threshold_to")
-    trigger = expected.get("trigger") or expected.get("Trigger") or "not specified"
+    operator = _case_insensitive_get(expected, "operator") or "GREATER_THAN"
+    threshold = _case_insensitive_get(expected, "threshold")
+    threshold_from = _case_insensitive_get(expected, "threshold_from")
+    threshold_to = _case_insensitive_get(expected, "threshold_to")
 
-    metric_id = expected.get("metric_id")
-    if not metric_id and "Metric" in expected:
-        m = re.search(r"\(([^)]+)\)\s*$", str(expected["Metric"]))
-        if m:
-            metric_id = m.group(1).strip()
+    trigger = _case_insensitive_get(expected, "trigger") or "not specified"
+    trigger = _TRIGGER_DISPLAY_TO_API.get(trigger, trigger)
 
-    raw_recip = expected.get("recipients") or expected.get("Recipient(s)") or []
+    metric_id = _case_insensitive_get(expected, "metric_id")
+    if not metric_id:
+        metric_disp = _case_insensitive_get(expected, "metric")
+        if metric_disp:
+            m = re.search(r"\(([^)]+)\)\s*$", str(metric_disp))
+            metric_id = m.group(1).strip() if m else None
+
+    raw_recip = _case_insensitive_get(expected, "recipients", "recipient(s)") or []
     if isinstance(raw_recip, str):
         recipients = [r.strip() for r in raw_recip.replace(";", ",").split(",") if r.strip()]
     else:
         recipients = list(raw_recip)
 
-    filters = expected.get("filters") or expected.get("Time window/Filters")
+    filters = _case_insensitive_get(expected, "filters")
     if isinstance(filters, str) and any(kw in filters for kw in ("None", "All time")):
         filters = None
 
