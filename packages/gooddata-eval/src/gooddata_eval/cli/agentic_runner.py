@@ -83,6 +83,7 @@ def _dispatch_agentic(
     langfuse: Any,
     run_ts: str,
     model_version_override: str | None,
+    max_clarification_turns: int = 3,
 ) -> dict | None:
     """Call the appropriate evaluate_agentic_* function for the item's test_kind.
 
@@ -170,6 +171,7 @@ def _dispatch_agentic(
             token=token,
             workspace_id=workspace_id,
             fixture=fixture,
+            max_clarification_turns=max_clarification_turns,
         )
         return {
             "conversation_success": result.conversation_success,
@@ -178,6 +180,7 @@ def _dispatch_agentic(
             "turns": [
                 {
                     "turn_id": tr.turn_id,
+                    "turn_index": tr.turn_index,
                     "expected_skill": tr.expected_skill,
                     "activated_skills": tr.activated_skills,
                     "skill_routing": tr.skill_routing,
@@ -201,6 +204,7 @@ def run_agentic_items(
     workspace_id: str,
     *,
     k: int = 2,
+    max_clarification_turns: int = 3,
     model_version: str | None = None,
     use_langfuse: bool = False,
     run_ts: str,
@@ -228,7 +232,7 @@ def run_agentic_items(
         )
         t0 = time.perf_counter()
         try:
-            conv_detail = _dispatch_agentic(item, host, token, workspace_id, k, langfuse, run_ts, model_version)
+            conv_detail = _dispatch_agentic(item, host, token, workspace_id, k, langfuse, run_ts, model_version, max_clarification_turns)
             if conv_detail is not None:
                 item_report.best_detail = conv_detail
                 item_report.pass_at_k = bool(conv_detail.get("conversation_success", False))

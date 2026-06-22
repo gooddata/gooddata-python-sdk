@@ -46,6 +46,7 @@ class TurnResult(BaseModel):
     """Evaluation result for a single conversation turn."""
 
     turn_id: str
+    turn_index: int = 0
     expected_skill: str
     skill_routing: bool
     output_present: bool
@@ -56,7 +57,13 @@ class TurnResult(BaseModel):
 
     @property
     def skill_success(self) -> bool:
-        return self.skill_routing and self.output_present and self.no_error
+        # Turn 0 must explicitly route via set_skills (strict).
+        # Follow-up turns: if the expected output is present the model is
+        # implicitly carrying the skill from the prior turn — consistent with
+        # how ToolSandbox and COMPASS evaluate stateful multi-turn conversations.
+        if self.turn_index == 0:
+            return self.skill_routing and self.output_present and self.no_error
+        return self.output_present and self.no_error
 
 
 def _resolve_refs(
@@ -296,7 +303,7 @@ def run_agentic_conversation(
             conversation_id = client.create_conversation()
             owns_conversation = True
 
-        for turn in fixture.turns:
+        for turn_index, turn in enumerate(fixture.turns):
             # Resolve $ref placeholders using outputs captured from prior turns.
             resolved_expected = _resolve_refs(turn.expected_output, turn_outputs)
             resolved_turn = turn.model_copy(update={"expected_output": resolved_expected})
@@ -338,6 +345,7 @@ def run_agentic_conversation(
             turn_results.append(
                 TurnResult(
                     turn_id=turn.turn_id,
+                    turn_index=turn_index,
                     expected_skill=turn.expected_skill,
                     skill_routing=skill_routing,
                     output_present=output_present,

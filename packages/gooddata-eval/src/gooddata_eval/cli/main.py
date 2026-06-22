@@ -89,6 +89,13 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     run.add_argument("--runs", type=int, default=2, help="Independent runs per item (pass@K). Default 2.")
     run.add_argument(
+        "--max-clarification-turns",
+        dest="max_clarification_turns",
+        type=int,
+        default=3,
+        help="Max simulated-user replies per conversation turn before giving up (agentic_conversation only). Default 3.",
+    )
+    run.add_argument(
         "--concurrency",
         type=int,
         default=1,
@@ -310,6 +317,7 @@ def _run(config: RunConfig) -> int:
                     token=config.token,
                     workspace_id=config.workspace_id,
                     k=config.runs,
+                    max_clarification_turns=config.max_clarification_turns,
                     model_version=resolved.model_id,
                     use_langfuse=config.log_to_langfuse,
                     run_ts=run_ts,
@@ -405,6 +413,7 @@ def main(argv: list[str] | None = None) -> int:
             models=args.models or [],
             runs=args.runs,
             concurrency=args.concurrency,
+            max_clarification_turns=args.max_clarification_turns,
             json_path=Path(args.json_path) if args.json_path else None,
             log_to_langfuse=args.langfuse,
             quiet=args.quiet,
