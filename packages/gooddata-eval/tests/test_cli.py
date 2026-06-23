@@ -512,6 +512,62 @@ def test_cli_rejects_zero_concurrency(monkeypatch, fixtures_dir):
     assert exit_code == 2
 
 
+def test_cli_preserve_failed_flag_parsed(monkeypatch, fixtures_dir):
+    """--preserve-failed sets preserve_failed=True in RunConfig and is passed to ChatClient."""
+    monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
+    captured_kwargs: dict = {}
+
+    class _FakeController:
+        def __init__(self, *a, **k): ...
+        def get_active(self):
+            return ActiveLlmProvider(provider_id="p", default_model_id="gpt-5.2")
+
+        def resolve_and_activate(self, requested, provider=None):
+            return ResolvedModel(provider_id="p", model_id="gpt-5.2", switched=False, provider_name="P")
+
+        def restore(self, original): ...
+        def close(self): ...
+
+    monkeypatch.setattr(cli_main, "WorkspaceModelController", _FakeController)
+
+    original_chat_client = cli_main.ChatClient
+
+    def _capture_chat_client(**kwargs):
+        captured_kwargs.update(kwargs)
+        return object()
+
+    monkeypatch.setattr(cli_main, "ChatClient", _capture_chat_client)
+
+    def _fake_run(items, backend, *, runs, model, workspace_id, **kw):
+        return EvalReport(
+            model=model,
+            workspace_id=workspace_id,
+            items=[
+                ItemReport(id="i1", dataset_name="d", test_kind="visualization", question="q", pass_at_k=True, runs=1)
+            ],
+        )
+
+    monkeypatch.setattr(cli_main, "run_items", _fake_run)
+
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--dataset",
+            str(fixtures_dir / "sample_dataset"),
+            "--preserve-failed",
+            "--quiet",
+        ]
+    )
+    assert exit_code == 0
+    assert captured_kwargs.get("preserve_failed") is True
+
+
 def test_cli_rejects_negative_concurrency(monkeypatch, fixtures_dir):
     monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
     exit_code = cli_main.main(

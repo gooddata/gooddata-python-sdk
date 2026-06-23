@@ -19,3 +19,4 @@ class RunConfig:
     log_to_langfuse: bool = False
     quiet: bool = False
     kind: str = "visualization"
+    preserve_failed: bool = False

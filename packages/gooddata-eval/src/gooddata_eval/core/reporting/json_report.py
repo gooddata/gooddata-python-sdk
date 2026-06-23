@@ -34,6 +34,8 @@ def _build_run_dict(report: EvalReport) -> dict:
                 "latency_s": round(item.latency_s, 3),
                 "avg_latency_s": round(item.avg_latency_s, 3),
                 "detail": item.best_detail,
+                "conversation_id": item.conversation_id,
+                "response_id": item.response_id,
             }
             for item in report.items
         },
