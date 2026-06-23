@@ -71,7 +71,9 @@ def validate_cross_references(viz: CreatedVisualization) -> tuple[bool, list[str
             continue
         using_val = filter_dict.get("using", "")
         using_uri = _resolve_alias_to_uri(using_val, fields)
-        if not using_uri.startswith(("metric/", "fact/")):
+        field_def = fields.get(using_val)
+        is_adhoc_agg = isinstance(field_def, AacQueryField) and bool(field_def.aggregation)
+        if not using_uri.startswith(("metric/", "fact/")) and not is_adhoc_agg:
             errors.append(
                 f"ranking filter '{filter_key}': using='{using_val}' "
                 f"resolves to '{using_uri}' — expected a metric/ or fact/ URI"
