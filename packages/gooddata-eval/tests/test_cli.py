@@ -530,3 +530,44 @@ def test_cli_rejects_negative_concurrency(monkeypatch, fixtures_dir):
         ]
     )
     assert exit_code == 2
+
+
+def test_progress_callbacks_thread_safe():
+    """Verify progress callbacks can be called from multiple threads without error."""
+    import io
+    import threading
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    console = Console(file=io.StringIO(), force_terminal=False)
+    on_item_start, on_run_done, on_item_done = cli_main._make_progress_callbacks(console)
+
+    errors: list[Exception] = []
+
+    def _worker(index: int) -> None:
+        try:
+            item = DatasetItem(
+                id=f"test-{index}",
+                dataset_name="test",
+                test_kind="general_question",
+                question=f"Question {index}",
+                expected_output="answer",
+            )
+            on_item_start(index, 100, item)
+            on_run_done(index, 100, 1, 1, index % 2 == 0, 1.5)
+            report = ItemReport(id=f"test-{index}", dataset_name="test", test_kind="general_question")
+            report.runs = 1
+            report.latency_s = 1.5
+            report.pass_at_k = index % 2 == 0
+            on_item_done(index, 100, report)
+        except Exception as e:
+            errors.append(e)
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        futures = [pool.submit(_worker, i) for i in range(50)]
+        for f in as_completed(futures):
+            f.result()  # re-raise if any thread failed
+
+    assert not errors, f"Thread-safety violation: {errors}"
+    output = console.file.getvalue()
+    assert "test-1" in output
+    assert "test-49" in output
