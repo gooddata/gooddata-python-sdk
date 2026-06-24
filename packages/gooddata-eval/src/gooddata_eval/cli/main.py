@@ -3,6 +3,7 @@
 
 import argparse
 import sys
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -139,14 +140,24 @@ def _parse_model_arg(val: str) -> tuple[str | None, str]:
 
 
 def _make_progress_callbacks(console: Console):
-    """Build (on_item_start, on_run_done, on_item_done) callbacks that stream progress."""
+    """Build (on_item_start, on_run_done, on_item_done) callbacks that stream progress.
+
+    A threading lock guards all console.print() calls so that concurrent
+    ``--concurrency 2+`` workers do not deadlock when stdout is piped
+    (e.g. running in a background process).
+    """
+    _print_lock = threading.Lock()
 
     def on_item_start(index: int, total: int, item: DatasetItem) -> None:
-        console.print(f"[dim]\\[{index}/{total}][/dim] [cyan]{item.id}[/cyan] {_truncate(item.question)}")
+        with _print_lock:
+            console.print(f"[dim]\\[{index}/{total}][/dim] [cyan]{item.id}[/cyan] {_truncate(item.question)}")
 
     def on_run_done(index: int, total: int, run_index: int, runs: int, passed: bool, latency: float) -> None:
         tag = "[green]pass[/green]" if passed else "[red]fail[/red]"
-        console.print(f"[dim]\\[{index}/{total}][/dim]     run {run_index}/{runs}  {tag}  [dim]{latency:.2f}s[/dim]")
+        with _print_lock:
+            console.print(
+                f"[dim]\\[{index}/{total}][/dim]     run {run_index}/{runs}  {tag}  [dim]{latency:.2f}s[/dim]"
+            )
 
     def on_item_done(index: int, total: int, report: ItemReport) -> None:
         if report.skipped:
@@ -165,7 +176,8 @@ def _make_progress_callbacks(console: Console):
                 f" [dim]({report.latency_s:.2f}s total, {report.avg_latency_s:.2f}s avg, "
                 f"quality={quality_str}, {report.runs} run(s))[/dim]"
             )
-        console.print(f"[dim]\\[{index}/{total}][/dim]   -> {tag} [cyan]{report.id}[/cyan]{suffix}")
+        with _print_lock:
+            console.print(f"[dim]\\[{index}/{total}][/dim]   -> {tag} [cyan]{report.id}[/cyan]{suffix}")
 
     return on_item_start, on_run_done, on_item_done
 
