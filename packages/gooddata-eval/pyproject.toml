@@ -1,7 +1,7 @@
 # (C) 2026 GoodData Corporation
 [project]
 name = "gooddata-eval"
-version = "1.68.0"
+version = "1.69.0"
 description = "Evaluate the GoodData AI agent against your own questions and models."
 readme = "README.md"
 license = "MIT"
@@ -11,7 +11,7 @@ authors = [
 keywords = ["gooddata", "ai", "evaluation", "llm", "analytics", "cli"]
 requires-python = ">=3.10"
 dependencies = [
-    "gooddata-sdk~=1.68.0",
+    "gooddata-sdk~=1.69.0",
     "httpx>=0.27,<1.0",
     "orjson>=3.9.15,<4.0.0",
     "pydantic>=2.6,<3.0",
