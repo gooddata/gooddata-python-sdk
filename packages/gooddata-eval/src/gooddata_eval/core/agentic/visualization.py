@@ -113,6 +113,9 @@ def generate_simulated_response(agent_message: str, expected_output: CreatedVisu
         )
     no_filter_hint = (" " + " ".join(no_filter_hints)) if no_filter_hints else ""
 
+    metric_refs = ", ".join(f"{{{u}}}" for u in metric_uris) if metric_uris else metrics_str
+    dim_refs = ", ".join(f"{{{u}}}" for u in dim_uris) if dim_uris else dimensions_str
+
     response = client.chat.completions.create(
         model="gpt-5.2",
         messages=[
@@ -120,8 +123,10 @@ def generate_simulated_response(agent_message: str, expected_output: CreatedVisu
                 "role": "system",
                 "content": (
                     "You are a user requesting data visualization from an AI agent. "
-                    "The agent may ask clarifying questions to better understand your request. "
-                    "Respond naturally and helpfully to their questions."
+                    "The agent may ask clarifying questions before completing your request. "
+                    "When the agent presents options or asks you to choose, respond by specifying "
+                    "the exact option using its identifier (e.g. {metric/id} or {label/id}) so the "
+                    "agent can proceed immediately. Be direct and concise."
                 ),
             },
             {
@@ -129,18 +134,19 @@ def generate_simulated_response(agent_message: str, expected_output: CreatedVisu
                 "content": (
                     f'The agent asked: "{agent_message}"\n\n'
                     f"Your goal is to get a visualization with:\n"
-                    f"- Metrics: {metrics_str}\n"
-                    f"- Dimensions: {dimensions_str}\n"
+                    f"- Metrics: {metric_refs}\n"
+                    f"- Dimensions: {dim_refs}\n"
                     f"- Filters: {filters_str}\n"
                     f"- Visualization type: {viz_type_str}\n\n"
-                    f"Respond naturally to the agent's question. Be helpful and answer what they're asking about.\n"
-                    f"If the agent asks specifically about items from your goal (like which metrics or dimensions "
-                    f"you want), you should mention them. Keep your response concise and natural, as a real user would."
+                    f"If the agent asks which metric or dimension to use, identify the option from its list "
+                    f"that matches your goal metrics/dimensions above and tell it to use that one by its "
+                    f"identifier. If none match exactly, pick the closest one and say to proceed. "
+                    f"Keep your response to 1-2 sentences."
                     f"{no_filter_hint}"
                 ),
             },
         ],
-        temperature=0.5,
+        temperature=0.3,
     )
     content = response.choices[0].message.content
     return content.strip() if content else ""
