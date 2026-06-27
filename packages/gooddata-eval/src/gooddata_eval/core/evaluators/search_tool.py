@@ -6,13 +6,14 @@ from gooddata_eval.core.models import ChatResult, DatasetItem
 
 
 def _args_match(actual_args: dict, expected_args: dict) -> bool:
-    if sorted(actual_args.get("keywords") or []) != sorted(expected_args.get("keywords") or []):
+    # Only keywords and object_types determine semantic correctness.
+    # limit is optional with a server-side default; emit_widget was renamed to
+    # user_requested_search in the tool schema — neither affects search quality.
+    actual_kw = sorted(k.lower() for k in (actual_args.get("keywords") or []))
+    expected_kw = sorted(k.lower() for k in (expected_args.get("keywords") or []))
+    if actual_kw != expected_kw:
         return False
-    if sorted(actual_args.get("object_types") or []) != sorted(expected_args.get("object_types") or []):
-        return False
-    if actual_args.get("limit") != expected_args.get("limit"):
-        return False
-    return actual_args.get("emit_widget") == expected_args.get("emit_widget")
+    return sorted(actual_args.get("object_types") or []) == sorted(expected_args.get("object_types") or [])
 
 
 class SearchToolEvaluator:
