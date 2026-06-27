@@ -30,7 +30,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-llm-judge = ["openai>=1.40,<2.0"]
+llm-judge = ["openai>=1.40,<2.0", "python-dotenv>=1.0,<2.0"]
 
 [project.scripts]
 gd-eval = "gooddata_eval.cli.main:main"

@@ -103,6 +103,11 @@ def _build_parser() -> argparse.ArgumentParser:
         "Increase to load-test the agent under simultaneous requests.",
     )
     run.add_argument("--json", dest="json_path", help="Write a JSON report to this path.")
+    run.add_argument(
+        "--skip-ids",
+        dest="skip_ids_file",
+        help="Path to a file listing item IDs to skip (one per line). Used for incremental re-runs.",
+    )
     run.add_argument("--quiet", action="store_true", help="Suppress per-item progress output.")
     run.add_argument(
         "--langfuse",
@@ -247,6 +252,8 @@ def _run(config: RunConfig) -> int:
         return _EXIT_OPERATIONAL_ERROR
 
     items = _load_dataset(config)
+    if config.skip_ids:
+        items = [i for i in items if i.id not in config.skip_ids]
     agentic_items = [i for i in items if i.test_kind in AGENTIC_TEST_KINDS]
     non_agentic_items = [i for i in items if i.test_kind not in AGENTIC_TEST_KINDS]
     models = config.models or []
@@ -396,6 +403,13 @@ def _run(config: RunConfig) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    try:
+        from dotenv import find_dotenv, load_dotenv  # noqa: PLC0415
+
+        load_dotenv(find_dotenv(usecwd=True))
+    except ImportError:
+        pass
+
     args = parse_args(argv if argv is not None else sys.argv[1:])
     if hasattr(args, "concurrency") and args.concurrency < 1:
         print("error: --concurrency must be >= 1.", file=sys.stderr)
@@ -404,6 +418,13 @@ def main(argv: list[str] | None = None) -> int:
         host, token = resolve_connection(host=args.host, token=args.token, profile=args.profile)
         if args.command == "models":
             return _list_models(host, token, getattr(args, "workspace", None))
+        skip_ids: frozenset[str] = frozenset()
+        if getattr(args, "skip_ids_file", None):
+            skip_ids = frozenset(
+                line.strip()
+                for line in Path(args.skip_ids_file).read_text().splitlines()
+                if line.strip()
+            )
         config = RunConfig(
             host=host,
             token=token,
@@ -418,6 +439,7 @@ def main(argv: list[str] | None = None) -> int:
             log_to_langfuse=args.langfuse,
             quiet=args.quiet,
             kind=args.kind,
+            skip_ids=skip_ids,
         )
         return _run(config)
     except (
