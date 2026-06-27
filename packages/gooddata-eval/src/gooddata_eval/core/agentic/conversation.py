@@ -163,6 +163,38 @@ def _activated_skills(tool_call_events: list[ToolCallEvent]) -> list[str]:
     return list(set(skills))
 
 
+def _check_viz_skill_activated(chat_result: ChatResult, config_flag: str) -> bool:
+    """Return True if create_adhoc_visualization was called with the given config flag set to True."""
+    for tc in chat_result.tool_call_events or []:
+        if tc.function_name != "create_adhoc_visualization":
+            continue
+        args = tc.parsed_arguments() or {}
+        config = (args.get("visualization") or {}).get("config") or {}
+        if config.get(config_flag):
+            return True
+    return False
+
+
+def _check_viz_skill_metric(chat_result: ChatResult, config_flag: str, exp_metric: str) -> bool:
+    """Return True if the visualization with config_flag=True used the expected metric."""
+    for tc in chat_result.tool_call_events or []:
+        if tc.function_name != "create_adhoc_visualization":
+            continue
+        args = tc.parsed_arguments() or {}
+        viz = args.get("visualization") or {}
+        if not (viz.get("config") or {}).get(config_flag):
+            continue
+        fields = (viz.get("query") or {}).get("fields") or {}
+        for field_def in fields.values():
+            if not isinstance(field_def, dict):
+                continue
+            using = field_def.get("using", "")
+            metric_id = using.split("/", 1)[-1] if "/" in using else using
+            if metric_id == exp_metric:
+                return True
+    return False
+
+
 def _check_output_present(turn: TurnDefinition, chat_result: ChatResult) -> bool:
     otype = turn.expected_output_type
     if otype == "visualization":
@@ -185,11 +217,11 @@ def _check_output_present(turn: TurnDefinition, chat_result: ChatResult) -> bool
     if otype == "what_if_analysis":
         return any(tc.function_name == "create_what_if_scenario" for tc in (chat_result.tool_call_events or []))
     if otype == "anomaly_detection":
-        return any(tc.function_name == "execute_anomaly_detection" for tc in (chat_result.tool_call_events or []))
+        return _check_viz_skill_activated(chat_result, "anomaly_detection_enabled")
     if otype == "clustering":
-        return any(tc.function_name == "execute_clustering" for tc in (chat_result.tool_call_events or []))
+        return _check_viz_skill_activated(chat_result, "clustering_enabled")
     if otype == "forecasting":
-        return any(tc.function_name == "execute_forecast" for tc in (chat_result.tool_call_events or []))
+        return _check_viz_skill_activated(chat_result, "forecast_enabled")
     if otype == "tool_call":
         expected_tool = turn.expected_tool_name
         if not expected_tool:
@@ -361,43 +393,12 @@ def _check_output_correct(turn: TurnDefinition, chat_result: ChatResult) -> bool
         exp_metric = expected.get("metric_id")
         if not exp_metric:
             return None
-        execute_fn = {
-            "anomaly_detection": "execute_anomaly_detection",
-            "clustering": "execute_clustering",
-            "forecasting": "execute_forecast",
+        config_flag = {
+            "anomaly_detection": "anomaly_detection_enabled",
+            "clustering": "clustering_enabled",
+            "forecasting": "forecast_enabled",
         }[otype]
-        # Build a map: viz ref → metrics list (from create_adhoc_visualization result)
-        viz_metrics: dict[str, list[str]] = {}
-        for tc in chat_result.tool_call_events or []:
-            if tc.function_name != "create_adhoc_visualization":
-                continue
-            if not tc.result:
-                continue
-            try:
-                result_data = json.loads(tc.result)
-                ref = result_data.get("ref")
-                if not ref:
-                    continue
-                args = tc.parsed_arguments() or {}
-                viz = args.get("visualization") or {}
-                raw_metrics = viz.get("metrics") or []
-                viz_metrics[ref] = [
-                    m.split("/", 1)[-1] if isinstance(m, str) else m
-                    for m in raw_metrics
-                ]
-            except Exception:
-                continue
-        for tc in chat_result.tool_call_events or []:
-            if tc.function_name != execute_fn:
-                continue
-            args = tc.parsed_arguments() or {}
-            viz_ref = args.get("visualization_ref")
-            if not viz_ref:
-                continue
-            metrics = viz_metrics.get(viz_ref)
-            if metrics is not None and exp_metric in metrics:
-                return True
-        return False
+        return _check_viz_skill_metric(chat_result, config_flag, exp_metric)
 
     return None
 
@@ -433,49 +434,38 @@ def _get_sim_user_response(agent_message: str, turn: TurnDefinition, expected_ou
             return generate_simulated_response(agent_message, expected_output)
         except Exception:
             pass
-    elif otype in {"key_driver_analysis", "what_if_analysis", "anomaly_detection", "clustering", "forecasting"} and expected_output:
-        metric_id = expected_output.get("metric_id")
+    elif otype in {"anomaly_detection", "clustering", "forecasting"}:
+        metric_id = (expected_output or {}).get("metric_id")
+        if not metric_id:
+            m = re.search(r"\{metric/([^}]+)\}", agent_message)
+            if m:
+                metric_id = m.group(1)
         if metric_id:
             return f"Use {{metric/{metric_id}}}. Please proceed with that metric."
+    elif otype in {"key_driver_analysis", "what_if_analysis"}:
+        metric_id = (expected_output or {}).get("metric_id")
+        date_attr = (expected_output or {}).get("date_attribute_id")
+        if not metric_id:
+            m = re.search(r"\{metric/([^}]+)\}", agent_message)
+            if m:
+                metric_id = m.group(1)
+        parts = []
+        if metric_id:
+            parts.append(f"Use {{metric/{metric_id}}}.")
+        if date_attr:
+            parts.append(f"Use {{date_attribute/{date_attr}}} as the date dimension.")
+            if date_attr.endswith(".year"):
+                parts.append("Use 2025 as the analyzed year (comparing to 2024).")
+        parts.append("Please proceed and complete the analysis without asking further questions.")
+        return " ".join(parts)
 
-    # Generic fallback for other skill types or when expected_output is absent
-    import os  # noqa: PLC0415
-
-    try:
-        from openai import OpenAI  # noqa: PLC0415
-
-        api_key = os.environ.get("OPENAI_API_KEY")
-        if api_key:
-            client = OpenAI(api_key=api_key)
-            response = client.chat.completions.create(
-                model="gpt-4o",
-                messages=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "You are a business user interacting with a data analytics chatbot. "
-                            "The chatbot may ask clarifying questions before completing your request. "
-                            "Answer naturally and concisely to help it accomplish your original goal. "
-                            "Do not mention technical terms like tools, skills, or APIs."
-                        ),
-                    },
-                    {
-                        "role": "user",
-                        "content": (
-                            f'Your original request was: "{turn.message}"\n'
-                            f'\nThe chatbot asked: "{agent_message}"\n\n'
-                            f"Answer the clarification question naturally and helpfully to accomplish your goal. "
-                            f"Keep your response concise, as a real user would."
-                        ),
-                    },
-                ],
-                temperature=0.5,
-            )
-            content = response.choices[0].message.content
-            return content.strip() if content else "Please proceed with sensible defaults."
-    except Exception:
-        pass
-    return "Please proceed with sensible defaults."
+    # Generic fallback: when expected_output is absent we cannot know which option
+    # is correct, so instruct the agent to self-select the best match and proceed.
+    # A vague "natural" reply here only prolongs clarification loops.
+    return (
+        "Please pick whichever option best matches my original request and proceed. "
+        "Do not ask for further clarification."
+    )
 
 
 @dataclass
