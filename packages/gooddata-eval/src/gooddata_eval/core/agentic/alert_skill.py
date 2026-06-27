@@ -81,8 +81,9 @@ def _check_trigger(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     act_trigger = actual_args.get("trigger", actual_args.get("triggerMode", "ALWAYS"))
     if exp_trigger in _ALWAYS_TRIGGER_VALUES:
         return act_trigger in {"ALWAYS", "Every time"}
+    exp_api = _TRIGGER_DISPLAY_TO_API.get(exp_trigger, exp_trigger)
     act_api = _TRIGGER_DISPLAY_TO_API.get(act_trigger, act_trigger)
-    return exp_trigger == act_api
+    return exp_api == act_api
 
 
 def _check_filters(expected: CatalogMetricAlert, actual_args: dict) -> bool:

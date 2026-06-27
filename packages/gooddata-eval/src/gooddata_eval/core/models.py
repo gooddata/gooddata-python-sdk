@@ -41,7 +41,7 @@ class CreatedVisualization(BaseModel):
 
     id: str
     title: str | None = None
-    type: str
+    type: str | None = None
     query: AacQuery
     metrics: list[AacBucketRef | str] = Field(default_factory=list)
     view_by: list[AacBucketRef | str] = Field(default_factory=list)

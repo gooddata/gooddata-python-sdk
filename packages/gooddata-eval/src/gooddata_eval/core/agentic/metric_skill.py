@@ -159,7 +159,11 @@ def _execute_single_metric_run(
         if _is_asking_clarification(response_text):
             current_question = generate_simulated_response(response_text, primary_expected)
         else:
-            break
+            # Agent gave a complete response but didn't call create_metric — nudge it.
+            current_question = (
+                "Please create the metric by calling the create_metric function. "
+                "Do not just describe the MAQL in text — actually invoke the tool to create it."
+            )
 
     actual_maql = (metric_result or {}).get("maql", "")
     metric_created = metric_result is not None

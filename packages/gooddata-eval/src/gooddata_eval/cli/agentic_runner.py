@@ -246,6 +246,17 @@ def run_agentic_items(
             item_report.pass_at_k = False
             item_report.runs = k
             print(f"[agentic] {item.id} FAIL: {exc}", flush=True)
+        except RuntimeError as exc:
+            exc_str = str(exc)
+            # SSE 502 = gen-ai max_iterations reached — model quality failure, not infra error
+            if "SSE error 502" in exc_str:
+                item_report.pass_at_k = False
+                item_report.runs = 1
+                item_report.best_detail = {"conversation_success": False, "max_iterations": True}
+                print(f"[agentic] {item.id} FAIL (max_iterations): {exc}", flush=True)
+            else:
+                item_report.error = f"{type(exc).__name__}: {exc}"
+                item_report.runs = 0
         except Exception as exc:
             item_report.error = f"{type(exc).__name__}: {exc}"
             item_report.runs = 0
