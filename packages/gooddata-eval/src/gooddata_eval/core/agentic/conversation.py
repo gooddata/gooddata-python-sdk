@@ -28,7 +28,20 @@ class TurnDefinition(BaseModel):
     turn_id: str
     message: str
     expected_skill: str
-    expected_output_type: Literal["visualization", "tool_call", "metric"] = "visualization"
+    expected_output_type: Literal[
+        "visualization",
+        "tool_call",
+        "metric",
+        "forecasting",
+        "what_if_analysis",
+        "visualization_summary",
+        "anomaly_detection",
+        "key_driver_analysis",
+        "alert",
+        "clustering",
+        "search",
+        "dashboard_summary",
+    ] = "visualization"
     expected_tool_name: str | None = None
     expected_output: dict | None = None
 
@@ -115,12 +128,12 @@ def _check_output_present(turn: TurnDefinition, chat_result: ChatResult) -> bool
         )
     if otype == "metric":
         return any(tc.function_name == "create_metric" for tc in (chat_result.tool_call_events or []))
-    if otype == "tool_call":
-        expected_tool = turn.expected_tool_name
-        if not expected_tool:
-            return bool(chat_result.tool_call_events)
-        return any(tc.function_name == expected_tool for tc in (chat_result.tool_call_events or []))
-    return False
+    # All other skill output types (tool_call, forecasting, what_if_analysis, etc.) use
+    # tool-call presence as the signal: any tool call, or a specific expected_tool_name if set.
+    expected_tool = turn.expected_tool_name
+    if not expected_tool:
+        return bool(chat_result.tool_call_events)
+    return any(tc.function_name == expected_tool for tc in (chat_result.tool_call_events or []))
 
 
 def _extract_metric_from_turn(tool_call_events: list[ToolCallEvent]) -> dict | None:
@@ -221,23 +234,21 @@ def _get_sim_user_response(agent_message: str, turn: TurnDefinition, expected_ou
     import os  # noqa: PLC0415
 
     try:
-        from openai import OpenAI  # noqa: PLC0415
+        import anthropic  # noqa: PLC0415
 
-        api_key = os.environ.get("OPENAI_API_KEY")
+        api_key = os.environ.get("ANTHROPIC_API_KEY")
         if api_key:
-            client = OpenAI(api_key=api_key)
-            response = client.chat.completions.create(
-                model="gpt-4o",
+            client = anthropic.Anthropic(api_key=api_key)
+            response = client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=256,
+                system=(
+                    "You are a business user interacting with a data analytics chatbot. "
+                    "The chatbot may ask clarifying questions before completing your request. "
+                    "Answer naturally and concisely to help it accomplish your original goal. "
+                    "Do not mention technical terms like tools, skills, or APIs."
+                ),
                 messages=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "You are a business user interacting with a data analytics chatbot. "
-                            "The chatbot may ask clarifying questions before completing your request. "
-                            "Answer naturally and concisely to help it accomplish your original goal. "
-                            "Do not mention technical terms like tools, skills, or APIs."
-                        ),
-                    },
                     {
                         "role": "user",
                         "content": (
@@ -248,9 +259,8 @@ def _get_sim_user_response(agent_message: str, turn: TurnDefinition, expected_ou
                         ),
                     },
                 ],
-                temperature=0.5,
             )
-            content = response.choices[0].message.content
+            content = response.content[0].text
             return content.strip() if content else "Please proceed with sensible defaults."
     except Exception:
         pass
