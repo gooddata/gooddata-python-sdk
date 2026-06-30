@@ -11,6 +11,7 @@ from typing import Callable, Protocol
 from gooddata_eval.core.evaluators import get_evaluator, supported_test_kinds
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import ChatResult, DatasetItem
+from gooddata_eval.core.summary.http_client import FeatureFlagDisabledError
 
 
 class ChatBackend(Protocol):
@@ -122,6 +123,9 @@ def _run_one_item(
                 report.pass_at_k = True
             if on_run_done is not None:
                 on_run_done(run_index, runs, evaluation.passed, latency)
+    except FeatureFlagDisabledError:
+        report.skipped = True
+        return report
     except Exception as e:  # agent/network/parse failure for this item
         report.error = f"{type(e).__name__}: {e}"
         if best is not None:

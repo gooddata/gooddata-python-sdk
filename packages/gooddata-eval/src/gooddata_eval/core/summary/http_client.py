@@ -17,6 +17,10 @@ import httpx
 
 from gooddata_eval.core.models import ChatResult, DatasetItem
 
+
+class FeatureFlagDisabledError(RuntimeError):
+    """Raised when the host requires a feature flag that is not enabled."""
+
 _PATH = "/api/v1/ai/workspaces/{workspace_id}/summary"
 
 
@@ -45,6 +49,14 @@ class SummaryClient:
             body["formatHint"] = si.format_hint
 
         resp = self._client.post(self._url, json=body, headers={**self._auth, "Content-Type": "application/json"})
+        if resp.status_code == 400:
+            detail = resp.json().get("detail", "")
+            if "feature flag" in detail.lower():
+                raise FeatureFlagDisabledError(
+                    f"dashboard_summary is disabled on this host "
+                    f"(GDC_FEATURES_VALUES_ENABLE_GEN_AI_DASHBOARD_SUMMARY_SKILL=true required). "
+                    f"Host detail: {detail}"
+                )
         resp.raise_for_status()
         data = resp.json()
         summary = data.get("summary") or ""
