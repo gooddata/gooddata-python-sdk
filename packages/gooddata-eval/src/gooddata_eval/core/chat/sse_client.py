@@ -14,10 +14,14 @@ protocol, not on this class.
 """
 
 import json
+import time
 from dataclasses import dataclass, field
 from typing import Any, Iterable
 
 import httpx
+
+_RETRYABLE = (httpx.RemoteProtocolError, httpx.ReadError, httpx.ReadTimeout, httpx.ConnectError)
+_MAX_RETRIES = 3
 
 from gooddata_eval.core.models import ChatResult, DatasetItem
 
@@ -149,12 +153,20 @@ class ChatClient:
         self._client = httpx.Client(timeout=timeout)
 
     def create_conversation(self) -> str:
-        resp = self._client.post(self._base, headers={**self._auth, "Content-Type": "application/json"})
-        resp.raise_for_status()
-        body = resp.json()
-        if "conversationId" not in body:
-            raise ValueError(f"GoodData /chat/conversations response missing 'conversationId': {body}")
-        return body["conversationId"]
+        last_exc: Exception | None = None
+        for attempt in range(_MAX_RETRIES + 1):
+            if attempt:
+                time.sleep(2 ** (attempt - 1))
+            try:
+                resp = self._client.post(self._base, headers={**self._auth, "Content-Type": "application/json"})
+                resp.raise_for_status()
+                body = resp.json()
+                if "conversationId" not in body:
+                    raise ValueError(f"GoodData /chat/conversations response missing 'conversationId': {body}")
+                return body["conversationId"]
+            except _RETRYABLE as exc:
+                last_exc = exc
+        raise last_exc  # type: ignore[misc]
 
     def delete_conversation(self, conversation_id: str) -> None:
         try:
@@ -166,9 +178,17 @@ class ChatClient:
         url = f"{self._base}/{conversation_id}/messages"
         headers = {**self._auth, "Accept": "text/event-stream", "Content-Type": "application/json"}
         body = {"item": {"role": "user", "content": {"type": "text", "text": question}}}
-        with self._client.stream("POST", url, json=body, headers=headers) as resp:
-            resp.raise_for_status()
-            return parse_sse_lines(resp.iter_lines())
+        last_exc: Exception | None = None
+        for attempt in range(_MAX_RETRIES + 1):
+            if attempt:
+                time.sleep(2 ** (attempt - 1))
+            try:
+                with self._client.stream("POST", url, json=body, headers=headers) as resp:
+                    resp.raise_for_status()
+                    return parse_sse_lines(resp.iter_lines())
+            except _RETRYABLE as exc:
+                last_exc = exc
+        raise last_exc  # type: ignore[misc]
 
     def ask(self, item: DatasetItem) -> ChatResult:
         """Run one single-turn conversation: create, send, parse, clean up."""
