@@ -3,8 +3,6 @@
 from unittest.mock import MagicMock, patch
 
 from gooddata_eval.core.agentic.search_tool import (
-    AgenticSearchSummary,
-    SearchResult,
     _tool_correctness,
     _tool_selection,
     run_agentic_search_tool,

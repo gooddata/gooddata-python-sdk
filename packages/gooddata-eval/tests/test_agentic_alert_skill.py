@@ -3,9 +3,7 @@
 from unittest.mock import MagicMock, patch
 
 from gooddata_eval.core.agentic.alert_skill import (
-    AgenticAlertSummary,
     AlertEvaluation,
-    AlertRunResult,
     _deep_subset,
     _to_number,
     run_agentic_alert_skill,

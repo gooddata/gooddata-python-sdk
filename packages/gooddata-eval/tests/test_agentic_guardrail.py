@@ -3,11 +3,9 @@
 from unittest.mock import MagicMock, patch
 
 from gooddata_eval.core.agentic.guardrail import (
-    AgenticGuardrailSummary,
     GuardrailResult,
     run_agentic_guardrail,
 )
-from gooddata_eval.core.models import ChatResult
 
 
 def test_guardrail_result_fields():

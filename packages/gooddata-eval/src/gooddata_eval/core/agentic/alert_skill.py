@@ -7,12 +7,10 @@ import json
 import os
 import re
 from dataclasses import dataclass
-
 from typing import Any
 
-from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.agentic._catalog import CatalogMetricAlert
-
+from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.models import ToolCallEvent
 
 try:
@@ -438,7 +436,9 @@ def evaluate_agentic_alert_skill(
     model_version_override: str | None = None,
 ) -> None:
     """Run alert-skill evaluation, log to Langfuse, and raise AlertSkillAssertionError on failure."""
-    from datetime import datetime as _dt, timezone as _tz  # noqa: PLC0415
+    from datetime import datetime as _dt  # noqa: PLC0415
+    from datetime import timezone as _tz  # noqa: PLC0415
+
     from gooddata_eval.core.agentic._langfuse import try_make_langfuse_client  # noqa: PLC0415
 
     if langfuse is None:

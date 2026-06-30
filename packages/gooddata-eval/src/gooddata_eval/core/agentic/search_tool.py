@@ -145,7 +145,9 @@ def evaluate_agentic_search_tool(
     model_version_override: str | None = None,
 ) -> None:
     """Run search-tool evaluation, log to Langfuse, and raise SearchToolAssertionError on failure."""
-    from datetime import datetime as _dt, timezone as _tz  # noqa: PLC0415
+    from datetime import datetime as _dt  # noqa: PLC0415
+    from datetime import timezone as _tz  # noqa: PLC0415
+
     from gooddata_eval.core.agentic._langfuse import try_make_langfuse_client  # noqa: PLC0415
 
     if langfuse is None:
