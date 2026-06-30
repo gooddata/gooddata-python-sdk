@@ -1,7 +1,7 @@
 # (C) 2026 GoodData Corporation
 """Shared LLM-as-judge for general_question and guardrail evaluators.
 
-Requires gooddata-eval[llm-judge] (openai>=1.40) and OPENAI_API_KEY.
+Requires anthropic>=0.30 and ANTHROPIC_API_KEY.
 Replicates DeepEval GEval(strict_mode=True) without a DeepEval dependency.
 """
 
@@ -17,6 +17,8 @@ Evaluation steps:
 Return a JSON object with exactly two keys:
   "score": 1 if the actual output satisfies all criteria, 0 otherwise
   "reasoning": one sentence explaining your decision
+
+Return ONLY the JSON object — no markdown fences, no extra text.
 """
 
 _USER_TEMPLATE = """\
@@ -29,17 +31,17 @@ ACTUAL OUTPUT: {actual_output}
 class LLMJudge:
     """Binary LLM judge (score 0 or 1) for text-answer evaluators."""
 
-    def __init__(self, evaluation_steps: list[str], model: str = "gpt-4o"):
+    def __init__(self, evaluation_steps: list[str], model: str = "claude-sonnet-4-6"):
         try:
-            from openai import OpenAI  # noqa: PLC0415
+            import anthropic  # noqa: PLC0415
         except ImportError as _err:
             raise ImportError(
-                "LLM-as-judge evaluators require the llm-judge extra: uv add 'gooddata-eval[llm-judge]'"
+                "LLM-as-judge evaluators require anthropic: uv add anthropic"
             ) from _err
-        api_key = os.environ.get("OPENAI_API_KEY")
+        api_key = os.environ.get("ANTHROPIC_API_KEY")
         if not api_key:
-            raise OSError("OPENAI_API_KEY environment variable is required for LLM-as-judge evaluators.")
-        self._client = OpenAI(api_key=api_key)
+            raise OSError("ANTHROPIC_API_KEY environment variable is required for LLM-as-judge evaluators.")
+        self._client = anthropic.Anthropic(api_key=api_key)
         self._model = model
         self._system_prompt = _SYSTEM_TEMPLATE.format(
             steps="\n".join(f"{i + 1}. {s}" for i, s in enumerate(evaluation_steps))
@@ -52,15 +54,17 @@ class LLMJudge:
             expected_output=expected_output,
             actual_output=actual_output,
         )
-        response = self._client.chat.completions.create(
+        response = self._client.messages.create(
             model=self._model,
-            messages=[
-                {"role": "system", "content": self._system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            response_format={"type": "json_object"},
+            max_tokens=256,
+            system=self._system_prompt,
+            messages=[{"role": "user", "content": user_prompt}],
             temperature=0,
         )
-        raw = response.choices[0].message.content or "{}"
-        data = json.loads(raw)
+        raw = response.content[0].text if response.content else "{}"
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError:
+            stripped = raw.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+            data = json.loads(stripped)
         return int(data.get("score", 0)) == 1, data.get("reasoning", "")

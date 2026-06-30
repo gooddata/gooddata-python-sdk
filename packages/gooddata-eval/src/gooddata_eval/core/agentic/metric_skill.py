@@ -13,9 +13,9 @@ from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.models import ToolCallEvent
 
 try:
-    from openai import OpenAI as _OpenAI
+    import anthropic as _anthropic
 except ImportError:
-    _OpenAI: Any = None
+    _anthropic: Any = None
 
 _DEFAULT_K = 1
 _DEFAULT_MAX_ITERATIONS = 7
@@ -71,17 +71,14 @@ def _best_maql_match(actual_maql: str, expected_outputs: list[dict]) -> tuple[bo
 
 
 def generate_simulated_response(agent_message: str, expected_output: dict) -> str:
-    """Generate a user reply to keep the metric-skill conversation going (gpt-4o-mini)."""
-    try:
-        from openai import OpenAI  # noqa: PLC0415
-    except ImportError as exc:
-        raise RuntimeError("openai package is required for generate_simulated_response") from exc
+    """Generate a user reply to keep the metric-skill conversation going (claude-haiku)."""
+    if _anthropic is None:
+        raise RuntimeError("anthropic package is required for generate_simulated_response")
 
-    api_key = os.environ.get("OPENAI_API_KEY")
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
-        raise OSError("OPENAI_API_KEY environment variable is not set")
+        raise OSError("ANTHROPIC_API_KEY environment variable is not set")
 
-    client = OpenAI(api_key=api_key)
     expected_maql = expected_output.get("maql", "")
     prompt = (
         f"You are simulating a user in a conversation with a BI assistant that creates metrics. "
@@ -89,12 +86,13 @@ def generate_simulated_response(agent_message: str, expected_output: dict) -> st
         f"The user originally asked to create a metric with MAQL: {expected_maql}. "
         f"Reply briefly as the user, providing any clarification the assistant needs."
     )
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": prompt}],
+    client = _anthropic.Anthropic(api_key=api_key)
+    response = client.messages.create(
+        model="claude-haiku-4-5-20251001",
         max_tokens=150,
+        messages=[{"role": "user", "content": prompt}],
     )
-    return response.choices[0].message.content or "Please proceed."
+    return response.content[0].text or "Please proceed."
 
 
 @dataclass

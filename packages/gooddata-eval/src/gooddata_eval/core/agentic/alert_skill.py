@@ -16,9 +16,9 @@ from gooddata_eval.core.agentic._catalog import CatalogMetricAlert
 from gooddata_eval.core.models import ToolCallEvent
 
 try:
-    from openai import OpenAI as _OpenAI
+    import anthropic as _anthropic
 except ImportError:
-    _OpenAI: Any = None
+    _anthropic: Any = None
 
 _DEFAULT_K = 1
 _DEFAULT_MAX_ITERATIONS = 6
@@ -126,17 +126,15 @@ def generate_simulated_alert_response(
     expected: CatalogMetricAlert,
     conversation_history: list,
 ) -> str:
-    """Stateful sim-user reply for alert-skill conversation (gpt-4o)."""
-    if _OpenAI is None:
+    """Stateful sim-user reply for alert-skill conversation (claude-haiku)."""
+    if _anthropic is None:
         raise RuntimeError(
-            "openai package is required for generate_simulated_alert_response. "
-            "Install the [llm-judge] extra: pip install 'gooddata-eval[llm-judge]'"
+            "anthropic package is required for generate_simulated_alert_response. "
+            "Install it: pip install anthropic"
         )
-    api_key = os.environ.get("OPENAI_API_KEY")
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
-        raise OSError("OPENAI_API_KEY environment variable is not set")
-
-    openai_client = _OpenAI(api_key=api_key)
+        raise OSError("ANTHROPIC_API_KEY environment variable is not set")
 
     metric = expected.metric_id or "not specified"
     operator = expected.operator
@@ -166,17 +164,14 @@ def generate_simulated_alert_response(
         + "Reply concisely and directly."
     )
 
-    messages: list = [{"role": "system", "content": system_prompt}]
-    messages.extend(conversation_history)
-    messages.append(
-        {"role": "user", "content": f'The agent asked: "{agent_message}"\n\nRespond concisely and directly.'}
+    client = _anthropic.Anthropic(api_key=api_key)
+    response = client.messages.create(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=256,
+        system=system_prompt,
+        messages=[{"role": "user", "content": f'The agent asked: "{agent_message}"\n\nRespond concisely and directly.'}],
     )
-    response = openai_client.chat.completions.create(
-        model="gpt-4o",
-        messages=messages,
-        temperature=0.5,
-    )
-    return response.choices[0].message.content or ""
+    return response.content[0].text or ""
 
 
 def _delete_alert(client: ChatClient, workspace_id: str, alert_id: str) -> None:

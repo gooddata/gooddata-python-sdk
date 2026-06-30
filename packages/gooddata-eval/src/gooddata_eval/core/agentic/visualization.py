@@ -48,22 +48,22 @@ class AgenticRunSummary:
 def generate_simulated_response(agent_message: str, expected_output: CreatedVisualization) -> str:
     """Generate a simulated user reply to an agent clarification question.
 
-    Uses OpenAI gpt-5.2 to produce a realistic reply that guides the agent
+    Uses claude-haiku to produce a realistic reply that guides the agent
     toward the expected visualization without revealing the answer directly.
-    Requires the [llm-judge] extra: pip install gooddata-eval[llm-judge]
+    Requires the anthropic package: pip install anthropic
     """
     try:
-        from openai import OpenAI  # noqa: PLC0415
+        import anthropic  # noqa: PLC0415
     except ImportError as exc:
         raise RuntimeError(
-            "openai is required for multi-turn agentic evaluation. "
-            "Install the [llm-judge] extra: pip install 'gooddata-eval[llm-judge]'"
+            "anthropic is required for multi-turn agentic evaluation. "
+            "Install it: pip install anthropic"
         ) from exc
 
-    api_key = os.environ.get("OPENAI_API_KEY")
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
-        raise OSError("OPENAI_API_KEY environment variable is required for multi-turn agentic evaluation.")
-    client = OpenAI(api_key=api_key)
+        raise OSError("ANTHROPIC_API_KEY environment variable is required for multi-turn agentic evaluation.")
+    client = anthropic.Anthropic(api_key=api_key)
 
     metric_uris = sorted(get_metric_uri_set(expected_output))
     dim_uris = sorted(get_dimension_uri_set(expected_output))
@@ -113,17 +113,15 @@ def generate_simulated_response(agent_message: str, expected_output: CreatedVisu
         )
     no_filter_hint = (" " + " ".join(no_filter_hints)) if no_filter_hints else ""
 
-    response = client.chat.completions.create(
-        model="gpt-5.2",
+    response = client.messages.create(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=256,
+        system=(
+            "You are a user requesting data visualization from an AI agent. "
+            "The agent may ask clarifying questions to better understand your request. "
+            "Respond naturally and helpfully to their questions."
+        ),
         messages=[
-            {
-                "role": "system",
-                "content": (
-                    "You are a user requesting data visualization from an AI agent. "
-                    "The agent may ask clarifying questions to better understand your request. "
-                    "Respond naturally and helpfully to their questions."
-                ),
-            },
             {
                 "role": "user",
                 "content": (
@@ -140,9 +138,8 @@ def generate_simulated_response(agent_message: str, expected_output: CreatedVisu
                 ),
             },
         ],
-        temperature=0.5,
     )
-    content = response.choices[0].message.content
+    content = response.content[0].text
     return content.strip() if content else ""
 
 
