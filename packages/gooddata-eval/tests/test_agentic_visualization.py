@@ -4,14 +4,9 @@
 All tests mock ChatClient so no network is needed.
 """
 
-from dataclasses import dataclass
 from unittest.mock import MagicMock, call, patch
 
-import pytest
-
 from gooddata_eval.core.agentic.visualization import (
-    AgenticRunSummary,
-    RunResult,
     _execute_single_run,
     run_agentic_visualization,
 )
@@ -154,7 +149,8 @@ def test_run_agentic_visualization_uses_initial_conversation_for_run_0():
     # create_conversation should NOT be called for run 0
     instance.create_conversation.assert_not_called()
     instance.send_message.assert_called_once_with("existing-conv", "Show revenue")
-    instance.delete_conversation.assert_called_once_with("existing-conv")
+    # the caller-supplied conversation is left intact; the function only deletes conversations it created
+    instance.delete_conversation.assert_not_called()
     assert len(summary.run_results) == 1
 
 
@@ -176,7 +172,8 @@ def test_run_agentic_visualization_creates_fresh_conversations_for_remaining_run
         )
 
     assert instance.create_conversation.call_count == 1  # only for run 1
-    assert instance.delete_conversation.call_count == 2  # existing-conv + fresh-1
+    # only the self-created fresh-1 is deleted; the caller-supplied existing-conv is left intact
+    instance.delete_conversation.assert_called_once_with("fresh-1")
     assert len(summary.run_results) == 2
 
 
@@ -233,7 +230,7 @@ def test_run_agentic_visualization_creates_conversation_when_no_initial_id():
         instance.create_conversation.side_effect = ["new-0", "new-1"]
         instance.send_message.return_value = _chat_with_viz()
 
-        summary = run_agentic_visualization(
+        run_agentic_visualization(
             host="https://example.com",
             token="tok",
             workspace_id="ws",
