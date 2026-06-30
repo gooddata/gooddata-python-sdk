@@ -98,6 +98,12 @@ def _build_parser() -> argparse.ArgumentParser:
     run.add_argument("--json", dest="json_path", help="Write a JSON report to this path.")
     run.add_argument("--quiet", action="store_true", help="Suppress per-item progress output.")
     run.add_argument(
+        "--skip-ids",
+        dest="skip_ids_file",
+        metavar="FILE",
+        help="Path to a file with item IDs to skip (one per line). Already-evaluated IDs from prior batches.",
+    )
+    run.add_argument(
         "--langfuse",
         action="store_true",
         help="Log scores and traces to Langfuse (requires --langfuse-dataset and LANGFUSE_* env vars).",
@@ -240,6 +246,8 @@ def _run(config: RunConfig) -> int:
         return _EXIT_OPERATIONAL_ERROR
 
     items = _load_dataset(config)
+    if config.skip_ids:
+        items = [i for i in items if i.id not in config.skip_ids]
     agentic_items = [i for i in items if i.test_kind in AGENTIC_TEST_KINDS]
     non_agentic_items = [i for i in items if i.test_kind not in AGENTIC_TEST_KINDS]
     models = config.models or []
@@ -396,6 +404,11 @@ def main(argv: list[str] | None = None) -> int:
         host, token = resolve_connection(host=args.host, token=args.token, profile=args.profile)
         if args.command == "models":
             return _list_models(host, token, getattr(args, "workspace", None))
+        skip_ids: frozenset[str] = frozenset()
+        if args.skip_ids_file:
+            skip_ids = frozenset(
+                line for line in Path(args.skip_ids_file).read_text().splitlines() if line
+            )
         config = RunConfig(
             host=host,
             token=token,
@@ -409,6 +422,7 @@ def main(argv: list[str] | None = None) -> int:
             log_to_langfuse=args.langfuse,
             quiet=args.quiet,
             kind=args.kind,
+            skip_ids=skip_ids,
         )
         return _run(config)
     except (

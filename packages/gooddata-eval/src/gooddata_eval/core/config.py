@@ -19,3 +19,4 @@ class RunConfig:
     log_to_langfuse: bool = False
     quiet: bool = False
     kind: str = "visualization"
+    skip_ids: frozenset[str] = field(default_factory=frozenset)
