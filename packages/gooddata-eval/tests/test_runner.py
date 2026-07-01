@@ -233,6 +233,31 @@ def test_run_items_concurrency_callbacks_fire_for_all_items():
     assert sorted(done_ids) == [f"c{i}" for i in range(5)]
 
 
+def test_run_items_error_report_includes_conversation_id():
+    """When an exception has a conversation_id, it appears in the error report."""
+
+    class _ConvIdBackend:
+        def ask(self, item: DatasetItem) -> ChatResult:
+            exc = RuntimeError("agent error")
+            exc.conversation_id = "conv-xyz"  # type: ignore[attr-defined]
+            raise exc
+
+    report = run_items([_item()], _ConvIdBackend(), runs=1)
+    assert report.errored == 1
+    assert "conversation_id=conv-xyz" in report.items[0].error
+
+
+def test_run_items_error_report_omits_conversation_id_when_absent():
+    """When no conversation_id is set, the error string has no bracket suffix."""
+
+    class _PlainBackend:
+        def ask(self, item: DatasetItem) -> ChatResult:
+            raise RuntimeError("plain error")
+
+    report = run_items([_item()], _PlainBackend(), runs=1)
+    assert "conversation_id" not in report.items[0].error
+
+
 def test_run_items_callback_exception_is_logged_not_swallowed(capsys):
     """A raising callback prints a traceback to stderr but the run continues."""
     backend = _FakeBackend([_chat_with(_viz_obj())] * 2)

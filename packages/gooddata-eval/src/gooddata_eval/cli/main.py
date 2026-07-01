@@ -99,6 +99,12 @@ def _build_parser() -> argparse.ArgumentParser:
     run.add_argument("--json", dest="json_path", help="Write a JSON report to this path.")
     run.add_argument("--quiet", action="store_true", help="Suppress per-item progress output.")
     run.add_argument(
+        "--preserve-failed",
+        action="store_true",
+        dest="preserve_failed",
+        help="Keep failed conversations on the server for post-mortem inspection.",
+    )
+    run.add_argument(
         "--langfuse",
         action="store_true",
         help="Log scores and traces to Langfuse (requires --langfuse-dataset and LANGFUSE_* env vars).",
@@ -331,7 +337,12 @@ def _run(config: RunConfig) -> int:
 
             # --- non-agentic items (single-turn, use Evaluator) ---
             backend = _RoutingBackend(
-                ChatClient(host=config.host, token=config.token, workspace_id=config.workspace_id),
+                ChatClient(
+                    host=config.host,
+                    token=config.token,
+                    workspace_id=config.workspace_id,
+                    preserve_failed=config.preserve_failed,
+                ),
                 SummaryClient(host=config.host, token=config.token, workspace_id=config.workspace_id),
             )
             try:
@@ -421,6 +432,7 @@ def main(argv: list[str] | None = None) -> int:
             log_to_langfuse=args.langfuse,
             quiet=args.quiet,
             kind=args.kind,
+            preserve_failed=args.preserve_failed,
         )
         return _run(config)
     except (

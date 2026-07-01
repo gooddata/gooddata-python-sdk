@@ -94,6 +94,8 @@ class ChatResult(BaseModel):
     created_visualizations: CreatedVisualizations | None = Field(default=None, alias="createdVisualizations")
     tool_call_events: list[ToolCallEvent] = Field(default_factory=list, alias="toolCallEvents")
     reasoning_step_count: int = Field(default=0, alias="reasoningStepCount")
+    conversation_id: str | None = Field(default=None, alias="conversationId")
+    response_id: str | None = Field(default=None, alias="responseId")
 
 
 class SummaryInput(BaseModel):

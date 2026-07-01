@@ -106,6 +106,7 @@ class _SseAccumulator:
     call_id_to_event_index: dict[str, int] = field(default_factory=dict)
     reasoning_steps: list[dict[str, Any]] = field(default_factory=list)
     adhoc_viz_args: list[dict[str, Any]] = field(default_factory=list)
+    response_id: str | None = None
 
 
 def _handle_text(content: dict[str, Any], acc: _SseAccumulator) -> None:
@@ -176,7 +177,9 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
             "objects": [acc.adhoc_viz_args[-1]],
             "reasoning": "\n".join(acc.viz_reasoning_parts),
         }
-    return ChatResult.model_validate(payload)
+    result = ChatResult.model_validate(payload)
+    result.response_id = acc.response_id
+    return result
 
 
 def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
@@ -204,9 +207,13 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
             if code in _RETRYABLE_STATUS_CODES:
                 raise TransientChatError(message, status_code=code, detail=detail)
             raise ChatError(message, status_code=code, detail=detail)
+        if event_data.get("responseId") and not acc.response_id:
+            acc.response_id = event_data["responseId"]
         item = event_data.get("item")
         if not item:
             continue
+        if item.get("responseId") and not acc.response_id:
+            acc.response_id = item["responseId"]
         role = item.get("role")
         content: dict[str, Any] = item.get("content") or {}
         ctype = content.get("type")
@@ -227,10 +234,13 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
 class ChatClient:
     """Single-turn AI chat client over the GoodData AI conversation endpoints."""
 
-    def __init__(self, host: str, token: str, workspace_id: str, *, timeout: float = 300.0):
+    def __init__(
+        self, host: str, token: str, workspace_id: str, *, timeout: float = 300.0, preserve_failed: bool = False
+    ):
         self._base = f"{host.rstrip('/')}/api/v1/ai/workspaces/{workspace_id}/chat/conversations"
         self._auth = {"Authorization": f"Bearer {token}"}
         self._client = httpx.Client(timeout=timeout)
+        self._preserve_failed = preserve_failed
 
     def create_conversation(self) -> str:
         def _do() -> str:
@@ -264,12 +274,29 @@ class ChatClient:
         return _retry_transient(_do, is_retryable=_is_retryable_exc)
 
     def ask(self, item: DatasetItem) -> ChatResult:
-        """Run one single-turn conversation: create, send, parse, clean up."""
+        """Run one conversation: create, send, parse, clean up.
+
+        The conversation_id is attached to the returned ChatResult for tracing.
+        When ``preserve_failed`` is set, failed conversations are kept on the
+        server so they can be inspected after the run; the conversation_id is
+        attached to the raised exception as well.
+        """
         conversation_id = self.create_conversation()
+        success = False
         try:
-            return self.send_message(conversation_id, item.question)
+            result = self.send_message(conversation_id, item.question)
+            result.conversation_id = conversation_id
+            success = True
+            return result
+        except Exception as exc:
+            try:
+                object.__setattr__(exc, "conversation_id", conversation_id)
+            except TypeError:
+                pass  # C-extension exception that rejects __setattr__
+            raise
         finally:
-            self.delete_conversation(conversation_id)
+            if success or not self._preserve_failed:
+                self.delete_conversation(conversation_id)
 
     def close(self) -> None:
         self._client.close()

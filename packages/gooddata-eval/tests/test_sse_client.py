@@ -5,6 +5,7 @@ import httpx
 import pytest
 from gooddata_eval.core.chat import sse_client as sse_mod
 from gooddata_eval.core.chat.sse_client import ChatClient, ChatError, TransientChatError, parse_sse_lines
+from gooddata_eval.core.models import DatasetItem
 
 
 def test_parse_sse_lines_collects_text_and_visualization(fixtures_dir):
@@ -222,3 +223,120 @@ def test_float_env_uses_default_when_unset(monkeypatch):
 def test_float_env_reads_override(monkeypatch):
     monkeypatch.setenv("GD_TEST_FLOAT", "1.5")
     assert sse_mod._float_env("GD_TEST_FLOAT", 5.0) == 1.5
+
+
+def test_parse_sse_lines_captures_response_id_from_event_data():
+    """response_id is captured from the top-level event_data."""
+    lines = [
+        'data: {"responseId": "resp-123", "item": {"role": "assistant", "content": {"type": "text", "text": "hi"}}}',
+    ]
+    result = parse_sse_lines(lines)
+    assert result.response_id == "resp-123"
+
+
+def test_parse_sse_lines_captures_response_id_from_item():
+    """response_id is captured from item when not present at top level."""
+    lines = [
+        'data: {"item": {"role": "assistant", "responseId": "resp-456", "content": {"type": "text", "text": "hi"}}}',
+    ]
+    result = parse_sse_lines(lines)
+    assert result.response_id == "resp-456"
+
+
+def test_parse_sse_lines_first_response_id_wins():
+    """Only the first responseId encountered is kept."""
+    lines = [
+        'data: {"responseId": "first", "item": {"role": "assistant", "content": {"type": "text", "text": "a"}}}',
+        'data: {"responseId": "second", "item": {"role": "assistant", "content": {"type": "text", "text": "b"}}}',
+    ]
+    result = parse_sse_lines(lines)
+    assert result.response_id == "first"
+
+
+def test_ask_attaches_conversation_id_to_result(monkeypatch):
+    """ChatClient.ask() sets conversation_id on the returned ChatResult."""
+    calls = []
+
+    def handler(request):
+        if request.method == "POST" and request.url.path.endswith("/conversations"):
+            return httpx.Response(200, json={"conversationId": "conv-abc"})
+        if request.method == "POST" and "messages" in str(request.url):
+            return httpx.Response(200, content=_OK_SSE)
+        if request.method == "DELETE":
+            calls.append("delete")
+            return httpx.Response(204)
+        return httpx.Response(404)
+
+    client = _client_with_handler(handler)
+    item = DatasetItem(id="t1", dataset_name="d", test_kind="visualization", question="q", expected_output={})
+    result = client.ask(item)
+    assert result.conversation_id == "conv-abc"
+    assert "delete" in calls  # conversation cleaned up on success
+
+
+def test_ask_preserve_failed_keeps_conversation_on_error(monkeypatch):
+    """With preserve_failed=True, failed conversations are not deleted."""
+    calls = []
+
+    def handler(request):
+        if request.method == "POST" and request.url.path.endswith("/conversations"):
+            return httpx.Response(200, json={"conversationId": "conv-fail"})
+        if request.method == "POST" and "messages" in str(request.url):
+            return httpx.Response(200, content=_NONRETRY_SSE)
+        if request.method == "DELETE":
+            calls.append("delete")
+            return httpx.Response(204)
+        return httpx.Response(404)
+
+    monkeypatch.setattr(sse_mod.time, "sleep", lambda s: None)
+    client = ChatClient(host="https://example.invalid", token="t", workspace_id="w", preserve_failed=True)
+    client._client = httpx.Client(transport=httpx.MockTransport(handler))
+
+    item = DatasetItem(id="t1", dataset_name="d", test_kind="visualization", question="q", expected_output={})
+    with pytest.raises(ChatError):
+        client.ask(item)
+    assert "delete" not in calls  # conversation preserved
+
+
+def test_ask_without_preserve_failed_deletes_on_error(monkeypatch):
+    """Without preserve_failed, conversations are deleted even on error."""
+    calls = []
+
+    def handler(request):
+        if request.method == "POST" and request.url.path.endswith("/conversations"):
+            return httpx.Response(200, json={"conversationId": "conv-del"})
+        if request.method == "POST" and "messages" in str(request.url):
+            return httpx.Response(200, content=_NONRETRY_SSE)
+        if request.method == "DELETE":
+            calls.append("delete")
+            return httpx.Response(204)
+        return httpx.Response(404)
+
+    monkeypatch.setattr(sse_mod.time, "sleep", lambda s: None)
+    client = _client_with_handler(handler)
+
+    item = DatasetItem(id="t1", dataset_name="d", test_kind="visualization", question="q", expected_output={})
+    with pytest.raises(ChatError):
+        client.ask(item)
+    assert "delete" in calls  # conversation deleted
+
+
+def test_ask_attaches_conversation_id_to_exception(monkeypatch):
+    """On failure, conversation_id is attached to the raised exception."""
+
+    def handler(request):
+        if request.method == "POST" and request.url.path.endswith("/conversations"):
+            return httpx.Response(200, json={"conversationId": "conv-exc"})
+        if request.method == "POST" and "messages" in str(request.url):
+            return httpx.Response(200, content=_NONRETRY_SSE)
+        if request.method == "DELETE":
+            return httpx.Response(204)
+        return httpx.Response(404)
+
+    monkeypatch.setattr(sse_mod.time, "sleep", lambda s: None)
+    client = _client_with_handler(handler)
+
+    item = DatasetItem(id="t1", dataset_name="d", test_kind="visualization", question="q", expected_output={})
+    with pytest.raises(ChatError) as ei:
+        client.ask(item)
+    assert ei.value.conversation_id == "conv-exc"
