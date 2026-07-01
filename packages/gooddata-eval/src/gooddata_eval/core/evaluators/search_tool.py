@@ -5,15 +5,27 @@ from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import ChatResult, DatasetItem
 
 
+def _normalize_str_list(value: object, *, lowercase: bool = False) -> list[str]:
+    # Arguments come from raw model-emitted JSON, so a malformed tool call may
+    # contain non-string entries. Drop them defensively so bad input scores as a
+    # mismatch instead of raising and aborting the whole evaluation.
+    if not isinstance(value, list):
+        return []
+    items = [item for item in value if isinstance(item, str)]
+    return sorted(item.lower() if lowercase else item for item in items)
+
+
 def _args_match(actual_args: dict, expected_args: dict) -> bool:
     # Only keywords and object_types determine semantic correctness.
     # limit is optional with a server-side default; emit_widget was renamed to
     # user_requested_search in the tool schema — neither affects search quality.
-    actual_kw = sorted(k.lower() for k in (actual_args.get("keywords") or []))
-    expected_kw = sorted(k.lower() for k in (expected_args.get("keywords") or []))
+    actual_kw = _normalize_str_list(actual_args.get("keywords"), lowercase=True)
+    expected_kw = _normalize_str_list(expected_args.get("keywords"), lowercase=True)
     if actual_kw != expected_kw:
         return False
-    return sorted(actual_args.get("object_types") or []) == sorted(expected_args.get("object_types") or [])
+    return _normalize_str_list(actual_args.get("object_types")) == _normalize_str_list(
+        expected_args.get("object_types")
+    )
 
 
 class SearchToolEvaluator:
