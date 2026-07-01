@@ -31,6 +31,8 @@ class ItemReport:
     runs: int = 0
     latency_s: float = 0.0  # total wall-clock across this item's runs
     best_detail: dict = field(default_factory=dict)
+    conversation_id: str | None = None
+    response_id: str | None = None
 
     @property
     def avg_latency_s(self) -> float:
@@ -112,6 +114,8 @@ def _run_one_item(
         for run_index in range(1, runs + 1):
             t0 = time.perf_counter()
             chat_result = backend.ask(item)
+            report.conversation_id = getattr(chat_result, "conversation_id", None) or report.conversation_id
+            report.response_id = getattr(chat_result, "response_id", None) or report.response_id
             evaluation = evaluator.evaluate(item, chat_result)
             latency = time.perf_counter() - t0
             report.runs += 1
@@ -123,7 +127,9 @@ def _run_one_item(
             if on_run_done is not None:
                 on_run_done(run_index, runs, evaluation.passed, latency)
     except Exception as e:  # agent/network/parse failure for this item
-        report.error = f"{type(e).__name__}: {e}"
+        conv_id = getattr(e, "conversation_id", None)
+        report.conversation_id = conv_id or report.conversation_id
+        report.error = f"{type(e).__name__}: {e}" + (f" [conversation_id={conv_id}]" if conv_id else "")
         if best is not None:
             report.best_detail = best.detail
         return report
