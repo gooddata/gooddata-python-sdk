@@ -1,24 +1,27 @@
+.github/workflows/bump-version.yaml
+  s_21215b218089d0::t_387fc7f98a5b06 2
+  s_21215b218089d0::t_e48ed9301ad77b 4-8,21,23-25,37,41-42,45-46,57-58,106-108,110,112-117
+  s_21215b218089d0::t_5f33bdace00fac 50,88,96,101
+  s_21215b218089d0::t_3aba40a30ca42d 51-53
+  s_21215b218089d0::t_2912a0baa0c29b 47-49
+  s_21215b218089d0::t_3c73d12f3e3fbc 103
+  s_21215b218089d0::t_9b213c4403e512 22,38-40,43-44,70-71,73-74,77-78,80,83-84,86,89-91,97-100,102,104,109,111
 scripts/is_latest_tag.sh
   s_21215b218089d0::t_d56097d9514a76 1-20
 MAINTENANCE.md
   s_21215b218089d0::t_74b75b19c60a9a 4,9-10,15-16,18-21,26-27
   s_21215b218089d0::t_de11bcac68ce34 5-8,11-14,17,22-25,28-34
 .github/workflows/build-release.yaml
-  s_21215b218089d0::t_2adee553105465 79-82
-  s_21215b218089d0::t_a079ba08a3698d 83
-  s_21215b218089d0::t_57b6fec9712827 12-14,16-26,53-54,93,100,105,142
-.github/workflows/bump-version.yaml
-  s_21215b218089d0::t_5f33bdace00fac 49,81,85-86,88-92
-  s_21215b218089d0::t_387fc7f98a5b06 2
-  s_21215b218089d0::t_2912a0baa0c29b 46-48
-  s_21215b218089d0::t_3aba40a30ca42d 50-52
-  s_21215b218089d0::t_3c73d12f3e3fbc 93-95
-  s_21215b218089d0::t_e48ed9301ad77b 4-8,21-25,37-45,56-57,70,96,98-108
+  s_21215b218089d0::t_9135e3a0bb4f25 85
+  s_21215b218089d0::t_a079ba08a3698d 84
+  s_21215b218089d0::t_c18371c9eee9b1 55
+  s_21215b218089d0::t_57b6fec9712827 12-14,16-26,53-54,95,102,107,144
+  s_21215b218089d0::t_2adee553105465 80-83
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.6.9",
-  "base_commit_sha": "44038d31fea589e8653bd73b0da40ceeeafc244b",
+  "base_commit_sha": "d16c33ab0f4495b0eb1325a45fe923f98b39615f",
   "prompts": {},
   "sessions": {
     "s_21215b218089d0": {
@@ -27,7 +30,7 @@ MAINTENANCE.md
         "id": "2db60762-f98d-442b-8201-11178f58ec0c",
         "model": "claude-opus-4-8"
       },
-      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+      "human_author": null
     }
   }
 }
