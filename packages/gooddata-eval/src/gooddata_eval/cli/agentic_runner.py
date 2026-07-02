@@ -6,7 +6,7 @@ from __future__ import annotations
 import time
 from typing import Any, TypedDict
 
-from gooddata_eval.core.agentic._langfuse import HttpxLangfuseClient, make_langfuse_client
+from gooddata_eval.core.agentic._langfuse import make_langfuse_client
 from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
 from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluate_agentic_conversation
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
@@ -17,17 +17,14 @@ from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualizat
 from gooddata_eval.core.models import CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
 
-_LfKw = TypedDict(
-    "_LfKw",
-    {
-        "langfuse": Any,
-        "dataset_item_id": str,
-        "dataset_name": str,
-        "run_timestamp": str,
-        "model_version_override": str | None,
-    },
-    total=False,
-)
+
+class _LfKw(TypedDict, total=False):
+    langfuse: Any
+    dataset_item_id: str
+    dataset_name: str
+    run_timestamp: str
+    model_version_override: str | None
+
 
 AGENTIC_TEST_KINDS = frozenset(
     {

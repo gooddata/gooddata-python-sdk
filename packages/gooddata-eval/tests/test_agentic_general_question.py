@@ -3,11 +3,9 @@
 from unittest.mock import MagicMock, patch
 
 from gooddata_eval.core.agentic.general_question import (
-    AgenticGeneralQuestionSummary,
     GeneralQuestionResult,
     run_agentic_general_question,
 )
-from gooddata_eval.core.models import ChatResult
 
 
 def test_general_question_result_fields():

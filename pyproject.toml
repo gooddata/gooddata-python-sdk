@@ -38,14 +38,14 @@ members = ["packages/*"]
 
 [dependency-groups]
 dev = [
-    "pre-commit~=4.0.1",
+    "pre-commit~=4.6.0",
     "gitlint~=0.19.1",
 ]
 lint = [
-    "ruff~=0.15.15",
+    "ruff~=0.15.20",
 ]
 type = [
-    "ty~=0.0.40",
+    "ty~=0.0.55",
 ]
 test = [
     # Common test dependencies used across all workspace packages
@@ -54,12 +54,13 @@ test = [
     "toml~=0.10.2",
     "griffe>=1.0",
     "docstring_parser~=0.15",
+    "jinja2~=3.1",
     "pytest-cov~=6.0.0",
     "pytest-json-report==1.5.0",
     # Additional test dependencies used by multiple packages
     "pytest-snapshot==0.9.0",
     "pytest-order~=1.3.0",
-    "vcrpy~=8.0.0",
+    "vcrpy~=8.2.1",
     "urllib3~=2.6.0",
     "python-dotenv~=1.0.0",
     "deepdiff~=8.5.0",
@@ -74,8 +75,8 @@ release = [
     "tomlkit>=0.11"
 ]
 tox = [
-    "tox~=4.32.0",
-    "tox-uv~=1.29.0"
+    "tox~=4.56.1",
+    "tox-uv~=1.35.2"
 ]
 
 [tool.ruff]

@@ -12,6 +12,7 @@ from gooddata_api_client.exceptions import ApiException
 from rich.console import Console
 from rich.table import Table
 
+from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, run_agentic_items
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import RunConfig
 from gooddata_eval.core.connection import ConnectionError_, resolve_connection
@@ -20,7 +21,6 @@ from gooddata_eval.core.langfuse.sink import LangfuseSink
 from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.reporting.console import render_comparison, render_console
 from gooddata_eval.core.reporting.json_report import write_multi_model_report
-from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, run_agentic_items
 from gooddata_eval.core.runner import ItemReport, run_items
 from gooddata_eval.core.summary.http_client import SummaryClient
 from gooddata_eval.core.workspace import ModelResolutionError, WorkspaceModelController
