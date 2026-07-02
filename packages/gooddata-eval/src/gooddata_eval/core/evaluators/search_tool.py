@@ -6,9 +6,12 @@ from gooddata_eval.core.models import ChatResult, DatasetItem
 
 
 def _normalize_str_list(value: object, *, lowercase: bool = False) -> list[str]:
-    # Arguments come from raw model-emitted JSON, so a malformed tool call may
-    # contain non-string entries. Drop them defensively so bad input scores as a
-    # mismatch instead of raising and aborting the whole evaluation.
+    # Arguments come from raw model-emitted JSON. The search_objects schema
+    # declares keywords/object_types as list[str], but a malformed tool call may
+    # send a non-list or non-string entries. Drop the offending entries defensively
+    # so bad input can't raise (.lower()/sorted() on a non-str) and abort the whole
+    # evaluation run; a non-list collapses to [] and the surviving strings are
+    # still compared normally.
     if not isinstance(value, list):
         return []
     items = [item for item in value if isinstance(item, str)]
@@ -23,6 +26,9 @@ def _args_match(actual_args: dict, expected_args: dict) -> bool:
     expected_kw = _normalize_str_list(expected_args.get("keywords"), lowercase=True)
     if actual_kw != expected_kw:
         return False
+    # object_types is compared case-sensitively (no lowercase=True): they are
+    # controlled ObjectType StrEnum values the model emits verbatim ("metric",
+    # "dashboard"), so a case mismatch is a genuine error, not a formatting quirk.
     return _normalize_str_list(actual_args.get("object_types")) == _normalize_str_list(
         expected_args.get("object_types")
     )
