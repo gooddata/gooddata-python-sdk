@@ -1,13 +1,45 @@
 # Repository maintenance and release
 
 ## How to release
-* manually run [Bump version & trigger release](.github/workflows/bump-version.yaml) workflow
-* after the previous workflow finishes, dispatch the GitHub workflow [Netlify Deploy](.github/workflows/netlify-deploy.yaml) on the `master` branch (takes ~15 minutes)
-  * The styling of the documentation is taken from the `master` branch. For more details see [generate.sh](scripts/generate.sh).
-* after the previous workflow finishes, push tag
-  * the version should be the same as the one in [Bump version & trigger release](.github/workflows/bump-version.yaml) workflow log
-  * checkout latest master branch and tag it `vX.Y.Z`
-  * push the tag to the gooddata/gooddata-python-sdk repository (e.g. `git push <remote> vX.Y.Z`)
+
+Releases are fully automated by a single workflow dispatch. **Always run the
+[Release](.github/workflows/bump-version.yaml) workflow from `master`** ("Use
+workflow from: master") — the workflow definition is always master's (single
+source of truth); the `base_branch` input selects which line's code it acts on.
+
+> The Release workflow dispatches `build-release.yaml` and `netlify-deploy.yaml`
+> from `master`, so those workflows must already exist on `master`. The first
+> orchestrated release therefore has to run after this change is merged, not from
+> a feature branch.
+
+### Standard release (major / minor)
+1. Run the [Release](.github/workflows/bump-version.yaml) workflow from `master` with `bump_type = major` or `minor` and `base_branch = master` (the default).
+2. The run bumps the version, commits onto `master`, creates the long-lived `rel/X.Y.0` maintenance branch (for later patching), and pushes the `vX.Y.0` tag.
+3. It then dispatches — from `master` — the downstream workflows:
+   * [Build Python Package and Create Release](.github/workflows/build-release.yaml) builds all components, publishes them to PyPI, creates the GitHub release (marked latest), and notifies Slack.
+   * [Netlify Deploy](.github/workflows/netlify-deploy.yaml) rebuilds and deploys the documentation (styling is taken from the `master` branch; see [generate.sh](scripts/generate.sh)).
+
+> `patch` is intentionally rejected when `base_branch = master` — patches come from a `rel/X.Y.Z` maintenance branch (see below).
+
+### Releasing an LTS patch (patching an old version)
+Each version has its own maintenance branch `rel/X.Y.Z`. A minor/major release creates the line anchor `rel/X.Y.0`; each patch creates the next `rel/X.Y.(n+1)` from the line's latest branch, so all patch branches persist.
+
+> If the line predates this release scheme it has no `rel/X.Y.0` branch yet — create it once from that line's tag before patching: `git branch rel/X.Y.0 vX.Y.0 && git push origin rel/X.Y.0`.
+
+1. Merge the fix to `master` via a normal PR.
+2. **Cherry-pick the fix onto the line's _latest_ `rel/X.Y.*` branch** (e.g. `rel/1.5.2`, not the anchor `rel/1.5.0`) and push it. This is what the next patch builds on — cherry-picking onto an older branch would silently drop the fix.
+3. Run the [Release](.github/workflows/bump-version.yaml) workflow **from `master`** with `bump_type = patch` and `base_branch = rel/X.Y.0` (the anchor; the workflow auto-selects the line's highest `rel/X.Y.*` to build from).
+4. The workflow builds from that latest branch, bumps the patch (e.g. `1.5.2` → `1.5.3`), and creates a new `rel/1.5.3` branch plus the `v1.5.3` tag. It does **not** touch `master` or the source branch.
+5. It dispatches `build-release.yaml` from `master`, which publishes every component to PyPI and creates the GitHub release. Because the tag is not the highest semver, the release is marked **non-latest** and documentation is **not** redeployed. (Patching the current latest line is the exception — that tag *is* the highest, so it is marked latest and docs deploy.)
+
+Subsequent patches repeat steps 1-4; each creates the next `rel/X.Y.Z` branch from the previous one, so patches chain and accumulate.
+
+### Re-running a release (escape hatch)
+To rebuild/republish an existing tag without bumping again, dispatch the build workflow directly from `master`:
+
+```shell
+gh workflow run build-release.yaml --ref master -f tag=vX.Y.Z -f make_latest=false
+```
 
 
 ### How-to dev release

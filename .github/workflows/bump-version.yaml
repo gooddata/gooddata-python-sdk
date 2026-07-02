@@ -1,6 +1,13 @@
 # (C) 2023 GoodData Corporation
-name: Bump version & trigger release
+name: Release (bump version, publish packages & docs)
 
+# Single source of truth: always run this workflow from master ("Use workflow
+# from: master"). Major/minor releases use base_branch=master and create the
+# line anchor rel/X.Y.0. Patch releases for an LTS line set base_branch to that
+# anchor rel/X.Y.0; the workflow builds from the line's highest existing
+# rel/X.Y.* branch and creates a new rel/X.Y.Z branch for the patch. The
+# workflow definition is always master's; only the code it operates on comes
+# from the resolved source branch.
 on:
   workflow_dispatch:
     inputs:
@@ -13,10 +20,21 @@ on:
           - major
           - minor
           - patch
+      base_branch:
+        description: 'Branch to release from. Use master for major/minor; use the line anchor rel/X.Y.0 for a patch (the latest rel/X.Y.* is auto-selected).'
+        type: string
+        required: true
+        default: 'master'
 
 permissions:
   contents: write
   pull-requests: write
+
+# Serialize releases so overlapping runs cannot race the is_latest computation
+# or contend on the master/tag pushes.
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
     bump-version:
@@ -24,9 +42,51 @@ jobs:
       outputs:
         new_version: ${{ steps.bump.outputs.new_version }}
       steps:
+        - name: Validate bump type and base branch
+          env:
+            BASE: ${{ inputs.base_branch }}
+            BUMP: ${{ inputs.bump_type }}
+          run: |
+            if [ "$BUMP" = "patch" ]; then
+              if [[ ! "$BASE" =~ ^rel/[0-9]+\.[0-9]+\.0$ ]]; then
+                echo "::error::patch releases require base_branch to be a rel/X.Y.0 maintenance branch (got: $BASE)."
+                exit 1
+              fi
+            else
+              if [ "$BASE" != "master" ]; then
+                echo "::error::$BUMP releases must use base_branch=master (got: $BASE)."
+                exit 1
+              fi
+            fi
+
+        - name: Resolve source branch
+          id: resolve
+          env:
+            GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
+            BASE: ${{ inputs.base_branch }}
+            BUMP: ${{ inputs.bump_type }}
+          run: |
+            if [ "$BUMP" = "patch" ]; then
+              # base_branch is the line anchor rel/X.Y.0; build the next patch from
+              # the line's highest existing rel/X.Y.* branch so patches chain.
+              MINOR="${BASE%.*}" # rel/1.2.0 -> rel/1.2
+              SOURCE=$(gh api "repos/${GITHUB_REPOSITORY}/git/matching-refs/heads/${MINOR}." --jq '.[].ref' \
+                | sed 's|refs/heads/||' | grep -E '^rel/[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1)
+              if [ -z "$SOURCE" ]; then
+                echo "::error::No ${MINOR}.* maintenance branch found. Create the line's rel/X.Y.0 branch first."
+                exit 1
+              fi
+            else
+              SOURCE="$BASE"
+            fi
+            echo "Resolved source branch: $SOURCE"
+            echo "source_branch=$SOURCE" >> "$GITHUB_OUTPUT"
+
         - name: Checkout
           uses: actions/checkout@v5
           with:
+            ref: ${{ steps.resolve.outputs.source_branch }}
+            fetch-depth: 0 # need full history and tags for is_latest_tag.sh
             token: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }} # needed to push to the protected branch
 
         - name: Install uv
@@ -38,52 +98,58 @@ jobs:
 
         - name: Bump version
           id: bump
+          env:
+            BUMP: ${{ inputs.bump_type }}
           run: |
-            NEW_VERSION=$(uv run python ./scripts/bump_version.py ${{ github.event.inputs.bump_type }})
-            echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+            NEW_VERSION=$(uv run python ./scripts/bump_version.py "$BUMP")
+            echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
 
         - name: Bump version in documentation
+          env:
+            NEW_VERSION: ${{ steps.bump.outputs.new_version }}
           run: |
-            uv run python ./scripts/bump_doc_dependencies.py ${{ steps.bump.outputs.new_version }}
+            uv run python ./scripts/bump_doc_dependencies.py "$NEW_VERSION"
 
         - name: Bump version in codebase
+          env:
+            NEW_VERSION: ${{ steps.bump.outputs.new_version }}
           run: |
-            make release-ci VERSION=${{ steps.bump.outputs.new_version }}
+            make release-ci VERSION="$NEW_VERSION"
 
-        - name: Specify release branch
-          id: branch
-          run: |
-            if [ "${{ github.event.inputs.bump_type }}" == "patch" ]; then
-              RELEASE_BRANCH="patch/${{ steps.bump.outputs.new_version }}"
-            else
-              RELEASE_BRANCH="rel/${{ steps.bump.outputs.new_version }}"
-            fi
-            echo "release_branch=$RELEASE_BRANCH" >> $GITHUB_OUTPUT
-
-        - name: Create and push the new version ${{steps.bump.outputs.new_version}}
+        - name: Commit, tag and push the new version ${{steps.bump.outputs.new_version}}
+          env:
+            NEW_VERSION: ${{ steps.bump.outputs.new_version }}
+            BASE: ${{ inputs.base_branch }}
           run: |
             git config user.name github-actions
             git config user.email github-actions@github.com
-            git checkout -b ${{ steps.branch.outputs.release_branch }}
+            NEW_BRANCH="rel/${NEW_VERSION}"
+            # A matching rel/X.Y.Z branch means this version was already released.
+            if git ls-remote --exit-code --heads origin "$NEW_BRANCH" >/dev/null 2>&1; then
+              echo "::error::v${NEW_VERSION} appears already released ($NEW_BRANCH exists). To rebuild, dispatch build-release.yaml directly."
+              exit 1
+            fi
             git add -A
-            git commit -m "Release ${{steps.bump.outputs.new_version}}"
-            git push origin ${{ steps.branch.outputs.release_branch }}
-            git checkout master
-            git merge ${{ steps.branch.outputs.release_branch }}
-            git push origin master
+            git commit -m "Release ${NEW_VERSION}"
+            git tag "v${NEW_VERSION}"
+            # Create the version's own rel/X.Y.Z branch; for a master release also
+            # advance master. Push atomically -- all refs land or none do.
+            REFSPECS=("refs/tags/v${NEW_VERSION}" "HEAD:refs/heads/${NEW_BRANCH}")
+            if [ "$BASE" = "master" ]; then
+              REFSPECS+=("HEAD:master")
+            fi
+            git push --atomic origin "${REFSPECS[@]}"
 
-# TODO: this part waits for docs build and publish optimization it takes too long (~15 minutes)
-#    trigger-release:
-#      needs:
-#        - bump-version
-#        - create-release-branch
-#      runs-on: ubuntu-latest
-#      steps:
-#        - name: Checkout
-#          uses: actions/checkout@v5
-#        - name: Push new tag – v${{ needs.bump-version.outputs.new_version }}
-#          run: |
-#            git config user.name GitHub Actions
-#            git config user.email github-actions@github.com
-#            git tag v${{ needs.bump-version.outputs.new_version }}
-#            git push origin v${{ needs.bump-version.outputs.new_version }}
+        - name: Dispatch build, publish and docs
+          env:
+            GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }} # GITHUB_TOKEN cannot trigger downstream workflow_dispatch
+            NEW_VERSION: ${{ steps.bump.outputs.new_version }}
+          run: |
+            git fetch --tags origin # ensure the comparison sees the freshest remote tag set
+            TAG="v${NEW_VERSION}"
+            IS_LATEST=$(bash scripts/is_latest_tag.sh "$TAG")
+            echo "Tag $TAG is_latest=$IS_LATEST"
+            gh workflow run build-release.yaml --ref master -f tag="$TAG" -f make_latest="$IS_LATEST"
+            if [ "$IS_LATEST" = "true" ]; then
+              gh workflow run netlify-deploy.yaml --ref master
+            fi

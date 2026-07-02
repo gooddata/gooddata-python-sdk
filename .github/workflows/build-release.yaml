@@ -9,10 +9,21 @@
 
 name: Build Python Package and Create Release
 
+# Dispatched by the Release workflow (bump-version.yaml) after it tags a release,
+# so this always runs from master's definition (single source of truth) while
+# building the tagged code. Can also be dispatched manually to re-run a release.
 on:
-  push:
-    tags:
-      - v*.*.*
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to build (e.g. v1.2.3)'
+        required: true
+        type: string
+      make_latest:
+        description: 'Mark the GitHub release as latest (true/false)'
+        required: false
+        default: 'false'
+        type: string
 
 env:
   COMPONENTS: '["gooddata-api-client","gooddata-pandas","gooddata-fdw","gooddata-sdk","gooddata-dbt","gooddata-flight-server","gooddata-flexconnect","gooddata-pipelines"]'
@@ -39,6 +50,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v5
+      with:
+        ref: ${{ inputs.tag }}
+        persist-credentials: false
     - name: Install uv
       uses: astral-sh/setup-uv@v7
     - name: Build ${{ matrix.component }}
@@ -63,6 +77,12 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.tag }}
+          fetch-depth: 0
+          persist-credentials: false
       - name: Obtain artifacts
         uses: actions/download-artifact@v6
         with:
@@ -72,18 +92,21 @@ jobs:
         uses: requarks/changelog-action@v1
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
-          tag: ${{ github.ref_name }}
+          tag: ${{ inputs.tag }}
           writeToFile: false
           includeRefIssues: false
           useGitmojis: false
       - name: Create GitHub release
         uses: "softprops/action-gh-release@v2"
         with:
+          tag_name: ${{ inputs.tag }}
           body: ${{ steps.changelog.outputs.changes }}
           token: "${{ secrets.GITHUB_TOKEN }}"
           draft: false
           prerelease: false
-          make_latest: true
+          # accepts the strings "true"/"false"/"legacy"; the Release workflow
+          # passes "true"/"false" from scripts/is_latest_tag.sh
+          make_latest: ${{ inputs.make_latest }}
           files: |
             dist/**/*.whl
             dist/**/*.tar.gz
@@ -120,4 +143,4 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: "#releases"
-            text: "The release of *gooddata-python-sdk@${{ github.ref_name }}*, has been successful. :tada:"
+            text: "The release of *gooddata-python-sdk@${{ inputs.tag }}*, has been successful. :tada:"
