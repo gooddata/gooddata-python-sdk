@@ -1,4 +1,7 @@
 # (C) 2026 GoodData Corporation
+import io
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 import httpx
 import orjson
 import pytest
@@ -86,7 +89,8 @@ def test_cli_run_end_to_end(monkeypatch, tmp_path, fixtures_dir):
         ]
     )
     assert exit_code == 0
-    assert orjson.loads(out.read_bytes())["runs"]["gpt-5.2"]["summary"]["passed"] == 1
+    # run keys are provider-prefixed (provider_name/model) to stay collision-free across providers
+    assert orjson.loads(out.read_bytes())["runs"]["Test Provider/gpt-5.2"]["summary"]["passed"] == 1
 
 
 def test_cli_operational_error_exits_nonzero(monkeypatch, fixtures_dir):
@@ -405,9 +409,10 @@ def test_cli_multimodel_writes_nested_json(monkeypatch, tmp_path, fixtures_dir):
         ]
     )
     data = orjson.loads(out.read_bytes())
-    assert data["models"] == ["gpt-5.2", "gpt-4o"]
+    # keys are provider-prefixed (provider_name/model); provider_name is "P" here
+    assert data["models"] == ["P/gpt-5.2", "P/gpt-4o"]
     assert "runs" in data and "comparison" in data
-    assert data["comparison"]["gpt-5.2"]["passed"] == 1
+    assert data["comparison"]["P/gpt-5.2"]["passed"] == 1
 
 
 def test_cli_restore_fires_even_when_model_loop_raises(monkeypatch, fixtures_dir):
@@ -590,10 +595,6 @@ def test_cli_rejects_negative_concurrency(monkeypatch, fixtures_dir):
 
 def test_progress_callbacks_thread_safe():
     """Verify progress callbacks can be called from multiple threads without error."""
-    import io
-    import threading
-    from concurrent.futures import ThreadPoolExecutor, as_completed
-
     console = Console(file=io.StringIO(), force_terminal=False)
     on_item_start, on_run_done, on_item_done = cli_main._make_progress_callbacks(console)
 
@@ -610,7 +611,9 @@ def test_progress_callbacks_thread_safe():
             )
             on_item_start(index, 100, item)
             on_run_done(index, 100, 1, 1, index % 2 == 0, 1.5)
-            report = ItemReport(id=f"test-{index}", dataset_name="test", test_kind="general_question")
+            report = ItemReport(
+                id=f"test-{index}", dataset_name="test", test_kind="general_question", question=f"Question {index}"
+            )
             report.runs = 1
             report.latency_s = 1.5
             report.pass_at_k = index % 2 == 0

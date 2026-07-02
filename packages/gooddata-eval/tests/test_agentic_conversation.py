@@ -4,13 +4,12 @@ from unittest.mock import MagicMock, patch
 
 from gooddata_eval.core.agentic.conversation import (
     ConversationFixture,
-    ConversationResult,
     TurnDefinition,
     TurnResult,
     _resolve_refs,
     run_agentic_conversation,
 )
-from gooddata_eval.core.models import ChatResult, ToolCallEvent
+from gooddata_eval.core.models import ToolCallEvent
 
 
 def test_turn_definition_model():

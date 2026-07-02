@@ -3,11 +3,10 @@
 
 from __future__ import annotations
 
-from typing import Any
-
 import os
 import re
 from dataclasses import dataclass
+from typing import Any
 
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.models import ToolCallEvent
@@ -247,7 +246,9 @@ def evaluate_agentic_metric_skill(
     model_version_override: str | None = None,
 ) -> None:
     """Run metric-skill evaluation, log to Langfuse, and raise MetricSkillAssertionError on failure."""
-    from datetime import datetime as _dt, timezone as _tz  # noqa: PLC0415
+    from datetime import datetime as _dt  # noqa: PLC0415
+    from datetime import timezone as _tz  # noqa: PLC0415
+
     from gooddata_eval.core.agentic._langfuse import try_make_langfuse_client  # noqa: PLC0415
 
     if langfuse is None:
