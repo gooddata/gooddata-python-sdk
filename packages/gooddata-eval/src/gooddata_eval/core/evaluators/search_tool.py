@@ -5,14 +5,33 @@ from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import ChatResult, DatasetItem
 
 
+def _normalize_str_list(value: object, *, lowercase: bool = False) -> list[str]:
+    # Arguments come from raw model-emitted JSON. The search_objects schema
+    # declares keywords/object_types as list[str], but a malformed tool call may
+    # send a non-list or non-string entries. Drop the offending entries defensively
+    # so bad input can't raise (.lower()/sorted() on a non-str) and abort the whole
+    # evaluation run; a non-list collapses to [] and the surviving strings are
+    # still compared normally.
+    if not isinstance(value, list):
+        return []
+    items = [item for item in value if isinstance(item, str)]
+    return sorted(item.lower() if lowercase else item for item in items)
+
+
 def _args_match(actual_args: dict, expected_args: dict) -> bool:
-    if sorted(actual_args.get("keywords") or []) != sorted(expected_args.get("keywords") or []):
+    # Only keywords and object_types determine semantic correctness.
+    # limit is optional with a server-side default; emit_widget was renamed to
+    # user_requested_search in the tool schema — neither affects search quality.
+    actual_kw = _normalize_str_list(actual_args.get("keywords"), lowercase=True)
+    expected_kw = _normalize_str_list(expected_args.get("keywords"), lowercase=True)
+    if actual_kw != expected_kw:
         return False
-    if sorted(actual_args.get("object_types") or []) != sorted(expected_args.get("object_types") or []):
-        return False
-    if actual_args.get("limit") != expected_args.get("limit"):
-        return False
-    return actual_args.get("emit_widget") == expected_args.get("emit_widget")
+    # object_types is compared case-sensitively (no lowercase=True): they are
+    # controlled ObjectType StrEnum values the model emits verbatim ("metric",
+    # "dashboard"), so a case mismatch is a genuine error, not a formatting quirk.
+    return _normalize_str_list(actual_args.get("object_types")) == _normalize_str_list(
+        expected_args.get("object_types")
+    )
 
 
 class SearchToolEvaluator:
