@@ -368,12 +368,18 @@ def create_file_structure(data: dict, root: Path, url_root: str) -> dict[str, di
 
             elif name == "functions":
                 for func_name in obj:
-                    if func_name.startswith("_") or func_name in links:
+                    if func_name.startswith("_"):
                         continue
-                    links[func_name] = {
-                        "path": f"{api_ref_root}/{func_name}".lower(),
-                        "kind": "function",
-                    }
+                    # Dedup only the global links dict (used for docstring
+                    # linkification). Page creation must still happen for every
+                    # class, otherwise inherited methods shared across classes
+                    # (e.g. client_class) get a page under only the first class
+                    # while every other class emits a relative link that 404s.
+                    if func_name not in links:
+                        links[func_name] = {
+                            "path": f"{api_ref_root}/{func_name}".lower(),
+                            "kind": "function",
+                        }
                     pages.append(
                         _PageSpec(
                             kind="function",

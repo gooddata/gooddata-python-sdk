@@ -398,3 +398,23 @@ class TestCreateFileStructure:
         # Should not raise — second "Shared" is skipped
         _mod.create_file_structure(data, tmp_path, "/latest/api-reference")
         assert (tmp_path / "mod1" / "Shared" / "_index.md").exists()
+
+    def test_shared_method_gets_page_under_every_class(self, _mod, tmp_path):
+        # Methods inherited across many classes (e.g. client_class) share a name.
+        # Each class lists the method with a relative link, so each class must get
+        # its own method page — deduping only affects the global links dict.
+        method = {"kind": "function", "docstring_parsed": None, "signature": {}}
+        data = {
+            "mod1": {
+                "kind": "module",
+                "ClassA": {"kind": "class", "functions": {"client_class": dict(method)}},
+            },
+            "mod2": {
+                "kind": "module",
+                "ClassB": {"kind": "class", "functions": {"client_class": dict(method)}},
+            },
+        }
+        _mod.create_file_structure(data, tmp_path, "/latest/api-reference")
+        # Both classes must have their own client_class page (neither should 404).
+        assert (tmp_path / "mod1" / "ClassA" / "client_class.md").exists()
+        assert (tmp_path / "mod2" / "ClassB" / "client_class.md").exists()
