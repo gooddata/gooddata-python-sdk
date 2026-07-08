@@ -78,7 +78,9 @@ class AlertSkillEvaluator:
 
         if "Trigger" in expected:
             expected_trigger = _TRIGGER_MAP.get(expected["Trigger"], expected["Trigger"])
-            trigger_correct = args.get("trigger") == expected_trigger
+            # Omitted/null trigger persists as the product default ALWAYS ("Every time").
+            actual_trigger = args.get("trigger") or "ALWAYS"
+            trigger_correct = actual_trigger == expected_trigger
 
         if "Filters" in expected:
             actual_filters = args.get("filters") or []

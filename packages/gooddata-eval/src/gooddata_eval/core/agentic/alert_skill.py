@@ -78,7 +78,11 @@ def _check_trigger(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     if expected.operator == "ANOMALY":
         return True
     exp_trigger = expected.trigger
-    act_trigger = actual_args.get("trigger", actual_args.get("triggerMode", "ALWAYS"))
+    # A missing OR explicit-null trigger means "unset" -> the product persists the
+    # default ALWAYS ("Every time"). `.get(k, default)` only returns the default when
+    # the key is ABSENT, but create_metric_alert serialises unset params as
+    # `trigger: null`, so chain with `or` to also cover the present-but-None case.
+    act_trigger = actual_args.get("trigger") or actual_args.get("triggerMode") or "ALWAYS"
     if exp_trigger in _ALWAYS_TRIGGER_VALUES:
         return act_trigger in {"ALWAYS", "Every time"}
     act_api = _TRIGGER_DISPLAY_TO_API.get(act_trigger, act_trigger)
