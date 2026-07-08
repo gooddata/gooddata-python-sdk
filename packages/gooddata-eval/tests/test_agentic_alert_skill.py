@@ -4,7 +4,9 @@ from unittest.mock import MagicMock, patch
 
 from gooddata_eval.core.agentic.alert_skill import (
     AlertEvaluation,
+    _check_trigger,
     _deep_subset,
+    _normalize_expected_output,
     _to_number,
     run_agentic_alert_skill,
 )
@@ -29,6 +31,24 @@ def test_deep_subset_simple():
 
 def test_deep_subset_missing_key():
     assert _deep_subset({"a": 1, "c": 3}, {"a": 1}) is False
+
+
+def test_check_trigger_missing_or_null_defaults_to_always():
+    # "Every time" is the product default -> the agent may omit the trigger arg
+    # entirely, or serialise it as null. Both must count as ALWAYS, not a mismatch.
+    expected = _normalize_expected_output({"Operator": "GREATER_THAN", "Trigger": "Every time"})
+    assert _check_trigger(expected, {"operator": "GREATER_THAN"}) is True  # key absent
+    assert _check_trigger(expected, {"trigger": None}) is True  # present-but-null (the bug)
+    assert _check_trigger(expected, {"trigger": "ALWAYS"}) is True
+
+
+def test_check_trigger_once_needs_explicit_once():
+    # A "One time" expectation must still require an explicit ONCE - the null-default
+    # fix must not turn a wrong/absent trigger into a pass here.
+    expected = _normalize_expected_output({"Operator": "LESS_THAN", "Trigger": "One time"})
+    assert _check_trigger(expected, {"trigger": "ONCE"}) is True
+    assert _check_trigger(expected, {"trigger": None}) is False  # null != ONCE
+    assert _check_trigger(expected, {"trigger": "ONCE_PER_INTERVAL"}) is False  # real model error stays a fail
 
 
 def test_alert_evaluation_strict_pass():
