@@ -58,6 +58,23 @@ def test_alert_evaluator_skips_absent_field():
     assert result.passed is True
 
 
+def test_alert_evaluator_defaults_missing_trigger_to_always():
+    # The agent may omit `trigger` (or send null) -> backend default is ALWAYS,
+    # so an "Every time" expectation must still pass instead of a false-negative.
+    expected = {"Operator": "GREATER_THAN", "Threshold": "150", "Trigger": "Every time"}
+    ev = get_evaluator("alert_skill")
+
+    absent = ev.evaluate(_item(expected), _chat_with_alert({"operator": "GREATER_THAN", "threshold": 150}))
+    assert absent.passed is True
+    assert absent.detail["trigger_correct"] is True
+
+    null = ev.evaluate(
+        _item(expected), _chat_with_alert({"operator": "GREATER_THAN", "threshold": 150, "trigger": None})
+    )
+    assert null.passed is True
+    assert null.detail["trigger_correct"] is True
+
+
 def test_alert_evaluator_fails_when_no_tool_call():
     result = get_evaluator("alert_skill").evaluate(
         _item({"Operator": "LESS_THAN"}), ChatResult.model_validate({"textResponse": "here is the alert"})
