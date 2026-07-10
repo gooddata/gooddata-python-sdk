@@ -8,8 +8,10 @@ import re
 from dataclasses import dataclass
 from typing import Literal
 
+from gooddata_sdk import GoodDataSdk
 from pydantic import BaseModel
 
+from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.models import ChatResult, ToolCallEvent
 from gooddata_eval.core.scoring import (
@@ -283,11 +285,16 @@ def run_agentic_conversation(
     replies before the agent produces the expected output.
     """
     client = ChatClient(host=host, token=token, workspace_id=workspace_id)
+    sdk = GoodDataSdk.create(host, token)
     turn_results: list[TurnResult] = []
     turn_outputs: dict[str, dict] = {}
     total_clarification_turns = 0
     conversation_id: str = ""
     owns_conversation = False
+    # Metrics created during this conversation, deleted after it completes so they do
+    # not persist in the (shared) workspace and get reused by a later test. Deferred to
+    # the end — a later turn may $ref a metric an earlier turn created.
+    created_metric_ids: list[str] = []
 
     try:
         if initial_conversation_id is not None:
@@ -335,6 +342,11 @@ def run_agentic_conversation(
                 if metric_data:
                     turn_outputs[turn.turn_id] = metric_data
 
+            # Track every metric created this turn (any turn may create one) for cleanup.
+            for metric_id in _extract_created_metric_ids(all_tool_calls):
+                if metric_id not in created_metric_ids:
+                    created_metric_ids.append(metric_id)
+
             turn_results.append(
                 TurnResult(
                     turn_id=turn.turn_id,
@@ -351,6 +363,8 @@ def run_agentic_conversation(
     finally:
         if owns_conversation and conversation_id:
             client.delete_conversation(conversation_id)
+        for metric_id in created_metric_ids:
+            _delete_metric(sdk, workspace_id, metric_id)
         client.close()
 
     activated_all = {skill for tr in turn_results for skill in tr.activated_skills}

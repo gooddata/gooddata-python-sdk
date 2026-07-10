@@ -9,6 +9,8 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
+from gooddata_sdk import GoodDataSdk
+
 from gooddata_eval.core.agentic._catalog import CatalogMetricAlert
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.models import ToolCallEvent
@@ -183,11 +185,14 @@ def generate_simulated_alert_response(
     return response.choices[0].message.content or ""
 
 
-def _delete_alert(client: ChatClient, workspace_id: str, alert_id: str) -> None:
-    host = str(client._base).split("/api/")[0]
-    url = f"{host}/api/v1/entities/workspaces/{workspace_id}/automations/{alert_id}"
+def _delete_alert(sdk: GoodDataSdk, workspace_id: str, alert_id: str) -> None:
+    """Best-effort delete of an alert (automation) created during evaluation.
+
+    Uses the GoodData SDK entities API rather than reimplementing the REST call.
+    Failures are logged, not raised.
+    """
     try:
-        client._client.delete(url, headers=client._auth)
+        sdk._client.entities_api.delete_entity_automations(workspace_id, alert_id)
     except Exception as exc:
         print(f"[CLEANUP] Failed to delete alert {alert_id}: {exc}")
 
@@ -327,6 +332,7 @@ def run_agentic_alert_skill(
     expected = _normalize_expected_output(expected_output)
     run_results: list[AlertRunResult] = []
     client = ChatClient(host=host, token=token, workspace_id=workspace_id)
+    sdk = GoodDataSdk.create(host, token)
 
     def _run_once(conv_id: str) -> AlertRunResult:
         alert_id_to_delete: str | None = None
@@ -375,7 +381,7 @@ def run_agentic_alert_skill(
             )
         finally:
             if alert_id_to_delete:
-                _delete_alert(client, workspace_id, alert_id_to_delete)
+                _delete_alert(sdk, workspace_id, alert_id_to_delete)
 
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
