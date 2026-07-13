@@ -2,9 +2,11 @@
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 from unittest.mock import MagicMock, patch
 
+import pytest
 from gooddata_eval.core.agentic.metric_skill import (
     AgenticMetricSummary,
     MetricRunResult,
+    _delete_metric,
     _normalize_maql,
     run_agentic_metric_skill,
 )
@@ -144,3 +146,81 @@ def test_run_agentic_metric_skill_creates_fresh_conversations_for_remaining_runs
     # Runs 1 and 2 always create fresh; run 0 uses existing-conv
     assert mock_client.create_conversation.call_count == 2
     assert mock_client.delete_conversation.call_count == 2
+
+
+def test_delete_metric_uses_sdk_entities_api():
+    sdk = MagicMock()
+    _delete_metric(sdk, "ws1", "foo_metric")
+    sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "foo_metric")
+
+
+def test_delete_metric_swallows_failures():
+    sdk = MagicMock()
+    sdk._client.entities_api.delete_entity_metrics.side_effect = RuntimeError("500")
+    # Cleanup is best-effort — a failed delete is logged, never propagated.
+    _delete_metric(sdk, "ws1", "foo_metric")
+
+
+def _create_metric_chat_result(metric_id: str = "foo_metric"):
+    return ChatResult.model_validate(
+        {
+            "textResponse": "done",
+            "toolCallEvents": [
+                {
+                    "functionName": "create_metric",
+                    "functionArguments": "{}",
+                    "result": f'{{"data": {{"maql": "SELECT {{metric/foo}}", "metric_id": "{metric_id}"}}}}',
+                }
+            ],
+            "reasoningStepCount": 1,
+        }
+    )
+
+
+def test_run_agentic_metric_skill_deletes_created_metric():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _create_metric_chat_result()
+    with (
+        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.metric_skill.GoodDataSdk") as mock_sdk_cls,
+    ):
+        mock_sdk = mock_sdk_cls.create.return_value
+        run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=1,
+        )
+    # The metric the run created is deleted on the way out, by its exact id, via the SDK.
+    mock_sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "foo_metric")
+
+
+def test_run_agentic_metric_skill_deletes_metric_even_when_teardown_fails():
+    # A metric is created, then conversation teardown raises; the created metric must still
+    # have been cleaned up (its deletion happens inside the per-run finally, before teardown).
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _create_metric_chat_result()
+    mock_client.delete_conversation.side_effect = RuntimeError("teardown boom")
+
+    with (
+        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.metric_skill.GoodDataSdk") as mock_sdk_cls,
+        pytest.raises(RuntimeError),
+    ):
+        mock_sdk = mock_sdk_cls.create.return_value
+        run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=1,
+        )
+
+    mock_sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "foo_metric")

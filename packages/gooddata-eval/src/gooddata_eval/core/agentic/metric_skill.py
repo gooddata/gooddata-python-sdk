@@ -8,6 +8,8 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
+from gooddata_sdk import GoodDataSdk
+
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.models import ToolCallEvent
 
@@ -127,6 +129,41 @@ def _extract_metric_result(tool_call_events: list[ToolCallEvent]) -> dict | None
     return None
 
 
+def _extract_created_metric_ids(tool_call_events: list[ToolCallEvent]) -> list[str]:
+    """Ids of every metric created by ``create_metric`` calls (a turn may create more than one).
+
+    Used for cleanup so no created metric leaks — unlike ``_extract_metric_result``, which
+    returns only the first result for MAQL evaluation. Shared with conversation evaluation.
+    """
+    metric_ids: list[str] = []
+    for tc in tool_call_events:
+        if tc.function_name != "create_metric" or not tc.result:
+            continue
+        result_data = tc.parsed_result()
+        if not result_data:
+            continue
+        data = result_data.get("data", result_data)
+        metric_id = data.get("metric_id") if isinstance(data, dict) else None
+        if metric_id and metric_id not in metric_ids:
+            metric_ids.append(metric_id)
+    return metric_ids
+
+
+def _delete_metric(sdk: GoodDataSdk, workspace_id: str, metric_id: str) -> None:
+    """Delete a metric created during evaluation.
+
+    Eval runs share a persistent workspace, so a metric left behind is picked up by
+    a later test — the agent reuses it (returning ``SELECT {id}`` instead of full
+    MAQL) and the assertion fails. Deleting the created metric on the way out keeps
+    the workspace clean for the next run. Best-effort: failures are logged, not raised.
+    Mirrors ``alert_skill._delete_alert``.
+    """
+    try:
+        sdk._client.entities_api.delete_entity_metrics(workspace_id, metric_id)
+    except Exception as exc:
+        print(f"[CLEANUP] Failed to delete metric {metric_id}: {exc}")
+
+
 def _is_asking_clarification(text: str) -> bool:
     if not text:
         return False
@@ -136,41 +173,54 @@ def _is_asking_clarification(text: str) -> bool:
 
 def _execute_single_metric_run(
     client: ChatClient,
+    sdk: GoodDataSdk,
+    workspace_id: str,
     conversation_id: str,
     question: str,
     expected_outputs: list[dict],
     max_iterations: int,
 ) -> MetricRunResult:
-    """Drive one full multi-turn metric-skill conversation and evaluate the result."""
+    """Drive one full multi-turn metric-skill conversation and evaluate the result.
+
+    Any metric the agent creates during this run is deleted on the way out (see
+    ``_delete_metric``) so it cannot leak into — and be reused by — a later test
+    sharing the workspace.
+    """
     primary_expected = expected_outputs[0] if expected_outputs else {}
     metric_result: dict | None = None
+    metric_id_to_delete: str | None = None
     turns = 0
     current_question = question
 
-    for _iteration in range(max_iterations):
-        turns += 1
-        chat_result = client.send_message(conversation_id, current_question)
-        candidate = _extract_metric_result(chat_result.tool_call_events or [])
-        if candidate is not None:
-            metric_result = candidate
-            break
-        response_text = (chat_result.text_response or "").strip()
-        if _is_asking_clarification(response_text):
-            current_question = generate_simulated_response(response_text, primary_expected)
-        else:
-            break
+    try:
+        for _iteration in range(max_iterations):
+            turns += 1
+            chat_result = client.send_message(conversation_id, current_question)
+            candidate = _extract_metric_result(chat_result.tool_call_events or [])
+            if candidate is not None:
+                metric_result = candidate
+                metric_id_to_delete = candidate.get("metric_id")
+                break
+            response_text = (chat_result.text_response or "").strip()
+            if _is_asking_clarification(response_text):
+                current_question = generate_simulated_response(response_text, primary_expected)
+            else:
+                break
 
-    actual_maql = (metric_result or {}).get("maql", "")
-    metric_created = metric_result is not None
-    maql_correct, _ = _best_maql_match(actual_maql, expected_outputs) if metric_created else (False, "")
-    return MetricRunResult(
-        conversation_id=conversation_id,
-        metric_result=metric_result,
-        metric_created=metric_created,
-        actual_maql=actual_maql,
-        maql_correct=maql_correct,
-        total_turns=float(turns),
-    )
+        actual_maql = (metric_result or {}).get("maql", "")
+        metric_created = metric_result is not None
+        maql_correct, _ = _best_maql_match(actual_maql, expected_outputs) if metric_created else (False, "")
+        return MetricRunResult(
+            conversation_id=conversation_id,
+            metric_result=metric_result,
+            metric_created=metric_created,
+            actual_maql=actual_maql,
+            maql_correct=maql_correct,
+            total_turns=float(turns),
+        )
+    finally:
+        if metric_id_to_delete:
+            _delete_metric(sdk, workspace_id, metric_id_to_delete)
 
 
 def run_agentic_metric_skill(
@@ -191,12 +241,15 @@ def run_agentic_metric_skill(
     expected_outputs: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
     run_results: list[MetricRunResult] = []
     client = ChatClient(host=host, token=token, workspace_id=workspace_id)
+    sdk = GoodDataSdk.create(host, token)
 
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
             run_results.append(
-                _execute_single_metric_run(client, conv_id_0, question, expected_outputs, max_iterations)
+                _execute_single_metric_run(
+                    client, sdk, workspace_id, conv_id_0, question, expected_outputs, max_iterations
+                )
             )
         finally:
             if initial_conversation_id is None:  # only delete conversations we created
@@ -206,7 +259,9 @@ def run_agentic_metric_skill(
             conv_id = client.create_conversation()
             try:
                 run_results.append(
-                    _execute_single_metric_run(client, conv_id, question, expected_outputs, max_iterations)
+                    _execute_single_metric_run(
+                        client, sdk, workspace_id, conv_id, question, expected_outputs, max_iterations
+                    )
                 )
             finally:
                 client.delete_conversation(conv_id)
