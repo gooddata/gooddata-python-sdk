@@ -1,0 +1,54 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_ff58a109afe9d1::t_07407d7b787350 288
+  s_ff58a109afe9d1::t_e8d0cd0d968cca 367
+  s_ff58a109afe9d1::t_761a2064b8b636 11,14
+  s_ff58a109afe9d1::t_5600d8dcddd6e1 346-347
+  s_ff58a109afe9d1::t_367268768265ce 294-297,345,348-349,366
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_ff58a109afe9d1::t_d1cfb3c8b9c5c0 384
+  s_ff58a109afe9d1::t_5d82c717a3ee42 12-13
+  s_ff58a109afe9d1::t_3a191b19d5535b 188-193,195
+  s_ff58a109afe9d1::t_a802747576f776 335
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  s_ff58a109afe9d1::t_6438fecd0309d0 210-211,213-214,216-224
+  s_ff58a109afe9d1::t_d506271d001fd0 9
+  s_ff58a109afe9d1::t_af8ab8b3ef9637 5
+  s_ff58a109afe9d1::t_49f4d15698ff07 200-206,208-209,225
+  s_ff58a109afe9d1::t_c42f20160676d4 149-150,155-157,160,162-163,166-171,173-177,189-197
+  s_ff58a109afe9d1::t_d113b4250ae097 151-154,158-159,161,164-165,172,178-188,198-199,207,212,215,226
+packages/gooddata-eval/tests/test_agentic_conversation.py
+  s_ff58a109afe9d1::t_6ca6107b4d0b49 5,16-36
+  s_ff58a109afe9d1::t_8224913f28f26f 228-253,259-266,269-279,292
+  s_ff58a109afe9d1::t_dc22f3c397300c 280-281,283-284,286-291
+  s_ff58a109afe9d1::t_1d4b705a8293df 282,285,293
+  s_ff58a109afe9d1::t_8bf32f2c9d4652 201,215-219,226-227
+  s_ff58a109afe9d1::t_0363b98658c035 37-38
+  s_ff58a109afe9d1::t_51ce4a109a67e9 254-258,267-268
+  s_ff58a109afe9d1::t_8415787707d493 196-200,202-214,220-225
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_ff58a109afe9d1::t_c24ecf01299a6c 153-157,160-161,163-166,177,183-188,195-198,200-201,203-221,262
+  s_ff58a109afe9d1::t_9df00c24faf2a9 264
+  s_ff58a109afe9d1::t_a798b07fa74ee9 176
+  s_ff58a109afe9d1::t_11d295a6e41100 11-12
+  s_ff58a109afe9d1::t_db0e5c7fafd1c1 132-151
+  s_ff58a109afe9d1::t_6103a11fae84cc 191,199,202,222
+  s_ff58a109afe9d1::t_94ecdaff2c61b0 223
+  s_ff58a109afe9d1::t_f0d19451ecf204 244,250-252,263
+  s_ff58a109afe9d1::t_b28bb55d3dfda6 152,158-159,162
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "16b8722d26021112b7e1187e676c4b1d855ce8b4",
+  "prompts": {},
+  "sessions": {
+    "s_ff58a109afe9d1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "16642f8f-be33-4845-94e9-46a9cf8bf57c",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": null
+    }
+  }
+}
