@@ -263,6 +263,7 @@ def evaluate_agentic_visualization(
     dataset_name: str = "visualization",
     run_timestamp: str | None = None,
     model_version_override: str | None = None,
+    run_metadata_extra: dict | None = None,
     record_output_path: str | None = None,
 ) -> None:
     """Run visualization evaluation, log to Langfuse, and raise VisualizationAssertionError on failure."""
@@ -302,6 +303,7 @@ def evaluate_agentic_visualization(
             dataset_name,
             run_timestamp,
             model_version_override,
+            run_metadata_extra,
         )
         K = len(summary.run_results)
         traces_by_conv = find_traces_per_conversation(

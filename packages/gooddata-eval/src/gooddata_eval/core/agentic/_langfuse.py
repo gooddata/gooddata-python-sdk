@@ -305,7 +305,7 @@ def observe(
                 run_name=run_name,
                 dataset_item_id=dataset_item_id,
                 trace_id=trace_id,
-                metadata=run_metadata or {"testing_framework": "tavern-e2e"},
+                metadata=run_metadata or {},
                 run_description="",
             )
             _log.debug(
@@ -383,14 +383,31 @@ def build_run_context(
     dataset_name: str,
     run_timestamp: str | None,
     model_version_override: str | None,
+    run_metadata_extra: dict[str, Any] | None = None,
 ) -> tuple[str, dict[str, Any]]:
-    """Return (run_name_base, run_metadata) with model version resolved from workspace API."""
+    """Return (run_name_base, run_metadata) with model version resolved from workspace API.
+
+    Args:
+        host: GoodData host URL.
+        token: API token used to resolve the workspace model version.
+        workspace_id: Workspace whose active LLM provider is read when no override is given.
+        dataset_name: Langfuse dataset name; used as the run-name prefix.
+        run_timestamp: Shared run timestamp for the run name (falls back to the current time).
+        model_version_override: Explicit model-version tag; when set it wins over the
+            workspace lookup.
+        run_metadata_extra: Optional extra key/values added to the dataset-run metadata
+            (e.g. a testing-framework tag or a CI run id for scoping). Default None keeps
+            behavior unchanged. The SDK-derived model_version is applied last and cannot
+            be overwritten by this dict.
+    """
     model = get_model_version(host, token, workspace_id, model_version_override)
     ts = run_timestamp or datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     base = f"{dataset_name}_{ts}"
     if model:
         base = f"{base}_{model}"
-    metadata: dict[str, Any] = {"testing_framework": "tavern-e2e"}
+    # Caller supplies its own run tags (e.g. testing_framework); model_version is applied
+    # last so the SDK-derived value cannot be overwritten by run_metadata_extra.
+    metadata: dict[str, Any] = dict(run_metadata_extra) if run_metadata_extra else {}
     if model:
         metadata["model_version"] = model
     return base, metadata

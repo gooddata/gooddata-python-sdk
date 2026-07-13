@@ -438,6 +438,7 @@ def evaluate_agentic_alert_skill(
     dataset_name: str = "alert_skill",
     run_timestamp: str | None = None,
     model_version_override: str | None = None,
+    run_metadata_extra: dict | None = None,
 ) -> None:
     """Run alert-skill evaluation, log to Langfuse, and raise AlertSkillAssertionError on failure."""
     from datetime import datetime as _dt  # noqa: PLC0415
@@ -475,6 +476,7 @@ def evaluate_agentic_alert_skill(
             dataset_name,
             run_timestamp,
             model_version_override,
+            run_metadata_extra,
         )
         traces_by_conv = find_traces_per_conversation(
             langfuse,
