@@ -152,6 +152,7 @@ def evaluate_agentic_general_question(
     dataset_name: str = "general_question",
     run_timestamp: str | None = None,
     model_version_override: str | None = None,
+    run_metadata_extra: dict | None = None,
 ) -> None:
     """Run general-question evaluation, log to Langfuse, and raise on failure."""
     from datetime import datetime as _dt  # noqa: PLC0415
@@ -188,6 +189,7 @@ def evaluate_agentic_general_question(
             dataset_name,
             run_timestamp,
             model_version_override,
+            run_metadata_extra,
         )
         traces_by_conv = find_traces_per_conversation(
             langfuse,
