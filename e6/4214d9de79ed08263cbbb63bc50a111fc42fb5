@@ -1,0 +1,32 @@
+packages/gooddata-sdk/src/gooddata_sdk/compute/model/filter.py
+  s_967138971ee7bb::t_2f471b4c5aa13d 673
+  s_967138971ee7bb::t_07a694fe8fa6d3 6
+packages/gooddata-pandas/pyproject.toml
+  s_967138971ee7bb::t_1283fe73f2b4ac 63
+packages/gooddata-sdk/pyproject.toml
+  s_967138971ee7bb::t_6f92e6b791f600 70
+packages/gooddata-fdw/pyproject.toml
+  s_967138971ee7bb::t_6cd724b923a0d6 55
+pyproject.toml
+  s_967138971ee7bb::t_0507772d294c50 41,45,48
+  s_967138971ee7bb::t_c156e5bade9eb5 77-78
+  s_967138971ee7bb::t_66c1a482813d64 62
+uv.lock
+  s_967138971ee7bb::t_d3be9c9ed82343 913,1047,1170,1172,1192,1195-1196,1198,1263,1642,1653,1655,1992,1994,1996,2081,2090,2092,2732-2752,2913-2921,2933,2943,2945,2949,2951,2956-2968,2975,2977,2994-3014,3132,3138,3140
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.5",
+  "base_commit_sha": "e64214d9de79ed08263cbbb63bc50a111fc42fb5",
+  "prompts": {},
+  "sessions": {
+    "s_967138971ee7bb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7c0ba5bc-a1e7-47b0-ba91-7031e39e7afc",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}
