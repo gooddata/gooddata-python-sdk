@@ -101,6 +101,8 @@ class FlightServerMethods:
                     f"While the result exists, it is of an unexpected type: {type(result).__name__} ",
                 ).to_internal_error()
 
+            finalizer = FlightServerMethods.call_finalizer_middleware(context)
+
             rlock, data = result.acquire_data()
 
             def _on_end(_: pyarrow.ArrowException | None) -> None:
@@ -121,7 +123,6 @@ class FlightServerMethods:
                         # log and sink these Exceptions - not much to do
                         _LOGGER.error("do_get_close_failed", exc_info=True)
 
-            finalizer = FlightServerMethods.call_finalizer_middleware(context)
             finalizer.register_on_end(_on_end)
 
             if isinstance(data, pyarrow.Table):
