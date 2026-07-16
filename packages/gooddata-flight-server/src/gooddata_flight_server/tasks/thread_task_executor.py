@@ -158,6 +158,7 @@ class _TaskExecution:
         "_result_future",
         "_lock",
         "_completed",
+        "_done",
         "_stats",
     )
 
@@ -189,6 +190,8 @@ class _TaskExecution:
         # all these are protected using the lock
         self._result_future: Future[Union[TaskResult, TaskError]] | None = None
         self._completed: threading.Condition = threading.Condition(self._lock)
+        # indicates the task actually finished
+        self._done: bool = False
 
     @property
     def task(self) -> Task:
@@ -235,6 +238,7 @@ class _TaskExecution:
 
         with self._lock:
             execution_result = self._cb.process_task_result(self, self._result_future)
+            self._done = True
             self._completed.notify_all()
 
         self._complete_execution_span(execution_result)
@@ -291,7 +295,7 @@ class _TaskExecution:
 
     def wait_for_completion(self, timeout: float | None = None) -> None:
         with self._lock:
-            completed = self._completed.wait(timeout=timeout)
+            completed = self._completed.wait_for(lambda: self._done, timeout=timeout)
 
         if not completed:
             raise TaskWaitTimeoutError(task_id=self._task.task_id, cmd=self._task.cmd)
