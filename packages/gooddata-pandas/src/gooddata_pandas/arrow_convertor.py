@@ -7,7 +7,7 @@ from typing import Callable
 import numpy
 import orjson
 import pandas
-from gooddata_sdk.type_converter import AttributeConverterStore
+from gooddata_sdk.type_converter import AttributeConverterStore, DateConverter, DatetimeConverter
 
 from gooddata_pandas.arrow_types import TypesMapper
 
@@ -98,9 +98,30 @@ def convert_label_values(label_id: str, values: list, model_labels: dict) -> lis
     Returns:
         Converted list, or the original *values* object when no conversion is needed.
     """
+    # pick the converter for this label's granularity (None for plain text attributes)
     converter = _get_date_converter_for_label(label_id, model_labels)
     if converter is None:
         return values
+
+    if isinstance(converter, (DateConverter, DatetimeConverter)):
+        # Date/datetime granularity is costly, so vectorize it in three steps:
+
+        # 1) parse each raw string into a datetime.date/datetime with the cheap
+        #    per-value to_type() (handles partial dates like "2023" or "2023-01");
+        #    keep None as None. This step stays per-value so that pandas
+        #    does not re-infer the date format from the raw strings in step 2.
+        typed = [converter.to_type(v) if v is not None else None for v in values]
+
+        # 2) convert the whole column to Timestamps in one vectorized call (this
+        #    single call replaces N per-value ones; None becomes NaT here).
+        converted = pandas.to_datetime(typed)
+
+        # 3) rebuild the list, restoring None wherever the input was None so that NaT
+        #    does not leak into the output.
+        return [None if orig is None else c for orig, c in zip(values, converted)]
+
+    # WEEK / QUARTER (StringConverter) and integer granularities are cheap per value
+    # and could change type subtly if batched, so convert them one by one (None kept).
     return [converter.to_external_type(v) if v is not None else None for v in values]
 
 
