@@ -677,30 +677,45 @@ def _compute_primary_labels_from_inline(
     """
     result: dict[int, dict[str, str]] = {}
     label_meta = xtab_meta.get("labelMetadata", {})
-    row_types = _get_row_types(table)
-    data_row_mask = [rt == 0 for rt in row_types]
+
+    # Project to only the columns this function reads - __row_type plus the label
+    # and primary-label columns - before filtering. Filtering the whole table would
+    # also copy every metric column for the data rows even though only these
+    # attribute columns are ever read below.
+    # table.select is zero-copy, so the subsequent filter copies just these columns.
+    needed_cols = [_COL_ROW_TYPE]
+    for ref in label_refs:
+        info = label_meta.get(ref, {})
+        label_id = label_ref_to_id.get(ref, info.get("labelId", ""))
+        primary_label_id = info.get("primaryLabelId", label_id)
+        for col in (label_id, primary_label_id):
+            if col in table.schema.names and col not in needed_cols:
+                needed_cols.append(col)
+
+    projected = table.select(needed_cols)
+
+    # Extract the data rows (row_type == 0) once and reuse
+    row_type_col = projected.column(_COL_ROW_TYPE)
+    data_rows = (
+        projected.filter(pc.equal(row_type_col, 0)) if pc.any(pc.not_equal(row_type_col, 0)).as_py() else projected
+    )
 
     for j, ref in enumerate(label_refs):
         info = label_meta.get(ref, {})
         label_id = label_ref_to_id.get(ref, info.get("labelId", ""))
         primary_label_id = info.get("primaryLabelId", label_id)
 
-        display_vals = table.column(label_id).to_pylist()
-
-        if label_id == primary_label_id:
+        if label_id == primary_label_id or primary_label_id not in table.schema.names:
+            # identity (or fallback when the primary column is absent): map each
+            # distinct display value to itself.
             mapping: dict[str, str] = {
-                v: v for v, is_data in zip(display_vals, data_row_mask) if is_data and isinstance(v, str)
-            }
-        elif primary_label_id in table.schema.names:
-            primary_vals = table.column(primary_label_id).to_pylist()
-            mapping = {
-                p: d
-                for p, d, is_data in zip(primary_vals, display_vals, data_row_mask)
-                if is_data and isinstance(p, str) and isinstance(d, str)
+                v: v for v in data_rows.column(label_id).unique().to_pylist() if isinstance(v, str)
             }
         else:
-            # Fallback: identity (primary label data not present in table)
-            mapping = {v: v for v, is_data in zip(display_vals, data_row_mask) if is_data and isinstance(v, str)}
+            # primary != display: map each primary value to its display value
+            primary_vals = data_rows.column(primary_label_id).to_pylist()
+            display_vals = data_rows.column(label_id).to_pylist()
+            mapping = {p: d for p, d in zip(primary_vals, display_vals) if isinstance(p, str) and isinstance(d, str)}
 
         result[j] = mapping
     return result
