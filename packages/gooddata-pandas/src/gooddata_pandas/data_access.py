@@ -340,22 +340,21 @@ def _find_attribute(attributes: list[CatalogAttribute], id_obj: IdObjType) -> Un
     return None
 
 
-def _typed_result(attributes: list[CatalogAttribute], attribute: Attribute, result_values: list[Any]) -> list[Any]:
+def _resolve_catalog_attribute(attributes: list[CatalogAttribute], attribute: Attribute) -> CatalogAttribute:
     """
-    Internal function to convert result_values to proper data types.
+    Find the CatalogAttribute matching the given execution attribute.
 
     Args:
         attributes (list[CatalogAttribute]): The catalog of attributes.
-        attribute (Attribute): The attribute for which the typed result will be computed.
-        result_values (list[Any]): A list of raw values.
+        attribute (Attribute): The execution attribute to resolve.
 
     Returns:
-        list[Any]: A list of converted values with proper data types.
+        CatalogAttribute: The matching catalog attribute.
     """
     catalog_attribute = _find_attribute(attributes, attribute.label)
     if catalog_attribute is None:
         raise ValueError(f"Unable to find attribute {attribute.label} in catalog")
-    return _typed_attribute_values(catalog_attribute, result_values)
+    return catalog_attribute
 
 
 def _extract_from_attributes_and_maybe_metrics(
@@ -399,6 +398,16 @@ def _extract_from_attributes_and_maybe_metrics(
     index_to_attribute = {index_name: exec_def.attributes[i] for index_name, i in safe_index_to_attr_idx.items()}
     col_to_attribute = {col: exec_def.attributes[i] for col, i in col_to_attr_idx.items()}
 
+    # resolve the matching CatalogAttribute for each index / attribute column once:
+    # it does not change during the batch iteration
+    index_to_catalog_attribute = {
+        index_name: _resolve_catalog_attribute(attributes, attribute)
+        for index_name, attribute in index_to_attribute.items()
+    }
+    col_to_catalog_attribute = {
+        col: _resolve_catalog_attribute(attributes, attribute) for col, attribute in col_to_attribute.items()
+    }
+
     # datastructures to return
     index: dict[str, list[Any]] = {idx_name: [] for idx_name in safe_index_to_attr_idx}
     data: dict[str, list[Any]] = {col: [] for col in cols}
@@ -406,13 +415,11 @@ def _extract_from_attributes_and_maybe_metrics(
     while True:
         for idx_name in index:
             rs = result.get_all_header_values(attribute_dim, safe_index_to_attr_idx[idx_name])
-            attribute = index_to_attribute[idx_name]
-            index[idx_name] += _typed_result(attributes, attribute, rs)
+            index[idx_name] += _typed_attribute_values(index_to_catalog_attribute[idx_name], rs)
         for col in cols:
             if col in col_to_attr_idx:
                 rs = result.get_all_header_values(attribute_dim, col_to_attr_idx[col])
-                attribute = col_to_attribute[col]
-                data[col] += _typed_result(attributes, attribute, rs)
+                data[col] += _typed_attribute_values(col_to_catalog_attribute[col], rs)
             elif col_to_metric_idx[col] < len(result.data):
                 data[col] += result.data[col_to_metric_idx[col]]
         if result.is_complete(attribute_dim):
