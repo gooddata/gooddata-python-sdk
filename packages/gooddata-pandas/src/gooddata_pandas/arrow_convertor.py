@@ -4,6 +4,7 @@ from __future__ import annotations
 import logging
 from typing import Callable
 
+import numpy
 import orjson
 import pandas
 from gooddata_sdk.type_converter import AttributeConverterStore
@@ -12,6 +13,7 @@ from gooddata_pandas.arrow_types import TypesMapper
 
 try:
     import pyarrow as pa
+    import pyarrow.compute as pc
 except ImportError as _exc:
     raise ImportError(
         "pyarrow is required for Arrow support. Install it with: pip install gooddata-pandas[arrow]"
@@ -420,12 +422,15 @@ def reorder_grand_totals(
         return table
     if _COL_ROW_TYPE not in table.schema.names:
         return table
-    row_type_vals = table.column(_COL_ROW_TYPE).to_pylist()
-    grand_mask = pa.array([v == 2 for v in row_type_vals], type=pa.bool_())
-    grand_total_rows = table.filter(grand_mask)
+
+    # uses pyarrow.compute to run these in a vectorized way.
+    # the fill_null ensures that nulls are still marked as non-totals
+    row_type_col = table.column(_COL_ROW_TYPE)
+    grand_total_rows = table.filter(pc.fill_null(pc.equal(row_type_col, 2), False))
     if grand_total_rows.num_rows == 0:
         return table
-    data_and_sub_rows = table.filter(pa.array([v != 2 for v in row_type_vals], type=pa.bool_()))
+
+    data_and_sub_rows = table.filter(pc.fill_null(pc.not_equal(row_type_col, 2), True))
     return pa.concat_tables([grand_total_rows, data_and_sub_rows])
 
 
@@ -616,8 +621,8 @@ def compute_row_totals_indexes(
     else:
         # Output rows are Arrow rows; every total row (row_type != 0) is listed
         # in the total-indexes for every attribute level.
-        row_types = _get_row_types(table)
-        total_row_idxs = [i for i, rt in enumerate(row_types) if rt != 0]
+        row_types = table.column(_COL_ROW_TYPE).to_numpy(zero_copy_only=False)
+        total_row_idxs = numpy.nonzero(row_types != 0)[0].tolist()
 
         result = []
         for header in row_dim.get("headers", []):
