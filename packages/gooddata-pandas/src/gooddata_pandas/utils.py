@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import uuid
-from typing import Any, Union
+from typing import Any, Callable, Union
 
 import pandas
 from gooddata_sdk import (
@@ -16,7 +16,13 @@ from gooddata_sdk import (
     VisualizationAttribute,
     VisualizationMetric,
 )
-from gooddata_sdk.type_converter import AttributeConverterStore, DateConverter, DatetimeConverter, IntegerConverter
+from gooddata_sdk.type_converter import (
+    AttributeConverterStore,
+    Converter,
+    DateConverter,
+    DatetimeConverter,
+    IntegerConverter,
+)
 from gooddata_sdk.utils import filter_for_attributes_labels
 from pandas import Index, MultiIndex
 
@@ -25,10 +31,25 @@ DataItemDef = Union[Attribute, Metric, ObjId, str]
 IndexDef = Union[LabelItemDef, dict[str, LabelItemDef]]
 ColumnsDef = dict[str, DataItemDef]
 
+# Maps SDK attribute converters to the pandas function that converts their parsed
+# (already-typed) values into the external pandas type. These pandas functions are
+# vectorized: they accept a single value OR a whole column. This lets the JSON
+# extraction path convert an entire attribute column in one call instead of once per
+# value - see _typed_attribute_values.
+_ATTRIBUTE_EXTERNAL_CONVERSIONS: dict[type[Converter], Callable[[Any], Any]] = {
+    IntegerConverter: pandas.to_numeric,
+    DateConverter: pandas.to_datetime,
+    DatetimeConverter: pandas.to_datetime,
+}
+
+
 # register external pandas types to converters
-IntegerConverter.set_external_fnc(lambda self, value: pandas.to_numeric(value))
-DateConverter.set_external_fnc(lambda self, value: pandas.to_datetime(value))
-DatetimeConverter.set_external_fnc(lambda self, value: pandas.to_datetime(value))
+def _external_conversion(conversion_function: Callable[[Any], Any]) -> Callable[[object, Any], Any]:
+    return lambda instance, value: conversion_function(value)
+
+
+for _converter_cls, _conversion_function in _ATTRIBUTE_EXTERNAL_CONVERSIONS.items():
+    _converter_cls.set_external_fnc(_external_conversion(_conversion_function))
 
 
 def get_catalog_attributes_for_extract(
@@ -167,6 +188,32 @@ def _typed_attribute_value(ct_attr: CatalogAttribute, value: Any) -> Any:
     """
     converter = AttributeConverterStore.find_converter(ct_attr.dataset.dataset_type, ct_attr.granularity)
     return converter.to_external_type(value)
+
+
+def _typed_attribute_values(ct_attr: CatalogAttribute, values: list[Any]) -> list[Any]:
+    """
+    Batch equivalent of _typed_attribute_value: convert a whole attribute value column
+    to its external type in a single vectorized call rather than once per value.
+
+    Calling pandas.to_datetime / pandas.to_numeric per scalar is a well-known
+    performance pitfall; here each raw value is parsed with the (cheap) per-value
+    to_type() and the pandas conversion is then applied once to the whole column.
+
+    Args:
+        ct_attr (CatalogAttribute): The catalog attribute.
+        values (list[Any]): The values to convert.
+
+    Returns:
+        list[Any]: The converted values, in the same order.
+    """
+    converter = AttributeConverterStore.find_converter(ct_attr.dataset.dataset_type, ct_attr.granularity)
+    typed_values = [converter.to_type(value) for value in values]
+
+    conversion_function = _ATTRIBUTE_EXTERNAL_CONVERSIONS.get(type(converter))
+    if conversion_function is None:
+        return typed_values
+
+    return list(conversion_function(typed_values))
 
 
 def make_pandas_index(index: dict) -> Union[Index, MultiIndex] | None:

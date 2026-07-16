@@ -25,7 +25,7 @@ from gooddata_pandas.utils import (
     _str_to_obj_id,
     _to_attribute,
     _to_item,
-    _typed_attribute_value,
+    _typed_attribute_values,
     get_catalog_attributes_for_extract,
 )
 
@@ -355,7 +355,7 @@ def _typed_result(attributes: list[CatalogAttribute], attribute: Attribute, resu
     catalog_attribute = _find_attribute(attributes, attribute.label)
     if catalog_attribute is None:
         raise ValueError(f"Unable to find attribute {attribute.label} in catalog")
-    return [_typed_attribute_value(catalog_attribute, value) for value in result_values]
+    return _typed_attribute_values(catalog_attribute, result_values)
 
 
 def _extract_from_attributes_and_maybe_metrics(
