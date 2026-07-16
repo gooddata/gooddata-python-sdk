@@ -462,11 +462,11 @@ def _extract_from_arrow(
     metric_dim_idx_to_field = build_metric_field_index(table)
     model_labels = read_model_labels(table)
 
-    data: dict[str, list] = {}
+    data: dict[str, Any] = {}
     for col in cols:
         if col in col_to_metric_idx:
             field_name = metric_dim_idx_to_field[col_to_metric_idx[col]]
-            data[col] = table.column(field_name).to_pylist()
+            data[col] = table.column(field_name).to_numpy(zero_copy_only=False)
         else:
             attr = exec_def.attributes[col_to_attr_idx[col]]
             label_id = attr.label.id
