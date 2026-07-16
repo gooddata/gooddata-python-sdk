@@ -25,6 +25,7 @@ from gooddata_pandas.data_access import compute_and_extract
 
 try:
     from gooddata_pandas.arrow_convertor import (
+        _parse_schema_metadata,
         compute_column_totals_indexes,
         compute_primary_labels,
         compute_row_totals_indexes,
@@ -469,16 +470,18 @@ class DataFrameFactory:
         call site.
         """
         table = reorder_grand_totals(table, grand_totals_position)
+        schema_meta = _parse_schema_metadata(table)
         df = convert_arrow_table_to_dataframe(
             table,
             self_destruct=self._arrow_config.self_destruct,
             types_mapper=self._arrow_config.types_mapper,
             custom_mapping=self._arrow_config.custom_mapping,
             label_overrides=label_overrides,
+            schema_meta=schema_meta,
         )
-        row_totals_indexes = compute_row_totals_indexes(table, exec_response.dimensions)
-        column_totals_indexes = compute_column_totals_indexes(table, exec_response.dimensions)
-        primary_labels_from_index, primary_labels_from_columns = compute_primary_labels(table)
+        row_totals_indexes = compute_row_totals_indexes(table, exec_response.dimensions, schema_meta=schema_meta)
+        column_totals_indexes = compute_column_totals_indexes(table, exec_response.dimensions, schema_meta=schema_meta)
+        primary_labels_from_index, primary_labels_from_columns = compute_primary_labels(table, schema_meta=schema_meta)
         metadata = DataFrameMetadata(
             row_totals_indexes=row_totals_indexes,
             column_totals_indexes=column_totals_indexes,
@@ -588,22 +591,28 @@ class DataFrameFactory:
             label_overrides = {}
 
         table = reorder_grand_totals(table, grand_totals_position)
+        # parse the schema metadata once and share it across the sibling functions
+        # below; each of them would otherwise re-parse it from the table
+        schema_meta = _parse_schema_metadata(table)
         df = convert_arrow_table_to_dataframe(
             table,
             self_destruct=self._arrow_config.self_destruct,
             types_mapper=self._arrow_config.types_mapper,
             custom_mapping=self._arrow_config.custom_mapping,
             label_overrides=label_overrides,
+            schema_meta=schema_meta,
         )
         row_totals_indexes = (
-            compute_row_totals_indexes(table, execution_response.dimensions) if execution_response is not None else []
-        )
-        column_totals_indexes = (
-            compute_column_totals_indexes(table, execution_response.dimensions)
+            compute_row_totals_indexes(table, execution_response.dimensions, schema_meta=schema_meta)
             if execution_response is not None
             else []
         )
-        primary_labels_from_index, primary_labels_from_columns = compute_primary_labels(table)
+        column_totals_indexes = (
+            compute_column_totals_indexes(table, execution_response.dimensions, schema_meta=schema_meta)
+            if execution_response is not None
+            else []
+        )
+        primary_labels_from_index, primary_labels_from_columns = compute_primary_labels(table, schema_meta=schema_meta)
         metadata = DataFrameMetadata(
             row_totals_indexes=row_totals_indexes,
             column_totals_indexes=column_totals_indexes,

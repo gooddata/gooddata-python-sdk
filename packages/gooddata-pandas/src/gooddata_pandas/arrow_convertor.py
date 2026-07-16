@@ -429,7 +429,9 @@ def reorder_grand_totals(
     return pa.concat_tables([grand_total_rows, data_and_sub_rows])
 
 
-def compute_column_totals_indexes(table: pa.Table, execution_dims: list) -> list[list[int]]:
+def compute_column_totals_indexes(
+    table: pa.Table, execution_dims: list, schema_meta: dict | None = None
+) -> list[list[int]]:
     """
     Compute column_totals_indexes compatible with DataFrameMetadata from an Arrow table.
 
@@ -445,7 +447,9 @@ def compute_column_totals_indexes(table: pa.Table, execution_dims: list) -> list
         grand_total_* fields become output rows and are already covered by
         compute_row_totals_indexes.  Returns [] in that case.
     """
-    schema_meta = _parse_schema_metadata(table)
+    if schema_meta is None:
+        schema_meta = _parse_schema_metadata(table)
+
     xtab_meta = schema_meta[_META_XTAB]
     is_transposed = schema_meta[_META_VIEW]["isTransposed"]
 
@@ -518,7 +522,9 @@ def compute_column_totals_indexes(table: pa.Table, execution_dims: list) -> list
     return result
 
 
-def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[list[int]]:
+def compute_row_totals_indexes(
+    table: pa.Table, execution_dims: list, schema_meta: dict | None = None
+) -> list[list[int]]:
     """
     Compute row_totals_indexes compatible with DataFrameMetadata from an Arrow table.
 
@@ -534,7 +540,9 @@ def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[li
         Total rows are grand_total_N fields.  A field is total at level j only when
         j >= len(gdc["label_values"]), i.e. that label level is being aggregated.
     """
-    schema_meta = _parse_schema_metadata(table)
+    if schema_meta is None:
+        schema_meta = _parse_schema_metadata(table)
+
     xtab_meta = schema_meta[_META_XTAB]
     is_transposed = schema_meta[_META_VIEW]["isTransposed"]
 
@@ -709,6 +717,7 @@ def _compute_primary_labels_from_fields(
 
 def compute_primary_labels(
     table: pa.Table,
+    schema_meta: dict | None = None,
 ) -> tuple[dict[int, dict[str, str]], dict[int, dict[str, str]]]:
     """
     Compute primary_labels_from_index and primary_labels_from_columns from an Arrow table.
@@ -719,7 +728,9 @@ def compute_primary_labels(
     Returns:
         (primary_labels_from_index, primary_labels_from_columns)
     """
-    schema_meta = _parse_schema_metadata(table)
+    if schema_meta is None:
+        schema_meta = _parse_schema_metadata(table)
+
     xtab_meta = schema_meta[_META_XTAB]
     is_transposed = schema_meta[_META_VIEW]["isTransposed"]
 
@@ -750,6 +761,7 @@ def convert_arrow_table_to_dataframe(
     types_mapper: TypesMapper = TypesMapper.DEFAULT,
     custom_mapping: dict | None = None,
     label_overrides: dict | None = None,
+    schema_meta: dict | None = None,
 ) -> pandas.DataFrame:
     """
     Convert a pyarrow Table returned by the GoodData /binary execution endpoint
@@ -800,7 +812,9 @@ def convert_arrow_table_to_dataframe(
     else:
         raise ValueError("Unknown types_mapper value")
 
-    schema_meta = _parse_schema_metadata(table)
+    if schema_meta is None:
+        schema_meta = _parse_schema_metadata(table)
+
     xtab_meta = schema_meta[_META_XTAB]
     model_meta = schema_meta[_META_MODEL]
     is_transposed = schema_meta[_META_VIEW]["isTransposed"]
