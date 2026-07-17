@@ -445,14 +445,16 @@ def reorder_grand_totals(
         return table
 
     # uses pyarrow.compute to run these in a vectorized way.
-    # the fill_null ensures that nulls are still marked as non-totals
+    # the fill_null ensures that nulls are still marked as non-totals.
+    # (pyarrow.compute functions are generated at runtime, so ty cannot see them.)
     row_type_col = table.column(_COL_ROW_TYPE)
-    grand_total_rows = table.filter(pc.fill_null(pc.equal(row_type_col, 2), False))
+    is_grand_total = pc.fill_null(pc.equal(row_type_col, 2), False)  # ty: ignore[unresolved-attribute]
+    grand_total_rows = table.filter(is_grand_total)
     if grand_total_rows.num_rows == 0:
         return table
 
-    data_and_sub_rows = table.filter(pc.fill_null(pc.not_equal(row_type_col, 2), True))
-    return pa.concat_tables([grand_total_rows, data_and_sub_rows])
+    not_grand_total = pc.fill_null(pc.not_equal(row_type_col, 2), True)  # ty: ignore[unresolved-attribute]
+    return pa.concat_tables([grand_total_rows, table.filter(not_grand_total)])
 
 
 def compute_column_totals_indexes(
@@ -694,11 +696,13 @@ def _compute_primary_labels_from_inline(
 
     projected = table.select(needed_cols)
 
-    # Extract the data rows (row_type == 0) once and reuse
+    # Extract the data rows (row_type == 0) once and reuse. Only filter when totals
+    # are actually present - otherwise the projected table already is the data rows.
+    # (pyarrow.compute functions are generated at runtime, so ty cannot see them.)
     row_type_col = projected.column(_COL_ROW_TYPE)
-    data_rows = (
-        projected.filter(pc.equal(row_type_col, 0)) if pc.any(pc.not_equal(row_type_col, 0)).as_py() else projected
-    )
+    has_total_rows = pc.any(pc.not_equal(row_type_col, 0)).as_py()  # ty: ignore[unresolved-attribute]
+    data_row_mask = pc.equal(row_type_col, 0)  # ty: ignore[unresolved-attribute]
+    data_rows = projected.filter(data_row_mask) if has_total_rows else projected
 
     for j, ref in enumerate(label_refs):
         info = label_meta.get(ref, {})
