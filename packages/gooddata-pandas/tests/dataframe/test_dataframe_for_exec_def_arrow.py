@@ -206,6 +206,38 @@ def test_primary_labels_from_inline_fallback_identity() -> None:
     assert result == {0: {"New York": "New York", "Los Angeles": "Los Angeles"}}
 
 
+def test_primary_labels_from_inline_ignores_metric_columns_and_total_rows() -> None:
+    """Regression guard for the column-projection optimization.
+
+    _compute_primary_labels_from_inline projects to only the label/primary-label
+    columns before filtering to data rows. This table adds several unrelated
+    metric/grand-total columns plus a total row, with primaryLabelId != labelId,
+    so a projection that dropped a needed label column (or a filter that leaked
+    the total row) would produce a wrong mapping or raise. The separate-column
+    test above cannot catch that: its table has no extra columns to drop and no
+    total row to exclude.
+    """
+    table = pa.table(
+        {
+            "__row_type": pa.array([0, 0, 2], type=pa.int8()),  # last row is a total
+            "display_label": pa.array(["New York", "Los Angeles", "sum"], type=pa.string()),
+            "primary_label": pa.array(["ny", "la", "sum"], type=pa.string()),
+            "metric_group_1": pa.array([1.0, 2.0, 3.0], type=pa.float64()),
+            "metric_group_2": pa.array([4.0, 5.0, 6.0], type=pa.float64()),
+            "grand_total_1": pa.array([7.0, 8.0, 9.0], type=pa.float64()),
+        }
+    )
+    xtab_meta = {"labelMetadata": {"l0": {"labelId": "display_label", "primaryLabelId": "primary_label"}}}
+    result = _compute_primary_labels_from_inline(
+        table,
+        label_refs=["l0"],
+        label_ref_to_id={"l0": "display_label"},
+        xtab_meta=xtab_meta,
+    )
+    # total row excluded; primary -> display for the data rows only
+    assert result == {0: {"ny": "New York", "la": "Los Angeles"}}
+
+
 # ---------------------------------------------------------------------------
 # _compute_primary_labels_from_fields — non-string skip branch
 # ---------------------------------------------------------------------------

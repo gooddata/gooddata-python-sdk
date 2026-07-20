@@ -4,14 +4,16 @@ from __future__ import annotations
 import logging
 from typing import Callable
 
+import numpy
 import orjson
 import pandas
-from gooddata_sdk.type_converter import AttributeConverterStore
+from gooddata_sdk.type_converter import AttributeConverterStore, DateConverter, DatetimeConverter
 
 from gooddata_pandas.arrow_types import TypesMapper
 
 try:
     import pyarrow as pa
+    import pyarrow.compute as pc
 except ImportError as _exc:
     raise ImportError(
         "pyarrow is required for Arrow support. Install it with: pip install gooddata-pandas[arrow]"
@@ -96,9 +98,30 @@ def convert_label_values(label_id: str, values: list, model_labels: dict) -> lis
     Returns:
         Converted list, or the original *values* object when no conversion is needed.
     """
+    # pick the converter for this label's granularity (None for plain text attributes)
     converter = _get_date_converter_for_label(label_id, model_labels)
     if converter is None:
         return values
+
+    if isinstance(converter, (DateConverter, DatetimeConverter)):
+        # Date/datetime granularity is costly, so vectorize it in three steps:
+
+        # 1) parse each raw string into a datetime.date/datetime with the cheap
+        #    per-value to_type() (handles partial dates like "2023" or "2023-01");
+        #    keep None as None. This step stays per-value so that pandas
+        #    does not re-infer the date format from the raw strings in step 2.
+        typed = [converter.to_type(v) if v is not None else None for v in values]
+
+        # 2) convert the whole column to Timestamps in one vectorized call (this
+        #    single call replaces N per-value ones; None becomes NaT here).
+        converted = pandas.to_datetime(typed)
+
+        # 3) rebuild the list, restoring None wherever the input was None so that NaT
+        #    does not leak into the output.
+        return [None if orig is None else c for orig, c in zip(values, converted)]
+
+    # WEEK / QUARTER (StringConverter) and integer granularities are cheap per value
+    # and could change type subtly if batched, so convert them one by one (None kept).
     return [converter.to_external_type(v) if v is not None else None for v in values]
 
 
@@ -420,16 +443,23 @@ def reorder_grand_totals(
         return table
     if _COL_ROW_TYPE not in table.schema.names:
         return table
-    row_type_vals = table.column(_COL_ROW_TYPE).to_pylist()
-    grand_mask = pa.array([v == 2 for v in row_type_vals], type=pa.bool_())
-    grand_total_rows = table.filter(grand_mask)
+
+    # uses pyarrow.compute to run these in a vectorized way.
+    # the fill_null ensures that nulls are still marked as non-totals.
+    # (pyarrow.compute functions are generated at runtime, so ty cannot see them.)
+    row_type_col = table.column(_COL_ROW_TYPE)
+    is_grand_total = pc.fill_null(pc.equal(row_type_col, 2), False)  # ty: ignore[unresolved-attribute]
+    grand_total_rows = table.filter(is_grand_total)
     if grand_total_rows.num_rows == 0:
         return table
-    data_and_sub_rows = table.filter(pa.array([v != 2 for v in row_type_vals], type=pa.bool_()))
-    return pa.concat_tables([grand_total_rows, data_and_sub_rows])
+
+    not_grand_total = pc.fill_null(pc.not_equal(row_type_col, 2), True)  # ty: ignore[unresolved-attribute]
+    return pa.concat_tables([grand_total_rows, table.filter(not_grand_total)])
 
 
-def compute_column_totals_indexes(table: pa.Table, execution_dims: list) -> list[list[int]]:
+def compute_column_totals_indexes(
+    table: pa.Table, execution_dims: list, schema_meta: dict | None = None
+) -> list[list[int]]:
     """
     Compute column_totals_indexes compatible with DataFrameMetadata from an Arrow table.
 
@@ -445,7 +475,9 @@ def compute_column_totals_indexes(table: pa.Table, execution_dims: list) -> list
         grand_total_* fields become output rows and are already covered by
         compute_row_totals_indexes.  Returns [] in that case.
     """
-    schema_meta = _parse_schema_metadata(table)
+    if schema_meta is None:
+        schema_meta = _parse_schema_metadata(table)
+
     xtab_meta = schema_meta[_META_XTAB]
     is_transposed = schema_meta[_META_VIEW]["isTransposed"]
 
@@ -518,7 +550,9 @@ def compute_column_totals_indexes(table: pa.Table, execution_dims: list) -> list
     return result
 
 
-def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[list[int]]:
+def compute_row_totals_indexes(
+    table: pa.Table, execution_dims: list, schema_meta: dict | None = None
+) -> list[list[int]]:
     """
     Compute row_totals_indexes compatible with DataFrameMetadata from an Arrow table.
 
@@ -534,7 +568,9 @@ def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[li
         Total rows are grand_total_N fields.  A field is total at level j only when
         j >= len(gdc["label_values"]), i.e. that label level is being aggregated.
     """
-    schema_meta = _parse_schema_metadata(table)
+    if schema_meta is None:
+        schema_meta = _parse_schema_metadata(table)
+
     xtab_meta = schema_meta[_META_XTAB]
     is_transposed = schema_meta[_META_VIEW]["isTransposed"]
 
@@ -608,8 +644,8 @@ def compute_row_totals_indexes(table: pa.Table, execution_dims: list) -> list[li
     else:
         # Output rows are Arrow rows; every total row (row_type != 0) is listed
         # in the total-indexes for every attribute level.
-        row_types = _get_row_types(table)
-        total_row_idxs = [i for i, rt in enumerate(row_types) if rt != 0]
+        row_types = table.column(_COL_ROW_TYPE).to_numpy(zero_copy_only=False)
+        total_row_idxs = numpy.nonzero(row_types != 0)[0].tolist()
 
         result = []
         for header in row_dim.get("headers", []):
@@ -643,30 +679,47 @@ def _compute_primary_labels_from_inline(
     """
     result: dict[int, dict[str, str]] = {}
     label_meta = xtab_meta.get("labelMetadata", {})
-    row_types = _get_row_types(table)
-    data_row_mask = [rt == 0 for rt in row_types]
+
+    # Project to only the columns this function reads - __row_type plus the label
+    # and primary-label columns - before filtering. Filtering the whole table would
+    # also copy every metric column for the data rows even though only these
+    # attribute columns are ever read below.
+    # table.select is zero-copy, so the subsequent filter copies just these columns.
+    needed_cols = [_COL_ROW_TYPE]
+    for ref in label_refs:
+        info = label_meta.get(ref, {})
+        label_id = label_ref_to_id.get(ref, info.get("labelId", ""))
+        primary_label_id = info.get("primaryLabelId", label_id)
+        for col in (label_id, primary_label_id):
+            if col in table.schema.names and col not in needed_cols:
+                needed_cols.append(col)
+
+    projected = table.select(needed_cols)
+
+    # Extract the data rows (row_type == 0) once and reuse. Only filter when totals
+    # are actually present - otherwise the projected table already is the data rows.
+    # (pyarrow.compute functions are generated at runtime, so ty cannot see them.)
+    row_type_col = projected.column(_COL_ROW_TYPE)
+    has_total_rows = pc.any(pc.not_equal(row_type_col, 0)).as_py()  # ty: ignore[unresolved-attribute]
+    data_row_mask = pc.equal(row_type_col, 0)  # ty: ignore[unresolved-attribute]
+    data_rows = projected.filter(data_row_mask) if has_total_rows else projected
 
     for j, ref in enumerate(label_refs):
         info = label_meta.get(ref, {})
         label_id = label_ref_to_id.get(ref, info.get("labelId", ""))
         primary_label_id = info.get("primaryLabelId", label_id)
 
-        display_vals = table.column(label_id).to_pylist()
-
-        if label_id == primary_label_id:
+        if label_id == primary_label_id or primary_label_id not in table.schema.names:
+            # identity (or fallback when the primary column is absent): map each
+            # distinct display value to itself.
             mapping: dict[str, str] = {
-                v: v for v, is_data in zip(display_vals, data_row_mask) if is_data and isinstance(v, str)
-            }
-        elif primary_label_id in table.schema.names:
-            primary_vals = table.column(primary_label_id).to_pylist()
-            mapping = {
-                p: d
-                for p, d, is_data in zip(primary_vals, display_vals, data_row_mask)
-                if is_data and isinstance(p, str) and isinstance(d, str)
+                v: v for v in data_rows.column(label_id).unique().to_pylist() if isinstance(v, str)
             }
         else:
-            # Fallback: identity (primary label data not present in table)
-            mapping = {v: v for v, is_data in zip(display_vals, data_row_mask) if is_data and isinstance(v, str)}
+            # primary != display: map each primary value to its display value
+            primary_vals = data_rows.column(primary_label_id).to_pylist()
+            display_vals = data_rows.column(label_id).to_pylist()
+            mapping = {p: d for p, d in zip(primary_vals, display_vals) if isinstance(p, str) and isinstance(d, str)}
 
         result[j] = mapping
     return result
@@ -709,6 +762,7 @@ def _compute_primary_labels_from_fields(
 
 def compute_primary_labels(
     table: pa.Table,
+    schema_meta: dict | None = None,
 ) -> tuple[dict[int, dict[str, str]], dict[int, dict[str, str]]]:
     """
     Compute primary_labels_from_index and primary_labels_from_columns from an Arrow table.
@@ -719,7 +773,9 @@ def compute_primary_labels(
     Returns:
         (primary_labels_from_index, primary_labels_from_columns)
     """
-    schema_meta = _parse_schema_metadata(table)
+    if schema_meta is None:
+        schema_meta = _parse_schema_metadata(table)
+
     xtab_meta = schema_meta[_META_XTAB]
     is_transposed = schema_meta[_META_VIEW]["isTransposed"]
 
@@ -750,6 +806,7 @@ def convert_arrow_table_to_dataframe(
     types_mapper: TypesMapper = TypesMapper.DEFAULT,
     custom_mapping: dict | None = None,
     label_overrides: dict | None = None,
+    schema_meta: dict | None = None,
 ) -> pandas.DataFrame:
     """
     Convert a pyarrow Table returned by the GoodData /binary execution endpoint
@@ -800,7 +857,9 @@ def convert_arrow_table_to_dataframe(
     else:
         raise ValueError("Unknown types_mapper value")
 
-    schema_meta = _parse_schema_metadata(table)
+    if schema_meta is None:
+        schema_meta = _parse_schema_metadata(table)
+
     xtab_meta = schema_meta[_META_XTAB]
     model_meta = schema_meta[_META_MODEL]
     is_transposed = schema_meta[_META_VIEW]["isTransposed"]
