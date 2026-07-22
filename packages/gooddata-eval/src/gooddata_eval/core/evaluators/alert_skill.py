@@ -35,7 +35,8 @@ def _extract_automation_id(tool_event) -> str | None:
     result_data = tool_event.parsed_result()
     if not isinstance(result_data, dict):
         return None
-    return result_data.get("id") or (result_data.get("data") or {}).get("id")
+    nested_data = result_data.get("data")
+    return result_data.get("id") or (nested_data.get("id") if isinstance(nested_data, dict) else None)
 
 
 def _check_threshold(expected: dict, actual_args: dict) -> bool:

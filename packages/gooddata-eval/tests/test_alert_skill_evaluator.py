@@ -111,3 +111,14 @@ def test_alert_evaluator_automation_id_none_when_result_has_no_id():
     actual_args = {"operator": "LESS_THAN", "threshold": 20000}
     result = get_evaluator("alert_skill").evaluate(_item(expected), _chat_with_alert(actual_args, result={}))
     assert result.detail["automation_id"] is None
+
+
+def test_alert_evaluator_automation_id_none_when_nested_data_is_not_a_mapping():
+    # Malformed/unexpected payload shape: "data" present but not a dict -> must
+    # not crash, just report automation_id=None (CodeRabbit review on PR #1694).
+    expected = {"Operator": "LESS_THAN", "Threshold": "20000"}
+    actual_args = {"operator": "LESS_THAN", "threshold": 20000}
+    result = get_evaluator("alert_skill").evaluate(
+        _item(expected), _chat_with_alert(actual_args, result={"data": "not-a-mapping"})
+    )
+    assert result.detail["automation_id"] is None
