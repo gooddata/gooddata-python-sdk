@@ -15,11 +15,15 @@ def _item(expected_output: dict) -> DatasetItem:
     )
 
 
-def _chat_with_alert(args: dict) -> ChatResult:
+def _chat_with_alert(args: dict, result: dict | None = None) -> ChatResult:
     return ChatResult.model_validate(
         {
             "toolCallEvents": [
-                {"functionName": "create_metric_alert", "functionArguments": json.dumps(args), "result": "{}"}
+                {
+                    "functionName": "create_metric_alert",
+                    "functionArguments": json.dumps(args),
+                    "result": json.dumps(result if result is not None else {}),
+                }
             ]
         }
     )
@@ -81,3 +85,29 @@ def test_alert_evaluator_fails_when_no_tool_call():
     )
     assert result.passed is False
     assert result.detail["alert_created"] is False
+    assert result.detail["automation_id"] is None
+
+
+def test_alert_evaluator_extracts_automation_id_from_top_level_result():
+    expected = {"Operator": "LESS_THAN", "Threshold": "20000"}
+    actual_args = {"operator": "LESS_THAN", "threshold": 20000}
+    result = get_evaluator("alert_skill").evaluate(
+        _item(expected), _chat_with_alert(actual_args, result={"id": "automation-abc-123"})
+    )
+    assert result.detail["automation_id"] == "automation-abc-123"
+
+
+def test_alert_evaluator_extracts_automation_id_from_nested_data_result():
+    expected = {"Operator": "LESS_THAN", "Threshold": "20000"}
+    actual_args = {"operator": "LESS_THAN", "threshold": 20000}
+    result = get_evaluator("alert_skill").evaluate(
+        _item(expected), _chat_with_alert(actual_args, result={"data": {"id": "automation-xyz-789"}})
+    )
+    assert result.detail["automation_id"] == "automation-xyz-789"
+
+
+def test_alert_evaluator_automation_id_none_when_result_has_no_id():
+    expected = {"Operator": "LESS_THAN", "Threshold": "20000"}
+    actual_args = {"operator": "LESS_THAN", "threshold": 20000}
+    result = get_evaluator("alert_skill").evaluate(_item(expected), _chat_with_alert(actual_args, result={}))
+    assert result.detail["automation_id"] is None

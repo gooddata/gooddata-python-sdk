@@ -25,6 +25,19 @@ def _extract_metric_id(metric_str: str) -> str | None:
     return match.group(1) if match else None
 
 
+def _extract_automation_id(tool_event) -> str | None:
+    """Real server-assigned id of the automation this call created.
+
+    Mirrors ``core/agentic/alert_skill.py``'s ``_extract_alert_call`` — the id
+    lives in the tool *result* (what the server assigned), not the tool call
+    *arguments* (what the agent asked for).
+    """
+    result_data = tool_event.parsed_result()
+    if not isinstance(result_data, dict):
+        return None
+    return result_data.get("id") or (result_data.get("data") or {}).get("id")
+
+
 def _check_threshold(expected: dict, actual_args: dict) -> bool:
     operator = expected.get("Operator", "")
     if operator == "ANOMALY":
@@ -58,10 +71,11 @@ class AlertSkillEvaluator:
             return ItemEvaluation(
                 passed=False,
                 rank_key=(False,) * 7,
-                detail={"alert_created": False},
+                detail={"alert_created": False, "automation_id": None},
             )
 
         args = tool_event.parsed_arguments()
+        automation_id = _extract_automation_id(tool_event)
 
         operator_correct = True
         threshold_correct = True
@@ -126,5 +140,9 @@ class AlertSkillEvaluator:
                 "filters_correct": filters_correct,
                 "metric_correct": metric_correct,
                 "recipients_correct": recipients_correct,
+                # Real server-assigned id of the automation this run created —
+                # lets a caller (e.g. a cleanup step) delete the exact object
+                # created instead of diffing the workspace catalog before/after.
+                "automation_id": automation_id,
             },
         )
