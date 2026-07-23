@@ -28,7 +28,7 @@ class MetricSkillEvaluator:
             return ItemEvaluation(
                 passed=False,
                 rank_key=(False, False, False),
-                detail={"metric_created": False, "maql_correct": False, "format_correct": False},
+                detail={"metric_created": False, "maql_correct": False, "format_correct": False, "metric_id": None},
             )
 
         result = tool_event.parsed_result()
@@ -54,5 +54,10 @@ class MetricSkillEvaluator:
                 "actual_maql": actual_maql,
                 "expected_format": expected_format,
                 "actual_format": actual_format,
+                # The real id of the metric this run created, straight from the
+                # create_metric tool result — lets a caller (e.g. a cleanup step)
+                # delete the exact object created instead of diffing the workspace
+                # catalog before/after and guessing by name.
+                "metric_id": payload.get("metric_id"),
             },
         )
