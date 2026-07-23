@@ -21,6 +21,13 @@ pygmentsUseClassic = false
 # See https://help.farbox.com/pygments.html
 pygmentsStyle = "tango"
 
+# The theme's head.html reads the lowercase "hugo_env" variable as the
+# search-engine indexing switch (HUGO_ENV itself must stay "production" in CI
+# because it selects the config environment). Hugo's default getenv policy
+# only allows ^HUGO_ and ^CI$, so allow it explicitly.
+[security.funcs]
+  getenv = ['^HUGO_', '^CI$', '^hugo_env$']
+
 [module]
   proxy = "direct"
   [module.hugoVersion]

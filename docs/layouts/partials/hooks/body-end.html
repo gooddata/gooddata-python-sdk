@@ -25,3 +25,7 @@
     data-modal-title-color="#1c0d3f"
     data-modal-title-font-family="bca6d3310b5c9dae1dae416e8abc8405,helvetica,arial,sans-serif"
 ></script>
+
+{{/* Dark-mode theme switcher */}}
+{{ $themeSwitcherJS := resources.Get "js/theme-switcher.js" | minify | fingerprint }}
+<script src="{{ $themeSwitcherJS.RelPermalink }}" integrity="{{ $themeSwitcherJS.Data.integrity }}" defer></script>
