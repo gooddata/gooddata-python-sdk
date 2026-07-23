@@ -32,6 +32,7 @@ def test_metric_evaluator_passes_on_exact_match():
     assert result.passed is True
     assert result.detail["maql_correct"] is True
     assert result.detail["format_correct"] is True
+    assert result.detail["metric_id"] == "avg_order_value"
 
 
 def test_metric_evaluator_fails_wrong_maql():
@@ -48,3 +49,4 @@ def test_metric_evaluator_fails_when_no_tool_call():
     result = ev.evaluate(_item(), empty)
     assert result.passed is False
     assert result.detail["metric_created"] is False
+    assert result.detail["metric_id"] is None
