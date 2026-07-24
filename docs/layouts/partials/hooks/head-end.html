@@ -1,0 +1,14 @@
+{{/* Project additions to the theme's <head> (gooddata-docs-theme calls this
+     hook at the end of its head.html). Everything here used to live in local
+     shadow copies of head.html and docs/baseof.html. */}}
+
+{{ if .Site.Params.prism_syntax_highlighting }}
+<link rel="stylesheet" href="{{ "/css/prism-extensions.css" | relURL }}"/>
+{{ end }}
+
+{{/* The canonical link comes from the theme's meta-version.html. */}}
+{{ if eq .Type "docs" }}
+<script type="application/ld+json">
+  {{ partial "structureddata/structureddata.looker.html" (dict "Page" . "Site" .Site) | safeJS }}
+</script>
+{{ end }}
