@@ -25,6 +25,17 @@ _DEFAULT_MAX_ITERATIONS = 6
 
 _TRIGGER_DISPLAY_TO_API = {"Every time": "ALWAYS", "One time": "ONCE"}
 _ALWAYS_TRIGGER_VALUES = {"Every time", "ALWAYS", "not specified"}
+_TRIGGER_UNSPECIFIED = "not specified"
+_RANGE_OPERATORS = ("BETWEEN", "NOT_BETWEEN")
+
+# Plain-language phrasing of each expected trigger, for the sim-user to demand out loud.
+_TRIGGER_INSTRUCTIONS = {
+    "ALWAYS": (
+        "alert me EVERY TIME the condition is met — not once per day, week, month, quarter or year, "
+        "and do not set any trigger interval"
+    ),
+    "ONCE": "alert me ONLY THE FIRST TIME the condition is met, then stop",
+}
 
 
 def _to_number(value: object) -> float | int | None:
@@ -65,7 +76,7 @@ def _deep_subset(expected: object, actual: object) -> bool:
 
 
 def _check_threshold(expected: CatalogMetricAlert, actual_args: dict) -> bool:
-    if expected.operator in ("BETWEEN", "NOT_BETWEEN"):
+    if expected.operator in _RANGE_OPERATORS:
         exp_from = _to_number(expected.threshold_from)
         exp_to = _to_number(expected.threshold_to)
         act_from = _to_number(actual_args.get("from_value", actual_args.get("fromValue")))
@@ -109,9 +120,8 @@ def _check_metric(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     return expected.metric_id == act_metric
 
 
-def _check_recipients(expected: CatalogMetricAlert, actual_args: dict) -> bool:
-    if not expected.recipients:
-        return True
+def _actual_recipients(actual_args: dict) -> list:
+    """Recipient list from the tool arguments, whatever shape the agent used."""
     act_recip_raw = actual_args.get("recipients", actual_args.get("external_recipients"))
     if isinstance(act_recip_raw, str):
         # external_recipients is JSON-encoded (e.g. '["email@example.com"]')
@@ -124,7 +134,49 @@ def _check_recipients(expected: CatalogMetricAlert, actual_args: dict) -> bool:
         act_recip = act_recip_raw
     else:
         act_recip = []
-    return set(expected.recipients) == set(act_recip or [])
+    return act_recip or []
+
+
+def _check_recipients(expected: CatalogMetricAlert, actual_args: dict) -> bool:
+    if not expected.recipients:
+        return True
+    return set(expected.recipients) == set(_actual_recipients(actual_args))
+
+
+def _trigger_instruction(expected: CatalogMetricAlert) -> str:
+    """What the sim-user must demand about the trigger, or '' when it should stay silent.
+
+    Stated for every explicit trigger, ALWAYS included: the product prompt tells the agent to
+    align `trigger_interval` with any date granularity in play, so an ALWAYS expectation only
+    survives when the user asks for it out loud. Silent when the fixture omits Trigger (so those
+    cases still exercise the product default) and for ANOMALY, whose product default really is
+    ONCE_PER_INTERVAL and whose trigger the assertion does not check.
+    """
+    if expected.operator == "ANOMALY" or expected.trigger == _TRIGGER_UNSPECIFIED:
+        return ""
+    return _TRIGGER_INSTRUCTIONS.get(expected.trigger, f"set the trigger to '{expected.trigger}'")
+
+
+def _filter_rule(filters: list | str | None) -> str:
+    """Rule keeping the sim-user from accepting filters the fixture did not ask for.
+
+    The agent volunteers a date filter for vague questions and then aligns the trigger interval
+    to it, which is how an expected-ALWAYS case drifts to ONCE_PER_INTERVAL. Refusing the extra
+    filter removes the reason the agent had to change the trigger.
+    """
+    if filters:
+        return (
+            f"The ONLY filters this alert may have are: {filters}. Do NOT accept any additional "
+            "filter the agent proposes — in particular no extra date, time-window or period "
+            "filter. If its proposal or summary adds one, tell it to drop the extra filter and "
+            "keep only the filters listed here."
+        )
+    return (
+        "This alert must have NO filters at all. If the agent asks about a time window, date "
+        "range or period, answer 'All time — no date range filter'. Do NOT accept any date, "
+        "time-window or period filter the agent proposes; if its proposal or summary adds one, "
+        "tell it to drop the filter."
+    )
 
 
 def generate_simulated_alert_response(
@@ -151,24 +203,26 @@ def generate_simulated_alert_response(
     trigger = expected.trigger
     filters = expected.filters
 
-    trigger_line = (
-        f"5. Proactively tell the agent the trigger is '{trigger}' in your first reply.\n"
-        if trigger not in _ALWAYS_TRIGGER_VALUES
-        else ""
-    )
+    rules = [
+        f"Your goal: metric={metric}, operator={operator}, threshold={threshold}, "
+        f"recipients={recipients}, trigger={trigger}" + (f", filters={filters}" if filters else "") + ".",
+        "Never revert or change a decision that was already confirmed in a previous turn.",
+        "If the agent shows a proposal or final summary and asks for confirmation, verify that the "
+        "recipients, the trigger AND the filters all match your goal. Correct every mismatch in "
+        "your reply. Only once all three are correct, say 'Yes, please proceed to create the alert.'",
+        "Proactively include your email recipient in your first reply. Do not wait for the agent "
+        "to ask — state it alongside the metric and condition answers.",
+    ]
+    trigger_instruction = _trigger_instruction(expected)
+    if trigger_instruction:
+        rules.append(f"Proactively tell the agent in your first reply: {trigger_instruction}.")
+    rules.append(_filter_rule(filters))
+
     system_prompt = (
         "You are a user requesting creation of an alert for a metric from an AI agent. "
         "Respond naturally but always steer toward the exact values you were given.\n"
         "Rules you MUST follow:\n"
-        f"1. Your goal: metric={metric}, operator={operator}, threshold={threshold}, "
-        f"recipients={recipients}, trigger={trigger}" + (f", filters={filters}" if filters else "") + ".\n"
-        "2. Never revert or change a decision that was already confirmed in a previous turn.\n"
-        "3. If the agent shows a final summary and asks for confirmation, verify that the "
-        "   recipients match your goal. If they differ, correct them. "
-        "   Once recipients are correct, say 'Yes, please proceed to create the alert.'\n"
-        "4. Proactively include your email recipient in your first reply. "
-        "   Do not wait for the agent to ask — state it alongside the metric and condition answers.\n"
-        + trigger_line
+        + "".join(f"{i}. {rule}\n" for i, rule in enumerate(rules, start=1))
         + "Reply concisely and directly."
     )
 
@@ -180,7 +234,9 @@ def generate_simulated_alert_response(
     response = openai_client.chat.completions.create(
         model="gpt-4o",
         messages=messages,
-        temperature=0.5,
+        # Deterministic as the model allows: the trigger/filter drift this prompt guards against
+        # was sampling-dependent, so temperature must not reintroduce it.
+        temperature=0,
     )
     return response.choices[0].message.content or ""
 
@@ -424,6 +480,48 @@ def run_agentic_alert_skill(
     )
 
 
+def _actual_trigger_display(actual_args: dict) -> str:
+    """Trigger as the agent set it, with the interval appended when one applies."""
+    trigger = actual_args.get("trigger") or actual_args.get("triggerMode") or "ALWAYS"
+    interval = actual_args.get("trigger_interval") or actual_args.get("triggerInterval")
+    return f"{trigger}/{interval}" if interval else str(trigger)
+
+
+def _score_comments(expected: CatalogMetricAlert, actual_args: dict, alert_created: bool) -> dict[str, str]:
+    """Expected-vs-actual detail per strict check, for the Langfuse score comments.
+
+    Without these a failed check shows only 0.0 on the trace, and triaging means reading CI logs
+    or hunting the create_metric_alert arguments through nested trace observations.
+    """
+    if not alert_created:
+        return {"alert_created": "create_metric_alert was never called"}
+
+    if expected.operator in _RANGE_OPERATORS:
+        exp_threshold: object = f"{expected.threshold_from}..{expected.threshold_to}"
+        act_threshold: object = (
+            f"{actual_args.get('from_value', actual_args.get('fromValue'))}.."
+            f"{actual_args.get('to_value', actual_args.get('toValue'))}"
+        )
+    else:
+        exp_threshold = expected.threshold
+        act_threshold = actual_args.get("threshold")
+
+    act_metric_raw = str(actual_args.get("metric_id", actual_args.get("metricId", "")))
+    act_metric = _parse_metric_id(act_metric_raw) or act_metric_raw
+    return {
+        "alert_created": "create_metric_alert was called",
+        "operator_correct": f"expected {expected.operator!r}; actual {actual_args.get('operator')!r}",
+        "threshold_correct": f"expected {exp_threshold!r}; actual {act_threshold!r}",
+        "trigger_correct": f"expected {expected.trigger!r}; actual {_actual_trigger_display(actual_args)!r}",
+        "filters_correct": (
+            f"expected {expected.filters!r}; "
+            f"actual {actual_args.get('filters', actual_args.get('attribute_filters'))!r}"
+        ),
+        "metric_correct": f"expected {expected.metric_id!r}; actual {act_metric!r}",
+        "recipients_correct": f"expected {expected.recipients!r}; actual {_actual_recipients(actual_args)!r}",
+    }
+
+
 class AlertSkillAssertionError(AssertionError):
     """Raised when an alert-skill evaluation fails."""
 
@@ -489,6 +587,7 @@ def evaluate_agentic_alert_skill(
             [r.conversation_id for r in summary.run_results],
             window_start,
         )
+        expected = _normalize_expected_output(expected_output)
         suffix_needed = len(summary.run_results) > 1
         for run_idx, run in enumerate(summary.run_results):
             pt = traces_by_conv.get(run.conversation_id)
@@ -503,9 +602,17 @@ def evaluate_agentic_alert_skill(
                 "metric_correct": ev.metric_correct,
                 "recipients_correct": ev.recipients_correct,
             }
+            comments = _score_comments(expected, run.actual_alert_arguments, ev.alert_created)
             with observe(langfuse, pt.id if pt else None, dataset_item_id, run_name, run_metadata) as tid:
                 for score_name, value in strict_checks.items():
-                    score_safe(langfuse, tid, name=score_name, value=float(value), data_type="BOOLEAN")
+                    score_safe(
+                        langfuse,
+                        tid,
+                        name=score_name,
+                        value=float(value),
+                        data_type="BOOLEAN",
+                        comment=comments.get(score_name),
+                    )
                 log_quality_and_value_scores(
                     langfuse,
                     tid,
