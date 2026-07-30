@@ -82,6 +82,44 @@ def test_parse_sse_lines_prefers_multipart_viz_over_adhoc_fallback():
     assert result.created_visualizations.objects[0].id == "real"
 
 
+def test_parse_sse_lines_collects_alert_proposal_without_text_part():
+    """The alert skill's confirmation turn emits ONLY an alertProposal part (GDAI-2032).
+
+    Pins the wire contract the simulated-user loops depend on: part ``type`` is
+    ``alertProposal`` and the payload lives under the ``alertProposal`` key.
+    """
+    proposal = {
+        "title": "# of Orders Alert - Greater Than 500",
+        "cta": "Should I create this alert?",
+        "recipients": [{"email": "admin@gooddata.com"}],
+        "alert": {"trigger": "ALWAYS", "execution": {"measures": [{"opaque": "afm"}]}},
+    }
+    lines = [
+        'data: {"item": {"role": "assistant", "content": {"type": "toolCall", "callId": "c1", '
+        '"name": "prepare_metric_alert_proposal", "arguments": {}}}}',
+        f'data: {{"item": {{"role": "assistant", "content": {{"type": "multipart", '
+        f'"parts": [{{"type": "alertProposal", "alertProposal": {json.dumps(proposal)}}}]}}}}}}',
+    ]
+    result = parse_sse_lines(lines)
+    assert result.text_response is None
+    assert result.alert_proposals == [proposal]
+
+
+def test_parse_sse_lines_keeps_alert_proposal_part_when_payload_is_null():
+    """Presence of the part is the confirmation signal even if the server did not resolve it."""
+    lines = [
+        'data: {"item": {"role": "assistant", "content": {"type": "multipart", '
+        '"parts": [{"type": "alertProposal", "alertProposal": null}]}}}',
+    ]
+    result = parse_sse_lines(lines)
+    assert result.alert_proposals == [{}]
+
+
+def test_parse_sse_lines_has_no_alert_proposals_by_default():
+    lines = ['data: {"item": {"role": "assistant", "content": {"type": "text", "text": "Done"}}}']
+    assert parse_sse_lines(lines).alert_proposals == []
+
+
 @pytest.mark.parametrize("code", [429, 502, 503, 504])
 def test_parse_sse_lines_transient_status_codes(code):
     with pytest.raises(TransientChatError) as ei:
