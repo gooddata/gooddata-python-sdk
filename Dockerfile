@@ -39,9 +39,11 @@ WORKDIR /data
 # to ensure consistent dependencies
 COPY pyproject.toml uv.lock ./
 
-# Install tox and tox-uv as system packages so they're available globally
-# We use uv pip install to install packages from the tox dependency group in pyproject.toml
-# by reading from the lock file which ensures consistent versions
+# Install tox and tox-uv as system packages so they're available globally.
+# NOTE: `uv pip install --group` reads the group's requirements from pyproject.toml but
+# resolves them FRESH from the index -- it does NOT read uv.lock. Every version that must
+# stay fixed therefore needs an explicit bound in the group itself; in particular `uv`,
+# whose console script installs over the binary copied above.
 # Clean up dependency files after installation to reduce image size
 RUN set -x \
   && uv pip install --system --group tox \

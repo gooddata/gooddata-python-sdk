@@ -76,7 +76,13 @@ release = [
 ]
 tox = [
     "tox~=4.56.1",
-    "tox-uv~=1.35.2"
+    "tox-uv~=1.35.2",
+    # tox-uv depends on the uv PyPI package without a version bound, and the Dockerfile
+    # installs this group with `uv pip install`, which resolves fresh instead of reading
+    # uv.lock. Without this bound the resolver picks the newest uv, whose console script
+    # then shadows the pinned binary in the image and trips required-version at runtime.
+    # Keep in sync with [tool.uv] required-version above.
+    "uv~=0.11.0",
 ]
 
 [tool.ruff]
