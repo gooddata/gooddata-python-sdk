@@ -8,9 +8,22 @@ from gooddata_eval.core.agentic.alert_skill import (
     _deep_subset,
     _normalize_expected_output,
     _to_number,
+    render_alert_proposal,
     run_agentic_alert_skill,
 )
 from gooddata_eval.core.models import ChatResult
+
+_PROPOSAL = {
+    "title": "# of Orders Alert - Greater Than 500",
+    "cta": "Should I create this alert?",
+    "recipients": [{"email": "admin@gooddata.com"}],
+    "dashboard": {"id": "dash-1", "title": "Orders overview"},
+    "alert": {
+        "trigger": "ALWAYS",
+        "condition": {"comparison": {"operator": "GREATER_THAN", "right": {"value": 500}}},
+        "execution": {"measures": [{"opaque": "afm"}]},
+    },
+}
 
 
 def test_to_number_int():
@@ -156,3 +169,82 @@ def test_run_agentic_alert_skill_creates_fresh_conversations_for_remaining_runs(
         )
     assert mock_client.create_conversation.call_count == 2
     assert mock_client.delete_conversation.call_count == 2
+
+
+def test_render_alert_proposal_keeps_verifiable_fields_and_drops_afm():
+    rendered = render_alert_proposal(_PROPOSAL)
+    # The CTA leads so the simulated user reads it as a question.
+    assert rendered.startswith("Should I create this alert?")
+    # Rule 3 of the sim-user prompt requires verifying recipients against its goal.
+    assert "admin@gooddata.com" in rendered
+    assert "GREATER_THAN" in rendered
+    assert "Orders overview" in rendered
+    # Opaque AFM wire dicts must not crowd out the fields above.
+    assert "execution" not in rendered
+
+
+def test_render_alert_proposal_drops_afm_when_execution_is_the_only_alert_field():
+    # Truthiness-gated replacement used to leave the original execution-bearing dict in place.
+    rendered = render_alert_proposal({"alert": {"execution": {"measures": [{"opaque": "afm"}]}}})
+    assert "execution" not in rendered
+    assert "opaque" not in rendered
+
+
+def test_render_alert_proposal_falls_back_to_default_cta():
+    assert render_alert_proposal({}).startswith("Should I create this alert?")
+
+
+def test_run_agentic_alert_skill_answers_proposal_only_confirmation_turn():
+    """GDAI-2032 regression: confirmation turn has no text part, only an alertProposal.
+
+    Without the fallback the simulated user is handed an empty agent message, so the agent
+    never receives an explicit "yes" and create_metric_alert is never called.
+    """
+    proposal_turn = ChatResult.model_validate(
+        {
+            "text_response": None,
+            "alertProposals": [_PROPOSAL],
+            "tool_call_events": [
+                {"functionName": "prepare_metric_alert_proposal", "functionArguments": "{}", "result": None}
+            ],
+        }
+    )
+    created_turn = ChatResult.model_validate(
+        {
+            "text_response": "Alert created.",
+            "tool_call_events": [
+                {
+                    "functionName": "create_metric_alert",
+                    "functionArguments": '{"operator": "GREATER_THAN", "threshold": 500}',
+                    "result": '{"id": "alert-1"}',
+                }
+            ],
+        }
+    )
+    mock_client = MagicMock()
+    mock_client.send_message.side_effect = [proposal_turn, created_turn]
+
+    with (
+        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
+        patch(
+            "gooddata_eval.core.agentic.alert_skill.generate_simulated_alert_response",
+            return_value="Yes, please proceed to create the alert.",
+        ) as mock_sim,
+        patch("gooddata_eval.core.agentic.alert_skill._delete_alert"),
+    ):
+        summary = run_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Notify me whenever the number of orders goes above 500",
+            expected_output={"operator": "GREATER_THAN", "threshold": 500},
+            k=1,
+            max_iterations=6,
+            initial_conversation_id="conv-1",
+        )
+
+    agent_message = mock_sim.call_args.args[0]
+    assert "Should I create this alert?" in agent_message
+    assert "admin@gooddata.com" in agent_message
+    assert summary.best.eval.alert_created is True
+    assert summary.best.alert_id == "alert-1"

@@ -11,6 +11,7 @@ from typing import Literal
 from gooddata_sdk import GoodDataSdk
 from pydantic import BaseModel
 
+from gooddata_eval.core.agentic.alert_skill import render_alert_proposal
 from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.models import ChatResult, ToolCallEvent
@@ -322,7 +323,10 @@ def run_agentic_conversation(
                     break
 
                 response_text = (chat_result.text_response or "").strip()
-                if _is_asking_clarification(response_text) and clarification_turns < max_clarification_turns:
+                if not response_text and chat_result.alert_proposals:
+                    response_text = render_alert_proposal(chat_result.alert_proposals[-1])
+                asking = _is_asking_clarification(response_text) or bool(chat_result.alert_proposals)
+                if asking and clarification_turns < max_clarification_turns:
                     clarification_turns += 1
                     total_clarification_turns += 1
                     current_message = _get_sim_user_response(response_text, resolved_turn, resolved_expected)

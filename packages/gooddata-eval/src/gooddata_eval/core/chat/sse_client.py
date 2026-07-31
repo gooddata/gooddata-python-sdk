@@ -102,6 +102,7 @@ class _SseAccumulator:
     text_parts: list[str] = field(default_factory=list)
     viz_reasoning_parts: list[str] = field(default_factory=list)
     visualizations: list[dict[str, Any]] = field(default_factory=list)
+    alert_proposals: list[dict[str, Any]] = field(default_factory=list)
     tool_call_events: list[dict[str, Any]] = field(default_factory=list)
     call_id_to_event_index: dict[str, int] = field(default_factory=dict)
     reasoning_steps: list[dict[str, Any]] = field(default_factory=list)
@@ -125,6 +126,11 @@ def _handle_multipart(content: dict[str, Any], acc: _SseAccumulator) -> None:
                 acc.viz_reasoning_parts.append(t)
         elif ptype == "visualization" and part.get("visualization"):
             acc.visualizations.append(part["visualization"])
+        elif ptype == "alertProposal":
+            # Record the part even when the server could not resolve the proposal payload
+            # (``alertProposal: null``) — its mere presence is the confirmation signal, and
+            # the reader falls back to a default CTA.
+            acc.alert_proposals.append(part.get("alertProposal") or {})
 
 
 def _handle_reasoning(content: dict[str, Any], acc: _SseAccumulator) -> None:
@@ -161,6 +167,7 @@ def _handle_tool_result(content: dict[str, Any], acc: _SseAccumulator) -> None:
 def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
     payload: dict[str, Any] = {
         "textResponse": "\n".join(acc.text_parts) or None,
+        "alertProposals": acc.alert_proposals,
         "toolCallEvents": acc.tool_call_events,
         "reasoningStepCount": len(acc.reasoning_steps),
     }

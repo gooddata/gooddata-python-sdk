@@ -92,6 +92,10 @@ class ChatResult(BaseModel):
 
     text_response: str | None = Field(default=None, alias="textResponse")
     created_visualizations: CreatedVisualizations | None = Field(default=None, alias="createdVisualizations")
+    # Alert-proposal parts of the agent's multipart response. The alert skill's confirmation
+    # step emits ONLY this part (no text part), so its `cta` is the only "the agent is asking
+    # a question" signal the simulated-user loops can key off.
+    alert_proposals: list[dict] = Field(default_factory=list, alias="alertProposals")
     tool_call_events: list[ToolCallEvent] = Field(default_factory=list, alias="toolCallEvents")
     reasoning_step_count: int = Field(default=0, alias="reasoningStepCount")
     conversation_id: str | None = Field(default=None, alias="conversationId")
