@@ -326,7 +326,9 @@ def render_alert_proposal(proposal: dict) -> str:
     # The AFM execution block is opaque wire dicts — noise that would crowd out the fields
     # the simulated user actually has to check.
     alert.pop("execution", None)
-    if alert:
+    if "alert" in summary:
+        # Key off presence, not truthiness: an alert whose only key was `execution` must
+        # still be replaced, otherwise the original (execution-bearing) dict survives.
         summary["alert"] = alert
     return f"{cta}\n\nAlert proposal:\n{json.dumps(summary, indent=2, sort_keys=True)}"
 

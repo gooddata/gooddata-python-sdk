@@ -183,6 +183,13 @@ def test_render_alert_proposal_keeps_verifiable_fields_and_drops_afm():
     assert "execution" not in rendered
 
 
+def test_render_alert_proposal_drops_afm_when_execution_is_the_only_alert_field():
+    # Truthiness-gated replacement used to leave the original execution-bearing dict in place.
+    rendered = render_alert_proposal({"alert": {"execution": {"measures": [{"opaque": "afm"}]}}})
+    assert "execution" not in rendered
+    assert "opaque" not in rendered
+
+
 def test_render_alert_proposal_falls_back_to_default_cta():
     assert render_alert_proposal({}).startswith("Should I create this alert?")
 
