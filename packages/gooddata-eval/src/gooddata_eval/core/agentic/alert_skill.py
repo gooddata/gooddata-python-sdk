@@ -311,11 +311,26 @@ def _extract_alert_call(tool_call_events: list[ToolCallEvent]) -> tuple[str | No
     return None, {}, False
 
 
-def _is_asking_clarification(text: str) -> bool:
-    if not text:
-        return False
-    t = text.lower()
-    return "?" in t or "could you" in t or "please" in t or "clarif" in t
+def render_alert_proposal(proposal: dict) -> str:
+    """Render an alert-proposal part as the text the simulated user reacts to.
+
+    The alert skill's confirmation step deliberately emits no text part (GDAI-2032) — the
+    prompt and the CTA live only in the proposal payload, which the frontend renders as a
+    widget. Dumping the payload (rather than prose) keeps recipients, condition, trigger and
+    dashboard visible so the simulated user can still verify them against its goal, and does
+    not need updating whenever ``AlertProposal`` grows a field.
+    """
+    cta = proposal.get("cta") or "Should I create this alert?"
+    summary = {k: v for k, v in proposal.items() if k != "cta"}
+    alert = dict(summary.get("alert") or {})
+    # The AFM execution block is opaque wire dicts — noise that would crowd out the fields
+    # the simulated user actually has to check.
+    alert.pop("execution", None)
+    if "alert" in summary:
+        # Key off presence, not truthiness: an alert whose only key was `execution` must
+        # still be replaced, otherwise the original (execution-bearing) dict survives.
+        summary["alert"] = alert
+    return f"{cta}\n\nAlert proposal:\n{json.dumps(summary, indent=2, sort_keys=True)}"
 
 
 def run_agentic_alert_skill(
@@ -352,6 +367,8 @@ def run_agentic_alert_skill(
                     alert_id_to_delete = alert_id
                     break
                 response_text = (chat_result.text_response or "").strip()
+                if not response_text and chat_result.alert_proposals:
+                    response_text = render_alert_proposal(chat_result.alert_proposals[-1])
                 # Stop if agent gave a completely empty response (stuck)
                 if not response_text and not chat_result.tool_call_events:
                     break

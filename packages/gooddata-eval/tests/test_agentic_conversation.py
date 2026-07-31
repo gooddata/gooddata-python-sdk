@@ -10,7 +10,7 @@ from gooddata_eval.core.agentic.conversation import (
     _resolve_refs,
     run_agentic_conversation,
 )
-from gooddata_eval.core.models import ToolCallEvent
+from gooddata_eval.core.models import ChatResult, ToolCallEvent
 
 
 def _skills_tc(*skills):
@@ -291,3 +291,64 @@ def test_run_agentic_conversation_deletes_metrics_even_when_a_later_turn_raises(
         )
 
     mock_sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "m1")
+
+
+def _alert_turn_fixture():
+    return ConversationFixture(
+        id="conv-alert",
+        expected_skills=["alert"],
+        turns=[
+            TurnDefinition(
+                turn_id="create_alert",
+                message="Now alert me when the metric drops below 100.",
+                expected_skill="alert",
+                expected_output_type="tool_call",
+                expected_tool_name="create_metric_alert",
+            )
+        ],
+    )
+
+
+def test_run_agentic_conversation_treats_alert_proposal_as_a_clarification():
+    """GDAI-2032 regression: a proposal-only turn has no text, so the old text-only check
+    stopped the turn instead of replying, and create_metric_alert never happened."""
+    proposal_turn = ChatResult.model_validate(
+        {
+            "text_response": None,
+            "alertProposals": [{"cta": "Should I create this alert?", "recipients": [{"email": "a@b.com"}]}],
+            "toolCallEvents": [
+                {"functionName": "set_skills", "functionArguments": '{"skills": ["alert"]}', "result": None},
+                {"functionName": "prepare_metric_alert_proposal", "functionArguments": "{}", "result": None},
+            ],
+        }
+    )
+    created_turn = ChatResult.model_validate(
+        {
+            "text_response": "Alert created.",
+            "toolCallEvents": [
+                {"functionName": "create_metric_alert", "functionArguments": "{}", "result": '{"id": "alert-1"}'}
+            ],
+        }
+    )
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [proposal_turn, created_turn]
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+        patch(
+            "gooddata_eval.core.agentic.conversation._get_sim_user_response",
+            return_value="Yes, please create it.",
+        ) as mock_sim,
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_alert_turn_fixture(),
+        )
+
+    assert "Should I create this alert?" in mock_sim.call_args.args[0]
+    assert result.turn_results[0].clarification_turns_used == 1
+    assert result.turn_results[0].skill_success is True

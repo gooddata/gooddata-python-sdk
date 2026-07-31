@@ -1148,6 +1148,7 @@ test = [
 tox = [
     { name = "tox" },
     { name = "tox-uv" },
+    { name = "uv" },
 ]
 type = [
     { name = "ty" },
@@ -1198,6 +1199,7 @@ test = [
 tox = [
     { name = "tox", specifier = "~=4.56.1" },
     { name = "tox-uv", specifier = "~=1.35.2" },
+    { name = "uv", specifier = "~=0.11.0" },
 ]
 type = [{ name = "ty", specifier = "~=0.0.55" }]
 
