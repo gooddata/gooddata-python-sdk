@@ -6,7 +6,7 @@ weight: 100
 api_ref: "CatalogOrganizationService.create_or_update_jwk"
 ---
 
-``create_or_update_jwk( jwk: CatalogJwk ) -> None``
+``create_or_update_jwk( jwk: CatalogJwk ) -> UpsertOutcome``
 
 Create a new jwk or overwrite an existing jwk with the same id.
 
@@ -18,4 +18,6 @@ Create a new jwk or overwrite an existing jwk with the same id.
 
 ## Returns
 
-_None_
+| type | description |
+| -- | -- |
+| UpsertOutcome | CREATED if the jwk did not exist yet, UPDATED if it did. |

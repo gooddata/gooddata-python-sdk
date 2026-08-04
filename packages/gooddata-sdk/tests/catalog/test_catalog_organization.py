@@ -13,6 +13,7 @@ from gooddata_sdk import (
     CatalogRsaSpecification,
     CatalogWebhook,
     GoodDataSdk,
+    UpsertOutcome,
 )
 from tests_support.vcrpy_utils import get_vcr
 
@@ -93,7 +94,7 @@ def test_create_jwk(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     new_jwk = _default_jwk()
     try:
-        sdk.catalog_organization.create_or_update_jwk(new_jwk)
+        assert sdk.catalog_organization.create_or_update_jwk(new_jwk) == UpsertOutcome.CREATED
         created_jwk = sdk.catalog_organization.get_jwk("demoJwk")
         assert new_jwk.id == created_jwk.id
         assert new_jwk.attributes == created_jwk.attributes
@@ -107,8 +108,8 @@ def test_update_jwk(test_config):
     new_jwk = _default_jwk()
     update_jwk = _default_jwk(alg="RS384")
     try:
-        sdk.catalog_organization.create_or_update_jwk(new_jwk)
-        sdk.catalog_organization.create_or_update_jwk(update_jwk)
+        assert sdk.catalog_organization.create_or_update_jwk(new_jwk) == UpsertOutcome.CREATED
+        assert sdk.catalog_organization.create_or_update_jwk(update_jwk) == UpsertOutcome.UPDATED
         updated_jwk = sdk.catalog_organization.get_jwk("demoJwk")
         assert update_jwk.attributes.content.alg == updated_jwk.attributes.content.alg
     finally:

@@ -9,6 +9,7 @@ from gooddata_api_client.model.json_api_api_token_in import JsonApiApiTokenIn
 from gooddata_api_client.model.json_api_api_token_in_document import JsonApiApiTokenInDocument
 
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
+from gooddata_sdk.catalog.types import UpsertOutcome
 from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUsers
 from gooddata_sdk.catalog.user.declarative_model.user_and_user_groups import CatalogDeclarativeUsersUserGroups
 from gooddata_sdk.catalog.user.declarative_model.user_group import CatalogDeclarativeUserGroups
@@ -25,7 +26,7 @@ from gooddata_sdk.utils import load_all_entities, load_all_entities_dict
 class CatalogUserService(CatalogServiceBase):
     # Entity methods for users
 
-    def create_or_update_user(self, user: CatalogUser) -> None:
+    def create_or_update_user(self, user: CatalogUser) -> UpsertOutcome:
         """Creates a new user or overwrites an existing user.
 
 
@@ -34,7 +35,8 @@ class CatalogUserService(CatalogServiceBase):
                 User entity object.
 
         Returns:
-            None
+            UpsertOutcome:
+                CREATED if the user did not exist yet, UPDATED if it did.
         """
         try:
             self.get_user(user_id=user.id)
@@ -43,6 +45,8 @@ class CatalogUserService(CatalogServiceBase):
         except NotFoundException:
             user_document = CatalogUserDocument(data=user)
             self._entities_api.create_entity_users(json_api_user_in_document=user_document.to_api())
+            return UpsertOutcome.CREATED
+        return UpsertOutcome.UPDATED
 
     def get_user(self, user_id: str) -> CatalogUser:
         """Get an individual user using User id.
@@ -89,7 +93,7 @@ class CatalogUserService(CatalogServiceBase):
 
     # Entity methods for user groups
 
-    def create_or_update_user_group(self, user_group: CatalogUserGroup) -> None:
+    def create_or_update_user_group(self, user_group: CatalogUserGroup) -> UpsertOutcome:
         """Create a new user group or overwrite an existing user group.
 
         Args:
@@ -97,7 +101,8 @@ class CatalogUserService(CatalogServiceBase):
                 UserGroup entity object.
 
         Returns:
-            None
+            UpsertOutcome:
+                CREATED if the user group did not exist yet, UPDATED if it did.
         """
         try:
             self.get_user_group(user_group_id=user_group.id)
@@ -108,6 +113,8 @@ class CatalogUserService(CatalogServiceBase):
         except NotFoundException:
             user_group_document = CatalogUserGroupDocument(data=user_group)
             self._entities_api.create_entity_user_groups(user_group_document.to_api())
+            return UpsertOutcome.CREATED
+        return UpsertOutcome.UPDATED
 
     def get_user_group(self, user_group_id: str) -> CatalogUserGroup:
         """Get an individual user group using user group id.
