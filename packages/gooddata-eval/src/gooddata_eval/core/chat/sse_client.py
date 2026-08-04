@@ -170,6 +170,7 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
         "alertProposals": acc.alert_proposals,
         "toolCallEvents": acc.tool_call_events,
         "reasoningStepCount": len(acc.reasoning_steps),
+        "reasoningSteps": [step["summary"] for step in acc.reasoning_steps],
     }
     if acc.visualizations:
         payload["createdVisualizations"] = {

@@ -98,6 +98,7 @@ class ChatResult(BaseModel):
     alert_proposals: list[dict] = Field(default_factory=list, alias="alertProposals")
     tool_call_events: list[ToolCallEvent] = Field(default_factory=list, alias="toolCallEvents")
     reasoning_step_count: int = Field(default=0, alias="reasoningStepCount")
+    reasoning_steps: list[str] = Field(default_factory=list, alias="reasoningSteps")
     conversation_id: str | None = Field(default=None, alias="conversationId")
     response_id: str | None = Field(default=None, alias="responseId")
 

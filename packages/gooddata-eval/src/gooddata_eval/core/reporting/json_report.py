@@ -36,6 +36,7 @@ def _build_run_dict(report: EvalReport) -> dict:
                 "detail": item.best_detail,
                 "conversation_id": item.conversation_id,
                 "response_id": item.response_id,
+                "reasoning": item.reasoning_steps,
             }
             for item in report.items
         },
