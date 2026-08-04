@@ -313,9 +313,7 @@ class ChatClient:
     def create_conversation(self) -> str:
         def _do() -> str:
             body = {"agentId": self._agent_id} if self._agent_id else {}
-            resp = self._client.post(
-                self._base, headers={**self._auth, "Content-Type": "application/json"}, json=body
-            )
+            resp = self._client.post(self._base, headers={**self._auth, "Content-Type": "application/json"}, json=body)
             resp.raise_for_status()
             body = resp.json()
             if "conversationId" not in body:
