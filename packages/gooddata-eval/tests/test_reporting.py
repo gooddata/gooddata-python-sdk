@@ -23,6 +23,7 @@ def _report() -> EvalReport:
                 pass_at_k=True,
                 runs=2,
                 latency_s=2.5,
+                reasoning_steps=["step one", "step two"],
             ),
             ItemReport(
                 id="i2",
@@ -48,6 +49,8 @@ def test_build_json_report_keyed_by_item_id():
     assert data["items"]["i1"]["pass_at_k"] is True
     assert data["items"]["i1"]["latency_s"] == 2.5
     assert data["items"]["i1"]["avg_latency_s"] == 1.25
+    assert data["items"]["i1"]["reasoning"] == ["step one", "step two"]
+    assert data["items"]["i2"]["reasoning"] == []
 
 
 def test_write_json_report_creates_file(tmp_path):
