@@ -70,10 +70,13 @@ def run_agentic_guardrail(
     k: int = _DEFAULT_K,
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    agent_id: str | None = None,
 ) -> AgenticGuardrailSummary:
     """Run the guardrail agentic evaluation K times and return a summary."""
     run_results: list[GuardrailResult] = []
-    client = ChatClient(host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort)
+    client = ChatClient(
+        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+    )
     judge = LLMJudge(_GUARDRAIL_EVALUATION_STEPS, model="gpt-4o")
 
     try:
@@ -146,6 +149,7 @@ def evaluate_agentic_guardrail(
     expected_output: str,
     k: int = _DEFAULT_K,
     initial_conversation_id: str | None = None,
+    agent_id: str | None = None,
     langfuse: object | None = None,
     dataset_item_id: str = "",
     dataset_name: str = "guardrail",
@@ -172,6 +176,7 @@ def evaluate_agentic_guardrail(
         k=k,
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
     )
 
     if langfuse is not None and dataset_item_id:

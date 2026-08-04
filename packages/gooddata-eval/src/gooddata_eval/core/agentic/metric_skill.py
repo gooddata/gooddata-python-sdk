@@ -249,6 +249,7 @@ def run_agentic_metric_skill(
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    agent_id: str | None = None,
 ) -> AgenticMetricSummary:
     """Run the metric-skill agentic evaluation K times and return a summary.
 
@@ -257,7 +258,9 @@ def run_agentic_metric_skill(
     """
     expected_outputs: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
     run_results: list[MetricRunResult] = []
-    client = ChatClient(host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort)
+    client = ChatClient(
+        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+    )
     sdk = GoodDataSdk.create(host, token)
 
     try:
@@ -311,6 +314,7 @@ def evaluate_agentic_metric_skill(
     k: int = _DEFAULT_K,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
+    agent_id: str | None = None,
     langfuse: object | None = None,
     dataset_item_id: str = "",
     dataset_name: str = "metric_skill",
@@ -338,6 +342,7 @@ def evaluate_agentic_metric_skill(
         max_iterations=max_iterations,
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
     )
 
     if langfuse is not None and dataset_item_id:

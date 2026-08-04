@@ -293,6 +293,7 @@ class ChatClient:
         timeout: float = 300.0,
         preserve_failed: bool = False,
         reasoning_effort: ReasoningEffort | None = None,
+        agent_id: str | None = None,
     ):
         """Create a chat client bound to one workspace.
 
@@ -307,10 +308,14 @@ class ChatClient:
         self._client = httpx.Client(timeout=timeout)
         self._preserve_failed = preserve_failed
         self._reasoning_effort = normalize_reasoning_effort(reasoning_effort)
+        self._agent_id = agent_id
 
     def create_conversation(self) -> str:
         def _do() -> str:
-            resp = self._client.post(self._base, headers={**self._auth, "Content-Type": "application/json"})
+            body = {"agentId": self._agent_id} if self._agent_id else {}
+            resp = self._client.post(
+                self._base, headers={**self._auth, "Content-Type": "application/json"}, json=body
+            )
             resp.raise_for_status()
             body = resp.json()
             if "conversationId" not in body:

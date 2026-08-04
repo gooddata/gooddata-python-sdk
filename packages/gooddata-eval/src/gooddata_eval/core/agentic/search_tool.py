@@ -69,11 +69,14 @@ def run_agentic_search_tool(
     k: int = _DEFAULT_K,
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    agent_id: str | None = None,
 ) -> AgenticSearchSummary:
     """Run the search-tool agentic evaluation K times (single-turn each)."""
     run_results: list[SearchResult] = []
 
-    client = ChatClient(host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort)
+    client = ChatClient(
+        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+    )
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
@@ -140,6 +143,7 @@ def evaluate_agentic_search_tool(
     expected_tool_call: dict,
     k: int = _DEFAULT_K,
     initial_conversation_id: str | None = None,
+    agent_id: str | None = None,
     langfuse: object | None = None,
     dataset_item_id: str = "",
     dataset_name: str = "search",
@@ -166,6 +170,7 @@ def evaluate_agentic_search_tool(
         k=k,
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
     )
 
     if langfuse is not None and dataset_item_id:

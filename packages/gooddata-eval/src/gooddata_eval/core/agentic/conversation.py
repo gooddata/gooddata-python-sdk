@@ -275,6 +275,7 @@ def run_agentic_conversation(
     max_clarification_turns: int = _DEFAULT_MAX_CLARIFICATION_TURNS,
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    agent_id: str | None = None,
 ) -> ConversationResult:
     """Run a multi-turn, multi-skill conversation evaluation (no K-runs).
 
@@ -282,7 +283,9 @@ def run_agentic_conversation(
     trigger up to *max_clarification_turns* additional rounds of simulated-user
     replies before the agent produces the expected output.
     """
-    client = ChatClient(host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort)
+    client = ChatClient(
+        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+    )
     sdk = GoodDataSdk.create(host, token)
     turn_results: list[TurnResult] = []
     turn_outputs: dict[str, dict] = {}
@@ -408,6 +411,7 @@ def evaluate_agentic_conversation(
     fixture: ConversationFixture,
     max_clarification_turns: int = _DEFAULT_MAX_CLARIFICATION_TURNS,
     initial_conversation_id: str | None = None,
+    agent_id: str | None = None,
     langfuse: object | None = None,
     dataset_item_id: str = "",
     dataset_name: str = "conversation",
@@ -433,6 +437,7 @@ def evaluate_agentic_conversation(
         max_clarification_turns=max_clarification_turns,
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
     )
 
     if langfuse is not None and dataset_item_id:

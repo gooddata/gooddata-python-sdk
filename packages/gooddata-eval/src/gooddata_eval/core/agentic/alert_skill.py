@@ -434,11 +434,14 @@ def run_agentic_alert_skill(
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    agent_id: str | None = None,
 ) -> AgenticAlertSummary:
     """Run the alert-skill agentic evaluation K times and return a summary."""
     expected = _normalize_expected_output(expected_output)
     run_results: list[AlertRunResult] = []
-    client = ChatClient(host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort)
+    client = ChatClient(
+        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+    )
     sdk = GoodDataSdk.create(host, token)
 
     def _run_once(conv_id: str) -> AlertRunResult:
@@ -550,6 +553,7 @@ def evaluate_agentic_alert_skill(
     k: int = _DEFAULT_K,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
+    agent_id: str | None = None,
     langfuse: object | None = None,
     dataset_item_id: str = "",
     dataset_name: str = "alert_skill",
@@ -577,6 +581,7 @@ def evaluate_agentic_alert_skill(
         max_iterations=max_iterations,
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
     )
 
     if langfuse is not None and dataset_item_id:

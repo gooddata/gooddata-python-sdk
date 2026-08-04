@@ -44,3 +44,4 @@ class RunConfig:
     kind: str = "visualization"
     preserve_failed: bool = False
     reasoning_effort: ReasoningEffort | None = None
+    agent_id: str | None = None
