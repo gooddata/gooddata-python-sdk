@@ -33,6 +33,7 @@ class ItemReport:
     best_detail: dict = field(default_factory=dict)
     conversation_id: str | None = None
     response_id: str | None = None
+    reasoning_steps: list[str] = field(default_factory=list)
 
     @property
     def avg_latency_s(self) -> float:
@@ -116,6 +117,7 @@ def _run_one_item(
             chat_result = backend.ask(item)
             report.conversation_id = getattr(chat_result, "conversation_id", None) or report.conversation_id
             report.response_id = getattr(chat_result, "response_id", None) or report.response_id
+            report.reasoning_steps = getattr(chat_result, "reasoning_steps", None) or report.reasoning_steps
             evaluation = evaluator.evaluate(item, chat_result)
             latency = time.perf_counter() - t0
             report.runs += 1
