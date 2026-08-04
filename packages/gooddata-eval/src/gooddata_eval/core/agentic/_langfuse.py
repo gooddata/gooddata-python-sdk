@@ -15,6 +15,8 @@ from typing import Any
 
 import httpx
 
+from gooddata_eval.core.config import ReasoningEffort, normalize_reasoning_effort
+
 _log = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
@@ -384,6 +386,7 @@ def build_run_context(
     run_timestamp: str | None,
     model_version_override: str | None,
     run_metadata_extra: dict[str, Any] | None = None,
+    reasoning_effort: ReasoningEffort | None = None,
 ) -> tuple[str, dict[str, Any]]:
     """Return (run_name_base, run_metadata) with model version resolved from workspace API.
 
@@ -399,15 +402,24 @@ def build_run_context(
             (e.g. a testing-framework tag or a CI run id for scoping). Default None keeps
             behavior unchanged. The SDK-derived model_version is applied last and cannot
             be overwritten by this dict.
+        reasoning_effort: Effort the run requested, stamped into both the run name and
+            the metadata so effort-varying runs stay comparable side by side.
     """
+    effort = normalize_reasoning_effort(reasoning_effort)
     model = get_model_version(host, token, workspace_id, model_version_override)
     ts = run_timestamp or datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     base = f"{dataset_name}_{ts}"
     if model:
         base = f"{base}_{model}"
+    # Part of the run name, not just metadata: two runs that differ only by effort would
+    # otherwise collide on the same name and be indistinguishable in the report.
+    if effort:
+        base = f"{base}_effort-{effort.lower()}"
     # Caller supplies its own run tags (e.g. testing_framework); model_version is applied
     # last so the SDK-derived value cannot be overwritten by run_metadata_extra.
     metadata: dict[str, Any] = dict(run_metadata_extra) if run_metadata_extra else {}
+    if effort:
+        metadata["reasoning_effort"] = effort
     if model:
         metadata["model_version"] = model
     return base, metadata

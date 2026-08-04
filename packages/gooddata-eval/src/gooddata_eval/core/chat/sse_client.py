@@ -22,6 +22,7 @@ from typing import Any, Callable, Iterable, TypeVar
 
 import httpx
 
+from gooddata_eval.core.config import ReasoningEffort, normalize_reasoning_effort
 from gooddata_eval.core.models import ChatResult, DatasetItem
 
 _log = logging.getLogger(__name__)
@@ -242,12 +243,28 @@ class ChatClient:
     """Single-turn AI chat client over the GoodData AI conversation endpoints."""
 
     def __init__(
-        self, host: str, token: str, workspace_id: str, *, timeout: float = 300.0, preserve_failed: bool = False
+        self,
+        host: str,
+        token: str,
+        workspace_id: str,
+        *,
+        timeout: float = 300.0,
+        preserve_failed: bool = False,
+        reasoning_effort: ReasoningEffort | None = None,
     ):
+        """Create a chat client bound to one workspace.
+
+        ``reasoning_effort`` (``LOW``/``MEDIUM``/``HIGH``) is sent as
+        ``options.reasoningEffort`` on every message; when None the key is omitted
+        entirely and the server keeps its own default. The server honours it only
+        while the ``enableGenAiReasoningEffort`` feature flag is on for the
+        organization, so setting it is a request rather than a guarantee.
+        """
         self._base = f"{host.rstrip('/')}/api/v1/ai/workspaces/{workspace_id}/chat/conversations"
         self._auth = {"Authorization": f"Bearer {token}"}
         self._client = httpx.Client(timeout=timeout)
         self._preserve_failed = preserve_failed
+        self._reasoning_effort = normalize_reasoning_effort(reasoning_effort)
 
     def create_conversation(self) -> str:
         def _do() -> str:
@@ -271,7 +288,9 @@ class ChatClient:
     def send_message(self, conversation_id: str, question: str) -> ChatResult:
         url = f"{self._base}/{conversation_id}/messages"
         headers = {**self._auth, "Accept": "text/event-stream", "Content-Type": "application/json"}
-        body = {"item": {"role": "user", "content": {"type": "text", "text": question}}}
+        body: dict[str, Any] = {"item": {"role": "user", "content": {"type": "text", "text": question}}}
+        if self._reasoning_effort is not None:
+            body["options"] = {"reasoningEffort": self._reasoning_effort}
 
         def _do() -> ChatResult:
             with self._client.stream("POST", url, json=body, headers=headers) as resp:

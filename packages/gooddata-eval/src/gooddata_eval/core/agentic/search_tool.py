@@ -6,6 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import ToolCallEvent
 
 _DEFAULT_K = 1
@@ -67,11 +68,12 @@ def run_agentic_search_tool(
     expected_tool_call: dict,
     k: int = _DEFAULT_K,
     initial_conversation_id: str | None = None,
+    reasoning_effort: ReasoningEffort | None = None,
 ) -> AgenticSearchSummary:
     """Run the search-tool agentic evaluation K times (single-turn each)."""
     run_results: list[SearchResult] = []
 
-    client = ChatClient(host=host, token=token, workspace_id=workspace_id)
+    client = ChatClient(host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort)
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
@@ -144,6 +146,7 @@ def evaluate_agentic_search_tool(
     run_timestamp: str | None = None,
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
+    reasoning_effort: ReasoningEffort | None = None,
 ) -> None:
     """Run search-tool evaluation, log to Langfuse, and raise SearchToolAssertionError on failure."""
     from datetime import datetime as _dt  # noqa: PLC0415
@@ -162,6 +165,7 @@ def evaluate_agentic_search_tool(
         expected_tool_call=expected_tool_call,
         k=k,
         initial_conversation_id=initial_conversation_id,
+        reasoning_effort=reasoning_effort,
     )
 
     if langfuse is not None and dataset_item_id:
@@ -181,6 +185,7 @@ def evaluate_agentic_search_tool(
             run_timestamp,
             model_version_override,
             run_metadata_extra,
+            reasoning_effort,
         )
         traces_by_conv = find_traces_per_conversation(
             langfuse,

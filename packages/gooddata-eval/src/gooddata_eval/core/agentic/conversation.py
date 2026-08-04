@@ -14,6 +14,7 @@ from pydantic import BaseModel
 from gooddata_eval.core.agentic.alert_skill import render_alert_proposal
 from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids
 from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import ChatResult, ToolCallEvent
 from gooddata_eval.core.scoring import (
     check_filters,
@@ -278,6 +279,7 @@ def run_agentic_conversation(
     fixture: ConversationFixture,
     max_clarification_turns: int = 20,
     initial_conversation_id: str | None = None,
+    reasoning_effort: ReasoningEffort | None = None,
 ) -> ConversationResult:
     """Run a multi-turn, multi-skill conversation evaluation (no K-runs).
 
@@ -285,7 +287,7 @@ def run_agentic_conversation(
     trigger up to *max_clarification_turns* additional rounds of simulated-user
     replies before the agent produces the expected output.
     """
-    client = ChatClient(host=host, token=token, workspace_id=workspace_id)
+    client = ChatClient(host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort)
     sdk = GoodDataSdk.create(host, token)
     turn_results: list[TurnResult] = []
     turn_outputs: dict[str, dict] = {}
@@ -403,6 +405,7 @@ def evaluate_agentic_conversation(
     run_timestamp: str | None = None,
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
+    reasoning_effort: ReasoningEffort | None = None,
 ) -> None:
     """Run conversation evaluation, log to Langfuse, and raise on failure."""
     from datetime import datetime as _dt  # noqa: PLC0415
@@ -420,6 +423,7 @@ def evaluate_agentic_conversation(
         fixture=fixture,
         max_clarification_turns=max_clarification_turns,
         initial_conversation_id=initial_conversation_id,
+        reasoning_effort=reasoning_effort,
     )
 
     if langfuse is not None and dataset_item_id:
@@ -439,6 +443,7 @@ def evaluate_agentic_conversation(
             run_timestamp,
             model_version_override,
             run_metadata_extra,
+            reasoning_effort,
         )
         traces_by_conv = find_traces_per_conversation(
             langfuse,

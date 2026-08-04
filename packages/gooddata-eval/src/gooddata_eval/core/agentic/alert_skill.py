@@ -13,6 +13,7 @@ from gooddata_sdk import GoodDataSdk
 
 from gooddata_eval.core.agentic._catalog import CatalogMetricAlert
 from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import ToolCallEvent
 
 try:
@@ -342,11 +343,12 @@ def run_agentic_alert_skill(
     k: int = _DEFAULT_K,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
+    reasoning_effort: ReasoningEffort | None = None,
 ) -> AgenticAlertSummary:
     """Run the alert-skill agentic evaluation K times and return a summary."""
     expected = _normalize_expected_output(expected_output)
     run_results: list[AlertRunResult] = []
-    client = ChatClient(host=host, token=token, workspace_id=workspace_id)
+    client = ChatClient(host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort)
     sdk = GoodDataSdk.create(host, token)
 
     def _run_once(conv_id: str) -> AlertRunResult:
@@ -462,6 +464,7 @@ def evaluate_agentic_alert_skill(
     run_timestamp: str | None = None,
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
+    reasoning_effort: ReasoningEffort | None = None,
 ) -> None:
     """Run alert-skill evaluation, log to Langfuse, and raise AlertSkillAssertionError on failure."""
     from datetime import datetime as _dt  # noqa: PLC0415
@@ -481,6 +484,7 @@ def evaluate_agentic_alert_skill(
         k=k,
         max_iterations=max_iterations,
         initial_conversation_id=initial_conversation_id,
+        reasoning_effort=reasoning_effort,
     )
 
     if langfuse is not None and dataset_item_id:
@@ -500,6 +504,7 @@ def evaluate_agentic_alert_skill(
             run_timestamp,
             model_version_override,
             run_metadata_extra,
+            reasoning_effort,
         )
         traces_by_conv = find_traces_per_conversation(
             langfuse,

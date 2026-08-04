@@ -11,6 +11,7 @@ import os
 from dataclasses import dataclass
 
 from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators.visualization import (
     EvaluationResult,
     _check_visualization_skill_activated,
@@ -203,6 +204,7 @@ def run_agentic_visualization(
     k: int = _DEFAULT_K,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
+    reasoning_effort: ReasoningEffort | None = None,
 ) -> AgenticRunSummary:
     """Run K independent conversations and return evaluation results.
 
@@ -211,7 +213,7 @@ def run_agentic_visualization(
     fresh conversations. Caller-supplied conversations are not deleted; all
     conversations created by this function are deleted on completion.
     """
-    client = ChatClient(host=host, token=token, workspace_id=workspace_id)
+    client = ChatClient(host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort)
     run_results: list[RunResult] = []
 
     try:
@@ -265,6 +267,7 @@ def evaluate_agentic_visualization(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     record_output_path: str | None = None,
+    reasoning_effort: ReasoningEffort | None = None,
 ) -> None:
     """Run visualization evaluation, log to Langfuse, and raise VisualizationAssertionError on failure."""
     import json as _json  # noqa: PLC0415
@@ -285,6 +288,7 @@ def evaluate_agentic_visualization(
         k=k,
         max_iterations=max_iterations,
         initial_conversation_id=initial_conversation_id,
+        reasoning_effort=reasoning_effort,
     )
 
     if langfuse is not None and dataset_item_id:
@@ -304,6 +308,7 @@ def evaluate_agentic_visualization(
             run_timestamp,
             model_version_override,
             run_metadata_extra,
+            reasoning_effort,
         )
         K = len(summary.run_results)
         traces_by_conv = find_traces_per_conversation(
