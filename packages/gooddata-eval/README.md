@@ -92,6 +92,7 @@ Both provider name and provider id are accepted as the prefix.
 |---|---|---|
 | `--runs K` | `2` | Independent runs per item (pass@K). An item passes if any run passes. |
 | `--concurrency K` | `1` | Number of items evaluated concurrently. `1` = sequential (default). Increase to load-test the agent under simultaneous requests. Progress output interleaves when K > 1. |
+| `--reasoning-effort {LOW,MEDIUM,HIGH}` | — | Requested LLM reasoning effort, sent with every message this run makes (or set `GD_EVAL_REASONING_EFFORT`). See [Requesting a reasoning effort](#requesting-a-reasoning-effort) below. |
 
 #### Output
 
@@ -105,6 +106,25 @@ Both provider name and provider id are accepted as the prefix.
 | Flag | Description |
 |---|---|
 | `--langfuse` | Log scores and traces to Langfuse after each item. Requires `--langfuse-dataset`. Creates one named experiment run per model (`gd-eval-{timestamp}-{model}`). Requires `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, `LANGFUSE_HOST`. |
+
+### Requesting a reasoning effort
+
+GoodData Cloud has an experimental per-message `reasoningEffort` option (`LOW`, `MEDIUM`, or `HIGH`) that hints how much the LLM should reason before answering. `gd-eval` can send it on every message it makes:
+
+```bash
+# One-off, via flag
+gd-eval run --workspace my-ws --dataset ./data --reasoning-effort HIGH
+
+# Session-wide, via env var
+export GD_EVAL_REASONING_EFFORT=LOW
+gd-eval run --workspace my-ws --dataset ./data
+```
+
+Things to know before using it:
+
+- **Not persisted server-side.** The setting applies only to the messages this run sends — it is not saved as a conversation or workspace default. Every `gd-eval` message in the run carries the value; nothing else on the server is affected.
+- **Feature-flag gated.** GoodData Cloud must have the reasoning-effort feature enabled for the org; when it isn't, the value is ignored and the platform falls back to `MEDIUM` regardless of what was requested.
+- **A hint, not a hard budget.** Providers with adaptive-thinking models (e.g. Anthropic, Bedrock) treat the value as a hint rather than an exact token allocation, so actual reasoning depth can still vary by model.
 
 ### JSON report shape
 

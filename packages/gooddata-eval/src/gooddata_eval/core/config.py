@@ -20,3 +20,4 @@ class RunConfig:
     quiet: bool = False
     kind: str = "visualization"
     preserve_failed: bool = False
+    reasoning_effort: str | None = None

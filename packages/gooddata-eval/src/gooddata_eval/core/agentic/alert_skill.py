@@ -342,6 +342,7 @@ def run_agentic_alert_skill(
     k: int = _DEFAULT_K,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
+    reasoning_effort: str | None = None,
 ) -> AgenticAlertSummary:
     """Run the alert-skill agentic evaluation K times and return a summary."""
     expected = _normalize_expected_output(expected_output)
@@ -361,7 +362,7 @@ def run_agentic_alert_skill(
             current_question = question
 
             for _iteration in range(max_iterations):
-                chat_result = client.send_message(conv_id, current_question)
+                chat_result = client.send_message(conv_id, current_question, reasoning_effort=reasoning_effort)
                 alert_id, actual_args, tool_called = _extract_alert_call(chat_result.tool_call_events or [])
                 if tool_called:
                     alert_id_to_delete = alert_id
@@ -462,6 +463,7 @@ def evaluate_agentic_alert_skill(
     run_timestamp: str | None = None,
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
+    reasoning_effort: str | None = None,
 ) -> None:
     """Run alert-skill evaluation, log to Langfuse, and raise AlertSkillAssertionError on failure."""
     from datetime import datetime as _dt  # noqa: PLC0415
@@ -481,6 +483,7 @@ def evaluate_agentic_alert_skill(
         k=k,
         max_iterations=max_iterations,
         initial_conversation_id=initial_conversation_id,
+        reasoning_effort=reasoning_effort,
     )
 
     if langfuse is not None and dataset_item_id:

@@ -152,6 +152,7 @@ def _execute_single_run(
     question: str,
     expected_outputs: list[CreatedVisualization],
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
+    reasoning_effort: str | None = None,
 ) -> RunResult:
     """Drive one full multi-turn conversation and evaluate the result."""
     total_turns = 0.0
@@ -159,7 +160,7 @@ def _execute_single_run(
     all_tool_call_events: list[ToolCallEvent] = []
     simulated_response_guide = expected_outputs[0]  # primary candidate guides the simulated user
 
-    current_result = client.send_message(conversation_id, question)
+    current_result = client.send_message(conversation_id, question, reasoning_effort=reasoning_effort)
 
     for iteration in range(max_iterations):
         total_turns += 1.0
@@ -175,7 +176,7 @@ def _execute_single_run(
             break
 
         follow_up = generate_simulated_response(current_result.text_response, simulated_response_guide)
-        current_result = client.send_message(conversation_id, follow_up)
+        current_result = client.send_message(conversation_id, follow_up, reasoning_effort=reasoning_effort)
 
     skill_activated = _check_visualization_skill_activated(all_tool_call_events)
     actual_output: CreatedVisualization | None = None
@@ -203,6 +204,7 @@ def run_agentic_visualization(
     k: int = _DEFAULT_K,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
+    reasoning_effort: str | None = None,
 ) -> AgenticRunSummary:
     """Run K independent conversations and return evaluation results.
 
@@ -217,7 +219,9 @@ def run_agentic_visualization(
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
-            run_results.append(_execute_single_run(client, conv_id_0, question, expected_outputs, max_iterations))
+            run_results.append(
+                _execute_single_run(client, conv_id_0, question, expected_outputs, max_iterations, reasoning_effort)
+            )
         finally:
             if initial_conversation_id is None:
                 client.delete_conversation(conv_id_0)
@@ -225,7 +229,9 @@ def run_agentic_visualization(
         for _ in range(1, k):
             conv_id = client.create_conversation()
             try:
-                run_results.append(_execute_single_run(client, conv_id, question, expected_outputs, max_iterations))
+                run_results.append(
+                    _execute_single_run(client, conv_id, question, expected_outputs, max_iterations, reasoning_effort)
+                )
             finally:
                 client.delete_conversation(conv_id)
     finally:
@@ -265,6 +271,7 @@ def evaluate_agentic_visualization(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     record_output_path: str | None = None,
+    reasoning_effort: str | None = None,
 ) -> None:
     """Run visualization evaluation, log to Langfuse, and raise VisualizationAssertionError on failure."""
     import json as _json  # noqa: PLC0415
@@ -285,6 +292,7 @@ def evaluate_agentic_visualization(
         k=k,
         max_iterations=max_iterations,
         initial_conversation_id=initial_conversation_id,
+        reasoning_effort=reasoning_effort,
     )
 
     if langfuse is not None and dataset_item_id:

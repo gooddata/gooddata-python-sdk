@@ -205,6 +205,30 @@ def test_send_message_does_not_retry_non_transient(monkeypatch):
     assert sleeps == []
 
 
+def test_send_message_omits_reasoning_effort_by_default():
+    requests = []
+
+    def handler(request):
+        requests.append(json.loads(request.content))
+        return httpx.Response(200, content=_OK_SSE)
+
+    client = _client_with_handler(handler)
+    client.send_message("conv", "q")
+    assert "options" not in requests[0]
+
+
+def test_send_message_sends_reasoning_effort_when_given():
+    requests = []
+
+    def handler(request):
+        requests.append(json.loads(request.content))
+        return httpx.Response(200, content=_OK_SSE)
+
+    client = _client_with_handler(handler)
+    client.send_message("conv", "q", reasoning_effort="HIGH")
+    assert requests[0]["options"] == {"reasoningEffort": "HIGH"}
+
+
 def test_create_conversation_retries_then_succeeds(monkeypatch):
     sleeps = []
     monkeypatch.setattr(sse_mod.time, "sleep", lambda s: sleeps.append(s))

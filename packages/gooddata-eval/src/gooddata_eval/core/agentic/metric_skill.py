@@ -179,6 +179,7 @@ def _execute_single_metric_run(
     question: str,
     expected_outputs: list[dict],
     max_iterations: int,
+    reasoning_effort: str | None = None,
 ) -> MetricRunResult:
     """Drive one full multi-turn metric-skill conversation and evaluate the result.
 
@@ -195,7 +196,7 @@ def _execute_single_metric_run(
     try:
         for _iteration in range(max_iterations):
             turns += 1
-            chat_result = client.send_message(conversation_id, current_question)
+            chat_result = client.send_message(conversation_id, current_question, reasoning_effort=reasoning_effort)
             candidate = _extract_metric_result(chat_result.tool_call_events or [])
             if candidate is not None:
                 metric_result = candidate
@@ -232,6 +233,7 @@ def run_agentic_metric_skill(
     k: int = _DEFAULT_K,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
+    reasoning_effort: str | None = None,
 ) -> AgenticMetricSummary:
     """Run the metric-skill agentic evaluation K times and return a summary.
 
@@ -248,7 +250,7 @@ def run_agentic_metric_skill(
         try:
             run_results.append(
                 _execute_single_metric_run(
-                    client, sdk, workspace_id, conv_id_0, question, expected_outputs, max_iterations
+                    client, sdk, workspace_id, conv_id_0, question, expected_outputs, max_iterations, reasoning_effort
                 )
             )
         finally:
@@ -260,7 +262,7 @@ def run_agentic_metric_skill(
             try:
                 run_results.append(
                     _execute_single_metric_run(
-                        client, sdk, workspace_id, conv_id, question, expected_outputs, max_iterations
+                        client, sdk, workspace_id, conv_id, question, expected_outputs, max_iterations, reasoning_effort
                     )
                 )
             finally:
@@ -300,6 +302,7 @@ def evaluate_agentic_metric_skill(
     run_timestamp: str | None = None,
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
+    reasoning_effort: str | None = None,
 ) -> None:
     """Run metric-skill evaluation, log to Langfuse, and raise MetricSkillAssertionError on failure."""
     from datetime import datetime as _dt  # noqa: PLC0415
@@ -319,6 +322,7 @@ def evaluate_agentic_metric_skill(
         k=k,
         max_iterations=max_iterations,
         initial_conversation_id=initial_conversation_id,
+        reasoning_effort=reasoning_effort,
     )
 
     if langfuse is not None and dataset_item_id:

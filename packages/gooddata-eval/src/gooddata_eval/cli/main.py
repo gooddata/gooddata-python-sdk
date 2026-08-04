@@ -2,6 +2,7 @@
 """`gd-eval` command-line entry point."""
 
 import argparse
+import os
 import sys
 import threading
 from datetime import datetime, timezone
@@ -37,14 +38,15 @@ class _RoutingBackend:
     else uses the conversational chat endpoint.
     """
 
-    def __init__(self, chat: ChatClient, summary: SummaryClient):
+    def __init__(self, chat: ChatClient, summary: SummaryClient, *, reasoning_effort: str | None = None):
         self._chat = chat
         self._summary = summary
+        self._reasoning_effort = reasoning_effort
 
     def ask(self, item: DatasetItem) -> ChatResult:
         if item.test_kind == _SUMMARY_TEST_KIND:
             return self._summary.ask(item)
-        return self._chat.ask(item)
+        return self._chat.ask(item, reasoning_effort=self._reasoning_effort)
 
     def close(self) -> None:
         for backend in (self._chat, self._summary):
@@ -108,6 +110,17 @@ def _build_parser() -> argparse.ArgumentParser:
         "--langfuse",
         action="store_true",
         help="Log scores and traces to Langfuse (requires --langfuse-dataset and LANGFUSE_* env vars).",
+    )
+    run.add_argument(
+        "--reasoning-effort",
+        dest="reasoning_effort",
+        choices=["LOW", "MEDIUM", "HIGH"],
+        default=None,
+        help=(
+            "Requested LLM reasoning effort for this run's messages (or set GD_EVAL_REASONING_EFFORT). "
+            "Experimental GoodData feature, gated behind an org-level flag — when disabled, the value is "
+            "ignored and MEDIUM is used. Not persisted server-side: applies only to messages this run sends."
+        ),
     )
     models_cmd = sub.add_parser("models", help="List LLM providers and models configured in the org.")
     models_cmd.add_argument("--host", help="GoodData host URL.")
@@ -333,6 +346,7 @@ def _run(config: RunConfig) -> int:
                     run_ts=run_ts,
                     on_item_start=on_item_start,
                     on_item_done=on_item_done,
+                    reasoning_effort=config.reasoning_effort,
                 )
 
             # --- non-agentic items (single-turn, use Evaluator) ---
@@ -344,6 +358,7 @@ def _run(config: RunConfig) -> int:
                     preserve_failed=config.preserve_failed,
                 ),
                 SummaryClient(host=config.host, token=config.token, workspace_id=config.workspace_id),
+                reasoning_effort=config.reasoning_effort,
             )
             try:
                 single_report = run_items(
@@ -433,6 +448,7 @@ def main(argv: list[str] | None = None) -> int:
             quiet=args.quiet,
             kind=args.kind,
             preserve_failed=args.preserve_failed,
+            reasoning_effort=args.reasoning_effort or os.environ.get("GD_EVAL_REASONING_EFFORT"),
         )
         return _run(config)
     except (

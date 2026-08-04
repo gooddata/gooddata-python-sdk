@@ -71,7 +71,7 @@ def test_execute_single_run_viz_on_first_turn():
     assert result.total_turns == 1.0
     assert result.total_steps == 2.0
     assert result.conversation_id == "conv-1"
-    client.send_message.assert_called_once_with("conv-1", "Show revenue")
+    client.send_message.assert_called_once_with("conv-1", "Show revenue", reasoning_effort=None)
 
 
 def test_execute_single_run_clarification_then_viz(monkeypatch):
@@ -92,7 +92,7 @@ def test_execute_single_run_clarification_then_viz(monkeypatch):
     assert result.eval_result.visualization_created is True
     assert result.total_turns == 2.0
     assert client.send_message.call_count == 2
-    assert client.send_message.call_args_list[1] == call("conv-1", "Revenue please")
+    assert client.send_message.call_args_list[1] == call("conv-1", "Revenue please", reasoning_effort=None)
 
 
 def test_execute_single_run_no_viz_no_text():
@@ -148,7 +148,7 @@ def test_run_agentic_visualization_uses_initial_conversation_for_run_0():
 
     # create_conversation should NOT be called for run 0
     instance.create_conversation.assert_not_called()
-    instance.send_message.assert_called_once_with("existing-conv", "Show revenue")
+    instance.send_message.assert_called_once_with("existing-conv", "Show revenue", reasoning_effort=None)
     # the caller-supplied conversation is left intact; the function only deletes conversations it created
     instance.delete_conversation.assert_not_called()
     assert len(summary.run_results) == 1

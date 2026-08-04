@@ -268,10 +268,12 @@ class ChatClient:
         except httpx.HTTPError:
             pass  # best-effort cleanup
 
-    def send_message(self, conversation_id: str, question: str) -> ChatResult:
+    def send_message(self, conversation_id: str, question: str, *, reasoning_effort: str | None = None) -> ChatResult:
         url = f"{self._base}/{conversation_id}/messages"
         headers = {**self._auth, "Accept": "text/event-stream", "Content-Type": "application/json"}
-        body = {"item": {"role": "user", "content": {"type": "text", "text": question}}}
+        body: dict[str, Any] = {"item": {"role": "user", "content": {"type": "text", "text": question}}}
+        if reasoning_effort:
+            body["options"] = {"reasoningEffort": reasoning_effort}
 
         def _do() -> ChatResult:
             with self._client.stream("POST", url, json=body, headers=headers) as resp:
@@ -280,7 +282,7 @@ class ChatClient:
 
         return _retry_transient(_do, is_retryable=_is_retryable_exc)
 
-    def ask(self, item: DatasetItem) -> ChatResult:
+    def ask(self, item: DatasetItem, *, reasoning_effort: str | None = None) -> ChatResult:
         """Run one conversation: create, send, parse, clean up.
 
         The conversation_id is attached to the returned ChatResult for tracing.
@@ -291,7 +293,7 @@ class ChatClient:
         conversation_id = self.create_conversation()
         success = False
         try:
-            result = self.send_message(conversation_id, item.question)
+            result = self.send_message(conversation_id, item.question, reasoning_effort=reasoning_effort)
             result.conversation_id = conversation_id
             success = True
             return result

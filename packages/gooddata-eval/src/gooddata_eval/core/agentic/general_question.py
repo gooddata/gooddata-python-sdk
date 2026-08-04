@@ -71,6 +71,7 @@ def run_agentic_general_question(
     expected_output: str,
     k: int = _DEFAULT_K,
     initial_conversation_id: str | None = None,
+    reasoning_effort: str | None = None,
 ) -> AgenticGeneralQuestionSummary:
     """Run the general-question agentic evaluation K times and return a summary."""
     run_results: list[GeneralQuestionResult] = []
@@ -80,7 +81,7 @@ def run_agentic_general_question(
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
-            chat_result = client.send_message(conv_id_0, question)
+            chat_result = client.send_message(conv_id_0, question, reasoning_effort=reasoning_effort)
             actual_output = (chat_result.text_response or "").strip()
             passed, reasoning = judge.score(
                 input=question, expected_output=expected_output, actual_output=actual_output
@@ -102,7 +103,7 @@ def run_agentic_general_question(
         for _ in range(1, k):
             conv_id = client.create_conversation()
             try:
-                chat_result = client.send_message(conv_id, question)
+                chat_result = client.send_message(conv_id, question, reasoning_effort=reasoning_effort)
                 actual_output = (chat_result.text_response or "").strip()
                 passed, reasoning = judge.score(
                     input=question, expected_output=expected_output, actual_output=actual_output
@@ -153,6 +154,7 @@ def evaluate_agentic_general_question(
     run_timestamp: str | None = None,
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
+    reasoning_effort: str | None = None,
 ) -> None:
     """Run general-question evaluation, log to Langfuse, and raise on failure."""
     from datetime import datetime as _dt  # noqa: PLC0415
@@ -171,6 +173,7 @@ def evaluate_agentic_general_question(
         expected_output=expected_output,
         k=k,
         initial_conversation_id=initial_conversation_id,
+        reasoning_effort=reasoning_effort,
     )
 
     if langfuse is not None and dataset_item_id:

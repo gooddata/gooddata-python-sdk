@@ -535,8 +535,6 @@ def test_cli_preserve_failed_flag_parsed(monkeypatch, fixtures_dir):
 
     monkeypatch.setattr(cli_main, "WorkspaceModelController", _FakeController)
 
-    original_chat_client = cli_main.ChatClient
-
     def _capture_chat_client(**kwargs):
         captured_kwargs.update(kwargs)
         return object()
@@ -571,6 +569,161 @@ def test_cli_preserve_failed_flag_parsed(monkeypatch, fixtures_dir):
     )
     assert exit_code == 0
     assert captured_kwargs.get("preserve_failed") is True
+
+
+def _reasoning_effort_harness(monkeypatch, fixtures_dir):
+    """Shared scaffolding for --reasoning-effort tests: fakes everything but _RoutingBackend."""
+    monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
+    captured: dict = {}
+
+    class _FakeController:
+        def __init__(self, *a, **k): ...
+        def get_active(self):
+            return ActiveLlmProvider(provider_id="p", default_model_id="gpt-5.2")
+
+        def resolve_and_activate(self, requested, provider=None):
+            return ResolvedModel(provider_id="p", model_id="gpt-5.2", switched=False, provider_name="P")
+
+        def restore(self, original): ...
+        def close(self): ...
+
+    monkeypatch.setattr(cli_main, "WorkspaceModelController", _FakeController)
+    monkeypatch.setattr(cli_main, "ChatClient", lambda **kwargs: object())
+    monkeypatch.setattr(cli_main, "SummaryClient", lambda **kwargs: object())
+
+    class _FakeBackend:
+        def __init__(self, chat, summary, *, reasoning_effort=None):
+            captured["reasoning_effort"] = reasoning_effort
+
+        def ask(self, item):
+            raise AssertionError("not used by the fake run_items")
+
+        def close(self): ...
+
+    monkeypatch.setattr(cli_main, "_RoutingBackend", _FakeBackend)
+
+    def _fake_run(items, backend, *, runs, model, workspace_id, **kw):
+        return EvalReport(
+            model=model,
+            workspace_id=workspace_id,
+            items=[
+                ItemReport(id="i1", dataset_name="d", test_kind="visualization", question="q", pass_at_k=True, runs=1)
+            ],
+        )
+
+    monkeypatch.setattr(cli_main, "run_items", _fake_run)
+    return captured
+
+
+def test_cli_reasoning_effort_flag_parsed(monkeypatch, fixtures_dir):
+    """--reasoning-effort threads its value into _RoutingBackend."""
+    captured = _reasoning_effort_harness(monkeypatch, fixtures_dir)
+
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--dataset",
+            str(fixtures_dir / "sample_dataset"),
+            "--reasoning-effort",
+            "HIGH",
+            "--quiet",
+        ]
+    )
+    assert exit_code == 0
+    assert captured.get("reasoning_effort") == "HIGH"
+
+
+def test_cli_reasoning_effort_omitted_by_default(monkeypatch, fixtures_dir):
+    """Without --reasoning-effort or the env var, no effort is requested."""
+    monkeypatch.delenv("GD_EVAL_REASONING_EFFORT", raising=False)
+    captured = _reasoning_effort_harness(monkeypatch, fixtures_dir)
+
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--dataset",
+            str(fixtures_dir / "sample_dataset"),
+            "--quiet",
+        ]
+    )
+    assert exit_code == 0
+    assert captured.get("reasoning_effort") is None
+
+
+def test_cli_reasoning_effort_env_var_fallback(monkeypatch, fixtures_dir):
+    """GD_EVAL_REASONING_EFFORT is used when --reasoning-effort is not passed."""
+    monkeypatch.setenv("GD_EVAL_REASONING_EFFORT", "LOW")
+    captured = _reasoning_effort_harness(monkeypatch, fixtures_dir)
+
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--dataset",
+            str(fixtures_dir / "sample_dataset"),
+            "--quiet",
+        ]
+    )
+    assert exit_code == 0
+    assert captured.get("reasoning_effort") == "LOW"
+
+
+def test_cli_reasoning_effort_flag_wins_over_env_var(monkeypatch, fixtures_dir):
+    """--reasoning-effort takes precedence over GD_EVAL_REASONING_EFFORT when both are set."""
+    monkeypatch.setenv("GD_EVAL_REASONING_EFFORT", "LOW")
+    captured = _reasoning_effort_harness(monkeypatch, fixtures_dir)
+
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--dataset",
+            str(fixtures_dir / "sample_dataset"),
+            "--reasoning-effort",
+            "HIGH",
+            "--quiet",
+        ]
+    )
+    assert exit_code == 0
+    assert captured.get("reasoning_effort") == "HIGH"
+
+
+def test_cli_reasoning_effort_rejects_invalid_value(fixtures_dir):
+    """argparse rejects any value outside LOW/MEDIUM/HIGH."""
+    with pytest.raises(SystemExit):
+        cli_main.parse_args(
+            [
+                "run",
+                "--workspace",
+                "ws1",
+                "--dataset",
+                str(fixtures_dir / "sample_dataset"),
+                "--reasoning-effort",
+                "EXTREME",
+            ]
+        )
 
 
 def test_cli_rejects_negative_concurrency(monkeypatch, fixtures_dir):

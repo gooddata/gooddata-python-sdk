@@ -278,6 +278,7 @@ def run_agentic_conversation(
     fixture: ConversationFixture,
     max_clarification_turns: int = 20,
     initial_conversation_id: str | None = None,
+    reasoning_effort: str | None = None,
 ) -> ConversationResult:
     """Run a multi-turn, multi-skill conversation evaluation (no K-runs).
 
@@ -315,7 +316,7 @@ def run_agentic_conversation(
             final_result: ChatResult | None = None
 
             for _iter in range(max_clarification_turns + 1):
-                chat_result = client.send_message(conversation_id, current_message)
+                chat_result = client.send_message(conversation_id, current_message, reasoning_effort=reasoning_effort)
                 final_result = chat_result
                 all_tool_calls.extend(chat_result.tool_call_events or [])
 
@@ -403,6 +404,7 @@ def evaluate_agentic_conversation(
     run_timestamp: str | None = None,
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
+    reasoning_effort: str | None = None,
 ) -> None:
     """Run conversation evaluation, log to Langfuse, and raise on failure."""
     from datetime import datetime as _dt  # noqa: PLC0415
@@ -420,6 +422,7 @@ def evaluate_agentic_conversation(
         fixture=fixture,
         max_clarification_turns=max_clarification_turns,
         initial_conversation_id=initial_conversation_id,
+        reasoning_effort=reasoning_effort,
     )
 
     if langfuse is not None and dataset_item_id:

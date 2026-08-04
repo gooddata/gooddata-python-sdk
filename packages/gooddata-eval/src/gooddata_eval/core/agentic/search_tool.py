@@ -67,6 +67,7 @@ def run_agentic_search_tool(
     expected_tool_call: dict,
     k: int = _DEFAULT_K,
     initial_conversation_id: str | None = None,
+    reasoning_effort: str | None = None,
 ) -> AgenticSearchSummary:
     """Run the search-tool agentic evaluation K times (single-turn each)."""
     run_results: list[SearchResult] = []
@@ -75,7 +76,7 @@ def run_agentic_search_tool(
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
-            chat_result = client.send_message(conv_id_0, question)
+            chat_result = client.send_message(conv_id_0, question, reasoning_effort=reasoning_effort)
             tcs = chat_result.tool_call_events or []
             selected = _tool_selection(tcs)
             correct = selected and _tool_correctness(tcs, expected_tool_call)
@@ -94,7 +95,7 @@ def run_agentic_search_tool(
         for _ in range(1, k):
             conv_id = client.create_conversation()
             try:
-                chat_result = client.send_message(conv_id, question)
+                chat_result = client.send_message(conv_id, question, reasoning_effort=reasoning_effort)
                 tcs = chat_result.tool_call_events or []
                 selected = _tool_selection(tcs)
                 correct = selected and _tool_correctness(tcs, expected_tool_call)
@@ -144,6 +145,7 @@ def evaluate_agentic_search_tool(
     run_timestamp: str | None = None,
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
+    reasoning_effort: str | None = None,
 ) -> None:
     """Run search-tool evaluation, log to Langfuse, and raise SearchToolAssertionError on failure."""
     from datetime import datetime as _dt  # noqa: PLC0415
@@ -162,6 +164,7 @@ def evaluate_agentic_search_tool(
         expected_tool_call=expected_tool_call,
         k=k,
         initial_conversation_id=initial_conversation_id,
+        reasoning_effort=reasoning_effort,
     )
 
     if langfuse is not None and dataset_item_id:
