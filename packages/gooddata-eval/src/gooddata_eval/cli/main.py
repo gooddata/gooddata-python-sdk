@@ -6,6 +6,7 @@ import sys
 import threading
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import get_args
 
 import httpx
 from gooddata_api_client.exceptions import ApiException
@@ -14,7 +15,7 @@ from rich.table import Table
 
 from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, run_agentic_items
 from gooddata_eval.core.chat.sse_client import ChatClient
-from gooddata_eval.core.config import RunConfig
+from gooddata_eval.core.config import ReasoningEffort, RunConfig
 from gooddata_eval.core.connection import ConnectionError_, resolve_connection
 from gooddata_eval.core.dataset.local import load_local_dataset
 from gooddata_eval.core.langfuse.sink import LangfuseSink
@@ -103,6 +104,13 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         dest="preserve_failed",
         help="Keep failed conversations on the server for post-mortem inspection.",
+    )
+    run.add_argument(
+        "--reasoning-effort",
+        dest="reasoning_effort",
+        choices=list(get_args(ReasoningEffort)),
+        help="Reasoning effort requested per message. Requires the enableGenAiReasoningEffort "
+        "feature flag on the target organization; without it the server ignores the value.",
     )
     run.add_argument(
         "--langfuse",
@@ -292,6 +300,10 @@ def _run(config: RunConfig) -> int:
                     progress_console.print(f"Provider={provider_display}, model={resolved.model_id}{switched}")
 
             run_name = f"gd-eval-{run_ts}-{resolved.model_id}"
+            if config.reasoning_effort:
+                # Without this two runs differing only by effort share a name and are
+                # indistinguishable in the report, which is the comparison this exists for.
+                run_name = f"{run_name}-effort-{config.reasoning_effort.lower()}"
             if progress_console and config.log_to_langfuse:
                 progress_console.print(f"Logging to Langfuse run '{run_name}'...")
 
@@ -307,6 +319,7 @@ def _run(config: RunConfig) -> int:
                     run_name=run_name,
                     model_id=resolved.model_id,
                     provider_type=resolved.provider_type,
+                    reasoning_effort=config.reasoning_effort,
                 )
 
                 def on_langfuse_item_done(
@@ -329,6 +342,7 @@ def _run(config: RunConfig) -> int:
                     workspace_id=config.workspace_id,
                     k=config.runs,
                     model_version=resolved.model_id,
+                    reasoning_effort=config.reasoning_effort,
                     use_langfuse=config.log_to_langfuse,
                     run_ts=run_ts,
                     on_item_start=on_item_start,
@@ -342,6 +356,7 @@ def _run(config: RunConfig) -> int:
                     token=config.token,
                     workspace_id=config.workspace_id,
                     preserve_failed=config.preserve_failed,
+                    reasoning_effort=config.reasoning_effort,
                 ),
                 SummaryClient(host=config.host, token=config.token, workspace_id=config.workspace_id),
             )
@@ -433,6 +448,7 @@ def main(argv: list[str] | None = None) -> int:
             quiet=args.quiet,
             kind=args.kind,
             preserve_failed=args.preserve_failed,
+            reasoning_effort=args.reasoning_effort,
         )
         return _run(config)
     except (

@@ -260,7 +260,7 @@ def test_cli_langfuse_sink_called_per_item(monkeypatch, fixtures_dir):
     langfuse_calls: list = []
 
     class _FakeSink:
-        def __init__(self, dataset_name, run_name, model_id="", provider_type=""): ...
+        def __init__(self, dataset_name, run_name, model_id="", provider_type="", reasoning_effort=None): ...
         def log_item(self, report, *, dataset_item_id):
             langfuse_calls.append(dataset_item_id)
 
@@ -535,8 +535,6 @@ def test_cli_preserve_failed_flag_parsed(monkeypatch, fixtures_dir):
 
     monkeypatch.setattr(cli_main, "WorkspaceModelController", _FakeController)
 
-    original_chat_client = cli_main.ChatClient
-
     def _capture_chat_client(**kwargs):
         captured_kwargs.update(kwargs)
         return object()
@@ -630,3 +628,79 @@ def test_progress_callbacks_thread_safe():
     output = console.file.getvalue()
     assert "test-1" in output
     assert "test-49" in output
+
+
+def test_cli_reasoning_effort_flag_parsed(monkeypatch, fixtures_dir):
+    """--reasoning-effort reaches RunConfig and is passed on to ChatClient."""
+    monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
+    captured_kwargs: dict = {}
+
+    class _FakeController:
+        def __init__(self, *a, **k): ...
+        def get_active(self):
+            return ActiveLlmProvider(provider_id="p", default_model_id="gpt-5.2")
+
+        def resolve_and_activate(self, requested, provider=None):
+            return ResolvedModel(provider_id="p", model_id="gpt-5.2", switched=False, provider_name="P")
+
+        def restore(self, original): ...
+        def close(self): ...
+
+    monkeypatch.setattr(cli_main, "WorkspaceModelController", _FakeController)
+
+    def _capture_chat_client(**kwargs):
+        captured_kwargs.update(kwargs)
+        return object()
+
+    monkeypatch.setattr(cli_main, "ChatClient", _capture_chat_client)
+
+    def _fake_run(items, backend, *, runs, model, workspace_id, **kw):
+        return EvalReport(
+            model=model,
+            workspace_id=workspace_id,
+            items=[
+                ItemReport(id="i1", dataset_name="d", test_kind="visualization", question="q", pass_at_k=True, runs=1)
+            ],
+        )
+
+    monkeypatch.setattr(cli_main, "run_items", _fake_run)
+
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--dataset",
+            str(fixtures_dir / "sample_dataset"),
+            "--reasoning-effort",
+            "LOW",
+            "--quiet",
+        ]
+    )
+    assert exit_code == 0
+    assert captured_kwargs.get("reasoning_effort") == "LOW"
+
+
+def test_cli_rejects_unknown_reasoning_effort(fixtures_dir):
+    """argparse choices guard the value before it can reach the server as a 422."""
+    with pytest.raises(SystemExit) as exc_info:
+        cli_main.main(
+            [
+                "run",
+                "--host",
+                "https://h",
+                "--token",
+                "tok",
+                "--workspace",
+                "ws1",
+                "--dataset",
+                str(fixtures_dir / "sample_dataset"),
+                "--reasoning-effort",
+                "low",
+            ]
+        )
+    assert exc_info.value.code == 2

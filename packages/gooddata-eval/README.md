@@ -92,6 +92,7 @@ Both provider name and provider id are accepted as the prefix.
 |---|---|---|
 | `--runs K` | `2` | Independent runs per item (pass@K). An item passes if any run passes. |
 | `--concurrency K` | `1` | Number of items evaluated concurrently. `1` = sequential (default). Increase to load-test the agent under simultaneous requests. Progress output interleaves when K > 1. |
+| `--reasoning-effort LEVEL` | server default | `LOW`, `MEDIUM` or `HIGH`, sent as `options.reasoningEffort` on every chat message. Requires the `enableGenAiReasoningEffort` feature flag on the target organization — without it the server ignores the value. Applies to chat items only; `dashboard_summary` items go through the summary endpoint, which has no such option. |
 
 #### Output
 
@@ -104,7 +105,7 @@ Both provider name and provider id are accepted as the prefix.
 
 | Flag | Description |
 |---|---|
-| `--langfuse` | Log scores and traces to Langfuse after each item. Requires `--langfuse-dataset`. Creates one named experiment run per model (`gd-eval-{timestamp}-{model}`). Requires `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, `LANGFUSE_HOST`. |
+| `--langfuse` | Log scores and traces to Langfuse after each item. Requires `--langfuse-dataset`. Creates one named experiment run per model (`gd-eval-{timestamp}-{model}`, suffixed `-effort-{level}` when `--reasoning-effort` is set so runs differing only by effort stay separate). Requires `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, `LANGFUSE_HOST`. |
 
 ### JSON report shape
 

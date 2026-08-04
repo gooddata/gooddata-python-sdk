@@ -145,8 +145,8 @@ def test_parse_sse_lines_non_retryable_status_is_chat_error_not_transient():
     assert ei.value.status_code == 400
 
 
-def _client_with_handler(handler):
-    client = ChatClient(host="https://example.invalid", token="t", workspace_id="w")
+def _client_with_handler(handler, **kwargs):
+    client = ChatClient(host="https://example.invalid", token="t", workspace_id="w", **kwargs)
     client._client = httpx.Client(transport=httpx.MockTransport(handler))
     return client
 
@@ -378,3 +378,78 @@ def test_ask_attaches_conversation_id_to_exception(monkeypatch):
     with pytest.raises(ChatError) as ei:
         client.ask(item)
     assert ei.value.conversation_id == "conv-exc"
+
+
+def _capture_body_client(captured, *, reasoning_effort=None):
+    def handler(request):
+        captured.append(json.loads(request.content))
+        return httpx.Response(200, content=_OK_SSE)
+
+    client = ChatClient(host="https://example.invalid", token="t", workspace_id="w", reasoning_effort=reasoning_effort)
+    client._client = httpx.Client(transport=httpx.MockTransport(handler))
+    return client
+
+
+def test_send_message_omits_options_when_no_reasoning_effort():
+    """Default must stay byte-identical to the pre-feature payload."""
+    captured = []
+    _capture_body_client(captured).send_message("conv", "q")
+    assert captured == [{"item": {"role": "user", "content": {"type": "text", "text": "q"}}}]
+
+
+@pytest.mark.parametrize("effort", ["LOW", "MEDIUM", "HIGH"])
+def test_send_message_sends_reasoning_effort(effort):
+    captured = []
+    _capture_body_client(captured, reasoning_effort=effort).send_message("conv", "q")
+    assert captured[0]["options"] == {"reasoningEffort": effort}
+    assert captured[0]["item"]["content"]["text"] == "q"
+
+
+def test_reasoning_effort_applies_to_every_message_in_a_conversation():
+    """Multi-turn evaluators call send_message repeatedly on one client."""
+    captured = []
+    client = _capture_body_client(captured, reasoning_effort="LOW")
+    client.send_message("conv", "first")
+    client.send_message("conv", "follow-up")
+    assert [c["options"] for c in captured] == [{"reasoningEffort": "LOW"}] * 2
+
+
+def test_ask_propagates_reasoning_effort():
+    """ask() creates, sends and deletes — the effort must survive that whole path."""
+    captured = []
+
+    def handler(request):
+        if request.method == "POST" and request.url.path.endswith("/conversations"):
+            return httpx.Response(201, json={"conversationId": "c1"})
+        if request.method == "POST":
+            captured.append(json.loads(request.content))
+            return httpx.Response(200, content=_OK_SSE)
+        return httpx.Response(204)
+
+    client = _client_with_handler(handler, reasoning_effort="HIGH")
+    item = DatasetItem(id="t1", dataset_name="d", test_kind="visualization", question="q", expected_output={})
+    client.ask(item)
+    assert captured[0]["options"] == {"reasoningEffort": "HIGH"}
+
+
+@pytest.mark.parametrize(("given", "sent"), [("low", "LOW"), ("  High  ", "HIGH"), ("MEDIUM", "MEDIUM")])
+def test_send_message_normalizes_reasoning_effort(given, sent):
+    """The endpoint enum is uppercase, so casing is canonicalized before the request."""
+    captured = []
+    _capture_body_client(captured, reasoning_effort=given).send_message("conv", "q")
+    assert captured[0]["options"] == {"reasoningEffort": sent}
+
+
+@pytest.mark.parametrize("blank", ["", "   "])
+def test_blank_reasoning_effort_is_treated_as_unset(blank):
+    """Previously a blank value was sent but skipped by the Langfuse writers, so the
+    request and the recorded run disagreed. It now means 'unset' on both paths."""
+    captured = []
+    _capture_body_client(captured, reasoning_effort=blank).send_message("conv", "q")
+    assert "options" not in captured[0]
+
+
+def test_invalid_reasoning_effort_fails_at_construction():
+    """Fail locally rather than as an out-of-enum request partway through a run."""
+    with pytest.raises(ValueError, match="Invalid reasoning effort"):
+        ChatClient(host="https://example.invalid", token="t", workspace_id="w", reasoning_effort="maximum")
