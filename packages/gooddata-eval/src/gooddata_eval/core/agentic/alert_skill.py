@@ -119,7 +119,30 @@ def _check_metric(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     return expected.metric_id == act_metric
 
 
-def _check_recipients(expected: CatalogMetricAlert, actual_args: dict) -> bool:
+def _resolve_internal_recipient_ids(sdk: GoodDataSdk, emails: list[str]) -> set[str]:
+    """Best-effort map of expected recipient emails to internal GoodData user ids.
+
+    Some notification channels are workspace-restricted to internal users --
+    `create_metric_alert` then addresses the alert by internal user id
+    (`internal_recipients`), never by email, so an expected email has to be
+    resolved before it can be compared against that field. Failures (no
+    matching user, no permission, network error) are swallowed: the caller
+    treats an empty result the same as "this delivery path doesn't match",
+    which is correct -- it doesn't mean the alert itself failed.
+    """
+    ids: set[str] = set()
+    for email in emails:
+        try:
+            resp = sdk._client.entities_api.get_all_entities_users(filter=f"email=='{email}'")
+            ids.update(u.id for u in (resp.data or []))
+        except Exception:
+            pass
+    return ids
+
+
+def _check_recipients(
+    expected: CatalogMetricAlert, actual_args: dict, sdk: GoodDataSdk | None = None
+) -> bool:
     if not expected.recipients:
         return True
     act_recip_raw = actual_args.get("recipients", actual_args.get("external_recipients"))
@@ -134,7 +157,14 @@ def _check_recipients(expected: CatalogMetricAlert, actual_args: dict) -> bool:
         act_recip = act_recip_raw
     else:
         act_recip = []
-    return set(expected.recipients) == set(act_recip or [])
+    if set(expected.recipients) == set(act_recip or []):
+        return True
+    act_internal = actual_args.get("internal_recipients")
+    if sdk is not None and isinstance(act_internal, list) and act_internal:
+        internal_recipient_ids = _resolve_internal_recipient_ids(sdk, expected.recipients)
+        if internal_recipient_ids & set(act_internal):
+            return True
+    return False
 
 
 def generate_simulated_alert_response(
@@ -482,7 +512,7 @@ def run_agentic_alert_skill(
                 trigger_correct=tool_called and _check_trigger(expected, actual_args),
                 filters_correct=tool_called and _check_filters(expected, actual_args),
                 metric_correct=tool_called and _check_metric(expected, actual_args),
-                recipients_correct=tool_called and _check_recipients(expected, actual_args),
+                recipients_correct=tool_called and _check_recipients(expected, actual_args, sdk=sdk),
             )
             return AlertRunResult(
                 conversation_id=conv_id,
