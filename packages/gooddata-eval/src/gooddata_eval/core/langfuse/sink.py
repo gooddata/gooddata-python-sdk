@@ -17,6 +17,7 @@ _QUALITY_WEIGHT = 0.6
 _SPEED_WEIGHT = 0.2
 
 if TYPE_CHECKING:
+    from gooddata_eval.core.config import ReasoningEffort
     from gooddata_eval.core.runner import ItemReport
 
 
@@ -48,11 +49,19 @@ def compute_scores(
 class LangfuseSink:
     """Posts evaluation results to Langfuse via the ingestion REST API."""
 
-    def __init__(self, dataset_name: str, run_name: str, model_id: str = "", provider_type: str = ""):
+    def __init__(
+        self,
+        dataset_name: str,
+        run_name: str,
+        model_id: str = "",
+        provider_type: str = "",
+        reasoning_effort: ReasoningEffort | None = None,
+    ):
         self._dataset_name = dataset_name
         self._run_name = run_name
         self._model_id = model_id
         self._provider_type = provider_type
+        self._reasoning_effort = reasoning_effort
         host = os.environ.get("LANGFUSE_HOST", "https://cloud.langfuse.com").rstrip("/")
         pub = os.environ.get("LANGFUSE_PUBLIC_KEY", "")
         sec = os.environ.get("LANGFUSE_SECRET_KEY", "")
@@ -101,8 +110,17 @@ class LangfuseSink:
                         "item_id": report.id,
                         "model": self._model_id,
                         "provider_type": self._provider_type,
+                        "reasoning_effort": self._reasoning_effort,
                     },
-                    "tags": [t for t in [report.test_kind, self._provider_type] if t],
+                    "tags": [
+                        t
+                        for t in [
+                            report.test_kind,
+                            self._provider_type,
+                            f"effort-{self._reasoning_effort.lower()}" if self._reasoning_effort else None,
+                        ]
+                        if t
+                    ],
                 },
             ),
         ]
@@ -168,6 +186,7 @@ class LangfuseSink:
                         "metadata": {
                             "model": self._model_id,
                             "provider_type": self._provider_type,
+                            "reasoning_effort": self._reasoning_effort,
                         },
                         "datasetItemId": dataset_item_id,
                         "traceId": trace_id,

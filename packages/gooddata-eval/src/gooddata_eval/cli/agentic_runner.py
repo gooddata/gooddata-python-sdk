@@ -14,6 +14,7 @@ from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.metric_skill import evaluate_agentic_metric_skill
 from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
+from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
 
@@ -24,6 +25,7 @@ class _LfKw(TypedDict, total=False):
     dataset_name: str
     run_timestamp: str
     model_version_override: str | None
+    reasoning_effort: ReasoningEffort | None
 
 
 AGENTIC_TEST_KINDS = frozenset(
@@ -80,6 +82,7 @@ def _dispatch_agentic(
     langfuse: Any,
     run_ts: str,
     model_version_override: str | None,
+    reasoning_effort: ReasoningEffort | None = None,
 ) -> None:
     """Call the appropriate evaluate_agentic_* function for the item's test_kind."""
     kind = item.test_kind
@@ -90,6 +93,7 @@ def _dispatch_agentic(
         "dataset_name": item.dataset_name,
         "run_timestamp": run_ts,
         "model_version_override": model_version_override,
+        "reasoning_effort": reasoning_effort,
     }
 
     if kind in ("vis_agentic", "agentic_visualization"):
@@ -176,6 +180,7 @@ def run_agentic_items(
     *,
     k: int = 2,
     model_version: str | None = None,
+    reasoning_effort: ReasoningEffort | None = None,
     use_langfuse: bool = False,
     run_ts: str,
     on_item_start: Any = None,
@@ -202,7 +207,7 @@ def run_agentic_items(
         )
         t0 = time.perf_counter()
         try:
-            _dispatch_agentic(item, host, token, workspace_id, k, langfuse, run_ts, model_version)
+            _dispatch_agentic(item, host, token, workspace_id, k, langfuse, run_ts, model_version, reasoning_effort)
             item_report.pass_at_k = True
             item_report.runs = k
         except AssertionError as exc:
