@@ -135,14 +135,12 @@ def _resolve_internal_recipient_ids(sdk: GoodDataSdk, emails: list[str]) -> set[
         try:
             resp = sdk._client.entities_api.get_all_entities_users(filter=f"email=='{email}'")
             ids.update(u.id for u in (resp.data or []))
-        except Exception:
+        except Exception:  # noqa: PERF203 — per-email lookup: one bad email must not abort the rest
             pass
     return ids
 
 
-def _check_recipients(
-    expected: CatalogMetricAlert, actual_args: dict, sdk: GoodDataSdk | None = None
-) -> bool:
+def _check_recipients(expected: CatalogMetricAlert, actual_args: dict, sdk: GoodDataSdk | None = None) -> bool:
     if not expected.recipients:
         return True
     act_recip_raw = actual_args.get("recipients", actual_args.get("external_recipients"))

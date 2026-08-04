@@ -147,10 +147,7 @@ def test_check_recipients_matches_external_recipients_without_sdk():
     # internal_recipients fallback doesn't force a lookup when it isn't needed.
     expected = _normalize_expected_output({"Recipients": ["user@example.com"]})
     mock_sdk = MagicMock()
-    assert (
-        _check_recipients(expected, {"recipients": ["user@example.com"]}, sdk=mock_sdk)
-        is True
-    )
+    assert _check_recipients(expected, {"recipients": ["user@example.com"]}, sdk=mock_sdk) is True
     mock_sdk._client.entities_api.get_all_entities_users.assert_not_called()
 
 
@@ -164,13 +161,8 @@ def test_check_recipients_matches_internal_recipients_via_resolved_user_id():
     mock_sdk._client.entities_api.get_all_entities_users.return_value.data = [
         MagicMock(id="user.abc123"),
     ]
-    assert (
-        _check_recipients(expected, {"internal_recipients": ["user.abc123"]}, sdk=mock_sdk)
-        is True
-    )
-    mock_sdk._client.entities_api.get_all_entities_users.assert_called_once_with(
-        filter="email=='user@example.com'"
-    )
+    assert _check_recipients(expected, {"internal_recipients": ["user.abc123"]}, sdk=mock_sdk) is True
+    mock_sdk._client.entities_api.get_all_entities_users.assert_called_once_with(filter="email=='user@example.com'")
 
 
 def test_check_recipients_internal_recipients_mismatch_still_fails():
