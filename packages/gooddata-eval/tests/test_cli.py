@@ -726,6 +726,28 @@ def test_cli_reasoning_effort_rejects_invalid_value(fixtures_dir):
         )
 
 
+def test_cli_reasoning_effort_rejects_invalid_env_var(monkeypatch, fixtures_dir):
+    """GD_EVAL_REASONING_EFFORT bypasses argparse choices, so main() must validate it too."""
+    monkeypatch.setenv("GD_EVAL_REASONING_EFFORT", "EXTREME")
+    monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
+
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--dataset",
+            str(fixtures_dir / "sample_dataset"),
+            "--quiet",
+        ]
+    )
+    assert exit_code == cli_main._EXIT_OPERATIONAL_ERROR
+
+
 def test_cli_rejects_negative_concurrency(monkeypatch, fixtures_dir):
     monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
     exit_code = cli_main.main(

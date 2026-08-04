@@ -425,11 +425,23 @@ def _run(config: RunConfig) -> int:
     return _EXIT_OK
 
 
+_VALID_REASONING_EFFORTS = frozenset({"LOW", "MEDIUM", "HIGH"})
+
+
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv if argv is not None else sys.argv[1:])
     if hasattr(args, "concurrency") and args.concurrency < 1:
         print("error: --concurrency must be >= 1.", file=sys.stderr)
         return _EXIT_OPERATIONAL_ERROR
+    reasoning_effort = None
+    if hasattr(args, "reasoning_effort"):
+        reasoning_effort = args.reasoning_effort or os.environ.get("GD_EVAL_REASONING_EFFORT")
+        if reasoning_effort is not None and reasoning_effort not in _VALID_REASONING_EFFORTS:
+            print(
+                f"error: reasoning effort must be one of {sorted(_VALID_REASONING_EFFORTS)}, got {reasoning_effort!r}.",
+                file=sys.stderr,
+            )
+            return _EXIT_OPERATIONAL_ERROR
     try:
         host, token = resolve_connection(host=args.host, token=args.token, profile=args.profile)
         if args.command == "models":
@@ -448,7 +460,7 @@ def main(argv: list[str] | None = None) -> int:
             quiet=args.quiet,
             kind=args.kind,
             preserve_failed=args.preserve_failed,
-            reasoning_effort=args.reasoning_effort or os.environ.get("GD_EVAL_REASONING_EFFORT"),
+            reasoning_effort=reasoning_effort,
         )
         return _run(config)
     except (
