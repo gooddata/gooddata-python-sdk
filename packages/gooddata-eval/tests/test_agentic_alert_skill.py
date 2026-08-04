@@ -146,7 +146,12 @@ def test_check_recipients_matches_external_recipients_without_sdk():
     # The common path never needs a network call at all -- confirms adding the
     # internal_recipients fallback doesn't force a lookup when it isn't needed.
     expected = _normalize_expected_output({"Recipients": ["user@example.com"]})
-    assert _check_recipients(expected, {"recipients": ["user@example.com"]}) is True
+    mock_sdk = MagicMock()
+    assert (
+        _check_recipients(expected, {"recipients": ["user@example.com"]}, sdk=mock_sdk)
+        is True
+    )
+    mock_sdk._client.entities_api.get_all_entities_users.assert_not_called()
 
 
 def test_check_recipients_matches_internal_recipients_via_resolved_user_id():
