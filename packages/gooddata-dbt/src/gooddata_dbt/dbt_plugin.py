@@ -73,7 +73,11 @@ def deploy_ldm(
     logger.info("Generate and put LDM")
     dbt_profiles = DbtProfiles(args)
     data_source_id = dbt_profiles.data_source_id
-    dbt_tables = DbtModelTables.from_local(args.gooddata_upper_case, all_model_ids)
+    dbt_tables = DbtModelTables.from_local(
+        args.gooddata_upper_case,
+        all_model_ids,
+        enable_second_granularities=args.gooddata_enable_second_granularities,
+    )
     generate_and_put_ldm(logger, sdk_wrapper, data_source_id, workspace_id, dbt_tables, model_ids)
     workspace_url = f"{sdk_wrapper.get_host_from_sdk()}/modeler/#/{workspace_id}"
     logger.info(f"LDM successfully loaded, verify here: {workspace_url}")

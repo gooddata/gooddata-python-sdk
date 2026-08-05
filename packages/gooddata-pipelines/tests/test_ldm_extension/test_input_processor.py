@@ -61,6 +61,24 @@ def test_date_from_field(mock_custom_field_date):
     assert date_ds.tags == ["dataset_name"]
 
 
+def test_date_from_field_second_granularities_disabled(
+    mock_custom_field_date,
+):
+    processor = LdmExtensionDataProcessor()
+    date_ds = processor._date_from_field("dataset_name", mock_custom_field_date)
+    assert not set(date_ds.granularities) & set(
+        processor._SECOND_DATE_GRANULARITIES
+    )
+
+
+def test_date_from_field_second_granularities_enabled(mock_custom_field_date):
+    processor = LdmExtensionDataProcessor(enable_second_granularities=True)
+    date_ds = processor._date_from_field("dataset_name", mock_custom_field_date)
+    assert set(date_ds.granularities) == set(
+        processor.DATE_GRANULARITIES + processor._SECOND_DATE_GRANULARITIES
+    )
+
+
 def test_date_ref_from_field(mock_custom_field_date):
     ref = LdmExtensionDataProcessor._date_ref_from_field(mock_custom_field_date)
     assert ref.identifier.id == "date1"

@@ -50,6 +50,7 @@ The plugin provides the following use cases:
   - Reads dbt models and profiles
   - Scans data source (connection props from dbt profiles) through GoodData to get column data types (optional in dbt)
   - Generates GoodData LDM(Logical Data Model) from dbt models. Can utilize custom gooddata-specific metadata, more below
+  - With `--gooddata-enable-second-granularities`, date datasets are created with second-based granularities.
 - upload_notification
   - Invalidates caches for data source
 - deploy_analytics

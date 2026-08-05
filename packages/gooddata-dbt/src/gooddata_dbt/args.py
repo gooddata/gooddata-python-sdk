@@ -67,6 +67,15 @@ def set_gooddata_upper_case_args(parser: argparse.ArgumentParser) -> None:
     )
 
 
+def set_gooddata_enable_second_granularities_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--gooddata-enable-second-granularities",
+        help="Create date datasets with second-based granularities.",
+        action="store_true",
+        default=False,
+    )
+
+
 def set_gooddata_workspace_title_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "-gwt", "--gooddata-workspace-title", help="Workspace title", default=os.getenv("GOODDATA_WORKSPACE_TITLE")
@@ -169,6 +178,7 @@ def parse_arguments(description: str) -> argparse.Namespace:
     set_dbt_args(deploy_ldm)
     set_environment_id_arg(deploy_ldm)
     set_gooddata_upper_case_args(deploy_ldm)
+    set_gooddata_enable_second_granularities_args(deploy_ldm)
     deploy_ldm.set_defaults(method="deploy_ldm")
 
     upload_notification = subparsers.add_parser("upload_notification")
