@@ -18,3 +18,7 @@ class UpsertOutcome(str, Enum):
 
     CREATED = "created"
     UPDATED = "updated"
+
+    # Match StrEnum's str() (the value, not "UpsertOutcome.CREATED") so moving
+    # to StrEnum once py3.10 support is dropped is a no-op for callers.
+    __str__ = str.__str__

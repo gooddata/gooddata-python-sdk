@@ -136,6 +136,12 @@ class TestIdLessCreateIsUnreachable:
 
 @pytest.mark.parametrize("outcome", list(UpsertOutcome))
 def test_outcome_is_a_plain_string(outcome):
-    """The str mixin keeps the value usable in logs and comparisons on py3.10."""
+    """The str mixin keeps the value usable in logs and comparisons on py3.10.
+
+    The str()/format() assertions pin the `__str__ = str.__str__` override, so
+    swapping the base for StrEnum once py3.10 is dropped stays a no-op.
+    """
     assert isinstance(outcome, str)
     assert outcome == outcome.value
+    assert str(outcome) == outcome.value
+    assert f"{outcome}" == outcome.value
