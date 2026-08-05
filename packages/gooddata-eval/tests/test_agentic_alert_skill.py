@@ -2,13 +2,16 @@
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 from unittest.mock import MagicMock, patch
 
+import pytest
 from gooddata_eval.core.agentic.alert_skill import (
     AlertEvaluation,
+    AlertSkillAssertionError,
     _check_filters,
     _check_trigger,
     _deep_subset,
     _normalize_expected_output,
     _to_number,
+    evaluate_agentic_alert_skill,
     generate_simulated_alert_response,
     render_alert_proposal,
     run_agentic_alert_skill,
@@ -489,3 +492,115 @@ def test_run_agentic_alert_skill_answers_proposal_only_confirmation_turn():
     assert "admin@gooddata.com" in agent_message
     assert summary.best.eval.alert_created is True
     assert summary.best.alert_id == "alert-1"
+
+
+def test_run_agentic_alert_skill_accumulates_reasoning_steps_across_iterations():
+    proposal_turn = ChatResult.model_validate(
+        {
+            "text_response": None,
+            "alertProposals": [_PROPOSAL],
+            "toolCallEvents": [
+                {"functionName": "prepare_metric_alert_proposal", "functionArguments": "{}", "result": None}
+            ],
+            "reasoningSteps": ["step one"],
+        }
+    )
+    created_turn = ChatResult.model_validate(
+        {
+            "text_response": "Alert created.",
+            "toolCallEvents": [
+                {
+                    "functionName": "create_metric_alert",
+                    "functionArguments": '{"operator": "GREATER_THAN", "threshold": 500}',
+                    "result": '{"id": "alert-1"}',
+                }
+            ],
+            "reasoningSteps": ["step two"],
+        }
+    )
+    mock_client = MagicMock()
+    mock_client.send_message.side_effect = [proposal_turn, created_turn]
+
+    with (
+        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
+        patch(
+            "gooddata_eval.core.agentic.alert_skill.generate_simulated_alert_response",
+            return_value="Yes, please proceed to create the alert.",
+        ),
+        patch("gooddata_eval.core.agentic.alert_skill._delete_alert"),
+    ):
+        summary = run_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Notify me whenever the number of orders goes above 500",
+            expected_output={"operator": "GREATER_THAN", "threshold": 500},
+            k=1,
+            max_iterations=6,
+            initial_conversation_id="conv-1",
+        )
+
+    assert summary.best.reasoning_steps == ["step one", "step two"]
+
+
+def test_evaluate_agentic_alert_skill_returns_reasoning_steps_on_pass():
+    chat_result = ChatResult.model_validate(
+        {
+            "text_response": "Alert created.",
+            "toolCallEvents": [
+                {
+                    "functionName": "create_metric_alert",
+                    "functionArguments": '{"operator": "GREATER_THAN", "threshold": 500}',
+                    "result": '{"id": "alert-1"}',
+                }
+            ],
+            "reasoningSteps": ["thinking about it"],
+        }
+    )
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = chat_result
+
+    with (
+        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.alert_skill._delete_alert"),
+    ):
+        reasoning = evaluate_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Notify me whenever the number of orders goes above 500",
+            expected_output={"operator": "GREATER_THAN", "threshold": 500},
+            k=1,
+            max_iterations=1,
+        )
+
+    assert reasoning == ["thinking about it"]
+
+
+def test_evaluate_agentic_alert_skill_attaches_reasoning_steps_to_exception_on_fail():
+    chat_result = ChatResult.model_validate(
+        {
+            "text_response": "I cannot create the alert",
+            "toolCallEvents": [],
+            "reasoningSteps": ["confused thinking"],
+        }
+    )
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = chat_result
+
+    with (
+        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
+        pytest.raises(AlertSkillAssertionError) as exc_info,
+    ):
+        evaluate_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Create alert",
+            expected_output={"operator": "GREATER_THAN", "threshold": 100},
+            k=1,
+            max_iterations=1,
+        )
+    assert exc_info.value.reasoning_steps == ["confused thinking"]

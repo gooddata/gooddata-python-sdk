@@ -9,9 +9,11 @@ import pytest
 from gooddata_eval.core.agentic.metric_skill import (
     AgenticMetricSummary,
     MetricRunResult,
+    MetricSkillAssertionError,
     SimulatedResponseError,
     _delete_metric,
     _normalize_maql,
+    evaluate_agentic_metric_skill,
     generate_simulated_response,
     run_agentic_metric_skill,
 )
@@ -318,3 +320,100 @@ def test_run_agentic_metric_skill_fails_the_run_when_the_simulated_reply_cannot_
     assert summary.best.total_turns == 1.0
     mock_client.close.assert_called_once()
     mock_sim.assert_called_once_with("Which brand field should I count?", {"maql": "SELECT {metric/foo}"})
+
+
+def test_run_agentic_metric_skill_accumulates_reasoning_steps_across_iterations():
+    clarify_turn = ChatResult.model_validate(
+        {
+            "textResponse": "Could you clarify which foo you mean?",
+            "toolCallEvents": [],
+            "reasoningSteps": ["step one"],
+        }
+    )
+    created_turn = ChatResult.model_validate(
+        {
+            "textResponse": "done",
+            "toolCallEvents": [
+                {
+                    "functionName": "create_metric",
+                    "functionArguments": "{}",
+                    "result": '{"data": {"maql": "SELECT {metric/foo}"}}',
+                }
+            ],
+            "reasoningSteps": ["step two"],
+        }
+    )
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [clarify_turn, created_turn]
+
+    with (
+        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.metric_skill.generate_simulated_response", return_value="It's foo"),
+    ):
+        summary = run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=2,
+        )
+
+    assert summary.best.reasoning_steps == ["step one", "step two"]
+
+
+def test_evaluate_agentic_metric_skill_returns_reasoning_steps_on_pass():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {
+            "textResponse": "done",
+            "toolCallEvents": [
+                {
+                    "functionName": "create_metric",
+                    "functionArguments": "{}",
+                    "result": '{"data": {"maql": "SELECT {metric/foo}"}}',
+                }
+            ],
+            "reasoningSteps": ["thinking about it"],
+        }
+    )
+    with patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client):
+        reasoning = evaluate_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=1,
+        )
+    assert reasoning == ["thinking about it"]
+
+
+def test_evaluate_agentic_metric_skill_attaches_reasoning_steps_to_exception_on_fail():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {
+            "textResponse": "I will work on that.",
+            "toolCallEvents": [],
+            "reasoningSteps": ["confused thinking"],
+        }
+    )
+    with (
+        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
+        pytest.raises(MetricSkillAssertionError) as exc_info,
+    ):
+        evaluate_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=1,
+        )
+    assert exc_info.value.reasoning_steps == ["confused thinking"]

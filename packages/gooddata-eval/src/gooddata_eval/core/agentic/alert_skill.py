@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 import os
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 from gooddata_sdk import GoodDataSdk
@@ -302,6 +302,7 @@ class AlertRunResult:
     alert_id: str | None
     eval: AlertEvaluation
     actual_alert_arguments: dict
+    reasoning_steps: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -450,6 +451,7 @@ def run_agentic_alert_skill(
             alert_id: str | None = None
             actual_args: dict = {}
             tool_called = False
+            reasoning_steps: list[str] = []
             # conversation_history stores prior turns for GPT-4o context.
             # Roles follow GPT-4o's perspective: "assistant"=agent text, "user"=sim-user reply.
             conversation_history: list = []
@@ -457,6 +459,7 @@ def run_agentic_alert_skill(
 
             for _iteration in range(max_iterations):
                 chat_result = client.send_message(conv_id, current_question)
+                reasoning_steps.extend(chat_result.reasoning_steps or [])
                 alert_id, actual_args, tool_called = _extract_alert_call(chat_result.tool_call_events or [])
                 if tool_called:
                     alert_id_to_delete = alert_id
@@ -492,6 +495,7 @@ def run_agentic_alert_skill(
                 alert_id=alert_id,
                 eval=ev,
                 actual_alert_arguments=actual_args,
+                reasoning_steps=reasoning_steps,
             )
         finally:
             if alert_id_to_delete:
@@ -542,6 +546,7 @@ class AlertSkillAssertionError(AssertionError):
     """Raised when an alert-skill evaluation fails."""
 
     __tracebackhide__ = True
+    reasoning_steps: list[str]
 
 
 def evaluate_agentic_alert_skill(
@@ -561,8 +566,13 @@ def evaluate_agentic_alert_skill(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
-) -> None:
-    """Run alert-skill evaluation, log to Langfuse, and raise AlertSkillAssertionError on failure."""
+) -> list[str]:
+    """Run alert-skill evaluation, log to Langfuse, and raise AlertSkillAssertionError on failure.
+
+    Returns the best run's reasoning_steps on success; on failure the same list is attached
+    to the raised exception as ``.reasoning_steps`` (mirrors the `conversation_id`-on-exception
+    idiom in `ChatClient.ask()`) so callers can retrieve it either way.
+    """
     from datetime import datetime as _dt  # noqa: PLC0415
     from datetime import timezone as _tz  # noqa: PLC0415
 
@@ -636,7 +646,7 @@ def evaluate_agentic_alert_skill(
     if not summary.pass_at_k:
         best = summary.best
         ev = best.eval
-        raise AlertSkillAssertionError(
+        exc = AlertSkillAssertionError(
             f"Alert skill assertion failed. strict_pass={ev.strict_pass}. "
             f"alert_created={ev.alert_created}, operator_correct={ev.operator_correct}, "
             f"threshold_correct={ev.threshold_correct}, trigger_correct={ev.trigger_correct}, "
@@ -644,3 +654,6 @@ def evaluate_agentic_alert_skill(
             f"recipients_correct={ev.recipients_correct}. "
             f"Actual args: {best.actual_alert_arguments}"
         )
+        exc.reasoning_steps = best.reasoning_steps
+        raise exc
+    return summary.best.reasoning_steps
