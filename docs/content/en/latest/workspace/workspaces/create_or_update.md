@@ -15,7 +15,10 @@ Creates a new workspace or overwrite an existing workspace with the same id.
 Data source Object, including physical data model.
 {{< /parameter >}}
 {{% /parameters-block %}}
-{{% parameters-block title="Returns" None="yes" %}}
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="UpsertOutcome" >}}
+CREATED if the workspace did not exist yet, UPDATED if it did.
+{{< /parameter >}}
 {{% /parameters-block %}}
 {{% parameters-block title="Raises" %}}
 {{< parameter p_type="Value Error" >}}

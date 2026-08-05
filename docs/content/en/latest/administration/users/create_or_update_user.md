@@ -19,7 +19,10 @@ User entity object.
 {{< /parameter >}}
 {{% /parameters-block %}}
 
-{{% parameters-block title="Returns" None="yes" %}}
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="UpsertOutcome" >}}
+CREATED if the user did not exist yet, UPDATED if it did.
+{{< /parameter >}}
 {{% /parameters-block %}}
 
 ## Example

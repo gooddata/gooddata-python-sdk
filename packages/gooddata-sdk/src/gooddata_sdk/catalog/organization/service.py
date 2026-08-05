@@ -43,6 +43,7 @@ from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
 from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
 from gooddata_sdk.catalog.organization.layout.identity_provider import CatalogDeclarativeIdentityProvider
 from gooddata_sdk.catalog.organization.layout.notification_channel import CatalogDeclarativeNotificationChannel
+from gooddata_sdk.catalog.types import UpsertOutcome
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.utils import load_all_entities, load_all_entities_dict
 
@@ -107,7 +108,7 @@ class CatalogOrganizationService(CatalogServiceBase):
         patch_document = JsonApiOrganizationPatchDocument(data=patch_data)
         self._entities_api.patch_entity_organizations(organization.id, patch_document)
 
-    def create_or_update_jwk(self, jwk: CatalogJwk) -> None:
+    def create_or_update_jwk(self, jwk: CatalogJwk) -> UpsertOutcome:
         """Create a new jwk or overwrite an existing jwk with the same id.
 
         Args:
@@ -115,7 +116,8 @@ class CatalogOrganizationService(CatalogServiceBase):
                 Catalog Jwk object to be created or updated.
 
         Returns:
-            None
+            UpsertOutcome:
+                CREATED if the jwk did not exist yet, UPDATED if it did.
 
         Raises:
             ValueError: Jwk can not be updated.
@@ -126,6 +128,8 @@ class CatalogOrganizationService(CatalogServiceBase):
             self._entities_api.update_entity_jwks(id=jwk.id, json_api_jwk_in_document=jwk_document.to_api())
         except NotFoundException:
             self._entities_api.create_entity_jwks(json_api_jwk_in_document=jwk_document.to_api())
+            return UpsertOutcome.CREATED
+        return UpsertOutcome.UPDATED
 
     def get_jwk(self, jwk_id: str) -> CatalogJwk:
         """Get an individual jwk.
@@ -473,7 +477,7 @@ class CatalogOrganizationService(CatalogServiceBase):
             identity_provider_id, CatalogIdentityProvider.to_api_patch(identity_provider_id, attributes)
         )
 
-    def create_or_update_export_template(self, export_template: CatalogExportTemplate) -> None:
+    def create_or_update_export_template(self, export_template: CatalogExportTemplate) -> UpsertOutcome:
         """Create a new export template or overwrite an existing export template with the same id.
 
         Args:
@@ -481,7 +485,8 @@ class CatalogOrganizationService(CatalogServiceBase):
                 Catalog export template object to be created or updated.
 
         Returns:
-            None
+            UpsertOutcome:
+                CREATED if the export template did not exist yet, UPDATED if it did.
 
         Raises:
             ValueError: Export template cannot be updated.
@@ -500,6 +505,8 @@ class CatalogOrganizationService(CatalogServiceBase):
                     data=export_template.to_api()
                 )
             )
+            return UpsertOutcome.CREATED
+        return UpsertOutcome.UPDATED
 
     def get_export_template(self, export_template_id: str) -> CatalogExportTemplate:
         """Get an individual export template.

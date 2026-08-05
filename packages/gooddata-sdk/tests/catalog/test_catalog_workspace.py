@@ -23,6 +23,7 @@ from gooddata_sdk import (
     GoodDataApiClient,
     GoodDataSdk,
     PostgresAttributes,
+    UpsertOutcome,
 )
 from gooddata_sdk.catalog.identifier import (
     CatalogDeclarativeAnalyticalDashboardIdentifier,
@@ -232,7 +233,7 @@ def test_update_workspace_valid(test_config):
 
     try:
         # Updating only name.
-        sdk.catalog_workspace.create_or_update(new_workspace)
+        assert sdk.catalog_workspace.create_or_update(new_workspace) == UpsertOutcome.UPDATED
         workspaces = sdk.catalog_workspace.list_workspaces()
         workspace_o = sdk.catalog_workspace.get_workspace(workspace.id)
         assert len(workspaces) == initial_count
@@ -304,7 +305,7 @@ def test_create_workspace(test_config):
     assert workspace_id not in [w.id for w in workspaces]
 
     try:
-        sdk.catalog_workspace.create_or_update(workspace)
+        assert sdk.catalog_workspace.create_or_update(workspace) == UpsertOutcome.CREATED
         workspaces = sdk.catalog_workspace.list_workspaces()
         workspace_o = sdk.catalog_workspace.get_workspace(workspace_id)
         assert len(workspaces) == initial_count + 1
@@ -435,9 +436,10 @@ def test_user_data_filters_life_cycle(test_config):
             title="test_new_user_data_filter",
             user_id=test_config["demo_user"],
         )
-        sdk.catalog_workspace.create_or_update_user_data_filter(
+        outcome = sdk.catalog_workspace.create_or_update_user_data_filter(
             workspace_id=test_config["workspace"], user_data_filter=user_data_filter
         )
+        assert outcome == UpsertOutcome.CREATED
         user_data_filters = sdk.catalog_workspace.list_user_data_filters(test_config["workspace"])
         assert len(user_data_filters) == 1
         assert user_data_filters[0].id == user_data_filter.id
@@ -784,7 +786,8 @@ def test_create_workspace_setting(test_config):
     setting = CatalogWorkspaceSetting(id=setting_id, setting_type=setting_type, content=content)
 
     try:
-        sdk.catalog_workspace.create_or_update_workspace_setting(test_config["workspace"], setting)
+        outcome = sdk.catalog_workspace.create_or_update_workspace_setting(test_config["workspace"], setting)
+        assert outcome == UpsertOutcome.CREATED
         setting_o = sdk.catalog_workspace.get_workspace_setting(test_config["workspace"], setting_id)
         assert setting_o == setting
     finally:
@@ -845,12 +848,14 @@ def test_update_workspace_setting(test_config):
     setting = CatalogWorkspaceSetting(id=setting_id, setting_type=setting_type, content=content)
 
     try:
-        sdk.catalog_workspace.create_or_update_workspace_setting(test_config["workspace"], setting)
+        outcome = sdk.catalog_workspace.create_or_update_workspace_setting(test_config["workspace"], setting)
+        assert outcome == UpsertOutcome.CREATED
         setting_o = sdk.catalog_workspace.get_workspace_setting(test_config["workspace"], setting_id)
         assert setting_o == setting
         content = {"value": "en-US"}
         setting = CatalogWorkspaceSetting(id=setting_id, setting_type=setting_type, content=content)
-        sdk.catalog_workspace.create_or_update_workspace_setting(test_config["workspace"], setting)
+        outcome = sdk.catalog_workspace.create_or_update_workspace_setting(test_config["workspace"], setting)
+        assert outcome == UpsertOutcome.UPDATED
         setting_o = sdk.catalog_workspace.get_workspace_setting(test_config["workspace"], setting_id)
         assert setting_o == setting
     finally:

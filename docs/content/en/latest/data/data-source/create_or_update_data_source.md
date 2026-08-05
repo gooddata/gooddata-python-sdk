@@ -20,7 +20,10 @@ Catalog data source object
 
 {{% /parameters-block %}}
 
-{{% parameters-block title="Returns" None="yes"%}}
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="UpsertOutcome" >}}
+CREATED if the data source did not exist yet, UPDATED if it did.
+{{< /parameter >}}
 {{% /parameters-block %}}
 
 ### Example
