@@ -33,10 +33,10 @@ packages/gooddata-eval/src/gooddata_eval/core/agentic/__init__.py
   s_7e53738a17b0e6::t_f74b15bfb08830 81-83
   s_7e53738a17b0e6::t_a51eb5d6cebad7 67
 packages/gooddata-eval/src/gooddata_eval/core/agentic/_langfuse.py
-  s_7e53738a17b0e6::t_91a512aa966d03 278,280-282
+  s_7e53738a17b0e6::t_91a512aa966d03 278,280-282,280,282-284
   s_7e53738a17b0e6::t_7ef0067a6ce90b 11
-  s_7e53738a17b0e6::t_b52b9e45ab8c3e 57-80,82-83
-  s_7e53738a17b0e6::t_79c828bb6d9cf8 81,84-85,113,283,287,305
+  s_7e53738a17b0e6::t_b52b9e45ab8c3e 57-80,59-82,82-83,84-85
+  s_7e53738a17b0e6::t_79c828bb6d9cf8 81,83,84-85,86-87,113,115,283,285,287,289,305,307
 ---
 {
   "schema_version": "authorship/3.0.0",
