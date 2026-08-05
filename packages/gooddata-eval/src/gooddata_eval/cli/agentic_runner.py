@@ -83,11 +83,12 @@ def _dispatch_agentic(
     run_ts: str,
     model_version_override: str | None,
     reasoning_effort: ReasoningEffort | None = None,
-) -> list[str] | None:
+) -> tuple[list[str], str, str | None] | list[str] | None:
     """Call the appropriate evaluate_agentic_* function for the item's test_kind.
 
-    Returns whatever that function returns -- only alert_skill/metric_skill/conversation
-    currently return their reasoning_steps; the rest still return None (unchanged).
+    Returns whatever that function returns -- alert_skill/metric_skill/conversation return
+    their (reasoning_steps, conversation_id, response_id); the rest still return None
+    (unchanged).
     """
     kind = item.test_kind
     eo = item.expected_output
@@ -211,16 +212,23 @@ def run_agentic_items(
         )
         t0 = time.perf_counter()
         try:
-            reasoning_steps = _dispatch_agentic(
+            outcome = _dispatch_agentic(
                 item, host, token, workspace_id, k, langfuse, run_ts, model_version, reasoning_effort
+            )
+            reasoning_steps, conversation_id, response_id = (
+                outcome if isinstance(outcome, tuple) else (outcome, None, None)
             )
             item_report.pass_at_k = True
             item_report.runs = k
             item_report.reasoning_steps = reasoning_steps or []
+            item_report.conversation_id = conversation_id
+            item_report.response_id = response_id
         except AssertionError as exc:
             item_report.pass_at_k = False
             item_report.runs = k
             item_report.reasoning_steps = getattr(exc, "reasoning_steps", None) or []
+            item_report.conversation_id = getattr(exc, "conversation_id", None)
+            item_report.response_id = getattr(exc, "response_id", None)
             print(f"[agentic] {item.id} FAIL: {exc}", flush=True)
         except Exception as exc:
             item_report.error = f"{type(exc).__name__}: {exc}"

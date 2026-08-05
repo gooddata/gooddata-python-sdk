@@ -20,7 +20,7 @@ def _item(test_kind: str = "agentic_alert_skill") -> DatasetItem:
 def test_run_agentic_items_surfaces_reasoning_steps_on_pass():
     with patch(
         "gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill",
-        return_value=["it created the alert"],
+        return_value=(["it created the alert"], "conv-1", "resp-1"),
     ):
         report = run_agentic_items(
             [_item()],
@@ -31,11 +31,15 @@ def test_run_agentic_items_surfaces_reasoning_steps_on_pass():
         )
     assert report.items[0].pass_at_k is True
     assert report.items[0].reasoning_steps == ["it created the alert"]
+    assert report.items[0].conversation_id == "conv-1"
+    assert report.items[0].response_id == "resp-1"
 
 
 def test_run_agentic_items_surfaces_reasoning_steps_from_exception_on_fail():
     exc = AlertSkillAssertionError("nope")
     exc.reasoning_steps = ["it got confused"]
+    exc.conversation_id = "conv-2"
+    exc.response_id = "resp-2"
     with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=exc):
         report = run_agentic_items(
             [_item()],
@@ -46,6 +50,8 @@ def test_run_agentic_items_surfaces_reasoning_steps_from_exception_on_fail():
         )
     assert report.items[0].pass_at_k is False
     assert report.items[0].reasoning_steps == ["it got confused"]
+    assert report.items[0].conversation_id == "conv-2"
+    assert report.items[0].response_id == "resp-2"
 
 
 def test_run_agentic_items_defaults_reasoning_steps_to_empty_when_exception_has_none():
@@ -61,6 +67,8 @@ def test_run_agentic_items_defaults_reasoning_steps_to_empty_when_exception_has_
             run_ts="2026-01-01",
         )
     assert report.items[0].reasoning_steps == []
+    assert report.items[0].conversation_id is None
+    assert report.items[0].response_id is None
 
 
 def test_run_agentic_items_defaults_reasoning_steps_to_empty_for_untouched_kinds():
@@ -75,3 +83,5 @@ def test_run_agentic_items_defaults_reasoning_steps_to_empty_for_untouched_kinds
         )
     assert report.items[0].pass_at_k is True
     assert report.items[0].reasoning_steps == []
+    assert report.items[0].conversation_id is None
+    assert report.items[0].response_id is None

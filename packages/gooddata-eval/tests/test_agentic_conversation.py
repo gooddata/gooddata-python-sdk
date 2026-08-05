@@ -417,6 +417,7 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
     chat_result.created_visualizations = [MagicMock()]
     chat_result.tool_call_events = [tc]
     chat_result.reasoning_steps = ["thinking about it"]
+    chat_result.response_id = "resp-1"
     mock_client.send_message.return_value = chat_result
 
     fixture = ConversationFixture(
@@ -432,13 +433,15 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
         ],
     )
     with patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client):
-        reasoning = evaluate_agentic_conversation(
+        reasoning, conversation_id, response_id = evaluate_agentic_conversation(
             host="http://host",
             token="tok",
             workspace_id="ws1",
             fixture=fixture,
         )
     assert reasoning == ["thinking about it"]
+    assert conversation_id == "conv-1"
+    assert response_id == "resp-1"
 
 
 def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_fail():
@@ -453,6 +456,7 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
     chat_result.tool_call_events = [tc]
     chat_result.alert_proposals = []
     chat_result.reasoning_steps = ["confused thinking"]
+    chat_result.response_id = "resp-2"
     mock_client.send_message.return_value = chat_result
 
     fixture = ConversationFixture(
@@ -478,3 +482,5 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
             fixture=fixture,
         )
     assert exc_info.value.reasoning_steps == ["confused thinking"]
+    assert exc_info.value.conversation_id == "conv-1"
+    assert exc_info.value.response_id == "resp-2"

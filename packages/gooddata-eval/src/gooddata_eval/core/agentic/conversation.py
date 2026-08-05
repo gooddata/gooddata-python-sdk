@@ -271,6 +271,7 @@ class ConversationResult:
     conversation_success: bool
     total_clarification_turns: int
     reasoning_steps: list[str] = field(default_factory=list)
+    response_id: str | None = None
 
 
 def run_agentic_conversation(
@@ -300,6 +301,7 @@ def run_agentic_conversation(
     # the end — a later turn may $ref a metric an earlier turn created.
     created_metric_ids: list[str] = []
     reasoning_steps: list[str] = []
+    response_id: str | None = None
 
     try:
         if initial_conversation_id is not None:
@@ -323,6 +325,7 @@ def run_agentic_conversation(
                 final_result = chat_result
                 all_tool_calls.extend(chat_result.tool_call_events or [])
                 reasoning_steps.extend(chat_result.reasoning_steps or [])
+                response_id = chat_result.response_id or response_id
 
                 if _check_output_present(resolved_turn, chat_result):
                     break
@@ -387,6 +390,7 @@ def run_agentic_conversation(
         conversation_success=conversation_success,
         total_clarification_turns=total_clarification_turns,
         reasoning_steps=reasoning_steps,
+        response_id=response_id,
     )
 
 
@@ -395,6 +399,8 @@ class ConversationAssertionError(AssertionError):
 
     __tracebackhide__ = True
     reasoning_steps: list[str]
+    conversation_id: str
+    response_id: str | None
 
 
 def evaluate_agentic_conversation(
@@ -411,12 +417,13 @@ def evaluate_agentic_conversation(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
-) -> list[str]:
+) -> tuple[list[str], str, str | None]:
     """Run conversation evaluation, log to Langfuse, and raise on failure.
 
-    Returns the conversation's reasoning_steps on success; on failure the same list is
-    attached to the raised exception as ``.reasoning_steps`` (mirrors the
-    `conversation_id`-on-exception idiom in `ChatClient.ask()`) so callers can retrieve it
+    Returns the conversation's (reasoning_steps, conversation_id, response_id) on success;
+    on failure the same three values are attached to the raised exception as
+    ``.reasoning_steps``/``.conversation_id``/``.response_id`` (mirrors the
+    `conversation_id`-on-exception idiom in `ChatClient.ask()`) so callers can retrieve them
     either way.
     """
     from datetime import datetime as _dt  # noqa: PLC0415
@@ -500,5 +507,7 @@ def evaluate_agentic_conversation(
             f"Failed turns: {[t.turn_id for t in failed_turns]}"
         )
         exc.reasoning_steps = result.reasoning_steps
+        exc.conversation_id = result.conversation_id
+        exc.response_id = result.response_id
         raise exc
-    return result.reasoning_steps
+    return result.reasoning_steps, result.conversation_id, result.response_id

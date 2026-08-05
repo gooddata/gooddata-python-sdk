@@ -287,7 +287,7 @@ def test_evaluate_agentic_metric_skill_returns_reasoning_steps_on_pass():
         }
     )
     with patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client):
-        reasoning = evaluate_agentic_metric_skill(
+        reasoning, conversation_id, response_id = evaluate_agentic_metric_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
             workspace_id="ws1",
@@ -297,6 +297,8 @@ def test_evaluate_agentic_metric_skill_returns_reasoning_steps_on_pass():
             max_iterations=1,
         )
     assert reasoning == ["thinking about it"]
+    assert conversation_id == "conv-1"
+    assert response_id is None
 
 
 def test_evaluate_agentic_metric_skill_attaches_reasoning_steps_to_exception_on_fail():
@@ -323,3 +325,5 @@ def test_evaluate_agentic_metric_skill_attaches_reasoning_steps_to_exception_on_
             max_iterations=1,
         )
     assert exc_info.value.reasoning_steps == ["confused thinking"]
+    assert exc_info.value.conversation_id == "conv-1"
+    assert exc_info.value.response_id is None
