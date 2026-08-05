@@ -18,6 +18,7 @@ from gooddata_dbt.dbt.base import (
     DBT_PATH_TO_MANIFEST,
     DBT_TARGET_DIR,
     NUMERIC_DATA_TYPES,
+    SECOND_TIMESTAMP_GRANULARITIES,
     TIMESTAMP_DATA_TYPES,
     TIMESTAMP_GRANULARITIES,
     Base,
@@ -202,9 +203,12 @@ class DbtModelTables:
         * column_type – Optional if missing call  scan
     """
 
-    def __init__(self, tables: list[DbtModelTable], upper_case: bool) -> None:
+    def __init__(
+        self, tables: list[DbtModelTable], upper_case: bool, enable_second_granularities: bool = False
+    ) -> None:
         self.upper_case = upper_case
         self.tables = tables
+        self._enable_second_granularities = enable_second_granularities
 
     @classmethod
     def from_cloud(
@@ -214,22 +218,27 @@ class DbtModelTables:
         upper_case: bool,
         all_model_ids: list[str],
         path: Union[str, Path] = DBT_TARGET_DIR,
+        enable_second_granularities: bool = False,
     ) -> "DbtModelTables":
         path = path if isinstance(path, Path) else Path(path)
         dbt_conn.download_manifest(run_id=run_id, path=path)
         with open(path / "manifest.json") as fp:
             dbt_catalog = json.load(fp)
         tables = cls.read_dbt_models(dbt_catalog, upper_case, all_model_ids)
-        return cls(tables, upper_case)
+        return cls(tables, upper_case, enable_second_granularities)
 
     @classmethod
     def from_local(
-        cls, upper_case: bool, all_model_ids: list[str], manifest_path: Union[str, Path] = DBT_PATH_TO_MANIFEST
+        cls,
+        upper_case: bool,
+        all_model_ids: list[str],
+        manifest_path: Union[str, Path] = DBT_PATH_TO_MANIFEST,
+        enable_second_granularities: bool = False,
     ) -> "DbtModelTables":
         with open(manifest_path) as fp:
             dbt_catalog = json.load(fp)
         tables = cls.read_dbt_models(dbt_catalog, upper_case, all_model_ids)
-        return cls(tables, upper_case)
+        return cls(tables, upper_case, enable_second_granularities)
 
     @staticmethod
     def read_dbt_models(dbt_catalog: dict, upper_case: bool, all_model_ids: list[str]) -> list[DbtModelTable]:
@@ -437,14 +446,17 @@ class DbtModelTables:
                 )
         return attributes
 
-    @staticmethod
-    def make_date_datasets(table: DbtModelTable, existing_date_datasets: list[dict]) -> list[dict]:
+    def make_date_datasets(self, table: DbtModelTable, existing_date_datasets: list[dict]) -> list[dict]:
         date_datasets = []
         for column in table.columns.values():
             existing_dataset_ids = [d["id"] for d in existing_date_datasets]
             if column.is_date() and column.gooddata_ldm_id not in existing_dataset_ids:
                 if column.data_type in TIMESTAMP_DATA_TYPES:
-                    granularities = DATE_GRANULARITIES + TIMESTAMP_GRANULARITIES
+                    granularities = (
+                        DATE_GRANULARITIES + TIMESTAMP_GRANULARITIES + SECOND_TIMESTAMP_GRANULARITIES
+                        if self._enable_second_granularities
+                        else DATE_GRANULARITIES + TIMESTAMP_GRANULARITIES
+                    )
                 else:
                     granularities = DATE_GRANULARITIES
                 date_datasets.append(
