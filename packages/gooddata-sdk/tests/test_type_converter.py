@@ -66,6 +66,10 @@ class TestDatetimeConverter:
         c = conv.DatetimeConverter()
         assert c.to_type(test_value) == datetime.datetime(2021, 10, 20, 11, 0)
 
+    def test_second_granularity_values_convert_to_datetime(self):
+        c = conv.AttributeConverterStore.find_converter("DATE", "SECOND")
+        assert c.to_type("2026-07-31 12:34:56") == datetime.datetime(2026, 7, 31, 12, 34, 56)
+
     def test_to_type_wrong_val(self):
         test_value = "2021-10-20"
         c = conv.DatetimeConverter()

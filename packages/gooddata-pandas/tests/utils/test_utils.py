@@ -59,6 +59,12 @@ def test_typed_attribute_values_batches_dates_to_timestamps():
         pandas.Timestamp("2023-01-01"),
         pandas.Timestamp("2023-03-01"),
     ]
+    assert _typed_attribute_values(
+        _date_catalog_attribute("SECOND"), ["2026-07-31 12:34:56", "2026-12-31 23:59:59"]
+    ) == [
+        pandas.Timestamp("2026-07-31 12:34:56"),
+        pandas.Timestamp("2026-12-31 23:59:59"),
+    ]
 
 
 def test_typed_attribute_values_week_and_quarter_stay_strings():
