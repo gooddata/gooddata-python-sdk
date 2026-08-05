@@ -83,8 +83,12 @@ def _dispatch_agentic(
     run_ts: str,
     model_version_override: str | None,
     reasoning_effort: ReasoningEffort | None = None,
-) -> None:
-    """Call the appropriate evaluate_agentic_* function for the item's test_kind."""
+) -> list[str] | None:
+    """Call the appropriate evaluate_agentic_* function for the item's test_kind.
+
+    Returns whatever that function returns -- only alert_skill/metric_skill/conversation
+    currently return their reasoning_steps; the rest still return None (unchanged).
+    """
     kind = item.test_kind
     eo = item.expected_output
     lf_kw: _LfKw = {
@@ -97,7 +101,7 @@ def _dispatch_agentic(
     }
 
     if kind in ("vis_agentic", "agentic_visualization"):
-        evaluate_agentic_visualization(
+        return evaluate_agentic_visualization(
             host=host,
             token=token,
             workspace_id=workspace_id,
@@ -107,7 +111,7 @@ def _dispatch_agentic(
             **lf_kw,
         )
     elif kind == "agentic_metric_skill":
-        evaluate_agentic_metric_skill(
+        return evaluate_agentic_metric_skill(
             host=host,
             token=token,
             workspace_id=workspace_id,
@@ -117,7 +121,7 @@ def _dispatch_agentic(
             **lf_kw,
         )
     elif kind == "agentic_alert_skill":
-        evaluate_agentic_alert_skill(
+        return evaluate_agentic_alert_skill(
             host=host,
             token=token,
             workspace_id=workspace_id,
@@ -130,7 +134,7 @@ def _dispatch_agentic(
         eo_dict = eo if isinstance(eo, dict) else {}
         tool_call = eo_dict.get("tool_call", {})
         expected_args = tool_call.get("function_arguments", eo_dict)
-        evaluate_agentic_search_tool(
+        return evaluate_agentic_search_tool(
             host=host,
             token=token,
             workspace_id=workspace_id,
@@ -140,7 +144,7 @@ def _dispatch_agentic(
             **lf_kw,
         )
     elif kind == "agentic_general_question":
-        evaluate_agentic_general_question(
+        return evaluate_agentic_general_question(
             host=host,
             token=token,
             workspace_id=workspace_id,
@@ -150,7 +154,7 @@ def _dispatch_agentic(
             **lf_kw,
         )
     elif kind == "agentic_guardrail":
-        evaluate_agentic_guardrail(
+        return evaluate_agentic_guardrail(
             host=host,
             token=token,
             workspace_id=workspace_id,
@@ -161,7 +165,7 @@ def _dispatch_agentic(
         )
     elif kind == "agentic_conversation":
         fixture_data = eo.get("fixture") or eo if isinstance(eo, dict) else {}
-        evaluate_agentic_conversation(
+        return evaluate_agentic_conversation(
             host=host,
             token=token,
             workspace_id=workspace_id,
@@ -207,12 +211,16 @@ def run_agentic_items(
         )
         t0 = time.perf_counter()
         try:
-            _dispatch_agentic(item, host, token, workspace_id, k, langfuse, run_ts, model_version, reasoning_effort)
+            reasoning_steps = _dispatch_agentic(
+                item, host, token, workspace_id, k, langfuse, run_ts, model_version, reasoning_effort
+            )
             item_report.pass_at_k = True
             item_report.runs = k
+            item_report.reasoning_steps = reasoning_steps or []
         except AssertionError as exc:
             item_report.pass_at_k = False
             item_report.runs = k
+            item_report.reasoning_steps = getattr(exc, "reasoning_steps", None) or []
             print(f"[agentic] {item.id} FAIL: {exc}", flush=True)
         except Exception as exc:
             item_report.error = f"{type(exc).__name__}: {exc}"
