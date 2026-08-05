@@ -36,6 +36,7 @@ from gooddata_sdk import (
     CatalogUserGroup,
     GoodDataApiClient,
     GoodDataSdk,
+    UpsertOutcome,
 )
 from gooddata_sdk.catalog.permission.declarative_model.permission import CatalogDeclarativeWorkspacePermissions
 from gooddata_sdk.utils import recreate_directory
@@ -89,7 +90,7 @@ def test_create_delete_user(test_config):
             authentication_id=authentication_id,
             user_group_ids=user_group_ids,
         )
-        sdk.catalog_user.create_or_update_user(user_e)
+        assert sdk.catalog_user.create_or_update_user(user_e) == UpsertOutcome.CREATED
         user = sdk.catalog_user.get_user(user_id)
         assert len(sdk.catalog_user.list_users()) == initial_count + 1
         assert user.id == user_id
@@ -150,7 +151,7 @@ def test_update_user(test_config):
             authentication_id=initial_auth_id,
             user_group_ids=initial_user_group_ids,
         )
-        sdk.catalog_user.create_or_update_user(initial_user)
+        assert sdk.catalog_user.create_or_update_user(initial_user) == UpsertOutcome.CREATED
         assert len(sdk.catalog_user.list_users()) == initial_user_count + 1
 
         # Update the user
@@ -162,7 +163,7 @@ def test_update_user(test_config):
             authentication_id=new_auth_id,
             user_group_ids=new_user_group_ids,
         )
-        sdk.catalog_user.create_or_update_user(updated_user_request)
+        assert sdk.catalog_user.create_or_update_user(updated_user_request) == UpsertOutcome.UPDATED
 
         # Verify updates
         updated_user = sdk.catalog_user.get_user(temp_user_id)
@@ -245,7 +246,7 @@ def test_create_delete_user_group(test_config):
             user_group_name=user_group_id.upper(),
             user_group_parent_ids=user_group_parent_ids,
         )
-        sdk.catalog_user.create_or_update_user_group(user_group_e)
+        assert sdk.catalog_user.create_or_update_user_group(user_group_e) == UpsertOutcome.CREATED
         user_group = sdk.catalog_user.get_user_group(user_group_id)
         assert len(sdk.catalog_user.list_user_groups()) == initial_count + 1
         assert user_group.id == user_group_id
@@ -269,7 +270,7 @@ def test_update_user_group(test_config):
             user_group_name=new_user_group_name,
             user_group_parent_ids=user_group_parent_ids,
         )
-        sdk.catalog_user.create_or_update_user_group(user_group_e)
+        assert sdk.catalog_user.create_or_update_user_group(user_group_e) == UpsertOutcome.UPDATED
         updated_user_group = sdk.catalog_user.get_user_group(user_group_id)
         assert user_group.id == updated_user_group.id
         assert updated_user_group.name == new_user_group_name

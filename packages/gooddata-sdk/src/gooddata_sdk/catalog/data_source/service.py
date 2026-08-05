@@ -35,6 +35,7 @@ from gooddata_sdk.catalog.data_source.declarative_model.physical_model.pdm impor
 )
 from gooddata_sdk.catalog.data_source.entity_model.data_source import CatalogDataSource
 from gooddata_sdk.catalog.entity import ClientSecretCredentialsFromFile, TokenCredentialsFromFile
+from gooddata_sdk.catalog.types import UpsertOutcome
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.utils import get_ds_credentials, load_all_entities_dict, read_layout_from_file
@@ -57,7 +58,7 @@ class CatalogDataSourceService(CatalogServiceBase):
     def create_or_update_data_source(
         self,
         data_source: CatalogDataSource,
-    ) -> None:
+    ) -> UpsertOutcome:
         """Pushes the Data Source to the GoodData environment.
 
         Automatically decides, whether to create or update.
@@ -67,7 +68,8 @@ class CatalogDataSourceService(CatalogServiceBase):
                 Catalog Data Source object
 
         Returns:
-            None
+            UpsertOutcome:
+                CREATED if the data source did not exist yet, UPDATED if it did.
         """
         try:
             self._entities_api.get_entity_data_sources(data_source.id)
@@ -77,6 +79,8 @@ class CatalogDataSourceService(CatalogServiceBase):
             )
         except NotFoundException:
             self._entities_api.create_entity_data_sources(data_source.to_api())
+            return UpsertOutcome.CREATED
+        return UpsertOutcome.UPDATED
 
     def get_data_source(self, data_source_id: str) -> CatalogDataSource:
         """Retrieve Data Source entity using data source id.

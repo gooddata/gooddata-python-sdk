@@ -40,6 +40,7 @@ from gooddata_sdk import (
     SqlColumn,
     TableDimension,
     TokenCredentialsFromFile,
+    UpsertOutcome,
     VerticaAttributes,
 )
 from gooddata_sdk.catalog.data_source.entity_model.data_source import DatabaseAttributes
@@ -283,7 +284,7 @@ def test_catalog_create_update_list_data_source(test_config):
             ),
             url_params=[("autosave", "false"), ("sslmode", "prefer")],
         )
-        sdk.catalog_data_source.create_or_update_data_source(updated_data_source)
+        assert sdk.catalog_data_source.create_or_update_data_source(updated_data_source) == UpsertOutcome.UPDATED
 
         data_sources = sdk.catalog_data_source.list_data_sources()
         assert len(data_sources) == 2
@@ -299,7 +300,7 @@ def test_catalog_create_update_list_data_source(test_config):
 
 def _create_delete_ds(sdk, data_source: CatalogDataSource):
     try:
-        sdk.catalog_data_source.create_or_update_data_source(data_source)
+        assert sdk.catalog_data_source.create_or_update_data_source(data_source) == UpsertOutcome.CREATED
         created_ds = sdk.catalog_data_source.get_data_source(data_source.id)
         assert data_source == created_ds
     finally:

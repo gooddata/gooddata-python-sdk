@@ -20,6 +20,7 @@ from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRe
 from gooddata_sdk import CatalogDeclarativeAutomation
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.permission.service import CatalogPermissionService
+from gooddata_sdk.catalog.types import UpsertOutcome
 from gooddata_sdk.catalog.workspace.aac import load_aac_workspace_from_disk, store_aac_workspace_to_disk
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
     CatalogDeclarativeFilterView,
@@ -60,7 +61,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
 
     # Entities methods
 
-    def create_or_update(self, workspace: CatalogWorkspace) -> None:
+    def create_or_update(self, workspace: CatalogWorkspace) -> UpsertOutcome:
         """Create a new workspace or overwrite an existing workspace with the same id.
 
         Args:
@@ -68,7 +69,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 Catalog Workspace object to be created or updated.
 
         Returns:
-            None
+            UpsertOutcome:
+                CREATED if the workspace did not exist yet, UPDATED if it did.
 
         Raises:
             ValueError: Workspace parent can not be updated.
@@ -88,6 +90,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 )
         except NotFoundException:
             self._entities_api.create_entity_workspaces(workspace.to_api())
+            return UpsertOutcome.CREATED
+        return UpsertOutcome.UPDATED
 
     def get_workspace(self, workspace_id: str) -> CatalogWorkspace:
         """Get an individual workspace.
@@ -146,7 +150,9 @@ class CatalogWorkspaceService(CatalogServiceBase):
         workspaces = load_all_entities(get_workspaces)
         return [CatalogWorkspace.from_api(w) for w in workspaces.data]
 
-    def create_or_update_workspace_setting(self, workspace_id: str, workspace_setting: CatalogWorkspaceSetting) -> None:
+    def create_or_update_workspace_setting(
+        self, workspace_id: str, workspace_setting: CatalogWorkspaceSetting
+    ) -> UpsertOutcome:
         """Create a new workspace setting or overwrite an existing workspace setting with the same id.
 
         Args:
@@ -156,20 +162,27 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 Catalog Workspace Setting object to be created or updated.
 
         Returns:
-            None
+            UpsertOutcome:
+                CREATED if the setting did not exist yet, UPDATED if it did.
+
+        Note:
+            A setting with no id takes the create branch, but that path currently
+            fails in the generated client, which rejects a None id.
         """
         if workspace_setting.id is None:
             self._entities_api.create_entity_workspace_settings(workspace_id, workspace_setting.to_api(True))
-        else:
-            try:
-                self.get_workspace_setting(workspace_id, workspace_setting.id)
-                self._entities_api.update_entity_workspace_settings(
-                    workspace_id,
-                    workspace_setting.id,
-                    workspace_setting.to_api(),
-                )
-            except NotFoundException:
-                self._entities_api.create_entity_workspace_settings(workspace_id, workspace_setting.to_api(True))
+            return UpsertOutcome.CREATED
+        try:
+            self.get_workspace_setting(workspace_id, workspace_setting.id)
+            self._entities_api.update_entity_workspace_settings(
+                workspace_id,
+                workspace_setting.id,
+                workspace_setting.to_api(),
+            )
+        except NotFoundException:
+            self._entities_api.create_entity_workspace_settings(workspace_id, workspace_setting.to_api(True))
+            return UpsertOutcome.CREATED
+        return UpsertOutcome.UPDATED
 
     def delete_workspace_setting(self, workspace_id: str, workspace_setting_id: str) -> None:
         try:
@@ -1207,7 +1220,9 @@ class CatalogWorkspaceService(CatalogServiceBase):
         user_data_filters = load_all_entities_dict(get_user_data_filters, camel_case=False)
         return [CatalogUserDataFilter.from_dict(v, camel_case=False) for v in user_data_filters["data"]]
 
-    def create_or_update_user_data_filter(self, workspace_id: str, user_data_filter: CatalogUserDataFilter) -> None:
+    def create_or_update_user_data_filter(
+        self, workspace_id: str, user_data_filter: CatalogUserDataFilter
+    ) -> UpsertOutcome:
         """Create a new user data filter or overwrite an existing one.
 
         Args:
@@ -1217,7 +1232,12 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 UserDataFilter entity object.
 
         Returns:
-            None
+            UpsertOutcome:
+                CREATED if the filter did not exist yet, UPDATED if it did.
+
+        Note:
+            A filter with no id takes the create branch, but that path currently
+            fails in the generated client, which rejects a None id.
         """
         user_data_filter_document = CatalogUserDataFilterDocument(data=user_data_filter)
         if user_data_filter.id is None:
@@ -1225,19 +1245,21 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 workspace_id=workspace_id,
                 json_api_user_data_filter_post_optional_id_document=user_data_filter_document.to_api(True),
             )
-        else:
-            try:
-                self.get_user_data_filter(workspace_id=workspace_id, user_data_filter_id=user_data_filter.id)
-                self._entities_api.update_entity_user_data_filters(
-                    workspace_id=workspace_id,
-                    object_id=user_data_filter.id,
-                    json_api_user_data_filter_in_document=user_data_filter_document.to_api(),
-                )
-            except NotFoundException:
-                self._entities_api.create_entity_user_data_filters(
-                    workspace_id=workspace_id,
-                    json_api_user_data_filter_post_optional_id_document=user_data_filter_document.to_api(True),
-                )
+            return UpsertOutcome.CREATED
+        try:
+            self.get_user_data_filter(workspace_id=workspace_id, user_data_filter_id=user_data_filter.id)
+            self._entities_api.update_entity_user_data_filters(
+                workspace_id=workspace_id,
+                object_id=user_data_filter.id,
+                json_api_user_data_filter_in_document=user_data_filter_document.to_api(),
+            )
+        except NotFoundException:
+            self._entities_api.create_entity_user_data_filters(
+                workspace_id=workspace_id,
+                json_api_user_data_filter_post_optional_id_document=user_data_filter_document.to_api(True),
+            )
+            return UpsertOutcome.CREATED
+        return UpsertOutcome.UPDATED
 
     def get_user_data_filter(self, workspace_id: str, user_data_filter_id: str) -> CatalogUserDataFilter:
         """Get user data filter by its id.
@@ -1410,7 +1432,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         filter_views = load_all_entities_dict(get_filter_views, camel_case=False)
         return [CatalogFilterView.from_dict(v, camel_case=False) for v in filter_views["data"]]
 
-    def create_or_update_filter_view(self, workspace_id: str, filter_view: CatalogFilterView) -> None:
+    def create_or_update_filter_view(self, workspace_id: str, filter_view: CatalogFilterView) -> UpsertOutcome:
         """Create a new filter view or overwrite an existing one.
 
         Args:
@@ -1420,7 +1442,12 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 FilterView entity object.
 
         Returns:
-            None
+            UpsertOutcome:
+                CREATED if the filter view did not exist yet, UPDATED if it did.
+
+        Note:
+            A filter view with no id takes the create branch, but that path
+            currently fails in the generated client, which rejects a None id.
         """
         filter_view_document = CatalogFilterViewDocument(data=filter_view)
         if filter_view.id is None:
@@ -1428,19 +1455,21 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 workspace_id=workspace_id,
                 json_api_filter_view_in_document=filter_view_document.to_api(),
             )
-        else:
-            try:
-                self.get_filter_view(workspace_id=workspace_id, filter_view_id=filter_view.id)
-                self._entities_api.update_entity_filter_views(
-                    workspace_id=workspace_id,
-                    object_id=filter_view.id,
-                    json_api_filter_view_in_document=filter_view_document.to_api(),
-                )
-            except NotFoundException:
-                self._entities_api.create_entity_filter_views(
-                    workspace_id=workspace_id,
-                    json_api_filter_view_in_document=filter_view_document.to_api(),
-                )
+            return UpsertOutcome.CREATED
+        try:
+            self.get_filter_view(workspace_id=workspace_id, filter_view_id=filter_view.id)
+            self._entities_api.update_entity_filter_views(
+                workspace_id=workspace_id,
+                object_id=filter_view.id,
+                json_api_filter_view_in_document=filter_view_document.to_api(),
+            )
+        except NotFoundException:
+            self._entities_api.create_entity_filter_views(
+                workspace_id=workspace_id,
+                json_api_filter_view_in_document=filter_view_document.to_api(),
+            )
+            return UpsertOutcome.CREATED
+        return UpsertOutcome.UPDATED
 
     def get_filter_view(self, workspace_id: str, filter_view_id: str) -> CatalogFilterView:
         """Get filter view by its id.
