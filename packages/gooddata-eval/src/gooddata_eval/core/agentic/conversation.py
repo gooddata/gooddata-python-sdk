@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import json
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Literal
 
 from gooddata_sdk import GoodDataSdk
@@ -269,6 +269,7 @@ class ConversationResult:
     full_skill_coverage: bool
     conversation_success: bool
     total_clarification_turns: int
+    reasoning_steps: list[str] = field(default_factory=list)
 
 
 def run_agentic_conversation(
@@ -296,6 +297,7 @@ def run_agentic_conversation(
     # not persist in the (shared) workspace and get reused by a later test. Deferred to
     # the end — a later turn may $ref a metric an earlier turn created.
     created_metric_ids: list[str] = []
+    reasoning_steps: list[str] = []
 
     try:
         if initial_conversation_id is not None:
@@ -318,6 +320,7 @@ def run_agentic_conversation(
                 chat_result = client.send_message(conversation_id, current_message)
                 final_result = chat_result
                 all_tool_calls.extend(chat_result.tool_call_events or [])
+                reasoning_steps.extend(chat_result.reasoning_steps or [])
 
                 if _check_output_present(resolved_turn, chat_result):
                     break
@@ -381,6 +384,7 @@ def run_agentic_conversation(
         full_skill_coverage=full_skill_coverage,
         conversation_success=conversation_success,
         total_clarification_turns=total_clarification_turns,
+        reasoning_steps=reasoning_steps,
     )
 
 
@@ -403,8 +407,14 @@ def evaluate_agentic_conversation(
     run_timestamp: str | None = None,
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
-) -> None:
-    """Run conversation evaluation, log to Langfuse, and raise on failure."""
+) -> list[str]:
+    """Run conversation evaluation, log to Langfuse, and raise on failure.
+
+    Returns the conversation's reasoning_steps on success; on failure the same list is
+    attached to the raised exception as ``.reasoning_steps`` (mirrors the
+    `conversation_id`-on-exception idiom in `ChatClient.ask()`) so callers can retrieve it
+    either way.
+    """
     from datetime import datetime as _dt  # noqa: PLC0415
     from datetime import timezone as _tz  # noqa: PLC0415
 
@@ -478,8 +488,11 @@ def evaluate_agentic_conversation(
 
     if not result.conversation_success:
         failed_turns = [tr for tr in result.turn_results if not tr.skill_success]
-        raise ConversationAssertionError(
+        exc = ConversationAssertionError(
             f"Conversation assertion failed. "
             f"full_skill_coverage={result.full_skill_coverage}. "
             f"Failed turns: {[t.turn_id for t in failed_turns]}"
         )
+        exc.reasoning_steps = result.reasoning_steps
+        raise exc
+    return result.reasoning_steps

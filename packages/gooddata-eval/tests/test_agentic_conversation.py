@@ -4,10 +4,12 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from gooddata_eval.core.agentic.conversation import (
+    ConversationAssertionError,
     ConversationFixture,
     TurnDefinition,
     TurnResult,
     _resolve_refs,
+    evaluate_agentic_conversation,
     run_agentic_conversation,
 )
 from gooddata_eval.core.models import ChatResult, ToolCallEvent
@@ -352,3 +354,127 @@ def test_run_agentic_conversation_treats_alert_proposal_as_a_clarification():
     assert "Should I create this alert?" in mock_sim.call_args.args[0]
     assert result.turn_results[0].clarification_turns_used == 1
     assert result.turn_results[0].skill_success is True
+
+
+def test_run_agentic_conversation_accumulates_reasoning_steps_across_turns():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    tc = MagicMock(spec=ToolCallEvent)
+    tc.function_name = "set_skills"
+    tc.parsed_arguments = lambda: {"skills": ["visualization"]}
+
+    turn1_result = MagicMock()
+    turn1_result.text_response = "Here is your visualization"
+    turn1_result.created_visualizations = [MagicMock()]
+    turn1_result.tool_call_events = [tc]
+    turn1_result.reasoning_steps = ["turn one reasoning"]
+
+    turn2_result = MagicMock()
+    turn2_result.text_response = "Here is another visualization"
+    turn2_result.created_visualizations = [MagicMock()]
+    turn2_result.tool_call_events = [tc]
+    turn2_result.reasoning_steps = ["turn two reasoning"]
+
+    mock_client.send_message.side_effect = [turn1_result, turn2_result]
+
+    fixture = ConversationFixture(
+        id="test-reasoning",
+        expected_skills=["visualization"],
+        turns=[
+            TurnDefinition(
+                turn_id="t1",
+                message="Make a chart",
+                expected_skill="visualization",
+                expected_output_type="visualization",
+            ),
+            TurnDefinition(
+                turn_id="t2",
+                message="Make another chart",
+                expected_skill="visualization",
+                expected_output_type="visualization",
+            ),
+        ],
+    )
+    with patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+        )
+
+    assert result.reasoning_steps == ["turn one reasoning", "turn two reasoning"]
+
+
+def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    tc = MagicMock(spec=ToolCallEvent)
+    tc.function_name = "set_skills"
+    tc.parsed_arguments = lambda: {"skills": ["visualization"]}
+    chat_result = MagicMock()
+    chat_result.text_response = "Here is your visualization"
+    chat_result.created_visualizations = [MagicMock()]
+    chat_result.tool_call_events = [tc]
+    chat_result.reasoning_steps = ["thinking about it"]
+    mock_client.send_message.return_value = chat_result
+
+    fixture = ConversationFixture(
+        id="test-1",
+        expected_skills=["visualization"],
+        turns=[
+            TurnDefinition(
+                turn_id="t1",
+                message="Make a chart",
+                expected_skill="visualization",
+                expected_output_type="visualization",
+            )
+        ],
+    )
+    with patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client):
+        reasoning = evaluate_agentic_conversation(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+        )
+    assert reasoning == ["thinking about it"]
+
+
+def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_fail():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    tc = MagicMock(spec=ToolCallEvent)
+    tc.function_name = "set_skills"
+    tc.parsed_arguments = lambda: {"skills": ["other_skill"]}
+    chat_result = MagicMock()
+    chat_result.text_response = "Here is something else"
+    chat_result.created_visualizations = None
+    chat_result.tool_call_events = [tc]
+    chat_result.alert_proposals = []
+    chat_result.reasoning_steps = ["confused thinking"]
+    mock_client.send_message.return_value = chat_result
+
+    fixture = ConversationFixture(
+        id="test-1",
+        expected_skills=["visualization"],
+        turns=[
+            TurnDefinition(
+                turn_id="t1",
+                message="Make a chart",
+                expected_skill="visualization",
+                expected_output_type="visualization",
+            )
+        ],
+    )
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        pytest.raises(ConversationAssertionError) as exc_info,
+    ):
+        evaluate_agentic_conversation(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+        )
+    assert exc_info.value.reasoning_steps == ["confused thinking"]
