@@ -99,3 +99,31 @@ def test_evaluator_skill_not_activated_when_wrong_skill_name():
     )
     result = ev.evaluate(_item(_expected()), chat)
     assert result.detail["skill_activated"] is False
+
+
+def _ranked(attribute: str | None, dim_alias: str = "d_q"):
+    """Single-dimension chart with a top-1 ranking filter, optionally naming the attribute."""
+    rank = {"type": "ranking_filter", "using": "m_rev", "top": 1}
+    if attribute is not None:
+        rank["attribute"] = attribute
+    return {
+        "id": "x",
+        "type": "column_chart",
+        "query": {
+            "fields": {"m_rev": {"using": "metric/revenue"}, dim_alias: {"using": "label/date.quarter"}},
+            "filter_by": {"f_rank": rank},
+        },
+        "metrics": ["m_rev"],
+        "view_by": [dim_alias],
+    }
+
+
+def test_evaluator_passes_when_agent_omits_ranking_attribute_on_single_dim_viz():
+    """QA-28615: the omitted attribute resolves to the sole dimension, so the case must pass."""
+    ev = get_evaluator("visualization")
+    expected = _ranked("d_q")
+    actual = _ranked(None, dim_alias="d_quarter")  # different alias, attribute omitted
+    result = ev.evaluate(_item(expected), _chat_result_with(actual))
+    assert result.detail["filter_ranking_score"] is True
+    assert result.detail["filters_correct"] is True
+    assert result.passed is True
