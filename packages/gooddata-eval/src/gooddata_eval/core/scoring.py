@@ -63,29 +63,46 @@ def uri_to_display_name(uri: str) -> str:
 
 
 def validate_cross_references(viz: CreatedVisualization) -> tuple[bool, list[str]]:
-    """Validate ranking-filter `using`/`attribute` resolve to correct URI prefixes."""
+    """Validate ranking-filter `using`/`attribute` resolve to correct URI prefixes.
+
+    Always returns `(ok, errors)` — a malformed filter produces an error entry, never an
+    exception. Anything unusable (None, empty, non-string) used to reach `.startswith()`
+    or `dict.get()` and blow up with AttributeError/TypeError mid-evaluation.
+
+    `using` is required by the AAC schema, `attribute` is optional (see
+    `_normalize_ranking_filter`), so an absent/None/empty `attribute` is accepted silently.
+    """
     errors: list[str] = []
     fields = viz.query.fields
     for filter_key, filter_dict in viz.query.filter_by.items():
         if filter_dict.get("type") != "ranking_filter":
             continue
-        using_val = filter_dict.get("using", "")
-        using_uri = _resolve_alias_to_uri(using_val, fields)
-        field_def = fields.get(using_val)
-        is_adhoc_agg = isinstance(field_def, AacQueryField) and bool(field_def.aggregation)
-        if not using_uri.startswith(("metric/", "fact/")) and not is_adhoc_agg:
-            errors.append(
-                f"ranking filter '{filter_key}': using='{using_val}' "
-                f"resolves to '{using_uri}' — expected a metric/ or fact/ URI"
-            )
-        if "attribute" in filter_dict:
-            attr_val = filter_dict["attribute"]
-            attr_uri = _resolve_alias_to_uri(attr_val, fields)
-            if not attr_uri.startswith(("label/", "attribute/")):
+        using_val = filter_dict.get("using")
+        if not isinstance(using_val, str) or not using_val:
+            errors.append(f"ranking filter '{filter_key}': using={using_val!r} — a metric/ or fact/ URI is required")
+        else:
+            using_uri = _resolve_alias_to_uri(using_val, fields)
+            field_def = fields.get(using_val)
+            is_adhoc_agg = isinstance(field_def, AacQueryField) and bool(field_def.aggregation)
+            if not using_uri.startswith(("metric/", "fact/")) and not is_adhoc_agg:
                 errors.append(
-                    f"ranking filter '{filter_key}': attribute='{attr_val}' "
-                    f"resolves to '{attr_uri}' — expected a label/ or attribute/ URI"
+                    f"ranking filter '{filter_key}': using='{using_val}' "
+                    f"resolves to '{using_uri}' — expected a metric/ or fact/ URI"
                 )
+        attr_val = filter_dict.get("attribute")
+        if attr_val is None or attr_val == "":
+            continue
+        if not isinstance(attr_val, str):
+            errors.append(
+                f"ranking filter '{filter_key}': attribute={attr_val!r} — expected a label/ or attribute/ URI"
+            )
+            continue
+        attr_uri = _resolve_alias_to_uri(attr_val, fields)
+        if not attr_uri.startswith(("label/", "attribute/")):
+            errors.append(
+                f"ranking filter '{filter_key}': attribute='{attr_val}' "
+                f"resolves to '{attr_uri}' — expected a label/ or attribute/ URI"
+            )
     return len(errors) == 0, errors
 
 
@@ -99,11 +116,43 @@ def _normalize_date_filter(filter_dict: dict, _fields: dict) -> dict:
     }
 
 
-def _normalize_ranking_filter(filter_dict: dict, fields: dict[str, AacQueryField | str]) -> dict:
+def _sole_dimension_uri(viz: CreatedVisualization) -> str | None:
+    """URI of the visualization's only dimension, or None when it has zero or several."""
+    dim_uris = get_dimension_uri_set(viz)
+    return next(iter(dim_uris)) if len(dim_uris) == 1 else None
+
+
+def _normalize_ranking_filter(
+    filter_dict: dict,
+    fields: dict[str, AacQueryField | str],
+    sole_dim_uri: str | None = None,
+) -> dict:
+    """Canonicalize a ranking filter so equivalent filters compare equal.
+
+    `attribute` is optional in the AAC schema (gen-ai models it as `NotRequired[str]` /
+    `str | None`), and when it is omitted AFM ranks over every dimension of the result. For a
+    single-dimension visualization that is exactly "rank by that one dimension", so an omitted
+    attribute is filled in with `sole_dim_uri` instead of comparing as an empty string — the
+    agent and the dataset may legitimately express the same filter either way.
+
+    The substitution is deliberately gated on there being exactly ONE dimension: with two or
+    more, omitting `attribute` ranks over the dimension *tuple*, which is a different filter,
+    so those stay strict. Callers pass the sole dimension of the visualization the filter
+    belongs to, which makes the comparison symmetric — it does not matter which side omitted it.
+
+    Missing, None and "" are all treated as "not specified"; so is a non-string, which
+    `validate_cross_references` reports separately rather than crashing the comparison.
+    """
+    attr_val = filter_dict.get("attribute")
+    if not isinstance(attr_val, str) or not attr_val:
+        dim_uri = sole_dim_uri or ""
+    else:
+        dim_uri = _resolve_alias_to_uri(attr_val, fields)
+    using_val = filter_dict.get("using")
     entry: dict = {
         "type": "ranking_filter",
-        "metric_uri": _resolve_alias_to_uri(filter_dict.get("using", ""), fields),
-        "dim_uri": _resolve_alias_to_uri(filter_dict.get("attribute", ""), fields),
+        "metric_uri": _resolve_alias_to_uri(using_val, fields) if isinstance(using_val, str) else "",
+        "dim_uri": dim_uri,
     }
     if "top" in filter_dict:
         entry["top"] = filter_dict["top"]
@@ -127,12 +176,13 @@ def _split_and_normalize_filters(viz: CreatedVisualization) -> tuple[set[str], s
     ranking_set: set[str] = set()
     attr_set: set[str] = set()
     fields = viz.query.fields
+    sole_dim_uri = _sole_dimension_uri(viz)
     for filter_dict in viz.query.filter_by.values():
         ft = filter_dict.get("type")
         if ft == "date_filter":
             date_set.add(json.dumps(_normalize_date_filter(filter_dict, fields), sort_keys=True))
         elif ft == "ranking_filter":
-            ranking_set.add(json.dumps(_normalize_ranking_filter(filter_dict, fields), sort_keys=True))
+            ranking_set.add(json.dumps(_normalize_ranking_filter(filter_dict, fields, sole_dim_uri), sort_keys=True))
         elif ft == "attribute_filter":
             attr_set.add(json.dumps(_normalize_attribute_filter(filter_dict, fields), sort_keys=True))
     return date_set, ranking_set, attr_set
