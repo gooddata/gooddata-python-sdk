@@ -1,0 +1,23 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_langfuse.py
+  s_7e53738a17b0e6::t_1a83084351ed3d 36-38
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_clarification.py
+  s_7e53738a17b0e6::t_9c90621a5466bf 10-18,25
+packages/gooddata-eval/tests/test_clarification.py
+  s_7e53738a17b0e6::t_9170ff74d4c79f 26-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "92ccd277bd51d798d60021f8de8ec70b4e5735bc",
+  "prompts": {},
+  "sessions": {
+    "s_7e53738a17b0e6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d7605be7-c26c-4dfd-83ba-5b457d0ca5a5",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Frank Huynh <duy.huynh@gooddata.com>"
+    }
+  }
+}
