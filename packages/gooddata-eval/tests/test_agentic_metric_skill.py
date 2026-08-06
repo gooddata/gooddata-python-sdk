@@ -19,7 +19,7 @@ from gooddata_eval.core.models import ChatResult
 
 
 def test_normalize_maql_strips_whitespace():
-    assert _normalize_maql("  SELECT  { metric/foo }  ") == "SELECT {metric/foo}"
+    assert _normalize_maql("  SELECT  { metric/foo }  ") == "select {metric/foo}"
 
 
 def test_normalize_maql_removes_select_wrapper():
@@ -57,6 +57,29 @@ def test_generate_simulated_response_prompt_preserves_maql_fidelity(monkeypatch)
     assert "WHERE" in sent_prompt or "filter" in sent_prompt.lower()
     assert "reply briefly" not in sent_prompt.lower()
     assert call_kwargs["max_tokens"] >= 300
+
+
+def test_normalize_maql_is_case_insensitive_for_keywords():
+    """Regression test for a live-reproduced bug: 'FOR PREVIOUS(...)' vs
+    'FOR Previous(...)' scored as a mismatch even though MAQL keywords are
+    case-insensitive -- a semantically identical agent answer failed the eval
+    purely on keyword casing."""
+    actual = "SELECT {metric/active_card_count_-_txn_-_cutcgco} FOR PREVIOUS({label/process_date.year})"
+    expected = "SELECT {metric/active_card_count_-_txn_-_cutcgco}\n  FOR Previous({label/process_date.year})"
+    assert _normalize_maql(actual) == _normalize_maql(expected)
+
+
+def test_normalize_maql_preserves_identifier_case():
+    # {type/id} references are real, case-sensitive ids -- must never be casefolded.
+    assert "Mixed_Case_Id" in _normalize_maql("SELECT {metric/Mixed_Case_Id}")
+
+
+def test_normalize_maql_preserves_quoted_literal_case():
+    """The bug this guards against: naively lowercasing everything outside {..}
+    would also lowercase quoted WHERE-clause literal values, which are real,
+    case-sensitive data -- not keywords. Two literals differing only in case
+    must NOT be treated as equal; that would be a false positive."""
+    assert _normalize_maql('WHERE {label/status} = "Active"') != _normalize_maql('WHERE {label/status} = "active"')
 
 
 def test_metric_run_result_fields():

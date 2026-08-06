@@ -25,6 +25,12 @@ _DEFAULT_MAX_ITERATIONS = 7
 _IFNULL_RE = re.compile(r"IFNULL\s*\([^,]+,\s*0\)", re.IGNORECASE)
 _SELECT_WRAP_RE = re.compile(r"^\s*\(\s*SELECT\s*\{([^}]+)\}\s*\)\s*$", re.IGNORECASE)
 _INNER_SELECT_RE = re.compile(r"\(\s*SELECT\s*\{([^}]+)\}\s*\)", re.IGNORECASE)
+# Matches whichever comes first: a {type/id} identifier reference or a quoted string
+# literal -- both are case-sensitive data and must survive casefolding untouched.
+# Everything else in MAQL (keywords, operators, numbers, punctuation) carries no
+# case-sensitive meaning, per the MAQL reference (SELECT/BY/WHERE/FOR PREVIOUS/etc.
+# are case-insensitive; only {..} identifiers and quoted literal values are not).
+_PROTECTED_RE = re.compile(r"\{[^}]*\}|\"[^\"]*\"|'[^']*'")
 
 
 def _strip_outer_parens(s: str) -> str:
@@ -42,8 +48,21 @@ def _strip_outer_parens(s: str) -> str:
     return s[1:-1].strip()
 
 
+def _casefold_outside_protected(s: str) -> str:
+    """Lowercase MAQL keywords/operators while preserving case-sensitive {type/id}
+    identifiers and quoted string literal values (e.g. WHERE {label/x} = "Active")."""
+    parts = []
+    last = 0
+    for m in _PROTECTED_RE.finditer(s):
+        parts.append(s[last : m.start()].lower())
+        parts.append(m.group(0))
+        last = m.end()
+    parts.append(s[last:].lower())
+    return "".join(parts)
+
+
 def _normalize_maql(maql: str) -> str:
-    """Semantic normalisation: strip whitespace, unwrap IFNULL/SELECT wrappers."""
+    """Semantic normalisation: strip whitespace, unwrap IFNULL/SELECT wrappers, casefold keywords."""
     if not maql:
         return ""
     m = maql.strip()
@@ -56,7 +75,7 @@ def _normalize_maql(maql: str) -> str:
     m = re.sub(r"\{\s+", "{", m)
     m = re.sub(r"\s+\}", "}", m)
     m = re.sub(r"\s+", " ", m)
-    return m.strip()
+    return _casefold_outside_protected(m.strip())
 
 
 def _best_maql_match(actual_maql: str, expected_outputs: list[dict]) -> tuple[bool, str]:
