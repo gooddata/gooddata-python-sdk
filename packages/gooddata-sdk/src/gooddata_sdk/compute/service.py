@@ -339,8 +339,10 @@ class ComputeService:
         used by AI features like search and chat. The embeddings are created from the
         workspace's metadata model and are essential for accurate AI functionality.
 
-        Note: This is a temporary solution and will be removed in a future release when
-        metadata synchronization becomes automatic.
+        Note: Metadata synchronization already runs automatically in the background, so
+        calling this method is not required under normal circumstances. It exists as a
+        manual, emergency-only escape hatch for cases where an immediate synchronization
+        is needed (e.g. troubleshooting), not as a temporary stopgap awaiting automation.
 
         Args:
             workspace_id (str): Workspace identifier
