@@ -42,7 +42,7 @@ def test_generate_simulated_response_prompt_preserves_maql_fidelity(monkeypatch)
     # `openai` is an optional [llm-judge] extra, not installed in this test env --
     # inject a fake module rather than patching a real one (mirrors how the source
     # itself does `from openai import OpenAI` as a local, guarded import).
-    fake_openai_module = types.SimpleNamespace(OpenAI=MagicMock(return_value=mock_client))
+    fake_openai_module = types.SimpleNamespace(OpenAI=MagicMock(return_value=mock_client), OpenAIError=Exception)
     monkeypatch.setitem(sys.modules, "openai", fake_openai_module)
 
     expected_output = {"maql": 'SELECT {metric/spend_amount_-_cutcgco} WHERE {label/ecommerce_indicator_code} = "1"'}
@@ -51,6 +51,7 @@ def test_generate_simulated_response_prompt_preserves_maql_fidelity(monkeypatch)
     call_kwargs = mock_client.chat.completions.create.call_args.kwargs
     sent_prompt = call_kwargs["messages"][0]["content"]
 
+    assert expected_output["maql"] in sent_prompt
     assert "verbatim" in sent_prompt
     assert "every clause" in sent_prompt
     assert "WHERE" in sent_prompt or "filter" in sent_prompt.lower()
