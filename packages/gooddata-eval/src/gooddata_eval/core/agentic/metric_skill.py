@@ -88,13 +88,16 @@ def generate_simulated_response(agent_message: str, expected_output: dict) -> st
     prompt = (
         f"You are simulating a user in a conversation with a BI assistant that creates metrics. "
         f"The assistant said: '{agent_message}'. "
-        f"The user originally asked to create a metric with MAQL: {expected_maql}. "
-        f"Reply briefly as the user, providing any clarification the assistant needs."
+        f"The user's ground-truth intended metric is exactly this MAQL: {expected_maql}. "
+        f"Reply as the user. You MUST ensure every clause of that MAQL (including any WHERE/filter "
+        f"conditions) is eventually satisfied, and quote field/label identifiers verbatim from it -- "
+        f"never paraphrase or drop a clause, even if the assistant's question doesn't explicitly ask "
+        f"about it. If the assistant's offered options omit a required filter, add it yourself."
     )
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=150,
+        max_tokens=300,
     )
     return response.choices[0].message.content or "Please proceed."
 
