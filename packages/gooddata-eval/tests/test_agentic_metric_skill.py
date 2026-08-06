@@ -51,6 +51,7 @@ def test_generate_simulated_response_prompt_preserves_maql_fidelity(monkeypatch)
     call_kwargs = mock_client.chat.completions.create.call_args.kwargs
     sent_prompt = call_kwargs["messages"][0]["content"]
 
+    assert expected_output["maql"] in sent_prompt
     assert "verbatim" in sent_prompt
     assert "every clause" in sent_prompt
     assert "WHERE" in sent_prompt or "filter" in sent_prompt.lower()
