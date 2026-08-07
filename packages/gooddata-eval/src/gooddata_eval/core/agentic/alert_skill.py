@@ -27,6 +27,13 @@ _DEFAULT_MAX_ITERATIONS = 6
 _TRIGGER_DISPLAY_TO_API = {"Every time": "ALWAYS", "One time": "ONCE"}
 _ALWAYS_TRIGGER_VALUES = {"Every time", "ALWAYS", "not specified"}
 
+_TRIGGER_INSTRUCTIONS = {
+    "ALWAYS": (
+        "alert me EVERY TIME the condition is met — not once per day, week or month, and not only the first time"
+    ),
+    "ONCE": "alert me ONLY THE FIRST TIME the condition is met, then stop",
+}
+
 
 def _to_number(value: object) -> float | int | None:
     """Convert string/number to int or float, None on failure."""
@@ -94,9 +101,11 @@ def _check_trigger(expected: CatalogMetricAlert, actual_args: dict) -> bool:
 
 def _check_filters(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     exp_filters = expected.filters
-    act_filters = actual_args.get("filters", actual_args.get("attribute_filters"))
-    if not exp_filters:
+    act_filters = actual_args.get("filters", actual_args.get("attribute_filters")) or []
+    if exp_filters is None:
         return True
+    if not exp_filters:
+        return not act_filters
     if not act_filters:
         return False
     return _deep_subset(exp_filters, act_filters)
@@ -132,8 +141,15 @@ def generate_simulated_alert_response(
     agent_message: str,
     expected: CatalogMetricAlert,
     conversation_history: list,
+    question: str = "",
 ) -> str:
-    """Stateful sim-user reply for alert-skill conversation (gpt-4o)."""
+    """Stateful sim-user reply for alert-skill conversation (gpt-4o).
+
+    ``question`` is the fixture's original request. The sim-user is first called with an empty
+    history — the opening question went straight to the agent, never to the sim-user — so
+    without it rule 5's "the filters your original request implies" refers to text the model
+    cannot see. Optional (defaults to "") to keep the signature backwards compatible.
+    """
     if _OpenAI is None:
         raise RuntimeError(
             "openai package is required for generate_simulated_alert_response. "
@@ -147,30 +163,83 @@ def generate_simulated_alert_response(
 
     metric = expected.metric_id or "not specified"
     operator = expected.operator
-    threshold = expected.threshold if expected.threshold is not None else "not specified"
+    # BETWEEN / NOT_BETWEEN carry their value in threshold_from/threshold_to, so `threshold` is
+    # None for them. Rule 3 asks the sim-user to verify the threshold, and reporting "not
+    # specified" made it demand the agent delete both bounds of a BETWEEN condition — an
+    # impossible request that burned every iteration without the alert ever being created.
+    threshold: str | float | int
+    if expected.operator in ("BETWEEN", "NOT_BETWEEN") and (
+        expected.threshold_from is not None or expected.threshold_to is not None
+    ):
+        threshold = f"between {expected.threshold_from} and {expected.threshold_to}"
+    elif expected.threshold is not None:
+        threshold = expected.threshold
+    else:
+        threshold = "not specified"
     recipients = ", ".join(expected.recipients) if expected.recipients else "not specified"
     trigger = expected.trigger
     filters = expected.filters
 
-    trigger_line = (
-        f"5. Proactively tell the agent the trigger is '{trigger}' in your first reply.\n"
-        if trigger not in _ALWAYS_TRIGGER_VALUES
-        else ""
-    )
+    # "not specified" is the normalizer's stand-in for an absent trigger, which the product
+    # persists as its ALWAYS default and `_check_trigger` asserts as ALWAYS. Both the cadence to
+    # ask for (rule 6) and the goal text (rule 1) use the resolved value: reporting the raw
+    # placeholder made rule 3 treat the trigger as unconstrained, so the sim-user would confirm a
+    # ONCE/ONCE_PER_INTERVAL proposal that the assertion then failed.
+    trigger_key = "ALWAYS" if trigger in _ALWAYS_TRIGGER_VALUES else trigger
+    trigger_request = _TRIGGER_INSTRUCTIONS.get(trigger_key, f"set the trigger to {trigger}")
+
+    # Three branches, matching the three states of `expected.filters`. `[]` and `None` must not
+    # share one: telling the sim-user "you want NO filters" on an unstated expectation makes it
+    # refuse filters the request genuinely implies (e.g. "orders from the United States"), which
+    # quietly turns that fixture into a weaker test rather than a failing one.
+    if filters:
+        filters_rule = (
+            f"5. Your alert needs exactly these filters and NOTHING else: {filters}. "
+            "If the agent offers, proposes or asks about any further date/time window, "
+            "evaluation period or granularity, refuse it and repeat that these are the only "
+            "filters you want.\n"
+        )
+    elif filters == []:
+        filters_rule = (
+            "5. Your alert must have NO filters and NO date/time window — it evaluates over all time. "
+            "If the agent asks which time period each check should cover, or offers a choice such as "
+            "'last Day / Week / Month', do NOT pick one: reply that you want no date filter at all, "
+            "all time. Never invent a period, a granularity or an 'evaluate each run on a X basis' "
+            "instruction the goal did not ask for.\n"
+        )
+    else:
+        filters_rule = (
+            "5. Ask only for the filters your original request implies — do not invent an evaluation "
+            "period, granularity or date window that was not requested. If the agent offers a choice "
+            "such as 'last Day / Week / Month' that your request never mentioned, say you do not want "
+            "a date window.\n"
+        )
+
+    original_request = f'Your original request to the agent was: "{question}"\n' if question else ""
+
     system_prompt = (
         "You are a user requesting creation of an alert for a metric from an AI agent. "
         "Respond naturally but always steer toward the exact values you were given.\n"
-        "Rules you MUST follow:\n"
+        + original_request
+        + "Rules you MUST follow:\n"
         f"1. Your goal: metric={metric}, operator={operator}, threshold={threshold}, "
-        f"recipients={recipients}, trigger={trigger}" + (f", filters={filters}" if filters else "") + ".\n"
+        f"recipients={recipients}, trigger={trigger_key}" + (f", filters={filters}" if filters else "") + ".\n"
         "2. Never revert or change a decision that was already confirmed in a previous turn.\n"
-        "3. If the agent shows a final summary and asks for confirmation, verify that the "
-        "   recipients match your goal. If they differ, correct them. "
-        "   Once recipients are correct, say 'Yes, please proceed to create the alert.'\n"
+        "3. If the agent shows a final summary, an alert proposal or asks for confirmation, check "
+        "   ALL of these against your goal: recipients, trigger (how often you are alerted), "
+        "   filters / time window, threshold and operator. If ANY of them differs — for example the "
+        "   summary says 'once per day/week/month' but your goal is every time, or it lists a date "
+        "   filter you never asked for — do NOT confirm: name the wrong field, state the correct "
+        "   value and ask the agent to fix it. Say 'Yes, please proceed to create the alert.' ONLY "
+        "   when every one of those fields matches your goal.\n"
+        "   A field your goal reports as 'not specified' is one you have NO expectation about: "
+        "   accept whatever the agent chose for it and never ask for it to be removed.\n"
         "4. Proactively include your email recipient in your first reply. "
         "   Do not wait for the agent to ask — state it alongside the metric and condition answers.\n"
-        + trigger_line
-        + "Reply concisely and directly."
+        + filters_rule
+        + f"6. Proactively state how often you want to be alerted in your first reply: {trigger_request}. "
+        "   Repeat it if the agent proposes a different cadence.\n"
+        "Reply concisely and directly."
     )
 
     messages: list = [{"role": "system", "content": system_prompt}]
@@ -257,6 +326,29 @@ def _case_insensitive_get(d: dict, *keys: str) -> Any:
     return None
 
 
+_NO_FILTER_MARKERS = ("none", "all time")
+
+
+def _normalize_expected_filters(expected: dict) -> list | str | None:
+    """
+    * ``Filters`` list           -> that list (exact expectation)
+    * "None (All time)" in either -> ``[]``   (stated: no filters; extras fail)
+    * anything else / absent      -> ``None`` (unstated; filters not asserted)
+    """
+    filters = _case_insensitive_get(expected, "filters")
+    if isinstance(filters, list):
+        return filters
+    time_window = _case_insensitive_get(expected, "time window/filters", "time_window")
+    for candidate in (filters, time_window):
+        if isinstance(candidate, str) and any(kw in candidate.lower() for kw in _NO_FILTER_MARKERS):
+            return []
+    # Prose that is not a no-filter marker ("Product Category = X") describes a filter without
+    # encoding it, so it cannot be compared: returning it made `_check_filters` fall through to
+    # `_deep_subset(str, list)`, which can never match. `None` is what the contract above
+    # promises — the sim-user derives such filters from the original request instead.
+    return None
+
+
 def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
     """Parse expected_output dict into CatalogMetricAlert, accepting display-format or internal-format keys."""
     operator = _case_insensitive_get(expected, "operator") or "GREATER_THAN"
@@ -280,9 +372,7 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
     else:
         recipients = list(raw_recip)
 
-    filters = _case_insensitive_get(expected, "filters")
-    if isinstance(filters, str) and any(kw in filters for kw in ("None", "All time")):
-        filters = None
+    filters = _normalize_expected_filters(expected)
 
     return CatalogMetricAlert(
         operator=operator,
@@ -377,7 +467,9 @@ def run_agentic_alert_skill(
                 # Stop before generating a follow-up for the last iteration
                 if _iteration >= max_iterations - 1:
                     break
-                follow_up = generate_simulated_alert_response(response_text, expected, conversation_history)
+                follow_up = generate_simulated_alert_response(
+                    response_text, expected, conversation_history, question=question
+                )
                 # Record this exchange so the next call has full history
                 conversation_history.append({"role": "assistant", "content": response_text})
                 conversation_history.append({"role": "user", "content": follow_up})

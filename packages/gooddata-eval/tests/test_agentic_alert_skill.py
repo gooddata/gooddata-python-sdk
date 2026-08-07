@@ -4,14 +4,31 @@ from unittest.mock import MagicMock, patch
 
 from gooddata_eval.core.agentic.alert_skill import (
     AlertEvaluation,
+    _check_filters,
     _check_trigger,
     _deep_subset,
     _normalize_expected_output,
     _to_number,
+    generate_simulated_alert_response,
     render_alert_proposal,
     run_agentic_alert_skill,
 )
 from gooddata_eval.core.models import ChatResult
+
+_DATE_FILTER = {
+    "relativeDateFilter": {
+        "dataset": {"identifier": {"id": "order_date", "type": "dataset"}},
+        "granularity": "MONTH",
+        "from": -1,
+        "to": -1,
+    }
+}
+_ATTR_FILTER = {
+    "positiveAttributeFilter": {
+        "label": {"identifier": {"id": "customer_country", "type": "label"}},
+        "in": {"values": ["United States"]},
+    }
+}
 
 _PROPOSAL = {
     "title": "# of Orders Alert - Greater Than 500",
@@ -62,6 +79,66 @@ def test_check_trigger_once_needs_explicit_once():
     assert _check_trigger(expected, {"trigger": "ONCE"}) is True
     assert _check_trigger(expected, {"trigger": None}) is False  # null != ONCE
     assert _check_trigger(expected, {"trigger": "ONCE_PER_INTERVAL"}) is False  # real model error stays a fail
+
+
+# --- filters: "no filters" is an expectation, "unspecified" is not (QA-28623) ---------------
+#
+# `_check_filters` used to return True whenever the expectation was empty, so an alert that
+# bolted on an unrequested relativeDateFilter scored filters_correct=1 and the drift the
+# ticket is about was invisible in the eval and on the trace.
+
+
+def test_check_filters_stated_none_rejects_extra_date_filter():
+    expected = _normalize_expected_output({"Operator": "GREATER_THAN", "Time window/Filters": "None (All time)"})
+    assert expected.filters == []  # stated, not merely absent
+    assert _check_filters(expected, {"filters": []}) is True
+    assert _check_filters(expected, {}) is True
+    assert _check_filters(expected, {"filters": [_DATE_FILTER]}) is False
+
+
+def test_check_filters_unspecified_is_not_asserted():
+    # Prose-only expectation: describes a filter the alert must have, but not comparably.
+    # Demanding emptiness here would fail an alert whose filters are in fact correct.
+    expected = _normalize_expected_output(
+        {"Operator": "LESS_THAN", "Time window/Filters": "Customer Country = United States"}
+    )
+    assert expected.filters is None
+    assert _check_filters(expected, {"filters": [_ATTR_FILTER, _DATE_FILTER]}) is True
+
+
+def test_check_filters_absent_time_window_is_not_asserted():
+    expected = _normalize_expected_output({"Operator": "ANOMALY"})
+    assert expected.filters is None
+    assert _check_filters(expected, {"filters": [_DATE_FILTER]}) is True
+
+
+def test_check_filters_explicit_list_still_requires_subset():
+    expected = _normalize_expected_output({"Operator": "LESS_THAN", "Filters": [_ATTR_FILTER]})
+    assert _check_filters(expected, {"filters": [_ATTR_FILTER]}) is True
+    assert _check_filters(expected, {"filters": []}) is False
+    # An extra filter beyond the expected list is still a length mismatch -> fail.
+    assert _check_filters(expected, {"filters": [_ATTR_FILTER, _DATE_FILTER]}) is False
+
+
+def test_normalize_expected_filters_prefers_machine_readable_list():
+    # Both columns present: the list wins over the prose, which merely paraphrases it.
+    expected = _normalize_expected_output(
+        {"Operator": "LESS_THAN", "Filters": [_ATTR_FILTER], "Time window/Filters": "Customer Country = United States"}
+    )
+    assert expected.filters == [_ATTR_FILTER]
+
+
+def test_normalize_expected_filters_reads_none_marker_from_filters_column():
+    expected = _normalize_expected_output({"Operator": "LESS_THAN", "Filters": "None (All time)"})
+    assert expected.filters == []
+
+
+def test_normalize_expected_filters_treats_prose_filters_column_as_unspecified():
+    # Prose in `Filters` used to be returned verbatim, so `_check_filters` compared a string to a
+    # list of filter dicts and could never pass — a guaranteed failure for a correct alert.
+    expected = _normalize_expected_output({"Operator": "LESS_THAN", "Filters": "Product Category = X"})
+    assert expected.filters is None
+    assert _check_filters(expected, {"filters": [_ATTR_FILTER]}) is True
 
 
 def test_alert_evaluation_strict_pass():
@@ -169,6 +246,170 @@ def test_run_agentic_alert_skill_creates_fresh_conversations_for_remaining_runs(
         )
     assert mock_client.create_conversation.call_count == 2
     assert mock_client.delete_conversation.call_count == 2
+
+
+# --- simulated user prompt (QA-28623) --------------------------------------------------------
+#
+# The drift these rules guard against was the sim-user's, not the agent's: asked "what time
+# window should each check use? Day / Week / Month" it volunteered "monthly", then confirmed a
+# summary that plainly read "Trigger: once per month".
+
+
+def _sim_user_prompt(expected_output: dict, question: str = "") -> str:
+    """Run the sim-user against a stub OpenAI client and return the system prompt it built."""
+    fake_openai = MagicMock()
+    fake_openai.return_value.chat.completions.create.return_value = MagicMock(
+        choices=[MagicMock(message=MagicMock(content="ok"))]
+    )
+    with (
+        patch("gooddata_eval.core.agentic.alert_skill._OpenAI", fake_openai),
+        patch.dict("os.environ", {"OPENAI_API_KEY": "test-key"}),
+    ):
+        generate_simulated_alert_response(
+            "What time period should each check cover?",
+            _normalize_expected_output(expected_output),
+            [],
+            question=question,
+        )
+    call = fake_openai.return_value.chat.completions.create.call_args
+    return call.kwargs["messages"][0]["content"]
+
+
+def test_sim_user_states_always_trigger_in_natural_language():
+    # `trigger=ALWAYS` alone left the sim-user silent about cadence; it must now ask for it
+    # in words a role-playing user would actually use.
+    prompt = _sim_user_prompt({"Operator": "GREATER_THAN", "Trigger": "Every time"})
+    assert "EVERY TIME" in prompt
+    assert "not once per day, week or month" in prompt
+
+
+def test_sim_user_asks_for_always_cadence_when_fixture_omits_trigger():
+    # A fixture with no Trigger still demands ALWAYS (the product default `_check_trigger`
+    # asserts), so rule 6 must ask for it rather than echo the "not specified" placeholder.
+    prompt = _sim_user_prompt({"Operator": "GREATER_THAN"})
+    assert "EVERY TIME" in prompt
+
+
+def test_sim_user_states_once_trigger_in_natural_language():
+    prompt = _sim_user_prompt({"Operator": "LESS_THAN", "Trigger": "One time"})
+    assert "ONLY THE FIRST TIME" in prompt
+
+
+def test_sim_user_goal_renders_omitted_trigger_as_always():
+    # Rule 3 tells the sim-user to accept fields the goal reports as "not specified". Leaving the
+    # trigger placeholder in the goal therefore licensed it to confirm a ONCE / ONCE_PER_INTERVAL
+    # proposal — which `_check_trigger` then fails, because an omitted trigger means ALWAYS.
+    expected = {"Operator": "GREATER_THAN"}
+    prompt = _sim_user_prompt(expected)
+    assert "trigger=ALWAYS" in prompt
+    assert "trigger=not specified" not in prompt
+    assert _check_trigger(_normalize_expected_output(expected), {"trigger": "ONCE"}) is False
+
+
+def test_sim_user_prompt_carries_the_original_request():
+    # The opening question goes straight to the agent, so the sim-user's first call has an empty
+    # history. Rule 5's "the filters your original request implies" needs the request in view.
+    question = "Notify me when the number of orders from the United States falls below 100"
+    prompt = _sim_user_prompt({"Operator": "LESS_THAN", "Threshold": "100"}, question=question)
+    assert question in prompt
+
+
+def test_run_agentic_alert_skill_passes_question_to_sim_user():
+    # Interaction: the agent asks for a filter the fixture never restates, so the sim-user can
+    # only supply it by reading the original request out of its own prompt.
+    question = "Notify me when the number of orders from the United States falls below 100"
+    asked_turn = ChatResult.model_validate(
+        {"text_response": "Which country should the alert filter on?", "tool_call_events": []}
+    )
+    created_turn = ChatResult.model_validate(
+        {
+            "text_response": "Alert created.",
+            "tool_call_events": [
+                {
+                    "functionName": "create_metric_alert",
+                    "functionArguments": '{"operator": "LESS_THAN", "threshold": 100}',
+                    "result": '{"id": "alert-1"}',
+                }
+            ],
+        }
+    )
+    mock_client = MagicMock()
+    mock_client.send_message.side_effect = [asked_turn, created_turn]
+
+    with (
+        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
+        patch(
+            "gooddata_eval.core.agentic.alert_skill.generate_simulated_alert_response",
+            return_value="United States.",
+        ) as mock_sim,
+        patch("gooddata_eval.core.agentic.alert_skill._delete_alert"),
+    ):
+        run_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question=question,
+            expected_output={"operator": "LESS_THAN", "threshold": 100},
+            k=1,
+            max_iterations=6,
+            initial_conversation_id="conv-1",
+        )
+
+    assert mock_sim.call_args.kwargs["question"] == question
+    # The agent message stays positional so existing callers/patches keep working.
+    assert mock_sim.call_args.args[0] == "Which country should the alert filter on?"
+
+
+def test_sim_user_goal_states_between_bounds():
+    # BETWEEN keeps its value in threshold_from/to, so `threshold` is None. Reporting the goal
+    # as "not specified" made the sim-user demand the agent delete both bounds — impossible, so
+    # it looped until max_iterations and the alert was never created (gpt56luna run, item _5).
+    prompt = _sim_user_prompt(
+        {"Operator": "BETWEEN", "Threshold_from": 50000, "Threshold_to": 200000, "Trigger": "Every time"}
+    )
+    assert "threshold=between 50000 and 200000" in prompt
+    assert "threshold=not specified" not in prompt
+
+
+def test_sim_user_accepts_fields_the_goal_leaves_unspecified():
+    # Rule 3 must not turn an absent expectation into a correction demand.
+    prompt = _sim_user_prompt({"Operator": "ANOMALY"})
+    assert "'not specified' is one you have NO expectation about" in prompt
+    assert "never ask for it to be removed" in prompt
+    # The phrase must survive literal concatenation intact — a line break mid-sentence used to
+    # render it as "'not    specified'", which the sim-user reads as a different instruction.
+    assert "'not    specified'" not in prompt
+
+
+def test_sim_user_refuses_invented_time_window_when_no_filters_expected():
+    prompt = _sim_user_prompt({"Operator": "GREATER_THAN", "Time window/Filters": "None (All time)"})
+    assert "NO filters" in prompt
+    assert "last Day / Week / Month" in prompt
+    assert "all time" in prompt
+
+
+def test_sim_user_is_not_told_no_filters_when_expectation_is_unstated():
+    # Prose-only expectation normalizes to None, not []. Claiming "NO filters" there would make
+    # the sim-user refuse the country filter this request genuinely implies — the fixture would
+    # still pass (filters are not asserted) while testing much less than it looks like.
+    prompt = _sim_user_prompt({"Operator": "LESS_THAN", "Time window/Filters": "Customer Country = United States"})
+    assert "NO filters" not in prompt
+    assert "do not invent an evaluation period" in prompt
+
+
+def test_sim_user_refuses_extra_filters_when_filters_expected():
+    prompt = _sim_user_prompt({"Operator": "LESS_THAN", "Filters": [_ATTR_FILTER]})
+    assert "NOTHING else" in prompt
+    assert "refuse it" in prompt
+
+
+def test_sim_user_verifies_trigger_and_filters_before_confirming():
+    # Rule 3 checked recipients only, so a summary showing the wrong trigger was rubber-stamped.
+    prompt = _sim_user_prompt({"Operator": "GREATER_THAN", "Trigger": "Every time"})
+    rule_3 = prompt.split("3.", 1)[1].split("4.", 1)[0]
+    for field in ("recipients", "trigger", "filters", "threshold", "operator"):
+        assert field in rule_3, f"final-summary check must cover {field}"
+    assert "do NOT confirm" in rule_3
 
 
 def test_render_alert_proposal_keeps_verifiable_fields_and_drops_afm():
