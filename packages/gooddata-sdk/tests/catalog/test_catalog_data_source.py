@@ -769,28 +769,6 @@ def test_scan_sql_without_preview(test_config: dict):
     assert response.data_preview is None
 
 
-"""
-# TODO: commented because Greenplum is supported only for Cloud and it cannot be tested using Docker image.
-@gd_vcr.use_cassette(str(_fixtures_dir / "greenplum.yaml"))
-def test_catalog_create_data_source_greenplum_spec(test_config):
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    _create_delete_ds(
-        sdk=sdk,
-        data_source=CatalogDataSourceGreenplum(
-            id="test",
-            name="Test",
-            db_specific_attributes=GreenplumAttributes(host="greenplum", db_name="demo"),
-            schema="demo",
-            credentials=BasicCredentials(
-                username="demouser",
-                password="demopass",
-            ),
-            url_params=[("autosave", "true")],
-        ),
-    )
-"""
-
-
 def test_allowed_data_source_type(test_config):
     allowed_types = JsonApiDataSourceInAttributes.allowed_values.get(("type",))
     for t in allowed_types.values():
