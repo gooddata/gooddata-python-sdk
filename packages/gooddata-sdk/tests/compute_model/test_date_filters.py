@@ -109,3 +109,40 @@ def test_date_filters_description(scenario, filter, descriptions):
 def test_all_time_date_filter_is_noop_by_default():
     f = AllTimeDateFilter(dataset=ObjId(type="dataset", id="dataset.id"))
     assert f.is_noop()
+
+
+@pytest.mark.parametrize(
+    "granularity",
+    [
+        "YEAR",
+        "QUARTER",
+        "MONTH",
+        "WEEK",
+        "DAY",
+        "HOUR",
+        "MINUTE",
+        "SECOND",
+        "QUARTER_OF_YEAR",
+        "MONTH_OF_YEAR",
+        "WEEK_OF_YEAR",
+        "DAY_OF_YEAR",
+        "DAY_OF_MONTH",
+        "DAY_OF_WEEK",
+        "HOUR_OF_DAY",
+        "MINUTE_OF_HOUR",
+        "MINUTE_OF_DAY",
+        "SECOND_OF_DAY",
+        "SECOND_OF_MINUTE",
+        "FISCAL_MONTH",
+        "FISCAL_QUARTER",
+        "FISCAL_YEAR",
+    ],
+)
+def test_relative_date_filter_accepts_all_supported_granularities(granularity):
+    f = RelativeDateFilter(
+        dataset=ObjId(type="dataset", id="dataset.id"),
+        granularity=granularity,
+        from_shift=-30,
+        to_shift=-1,
+    )
+    assert f.granularity == granularity

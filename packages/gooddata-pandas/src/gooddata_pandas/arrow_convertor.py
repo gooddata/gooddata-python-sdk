@@ -68,7 +68,7 @@ def _get_date_converter_for_label(label_id: str, model_labels: dict):
 
     - ``DAY`` / ``MONTH`` / ``YEAR`` → ``DateConverter``  (→ ``pandas.Timestamp`` via external fn)
     - ``WEEK`` / ``QUARTER``         → ``StringConverter`` (no-op)
-    - ``MINUTE`` / ``HOUR``          → ``DatetimeConverter``
+    - ``SECOND`` / ``MINUTE`` / ``HOUR`` → ``DatetimeConverter``
     - No granularity (text attrs)    → ``None`` (caller skips conversion)
     """
     info = model_labels.get(label_id, {})
@@ -84,6 +84,7 @@ def convert_label_values(label_id: str, values: list, model_labels: dict) -> lis
     Mirrors the non-Arrow execution path (``AttributeConverterStore`` in ``_typed_attribute_value``):
 
     - ``DAY`` / ``MONTH`` / ``YEAR`` granularity → ``pandas.Timestamp``
+    - ``SECOND`` / ``MINUTE`` / ``HOUR``         → ``pandas.Timestamp``
     - ``WEEK`` / ``QUARTER``                     → ``str`` (unchanged)
     - No granularity (text attributes)            → values returned as the **same object**
 

@@ -295,7 +295,7 @@ def build_stores() -> None:
     AttributeConverterStore.register("DATE", IntegerConverter)
     AttributeConverterStore.register("DATE", StringConverter, ["WEEK", "QUARTER"])
     AttributeConverterStore.register("DATE", DateConverter, ["DAY", "MONTH", "YEAR"])
-    AttributeConverterStore.register("DATE", DatetimeConverter, ["MINUTE", "HOUR"])
+    AttributeConverterStore.register("DATE", DatetimeConverter, ["SECOND", "MINUTE", "HOUR"])
 
     DBTypeConverterStore.register("date", DateConverter)
     DBTypeConverterStore.register("timestamp", DatetimeConverter)
