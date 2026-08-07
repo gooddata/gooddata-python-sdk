@@ -1,0 +1,19 @@
+packages/gooddata-sdk/pyproject.toml
+  s_61f6f3745f96ee::t_bb24c97baed547 37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.1",
+  "base_commit_sha": "24da1747e1f1c05aca5b09b8ac627b7c2ce5d3f1",
+  "prompts": {},
+  "sessions": {
+    "s_61f6f3745f96ee": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c8e7346f-ecd6-42b4-950d-02aa766e7181",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>"
+    }
+  }
+}

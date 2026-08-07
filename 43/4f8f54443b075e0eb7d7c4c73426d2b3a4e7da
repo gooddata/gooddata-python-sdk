@@ -1,0 +1,29 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_langfuse.py
+  s_7e53738a17b0e6::t_f7277a0b7bf474 108
+  s_7e53738a17b0e6::t_91a512aa966d03 273,275-283,287,305
+  s_7e53738a17b0e6::t_7ef0067a6ce90b 11
+  s_7e53738a17b0e6::t_b52b9e45ab8c3e 57-80
+packages/gooddata-eval/src/gooddata_eval/core/agentic/kda_skill.py
+  s_7e53738a17b0e6::t_c6213a0c11a5c7 135-146,148-174
+  s_7e53738a17b0e6::t_0804b9080c9c06 147
+  s_7e53738a17b0e6::t_eeb10f274d9d7c 417
+  s_7e53738a17b0e6::t_4ce898eadd3d6b 448
+  s_7e53738a17b0e6::t_fd55d09193eef7 7,15
+  s_7e53738a17b0e6::t_bb197ef82c5535 16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "434f8f54443b075e0eb7d7c4c73426d2b3a4e7da",
+  "prompts": {},
+  "sessions": {
+    "s_7e53738a17b0e6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d7605be7-c26c-4dfd-83ba-5b457d0ca5a5",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Frank Huynh <duy.huynh@gooddata.com>"
+    }
+  }
+}

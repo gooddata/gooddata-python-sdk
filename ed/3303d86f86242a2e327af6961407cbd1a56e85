@@ -1,0 +1,21 @@
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/sink.py
+  s_22fd5fea75407c::t_fcc1b7291de2f9 92-95
+packages/gooddata-eval/tests/test_langfuse_sink.py
+  s_22fd5fea75407c::t_7285b0e207b38c 105-127
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "ed3303d86f86242a2e327af6961407cbd1a56e85",
+  "prompts": {},
+  "sessions": {
+    "s_22fd5fea75407c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d24a9eb5-c031-4c30-a864-ae48fd8fcc20",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

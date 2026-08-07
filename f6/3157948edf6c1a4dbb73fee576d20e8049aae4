@@ -1,0 +1,19 @@
+packages/gooddata-eval/src/gooddata_eval/core/workspace.py
+  s_90905292b36e6b::t_c8c9f974896964 136-162,240-241,243-246,248,250
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "f63157948edf6c1a4dbb73fee576d20e8049aae4",
+  "prompts": {},
+  "sessions": {
+    "s_90905292b36e6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4819d826-2ce0-4f89-89e2-8b5af18493a9",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

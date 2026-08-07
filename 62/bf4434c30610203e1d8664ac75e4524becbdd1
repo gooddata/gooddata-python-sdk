@@ -1,0 +1,26 @@
+packages/gooddata-eval/examples/summary_dataset/dashboard_summary_example.json
+  ai_agent 5,7
+packages/gooddata-eval/src/gooddata_eval/core/workspace.py
+  s_22fd5fea75407c::t_ed4408e76b33dc 8-11
+  s_22fd5fea75407c::t_090e19a6c62236 145-151,153-154
+  s_22fd5fea75407c::t_a3563d449b7878 180-183,185
+packages/gooddata-eval/tests/test_workspace.py
+  s_22fd5fea75407c::t_a10b604de051f2 2-3,8,14
+  s_22fd5fea75407c::t_7a4bfd833aaf68 113-160
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "62bf4434c30610203e1d8664ac75e4524becbdd1",
+  "prompts": {},
+  "sessions": {
+    "s_22fd5fea75407c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d24a9eb5-c031-4c30-a864-ae48fd8fcc20",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

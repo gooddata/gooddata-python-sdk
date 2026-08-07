@@ -1,0 +1,38 @@
+packages/gooddata-sdk/src/gooddata_sdk/__init__.py
+  s_7c7b47675a454a::t_bd98b65b48683a 224
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model.py
+  s_7c7b47675a454a::t_6ac198f621e886 86
+  s_7c7b47675a454a::t_e1f6b874b191bc 54
+  s_7c7b47675a454a::t_37fdbe3a6727ec 225
+  s_7c7b47675a454a::t_114cf9ca7fe746 270
+  s_7c7b47675a454a::t_7a5ed10e96fb9d 18
+  s_7c7b47675a454a::t_64493fe0d0abb8 214
+  s_7c7b47675a454a::t_5561cf108c6c72 366-372
+  s_7c7b47675a454a::t_06020c9ee53306 199-201
+  s_7c7b47675a454a::t_495326ebc4706f 152-157
+  s_7c7b47675a454a::t_6d812e446fd4f1 259
+  s_7c7b47675a454a::t_bf229c298d1011 170
+packages/gooddata-sdk/tests/catalog/unit_tests/test_declarative_analytics_parameters.py
+  s_7c7b47675a454a::t_c40b10fca6cb32 14-15,17-19
+  s_7c7b47675a454a::t_fe90252fa5d397 24
+  s_7c7b47675a454a::t_48e93af7f1b3f6 38
+  s_7c7b47675a454a::t_3bff165da36bd1 1-13,16,20-23,25-37,39-42
+  s_7c7b47675a454a::t_19f3f918395cc8 52
+  s_7c7b47675a454a::t_441ad5d2e4d084 43-51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "38b0fd5fde9d24f82ab6041998a45d7b14f05961",
+  "prompts": {},
+  "sessions": {
+    "s_7c7b47675a454a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b1ddae8e-f450-43a1-bdf2-308ac9756b5e",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Jan Svager <jan.svager@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  ai_agent 12,20-21,66-76,86-93,105-121,164-214,224-226,229,231-234,236,238-314,316-322,324-329,332-333,341-342,349
+packages/gooddata-eval/src/gooddata_eval/core/workspace.py
+  ai_agent 6-7,30,105-106,173,176-177,183-186,200-205,214-216,224-252,260
+packages/gooddata-eval/tests/test_workspace.py
+  ai_agent 161-183
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "7b6a465304faa302a8a8578bea554055fc72d0f9",
+  "prompts": {}
+}

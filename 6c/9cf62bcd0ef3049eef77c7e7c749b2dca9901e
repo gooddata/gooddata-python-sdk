@@ -1,0 +1,29 @@
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  s_ee5cc41b994920::t_1d1981bf6fa0e5 1
+  s_ee5cc41b994920::t_ad1fe50abaf1cf 11
+  s_ee5cc41b994920::t_720debe28d779e 47-51
+  s_ee5cc41b994920::t_6e08d547faed93 69
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_ee5cc41b994920::t_3990904f770a25 160
+  s_ee5cc41b994920::t_cfa2fa08d50b2f 65-66
+  s_ee5cc41b994920::t_89ba1bada4dfc6 146-147
+  s_ee5cc41b994920::t_ffd433ae1ba495 1
+  s_ee5cc41b994920::t_542b87deb9f1df 77-78
+  s_ee5cc41b994920::t_b5bb525a2d8394 14-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "6c9cf62bcd0ef3049eef77c7e7c749b2dca9901e",
+  "prompts": {},
+  "sessions": {
+    "s_ee5cc41b994920": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a4aa36d-5864-4014-bd73-a9160c2f8d78",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

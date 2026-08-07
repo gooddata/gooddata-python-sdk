@@ -1,0 +1,26 @@
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  s_ee5cc41b994920::t_c18581abe724dc 74
+  s_ee5cc41b994920::t_b61ce96c12293b 15,19
+  s_ee5cc41b994920::t_85c794ca9ebee2 68-73,75-90
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_ee5cc41b994920::t_a9df6b66d89f9d 146,148-149,151,153-163
+  s_ee5cc41b994920::t_ad30d79567b061 81-82
+  s_ee5cc41b994920::t_0e30c7d3a96cd7 94-132
+  s_ee5cc41b994920::t_5e4eb3991cc969 36-38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "993da0434ec543550dca60aa3dcebf4e1259de56",
+  "prompts": {},
+  "sessions": {
+    "s_ee5cc41b994920": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a4aa36d-5864-4014-bd73-a9160c2f8d78",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

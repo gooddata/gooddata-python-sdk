@@ -1,0 +1,27 @@
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/general_question.py
+  s_90905292b36e6b::t_fec4134819d7a6 1-38
+packages/gooddata-eval/tests/test_text_evaluators.py
+  s_90905292b36e6b::t_270478bfeb881c 4-5
+  s_90905292b36e6b::t_fadb39b2086fd9 1-3,6-69
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/guardrail.py
+  s_90905292b36e6b::t_76be383212c009 1-51
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/__init__.py
+  s_90905292b36e6b::t_48077bb5ea5be6 14-25,36-40,44
+  s_90905292b36e6b::t_3d02081ce4d002 6-7,26-31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "7076df02c7a2fd25c9dd9467f1020ac8c9d94ca1",
+  "prompts": {},
+  "sessions": {
+    "s_90905292b36e6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4819d826-2ce0-4f89-89e2-8b5af18493a9",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

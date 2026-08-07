@@ -1,0 +1,52 @@
+packages/gooddata-eval/src/gooddata_eval/core/summary/__init__.py
+  s_22fd5fea75407c::t_e8592cf62a99b8 1
+packages/gooddata-eval/src/gooddata_eval/core/runner.py
+  s_22fd5fea75407c::t_e3f93626f81c7a 109
+  s_22fd5fea75407c::t_a009647a3ead1e 15-17
+packages/gooddata-eval/tests/test_summary_client.py
+  s_22fd5fea75407c::t_eb6c73b2b43453 1-72,74-85
+  s_22fd5fea75407c::t_1aed1cf8540701 73
+packages/gooddata-eval/tests/test_summary_evaluator.py
+  s_22fd5fea75407c::t_37f1bb15be0c59 1-3,5-86
+  s_22fd5fea75407c::t_d5ad81cccd6cae 4
+packages/gooddata-eval/examples/summary_dataset/dashboard_summary_example.json
+  s_22fd5fea75407c::t_b65fb491f95210 7
+  s_22fd5fea75407c::t_f6c4c8f13b15d8 1-6,8-22
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_22fd5fea75407c::t_af998faeb57193 88-104,115-116
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/summary.py
+  s_22fd5fea75407c::t_0cf1483cd6fbb7 1-58,62-90
+  s_22fd5fea75407c::t_6f5be80f61be86 59-61
+packages/gooddata-eval/README.md
+  s_22fd5fea75407c::t_a881d321bc9f22 88,92-129,140
+packages/gooddata-eval/src/gooddata_eval/core/summary/http_client.py
+  s_22fd5fea75407c::t_67caaa9824b8d5 1-54
+packages/gooddata-eval/tests/test_runner.py
+  s_22fd5fea75407c::t_2592215d675d7b 35
+  s_22fd5fea75407c::t_3304543f3290ff 69
+  s_22fd5fea75407c::t_fde02b71ad91bc 112-120
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  s_22fd5fea75407c::t_a37a547681724b 170-173
+  s_22fd5fea75407c::t_8b09899a4a90ad 18,22,27-49
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/__init__.py
+  s_22fd5fea75407c::t_76882a798c7f4f 23-25,29,34
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_22fd5fea75407c::t_a31f54325601ee 172,176
+  s_22fd5fea75407c::t_431aeec50c5a5a 22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "d48428aeb49e12d79a3e9898f720acb020843181",
+  "prompts": {},
+  "sessions": {
+    "s_22fd5fea75407c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d24a9eb5-c031-4c30-a864-ae48fd8fcc20",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

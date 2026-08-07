@@ -1,0 +1,41 @@
+gooddata-api-client/README.md
+  s_171bb95bfb79f0::t_8d334420f39bda 1580
+schemas/gooddata-scan-client.json
+  s_171bb95bfb79f0::t_d4e5362b07b1c6 237
+gooddata-api-client/docs/DeclarativeIpAllowlistPolicy.md
+  s_171bb95bfb79f0::t_8d334420f39bda 1-16
+gooddata-api-client/docs/LayoutApi.md
+  s_171bb95bfb79f0::t_d4e5362b07b1c6 4438-4455
+gooddata-api-client/.openapi-generator/FILES
+  s_171bb95bfb79f0::t_8d334420f39bda 294,1835
+gooddata-api-client/gooddata_api_client/models/__init__.py
+  s_171bb95bfb79f0::t_d4e5362b07b1c6 252
+schemas/gooddata-metadata-client.json
+  s_171bb95bfb79f0::t_d4e5362b07b1c6 3220,4268-4310,4854-4856
+gooddata-api-client/docs/DeclarativeColumn.md
+  s_171bb95bfb79f0::t_8d334420f39bda 9
+schemas/gooddata-api-client.json
+  s_171bb95bfb79f0::t_d4e5362b07b1c6 5700,6748-6790,7334-7336
+gooddata-api-client/docs/DeclarativeOrganization.md
+  s_171bb95bfb79f0::t_8d334420f39bda 14
+gooddata-api-client/gooddata_api_client/model/declarative_ip_allowlist_policy.py
+  s_171bb95bfb79f0::t_d4e5362b07b1c6 1-297
+gooddata-api-client/gooddata_api_client/model/declarative_organization.py
+  s_171bb95bfb79f0::t_d4e5362b07b1c6 39,52,121,142,200,301
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "194436fe4a509a0064fb10877960d44415a1483a",
+  "prompts": {},
+  "sessions": {
+    "s_171bb95bfb79f0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "46bc1ba2-1329-45ba-bbb1-ef0048e839d5",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>"
+    }
+  }
+}

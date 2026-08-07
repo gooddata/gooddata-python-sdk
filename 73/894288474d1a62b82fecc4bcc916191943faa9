@@ -1,0 +1,21 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.11",
+  "base_commit_sha": "73894288474d1a62b82fecc4bcc916191943faa9",
+  "prompts": {
+    "c38e6605a58c32d5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9e46f32c-c67d-42ad-b1b6-9387f36ea89b",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 5,
+      "accepted_lines": 0,
+      "overriden_lines": 0
+    }
+  }
+}

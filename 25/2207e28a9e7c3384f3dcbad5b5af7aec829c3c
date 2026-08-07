@@ -1,0 +1,33 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_langfuse.py
+  s_96ee128288a9f7::t_f12527232e4ce0 386,388-392,401-402
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_96ee128288a9f7::t_8fbef87df62c02 441,479
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_96ee128288a9f7::t_9301620b68430a 387,423
+packages/gooddata-eval/src/gooddata_eval/core/agentic/general_question.py
+  s_96ee128288a9f7::t_25d164b075fcb2 155,192
+packages/gooddata-eval/src/gooddata_eval/core/agentic/guardrail.py
+  s_96ee128288a9f7::t_0bb250aa072619 152,189
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_96ee128288a9f7::t_7f7b6d7f39e4ec 247,285
+packages/gooddata-eval/src/gooddata_eval/core/agentic/search_tool.py
+  s_96ee128288a9f7::t_a4a7e11f4bebdc 146,183
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_96ee128288a9f7::t_5e7fe4e013869d 266,306
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.11",
+  "base_commit_sha": "252207e28a9e7c3384f3dcbad5b5af7aec829c3c",
+  "prompts": {},
+  "sessions": {
+    "s_96ee128288a9f7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ce332428-29dd-431e-97a9-a120cdceef73",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

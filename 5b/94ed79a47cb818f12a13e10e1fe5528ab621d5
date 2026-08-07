@@ -1,0 +1,25 @@
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/aac.py
+  c05371498ae88a25 191-193,195,197-202,205-207,209-216
+packages/gooddata-sdk/tests/catalog/test_aac.py
+  c05371498ae88a25 14,180-211,299-360
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "5b94ed79a47cb818f12a13e10e1fe5528ab621d5",
+  "prompts": {
+    "c05371498ae88a25": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a63070e5-4081-4c8b-9202-2a7f980836ee",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>",
+      "messages": [],
+      "total_additions": 119,
+      "total_deletions": 6,
+      "accepted_lines": 117,
+      "overriden_lines": 0
+    }
+  }
+}
