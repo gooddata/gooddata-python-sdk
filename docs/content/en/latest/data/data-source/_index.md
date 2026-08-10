@@ -154,24 +154,6 @@ CatalogDataSourceBigQuery(
     parameters=[{"name": "projectId", "value": "abc"}],
 )
 ```
-### Greenplum
-
-```python
-CatalogDataSourceGreenplum(
-    id=data_source_id,
-    name=data_source_name,
-    db_specific_attributes=GreenplumAttributes(
-        host=os.environ["GREENPLUM_HOST"],
-        db_name=os.environ["GREENPLUM_DBNAME"]
-    ),
-    schema=os.environ["GREENPLUM_SCHEMA"],
-    credentials=BasicCredentials(
-        username=os.environ["GREENPLUM_USER"],
-        password=os.environ["GREENPLUM_PASSWORD"],
-    ),
-)
-```
-
 ### Microsoft SQL Server
 
 ```python

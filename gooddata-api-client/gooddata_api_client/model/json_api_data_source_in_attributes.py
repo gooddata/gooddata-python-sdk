@@ -71,7 +71,6 @@ class JsonApiDataSourceInAttributes(ModelNormal):
             'PRESTO': "PRESTO",
             'DREMIO': "DREMIO",
             'DRILL': "DRILL",
-            'GREENPLUM': "GREENPLUM",
             'AZURESQL': "AZURESQL",
             'SYNAPSESQL': "SYNAPSESQL",
             'DATABRICKS': "DATABRICKS",
