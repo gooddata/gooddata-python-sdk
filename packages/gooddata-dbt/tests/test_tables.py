@@ -3,7 +3,12 @@ import json
 from pathlib import Path
 from typing import Union
 
-from gooddata_dbt.dbt.tables import DbtModelTables
+from gooddata_dbt.dbt.base import (
+    DATE_GRANULARITIES,
+    SECOND_TIMESTAMP_GRANULARITIES,
+    TIMESTAMP_GRANULARITIES,
+)
+from gooddata_dbt.dbt.tables import DbtModelColumn, DbtModelTable, DbtModelTables
 from gooddata_sdk import CatalogDeclarativeModel, CatalogDeclarativeTables
 
 _CURR_DIR = Path(__file__).parent
@@ -49,6 +54,36 @@ def test_make_ldm():
     assert ldm.ldm is not None
     assert len(ldm.ldm.datasets) == 4
     assert len(ldm.ldm.date_instances) == 4
+
+
+def _table_with_date_columns() -> DbtModelTable:
+    return DbtModelTable(
+        name="events",
+        description="",
+        tags=[],
+        schema="public",
+        columns={
+            "created_at": DbtModelColumn(name="created_at", description="", tags=[], data_type="TIMESTAMP"),
+            "created_on": DbtModelColumn(name="created_on", description="", tags=[], data_type="DATE"),
+        },
+    )
+
+
+def test_make_date_datasets_without_second_granularities():
+    tables = DbtModelTables([], upper_case=False)
+    date_datasets = {d["id"]: d for d in tables.make_date_datasets(_table_with_date_columns(), [])}
+    assert date_datasets["created_at"]["granularities"] == DATE_GRANULARITIES + TIMESTAMP_GRANULARITIES
+    assert date_datasets["created_on"]["granularities"] == DATE_GRANULARITIES
+
+
+def test_make_date_datasets_with_second_granularities():
+    tables = DbtModelTables([], upper_case=False, enable_second_granularities=True)
+    date_datasets = {d["id"]: d for d in tables.make_date_datasets(_table_with_date_columns(), [])}
+    assert (
+        date_datasets["created_at"]["granularities"]
+        == DATE_GRANULARITIES + TIMESTAMP_GRANULARITIES + SECOND_TIMESTAMP_GRANULARITIES
+    )
+    assert date_datasets["created_on"]["granularities"] == DATE_GRANULARITIES
 
 
 FAA_MODEL_ID = "faa"

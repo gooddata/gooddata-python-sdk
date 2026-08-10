@@ -33,27 +33,47 @@ from gooddata_pipelines.logger.logger import LogObserver
 
 
 class LdmExtensionManager:
-    """Manager for creating custom datasets and fields in GoodData workspaces."""
+    """Manager for creating custom datasets and fields in GoodData workspaces.
+
+    Args:
+        enable_second_granularities (bool): Whether to create date datasets
+        with second-based granularities.
+    """
 
     INDENT = " " * 2
 
     @classmethod
-    def create(cls, host: str, token: str) -> "LdmExtensionManager":
-        return cls(host=host, token=token)
+    def create(
+        cls, host: str, token: str, enable_second_granularities: bool = False
+    ) -> "LdmExtensionManager":
+        return cls(
+            host=host,
+            token=token,
+            enable_second_granularities=enable_second_granularities,
+        )
 
     @classmethod
     def create_from_profile(
         cls,
         profile: str = "default",
         profiles_path: Path = PROFILES_FILE_PATH,
+        enable_second_granularities: bool = False,
     ) -> "LdmExtensionManager":
         """Creates a provisioner instance using a GoodData profile file."""
         content = profile_content(profile, profiles_path)
-        return cls(host=content["host"], token=content["token"])
+        return cls(
+            host=content["host"],
+            token=content["token"],
+            enable_second_granularities=enable_second_granularities,
+        )
 
-    def __init__(self, host: str, token: str):
+    def __init__(
+        self, host: str, token: str, enable_second_granularities: bool = False
+    ):
         self._validator = LdmExtensionDataValidator()
-        self._processor = LdmExtensionDataProcessor()
+        self._processor = LdmExtensionDataProcessor(
+            enable_second_granularities=enable_second_granularities
+        )
         self._sdk = GoodDataSdk.create(host_=host, token_=token)
         self._api = GoodDataApi(host=host, token=token)
         self.logger = LogObserver()

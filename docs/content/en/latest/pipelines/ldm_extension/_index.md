@@ -27,6 +27,8 @@ ldm_extension_manager = LdmExtensionManager.create(host=host, token=token)
 
 To extend the LDM, you need to define the custom datasets and the fields they should contain. The script also checks the validity of analytical objects before and after the update. Updates introducing new invalid relations are automatically rolled back. You can opt out of this behavior by setting the `check_relations` parameter to False.
 
+To create date datasets with the second-based granularities (`SECOND`, `SECOND_OF_MINUTE`, `SECOND_OF_DAY`, `MINUTE_OF_DAY`), set the `enable_second_granularities` parameter to True when creating the LdmExtensionManager.
+
 ### Custom Dataset Definitions
 
 The custom dataset represents a new dataset appended to the child LDM. It is defined by the following parameters:

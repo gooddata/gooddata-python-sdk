@@ -82,6 +82,21 @@ class LdmExtensionDataProcessor:
         "FISCAL_YEAR",
     ]
 
+    # newly added granularities gated behind `enableSecondGranularities` feature flag
+    _SECOND_DATE_GRANULARITIES: list[str] = [
+        "SECOND",
+        "SECOND_OF_MINUTE",
+        "SECOND_OF_DAY",
+        "MINUTE_OF_DAY",
+    ]
+
+    def __init__(self, enable_second_granularities: bool = False):
+        self._date_granularities = (
+            self.DATE_GRANULARITIES + self._SECOND_DATE_GRANULARITIES
+            if enable_second_granularities
+            else self.DATE_GRANULARITIES
+        )
+
     @staticmethod
     def _attribute_from_field(
         dataset_name: str,
@@ -127,7 +142,7 @@ class LdmExtensionDataProcessor:
                 title_base="",
                 title_pattern="%titleBase - %granularityTitle",
             ),
-            granularities=self.DATE_GRANULARITIES,
+            granularities=self._date_granularities,
             description=custom_field.description,
             tags=_effective_field_tags(dataset_name, custom_field),
         )

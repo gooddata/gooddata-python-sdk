@@ -52,6 +52,13 @@ TIMESTAMP_GRANULARITIES = [
     "MINUTE_OF_HOUR",
     "HOUR_OF_DAY",
 ]
+# newly added granularities gated behind `enableSecondGranularities` feature flag
+SECOND_TIMESTAMP_GRANULARITIES = [
+    "SECOND",
+    "SECOND_OF_MINUTE",
+    "SECOND_OF_DAY",
+    "MINUTE_OF_DAY",
+]
 T = TypeVar("T", bound="Base")
 
 DBT_TARGET_DIR = Path("target")
