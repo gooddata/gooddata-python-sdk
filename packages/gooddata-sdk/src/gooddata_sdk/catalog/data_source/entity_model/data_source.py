@@ -167,11 +167,6 @@ class VerticaAttributes(PostgresAttributes):
 
 
 @define(kw_only=True)
-class GreenplumAttributes(PostgresAttributes):
-    pass
-
-
-@define(kw_only=True)
 class MySqlAttributes(DatabaseAttributes):
     host: str
     port: str = "3306"
@@ -228,12 +223,6 @@ class CatalogDataSourceSnowflake(CatalogDataSource):
 @define(kw_only=True)
 class CatalogDataSourceBigQuery(CatalogDataSource):
     type: str = "BIGQUERY"
-
-
-@define(kw_only=True)
-class CatalogDataSourceGreenplum(CatalogDataSourcePostgres):
-    type: str = "GREENPLUM"
-    db_vendor: str = "postgresql"
 
 
 @define(kw_only=True)
