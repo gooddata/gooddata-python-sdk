@@ -37,8 +37,8 @@ def lazy_import():
     from gooddata_api_client.model.json_api_notification_channel_out_with_links import JsonApiNotificationChannelOutWithLinks
     from gooddata_api_client.model.json_api_user_identifier_out_with_links import JsonApiUserIdentifierOutWithLinks
     from gooddata_api_client.model.json_api_user_out_with_links import JsonApiUserOutWithLinks
-    from gooddata_api_client.model.json_api_workspace_in_attributes import JsonApiWorkspaceInAttributes
     from gooddata_api_client.model.json_api_workspace_in_relationships import JsonApiWorkspaceInRelationships
+    from gooddata_api_client.model.json_api_workspace_out_attributes import JsonApiWorkspaceOutAttributes
     from gooddata_api_client.model.json_api_workspace_out_meta import JsonApiWorkspaceOutMeta
     from gooddata_api_client.model.json_api_workspace_out_with_links import JsonApiWorkspaceOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
@@ -48,8 +48,8 @@ def lazy_import():
     globals()['JsonApiNotificationChannelOutWithLinks'] = JsonApiNotificationChannelOutWithLinks
     globals()['JsonApiUserIdentifierOutWithLinks'] = JsonApiUserIdentifierOutWithLinks
     globals()['JsonApiUserOutWithLinks'] = JsonApiUserOutWithLinks
-    globals()['JsonApiWorkspaceInAttributes'] = JsonApiWorkspaceInAttributes
     globals()['JsonApiWorkspaceInRelationships'] = JsonApiWorkspaceInRelationships
+    globals()['JsonApiWorkspaceOutAttributes'] = JsonApiWorkspaceOutAttributes
     globals()['JsonApiWorkspaceOutMeta'] = JsonApiWorkspaceOutMeta
     globals()['JsonApiWorkspaceOutWithLinks'] = JsonApiWorkspaceOutWithLinks
     globals()['ObjectLinks'] = ObjectLinks
@@ -119,7 +119,7 @@ class JsonApiWorkspaceAutomationOutIncludes(ModelComposed):
             'meta': (JsonApiWorkspaceOutMeta,),  # noqa: E501
             'relationships': (JsonApiWorkspaceInRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
-            'attributes': (JsonApiWorkspaceInAttributes,),  # noqa: E501
+            'attributes': (JsonApiWorkspaceOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
@@ -180,7 +180,7 @@ class JsonApiWorkspaceAutomationOutIncludes(ModelComposed):
             meta (JsonApiWorkspaceOutMeta): [optional]  # noqa: E501
             relationships (JsonApiWorkspaceInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            attributes (JsonApiWorkspaceInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiWorkspaceOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
             type (str): Object type. [optional] if omitted the server will use the default value of "workspace"  # noqa: E501
         """
@@ -289,7 +289,7 @@ class JsonApiWorkspaceAutomationOutIncludes(ModelComposed):
             meta (JsonApiWorkspaceOutMeta): [optional]  # noqa: E501
             relationships (JsonApiWorkspaceInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            attributes (JsonApiWorkspaceInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiWorkspaceOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
             type (str): Object type. [optional] if omitted the server will use the default value of "workspace"  # noqa: E501
         """

@@ -18,8 +18,10 @@ Method | HTTP request | Description
 [**manage_data_source_permissions**](PermissionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 [**manage_fact_permissions**](PermissionsApi.md#manage_fact_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/facts/{factId}/managePermissions | Manage Permissions for a Fact
 [**manage_label_permissions**](PermissionsApi.md#manage_label_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/managePermissions | Manage Permissions for a Label
+[**manage_metric_permissions**](PermissionsApi.md#manage_metric_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/managePermissions | (BETA) Manage Permissions for a Metric
 [**manage_organization_permissions**](PermissionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
 [**manage_workspace_permissions**](PermissionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
+[**metric_permissions**](PermissionsApi.md#metric_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/permissions | (BETA) Get Metric Permissions
 [**set_organization_permissions**](PermissionsApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
 [**set_user_group_permissions**](PermissionsApi.md#set_user_group_permissions) | **PUT** /api/v1/layout/userGroups/{userGroupId}/permissions | Set permissions for the user-group
 [**set_user_permissions**](PermissionsApi.md#set_user_permissions) | **PUT** /api/v1/layout/users/{userId}/permissions | Set permissions for the user
@@ -796,7 +798,7 @@ with gooddata_api_client.ApiClient() as api_client:
     data_source_permission_assignment = [
         DataSourcePermissionAssignment(
             assignee_identifier=AssigneeIdentifier(
-                id="id_example",
+                id="/6bUUGjjNSwg0_bs",
                 type="user",
             ),
             permissions=[
@@ -983,6 +985,76 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **manage_metric_permissions**
+> manage_metric_permissions(workspace_id, metric_id, manage_metric_permissions_request_inner)
+
+(BETA) Manage Permissions for a Metric
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.manage_metric_permissions_request_inner import ManageMetricPermissionsRequestInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    metric_id = "metricId_example" # str | 
+    manage_metric_permissions_request_inner = [
+        ManageMetricPermissionsRequestInner(None),
+    ] # [ManageMetricPermissionsRequestInner] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Manage Permissions for a Metric
+        api_instance.manage_metric_permissions(workspace_id, metric_id, manage_metric_permissions_request_inner)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->manage_metric_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **metric_id** | **str**|  |
+ **manage_metric_permissions_request_inner** | [**[ManageMetricPermissionsRequestInner]**](ManageMetricPermissionsRequestInner.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **manage_organization_permissions**
 > manage_organization_permissions(organization_permission_assignment)
 
@@ -1013,7 +1085,7 @@ with gooddata_api_client.ApiClient() as api_client:
     organization_permission_assignment = [
         OrganizationPermissionAssignment(
             assignee_identifier=AssigneeIdentifier(
-                id="id_example",
+                id="/6bUUGjjNSwg0_bs",
                 type="user",
             ),
             permissions=[
@@ -1090,7 +1162,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_permission_assignment = [
         WorkspacePermissionAssignment(
             assignee_identifier=AssigneeIdentifier(
-                id="id_example",
+                id="/6bUUGjjNSwg0_bs",
                 type="user",
             ),
             hierarchy_permissions=[
@@ -1140,6 +1212,73 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **metric_permissions**
+> MetricPermissions metric_permissions(workspace_id, metric_id)
+
+(BETA) Get Metric Permissions
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.metric_permissions import MetricPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    metric_id = "metricId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Get Metric Permissions
+        api_response = api_instance.metric_permissions(workspace_id, metric_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->metric_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **metric_id** | **str**|  |
+
+### Return type
+
+[**MetricPermissions**](MetricPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **set_organization_permissions**
 > set_organization_permissions(declarative_organization_permission)
 
@@ -1170,7 +1309,7 @@ with gooddata_api_client.ApiClient() as api_client:
     declarative_organization_permission = [
         DeclarativeOrganizationPermission(
             assignee=AssigneeIdentifier(
-                id="id_example",
+                id="/6bUUGjjNSwg0_bs",
                 type="user",
             ),
             name="MANAGE",
@@ -1246,7 +1385,7 @@ with gooddata_api_client.ApiClient() as api_client:
         permissions=[
             DeclarativeUserGroupPermission(
                 assignee=AssigneeIdentifier(
-                    id="id_example",
+                    id="/6bUUGjjNSwg0_bs",
                     type="user",
                 ),
                 name="SEE",
@@ -1324,7 +1463,7 @@ with gooddata_api_client.ApiClient() as api_client:
         permissions=[
             DeclarativeUserPermission(
                 assignee=AssigneeIdentifier(
-                    id="id_example",
+                    id="/6bUUGjjNSwg0_bs",
                     type="user",
                 ),
                 name="SEE",
@@ -1402,7 +1541,7 @@ with gooddata_api_client.ApiClient() as api_client:
         hierarchy_permissions=[
             DeclarativeWorkspaceHierarchyPermission(
                 assignee=AssigneeIdentifier(
-                    id="id_example",
+                    id="/6bUUGjjNSwg0_bs",
                     type="user",
                 ),
                 name="MANAGE",
@@ -1411,7 +1550,7 @@ with gooddata_api_client.ApiClient() as api_client:
         permissions=[
             DeclarativeSingleWorkspacePermission(
                 assignee=AssigneeIdentifier(
-                    id="id_example",
+                    id="/6bUUGjjNSwg0_bs",
                     type="user",
                 ),
                 name="MANAGE",

@@ -77,15 +77,15 @@
               },
               "from": {
                 "example": "2020-07-01 18:23",
-                "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
+                "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2}(:\\d{1,2})?)?$",
                 "type": "string"
               },
               "localIdentifier": {
                 "type": "string"
               },
               "to": {
-                "example": "2020-07-16 23:59",
-                "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
+                "example": "2020-07-16 23:59:59",
+                "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2}(:\\d{1,2})?)?$",
                 "type": "string"
               }
             },
@@ -99,6 +99,104 @@
         },
         "required": [
           "absoluteDateFilter"
+        ],
+        "type": "object"
+      },
+      "AbsoluteGranularityDateFilter": {
+        "description": "An absolute date range filter defined at a specific granularity. The 'from'/'to' literals must match the format of the chosen granularity (e.g. '2020' for YEAR, '2012-05' for MONTH, '2012-3' for QUARTER, '1996-01' for WEEK, '2010-10-30' for DAY, or a plain ordinal like '6' for periodical granularities such as MONTH_OF_YEAR). At least one of 'from'/'to' must be provided; specifying only one yields an open-ended range.",
+        "properties": {
+          "absoluteGranularityDateFilter": {
+            "properties": {
+              "applyOnResult": {
+                "type": "boolean"
+              },
+              "dataset": {
+                "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
+              },
+              "emptyValueHandling": {
+                "default": "EXCLUDE",
+                "description": "Specifies how rows with empty (null/missing) date values should be handled. INCLUDE includes empty dates in addition to the date range restriction, EXCLUDE removes rows with empty dates (default), ONLY keeps only rows with empty dates.",
+                "enum": [
+                  "INCLUDE",
+                  "EXCLUDE",
+                  "ONLY"
+                ],
+                "type": "string"
+              },
+              "from": {
+                "description": "Start of the range (including), in the format matching 'granularity'. If omitted, the range is unbounded at the start.",
+                "example": "2012-05",
+                "nullable": true,
+                "pattern": "^((?:\\d{4})|(?:\\d{4}-[1-4])|(?:\\d{4}-(0[1-9]|1[0-2]))|(?:\\d{4}-(0[1-9]|[1-4]\\d|5[0-3]))|(?:\\d{4}-\\d{2}-\\d{2})|(?:[0-9]|[1-5]\\d)|(?:[0-9]|[1-9]\\d{1,3}|[1-7]\\d{4}|8[0-5]\\d{3}|86[0-3]\\d{2})|(?:[0-9]|[1-5]\\d)|(?:[0-9]|[1-9]\\d{1,2}|1[0-3]\\d{2}|14[0-3]\\d)|(?:[0-9]|1\\d|2[0-3])|(?:[0-6])|(?:[1-9]|[12]\\d|3[01])|(?:[1-9]|[1-8]\\d|9[0-2])|(?:[1-9]|[1-9]\\d|[12]\\d\\d|3[0-5]\\d|36[0-6])|(?:[1-9]|[1-4]\\d|5[0-3])|(?:[1-9]|1[0-2])|(?:[1-4]))$",
+                "type": "string"
+              },
+              "granularity": {
+                "description": "Granularity determining the filtered date attribute and the expected 'from'/'to' format.",
+                "enum": [
+                  "SECOND",
+                  "SECOND_OF_MINUTE",
+                  "SECOND_OF_DAY",
+                  "MINUTE",
+                  "MINUTE_OF_HOUR",
+                  "MINUTE_OF_DAY",
+                  "HOUR",
+                  "HOUR_OF_DAY",
+                  "DAY",
+                  "DAY_OF_WEEK",
+                  "DAY_OF_MONTH",
+                  "DAY_OF_QUARTER",
+                  "DAY_OF_YEAR",
+                  "WEEK",
+                  "WEEK_OF_YEAR",
+                  "MONTH",
+                  "MONTH_OF_YEAR",
+                  "QUARTER",
+                  "QUARTER_OF_YEAR",
+                  "YEAR",
+                  "FISCAL_DAY_OF_FISCAL_WEEK",
+                  "FISCAL_DAY_OF_FISCAL_MONTH",
+                  "FISCAL_DAY_OF_FISCAL_QUARTER",
+                  "FISCAL_DAY_OF_FISCAL_SEMESTER",
+                  "FISCAL_DAY_OF_FISCAL_YEAR",
+                  "FISCAL_WEEK",
+                  "FISCAL_WEEK_OF_FISCAL_MONTH",
+                  "FISCAL_WEEK_OF_FISCAL_QUARTER",
+                  "FISCAL_WEEK_OF_FISCAL_SEMESTER",
+                  "FISCAL_WEEK_OF_FISCAL_YEAR",
+                  "FISCAL_MONTH",
+                  "FISCAL_MONTH_OF_FISCAL_QUARTER",
+                  "FISCAL_MONTH_OF_FISCAL_SEMESTER",
+                  "FISCAL_MONTH_OF_FISCAL_YEAR",
+                  "FISCAL_QUARTER",
+                  "FISCAL_QUARTER_OF_FISCAL_SEMESTER",
+                  "FISCAL_QUARTER_OF_FISCAL_YEAR",
+                  "FISCAL_SEMESTER",
+                  "FISCAL_SEMESTER_OF_FISCAL_YEAR",
+                  "FISCAL_YEAR"
+                ],
+                "example": "MONTH",
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "to": {
+                "description": "End of the range (including), in the format matching 'granularity'. If omitted, the range is unbounded at the end.",
+                "example": "2012-08",
+                "nullable": true,
+                "pattern": "^((?:\\d{4})|(?:\\d{4}-[1-4])|(?:\\d{4}-(0[1-9]|1[0-2]))|(?:\\d{4}-(0[1-9]|[1-4]\\d|5[0-3]))|(?:\\d{4}-\\d{2}-\\d{2})|(?:[0-9]|[1-5]\\d)|(?:[0-9]|[1-9]\\d{1,3}|[1-7]\\d{4}|8[0-5]\\d{3}|86[0-3]\\d{2})|(?:[0-9]|[1-5]\\d)|(?:[0-9]|[1-9]\\d{1,2}|1[0-3]\\d{2}|14[0-3]\\d)|(?:[0-9]|1\\d|2[0-3])|(?:[0-6])|(?:[1-9]|[12]\\d|3[01])|(?:[1-9]|[1-8]\\d|9[0-2])|(?:[1-9]|[1-9]\\d|[12]\\d\\d|3[0-5]\\d|36[0-6])|(?:[1-9]|[1-4]\\d|5[0-3])|(?:[1-9]|1[0-2])|(?:[1-4]))$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "dataset",
+              "granularity"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "absoluteGranularityDateFilter"
         ],
         "type": "object"
       },
@@ -270,8 +368,8 @@
               }
             },
             "required": [
-              "type",
-              "id"
+              "id",
+              "type"
             ],
             "type": "object"
           }
@@ -388,8 +486,8 @@
               }
             },
             "required": [
-              "type",
-              "id"
+              "id",
+              "type"
             ],
             "type": "object"
           }
@@ -516,8 +614,17 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "type": {
+            "enum": [
+              "aggregate"
+            ],
+            "type": "string"
           }
         },
+        "required": [
+          "type"
+        ],
         "type": "object"
       },
       "AiUsageMetadataItem": {
@@ -570,24 +677,45 @@
                 "default": "DAY",
                 "description": "Date granularity used to resolve the date attribute label for null value checks. Defaults to DAY if not specified.",
                 "enum": [
+                  "SECOND",
+                  "SECOND_OF_MINUTE",
+                  "SECOND_OF_DAY",
                   "MINUTE",
-                  "HOUR",
-                  "DAY",
-                  "WEEK",
-                  "MONTH",
-                  "QUARTER",
-                  "YEAR",
                   "MINUTE_OF_HOUR",
+                  "MINUTE_OF_DAY",
+                  "HOUR",
                   "HOUR_OF_DAY",
+                  "DAY",
                   "DAY_OF_WEEK",
                   "DAY_OF_MONTH",
                   "DAY_OF_QUARTER",
                   "DAY_OF_YEAR",
+                  "WEEK",
                   "WEEK_OF_YEAR",
+                  "MONTH",
                   "MONTH_OF_YEAR",
+                  "QUARTER",
                   "QUARTER_OF_YEAR",
+                  "YEAR",
+                  "FISCAL_DAY_OF_FISCAL_WEEK",
+                  "FISCAL_DAY_OF_FISCAL_MONTH",
+                  "FISCAL_DAY_OF_FISCAL_QUARTER",
+                  "FISCAL_DAY_OF_FISCAL_SEMESTER",
+                  "FISCAL_DAY_OF_FISCAL_YEAR",
+                  "FISCAL_WEEK",
+                  "FISCAL_WEEK_OF_FISCAL_MONTH",
+                  "FISCAL_WEEK_OF_FISCAL_QUARTER",
+                  "FISCAL_WEEK_OF_FISCAL_SEMESTER",
+                  "FISCAL_WEEK_OF_FISCAL_YEAR",
                   "FISCAL_MONTH",
+                  "FISCAL_MONTH_OF_FISCAL_QUARTER",
+                  "FISCAL_MONTH_OF_FISCAL_SEMESTER",
+                  "FISCAL_MONTH_OF_FISCAL_YEAR",
                   "FISCAL_QUARTER",
+                  "FISCAL_QUARTER_OF_FISCAL_SEMESTER",
+                  "FISCAL_QUARTER_OF_FISCAL_YEAR",
+                  "FISCAL_SEMESTER",
+                  "FISCAL_SEMESTER_OF_FISCAL_YEAR",
                   "FISCAL_YEAR"
                 ],
                 "example": "DAY",
@@ -648,64 +776,6 @@
         "required": [
           "sourceType",
           "targetType"
-        ],
-        "type": "object"
-      },
-      "AnalyticsCatalogCreatedBy": {
-        "properties": {
-          "reasoning": {
-            "description": "Reasoning for error states",
-            "type": "string"
-          },
-          "users": {
-            "description": "Users who created any object in the catalog",
-            "items": {
-              "$ref": "#/components/schemas/AnalyticsCatalogUser"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "reasoning",
-          "users"
-        ],
-        "type": "object"
-      },
-      "AnalyticsCatalogTags": {
-        "properties": {
-          "tags": {
-            "items": {
-              "description": "Tags assigned to any object in the catalog",
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "tags"
-        ],
-        "type": "object"
-      },
-      "AnalyticsCatalogUser": {
-        "description": "Users who created any object in the catalog",
-        "properties": {
-          "firstname": {
-            "description": "First name of the user who created any objects",
-            "type": "string"
-          },
-          "lastname": {
-            "description": "Last name of the user who created any objects",
-            "type": "string"
-          },
-          "userId": {
-            "description": "User ID of the user who created any objects",
-            "type": "string"
-          }
-        },
-        "required": [
-          "firstname",
-          "lastname",
-          "userId"
         ],
         "type": "object"
       },
@@ -973,24 +1043,45 @@
               "granularity": {
                 "description": "Date granularity of the attribute, only filled for date attributes.",
                 "enum": [
+                  "SECOND",
+                  "SECOND_OF_MINUTE",
+                  "SECOND_OF_DAY",
                   "MINUTE",
-                  "HOUR",
-                  "DAY",
-                  "WEEK",
-                  "MONTH",
-                  "QUARTER",
-                  "YEAR",
                   "MINUTE_OF_HOUR",
+                  "MINUTE_OF_DAY",
+                  "HOUR",
                   "HOUR_OF_DAY",
+                  "DAY",
                   "DAY_OF_WEEK",
                   "DAY_OF_MONTH",
                   "DAY_OF_QUARTER",
                   "DAY_OF_YEAR",
+                  "WEEK",
                   "WEEK_OF_YEAR",
+                  "MONTH",
                   "MONTH_OF_YEAR",
+                  "QUARTER",
                   "QUARTER_OF_YEAR",
+                  "YEAR",
+                  "FISCAL_DAY_OF_FISCAL_WEEK",
+                  "FISCAL_DAY_OF_FISCAL_MONTH",
+                  "FISCAL_DAY_OF_FISCAL_QUARTER",
+                  "FISCAL_DAY_OF_FISCAL_SEMESTER",
+                  "FISCAL_DAY_OF_FISCAL_YEAR",
+                  "FISCAL_WEEK",
+                  "FISCAL_WEEK_OF_FISCAL_MONTH",
+                  "FISCAL_WEEK_OF_FISCAL_QUARTER",
+                  "FISCAL_WEEK_OF_FISCAL_SEMESTER",
+                  "FISCAL_WEEK_OF_FISCAL_YEAR",
                   "FISCAL_MONTH",
+                  "FISCAL_MONTH_OF_FISCAL_QUARTER",
+                  "FISCAL_MONTH_OF_FISCAL_SEMESTER",
+                  "FISCAL_MONTH_OF_FISCAL_YEAR",
                   "FISCAL_QUARTER",
+                  "FISCAL_QUARTER_OF_FISCAL_SEMESTER",
+                  "FISCAL_QUARTER_OF_FISCAL_YEAR",
+                  "FISCAL_SEMESTER",
+                  "FISCAL_SEMESTER_OF_FISCAL_YEAR",
                   "FISCAL_YEAR"
                 ],
                 "type": "string"
@@ -1290,24 +1381,45 @@
           "granularity": {
             "description": "Date granularity specifying particular date attribute in given dimension.",
             "enum": [
+              "SECOND",
+              "SECOND_OF_MINUTE",
+              "SECOND_OF_DAY",
               "MINUTE",
-              "HOUR",
-              "DAY",
-              "WEEK",
-              "MONTH",
-              "QUARTER",
-              "YEAR",
               "MINUTE_OF_HOUR",
+              "MINUTE_OF_DAY",
+              "HOUR",
               "HOUR_OF_DAY",
+              "DAY",
               "DAY_OF_WEEK",
               "DAY_OF_MONTH",
               "DAY_OF_QUARTER",
               "DAY_OF_YEAR",
+              "WEEK",
               "WEEK_OF_YEAR",
+              "MONTH",
               "MONTH_OF_YEAR",
+              "QUARTER",
               "QUARTER_OF_YEAR",
+              "YEAR",
+              "FISCAL_DAY_OF_FISCAL_WEEK",
+              "FISCAL_DAY_OF_FISCAL_MONTH",
+              "FISCAL_DAY_OF_FISCAL_QUARTER",
+              "FISCAL_DAY_OF_FISCAL_SEMESTER",
+              "FISCAL_DAY_OF_FISCAL_YEAR",
+              "FISCAL_WEEK",
+              "FISCAL_WEEK_OF_FISCAL_MONTH",
+              "FISCAL_WEEK_OF_FISCAL_QUARTER",
+              "FISCAL_WEEK_OF_FISCAL_SEMESTER",
+              "FISCAL_WEEK_OF_FISCAL_YEAR",
               "FISCAL_MONTH",
+              "FISCAL_MONTH_OF_FISCAL_QUARTER",
+              "FISCAL_MONTH_OF_FISCAL_SEMESTER",
+              "FISCAL_MONTH_OF_FISCAL_YEAR",
               "FISCAL_QUARTER",
+              "FISCAL_QUARTER_OF_FISCAL_SEMESTER",
+              "FISCAL_QUARTER_OF_FISCAL_YEAR",
+              "FISCAL_SEMESTER",
+              "FISCAL_SEMESTER_OF_FISCAL_YEAR",
               "FISCAL_YEAR"
             ],
             "example": "DAY",
@@ -1323,6 +1435,23 @@
         },
         "required": [
           "granularity"
+        ],
+        "type": "object"
+      },
+      "CertificationInfo": {
+        "description": "Certification state of the object. Who certified and when are never exposed here.",
+        "properties": {
+          "certificationMessage": {
+            "description": "Optional message describing the certification.",
+            "type": "string"
+          },
+          "status": {
+            "description": "Certification status, e.g. CERTIFIED.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
         ],
         "type": "object"
       },
@@ -1346,17 +1475,7 @@
           "filters": {
             "description": "Optional filters to apply",
             "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/AbstractMeasureValueFilter"
-                },
-                {
-                  "$ref": "#/components/schemas/FilterDefinitionForSimpleMeasure"
-                },
-                {
-                  "$ref": "#/components/schemas/InlineFilterDefinition"
-                }
-              ]
+              "$ref": "#/components/schemas/FilterDefinition"
             },
             "type": "array"
           },
@@ -1423,17 +1542,7 @@
           "filters": {
             "description": "Optional filters to apply.",
             "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/AbstractMeasureValueFilter"
-                },
-                {
-                  "$ref": "#/components/schemas/FilterDefinitionForSimpleMeasure"
-                },
-                {
-                  "$ref": "#/components/schemas/InlineFilterDefinition"
-                }
-              ]
+              "$ref": "#/components/schemas/FilterDefinition"
             },
             "type": "array"
           },
@@ -1928,10 +2037,17 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "type": {
+            "enum": [
+              "column"
+            ],
+            "type": "string"
           }
         },
         "required": [
-          "columns"
+          "columns",
+          "type"
         ],
         "type": "object"
       },
@@ -2060,7 +2176,6 @@
               }
             },
             "required": [
-              "conditions",
               "measure"
             ],
             "type": "object"
@@ -2098,10 +2213,30 @@
             "type": "object"
           },
           "distributionConfig": {
-            "$ref": "#/components/schemas/DistributionConfig"
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/HashDistributionConfig"
+              },
+              {
+                "$ref": "#/components/schemas/RandomDistributionConfig"
+              }
+            ]
           },
           "keyConfig": {
-            "$ref": "#/components/schemas/KeyConfig"
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AggregateKeyConfig"
+              },
+              {
+                "$ref": "#/components/schemas/DuplicateKeyConfig"
+              },
+              {
+                "$ref": "#/components/schemas/PrimaryKeyConfig"
+              },
+              {
+                "$ref": "#/components/schemas/UniqueKeyConfig"
+              }
+            ]
           },
           "maxVarcharLength": {
             "description": "Cap VARCHAR(N) to this length when N exceeds it. 0 = no cap.",
@@ -2109,7 +2244,17 @@
             "type": "integer"
           },
           "partitionConfig": {
-            "$ref": "#/components/schemas/PartitionConfig"
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ColumnPartitionConfig"
+              },
+              {
+                "$ref": "#/components/schemas/DateTruncPartitionConfig"
+              },
+              {
+                "$ref": "#/components/schemas/TimeSlicePartitionConfig"
+              }
+            ]
           },
           "pathPrefix": {
             "description": "Path prefix to the parquet files (e.g. 'my-dataset/year=2024/'). All parquet files must be at a uniform depth under the prefix — either all directly under the prefix, or all under a consistent Hive partition hierarchy (e.g. year=2024/month=01/). Mixed layouts (files at multiple depths) are not supported.",
@@ -2174,7 +2319,7 @@
                   "$ref": "#/components/schemas/DateRelativeFilter"
                 },
                 {
-                  "$ref": "#/components/schemas/RankingFilter"
+                  "$ref": "#/components/schemas/GenAiRankingFilter"
                 }
               ]
             },
@@ -2245,6 +2390,7 @@
             "type": "array"
           },
           "reasoning": {
+            "deprecated": true,
             "description": "DEPRECATED: Use top-level reasoning.steps instead. Reasoning from LLM. Description of how and why the answer was generated.",
             "type": "string"
           },
@@ -2424,6 +2570,9 @@
             "$ref": "#/components/schemas/AbsoluteDateFilter"
           },
           {
+            "$ref": "#/components/schemas/AbsoluteGranularityDateFilter"
+          },
+          {
             "$ref": "#/components/schemas/RelativeDateFilter"
           },
           {
@@ -2445,24 +2594,45 @@
               },
               "granularity": {
                 "enum": [
+                  "SECOND",
+                  "SECOND_OF_MINUTE",
+                  "SECOND_OF_DAY",
                   "MINUTE",
-                  "HOUR",
-                  "DAY",
-                  "WEEK",
-                  "MONTH",
-                  "QUARTER",
-                  "YEAR",
                   "MINUTE_OF_HOUR",
+                  "MINUTE_OF_DAY",
+                  "HOUR",
                   "HOUR_OF_DAY",
+                  "DAY",
                   "DAY_OF_WEEK",
                   "DAY_OF_MONTH",
                   "DAY_OF_QUARTER",
                   "DAY_OF_YEAR",
+                  "WEEK",
                   "WEEK_OF_YEAR",
+                  "MONTH",
                   "MONTH_OF_YEAR",
+                  "QUARTER",
                   "QUARTER_OF_YEAR",
+                  "YEAR",
+                  "FISCAL_DAY_OF_FISCAL_WEEK",
+                  "FISCAL_DAY_OF_FISCAL_MONTH",
+                  "FISCAL_DAY_OF_FISCAL_QUARTER",
+                  "FISCAL_DAY_OF_FISCAL_SEMESTER",
+                  "FISCAL_DAY_OF_FISCAL_YEAR",
+                  "FISCAL_WEEK",
+                  "FISCAL_WEEK_OF_FISCAL_MONTH",
+                  "FISCAL_WEEK_OF_FISCAL_QUARTER",
+                  "FISCAL_WEEK_OF_FISCAL_SEMESTER",
+                  "FISCAL_WEEK_OF_FISCAL_YEAR",
                   "FISCAL_MONTH",
+                  "FISCAL_MONTH_OF_FISCAL_QUARTER",
+                  "FISCAL_MONTH_OF_FISCAL_SEMESTER",
+                  "FISCAL_MONTH_OF_FISCAL_YEAR",
                   "FISCAL_QUARTER",
+                  "FISCAL_QUARTER_OF_FISCAL_SEMESTER",
+                  "FISCAL_QUARTER_OF_FISCAL_YEAR",
+                  "FISCAL_SEMESTER",
+                  "FISCAL_SEMESTER_OF_FISCAL_YEAR",
                   "FISCAL_YEAR"
                 ],
                 "type": "string"
@@ -2493,6 +2663,12 @@
             "description": "Column to partition on.",
             "type": "string"
           },
+          "type": {
+            "enum": [
+              "dateTrunc"
+            ],
+            "type": "string"
+          },
           "unit": {
             "description": "Date/time unit for partition granularity",
             "enum": [
@@ -2512,6 +2688,7 @@
         },
         "required": [
           "column",
+          "type",
           "unit"
         ],
         "type": "object"
@@ -2701,8 +2878,17 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "type": {
+            "enum": [
+              "duplicate"
+            ],
+            "type": "string"
           }
         },
+        "required": [
+          "type"
+        ],
         "type": "object"
       },
       "Element": {
@@ -2792,6 +2978,11 @@
             ],
             "type": "string"
           },
+          "timezone": {
+            "description": "Time zone (IANA id, e.g. \"Europe/Prague\") used to resolve relative date filters in ```dependsOn```. If set it takes precedence over the workspace/user time zone setting; if not set the setting is used.",
+            "example": "Europe/Prague",
+            "type": "string"
+          },
           "validateBy": {
             "description": "Return only items that are computable on metric.",
             "items": {
@@ -2825,24 +3016,45 @@
           "granularity": {
             "description": "Granularity of requested label in case of date attribute",
             "enum": [
+              "SECOND",
+              "SECOND_OF_MINUTE",
+              "SECOND_OF_DAY",
               "MINUTE",
-              "HOUR",
-              "DAY",
-              "WEEK",
-              "MONTH",
-              "QUARTER",
-              "YEAR",
               "MINUTE_OF_HOUR",
+              "MINUTE_OF_DAY",
+              "HOUR",
               "HOUR_OF_DAY",
+              "DAY",
               "DAY_OF_WEEK",
               "DAY_OF_MONTH",
               "DAY_OF_QUARTER",
               "DAY_OF_YEAR",
+              "WEEK",
               "WEEK_OF_YEAR",
+              "MONTH",
               "MONTH_OF_YEAR",
+              "QUARTER",
               "QUARTER_OF_YEAR",
+              "YEAR",
+              "FISCAL_DAY_OF_FISCAL_WEEK",
+              "FISCAL_DAY_OF_FISCAL_MONTH",
+              "FISCAL_DAY_OF_FISCAL_QUARTER",
+              "FISCAL_DAY_OF_FISCAL_SEMESTER",
+              "FISCAL_DAY_OF_FISCAL_YEAR",
+              "FISCAL_WEEK",
+              "FISCAL_WEEK_OF_FISCAL_MONTH",
+              "FISCAL_WEEK_OF_FISCAL_QUARTER",
+              "FISCAL_WEEK_OF_FISCAL_SEMESTER",
+              "FISCAL_WEEK_OF_FISCAL_YEAR",
               "FISCAL_MONTH",
+              "FISCAL_MONTH_OF_FISCAL_QUARTER",
+              "FISCAL_MONTH_OF_FISCAL_SEMESTER",
+              "FISCAL_MONTH_OF_FISCAL_YEAR",
               "FISCAL_QUARTER",
+              "FISCAL_QUARTER_OF_FISCAL_SEMESTER",
+              "FISCAL_QUARTER_OF_FISCAL_YEAR",
+              "FISCAL_SEMESTER",
+              "FISCAL_SEMESTER_OF_FISCAL_YEAR",
               "FISCAL_YEAR"
             ],
             "type": "string"
@@ -3159,6 +3371,11 @@
             "description": "Specifies the timestamp of the execution from which relative filters are resolved. If not set, the current time is used.",
             "format": "date-time",
             "type": "string"
+          },
+          "timezone": {
+            "description": "Specifies the time zone used to resolve relative date filters and to convert time-zone-aware date/time values in the result. Expects an IANA time zone id (e.g. \"Europe/Prague\") or a fixed GMT offset (e.g. \"GMT+02:00\"). If not set, the time zone from the workspace/user settings is used.",
+            "example": "Europe/Prague",
+            "type": "string"
           }
         },
         "type": "object"
@@ -3178,10 +3395,19 @@
           }
         ],
         "description": "Operation that has failed",
+        "properties": {
+          "status": {
+            "enum": [
+              "failed"
+            ],
+            "type": "string"
+          }
+        },
         "required": [
           "error",
           "id",
-          "kind"
+          "kind",
+          "status"
         ],
         "type": "object"
       },
@@ -3224,6 +3450,9 @@
           },
           {
             "$ref": "#/components/schemas/AbsoluteDateFilter"
+          },
+          {
+            "$ref": "#/components/schemas/AbsoluteGranularityDateFilter"
           },
           {
             "$ref": "#/components/schemas/RelativeDateFilter"
@@ -3365,6 +3594,7 @@
             "type": "array"
           },
           "reasoning": {
+            "deprecated": true,
             "description": "DEPRECATED: Use top-level reasoning.steps instead. Reasoning from LLM. Description of how and why the answer was generated.",
             "type": "string"
           }
@@ -3372,6 +3602,47 @@
         "required": [
           "objects",
           "reasoning"
+        ],
+        "type": "object"
+      },
+      "GenAiRankingFilter": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Filter"
+          },
+          {
+            "properties": {
+              "dimensionality": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "measures": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "operator": {
+                "enum": [
+                  "TOP",
+                  "BOTTOM"
+                ],
+                "type": "string"
+              },
+              "value": {
+                "format": "int32",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "measures",
+          "operator",
+          "value"
         ],
         "type": "object"
       },
@@ -3544,8 +3815,17 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "type": {
+            "enum": [
+              "hash"
+            ],
+            "type": "string"
           }
         },
+        "required": [
+          "type"
+        ],
         "type": "object"
       },
       "HeaderGroup": {
@@ -3637,12 +3917,19 @@
           "widgetId": {
             "description": "Widget object ID.",
             "type": "string"
+          },
+          "widgetType": {
+            "enum": [
+              "insight"
+            ],
+            "type": "string"
           }
         },
         "required": [
           "title",
           "visualizationId",
-          "widgetId"
+          "widgetId",
+          "widgetType"
         ],
         "type": "object"
       },
@@ -4019,24 +4306,45 @@
           },
           "granularity": {
             "enum": [
+              "SECOND",
+              "SECOND_OF_MINUTE",
+              "SECOND_OF_DAY",
               "MINUTE",
-              "HOUR",
-              "DAY",
-              "WEEK",
-              "MONTH",
-              "QUARTER",
-              "YEAR",
               "MINUTE_OF_HOUR",
+              "MINUTE_OF_DAY",
+              "HOUR",
               "HOUR_OF_DAY",
+              "DAY",
               "DAY_OF_WEEK",
               "DAY_OF_MONTH",
               "DAY_OF_QUARTER",
               "DAY_OF_YEAR",
+              "WEEK",
               "WEEK_OF_YEAR",
+              "MONTH",
               "MONTH_OF_YEAR",
+              "QUARTER",
               "QUARTER_OF_YEAR",
+              "YEAR",
+              "FISCAL_DAY_OF_FISCAL_WEEK",
+              "FISCAL_DAY_OF_FISCAL_MONTH",
+              "FISCAL_DAY_OF_FISCAL_QUARTER",
+              "FISCAL_DAY_OF_FISCAL_SEMESTER",
+              "FISCAL_DAY_OF_FISCAL_YEAR",
+              "FISCAL_WEEK",
+              "FISCAL_WEEK_OF_FISCAL_MONTH",
+              "FISCAL_WEEK_OF_FISCAL_QUARTER",
+              "FISCAL_WEEK_OF_FISCAL_SEMESTER",
+              "FISCAL_WEEK_OF_FISCAL_YEAR",
               "FISCAL_MONTH",
+              "FISCAL_MONTH_OF_FISCAL_QUARTER",
+              "FISCAL_MONTH_OF_FISCAL_SEMESTER",
+              "FISCAL_MONTH_OF_FISCAL_YEAR",
               "FISCAL_QUARTER",
+              "FISCAL_QUARTER_OF_FISCAL_SEMESTER",
+              "FISCAL_QUARTER_OF_FISCAL_YEAR",
+              "FISCAL_SEMESTER",
+              "FISCAL_SEMESTER_OF_FISCAL_YEAR",
               "FISCAL_YEAR"
             ],
             "type": "string"
@@ -4129,20 +4437,7 @@
       "ListLlmProviderModelsRequest": {
         "properties": {
           "providerConfig": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/AnthropicProviderConfig"
-              },
-              {
-                "$ref": "#/components/schemas/AwsBedrockProviderConfig"
-              },
-              {
-                "$ref": "#/components/schemas/AzureFoundryProviderConfig"
-              },
-              {
-                "$ref": "#/components/schemas/OpenAIProviderConfig"
-              }
-            ]
+            "$ref": "#/components/schemas/LlmProviderConfig"
           }
         },
         "required": [
@@ -4849,17 +5144,7 @@
           "filters": {
             "description": "Various filter types to filter the execution result.",
             "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/AbstractMeasureValueFilter"
-                },
-                {
-                  "$ref": "#/components/schemas/FilterDefinitionForSimpleMeasure"
-                },
-                {
-                  "$ref": "#/components/schemas/InlineFilterDefinition"
-                }
-              ]
+              "$ref": "#/components/schemas/FilterDefinition"
             },
             "type": "array"
           },
@@ -4894,7 +5179,6 @@
         },
         "required": [
           "attributes",
-          "filters",
           "granularity",
           "measures",
           "sensitivity"
@@ -4979,6 +5263,7 @@
         "type": "object"
       },
       "ParameterItem": {
+        "additionalProperties": true,
         "description": "(EXPERIMENTAL) Parameter value for this execution.",
         "properties": {
           "parameter": {
@@ -5022,9 +5307,18 @@
           }
         ],
         "description": "Operation that is still pending",
+        "properties": {
+          "status": {
+            "enum": [
+              "pending"
+            ],
+            "type": "string"
+          }
+        },
         "required": [
           "id",
-          "kind"
+          "kind",
+          "status"
         ],
         "type": "object"
       },
@@ -5314,8 +5608,17 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "type": {
+            "enum": [
+              "primary"
+            ],
+            "type": "string"
           }
         },
+        "required": [
+          "type"
+        ],
         "type": "object"
       },
       "ProvisionDatabaseInstanceRequest": {
@@ -5466,8 +5769,17 @@
             "format": "int32",
             "minimum": 1,
             "type": "integer"
+          },
+          "type": {
+            "enum": [
+              "random"
+            ],
+            "type": "string"
           }
         },
+        "required": [
+          "type"
+        ],
         "type": "object"
       },
       "RangeCondition": {
@@ -5710,24 +6022,45 @@
               "granularity": {
                 "description": "Date granularity specifying particular date attribute in given dimension.",
                 "enum": [
+                  "SECOND",
+                  "SECOND_OF_MINUTE",
+                  "SECOND_OF_DAY",
                   "MINUTE",
-                  "HOUR",
-                  "DAY",
-                  "WEEK",
-                  "MONTH",
-                  "QUARTER",
-                  "YEAR",
                   "MINUTE_OF_HOUR",
+                  "MINUTE_OF_DAY",
+                  "HOUR",
                   "HOUR_OF_DAY",
+                  "DAY",
                   "DAY_OF_WEEK",
                   "DAY_OF_MONTH",
                   "DAY_OF_QUARTER",
                   "DAY_OF_YEAR",
+                  "WEEK",
                   "WEEK_OF_YEAR",
+                  "MONTH",
                   "MONTH_OF_YEAR",
+                  "QUARTER",
                   "QUARTER_OF_YEAR",
+                  "YEAR",
+                  "FISCAL_DAY_OF_FISCAL_WEEK",
+                  "FISCAL_DAY_OF_FISCAL_MONTH",
+                  "FISCAL_DAY_OF_FISCAL_QUARTER",
+                  "FISCAL_DAY_OF_FISCAL_SEMESTER",
+                  "FISCAL_DAY_OF_FISCAL_YEAR",
+                  "FISCAL_WEEK",
+                  "FISCAL_WEEK_OF_FISCAL_MONTH",
+                  "FISCAL_WEEK_OF_FISCAL_QUARTER",
+                  "FISCAL_WEEK_OF_FISCAL_SEMESTER",
+                  "FISCAL_WEEK_OF_FISCAL_YEAR",
                   "FISCAL_MONTH",
+                  "FISCAL_MONTH_OF_FISCAL_QUARTER",
+                  "FISCAL_MONTH_OF_FISCAL_SEMESTER",
+                  "FISCAL_MONTH_OF_FISCAL_YEAR",
                   "FISCAL_QUARTER",
+                  "FISCAL_QUARTER_OF_FISCAL_SEMESTER",
+                  "FISCAL_QUARTER_OF_FISCAL_YEAR",
+                  "FISCAL_SEMESTER",
+                  "FISCAL_SEMESTER_OF_FISCAL_YEAR",
                   "FISCAL_YEAR"
                 ],
                 "example": "DAY",
@@ -5950,11 +6283,18 @@
           "widgetId": {
             "description": "Widget object ID.",
             "type": "string"
+          },
+          "widgetType": {
+            "enum": [
+              "richText"
+            ],
+            "type": "string"
           }
         },
         "required": [
           "title",
-          "widgetId"
+          "widgetId",
+          "widgetType"
         ],
         "type": "object"
       },
@@ -6163,6 +6503,7 @@
             "$ref": "#/components/schemas/ErrorInfo"
           },
           "reasoning": {
+            "deprecated": true,
             "description": "DEPRECATED: Use top-level reasoning.steps instead. If something is not working properly this field will contain explanation.",
             "type": "string"
           },
@@ -6188,6 +6529,9 @@
       },
       "SearchResultObject": {
         "properties": {
+          "certification": {
+            "$ref": "#/components/schemas/CertificationInfo"
+          },
           "createdAt": {
             "description": "Timestamp when object was created.",
             "format": "date-time",
@@ -6474,9 +6818,18 @@
           }
         ],
         "description": "Operation that has succeeded",
+        "properties": {
+          "status": {
+            "enum": [
+              "succeeded"
+            ],
+            "type": "string"
+          }
+        },
         "required": [
           "id",
-          "kind"
+          "kind",
+          "status"
         ],
         "type": "object"
       },
@@ -6508,20 +6861,7 @@
             "type": "array"
           },
           "providerConfig": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/AnthropicProviderConfig"
-              },
-              {
-                "$ref": "#/components/schemas/AwsBedrockProviderConfig"
-              },
-              {
-                "$ref": "#/components/schemas/AzureFoundryProviderConfig"
-              },
-              {
-                "$ref": "#/components/schemas/OpenAIProviderConfig"
-              }
-            ]
+            "$ref": "#/components/schemas/LlmProviderConfig"
           }
         },
         "type": "object"
@@ -6536,20 +6876,7 @@
             "type": "array"
           },
           "providerConfig": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/AnthropicProviderConfig"
-              },
-              {
-                "$ref": "#/components/schemas/AwsBedrockProviderConfig"
-              },
-              {
-                "$ref": "#/components/schemas/AzureFoundryProviderConfig"
-              },
-              {
-                "$ref": "#/components/schemas/OpenAIProviderConfig"
-              }
-            ]
+            "$ref": "#/components/schemas/LlmProviderConfig"
           }
         },
         "required": [
@@ -6608,6 +6935,12 @@
             "minimum": 1,
             "type": "integer"
           },
+          "type": {
+            "enum": [
+              "timeSlice"
+            ],
+            "type": "string"
+          },
           "unit": {
             "description": "Date/time unit for partition granularity",
             "enum": [
@@ -6628,6 +6961,7 @@
         "required": [
           "column",
           "slices",
+          "type",
           "unit"
         ],
         "type": "object"
@@ -6871,11 +7205,17 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "type": {
+            "enum": [
+              "unique"
+            ],
+            "type": "string"
           }
         },
-        "type": "object"
-      },
-      "Unit": {
+        "required": [
+          "type"
+        ],
         "type": "object"
       },
       "UpdateDatabaseDataSourceRequest": {
@@ -7021,13 +7361,20 @@
           "widgetId": {
             "description": "Widget object ID.",
             "type": "string"
+          },
+          "widgetType": {
+            "enum": [
+              "visualizationSwitcher"
+            ],
+            "type": "string"
           }
         },
         "required": [
           "activeVisualizationId",
           "title",
           "visualizationIds",
-          "widgetId"
+          "widgetId",
+          "widgetType"
         ],
         "type": "object"
       },
@@ -7109,17 +7456,7 @@
         "properties": {
           "filters": {
             "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/AbstractMeasureValueFilter"
-                },
-                {
-                  "$ref": "#/components/schemas/FilterDefinitionForSimpleMeasure"
-                },
-                {
-                  "$ref": "#/components/schemas/InlineFilterDefinition"
-                }
-              ]
+              "$ref": "#/components/schemas/FilterDefinition"
             },
             "type": "array"
           },
@@ -7228,6 +7565,7 @@
         "operationId": "validateLLMEndpoint",
         "responses": {
           "410": {
+            "content": {},
             "description": "Gone"
           }
         },
@@ -7255,6 +7593,7 @@
         ],
         "responses": {
           "410": {
+            "content": {},
             "description": "Gone"
           }
         },
@@ -7406,41 +7745,6 @@
         ]
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy": {
-      "get": {
-        "description": "Returns a list of Users who created any object for this workspace",
-        "operationId": "createdBy",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AnalyticsCatalogCreatedBy"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "summary": "Get Analytics Catalog CreatedBy Users",
-        "tags": [
-          "Smart Functions",
-          "actions"
-        ]
-      }
-    },
     "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateDescription": {
       "post": {
         "description": "Generates a description for the specified analytics object. Returns description and a note with details if generation was not performed.",
@@ -7525,41 +7829,6 @@
           }
         },
         "summary": "Generate Title for Analytics Object",
-        "tags": [
-          "Smart Functions",
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags": {
-      "get": {
-        "description": "Returns a list of tags for this workspace",
-        "operationId": "tags",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AnalyticsCatalogTags"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "summary": "Get Analytics Catalog Tags",
         "tags": [
           "Smart Functions",
           "actions"
@@ -7941,6 +8210,7 @@
         ],
         "responses": {
           "410": {
+            "content": {},
             "description": "Gone"
           }
         },
@@ -8550,7 +8820,17 @@
                 }
               }
             },
-            "description": "Execution result was found and returned."
+            "description": "Execution result was found and returned.",
+            "headers": {
+              "X-GDC-RESULT-TOTAL-ROWS": {
+                "description": "Total number of data rows in the full result.",
+                "schema": {
+                  "format": "int64",
+                  "type": "integer"
+                },
+                "style": "simple"
+              }
+            }
           }
         },
         "summary": "(BETA) Get a single execution result in Apache Arrow File or Stream format",
@@ -9370,7 +9650,7 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId}": {
       "get": {
-        "description": "(BETA) Gets forecast result.",
+        "description": "Gets forecast result.",
         "operationId": "forecastResult",
         "parameters": [
           {
@@ -9424,7 +9704,7 @@
             "description": "OK"
           }
         },
-        "summary": "(BETA) Smart functions - Forecast Result",
+        "summary": "Smart functions - Forecast Result",
         "tags": [
           "Smart Functions",
           "actions"
@@ -9433,7 +9713,7 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId}": {
       "post": {
-        "description": "(BETA) Computes forecasted data points from the provided execution result and parameters.",
+        "description": "Computes forecasted data points from the provided execution result and parameters.",
         "operationId": "forecast",
         "parameters": [
           {
@@ -9489,7 +9769,7 @@
             "description": "OK"
           }
         },
-        "summary": "(BETA) Smart functions - Forecast",
+        "summary": "Smart functions - Forecast",
         "tags": [
           "Smart Functions",
           "actions"
@@ -9584,10 +9864,11 @@
             "name": "page",
             "required": false,
             "schema": {
-              "default": "0",
+              "default": 0,
               "description": "Zero-based page number.",
+              "format": "int32",
               "minimum": 0,
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -9596,11 +9877,12 @@
             "name": "size",
             "required": false,
             "schema": {
-              "default": "50",
+              "default": 50,
               "description": "Number of items per page.",
+              "format": "int32",
               "maximum": 500,
               "minimum": 1,
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -9665,13 +9947,7 @@
         },
         "responses": {
           "202": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unit"
-                }
-              }
-            },
+            "content": {},
             "description": "Accepted",
             "headers": {
               "operation-id": {
@@ -9734,13 +10010,7 @@
         ],
         "responses": {
           "202": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unit"
-                }
-              }
-            },
+            "content": {},
             "description": "Accepted",
             "headers": {
               "operation-id": {
@@ -9852,13 +10122,7 @@
         },
         "responses": {
           "202": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unit"
-                }
-              }
-            },
+            "content": {},
             "description": "Statistics analysis scheduled.",
             "headers": {
               "operation-id": {
@@ -9956,10 +10220,11 @@
             "name": "page",
             "required": false,
             "schema": {
-              "default": "0",
+              "default": 0,
               "description": "Zero-based page number.",
+              "format": "int32",
               "minimum": 0,
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -9968,11 +10233,12 @@
             "name": "size",
             "required": false,
             "schema": {
-              "default": "50",
+              "default": 50,
               "description": "Number of items per page.",
+              "format": "int32",
               "maximum": 500,
               "minimum": 1,
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -10134,10 +10400,11 @@
             "name": "page",
             "required": false,
             "schema": {
-              "default": "0",
+              "default": 0,
               "description": "Zero-based page number.",
+              "format": "int32",
               "minimum": 0,
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -10146,11 +10413,12 @@
             "name": "size",
             "required": false,
             "schema": {
-              "default": "50",
+              "default": 50,
               "description": "Number of items per page.",
+              "format": "int32",
               "maximum": 500,
               "minimum": 1,
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -10225,13 +10493,7 @@
         },
         "responses": {
           "202": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unit"
-                }
-              }
-            },
+            "content": {},
             "description": "Accepted",
             "headers": {
               "operation-id": {
@@ -10304,13 +10566,7 @@
         ],
         "responses": {
           "202": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unit"
-                }
-              }
-            },
+            "content": {},
             "description": "Accepted",
             "headers": {
               "operation-id": {
@@ -10442,13 +10698,7 @@
         },
         "responses": {
           "202": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unit"
-                }
-              }
-            },
+            "content": {},
             "description": "Accepted",
             "headers": {
               "operation-id": {
@@ -10496,10 +10746,11 @@
             "name": "page",
             "required": false,
             "schema": {
-              "default": "0",
+              "default": 0,
               "description": "Zero-based page number.",
+              "format": "int32",
               "minimum": 0,
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -10508,11 +10759,12 @@
             "name": "size",
             "required": false,
             "schema": {
-              "default": "50",
+              "default": 50,
               "description": "Number of items per page.",
+              "format": "int32",
               "maximum": 500,
               "minimum": 1,
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -10615,10 +10867,11 @@
             "name": "page",
             "required": false,
             "schema": {
-              "default": "0",
+              "default": 0,
               "description": "Zero-based page number.",
+              "format": "int32",
               "minimum": 0,
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -10627,11 +10880,12 @@
             "name": "size",
             "required": false,
             "schema": {
-              "default": "50",
+              "default": 50,
               "description": "Number of items per page.",
+              "format": "int32",
               "maximum": 500,
               "minimum": 1,
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -10714,13 +10968,7 @@
         },
         "responses": {
           "202": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unit"
-                }
-              }
-            },
+            "content": {},
             "description": "Accepted",
             "headers": {
               "operation-id": {

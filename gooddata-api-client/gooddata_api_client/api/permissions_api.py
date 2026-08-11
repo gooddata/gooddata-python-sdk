@@ -32,6 +32,8 @@ from gooddata_api_client.model.declarative_workspace_permissions import Declarat
 from gooddata_api_client.model.ldm_object_permissions import LdmObjectPermissions
 from gooddata_api_client.model.manage_attribute_permissions_request_inner import ManageAttributePermissionsRequestInner
 from gooddata_api_client.model.manage_dashboard_permissions_request_inner import ManageDashboardPermissionsRequestInner
+from gooddata_api_client.model.manage_metric_permissions_request_inner import ManageMetricPermissionsRequestInner
+from gooddata_api_client.model.metric_permissions import MetricPermissions
 from gooddata_api_client.model.organization_permission_assignment import OrganizationPermissionAssignment
 from gooddata_api_client.model.workspace_permission_assignment import WorkspacePermissionAssignment
 
@@ -805,6 +807,66 @@ class PermissionsApi(object):
             },
             api_client=api_client
         )
+        self.manage_metric_permissions_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/managePermissions',
+                'operation_id': 'manage_metric_permissions',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'metric_id',
+                    'manage_metric_permissions_request_inner',
+                ],
+                'required': [
+                    'workspace_id',
+                    'metric_id',
+                    'manage_metric_permissions_request_inner',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'metric_id':
+                        (str,),
+                    'manage_metric_permissions_request_inner':
+                        ([ManageMetricPermissionsRequestInner],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'metric_id': 'metricId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'metric_id': 'path',
+                    'manage_metric_permissions_request_inner': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
         self.manage_organization_permissions_endpoint = _Endpoint(
             settings={
                 'response_type': None,
@@ -904,6 +966,61 @@ class PermissionsApi(object):
                 'content_type': [
                     'application/json'
                 ]
+            },
+            api_client=api_client
+        )
+        self.metric_permissions_endpoint = _Endpoint(
+            settings={
+                'response_type': (MetricPermissions,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/permissions',
+                'operation_id': 'metric_permissions',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'metric_id',
+                ],
+                'required': [
+                    'workspace_id',
+                    'metric_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'metric_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'metric_id': 'metricId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'metric_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
             },
             api_client=api_client
         )
@@ -2322,6 +2439,96 @@ class PermissionsApi(object):
             manage_attribute_permissions_request_inner
         return self.manage_label_permissions_endpoint.call_with_http_info(**kwargs)
 
+    def manage_metric_permissions(
+        self,
+        workspace_id,
+        metric_id,
+        manage_metric_permissions_request_inner,
+        **kwargs
+    ):
+        """(BETA) Manage Permissions for a Metric  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.manage_metric_permissions(workspace_id, metric_id, manage_metric_permissions_request_inner, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            metric_id (str):
+            manage_metric_permissions_request_inner ([ManageMetricPermissionsRequestInner]):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['metric_id'] = \
+            metric_id
+        kwargs['manage_metric_permissions_request_inner'] = \
+            manage_metric_permissions_request_inner
+        return self.manage_metric_permissions_endpoint.call_with_http_info(**kwargs)
+
     def manage_organization_permissions(
         self,
         organization_permission_assignment,
@@ -2491,6 +2698,92 @@ class PermissionsApi(object):
         kwargs['workspace_permission_assignment'] = \
             workspace_permission_assignment
         return self.manage_workspace_permissions_endpoint.call_with_http_info(**kwargs)
+
+    def metric_permissions(
+        self,
+        workspace_id,
+        metric_id,
+        **kwargs
+    ):
+        """(BETA) Get Metric Permissions  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.metric_permissions(workspace_id, metric_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            metric_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            MetricPermissions
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['metric_id'] = \
+            metric_id
+        return self.metric_permissions_endpoint.call_with_http_info(**kwargs)
 
     def set_organization_permissions(
         self,

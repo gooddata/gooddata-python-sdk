@@ -56,6 +56,9 @@ class RandomDistributionConfig(ModelNormal):
     """
 
     allowed_values = {
+        ('type',): {
+            'RANDOM': "random",
+        },
     }
 
     validations = {
@@ -85,6 +88,7 @@ class RandomDistributionConfig(ModelNormal):
                 and the value is attribute type.
         """
         return {
+            'type': (str,),  # noqa: E501
             'buckets': (int,),  # noqa: E501
         }
 
@@ -94,6 +98,7 @@ class RandomDistributionConfig(ModelNormal):
 
 
     attribute_map = {
+        'type': 'type',  # noqa: E501
         'buckets': 'buckets',  # noqa: E501
     }
 
@@ -107,7 +112,10 @@ class RandomDistributionConfig(ModelNormal):
     def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """RandomDistributionConfig - a model defined in OpenAPI
 
+        Args:
+
         Keyword Args:
+            type (str): defaults to "random", must be one of ["random", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -141,6 +149,7 @@ class RandomDistributionConfig(ModelNormal):
             buckets (int): Number of random distribution buckets. Defaults to 1.. [optional]  # noqa: E501
         """
 
+        type = kwargs.get('type', "random")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -170,6 +179,7 @@ class RandomDistributionConfig(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -193,7 +203,10 @@ class RandomDistributionConfig(ModelNormal):
     def __init__(self, *args, **kwargs):  # noqa: E501
         """RandomDistributionConfig - a model defined in OpenAPI
 
+        Args:
+
         Keyword Args:
+            type (str): defaults to "random", must be one of ["random", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -227,6 +240,7 @@ class RandomDistributionConfig(ModelNormal):
             buckets (int): Number of random distribution buckets. Defaults to 1.. [optional]  # noqa: E501
         """
 
+        type = kwargs.get('type', "random")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -254,6 +268,7 @@ class RandomDistributionConfig(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

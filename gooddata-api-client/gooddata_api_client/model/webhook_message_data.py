@@ -34,11 +34,13 @@ def lazy_import():
     from gooddata_api_client.model.alert_description import AlertDescription
     from gooddata_api_client.model.export_result import ExportResult
     from gooddata_api_client.model.notification_filter import NotificationFilter
+    from gooddata_api_client.model.notification_parameter import NotificationParameter
     from gooddata_api_client.model.webhook_automation_info import WebhookAutomationInfo
     from gooddata_api_client.model.webhook_recipient import WebhookRecipient
     globals()['AlertDescription'] = AlertDescription
     globals()['ExportResult'] = ExportResult
     globals()['NotificationFilter'] = NotificationFilter
+    globals()['NotificationParameter'] = NotificationParameter
     globals()['WebhookAutomationInfo'] = WebhookAutomationInfo
     globals()['WebhookRecipient'] = WebhookRecipient
 
@@ -103,6 +105,7 @@ class WebhookMessageData(ModelNormal):
             'filters': ([NotificationFilter],),  # noqa: E501
             'image_exports': ([ExportResult],),  # noqa: E501
             'notification_source': (str,),  # noqa: E501
+            'parameters': ([NotificationParameter],),  # noqa: E501
             'raw_exports': ([ExportResult],),  # noqa: E501
             'recipients': ([WebhookRecipient],),  # noqa: E501
             'remaining_action_count': (int,),  # noqa: E501
@@ -124,6 +127,7 @@ class WebhookMessageData(ModelNormal):
         'filters': 'filters',  # noqa: E501
         'image_exports': 'imageExports',  # noqa: E501
         'notification_source': 'notificationSource',  # noqa: E501
+        'parameters': 'parameters',  # noqa: E501
         'raw_exports': 'rawExports',  # noqa: E501
         'recipients': 'recipients',  # noqa: E501
         'remaining_action_count': 'remainingActionCount',  # noqa: E501
@@ -182,6 +186,7 @@ class WebhookMessageData(ModelNormal):
             filters ([NotificationFilter]): [optional]  # noqa: E501
             image_exports ([ExportResult]): [optional]  # noqa: E501
             notification_source (str): [optional]  # noqa: E501
+            parameters ([NotificationParameter]): [optional]  # noqa: E501
             raw_exports ([ExportResult]): [optional]  # noqa: E501
             recipients ([WebhookRecipient]): [optional]  # noqa: E501
             remaining_action_count (int): [optional]  # noqa: E501
@@ -283,6 +288,7 @@ class WebhookMessageData(ModelNormal):
             filters ([NotificationFilter]): [optional]  # noqa: E501
             image_exports ([ExportResult]): [optional]  # noqa: E501
             notification_source (str): [optional]  # noqa: E501
+            parameters ([NotificationParameter]): [optional]  # noqa: E501
             raw_exports ([ExportResult]): [optional]  # noqa: E501
             recipients ([WebhookRecipient]): [optional]  # noqa: E501
             remaining_action_count (int): [optional]  # noqa: E501

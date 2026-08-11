@@ -42,6 +42,7 @@ with gooddata_api_client.ApiClient() as api_client:
         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
         file_name="filename",
         metadata={},
+        timezone_id="Asia/Kolkata",
     ) # VisualExportRequest | 
     x_gdc_debug = False # bool |  (optional) if omitted the server will use the default value of False
 

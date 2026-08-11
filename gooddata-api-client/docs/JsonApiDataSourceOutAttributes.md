@@ -9,10 +9,12 @@ Name | Type | Description | Notes
 **type** | **str** | Type of the database providing the data for the data source. | 
 **alternative_data_source_id** | **str, none_type** | Alternative data source ID. It is a weak reference meaning data source does not have to exist. All the entities (e.g. tables) from the data source must be available also in the alternative data source. It must be present in the same organization as the data source. | [optional] 
 **authentication_type** | **str, none_type** | Type of authentication used to connect to the database. | [optional] 
+**cache_retention** | [**JsonApiDataSourceInAttributesCacheRetention**](JsonApiDataSourceInAttributesCacheRetention.md) |  | [optional] 
 **cache_strategy** | **str, none_type** | Determines how the results coming from a particular datasource should be cached. | [optional] 
 **client_id** | **str, none_type** | The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account). | [optional] 
 **date_time_semantics** | **str, none_type** | Determines how datetime values are interpreted in data sources without native support for specifying this. Only StarRocks and AI Lakehouse data sources currently support this. | [optional] 
 **decoded_parameters** | [**[JsonApiDataSourceInAttributesParametersInner], none_type**](JsonApiDataSourceInAttributesParametersInner.md) | Decoded parameters to be used when connecting to the database providing the data for the data source. | [optional] 
+**managed** | **bool** | Whether the object is platform-managed and read-only. | [optional] 
 **parameters** | [**[JsonApiDataSourceInAttributesParametersInner], none_type**](JsonApiDataSourceInAttributesParametersInner.md) | Additional parameters to be used when connecting to the database providing the data for the data source. | [optional] 
 **url** | **str, none_type** | The URL of the database providing the data for the data source. | [optional] 
 **username** | **str, none_type** | The username to use to connect to the database providing the data for the data source. | [optional] 

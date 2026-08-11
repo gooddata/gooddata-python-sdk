@@ -85,6 +85,7 @@ class VisualExportRequest(ModelNormal):
             'dashboard_id': (str,),  # noqa: E501
             'file_name': (str,),  # noqa: E501
             'metadata': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),  # noqa: E501
+            'timezone_id': (str, none_type,),  # noqa: E501
         }
 
     @cached_property
@@ -96,6 +97,7 @@ class VisualExportRequest(ModelNormal):
         'dashboard_id': 'dashboardId',  # noqa: E501
         'file_name': 'fileName',  # noqa: E501
         'metadata': 'metadata',  # noqa: E501
+        'timezone_id': 'timezoneId',  # noqa: E501
     }
 
     read_only_vars = {
@@ -144,6 +146,7 @@ class VisualExportRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             metadata ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Metadata definition in free-form JSON format.. [optional]  # noqa: E501
+            timezone_id (str, none_type): Time zone the export should be rendered in, as an IANA identifier (e.g. 'Asia/Kolkata') or a GMT offset (e.g. 'GMT+01:00'). When omitted, the workspace time zone setting is used.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -236,6 +239,7 @@ class VisualExportRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             metadata ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Metadata definition in free-form JSON format.. [optional]  # noqa: E501
+            timezone_id (str, none_type): Time zone the export should be rendered in, as an IANA identifier (e.g. 'Asia/Kolkata') or a GMT offset (e.g. 'GMT+01:00'). When omitted, the workspace time zone setting is used.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

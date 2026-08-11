@@ -31,7 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_data_source_in_attributes_cache_retention import JsonApiDataSourceInAttributesCacheRetention
     from gooddata_api_client.model.json_api_data_source_in_attributes_parameters_inner import JsonApiDataSourceInAttributesParametersInner
+    globals()['JsonApiDataSourceInAttributesCacheRetention'] = JsonApiDataSourceInAttributesCacheRetention
     globals()['JsonApiDataSourceInAttributesParametersInner'] = JsonApiDataSourceInAttributesParametersInner
 
 
@@ -95,7 +97,7 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
             'TOKEN': "TOKEN",
             'KEY_PAIR': "KEY_PAIR",
             'CLIENT_SECRET': "CLIENT_SECRET",
-            'ACCESS_TOKEN': "ACCESS_TOKEN",
+            'OIDC_PASSTHROUGH': "OIDC_PASSTHROUGH",
         },
         ('cache_strategy',): {
             'None': None,
@@ -160,10 +162,12 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
             'type': (str,),  # noqa: E501
             'alternative_data_source_id': (str, none_type,),  # noqa: E501
             'authentication_type': (str, none_type,),  # noqa: E501
+            'cache_retention': (JsonApiDataSourceInAttributesCacheRetention,),  # noqa: E501
             'cache_strategy': (str, none_type,),  # noqa: E501
             'client_id': (str, none_type,),  # noqa: E501
             'date_time_semantics': (str, none_type,),  # noqa: E501
             'decoded_parameters': ([JsonApiDataSourceInAttributesParametersInner], none_type,),  # noqa: E501
+            'managed': (bool,),  # noqa: E501
             'parameters': ([JsonApiDataSourceInAttributesParametersInner], none_type,),  # noqa: E501
             'url': (str, none_type,),  # noqa: E501
             'username': (str, none_type,),  # noqa: E501
@@ -180,10 +184,12 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
         'type': 'type',  # noqa: E501
         'alternative_data_source_id': 'alternativeDataSourceId',  # noqa: E501
         'authentication_type': 'authenticationType',  # noqa: E501
+        'cache_retention': 'cacheRetention',  # noqa: E501
         'cache_strategy': 'cacheStrategy',  # noqa: E501
         'client_id': 'clientId',  # noqa: E501
         'date_time_semantics': 'dateTimeSemantics',  # noqa: E501
         'decoded_parameters': 'decodedParameters',  # noqa: E501
+        'managed': 'managed',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
         'url': 'url',  # noqa: E501
         'username': 'username',  # noqa: E501
@@ -237,10 +243,12 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             alternative_data_source_id (str, none_type): Alternative data source ID. It is a weak reference meaning data source does not have to exist. All the entities (e.g. tables) from the data source must be available also in the alternative data source. It must be present in the same organization as the data source.. [optional]  # noqa: E501
             authentication_type (str, none_type): Type of authentication used to connect to the database.. [optional]  # noqa: E501
+            cache_retention (JsonApiDataSourceInAttributesCacheRetention): [optional]  # noqa: E501
             cache_strategy (str, none_type): Determines how the results coming from a particular datasource should be cached.. [optional]  # noqa: E501
             client_id (str, none_type): The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501
             date_time_semantics (str, none_type): Determines how datetime values are interpreted in data sources without native support for specifying this. Only StarRocks and AI Lakehouse data sources currently support this.. [optional]  # noqa: E501
             decoded_parameters ([JsonApiDataSourceInAttributesParametersInner], none_type): Decoded parameters to be used when connecting to the database providing the data for the data source.. [optional]  # noqa: E501
+            managed (bool): Whether the object is platform-managed and read-only.. [optional]  # noqa: E501
             parameters ([JsonApiDataSourceInAttributesParametersInner], none_type): Additional parameters to be used when connecting to the database providing the data for the data source.. [optional]  # noqa: E501
             url (str, none_type): The URL of the database providing the data for the data source.. [optional]  # noqa: E501
             username (str, none_type): The username to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501
@@ -339,10 +347,12 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             alternative_data_source_id (str, none_type): Alternative data source ID. It is a weak reference meaning data source does not have to exist. All the entities (e.g. tables) from the data source must be available also in the alternative data source. It must be present in the same organization as the data source.. [optional]  # noqa: E501
             authentication_type (str, none_type): Type of authentication used to connect to the database.. [optional]  # noqa: E501
+            cache_retention (JsonApiDataSourceInAttributesCacheRetention): [optional]  # noqa: E501
             cache_strategy (str, none_type): Determines how the results coming from a particular datasource should be cached.. [optional]  # noqa: E501
             client_id (str, none_type): The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501
             date_time_semantics (str, none_type): Determines how datetime values are interpreted in data sources without native support for specifying this. Only StarRocks and AI Lakehouse data sources currently support this.. [optional]  # noqa: E501
             decoded_parameters ([JsonApiDataSourceInAttributesParametersInner], none_type): Decoded parameters to be used when connecting to the database providing the data for the data source.. [optional]  # noqa: E501
+            managed (bool): Whether the object is platform-managed and read-only.. [optional]  # noqa: E501
             parameters ([JsonApiDataSourceInAttributesParametersInner], none_type): Additional parameters to be used when connecting to the database providing the data for the data source.. [optional]  # noqa: E501
             url (str, none_type): The URL of the database providing the data for the data source.. [optional]  # noqa: E501
             username (str, none_type): The username to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501

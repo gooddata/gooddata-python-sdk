@@ -32,13 +32,13 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.column_info import ColumnInfo
-    from gooddata_api_client.model.pipe_table_distribution_config import PipeTableDistributionConfig
-    from gooddata_api_client.model.pipe_table_key_config import PipeTableKeyConfig
-    from gooddata_api_client.model.pipe_table_partition_config import PipeTablePartitionConfig
+    from gooddata_api_client.model.create_pipe_table_request_distribution_config import CreatePipeTableRequestDistributionConfig
+    from gooddata_api_client.model.create_pipe_table_request_key_config import CreatePipeTableRequestKeyConfig
+    from gooddata_api_client.model.create_pipe_table_request_partition_config import CreatePipeTableRequestPartitionConfig
     globals()['ColumnInfo'] = ColumnInfo
-    globals()['PipeTableDistributionConfig'] = PipeTableDistributionConfig
-    globals()['PipeTableKeyConfig'] = PipeTableKeyConfig
-    globals()['PipeTablePartitionConfig'] = PipeTablePartitionConfig
+    globals()['CreatePipeTableRequestDistributionConfig'] = CreatePipeTableRequestDistributionConfig
+    globals()['CreatePipeTableRequestKeyConfig'] = CreatePipeTableRequestKeyConfig
+    globals()['CreatePipeTableRequestPartitionConfig'] = CreatePipeTableRequestPartitionConfig
 
 
 class PipeTable(ModelNormal):
@@ -96,8 +96,8 @@ class PipeTable(ModelNormal):
         return {
             'columns': ([ColumnInfo],),  # noqa: E501
             'database_name': (str,),  # noqa: E501
-            'distribution_config': (PipeTableDistributionConfig,),  # noqa: E501
-            'key_config': (PipeTableKeyConfig,),  # noqa: E501
+            'distribution_config': (CreatePipeTableRequestDistributionConfig,),  # noqa: E501
+            'key_config': (CreatePipeTableRequestKeyConfig,),  # noqa: E501
             'partition_columns': ([str],),  # noqa: E501
             'path_prefix': (str,),  # noqa: E501
             'pipe_table_id': (str,),  # noqa: E501
@@ -105,7 +105,7 @@ class PipeTable(ModelNormal):
             'source_storage_name': (str,),  # noqa: E501
             'table_name': (str,),  # noqa: E501
             'table_properties': ({str: (str,)},),  # noqa: E501
-            'partition_config': (PipeTablePartitionConfig,),  # noqa: E501
+            'partition_config': (CreatePipeTableRequestPartitionConfig,),  # noqa: E501
         }
 
     @cached_property
@@ -141,8 +141,8 @@ class PipeTable(ModelNormal):
         Args:
             columns ([ColumnInfo]): Inferred column schema
             database_name (str): Database name
-            distribution_config (PipeTableDistributionConfig):
-            key_config (PipeTableKeyConfig):
+            distribution_config (CreatePipeTableRequestDistributionConfig):
+            key_config (CreatePipeTableRequestKeyConfig):
             partition_columns ([str]): Hive partition columns detected from the path structure
             path_prefix (str): Path prefix to the parquet files
             pipe_table_id (str): Internal UUID of the pipe table record
@@ -182,7 +182,7 @@ class PipeTable(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            partition_config (PipeTablePartitionConfig): [optional]  # noqa: E501
+            partition_config (CreatePipeTableRequestPartitionConfig): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -251,8 +251,8 @@ class PipeTable(ModelNormal):
         Args:
             columns ([ColumnInfo]): Inferred column schema
             database_name (str): Database name
-            distribution_config (PipeTableDistributionConfig):
-            key_config (PipeTableKeyConfig):
+            distribution_config (CreatePipeTableRequestDistributionConfig):
+            key_config (CreatePipeTableRequestKeyConfig):
             partition_columns ([str]): Hive partition columns detected from the path structure
             path_prefix (str): Path prefix to the parquet files
             pipe_table_id (str): Internal UUID of the pipe table record
@@ -292,7 +292,7 @@ class PipeTable(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            partition_config (PipeTablePartitionConfig): [optional]  # noqa: E501
+            partition_config (CreatePipeTableRequestPartitionConfig): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

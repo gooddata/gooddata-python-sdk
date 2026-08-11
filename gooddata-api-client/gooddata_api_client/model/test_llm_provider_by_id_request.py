@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.list_llm_provider_models_request_provider_config import ListLlmProviderModelsRequestProviderConfig
     from gooddata_api_client.model.llm_model import LlmModel
-    globals()['ListLlmProviderModelsRequestProviderConfig'] = ListLlmProviderModelsRequestProviderConfig
+    from gooddata_api_client.model.llm_provider_config import LlmProviderConfig
     globals()['LlmModel'] = LlmModel
+    globals()['LlmProviderConfig'] = LlmProviderConfig
 
 
 class TestLlmProviderByIdRequest(ModelNormal):
@@ -91,7 +91,7 @@ class TestLlmProviderByIdRequest(ModelNormal):
         lazy_import()
         return {
             'models': ([LlmModel],),  # noqa: E501
-            'provider_config': (ListLlmProviderModelsRequestProviderConfig,),  # noqa: E501
+            'provider_config': (LlmProviderConfig,),  # noqa: E501
         }
 
     @cached_property
@@ -146,7 +146,7 @@ class TestLlmProviderByIdRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             models ([LlmModel]): Models overrides.. [optional]  # noqa: E501
-            provider_config (ListLlmProviderModelsRequestProviderConfig): [optional]  # noqa: E501
+            provider_config (LlmProviderConfig): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -233,7 +233,7 @@ class TestLlmProviderByIdRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             models ([LlmModel]): Models overrides.. [optional]  # noqa: E501
-            provider_config (ListLlmProviderModelsRequestProviderConfig): [optional]  # noqa: E501
+            provider_config (LlmProviderConfig): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

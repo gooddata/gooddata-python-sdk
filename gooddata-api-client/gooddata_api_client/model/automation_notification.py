@@ -64,6 +64,9 @@ class AutomationNotification(ModelComposed):
     """
 
     allowed_values = {
+        ('type',): {
+            'AUTOMATION': "AUTOMATION",
+        },
     }
 
     validations = {
@@ -92,8 +95,8 @@ class AutomationNotification(ModelComposed):
         """
         lazy_import()
         return {
-            'content': (WebhookMessage,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'content': (WebhookMessage,),  # noqa: E501
         }
 
     @cached_property
@@ -105,8 +108,8 @@ class AutomationNotification(ModelComposed):
         return {'type': val}
 
     attribute_map = {
-        'content': 'content',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'content': 'content',  # noqa: E501
     }
 
     read_only_vars = {
@@ -118,8 +121,8 @@ class AutomationNotification(ModelComposed):
         """AutomationNotification - a model defined in OpenAPI
 
         Keyword Args:
+            type (str): defaults to "AUTOMATION", must be one of ["AUTOMATION", ]  # noqa: E501
             content (WebhookMessage):
-            type (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -152,6 +155,7 @@ class AutomationNotification(ModelComposed):
                                 _visited_composed_classes = (Animal,)
         """
 
+        type = kwargs.get('type', "AUTOMATION")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -223,8 +227,8 @@ class AutomationNotification(ModelComposed):
         """AutomationNotification - a model defined in OpenAPI
 
         Keyword Args:
+            type (str): defaults to "AUTOMATION", must be one of ["AUTOMATION", ]  # noqa: E501
             content (WebhookMessage):
-            type (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -257,6 +261,7 @@ class AutomationNotification(ModelComposed):
                                 _visited_composed_classes = (Animal,)
         """
 
+        type = kwargs.get('type', "AUTOMATION")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())

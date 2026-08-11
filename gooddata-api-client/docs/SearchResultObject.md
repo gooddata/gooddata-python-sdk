@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **title** | **str** | Object title. | 
 **type** | **str** | Object type, e.g. dashboard. | 
 **workspace_id** | **str** | Workspace ID. | 
+**certification** | [**CertificationInfo**](CertificationInfo.md) |  | [optional] 
 **created_at** | **datetime** | Timestamp when object was created. | [optional] 
 **description** | **str** | Object description. | [optional] 
 **is_hidden** | **bool** | If true, this object is hidden from AI search results by default. | [optional] 

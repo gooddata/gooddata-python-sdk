@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.declarative_export_definition_request_payload import DeclarativeExportDefinitionRequestPayload
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
-    globals()['DeclarativeExportDefinitionRequestPayload'] = DeclarativeExportDefinitionRequestPayload
+    from gooddata_api_client.model.export_request import ExportRequest
     globals()['DeclarativeUserIdentifier'] = DeclarativeUserIdentifier
+    globals()['ExportRequest'] = ExportRequest
 
 
 class DeclarativeExportDefinition(ModelNormal):
@@ -120,7 +120,7 @@ class DeclarativeExportDefinition(ModelNormal):
             'description': (str,),  # noqa: E501
             'modified_at': (str, none_type,),  # noqa: E501
             'modified_by': (DeclarativeUserIdentifier,),  # noqa: E501
-            'request_payload': (DeclarativeExportDefinitionRequestPayload,),  # noqa: E501
+            'request_payload': (ExportRequest,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
         }
 
@@ -191,7 +191,7 @@ class DeclarativeExportDefinition(ModelNormal):
             description (str): Export definition object description.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
-            request_payload (DeclarativeExportDefinitionRequestPayload): [optional]  # noqa: E501
+            request_payload (ExportRequest): [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 
@@ -289,7 +289,7 @@ class DeclarativeExportDefinition(ModelNormal):
             description (str): Export definition object description.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
-            request_payload (DeclarativeExportDefinitionRequestPayload): [optional]  # noqa: E501
+            request_payload (ExportRequest): [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 

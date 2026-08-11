@@ -5,6 +5,7 @@ Primary key model — enforces uniqueness, replaces on conflict.
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**type** | **str** |  | defaults to "primary"
 **columns** | **[str]** | Key columns. Defaults to first inferred column. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

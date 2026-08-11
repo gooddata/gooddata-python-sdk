@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | API identifier of an object | 
 **type** | **str** | Object type | defaults to "workspace"
-**attributes** | [**JsonApiWorkspaceInAttributes**](JsonApiWorkspaceInAttributes.md) |  | [optional] 
+**attributes** | [**JsonApiWorkspaceOutAttributes**](JsonApiWorkspaceOutAttributes.md) |  | [optional] 
 **meta** | [**JsonApiWorkspaceOutMeta**](JsonApiWorkspaceOutMeta.md) |  | [optional] 
 **relationships** | [**JsonApiWorkspaceInRelationships**](JsonApiWorkspaceInRelationships.md) |  | [optional] 
 **links** | [**ObjectLinks**](ObjectLinks.md) |  | [optional] 

@@ -88,6 +88,7 @@ class ExecutionSettings(ModelNormal):
         return {
             'data_sampling_percentage': (float,),  # noqa: E501
             'timestamp': (datetime,),  # noqa: E501
+            'timezone': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -98,6 +99,7 @@ class ExecutionSettings(ModelNormal):
     attribute_map = {
         'data_sampling_percentage': 'dataSamplingPercentage',  # noqa: E501
         'timestamp': 'timestamp',  # noqa: E501
+        'timezone': 'timezone',  # noqa: E501
     }
 
     read_only_vars = {
@@ -143,6 +145,7 @@ class ExecutionSettings(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             data_sampling_percentage (float): Specifies the percentage of rows from fact datasets to use during computation. This feature is available only for workspaces that use a Vertica Data Source without table views.. [optional]  # noqa: E501
             timestamp (datetime): Specifies the timestamp of the execution from which relative filters are resolved. If not set, the current time is used.. [optional]  # noqa: E501
+            timezone (str): Specifies the time zone used to resolve relative date filters and to convert time-zone-aware date/time values in the result. Expects an IANA time zone id (e.g. \"Europe/Prague\") or a fixed GMT offset (e.g. \"GMT+02:00\"). If not set, the time zone from the workspace/user settings is used.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -230,6 +233,7 @@ class ExecutionSettings(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             data_sampling_percentage (float): Specifies the percentage of rows from fact datasets to use during computation. This feature is available only for workspaces that use a Vertica Data Source without table views.. [optional]  # noqa: E501
             timestamp (datetime): Specifies the timestamp of the execution from which relative filters are resolved. If not set, the current time is used.. [optional]  # noqa: E501
+            timezone (str): Specifies the time zone used to resolve relative date filters and to convert time-zone-aware date/time values in the result. Expects an IANA time zone id (e.g. \"Europe/Prague\") or a fixed GMT offset (e.g. \"GMT+02:00\"). If not set, the time zone from the workspace/user settings is used.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

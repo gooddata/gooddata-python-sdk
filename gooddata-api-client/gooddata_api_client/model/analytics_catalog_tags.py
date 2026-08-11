@@ -105,7 +105,7 @@ class AnalyticsCatalogTags(ModelNormal):
         """AnalyticsCatalogTags - a model defined in OpenAPI
 
         Args:
-            tags ([str]):
+            tags ([str]): Sorted, distinct tag strings found in the workspace hierarchy.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -194,7 +194,7 @@ class AnalyticsCatalogTags(ModelNormal):
         """AnalyticsCatalogTags - a model defined in OpenAPI
 
         Args:
-            tags ([str]):
+            tags ([str]): Sorted, distinct tag strings found in the workspace hierarchy.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

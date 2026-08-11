@@ -100,6 +100,7 @@ class ImageExportRequest(ModelNormal):
             'format': (str,),  # noqa: E501
             'widget_ids': ([str],),  # noqa: E501
             'metadata': (JsonNode,),  # noqa: E501
+            'timezone_id': (str, none_type,),  # noqa: E501
         }
 
     @cached_property
@@ -113,6 +114,7 @@ class ImageExportRequest(ModelNormal):
         'format': 'format',  # noqa: E501
         'widget_ids': 'widgetIds',  # noqa: E501
         'metadata': 'metadata',  # noqa: E501
+        'timezone_id': 'timezoneId',  # noqa: E501
     }
 
     read_only_vars = {
@@ -163,6 +165,7 @@ class ImageExportRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             metadata (JsonNode): [optional]  # noqa: E501
+            timezone_id (str, none_type): Time zone the export should be rendered in, as an IANA identifier (e.g. 'Asia/Kolkata') or a GMT offset (e.g. 'GMT+01:00'). When omitted, the workspace time zone setting is used.. [optional]  # noqa: E501
         """
 
         format = kwargs.get('format', "PNG")
@@ -260,6 +263,7 @@ class ImageExportRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             metadata (JsonNode): [optional]  # noqa: E501
+            timezone_id (str, none_type): Time zone the export should be rendered in, as an IANA identifier (e.g. 'Asia/Kolkata') or a GMT offset (e.g. 'GMT+01:00'). When omitted, the workspace time zone setting is used.. [optional]  # noqa: E501
         """
 
         format = kwargs.get('format', "PNG")

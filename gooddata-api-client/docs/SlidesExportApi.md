@@ -44,6 +44,7 @@ with gooddata_api_client.ApiClient() as api_client:
         format="PDF",
         metadata=JsonNode(),
         template_id="template_id_example",
+        timezone_id="Asia/Kolkata",
         visualization_ids=[
             "visualization_ids_example",
         ],

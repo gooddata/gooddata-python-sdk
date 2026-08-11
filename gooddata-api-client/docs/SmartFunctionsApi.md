@@ -14,8 +14,8 @@ Method | HTTP request | Description
 [**clustering**](SmartFunctionsApi.md#clustering) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/{resultId} | (EXPERIMENTAL) Smart functions - Clustering
 [**clustering_result**](SmartFunctionsApi.md#clustering_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/clustering/result/{resultId} | (EXPERIMENTAL) Smart functions - Clustering Result
 [**created_by**](SmartFunctionsApi.md#created_by) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy | Get Analytics Catalog CreatedBy Users
-[**forecast**](SmartFunctionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
-[**forecast_result**](SmartFunctionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
+[**forecast**](SmartFunctionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | Smart functions - Forecast
+[**forecast_result**](SmartFunctionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | Smart functions - Forecast Result
 [**generate_description**](SmartFunctionsApi.md#generate_description) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateDescription | Generate Description for Analytics Object
 [**generate_title**](SmartFunctionsApi.md#generate_title) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateTitle | Generate Title for Analytics Object
 [**get_quality_issues**](SmartFunctionsApi.md#get_quality_issues) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues | Get Quality Issues
@@ -109,7 +109,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     widgets=[
                         WidgetDescriptor(
                             filters=[
-                                ChangeAnalysisParamsFiltersInner(None),
+                                FilterDefinition(),
                             ],
                             title="title_example",
                             widget_id="widget_id_example",
@@ -315,7 +315,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     widgets=[
                         WidgetDescriptor(
                             filters=[
-                                ChangeAnalysisParamsFiltersInner(None),
+                                FilterDefinition(),
                             ],
                             title="title_example",
                             widget_id="widget_id_example",
@@ -889,7 +889,7 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    workspace_id = "workspaceId_example" # str | 
 
     # example passing only required values which don't have defaults set
     try:
@@ -905,7 +905,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
+ **workspace_id** | **str**|  |
 
 ### Return type
 
@@ -932,9 +932,9 @@ No authorization required
 # **forecast**
 > SmartFunctionResponse forecast(workspace_id, result_id, forecast_request)
 
-(BETA) Smart functions - Forecast
+Smart functions - Forecast
 
-(BETA) Computes forecasted data points from the provided execution result and parameters.
+Computes forecasted data points from the provided execution result and parameters.
 
 ### Example
 
@@ -968,7 +968,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Smart functions - Forecast
+        # Smart functions - Forecast
         api_response = api_instance.forecast(workspace_id, result_id, forecast_request)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -977,7 +977,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # (BETA) Smart functions - Forecast
+        # Smart functions - Forecast
         api_response = api_instance.forecast(workspace_id, result_id, forecast_request, skip_cache=skip_cache)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1019,9 +1019,9 @@ No authorization required
 # **forecast_result**
 > ForecastResult forecast_result(workspace_id, result_id)
 
-(BETA) Smart functions - Forecast Result
+Smart functions - Forecast Result
 
-(BETA) Gets forecast result.
+Gets forecast result.
 
 ### Example
 
@@ -1050,7 +1050,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Smart functions - Forecast Result
+        # Smart functions - Forecast Result
         api_response = api_instance.forecast_result(workspace_id, result_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1059,7 +1059,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # (BETA) Smart functions - Forecast Result
+        # Smart functions - Forecast Result
         api_response = api_instance.forecast_result(workspace_id, result_id, offset=offset, limit=limit)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1409,7 +1409,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = smart_functions_api.SmartFunctionsApi(api_client)
     list_llm_provider_models_request = ListLlmProviderModelsRequest(
-        provider_config=ListLlmProviderModelsRequestProviderConfig(None),
+        provider_config=LlmProviderConfig(None),
     ) # ListLlmProviderModelsRequest | 
 
     # example passing only required values which don't have defaults set
@@ -1743,7 +1743,7 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = smart_functions_api.SmartFunctionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    workspace_id = "workspaceId_example" # str | 
 
     # example passing only required values which don't have defaults set
     try:
@@ -1759,7 +1759,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
+ **workspace_id** | **str**|  |
 
 ### Return type
 
@@ -1818,7 +1818,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="id_example",
             ),
         ],
-        provider_config=ListLlmProviderModelsRequestProviderConfig(None),
+        provider_config=LlmProviderConfig(None),
     ) # TestLlmProviderDefinitionRequest | 
 
     # example passing only required values which don't have defaults set
@@ -1895,7 +1895,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="id_example",
             ),
         ],
-        provider_config=ListLlmProviderModelsRequestProviderConfig(None),
+        provider_config=LlmProviderConfig(None),
     ) # TestLlmProviderByIdRequest |  (optional)
 
     # example passing only required values which don't have defaults set

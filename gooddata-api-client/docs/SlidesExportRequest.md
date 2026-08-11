@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **dashboard_id** | **str** | Dashboard identifier | [optional] 
 **metadata** | [**JsonNode**](JsonNode.md) |  | [optional] 
 **template_id** | **str, none_type** | Export template identifier. | [optional] 
+**timezone_id** | **str, none_type** | Time zone the export should be rendered in, as an IANA identifier (e.g. &#39;Asia/Kolkata&#39;) or a GMT offset (e.g. &#39;GMT+01:00&#39;). When omitted, the workspace time zone setting is used. | [optional] 
 **visualization_ids** | **[str]** | List of visualization ids to be exported. Note that only one visualization is currently supported. | [optional] 
 **widget_ids** | **[str]** | List of widget identifiers to be exported. Note that only one widget is currently supported. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]

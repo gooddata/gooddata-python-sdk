@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 
 # **analyze_statistics**
-> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} analyze_statistics(instance_id, analyze_statistics_request)
+> analyze_statistics(instance_id, analyze_statistics_request)
 
 (BETA) Run ANALYZE TABLE for tables in a database instance
 
@@ -50,8 +50,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # (BETA) Run ANALYZE TABLE for tables in a database instance
-        api_response = api_instance.analyze_statistics(instance_id, analyze_statistics_request)
-        pprint(api_response)
+        api_instance.analyze_statistics(instance_id, analyze_statistics_request)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakePipeTablesApi->analyze_statistics: %s\n" % e)
 
@@ -59,8 +58,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # (BETA) Run ANALYZE TABLE for tables in a database instance
-        api_response = api_instance.analyze_statistics(instance_id, analyze_statistics_request, operation_id=operation_id)
-        pprint(api_response)
+        api_instance.analyze_statistics(instance_id, analyze_statistics_request, operation_id=operation_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakePipeTablesApi->analyze_statistics: %s\n" % e)
 ```
@@ -76,7 +74,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
+void (empty response body)
 
 ### Authorization
 
@@ -85,7 +83,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
@@ -97,7 +95,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_ai_lake_pipe_table**
-> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} create_ai_lake_pipe_table(instance_id, create_pipe_table_request)
+> create_ai_lake_pipe_table(instance_id, create_pipe_table_request)
 
 (BETA) Create a new AI Lake pipe table
 
@@ -137,16 +135,10 @@ with gooddata_api_client.ApiClient() as api_client:
         column_overrides={
             "key": "key_example",
         },
-        distribution_config=DistributionConfig(
-            type="type_example",
-        ),
-        key_config=KeyConfig(
-            type="type_example",
-        ),
+        distribution_config=CreatePipeTableRequestDistributionConfig(None),
+        key_config=CreatePipeTableRequestKeyConfig(None),
         max_varchar_length=1,
-        partition_config=PartitionConfig(
-            type="type_example",
-        ),
+        partition_config=CreatePipeTableRequestPartitionConfig(None),
         path_prefix="path_prefix_example",
         polling_interval_seconds=1,
         source_storage_name="source_storage_name_example",
@@ -160,8 +152,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # (BETA) Create a new AI Lake pipe table
-        api_response = api_instance.create_ai_lake_pipe_table(instance_id, create_pipe_table_request)
-        pprint(api_response)
+        api_instance.create_ai_lake_pipe_table(instance_id, create_pipe_table_request)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakePipeTablesApi->create_ai_lake_pipe_table: %s\n" % e)
 
@@ -169,8 +160,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # (BETA) Create a new AI Lake pipe table
-        api_response = api_instance.create_ai_lake_pipe_table(instance_id, create_pipe_table_request, operation_id=operation_id)
-        pprint(api_response)
+        api_instance.create_ai_lake_pipe_table(instance_id, create_pipe_table_request, operation_id=operation_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakePipeTablesApi->create_ai_lake_pipe_table: %s\n" % e)
 ```
@@ -186,7 +176,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
+void (empty response body)
 
 ### Authorization
 
@@ -195,7 +185,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
@@ -207,7 +197,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_ai_lake_pipe_table**
-> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} delete_ai_lake_pipe_table(instance_id, table_name)
+> delete_ai_lake_pipe_table(instance_id, table_name)
 
 (BETA) Delete an AI Lake pipe table
 
@@ -239,8 +229,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # (BETA) Delete an AI Lake pipe table
-        api_response = api_instance.delete_ai_lake_pipe_table(instance_id, table_name)
-        pprint(api_response)
+        api_instance.delete_ai_lake_pipe_table(instance_id, table_name)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakePipeTablesApi->delete_ai_lake_pipe_table: %s\n" % e)
 
@@ -248,8 +237,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # (BETA) Delete an AI Lake pipe table
-        api_response = api_instance.delete_ai_lake_pipe_table(instance_id, table_name, operation_id=operation_id)
-        pprint(api_response)
+        api_instance.delete_ai_lake_pipe_table(instance_id, table_name, operation_id=operation_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakePipeTablesApi->delete_ai_lake_pipe_table: %s\n" % e)
 ```
@@ -265,7 +253,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
+void (empty response body)
 
 ### Authorization
 
@@ -274,7 +262,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
@@ -382,8 +370,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = ai_lake_pipe_tables_api.AILakePipeTablesApi(api_client)
     instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
-    page = "0" # str | Zero-based page number. (optional) if omitted the server will use the default value of "0"
-    size = "50" # str | Number of items per page. (optional) if omitted the server will use the default value of "50"
+    page = 0 # int | Zero-based page number. (optional) if omitted the server will use the default value of 0
+    size = 50 # int | Number of items per page. (optional) if omitted the server will use the default value of 50
     meta_include = [
         "metaInclude_example",
     ] # [str] |  (optional)
@@ -412,8 +400,8 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
- **page** | **str**| Zero-based page number. | [optional] if omitted the server will use the default value of "0"
- **size** | **str**| Number of items per page. | [optional] if omitted the server will use the default value of "50"
+ **page** | **int**| Zero-based page number. | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| Number of items per page. | [optional] if omitted the server will use the default value of 50
  **meta_include** | **[str]**|  | [optional]
 
 ### Return type
@@ -439,7 +427,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **refresh_ai_lake_pipe_table_partition**
-> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} refresh_ai_lake_pipe_table_partition(instance_id, table_name, refresh_partition_request)
+> refresh_ai_lake_pipe_table_partition(instance_id, table_name, refresh_partition_request)
 
 (BETA) Refresh a pipe table partition
 
@@ -477,8 +465,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # (BETA) Refresh a pipe table partition
-        api_response = api_instance.refresh_ai_lake_pipe_table_partition(instance_id, table_name, refresh_partition_request)
-        pprint(api_response)
+        api_instance.refresh_ai_lake_pipe_table_partition(instance_id, table_name, refresh_partition_request)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakePipeTablesApi->refresh_ai_lake_pipe_table_partition: %s\n" % e)
 
@@ -486,8 +473,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # (BETA) Refresh a pipe table partition
-        api_response = api_instance.refresh_ai_lake_pipe_table_partition(instance_id, table_name, refresh_partition_request, operation_id=operation_id)
-        pprint(api_response)
+        api_instance.refresh_ai_lake_pipe_table_partition(instance_id, table_name, refresh_partition_request, operation_id=operation_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakePipeTablesApi->refresh_ai_lake_pipe_table_partition: %s\n" % e)
 ```
@@ -504,7 +490,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
+void (empty response body)
 
 ### Authorization
 
@@ -513,7 +499,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details

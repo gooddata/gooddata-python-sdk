@@ -56,6 +56,9 @@ class DuplicateKeyConfig(ModelNormal):
     """
 
     allowed_values = {
+        ('type',): {
+            'DUPLICATE': "duplicate",
+        },
     }
 
     validations = {
@@ -82,6 +85,7 @@ class DuplicateKeyConfig(ModelNormal):
                 and the value is attribute type.
         """
         return {
+            'type': (str,),  # noqa: E501
             'columns': ([str],),  # noqa: E501
         }
 
@@ -91,6 +95,7 @@ class DuplicateKeyConfig(ModelNormal):
 
 
     attribute_map = {
+        'type': 'type',  # noqa: E501
         'columns': 'columns',  # noqa: E501
     }
 
@@ -104,7 +109,10 @@ class DuplicateKeyConfig(ModelNormal):
     def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """DuplicateKeyConfig - a model defined in OpenAPI
 
+        Args:
+
         Keyword Args:
+            type (str): defaults to "duplicate", must be one of ["duplicate", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -138,6 +146,7 @@ class DuplicateKeyConfig(ModelNormal):
             columns ([str]): Key columns. Defaults to first inferred column.. [optional]  # noqa: E501
         """
 
+        type = kwargs.get('type', "duplicate")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -167,6 +176,7 @@ class DuplicateKeyConfig(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -190,7 +200,10 @@ class DuplicateKeyConfig(ModelNormal):
     def __init__(self, *args, **kwargs):  # noqa: E501
         """DuplicateKeyConfig - a model defined in OpenAPI
 
+        Args:
+
         Keyword Args:
+            type (str): defaults to "duplicate", must be one of ["duplicate", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -224,6 +237,7 @@ class DuplicateKeyConfig(ModelNormal):
             columns ([str]): Key columns. Defaults to first inferred column.. [optional]  # noqa: E501
         """
 
+        type = kwargs.get('type', "duplicate")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -251,6 +265,7 @@ class DuplicateKeyConfig(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

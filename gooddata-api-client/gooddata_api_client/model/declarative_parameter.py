@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.declarative_parameter_content import DeclarativeParameterContent
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
-    globals()['DeclarativeParameterContent'] = DeclarativeParameterContent
+    from gooddata_api_client.model.parameter_definition import ParameterDefinition
     globals()['DeclarativeUserIdentifier'] = DeclarativeUserIdentifier
+    globals()['ParameterDefinition'] = ParameterDefinition
 
 
 class DeclarativeParameter(ModelNormal):
@@ -113,7 +113,7 @@ class DeclarativeParameter(ModelNormal):
         """
         lazy_import()
         return {
-            'content': (DeclarativeParameterContent,),  # noqa: E501
+            'content': (ParameterDefinition,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
             'created_at': (str, none_type,),  # noqa: E501
@@ -152,7 +152,7 @@ class DeclarativeParameter(ModelNormal):
         """DeclarativeParameter - a model defined in OpenAPI
 
         Args:
-            content (DeclarativeParameterContent):
+            content (ParameterDefinition):
             id (str): Parameter ID.
             title (str): Parameter title.
 
@@ -251,7 +251,7 @@ class DeclarativeParameter(ModelNormal):
         """DeclarativeParameter - a model defined in OpenAPI
 
         Args:
-            content (DeclarativeParameterContent):
+            content (ParameterDefinition):
             id (str): Parameter ID.
             title (str): Parameter title.
 

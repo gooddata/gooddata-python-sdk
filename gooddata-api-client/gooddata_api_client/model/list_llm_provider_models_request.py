@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.list_llm_provider_models_request_provider_config import ListLlmProviderModelsRequestProviderConfig
-    globals()['ListLlmProviderModelsRequestProviderConfig'] = ListLlmProviderModelsRequestProviderConfig
+    from gooddata_api_client.model.llm_provider_config import LlmProviderConfig
+    globals()['LlmProviderConfig'] = LlmProviderConfig
 
 
 class ListLlmProviderModelsRequest(ModelNormal):
@@ -88,7 +88,7 @@ class ListLlmProviderModelsRequest(ModelNormal):
         """
         lazy_import()
         return {
-            'provider_config': (ListLlmProviderModelsRequestProviderConfig,),  # noqa: E501
+            'provider_config': (LlmProviderConfig,),  # noqa: E501
         }
 
     @cached_property
@@ -111,7 +111,7 @@ class ListLlmProviderModelsRequest(ModelNormal):
         """ListLlmProviderModelsRequest - a model defined in OpenAPI
 
         Args:
-            provider_config (ListLlmProviderModelsRequestProviderConfig):
+            provider_config (LlmProviderConfig):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -200,7 +200,7 @@ class ListLlmProviderModelsRequest(ModelNormal):
         """ListLlmProviderModelsRequest - a model defined in OpenAPI
 
         Args:
-            provider_config (ListLlmProviderModelsRequestProviderConfig):
+            provider_config (LlmProviderConfig):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

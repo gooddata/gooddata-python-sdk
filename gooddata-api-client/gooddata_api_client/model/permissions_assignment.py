@@ -67,6 +67,9 @@ class PermissionsAssignment(ModelNormal):
     }
 
     validations = {
+        ('assignees',): {
+            'min_items': 1,
+        },
     }
 
     @cached_property

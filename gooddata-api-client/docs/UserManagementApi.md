@@ -119,7 +119,7 @@ with gooddata_api_client.ApiClient() as api_client:
     permissions_assignment = PermissionsAssignment(
         assignees=[
             AssigneeIdentifier(
-                id="id_example",
+                id="/6bUUGjjNSwg0_bs",
                 type="user",
             ),
         ],
@@ -270,10 +270,19 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = user_management_api.UserManagementApi(api_client)
     user_id = "userId_example" # str | 
+    include_inherited = True # bool | When true, include permissions inherited from user groups (workspaces also cascade down the workspace hierarchy). Each workspace and data source is tagged with how the user gains access. Defaults to false (direct assignments only). (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
         api_response = api_instance.list_permissions_for_user(user_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling UserManagementApi->list_permissions_for_user: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.list_permissions_for_user(user_id, include_inherited=include_inherited)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling UserManagementApi->list_permissions_for_user: %s\n" % e)
@@ -285,6 +294,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **user_id** | **str**|  |
+ **include_inherited** | **bool**| When true, include permissions inherited from user groups (workspaces also cascade down the workspace hierarchy). Each workspace and data source is tagged with how the user gains access. Defaults to false (direct assignments only). | [optional] if omitted the server will use the default value of False
 
 ### Return type
 
@@ -334,10 +344,19 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = user_management_api.UserManagementApi(api_client)
     user_group_id = "userGroupId_example" # str | 
+    include_inherited = True # bool | When true, include permissions inherited from parent user groups (workspaces also cascade down the workspace hierarchy). Each workspace and data source is tagged with how the group gains access. Defaults to false (direct assignments only). (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
         api_response = api_instance.list_permissions_for_user_group(user_group_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling UserManagementApi->list_permissions_for_user_group: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.list_permissions_for_user_group(user_group_id, include_inherited=include_inherited)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling UserManagementApi->list_permissions_for_user_group: %s\n" % e)
@@ -349,6 +368,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **user_group_id** | **str**|  |
+ **include_inherited** | **bool**| When true, include permissions inherited from parent user groups (workspaces also cascade down the workspace hierarchy). Each workspace and data source is tagged with how the group gains access. Defaults to false (direct assignments only). | [optional] if omitted the server will use the default value of False
 
 ### Return type
 
@@ -626,7 +646,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     page = page=0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = size=20 # int | The size of the page to be returned. (optional) if omitted the server will use the default value of 20
-    name = "name=charles" # str | Filter by user name. Note that user name is case insensitive. (optional)
+    name = "name=charles" # str | Filter by user name, email or login (user ID). Note that the filter is case insensitive. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -652,7 +672,7 @@ Name | Type | Description  | Notes
  **workspace_id** | **str**|  |
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned. | [optional] if omitted the server will use the default value of 20
- **name** | **str**| Filter by user name. Note that user name is case insensitive. | [optional]
+ **name** | **str**| Filter by user name, email or login (user ID). Note that the filter is case insensitive. | [optional]
 
 ### Return type
 
@@ -944,7 +964,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = user_management_api.UserManagementApi(api_client)
     assignee_identifier = [
         AssigneeIdentifier(
-            id="id_example",
+            id="/6bUUGjjNSwg0_bs",
             type="user",
         ),
     ] # [AssigneeIdentifier] | 
@@ -1013,7 +1033,7 @@ with gooddata_api_client.ApiClient() as api_client:
     permissions_assignment = PermissionsAssignment(
         assignees=[
             AssigneeIdentifier(
-                id="id_example",
+                id="/6bUUGjjNSwg0_bs",
                 type="user",
             ),
         ],

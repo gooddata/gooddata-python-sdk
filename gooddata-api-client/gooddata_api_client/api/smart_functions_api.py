@@ -687,17 +687,10 @@ class SmartFunctionsApi(object):
                 'enum': [
                 ],
                 'validation': [
-                    'workspace_id',
                 ]
             },
             root_map={
                 'validations': {
-                    ('workspace_id',): {
-
-                        'regex': {
-                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
-                        },
-                    },
                 },
                 'allowed_values': {
                 },
@@ -1398,17 +1391,10 @@ class SmartFunctionsApi(object):
                 'enum': [
                 ],
                 'validation': [
-                    'workspace_id',
                 ]
             },
             root_map={
                 'validations': {
-                    ('workspace_id',): {
-
-                        'regex': {
-                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
-                        },
-                    },
                 },
                 'allowed_values': {
                 },
@@ -2546,7 +2532,7 @@ class SmartFunctionsApi(object):
         >>> result = thread.get()
 
         Args:
-            workspace_id (str): Workspace identifier
+            workspace_id (str):
 
         Keyword Args:
             _return_http_data_only (bool): response data without head status
@@ -2621,9 +2607,9 @@ class SmartFunctionsApi(object):
         forecast_request,
         **kwargs
     ):
-        """(BETA) Smart functions - Forecast  # noqa: E501
+        """Smart functions - Forecast  # noqa: E501
 
-        (BETA) Computes forecasted data points from the provided execution result and parameters.  # noqa: E501
+        Computes forecasted data points from the provided execution result and parameters.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -2712,9 +2698,9 @@ class SmartFunctionsApi(object):
         result_id,
         **kwargs
     ):
-        """(BETA) Smart functions - Forecast Result  # noqa: E501
+        """Smart functions - Forecast Result  # noqa: E501
 
-        (BETA) Gets forecast result.  # noqa: E501
+        Gets forecast result.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -3569,7 +3555,7 @@ class SmartFunctionsApi(object):
         >>> result = thread.get()
 
         Args:
-            workspace_id (str): Workspace identifier
+            workspace_id (str):
 
         Keyword Args:
             _return_http_data_only (bool): response data without head status

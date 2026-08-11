@@ -33,6 +33,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.absolute_date_filter import AbsoluteDateFilter
     from gooddata_api_client.model.absolute_date_filter_absolute_date_filter import AbsoluteDateFilterAbsoluteDateFilter
+    from gooddata_api_client.model.absolute_granularity_date_filter import AbsoluteGranularityDateFilter
+    from gooddata_api_client.model.absolute_granularity_date_filter_absolute_granularity_date_filter import AbsoluteGranularityDateFilterAbsoluteGranularityDateFilter
     from gooddata_api_client.model.all_time_date_filter import AllTimeDateFilter
     from gooddata_api_client.model.all_time_date_filter_all_time_date_filter import AllTimeDateFilterAllTimeDateFilter
     from gooddata_api_client.model.comparison_measure_value_filter import ComparisonMeasureValueFilter
@@ -55,6 +57,8 @@ def lazy_import():
     from gooddata_api_client.model.relative_date_filter_relative_date_filter import RelativeDateFilterRelativeDateFilter
     globals()['AbsoluteDateFilter'] = AbsoluteDateFilter
     globals()['AbsoluteDateFilterAbsoluteDateFilter'] = AbsoluteDateFilterAbsoluteDateFilter
+    globals()['AbsoluteGranularityDateFilter'] = AbsoluteGranularityDateFilter
+    globals()['AbsoluteGranularityDateFilterAbsoluteGranularityDateFilter'] = AbsoluteGranularityDateFilterAbsoluteGranularityDateFilter
     globals()['AllTimeDateFilter'] = AllTimeDateFilter
     globals()['AllTimeDateFilterAllTimeDateFilter'] = AllTimeDateFilterAllTimeDateFilter
     globals()['ComparisonMeasureValueFilter'] = ComparisonMeasureValueFilter
@@ -136,6 +140,7 @@ class FilterDefinition(ModelComposed):
             'range_measure_value_filter': (RangeMeasureValueFilterRangeMeasureValueFilter,),  # noqa: E501
             'compound_measure_value_filter': (CompoundMeasureValueFilterCompoundMeasureValueFilter,),  # noqa: E501
             'absolute_date_filter': (AbsoluteDateFilterAbsoluteDateFilter,),  # noqa: E501
+            'absolute_granularity_date_filter': (AbsoluteGranularityDateFilterAbsoluteGranularityDateFilter,),  # noqa: E501
             'relative_date_filter': (RelativeDateFilterRelativeDateFilter,),  # noqa: E501
             'all_time_date_filter': (AllTimeDateFilterAllTimeDateFilter,),  # noqa: E501
             'negative_attribute_filter': (NegativeAttributeFilterNegativeAttributeFilter,),  # noqa: E501
@@ -155,6 +160,7 @@ class FilterDefinition(ModelComposed):
         'range_measure_value_filter': 'rangeMeasureValueFilter',  # noqa: E501
         'compound_measure_value_filter': 'compoundMeasureValueFilter',  # noqa: E501
         'absolute_date_filter': 'absoluteDateFilter',  # noqa: E501
+        'absolute_granularity_date_filter': 'absoluteGranularityDateFilter',  # noqa: E501
         'relative_date_filter': 'relativeDateFilter',  # noqa: E501
         'all_time_date_filter': 'allTimeDateFilter',  # noqa: E501
         'negative_attribute_filter': 'negativeAttributeFilter',  # noqa: E501
@@ -207,6 +213,7 @@ class FilterDefinition(ModelComposed):
             range_measure_value_filter (RangeMeasureValueFilterRangeMeasureValueFilter): [optional]  # noqa: E501
             compound_measure_value_filter (CompoundMeasureValueFilterCompoundMeasureValueFilter): [optional]  # noqa: E501
             absolute_date_filter (AbsoluteDateFilterAbsoluteDateFilter): [optional]  # noqa: E501
+            absolute_granularity_date_filter (AbsoluteGranularityDateFilterAbsoluteGranularityDateFilter): [optional]  # noqa: E501
             relative_date_filter (RelativeDateFilterRelativeDateFilter): [optional]  # noqa: E501
             all_time_date_filter (AllTimeDateFilterAllTimeDateFilter): [optional]  # noqa: E501
             negative_attribute_filter (NegativeAttributeFilterNegativeAttributeFilter): [optional]  # noqa: E501
@@ -321,6 +328,7 @@ class FilterDefinition(ModelComposed):
             range_measure_value_filter (RangeMeasureValueFilterRangeMeasureValueFilter): [optional]  # noqa: E501
             compound_measure_value_filter (CompoundMeasureValueFilterCompoundMeasureValueFilter): [optional]  # noqa: E501
             absolute_date_filter (AbsoluteDateFilterAbsoluteDateFilter): [optional]  # noqa: E501
+            absolute_granularity_date_filter (AbsoluteGranularityDateFilterAbsoluteGranularityDateFilter): [optional]  # noqa: E501
             relative_date_filter (RelativeDateFilterRelativeDateFilter): [optional]  # noqa: E501
             all_time_date_filter (AllTimeDateFilterAllTimeDateFilter): [optional]  # noqa: E501
             negative_attribute_filter (NegativeAttributeFilterNegativeAttributeFilter): [optional]  # noqa: E501
@@ -398,6 +406,7 @@ class FilterDefinition(ModelComposed):
           ],
           'oneOf': [
               AbsoluteDateFilter,
+              AbsoluteGranularityDateFilter,
               AllTimeDateFilter,
               ComparisonMeasureValueFilter,
               CompoundMeasureValueFilter,

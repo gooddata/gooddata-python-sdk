@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.declarative_notification_channel_destination import DeclarativeNotificationChannelDestination
-    globals()['DeclarativeNotificationChannelDestination'] = DeclarativeNotificationChannelDestination
+    from gooddata_api_client.model.notification_channel_destination import NotificationChannelDestination
+    globals()['NotificationChannelDestination'] = NotificationChannelDestination
 
 
 class DeclarativeNotificationChannel(ModelNormal):
@@ -131,7 +131,7 @@ class DeclarativeNotificationChannel(ModelNormal):
             'custom_dashboard_url': (str,),  # noqa: E501
             'dashboard_link_visibility': (str,),  # noqa: E501
             'description': (str,),  # noqa: E501
-            'destination': (DeclarativeNotificationChannelDestination,),  # noqa: E501
+            'destination': (NotificationChannelDestination,),  # noqa: E501
             'destination_type': (str, none_type,),  # noqa: E501
             'in_platform_notification': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
@@ -205,7 +205,7 @@ class DeclarativeNotificationChannel(ModelNormal):
             custom_dashboard_url (str): Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are: {workspaceId} {dashboardId} {automationId} {asOfDate} . [optional]  # noqa: E501
             dashboard_link_visibility (str): Dashboard link visibility in notifications. HIDDEN - the link will not be included INTERNAL_ONLY - only internal users will see the link ALL - all users will see the link . [optional] if omitted the server will use the default value of "INTERNAL_ONLY"  # noqa: E501
             description (str): Description of a notification channel.. [optional]  # noqa: E501
-            destination (DeclarativeNotificationChannelDestination): [optional]  # noqa: E501
+            destination (NotificationChannelDestination): [optional]  # noqa: E501
             destination_type (str, none_type): [optional]  # noqa: E501
             in_platform_notification (str): In-platform notifications configuration. No effect if the destination type is IN_PLATFORM. DISABLED - in-platform notifications are not sent ENABLED - in-platform notifications are sent in addition to the regular notifications . [optional] if omitted the server will use the default value of "DISABLED"  # noqa: E501
             name (str): Name of a notification channel.. [optional]  # noqa: E501
@@ -303,7 +303,7 @@ class DeclarativeNotificationChannel(ModelNormal):
             custom_dashboard_url (str): Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are: {workspaceId} {dashboardId} {automationId} {asOfDate} . [optional]  # noqa: E501
             dashboard_link_visibility (str): Dashboard link visibility in notifications. HIDDEN - the link will not be included INTERNAL_ONLY - only internal users will see the link ALL - all users will see the link . [optional] if omitted the server will use the default value of "INTERNAL_ONLY"  # noqa: E501
             description (str): Description of a notification channel.. [optional]  # noqa: E501
-            destination (DeclarativeNotificationChannelDestination): [optional]  # noqa: E501
+            destination (NotificationChannelDestination): [optional]  # noqa: E501
             destination_type (str, none_type): [optional]  # noqa: E501
             in_platform_notification (str): In-platform notifications configuration. No effect if the destination type is IN_PLATFORM. DISABLED - in-platform notifications are not sent ENABLED - in-platform notifications are sent in addition to the regular notifications . [optional] if omitted the server will use the default value of "DISABLED"  # noqa: E501
             name (str): Name of a notification channel.. [optional]  # noqa: E501

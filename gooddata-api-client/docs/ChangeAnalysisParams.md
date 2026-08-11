@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **analyzed_period** | **str** | The analyzed time period | 
 **attributes** | [**[AttributeItem]**](AttributeItem.md) | Attributes to analyze for significant changes | 
 **date_attribute** | [**AttributeItem**](AttributeItem.md) |  | 
-**filters** | [**[ChangeAnalysisParamsFiltersInner]**](ChangeAnalysisParamsFiltersInner.md) | Optional filters to apply | 
+**filters** | [**[FilterDefinition]**](FilterDefinition.md) | Optional filters to apply | 
 **measure** | [**MeasureItem**](MeasureItem.md) |  | 
 **measure_title** | **str** | The title of the measure being analyzed | 
 **reference_period** | **str** | The reference time period | 

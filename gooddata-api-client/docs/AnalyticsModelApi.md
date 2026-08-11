@@ -208,7 +208,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         id="employee123",
                         type="user",
                     ),
-                    request_payload=DeclarativeExportDefinitionRequestPayload(None),
+                    request_payload=ExportRequest(),
                     tags=["Revenues"],
                     title="My regular export",
                 ),
@@ -276,7 +276,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
             parameters=[
                 DeclarativeParameter(
-                    content=DeclarativeParameterContent(None),
+                    content=ParameterDefinition(),
                     created_at="2023-07-20 12:30",
                     created_by=DeclarativeUserIdentifier(
                         id="employee123",

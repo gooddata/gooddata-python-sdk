@@ -107,7 +107,7 @@ with gooddata_api_client.ApiClient() as api_client:
     data_source_permission_assignment = [
         DataSourcePermissionAssignment(
             assignee_identifier=AssigneeIdentifier(
-                id="id_example",
+                id="/6bUUGjjNSwg0_bs",
                 type="user",
             ),
             permissions=[
@@ -186,7 +186,7 @@ with gooddata_api_client.ApiClient() as api_client:
         permissions=[
             DeclarativeDataSourcePermission(
                 assignee=AssigneeIdentifier(
-                    id="id_example",
+                    id="/6bUUGjjNSwg0_bs",
                     type="user",
                 ),
                 name="MANAGE",

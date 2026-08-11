@@ -46,8 +46,8 @@ Method | HTTP request | Description
 [**delete_workspace_automations**](ActionsApi.md#delete_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/delete | Delete selected automations in the workspace
 [**explain_afm**](ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
 [**fact_permissions**](ActionsApi.md#fact_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/facts/{factId}/permissions | Get Fact Permissions
-[**forecast**](ActionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | (BETA) Smart functions - Forecast
-[**forecast_result**](ActionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | (BETA) Smart functions - Forecast Result
+[**forecast**](ActionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | Smart functions - Forecast
+[**forecast_result**](ActionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | Smart functions - Forecast Result
 [**generate_dashboard_summary**](ActionsApi.md#generate_dashboard_summary) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/dashboardSummary | 
 [**generate_description**](ActionsApi.md#generate_description) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateDescription | Generate Description for Analytics Object
 [**generate_logical_model**](ActionsApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
@@ -85,13 +85,13 @@ Method | HTTP request | Description
 [**manage_data_source_permissions**](ActionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 [**manage_fact_permissions**](ActionsApi.md#manage_fact_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/facts/{factId}/managePermissions | Manage Permissions for a Fact
 [**manage_label_permissions**](ActionsApi.md#manage_label_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/managePermissions | Manage Permissions for a Label
+[**manage_metric_permissions**](ActionsApi.md#manage_metric_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/managePermissions | (BETA) Manage Permissions for a Metric
 [**manage_organization_permissions**](ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
 [**manage_workspace_permissions**](ActionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
 [**mark_as_read_notification**](ActionsApi.md#mark_as_read_notification) | **POST** /api/v1/actions/notifications/{notificationId}/markAsRead | Mark notification as read.
 [**mark_as_read_notification_all**](ActionsApi.md#mark_as_read_notification_all) | **POST** /api/v1/actions/notifications/markAsRead | Mark all notifications as read.
 [**memory_created_by_users**](ActionsApi.md#memory_created_by_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory/createdBy | Get AI Memory CreatedBy Users
-[**metadata_sync**](ActionsApi.md#metadata_sync) | **POST** /api/v1/actions/workspaces/{workspaceId}/metadataSync | (BETA) Sync Metadata to other services
-[**metadata_sync_organization**](ActionsApi.md#metadata_sync_organization) | **POST** /api/v1/actions/organization/metadataSync | (BETA) Sync organization scope Metadata to other services
+[**metric_permissions**](ActionsApi.md#metric_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/permissions | (BETA) Get Metric Permissions
 [**outlier_detection**](ActionsApi.md#outlier_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/detectOutliers | (BETA) Outlier Detection
 [**outlier_detection_result**](ActionsApi.md#outlier_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/detectOutliers/result/{resultId} | (BETA) Outlier Detection Result
 [**overridden_child_entities**](ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
@@ -101,6 +101,7 @@ Method | HTTP request | Description
 [**read_csv_file_manifests**](ActionsApi.md#read_csv_file_manifests) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/readCsvFileManifests | Read CSV file manifests
 [**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 [**register_workspace_upload_notification**](ActionsApi.md#register_workspace_upload_notification) | **POST** /api/v1/actions/workspaces/{workspaceId}/uploadNotification | Register an upload notification
+[**reload_observability_layout**](ActionsApi.md#reload_observability_layout) | **POST** /api/v1/actions/organization/reloadObservabilityLayout | Reload the managed AI observability layout
 [**remove_targets**](ActionsApi.md#remove_targets) | **POST** /api/v1/actions/ipAllowlistPolicies/{id}/removeTargets | Remove targets from IP allowlist policy
 [**resolve_all_entitlements**](ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 [**resolve_all_settings_without_workspace**](ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
@@ -172,7 +173,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ip_allowlist_policy_targets = IpAllowlistPolicyTargets(
         targets=[
             AssigneeIdentifier(
-                id="id_example",
+                id="/6bUUGjjNSwg0_bs",
                 type="user",
             ),
         ],
@@ -291,7 +292,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     widgets=[
                         WidgetDescriptor(
                             filters=[
-                                ChangeAnalysisParamsFiltersInner(None),
+                                FilterDefinition(),
                             ],
                             title="title_example",
                             widget_id="widget_id_example",
@@ -497,7 +498,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     widgets=[
                         WidgetDescriptor(
                             filters=[
-                                ChangeAnalysisParamsFiltersInner(None),
+                                FilterDefinition(),
                             ],
                             title="title_example",
                             widget_id="widget_id_example",
@@ -1356,7 +1357,7 @@ with gooddata_api_client.ApiClient() as api_client:
             "exclude_tags_example",
         ],
         filters=[
-            ChangeAnalysisParamsFiltersInner(None),
+            FilterDefinition(),
         ],
         include_tags=[
             "include_tags_example",
@@ -1981,6 +1982,7 @@ with gooddata_api_client.ApiClient() as api_client:
         label="label_id",
         pattern_filter="pattern_filter_example",
         sort_order="ASC",
+        timezone="Europe/Prague",
         validate_by=[
             ValidateByItem(
                 id="id_example",
@@ -2117,15 +2119,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
             ],
             parameters=[
-                ParameterItem(
-                    parameter=AfmObjectIdentifierParameter(
-                        identifier=AfmObjectIdentifierParameterIdentifier(
-                            id="sample_item.price",
-                            type="parameter",
-                        ),
-                    ),
-                    value="value_example",
-                ),
+                ParameterItem(),
             ],
         ),
         result_spec=ResultSpec(
@@ -2155,6 +2149,7 @@ with gooddata_api_client.ApiClient() as api_client:
         settings=ExecutionSettings(
             data_sampling_percentage=0,
             timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+            timezone="Europe/Prague",
         ),
     ) # AfmExecution | 
     skip_cache = False # bool | Ignore all caches during execution of current request. (optional) if omitted the server will use the default value of False
@@ -2248,6 +2243,7 @@ with gooddata_api_client.ApiClient() as api_client:
         settings=ExecutionSettings(
             data_sampling_percentage=0,
             timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+            timezone="Europe/Prague",
         ),
     ) # VisualizationObjectExecution |  (optional)
 
@@ -2454,15 +2450,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
             ],
             parameters=[
-                ParameterItem(
-                    parameter=AfmObjectIdentifierParameter(
-                        identifier=AfmObjectIdentifierParameterIdentifier(
-                            id="sample_item.price",
-                            type="parameter",
-                        ),
-                    ),
-                    value="value_example",
-                ),
+                ParameterItem(),
             ],
         ),
         types=[
@@ -2615,11 +2603,7 @@ with gooddata_api_client.ApiClient() as api_client:
             DashboardFilter(),
         ],
         dashboard_parameters_override=[
-            DashboardParameterValue(
-                id="year",
-                title="Year",
-                value="2026",
-            ),
+            ParameterValue(),
         ],
         dashboard_tabs_filters_overrides={
             "key": [
@@ -2628,13 +2612,14 @@ with gooddata_api_client.ApiClient() as api_client:
         },
         dashboard_tabs_parameters_overrides={
             "key": [
-                DashboardParameterValue(
-                    id="year",
-                    title="Year",
-                    value="2026",
-                ),
+                ParameterValue(),
             ],
         },
+        execution_settings=ExecutionSettings(
+            data_sampling_percentage=0,
+            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+            timezone="Europe/Prague",
+        ),
         file_name="result",
         format="XLSX",
         settings=DashboardExportSettings(
@@ -2722,6 +2707,7 @@ with gooddata_api_client.ApiClient() as api_client:
         file_name="filename",
         format="PNG",
         metadata=JsonNode(),
+        timezone_id="Asia/Kolkata",
         widget_ids=[
             "widget_ids_example",
         ],
@@ -2799,6 +2785,7 @@ with gooddata_api_client.ApiClient() as api_client:
         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
         file_name="filename",
         metadata={},
+        timezone_id="Asia/Kolkata",
     ) # VisualExportRequest | 
     x_gdc_debug = False # bool |  (optional) if omitted the server will use the default value of False
 
@@ -2938,20 +2925,13 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
             ],
             parameters=[
-                ParameterItem(
-                    parameter=AfmObjectIdentifierParameter(
-                        identifier=AfmObjectIdentifierParameterIdentifier(
-                            id="sample_item.price",
-                            type="parameter",
-                        ),
-                    ),
-                    value="value_example",
-                ),
+                ParameterItem(),
             ],
         ),
         execution_settings=ExecutionSettings(
             data_sampling_percentage=0,
             timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+            timezone="Europe/Prague",
         ),
         file_name="result",
         format="CSV",
@@ -3031,6 +3011,7 @@ with gooddata_api_client.ApiClient() as api_client:
         format="PDF",
         metadata=JsonNode(),
         template_id="template_id_example",
+        timezone_id="Asia/Kolkata",
         visualization_ids=[
             "visualization_ids_example",
         ],
@@ -3133,6 +3114,30 @@ with gooddata_api_client.ApiClient() as api_client:
             },
         ),
         execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+        execution_settings=ExecutionSettings(
+            data_sampling_percentage=0,
+            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+            timezone="Europe/Prague",
+        ),
+        executions=[
+            TabularExportExecution(
+                custom_override=CustomOverride(
+                    labels={
+                        "key": CustomLabel(
+                            title="title_example",
+                        ),
+                    },
+                    metrics={
+                        "key": CustomMetric(
+                            format="format_example",
+                            title="title_example",
+                        ),
+                    },
+                ),
+                execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                title="Pushpins",
+            ),
+        ],
         file_name="result",
         format="CSV",
         metadata=JsonNode(),
@@ -3163,6 +3168,9 @@ with gooddata_api_client.ApiClient() as api_client:
         visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
         visualization_object_custom_filters=[
             {},
+        ],
+        visualization_object_custom_parameters=[
+            ParameterValue(),
         ],
     ) # TabularExportRequest | 
 
@@ -3232,7 +3240,7 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    workspace_id = "workspaceId_example" # str | 
 
     # example passing only required values which don't have defaults set
     try:
@@ -3248,7 +3256,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
+ **workspace_id** | **str**|  |
 
 ### Return type
 
@@ -3694,15 +3702,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
             ],
             parameters=[
-                ParameterItem(
-                    parameter=AfmObjectIdentifierParameter(
-                        identifier=AfmObjectIdentifierParameterIdentifier(
-                            id="sample_item.price",
-                            type="parameter",
-                        ),
-                    ),
-                    value="value_example",
-                ),
+                ParameterItem(),
             ],
         ),
         result_spec=ResultSpec(
@@ -3732,6 +3732,7 @@ with gooddata_api_client.ApiClient() as api_client:
         settings=ExecutionSettings(
             data_sampling_percentage=0,
             timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+            timezone="Europe/Prague",
         ),
     ) # AfmExecution | 
     explain_type = "MAQL" # str | Requested explain type. If not specified all types are bundled in a ZIP archive.  `MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info  `GRPC_MODEL` - Datasets used in execution  `GRPC_MODEL_SVG` - Generated SVG image of the datasets  `COMPRESSED_GRPC_MODEL_SVG` - Generated SVG image of the model fragment used in the query  `WDF` - Workspace data filters in execution workspace context  `QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL  `QT_SVG` - Generated SVG image of the Query Tree  `OPT_QT` - Optimized Query Tree  `OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree  `SQL` - Final SQL to be executed  `COMPRESSED_SQL` - Final SQL to be executed with rolled SQL datasets  `SETTINGS` - Settings used to execute explain request  `GIT` - Git properties of current build (optional)
@@ -3853,9 +3854,9 @@ No authorization required
 # **forecast**
 > SmartFunctionResponse forecast(workspace_id, result_id, forecast_request)
 
-(BETA) Smart functions - Forecast
+Smart functions - Forecast
 
-(BETA) Computes forecasted data points from the provided execution result and parameters.
+Computes forecasted data points from the provided execution result and parameters.
 
 ### Example
 
@@ -3889,7 +3890,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Smart functions - Forecast
+        # Smart functions - Forecast
         api_response = api_instance.forecast(workspace_id, result_id, forecast_request)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -3898,7 +3899,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # (BETA) Smart functions - Forecast
+        # Smart functions - Forecast
         api_response = api_instance.forecast(workspace_id, result_id, forecast_request, skip_cache=skip_cache)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -3940,9 +3941,9 @@ No authorization required
 # **forecast_result**
 > ForecastResult forecast_result(workspace_id, result_id)
 
-(BETA) Smart functions - Forecast Result
+Smart functions - Forecast Result
 
-(BETA) Gets forecast result.
+Gets forecast result.
 
 ### Example
 
@@ -3971,7 +3972,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Smart functions - Forecast Result
+        # Smart functions - Forecast Result
         api_response = api_instance.forecast_result(workspace_id, result_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -3980,7 +3981,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # (BETA) Smart functions - Forecast Result
+        # Smart functions - Forecast Result
         api_response = api_instance.forecast_result(workspace_id, result_id, offset=offset, limit=limit)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -6161,7 +6162,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     list_llm_provider_models_request = ListLlmProviderModelsRequest(
-        provider_config=ListLlmProviderModelsRequestProviderConfig(None),
+        provider_config=LlmProviderConfig(None),
     ) # ListLlmProviderModelsRequest | 
 
     # example passing only required values which don't have defaults set
@@ -6375,7 +6376,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     page = page=0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = size=20 # int | The size of the page to be returned. (optional) if omitted the server will use the default value of 20
-    name = "name=charles" # str | Filter by user name. Note that user name is case insensitive. (optional)
+    name = "name=charles" # str | Filter by user name, email or login (user ID). Note that the filter is case insensitive. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -6401,7 +6402,7 @@ Name | Type | Description  | Notes
  **workspace_id** | **str**|  |
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned. | [optional] if omitted the server will use the default value of 20
- **name** | **str**| Filter by user name. Note that user name is case insensitive. | [optional]
+ **name** | **str**| Filter by user name, email or login (user ID). Note that the filter is case insensitive. | [optional]
 
 ### Return type
 
@@ -6596,7 +6597,7 @@ with gooddata_api_client.ApiClient() as api_client:
     data_source_permission_assignment = [
         DataSourcePermissionAssignment(
             assignee_identifier=AssigneeIdentifier(
-                id="id_example",
+                id="/6bUUGjjNSwg0_bs",
                 type="user",
             ),
             permissions=[
@@ -6783,6 +6784,76 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **manage_metric_permissions**
+> manage_metric_permissions(workspace_id, metric_id, manage_metric_permissions_request_inner)
+
+(BETA) Manage Permissions for a Metric
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.manage_metric_permissions_request_inner import ManageMetricPermissionsRequestInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    metric_id = "metricId_example" # str | 
+    manage_metric_permissions_request_inner = [
+        ManageMetricPermissionsRequestInner(None),
+    ] # [ManageMetricPermissionsRequestInner] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Manage Permissions for a Metric
+        api_instance.manage_metric_permissions(workspace_id, metric_id, manage_metric_permissions_request_inner)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->manage_metric_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **metric_id** | **str**|  |
+ **manage_metric_permissions_request_inner** | [**[ManageMetricPermissionsRequestInner]**](ManageMetricPermissionsRequestInner.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **manage_organization_permissions**
 > manage_organization_permissions(organization_permission_assignment)
 
@@ -6813,7 +6884,7 @@ with gooddata_api_client.ApiClient() as api_client:
     organization_permission_assignment = [
         OrganizationPermissionAssignment(
             assignee_identifier=AssigneeIdentifier(
-                id="id_example",
+                id="/6bUUGjjNSwg0_bs",
                 type="user",
             ),
             permissions=[
@@ -6890,7 +6961,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_permission_assignment = [
         WorkspacePermissionAssignment(
             assignee_identifier=AssigneeIdentifier(
-                id="id_example",
+                id="/6bUUGjjNSwg0_bs",
                 type="user",
             ),
             hierarchy_permissions=[
@@ -7138,12 +7209,10 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **metadata_sync**
-> metadata_sync(workspace_id)
+# **metric_permissions**
+> MetricPermissions metric_permissions(workspace_id, metric_id)
 
-(BETA) Sync Metadata to other services
-
-(BETA) Temporary solution. Later relevant metadata actions will trigger it in its scope only.
+(BETA) Get Metric Permissions
 
 ### Example
 
@@ -7152,6 +7221,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.metric_permissions import MetricPermissions
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -7165,13 +7235,15 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
+    metric_id = "metricId_example" # str | 
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Sync Metadata to other services
-        api_instance.metadata_sync(workspace_id)
+        # (BETA) Get Metric Permissions
+        api_response = api_instance.metric_permissions(workspace_id, metric_id)
+        pprint(api_response)
     except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->metadata_sync: %s\n" % e)
+        print("Exception when calling ActionsApi->metric_permissions: %s\n" % e)
 ```
 
 
@@ -7180,10 +7252,11 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
+ **metric_id** | **str**|  |
 
 ### Return type
 
-void (empty response body)
+[**MetricPermissions**](MetricPermissions.md)
 
 ### Authorization
 
@@ -7192,68 +7265,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **metadata_sync_organization**
-> metadata_sync_organization()
-
-(BETA) Sync organization scope Metadata to other services
-
-(BETA) Temporary solution. Later relevant metadata actions will trigger sync in their scope only.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-
-    # example, this endpoint has no required or optional parameters
-    try:
-        # (BETA) Sync organization scope Metadata to other services
-        api_instance.metadata_sync_organization()
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->metadata_sync_organization: %s\n" % e)
-```
-
-
-### Parameters
-This endpoint does not need any parameter.
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 
 ### HTTP response details
@@ -7313,7 +7325,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
         ],
         filters=[
-            ChangeAnalysisParamsFiltersInner(None),
+            FilterDefinition(),
         ],
         granularity="HOUR",
         measures=[
@@ -7946,6 +7958,67 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **reload_observability_layout**
+> reload_observability_layout()
+
+Reload the managed AI observability layout
+
+Re-applies the latest GoodData-managed AI observability layout to the organization. Requires the AI_OBSERVABILITY entitlement and organization MANAGE permission. Idempotent; customer-authored content is left untouched.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Reload the managed AI observability layout
+        api_instance.reload_observability_layout()
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->reload_observability_layout: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **remove_targets**
 > remove_targets(id, ip_allowlist_policy_targets)
 
@@ -7975,7 +8048,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ip_allowlist_policy_targets = IpAllowlistPolicyTargets(
         targets=[
             AssigneeIdentifier(
-                id="id_example",
+                id="/6bUUGjjNSwg0_bs",
                 type="user",
             ),
         ],
@@ -8671,7 +8744,7 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | Execution result was found and returned. |  -  |
+**200** | Execution result was found and returned. |  * X-GDC-RESULT-TOTAL-ROWS - Total number of data rows in the full result. <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -9324,7 +9397,7 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    workspace_id = "workspaceId_example" # str | 
 
     # example passing only required values which don't have defaults set
     try:
@@ -9340,7 +9413,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
+ **workspace_id** | **str**|  |
 
 ### Return type
 
@@ -9394,6 +9467,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     data_source_id = "myPostgres" # str | Data source id
     test_request = TestRequest(
+        authentication_type="USERNAME_PASSWORD",
         client_id="client_id_example",
         client_secret="client_secret_example",
         parameters=[
@@ -9479,6 +9553,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     test_definition_request = TestDefinitionRequest(
+        authentication_type="USERNAME_PASSWORD",
         client_id="client_id_example",
         client_secret="client_secret_example",
         parameters=[
@@ -9565,7 +9640,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     notification_channel_id = "notificationChannelId_example" # str | 
     test_destination_request = TestDestinationRequest(
-        destination=DeclarativeNotificationChannelDestination(None),
+        destination=NotificationChannelDestination(),
         external_recipients=[
             AutomationExternalRecipient(
                 email="email_example",
@@ -9656,7 +9731,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="id_example",
             ),
         ],
-        provider_config=ListLlmProviderModelsRequestProviderConfig(None),
+        provider_config=LlmProviderConfig(None),
     ) # TestLlmProviderDefinitionRequest | 
 
     # example passing only required values which don't have defaults set
@@ -9733,7 +9808,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="id_example",
             ),
         ],
-        provider_config=ListLlmProviderModelsRequestProviderConfig(None),
+        provider_config=LlmProviderConfig(None),
     ) # TestLlmProviderByIdRequest |  (optional)
 
     # example passing only required values which don't have defaults set
@@ -9813,7 +9888,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     test_destination_request = TestDestinationRequest(
-        destination=DeclarativeNotificationChannelDestination(None),
+        destination=NotificationChannelDestination(),
         external_recipients=[
             AutomationExternalRecipient(
                 email="email_example",
@@ -9957,7 +10032,7 @@ with gooddata_api_client.ApiClient() as api_client:
     trigger_automation_request = TriggerAutomationRequest(
         automation=AdHocAutomation(
             alert=AutomationAlert(
-                condition=AutomationAlertCondition(None),
+                condition=AlertCondition(),
                 execution=AlertAfm(
                     attributes=[
                         AttributeItem(
@@ -9987,15 +10062,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ],
                     parameters=[
-                        ParameterItem(
-                            parameter=AfmObjectIdentifierParameter(
-                                identifier=AfmObjectIdentifierParameterIdentifier(
-                                    id="sample_item.price",
-                                    type="parameter",
-                                ),
-                            ),
-                            value="value_example",
-                        ),
+                        ParameterItem(),
                     ],
                 ),
                 interval="DAY",
@@ -10013,11 +10080,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                         dashboard_parameters_override=[
-                            DashboardParameterValue(
-                                id="year",
-                                title="Year",
-                                value="2026",
-                            ),
+                            ParameterValue(),
                         ],
                         dashboard_tabs_filters_overrides={
                             "key": [
@@ -10026,13 +10089,14 @@ with gooddata_api_client.ApiClient() as api_client:
                         },
                         dashboard_tabs_parameters_overrides={
                             "key": [
-                                DashboardParameterValue(
-                                    id="year",
-                                    title="Year",
-                                    value="2026",
-                                ),
+                                ParameterValue(),
                             ],
                         },
+                        execution_settings=ExecutionSettings(
+                            data_sampling_percentage=0,
+                            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                            timezone="Europe/Prague",
+                        ),
                         file_name="result",
                         format="XLSX",
                         settings=DashboardExportSettings(
@@ -10063,6 +10127,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         file_name="filename",
                         format="PNG",
                         metadata=JsonNode(),
+                        timezone_id="Asia/Kolkata",
                         widget_ids=[
                             "widget_ids_example",
                         ],
@@ -10134,20 +10199,13 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                             ],
                             parameters=[
-                                ParameterItem(
-                                    parameter=AfmObjectIdentifierParameter(
-                                        identifier=AfmObjectIdentifierParameterIdentifier(
-                                            id="sample_item.price",
-                                            type="parameter",
-                                        ),
-                                    ),
-                                    value="value_example",
-                                ),
+                                ParameterItem(),
                             ],
                         ),
                         execution_settings=ExecutionSettings(
                             data_sampling_percentage=0,
                             timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                            timezone="Europe/Prague",
                         ),
                         file_name="result",
                         format="CSV",
@@ -10169,6 +10227,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         format="PDF",
                         metadata=JsonNode(),
                         template_id="template_id_example",
+                        timezone_id="Asia/Kolkata",
                         visualization_ids=[
                             "visualization_ids_example",
                         ],
@@ -10195,6 +10254,30 @@ with gooddata_api_client.ApiClient() as api_client:
                             },
                         ),
                         execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                        execution_settings=ExecutionSettings(
+                            data_sampling_percentage=0,
+                            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                            timezone="Europe/Prague",
+                        ),
+                        executions=[
+                            TabularExportExecution(
+                                custom_override=CustomOverride(
+                                    labels={
+                                        "key": CustomLabel(
+                                            title="title_example",
+                                        ),
+                                    },
+                                    metrics={
+                                        "key": CustomMetric(
+                                            format="format_example",
+                                            title="title_example",
+                                        ),
+                                    },
+                                ),
+                                execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                                title="Pushpins",
+                            ),
+                        ],
                         file_name="result",
                         format="CSV",
                         metadata=JsonNode(),
@@ -10226,6 +10309,9 @@ with gooddata_api_client.ApiClient() as api_client:
                         visualization_object_custom_filters=[
                             {},
                         ],
+                        visualization_object_custom_parameters=[
+                            ParameterValue(),
+                        ],
                     ),
                 ),
             ],
@@ -10237,6 +10323,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                         file_name="filename",
                         metadata={},
+                        timezone_id="Asia/Kolkata",
                     ),
                 ),
             ],

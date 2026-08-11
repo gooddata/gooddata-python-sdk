@@ -60,6 +60,9 @@ class InsightWidgetDescriptor(ModelNormal):
     """
 
     allowed_values = {
+        ('widget_type',): {
+            'INSIGHT': "insight",
+        },
     }
 
     validations = {
@@ -91,6 +94,7 @@ class InsightWidgetDescriptor(ModelNormal):
             'title': (str,),  # noqa: E501
             'visualization_id': (str,),  # noqa: E501
             'widget_id': (str,),  # noqa: E501
+            'widget_type': (str,),  # noqa: E501
             'filters': ([FilterDefinition],),  # noqa: E501
             'result_id': (str,),  # noqa: E501
         }
@@ -104,6 +108,7 @@ class InsightWidgetDescriptor(ModelNormal):
         'title': 'title',  # noqa: E501
         'visualization_id': 'visualizationId',  # noqa: E501
         'widget_id': 'widgetId',  # noqa: E501
+        'widget_type': 'widgetType',  # noqa: E501
         'filters': 'filters',  # noqa: E501
         'result_id': 'resultId',  # noqa: E501
     }
@@ -124,6 +129,7 @@ class InsightWidgetDescriptor(ModelNormal):
             widget_id (str): Widget object ID.
 
         Keyword Args:
+            widget_type (str): defaults to "insight", must be one of ["insight", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -158,6 +164,7 @@ class InsightWidgetDescriptor(ModelNormal):
             result_id (str): Signed result ID for this widget's cached execution result.. [optional]  # noqa: E501
         """
 
+        widget_type = kwargs.get('widget_type', "insight")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -190,6 +197,7 @@ class InsightWidgetDescriptor(ModelNormal):
         self.title = title
         self.visualization_id = visualization_id
         self.widget_id = widget_id
+        self.widget_type = widget_type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -219,6 +227,7 @@ class InsightWidgetDescriptor(ModelNormal):
             widget_id (str): Widget object ID.
 
         Keyword Args:
+            widget_type (str): defaults to "insight", must be one of ["insight", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -253,6 +262,7 @@ class InsightWidgetDescriptor(ModelNormal):
             result_id (str): Signed result ID for this widget's cached execution result.. [optional]  # noqa: E501
         """
 
+        widget_type = kwargs.get('widget_type', "insight")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -283,6 +293,7 @@ class InsightWidgetDescriptor(ModelNormal):
         self.title = title
         self.visualization_id = visualization_id
         self.widget_id = widget_id
+        self.widget_type = widget_type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

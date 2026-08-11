@@ -712,6 +712,18 @@
       "TestDefinitionRequest": {
         "description": "A request containing all information for testing data source definition.",
         "properties": {
+          "authenticationType": {
+            "description": "Type of authentication used to connect to the database. Determines how the supplied credentials are used (e.g. KEY_PAIR, OIDC_PASSTHROUGH).",
+            "enum": [
+              "USERNAME_PASSWORD",
+              "TOKEN",
+              "KEY_PAIR",
+              "CLIENT_SECRET",
+              "OIDC_PASSTHROUGH"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
           "clientId": {
             "description": "Id for client based authentication for data sources which supports it.",
             "type": "string"
@@ -822,6 +834,18 @@
       "TestRequest": {
         "description": "A request containing all information for testing existing data source.",
         "properties": {
+          "authenticationType": {
+            "description": "Type of authentication used to connect to the database. Determines how the supplied credentials are used (e.g. KEY_PAIR, OIDC_PASSTHROUGH).",
+            "enum": [
+              "USERNAME_PASSWORD",
+              "TOKEN",
+              "KEY_PAIR",
+              "CLIENT_SECRET",
+              "OIDC_PASSTHROUGH"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
           "clientId": {
             "description": "Id for client based authentication for data sources which supports it.",
             "type": "string"

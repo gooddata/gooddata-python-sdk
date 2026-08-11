@@ -32,13 +32,19 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.custom_override import CustomOverride
+    from gooddata_api_client.model.execution_settings import ExecutionSettings
     from gooddata_api_client.model.json_node import JsonNode
+    from gooddata_api_client.model.parameter_value import ParameterValue
     from gooddata_api_client.model.settings import Settings
+    from gooddata_api_client.model.tabular_export_execution import TabularExportExecution
     from gooddata_api_client.model.tabular_export_request import TabularExportRequest
     from gooddata_api_client.model.visual_export_request import VisualExportRequest
     globals()['CustomOverride'] = CustomOverride
+    globals()['ExecutionSettings'] = ExecutionSettings
     globals()['JsonNode'] = JsonNode
+    globals()['ParameterValue'] = ParameterValue
     globals()['Settings'] = Settings
+    globals()['TabularExportExecution'] = TabularExportExecution
     globals()['TabularExportRequest'] = TabularExportRequest
     globals()['VisualExportRequest'] = VisualExportRequest
 
@@ -103,12 +109,16 @@ class ExportRequest(ModelComposed):
         lazy_import()
         return {
             'metadata': (JsonNode,),  # noqa: E501
+            'timezone_id': (str, none_type,),  # noqa: E501
             'custom_override': (CustomOverride,),  # noqa: E501
             'execution_result': (str,),  # noqa: E501
+            'execution_settings': (ExecutionSettings,),  # noqa: E501
+            'executions': ([TabularExportExecution],),  # noqa: E501
             'related_dashboard_id': (str,),  # noqa: E501
             'settings': (Settings,),  # noqa: E501
             'visualization_object': (str,),  # noqa: E501
             'visualization_object_custom_filters': ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}],),  # noqa: E501
+            'visualization_object_custom_parameters': ([ParameterValue],),  # noqa: E501
             'dashboard_id': (str,),  # noqa: E501
             'file_name': (str,),  # noqa: E501
             'format': (str,),  # noqa: E501
@@ -121,12 +131,16 @@ class ExportRequest(ModelComposed):
 
     attribute_map = {
         'metadata': 'metadata',  # noqa: E501
+        'timezone_id': 'timezoneId',  # noqa: E501
         'custom_override': 'customOverride',  # noqa: E501
         'execution_result': 'executionResult',  # noqa: E501
+        'execution_settings': 'executionSettings',  # noqa: E501
+        'executions': 'executions',  # noqa: E501
         'related_dashboard_id': 'relatedDashboardId',  # noqa: E501
         'settings': 'settings',  # noqa: E501
         'visualization_object': 'visualizationObject',  # noqa: E501
         'visualization_object_custom_filters': 'visualizationObjectCustomFilters',  # noqa: E501
+        'visualization_object_custom_parameters': 'visualizationObjectCustomParameters',  # noqa: E501
         'dashboard_id': 'dashboardId',  # noqa: E501
         'file_name': 'fileName',  # noqa: E501
         'format': 'format',  # noqa: E501
@@ -172,12 +186,16 @@ class ExportRequest(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             metadata (JsonNode): [optional]  # noqa: E501
+            timezone_id (str, none_type): Time zone the export should be rendered in, as an IANA identifier (e.g. 'Asia/Kolkata') or a GMT offset (e.g. 'GMT+01:00'). When omitted, the workspace time zone setting is used.. [optional]  # noqa: E501
             custom_override (CustomOverride): [optional]  # noqa: E501
             execution_result (str): Execution result identifier.. [optional]  # noqa: E501
+            execution_settings (ExecutionSettings): [optional]  # noqa: E501
+            executions ([TabularExportExecution]): Pre-executed layers for multi-layer geo visualizations. When provided, this is the canonical source of the exported layers and takes precedence over the top-level executionResult and customOverride, which are ignored. Index 0 is the main layer; each layer carries its own executionResult and customOverride.. [optional]  # noqa: E501
             related_dashboard_id (str): Analytical dashboard identifier. Optional identifier, which informs the system that the export is related to a specific dashboard.. [optional]  # noqa: E501
             settings (Settings): [optional]  # noqa: E501
             visualization_object (str): Visualization object identifier. Alternative to executionResult property.. [optional]  # noqa: E501
             visualization_object_custom_filters ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. Those filters override the original filters defined in the visualization.. [optional]  # noqa: E501
+            visualization_object_custom_parameters ([ParameterValue]): Optional custom parameters to be applied when visualizationObject is given. Those parameters override the original parameters defined in the visualization.. [optional]  # noqa: E501
             dashboard_id (str): Dashboard identifier. [optional]  # noqa: E501
             file_name (str): Filename of downloaded file without extension.. [optional]  # noqa: E501
             format (str): Expected file format.. [optional]  # noqa: E501
@@ -285,12 +303,16 @@ class ExportRequest(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             metadata (JsonNode): [optional]  # noqa: E501
+            timezone_id (str, none_type): Time zone the export should be rendered in, as an IANA identifier (e.g. 'Asia/Kolkata') or a GMT offset (e.g. 'GMT+01:00'). When omitted, the workspace time zone setting is used.. [optional]  # noqa: E501
             custom_override (CustomOverride): [optional]  # noqa: E501
             execution_result (str): Execution result identifier.. [optional]  # noqa: E501
+            execution_settings (ExecutionSettings): [optional]  # noqa: E501
+            executions ([TabularExportExecution]): Pre-executed layers for multi-layer geo visualizations. When provided, this is the canonical source of the exported layers and takes precedence over the top-level executionResult and customOverride, which are ignored. Index 0 is the main layer; each layer carries its own executionResult and customOverride.. [optional]  # noqa: E501
             related_dashboard_id (str): Analytical dashboard identifier. Optional identifier, which informs the system that the export is related to a specific dashboard.. [optional]  # noqa: E501
             settings (Settings): [optional]  # noqa: E501
             visualization_object (str): Visualization object identifier. Alternative to executionResult property.. [optional]  # noqa: E501
             visualization_object_custom_filters ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. Those filters override the original filters defined in the visualization.. [optional]  # noqa: E501
+            visualization_object_custom_parameters ([ParameterValue]): Optional custom parameters to be applied when visualizationObject is given. Those parameters override the original parameters defined in the visualization.. [optional]  # noqa: E501
             dashboard_id (str): Dashboard identifier. [optional]  # noqa: E501
             file_name (str): Filename of downloaded file without extension.. [optional]  # noqa: E501
             format (str): Expected file format.. [optional]  # noqa: E501

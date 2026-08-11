@@ -90,9 +90,9 @@ class CompoundMeasureValueFilterCompoundMeasureValueFilter(ModelNormal):
         """
         lazy_import()
         return {
-            'conditions': ([MeasureValueCondition],),  # noqa: E501
             'measure': (AfmIdentifier,),  # noqa: E501
             'apply_on_result': (bool,),  # noqa: E501
+            'conditions': ([MeasureValueCondition],),  # noqa: E501
             'dimensionality': ([AfmIdentifier],),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
             'treat_null_values_as': (float,),  # noqa: E501
@@ -104,9 +104,9 @@ class CompoundMeasureValueFilterCompoundMeasureValueFilter(ModelNormal):
 
 
     attribute_map = {
-        'conditions': 'conditions',  # noqa: E501
         'measure': 'measure',  # noqa: E501
         'apply_on_result': 'applyOnResult',  # noqa: E501
+        'conditions': 'conditions',  # noqa: E501
         'dimensionality': 'dimensionality',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
         'treat_null_values_as': 'treatNullValuesAs',  # noqa: E501
@@ -119,11 +119,10 @@ class CompoundMeasureValueFilterCompoundMeasureValueFilter(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, conditions, measure, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, measure, *args, **kwargs):  # noqa: E501
         """CompoundMeasureValueFilterCompoundMeasureValueFilter - a model defined in OpenAPI
 
         Args:
-            conditions ([MeasureValueCondition]): List of conditions to apply. Conditions are combined with OR logic. Each condition can be either a comparison (e.g., > 100) or a range (e.g., BETWEEN 10 AND 50). If empty, no filtering is applied and all rows are returned.
             measure (AfmIdentifier):
 
         Keyword Args:
@@ -158,6 +157,7 @@ class CompoundMeasureValueFilterCompoundMeasureValueFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            conditions ([MeasureValueCondition]): List of conditions to apply. Conditions are combined with OR logic. Each condition can be either a comparison (e.g., > 100) or a range (e.g., BETWEEN 10 AND 50). If empty, no filtering is applied and all rows are returned.. [optional]  # noqa: E501
             dimensionality ([AfmIdentifier]): References to the attributes to be used when filtering.. [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
             treat_null_values_as (float): A value that will be substituted for null values in the metric for the comparisons.. [optional]  # noqa: E501
@@ -192,7 +192,6 @@ class CompoundMeasureValueFilterCompoundMeasureValueFilter(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.conditions = conditions
         self.measure = measure
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -214,11 +213,10 @@ class CompoundMeasureValueFilterCompoundMeasureValueFilter(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, conditions, measure, *args, **kwargs):  # noqa: E501
+    def __init__(self, measure, *args, **kwargs):  # noqa: E501
         """CompoundMeasureValueFilterCompoundMeasureValueFilter - a model defined in OpenAPI
 
         Args:
-            conditions ([MeasureValueCondition]): List of conditions to apply. Conditions are combined with OR logic. Each condition can be either a comparison (e.g., > 100) or a range (e.g., BETWEEN 10 AND 50). If empty, no filtering is applied and all rows are returned.
             measure (AfmIdentifier):
 
         Keyword Args:
@@ -253,6 +251,7 @@ class CompoundMeasureValueFilterCompoundMeasureValueFilter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             apply_on_result (bool): [optional]  # noqa: E501
+            conditions ([MeasureValueCondition]): List of conditions to apply. Conditions are combined with OR logic. Each condition can be either a comparison (e.g., > 100) or a range (e.g., BETWEEN 10 AND 50). If empty, no filtering is applied and all rows are returned.. [optional]  # noqa: E501
             dimensionality ([AfmIdentifier]): References to the attributes to be used when filtering.. [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
             treat_null_values_as (float): A value that will be substituted for null values in the metric for the comparisons.. [optional]  # noqa: E501
@@ -285,7 +284,6 @@ class CompoundMeasureValueFilterCompoundMeasureValueFilter(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.conditions = conditions
         self.measure = measure
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

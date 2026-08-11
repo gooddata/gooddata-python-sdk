@@ -280,7 +280,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         id="employee123",
                         type="user",
                     ),
-                    request_payload=DeclarativeExportDefinitionRequestPayload(None),
+                    request_payload=ExportRequest(),
                     tags=["Revenues"],
                     title="My regular export",
                 ),
@@ -348,7 +348,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
             parameters=[
                 DeclarativeParameter(
-                    content=DeclarativeParameterContent(None),
+                    content=ParameterDefinition(),
                     created_at="2023-07-20 12:30",
                     created_by=DeclarativeUserIdentifier(
                         id="employee123",
@@ -394,6 +394,19 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
         ),
         ldm=DeclarativeLdm(
+            calendars={
+                "key": DeclarativeCalendar(
+                    definition=CalendarDefinition(),
+                    description="Custom fiscal calendar starting in April.",
+                    enabled_granularities=[
+                        CalendarGranularity(
+                            granularity="FISCAL_MONTH",
+                            prefix="FP",
+                        ),
+                    ],
+                    name="Fiscal calendar",
+                ),
+            },
             dataset_extensions=[
                 DeclarativeDatasetExtension(
                     id="customers",
@@ -558,7 +571,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 DeclarativeDateDataset(
                     description="A customer order date",
                     granularities=[
-                        "MINUTE",
+                        "SECOND",
                     ],
                     granularities_formatting=GranularitiesFormatting(
                         title_base="title_base_example",
@@ -667,7 +680,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 automations=[
                     DeclarativeAutomation(
                         alert=AutomationAlert(
-                            condition=AutomationAlertCondition(None),
+                            condition=AlertCondition(),
                             execution=AlertAfm(
                                 attributes=[
                                     AttributeItem(
@@ -697,15 +710,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 ],
                                 parameters=[
-                                    ParameterItem(
-                                        parameter=AfmObjectIdentifierParameter(
-                                            identifier=AfmObjectIdentifierParameterIdentifier(
-                                                id="sample_item.price",
-                                                type="parameter",
-                                            ),
-                                        ),
-                                        value="value_example",
-                                    ),
+                                    ParameterItem(),
                                 ],
                             ),
                             interval="DAY",
@@ -728,11 +733,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ],
                                     dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                                     dashboard_parameters_override=[
-                                        DashboardParameterValue(
-                                            id="year",
-                                            title="Year",
-                                            value="2026",
-                                        ),
+                                        ParameterValue(),
                                     ],
                                     dashboard_tabs_filters_overrides={
                                         "key": [
@@ -741,13 +742,14 @@ with gooddata_api_client.ApiClient() as api_client:
                                     },
                                     dashboard_tabs_parameters_overrides={
                                         "key": [
-                                            DashboardParameterValue(
-                                                id="year",
-                                                title="Year",
-                                                value="2026",
-                                            ),
+                                            ParameterValue(),
                                         ],
                                     },
+                                    execution_settings=ExecutionSettings(
+                                        data_sampling_percentage=0,
+                                        timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                        timezone="Europe/Prague",
+                                    ),
                                     file_name="result",
                                     format="XLSX",
                                     settings=DashboardExportSettings(
@@ -786,6 +788,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     file_name="filename",
                                     format="PNG",
                                     metadata=JsonNode(),
+                                    timezone_id="Asia/Kolkata",
                                     widget_ids=[
                                         "widget_ids_example",
                                     ],
@@ -862,20 +865,13 @@ with gooddata_api_client.ApiClient() as api_client:
                                             ),
                                         ],
                                         parameters=[
-                                            ParameterItem(
-                                                parameter=AfmObjectIdentifierParameter(
-                                                    identifier=AfmObjectIdentifierParameterIdentifier(
-                                                        id="sample_item.price",
-                                                        type="parameter",
-                                                    ),
-                                                ),
-                                                value="value_example",
-                                            ),
+                                            ParameterItem(),
                                         ],
                                     ),
                                     execution_settings=ExecutionSettings(
                                         data_sampling_percentage=0,
                                         timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                        timezone="Europe/Prague",
                                     ),
                                     file_name="result",
                                     format="CSV",
@@ -902,6 +898,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     format="PDF",
                                     metadata=JsonNode(),
                                     template_id="template_id_example",
+                                    timezone_id="Asia/Kolkata",
                                     visualization_ids=[
                                         "visualization_ids_example",
                                     ],
@@ -929,6 +926,30 @@ with gooddata_api_client.ApiClient() as api_client:
                                         },
                                     ),
                                     execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                                    execution_settings=ExecutionSettings(
+                                        data_sampling_percentage=0,
+                                        timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                        timezone="Europe/Prague",
+                                    ),
+                                    executions=[
+                                        TabularExportExecution(
+                                            custom_override=CustomOverride(
+                                                labels={
+                                                    "key": CustomLabel(
+                                                        title="title_example",
+                                                    ),
+                                                },
+                                                metrics={
+                                                    "key": CustomMetric(
+                                                        format="format_example",
+                                                        title="title_example",
+                                                    ),
+                                                },
+                                            ),
+                                            execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                                            title="Pushpins",
+                                        ),
+                                    ],
                                     file_name="result",
                                     format="CSV",
                                     metadata=JsonNode(),
@@ -960,6 +981,9 @@ with gooddata_api_client.ApiClient() as api_client:
                                     visualization_object_custom_filters=[
                                         {},
                                     ],
+                                    visualization_object_custom_parameters=[
+                                        ParameterValue(),
+                                    ],
                                 ),
                             ),
                         ],
@@ -973,12 +997,20 @@ with gooddata_api_client.ApiClient() as api_client:
                                     dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                                     file_name="filename",
                                     metadata={},
+                                    timezone_id="Asia/Kolkata",
                                 ),
                             ),
                         ],
                     ),
                 ],
                 cache_extra_limit=1,
+                color_palettes=[
+                    DeclarativeWorkspaceColorPalette(
+                        content=JsonNode(),
+                        id="id_example",
+                        name="name_example",
+                    ),
+                ],
                 custom_application_settings=[
                     DeclarativeCustomApplicationSetting(
                         application_name="Modeler",
@@ -996,6 +1028,79 @@ with gooddata_api_client.ApiClient() as api_client:
                 early_access="early_access_example",
                 early_access_values=[
                     "early_access_values_example",
+                ],
+                export_templates=[
+                    DeclarativeWorkspaceExportTemplate(
+                        dashboard_slides_template=WorkspaceDashboardSlidesTemplate(
+                            applied_on=["PDF","PPTX"],
+                            content_slide=ContentSlideTemplate(
+                                description_field="{{dashboardFilters}}",
+                                footer=RunningSection(
+                                    left="left_example",
+                                    right="right_example",
+                                ),
+                                header=RunningSection(
+                                    left="left_example",
+                                    right="right_example",
+                                ),
+                            ),
+                            cover_slide=CoverSlideTemplate(
+                                background_image=True,
+                                description_field="Exported at: {{exportedAt}}",
+                                footer=RunningSection(
+                                    left="left_example",
+                                    right="right_example",
+                                ),
+                                header=RunningSection(
+                                    left="left_example",
+                                    right="right_example",
+                                ),
+                            ),
+                            intro_slide=IntroSlideTemplate(
+                                background_image=True,
+                                description_field='''About:
+{{dashboardDescription}}
+
+{{dashboardFilters}}''',
+                                footer=RunningSection(
+                                    left="left_example",
+                                    right="right_example",
+                                ),
+                                header=RunningSection(
+                                    left="left_example",
+                                    right="right_example",
+                                ),
+                                title_field="Introduction",
+                            ),
+                            section_slide=SectionSlideTemplate(
+                                background_image=True,
+                                footer=RunningSection(
+                                    left="left_example",
+                                    right="right_example",
+                                ),
+                                header=RunningSection(
+                                    left="left_example",
+                                    right="right_example",
+                                ),
+                            ),
+                        ),
+                        id="default-export-template",
+                        name="My default export template",
+                        widget_slides_template=WorkspaceWidgetSlidesTemplate(
+                            applied_on=["PDF","PPTX"],
+                            content_slide=ContentSlideTemplate(
+                                description_field="{{dashboardFilters}}",
+                                footer=RunningSection(
+                                    left="left_example",
+                                    right="right_example",
+                                ),
+                                header=RunningSection(
+                                    left="left_example",
+                                    right="right_example",
+                                ),
+                            ),
+                        ),
+                    ),
                 ],
                 filter_views=[
                     DeclarativeFilterView(
@@ -1020,7 +1125,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 hierarchy_permissions=[
                     DeclarativeWorkspaceHierarchyPermission(
                         assignee=AssigneeIdentifier(
-                            id="id_example",
+                            id="/6bUUGjjNSwg0_bs",
                             type="user",
                         ),
                         name="MANAGE",
@@ -1119,7 +1224,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     id="employee123",
                                     type="user",
                                 ),
-                                request_payload=DeclarativeExportDefinitionRequestPayload(None),
+                                request_payload=ExportRequest(),
                                 tags=["Revenues"],
                                 title="My regular export",
                             ),
@@ -1187,7 +1292,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         parameters=[
                             DeclarativeParameter(
-                                content=DeclarativeParameterContent(None),
+                                content=ParameterDefinition(),
                                 created_at="2023-07-20 12:30",
                                 created_by=DeclarativeUserIdentifier(
                                     id="employee123",
@@ -1233,6 +1338,19 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                     ),
                     ldm=DeclarativeLdm(
+                        calendars={
+                            "key": DeclarativeCalendar(
+                                definition=CalendarDefinition(),
+                                description="Custom fiscal calendar starting in April.",
+                                enabled_granularities=[
+                                    CalendarGranularity(
+                                        granularity="FISCAL_MONTH",
+                                        prefix="FP",
+                                    ),
+                                ],
+                                name="Fiscal calendar",
+                            ),
+                        },
                         dataset_extensions=[
                             DeclarativeDatasetExtension(
                                 id="customers",
@@ -1397,7 +1515,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             DeclarativeDateDataset(
                                 description="A customer order date",
                                 granularities=[
-                                    "MINUTE",
+                                    "SECOND",
                                 ],
                                 granularities_formatting=GranularitiesFormatting(
                                     title_base="title_base_example",
@@ -1418,7 +1536,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 permissions=[
                     DeclarativeSingleWorkspacePermission(
                         assignee=AssigneeIdentifier(
-                            id="id_example",
+                            id="/6bUUGjjNSwg0_bs",
                             type="user",
                         ),
                         name="MANAGE",
@@ -1430,6 +1548,13 @@ with gooddata_api_client.ApiClient() as api_client:
                         content=JsonNode(),
                         id="/6bUUGjjNSwg0_bs",
                         type="TIMEZONE",
+                    ),
+                ],
+                themes=[
+                    DeclarativeWorkspaceTheme(
+                        content=JsonNode(),
+                        id="id_example",
+                        name="name_example",
                     ),
                 ],
                 user_data_filters=[

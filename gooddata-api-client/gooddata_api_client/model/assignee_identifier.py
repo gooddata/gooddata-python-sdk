@@ -63,6 +63,11 @@ class AssigneeIdentifier(ModelNormal):
     }
 
     validations = {
+        ('id',): {
+            'regex': {
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+            },
+        },
     }
 
     @cached_property
@@ -111,7 +116,7 @@ class AssigneeIdentifier(ModelNormal):
         """AssigneeIdentifier - a model defined in OpenAPI
 
         Args:
-            id (str):
+            id (str): Identifier of the assignee.
             type (str):
 
         Keyword Args:
@@ -202,7 +207,7 @@ class AssigneeIdentifier(ModelNormal):
         """AssigneeIdentifier - a model defined in OpenAPI
 
         Args:
-            id (str):
+            id (str): Identifier of the assignee.
             type (str):
 
         Keyword Args:
