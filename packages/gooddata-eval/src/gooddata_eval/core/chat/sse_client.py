@@ -28,18 +28,34 @@ from gooddata_eval.core.models import ChatResult, DatasetItem
 _log = logging.getLogger(__name__)
 
 SSE_DATA_PREFIX = "data: "
+SSE_EVENT_PREFIX = "event: "
+# gen-ai's last event, only if at least one item was already emitted (conversations_controller.py).
+_RESPONSE_ENDED_EVENT = "response_ended"
 
 _RETRYABLE_STATUS_CODES: frozenset[int] = frozenset({429, 502, 503, 504})
 _METADATA_SYNC_MARKER = "METADATA_SYNC_IN_PROGRESS"
 
 
 class ChatError(RuntimeError):
-    """Non-retryable error reported by the chat SSE stream."""
+    """Non-retryable error reported by the chat SSE stream.
 
-    def __init__(self, message: str, *, status_code: int | None = None, detail: str | None = None) -> None:
+    ``partial_result`` carries whatever the accumulator captured before the error fired
+    (tool calls included). Callers must not assume it's complete -- fields like
+    ``stream_ended`` reflect the state at the moment of the error, not a finished turn.
+    """
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        status_code: int | None = None,
+        detail: str | None = None,
+        partial_result: ChatResult | None = None,
+    ) -> None:
         super().__init__(message)
         self.status_code = status_code
         self.detail = detail
+        self.partial_result = partial_result
 
 
 class TransientChatError(ChatError):
@@ -109,6 +125,7 @@ class _SseAccumulator:
     reasoning_steps: list[dict[str, Any]] = field(default_factory=list)
     adhoc_viz_args: list[dict[str, Any]] = field(default_factory=list)
     response_id: str | None = None
+    stream_ended: bool = False
 
 
 def _handle_text(content: dict[str, Any], acc: _SseAccumulator) -> None:
@@ -187,15 +204,37 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
         }
     result = ChatResult.model_validate(payload)
     result.response_id = acc.response_id
+    result.stream_ended = acc.stream_ended
     return result
 
 
 def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
     """Parse an SSE stream (iterable of decoded lines) into a ChatResult."""
     acc = _SseAccumulator()
-    for raw_line in lines:
+    current_event = "message"  # SSE default in the absence of an explicit "event: " line
+    it = iter(lines)
+    while True:
+        try:
+            raw_line = next(it)
+        except StopIteration:
+            break
+        except Exception as exc:
+            # Only a transport-level failure (e.g. connection drop mid-stream) is rescued
+            # here -- a bug in the processing below must propagate uncaught, not get
+            # mislabeled as a network error.
+            raise ChatError(f"SSE stream error: {exc}", partial_result=_build_chat_result(acc)) from exc
         line = raw_line.decode("utf-8") if isinstance(raw_line, bytes) else raw_line
-        if not line or line.startswith("event: ") or not line.startswith(SSE_DATA_PREFIX):
+        if not line:
+            current_event = "message"  # blank line ends one event block per the SSE spec
+            continue
+        if line.startswith(SSE_EVENT_PREFIX):
+            current_event = line[len(SSE_EVENT_PREFIX) :].strip()
+            if current_event == _RESPONSE_ENDED_EVENT:
+                acc.stream_ended = True
+            continue
+        if not line.startswith(SSE_DATA_PREFIX):
+            continue
+        if current_event == _RESPONSE_ENDED_EVENT:
             continue
         data_str = line[len(SSE_DATA_PREFIX) :]
         if _METADATA_SYNC_MARKER in data_str:
@@ -203,6 +242,7 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
                 f"SSE transient error: {_METADATA_SYNC_MARKER}",
                 status_code=None,
                 detail=None,
+                partial_result=_build_chat_result(acc),
             )
         try:
             event_data = json.loads(data_str)
@@ -213,8 +253,10 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
             detail = event_data.get("detail")
             message = f"SSE error {code}: {detail}"
             if code in _RETRYABLE_STATUS_CODES:
-                raise TransientChatError(message, status_code=code, detail=detail)
-            raise ChatError(message, status_code=code, detail=detail)
+                raise TransientChatError(
+                    message, status_code=code, detail=detail, partial_result=_build_chat_result(acc)
+                )
+            raise ChatError(message, status_code=code, detail=detail, partial_result=_build_chat_result(acc))
         if event_data.get("responseId") and not acc.response_id:
             acc.response_id = event_data["responseId"]
         item = event_data.get("item")
@@ -293,9 +335,20 @@ class ChatClient:
             body["options"] = {"reasoningEffort": self._reasoning_effort}
 
         def _do() -> ChatResult:
+            # Set fresh on every retry attempt (before opening this attempt's stream, so its
+            # own connection setup time counts) -- excludes not just the sleep backoff between
+            # attempts, but the entire duration of any earlier failed attempt.
+            t0 = time.monotonic()
             with self._client.stream("POST", url, json=body, headers=headers) as resp:
                 resp.raise_for_status()
-                return parse_sse_lines(resp.iter_lines())
+                try:
+                    result = parse_sse_lines(resp.iter_lines())
+                except ChatError as exc:
+                    if exc.partial_result is not None:
+                        exc.partial_result.turn_wall_clock_sec = time.monotonic() - t0
+                    raise
+                result.turn_wall_clock_sec = time.monotonic() - t0
+                return result
 
         return _retry_transient(_do, is_retryable=_is_retryable_exc)
 
