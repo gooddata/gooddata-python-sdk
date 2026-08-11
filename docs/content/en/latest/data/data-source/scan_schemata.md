@@ -12,7 +12,7 @@ api_ref: "CatalogDataSourceService.scan_schemata"
 
 Returns a list of schemas that exist in the database and can be configured in the data source entity.
 
-Data source managers like Dremio or Drill can work with multiple schemas and schema names can be injected into scan_request to filter out tables stored in the different schemas.
+Data source managers like Dremio can work with multiple schemas and schema names can be injected into scan_request to filter out tables stored in the different schemas.
 
 {{% parameters-block  title="Parameters"%}}
 

@@ -66,7 +66,6 @@ class JsonApiDataSourceIdentifierOutAttributes(ModelNormal):
             'MSSQL': "MSSQL",
             'PRESTO': "PRESTO",
             'DREMIO': "DREMIO",
-            'DRILL': "DRILL",
             'AZURESQL': "AZURESQL",
             'SYNAPSESQL': "SYNAPSESQL",
             'DATABRICKS': "DATABRICKS",
