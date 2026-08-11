@@ -91,15 +91,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                         parameters=[
-                            ParameterItem(
-                                parameter=AfmObjectIdentifierParameter(
-                                    identifier=AfmObjectIdentifierParameterIdentifier(
-                                        id="sample_item.price",
-                                        type="parameter",
-                                    ),
-                                ),
-                                value="value_example",
-                            ),
+                            ParameterItem(),
                         ],
                     ),
                     interval="DAY",
@@ -114,11 +106,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             dashboard_parameters_override=[
-                                DashboardParameterValue(
-                                    id="year",
-                                    title="Year",
-                                    value="2026",
-                                ),
+                                ParameterValue(),
                             ],
                             dashboard_tabs_filters_overrides={
                                 "key": [
@@ -127,13 +115,14 @@ with gooddata_api_client.ApiClient() as api_client:
                             },
                             dashboard_tabs_parameters_overrides={
                                 "key": [
-                                    DashboardParameterValue(
-                                        id="year",
-                                        title="Year",
-                                        value="2026",
-                                    ),
+                                    ParameterValue(),
                                 ],
                             },
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
+                            ),
                             file_name="result",
                             format="XLSX",
                             settings=DashboardExportSettings(
@@ -163,6 +152,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             file_name="filename",
                             format="PNG",
                             metadata=JsonNode(),
+                            timezone_id="Asia/Kolkata",
                             widget_ids=[
                                 "widget_ids_example",
                             ],
@@ -230,20 +220,13 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 ],
                                 parameters=[
-                                    ParameterItem(
-                                        parameter=AfmObjectIdentifierParameter(
-                                            identifier=AfmObjectIdentifierParameterIdentifier(
-                                                id="sample_item.price",
-                                                type="parameter",
-                                            ),
-                                        ),
-                                        value="value_example",
-                                    ),
+                                    ParameterItem(),
                                 ],
                             ),
                             execution_settings=ExecutionSettings(
                                 data_sampling_percentage=0,
                                 timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
                             ),
                             file_name="result",
                             format="CSV",
@@ -264,6 +247,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             format="PDF",
                             metadata=JsonNode(),
                             template_id="template_id_example",
+                            timezone_id="Asia/Kolkata",
                             visualization_ids=[
                                 "visualization_ids_example",
                             ],
@@ -291,6 +275,30 @@ with gooddata_api_client.ApiClient() as api_client:
                                 },
                             ),
                             execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
+                            ),
+                            executions=[
+                                TabularExportExecution(
+                                    custom_override=CustomOverride(
+                                        labels={
+                                            "key": CustomLabel(
+                                                title="title_example",
+                                            ),
+                                        },
+                                        metrics={
+                                            "key": CustomMetric(
+                                                format="format_example",
+                                                title="title_example",
+                                            ),
+                                        },
+                                    ),
+                                    execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                                    title="Pushpins",
+                                ),
+                            ],
                             file_name="result",
                             format="CSV",
                             metadata=JsonNode(),
@@ -322,6 +330,9 @@ with gooddata_api_client.ApiClient() as api_client:
                             visualization_object_custom_filters=[
                                 {},
                             ],
+                            visualization_object_custom_parameters=[
+                                ParameterValue(),
+                            ],
                         ),
                     ),
                 ],
@@ -335,6 +346,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             file_name="filename",
                             metadata={},
+                            timezone_id="Asia/Kolkata",
                         ),
                     ),
                 ],
@@ -1040,15 +1052,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                         parameters=[
-                            ParameterItem(
-                                parameter=AfmObjectIdentifierParameter(
-                                    identifier=AfmObjectIdentifierParameterIdentifier(
-                                        id="sample_item.price",
-                                        type="parameter",
-                                    ),
-                                ),
-                                value="value_example",
-                            ),
+                            ParameterItem(),
                         ],
                     ),
                     interval="DAY",
@@ -1063,11 +1067,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             dashboard_parameters_override=[
-                                DashboardParameterValue(
-                                    id="year",
-                                    title="Year",
-                                    value="2026",
-                                ),
+                                ParameterValue(),
                             ],
                             dashboard_tabs_filters_overrides={
                                 "key": [
@@ -1076,13 +1076,14 @@ with gooddata_api_client.ApiClient() as api_client:
                             },
                             dashboard_tabs_parameters_overrides={
                                 "key": [
-                                    DashboardParameterValue(
-                                        id="year",
-                                        title="Year",
-                                        value="2026",
-                                    ),
+                                    ParameterValue(),
                                 ],
                             },
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
+                            ),
                             file_name="result",
                             format="XLSX",
                             settings=DashboardExportSettings(
@@ -1112,6 +1113,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             file_name="filename",
                             format="PNG",
                             metadata=JsonNode(),
+                            timezone_id="Asia/Kolkata",
                             widget_ids=[
                                 "widget_ids_example",
                             ],
@@ -1179,20 +1181,13 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 ],
                                 parameters=[
-                                    ParameterItem(
-                                        parameter=AfmObjectIdentifierParameter(
-                                            identifier=AfmObjectIdentifierParameterIdentifier(
-                                                id="sample_item.price",
-                                                type="parameter",
-                                            ),
-                                        ),
-                                        value="value_example",
-                                    ),
+                                    ParameterItem(),
                                 ],
                             ),
                             execution_settings=ExecutionSettings(
                                 data_sampling_percentage=0,
                                 timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
                             ),
                             file_name="result",
                             format="CSV",
@@ -1213,6 +1208,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             format="PDF",
                             metadata=JsonNode(),
                             template_id="template_id_example",
+                            timezone_id="Asia/Kolkata",
                             visualization_ids=[
                                 "visualization_ids_example",
                             ],
@@ -1240,6 +1236,30 @@ with gooddata_api_client.ApiClient() as api_client:
                                 },
                             ),
                             execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
+                            ),
+                            executions=[
+                                TabularExportExecution(
+                                    custom_override=CustomOverride(
+                                        labels={
+                                            "key": CustomLabel(
+                                                title="title_example",
+                                            ),
+                                        },
+                                        metrics={
+                                            "key": CustomMetric(
+                                                format="format_example",
+                                                title="title_example",
+                                            ),
+                                        },
+                                    ),
+                                    execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                                    title="Pushpins",
+                                ),
+                            ],
                             file_name="result",
                             format="CSV",
                             metadata=JsonNode(),
@@ -1271,6 +1291,9 @@ with gooddata_api_client.ApiClient() as api_client:
                             visualization_object_custom_filters=[
                                 {},
                             ],
+                            visualization_object_custom_parameters=[
+                                ParameterValue(),
+                            ],
                         ),
                     ),
                 ],
@@ -1284,6 +1307,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             file_name="filename",
                             metadata={},
+                            timezone_id="Asia/Kolkata",
                         ),
                     ),
                 ],
@@ -1744,7 +1768,7 @@ with gooddata_api_client.ApiClient() as api_client:
     declarative_automation = [
         DeclarativeAutomation(
             alert=AutomationAlert(
-                condition=AutomationAlertCondition(None),
+                condition=AlertCondition(),
                 execution=AlertAfm(
                     attributes=[
                         AttributeItem(
@@ -1774,15 +1798,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ],
                     parameters=[
-                        ParameterItem(
-                            parameter=AfmObjectIdentifierParameter(
-                                identifier=AfmObjectIdentifierParameterIdentifier(
-                                    id="sample_item.price",
-                                    type="parameter",
-                                ),
-                            ),
-                            value="value_example",
-                        ),
+                        ParameterItem(),
                     ],
                 ),
                 interval="DAY",
@@ -1805,11 +1821,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                         dashboard_parameters_override=[
-                            DashboardParameterValue(
-                                id="year",
-                                title="Year",
-                                value="2026",
-                            ),
+                            ParameterValue(),
                         ],
                         dashboard_tabs_filters_overrides={
                             "key": [
@@ -1818,13 +1830,14 @@ with gooddata_api_client.ApiClient() as api_client:
                         },
                         dashboard_tabs_parameters_overrides={
                             "key": [
-                                DashboardParameterValue(
-                                    id="year",
-                                    title="Year",
-                                    value="2026",
-                                ),
+                                ParameterValue(),
                             ],
                         },
+                        execution_settings=ExecutionSettings(
+                            data_sampling_percentage=0,
+                            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                            timezone="Europe/Prague",
+                        ),
                         file_name="result",
                         format="XLSX",
                         settings=DashboardExportSettings(
@@ -1863,6 +1876,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         file_name="filename",
                         format="PNG",
                         metadata=JsonNode(),
+                        timezone_id="Asia/Kolkata",
                         widget_ids=[
                             "widget_ids_example",
                         ],
@@ -1939,20 +1953,13 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                             ],
                             parameters=[
-                                ParameterItem(
-                                    parameter=AfmObjectIdentifierParameter(
-                                        identifier=AfmObjectIdentifierParameterIdentifier(
-                                            id="sample_item.price",
-                                            type="parameter",
-                                        ),
-                                    ),
-                                    value="value_example",
-                                ),
+                                ParameterItem(),
                             ],
                         ),
                         execution_settings=ExecutionSettings(
                             data_sampling_percentage=0,
                             timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                            timezone="Europe/Prague",
                         ),
                         file_name="result",
                         format="CSV",
@@ -1979,6 +1986,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         format="PDF",
                         metadata=JsonNode(),
                         template_id="template_id_example",
+                        timezone_id="Asia/Kolkata",
                         visualization_ids=[
                             "visualization_ids_example",
                         ],
@@ -2006,6 +2014,30 @@ with gooddata_api_client.ApiClient() as api_client:
                             },
                         ),
                         execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                        execution_settings=ExecutionSettings(
+                            data_sampling_percentage=0,
+                            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                            timezone="Europe/Prague",
+                        ),
+                        executions=[
+                            TabularExportExecution(
+                                custom_override=CustomOverride(
+                                    labels={
+                                        "key": CustomLabel(
+                                            title="title_example",
+                                        ),
+                                    },
+                                    metrics={
+                                        "key": CustomMetric(
+                                            format="format_example",
+                                            title="title_example",
+                                        ),
+                                    },
+                                ),
+                                execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                                title="Pushpins",
+                            ),
+                        ],
                         file_name="result",
                         format="CSV",
                         metadata=JsonNode(),
@@ -2037,6 +2069,9 @@ with gooddata_api_client.ApiClient() as api_client:
                         visualization_object_custom_filters=[
                             {},
                         ],
+                        visualization_object_custom_parameters=[
+                            ParameterValue(),
+                        ],
                     ),
                 ),
             ],
@@ -2050,6 +2085,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                         file_name="filename",
                         metadata={},
+                        timezone_id="Asia/Kolkata",
                     ),
                 ),
             ],
@@ -2125,7 +2161,7 @@ with gooddata_api_client.ApiClient() as api_client:
     trigger_automation_request = TriggerAutomationRequest(
         automation=AdHocAutomation(
             alert=AutomationAlert(
-                condition=AutomationAlertCondition(None),
+                condition=AlertCondition(),
                 execution=AlertAfm(
                     attributes=[
                         AttributeItem(
@@ -2155,15 +2191,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ),
                     ],
                     parameters=[
-                        ParameterItem(
-                            parameter=AfmObjectIdentifierParameter(
-                                identifier=AfmObjectIdentifierParameterIdentifier(
-                                    id="sample_item.price",
-                                    type="parameter",
-                                ),
-                            ),
-                            value="value_example",
-                        ),
+                        ParameterItem(),
                     ],
                 ),
                 interval="DAY",
@@ -2181,11 +2209,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                         dashboard_parameters_override=[
-                            DashboardParameterValue(
-                                id="year",
-                                title="Year",
-                                value="2026",
-                            ),
+                            ParameterValue(),
                         ],
                         dashboard_tabs_filters_overrides={
                             "key": [
@@ -2194,13 +2218,14 @@ with gooddata_api_client.ApiClient() as api_client:
                         },
                         dashboard_tabs_parameters_overrides={
                             "key": [
-                                DashboardParameterValue(
-                                    id="year",
-                                    title="Year",
-                                    value="2026",
-                                ),
+                                ParameterValue(),
                             ],
                         },
+                        execution_settings=ExecutionSettings(
+                            data_sampling_percentage=0,
+                            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                            timezone="Europe/Prague",
+                        ),
                         file_name="result",
                         format="XLSX",
                         settings=DashboardExportSettings(
@@ -2231,6 +2256,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         file_name="filename",
                         format="PNG",
                         metadata=JsonNode(),
+                        timezone_id="Asia/Kolkata",
                         widget_ids=[
                             "widget_ids_example",
                         ],
@@ -2302,20 +2328,13 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ),
                             ],
                             parameters=[
-                                ParameterItem(
-                                    parameter=AfmObjectIdentifierParameter(
-                                        identifier=AfmObjectIdentifierParameterIdentifier(
-                                            id="sample_item.price",
-                                            type="parameter",
-                                        ),
-                                    ),
-                                    value="value_example",
-                                ),
+                                ParameterItem(),
                             ],
                         ),
                         execution_settings=ExecutionSettings(
                             data_sampling_percentage=0,
                             timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                            timezone="Europe/Prague",
                         ),
                         file_name="result",
                         format="CSV",
@@ -2337,6 +2356,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         format="PDF",
                         metadata=JsonNode(),
                         template_id="template_id_example",
+                        timezone_id="Asia/Kolkata",
                         visualization_ids=[
                             "visualization_ids_example",
                         ],
@@ -2363,6 +2383,30 @@ with gooddata_api_client.ApiClient() as api_client:
                             },
                         ),
                         execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                        execution_settings=ExecutionSettings(
+                            data_sampling_percentage=0,
+                            timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                            timezone="Europe/Prague",
+                        ),
+                        executions=[
+                            TabularExportExecution(
+                                custom_override=CustomOverride(
+                                    labels={
+                                        "key": CustomLabel(
+                                            title="title_example",
+                                        ),
+                                    },
+                                    metrics={
+                                        "key": CustomMetric(
+                                            format="format_example",
+                                            title="title_example",
+                                        ),
+                                    },
+                                ),
+                                execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                                title="Pushpins",
+                            ),
+                        ],
                         file_name="result",
                         format="CSV",
                         metadata=JsonNode(),
@@ -2394,6 +2438,9 @@ with gooddata_api_client.ApiClient() as api_client:
                         visualization_object_custom_filters=[
                             {},
                         ],
+                        visualization_object_custom_parameters=[
+                            ParameterValue(),
+                        ],
                     ),
                 ),
             ],
@@ -2405,6 +2452,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                         file_name="filename",
                         metadata={},
+                        timezone_id="Asia/Kolkata",
                     ),
                 ),
             ],
@@ -3051,15 +3099,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                         parameters=[
-                            ParameterItem(
-                                parameter=AfmObjectIdentifierParameter(
-                                    identifier=AfmObjectIdentifierParameterIdentifier(
-                                        id="sample_item.price",
-                                        type="parameter",
-                                    ),
-                                ),
-                                value="value_example",
-                            ),
+                            ParameterItem(),
                         ],
                     ),
                     interval="DAY",
@@ -3074,11 +3114,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             dashboard_parameters_override=[
-                                DashboardParameterValue(
-                                    id="year",
-                                    title="Year",
-                                    value="2026",
-                                ),
+                                ParameterValue(),
                             ],
                             dashboard_tabs_filters_overrides={
                                 "key": [
@@ -3087,13 +3123,14 @@ with gooddata_api_client.ApiClient() as api_client:
                             },
                             dashboard_tabs_parameters_overrides={
                                 "key": [
-                                    DashboardParameterValue(
-                                        id="year",
-                                        title="Year",
-                                        value="2026",
-                                    ),
+                                    ParameterValue(),
                                 ],
                             },
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
+                            ),
                             file_name="result",
                             format="XLSX",
                             settings=DashboardExportSettings(
@@ -3123,6 +3160,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             file_name="filename",
                             format="PNG",
                             metadata=JsonNode(),
+                            timezone_id="Asia/Kolkata",
                             widget_ids=[
                                 "widget_ids_example",
                             ],
@@ -3190,20 +3228,13 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 ],
                                 parameters=[
-                                    ParameterItem(
-                                        parameter=AfmObjectIdentifierParameter(
-                                            identifier=AfmObjectIdentifierParameterIdentifier(
-                                                id="sample_item.price",
-                                                type="parameter",
-                                            ),
-                                        ),
-                                        value="value_example",
-                                    ),
+                                    ParameterItem(),
                                 ],
                             ),
                             execution_settings=ExecutionSettings(
                                 data_sampling_percentage=0,
                                 timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
                             ),
                             file_name="result",
                             format="CSV",
@@ -3224,6 +3255,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             format="PDF",
                             metadata=JsonNode(),
                             template_id="template_id_example",
+                            timezone_id="Asia/Kolkata",
                             visualization_ids=[
                                 "visualization_ids_example",
                             ],
@@ -3251,6 +3283,30 @@ with gooddata_api_client.ApiClient() as api_client:
                                 },
                             ),
                             execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
+                            ),
+                            executions=[
+                                TabularExportExecution(
+                                    custom_override=CustomOverride(
+                                        labels={
+                                            "key": CustomLabel(
+                                                title="title_example",
+                                            ),
+                                        },
+                                        metrics={
+                                            "key": CustomMetric(
+                                                format="format_example",
+                                                title="title_example",
+                                            ),
+                                        },
+                                    ),
+                                    execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                                    title="Pushpins",
+                                ),
+                            ],
                             file_name="result",
                             format="CSV",
                             metadata=JsonNode(),
@@ -3282,6 +3338,9 @@ with gooddata_api_client.ApiClient() as api_client:
                             visualization_object_custom_filters=[
                                 {},
                             ],
+                            visualization_object_custom_parameters=[
+                                ParameterValue(),
+                            ],
                         ),
                     ),
                 ],
@@ -3295,6 +3354,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             file_name="filename",
                             metadata={},
+                            timezone_id="Asia/Kolkata",
                         ),
                     ),
                 ],

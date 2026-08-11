@@ -31,15 +31,15 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_workspace_in_attributes import JsonApiWorkspaceInAttributes
     from gooddata_api_client.model.json_api_workspace_in_relationships import JsonApiWorkspaceInRelationships
     from gooddata_api_client.model.json_api_workspace_out import JsonApiWorkspaceOut
+    from gooddata_api_client.model.json_api_workspace_out_attributes import JsonApiWorkspaceOutAttributes
     from gooddata_api_client.model.json_api_workspace_out_meta import JsonApiWorkspaceOutMeta
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
-    globals()['JsonApiWorkspaceInAttributes'] = JsonApiWorkspaceInAttributes
     globals()['JsonApiWorkspaceInRelationships'] = JsonApiWorkspaceInRelationships
     globals()['JsonApiWorkspaceOut'] = JsonApiWorkspaceOut
+    globals()['JsonApiWorkspaceOutAttributes'] = JsonApiWorkspaceOutAttributes
     globals()['JsonApiWorkspaceOutMeta'] = JsonApiWorkspaceOutMeta
     globals()['ObjectLinks'] = ObjectLinks
     globals()['ObjectLinksContainer'] = ObjectLinksContainer
@@ -108,7 +108,7 @@ class JsonApiWorkspaceOutWithLinks(ModelComposed):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiWorkspaceInAttributes,),  # noqa: E501
+            'attributes': (JsonApiWorkspaceOutAttributes,),  # noqa: E501
             'meta': (JsonApiWorkspaceOutMeta,),  # noqa: E501
             'relationships': (JsonApiWorkspaceInRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
@@ -169,7 +169,7 @@ class JsonApiWorkspaceOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiWorkspaceInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiWorkspaceOutAttributes): [optional]  # noqa: E501
             meta (JsonApiWorkspaceOutMeta): [optional]  # noqa: E501
             relationships (JsonApiWorkspaceInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
@@ -279,7 +279,7 @@ class JsonApiWorkspaceOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiWorkspaceInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiWorkspaceOutAttributes): [optional]  # noqa: E501
             meta (JsonApiWorkspaceOutMeta): [optional]  # noqa: E501
             relationships (JsonApiWorkspaceInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501

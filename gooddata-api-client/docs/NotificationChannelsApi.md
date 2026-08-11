@@ -1078,7 +1078,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 custom_dashboard_url="custom_dashboard_url_example",
                 dashboard_link_visibility="INTERNAL_ONLY",
                 description="This is a channel",
-                destination=DeclarativeNotificationChannelDestination(None),
+                destination=NotificationChannelDestination(),
                 id="notification-channel-1",
                 in_platform_notification="DISABLED",
                 name="channel",
@@ -1154,7 +1154,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = notification_channels_api.NotificationChannelsApi(api_client)
     notification_channel_id = "notificationChannelId_example" # str | 
     test_destination_request = TestDestinationRequest(
-        destination=DeclarativeNotificationChannelDestination(None),
+        destination=NotificationChannelDestination(),
         external_recipients=[
             AutomationExternalRecipient(
                 email="email_example",
@@ -1239,7 +1239,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = notification_channels_api.NotificationChannelsApi(api_client)
     test_destination_request = TestDestinationRequest(
-        destination=DeclarativeNotificationChannelDestination(None),
+        destination=NotificationChannelDestination(),
         external_recipients=[
             AutomationExternalRecipient(
                 email="email_example",

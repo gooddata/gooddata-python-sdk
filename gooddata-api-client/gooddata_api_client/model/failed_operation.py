@@ -64,6 +64,9 @@ class FailedOperation(ModelComposed):
     """
 
     allowed_values = {
+        ('status',): {
+            'FAILED': "failed",
+        },
         ('kind',): {
             'PROVISION-DATABASE': "provision-database",
             'DEPROVISION-DATABASE': "deprovision-database",
@@ -101,10 +104,10 @@ class FailedOperation(ModelComposed):
         """
         lazy_import()
         return {
+            'status': (str,),  # noqa: E501
             'error': (OperationError,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'kind': (str,),  # noqa: E501
-            'status': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -116,10 +119,10 @@ class FailedOperation(ModelComposed):
         return {'status': val}
 
     attribute_map = {
+        'status': 'status',  # noqa: E501
         'error': 'error',  # noqa: E501
         'id': 'id',  # noqa: E501
         'kind': 'kind',  # noqa: E501
-        'status': 'status',  # noqa: E501
     }
 
     read_only_vars = {
@@ -131,10 +134,10 @@ class FailedOperation(ModelComposed):
         """FailedOperation - a model defined in OpenAPI
 
         Keyword Args:
+            status (str): defaults to "failed", must be one of ["failed", ]  # noqa: E501
             error (OperationError):
             id (str): Id of the operation
             kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `create-pipe-table` — Creating a pipe table backed by an S3 data source. * `delete-pipe-table` — Deleting a pipe table. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. * `refresh-partition` — Refreshing a specific Hive partition (delete + re-load from S3). 
-            status (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -167,6 +170,7 @@ class FailedOperation(ModelComposed):
                                 _visited_composed_classes = (Animal,)
         """
 
+        status = kwargs.get('status', "failed")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -238,10 +242,10 @@ class FailedOperation(ModelComposed):
         """FailedOperation - a model defined in OpenAPI
 
         Keyword Args:
+            status (str): defaults to "failed", must be one of ["failed", ]  # noqa: E501
             error (OperationError):
             id (str): Id of the operation
             kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `create-pipe-table` — Creating a pipe table backed by an S3 data source. * `delete-pipe-table` — Deleting a pipe table. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. * `refresh-partition` — Refreshing a specific Hive partition (delete + re-load from S3). 
-            status (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -274,6 +278,7 @@ class FailedOperation(ModelComposed):
                                 _visited_composed_classes = (Animal,)
         """
 
+        status = kwargs.get('status', "failed")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())

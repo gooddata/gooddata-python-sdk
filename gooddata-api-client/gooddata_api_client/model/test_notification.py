@@ -62,6 +62,9 @@ class TestNotification(ModelComposed):
     """
 
     allowed_values = {
+        ('type',): {
+            'TEST': "TEST",
+        },
     }
 
     validations = {
@@ -90,8 +93,8 @@ class TestNotification(ModelComposed):
         """
         lazy_import()
         return {
-            'message': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'message': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -103,8 +106,8 @@ class TestNotification(ModelComposed):
         return {'type': val}
 
     attribute_map = {
-        'message': 'message',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'message': 'message',  # noqa: E501
     }
 
     read_only_vars = {
@@ -116,8 +119,8 @@ class TestNotification(ModelComposed):
         """TestNotification - a model defined in OpenAPI
 
         Keyword Args:
+            type (str): defaults to "TEST", must be one of ["TEST", ]  # noqa: E501
             message (str):
-            type (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -150,6 +153,7 @@ class TestNotification(ModelComposed):
                                 _visited_composed_classes = (Animal,)
         """
 
+        type = kwargs.get('type', "TEST")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -221,8 +225,8 @@ class TestNotification(ModelComposed):
         """TestNotification - a model defined in OpenAPI
 
         Keyword Args:
+            type (str): defaults to "TEST", must be one of ["TEST", ]  # noqa: E501
             message (str):
-            type (str):
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -255,6 +259,7 @@ class TestNotification(ModelComposed):
                                 _visited_composed_classes = (Animal,)
         """
 
+        type = kwargs.get('type', "TEST")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())

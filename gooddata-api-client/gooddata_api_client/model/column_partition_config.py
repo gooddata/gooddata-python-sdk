@@ -56,6 +56,9 @@ class ColumnPartitionConfig(ModelNormal):
     """
 
     allowed_values = {
+        ('type',): {
+            'COLUMN': "column",
+        },
     }
 
     validations = {
@@ -83,6 +86,7 @@ class ColumnPartitionConfig(ModelNormal):
         """
         return {
             'columns': ([str],),  # noqa: E501
+            'type': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -92,6 +96,7 @@ class ColumnPartitionConfig(ModelNormal):
 
     attribute_map = {
         'columns': 'columns',  # noqa: E501
+        'type': 'type',  # noqa: E501
     }
 
     read_only_vars = {
@@ -108,6 +113,7 @@ class ColumnPartitionConfig(ModelNormal):
             columns ([str]): Columns to partition by.
 
         Keyword Args:
+            type (str): defaults to "column", must be one of ["column", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -140,6 +146,7 @@ class ColumnPartitionConfig(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
+        type = kwargs.get('type', "column")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -170,6 +177,7 @@ class ColumnPartitionConfig(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.columns = columns
+        self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -197,6 +205,7 @@ class ColumnPartitionConfig(ModelNormal):
             columns ([str]): Columns to partition by.
 
         Keyword Args:
+            type (str): defaults to "column", must be one of ["column", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -229,6 +238,7 @@ class ColumnPartitionConfig(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
+        type = kwargs.get('type', "column")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -257,6 +267,7 @@ class ColumnPartitionConfig(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.columns = columns
+        self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

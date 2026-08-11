@@ -60,6 +60,10 @@ class UserManagementDataSourcePermissionAssignment(ModelNormal):
             'MANAGE': "MANAGE",
             'USE': "USE",
         },
+        ('access_source',): {
+            'DIRECT': "DIRECT",
+            'GROUP': "GROUP",
+        },
     }
 
     validations = {
@@ -88,6 +92,7 @@ class UserManagementDataSourcePermissionAssignment(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'permissions': ([str],),  # noqa: E501
+            'access_source': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
         }
 
@@ -99,10 +104,12 @@ class UserManagementDataSourcePermissionAssignment(ModelNormal):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
+        'access_source': 'accessSource',  # noqa: E501
         'name': 'name',  # noqa: E501
     }
 
     read_only_vars = {
+        'access_source',  # noqa: E501
         'name',  # noqa: E501
     }
 
@@ -148,6 +155,7 @@ class UserManagementDataSourcePermissionAssignment(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            access_source (str): How the subject gains access to the data source (DIRECT or GROUP). Absent for direct-only listings.. [optional]  # noqa: E501
             name (str): Name of the datasource. [optional]  # noqa: E501
         """
 
@@ -240,6 +248,7 @@ class UserManagementDataSourcePermissionAssignment(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            access_source (str): How the subject gains access to the data source (DIRECT or GROUP). Absent for direct-only listings.. [optional]  # noqa: E501
             name (str): Name of the datasource. [optional]  # noqa: E501
         """
 

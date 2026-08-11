@@ -35,14 +35,12 @@ def lazy_import():
     from gooddata_api_client.model.attribute_positive_filter import AttributePositiveFilter
     from gooddata_api_client.model.date_absolute_filter import DateAbsoluteFilter
     from gooddata_api_client.model.date_relative_filter import DateRelativeFilter
-    from gooddata_api_client.model.ranking_filter import RankingFilter
-    from gooddata_api_client.model.ranking_filter_ranking_filter import RankingFilterRankingFilter
+    from gooddata_api_client.model.gen_ai_ranking_filter import GenAiRankingFilter
     globals()['AttributeNegativeFilter'] = AttributeNegativeFilter
     globals()['AttributePositiveFilter'] = AttributePositiveFilter
     globals()['DateAbsoluteFilter'] = DateAbsoluteFilter
     globals()['DateRelativeFilter'] = DateRelativeFilter
-    globals()['RankingFilter'] = RankingFilter
-    globals()['RankingFilterRankingFilter'] = RankingFilterRankingFilter
+    globals()['GenAiRankingFilter'] = GenAiRankingFilter
 
 
 class CreatedVisualizationFiltersInner(ModelComposed):
@@ -71,25 +69,50 @@ class CreatedVisualizationFiltersInner(ModelComposed):
 
     allowed_values = {
         ('granularity',): {
+            'SECOND': "SECOND",
+            'SECOND_OF_MINUTE': "SECOND_OF_MINUTE",
+            'SECOND_OF_DAY': "SECOND_OF_DAY",
             'MINUTE': "MINUTE",
-            'HOUR': "HOUR",
-            'DAY': "DAY",
-            'WEEK': "WEEK",
-            'MONTH': "MONTH",
-            'QUARTER': "QUARTER",
-            'YEAR': "YEAR",
             'MINUTE_OF_HOUR': "MINUTE_OF_HOUR",
+            'MINUTE_OF_DAY': "MINUTE_OF_DAY",
+            'HOUR': "HOUR",
             'HOUR_OF_DAY': "HOUR_OF_DAY",
+            'DAY': "DAY",
             'DAY_OF_WEEK': "DAY_OF_WEEK",
             'DAY_OF_MONTH': "DAY_OF_MONTH",
             'DAY_OF_QUARTER': "DAY_OF_QUARTER",
             'DAY_OF_YEAR': "DAY_OF_YEAR",
+            'WEEK': "WEEK",
             'WEEK_OF_YEAR': "WEEK_OF_YEAR",
+            'MONTH': "MONTH",
             'MONTH_OF_YEAR': "MONTH_OF_YEAR",
+            'QUARTER': "QUARTER",
             'QUARTER_OF_YEAR': "QUARTER_OF_YEAR",
+            'YEAR': "YEAR",
+            'FISCAL_DAY_OF_FISCAL_WEEK': "FISCAL_DAY_OF_FISCAL_WEEK",
+            'FISCAL_DAY_OF_FISCAL_MONTH': "FISCAL_DAY_OF_FISCAL_MONTH",
+            'FISCAL_DAY_OF_FISCAL_QUARTER': "FISCAL_DAY_OF_FISCAL_QUARTER",
+            'FISCAL_DAY_OF_FISCAL_SEMESTER': "FISCAL_DAY_OF_FISCAL_SEMESTER",
+            'FISCAL_DAY_OF_FISCAL_YEAR': "FISCAL_DAY_OF_FISCAL_YEAR",
+            'FISCAL_WEEK': "FISCAL_WEEK",
+            'FISCAL_WEEK_OF_FISCAL_MONTH': "FISCAL_WEEK_OF_FISCAL_MONTH",
+            'FISCAL_WEEK_OF_FISCAL_QUARTER': "FISCAL_WEEK_OF_FISCAL_QUARTER",
+            'FISCAL_WEEK_OF_FISCAL_SEMESTER': "FISCAL_WEEK_OF_FISCAL_SEMESTER",
+            'FISCAL_WEEK_OF_FISCAL_YEAR': "FISCAL_WEEK_OF_FISCAL_YEAR",
             'FISCAL_MONTH': "FISCAL_MONTH",
+            'FISCAL_MONTH_OF_FISCAL_QUARTER': "FISCAL_MONTH_OF_FISCAL_QUARTER",
+            'FISCAL_MONTH_OF_FISCAL_SEMESTER': "FISCAL_MONTH_OF_FISCAL_SEMESTER",
+            'FISCAL_MONTH_OF_FISCAL_YEAR': "FISCAL_MONTH_OF_FISCAL_YEAR",
             'FISCAL_QUARTER': "FISCAL_QUARTER",
+            'FISCAL_QUARTER_OF_FISCAL_SEMESTER': "FISCAL_QUARTER_OF_FISCAL_SEMESTER",
+            'FISCAL_QUARTER_OF_FISCAL_YEAR': "FISCAL_QUARTER_OF_FISCAL_YEAR",
+            'FISCAL_SEMESTER': "FISCAL_SEMESTER",
+            'FISCAL_SEMESTER_OF_FISCAL_YEAR': "FISCAL_SEMESTER_OF_FISCAL_YEAR",
             'FISCAL_YEAR': "FISCAL_YEAR",
+        },
+        ('operator',): {
+            'TOP': "TOP",
+            'BOTTOM': "BOTTOM",
         },
     }
 
@@ -119,13 +142,16 @@ class CreatedVisualizationFiltersInner(ModelComposed):
         """
         lazy_import()
         return {
+            'dimensionality': ([str],),  # noqa: E501
             'exclude': ([str],),  # noqa: E501
             'using': (str,),  # noqa: E501
             'include': ([str],),  # noqa: E501
             '_from': (int,),  # noqa: E501
             'to': (int,),  # noqa: E501
             'granularity': (str,),  # noqa: E501
-            'ranking_filter': (RankingFilterRankingFilter,),  # noqa: E501
+            'measures': ([str],),  # noqa: E501
+            'operator': (str,),  # noqa: E501
+            'value': (int,),  # noqa: E501
         }
 
     @cached_property
@@ -134,13 +160,16 @@ class CreatedVisualizationFiltersInner(ModelComposed):
 
 
     attribute_map = {
+        'dimensionality': 'dimensionality',  # noqa: E501
         'exclude': 'exclude',  # noqa: E501
         'using': 'using',  # noqa: E501
         'include': 'include',  # noqa: E501
         '_from': 'from',  # noqa: E501
         'to': 'to',  # noqa: E501
         'granularity': 'granularity',  # noqa: E501
-        'ranking_filter': 'rankingFilter',  # noqa: E501
+        'measures': 'measures',  # noqa: E501
+        'operator': 'operator',  # noqa: E501
+        'value': 'value',  # noqa: E501
     }
 
     read_only_vars = {
@@ -182,13 +211,16 @@ class CreatedVisualizationFiltersInner(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            dimensionality ([str]): [optional]  # noqa: E501
             exclude ([str]): [optional]  # noqa: E501
             using (str): [optional]  # noqa: E501
             include ([str]): [optional]  # noqa: E501
             _from (int): [optional]  # noqa: E501
             to (int): [optional]  # noqa: E501
             granularity (str): [optional]  # noqa: E501
-            ranking_filter (RankingFilterRankingFilter): [optional]  # noqa: E501
+            measures ([str]): [optional]  # noqa: E501
+            operator (str): [optional]  # noqa: E501
+            value (int): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -292,13 +324,16 @@ class CreatedVisualizationFiltersInner(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            dimensionality ([str]): [optional]  # noqa: E501
             exclude ([str]): [optional]  # noqa: E501
             using (str): [optional]  # noqa: E501
             include ([str]): [optional]  # noqa: E501
             _from (int): [optional]  # noqa: E501
             to (int): [optional]  # noqa: E501
             granularity (str): [optional]  # noqa: E501
-            ranking_filter (RankingFilterRankingFilter): [optional]  # noqa: E501
+            measures ([str]): [optional]  # noqa: E501
+            operator (str): [optional]  # noqa: E501
+            value (int): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -374,6 +409,6 @@ class CreatedVisualizationFiltersInner(ModelComposed):
               AttributePositiveFilter,
               DateAbsoluteFilter,
               DateRelativeFilter,
-              RankingFilter,
+              GenAiRankingFilter,
           ],
         }

@@ -191,6 +191,7 @@
         "properties": {
           "location": {
             "description": "Location of the file in the staging area to convert.",
+            "minLength": 1,
             "type": "string"
           }
         },
@@ -1068,6 +1069,7 @@
         },
         "responses": {
           "204": {
+            "content": {},
             "description": "Successful deletion."
           }
         },
@@ -1383,6 +1385,7 @@
             "description": "Features retrieved successfully"
           },
           "404": {
+            "content": {},
             "description": "Collection not found"
           }
         },
@@ -1461,6 +1464,7 @@
             "description": "Features retrieved successfully"
           },
           "404": {
+            "content": {},
             "description": "Collection not found"
           }
         },

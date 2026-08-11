@@ -29,6 +29,7 @@ Method | HTTP request | Description
 [**create_entity_memory_items**](EntitiesApi.md#create_entity_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems | Post Memory Items
 [**create_entity_metrics**](EntitiesApi.md#create_entity_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics | Post Metrics
 [**create_entity_notification_channels**](EntitiesApi.md#create_entity_notification_channels) | **POST** /api/v1/entities/notificationChannels | Post Notification Channel entities
+[**create_entity_org_memory_items**](EntitiesApi.md#create_entity_org_memory_items) | **POST** /api/v1/entities/orgMemoryItems | Post organization Memory Item entities
 [**create_entity_organization_settings**](EntitiesApi.md#create_entity_organization_settings) | **POST** /api/v1/entities/organizationSettings | Post Organization Setting entities
 [**create_entity_parameters**](EntitiesApi.md#create_entity_parameters) | **POST** /api/v1/entities/workspaces/{workspaceId}/parameters | Post Parameters
 [**create_entity_themes**](EntitiesApi.md#create_entity_themes) | **POST** /api/v1/entities/themes | Post Theming
@@ -37,9 +38,12 @@ Method | HTTP request | Description
 [**create_entity_user_settings**](EntitiesApi.md#create_entity_user_settings) | **POST** /api/v1/entities/users/{userId}/userSettings | Post new user settings for the user
 [**create_entity_users**](EntitiesApi.md#create_entity_users) | **POST** /api/v1/entities/users | Post User entities
 [**create_entity_visualization_objects**](EntitiesApi.md#create_entity_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | Post Visualization Objects
+[**create_entity_workspace_color_palettes**](EntitiesApi.md#create_entity_workspace_color_palettes) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceColorPalettes | Post Workspace Color Palette
 [**create_entity_workspace_data_filter_settings**](EntitiesApi.md#create_entity_workspace_data_filter_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings | Post Settings for Workspace Data Filters
 [**create_entity_workspace_data_filters**](EntitiesApi.md#create_entity_workspace_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters | Post Workspace Data Filters
+[**create_entity_workspace_export_templates**](EntitiesApi.md#create_entity_workspace_export_templates) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceExportTemplates | Post Workspace Export Template
 [**create_entity_workspace_settings**](EntitiesApi.md#create_entity_workspace_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings | Post Settings for Workspaces
+[**create_entity_workspace_themes**](EntitiesApi.md#create_entity_workspace_themes) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceThemes | Post Workspace Theme
 [**create_entity_workspaces**](EntitiesApi.md#create_entity_workspaces) | **POST** /api/v1/entities/workspaces | Post Workspace entities
 [**delete_entity**](EntitiesApi.md#delete_entity) | **DELETE** /api/v1/entities/llmEndpoints/{id} | Delete LLM endpoint entity (Removed)
 [**delete_entity_agents**](EntitiesApi.md#delete_entity_agents) | **DELETE** /api/v1/entities/agents/{id} | Delete Agent entity
@@ -66,6 +70,7 @@ Method | HTTP request | Description
 [**delete_entity_memory_items**](EntitiesApi.md#delete_entity_memory_items) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Delete a Memory Item
 [**delete_entity_metrics**](EntitiesApi.md#delete_entity_metrics) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Delete a Metric
 [**delete_entity_notification_channels**](EntitiesApi.md#delete_entity_notification_channels) | **DELETE** /api/v1/entities/notificationChannels/{id} | Delete Notification Channel entity
+[**delete_entity_org_memory_items**](EntitiesApi.md#delete_entity_org_memory_items) | **DELETE** /api/v1/entities/orgMemoryItems/{id} | Delete an organization Memory Item entity
 [**delete_entity_organization_settings**](EntitiesApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | Delete Organization Setting entity
 [**delete_entity_parameters**](EntitiesApi.md#delete_entity_parameters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/parameters/{objectId} | Delete a Parameter
 [**delete_entity_themes**](EntitiesApi.md#delete_entity_themes) | **DELETE** /api/v1/entities/themes/{id} | Delete Theming
@@ -74,9 +79,12 @@ Method | HTTP request | Description
 [**delete_entity_user_settings**](EntitiesApi.md#delete_entity_user_settings) | **DELETE** /api/v1/entities/users/{userId}/userSettings/{id} | Delete a setting for a user
 [**delete_entity_users**](EntitiesApi.md#delete_entity_users) | **DELETE** /api/v1/entities/users/{id} | Delete User entity
 [**delete_entity_visualization_objects**](EntitiesApi.md#delete_entity_visualization_objects) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Delete a Visualization Object
+[**delete_entity_workspace_color_palettes**](EntitiesApi.md#delete_entity_workspace_color_palettes) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceColorPalettes/{objectId} | Delete a Workspace Color Palette
 [**delete_entity_workspace_data_filter_settings**](EntitiesApi.md#delete_entity_workspace_data_filter_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | Delete a Settings for Workspace Data Filter
 [**delete_entity_workspace_data_filters**](EntitiesApi.md#delete_entity_workspace_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | Delete a Workspace Data Filter
+[**delete_entity_workspace_export_templates**](EntitiesApi.md#delete_entity_workspace_export_templates) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceExportTemplates/{objectId} | Delete a Workspace Export Template
 [**delete_entity_workspace_settings**](EntitiesApi.md#delete_entity_workspace_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Delete a Setting for Workspace
+[**delete_entity_workspace_themes**](EntitiesApi.md#delete_entity_workspace_themes) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceThemes/{objectId} | Delete a Workspace Theme
 [**delete_entity_workspaces**](EntitiesApi.md#delete_entity_workspaces) | **DELETE** /api/v1/entities/workspaces/{id} | Delete Workspace entity
 [**get_all_automations_workspace_automations**](EntitiesApi.md#get_all_automations_workspace_automations) | **GET** /api/v1/entities/organization/workspaceAutomations | Get all Automations across all Workspaces
 [**get_all_entities**](EntitiesApi.md#get_all_entities) | **GET** /api/v1/entities/llmEndpoints | Get all LLM endpoint entities (Removed)
@@ -102,6 +110,7 @@ Method | HTTP request | Description
 [**get_all_entities_facts**](EntitiesApi.md#get_all_entities_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts | Get all Facts
 [**get_all_entities_filter_contexts**](EntitiesApi.md#get_all_entities_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Get all Filter Context
 [**get_all_entities_filter_views**](EntitiesApi.md#get_all_entities_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews | Get all Filter views
+[**get_all_entities_fiscal_calendars**](EntitiesApi.md#get_all_entities_fiscal_calendars) | **GET** /api/v1/entities/workspaces/{workspaceId}/fiscalCalendars | Get all Fiscal Calendars
 [**get_all_entities_identity_providers**](EntitiesApi.md#get_all_entities_identity_providers) | **GET** /api/v1/entities/identityProviders | Get all Identity Providers
 [**get_all_entities_ip_allowlist_policies**](EntitiesApi.md#get_all_entities_ip_allowlist_policies) | **GET** /api/v1/entities/ipAllowlistPolicies | Get all IpAllowlistPolicy entities
 [**get_all_entities_jwks**](EntitiesApi.md#get_all_entities_jwks) | **GET** /api/v1/entities/jwks | Get all Jwks
@@ -112,6 +121,7 @@ Method | HTTP request | Description
 [**get_all_entities_metrics**](EntitiesApi.md#get_all_entities_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics | Get all Metrics
 [**get_all_entities_notification_channel_identifiers**](EntitiesApi.md#get_all_entities_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers | Get all Notification Channel Identifier entities
 [**get_all_entities_notification_channels**](EntitiesApi.md#get_all_entities_notification_channels) | **GET** /api/v1/entities/notificationChannels | Get all Notification Channel entities
+[**get_all_entities_org_memory_items**](EntitiesApi.md#get_all_entities_org_memory_items) | **GET** /api/v1/entities/orgMemoryItems | Get all organization Memory Item entities
 [**get_all_entities_organization_settings**](EntitiesApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization Setting entities
 [**get_all_entities_parameters**](EntitiesApi.md#get_all_entities_parameters) | **GET** /api/v1/entities/workspaces/{workspaceId}/parameters | Get all Parameters
 [**get_all_entities_themes**](EntitiesApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
@@ -121,9 +131,12 @@ Method | HTTP request | Description
 [**get_all_entities_user_settings**](EntitiesApi.md#get_all_entities_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings | List all settings for a user
 [**get_all_entities_users**](EntitiesApi.md#get_all_entities_users) | **GET** /api/v1/entities/users | Get User entities
 [**get_all_entities_visualization_objects**](EntitiesApi.md#get_all_entities_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | Get all Visualization Objects
+[**get_all_entities_workspace_color_palettes**](EntitiesApi.md#get_all_entities_workspace_color_palettes) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceColorPalettes | Get all Workspace Color Palettes
 [**get_all_entities_workspace_data_filter_settings**](EntitiesApi.md#get_all_entities_workspace_data_filter_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings | Get all Settings for Workspace Data Filters
 [**get_all_entities_workspace_data_filters**](EntitiesApi.md#get_all_entities_workspace_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters | Get all Workspace Data Filters
+[**get_all_entities_workspace_export_templates**](EntitiesApi.md#get_all_entities_workspace_export_templates) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceExportTemplates | Get all Workspace Export Templates
 [**get_all_entities_workspace_settings**](EntitiesApi.md#get_all_entities_workspace_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings | Get all Setting for Workspaces
+[**get_all_entities_workspace_themes**](EntitiesApi.md#get_all_entities_workspace_themes) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceThemes | Get all Workspace Themes
 [**get_all_entities_workspaces**](EntitiesApi.md#get_all_entities_workspaces) | **GET** /api/v1/entities/workspaces | Get Workspace entities
 [**get_all_options**](EntitiesApi.md#get_all_options) | **GET** /api/v1/options | Links for all configuration options
 [**get_data_source_drivers**](EntitiesApi.md#get_data_source_drivers) | **GET** /api/v1/options/availableDrivers | Get all available data source drivers
@@ -151,6 +164,7 @@ Method | HTTP request | Description
 [**get_entity_facts**](EntitiesApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
 [**get_entity_filter_contexts**](EntitiesApi.md#get_entity_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Get a Filter Context
 [**get_entity_filter_views**](EntitiesApi.md#get_entity_filter_views) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterViews/{objectId} | Get Filter view
+[**get_entity_fiscal_calendars**](EntitiesApi.md#get_entity_fiscal_calendars) | **GET** /api/v1/entities/workspaces/{workspaceId}/fiscalCalendars/{objectId} | Get a Fiscal Calendar
 [**get_entity_identity_providers**](EntitiesApi.md#get_entity_identity_providers) | **GET** /api/v1/entities/identityProviders/{id} | Get Identity Provider
 [**get_entity_ip_allowlist_policies**](EntitiesApi.md#get_entity_ip_allowlist_policies) | **GET** /api/v1/entities/ipAllowlistPolicies/{id} | Get IpAllowlistPolicy entity
 [**get_entity_jwks**](EntitiesApi.md#get_entity_jwks) | **GET** /api/v1/entities/jwks/{id} | Get Jwk
@@ -161,6 +175,7 @@ Method | HTTP request | Description
 [**get_entity_metrics**](EntitiesApi.md#get_entity_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Get a Metric
 [**get_entity_notification_channel_identifiers**](EntitiesApi.md#get_entity_notification_channel_identifiers) | **GET** /api/v1/entities/notificationChannelIdentifiers/{id} | Get Notification Channel Identifier entity
 [**get_entity_notification_channels**](EntitiesApi.md#get_entity_notification_channels) | **GET** /api/v1/entities/notificationChannels/{id} | Get Notification Channel entity
+[**get_entity_org_memory_items**](EntitiesApi.md#get_entity_org_memory_items) | **GET** /api/v1/entities/orgMemoryItems/{id} | Get an organization Memory Item entity
 [**get_entity_organization_settings**](EntitiesApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization Setting entity
 [**get_entity_organizations**](EntitiesApi.md#get_entity_organizations) | **GET** /api/v1/entities/admin/organizations/{id} | Get Organizations
 [**get_entity_parameters**](EntitiesApi.md#get_entity_parameters) | **GET** /api/v1/entities/workspaces/{workspaceId}/parameters/{objectId} | Get a Parameter
@@ -171,9 +186,12 @@ Method | HTTP request | Description
 [**get_entity_user_settings**](EntitiesApi.md#get_entity_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings/{id} | Get a setting for a user
 [**get_entity_users**](EntitiesApi.md#get_entity_users) | **GET** /api/v1/entities/users/{id} | Get User entity
 [**get_entity_visualization_objects**](EntitiesApi.md#get_entity_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Get a Visualization Object
+[**get_entity_workspace_color_palettes**](EntitiesApi.md#get_entity_workspace_color_palettes) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceColorPalettes/{objectId} | Get a Workspace Color Palette
 [**get_entity_workspace_data_filter_settings**](EntitiesApi.md#get_entity_workspace_data_filter_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | Get a Setting for Workspace Data Filter
 [**get_entity_workspace_data_filters**](EntitiesApi.md#get_entity_workspace_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | Get a Workspace Data Filter
+[**get_entity_workspace_export_templates**](EntitiesApi.md#get_entity_workspace_export_templates) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceExportTemplates/{objectId} | Get a Workspace Export Template
 [**get_entity_workspace_settings**](EntitiesApi.md#get_entity_workspace_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Get a Setting for Workspace
+[**get_entity_workspace_themes**](EntitiesApi.md#get_entity_workspace_themes) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceThemes/{objectId} | Get a Workspace Theme
 [**get_entity_workspaces**](EntitiesApi.md#get_entity_workspaces) | **GET** /api/v1/entities/workspaces/{id} | Get Workspace entity
 [**get_organization**](EntitiesApi.md#get_organization) | **GET** /api/v1/entities/organization | Get current organization info
 [**patch_entity**](EntitiesApi.md#patch_entity) | **PATCH** /api/v1/entities/llmEndpoints/{id} | Patch LLM endpoint entity (Removed)
@@ -203,6 +221,7 @@ Method | HTTP request | Description
 [**patch_entity_memory_items**](EntitiesApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Patch a Memory Item
 [**patch_entity_metrics**](EntitiesApi.md#patch_entity_metrics) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Patch a Metric
 [**patch_entity_notification_channels**](EntitiesApi.md#patch_entity_notification_channels) | **PATCH** /api/v1/entities/notificationChannels/{id} | Patch Notification Channel entity
+[**patch_entity_org_memory_items**](EntitiesApi.md#patch_entity_org_memory_items) | **PATCH** /api/v1/entities/orgMemoryItems/{id} | Patch an organization Memory Item entity
 [**patch_entity_organization_settings**](EntitiesApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | Patch Organization Setting entity
 [**patch_entity_organizations**](EntitiesApi.md#patch_entity_organizations) | **PATCH** /api/v1/entities/admin/organizations/{id} | Patch Organization
 [**patch_entity_parameters**](EntitiesApi.md#patch_entity_parameters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/parameters/{objectId} | Patch a Parameter
@@ -211,9 +230,12 @@ Method | HTTP request | Description
 [**patch_entity_user_groups**](EntitiesApi.md#patch_entity_user_groups) | **PATCH** /api/v1/entities/userGroups/{id} | Patch UserGroup entity
 [**patch_entity_users**](EntitiesApi.md#patch_entity_users) | **PATCH** /api/v1/entities/users/{id} | Patch User entity
 [**patch_entity_visualization_objects**](EntitiesApi.md#patch_entity_visualization_objects) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Patch a Visualization Object
+[**patch_entity_workspace_color_palettes**](EntitiesApi.md#patch_entity_workspace_color_palettes) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceColorPalettes/{objectId} | Patch a Workspace Color Palette
 [**patch_entity_workspace_data_filter_settings**](EntitiesApi.md#patch_entity_workspace_data_filter_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | Patch a Settings for Workspace Data Filter
 [**patch_entity_workspace_data_filters**](EntitiesApi.md#patch_entity_workspace_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | Patch a Workspace Data Filter
+[**patch_entity_workspace_export_templates**](EntitiesApi.md#patch_entity_workspace_export_templates) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceExportTemplates/{objectId} | Patch a Workspace Export Template
 [**patch_entity_workspace_settings**](EntitiesApi.md#patch_entity_workspace_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Patch a Setting for Workspace
+[**patch_entity_workspace_themes**](EntitiesApi.md#patch_entity_workspace_themes) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceThemes/{objectId} | Patch a Workspace Theme
 [**patch_entity_workspaces**](EntitiesApi.md#patch_entity_workspaces) | **PATCH** /api/v1/entities/workspaces/{id} | Patch Workspace entity
 [**search_entities_aggregated_facts**](EntitiesApi.md#search_entities_aggregated_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/search | The search endpoint (beta)
 [**search_entities_analytical_dashboards**](EntitiesApi.md#search_entities_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/search | The search endpoint (beta)
@@ -263,6 +285,7 @@ Method | HTTP request | Description
 [**update_entity_memory_items**](EntitiesApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Put a Memory Item
 [**update_entity_metrics**](EntitiesApi.md#update_entity_metrics) | **PUT** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Put a Metric
 [**update_entity_notification_channels**](EntitiesApi.md#update_entity_notification_channels) | **PUT** /api/v1/entities/notificationChannels/{id} | Put Notification Channel entity
+[**update_entity_org_memory_items**](EntitiesApi.md#update_entity_org_memory_items) | **PUT** /api/v1/entities/orgMemoryItems/{id} | Put an organization Memory Item entity
 [**update_entity_organization_settings**](EntitiesApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization Setting entity
 [**update_entity_organizations**](EntitiesApi.md#update_entity_organizations) | **PUT** /api/v1/entities/admin/organizations/{id} | Put Organization
 [**update_entity_parameters**](EntitiesApi.md#update_entity_parameters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/parameters/{objectId} | Put a Parameter
@@ -272,9 +295,12 @@ Method | HTTP request | Description
 [**update_entity_user_settings**](EntitiesApi.md#update_entity_user_settings) | **PUT** /api/v1/entities/users/{userId}/userSettings/{id} | Put new user settings for the user
 [**update_entity_users**](EntitiesApi.md#update_entity_users) | **PUT** /api/v1/entities/users/{id} | Put User entity
 [**update_entity_visualization_objects**](EntitiesApi.md#update_entity_visualization_objects) | **PUT** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Put a Visualization Object
+[**update_entity_workspace_color_palettes**](EntitiesApi.md#update_entity_workspace_color_palettes) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceColorPalettes/{objectId} | Put a Workspace Color Palette
 [**update_entity_workspace_data_filter_settings**](EntitiesApi.md#update_entity_workspace_data_filter_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | Put a Settings for Workspace Data Filter
 [**update_entity_workspace_data_filters**](EntitiesApi.md#update_entity_workspace_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | Put a Workspace Data Filter
+[**update_entity_workspace_export_templates**](EntitiesApi.md#update_entity_workspace_export_templates) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceExportTemplates/{objectId} | Put a Workspace Export Template
 [**update_entity_workspace_settings**](EntitiesApi.md#update_entity_workspace_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Put a Setting for a Workspace
+[**update_entity_workspace_themes**](EntitiesApi.md#update_entity_workspace_themes) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceThemes/{objectId} | Put a Workspace Theme
 [**update_entity_workspaces**](EntitiesApi.md#update_entity_workspaces) | **PUT** /api/v1/entities/workspaces/{id} | Put Workspace entity
 
 
@@ -781,15 +807,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                         parameters=[
-                            ParameterItem(
-                                parameter=AfmObjectIdentifierParameter(
-                                    identifier=AfmObjectIdentifierParameterIdentifier(
-                                        id="sample_item.price",
-                                        type="parameter",
-                                    ),
-                                ),
-                                value="value_example",
-                            ),
+                            ParameterItem(),
                         ],
                     ),
                     interval="DAY",
@@ -804,11 +822,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             dashboard_parameters_override=[
-                                DashboardParameterValue(
-                                    id="year",
-                                    title="Year",
-                                    value="2026",
-                                ),
+                                ParameterValue(),
                             ],
                             dashboard_tabs_filters_overrides={
                                 "key": [
@@ -817,13 +831,14 @@ with gooddata_api_client.ApiClient() as api_client:
                             },
                             dashboard_tabs_parameters_overrides={
                                 "key": [
-                                    DashboardParameterValue(
-                                        id="year",
-                                        title="Year",
-                                        value="2026",
-                                    ),
+                                    ParameterValue(),
                                 ],
                             },
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
+                            ),
                             file_name="result",
                             format="XLSX",
                             settings=DashboardExportSettings(
@@ -853,6 +868,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             file_name="filename",
                             format="PNG",
                             metadata=JsonNode(),
+                            timezone_id="Asia/Kolkata",
                             widget_ids=[
                                 "widget_ids_example",
                             ],
@@ -920,20 +936,13 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 ],
                                 parameters=[
-                                    ParameterItem(
-                                        parameter=AfmObjectIdentifierParameter(
-                                            identifier=AfmObjectIdentifierParameterIdentifier(
-                                                id="sample_item.price",
-                                                type="parameter",
-                                            ),
-                                        ),
-                                        value="value_example",
-                                    ),
+                                    ParameterItem(),
                                 ],
                             ),
                             execution_settings=ExecutionSettings(
                                 data_sampling_percentage=0,
                                 timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
                             ),
                             file_name="result",
                             format="CSV",
@@ -954,6 +963,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             format="PDF",
                             metadata=JsonNode(),
                             template_id="template_id_example",
+                            timezone_id="Asia/Kolkata",
                             visualization_ids=[
                                 "visualization_ids_example",
                             ],
@@ -981,6 +991,30 @@ with gooddata_api_client.ApiClient() as api_client:
                                 },
                             ),
                             execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
+                            ),
+                            executions=[
+                                TabularExportExecution(
+                                    custom_override=CustomOverride(
+                                        labels={
+                                            "key": CustomLabel(
+                                                title="title_example",
+                                            ),
+                                        },
+                                        metrics={
+                                            "key": CustomMetric(
+                                                format="format_example",
+                                                title="title_example",
+                                            ),
+                                        },
+                                    ),
+                                    execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                                    title="Pushpins",
+                                ),
+                            ],
                             file_name="result",
                             format="CSV",
                             metadata=JsonNode(),
@@ -1012,6 +1046,9 @@ with gooddata_api_client.ApiClient() as api_client:
                             visualization_object_custom_filters=[
                                 {},
                             ],
+                            visualization_object_custom_parameters=[
+                                ParameterValue(),
+                            ],
                         ),
                     ),
                 ],
@@ -1025,6 +1062,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             file_name="filename",
                             metadata={},
+                            timezone_id="Asia/Kolkata",
                         ),
                     ),
                 ],
@@ -1641,6 +1679,8 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiDataSourceIn(
             attributes=JsonApiDataSourceInAttributes(
                 alternative_data_source_id="pg_local_docker-demo2",
+                authentication_type="USERNAME_PASSWORD",
+                cache_retention=JsonApiDataSourceInAttributesCacheRetention(None),
                 cache_strategy="ALWAYS",
                 client_id="client_id_example",
                 client_secret="client_secret_example",
@@ -2935,6 +2975,102 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **create_entity_org_memory_items**
+> JsonApiOrgMemoryItemOutDocument create_entity_org_memory_items(json_api_org_memory_item_in_document)
+
+Post organization Memory Item entities
+
+Organization-scoped AI memory item
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_org_memory_item_in_document import JsonApiOrgMemoryItemInDocument
+from gooddata_api_client.model.json_api_org_memory_item_out_document import JsonApiOrgMemoryItemOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    json_api_org_memory_item_in_document = JsonApiOrgMemoryItemInDocument(
+        data=JsonApiOrgMemoryItemIn(
+            attributes=JsonApiOrgMemoryItemInAttributes(
+                description="description_example",
+                instruction="instruction_example",
+                is_disabled=True,
+                keywords=[
+                    "keywords_example",
+                ],
+                strategy="ALWAYS",
+                title="title_example",
+            ),
+            id="id1",
+            type="orgMemoryItem",
+        ),
+    ) # JsonApiOrgMemoryItemInDocument | 
+    include = [
+        "createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Post organization Memory Item entities
+        api_response = api_instance.create_entity_org_memory_items(json_api_org_memory_item_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_org_memory_items: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Post organization Memory Item entities
+        api_response = api_instance.create_entity_org_memory_items(json_api_org_memory_item_in_document, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_org_memory_items: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **json_api_org_memory_item_in_document** | [**JsonApiOrgMemoryItemInDocument**](JsonApiOrgMemoryItemInDocument.md)|  |
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiOrgMemoryItemOutDocument**](JsonApiOrgMemoryItemOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **create_entity_organization_settings**
 > JsonApiOrganizationSettingOutDocument create_entity_organization_settings(json_api_organization_setting_in_document)
 
@@ -3670,6 +3806,96 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **create_entity_workspace_color_palettes**
+> JsonApiWorkspaceColorPaletteOutDocument create_entity_workspace_color_palettes(workspace_id, json_api_workspace_color_palette_in_document)
+
+Post Workspace Color Palette
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_color_palette_out_document import JsonApiWorkspaceColorPaletteOutDocument
+from gooddata_api_client.model.json_api_workspace_color_palette_in_document import JsonApiWorkspaceColorPaletteInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    json_api_workspace_color_palette_in_document = JsonApiWorkspaceColorPaletteInDocument(
+        data=JsonApiWorkspaceColorPaletteIn(
+            attributes=JsonApiColorPaletteInAttributes(
+                content={},
+                name="name_example",
+            ),
+            id="id1",
+            type="workspaceColorPalette",
+        ),
+    ) # JsonApiWorkspaceColorPaletteInDocument | 
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Post Workspace Color Palette
+        api_response = api_instance.create_entity_workspace_color_palettes(workspace_id, json_api_workspace_color_palette_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_workspace_color_palettes: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Post Workspace Color Palette
+        api_response = api_instance.create_entity_workspace_color_palettes(workspace_id, json_api_workspace_color_palette_in_document, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_workspace_color_palettes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **json_api_workspace_color_palette_in_document** | [**JsonApiWorkspaceColorPaletteInDocument**](JsonApiWorkspaceColorPaletteInDocument.md)|  |
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceColorPaletteOutDocument**](JsonApiWorkspaceColorPaletteOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **create_entity_workspace_data_filter_settings**
 > JsonApiWorkspaceDataFilterSettingOutDocument create_entity_workspace_data_filter_settings(workspace_id, json_api_workspace_data_filter_setting_in_document)
 
@@ -3877,6 +4103,162 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **create_entity_workspace_export_templates**
+> JsonApiWorkspaceExportTemplateOutDocument create_entity_workspace_export_templates(workspace_id, json_api_workspace_export_template_post_optional_id_document)
+
+Post Workspace Export Template
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_export_template_post_optional_id_document import JsonApiWorkspaceExportTemplatePostOptionalIdDocument
+from gooddata_api_client.model.json_api_workspace_export_template_out_document import JsonApiWorkspaceExportTemplateOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    json_api_workspace_export_template_post_optional_id_document = JsonApiWorkspaceExportTemplatePostOptionalIdDocument(
+        data=JsonApiWorkspaceExportTemplatePostOptionalId(
+            attributes=JsonApiWorkspaceExportTemplateInAttributes(
+                dashboard_slides_template=JsonApiWorkspaceExportTemplateInAttributesDashboardSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    cover_slide=CoverSlideTemplate(
+                        background_image=True,
+                        description_field="Exported at: {{exportedAt}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    intro_slide=IntroSlideTemplate(
+                        background_image=True,
+                        description_field='''About:
+{{dashboardDescription}}
+
+{{dashboardFilters}}''',
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        title_field="Introduction",
+                    ),
+                    section_slide=SectionSlideTemplate(
+                        background_image=True,
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+                name="name_example",
+                widget_slides_template=JsonApiWorkspaceExportTemplateInAttributesWidgetSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+            ),
+            id="id1",
+            type="workspaceExportTemplate",
+        ),
+    ) # JsonApiWorkspaceExportTemplatePostOptionalIdDocument | 
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Post Workspace Export Template
+        api_response = api_instance.create_entity_workspace_export_templates(workspace_id, json_api_workspace_export_template_post_optional_id_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_workspace_export_templates: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Post Workspace Export Template
+        api_response = api_instance.create_entity_workspace_export_templates(workspace_id, json_api_workspace_export_template_post_optional_id_document, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_workspace_export_templates: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **json_api_workspace_export_template_post_optional_id_document** | [**JsonApiWorkspaceExportTemplatePostOptionalIdDocument**](JsonApiWorkspaceExportTemplatePostOptionalIdDocument.md)|  |
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceExportTemplateOutDocument**](JsonApiWorkspaceExportTemplateOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **create_entity_workspace_settings**
 > JsonApiWorkspaceSettingOutDocument create_entity_workspace_settings(workspace_id, json_api_workspace_setting_post_optional_id_document)
 
@@ -3948,6 +4330,96 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiWorkspaceSettingOutDocument**](JsonApiWorkspaceSettingOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create_entity_workspace_themes**
+> JsonApiWorkspaceThemeOutDocument create_entity_workspace_themes(workspace_id, json_api_workspace_theme_in_document)
+
+Post Workspace Theme
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_theme_out_document import JsonApiWorkspaceThemeOutDocument
+from gooddata_api_client.model.json_api_workspace_theme_in_document import JsonApiWorkspaceThemeInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    json_api_workspace_theme_in_document = JsonApiWorkspaceThemeInDocument(
+        data=JsonApiWorkspaceThemeIn(
+            attributes=JsonApiColorPaletteInAttributes(
+                content={},
+                name="name_example",
+            ),
+            id="id1",
+            type="workspaceTheme",
+        ),
+    ) # JsonApiWorkspaceThemeInDocument | 
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Post Workspace Theme
+        api_response = api_instance.create_entity_workspace_themes(workspace_id, json_api_workspace_theme_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_workspace_themes: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Post Workspace Theme
+        api_response = api_instance.create_entity_workspace_themes(workspace_id, json_api_workspace_theme_in_document, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_workspace_themes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **json_api_workspace_theme_in_document** | [**JsonApiWorkspaceThemeInDocument**](JsonApiWorkspaceThemeInDocument.md)|  |
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceThemeOutDocument**](JsonApiWorkspaceThemeOutDocument.md)
 
 ### Authorization
 
@@ -5687,6 +6159,69 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **delete_entity_org_memory_items**
+> delete_entity_org_memory_items(id)
+
+Delete an organization Memory Item entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete an organization Memory Item entity
+        api_instance.delete_entity_org_memory_items(id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_org_memory_items: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **delete_entity_organization_settings**
 > delete_entity_organization_settings(id)
 
@@ -6203,6 +6738,71 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **delete_entity_workspace_color_palettes**
+> delete_entity_workspace_color_palettes(workspace_id, object_id)
+
+Delete a Workspace Color Palette
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete a Workspace Color Palette
+        api_instance.delete_entity_workspace_color_palettes(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_workspace_color_palettes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **delete_entity_workspace_data_filter_settings**
 > delete_entity_workspace_data_filter_settings(workspace_id, object_id)
 
@@ -6333,6 +6933,71 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **delete_entity_workspace_export_templates**
+> delete_entity_workspace_export_templates(workspace_id, object_id)
+
+Delete a Workspace Export Template
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete a Workspace Export Template
+        api_instance.delete_entity_workspace_export_templates(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_workspace_export_templates: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **delete_entity_workspace_settings**
 > delete_entity_workspace_settings(workspace_id, object_id)
 
@@ -6366,6 +7031,71 @@ with gooddata_api_client.ApiClient() as api_client:
         api_instance.delete_entity_workspace_settings(workspace_id, object_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_workspace_settings: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_entity_workspace_themes**
+> delete_entity_workspace_themes(workspace_id, object_id)
+
+Delete a Workspace Theme
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete a Workspace Theme
+        api_instance.delete_entity_workspace_themes(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_workspace_themes: %s\n" % e)
 ```
 
 
@@ -8564,6 +9294,98 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_all_entities_fiscal_calendars**
+> JsonApiFiscalCalendarOutList get_all_entities_fiscal_calendars(workspace_id)
+
+Get all Fiscal Calendars
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_fiscal_calendar_out_list import JsonApiFiscalCalendarOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    filter = "title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get all Fiscal Calendars
+        api_response = api_instance.get_all_entities_fiscal_calendars(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_fiscal_calendars: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get all Fiscal Calendars
+        api_response = api_instance.get_all_entities_fiscal_calendars(workspace_id, origin=origin, filter=filter, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_fiscal_calendars: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiFiscalCalendarOutList**](JsonApiFiscalCalendarOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_all_entities_identity_providers**
 > JsonApiIdentityProviderOutList get_all_entities_identity_providers()
 
@@ -9422,6 +10244,88 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_all_entities_org_memory_items**
+> JsonApiOrgMemoryItemOutList get_all_entities_org_memory_items()
+
+Get all organization Memory Item entities
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_org_memory_item_out_list import JsonApiOrgMemoryItemOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    filter = "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get all organization Memory Item entities
+        api_response = api_instance.get_all_entities_org_memory_items(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_org_memory_items: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiOrgMemoryItemOutList**](JsonApiOrgMemoryItemOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_all_entities_organization_settings**
 > JsonApiOrganizationSettingOutList get_all_entities_organization_settings()
 
@@ -10202,6 +11106,98 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_all_entities_workspace_color_palettes**
+> JsonApiWorkspaceColorPaletteOutList get_all_entities_workspace_color_palettes(workspace_id)
+
+Get all Workspace Color Palettes
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_color_palette_out_list import JsonApiWorkspaceColorPaletteOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get all Workspace Color Palettes
+        api_response = api_instance.get_all_entities_workspace_color_palettes(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_workspace_color_palettes: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get all Workspace Color Palettes
+        api_response = api_instance.get_all_entities_workspace_color_palettes(workspace_id, origin=origin, filter=filter, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_workspace_color_palettes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceColorPaletteOutList**](JsonApiWorkspaceColorPaletteOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_all_entities_workspace_data_filter_settings**
 > JsonApiWorkspaceDataFilterSettingOutList get_all_entities_workspace_data_filter_settings(workspace_id)
 
@@ -10394,6 +11390,98 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_all_entities_workspace_export_templates**
+> JsonApiWorkspaceExportTemplateOutList get_all_entities_workspace_export_templates(workspace_id)
+
+Get all Workspace Export Templates
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_export_template_out_list import JsonApiWorkspaceExportTemplateOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    filter = "name==someString;dashboardSlidesTemplate==WorkspaceDashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get all Workspace Export Templates
+        api_response = api_instance.get_all_entities_workspace_export_templates(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_workspace_export_templates: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get all Workspace Export Templates
+        api_response = api_instance.get_all_entities_workspace_export_templates(workspace_id, origin=origin, filter=filter, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_workspace_export_templates: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceExportTemplateOutList**](JsonApiWorkspaceExportTemplateOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_all_entities_workspace_settings**
 > JsonApiWorkspaceSettingOutList get_all_entities_workspace_settings(workspace_id)
 
@@ -10467,6 +11555,98 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiWorkspaceSettingOutList**](JsonApiWorkspaceSettingOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_all_entities_workspace_themes**
+> JsonApiWorkspaceThemeOutList get_all_entities_workspace_themes(workspace_id)
+
+Get all Workspace Themes
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_theme_out_list import JsonApiWorkspaceThemeOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get all Workspace Themes
+        api_response = api_instance.get_all_entities_workspace_themes(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_workspace_themes: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get all Workspace Themes
+        api_response = api_instance.get_all_entities_workspace_themes(workspace_id, origin=origin, filter=filter, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_workspace_themes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceThemeOutList**](JsonApiWorkspaceThemeOutList.md)
 
 ### Authorization
 
@@ -12665,6 +13845,86 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_entity_fiscal_calendars**
+> JsonApiFiscalCalendarOutDocument get_entity_fiscal_calendars(workspace_id, object_id)
+
+Get a Fiscal Calendar
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_fiscal_calendar_out_document import JsonApiFiscalCalendarOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    filter = "title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get a Fiscal Calendar
+        api_response = api_instance.get_entity_fiscal_calendars(workspace_id, object_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_fiscal_calendars: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get a Fiscal Calendar
+        api_response = api_instance.get_entity_fiscal_calendars(workspace_id, object_id, filter=filter, x_gdc_validate_relations=x_gdc_validate_relations)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_fiscal_calendars: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+
+### Return type
+
+[**JsonApiFiscalCalendarOutDocument**](JsonApiFiscalCalendarOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_entity_identity_providers**
 > JsonApiIdentityProviderOutDocument get_entity_identity_providers(id)
 
@@ -13460,6 +14720,86 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiNotificationChannelOutDocument**](JsonApiNotificationChannelOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_entity_org_memory_items**
+> JsonApiOrgMemoryItemOutDocument get_entity_org_memory_items(id)
+
+Get an organization Memory Item entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_org_memory_item_out_document import JsonApiOrgMemoryItemOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get an organization Memory Item entity
+        api_response = api_instance.get_entity_org_memory_items(id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_org_memory_items: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get an organization Memory Item entity
+        api_response = api_instance.get_entity_org_memory_items(id, filter=filter, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_org_memory_items: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiOrgMemoryItemOutDocument**](JsonApiOrgMemoryItemOutDocument.md)
 
 ### Authorization
 
@@ -14299,6 +15639,90 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_entity_workspace_color_palettes**
+> JsonApiWorkspaceColorPaletteOutDocument get_entity_workspace_color_palettes(workspace_id, object_id)
+
+Get a Workspace Color Palette
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_color_palette_out_document import JsonApiWorkspaceColorPaletteOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get a Workspace Color Palette
+        api_response = api_instance.get_entity_workspace_color_palettes(workspace_id, object_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_workspace_color_palettes: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get a Workspace Color Palette
+        api_response = api_instance.get_entity_workspace_color_palettes(workspace_id, object_id, filter=filter, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_workspace_color_palettes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceColorPaletteOutDocument**](JsonApiWorkspaceColorPaletteOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_entity_workspace_data_filter_settings**
 > JsonApiWorkspaceDataFilterSettingOutDocument get_entity_workspace_data_filter_settings(workspace_id, object_id)
 
@@ -14475,6 +15899,90 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_entity_workspace_export_templates**
+> JsonApiWorkspaceExportTemplateOutDocument get_entity_workspace_export_templates(workspace_id, object_id)
+
+Get a Workspace Export Template
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_export_template_out_document import JsonApiWorkspaceExportTemplateOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    filter = "name==someString;dashboardSlidesTemplate==WorkspaceDashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get a Workspace Export Template
+        api_response = api_instance.get_entity_workspace_export_templates(workspace_id, object_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_workspace_export_templates: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get a Workspace Export Template
+        api_response = api_instance.get_entity_workspace_export_templates(workspace_id, object_id, filter=filter, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_workspace_export_templates: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceExportTemplateOutDocument**](JsonApiWorkspaceExportTemplateOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_entity_workspace_settings**
 > JsonApiWorkspaceSettingOutDocument get_entity_workspace_settings(workspace_id, object_id)
 
@@ -14540,6 +16048,90 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiWorkspaceSettingOutDocument**](JsonApiWorkspaceSettingOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_entity_workspace_themes**
+> JsonApiWorkspaceThemeOutDocument get_entity_workspace_themes(workspace_id, object_id)
+
+Get a Workspace Theme
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_theme_out_document import JsonApiWorkspaceThemeOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get a Workspace Theme
+        api_response = api_instance.get_entity_workspace_themes(workspace_id, object_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_workspace_themes: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get a Workspace Theme
+        api_response = api_instance.get_entity_workspace_themes(workspace_id, object_id, filter=filter, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_workspace_themes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceThemeOutDocument**](JsonApiWorkspaceThemeOutDocument.md)
 
 ### Authorization
 
@@ -15252,15 +16844,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                         parameters=[
-                            ParameterItem(
-                                parameter=AfmObjectIdentifierParameter(
-                                    identifier=AfmObjectIdentifierParameterIdentifier(
-                                        id="sample_item.price",
-                                        type="parameter",
-                                    ),
-                                ),
-                                value="value_example",
-                            ),
+                            ParameterItem(),
                         ],
                     ),
                     interval="DAY",
@@ -15275,11 +16859,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             dashboard_parameters_override=[
-                                DashboardParameterValue(
-                                    id="year",
-                                    title="Year",
-                                    value="2026",
-                                ),
+                                ParameterValue(),
                             ],
                             dashboard_tabs_filters_overrides={
                                 "key": [
@@ -15288,13 +16868,14 @@ with gooddata_api_client.ApiClient() as api_client:
                             },
                             dashboard_tabs_parameters_overrides={
                                 "key": [
-                                    DashboardParameterValue(
-                                        id="year",
-                                        title="Year",
-                                        value="2026",
-                                    ),
+                                    ParameterValue(),
                                 ],
                             },
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
+                            ),
                             file_name="result",
                             format="XLSX",
                             settings=DashboardExportSettings(
@@ -15324,6 +16905,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             file_name="filename",
                             format="PNG",
                             metadata=JsonNode(),
+                            timezone_id="Asia/Kolkata",
                             widget_ids=[
                                 "widget_ids_example",
                             ],
@@ -15391,20 +16973,13 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 ],
                                 parameters=[
-                                    ParameterItem(
-                                        parameter=AfmObjectIdentifierParameter(
-                                            identifier=AfmObjectIdentifierParameterIdentifier(
-                                                id="sample_item.price",
-                                                type="parameter",
-                                            ),
-                                        ),
-                                        value="value_example",
-                                    ),
+                                    ParameterItem(),
                                 ],
                             ),
                             execution_settings=ExecutionSettings(
                                 data_sampling_percentage=0,
                                 timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
                             ),
                             file_name="result",
                             format="CSV",
@@ -15425,6 +17000,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             format="PDF",
                             metadata=JsonNode(),
                             template_id="template_id_example",
+                            timezone_id="Asia/Kolkata",
                             visualization_ids=[
                                 "visualization_ids_example",
                             ],
@@ -15452,6 +17028,30 @@ with gooddata_api_client.ApiClient() as api_client:
                                 },
                             ),
                             execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
+                            ),
+                            executions=[
+                                TabularExportExecution(
+                                    custom_override=CustomOverride(
+                                        labels={
+                                            "key": CustomLabel(
+                                                title="title_example",
+                                            ),
+                                        },
+                                        metrics={
+                                            "key": CustomMetric(
+                                                format="format_example",
+                                                title="title_example",
+                                            ),
+                                        },
+                                    ),
+                                    execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                                    title="Pushpins",
+                                ),
+                            ],
                             file_name="result",
                             format="CSV",
                             metadata=JsonNode(),
@@ -15483,6 +17083,9 @@ with gooddata_api_client.ApiClient() as api_client:
                             visualization_object_custom_filters=[
                                 {},
                             ],
+                            visualization_object_custom_parameters=[
+                                ParameterValue(),
+                            ],
                         ),
                     ),
                 ],
@@ -15496,6 +17099,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             file_name="filename",
                             metadata={},
+                            timezone_id="Asia/Kolkata",
                         ),
                     ),
                 ],
@@ -16161,6 +17765,8 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiDataSourcePatch(
             attributes=JsonApiDataSourcePatchAttributes(
                 alternative_data_source_id="pg_local_docker-demo2",
+                authentication_type="USERNAME_PASSWORD",
+                cache_retention=JsonApiDataSourceInAttributesCacheRetention(None),
                 cache_strategy="ALWAYS",
                 client_id="client_id_example",
                 client_secret="client_secret_example",
@@ -17705,6 +19311,104 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **patch_entity_org_memory_items**
+> JsonApiOrgMemoryItemOutDocument patch_entity_org_memory_items(id, json_api_org_memory_item_patch_document)
+
+Patch an organization Memory Item entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_org_memory_item_patch_document import JsonApiOrgMemoryItemPatchDocument
+from gooddata_api_client.model.json_api_org_memory_item_out_document import JsonApiOrgMemoryItemOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_org_memory_item_patch_document = JsonApiOrgMemoryItemPatchDocument(
+        data=JsonApiOrgMemoryItemPatch(
+            attributes=JsonApiOrgMemoryItemPatchAttributes(
+                description="description_example",
+                instruction="instruction_example",
+                is_disabled=True,
+                keywords=[
+                    "keywords_example",
+                ],
+                strategy="ALWAYS",
+                title="title_example",
+            ),
+            id="id1",
+            type="orgMemoryItem",
+        ),
+    ) # JsonApiOrgMemoryItemPatchDocument | 
+    filter = "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Patch an organization Memory Item entity
+        api_response = api_instance.patch_entity_org_memory_items(id, json_api_org_memory_item_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_org_memory_items: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Patch an organization Memory Item entity
+        api_response = api_instance.patch_entity_org_memory_items(id, json_api_org_memory_item_patch_document, filter=filter, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_org_memory_items: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_org_memory_item_patch_document** | [**JsonApiOrgMemoryItemPatchDocument**](JsonApiOrgMemoryItemPatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiOrgMemoryItemOutDocument**](JsonApiOrgMemoryItemOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **patch_entity_organization_settings**
 > JsonApiOrganizationSettingOutDocument patch_entity_organization_settings(id, json_api_organization_setting_patch_document)
 
@@ -18501,6 +20205,96 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **patch_entity_workspace_color_palettes**
+> JsonApiWorkspaceColorPaletteOutDocument patch_entity_workspace_color_palettes(workspace_id, object_id, json_api_workspace_color_palette_patch_document)
+
+Patch a Workspace Color Palette
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_color_palette_out_document import JsonApiWorkspaceColorPaletteOutDocument
+from gooddata_api_client.model.json_api_workspace_color_palette_patch_document import JsonApiWorkspaceColorPalettePatchDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_workspace_color_palette_patch_document = JsonApiWorkspaceColorPalettePatchDocument(
+        data=JsonApiWorkspaceColorPalettePatch(
+            attributes=JsonApiColorPalettePatchAttributes(
+                content={},
+                name="name_example",
+            ),
+            id="id1",
+            type="workspaceColorPalette",
+        ),
+    ) # JsonApiWorkspaceColorPalettePatchDocument | 
+    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Patch a Workspace Color Palette
+        api_response = api_instance.patch_entity_workspace_color_palettes(workspace_id, object_id, json_api_workspace_color_palette_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_workspace_color_palettes: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Patch a Workspace Color Palette
+        api_response = api_instance.patch_entity_workspace_color_palettes(workspace_id, object_id, json_api_workspace_color_palette_patch_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_workspace_color_palettes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_workspace_color_palette_patch_document** | [**JsonApiWorkspaceColorPalettePatchDocument**](JsonApiWorkspaceColorPalettePatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceColorPaletteOutDocument**](JsonApiWorkspaceColorPaletteOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **patch_entity_workspace_data_filter_settings**
 > JsonApiWorkspaceDataFilterSettingOutDocument patch_entity_workspace_data_filter_settings(workspace_id, object_id, json_api_workspace_data_filter_setting_patch_document)
 
@@ -18708,6 +20502,162 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **patch_entity_workspace_export_templates**
+> JsonApiWorkspaceExportTemplateOutDocument patch_entity_workspace_export_templates(workspace_id, object_id, json_api_workspace_export_template_patch_document)
+
+Patch a Workspace Export Template
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_export_template_patch_document import JsonApiWorkspaceExportTemplatePatchDocument
+from gooddata_api_client.model.json_api_workspace_export_template_out_document import JsonApiWorkspaceExportTemplateOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_workspace_export_template_patch_document = JsonApiWorkspaceExportTemplatePatchDocument(
+        data=JsonApiWorkspaceExportTemplatePatch(
+            attributes=JsonApiWorkspaceExportTemplatePatchAttributes(
+                dashboard_slides_template=JsonApiWorkspaceExportTemplateInAttributesDashboardSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    cover_slide=CoverSlideTemplate(
+                        background_image=True,
+                        description_field="Exported at: {{exportedAt}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    intro_slide=IntroSlideTemplate(
+                        background_image=True,
+                        description_field='''About:
+{{dashboardDescription}}
+
+{{dashboardFilters}}''',
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        title_field="Introduction",
+                    ),
+                    section_slide=SectionSlideTemplate(
+                        background_image=True,
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+                name="name_example",
+                widget_slides_template=JsonApiWorkspaceExportTemplateInAttributesWidgetSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+            ),
+            id="id1",
+            type="workspaceExportTemplate",
+        ),
+    ) # JsonApiWorkspaceExportTemplatePatchDocument | 
+    filter = "name==someString;dashboardSlidesTemplate==WorkspaceDashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Patch a Workspace Export Template
+        api_response = api_instance.patch_entity_workspace_export_templates(workspace_id, object_id, json_api_workspace_export_template_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_workspace_export_templates: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Patch a Workspace Export Template
+        api_response = api_instance.patch_entity_workspace_export_templates(workspace_id, object_id, json_api_workspace_export_template_patch_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_workspace_export_templates: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_workspace_export_template_patch_document** | [**JsonApiWorkspaceExportTemplatePatchDocument**](JsonApiWorkspaceExportTemplatePatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceExportTemplateOutDocument**](JsonApiWorkspaceExportTemplateOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **patch_entity_workspace_settings**
 > JsonApiWorkspaceSettingOutDocument patch_entity_workspace_settings(workspace_id, object_id, json_api_workspace_setting_patch_document)
 
@@ -18779,6 +20729,96 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiWorkspaceSettingOutDocument**](JsonApiWorkspaceSettingOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **patch_entity_workspace_themes**
+> JsonApiWorkspaceThemeOutDocument patch_entity_workspace_themes(workspace_id, object_id, json_api_workspace_theme_patch_document)
+
+Patch a Workspace Theme
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_theme_out_document import JsonApiWorkspaceThemeOutDocument
+from gooddata_api_client.model.json_api_workspace_theme_patch_document import JsonApiWorkspaceThemePatchDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_workspace_theme_patch_document = JsonApiWorkspaceThemePatchDocument(
+        data=JsonApiWorkspaceThemePatch(
+            attributes=JsonApiColorPalettePatchAttributes(
+                content={},
+                name="name_example",
+            ),
+            id="id1",
+            type="workspaceTheme",
+        ),
+    ) # JsonApiWorkspaceThemePatchDocument | 
+    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Patch a Workspace Theme
+        api_response = api_instance.patch_entity_workspace_themes(workspace_id, object_id, json_api_workspace_theme_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_workspace_themes: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Patch a Workspace Theme
+        api_response = api_instance.patch_entity_workspace_themes(workspace_id, object_id, json_api_workspace_theme_patch_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_workspace_themes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_workspace_theme_patch_document** | [**JsonApiWorkspaceThemePatchDocument**](JsonApiWorkspaceThemePatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceThemeOutDocument**](JsonApiWorkspaceThemeOutDocument.md)
 
 ### Authorization
 
@@ -21623,15 +23663,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                         ],
                         parameters=[
-                            ParameterItem(
-                                parameter=AfmObjectIdentifierParameter(
-                                    identifier=AfmObjectIdentifierParameterIdentifier(
-                                        id="sample_item.price",
-                                        type="parameter",
-                                    ),
-                                ),
-                                value="value_example",
-                            ),
+                            ParameterItem(),
                         ],
                     ),
                     interval="DAY",
@@ -21646,11 +23678,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ],
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             dashboard_parameters_override=[
-                                DashboardParameterValue(
-                                    id="year",
-                                    title="Year",
-                                    value="2026",
-                                ),
+                                ParameterValue(),
                             ],
                             dashboard_tabs_filters_overrides={
                                 "key": [
@@ -21659,13 +23687,14 @@ with gooddata_api_client.ApiClient() as api_client:
                             },
                             dashboard_tabs_parameters_overrides={
                                 "key": [
-                                    DashboardParameterValue(
-                                        id="year",
-                                        title="Year",
-                                        value="2026",
-                                    ),
+                                    ParameterValue(),
                                 ],
                             },
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
+                            ),
                             file_name="result",
                             format="XLSX",
                             settings=DashboardExportSettings(
@@ -21695,6 +23724,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             file_name="filename",
                             format="PNG",
                             metadata=JsonNode(),
+                            timezone_id="Asia/Kolkata",
                             widget_ids=[
                                 "widget_ids_example",
                             ],
@@ -21762,20 +23792,13 @@ with gooddata_api_client.ApiClient() as api_client:
                                     ),
                                 ],
                                 parameters=[
-                                    ParameterItem(
-                                        parameter=AfmObjectIdentifierParameter(
-                                            identifier=AfmObjectIdentifierParameterIdentifier(
-                                                id="sample_item.price",
-                                                type="parameter",
-                                            ),
-                                        ),
-                                        value="value_example",
-                                    ),
+                                    ParameterItem(),
                                 ],
                             ),
                             execution_settings=ExecutionSettings(
                                 data_sampling_percentage=0,
                                 timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
                             ),
                             file_name="result",
                             format="CSV",
@@ -21796,6 +23819,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             format="PDF",
                             metadata=JsonNode(),
                             template_id="template_id_example",
+                            timezone_id="Asia/Kolkata",
                             visualization_ids=[
                                 "visualization_ids_example",
                             ],
@@ -21823,6 +23847,30 @@ with gooddata_api_client.ApiClient() as api_client:
                                 },
                             ),
                             execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                            execution_settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
+                            ),
+                            executions=[
+                                TabularExportExecution(
+                                    custom_override=CustomOverride(
+                                        labels={
+                                            "key": CustomLabel(
+                                                title="title_example",
+                                            ),
+                                        },
+                                        metrics={
+                                            "key": CustomMetric(
+                                                format="format_example",
+                                                title="title_example",
+                                            ),
+                                        },
+                                    ),
+                                    execution_result="ff483727196c9dc862c7fd3a5a84df55c96d61a4",
+                                    title="Pushpins",
+                                ),
+                            ],
                             file_name="result",
                             format="CSV",
                             metadata=JsonNode(),
@@ -21854,6 +23902,9 @@ with gooddata_api_client.ApiClient() as api_client:
                             visualization_object_custom_filters=[
                                 {},
                             ],
+                            visualization_object_custom_parameters=[
+                                ParameterValue(),
+                            ],
                         ),
                     ),
                 ],
@@ -21867,6 +23918,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
                             file_name="filename",
                             metadata={},
+                            timezone_id="Asia/Kolkata",
                         ),
                     ),
                 ],
@@ -22623,6 +24675,8 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiDataSourceIn(
             attributes=JsonApiDataSourceInAttributes(
                 alternative_data_source_id="pg_local_docker-demo2",
+                authentication_type="USERNAME_PASSWORD",
+                cache_retention=JsonApiDataSourceInAttributesCacheRetention(None),
                 cache_strategy="ALWAYS",
                 client_id="client_id_example",
                 client_secret="client_secret_example",
@@ -23987,6 +26041,104 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **update_entity_org_memory_items**
+> JsonApiOrgMemoryItemOutDocument update_entity_org_memory_items(id, json_api_org_memory_item_in_document)
+
+Put an organization Memory Item entity
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_org_memory_item_in_document import JsonApiOrgMemoryItemInDocument
+from gooddata_api_client.model.json_api_org_memory_item_out_document import JsonApiOrgMemoryItemOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_org_memory_item_in_document = JsonApiOrgMemoryItemInDocument(
+        data=JsonApiOrgMemoryItemIn(
+            attributes=JsonApiOrgMemoryItemInAttributes(
+                description="description_example",
+                instruction="instruction_example",
+                is_disabled=True,
+                keywords=[
+                    "keywords_example",
+                ],
+                strategy="ALWAYS",
+                title="title_example",
+            ),
+            id="id1",
+            type="orgMemoryItem",
+        ),
+    ) # JsonApiOrgMemoryItemInDocument | 
+    filter = "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Put an organization Memory Item entity
+        api_response = api_instance.update_entity_org_memory_items(id, json_api_org_memory_item_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_org_memory_items: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Put an organization Memory Item entity
+        api_response = api_instance.update_entity_org_memory_items(id, json_api_org_memory_item_in_document, filter=filter, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_org_memory_items: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_org_memory_item_in_document** | [**JsonApiOrgMemoryItemInDocument**](JsonApiOrgMemoryItemInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiOrgMemoryItemOutDocument**](JsonApiOrgMemoryItemOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **update_entity_organization_settings**
 > JsonApiOrganizationSettingOutDocument update_entity_organization_settings(id, json_api_organization_setting_in_document)
 
@@ -24873,6 +27025,96 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **update_entity_workspace_color_palettes**
+> JsonApiWorkspaceColorPaletteOutDocument update_entity_workspace_color_palettes(workspace_id, object_id, json_api_workspace_color_palette_in_document)
+
+Put a Workspace Color Palette
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_color_palette_out_document import JsonApiWorkspaceColorPaletteOutDocument
+from gooddata_api_client.model.json_api_workspace_color_palette_in_document import JsonApiWorkspaceColorPaletteInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_workspace_color_palette_in_document = JsonApiWorkspaceColorPaletteInDocument(
+        data=JsonApiWorkspaceColorPaletteIn(
+            attributes=JsonApiColorPaletteInAttributes(
+                content={},
+                name="name_example",
+            ),
+            id="id1",
+            type="workspaceColorPalette",
+        ),
+    ) # JsonApiWorkspaceColorPaletteInDocument | 
+    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Put a Workspace Color Palette
+        api_response = api_instance.update_entity_workspace_color_palettes(workspace_id, object_id, json_api_workspace_color_palette_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_workspace_color_palettes: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Put a Workspace Color Palette
+        api_response = api_instance.update_entity_workspace_color_palettes(workspace_id, object_id, json_api_workspace_color_palette_in_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_workspace_color_palettes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_workspace_color_palette_in_document** | [**JsonApiWorkspaceColorPaletteInDocument**](JsonApiWorkspaceColorPaletteInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceColorPaletteOutDocument**](JsonApiWorkspaceColorPaletteOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **update_entity_workspace_data_filter_settings**
 > JsonApiWorkspaceDataFilterSettingOutDocument update_entity_workspace_data_filter_settings(workspace_id, object_id, json_api_workspace_data_filter_setting_in_document)
 
@@ -25080,6 +27322,162 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **update_entity_workspace_export_templates**
+> JsonApiWorkspaceExportTemplateOutDocument update_entity_workspace_export_templates(workspace_id, object_id, json_api_workspace_export_template_in_document)
+
+Put a Workspace Export Template
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_export_template_out_document import JsonApiWorkspaceExportTemplateOutDocument
+from gooddata_api_client.model.json_api_workspace_export_template_in_document import JsonApiWorkspaceExportTemplateInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_workspace_export_template_in_document = JsonApiWorkspaceExportTemplateInDocument(
+        data=JsonApiWorkspaceExportTemplateIn(
+            attributes=JsonApiWorkspaceExportTemplateInAttributes(
+                dashboard_slides_template=JsonApiWorkspaceExportTemplateInAttributesDashboardSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    cover_slide=CoverSlideTemplate(
+                        background_image=True,
+                        description_field="Exported at: {{exportedAt}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                    intro_slide=IntroSlideTemplate(
+                        background_image=True,
+                        description_field='''About:
+{{dashboardDescription}}
+
+{{dashboardFilters}}''',
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        title_field="Introduction",
+                    ),
+                    section_slide=SectionSlideTemplate(
+                        background_image=True,
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+                name="name_example",
+                widget_slides_template=JsonApiWorkspaceExportTemplateInAttributesWidgetSlidesTemplate(
+                    applied_on=["PDF","PPTX"],
+                    content_slide=ContentSlideTemplate(
+                        description_field="{{dashboardFilters}}",
+                        footer=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                        header=RunningSection(
+                            left="left_example",
+                            right="right_example",
+                        ),
+                    ),
+                ),
+            ),
+            id="id1",
+            type="workspaceExportTemplate",
+        ),
+    ) # JsonApiWorkspaceExportTemplateInDocument | 
+    filter = "name==someString;dashboardSlidesTemplate==WorkspaceDashboardSlidesTemplateValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Put a Workspace Export Template
+        api_response = api_instance.update_entity_workspace_export_templates(workspace_id, object_id, json_api_workspace_export_template_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_workspace_export_templates: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Put a Workspace Export Template
+        api_response = api_instance.update_entity_workspace_export_templates(workspace_id, object_id, json_api_workspace_export_template_in_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_workspace_export_templates: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_workspace_export_template_in_document** | [**JsonApiWorkspaceExportTemplateInDocument**](JsonApiWorkspaceExportTemplateInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceExportTemplateOutDocument**](JsonApiWorkspaceExportTemplateOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **update_entity_workspace_settings**
 > JsonApiWorkspaceSettingOutDocument update_entity_workspace_settings(workspace_id, object_id, json_api_workspace_setting_in_document)
 
@@ -25151,6 +27549,96 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiWorkspaceSettingOutDocument**](JsonApiWorkspaceSettingOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json, application/vnd.gooddata.api+json
+ - **Accept**: application/json, application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **update_entity_workspace_themes**
+> JsonApiWorkspaceThemeOutDocument update_entity_workspace_themes(workspace_id, object_id, json_api_workspace_theme_in_document)
+
+Put a Workspace Theme
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_workspace_theme_out_document import JsonApiWorkspaceThemeOutDocument
+from gooddata_api_client.model.json_api_workspace_theme_in_document import JsonApiWorkspaceThemeInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_workspace_theme_in_document = JsonApiWorkspaceThemeInDocument(
+        data=JsonApiWorkspaceThemeIn(
+            attributes=JsonApiColorPaletteInAttributes(
+                content={},
+                name="name_example",
+            ),
+            id="id1",
+            type="workspaceTheme",
+        ),
+    ) # JsonApiWorkspaceThemeInDocument | 
+    filter = "name==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Put a Workspace Theme
+        api_response = api_instance.update_entity_workspace_themes(workspace_id, object_id, json_api_workspace_theme_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_workspace_themes: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Put a Workspace Theme
+        api_response = api_instance.update_entity_workspace_themes(workspace_id, object_id, json_api_workspace_theme_in_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_workspace_themes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_workspace_theme_in_document** | [**JsonApiWorkspaceThemeInDocument**](JsonApiWorkspaceThemeInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiWorkspaceThemeOutDocument**](JsonApiWorkspaceThemeOutDocument.md)
 
 ### Authorization
 

@@ -81,6 +81,11 @@ class IdentifierRefIdentifier(ModelNormal):
             'WORKSPACEDATAFILTER': "workspaceDataFilter",
             'WORKSPACEDATAFILTERSETTING': "workspaceDataFilterSetting",
             'FILTERVIEW': "filterView",
+            'WORKSPACEEXPORTTEMPLATE': "workspaceExportTemplate",
+            'WORKSPACETHEME': "workspaceTheme",
+            'WORKSPACECOLORPALETTE': "workspaceColorPalette",
+            'FISCALCALENDAR': "fiscalCalendar",
+            'FISCALCALENDARGRANULARITY': "fiscalCalendarGranularity",
         },
     }
 

@@ -82,6 +82,11 @@ class UserManagementWorkspacePermissionAssignment(ModelNormal):
             'CREATE_FILTER_VIEW': "CREATE_FILTER_VIEW",
             'VIEW': "VIEW",
         },
+        ('access_source',): {
+            'DIRECT': "DIRECT",
+            'GROUP': "GROUP",
+            'HIERARCHY': "HIERARCHY",
+        },
     }
 
     validations = {
@@ -111,6 +116,7 @@ class UserManagementWorkspacePermissionAssignment(ModelNormal):
             'hierarchy_permissions': ([str],),  # noqa: E501
             'id': (str,),  # noqa: E501
             'permissions': ([str],),  # noqa: E501
+            'access_source': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
         }
 
@@ -123,10 +129,12 @@ class UserManagementWorkspacePermissionAssignment(ModelNormal):
         'hierarchy_permissions': 'hierarchyPermissions',  # noqa: E501
         'id': 'id',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
+        'access_source': 'accessSource',  # noqa: E501
         'name': 'name',  # noqa: E501
     }
 
     read_only_vars = {
+        'access_source',  # noqa: E501
         'name',  # noqa: E501
     }
 
@@ -173,6 +181,7 @@ class UserManagementWorkspacePermissionAssignment(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            access_source (str): How the subject gains access to the workspace (DIRECT, GROUP, HIERARCHY). Absent for direct-only listings.. [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
         """
 
@@ -267,6 +276,7 @@ class UserManagementWorkspacePermissionAssignment(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            access_source (str): How the subject gains access to the workspace (DIRECT, GROUP, HIERARCHY). Absent for direct-only listings.. [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
         """
 

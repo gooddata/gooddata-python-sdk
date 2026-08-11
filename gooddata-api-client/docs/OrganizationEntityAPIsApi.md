@@ -52,7 +52,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ip_allowlist_policy_targets = IpAllowlistPolicyTargets(
         targets=[
             AssigneeIdentifier(
-                id="id_example",
+                id="/6bUUGjjNSwg0_bs",
                 type="user",
             ),
         ],
@@ -1093,7 +1093,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ip_allowlist_policy_targets = IpAllowlistPolicyTargets(
         targets=[
             AssigneeIdentifier(
-                id="id_example",
+                id="/6bUUGjjNSwg0_bs",
                 type="user",
             ),
         ],

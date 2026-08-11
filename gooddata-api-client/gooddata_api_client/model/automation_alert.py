@@ -32,9 +32,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.alert_afm import AlertAfm
-    from gooddata_api_client.model.automation_alert_condition import AutomationAlertCondition
+    from gooddata_api_client.model.alert_condition import AlertCondition
     globals()['AlertAfm'] = AlertAfm
-    globals()['AutomationAlertCondition'] = AutomationAlertCondition
+    globals()['AlertCondition'] = AlertCondition
 
 
 class AutomationAlert(ModelNormal):
@@ -102,7 +102,7 @@ class AutomationAlert(ModelNormal):
         """
         lazy_import()
         return {
-            'condition': (AutomationAlertCondition,),  # noqa: E501
+            'condition': (AlertCondition,),  # noqa: E501
             'execution': (AlertAfm,),  # noqa: E501
             'interval': (str,),  # noqa: E501
             'trigger': (str,),  # noqa: E501
@@ -131,7 +131,7 @@ class AutomationAlert(ModelNormal):
         """AutomationAlert - a model defined in OpenAPI
 
         Args:
-            condition (AutomationAlertCondition):
+            condition (AlertCondition):
             execution (AlertAfm):
 
         Keyword Args:
@@ -224,7 +224,7 @@ class AutomationAlert(ModelNormal):
         """AutomationAlert - a model defined in OpenAPI
 
         Args:
-            condition (AutomationAlertCondition):
+            condition (AlertCondition):
             execution (AlertAfm):
 
         Keyword Args:

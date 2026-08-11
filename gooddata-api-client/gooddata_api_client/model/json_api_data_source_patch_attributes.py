@@ -31,7 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_data_source_in_attributes_cache_retention import JsonApiDataSourceInAttributesCacheRetention
     from gooddata_api_client.model.json_api_data_source_in_attributes_parameters_inner import JsonApiDataSourceInAttributesParametersInner
+    globals()['JsonApiDataSourceInAttributesCacheRetention'] = JsonApiDataSourceInAttributesCacheRetention
     globals()['JsonApiDataSourceInAttributesParametersInner'] = JsonApiDataSourceInAttributesParametersInner
 
 
@@ -60,6 +62,14 @@ class JsonApiDataSourcePatchAttributes(ModelNormal):
     """
 
     allowed_values = {
+        ('authentication_type',): {
+            'None': None,
+            'USERNAME_PASSWORD': "USERNAME_PASSWORD",
+            'TOKEN': "TOKEN",
+            'KEY_PAIR': "KEY_PAIR",
+            'CLIENT_SECRET': "CLIENT_SECRET",
+            'OIDC_PASSTHROUGH': "OIDC_PASSTHROUGH",
+        },
         ('cache_strategy',): {
             'None': None,
             'ALWAYS': "ALWAYS",
@@ -164,6 +174,8 @@ class JsonApiDataSourcePatchAttributes(ModelNormal):
         lazy_import()
         return {
             'alternative_data_source_id': (str, none_type,),  # noqa: E501
+            'authentication_type': (str, none_type,),  # noqa: E501
+            'cache_retention': (JsonApiDataSourceInAttributesCacheRetention,),  # noqa: E501
             'cache_strategy': (str, none_type,),  # noqa: E501
             'client_id': (str, none_type,),  # noqa: E501
             'client_secret': (str, none_type,),  # noqa: E501
@@ -187,6 +199,8 @@ class JsonApiDataSourcePatchAttributes(ModelNormal):
 
     attribute_map = {
         'alternative_data_source_id': 'alternativeDataSourceId',  # noqa: E501
+        'authentication_type': 'authenticationType',  # noqa: E501
+        'cache_retention': 'cacheRetention',  # noqa: E501
         'cache_strategy': 'cacheStrategy',  # noqa: E501
         'client_id': 'clientId',  # noqa: E501
         'client_secret': 'clientSecret',  # noqa: E501
@@ -245,6 +259,8 @@ class JsonApiDataSourcePatchAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             alternative_data_source_id (str, none_type): Alternative data source ID. It is a weak reference meaning data source does not have to exist. All the entities (e.g. tables) from the data source must be available also in the alternative data source. It must be present in the same organization as the data source.. [optional]  # noqa: E501
+            authentication_type (str, none_type): Type of authentication used to connect to the database.. [optional]  # noqa: E501
+            cache_retention (JsonApiDataSourceInAttributesCacheRetention): [optional]  # noqa: E501
             cache_strategy (str, none_type): Determines how the results coming from a particular datasource should be cached.. [optional]  # noqa: E501
             client_id (str, none_type): The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501
             client_secret (str, none_type): The client secret to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501
@@ -345,6 +361,8 @@ class JsonApiDataSourcePatchAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             alternative_data_source_id (str, none_type): Alternative data source ID. It is a weak reference meaning data source does not have to exist. All the entities (e.g. tables) from the data source must be available also in the alternative data source. It must be present in the same organization as the data source.. [optional]  # noqa: E501
+            authentication_type (str, none_type): Type of authentication used to connect to the database.. [optional]  # noqa: E501
+            cache_retention (JsonApiDataSourceInAttributesCacheRetention): [optional]  # noqa: E501
             cache_strategy (str, none_type): Determines how the results coming from a particular datasource should be cached.. [optional]  # noqa: E501
             client_id (str, none_type): The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501
             client_secret (str, none_type): The client secret to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501

@@ -206,6 +206,7 @@ class UserManagementApi(object):
             params_map={
                 'all': [
                     'user_id',
+                    'include_inherited',
                 ],
                 'required': [
                     'user_id',
@@ -225,12 +226,16 @@ class UserManagementApi(object):
                 'openapi_types': {
                     'user_id':
                         (str,),
+                    'include_inherited':
+                        (bool,),
                 },
                 'attribute_map': {
                     'user_id': 'userId',
+                    'include_inherited': 'includeInherited',
                 },
                 'location_map': {
                     'user_id': 'path',
+                    'include_inherited': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -255,6 +260,7 @@ class UserManagementApi(object):
             params_map={
                 'all': [
                     'user_group_id',
+                    'include_inherited',
                 ],
                 'required': [
                     'user_group_id',
@@ -274,12 +280,16 @@ class UserManagementApi(object):
                 'openapi_types': {
                     'user_group_id':
                         (str,),
+                    'include_inherited':
+                        (bool,),
                 },
                 'attribute_map': {
                     'user_group_id': 'userGroupId',
+                    'include_inherited': 'includeInherited',
                 },
                 'location_map': {
                     'user_group_id': 'path',
+                    'include_inherited': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -1085,6 +1095,7 @@ class UserManagementApi(object):
             user_id (str):
 
         Keyword Args:
+            include_inherited (bool): When true, include permissions inherited from user groups (workspaces also cascade down the workspace hierarchy). Each workspace and data source is tagged with how the user gains access. Defaults to false (direct assignments only).. [optional] if omitted the server will use the default value of False
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -1167,6 +1178,7 @@ class UserManagementApi(object):
             user_group_id (str):
 
         Keyword Args:
+            include_inherited (bool): When true, include permissions inherited from parent user groups (workspaces also cascade down the workspace hierarchy). Each workspace and data source is tagged with how the group gains access. Defaults to false (direct assignments only).. [optional] if omitted the server will use the default value of False
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -1501,7 +1513,7 @@ class UserManagementApi(object):
         Keyword Args:
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
             size (int): The size of the page to be returned.. [optional] if omitted the server will use the default value of 20
-            name (str): Filter by user name. Note that user name is case insensitive.. [optional]
+            name (str): Filter by user name, email or login (user ID). Note that the filter is case insensitive.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

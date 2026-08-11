@@ -106,6 +106,7 @@ class SlidesExportRequest(ModelNormal):
             'dashboard_id': (str,),  # noqa: E501
             'metadata': (JsonNode,),  # noqa: E501
             'template_id': (str, none_type,),  # noqa: E501
+            'timezone_id': (str, none_type,),  # noqa: E501
             'visualization_ids': ([str],),  # noqa: E501
             'widget_ids': ([str],),  # noqa: E501
         }
@@ -121,6 +122,7 @@ class SlidesExportRequest(ModelNormal):
         'dashboard_id': 'dashboardId',  # noqa: E501
         'metadata': 'metadata',  # noqa: E501
         'template_id': 'templateId',  # noqa: E501
+        'timezone_id': 'timezoneId',  # noqa: E501
         'visualization_ids': 'visualizationIds',  # noqa: E501
         'widget_ids': 'widgetIds',  # noqa: E501
     }
@@ -173,6 +175,7 @@ class SlidesExportRequest(ModelNormal):
             dashboard_id (str): Dashboard identifier. [optional]  # noqa: E501
             metadata (JsonNode): [optional]  # noqa: E501
             template_id (str, none_type): Export template identifier.. [optional]  # noqa: E501
+            timezone_id (str, none_type): Time zone the export should be rendered in, as an IANA identifier (e.g. 'Asia/Kolkata') or a GMT offset (e.g. 'GMT+01:00'). When omitted, the workspace time zone setting is used.. [optional]  # noqa: E501
             visualization_ids ([str]): List of visualization ids to be exported. Note that only one visualization is currently supported.. [optional]  # noqa: E501
             widget_ids ([str]): List of widget identifiers to be exported. Note that only one widget is currently supported.. [optional]  # noqa: E501
         """
@@ -269,6 +272,7 @@ class SlidesExportRequest(ModelNormal):
             dashboard_id (str): Dashboard identifier. [optional]  # noqa: E501
             metadata (JsonNode): [optional]  # noqa: E501
             template_id (str, none_type): Export template identifier.. [optional]  # noqa: E501
+            timezone_id (str, none_type): Time zone the export should be rendered in, as an IANA identifier (e.g. 'Asia/Kolkata') or a GMT offset (e.g. 'GMT+01:00'). When omitted, the workspace time zone setting is used.. [optional]  # noqa: E501
             visualization_ids ([str]): List of visualization ids to be exported. Note that only one visualization is currently supported.. [optional]  # noqa: E501
             widget_ids ([str]): List of widget identifiers to be exported. Note that only one widget is currently supported.. [optional]  # noqa: E501
         """

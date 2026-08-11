@@ -5,6 +5,7 @@ A logical data model (LDM) representation.
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**calendars** | [**{str: (DeclarativeCalendar,)}**](DeclarativeCalendar.md) | Custom fiscal calendars keyed by calendar ID. Can be defined only in the root workspace. | [optional] 
 **dataset_extensions** | [**[DeclarativeDatasetExtension]**](DeclarativeDatasetExtension.md) | An array containing extensions for datasets defined in parent workspaces. | [optional] 
 **datasets** | [**[DeclarativeDataset]**](DeclarativeDataset.md) | An array containing datasets. | [optional] 
 **date_instances** | [**[DeclarativeDateDataset]**](DeclarativeDateDataset.md) | An array containing date-related datasets. | [optional] 

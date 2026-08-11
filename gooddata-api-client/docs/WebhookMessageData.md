@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **filters** | [**[NotificationFilter]**](NotificationFilter.md) |  | [optional] 
 **image_exports** | [**[ExportResult]**](ExportResult.md) |  | [optional] 
 **notification_source** | **str** |  | [optional] 
+**parameters** | [**[NotificationParameter]**](NotificationParameter.md) |  | [optional] 
 **raw_exports** | [**[ExportResult]**](ExportResult.md) |  | [optional] 
 **recipients** | [**[WebhookRecipient]**](WebhookRecipient.md) |  | [optional] 
 **remaining_action_count** | **int** |  | [optional] 

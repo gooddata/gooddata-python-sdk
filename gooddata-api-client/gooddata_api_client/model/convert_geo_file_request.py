@@ -59,6 +59,9 @@ class ConvertGeoFileRequest(ModelNormal):
     }
 
     validations = {
+        ('location',): {
+            'min_length': 1,
+        },
     }
 
     @cached_property
