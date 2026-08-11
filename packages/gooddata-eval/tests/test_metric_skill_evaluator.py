@@ -1,4 +1,8 @@
 # (C) 2026 GoodData Corporation
+from unittest.mock import Mock
+
+import pytest
+from gooddata_eval.core.agentic.metric_skill import EvalEnvironmentError, _assert_expected_metrics_absent
 from gooddata_eval.core.evaluators import get_evaluator
 from gooddata_eval.core.models import ChatResult, DatasetItem
 
@@ -50,3 +54,35 @@ def test_metric_evaluator_fails_when_no_tool_call():
     assert result.passed is False
     assert result.detail["metric_created"] is False
     assert result.detail["metric_id"] is None
+
+
+def _sdk_with_metrics(*metric_ids: str) -> Mock:
+    sdk = Mock()
+    sdk._client.entities_api.get_all_entities_metrics.return_value = Mock(data=[Mock(id=mid) for mid in metric_ids])
+    return sdk
+
+
+def test_precheck_passes_on_clean_workspace():
+    _assert_expected_metrics_absent(_sdk_with_metrics("net_sales"), "ws", [{"metric_id": "average_order_value"}])
+
+
+def test_precheck_rejects_leftover_metric():
+    sdk = _sdk_with_metrics("net_sales", "average_order_value")
+    with pytest.raises(EvalEnvironmentError, match="average_order_value"):
+        _assert_expected_metrics_absent(sdk, "ws", [{"metric_id": "average_order_value"}])
+
+
+def test_precheck_is_not_an_assertion_error():
+    assert not issubclass(EvalEnvironmentError, AssertionError)
+
+
+def test_precheck_skips_when_metric_listing_fails():
+    sdk = Mock()
+    sdk._client.entities_api.get_all_entities_metrics.side_effect = RuntimeError("boom")
+    _assert_expected_metrics_absent(sdk, "ws", [{"metric_id": "average_order_value"}])
+
+
+def test_precheck_noop_without_expected_metric_id():
+    sdk = Mock()
+    _assert_expected_metrics_absent(sdk, "ws", [{"maql": "SELECT 1"}])
+    sdk._client.entities_api.get_all_entities_metrics.assert_not_called()

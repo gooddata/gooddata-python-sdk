@@ -121,6 +121,44 @@ class AgenticMetricSummary:
     best: MetricRunResult
 
 
+class EvalEnvironmentError(Exception):
+    """The workspace was not in the state the case requires — not a model failure.
+
+    Deliberately NOT an AssertionError: a dirty workspace and a wrong answer are different
+    problems with different owners, and collapsing them is how state pollution once got
+    reported as a model quality regression.
+    """
+
+    __tracebackhide__ = True
+
+
+def _assert_expected_metrics_absent(sdk: GoodDataSdk, workspace_id: str, expected_outputs: list[dict]) -> None:
+    """Fail before the conversation when a metric this case must create already exists.
+
+    Eval workspaces are persistent, so a metric an earlier run left behind makes the agent
+    correctly decline to create a duplicate. That answer carries no ``create_metric`` call, so
+    it scores ``metric_created=False`` and is indistinguishable from the model getting it wrong.
+    Checking up front turns a silent misdiagnosis into an actionable error.
+    """
+    expected_ids = {c.get("metric_id") for c in expected_outputs if c.get("metric_id")}
+    if not expected_ids:
+        return
+    try:
+        entities = sdk._client.entities_api.get_all_entities_metrics(workspace_id, origin="NATIVE", size=500)
+        existing = {m.id for m in entities.data}
+    except Exception as exc:  # noqa: BLE001
+        print(f"[PRECHECK] could not list metrics in {workspace_id}: {exc}")
+        return
+    clash = sorted(expected_ids & existing)
+    if clash:
+        raise EvalEnvironmentError(
+            f"Workspace '{workspace_id}' already contains {clash}, which this case is meant to create. "
+            f"The agent will decline to create a duplicate, which would score as a model failure. "
+            f"Reset the eval workspaces first: "
+            f"`ci/seed_llm_eval_workspaces.py --reset-only` (or the pipeline's reset-workspaces job)."
+        )
+
+
 def _extract_metric_result(tool_call_events: list[ToolCallEvent]) -> dict | None:
     for tc in tool_call_events:
         if tc.function_name == "create_metric" and tc.result:
@@ -244,6 +282,7 @@ def run_agentic_metric_skill(
     run_results: list[MetricRunResult] = []
     client = ChatClient(host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort)
     sdk = GoodDataSdk.create(host, token)
+    _assert_expected_metrics_absent(sdk, workspace_id, expected_outputs)
 
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()

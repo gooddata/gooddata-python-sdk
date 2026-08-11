@@ -32,6 +32,7 @@ from gooddata_eval.core.agentic.guardrail import (
 )
 from gooddata_eval.core.agentic.metric_skill import (
     AgenticMetricSummary,
+    EvalEnvironmentError,
     MetricRunResult,
     MetricSkillAssertionError,
     evaluate_agentic_metric_skill,
@@ -65,6 +66,7 @@ __all__ = [
     "ConversationAssertionError",
     "ConversationFixture",
     "ConversationResult",
+    "EvalEnvironmentError",
     "GeneralQuestionAssertionError",
     "GeneralQuestionResult",
     "GuardrailAssertionError",
