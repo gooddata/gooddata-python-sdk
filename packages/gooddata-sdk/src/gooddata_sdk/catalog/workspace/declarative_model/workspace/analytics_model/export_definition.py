@@ -2,9 +2,7 @@
 
 from attrs import define
 from gooddata_api_client.model.declarative_export_definition import DeclarativeExportDefinition
-from gooddata_api_client.model.declarative_export_definition_request_payload import (
-    DeclarativeExportDefinitionRequestPayload,
-)
+from gooddata_api_client.model.export_request import ExportRequest
 
 from gooddata_sdk import ExportCustomOverride, ExportSettings
 from gooddata_sdk.catalog.base import Base
@@ -25,8 +23,8 @@ class CatalogDeclarativeExportDefinitionRequestPayload(Base):
     dashboard_id: str | None = None
 
     @staticmethod
-    def client_class() -> type[DeclarativeExportDefinitionRequestPayload]:
-        return DeclarativeExportDefinitionRequestPayload
+    def client_class() -> type[ExportRequest]:
+        return ExportRequest
 
 
 @define(kw_only=True)
