@@ -112,7 +112,7 @@ class AILakeApi(object):
         )
         self.analyze_statistics_endpoint = _Endpoint(
             settings={
-                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/analyzeStatistics',
                 'operation_id': 'analyze_statistics',
@@ -162,9 +162,7 @@ class AILakeApi(object):
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
+                'accept': [],
                 'content_type': [
                     'application/json'
                 ]
@@ -173,7 +171,7 @@ class AILakeApi(object):
         )
         self.create_ai_lake_pipe_table_endpoint = _Endpoint(
             settings={
-                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/pipeTables',
                 'operation_id': 'create_ai_lake_pipe_table',
@@ -223,9 +221,7 @@ class AILakeApi(object):
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
+                'accept': [],
                 'content_type': [
                     'application/json'
                 ]
@@ -234,7 +230,7 @@ class AILakeApi(object):
         )
         self.delete_ai_lake_pipe_table_endpoint = _Endpoint(
             settings={
-                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName}',
                 'operation_id': 'delete_ai_lake_pipe_table',
@@ -285,16 +281,14 @@ class AILakeApi(object):
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
+                'accept': [],
                 'content_type': [],
             },
             api_client=api_client
         )
         self.deprovision_ai_lake_database_instance_endpoint = _Endpoint(
             settings={
-                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}',
                 'operation_id': 'deprovision_ai_lake_database_instance',
@@ -339,9 +333,7 @@ class AILakeApi(object):
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
+                'accept': [],
                 'content_type': [],
             },
             api_client=api_client
@@ -581,9 +573,12 @@ class AILakeApi(object):
                 'validations': {
                     ('page',): {
 
+                        'inclusive_minimum': 0,
                     },
                     ('size',): {
 
+                        'inclusive_maximum': 500,
+                        'inclusive_minimum': 1,
                     },
                     ('meta_include',): {
 
@@ -595,9 +590,9 @@ class AILakeApi(object):
                     'instance_id':
                         (str,),
                     'page':
-                        (str,),
+                        (int,),
                     'size':
-                        (str,),
+                        (int,),
                     'meta_include':
                         ([str],),
                 },
@@ -655,9 +650,12 @@ class AILakeApi(object):
                 'validations': {
                     ('page',): {
 
+                        'inclusive_minimum': 0,
                     },
                     ('size',): {
 
+                        'inclusive_maximum': 500,
+                        'inclusive_minimum': 1,
                     },
                     ('meta_include',): {
 
@@ -667,9 +665,9 @@ class AILakeApi(object):
                 },
                 'openapi_types': {
                     'page':
-                        (str,),
+                        (int,),
                     'size':
-                        (str,),
+                        (int,),
                     'meta_include':
                         ([str],),
                 },
@@ -725,9 +723,12 @@ class AILakeApi(object):
                 'validations': {
                     ('page',): {
 
+                        'inclusive_minimum': 0,
                     },
                     ('size',): {
 
+                        'inclusive_maximum': 500,
+                        'inclusive_minimum': 1,
                     },
                     ('meta_include',): {
 
@@ -737,9 +738,9 @@ class AILakeApi(object):
                 },
                 'openapi_types': {
                     'page':
-                        (str,),
+                        (int,),
                     'size':
-                        (str,),
+                        (int,),
                     'meta_include':
                         ([str],),
                 },
@@ -798,9 +799,12 @@ class AILakeApi(object):
                 'validations': {
                     ('page',): {
 
+                        'inclusive_minimum': 0,
                     },
                     ('size',): {
 
+                        'inclusive_maximum': 500,
+                        'inclusive_minimum': 1,
                     },
                     ('meta_include',): {
 
@@ -812,9 +816,9 @@ class AILakeApi(object):
                     'instance_id':
                         (str,),
                     'page':
-                        (str,),
+                        (int,),
                     'size':
-                        (str,),
+                        (int,),
                     'meta_include':
                         ([str],),
                 },
@@ -872,9 +876,12 @@ class AILakeApi(object):
                 'validations': {
                     ('page',): {
 
+                        'inclusive_minimum': 0,
                     },
                     ('size',): {
 
+                        'inclusive_maximum': 500,
+                        'inclusive_minimum': 1,
                     },
                     ('meta_include',): {
 
@@ -884,9 +891,9 @@ class AILakeApi(object):
                 },
                 'openapi_types': {
                     'page':
-                        (str,),
+                        (int,),
                     'size':
-                        (str,),
+                        (int,),
                     'meta_include':
                         ([str],),
                 },
@@ -914,7 +921,7 @@ class AILakeApi(object):
         )
         self.provision_ai_lake_database_instance_endpoint = _Endpoint(
             settings={
-                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances',
                 'operation_id': 'provision_ai_lake_database_instance',
@@ -958,9 +965,7 @@ class AILakeApi(object):
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
+                'accept': [],
                 'content_type': [
                     'application/json'
                 ]
@@ -969,7 +974,7 @@ class AILakeApi(object):
         )
         self.refresh_ai_lake_pipe_table_partition_endpoint = _Endpoint(
             settings={
-                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName}/refresh',
                 'operation_id': 'refresh_ai_lake_pipe_table_partition',
@@ -1025,9 +1030,7 @@ class AILakeApi(object):
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
+                'accept': [],
                 'content_type': [
                     'application/json'
                 ]
@@ -1091,7 +1094,7 @@ class AILakeApi(object):
         )
         self.run_ai_lake_service_command_endpoint = _Endpoint(
             settings={
-                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/services/{serviceId}/commands/{commandName}/run',
                 'operation_id': 'run_ai_lake_service_command',
@@ -1147,9 +1150,7 @@ class AILakeApi(object):
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
+                'accept': [],
                 'content_type': [
                     'application/json'
                 ]
@@ -1353,7 +1354,7 @@ class AILakeApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -1441,7 +1442,7 @@ class AILakeApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -1529,7 +1530,7 @@ class AILakeApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -1615,7 +1616,7 @@ class AILakeApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -2002,8 +2003,8 @@ class AILakeApi(object):
             instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
 
         Keyword Args:
-            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
-            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
+            page (int): Zero-based page number.. [optional] if omitted the server will use the default value of 0
+            size (int): Number of items per page.. [optional] if omitted the server will use the default value of 50
             meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -2085,8 +2086,8 @@ class AILakeApi(object):
 
 
         Keyword Args:
-            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
-            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
+            page (int): Zero-based page number.. [optional] if omitted the server will use the default value of 0
+            size (int): Number of items per page.. [optional] if omitted the server will use the default value of 50
             meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -2166,8 +2167,8 @@ class AILakeApi(object):
 
 
         Keyword Args:
-            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
-            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
+            page (int): Zero-based page number.. [optional] if omitted the server will use the default value of 0
+            size (int): Number of items per page.. [optional] if omitted the server will use the default value of 50
             meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -2250,8 +2251,8 @@ class AILakeApi(object):
             instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
 
         Keyword Args:
-            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
-            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
+            page (int): Zero-based page number.. [optional] if omitted the server will use the default value of 0
+            size (int): Number of items per page.. [optional] if omitted the server will use the default value of 50
             meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -2333,8 +2334,8 @@ class AILakeApi(object):
 
 
         Keyword Args:
-            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
-            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
+            page (int): Zero-based page number.. [optional] if omitted the server will use the default value of 0
+            size (int): Number of items per page.. [optional] if omitted the server will use the default value of 50
             meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -2450,7 +2451,7 @@ class AILakeApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -2538,7 +2539,7 @@ class AILakeApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -2717,7 +2718,7 @@ class AILakeApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """

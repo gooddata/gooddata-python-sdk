@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Id of the datasource | 
 **permissions** | **[str]** |  | 
+**access_source** | **str** | How the subject gains access to the data source (DIRECT or GROUP). Absent for direct-only listings. | [optional] [readonly] 
 **name** | **str** | Name of the datasource | [optional] [readonly] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

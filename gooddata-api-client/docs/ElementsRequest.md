@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **filter_by** | [**FilterBy**](FilterBy.md) |  | [optional] 
 **pattern_filter** | **str** | Return only items, whose &#x60;&#x60;&#x60;label&#x60;&#x60;&#x60; title case insensitively contains &#x60;&#x60;&#x60;filter&#x60;&#x60;&#x60; as substring. | [optional] 
 **sort_order** | **str** | Sort order of returned items. Items are sorted by &#x60;&#x60;&#x60;label&#x60;&#x60;&#x60; title. If no sort order is specified then attribute&#39;s &#x60;&#x60;&#x60;sortDirection&#x60;&#x60;&#x60; is used, which is ASC by default | [optional] 
+**timezone** | **str** | Time zone (IANA id, e.g. \&quot;Europe/Prague\&quot;) used to resolve relative date filters in &#x60;&#x60;&#x60;dependsOn&#x60;&#x60;&#x60;. If set it takes precedence over the workspace/user time zone setting; if not set the setting is used. | [optional] 
 **validate_by** | [**[ValidateByItem]**](ValidateByItem.md) | Return only items that are computable on metric. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

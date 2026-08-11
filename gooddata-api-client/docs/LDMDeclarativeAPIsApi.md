@@ -116,6 +116,19 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     declarative_model = DeclarativeModel(
         ldm=DeclarativeLdm(
+            calendars={
+                "key": DeclarativeCalendar(
+                    definition=CalendarDefinition(),
+                    description="Custom fiscal calendar starting in April.",
+                    enabled_granularities=[
+                        CalendarGranularity(
+                            granularity="FISCAL_MONTH",
+                            prefix="FP",
+                        ),
+                    ],
+                    name="Fiscal calendar",
+                ),
+            },
             dataset_extensions=[
                 DeclarativeDatasetExtension(
                     id="customers",
@@ -280,7 +293,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 DeclarativeDateDataset(
                     description="A customer order date",
                     granularities=[
-                        "MINUTE",
+                        "SECOND",
                     ],
                     granularities_formatting=GranularitiesFormatting(
                         title_base="title_base_example",

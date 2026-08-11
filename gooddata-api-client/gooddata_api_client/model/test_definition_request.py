@@ -89,6 +89,14 @@ class TestDefinitionRequest(ModelNormal):
             'AILAKEHOUSE': "AILAKEHOUSE",
             'DENODO': "DENODO",
         },
+        ('authentication_type',): {
+            'None': None,
+            'USERNAME_PASSWORD': "USERNAME_PASSWORD",
+            'TOKEN': "TOKEN",
+            'KEY_PAIR': "KEY_PAIR",
+            'CLIENT_SECRET': "CLIENT_SECRET",
+            'OIDC_PASSTHROUGH': "OIDC_PASSTHROUGH",
+        },
     }
 
     validations = {
@@ -118,6 +126,7 @@ class TestDefinitionRequest(ModelNormal):
         lazy_import()
         return {
             'type': (str,),  # noqa: E501
+            'authentication_type': (str, none_type,),  # noqa: E501
             'client_id': (str,),  # noqa: E501
             'client_secret': (str,),  # noqa: E501
             'parameters': ([DataSourceParameter],),  # noqa: E501
@@ -137,6 +146,7 @@ class TestDefinitionRequest(ModelNormal):
 
     attribute_map = {
         'type': 'type',  # noqa: E501
+        'authentication_type': 'authenticationType',  # noqa: E501
         'client_id': 'clientId',  # noqa: E501
         'client_secret': 'clientSecret',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
@@ -193,6 +203,7 @@ class TestDefinitionRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            authentication_type (str, none_type): Type of authentication used to connect to the database. Determines how the supplied credentials are used (e.g. KEY_PAIR, OIDC_PASSTHROUGH).. [optional]  # noqa: E501
             client_id (str): Id for client based authentication for data sources which supports it.. [optional]  # noqa: E501
             client_secret (str): Secret for client based authentication for data sources which supports it.. [optional]  # noqa: E501
             parameters ([DataSourceParameter]): [optional]  # noqa: E501
@@ -292,6 +303,7 @@ class TestDefinitionRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            authentication_type (str, none_type): Type of authentication used to connect to the database. Determines how the supplied credentials are used (e.g. KEY_PAIR, OIDC_PASSTHROUGH).. [optional]  # noqa: E501
             client_id (str): Id for client based authentication for data sources which supports it.. [optional]  # noqa: E501
             client_secret (str): Secret for client based authentication for data sources which supports it.. [optional]  # noqa: E501
             parameters ([DataSourceParameter]): [optional]  # noqa: E501

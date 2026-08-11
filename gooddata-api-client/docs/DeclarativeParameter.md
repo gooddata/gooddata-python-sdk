@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | [**DeclarativeParameterContent**](DeclarativeParameterContent.md) |  | 
+**content** | [**ParameterDefinition**](ParameterDefinition.md) |  | 
 **id** | **str** | Parameter ID. | 
 **title** | **str** | Parameter title. | 
 **created_at** | **str, none_type** | Time of the entity creation. | [optional] 

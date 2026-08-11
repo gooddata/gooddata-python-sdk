@@ -56,6 +56,9 @@ class DateTruncPartitionConfig(ModelNormal):
     """
 
     allowed_values = {
+        ('type',): {
+            'DATETRUNC': "dateTrunc",
+        },
         ('unit',): {
             'YEAR': "year",
             'QUARTER': "quarter",
@@ -95,6 +98,7 @@ class DateTruncPartitionConfig(ModelNormal):
         """
         return {
             'column': (str,),  # noqa: E501
+            'type': (str,),  # noqa: E501
             'unit': (str,),  # noqa: E501
         }
 
@@ -105,6 +109,7 @@ class DateTruncPartitionConfig(ModelNormal):
 
     attribute_map = {
         'column': 'column',  # noqa: E501
+        'type': 'type',  # noqa: E501
         'unit': 'unit',  # noqa: E501
     }
 
@@ -123,6 +128,7 @@ class DateTruncPartitionConfig(ModelNormal):
             unit (str): Date/time unit for partition granularity
 
         Keyword Args:
+            type (str): defaults to "dateTrunc", must be one of ["dateTrunc", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -155,6 +161,7 @@ class DateTruncPartitionConfig(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
+        type = kwargs.get('type', "dateTrunc")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -185,6 +192,7 @@ class DateTruncPartitionConfig(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.column = column
+        self.type = type
         self.unit = unit
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -214,6 +222,7 @@ class DateTruncPartitionConfig(ModelNormal):
             unit (str): Date/time unit for partition granularity
 
         Keyword Args:
+            type (str): defaults to "dateTrunc", must be one of ["dateTrunc", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -246,6 +255,7 @@ class DateTruncPartitionConfig(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
+        type = kwargs.get('type', "dateTrunc")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -274,6 +284,7 @@ class DateTruncPartitionConfig(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.column = column
+        self.type = type
         self.unit = unit
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

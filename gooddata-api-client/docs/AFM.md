@@ -6,7 +6,7 @@ Top level executable entity. Combination of [A]ttributes, [F]ilters & [M]etrics.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **attributes** | [**[AttributeItem]**](AttributeItem.md) | Attributes to be used in the computation. | 
-**filters** | [**[AFMFiltersInner]**](AFMFiltersInner.md) | Various filter types to filter the execution result. | 
+**filters** | [**[FilterDefinition]**](FilterDefinition.md) | Various filter types to filter the execution result. | 
 **measures** | [**[MeasureItem]**](MeasureItem.md) | Metrics to be computed. | 
 **aux_measures** | [**[MeasureItem]**](MeasureItem.md) | Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result. | [optional] 
 **measure_definition_overrides** | [**[MetricDefinitionOverride]**](MetricDefinitionOverride.md) | (EXPERIMENTAL) Override definitions of catalog metrics for this request. Allows substituting a catalog metric&#39;s MAQL definition without modifying the stored definition. | [optional] 

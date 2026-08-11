@@ -5,6 +5,7 @@ A request containing all information for testing existing data source.
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**authentication_type** | **str, none_type** | Type of authentication used to connect to the database. Determines how the supplied credentials are used (e.g. KEY_PAIR, OIDC_PASSTHROUGH). | [optional] 
 **client_id** | **str** | Id for client based authentication for data sources which supports it. | [optional] 
 **client_secret** | **str** | Secret for client based authentication for data sources which supports it. | [optional] 
 **parameters** | [**[DataSourceParameter]**](DataSourceParameter.md) |  | [optional] 

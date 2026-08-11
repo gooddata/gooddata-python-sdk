@@ -56,6 +56,9 @@ class HashDistributionConfig(ModelNormal):
     """
 
     allowed_values = {
+        ('type',): {
+            'HASH': "hash",
+        },
     }
 
     validations = {
@@ -85,6 +88,7 @@ class HashDistributionConfig(ModelNormal):
                 and the value is attribute type.
         """
         return {
+            'type': (str,),  # noqa: E501
             'buckets': (int,),  # noqa: E501
             'columns': ([str],),  # noqa: E501
         }
@@ -95,6 +99,7 @@ class HashDistributionConfig(ModelNormal):
 
 
     attribute_map = {
+        'type': 'type',  # noqa: E501
         'buckets': 'buckets',  # noqa: E501
         'columns': 'columns',  # noqa: E501
     }
@@ -109,7 +114,10 @@ class HashDistributionConfig(ModelNormal):
     def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """HashDistributionConfig - a model defined in OpenAPI
 
+        Args:
+
         Keyword Args:
+            type (str): defaults to "hash", must be one of ["hash", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -144,6 +152,7 @@ class HashDistributionConfig(ModelNormal):
             columns ([str]): Columns to distribute by. Defaults to first column.. [optional]  # noqa: E501
         """
 
+        type = kwargs.get('type', "hash")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -173,6 +182,7 @@ class HashDistributionConfig(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -196,7 +206,10 @@ class HashDistributionConfig(ModelNormal):
     def __init__(self, *args, **kwargs):  # noqa: E501
         """HashDistributionConfig - a model defined in OpenAPI
 
+        Args:
+
         Keyword Args:
+            type (str): defaults to "hash", must be one of ["hash", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -231,6 +244,7 @@ class HashDistributionConfig(ModelNormal):
             columns ([str]): Columns to distribute by. Defaults to first column.. [optional]  # noqa: E501
         """
 
+        type = kwargs.get('type', "hash")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -258,6 +272,7 @@ class HashDistributionConfig(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

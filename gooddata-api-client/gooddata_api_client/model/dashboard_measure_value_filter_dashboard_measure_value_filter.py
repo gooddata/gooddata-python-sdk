@@ -90,8 +90,8 @@ class DashboardMeasureValueFilterDashboardMeasureValueFilter(ModelNormal):
         """
         lazy_import()
         return {
-            'conditions': ([DashboardCompoundConditionItem],),  # noqa: E501
             'measure': (IdentifierRef,),  # noqa: E501
+            'conditions': ([DashboardCompoundConditionItem],),  # noqa: E501
             'dimensionality': ([IdentifierRef],),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
@@ -103,8 +103,8 @@ class DashboardMeasureValueFilterDashboardMeasureValueFilter(ModelNormal):
 
 
     attribute_map = {
-        'conditions': 'conditions',  # noqa: E501
         'measure': 'measure',  # noqa: E501
+        'conditions': 'conditions',  # noqa: E501
         'dimensionality': 'dimensionality',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
         'title': 'title',  # noqa: E501
@@ -117,11 +117,10 @@ class DashboardMeasureValueFilterDashboardMeasureValueFilter(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, conditions, measure, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, measure, *args, **kwargs):  # noqa: E501
         """DashboardMeasureValueFilterDashboardMeasureValueFilter - a model defined in OpenAPI
 
         Args:
-            conditions ([DashboardCompoundConditionItem]):
             measure (IdentifierRef):
 
         Keyword Args:
@@ -155,6 +154,7 @@ class DashboardMeasureValueFilterDashboardMeasureValueFilter(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            conditions ([DashboardCompoundConditionItem]): [optional]  # noqa: E501
             dimensionality ([IdentifierRef]): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
@@ -189,7 +189,6 @@ class DashboardMeasureValueFilterDashboardMeasureValueFilter(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.conditions = conditions
         self.measure = measure
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -211,11 +210,10 @@ class DashboardMeasureValueFilterDashboardMeasureValueFilter(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, conditions, measure, *args, **kwargs):  # noqa: E501
+    def __init__(self, measure, *args, **kwargs):  # noqa: E501
         """DashboardMeasureValueFilterDashboardMeasureValueFilter - a model defined in OpenAPI
 
         Args:
-            conditions ([DashboardCompoundConditionItem]):
             measure (IdentifierRef):
 
         Keyword Args:
@@ -249,6 +247,7 @@ class DashboardMeasureValueFilterDashboardMeasureValueFilter(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            conditions ([DashboardCompoundConditionItem]): [optional]  # noqa: E501
             dimensionality ([IdentifierRef]): [optional]  # noqa: E501
             local_identifier (str): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
@@ -281,7 +280,6 @@ class DashboardMeasureValueFilterDashboardMeasureValueFilter(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.conditions = conditions
         self.measure = measure
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

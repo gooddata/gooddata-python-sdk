@@ -32,10 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.attribute_item import AttributeItem
-    from gooddata_api_client.model.change_analysis_params_filters_inner import ChangeAnalysisParamsFiltersInner
+    from gooddata_api_client.model.filter_definition import FilterDefinition
     from gooddata_api_client.model.measure_item import MeasureItem
     globals()['AttributeItem'] = AttributeItem
-    globals()['ChangeAnalysisParamsFiltersInner'] = ChangeAnalysisParamsFiltersInner
+    globals()['FilterDefinition'] = FilterDefinition
     globals()['MeasureItem'] = MeasureItem
 
 
@@ -109,11 +109,11 @@ class OutlierDetectionRequest(ModelNormal):
         lazy_import()
         return {
             'attributes': ([AttributeItem],),  # noqa: E501
-            'filters': ([ChangeAnalysisParamsFiltersInner],),  # noqa: E501
             'granularity': (str,),  # noqa: E501
             'measures': ([MeasureItem],),  # noqa: E501
             'sensitivity': (str,),  # noqa: E501
             'aux_measures': ([MeasureItem],),  # noqa: E501
+            'filters': ([FilterDefinition],),  # noqa: E501
         }
 
     @cached_property
@@ -123,11 +123,11 @@ class OutlierDetectionRequest(ModelNormal):
 
     attribute_map = {
         'attributes': 'attributes',  # noqa: E501
-        'filters': 'filters',  # noqa: E501
         'granularity': 'granularity',  # noqa: E501
         'measures': 'measures',  # noqa: E501
         'sensitivity': 'sensitivity',  # noqa: E501
         'aux_measures': 'auxMeasures',  # noqa: E501
+        'filters': 'filters',  # noqa: E501
     }
 
     read_only_vars = {
@@ -137,12 +137,11 @@ class OutlierDetectionRequest(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, attributes, filters, granularity, measures, sensitivity, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, attributes, granularity, measures, sensitivity, *args, **kwargs):  # noqa: E501
         """OutlierDetectionRequest - a model defined in OpenAPI
 
         Args:
             attributes ([AttributeItem]): Attributes to be used in the computation.
-            filters ([ChangeAnalysisParamsFiltersInner]): Various filter types to filter the execution result.
             granularity (str): Date granularity for anomaly detection. Only time-based granularities are supported (HOUR, DAY, WEEK, MONTH, QUARTER, YEAR).
             measures ([MeasureItem]):
             sensitivity (str): Sensitivity level for outlier detection
@@ -179,6 +178,7 @@ class OutlierDetectionRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             aux_measures ([MeasureItem]): Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.. [optional]  # noqa: E501
+            filters ([FilterDefinition]): Various filter types to filter the execution result.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -211,7 +211,6 @@ class OutlierDetectionRequest(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.attributes = attributes
-        self.filters = filters
         self.granularity = granularity
         self.measures = measures
         self.sensitivity = sensitivity
@@ -235,12 +234,11 @@ class OutlierDetectionRequest(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, attributes, filters, granularity, measures, sensitivity, *args, **kwargs):  # noqa: E501
+    def __init__(self, attributes, granularity, measures, sensitivity, *args, **kwargs):  # noqa: E501
         """OutlierDetectionRequest - a model defined in OpenAPI
 
         Args:
             attributes ([AttributeItem]): Attributes to be used in the computation.
-            filters ([ChangeAnalysisParamsFiltersInner]): Various filter types to filter the execution result.
             granularity (str): Date granularity for anomaly detection. Only time-based granularities are supported (HOUR, DAY, WEEK, MONTH, QUARTER, YEAR).
             measures ([MeasureItem]):
             sensitivity (str): Sensitivity level for outlier detection
@@ -277,6 +275,7 @@ class OutlierDetectionRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             aux_measures ([MeasureItem]): Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.. [optional]  # noqa: E501
+            filters ([FilterDefinition]): Various filter types to filter the execution result.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -307,7 +306,6 @@ class OutlierDetectionRequest(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.attributes = attributes
-        self.filters = filters
         self.granularity = granularity
         self.measures = measures
         self.sensitivity = sensitivity

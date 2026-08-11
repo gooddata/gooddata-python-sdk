@@ -32,13 +32,13 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.column_expression import ColumnExpression
-    from gooddata_api_client.model.distribution_config import DistributionConfig
-    from gooddata_api_client.model.key_config import KeyConfig
-    from gooddata_api_client.model.partition_config import PartitionConfig
+    from gooddata_api_client.model.create_pipe_table_request_distribution_config import CreatePipeTableRequestDistributionConfig
+    from gooddata_api_client.model.create_pipe_table_request_key_config import CreatePipeTableRequestKeyConfig
+    from gooddata_api_client.model.create_pipe_table_request_partition_config import CreatePipeTableRequestPartitionConfig
     globals()['ColumnExpression'] = ColumnExpression
-    globals()['DistributionConfig'] = DistributionConfig
-    globals()['KeyConfig'] = KeyConfig
-    globals()['PartitionConfig'] = PartitionConfig
+    globals()['CreatePipeTableRequestDistributionConfig'] = CreatePipeTableRequestDistributionConfig
+    globals()['CreatePipeTableRequestKeyConfig'] = CreatePipeTableRequestKeyConfig
+    globals()['CreatePipeTableRequestPartitionConfig'] = CreatePipeTableRequestPartitionConfig
 
 
 class CreatePipeTableRequest(ModelNormal):
@@ -100,10 +100,10 @@ class CreatePipeTableRequest(ModelNormal):
             'aggregation_overrides': ({str: (str,)},),  # noqa: E501
             'column_expressions': ({str: (ColumnExpression,)},),  # noqa: E501
             'column_overrides': ({str: (str,)},),  # noqa: E501
-            'distribution_config': (DistributionConfig,),  # noqa: E501
-            'key_config': (KeyConfig,),  # noqa: E501
+            'distribution_config': (CreatePipeTableRequestDistributionConfig,),  # noqa: E501
+            'key_config': (CreatePipeTableRequestKeyConfig,),  # noqa: E501
             'max_varchar_length': (int,),  # noqa: E501
-            'partition_config': (PartitionConfig,),  # noqa: E501
+            'partition_config': (CreatePipeTableRequestPartitionConfig,),  # noqa: E501
             'polling_interval_seconds': (int,),  # noqa: E501
             'table_properties': ({str: (str,)},),  # noqa: E501
         }
@@ -177,10 +177,10 @@ class CreatePipeTableRequest(ModelNormal):
             aggregation_overrides ({str: (str,)}): Maps non-key column names to their StarRocks aggregation function (SUM, MIN, MAX, REPLACE, REPLACE_IF_NOT_NULL, HLL_UNION, BITMAP_UNION, PERCENTILE_UNION). Required for every non-key column when keyConfig type is 'aggregate'. Ignored for other key types.. [optional]  # noqa: E501
             column_expressions ({str: (ColumnExpression,)}): Per-target-column projection overrides. Each entry emits `<function>(<column>) AS <key>` in the SELECT list of the generated CREATE PIPE ... AS INSERT; keys absent from the map are projected as-is. Required for AGGREGATE-KEY tables that include native HLL columns (StarRocks rejects raw VARBINARY into HLL columns).. [optional]  # noqa: E501
             column_overrides ({str: (str,)}): Override inferred column types. Maps column names to SQL type strings (e.g. {\"year\": \"INT\", \"event_date\": \"DATE\"}). Applied after parquet schema inference.. [optional]  # noqa: E501
-            distribution_config (DistributionConfig): [optional]  # noqa: E501
-            key_config (KeyConfig): [optional]  # noqa: E501
+            distribution_config (CreatePipeTableRequestDistributionConfig): [optional]  # noqa: E501
+            key_config (CreatePipeTableRequestKeyConfig): [optional]  # noqa: E501
             max_varchar_length (int): Cap VARCHAR(N) to this length when N exceeds it. 0 = no cap.. [optional]  # noqa: E501
-            partition_config (PartitionConfig): [optional]  # noqa: E501
+            partition_config (CreatePipeTableRequestPartitionConfig): [optional]  # noqa: E501
             polling_interval_seconds (int): How often (in seconds) the pipe polls for new files. 0 or null = use server default.. [optional]  # noqa: E501
             table_properties ({str: (str,)}): CREATE TABLE PROPERTIES key-value pairs. Defaults to {\"replication_num\": \"1\"}.. [optional]  # noqa: E501
         """
@@ -279,10 +279,10 @@ class CreatePipeTableRequest(ModelNormal):
             aggregation_overrides ({str: (str,)}): Maps non-key column names to their StarRocks aggregation function (SUM, MIN, MAX, REPLACE, REPLACE_IF_NOT_NULL, HLL_UNION, BITMAP_UNION, PERCENTILE_UNION). Required for every non-key column when keyConfig type is 'aggregate'. Ignored for other key types.. [optional]  # noqa: E501
             column_expressions ({str: (ColumnExpression,)}): Per-target-column projection overrides. Each entry emits `<function>(<column>) AS <key>` in the SELECT list of the generated CREATE PIPE ... AS INSERT; keys absent from the map are projected as-is. Required for AGGREGATE-KEY tables that include native HLL columns (StarRocks rejects raw VARBINARY into HLL columns).. [optional]  # noqa: E501
             column_overrides ({str: (str,)}): Override inferred column types. Maps column names to SQL type strings (e.g. {\"year\": \"INT\", \"event_date\": \"DATE\"}). Applied after parquet schema inference.. [optional]  # noqa: E501
-            distribution_config (DistributionConfig): [optional]  # noqa: E501
-            key_config (KeyConfig): [optional]  # noqa: E501
+            distribution_config (CreatePipeTableRequestDistributionConfig): [optional]  # noqa: E501
+            key_config (CreatePipeTableRequestKeyConfig): [optional]  # noqa: E501
             max_varchar_length (int): Cap VARCHAR(N) to this length when N exceeds it. 0 = no cap.. [optional]  # noqa: E501
-            partition_config (PartitionConfig): [optional]  # noqa: E501
+            partition_config (CreatePipeTableRequestPartitionConfig): [optional]  # noqa: E501
             polling_interval_seconds (int): How often (in seconds) the pipe polls for new files. 0 or null = use server default.. [optional]  # noqa: E501
             table_properties ({str: (str,)}): CREATE TABLE PROPERTIES key-value pairs. Defaults to {\"replication_num\": \"1\"}.. [optional]  # noqa: E501
         """

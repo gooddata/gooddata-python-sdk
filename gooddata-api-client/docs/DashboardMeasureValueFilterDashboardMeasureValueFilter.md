@@ -4,8 +4,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**conditions** | [**[DashboardCompoundConditionItem]**](DashboardCompoundConditionItem.md) |  | 
 **measure** | [**IdentifierRef**](IdentifierRef.md) |  | 
+**conditions** | [**[DashboardCompoundConditionItem]**](DashboardCompoundConditionItem.md) |  | [optional] 
 **dimensionality** | [**[IdentifierRef]**](IdentifierRef.md) |  | [optional] 
 **local_identifier** | **str** |  | [optional] 
 **title** | **str** |  | [optional] 

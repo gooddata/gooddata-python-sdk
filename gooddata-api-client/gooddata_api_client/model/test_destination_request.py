@@ -32,9 +32,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.automation_external_recipient import AutomationExternalRecipient
-    from gooddata_api_client.model.declarative_notification_channel_destination import DeclarativeNotificationChannelDestination
+    from gooddata_api_client.model.notification_channel_destination import NotificationChannelDestination
     globals()['AutomationExternalRecipient'] = AutomationExternalRecipient
-    globals()['DeclarativeNotificationChannelDestination'] = DeclarativeNotificationChannelDestination
+    globals()['NotificationChannelDestination'] = NotificationChannelDestination
 
 
 class TestDestinationRequest(ModelNormal):
@@ -93,7 +93,7 @@ class TestDestinationRequest(ModelNormal):
         """
         lazy_import()
         return {
-            'destination': (DeclarativeNotificationChannelDestination,),  # noqa: E501
+            'destination': (NotificationChannelDestination,),  # noqa: E501
             'external_recipients': ([AutomationExternalRecipient], none_type,),  # noqa: E501
         }
 
@@ -118,7 +118,7 @@ class TestDestinationRequest(ModelNormal):
         """TestDestinationRequest - a model defined in OpenAPI
 
         Args:
-            destination (DeclarativeNotificationChannelDestination):
+            destination (NotificationChannelDestination):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -208,7 +208,7 @@ class TestDestinationRequest(ModelNormal):
         """TestDestinationRequest - a model defined in OpenAPI
 
         Args:
-            destination (DeclarativeNotificationChannelDestination):
+            destination (NotificationChannelDestination):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

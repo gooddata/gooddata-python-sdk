@@ -113,8 +113,8 @@ class AnalyticsCatalogCreatedBy(ModelNormal):
         """AnalyticsCatalogCreatedBy - a model defined in OpenAPI
 
         Args:
-            reasoning (str): Reasoning for error states
-            users ([AnalyticsCatalogUser]): Users who created any object in the catalog
+            reasoning (str): Reserved for future use. Always empty string in the current implementation.
+            users ([AnalyticsCatalogUser]): Distinct users who have created at least one catalog object.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -204,8 +204,8 @@ class AnalyticsCatalogCreatedBy(ModelNormal):
         """AnalyticsCatalogCreatedBy - a model defined in OpenAPI
 
         Args:
-            reasoning (str): Reasoning for error states
-            users ([AnalyticsCatalogUser]): Users who created any object in the catalog
+            reasoning (str): Reserved for future use. Always empty string in the current implementation.
+            users ([AnalyticsCatalogUser]): Distinct users who have created at least one catalog object.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

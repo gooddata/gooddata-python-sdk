@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **custom_dashboard_url** | **str** | Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are: {workspaceId} {dashboardId} {automationId} {asOfDate}  | [optional] 
 **dashboard_link_visibility** | **str** | Dashboard link visibility in notifications. HIDDEN - the link will not be included INTERNAL_ONLY - only internal users will see the link ALL - all users will see the link  | [optional]  if omitted the server will use the default value of "INTERNAL_ONLY"
 **description** | **str** | Description of a notification channel. | [optional] 
-**destination** | [**DeclarativeNotificationChannelDestination**](DeclarativeNotificationChannelDestination.md) |  | [optional] 
+**destination** | [**NotificationChannelDestination**](NotificationChannelDestination.md) |  | [optional] 
 **destination_type** | **str, none_type** |  | [optional] [readonly] 
 **in_platform_notification** | **str** | In-platform notifications configuration. No effect if the destination type is IN_PLATFORM. DISABLED - in-platform notifications are not sent ENABLED - in-platform notifications are sent in addition to the regular notifications  | [optional]  if omitted the server will use the default value of "DISABLED"
 **name** | **str** | Name of a notification channel. | [optional] 

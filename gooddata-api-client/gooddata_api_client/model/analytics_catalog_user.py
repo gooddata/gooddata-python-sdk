@@ -109,9 +109,9 @@ class AnalyticsCatalogUser(ModelNormal):
         """AnalyticsCatalogUser - a model defined in OpenAPI
 
         Args:
-            firstname (str): First name of the user who created any objects
-            lastname (str): Last name of the user who created any objects
-            user_id (str): User ID of the user who created any objects
+            firstname (str): User first name.
+            lastname (str): User last name.
+            user_id (str): User identifier.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -202,9 +202,9 @@ class AnalyticsCatalogUser(ModelNormal):
         """AnalyticsCatalogUser - a model defined in OpenAPI
 
         Args:
-            firstname (str): First name of the user who created any objects
-            lastname (str): Last name of the user who created any objects
-            user_id (str): User ID of the user who created any objects
+            firstname (str): User first name.
+            lastname (str): User last name.
+            user_id (str): User identifier.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

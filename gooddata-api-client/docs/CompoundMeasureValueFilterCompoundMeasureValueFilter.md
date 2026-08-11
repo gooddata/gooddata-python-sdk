@@ -4,9 +4,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**conditions** | [**[MeasureValueCondition]**](MeasureValueCondition.md) | List of conditions to apply. Conditions are combined with OR logic. Each condition can be either a comparison (e.g., &gt; 100) or a range (e.g., BETWEEN 10 AND 50). If empty, no filtering is applied and all rows are returned. | 
 **measure** | [**AfmIdentifier**](AfmIdentifier.md) |  | 
 **apply_on_result** | **bool** |  | [optional] 
+**conditions** | [**[MeasureValueCondition]**](MeasureValueCondition.md) | List of conditions to apply. Conditions are combined with OR logic. Each condition can be either a comparison (e.g., &gt; 100) or a range (e.g., BETWEEN 10 AND 50). If empty, no filtering is applied and all rows are returned. | [optional] 
 **dimensionality** | [**[AfmIdentifier]**](AfmIdentifier.md) | References to the attributes to be used when filtering. | [optional] 
 **local_identifier** | **str** |  | [optional] 
 **treat_null_values_as** | **float** | A value that will be substituted for null values in the metric for the comparisons. | [optional] 

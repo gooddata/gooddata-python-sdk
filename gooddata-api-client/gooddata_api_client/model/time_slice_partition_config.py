@@ -56,6 +56,9 @@ class TimeSlicePartitionConfig(ModelNormal):
     """
 
     allowed_values = {
+        ('type',): {
+            'TIMESLICE': "timeSlice",
+        },
         ('unit',): {
             'YEAR': "year",
             'QUARTER': "quarter",
@@ -99,6 +102,7 @@ class TimeSlicePartitionConfig(ModelNormal):
         return {
             'column': (str,),  # noqa: E501
             'slices': (int,),  # noqa: E501
+            'type': (str,),  # noqa: E501
             'unit': (str,),  # noqa: E501
         }
 
@@ -110,6 +114,7 @@ class TimeSlicePartitionConfig(ModelNormal):
     attribute_map = {
         'column': 'column',  # noqa: E501
         'slices': 'slices',  # noqa: E501
+        'type': 'type',  # noqa: E501
         'unit': 'unit',  # noqa: E501
     }
 
@@ -129,6 +134,7 @@ class TimeSlicePartitionConfig(ModelNormal):
             unit (str): Date/time unit for partition granularity
 
         Keyword Args:
+            type (str): defaults to "timeSlice", must be one of ["timeSlice", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -161,6 +167,7 @@ class TimeSlicePartitionConfig(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
+        type = kwargs.get('type', "timeSlice")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -192,6 +199,7 @@ class TimeSlicePartitionConfig(ModelNormal):
 
         self.column = column
         self.slices = slices
+        self.type = type
         self.unit = unit
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -222,6 +230,7 @@ class TimeSlicePartitionConfig(ModelNormal):
             unit (str): Date/time unit for partition granularity
 
         Keyword Args:
+            type (str): defaults to "timeSlice", must be one of ["timeSlice", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -254,6 +263,7 @@ class TimeSlicePartitionConfig(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
+        type = kwargs.get('type', "timeSlice")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -283,6 +293,7 @@ class TimeSlicePartitionConfig(ModelNormal):
 
         self.column = column
         self.slices = slices
+        self.type = type
         self.unit = unit
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

@@ -3,9 +3,22 @@ import builtins
 
 from attrs import define, field
 from gooddata_api_client.model.declarative_notification_channel import DeclarativeNotificationChannel
+from gooddata_api_client.model.notification_channel_destination import NotificationChannelDestination
 from gooddata_api_client.model.webhook import Webhook
 
 from gooddata_sdk.catalog.base import Base
+
+# The generator collapses the `type` enums of NotificationChannelDestination's oneOf children
+# into the last child's single value (IN_PLATFORM), so valid destinations of the other types
+# fail client-side validation on both serialization and response parsing. Restore the full set.
+NotificationChannelDestination.allowed_values[("type",)].update(
+    {
+        "WEBHOOK": "WEBHOOK",
+        "SMTP": "SMTP",
+        "DEFAULT_SMTP": "DEFAULT_SMTP",
+        "IN_PLATFORM": "IN_PLATFORM",
+    }
+)
 
 # TODO: there is an issue with generated client which causes these two classes to fail
 # type in gooddata_api_client/model/declarative_notification_channel_destination.py contains only WEBHOOK as valid value

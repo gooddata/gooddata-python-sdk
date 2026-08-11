@@ -60,6 +60,9 @@ class VisualizationSwitcherWidgetDescriptor(ModelNormal):
     """
 
     allowed_values = {
+        ('widget_type',): {
+            'VISUALIZATIONSWITCHER': "visualizationSwitcher",
+        },
     }
 
     validations = {
@@ -92,6 +95,7 @@ class VisualizationSwitcherWidgetDescriptor(ModelNormal):
             'title': (str,),  # noqa: E501
             'visualization_ids': ([str],),  # noqa: E501
             'widget_id': (str,),  # noqa: E501
+            'widget_type': (str,),  # noqa: E501
             'filters': ([FilterDefinition],),  # noqa: E501
             'result_id': (str,),  # noqa: E501
         }
@@ -106,6 +110,7 @@ class VisualizationSwitcherWidgetDescriptor(ModelNormal):
         'title': 'title',  # noqa: E501
         'visualization_ids': 'visualizationIds',  # noqa: E501
         'widget_id': 'widgetId',  # noqa: E501
+        'widget_type': 'widgetType',  # noqa: E501
         'filters': 'filters',  # noqa: E501
         'result_id': 'resultId',  # noqa: E501
     }
@@ -127,6 +132,7 @@ class VisualizationSwitcherWidgetDescriptor(ModelNormal):
             widget_id (str): Widget object ID.
 
         Keyword Args:
+            widget_type (str): defaults to "visualizationSwitcher", must be one of ["visualizationSwitcher", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -161,6 +167,7 @@ class VisualizationSwitcherWidgetDescriptor(ModelNormal):
             result_id (str): Signed result ID for the currently active visualization's execution result.. [optional]  # noqa: E501
         """
 
+        widget_type = kwargs.get('widget_type', "visualizationSwitcher")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -194,6 +201,7 @@ class VisualizationSwitcherWidgetDescriptor(ModelNormal):
         self.title = title
         self.visualization_ids = visualization_ids
         self.widget_id = widget_id
+        self.widget_type = widget_type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -224,6 +232,7 @@ class VisualizationSwitcherWidgetDescriptor(ModelNormal):
             widget_id (str): Widget object ID.
 
         Keyword Args:
+            widget_type (str): defaults to "visualizationSwitcher", must be one of ["visualizationSwitcher", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -258,6 +267,7 @@ class VisualizationSwitcherWidgetDescriptor(ModelNormal):
             result_id (str): Signed result ID for the currently active visualization's execution result.. [optional]  # noqa: E501
         """
 
+        widget_type = kwargs.get('widget_type', "visualizationSwitcher")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -289,6 +299,7 @@ class VisualizationSwitcherWidgetDescriptor(ModelNormal):
         self.title = title
         self.visualization_ids = visualization_ids
         self.widget_id = widget_id
+        self.widget_type = widget_type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

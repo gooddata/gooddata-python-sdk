@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.change_analysis_params_filters_inner import ChangeAnalysisParamsFiltersInner
-    globals()['ChangeAnalysisParamsFiltersInner'] = ChangeAnalysisParamsFiltersInner
+    from gooddata_api_client.model.filter_definition import FilterDefinition
+    globals()['FilterDefinition'] = FilterDefinition
 
 
 class WidgetDescriptor(ModelNormal):
@@ -91,7 +91,7 @@ class WidgetDescriptor(ModelNormal):
             'title': (str,),  # noqa: E501
             'widget_id': (str,),  # noqa: E501
             'widget_type': (str,),  # noqa: E501
-            'filters': ([ChangeAnalysisParamsFiltersInner],),  # noqa: E501
+            'filters': ([FilterDefinition],),  # noqa: E501
         }
 
     @cached_property
@@ -155,7 +155,7 @@ class WidgetDescriptor(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            filters ([ChangeAnalysisParamsFiltersInner]): [optional]  # noqa: E501
+            filters ([FilterDefinition]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -249,7 +249,7 @@ class WidgetDescriptor(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            filters ([ChangeAnalysisParamsFiltersInner]): [optional]  # noqa: E501
+            filters ([FilterDefinition]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -5,6 +5,7 @@ Aggregate key model — pre-aggregates rows sharing the same key columns.
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**type** | **str** |  | defaults to "aggregate"
 **columns** | **[str]** | Key columns. Defaults to first inferred column. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

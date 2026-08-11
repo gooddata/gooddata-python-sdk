@@ -167,9 +167,12 @@ class AILakeServicesOperationsApi(object):
                 'validations': {
                     ('page',): {
 
+                        'inclusive_minimum': 0,
                     },
                     ('size',): {
 
+                        'inclusive_maximum': 500,
+                        'inclusive_minimum': 1,
                     },
                     ('meta_include',): {
 
@@ -179,9 +182,9 @@ class AILakeServicesOperationsApi(object):
                 },
                 'openapi_types': {
                     'page':
-                        (str,),
+                        (int,),
                     'size':
-                        (str,),
+                        (int,),
                     'meta_include':
                         ([str],),
                 },
@@ -209,7 +212,7 @@ class AILakeServicesOperationsApi(object):
         )
         self.run_ai_lake_service_command_endpoint = _Endpoint(
             settings={
-                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                'response_type': None,
                 'auth': [],
                 'endpoint_path': '/api/v1/ailake/services/{serviceId}/commands/{commandName}/run',
                 'operation_id': 'run_ai_lake_service_command',
@@ -265,9 +268,7 @@ class AILakeServicesOperationsApi(object):
                 }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
+                'accept': [],
                 'content_type': [
                     'application/json'
                 ]
@@ -456,8 +457,8 @@ class AILakeServicesOperationsApi(object):
 
 
         Keyword Args:
-            page (str): Zero-based page number.. [optional] if omitted the server will use the default value of "0"
-            size (str): Number of items per page.. [optional] if omitted the server will use the default value of "50"
+            page (int): Zero-based page number.. [optional] if omitted the server will use the default value of 0
+            size (int): Number of items per page.. [optional] if omitted the server will use the default value of 50
             meta_include ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -577,7 +578,7 @@ class AILakeServicesOperationsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """

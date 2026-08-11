@@ -43,6 +43,7 @@ with gooddata_api_client.ApiClient() as api_client:
         file_name="filename",
         format="PNG",
         metadata=JsonNode(),
+        timezone_id="Asia/Kolkata",
         widget_ids=[
             "widget_ids_example",
         ],

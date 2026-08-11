@@ -109,7 +109,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 permissions=[
                     DeclarativeUserPermission(
                         assignee=AssigneeIdentifier(
-                            id="id_example",
+                            id="/6bUUGjjNSwg0_bs",
                             type="user",
                         ),
                         name="SEE",

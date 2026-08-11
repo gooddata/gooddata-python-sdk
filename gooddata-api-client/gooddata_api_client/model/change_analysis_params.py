@@ -32,10 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.attribute_item import AttributeItem
-    from gooddata_api_client.model.change_analysis_params_filters_inner import ChangeAnalysisParamsFiltersInner
+    from gooddata_api_client.model.filter_definition import FilterDefinition
     from gooddata_api_client.model.measure_item import MeasureItem
     globals()['AttributeItem'] = AttributeItem
-    globals()['ChangeAnalysisParamsFiltersInner'] = ChangeAnalysisParamsFiltersInner
+    globals()['FilterDefinition'] = FilterDefinition
     globals()['MeasureItem'] = MeasureItem
 
 
@@ -95,7 +95,7 @@ class ChangeAnalysisParams(ModelNormal):
             'analyzed_period': (str,),  # noqa: E501
             'attributes': ([AttributeItem],),  # noqa: E501
             'date_attribute': (AttributeItem,),  # noqa: E501
-            'filters': ([ChangeAnalysisParamsFiltersInner],),  # noqa: E501
+            'filters': ([FilterDefinition],),  # noqa: E501
             'measure': (MeasureItem,),  # noqa: E501
             'measure_title': (str,),  # noqa: E501
             'reference_period': (str,),  # noqa: E501
@@ -132,7 +132,7 @@ class ChangeAnalysisParams(ModelNormal):
             analyzed_period (str): The analyzed time period
             attributes ([AttributeItem]): Attributes to analyze for significant changes
             date_attribute (AttributeItem):
-            filters ([ChangeAnalysisParamsFiltersInner]): Optional filters to apply
+            filters ([FilterDefinition]): Optional filters to apply
             measure (MeasureItem):
             measure_title (str): The title of the measure being analyzed
             reference_period (str): The reference time period
@@ -235,7 +235,7 @@ class ChangeAnalysisParams(ModelNormal):
             analyzed_period (str): The analyzed time period
             attributes ([AttributeItem]): Attributes to analyze for significant changes
             date_attribute (AttributeItem):
-            filters ([ChangeAnalysisParamsFiltersInner]): Optional filters to apply
+            filters ([FilterDefinition]): Optional filters to apply
             measure (MeasureItem):
             measure_title (str): The title of the measure being analyzed
             reference_period (str): The reference time period

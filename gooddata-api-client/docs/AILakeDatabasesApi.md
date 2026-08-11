@@ -89,7 +89,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **deprovision_ai_lake_database_instance**
-> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} deprovision_ai_lake_database_instance(instance_id)
+> deprovision_ai_lake_database_instance(instance_id)
 
 (BETA) Delete an existing AILake Database instance
 
@@ -120,8 +120,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # (BETA) Delete an existing AILake Database instance
-        api_response = api_instance.deprovision_ai_lake_database_instance(instance_id)
-        pprint(api_response)
+        api_instance.deprovision_ai_lake_database_instance(instance_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakeDatabasesApi->deprovision_ai_lake_database_instance: %s\n" % e)
 
@@ -129,8 +128,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # (BETA) Delete an existing AILake Database instance
-        api_response = api_instance.deprovision_ai_lake_database_instance(instance_id, operation_id=operation_id)
-        pprint(api_response)
+        api_instance.deprovision_ai_lake_database_instance(instance_id, operation_id=operation_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakeDatabasesApi->deprovision_ai_lake_database_instance: %s\n" % e)
 ```
@@ -145,7 +143,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
+void (empty response body)
 
 ### Authorization
 
@@ -154,7 +152,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
@@ -260,8 +258,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = ai_lake_databases_api.AILakeDatabasesApi(api_client)
     instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
-    page = "0" # str | Zero-based page number. (optional) if omitted the server will use the default value of "0"
-    size = "50" # str | Number of items per page. (optional) if omitted the server will use the default value of "50"
+    page = 0 # int | Zero-based page number. (optional) if omitted the server will use the default value of 0
+    size = 50 # int | Number of items per page. (optional) if omitted the server will use the default value of 50
     meta_include = [
         "metaInclude_example",
     ] # [str] |  (optional)
@@ -290,8 +288,8 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
- **page** | **str**| Zero-based page number. | [optional] if omitted the server will use the default value of "0"
- **size** | **str**| Number of items per page. | [optional] if omitted the server will use the default value of "50"
+ **page** | **int**| Zero-based page number. | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| Number of items per page. | [optional] if omitted the server will use the default value of 50
  **meta_include** | **[str]**|  | [optional]
 
 ### Return type
@@ -343,8 +341,8 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = ai_lake_databases_api.AILakeDatabasesApi(api_client)
-    page = "0" # str | Zero-based page number. (optional) if omitted the server will use the default value of "0"
-    size = "50" # str | Number of items per page. (optional) if omitted the server will use the default value of "50"
+    page = 0 # int | Zero-based page number. (optional) if omitted the server will use the default value of 0
+    size = 50 # int | Number of items per page. (optional) if omitted the server will use the default value of 50
     meta_include = [
         "metaInclude_example",
     ] # [str] |  (optional)
@@ -364,8 +362,8 @@ with gooddata_api_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | **str**| Zero-based page number. | [optional] if omitted the server will use the default value of "0"
- **size** | **str**| Number of items per page. | [optional] if omitted the server will use the default value of "50"
+ **page** | **int**| Zero-based page number. | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| Number of items per page. | [optional] if omitted the server will use the default value of 50
  **meta_include** | **[str]**|  | [optional]
 
 ### Return type
@@ -417,8 +415,8 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = ai_lake_databases_api.AILakeDatabasesApi(api_client)
-    page = "0" # str | Zero-based page number. (optional) if omitted the server will use the default value of "0"
-    size = "50" # str | Number of items per page. (optional) if omitted the server will use the default value of "50"
+    page = 0 # int | Zero-based page number. (optional) if omitted the server will use the default value of 0
+    size = 50 # int | Number of items per page. (optional) if omitted the server will use the default value of 50
     meta_include = [
         "metaInclude_example",
     ] # [str] |  (optional)
@@ -438,8 +436,8 @@ with gooddata_api_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | **str**| Zero-based page number. | [optional] if omitted the server will use the default value of "0"
- **size** | **str**| Number of items per page. | [optional] if omitted the server will use the default value of "50"
+ **page** | **int**| Zero-based page number. | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| Number of items per page. | [optional] if omitted the server will use the default value of 50
  **meta_include** | **[str]**|  | [optional]
 
 ### Return type
@@ -465,7 +463,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **provision_ai_lake_database_instance**
-> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} provision_ai_lake_database_instance(provision_database_instance_request)
+> provision_ai_lake_database_instance(provision_database_instance_request)
 
 (BETA) Create a new AILake Database instance
 
@@ -504,8 +502,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # (BETA) Create a new AILake Database instance
-        api_response = api_instance.provision_ai_lake_database_instance(provision_database_instance_request)
-        pprint(api_response)
+        api_instance.provision_ai_lake_database_instance(provision_database_instance_request)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakeDatabasesApi->provision_ai_lake_database_instance: %s\n" % e)
 
@@ -513,8 +510,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # (BETA) Create a new AILake Database instance
-        api_response = api_instance.provision_ai_lake_database_instance(provision_database_instance_request, operation_id=operation_id)
-        pprint(api_response)
+        api_instance.provision_ai_lake_database_instance(provision_database_instance_request, operation_id=operation_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakeDatabasesApi->provision_ai_lake_database_instance: %s\n" % e)
 ```
@@ -529,7 +525,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
+void (empty response body)
 
 ### Authorization
 
@@ -538,7 +534,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details

@@ -37,8 +37,11 @@ def lazy_import():
     from gooddata_api_client.model.declarative_setting import DeclarativeSetting
     from gooddata_api_client.model.declarative_single_workspace_permission import DeclarativeSingleWorkspacePermission
     from gooddata_api_client.model.declarative_user_data_filter import DeclarativeUserDataFilter
+    from gooddata_api_client.model.declarative_workspace_color_palette import DeclarativeWorkspaceColorPalette
+    from gooddata_api_client.model.declarative_workspace_export_template import DeclarativeWorkspaceExportTemplate
     from gooddata_api_client.model.declarative_workspace_hierarchy_permission import DeclarativeWorkspaceHierarchyPermission
     from gooddata_api_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
+    from gooddata_api_client.model.declarative_workspace_theme import DeclarativeWorkspaceTheme
     from gooddata_api_client.model.workspace_data_source import WorkspaceDataSource
     from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
     globals()['DeclarativeAutomation'] = DeclarativeAutomation
@@ -47,8 +50,11 @@ def lazy_import():
     globals()['DeclarativeSetting'] = DeclarativeSetting
     globals()['DeclarativeSingleWorkspacePermission'] = DeclarativeSingleWorkspacePermission
     globals()['DeclarativeUserDataFilter'] = DeclarativeUserDataFilter
+    globals()['DeclarativeWorkspaceColorPalette'] = DeclarativeWorkspaceColorPalette
+    globals()['DeclarativeWorkspaceExportTemplate'] = DeclarativeWorkspaceExportTemplate
     globals()['DeclarativeWorkspaceHierarchyPermission'] = DeclarativeWorkspaceHierarchyPermission
     globals()['DeclarativeWorkspaceModel'] = DeclarativeWorkspaceModel
+    globals()['DeclarativeWorkspaceTheme'] = DeclarativeWorkspaceTheme
     globals()['WorkspaceDataSource'] = WorkspaceDataSource
     globals()['WorkspaceIdentifier'] = WorkspaceIdentifier
 
@@ -132,18 +138,22 @@ class DeclarativeWorkspace(ModelNormal):
             'name': (str,),  # noqa: E501
             'automations': ([DeclarativeAutomation],),  # noqa: E501
             'cache_extra_limit': (int,),  # noqa: E501
+            'color_palettes': ([DeclarativeWorkspaceColorPalette],),  # noqa: E501
             'custom_application_settings': ([DeclarativeCustomApplicationSetting],),  # noqa: E501
             'data_source': (WorkspaceDataSource,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'early_access': (str,),  # noqa: E501
             'early_access_values': ([str],),  # noqa: E501
+            'export_templates': ([DeclarativeWorkspaceExportTemplate],),  # noqa: E501
             'filter_views': ([DeclarativeFilterView],),  # noqa: E501
             'hierarchy_permissions': ([DeclarativeWorkspaceHierarchyPermission],),  # noqa: E501
+            'managed': (bool,),  # noqa: E501
             'model': (DeclarativeWorkspaceModel,),  # noqa: E501
             'parent': (WorkspaceIdentifier,),  # noqa: E501
             'permissions': ([DeclarativeSingleWorkspacePermission],),  # noqa: E501
             'prefix': (str,),  # noqa: E501
             'settings': ([DeclarativeSetting],),  # noqa: E501
+            'themes': ([DeclarativeWorkspaceTheme],),  # noqa: E501
             'user_data_filters': ([DeclarativeUserDataFilter],),  # noqa: E501
         }
 
@@ -157,22 +167,27 @@ class DeclarativeWorkspace(ModelNormal):
         'name': 'name',  # noqa: E501
         'automations': 'automations',  # noqa: E501
         'cache_extra_limit': 'cacheExtraLimit',  # noqa: E501
+        'color_palettes': 'colorPalettes',  # noqa: E501
         'custom_application_settings': 'customApplicationSettings',  # noqa: E501
         'data_source': 'dataSource',  # noqa: E501
         'description': 'description',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
         'early_access_values': 'earlyAccessValues',  # noqa: E501
+        'export_templates': 'exportTemplates',  # noqa: E501
         'filter_views': 'filterViews',  # noqa: E501
         'hierarchy_permissions': 'hierarchyPermissions',  # noqa: E501
+        'managed': 'managed',  # noqa: E501
         'model': 'model',  # noqa: E501
         'parent': 'parent',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
         'prefix': 'prefix',  # noqa: E501
         'settings': 'settings',  # noqa: E501
+        'themes': 'themes',  # noqa: E501
         'user_data_filters': 'userDataFilters',  # noqa: E501
     }
 
     read_only_vars = {
+        'managed',  # noqa: E501
     }
 
     _composed_schemas = {}
@@ -219,18 +234,22 @@ class DeclarativeWorkspace(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             automations ([DeclarativeAutomation]): [optional]  # noqa: E501
             cache_extra_limit (int): Extra cache limit allocated to specific workspace. In case there is extra cache budget setup for organization, it can be split between multiple workspaces.. [optional]  # noqa: E501
+            color_palettes ([DeclarativeWorkspaceColorPalette]): A list of workspace color palettes.. [optional]  # noqa: E501
             custom_application_settings ([DeclarativeCustomApplicationSetting]): A list of workspace custom settings.. [optional]  # noqa: E501
             data_source (WorkspaceDataSource): [optional]  # noqa: E501
             description (str): Description of the workspace. [optional]  # noqa: E501
             early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
             early_access_values ([str]): Early access defined on level Workspace. [optional]  # noqa: E501
+            export_templates ([DeclarativeWorkspaceExportTemplate]): A list of workspace export templates.. [optional]  # noqa: E501
             filter_views ([DeclarativeFilterView]): [optional]  # noqa: E501
             hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
+            managed (bool): Whether the workspace is platform-managed and read-only. Informational on export; ignored on import (the flag is server-controlled).. [optional]  # noqa: E501
             model (DeclarativeWorkspaceModel): [optional]  # noqa: E501
             parent (WorkspaceIdentifier): [optional]  # noqa: E501
             permissions ([DeclarativeSingleWorkspacePermission]): [optional]  # noqa: E501
             prefix (str): Custom prefix of entity identifiers in workspace. [optional]  # noqa: E501
             settings ([DeclarativeSetting]): A list of workspace settings.. [optional]  # noqa: E501
+            themes ([DeclarativeWorkspaceTheme]): A list of workspace themes.. [optional]  # noqa: E501
             user_data_filters ([DeclarativeUserDataFilter]): A list of workspace user data filters.. [optional]  # noqa: E501
         """
 
@@ -325,18 +344,22 @@ class DeclarativeWorkspace(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             automations ([DeclarativeAutomation]): [optional]  # noqa: E501
             cache_extra_limit (int): Extra cache limit allocated to specific workspace. In case there is extra cache budget setup for organization, it can be split between multiple workspaces.. [optional]  # noqa: E501
+            color_palettes ([DeclarativeWorkspaceColorPalette]): A list of workspace color palettes.. [optional]  # noqa: E501
             custom_application_settings ([DeclarativeCustomApplicationSetting]): A list of workspace custom settings.. [optional]  # noqa: E501
             data_source (WorkspaceDataSource): [optional]  # noqa: E501
             description (str): Description of the workspace. [optional]  # noqa: E501
             early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
             early_access_values ([str]): Early access defined on level Workspace. [optional]  # noqa: E501
+            export_templates ([DeclarativeWorkspaceExportTemplate]): A list of workspace export templates.. [optional]  # noqa: E501
             filter_views ([DeclarativeFilterView]): [optional]  # noqa: E501
             hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
+            managed (bool): Whether the workspace is platform-managed and read-only. Informational on export; ignored on import (the flag is server-controlled).. [optional]  # noqa: E501
             model (DeclarativeWorkspaceModel): [optional]  # noqa: E501
             parent (WorkspaceIdentifier): [optional]  # noqa: E501
             permissions ([DeclarativeSingleWorkspacePermission]): [optional]  # noqa: E501
             prefix (str): Custom prefix of entity identifiers in workspace. [optional]  # noqa: E501
             settings ([DeclarativeSetting]): A list of workspace settings.. [optional]  # noqa: E501
+            themes ([DeclarativeWorkspaceTheme]): A list of workspace themes.. [optional]  # noqa: E501
             user_data_filters ([DeclarativeUserDataFilter]): A list of workspace user data filters.. [optional]  # noqa: E501
         """
 

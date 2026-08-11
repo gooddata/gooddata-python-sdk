@@ -159,7 +159,7 @@ with gooddata_api_client.ApiClient() as api_client:
             "exclude_tags_example",
         ],
         filters=[
-            ChangeAnalysisParamsFiltersInner(None),
+            FilterDefinition(),
         ],
         include_tags=[
             "include_tags_example",
@@ -408,6 +408,7 @@ with gooddata_api_client.ApiClient() as api_client:
         label="label_id",
         pattern_filter="pattern_filter_example",
         sort_order="ASC",
+        timezone="Europe/Prague",
         validate_by=[
             ValidateByItem(
                 id="id_example",
@@ -544,15 +545,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
             ],
             parameters=[
-                ParameterItem(
-                    parameter=AfmObjectIdentifierParameter(
-                        identifier=AfmObjectIdentifierParameterIdentifier(
-                            id="sample_item.price",
-                            type="parameter",
-                        ),
-                    ),
-                    value="value_example",
-                ),
+                ParameterItem(),
             ],
         ),
         result_spec=ResultSpec(
@@ -582,6 +575,7 @@ with gooddata_api_client.ApiClient() as api_client:
         settings=ExecutionSettings(
             data_sampling_percentage=0,
             timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+            timezone="Europe/Prague",
         ),
     ) # AfmExecution | 
     skip_cache = False # bool | Ignore all caches during execution of current request. (optional) if omitted the server will use the default value of False
@@ -675,6 +669,7 @@ with gooddata_api_client.ApiClient() as api_client:
         settings=ExecutionSettings(
             data_sampling_percentage=0,
             timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+            timezone="Europe/Prague",
         ),
     ) # VisualizationObjectExecution |  (optional)
 
@@ -881,15 +876,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
             ],
             parameters=[
-                ParameterItem(
-                    parameter=AfmObjectIdentifierParameter(
-                        identifier=AfmObjectIdentifierParameterIdentifier(
-                            id="sample_item.price",
-                            type="parameter",
-                        ),
-                    ),
-                    value="value_example",
-                ),
+                ParameterItem(),
             ],
         ),
         types=[
@@ -1009,15 +996,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ),
             ],
             parameters=[
-                ParameterItem(
-                    parameter=AfmObjectIdentifierParameter(
-                        identifier=AfmObjectIdentifierParameterIdentifier(
-                            id="sample_item.price",
-                            type="parameter",
-                        ),
-                    ),
-                    value="value_example",
-                ),
+                ParameterItem(),
             ],
         ),
         result_spec=ResultSpec(
@@ -1047,6 +1026,7 @@ with gooddata_api_client.ApiClient() as api_client:
         settings=ExecutionSettings(
             data_sampling_percentage=0,
             timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+            timezone="Europe/Prague",
         ),
     ) # AfmExecution | 
     explain_type = "MAQL" # str | Requested explain type. If not specified all types are bundled in a ZIP archive.  `MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info  `GRPC_MODEL` - Datasets used in execution  `GRPC_MODEL_SVG` - Generated SVG image of the datasets  `COMPRESSED_GRPC_MODEL_SVG` - Generated SVG image of the model fragment used in the query  `WDF` - Workspace data filters in execution workspace context  `QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL  `QT_SVG` - Generated SVG image of the Query Tree  `OPT_QT` - Optimized Query Tree  `OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree  `SQL` - Final SQL to be executed  `COMPRESSED_SQL` - Final SQL to be executed with rolled SQL datasets  `SETTINGS` - Settings used to execute explain request  `GIT` - Git properties of current build (optional)
@@ -1322,7 +1302,7 @@ with gooddata_api_client.ApiClient() as api_client:
             ),
         ],
         filters=[
-            ChangeAnalysisParamsFiltersInner(None),
+            FilterDefinition(),
         ],
         granularity="HOUR",
         measures=[
@@ -1702,7 +1682,7 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | Execution result was found and returned. |  -  |
+**200** | Execution result was found and returned. |  * X-GDC-RESULT-TOTAL-ROWS - Total number of data rows in the full result. <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
