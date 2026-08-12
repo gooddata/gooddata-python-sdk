@@ -11,6 +11,7 @@ from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
 from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluate_agentic_conversation
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
+from gooddata_eval.core.agentic.kda_skill import evaluate_agentic_kda_skill
 from gooddata_eval.core.agentic.metric_skill import evaluate_agentic_metric_skill
 from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
@@ -38,6 +39,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_general_question",
         "agentic_guardrail",
         "agentic_conversation",
+        "agentic_kda_skill",
     }
 )
 
@@ -156,6 +158,16 @@ def _dispatch_agentic(
             workspace_id=workspace_id,
             question=item.question,
             expected_output=eo if isinstance(eo, str) else str(eo),
+            k=k,
+            **lf_kw,
+        )
+    elif kind == "agentic_kda_skill":
+        evaluate_agentic_kda_skill(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo if isinstance(eo, dict) else {},
             k=k,
             **lf_kw,
         )

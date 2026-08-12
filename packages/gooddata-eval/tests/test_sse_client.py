@@ -23,10 +23,125 @@ def test_parse_sse_lines_raises_on_error_event():
         parse_sse_lines(lines)
 
 
+def test_parse_sse_lines_error_carries_partial_result_with_tool_calls_already_seen():
+    # A statusCode error ends the stream before _build_chat_result ever runs -- without
+    # partial_result, a tool call that already succeeded (e.g. KDA's own create/execute)
+    # before a LATER, unrelated error killed the turn would be silently discarded, making
+    # the run look like the agent never called the tool at all.
+    lines = [
+        json.dumps(
+            {
+                "item": {
+                    "role": "assistant",
+                    "content": {"type": "toolCall", "callId": "c1", "name": "create_key_driver_analysis"},
+                }
+            }
+        ),
+        "",
+        json.dumps(
+            {
+                "item": {
+                    "role": "tool",
+                    "content": {
+                        "type": "toolResult",
+                        "callId": "c1",
+                        "result": json.dumps({"success": True}),
+                    },
+                }
+            }
+        ),
+        "",
+        json.dumps({"statusCode": 500, "detail": "boom"}),
+    ]
+    lines = [f"data: {line}" if line else line for line in lines]
+    with pytest.raises(ChatError) as ei:
+        parse_sse_lines(lines)
+    partial = ei.value.partial_result
+    assert partial is not None
+    assert len(partial.tool_call_events) == 1
+    assert partial.tool_call_events[0].function_name == "create_key_driver_analysis"
+    assert partial.tool_call_events[0].result == '{"success": true}'
+
+
+def test_parse_sse_lines_raw_transport_error_also_carries_partial_result():
+    # A connection drop mid-stream (httpx.RemoteProtocolError/ReadError) has no statusCode
+    # payload -- it's a raw exception from iterating `lines` itself, not one this module
+    # raises. Must still be rescued the same way a statusCode-shaped error is.
+    def _lines():
+        yield (
+            'data: {"item": {"role": "assistant", "content": '
+            + json.dumps({"type": "toolCall", "callId": "c1", "name": "create_key_driver_analysis"})
+            + "}}"
+        )
+        yield ""
+        raise RuntimeError("connection dropped")
+
+    with pytest.raises(ChatError) as ei:
+        parse_sse_lines(_lines())
+    assert not isinstance(ei.value, TransientChatError)  # not retried -- same as before this fix
+    partial = ei.value.partial_result
+    assert partial is not None
+    assert len(partial.tool_call_events) == 1
+    assert partial.tool_call_events[0].function_name == "create_key_driver_analysis"
+
+
+def test_parse_sse_lines_a_real_parsing_bug_propagates_uncaught_not_as_a_chat_error():
+    # A malformed payload (here: "item" is a string, not a dict) crashes the processing
+    # code itself with a plain AttributeError -- must surface loudly as that bug, not get
+    # silently relabeled as a ChatError/"SSE stream error" indistinguishable from a
+    # genuine network blip. Only a failure from iterating `lines` itself is rescued.
+    lines = ['data: {"item": "not-a-dict"}']
+    with pytest.raises(AttributeError):
+        parse_sse_lines(lines)
+
+
 def test_parse_sse_lines_ignores_non_data_lines():
     result = parse_sse_lines(["event: ping", "", ": comment"])
     assert result.text_response is None
     assert result.created_visualizations is None
+
+
+def test_parse_sse_lines_stream_ended_false_when_response_ended_never_arrives():
+    # A turn cut off mid-stream (connection dropped, process killed) never gets to emit
+    # gen-ai's own "response_ended" event -- text_response can still be non-empty from
+    # whatever text arrived before the cutoff.
+    lines = [
+        "event: item",
+        'data: {"item": {"role": "assistant", "content": {"type": "text", "text": "partial answ"}}}',
+        "",
+    ]
+    result = parse_sse_lines(lines)
+    assert result.text_response == "partial answ"
+    assert result.stream_ended is False
+
+
+def test_parse_sse_lines_stream_ended_true_when_response_ended_event_arrives():
+    lines = [
+        "event: item",
+        'data: {"item": {"role": "assistant", "content": {"type": "text", "text": "full answer"}}}',
+        "",
+        "event: response_ended",
+        "data: {}",
+        "",
+    ]
+    result = parse_sse_lines(lines)
+    assert result.text_response == "full answer"
+    assert result.stream_ended is True
+
+
+def test_parse_sse_lines_stream_ended_defaults_false_with_no_events_at_all():
+    assert parse_sse_lines([]).stream_ended is False
+
+
+def test_parse_sse_lines_stream_ended_true_when_response_ended_has_no_data_line():
+    lines = [
+        "event: item",
+        'data: {"item": {"role": "assistant", "content": {"type": "text", "text": "x"}}}',
+        "",
+        "event: response_ended",
+        "",
+    ]
+    assert parse_sse_lines(lines).stream_ended is True
 
 
 def test_parse_sse_lines_falls_back_to_adhoc_viz_when_multipart_viz_is_null():
@@ -203,6 +318,41 @@ def test_send_message_does_not_retry_non_transient(monkeypatch):
     assert not isinstance(ei.value, TransientChatError)
     assert calls["n"] == 1
     assert sleeps == []
+
+
+def test_send_message_sets_turn_wall_clock_sec_on_success(monkeypatch):
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([100.0, 102.5]).__next__)
+    client = _client_with_handler(lambda request: httpx.Response(200, content=_OK_SSE))
+    result = client.send_message("conv", "q")
+    assert result.turn_wall_clock_sec == pytest.approx(2.5)
+
+
+def test_send_message_wall_clock_excludes_retry_backoff(monkeypatch):
+    # t0 must be per-attempt, set inside _do() before the connection opens -- not around
+    # the whole send_message() call -- or a failed attempt's time plus the backoff sleep
+    # between attempts (harness/network overhead, not gen-ai's time) would inflate the
+    # reported latency.
+    monkeypatch.setattr(sse_mod.time, "sleep", lambda s: None)
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([1000.0, 1000.5, 2000.0, 2001.2]).__next__)
+    calls = {"n": 0}
+
+    def handler(request):
+        calls["n"] += 1
+        return httpx.Response(200, content=_TRANSIENT_SSE if calls["n"] < 2 else _OK_SSE)
+
+    client = _client_with_handler(handler)
+    result = client.send_message("conv", "q")
+    assert calls["n"] == 2
+    assert result.turn_wall_clock_sec == pytest.approx(1.2)  # attempt 2 alone, not spanning attempt 1 + backoff
+
+
+def test_send_message_stamps_turn_wall_clock_sec_on_partial_result_too(monkeypatch):
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([50.0, 51.0]).__next__)
+    client = _client_with_handler(lambda request: httpx.Response(200, content=_NONRETRY_SSE))
+    with pytest.raises(ChatError) as ei:
+        client.send_message("conv", "q")
+    assert ei.value.partial_result is not None
+    assert ei.value.partial_result.turn_wall_clock_sec == pytest.approx(1.0)
 
 
 def test_create_conversation_retries_then_succeeds(monkeypatch):
