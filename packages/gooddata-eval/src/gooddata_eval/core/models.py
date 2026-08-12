@@ -100,6 +100,10 @@ class ChatResult(BaseModel):
     reasoning_step_count: int = Field(default=0, alias="reasoningStepCount")
     conversation_id: str | None = Field(default=None, alias="conversationId")
     response_id: str | None = Field(default=None, alias="responseId")
+    # True once gen-ai's response_ended event arrived.
+    stream_ended: bool = False
+    # Wall-clock seconds for the whole chat turn, timed by the client.
+    turn_wall_clock_sec: float | None = None
 
 
 class SummaryInput(BaseModel):
