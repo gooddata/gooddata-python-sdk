@@ -141,7 +141,7 @@ def generate_simulated_response(agent_message: str, expected_output: CreatedVisu
                 ),
             },
         ],
-        temperature=0.5,
+        temperature=0,
     )
     content = response.choices[0].message.content
     return content.strip() if content else ""

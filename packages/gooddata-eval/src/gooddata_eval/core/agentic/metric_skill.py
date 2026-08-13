@@ -95,6 +95,7 @@ def generate_simulated_response(agent_message: str, expected_output: dict) -> st
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=150,
+        temperature=0,
     )
     return response.choices[0].message.content or "Please proceed."
 

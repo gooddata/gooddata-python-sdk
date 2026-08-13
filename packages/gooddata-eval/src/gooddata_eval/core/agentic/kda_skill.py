@@ -71,6 +71,7 @@ def generate_simulated_kda_response(agent_message: str, measure_candidates: dict
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=150,
+        temperature=0,
         timeout=30,
     )
     return response.choices[0].message.content or "Please proceed with either option."

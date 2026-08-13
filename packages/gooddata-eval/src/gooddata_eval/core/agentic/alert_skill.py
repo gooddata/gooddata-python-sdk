@@ -250,7 +250,7 @@ def generate_simulated_alert_response(
     response = openai_client.chat.completions.create(
         model="gpt-4o",
         messages=messages,
-        temperature=0.5,
+        temperature=0,
     )
     return response.choices[0].message.content or ""
 
