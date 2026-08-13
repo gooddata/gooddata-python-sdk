@@ -252,7 +252,7 @@ def _get_sim_user_response(agent_message: str, turn: TurnDefinition, expected_ou
                         ),
                     },
                 ],
-                temperature=0.5,
+                temperature=0,
             )
             content = response.choices[0].message.content
             return content.strip() if content else "Please proceed with sensible defaults."
