@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import logging
 import os
-import re
 from dataclasses import dataclass
 
 from gooddata_eval.core.chat.sse_client import ChatClient
@@ -15,36 +14,79 @@ from gooddata_eval.core.models import ToolCallEvent
 _log = logging.getLogger(__name__)
 
 _DEFAULT_K = 1
-# Disambiguation safety net only (create+execute always run together in the same
-# turn) -- 3 covers metric and period each needing their own clarifying question.
-_DEFAULT_MAX_ITERATIONS = 3
+# Disambiguation safety net only (create+execute always run together in the same turn) --
+# 3 real questions' worth (metric, period, +1 slack) since a simulated reply is now sent on
+# every non-final turn (see run_agentic_kda_skill), not just ones classified as a question.
+_DEFAULT_MAX_ITERATIONS = 4
 
 
-def _is_asking_kda_clarification(text: str) -> bool:
-    """True if ``text`` reads as the agent asking for input, not a final answer.
-
-    KDA-specific, not shared with metric_skill.py/conversation.py -- each skill's
-    disambiguation heuristic has already drifted independently. Requires the text to
-    end on "?" (a "?" anywhere also matches a final answer that merely quotes one).
+def _build_period_hint(expected_output: dict) -> str | None:
+    """Build a period hint from whichever of expected_output's Date Attribute/Analyzed
+    Period/Reference Period are present -- a question about only one of them (e.g. "which
+    date dimension?") must still get an answerable hint, not None just because the other
+    two are absent.
     """
-    if not text:
-        return False
-    t = text.strip().lower()
-    if t.endswith("?"):
-        return True
-    # "To clarify, ..." means "in other words" (a final answer), not a request for one --
-    # strip it first so "clarif" below only matches genuine clarification requests.
-    t = re.sub(r"^(just )?to clarify,?\s*", "", t)
-    return "could you" in t or "please provide" in t or "clarif" in t
+    date_attr = expected_output.get("Date Attribute")
+    analyzed = expected_output.get("Analyzed Period")
+    reference_period = expected_output.get("Reference Period")
+    if not (date_attr or analyzed or reference_period):
+        return None
+    parts = []
+    if date_attr:
+        parts.append(date_attr)
+    if analyzed and reference_period:
+        parts.append(f"comparing {analyzed} to {reference_period}")
+    elif analyzed:
+        parts.append(f"period {analyzed}")
+    elif reference_period:
+        parts.append(f"compared to {reference_period}")
+    return ", ".join(parts)
 
 
-def generate_simulated_kda_response(agent_message: str, measure_candidates: dict | list[dict] | None) -> str:
+def _build_clarification_prompt(
+    agent_message: str, measure_candidates: dict | list[dict] | None, period_hint: str | None
+) -> str:
+    """Build the simulated-user prompt, referencing only whatever candidates/period-hint
+    are actually usable -- an empty/None candidate must drop the "acceptable metric/fact"
+    clause entirely rather than assert a literal "None" as if it were a real option.
+    """
+    candidates = [
+        c for c in (measure_candidates if isinstance(measure_candidates, list) else [measure_candidates]) if c
+    ]
+    reference = ""
+    if candidates:
+        candidate_desc = "; or ".join(
+            f"{c.get('type')} '{c.get('id')}'" + (f" (aggregation {c['aggregation']})" if c.get("aggregation") else "")
+            for c in candidates
+        )
+        reference = f"an acceptable metric/fact is {candidate_desc}"
+    if period_hint:
+        reference = (
+            f"{reference}; the intended time period is {period_hint}"
+            if reference
+            else f"the intended time period is {period_hint}"
+        )
+    return (
+        f"You are simulating a user in a conversation with a BI assistant that runs key driver "
+        f"analysis. The assistant asked: '{agent_message}'. "
+        + (f"For reference, {reference}. " if reference else "")
+        + "Reply briefly as the user, answering whichever of those the assistant actually asked about."
+    )
+
+
+def generate_simulated_kda_response(
+    agent_message: str,
+    measure_candidates: dict | list[dict] | None,
+    period_hint: str | None = None,
+) -> str:
     """Generate a user reply to keep the KDA-skill conversation going (gpt-4o-mini).
 
-    Used only when the agent asks a clarifying question instead of triggering KDA
-    directly. Picks *any* candidate from ``measure_candidates`` -- scope only needs KDA
-    to trigger, not the resulting measure to be exactly right. Always OpenAI regardless
-    of the combo's own provider -- this is test-harness plumbing, not the system under test.
+    Called on any turn that didn't trigger KDA, whatever the agent's response actually
+    said -- most often a clarifying question about the measure, the period, or both, so
+    both are given as reference and the reply answers whichever was actually asked.
+    Scope only needs KDA to trigger, not the resulting measure/period to be exactly
+    right. Always OpenAI regardless of the combo's own provider -- this is
+    test-harness plumbing, not the system under test.
     """
     try:
         from openai import OpenAI  # noqa: PLC0415
@@ -56,17 +98,7 @@ def generate_simulated_kda_response(agent_message: str, measure_candidates: dict
         raise OSError("OPENAI_API_KEY environment variable is not set")
 
     client = OpenAI(api_key=api_key)
-    candidates = measure_candidates if isinstance(measure_candidates, list) else [measure_candidates or {}]
-    candidate_desc = "; or ".join(
-        f"{c.get('type')} '{c.get('id')}'" + (f" (aggregation {c['aggregation']})" if c.get("aggregation") else "")
-        for c in candidates
-    )
-    prompt = (
-        f"You are simulating a user in a conversation with a BI assistant that runs key driver "
-        f"analysis. The assistant said: '{agent_message}'. "
-        f"The user is happy to proceed with any of the following: {candidate_desc}. "
-        f"Reply briefly as the user, picking whichever of those the assistant offered."
-    )
+    prompt = _build_clarification_prompt(agent_message, measure_candidates, period_hint)
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}],
@@ -171,9 +203,12 @@ def run_agentic_kda_skill(
 
     Each run is normally one message, one turn -- create and execute are always called
     together in the same turn (the skill's own system prompt: "NO confirmation needed").
-    The only thing that can extend a run up to ``max_iterations`` turns is the agent
-    asking a clarifying question instead of triggering KDA directly; a simulated user
-    reply nudges it forward.
+    A run only extends past turn 1, up to ``max_iterations``, when the agent's response
+    has no create call and isn't empty; a simulated user reply is then always sent, with
+    no attempt to classify whether the text was actually asking for input (matching
+    visualization.py/alert_skill.py's own break conditions) -- missing a genuine
+    clarifying question hard-fails the run, while sending one after an unrecognized final
+    answer only costs one harmless extra turn, so the asymmetry favors never guessing.
     """
     if k < 1:
         # k=0 or negative would otherwise silently run once, indistinguishable from k=1.
@@ -212,17 +247,22 @@ def run_agentic_kda_skill(
                 # execute tool isn't available at all when data-sharing is off for the org).
                 turn_wall_clock_sec = chat_result.turn_wall_clock_sec
                 break
+            if not response_text:
+                break
             if iteration >= max_iterations - 1:
                 break
-            if _is_asking_kda_clarification(response_text):
-                measure_candidates = expected_output.get("Measure") if isinstance(expected_output, dict) else None
-                try:
-                    current_question = generate_simulated_kda_response(response_text, measure_candidates)
-                    disambiguated = True
-                except Exception as exc:  # noqa: BLE001 -- safety net, not the assertion; end only this run
-                    _log.warning("Simulated KDA user reply failed for conversation %s: %s", conv_id, exc)
-                    break
-            else:
+            # No text classification -- matches visualization.py/alert_skill.py: break only on
+            # the goal signal (create_args set) or an empty response, otherwise always send a
+            # simulated reply. A false positive (agent had already given a final answer) costs
+            # one harmless extra turn; a false negative (missing a genuine clarifying question)
+            # would hard-fail the run, so the asymmetry favors never trying to tell them apart.
+            measure_candidates = expected_output.get("Measure") if isinstance(expected_output, dict) else None
+            period_hint = _build_period_hint(expected_output) if isinstance(expected_output, dict) else None
+            try:
+                current_question = generate_simulated_kda_response(response_text, measure_candidates, period_hint)
+                disambiguated = True
+            except Exception as exc:  # noqa: BLE001 -- safety net, not the assertion; end only this run
+                _log.warning("Simulated KDA user reply failed for conversation %s: %s", conv_id, exc)
                 break
 
         ev = _evaluate_run(create_args, execute_result, turn_completed, disambiguated)
