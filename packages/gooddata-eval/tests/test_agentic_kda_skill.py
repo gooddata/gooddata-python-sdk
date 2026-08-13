@@ -8,9 +8,10 @@ import pytest
 from gooddata_eval.core.agentic.kda_skill import (
     KdaEvaluation,
     KdaSkillAssertionError,
+    _build_clarification_prompt,
+    _build_period_hint,
     _evaluate_run,
     _extract_kda_calls,
-    _is_asking_kda_clarification,
     evaluate_agentic_kda_skill,
     run_agentic_kda_skill,
 )
@@ -67,51 +68,59 @@ def _no_kda_chat_result(
 
 
 # --------------------------------------------------------------------------- #
-# _is_asking_kda_clarification
+# _build_clarification_prompt
 # --------------------------------------------------------------------------- #
-@pytest.mark.parametrize(
-    "text",
-    ["Could you clarify which metric?", "Please provide the date range.", "Did you mean revenue?"],
-)
-def test_is_asking_kda_clarification_true(text):
-    assert _is_asking_kda_clarification(text) is True
+def test_build_clarification_prompt_omits_reference_clause_when_no_candidates_or_period():
+    # Regression (chi My's review): with no usable candidates, the old code still asserted
+    # "an acceptable metric/fact is None 'None'" as if it were a real option -- likely to
+    # make the simulated user invent a metric literally named "None". No candidates and no
+    # period hint must drop the whole "For reference, ..." clause instead.
+    prompt = _build_clarification_prompt("Which date range?", None, None)
+    assert "None" not in prompt
+    assert "For reference" not in prompt
 
 
-def test_is_asking_kda_clarification_false_on_plain_statement():
-    assert _is_asking_kda_clarification("Here is the key driver analysis result.") is False
+def test_build_clarification_prompt_includes_only_period_hint_when_no_candidates():
+    prompt = _build_clarification_prompt("Which period?", None, "2026-2 vs 2026-1")
+    assert "None" not in prompt
+    assert "the intended time period is 2026-2 vs 2026-1" in prompt
 
 
-def test_is_asking_kda_clarification_false_on_empty():
-    assert _is_asking_kda_clarification("") is False
+def test_build_clarification_prompt_includes_candidates_and_period_hint():
+    prompt = _build_clarification_prompt(
+        "Which metric and period?", {"type": "metric", "id": "revenue"}, "2026-2 vs 2026-1"
+    )
+    assert "an acceptable metric/fact is metric 'revenue'" in prompt
+    assert "the intended time period is 2026-2 vs 2026-1" in prompt
 
 
-def test_is_asking_kda_clarification_false_when_question_mark_is_not_the_final_answer():
-    # Regression guard for the original bug: a final answer that merely quotes or
-    # rhetorically references a question must not be mistaken for a clarifying question.
-    text = 'The user asked "what changed?" so here is the key driver breakdown they requested.'
-    assert _is_asking_kda_clarification(text) is False
+# --------------------------------------------------------------------------- #
+# _build_period_hint
+# --------------------------------------------------------------------------- #
+def test_build_period_hint_none_when_no_period_fields_present():
+    assert _build_period_hint({"Measure": {"type": "metric", "id": "revenue"}}) is None
 
 
-@pytest.mark.parametrize(
-    "text",
-    [
-        "To clarify, revenue rose 12% quarter over quarter.",
-        "Just to clarify, the increase was driven by the South region.",
-    ],
-)
-def test_is_asking_kda_clarification_false_on_to_clarify_discourse_marker(text):
-    # Regression guard: "to clarify, ..." is a discourse marker ("in other words") that
-    # introduces a restated FINAL answer, not a request for one -- the bare "clarif" in t
-    # substring check would otherwise mistake this for a clarifying question and burn a
-    # simulated-reply turn on an answer that was already complete.
-    assert _is_asking_kda_clarification(text) is False
+def test_build_period_hint_all_three_fields():
+    hint = _build_period_hint(
+        {"Date Attribute": "transaction_date.quarter", "Analyzed Period": "2026-2", "Reference Period": "2026-1"}
+    )
+    assert hint == "transaction_date.quarter, comparing 2026-2 to 2026-1"
 
 
-def test_is_asking_kda_clarification_true_for_genuine_clarify_request_despite_marker_strip():
-    # The discourse-marker strip must not eat a genuine request that happens to start the
-    # same way it's phrased in practice. No trailing "?" here specifically so this exercises
-    # the "could you" substring check post-strip, not the separate endswith("?") check.
-    assert _is_asking_kda_clarification("To clarify, could you tell me which region you mean") is True
+def test_build_period_hint_date_attribute_only():
+    # A dataset item carrying only Date Attribute (agent asks "which date dimension should
+    # I use?") must still get an answerable hint -- this used to require all 3 fields and
+    # reproduced the same gap the metric-clarification fix closed, just narrower.
+    assert _build_period_hint({"Date Attribute": "transaction_date.quarter"}) == "transaction_date.quarter"
+
+
+def test_build_period_hint_analyzed_period_only():
+    assert _build_period_hint({"Analyzed Period": "2026-2"}) == "period 2026-2"
+
+
+def test_build_period_hint_reference_period_only():
+    assert _build_period_hint({"Reference Period": "2026-1"}) == "compared to 2026-1"
 
 
 # --------------------------------------------------------------------------- #
@@ -427,6 +436,128 @@ def test_run_agentic_kda_skill_marks_disambiguated_after_a_simulated_reply():
     assert summary.best.evaluation.triggered is True
 
 
+def test_run_agentic_kda_skill_disambiguates_on_question_followed_by_option_list():
+    # Regression (QA-28800): the real captured response ends with a bullet list of
+    # candidate metrics. Before this module dropped text classification in favor of
+    # always retrying on a non-empty, non-triggering response (matching
+    # visualization.py/alert_skill.py), a heuristic that only matched "?" endings gave
+    # up after turn 1 (triggered=False) instead of ever nudging the simulated user to
+    # pick one.
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _no_kda_chat_result(
+            'I found two different "Total Net Revenue" metrics in your data model. '
+            "Which one should I analyze for the 2024 vs 2023 drop?\n\n"
+            "- {metric/metric_l1_sql_net_sales_summary_net_revenue}\n"
+            "- {metric/metric_l1_total_net_revenue}"
+        ),
+        _kda_chat_result(success=True),
+    ]
+
+    with (
+        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
+        patch(
+            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
+            return_value="Use metric_l1_sql_net_sales_summary_net_revenue.",
+        ) as mock_simulate,
+    ):
+        summary = run_agentic_kda_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Why did Total Net Revenue of Net Sales Summary drop in 2024 compared to 2023?",
+            expected_output=_EXPECTED,
+            k=1,
+            max_iterations=2,
+        )
+
+    mock_simulate.assert_called_once()
+    assert summary.best.evaluation.disambiguated is True
+    assert summary.best.evaluation.triggered is True
+    assert mock_client.send_message.call_count == 2
+
+
+def test_run_agentic_kda_skill_retries_on_bold_markdown_option_list_with_no_space():
+    # Regression (chi My's review): a prior classifier-based fix required a space right
+    # after the list marker, so "**Option 1**: revenue" (bold markdown, no space between
+    # the two asterisks) would have been misread as a final answer. Dropping content
+    # classification entirely (see run_agentic_kda_skill's docstring) makes this -- and any
+    # other future response shape -- a non-issue: a non-triggering, non-empty response
+    # always gets a simulated reply now, regardless of how it's formatted.
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _no_kda_chat_result("Which one should I analyze?\n**Option 1**: revenue\n**Option 2**: gross profit"),
+        _kda_chat_result(success=True),
+    ]
+
+    with (
+        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
+        patch(
+            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
+            return_value="Use revenue.",
+        ) as mock_simulate,
+    ):
+        summary = run_agentic_kda_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Why did revenue drop?",
+            expected_output=_EXPECTED,
+            k=1,
+            max_iterations=2,
+        )
+
+    mock_simulate.assert_called_once()
+    assert summary.best.evaluation.disambiguated is True
+    assert summary.best.evaluation.triggered is True
+
+
+def test_run_agentic_kda_skill_disambiguates_on_period_clarification():
+    # generate_simulated_kda_response used to only know about measure candidates -- if the
+    # agent asked about the PERIOD instead, it had nothing period-specific to answer with.
+    # Verify the period hint built from expected_output's Date Attribute/Analyzed
+    # Period/Reference Period reaches the simulated-reply call.
+    expected_output = {
+        "Measure": {"type": "metric", "id": "revenue"},
+        "Date Attribute": "transaction_date.quarter",
+        "Analyzed Period": "2026-2",
+        "Reference Period": "2026-1",
+    }
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _no_kda_chat_result("Which period would you like to compare?"),
+        _kda_chat_result(success=True),
+    ]
+
+    with (
+        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
+        patch(
+            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
+            return_value="Compare 2026-2 to 2026-1.",
+        ) as mock_simulate,
+    ):
+        summary = run_agentic_kda_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Why did revenue drop?",
+            expected_output=expected_output,
+            k=1,
+            max_iterations=2,
+        )
+
+    mock_simulate.assert_called_once_with(
+        "Which period would you like to compare?",
+        {"type": "metric", "id": "revenue"},
+        "transaction_date.quarter, comparing 2026-2 to 2026-1",
+    )
+    assert summary.best.evaluation.disambiguated is True
+    assert summary.best.evaluation.triggered is True
+
+
 def test_run_agentic_kda_skill_disambiguates_when_expected_output_is_not_a_dict():
     # DatasetItem.expected_output on the gdc-nas side allows str/list, not just dict.
     # expected_output.get("Measure") would raise AttributeError on those shapes, silently
@@ -457,7 +588,7 @@ def test_run_agentic_kda_skill_disambiguates_when_expected_output_is_not_a_dict(
             max_iterations=2,
         )
 
-    mock_generate.assert_called_once_with("Could you clarify which measure?", None)
+    mock_generate.assert_called_once_with("Could you clarify which measure?", None, None)
     assert summary.best.evaluation.disambiguated is True
     assert summary.best.evaluation.triggered is True
 
