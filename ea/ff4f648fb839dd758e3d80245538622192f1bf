@@ -1,7 +1,7 @@
 .pre-commit-config.yaml
   s_0a515c66b30699::t_660398d3ce8891 38
 pyproject.toml
-  s_0a515c66b30699::t_fb0c0a99557b43 20
+  s_0a515c66b30699::t_fb0c0a99557b43 20,21
 ---
 {
   "schema_version": "authorship/3.0.0",
