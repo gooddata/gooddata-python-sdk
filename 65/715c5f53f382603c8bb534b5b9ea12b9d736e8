@@ -1,0 +1,21 @@
+.pre-commit-config.yaml
+  s_0a515c66b30699::t_660398d3ce8891 38
+pyproject.toml
+  s_0a515c66b30699::t_fb0c0a99557b43 20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "65715c5f53f382603c8bb534b5b9ea12b9d736e8",
+  "prompts": {},
+  "sessions": {
+    "s_0a515c66b30699": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69290896-5e7e-46ff-89c1-242e16a27455",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}
