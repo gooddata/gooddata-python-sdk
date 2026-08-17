@@ -82,7 +82,7 @@ tox = [
     # uv.lock. Without this bound the resolver picks the newest uv, whose console script
     # then shadows the pinned binary in the image and trips required-version at runtime.
     # Keep in sync with [tool.uv] required-version above.
-    "uv~=0.11.0",
+    "uv~=0.12.0",
 ]
 
 [tool.ruff]
