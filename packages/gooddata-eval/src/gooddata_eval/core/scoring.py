@@ -188,6 +188,19 @@ def _split_and_normalize_filters(viz: CreatedVisualization) -> tuple[set[str], s
     return date_set, ranking_set, attr_set
 
 
+def normalized_filters(viz: CreatedVisualization) -> dict[str, list[str]]:
+    """A visualization's filters exactly as `check_filters` compares them.
+
+    Grouped by the three categories it scores separately and sorted for stable output.
+    Each entry is the canonical JSON string equality is tested on, so reporting the
+    expected and actual side by side shows precisely why a category did not match —
+    a `filter_date_score` of False otherwise gives no clue whether the period differed,
+    the granularity did, or the dataset the filter hangs off did.
+    """
+    date_set, ranking_set, attr_set = _split_and_normalize_filters(viz)
+    return {"date": sorted(date_set), "ranking": sorted(ranking_set), "attribute": sorted(attr_set)}
+
+
 def check_filters(expected: CreatedVisualization, actual: CreatedVisualization) -> FilterScores:
     exp_date, exp_rank, exp_attr = _split_and_normalize_filters(expected)
     act_date, act_rank, act_attr = _split_and_normalize_filters(actual)
