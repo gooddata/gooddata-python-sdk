@@ -5,6 +5,7 @@ from gooddata_eval.core.scoring import (
     check_viz_type,
     get_dimension_uri_set,
     get_metric_uri_set,
+    normalized_filters,
     uri_to_display_name,
     validate_cross_references,
 )
@@ -161,3 +162,46 @@ def test_validate_cross_references_accepts_omitted_attribute_but_flags_missing_u
     ok, errors = validate_cross_references(no_using)
     assert ok is False
     assert "is required" in errors[0]
+
+
+def test_normalized_filters_groups_by_scored_category():
+    """The three categories `check_filters` scores separately, in the form it compares."""
+    viz = CreatedVisualization.model_validate(
+        {
+            "id": "x",
+            "type": "bar_chart",
+            "query": {
+                "fields": {"m": {"using": "metric/spend"}, "d": {"using": "label/merchant.name"}},
+                "filter_by": {
+                    "f0": {
+                        "type": "date_filter",
+                        "using": "dataset/date",
+                        "granularity": "MONTH",
+                        "from": -1,
+                        "to": -1,
+                    },
+                    "f1": {"type": "ranking_filter", "using": "m", "top": 5},
+                    "f2": {"type": "attribute_filter", "using": "label/region", "state": {"include": ["EMEA"]}},
+                },
+            },
+            "metrics": ["m"],
+            "view_by": ["d"],
+        }
+    )
+    grouped = normalized_filters(viz)
+    assert set(grouped) == {"date", "ranking", "attribute"}
+    assert all(len(v) == 1 for v in grouped.values())
+    # The ranking entry carries the substituted sole dimension, matching what equality sees.
+    assert '"dim_uri": "label/merchant.name"' in grouped["ranking"][0]
+
+
+def test_normalized_filters_is_empty_per_category_when_unfiltered():
+    viz = CreatedVisualization.model_validate(
+        {
+            "id": "x",
+            "type": "headline",
+            "query": {"fields": {"m": {"using": "metric/spend"}}, "filter_by": {}},
+            "metrics": ["m"],
+        }
+    )
+    assert normalized_filters(viz) == {"date": [], "ranking": [], "attribute": []}
