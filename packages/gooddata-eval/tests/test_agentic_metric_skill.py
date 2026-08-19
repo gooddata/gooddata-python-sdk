@@ -1,13 +1,17 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
+import os
+import sys
 from unittest.mock import MagicMock, patch
 
 import pytest
 from gooddata_eval.core.agentic.metric_skill import (
     AgenticMetricSummary,
     MetricRunResult,
+    SimulatedResponseError,
     _delete_metric,
     _normalize_maql,
+    generate_simulated_response,
     run_agentic_metric_skill,
 )
 from gooddata_eval.core.models import ChatResult
@@ -83,7 +87,13 @@ def test_run_agentic_metric_skill_closes_client_on_no_result():
             "reasoningStepCount": 1,
         }
     )
-    with patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client):
+    with (
+        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
+        patch(
+            "gooddata_eval.core.agentic.metric_skill.generate_simulated_response",
+            return_value="Go ahead and create it.",
+        ) as mock_sim,
+    ):
         summary = run_agentic_metric_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -96,6 +106,7 @@ def test_run_agentic_metric_skill_closes_client_on_no_result():
     mock_client.close.assert_called_once()
     assert summary.pass_at_k is False
     assert summary.best.metric_created is False
+    mock_sim.assert_called_once_with("I will work on that.", {"maql": "SELECT {metric/foo}"})
 
 
 def test_run_agentic_metric_skill_uses_initial_conversation_for_run_0():
@@ -224,3 +235,52 @@ def test_run_agentic_metric_skill_deletes_metric_even_when_teardown_fails():
         )
 
     mock_sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "foo_metric")
+
+
+def test_generate_simulated_response_without_an_api_key():
+    with (
+        patch.dict(sys.modules, {"openai": MagicMock()}),
+        patch.dict(os.environ, {}, clear=True),
+        pytest.raises(SimulatedResponseError, match="OPENAI_API_KEY"),
+    ):
+        generate_simulated_response("Which brand field?", {"maql": "SELECT {metric/foo}"})
+
+
+def test_generate_simulated_response_without_the_openai_package():
+    with (
+        patch.dict(sys.modules, {"openai": None}),
+        pytest.raises(SimulatedResponseError, match="openai package is required"),
+    ):
+        generate_simulated_response("Which brand field?", {"maql": "SELECT {metric/foo}"})
+
+
+def test_run_agentic_metric_skill_fails_the_run_when_the_simulated_reply_cannot_be_generated():
+    exc = SimulatedResponseError("OPENAI_API_KEY environment variable is not set")
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {
+            "textResponse": "Which brand field should I count?",
+            "toolCallEvents": [],
+            "reasoningStepCount": 1,
+        }
+    )
+    with (
+        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.metric_skill.generate_simulated_response", side_effect=exc) as mock_sim,
+    ):
+        summary = run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=3,
+        )
+
+    assert summary.pass_at_k is False
+    assert summary.best.metric_created is False
+    assert summary.best.total_turns == 1.0
+    mock_client.close.assert_called_once()
+    mock_sim.assert_called_once_with("Which brand field should I count?", {"maql": "SELECT {metric/foo}"})

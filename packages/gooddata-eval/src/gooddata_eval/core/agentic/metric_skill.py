@@ -72,16 +72,29 @@ def _best_maql_match(actual_maql: str, expected_outputs: list[dict]) -> tuple[bo
     return False, expected_outputs[0].get("maql", "") if expected_outputs else ""
 
 
+class SimulatedResponseError(RuntimeError):
+    """The simulated user could not reply: openai missing, no API key, or the provider failed.
+
+    Carries every expected setup/provider failure so callers can end the run without
+    swallowing programming errors raised from the same call.
+    """
+
+
 def generate_simulated_response(agent_message: str, expected_output: dict) -> str:
-    """Generate a user reply to keep the metric-skill conversation going (gpt-4o-mini)."""
+    """Generate a user reply to keep the metric-skill conversation going (gpt-4o-mini).
+
+    Raises:
+        SimulatedResponseError: openai is not installed, OPENAI_API_KEY is unset, or the
+            provider call failed.
+    """
     try:
-        from openai import OpenAI  # noqa: PLC0415
+        from openai import OpenAI, OpenAIError  # noqa: PLC0415
     except ImportError as exc:
-        raise RuntimeError("openai package is required for generate_simulated_response") from exc
+        raise SimulatedResponseError("openai package is required for generate_simulated_response") from exc
 
     api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
-        raise OSError("OPENAI_API_KEY environment variable is not set")
+        raise SimulatedResponseError("OPENAI_API_KEY environment variable is not set")
 
     client = OpenAI(api_key=api_key)
     expected_maql = expected_output.get("maql", "")
@@ -91,12 +104,15 @@ def generate_simulated_response(agent_message: str, expected_output: dict) -> st
         f"The user originally asked to create a metric with MAQL: {expected_maql}. "
         f"Reply briefly as the user, providing any clarification the assistant needs."
     )
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=150,
-        temperature=0,
-    )
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=150,
+            temperature=0,
+        )
+    except OpenAIError as exc:
+        raise SimulatedResponseError(f"simulated user reply failed: {exc}") from exc
     return response.choices[0].message.content or "Please proceed."
 
 
@@ -166,13 +182,6 @@ def _delete_metric(sdk: GoodDataSdk, workspace_id: str, metric_id: str) -> None:
         print(f"[CLEANUP] Failed to delete metric {metric_id}: {exc}")
 
 
-def _is_asking_clarification(text: str) -> bool:
-    if not text:
-        return False
-    t = text.lower()
-    return "?" in t or "could you" in t or "please provide" in t or "clarif" in t
-
-
 def _execute_single_metric_run(
     client: ChatClient,
     sdk: GoodDataSdk,
@@ -204,9 +213,14 @@ def _execute_single_metric_run(
                 metric_id_to_delete = candidate.get("metric_id")
                 break
             response_text = (chat_result.text_response or "").strip()
-            if _is_asking_clarification(response_text):
+            if not response_text and not chat_result.tool_call_events:
+                break
+            if _iteration >= max_iterations - 1:
+                break
+            try:
                 current_question = generate_simulated_response(response_text, primary_expected)
-            else:
+            except SimulatedResponseError as exc:
+                print(f"[SIM-USER] Simulated reply failed for conversation {conversation_id}: {exc}")
                 break
 
         actual_maql = (metric_result or {}).get("maql", "")

@@ -25,6 +25,8 @@ from gooddata_eval.core.scoring import (
 
 _REF_PATTERN = re.compile(r"\$ref:([\w_]+)\.([\w_]+)")
 
+_DEFAULT_MAX_CLARIFICATION_TURNS = 7
+
 
 class TurnDefinition(BaseModel):
     """Definition of a single turn in a multi-turn conversation evaluation."""
@@ -192,13 +194,6 @@ def _check_output_correct(turn: TurnDefinition, chat_result: ChatResult) -> bool
     return None
 
 
-def _is_asking_clarification(text: str) -> bool:
-    if not text:
-        return False
-    t = text.lower()
-    return "?" in t or "could you" in t or "please" in t or "clarif" in t
-
-
 def _get_sim_user_response(agent_message: str, turn: TurnDefinition, expected_output: dict | None) -> str:
     """Generate a simulated user reply to an agent clarification question."""
     otype = turn.expected_output_type
@@ -277,7 +272,7 @@ def run_agentic_conversation(
     token: str,
     workspace_id: str,
     fixture: ConversationFixture,
-    max_clarification_turns: int = 20,
+    max_clarification_turns: int = _DEFAULT_MAX_CLARIFICATION_TURNS,
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
 ) -> ConversationResult:
@@ -307,8 +302,22 @@ def run_agentic_conversation(
             owns_conversation = True
 
         for turn in fixture.turns:
-            # Resolve $ref placeholders using outputs captured from prior turns.
-            resolved_expected = _resolve_refs(turn.expected_output, turn_outputs)
+            try:
+                resolved_expected = _resolve_refs(turn.expected_output, turn_outputs)
+            except ValueError as exc:
+                print(f"[SKIP] turn '{turn.turn_id}': {exc}")
+                turn_results.append(
+                    TurnResult(
+                        turn_id=turn.turn_id,
+                        expected_skill=turn.expected_skill,
+                        skill_routing=False,
+                        output_present=False,
+                        no_error=False,
+                        activated_skills=[],
+                        output_correct=False,
+                    )
+                )
+                continue
             resolved_turn = turn.model_copy(update={"expected_output": resolved_expected})
 
             clarification_turns = 0
@@ -327,13 +336,13 @@ def run_agentic_conversation(
                 response_text = (chat_result.text_response or "").strip()
                 if not response_text and chat_result.alert_proposals:
                     response_text = render_alert_proposal(chat_result.alert_proposals[-1])
-                asking = _is_asking_clarification(response_text) or bool(chat_result.alert_proposals)
-                if asking and clarification_turns < max_clarification_turns:
-                    clarification_turns += 1
-                    total_clarification_turns += 1
-                    current_message = _get_sim_user_response(response_text, resolved_turn, resolved_expected)
-                else:
+                if not response_text and not chat_result.tool_call_events:
                     break
+                if clarification_turns >= max_clarification_turns:
+                    break
+                clarification_turns += 1
+                total_clarification_turns += 1
+                current_message = _get_sim_user_response(response_text, resolved_turn, resolved_expected)
 
             activated = _activated_skills(all_tool_calls)
             skill_routing = turn.expected_skill in activated if activated else False
@@ -397,7 +406,7 @@ def evaluate_agentic_conversation(
     token: str,
     workspace_id: str,
     fixture: ConversationFixture,
-    max_clarification_turns: int = 20,
+    max_clarification_turns: int = _DEFAULT_MAX_CLARIFICATION_TURNS,
     initial_conversation_id: str | None = None,
     langfuse: object | None = None,
     dataset_item_id: str = "",
