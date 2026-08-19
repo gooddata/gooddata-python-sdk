@@ -133,7 +133,10 @@ def _resolve_internal_recipient_ids(sdk: GoodDataSdk, emails: list[str]) -> set[
     ids: set[str] = set()
     for email in emails:
         try:
-            resp = sdk._client.entities_api.get_all_entities_users(filter=f"email=='{email}'")
+            # RSQL quoted-string escaping: backslash first, then the enclosing quote char,
+            # or an email like o'hara@example.com breaks the filter into invalid RSQL.
+            escaped = email.replace("\\", "\\\\").replace("'", "\\'")
+            resp = sdk._client.entities_api.get_all_entities_users(filter=f"email=='{escaped}'")
             ids.update(u.id for u in (resp.data or []))
         except Exception:  # noqa: PERF203 — per-email lookup: one bad email must not abort the rest
             pass
