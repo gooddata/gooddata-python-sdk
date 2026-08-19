@@ -12,8 +12,14 @@ from gooddata_sdk import GoodDataSdk
 from pydantic import BaseModel
 
 from gooddata_eval.core.agentic.alert_skill import render_alert_proposal
-from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids
-from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.agentic.metric_skill import (
+    _clear_stale_metrics,
+    _delete_metric,
+    _expected_metric_ids,
+    _extract_created_metric_ids,
+    _metric_ids_in_workspace,
+)
+from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import ChatResult, ToolCallEvent
 from gooddata_eval.core.scoring import (
@@ -293,6 +299,13 @@ def run_agentic_conversation(
     # not persist in the (shared) workspace and get reused by a later test. Deferred to
     # the end — a later turn may $ref a metric an earlier turn created.
     created_metric_ids: list[str] = []
+    # Metrics the fixture expects this conversation to create. Leftovers of them from an
+    # earlier run make the agent report "that metric already exists" and answer a question
+    # the fixture never anticipated, so they are cleared before the conversation starts.
+    expected_metric_ids = _expected_metric_ids(
+        [t.expected_output for t in fixture.turns if t.expected_output_type == "metric" and t.expected_output]
+    )
+    protected_metric_ids = _clear_stale_metrics(sdk, workspace_id, expected_metric_ids, expects_new=True)
 
     try:
         if initial_conversation_id is not None:
@@ -326,7 +339,17 @@ def run_agentic_conversation(
             final_result: ChatResult | None = None
 
             for _iter in range(max_clarification_turns + 1):
-                chat_result = client.send_message(conversation_id, current_message)
+                try:
+                    chat_result = client.send_message(conversation_id, current_message)
+                except ChatError as exc:
+                    # The stream can die after create_metric ran server-side; keep what the
+                    # accumulator saw so the cleanup below still knows what to delete.
+                    if exc.partial_result is not None:
+                        all_tool_calls.extend(exc.partial_result.tool_call_events or [])
+                        created_metric_ids.extend(
+                            m for m in _extract_created_metric_ids(all_tool_calls) if m not in created_metric_ids
+                        )
+                    raise
                 final_result = chat_result
                 all_tool_calls.extend(chat_result.tool_call_events or [])
 
@@ -379,6 +402,12 @@ def run_agentic_conversation(
         if owns_conversation and conversation_id:
             client.delete_conversation(conversation_id)
         for metric_id in created_metric_ids:
+            _delete_metric(sdk, workspace_id, metric_id)
+        leftovers = (expected_metric_ids - protected_metric_ids - set(created_metric_ids)) & _metric_ids_in_workspace(
+            sdk, workspace_id
+        )
+        for metric_id in sorted(leftovers):
+            print(f"[CLEANUP] Removing metric {metric_id} the conversation left in {workspace_id}")
             _delete_metric(sdk, workspace_id, metric_id)
         client.close()
 

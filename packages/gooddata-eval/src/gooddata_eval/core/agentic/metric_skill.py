@@ -10,7 +10,7 @@ from typing import Any
 
 from gooddata_sdk import GoodDataSdk
 
-from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import ToolCallEvent
 
@@ -102,7 +102,11 @@ def generate_simulated_response(agent_message: str, expected_output: dict) -> st
         f"You are simulating a user in a conversation with a BI assistant that creates metrics. "
         f"The assistant said: '{agent_message}'. "
         f"The user originally asked to create a metric with MAQL: {expected_maql}. "
-        f"Reply briefly as the user, providing any clarification the assistant needs."
+        f"Reply briefly as the user, providing any clarification the assistant needs. "
+        f"Never introduce a requirement the original request did not contain: no filters, no date "
+        f"ranges and no exclusions beyond what the MAQL above already says. If the assistant reports "
+        f"that a similar metric already exists, or offers alternative definitions, tell it to create "
+        f"the metric exactly as originally described."
     )
     try:
         response = client.chat.completions.create(
@@ -126,6 +130,7 @@ class MetricRunResult:
     actual_maql: str
     maql_correct: bool
     total_turns: float
+    created_new: bool | None = None
 
 
 @dataclass
@@ -182,6 +187,45 @@ def _delete_metric(sdk: GoodDataSdk, workspace_id: str, metric_id: str) -> None:
         print(f"[CLEANUP] Failed to delete metric {metric_id}: {exc}")
 
 
+def _metric_ids_in_workspace(sdk: GoodDataSdk, workspace_id: str) -> set[str]:
+    """Ids of every metric currently in the workspace; empty on failure so cleanup stays best-effort."""
+    try:
+        return {m.id for m in sdk.catalog_workspace_content.get_metrics_catalog(workspace_id)}
+    except Exception as exc:
+        print(f"[CLEANUP] Failed to list metrics in {workspace_id}: {exc}")
+        return set()
+
+
+def _expected_metric_ids(expected_outputs: list[dict]) -> set[str]:
+    """Ids the run is expected to produce: the fixture's own metric_id plus a slug of its title."""
+    ids: set[str] = set()
+    for candidate in expected_outputs:
+        metric_id = candidate.get("metric_id")
+        if metric_id:
+            ids.add(str(metric_id))
+        title = candidate.get("title")
+        if title:
+            ids.add(re.sub(r"[^a-z0-9]+", "_", str(title).lower()).strip("_"))
+    return ids
+
+
+def _clear_stale_metrics(sdk: GoodDataSdk, workspace_id: str, expected_ids: set[str], expects_new: bool) -> set[str]:
+    """Delete leftovers of what this run is about to create; return ids it must leave alone.
+
+    A run whose stream dies after create_metric leaves the metric behind, and the next run then
+    meets "a metric with that definition already exists", answers the follow-up question and
+    drifts off the fixture. Only ids the fixture itself names are touched, so runs sharing a
+    workspace cannot delete each other's work.
+    """
+    live = _metric_ids_in_workspace(sdk, workspace_id) & expected_ids
+    if not expects_new:
+        return live
+    for metric_id in sorted(live):
+        print(f"[CLEANUP] Removing stale metric {metric_id} in {workspace_id} before the run")
+        _delete_metric(sdk, workspace_id, metric_id)
+    return set()
+
+
 def _execute_single_metric_run(
     client: ChatClient,
     sdk: GoodDataSdk,
@@ -193,24 +237,34 @@ def _execute_single_metric_run(
 ) -> MetricRunResult:
     """Drive one full multi-turn metric-skill conversation and evaluate the result.
 
-    Any metric the agent creates during this run is deleted on the way out (see
-    ``_delete_metric``) so it cannot leak into — and be reused by — a later test
-    sharing the workspace.
+    The workspace is cleared of earlier leftovers before the run and of everything this
+    run created after it (see ``_clear_stale_metrics``), so a metric can neither leak into
+    nor be reused by another run sharing the workspace.
     """
     primary_expected = expected_outputs[0] if expected_outputs else {}
+    expected_ids = _expected_metric_ids(expected_outputs)
+    expects_new = any(c.get("created_new", True) for c in expected_outputs) if expected_outputs else True
+    protected_ids = _clear_stale_metrics(sdk, workspace_id, expected_ids, expects_new)
     metric_result: dict | None = None
-    metric_id_to_delete: str | None = None
+    all_tool_calls: list[ToolCallEvent] = []
     turns = 0
     current_question = question
 
     try:
         for _iteration in range(max_iterations):
             turns += 1
-            chat_result = client.send_message(conversation_id, current_question)
+            try:
+                chat_result = client.send_message(conversation_id, current_question)
+            except ChatError as exc:
+                # The stream can die after create_metric ran server-side. Keep whatever the
+                # accumulator saw so the cleanup below can still find the metric by its id.
+                if exc.partial_result is not None:
+                    all_tool_calls.extend(exc.partial_result.tool_call_events or [])
+                raise
+            all_tool_calls.extend(chat_result.tool_call_events or [])
             candidate = _extract_metric_result(chat_result.tool_call_events or [])
             if candidate is not None:
                 metric_result = candidate
-                metric_id_to_delete = candidate.get("metric_id")
                 break
             response_text = (chat_result.text_response or "").strip()
             if not response_text and not chat_result.tool_call_events:
@@ -233,10 +287,16 @@ def _execute_single_metric_run(
             actual_maql=actual_maql,
             maql_correct=maql_correct,
             total_turns=float(turns),
+            created_new=metric_result.get("created_new") if metric_result else None,
         )
     finally:
-        if metric_id_to_delete:
-            _delete_metric(sdk, workspace_id, metric_id_to_delete)
+        created_ids = set(_extract_created_metric_ids(all_tool_calls))
+        for metric_id in sorted(created_ids):
+            _delete_metric(sdk, workspace_id, metric_id)
+        leftovers = (expected_ids - protected_ids - created_ids) & _metric_ids_in_workspace(sdk, workspace_id)
+        for metric_id in sorted(leftovers):
+            print(f"[CLEANUP] Removing metric {metric_id} the run left in {workspace_id}")
+            _delete_metric(sdk, workspace_id, metric_id)
 
 
 def run_agentic_metric_skill(
@@ -383,9 +443,16 @@ def evaluate_agentic_metric_skill(
         best = summary.best
         expected_outputs_list: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
         candidates_str = "; ".join(repr(c.get("maql", "")) for c in expected_outputs_list)
+        reused = best.metric_created and best.created_new is False
         raise MetricSkillAssertionError(
             f"Metric skill assertion failed. "
-            f"metric_created={best.metric_created}, maql_correct={best.maql_correct}. "
+            f"metric_created={best.metric_created}, maql_correct={best.maql_correct}, "
+            f"created_new={best.created_new}. "
             f"Expected MAQL (candidates): {candidates_str}. "
             f"Actual MAQL: {best.actual_maql}."
+            + (
+                " The agent reused an existing metric instead of creating one — the workspace was not clean."
+                if reused
+                else ""
+            )
         )

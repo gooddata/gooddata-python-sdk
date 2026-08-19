@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 import os
 import sys
+from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -10,10 +11,12 @@ from gooddata_eval.core.agentic.metric_skill import (
     MetricRunResult,
     SimulatedResponseError,
     _delete_metric,
+    _expected_metric_ids,
     _normalize_maql,
     generate_simulated_response,
     run_agentic_metric_skill,
 )
+from gooddata_eval.core.chat.sse_client import ChatError
 from gooddata_eval.core.models import ChatResult
 
 
@@ -284,3 +287,133 @@ def test_run_agentic_metric_skill_fails_the_run_when_the_simulated_reply_cannot_
     assert summary.best.total_turns == 1.0
     mock_client.close.assert_called_once()
     mock_sim.assert_called_once_with("Which brand field should I count?", {"maql": "SELECT {metric/foo}"})
+
+
+def _metric_ns(metric_id):
+    return SimpleNamespace(id=metric_id)
+
+
+def _brand_expected(created_new=True):
+    return {
+        "maql": "SELECT COUNT({label/product_brand})",
+        "title": "Unique Product Brand Count",
+        "metric_id": "unique_product_brand_count",
+        "created_new": created_new,
+    }
+
+
+def test_expected_metric_ids_covers_the_fixture_id_and_its_title_slug():
+    assert _expected_metric_ids([_brand_expected()]) == {"unique_product_brand_count"}
+    assert _expected_metric_ids([{"title": "MoM Net Sales Growth"}]) == {"mom_net_sales_growth"}
+
+
+def test_run_agentic_metric_skill_clears_a_stale_metric_before_the_run():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _create_metric_chat_result()
+    with (
+        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.metric_skill.GoodDataSdk") as mock_sdk_cls,
+    ):
+        mock_sdk = mock_sdk_cls.create.return_value
+        # Before the run a leftover of the expected metric is still there; after it, nothing extra.
+        mock_sdk.catalog_workspace_content.get_metrics_catalog.side_effect = [
+            [_metric_ns("unique_product_brand_count"), _metric_ns("net_sales")],
+            [],
+        ]
+        run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output=_brand_expected(),
+            k=1,
+            max_iterations=1,
+        )
+
+    deleted = [c.args for c in mock_sdk._client.entities_api.delete_entity_metrics.call_args_list]
+    # The leftover goes first, then the metric this run created. A baseline metric is untouched.
+    assert deleted == [("ws1", "unique_product_brand_count"), ("ws1", "foo_metric")]
+
+
+def test_run_agentic_metric_skill_keeps_an_existing_metric_the_fixture_expects_to_be_reused():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {"textResponse": "Reused it.", "toolCallEvents": [], "reasoningStepCount": 1}
+    )
+    with (
+        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.metric_skill.GoodDataSdk") as mock_sdk_cls,
+    ):
+        mock_sdk = mock_sdk_cls.create.return_value
+        mock_sdk.catalog_workspace_content.get_metrics_catalog.return_value = [_metric_ns("unique_product_brand_count")]
+        run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output=_brand_expected(created_new=False),
+            k=1,
+            max_iterations=1,
+        )
+
+    mock_sdk._client.entities_api.delete_entity_metrics.assert_not_called()
+
+
+def test_run_agentic_metric_skill_deletes_the_metric_a_dead_stream_left_behind():
+    """The create_metric result never reaches the client when the SSE stream dies, but the
+    metric exists server-side — the partial result is what makes it findable."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = ChatError(
+        "SSE stream error: peer closed connection",
+        partial_result=_create_metric_chat_result(),
+    )
+    with (
+        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.metric_skill.GoodDataSdk") as mock_sdk_cls,
+        pytest.raises(ChatError),
+    ):
+        mock_sdk = mock_sdk_cls.create.return_value
+        mock_sdk.catalog_workspace_content.get_metrics_catalog.return_value = []
+        run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output=_brand_expected(),
+            k=1,
+            max_iterations=1,
+        )
+
+    mock_sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "foo_metric")
+
+
+def test_run_agentic_metric_skill_sweeps_a_metric_no_tool_call_ever_reported():
+    """Nothing at all came back from the stream, so the id is unknown — the metric is found by
+    the identity the fixture expects."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = ChatError("SSE stream error: peer closed connection")
+    with (
+        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.metric_skill.GoodDataSdk") as mock_sdk_cls,
+        pytest.raises(ChatError),
+    ):
+        mock_sdk = mock_sdk_cls.create.return_value
+        mock_sdk.catalog_workspace_content.get_metrics_catalog.side_effect = [
+            [],
+            [_metric_ns("unique_product_brand_count")],
+        ]
+        run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output=_brand_expected(),
+            k=1,
+            max_iterations=1,
+        )
+
+    mock_sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "unique_product_brand_count")

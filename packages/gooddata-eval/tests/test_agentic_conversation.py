@@ -1,5 +1,6 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
+from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -10,6 +11,7 @@ from gooddata_eval.core.agentic.conversation import (
     _resolve_refs,
     run_agentic_conversation,
 )
+from gooddata_eval.core.chat.sse_client import ChatError
 from gooddata_eval.core.models import ChatResult, ToolCallEvent
 
 
@@ -467,3 +469,77 @@ def test_run_agentic_conversation_records_a_failed_turn_when_a_ref_cannot_be_res
     assert result.turn_results[1].no_error is False
     assert result.turn_results[2].skill_success is True
     assert result.conversation_success is False
+
+
+def _metric_turn_fixture_with_title():
+    return ConversationFixture(
+        id="conv-metric",
+        expected_skills=["metric"],
+        turns=[
+            TurnDefinition(
+                turn_id="create_metric",
+                message="Create MoM Net Sales Growth",
+                expected_skill="metric",
+                expected_output_type="metric",
+                expected_output={"maql": "SELECT 1", "title": "MoM Net Sales Growth"},
+            )
+        ],
+    )
+
+
+def test_run_agentic_conversation_clears_a_stale_metric_before_the_conversation():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m1")])
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk") as mock_sdk_cls,
+    ):
+        mock_sdk = mock_sdk_cls.create.return_value
+        mock_sdk.catalog_workspace_content.get_metrics_catalog.side_effect = [
+            [SimpleNamespace(id="mom_net_sales_growth"), SimpleNamespace(id="net_sales")],
+            [],
+        ]
+        run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_metric_turn_fixture_with_title(),
+        )
+
+    deleted = [c.args for c in mock_sdk._client.entities_api.delete_entity_metrics.call_args_list]
+    assert deleted == [("ws1", "mom_net_sales_growth"), ("ws1", "m1")]
+
+
+def test_run_agentic_conversation_deletes_the_metric_a_dead_stream_left_behind():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    partial = ChatResult.model_validate(
+        {
+            "toolCallEvents": [
+                {
+                    "functionName": "create_metric",
+                    "functionArguments": "{}",
+                    "result": '{"data": {"metric_id": "m1", "maql": "SELECT 1"}}',
+                }
+            ]
+        }
+    )
+    mock_client.send_message.side_effect = ChatError("SSE stream error", partial_result=partial)
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk") as mock_sdk_cls,
+        pytest.raises(ChatError),
+    ):
+        mock_sdk = mock_sdk_cls.create.return_value
+        mock_sdk.catalog_workspace_content.get_metrics_catalog.return_value = []
+        run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_metric_turn_fixture_with_title(),
+        )
+
+    mock_sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "m1")
