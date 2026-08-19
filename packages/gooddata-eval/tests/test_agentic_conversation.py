@@ -352,3 +352,118 @@ def test_run_agentic_conversation_treats_alert_proposal_as_a_clarification():
     assert "Should I create this alert?" in mock_sim.call_args.args[0]
     assert result.turn_results[0].clarification_turns_used == 1
     assert result.turn_results[0].skill_success is True
+
+
+def _viz_turn_result(text=None, viz=None, tool_calls=()):
+    r = MagicMock()
+    r.text_response = text
+    r.created_visualizations = viz
+    r.tool_call_events = list(tool_calls)
+    r.alert_proposals = []
+    return r
+
+
+def test_run_agentic_conversation_replies_to_a_statement_without_a_question_mark():
+    """QA-28982 regression: gpt-5.2 answered "I need to confirm ... Next I'll:" -- no question
+    mark, so the old substring heuristic ended the turn and no metric was ever created."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    stalling_turn = _viz_turn_result(
+        text="I can create that, but first I need to confirm which Net Sales calculation to use. Next I'll: ...",
+        tool_calls=[_skills_tc("metric")],
+    )
+    mock_client.send_message.side_effect = [
+        stalling_turn,
+        _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m1")]),
+    ]
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+        patch(
+            "gooddata_eval.core.agentic.conversation._get_sim_user_response",
+            return_value="Go ahead with Net Sales.",
+        ) as mock_sim,
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_two_metric_turn_fixture().model_copy(update={"turns": _two_metric_turn_fixture().turns[:1]}),
+        )
+
+    mock_sim.assert_called_once()
+    assert result.turn_results[0].clarification_turns_used == 1
+    assert result.turn_results[0].skill_success is True
+
+
+def test_run_agentic_conversation_stops_when_the_agent_says_nothing():
+    """An agent that returns neither text nor tool calls is stuck -- no point replying to it."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _viz_turn_result(text=None)
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+        patch("gooddata_eval.core.agentic.conversation._get_sim_user_response") as mock_sim,
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_two_metric_turn_fixture().model_copy(update={"turns": _two_metric_turn_fixture().turns[:1]}),
+        )
+
+    mock_sim.assert_not_called()
+    assert mock_client.send_message.call_count == 1
+    assert result.turn_results[0].skill_success is False
+
+
+def test_run_agentic_conversation_records_a_failed_turn_when_a_ref_cannot_be_resolved():
+    """QA-28982 regression: turn 1 producing no metric used to raise ValueError out of the whole
+    run, hiding which turn broke and skipping every later turn."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _viz_turn_result(text="Which Net Sales metric?", tool_calls=[_skills_tc("metric")]),
+        _viz_turn_result(text="Working on it.", tool_calls=[_skills_tc("metric")]),
+        _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m2")]),
+    ]
+    fixture = ConversationFixture(
+        id="test-ref",
+        expected_skills=["metric"],
+        turns=[
+            TurnDefinition(
+                turn_id="t1", message="Create shared", expected_skill="metric", expected_output_type="metric"
+            ),
+            TurnDefinition(
+                turn_id="t2",
+                message="Chart it",
+                expected_skill="visualization",
+                expected_output={"metrics": ["metric/$ref:t1.metric_id"]},
+            ),
+            TurnDefinition(
+                turn_id="t3", message="Create another", expected_skill="metric", expected_output_type="metric"
+            ),
+        ],
+    )
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+        patch("gooddata_eval.core.agentic.conversation._get_sim_user_response", return_value="Go ahead."),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+            max_clarification_turns=1,
+        )
+
+    assert [t.turn_id for t in result.turn_results] == ["t1", "t2", "t3"]
+    assert result.turn_results[0].skill_success is False
+    assert result.turn_results[1].no_error is False
+    assert result.turn_results[2].skill_success is True
+    assert result.conversation_success is False
