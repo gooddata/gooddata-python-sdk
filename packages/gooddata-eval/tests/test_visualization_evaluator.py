@@ -127,3 +127,46 @@ def test_evaluator_passes_when_agent_omits_ranking_attribute_on_single_dim_viz()
     assert result.detail["filter_ranking_score"] is True
     assert result.detail["filters_correct"] is True
     assert result.passed is True
+
+
+def _dated(granularity: str, frm: int, to: int):
+    return {
+        "id": "x",
+        "type": "column_chart",
+        "query": {
+            "fields": {"m_rev": {"using": "metric/revenue"}, "d_q": {"using": "label/date.quarter"}},
+            "filter_by": {
+                "f_date": {
+                    "type": "date_filter",
+                    "using": "dataset/date",
+                    "granularity": granularity,
+                    "from": frm,
+                    "to": to,
+                }
+            },
+        },
+        "metrics": ["m_rev"],
+        "view_by": ["d_q"],
+    }
+
+
+def test_detail_reports_the_filters_that_were_compared():
+    """A `filter_date_score` of False is undiagnosable from a finished run without them:
+    two encodings of the same period compare unequal and the booleans don't say which."""
+    ev = get_evaluator("visualization")
+    result = ev.evaluate(_item(_dated("MONTH", -11, 0)), _chat_result_with(_dated("MONTH", -12, -1)))
+
+    assert result.detail["filter_date_score"] is False
+    expected, actual = result.detail["expected_filters"], result.detail["actual_filters"]
+    assert '"from": -11' in expected["date"][0]
+    assert '"from": -12' in actual["date"][0]
+    assert expected["ranking"] == actual["ranking"] == []
+    assert expected["attribute"] == actual["attribute"] == []
+
+
+def test_detail_filters_are_empty_when_no_visualization_was_created():
+    ev = get_evaluator("visualization")
+    empty = ChatResult.model_validate({"textResponse": "what metric?", "toolCallEvents": []})
+    result = ev.evaluate(_item(_dated("MONTH", -11, 0)), empty)
+    assert result.detail["actual_filters"] == {"date": [], "ranking": [], "attribute": []}
+    assert len(result.detail["expected_filters"]["date"]) == 1
