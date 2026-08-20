@@ -162,7 +162,7 @@ def test_check_recipients_matches_internal_recipients_via_resolved_user_id():
         MagicMock(id="user.abc123"),
     ]
     assert _check_recipients(expected, {"internal_recipients": ["user.abc123"]}, sdk=mock_sdk) is True
-    mock_sdk._client.entities_api.get_all_entities_users.assert_called_once_with(filter="email=='user@example.com'")
+    mock_sdk._client.entities_api.get_all_entities_users.assert_called_once_with(filter="email=in=('user@example.com')")
 
 
 def test_check_recipients_escapes_apostrophe_in_email_for_rsql_filter():
@@ -174,7 +174,24 @@ def test_check_recipients_escapes_apostrophe_in_email_for_rsql_filter():
         MagicMock(id="user.abc123"),
     ]
     assert _check_recipients(expected, {"internal_recipients": ["user.abc123"]}, sdk=mock_sdk) is True
-    mock_sdk._client.entities_api.get_all_entities_users.assert_called_once_with(filter="email=='o\\'hara@example.com'")
+    mock_sdk._client.entities_api.get_all_entities_users.assert_called_once_with(
+        filter="email=in=('o\\'hara@example.com')"
+    )
+
+
+def test_check_recipients_resolves_multiple_emails_in_a_single_bulk_request():
+    # N expected recipients must cost one request, not N -- confirmed against the
+    # live Users entities API that RSQL `=in=(...)` returns only the matching subset.
+    expected = _normalize_expected_output({"Recipients": ["a@example.com", "b@example.com"]})
+    mock_sdk = MagicMock()
+    mock_sdk._client.entities_api.get_all_entities_users.return_value.data = [
+        MagicMock(id="user.a"),
+        MagicMock(id="user.b"),
+    ]
+    assert _check_recipients(expected, {"internal_recipients": ["user.a", "user.b"]}, sdk=mock_sdk) is True
+    mock_sdk._client.entities_api.get_all_entities_users.assert_called_once_with(
+        filter="email=in=('a@example.com','b@example.com')"
+    )
 
 
 def test_check_recipients_internal_recipients_mismatch_still_fails():

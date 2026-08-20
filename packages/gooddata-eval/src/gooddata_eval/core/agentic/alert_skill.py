@@ -130,17 +130,17 @@ def _resolve_internal_recipient_ids(sdk: GoodDataSdk, emails: list[str]) -> set[
     treats an empty result the same as "this delivery path doesn't match",
     which is correct -- it doesn't mean the alert itself failed.
     """
-    ids: set[str] = set()
-    for email in emails:
-        try:
-            # RSQL quoted-string escaping: backslash first, then the enclosing quote char,
-            # or an email like o'hara@example.com breaks the filter into invalid RSQL.
-            escaped = email.replace("\\", "\\\\").replace("'", "\\'")
-            resp = sdk._client.entities_api.get_all_entities_users(filter=f"email=='{escaped}'")
-            ids.update(u.id for u in (resp.data or []))
-        except Exception:  # noqa: PERF203 — per-email lookup: one bad email must not abort the rest
-            pass
-    return ids
+    if not emails:
+        return set()
+    try:
+        # RSQL quoted-string escaping: backslash first, then the enclosing quote char,
+        # or an email like o'hara@example.com breaks the filter into invalid RSQL.
+        escaped = [email.replace("\\", "\\\\").replace("'", "\\'") for email in emails]
+        quoted = ",".join(f"'{email}'" for email in escaped)
+        resp = sdk._client.entities_api.get_all_entities_users(filter=f"email=in=({quoted})")
+        return {u.id for u in (resp.data or [])}
+    except Exception:
+        return set()
 
 
 def _check_recipients(expected: CatalogMetricAlert, actual_args: dict, sdk: GoodDataSdk | None = None) -> bool:
