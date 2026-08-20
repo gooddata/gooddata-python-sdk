@@ -254,6 +254,18 @@ class VisualizationAssertionError(AssertionError):
     __tracebackhide__ = True
 
 
+def _filter_diff(category: str, ev: EvaluationResult) -> str:
+    """Expected-vs-actual lines for one filter category, or "" when they matched.
+
+    Filters compare by exact equality on their canonical form, so "False" alone leaves
+    the reader guessing which part differed — the period, the granularity or the dataset.
+    """
+    expected, actual = ev.expected_filters.get(category, []), ev.actual_filters.get(category, [])
+    if expected == actual:
+        return ""
+    return f"      expected : {expected or 'none'}\n      actual   : {actual or 'none'}\n"
+
+
 def evaluate_agentic_visualization(
     host: str,
     token: str,
@@ -393,8 +405,11 @@ def evaluate_agentic_visualization(
             f"    actual   : {sorted(ev.actual_dim_uris)}\n"
             f"  Filters Correct       : {ev.filters_correct}\n"
             f"    date      : {ev.filter_date_score}\n"
+            f"{_filter_diff('date', ev)}"
             f"    ranking   : {ev.filter_ranking_score}\n"
+            f"{_filter_diff('ranking', ev)}"
             f"    attribute : {ev.filter_attribute_score}\n"
+            f"{_filter_diff('attribute', ev)}"
             f"  Viz Type Hard         : {ev.viz_type_hard}\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
         )

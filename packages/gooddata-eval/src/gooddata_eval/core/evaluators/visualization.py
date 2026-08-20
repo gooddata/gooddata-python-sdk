@@ -10,8 +10,11 @@ from gooddata_eval.core.scoring import (
     check_viz_type,
     get_dimension_uri_set,
     get_metric_uri_set,
+    normalized_filters,
     validate_cross_references,
 )
+
+_NO_FILTERS: dict[str, list[str]] = {"date": [], "ranking": [], "attribute": []}
 
 
 @dataclass
@@ -31,6 +34,11 @@ class EvaluationResult:
     actual_metric_uris: set[str]
     expected_dim_uris: set[str]
     actual_dim_uris: set[str]
+    # Filters in the canonical form equality is tested on, keyed by the category each
+    # `filter_*_score` covers. Reported alongside the booleans because a filter mismatch
+    # is otherwise undiagnosable from a finished run.
+    expected_filters: dict[str, list[str]]
+    actual_filters: dict[str, list[str]]
 
     @property
     def strict_pass(self) -> bool:
@@ -91,6 +99,8 @@ def _evaluate_visualization(
             actual_metric_uris=set(),
             expected_dim_uris=exp_dim_uris,
             actual_dim_uris=set(),
+            expected_filters=normalized_filters(expected),
+            actual_filters={category: values.copy() for category, values in _NO_FILTERS.items()},
         )
     cross_ref_valid, cross_ref_errors = validate_cross_references(actual)
     act_metric_uris = get_metric_uri_set(actual)
@@ -112,6 +122,8 @@ def _evaluate_visualization(
         actual_metric_uris=act_metric_uris,
         expected_dim_uris=exp_dim_uris,
         actual_dim_uris=act_dim_uris,
+        expected_filters=normalized_filters(expected),
+        actual_filters=normalized_filters(actual),
     )
 
 
@@ -174,5 +186,7 @@ class VisualizationEvaluator:
                 "actual_metric_uris": sorted(ev.actual_metric_uris),
                 "expected_dim_uris": sorted(ev.expected_dim_uris),
                 "actual_dim_uris": sorted(ev.actual_dim_uris),
+                "expected_filters": ev.expected_filters,
+                "actual_filters": ev.actual_filters,
             },
         )
