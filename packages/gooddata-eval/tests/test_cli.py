@@ -26,6 +26,16 @@ def test_build_run_config_requires_a_source():
         cli_main.parse_args(["run", "--host", "h", "--workspace", "w"])
 
 
+def test_parse_args_agent_id_flag():
+    args = cli_main.parse_args(["run", "--host", "h", "--workspace", "w", "--dataset", "d", "--agent-id", "agent-1"])
+    assert args.agent_id == "agent-1"
+
+
+def test_parse_args_agent_id_defaults_to_none():
+    args = cli_main.parse_args(["run", "--host", "h", "--workspace", "w", "--dataset", "d"])
+    assert args.agent_id is None
+
+
 def test_cli_run_end_to_end(monkeypatch, tmp_path, fixtures_dir):
     # Stub connection + model activation + chat backend so no network is needed.
     monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
@@ -91,6 +101,106 @@ def test_cli_run_end_to_end(monkeypatch, tmp_path, fixtures_dir):
     assert exit_code == 0
     # run keys are provider-prefixed (provider_name/model) to stay collision-free across providers
     assert orjson.loads(out.read_bytes())["runs"]["Test Provider/gpt-5.2"]["summary"]["passed"] == 1
+
+
+def _stub_run_for_agent_id_test(monkeypatch, seen_chat_client_kwargs):
+    monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
+
+    class _FakeController:
+        def __init__(self, *a, **k): ...
+        def get_active(self):
+            return ActiveLlmProvider(provider_id="prov", default_model_id="gpt-5.2")
+
+        def resolve_and_activate(self, requested, provider=None):
+            return ResolvedModel(
+                provider_id="prov", model_id=requested or "gpt-5.2", switched=False, provider_name="Test Provider"
+            )
+
+        def restore(self, original): ...
+        def close(self): ...
+
+    monkeypatch.setattr(cli_main, "WorkspaceModelController", _FakeController)
+
+    def _fake_run(items, backend, *, runs, model, workspace_id, **kw):
+        return EvalReport(model=model, workspace_id=workspace_id, items=[])
+
+    monkeypatch.setattr(cli_main, "run_items", _fake_run)
+
+    def _spy_chat_client(**kwargs):
+        seen_chat_client_kwargs.update(kwargs)
+        return object()
+
+    monkeypatch.setattr(cli_main, "ChatClient", _spy_chat_client)
+
+
+def test_cli_run_passes_agent_id_flag_to_chat_client(monkeypatch, tmp_path, fixtures_dir):
+    seen = {}
+    _stub_run_for_agent_id_test(monkeypatch, seen)
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--dataset",
+            str(fixtures_dir / "sample_dataset"),
+            "--agent-id",
+            "agent-1",
+            "--json",
+            str(tmp_path / "res.json"),
+        ]
+    )
+    assert exit_code == 0
+    assert seen["agent_id"] == "agent-1"
+
+
+def test_cli_run_falls_back_to_agent_id_env_var(monkeypatch, tmp_path, fixtures_dir):
+    monkeypatch.setenv("GD_EVAL_AGENT_ID", "agent-from-env")
+    seen = {}
+    _stub_run_for_agent_id_test(monkeypatch, seen)
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--dataset",
+            str(fixtures_dir / "sample_dataset"),
+            "--json",
+            str(tmp_path / "res.json"),
+        ]
+    )
+    assert exit_code == 0
+    assert seen["agent_id"] == "agent-from-env"
+
+
+def test_cli_run_agent_id_omitted_when_unset(monkeypatch, tmp_path, fixtures_dir):
+    monkeypatch.delenv("GD_EVAL_AGENT_ID", raising=False)
+    seen = {}
+    _stub_run_for_agent_id_test(monkeypatch, seen)
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--dataset",
+            str(fixtures_dir / "sample_dataset"),
+            "--json",
+            str(tmp_path / "res.json"),
+        ]
+    )
+    assert exit_code == 0
+    assert seen["agent_id"] is None
 
 
 def test_cli_operational_error_exits_nonzero(monkeypatch, fixtures_dir):

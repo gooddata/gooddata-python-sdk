@@ -388,6 +388,32 @@ def test_create_conversation_does_not_retry_4xx(monkeypatch):
     assert sleeps == []
 
 
+def test_create_conversation_omits_agent_id_by_default():
+    # No agent_id given -> unchanged, existing behavior: GoodData's own
+    # last-used/last-edited default-agent resolution still applies.
+    seen = {}
+
+    def handler(request):
+        seen["body"] = request.content
+        return httpx.Response(200, json={"conversationId": "abc"})
+
+    client = _client_with_handler(handler)
+    client.create_conversation()
+    assert seen["body"] in (b"", b"{}")
+
+
+def test_create_conversation_sends_agent_id_when_given():
+    seen = {}
+
+    def handler(request):
+        seen["body"] = json.loads(request.content)
+        return httpx.Response(200, json={"conversationId": "abc"})
+
+    client = _client_with_handler(handler, agent_id="agent-123")
+    client.create_conversation()
+    assert seen["body"] == {"agentId": "agent-123"}
+
+
 def test_int_env_uses_default_when_unset(monkeypatch):
     monkeypatch.delenv("GD_TEST_INT", raising=False)
     assert sse_mod._int_env("GD_TEST_INT", 5) == 5

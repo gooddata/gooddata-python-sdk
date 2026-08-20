@@ -205,6 +205,7 @@ def run_agentic_visualization(
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    agent_id: str | None = None,
 ) -> AgenticRunSummary:
     """Run K independent conversations and return evaluation results.
 
@@ -213,7 +214,9 @@ def run_agentic_visualization(
     fresh conversations. Caller-supplied conversations are not deleted; all
     conversations created by this function are deleted on completion.
     """
-    client = ChatClient(host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort)
+    client = ChatClient(
+        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+    )
     run_results: list[RunResult] = []
 
     try:
@@ -260,6 +263,7 @@ def evaluate_agentic_visualization(
     k: int = _DEFAULT_K,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
+    agent_id: str | None = None,
     langfuse: object | None = None,
     dataset_item_id: str = "",
     dataset_name: str = "visualization",
@@ -289,6 +293,7 @@ def evaluate_agentic_visualization(
         max_iterations=max_iterations,
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
     )
 
     if langfuse is not None and dataset_item_id:

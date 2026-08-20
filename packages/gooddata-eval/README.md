@@ -62,6 +62,40 @@ When the same model id is offered by multiple providers, use the
 
 Both provider name and provider id are accepted as the prefix.
 
+### Targeting a specific AI Hub agent
+
+GoodData has no admin-settable "default agent": when a conversation doesn't
+name one, the platform picks whichever agent was last used or last edited in
+that workspace. If your org has several AI Hub agents configured (e.g. one
+scoped to visualization only, another with every skill enabled), evaluating
+without `--agent-id` can silently exercise the wrong one — a
+`metric_skill`/`alert_skill` item run against a visualization-only agent will
+never pass, no matter how well-formed the question is.
+
+```bash
+export GD_EVAL_AGENT_ID='eval-all-skills'
+
+gd-eval run \
+  --host  https://your.gooddata.cloud \
+  --workspace  ecommerce_demo \
+  --dataset  ./my-dataset \
+  --model  gpt-5.2 \
+  --runs  1 \
+  --json  results.json
+```
+
+Or pass it explicitly instead of via the env var:
+
+```bash
+gd-eval run \
+  --host  https://your.gooddata.cloud \
+  --workspace  ecommerce_demo \
+  --dataset  ./my-dataset \
+  --agent-id  eval-all-skills \
+  --model  gpt-5.2 \
+  --runs  1
+```
+
 ### All flags
 
 #### Connection
@@ -72,6 +106,7 @@ Both provider name and provider id are accepted as the prefix.
 | `--token TOKEN` | `GOODDATA_TOKEN` | API token. Pass via flag or env var. |
 | `--profile NAME` | — | Profile name in `~/.gooddata/profiles.yaml` (same file as the `gdc` CLI). |
 | `--workspace ID` | — | **Required.** Workspace id to evaluate against. |
+| `--agent-id ID` | `GD_EVAL_AGENT_ID` | AI Hub agent every conversation should target. GoodData has no admin-settable default agent — without this, each conversation falls back to whichever agent the platform's last-used/last-edited heuristic resolves, which may not have every skill under test enabled. |
 
 #### Dataset source (pick one)
 
