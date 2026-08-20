@@ -100,7 +100,7 @@ def _evaluate_visualization(
             expected_dim_uris=exp_dim_uris,
             actual_dim_uris=set(),
             expected_filters=normalized_filters(expected),
-            actual_filters=dict(_NO_FILTERS),
+            actual_filters={category: values.copy() for category, values in _NO_FILTERS.items()},
         )
     cross_ref_valid, cross_ref_errors = validate_cross_references(actual)
     act_metric_uris = get_metric_uri_set(actual)
