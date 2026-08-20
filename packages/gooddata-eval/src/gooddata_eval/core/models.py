@@ -107,6 +107,14 @@ class ChatResult(BaseModel):
     turn_wall_clock_sec: float | None = None
 
 
+class AgenticEvalOutcome(BaseModel):
+    """Reasoning trace and trace-lookup IDs returned by an evaluate_agentic_* call on success."""
+
+    reasoning_steps: list[str] = Field(default_factory=list)
+    conversation_id: str | None = None
+    response_id: str | None = None
+
+
 class SummaryInput(BaseModel):
     """Structured input for the `dashboard_summary` test kind.
 

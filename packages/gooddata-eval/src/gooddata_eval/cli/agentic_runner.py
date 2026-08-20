@@ -16,7 +16,7 @@ from gooddata_eval.core.agentic.metric_skill import evaluate_agentic_metric_skil
 from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import CreatedVisualization, DatasetItem
+from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
 
 
@@ -86,11 +86,12 @@ def _dispatch_agentic(
     model_version_override: str | None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
-) -> list[str] | None:
+) -> AgenticEvalOutcome | list[str] | None:
     """Call the appropriate evaluate_agentic_* function for the item's test_kind.
 
-    Returns whatever that function returns -- only alert_skill/metric_skill/conversation
-    currently return their reasoning_steps; the rest still return None (unchanged).
+    Returns whatever that function returns -- alert_skill/metric_skill/conversation return
+    an AgenticEvalOutcome; the rest still return None
+    (unchanged).
     """
     kind = item.test_kind
     eo = item.expected_output
@@ -232,16 +233,26 @@ def run_agentic_items(
         )
         t0 = time.perf_counter()
         try:
-            reasoning_steps = _dispatch_agentic(
+            outcome = _dispatch_agentic(
                 item, host, token, workspace_id, k, langfuse, run_ts, model_version, reasoning_effort, agent_id
             )
+            if isinstance(outcome, AgenticEvalOutcome):
+                reasoning_steps = outcome.reasoning_steps
+                conversation_id = outcome.conversation_id
+                response_id = outcome.response_id
+            else:
+                reasoning_steps, conversation_id, response_id = outcome, None, None
             item_report.pass_at_k = True
             item_report.runs = k
             item_report.reasoning_steps = reasoning_steps or []
+            item_report.conversation_id = conversation_id
+            item_report.response_id = response_id
         except AssertionError as exc:
             item_report.pass_at_k = False
             item_report.runs = k
             item_report.reasoning_steps = getattr(exc, "reasoning_steps", None) or []
+            item_report.conversation_id = getattr(exc, "conversation_id", None)
+            item_report.response_id = getattr(exc, "response_id", None)
             print(f"[agentic] {item.id} FAIL: {exc}", flush=True)
         except Exception as exc:
             item_report.error = f"{type(exc).__name__}: {exc}"
