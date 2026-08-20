@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 import os
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 from gooddata_sdk import GoodDataSdk
@@ -14,7 +14,7 @@ from gooddata_sdk import GoodDataSdk
 from gooddata_eval.core.agentic._catalog import CatalogMetricAlert
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import ToolCallEvent
+from gooddata_eval.core.models import AgenticEvalOutcome, ToolCallEvent
 
 try:
     from openai import OpenAI as _OpenAI
@@ -333,6 +333,8 @@ class AlertRunResult:
     alert_id: str | None
     eval: AlertEvaluation
     actual_alert_arguments: dict
+    reasoning_steps: list[str] = field(default_factory=list)
+    response_id: str | None = None
 
 
 @dataclass
@@ -481,6 +483,8 @@ def run_agentic_alert_skill(
             alert_id: str | None = None
             actual_args: dict = {}
             tool_called = False
+            reasoning_steps: list[str] = []
+            response_id: str | None = None
             # conversation_history stores prior turns for GPT-4o context.
             # Roles follow GPT-4o's perspective: "assistant"=agent text, "user"=sim-user reply.
             conversation_history: list = []
@@ -488,6 +492,8 @@ def run_agentic_alert_skill(
 
             for _iteration in range(max_iterations):
                 chat_result = client.send_message(conv_id, current_question)
+                reasoning_steps.extend(chat_result.reasoning_steps or [])
+                response_id = chat_result.response_id or response_id
                 alert_id, actual_args, tool_called = _extract_alert_call(chat_result.tool_call_events or [])
                 if tool_called:
                     alert_id_to_delete = alert_id
@@ -523,6 +529,8 @@ def run_agentic_alert_skill(
                 alert_id=alert_id,
                 eval=ev,
                 actual_alert_arguments=actual_args,
+                reasoning_steps=reasoning_steps,
+                response_id=response_id,
             )
         finally:
             if alert_id_to_delete:
@@ -573,6 +581,9 @@ class AlertSkillAssertionError(AssertionError):
     """Raised when an alert-skill evaluation fails."""
 
     __tracebackhide__ = True
+    reasoning_steps: list[str]
+    conversation_id: str
+    response_id: str | None
 
 
 def evaluate_agentic_alert_skill(
@@ -592,8 +603,16 @@ def evaluate_agentic_alert_skill(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
-) -> None:
-    """Run alert-skill evaluation, log to Langfuse, and raise AlertSkillAssertionError on failure."""
+) -> AgenticEvalOutcome:
+    """Run alert-skill evaluation, log to Langfuse, and raise AlertSkillAssertionError on failure.
+
+    Returns the best run's outcome (reasoning_steps, conversation_id, response_id) as an
+    AgenticEvalOutcome on success; on failure the same three values are attached to the
+    raised exception as
+    ``.reasoning_steps``/``.conversation_id``/``.response_id`` (mirrors the
+    `conversation_id`-on-exception idiom in `ChatClient.ask()`) so callers can retrieve them
+    either way.
+    """
     from datetime import datetime as _dt  # noqa: PLC0415
     from datetime import timezone as _tz  # noqa: PLC0415
 
@@ -667,7 +686,7 @@ def evaluate_agentic_alert_skill(
     if not summary.pass_at_k:
         best = summary.best
         ev = best.eval
-        raise AlertSkillAssertionError(
+        exc = AlertSkillAssertionError(
             f"Alert skill assertion failed. strict_pass={ev.strict_pass}. "
             f"alert_created={ev.alert_created}, operator_correct={ev.operator_correct}, "
             f"threshold_correct={ev.threshold_correct}, trigger_correct={ev.trigger_correct}, "
@@ -675,3 +694,12 @@ def evaluate_agentic_alert_skill(
             f"recipients_correct={ev.recipients_correct}. "
             f"Actual args: {best.actual_alert_arguments}"
         )
+        exc.reasoning_steps = best.reasoning_steps
+        exc.conversation_id = best.conversation_id
+        exc.response_id = best.response_id
+        raise exc
+    return AgenticEvalOutcome(
+        reasoning_steps=summary.best.reasoning_steps,
+        conversation_id=summary.best.conversation_id,
+        response_id=summary.best.response_id,
+    )

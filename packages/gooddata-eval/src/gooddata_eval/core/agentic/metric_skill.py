@@ -5,14 +5,14 @@ from __future__ import annotations
 
 import os
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 from gooddata_sdk import GoodDataSdk
 
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import ToolCallEvent
+from gooddata_eval.core.models import AgenticEvalOutcome, ToolCallEvent
 
 try:
     from openai import OpenAI as _OpenAI
@@ -129,6 +129,8 @@ class MetricRunResult:
     actual_maql: str
     maql_correct: bool
     total_turns: float
+    reasoning_steps: list[str] = field(default_factory=list)
+    response_id: str | None = None
 
 
 @dataclass
@@ -205,11 +207,15 @@ def _execute_single_metric_run(
     metric_id_to_delete: str | None = None
     turns = 0
     current_question = question
+    reasoning_steps: list[str] = []
+    response_id: str | None = None
 
     try:
         for _iteration in range(max_iterations):
             turns += 1
             chat_result = client.send_message(conversation_id, current_question)
+            reasoning_steps.extend(chat_result.reasoning_steps or [])
+            response_id = chat_result.response_id or response_id
             candidate = _extract_metric_result(chat_result.tool_call_events or [])
             if candidate is not None:
                 metric_result = candidate
@@ -236,6 +242,8 @@ def _execute_single_metric_run(
             actual_maql=actual_maql,
             maql_correct=maql_correct,
             total_turns=float(turns),
+            reasoning_steps=reasoning_steps,
+            response_id=response_id,
         )
     finally:
         if metric_id_to_delete:
@@ -306,6 +314,9 @@ class MetricSkillAssertionError(AssertionError):
     """Raised when a metric-skill evaluation fails."""
 
     __tracebackhide__ = True
+    reasoning_steps: list[str]
+    conversation_id: str
+    response_id: str | None
 
 
 def evaluate_agentic_metric_skill(
@@ -325,8 +336,16 @@ def evaluate_agentic_metric_skill(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
-) -> None:
-    """Run metric-skill evaluation, log to Langfuse, and raise MetricSkillAssertionError on failure."""
+) -> AgenticEvalOutcome:
+    """Run metric-skill evaluation, log to Langfuse, and raise MetricSkillAssertionError on failure.
+
+    Returns the best run's outcome (reasoning_steps, conversation_id, response_id) as an
+    AgenticEvalOutcome on success; on failure the same three values are attached to the
+    raised exception as
+    ``.reasoning_steps``/``.conversation_id``/``.response_id`` (mirrors the
+    `conversation_id`-on-exception idiom in `ChatClient.ask()`) so callers can retrieve them
+    either way.
+    """
     from datetime import datetime as _dt  # noqa: PLC0415
     from datetime import timezone as _tz  # noqa: PLC0415
 
@@ -391,9 +410,18 @@ def evaluate_agentic_metric_skill(
         best = summary.best
         expected_outputs_list: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
         candidates_str = "; ".join(repr(c.get("maql", "")) for c in expected_outputs_list)
-        raise MetricSkillAssertionError(
+        exc = MetricSkillAssertionError(
             f"Metric skill assertion failed. "
             f"metric_created={best.metric_created}, maql_correct={best.maql_correct}. "
             f"Expected MAQL (candidates): {candidates_str}. "
             f"Actual MAQL: {best.actual_maql}."
         )
+        exc.reasoning_steps = best.reasoning_steps
+        exc.conversation_id = best.conversation_id
+        exc.response_id = best.response_id
+        raise exc
+    return AgenticEvalOutcome(
+        reasoning_steps=summary.best.reasoning_steps,
+        conversation_id=summary.best.conversation_id,
+        response_id=summary.best.response_id,
+    )

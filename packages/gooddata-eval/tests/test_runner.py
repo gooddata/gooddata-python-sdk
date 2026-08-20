@@ -258,6 +258,41 @@ def test_run_items_error_report_omits_conversation_id_when_absent():
     assert "conversation_id" not in report.items[0].error
 
 
+def test_run_items_carries_reasoning_steps_from_chat_result():
+    """reasoning_steps from the ChatResult surfaces on the item report, same as conversation_id."""
+
+    class _ReasoningBackend:
+        def ask(self, item: DatasetItem) -> ChatResult:
+            return ChatResult.model_validate(
+                {"textResponse": "which metric?", "reasoningSteps": ["step one", "step two"]}
+            )
+
+    report = run_items([_item()], _ReasoningBackend(), runs=1)
+    assert report.items[0].reasoning_steps == ["step one", "step two"]
+
+
+def test_run_items_reasoning_steps_empty_when_chat_result_has_none():
+    backend = _FakeBackend([_empty_chat()])
+    report = run_items([_item()], backend, runs=1)
+    assert report.items[0].reasoning_steps == []
+
+
+def test_run_items_reasoning_steps_keeps_earlier_run_when_later_run_is_empty():
+    """A later run with no reasoning events must not clobber an earlier run's steps (runner.py:120's `or`)."""
+
+    class _MixedReasoningBackend:
+        def __init__(self):
+            self.calls = 0
+
+        def ask(self, item: DatasetItem) -> ChatResult:
+            self.calls += 1
+            steps = ["step one", "step two"] if self.calls == 1 else []
+            return ChatResult.model_validate({"textResponse": "answer", "reasoningSteps": steps})
+
+    report = run_items([_item()], _MixedReasoningBackend(), runs=2)
+    assert report.items[0].reasoning_steps == ["step one", "step two"]
+
+
 def test_run_items_callback_exception_is_logged_not_swallowed(capsys):
     """A raising callback prints a traceback to stderr but the run continues."""
     backend = _FakeBackend([_chat_with(_viz_obj())] * 2)
