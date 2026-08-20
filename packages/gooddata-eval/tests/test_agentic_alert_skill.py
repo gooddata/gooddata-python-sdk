@@ -5,6 +5,7 @@ from unittest.mock import MagicMock, patch
 from gooddata_eval.core.agentic.alert_skill import (
     AlertEvaluation,
     _check_filters,
+    _check_recipients,
     _check_trigger,
     _deep_subset,
     _normalize_expected_output,
@@ -139,6 +140,83 @@ def test_normalize_expected_filters_treats_prose_filters_column_as_unspecified()
     expected = _normalize_expected_output({"Operator": "LESS_THAN", "Filters": "Product Category = X"})
     assert expected.filters is None
     assert _check_filters(expected, {"filters": [_ATTR_FILTER]}) is True
+
+
+def test_check_recipients_matches_external_recipients_without_sdk():
+    # The common path never needs a network call at all -- confirms adding the
+    # internal_recipients fallback doesn't force a lookup when it isn't needed.
+    expected = _normalize_expected_output({"Recipients": ["user@example.com"]})
+    mock_sdk = MagicMock()
+    assert _check_recipients(expected, {"recipients": ["user@example.com"]}, sdk=mock_sdk) is True
+    mock_sdk._client.entities_api.get_all_entities_users.assert_not_called()
+
+
+def test_check_recipients_matches_internal_recipients_via_resolved_user_id():
+    # Some notification channels are workspace-restricted to internal users --
+    # create_metric_alert then addresses the alert by internal user id via
+    # `internal_recipients`, never by email, so the plain email/external-recipients
+    # comparison alone can never match this delivery path.
+    expected = _normalize_expected_output({"Recipients": ["user@example.com"]})
+    mock_sdk = MagicMock()
+    mock_sdk._client.entities_api.get_all_entities_users.return_value.data = [
+        MagicMock(id="user.abc123"),
+    ]
+    assert _check_recipients(expected, {"internal_recipients": ["user.abc123"]}, sdk=mock_sdk) is True
+    mock_sdk._client.entities_api.get_all_entities_users.assert_called_once_with(filter="email=in=('user@example.com')")
+
+
+def test_check_recipients_escapes_apostrophe_in_email_for_rsql_filter():
+    # o'hara@example.com must not break the RSQL filter string -- the apostrophe
+    # has to be escaped before interpolation, same as the query engine requires.
+    expected = _normalize_expected_output({"Recipients": ["o'hara@example.com"]})
+    mock_sdk = MagicMock()
+    mock_sdk._client.entities_api.get_all_entities_users.return_value.data = [
+        MagicMock(id="user.abc123"),
+    ]
+    assert _check_recipients(expected, {"internal_recipients": ["user.abc123"]}, sdk=mock_sdk) is True
+    mock_sdk._client.entities_api.get_all_entities_users.assert_called_once_with(
+        filter="email=in=('o\\'hara@example.com')"
+    )
+
+
+def test_check_recipients_resolves_multiple_emails_in_a_single_bulk_request():
+    # N expected recipients must cost one request, not N -- confirmed against the
+    # live Users entities API that RSQL `=in=(...)` returns only the matching subset.
+    expected = _normalize_expected_output({"Recipients": ["a@example.com", "b@example.com"]})
+    mock_sdk = MagicMock()
+    mock_sdk._client.entities_api.get_all_entities_users.return_value.data = [
+        MagicMock(id="user.a"),
+        MagicMock(id="user.b"),
+    ]
+    assert _check_recipients(expected, {"internal_recipients": ["user.a", "user.b"]}, sdk=mock_sdk) is True
+    mock_sdk._client.entities_api.get_all_entities_users.assert_called_once_with(
+        filter="email=in=('a@example.com','b@example.com')"
+    )
+
+
+def test_check_recipients_internal_recipients_mismatch_still_fails():
+    expected = _normalize_expected_output({"Recipients": ["user@example.com"]})
+    mock_sdk = MagicMock()
+    mock_sdk._client.entities_api.get_all_entities_users.return_value.data = [
+        MagicMock(id="someone.else"),
+    ]
+    assert _check_recipients(expected, {"internal_recipients": ["user.abc123"]}, sdk=mock_sdk) is False
+
+
+def test_check_recipients_internal_recipients_without_sdk_fails_gracefully():
+    # No sdk available to resolve the email -> no crash, just no match (the plain
+    # external-recipients comparison already ran and failed by this point).
+    expected = _normalize_expected_output({"Recipients": ["user@example.com"]})
+    assert _check_recipients(expected, {"internal_recipients": ["user.abc123"]}, sdk=None) is False
+
+
+def test_check_recipients_resolution_failure_fails_gracefully():
+    # A lookup error (permissions, network) must not crash the evaluation --
+    # it just means this comparison path can't match, same as no sdk at all.
+    expected = _normalize_expected_output({"Recipients": ["user@example.com"]})
+    mock_sdk = MagicMock()
+    mock_sdk._client.entities_api.get_all_entities_users.side_effect = RuntimeError("boom")
+    assert _check_recipients(expected, {"internal_recipients": ["user.abc123"]}, sdk=mock_sdk) is False
 
 
 def test_alert_evaluation_strict_pass():
