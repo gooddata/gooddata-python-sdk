@@ -16,7 +16,7 @@ from gooddata_eval.core.agentic.metric_skill import evaluate_agentic_metric_skil
 from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import CreatedVisualization, DatasetItem
+from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
 
 
@@ -86,11 +86,11 @@ def _dispatch_agentic(
     model_version_override: str | None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
-) -> tuple[list[str], str, str | None] | list[str] | None:
+) -> AgenticEvalOutcome | list[str] | None:
     """Call the appropriate evaluate_agentic_* function for the item's test_kind.
 
     Returns whatever that function returns -- alert_skill/metric_skill/conversation return
-    their (reasoning_steps, conversation_id, response_id); the rest still return None
+    an AgenticEvalOutcome; the rest still return None
     (unchanged).
     """
     kind = item.test_kind
@@ -236,9 +236,12 @@ def run_agentic_items(
             outcome = _dispatch_agentic(
                 item, host, token, workspace_id, k, langfuse, run_ts, model_version, reasoning_effort, agent_id
             )
-            reasoning_steps, conversation_id, response_id = (
-                outcome if isinstance(outcome, tuple) else (outcome, None, None)
-            )
+            if isinstance(outcome, AgenticEvalOutcome):
+                reasoning_steps = outcome.reasoning_steps
+                conversation_id = outcome.conversation_id
+                response_id = outcome.response_id
+            else:
+                reasoning_steps, conversation_id, response_id = outcome, None, None
             item_report.pass_at_k = True
             item_report.runs = k
             item_report.reasoning_steps = reasoning_steps or []

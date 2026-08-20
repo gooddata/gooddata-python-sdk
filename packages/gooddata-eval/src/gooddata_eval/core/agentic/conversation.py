@@ -15,7 +15,7 @@ from gooddata_eval.core.agentic.alert_skill import render_alert_proposal
 from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import ChatResult, ToolCallEvent
+from gooddata_eval.core.models import AgenticEvalOutcome, ChatResult, ToolCallEvent
 from gooddata_eval.core.scoring import (
     check_filters,
     check_viz_type,
@@ -430,11 +430,12 @@ def evaluate_agentic_conversation(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
-) -> tuple[list[str], str, str | None]:
+) -> AgenticEvalOutcome:
     """Run conversation evaluation, log to Langfuse, and raise on failure.
 
-    Returns the conversation's (reasoning_steps, conversation_id, response_id) on success;
-    on failure the same three values are attached to the raised exception as
+    Returns the conversation's outcome (reasoning_steps, conversation_id, response_id) as
+    an AgenticEvalOutcome on success; on failure the same three values are attached to the
+    raised exception as
     ``.reasoning_steps``/``.conversation_id``/``.response_id`` (mirrors the
     `conversation_id`-on-exception idiom in `ChatClient.ask()`) so callers can retrieve them
     either way.
@@ -524,4 +525,8 @@ def evaluate_agentic_conversation(
         exc.conversation_id = result.conversation_id
         exc.response_id = result.response_id
         raise exc
-    return result.reasoning_steps, result.conversation_id, result.response_id
+    return AgenticEvalOutcome(
+        reasoning_steps=result.reasoning_steps,
+        conversation_id=result.conversation_id,
+        response_id=result.response_id,
+    )

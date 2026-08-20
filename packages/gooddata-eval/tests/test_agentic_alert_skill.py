@@ -565,7 +565,7 @@ def test_evaluate_agentic_alert_skill_returns_reasoning_steps_on_pass():
         patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
         patch("gooddata_eval.core.agentic.alert_skill._delete_alert"),
     ):
-        reasoning, conversation_id, response_id = evaluate_agentic_alert_skill(
+        outcome = evaluate_agentic_alert_skill(
             host="http://host",
             token="tok",
             workspace_id="ws1",
@@ -575,9 +575,9 @@ def test_evaluate_agentic_alert_skill_returns_reasoning_steps_on_pass():
             max_iterations=1,
         )
 
-    assert reasoning == ["thinking about it"]
-    assert conversation_id == "conv-1"
-    assert response_id is None
+    assert outcome.reasoning_steps == ["thinking about it"]
+    assert outcome.conversation_id == "conv-1"
+    assert outcome.response_id is None
 
 
 def test_evaluate_agentic_alert_skill_attaches_reasoning_steps_to_exception_on_fail():

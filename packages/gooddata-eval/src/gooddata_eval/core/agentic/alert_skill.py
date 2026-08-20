@@ -14,7 +14,7 @@ from gooddata_sdk import GoodDataSdk
 from gooddata_eval.core.agentic._catalog import CatalogMetricAlert
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import ToolCallEvent
+from gooddata_eval.core.models import AgenticEvalOutcome, ToolCallEvent
 
 try:
     from openai import OpenAI as _OpenAI
@@ -572,11 +572,12 @@ def evaluate_agentic_alert_skill(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
-) -> tuple[list[str], str, str | None]:
+) -> AgenticEvalOutcome:
     """Run alert-skill evaluation, log to Langfuse, and raise AlertSkillAssertionError on failure.
 
-    Returns the best run's (reasoning_steps, conversation_id, response_id) on success; on
-    failure the same three values are attached to the raised exception as
+    Returns the best run's outcome (reasoning_steps, conversation_id, response_id) as an
+    AgenticEvalOutcome on success; on failure the same three values are attached to the
+    raised exception as
     ``.reasoning_steps``/``.conversation_id``/``.response_id`` (mirrors the
     `conversation_id`-on-exception idiom in `ChatClient.ask()`) so callers can retrieve them
     either way.
@@ -666,4 +667,8 @@ def evaluate_agentic_alert_skill(
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
         raise exc
-    return summary.best.reasoning_steps, summary.best.conversation_id, summary.best.response_id
+    return AgenticEvalOutcome(
+        reasoning_steps=summary.best.reasoning_steps,
+        conversation_id=summary.best.conversation_id,
+        response_id=summary.best.response_id,
+    )

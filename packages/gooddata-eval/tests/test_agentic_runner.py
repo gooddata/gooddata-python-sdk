@@ -5,7 +5,7 @@ from unittest.mock import patch
 import pytest
 from gooddata_eval.cli.agentic_runner import _dispatch_agentic, run_agentic_items
 from gooddata_eval.core.agentic.alert_skill import AlertSkillAssertionError
-from gooddata_eval.core.models import DatasetItem
+from gooddata_eval.core.models import AgenticEvalOutcome, DatasetItem
 
 
 def test_dispatch_agentic_passes_agent_id_through_to_alert_skill():
@@ -108,7 +108,9 @@ def _item(test_kind: str = "agentic_alert_skill") -> DatasetItem:
 def test_run_agentic_items_surfaces_reasoning_steps_on_pass():
     with patch(
         "gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill",
-        return_value=(["it created the alert"], "conv-1", "resp-1"),
+        return_value=AgenticEvalOutcome(
+            reasoning_steps=["it created the alert"], conversation_id="conv-1", response_id="resp-1"
+        ),
     ):
         report = run_agentic_items(
             [_item()],

@@ -548,15 +548,15 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
         ],
     )
     with patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client):
-        reasoning, conversation_id, response_id = evaluate_agentic_conversation(
+        outcome = evaluate_agentic_conversation(
             host="http://host",
             token="tok",
             workspace_id="ws1",
             fixture=fixture,
         )
-    assert reasoning == ["thinking about it"]
-    assert conversation_id == "conv-1"
-    assert response_id == "resp-1"
+    assert outcome.reasoning_steps == ["thinking about it"]
+    assert outcome.conversation_id == "conv-1"
+    assert outcome.response_id == "resp-1"
 
 
 def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_fail():
