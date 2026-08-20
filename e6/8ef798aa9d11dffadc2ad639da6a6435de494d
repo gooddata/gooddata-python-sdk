@@ -1,0 +1,35 @@
+packages/gooddata-eval/tests/test_agentic_kda_skill.py
+  s_7e53738a17b0e6::t_c40207d9812696 139,167-194
+  s_7e53738a17b0e6::t_6ed97c715830c3 622
+  s_7e53738a17b0e6::t_831a91a601b6d7 119-138
+  s_7e53738a17b0e6::t_4323a1c638c3d1 548-591
+  s_7e53738a17b0e6::t_b04d4a2ce3b884 11
+  s_7e53738a17b0e6::t_d35453aa78ae36 546-547
+  s_7e53738a17b0e6::t_bff52a8f404d18 508-545
+  s_7e53738a17b0e6::t_5c0fd288fc57d1 140-166
+  s_7e53738a17b0e6::t_05bec9735d8855 12
+packages/gooddata-eval/src/gooddata_eval/core/agentic/kda_skill.py
+  s_7e53738a17b0e6::t_7caa18d7bef06f 54-76
+  s_7e53738a17b0e6::t_0d5f2ca4602883 23,31-36,46
+  s_7e53738a17b0e6::t_3914f9e1eb3abd 24-25,43-45,47
+  s_7e53738a17b0e6::t_d118e31cba2ec7 282
+  s_7e53738a17b0e6::t_3e1256061cabe9 284
+  s_7e53738a17b0e6::t_0ee01c0ea6b26b 108-112,116-120
+  s_7e53738a17b0e6::t_ecba3f30af3bf3 77-107,132
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "e68ef798aa9d11dffadc2ad639da6a6435de494d",
+  "prompts": {},
+  "sessions": {
+    "s_7e53738a17b0e6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d7605be7-c26c-4dfd-83ba-5b457d0ca5a5",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": null
+    }
+  }
+}
