@@ -2,6 +2,7 @@
 """`gd-eval` command-line entry point."""
 
 import argparse
+import os
 import sys
 import threading
 from datetime import datetime, timezone
@@ -116,6 +117,16 @@ def _build_parser() -> argparse.ArgumentParser:
         "--langfuse",
         action="store_true",
         help="Log scores and traces to Langfuse (requires --langfuse-dataset and LANGFUSE_* env vars).",
+    )
+    run.add_argument(
+        "--agent-id",
+        dest="agent_id",
+        help=(
+            "AI Hub agent id every conversation should target (or set GD_EVAL_AGENT_ID). "
+            "GoodData has no admin-settable default agent -- without this, each conversation "
+            "falls back to whichever agent the platform's last-used/last-edited heuristic "
+            "resolves, which may not have every skill under test enabled."
+        ),
     )
     models_cmd = sub.add_parser("models", help="List LLM providers and models configured in the org.")
     models_cmd.add_argument("--host", help="GoodData host URL.")
@@ -347,6 +358,7 @@ def _run(config: RunConfig) -> int:
                     run_ts=run_ts,
                     on_item_start=on_item_start,
                     on_item_done=on_item_done,
+                    agent_id=config.agent_id,
                 )
 
             # --- non-agentic items (single-turn, use Evaluator) ---
@@ -357,6 +369,7 @@ def _run(config: RunConfig) -> int:
                     workspace_id=config.workspace_id,
                     preserve_failed=config.preserve_failed,
                     reasoning_effort=config.reasoning_effort,
+                    agent_id=config.agent_id,
                 ),
                 SummaryClient(host=config.host, token=config.token, workspace_id=config.workspace_id),
             )
@@ -449,6 +462,7 @@ def main(argv: list[str] | None = None) -> int:
             kind=args.kind,
             preserve_failed=args.preserve_failed,
             reasoning_effort=args.reasoning_effort,
+            agent_id=args.agent_id or os.environ.get("GD_EVAL_AGENT_ID"),
         )
         return _run(config)
     except (

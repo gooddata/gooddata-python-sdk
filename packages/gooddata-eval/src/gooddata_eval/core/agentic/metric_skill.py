@@ -101,14 +101,17 @@ def generate_simulated_response(agent_message: str, expected_output: dict) -> st
     prompt = (
         f"You are simulating a user in a conversation with a BI assistant that creates metrics. "
         f"The assistant said: '{agent_message}'. "
-        f"The user originally asked to create a metric with MAQL: {expected_maql}. "
-        f"Reply briefly as the user, providing any clarification the assistant needs."
+        f"The user's ground-truth intended metric is exactly this MAQL: {expected_maql}. "
+        f"Reply as the user. You MUST ensure every clause of that MAQL (including any WHERE/filter "
+        f"conditions) is eventually satisfied, and quote field/label identifiers verbatim from it -- "
+        f"never paraphrase or drop a clause, even if the assistant's question doesn't explicitly ask "
+        f"about it. If the assistant's offered options omit a required filter, add it yourself."
     )
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=150,
+            max_tokens=300,
             temperature=0,
         )
     except OpenAIError as exc:
@@ -249,6 +252,7 @@ def run_agentic_metric_skill(
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    agent_id: str | None = None,
 ) -> AgenticMetricSummary:
     """Run the metric-skill agentic evaluation K times and return a summary.
 
@@ -257,7 +261,9 @@ def run_agentic_metric_skill(
     """
     expected_outputs: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
     run_results: list[MetricRunResult] = []
-    client = ChatClient(host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort)
+    client = ChatClient(
+        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+    )
     sdk = GoodDataSdk.create(host, token)
 
     try:
@@ -311,6 +317,7 @@ def evaluate_agentic_metric_skill(
     k: int = _DEFAULT_K,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
+    agent_id: str | None = None,
     langfuse: object | None = None,
     dataset_item_id: str = "",
     dataset_name: str = "metric_skill",
@@ -338,6 +345,7 @@ def evaluate_agentic_metric_skill(
         max_iterations=max_iterations,
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
     )
 
     if langfuse is not None and dataset_item_id:

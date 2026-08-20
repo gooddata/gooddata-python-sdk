@@ -85,6 +85,7 @@ def _dispatch_agentic(
     run_ts: str,
     model_version_override: str | None,
     reasoning_effort: ReasoningEffort | None = None,
+    agent_id: str | None = None,
 ) -> None:
     """Call the appropriate evaluate_agentic_* function for the item's test_kind."""
     kind = item.test_kind
@@ -106,6 +107,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_outputs=_parse_visualization_expected(eo),
             k=k,
+            agent_id=agent_id,
             **lf_kw,
         )
     elif kind == "agentic_metric_skill":
@@ -116,6 +118,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, (dict, list)) else {},
             k=k,
+            agent_id=agent_id,
             **lf_kw,
         )
     elif kind == "agentic_alert_skill":
@@ -126,6 +129,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, dict) else {},
             k=k,
+            agent_id=agent_id,
             **lf_kw,
         )
     elif kind == "agentic_search":
@@ -139,6 +143,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_tool_call=expected_args,
             k=k,
+            agent_id=agent_id,
             **lf_kw,
         )
     elif kind == "agentic_general_question":
@@ -149,6 +154,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, str) else str(eo),
             k=k,
+            agent_id=agent_id,
             **lf_kw,
         )
     elif kind == "agentic_guardrail":
@@ -159,6 +165,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, str) else str(eo),
             k=k,
+            agent_id=agent_id,
             **lf_kw,
         )
     elif kind == "agentic_kda_skill":
@@ -178,6 +185,7 @@ def _dispatch_agentic(
             token=token,
             workspace_id=workspace_id,
             fixture=ConversationFixture.model_validate(fixture_data),
+            agent_id=agent_id,
             **lf_kw,
         )
     else:
@@ -197,6 +205,7 @@ def run_agentic_items(
     run_ts: str,
     on_item_start: Any = None,
     on_item_done: Any = None,
+    agent_id: str | None = None,
 ) -> EvalReport:
     """Run agentic items through evaluate_agentic_* and return an EvalReport."""
     langfuse = make_langfuse_client() if use_langfuse else None
@@ -219,7 +228,9 @@ def run_agentic_items(
         )
         t0 = time.perf_counter()
         try:
-            _dispatch_agentic(item, host, token, workspace_id, k, langfuse, run_ts, model_version, reasoning_effort)
+            _dispatch_agentic(
+                item, host, token, workspace_id, k, langfuse, run_ts, model_version, reasoning_effort, agent_id
+            )
             item_report.pass_at_k = True
             item_report.runs = k
         except AssertionError as exc:

@@ -73,10 +73,13 @@ def run_agentic_general_question(
     k: int = _DEFAULT_K,
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    agent_id: str | None = None,
 ) -> AgenticGeneralQuestionSummary:
     """Run the general-question agentic evaluation K times and return a summary."""
     run_results: list[GeneralQuestionResult] = []
-    client = ChatClient(host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort)
+    client = ChatClient(
+        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+    )
     judge = LLMJudge(_GENERAL_QUESTION_EVALUATION_STEPS, model="gpt-4o")
 
     try:
@@ -149,6 +152,7 @@ def evaluate_agentic_general_question(
     expected_output: str,
     k: int = _DEFAULT_K,
     initial_conversation_id: str | None = None,
+    agent_id: str | None = None,
     langfuse: object | None = None,
     dataset_item_id: str = "",
     dataset_name: str = "general_question",
@@ -175,6 +179,7 @@ def evaluate_agentic_general_question(
         k=k,
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
     )
 
     if langfuse is not None and dataset_item_id:
