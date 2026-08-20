@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 import os
 import sys
+import types
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -23,6 +24,39 @@ def test_normalize_maql_strips_whitespace():
 
 def test_normalize_maql_removes_select_wrapper():
     assert _normalize_maql("(SELECT {metric/abc})") == "{metric/abc}"
+
+
+def test_generate_simulated_response_prompt_preserves_maql_fidelity(monkeypatch):
+    """Regression test for a live-reproduced bug: the old prompt ("reply briefly",
+    no instruction to cover clauses the assistant didn't ask about) let the
+    simulating LLM silently drop a MAQL's WHERE clause or paraphrase a label id --
+    confirmed via a 5x-repeated A/B test (1/5 vs 5/5 fidelity) that this was the
+    prompt, not the model (gpt-4o did not fix it under the old prompt either).
+    """
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    mock_client = MagicMock()
+    mock_response = MagicMock()
+    mock_response.choices = [MagicMock(message=MagicMock(content="ok"))]
+    mock_client.chat.completions.create.return_value = mock_response
+
+    # `openai` is an optional [llm-judge] extra, not installed in this test env --
+    # inject a fake module rather than patching a real one (mirrors how the source
+    # itself does `from openai import OpenAI` as a local, guarded import).
+    fake_openai_module = types.SimpleNamespace(OpenAI=MagicMock(return_value=mock_client), OpenAIError=Exception)
+    monkeypatch.setitem(sys.modules, "openai", fake_openai_module)
+
+    expected_output = {"maql": 'SELECT {metric/spend_amount_-_cutcgco} WHERE {label/ecommerce_indicator_code} = "1"'}
+    generate_simulated_response("Which base metric should I use?", expected_output)
+
+    call_kwargs = mock_client.chat.completions.create.call_args.kwargs
+    sent_prompt = call_kwargs["messages"][0]["content"]
+
+    assert expected_output["maql"] in sent_prompt
+    assert "verbatim" in sent_prompt
+    assert "every clause" in sent_prompt
+    assert "WHERE" in sent_prompt or "filter" in sent_prompt.lower()
+    assert "reply briefly" not in sent_prompt.lower()
+    assert call_kwargs["max_tokens"] >= 300
 
 
 def test_metric_run_result_fields():
