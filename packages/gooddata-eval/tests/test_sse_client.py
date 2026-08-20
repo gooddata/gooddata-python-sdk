@@ -175,7 +175,15 @@ def test_parse_sse_lines_counts_reasoning_steps():
     ]
     result = parse_sse_lines(lines)
     assert result.reasoning_step_count == 2
+    assert result.reasoning_steps == ["step one", "step two"]
     assert result.text_response == "Done"
+
+
+def test_parse_sse_lines_reasoning_steps_empty_when_no_reasoning_events():
+    lines = ['data: {"item": {"role": "assistant", "content": {"type": "text", "text": "Done"}}}']
+    result = parse_sse_lines(lines)
+    assert result.reasoning_step_count == 0
+    assert result.reasoning_steps == []
 
 
 def test_parse_sse_lines_prefers_multipart_viz_over_adhoc_fallback():

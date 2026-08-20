@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import json
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Literal
 
 from gooddata_sdk import GoodDataSdk
@@ -15,7 +15,7 @@ from gooddata_eval.core.agentic.alert_skill import render_alert_proposal
 from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import ChatResult, ToolCallEvent
+from gooddata_eval.core.models import AgenticEvalOutcome, ChatResult, ToolCallEvent
 from gooddata_eval.core.scoring import (
     check_filters,
     check_viz_type,
@@ -265,6 +265,8 @@ class ConversationResult:
     full_skill_coverage: bool
     conversation_success: bool
     total_clarification_turns: int
+    reasoning_steps: list[str] = field(default_factory=list)
+    response_id: str | None = None
 
 
 def run_agentic_conversation(
@@ -296,6 +298,8 @@ def run_agentic_conversation(
     # not persist in the (shared) workspace and get reused by a later test. Deferred to
     # the end — a later turn may $ref a metric an earlier turn created.
     created_metric_ids: list[str] = []
+    reasoning_steps: list[str] = []
+    response_id: str | None = None
 
     try:
         if initial_conversation_id is not None:
@@ -332,6 +336,8 @@ def run_agentic_conversation(
                 chat_result = client.send_message(conversation_id, current_message)
                 final_result = chat_result
                 all_tool_calls.extend(chat_result.tool_call_events or [])
+                reasoning_steps.extend(chat_result.reasoning_steps or [])
+                response_id = chat_result.response_id or response_id
 
                 if _check_output_present(resolved_turn, chat_result):
                     break
@@ -395,6 +401,8 @@ def run_agentic_conversation(
         full_skill_coverage=full_skill_coverage,
         conversation_success=conversation_success,
         total_clarification_turns=total_clarification_turns,
+        reasoning_steps=reasoning_steps,
+        response_id=response_id,
     )
 
 
@@ -402,6 +410,9 @@ class ConversationAssertionError(AssertionError):
     """Raised when a conversation evaluation fails."""
 
     __tracebackhide__ = True
+    reasoning_steps: list[str]
+    conversation_id: str
+    response_id: str | None
 
 
 def evaluate_agentic_conversation(
@@ -419,8 +430,16 @@ def evaluate_agentic_conversation(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
-) -> None:
-    """Run conversation evaluation, log to Langfuse, and raise on failure."""
+) -> AgenticEvalOutcome:
+    """Run conversation evaluation, log to Langfuse, and raise on failure.
+
+    Returns the conversation's outcome (reasoning_steps, conversation_id, response_id) as
+    an AgenticEvalOutcome on success; on failure the same three values are attached to the
+    raised exception as
+    ``.reasoning_steps``/``.conversation_id``/``.response_id`` (mirrors the
+    `conversation_id`-on-exception idiom in `ChatClient.ask()`) so callers can retrieve them
+    either way.
+    """
     from datetime import datetime as _dt  # noqa: PLC0415
     from datetime import timezone as _tz  # noqa: PLC0415
 
@@ -497,8 +516,17 @@ def evaluate_agentic_conversation(
 
     if not result.conversation_success:
         failed_turns = [tr for tr in result.turn_results if not tr.skill_success]
-        raise ConversationAssertionError(
+        exc = ConversationAssertionError(
             f"Conversation assertion failed. "
             f"full_skill_coverage={result.full_skill_coverage}. "
             f"Failed turns: {[t.turn_id for t in failed_turns]}"
         )
+        exc.reasoning_steps = result.reasoning_steps
+        exc.conversation_id = result.conversation_id
+        exc.response_id = result.response_id
+        raise exc
+    return AgenticEvalOutcome(
+        reasoning_steps=result.reasoning_steps,
+        conversation_id=result.conversation_id,
+        response_id=result.response_id,
+    )

@@ -98,12 +98,21 @@ class ChatResult(BaseModel):
     alert_proposals: list[dict] = Field(default_factory=list, alias="alertProposals")
     tool_call_events: list[ToolCallEvent] = Field(default_factory=list, alias="toolCallEvents")
     reasoning_step_count: int = Field(default=0, alias="reasoningStepCount")
+    reasoning_steps: list[str] = Field(default_factory=list, alias="reasoningSteps")
     conversation_id: str | None = Field(default=None, alias="conversationId")
     response_id: str | None = Field(default=None, alias="responseId")
     # True once gen-ai's response_ended event arrived.
     stream_ended: bool = False
     # Wall-clock seconds for the whole chat turn, timed by the client.
     turn_wall_clock_sec: float | None = None
+
+
+class AgenticEvalOutcome(BaseModel):
+    """Reasoning trace and trace-lookup IDs returned by an evaluate_agentic_* call on success."""
+
+    reasoning_steps: list[str] = Field(default_factory=list)
+    conversation_id: str | None = None
+    response_id: str | None = None
 
 
 class SummaryInput(BaseModel):
