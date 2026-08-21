@@ -2,10 +2,14 @@
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 from unittest.mock import MagicMock, patch
 
+import pytest
 from gooddata_eval.core.agentic.general_question import (
+    GeneralQuestionAssertionError,
     GeneralQuestionResult,
+    evaluate_agentic_general_question,
     run_agentic_general_question,
 )
+from gooddata_eval.core.models import ChatResult
 
 
 def test_general_question_result_fields():
@@ -98,3 +102,99 @@ def test_run_agentic_general_question_creates_fresh_conversations_for_remaining_
         )
     assert mock_client.create_conversation.call_count == 2
     assert mock_client.delete_conversation.call_count == 2
+
+
+def test_run_agentic_general_question_captures_reasoning_steps():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {
+            "textResponse": "42",
+            "toolCallEvents": [],
+            "reasoningSteps": ["recalling the answer"],
+            "responseId": "resp-1",
+        }
+    )
+    mock_judge = MagicMock()
+    mock_judge.score.return_value = (True, "Correct answer")
+
+    with (
+        patch("gooddata_eval.core.agentic.general_question.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.general_question.LLMJudge", return_value=mock_judge),
+    ):
+        summary = run_agentic_general_question(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="What is the answer?",
+            expected_output="42",
+            k=1,
+        )
+
+    assert summary.best.reasoning_steps == ["recalling the answer"]
+    assert summary.best.response_id == "resp-1"
+
+
+def test_evaluate_agentic_general_question_returns_reasoning_steps_on_pass():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {
+            "textResponse": "42",
+            "toolCallEvents": [],
+            "reasoningSteps": ["recalling the answer"],
+            "responseId": "resp-1",
+        }
+    )
+    mock_judge = MagicMock()
+    mock_judge.score.return_value = (True, "Correct answer")
+
+    with (
+        patch("gooddata_eval.core.agentic.general_question.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.general_question.LLMJudge", return_value=mock_judge),
+    ):
+        outcome = evaluate_agentic_general_question(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="What is the answer?",
+            expected_output="42",
+            k=1,
+        )
+
+    assert outcome.reasoning_steps == ["recalling the answer"]
+    assert outcome.conversation_id == "conv-1"
+    assert outcome.response_id == "resp-1"
+
+
+def test_evaluate_agentic_general_question_attaches_reasoning_steps_to_exception_on_fail():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {
+            "textResponse": "I don't know",
+            "toolCallEvents": [],
+            "reasoningSteps": ["unable to find the answer"],
+            "responseId": "resp-2",
+        }
+    )
+    mock_judge = MagicMock()
+    mock_judge.score.return_value = (False, "Wrong answer")
+
+    with (
+        patch("gooddata_eval.core.agentic.general_question.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.general_question.LLMJudge", return_value=mock_judge),
+        pytest.raises(GeneralQuestionAssertionError) as exc_info,
+    ):
+        evaluate_agentic_general_question(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="What is the answer?",
+            expected_output="42",
+            k=1,
+        )
+
+    assert exc_info.value.reasoning_steps == ["unable to find the answer"]
+    assert exc_info.value.conversation_id == "conv-1"
+    assert exc_info.value.response_id == "resp-2"
