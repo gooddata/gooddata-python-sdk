@@ -557,6 +557,20 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
     assert outcome.reasoning_steps == ["thinking about it"]
     assert outcome.conversation_id == "conv-1"
     assert outcome.response_id == "resp-1"
+    assert outcome.detail == {
+        "full_skill_coverage": True,
+        "total_clarification_turns": 0,
+        "turns": [
+            {
+                "turn_id": "t1",
+                "expected_skill": "visualization",
+                "skill_routing": True,
+                "output_present": True,
+                "output_correct": None,
+                "activated_skills": ["visualization"],
+            }
+        ],
+    }
 
 
 def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_fail():
@@ -600,3 +614,17 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
     assert exc_info.value.reasoning_steps == ["confused thinking"]
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id == "resp-2"
+    assert exc_info.value.detail == {
+        "full_skill_coverage": False,
+        "total_clarification_turns": 0,
+        "turns": [
+            {
+                "turn_id": "t1",
+                "expected_skill": "visualization",
+                "skill_routing": False,
+                "output_present": False,
+                "output_correct": None,
+                "activated_skills": ["other_skill"],
+            }
+        ],
+    }

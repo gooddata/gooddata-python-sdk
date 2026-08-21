@@ -159,6 +159,33 @@ def _extract_actual(chat_result: ChatResult) -> CreatedVisualization | None:
     return cv.objects[0]
 
 
+def evaluation_result_detail(ev: EvaluationResult) -> dict:
+    """The per-check breakdown reported as ``detail`` for a visualization evaluation.
+
+    Shared by the single-shot evaluator below and the agentic path
+    (``core/agentic/visualization.py``) so both report the exact same shape.
+    """
+    return {
+        "visualization_created": ev.visualization_created,
+        "cross_ref_valid": ev.cross_ref_valid,
+        "cross_ref_errors": ev.cross_ref_errors,
+        "metrics_correct": ev.metrics_correct,
+        "dimensions_correct": ev.dimensions_correct,
+        "filters_correct": ev.filters_correct,
+        "filter_date_score": ev.filter_date_score,
+        "filter_ranking_score": ev.filter_ranking_score,
+        "filter_attribute_score": ev.filter_attribute_score,
+        "viz_type_hard": ev.viz_type_hard,
+        "skill_activated": ev.skill_activated,
+        "expected_metric_uris": sorted(ev.expected_metric_uris),
+        "actual_metric_uris": sorted(ev.actual_metric_uris),
+        "expected_dim_uris": sorted(ev.expected_dim_uris),
+        "actual_dim_uris": sorted(ev.actual_dim_uris),
+        "expected_filters": ev.expected_filters,
+        "actual_filters": ev.actual_filters,
+    }
+
+
 class VisualizationEvaluator:
     test_kind = "visualization"
 
@@ -170,23 +197,5 @@ class VisualizationEvaluator:
         return ItemEvaluation(
             passed=ev.strict_pass,
             rank_key=(ev.strict_pass, ev.strict_checks_passed_count),
-            detail={
-                "visualization_created": ev.visualization_created,
-                "cross_ref_valid": ev.cross_ref_valid,
-                "cross_ref_errors": ev.cross_ref_errors,
-                "metrics_correct": ev.metrics_correct,
-                "dimensions_correct": ev.dimensions_correct,
-                "filters_correct": ev.filters_correct,
-                "filter_date_score": ev.filter_date_score,
-                "filter_ranking_score": ev.filter_ranking_score,
-                "filter_attribute_score": ev.filter_attribute_score,
-                "viz_type_hard": ev.viz_type_hard,
-                "skill_activated": ev.skill_activated,
-                "expected_metric_uris": sorted(ev.expected_metric_uris),
-                "actual_metric_uris": sorted(ev.actual_metric_uris),
-                "expected_dim_uris": sorted(ev.expected_dim_uris),
-                "actual_dim_uris": sorted(ev.actual_dim_uris),
-                "expected_filters": ev.expected_filters,
-                "actual_filters": ev.actual_filters,
-            },
+            detail=evaluation_result_detail(ev),
         )

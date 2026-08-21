@@ -3,11 +3,11 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import ToolCallEvent
+from gooddata_eval.core.models import AgenticEvalOutcome, ToolCallEvent
 
 _DEFAULT_K = 1
 
@@ -48,6 +48,8 @@ class SearchResult:
     tool_selected: bool
     tool_correct: bool
     tool_call_names: list[str]
+    reasoning_steps: list[str] = field(default_factory=list)
+    response_id: str | None = None
 
 
 @dataclass
@@ -90,6 +92,8 @@ def run_agentic_search_tool(
                     tool_selected=selected,
                     tool_correct=correct,
                     tool_call_names=[tc.function_name for tc in tcs],
+                    reasoning_steps=list(chat_result.reasoning_steps or []),
+                    response_id=chat_result.response_id,
                 )
             )
         finally:
@@ -109,6 +113,8 @@ def run_agentic_search_tool(
                         tool_selected=selected,
                         tool_correct=correct,
                         tool_call_names=[tc.function_name for tc in tcs],
+                        reasoning_steps=list(chat_result.reasoning_steps or []),
+                        response_id=chat_result.response_id,
                     )
                 )
             finally:
@@ -133,6 +139,10 @@ class SearchToolAssertionError(AssertionError):
     """Raised when a search-tool evaluation fails."""
 
     __tracebackhide__ = True
+    reasoning_steps: list[str]
+    conversation_id: str
+    response_id: str | None
+    detail: dict
 
 
 def evaluate_agentic_search_tool(
@@ -151,8 +161,13 @@ def evaluate_agentic_search_tool(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
-) -> None:
-    """Run search-tool evaluation, log to Langfuse, and raise SearchToolAssertionError on failure."""
+) -> AgenticEvalOutcome:
+    """Run search-tool evaluation, log to Langfuse, and raise SearchToolAssertionError on failure.
+
+    Returns the best run's outcome (reasoning_steps, conversation_id, response_id) as an
+    AgenticEvalOutcome on success; on failure the same three values are attached to the
+    raised exception as ``.reasoning_steps``/``.conversation_id``/``.response_id``.
+    """
     from datetime import datetime as _dt  # noqa: PLC0415
     from datetime import timezone as _tz  # noqa: PLC0415
 
@@ -214,8 +229,28 @@ def evaluate_agentic_search_tool(
 
     if not summary.pass_at_k:
         best = summary.best
-        raise SearchToolAssertionError(
+        exc = SearchToolAssertionError(
             f"Search tool assertion failed. "
             f"tool_selected={best.tool_selected}, tool_correct={best.tool_correct}. "
             f"Tool calls made: {best.tool_call_names}"
         )
+        exc.reasoning_steps = best.reasoning_steps
+        exc.conversation_id = best.conversation_id
+        exc.response_id = best.response_id
+        exc.detail = {
+            "tool_selected": best.tool_selected,
+            "tool_correct": best.tool_correct,
+            "tool_call_names": best.tool_call_names,
+        }
+        raise exc
+    best = summary.best
+    return AgenticEvalOutcome(
+        reasoning_steps=best.reasoning_steps,
+        conversation_id=best.conversation_id,
+        response_id=best.response_id,
+        detail={
+            "tool_selected": best.tool_selected,
+            "tool_correct": best.tool_correct,
+            "tool_call_names": best.tool_call_names,
+        },
+    )
