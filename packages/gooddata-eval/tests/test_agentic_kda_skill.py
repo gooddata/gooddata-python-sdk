@@ -1153,3 +1153,38 @@ def test_evaluate_agentic_kda_skill_attaches_reasoning_steps_to_exception_on_fai
     assert exc_info.value.reasoning_steps == ["could not find a measure"]
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id == "resp-2"
+
+
+def test_evaluate_agentic_kda_skill_preserves_reasoning_from_a_chat_error_partial_result():
+    # Same scenario as test_run_agentic_kda_skill_recovers_kda_calls_from_a_chat_errors_partial_result
+    # (KDA create/execute already streamed before an unrelated later failure), but checking that
+    # the partial_result's own reasoning_steps/response_id survive onto the exception too, not
+    # just the tool-call data.
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = ChatError(
+        "SSE error 500: boom",
+        status_code=500,
+        partial_result=_kda_chat_result(
+            success=True, reasoning_steps=["analyzing before cutoff"], response_id="resp-3"
+        ),
+    )
+
+    with (
+        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic._langfuse.try_make_langfuse_client", return_value=None),
+        pytest.raises(KdaSkillAssertionError) as exc_info,
+    ):
+        evaluate_agentic_kda_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="What drove revenue change?",
+            expected_output=_EXPECTED,
+            k=1,
+            max_iterations=1,
+            langfuse=None,
+        )
+
+    assert exc_info.value.reasoning_steps == ["analyzing before cutoff"]
+    assert exc_info.value.response_id == "resp-3"

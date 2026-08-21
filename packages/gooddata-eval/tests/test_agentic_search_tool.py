@@ -118,9 +118,7 @@ def test_run_agentic_search_tool_captures_reasoning_steps():
     mock_client.send_message.return_value = ChatResult.model_validate(
         {
             "textResponse": "Found it",
-            "toolCallEvents": [
-                {"functionName": "search_objects", "functionArguments": '{"keywords": "revenue"}'}
-            ],
+            "toolCallEvents": [{"functionName": "search_objects", "functionArguments": '{"keywords": "revenue"}'}],
             "reasoningSteps": ["deciding what to search for"],
             "responseId": "resp-1",
         }
@@ -146,9 +144,7 @@ def test_evaluate_agentic_search_tool_returns_reasoning_steps_on_pass():
     mock_client.send_message.return_value = ChatResult.model_validate(
         {
             "textResponse": "Found it",
-            "toolCallEvents": [
-                {"functionName": "search_objects", "functionArguments": '{"keywords": "revenue"}'}
-            ],
+            "toolCallEvents": [{"functionName": "search_objects", "functionArguments": '{"keywords": "revenue"}'}],
             "reasoningSteps": ["deciding what to search for"],
             "responseId": "resp-1",
         }

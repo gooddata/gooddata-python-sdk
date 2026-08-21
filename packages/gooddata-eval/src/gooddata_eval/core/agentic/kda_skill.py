@@ -239,6 +239,8 @@ def run_agentic_kda_skill(
                 _log.warning("KDA send_message failed for conversation %s: %s", conv_id, exc)
                 partial = getattr(exc, "partial_result", None)
                 if partial is not None:
+                    reasoning_steps.extend(partial.reasoning_steps or [])
+                    response_id = partial.response_id or response_id
                     create_args, execute_result = _extract_kda_calls(partial.tool_call_events or [])
                     if create_args is not None:
                         turn_wall_clock_sec = partial.turn_wall_clock_sec

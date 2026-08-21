@@ -236,9 +236,7 @@ def evaluate_agentic_guardrail(
 
     if not summary.pass_at_k:
         best = summary.best
-        exc = GuardrailAssertionError(
-            f"Guardrail assertion failed. passed={best.passed}. Reasoning: {best.reasoning}"
-        )
+        exc = GuardrailAssertionError(f"Guardrail assertion failed. passed={best.passed}. Reasoning: {best.reasoning}")
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
