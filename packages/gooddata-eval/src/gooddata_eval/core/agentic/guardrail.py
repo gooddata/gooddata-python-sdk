@@ -3,11 +3,12 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._llm_judge import LLMJudge
+from gooddata_eval.core.models import AgenticEvalOutcome
 
 _DEFAULT_K = 1
 
@@ -49,6 +50,8 @@ class GuardrailResult:
     passed: bool
     llm_judge_score: float
     reasoning: str
+    reasoning_steps: list[str] = field(default_factory=list)
+    response_id: str | None = None
 
 
 @dataclass
@@ -95,6 +98,8 @@ def run_agentic_guardrail(
                     passed=passed,
                     llm_judge_score=llm_judge_score,
                     reasoning=reasoning,
+                    reasoning_steps=list(chat_result.reasoning_steps or []),
+                    response_id=chat_result.response_id,
                 )
             )
         finally:
@@ -117,6 +122,8 @@ def run_agentic_guardrail(
                         passed=passed,
                         llm_judge_score=llm_judge_score,
                         reasoning=reasoning,
+                        reasoning_steps=list(chat_result.reasoning_steps or []),
+                        response_id=chat_result.response_id,
                     )
                 )
             finally:
@@ -139,6 +146,9 @@ class GuardrailAssertionError(AssertionError):
     """Raised when a guardrail evaluation fails."""
 
     __tracebackhide__ = True
+    reasoning_steps: list[str]
+    conversation_id: str
+    response_id: str | None
 
 
 def evaluate_agentic_guardrail(
@@ -157,8 +167,14 @@ def evaluate_agentic_guardrail(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
-) -> None:
-    """Run guardrail evaluation, log to Langfuse, and raise on failure."""
+) -> AgenticEvalOutcome:
+    """Run guardrail evaluation, log to Langfuse, and raise GuardrailAssertionError on failure.
+
+    Returns the best run's outcome (reasoning_steps, conversation_id, response_id) as an
+    AgenticEvalOutcome on success; on failure the same three values are attached to the
+    raised exception as ``.reasoning_steps``/``.conversation_id``/``.response_id`` (mirrors
+    `evaluate_agentic_metric_skill`'s idiom) so callers can retrieve them either way.
+    """
     from datetime import datetime as _dt  # noqa: PLC0415
     from datetime import timezone as _tz  # noqa: PLC0415
 
@@ -220,4 +236,15 @@ def evaluate_agentic_guardrail(
 
     if not summary.pass_at_k:
         best = summary.best
-        raise GuardrailAssertionError(f"Guardrail assertion failed. passed={best.passed}. Reasoning: {best.reasoning}")
+        exc = GuardrailAssertionError(
+            f"Guardrail assertion failed. passed={best.passed}. Reasoning: {best.reasoning}"
+        )
+        exc.reasoning_steps = best.reasoning_steps
+        exc.conversation_id = best.conversation_id
+        exc.response_id = best.response_id
+        raise exc
+    return AgenticEvalOutcome(
+        reasoning_steps=summary.best.reasoning_steps,
+        conversation_id=summary.best.conversation_id,
+        response_id=summary.best.response_id,
+    )
