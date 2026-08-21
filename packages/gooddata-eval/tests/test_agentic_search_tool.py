@@ -2,9 +2,12 @@
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 from unittest.mock import MagicMock, patch
 
+import pytest
 from gooddata_eval.core.agentic.search_tool import (
+    SearchToolAssertionError,
     _tool_correctness,
     _tool_selection,
+    evaluate_agentic_search_tool,
     run_agentic_search_tool,
 )
 from gooddata_eval.core.models import ChatResult, ToolCallEvent
@@ -107,3 +110,90 @@ def test_run_agentic_search_tool_creates_fresh_conversations_for_remaining_runs(
         )
     assert mock_client.create_conversation.call_count == 2
     assert mock_client.delete_conversation.call_count == 2
+
+
+def test_run_agentic_search_tool_captures_reasoning_steps():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {
+            "textResponse": "Found it",
+            "toolCallEvents": [
+                {"functionName": "search_objects", "functionArguments": '{"keywords": "revenue"}'}
+            ],
+            "reasoningSteps": ["deciding what to search for"],
+            "responseId": "resp-1",
+        }
+    )
+
+    with patch("gooddata_eval.core.agentic.search_tool.ChatClient", return_value=mock_client):
+        summary = run_agentic_search_tool(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Search for revenue",
+            expected_tool_call={"keywords": "revenue"},
+            k=1,
+        )
+
+    assert summary.best.reasoning_steps == ["deciding what to search for"]
+    assert summary.best.response_id == "resp-1"
+
+
+def test_evaluate_agentic_search_tool_returns_reasoning_steps_on_pass():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {
+            "textResponse": "Found it",
+            "toolCallEvents": [
+                {"functionName": "search_objects", "functionArguments": '{"keywords": "revenue"}'}
+            ],
+            "reasoningSteps": ["deciding what to search for"],
+            "responseId": "resp-1",
+        }
+    )
+
+    with patch("gooddata_eval.core.agentic.search_tool.ChatClient", return_value=mock_client):
+        outcome = evaluate_agentic_search_tool(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Search for revenue",
+            expected_tool_call={"keywords": "revenue"},
+            k=1,
+        )
+
+    assert outcome.reasoning_steps == ["deciding what to search for"]
+    assert outcome.conversation_id == "conv-1"
+    assert outcome.response_id == "resp-1"
+
+
+def test_evaluate_agentic_search_tool_attaches_reasoning_steps_to_exception_on_fail():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {
+            "textResponse": "I could not find anything",
+            "toolCallEvents": [],
+            "reasoningSteps": ["giving up early"],
+            "responseId": "resp-2",
+        }
+    )
+
+    with (
+        patch("gooddata_eval.core.agentic.search_tool.ChatClient", return_value=mock_client),
+        pytest.raises(SearchToolAssertionError) as exc_info,
+    ):
+        evaluate_agentic_search_tool(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Search for revenue",
+            expected_tool_call={"keywords": "revenue"},
+            k=1,
+        )
+
+    assert exc_info.value.reasoning_steps == ["giving up early"]
+    assert exc_info.value.conversation_id == "conv-1"
+    assert exc_info.value.response_id == "resp-2"
