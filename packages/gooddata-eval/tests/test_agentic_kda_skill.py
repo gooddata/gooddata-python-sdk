@@ -35,6 +35,8 @@ def _kda_chat_result(
     text: str = "Here is the analysis.",
     stream_ended: bool = True,
     turn_wall_clock_sec: float | None = None,
+    reasoning_steps: list[str] | None = None,
+    response_id: str | None = None,
 ) -> ChatResult:
     return ChatResult.model_validate(
         {
@@ -44,6 +46,8 @@ def _kda_chat_result(
                 _tool_call("execute_key_driver_analysis", result={"success": success, "data": {"summary": {}}}),
             ],
             "reasoningStepCount": 1,
+            "reasoningSteps": reasoning_steps or [],
+            "responseId": response_id,
             "stream_ended": stream_ended,
             "turn_wall_clock_sec": turn_wall_clock_sec,
         }
@@ -55,12 +59,16 @@ def _no_kda_chat_result(
     *,
     stream_ended: bool = True,
     turn_wall_clock_sec: float | None = None,
+    reasoning_steps: list[str] | None = None,
+    response_id: str | None = None,
 ) -> ChatResult:
     return ChatResult.model_validate(
         {
             "textResponse": text,
             "toolCallEvents": [],
             "reasoningStepCount": 1,
+            "reasoningSteps": reasoning_steps or [],
+            "responseId": response_id,
             "stream_ended": stream_ended,
             "turn_wall_clock_sec": turn_wall_clock_sec,
         }
@@ -1059,3 +1067,89 @@ def test_evaluate_agentic_kda_skill_does_not_log_pass_at_k_or_pass_power_k():
     assert "kda_pass_power_2" not in logged
     assert "pass_at_2" not in logged
     assert "pass_power_2" not in logged
+
+
+def test_run_agentic_kda_skill_accumulates_reasoning_steps_across_iterations():
+    """A clarification turn's reasoning is retained even though only the final turn's
+    create/execute calls determine the KDA outcome."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _no_kda_chat_result("Which metric do you mean?", reasoning_steps=["step one"], response_id="resp-1"),
+        _kda_chat_result(reasoning_steps=["step two"], response_id="resp-2"),
+    ]
+
+    with (
+        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
+        patch(
+            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
+            return_value="I mean revenue.",
+        ),
+    ):
+        summary = run_agentic_kda_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="What drove the change?",
+            expected_output=_EXPECTED,
+            k=1,
+            max_iterations=2,
+        )
+
+    assert summary.best.reasoning_steps == ["step one", "step two"]
+    assert summary.best.response_id == "resp-2"
+
+
+def test_evaluate_agentic_kda_skill_returns_reasoning_steps_on_pass():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _kda_chat_result(
+        success=True, reasoning_steps=["analyzing drivers"], response_id="resp-1"
+    )
+
+    with (
+        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic._langfuse.try_make_langfuse_client", return_value=None),
+    ):
+        outcome = evaluate_agentic_kda_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="What drove revenue change?",
+            expected_output=_EXPECTED,
+            k=1,
+            max_iterations=1,
+            langfuse=None,
+        )
+
+    assert outcome.reasoning_steps == ["analyzing drivers"]
+    assert outcome.conversation_id == "conv-1"
+    assert outcome.response_id == "resp-1"
+
+
+def test_evaluate_agentic_kda_skill_attaches_reasoning_steps_to_exception_on_fail():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _no_kda_chat_result(
+        reasoning_steps=["could not find a measure"], response_id="resp-2"
+    )
+
+    with (
+        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic._langfuse.try_make_langfuse_client", return_value=None),
+        pytest.raises(KdaSkillAssertionError) as exc_info,
+    ):
+        evaluate_agentic_kda_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="What drove revenue change?",
+            expected_output=_EXPECTED,
+            k=1,
+            max_iterations=1,
+            langfuse=None,
+        )
+
+    assert exc_info.value.reasoning_steps == ["could not find a measure"]
+    assert exc_info.value.conversation_id == "conv-1"
+    assert exc_info.value.response_id == "resp-2"

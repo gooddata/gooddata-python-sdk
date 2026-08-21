@@ -86,12 +86,12 @@ def _dispatch_agentic(
     model_version_override: str | None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
-) -> AgenticEvalOutcome | list[str] | None:
+) -> AgenticEvalOutcome:
     """Call the appropriate evaluate_agentic_* function for the item's test_kind.
 
-    Returns whatever that function returns -- alert_skill/metric_skill/conversation return
-    an AgenticEvalOutcome; the rest still return None
-    (unchanged).
+    Every evaluate_agentic_* function returns an AgenticEvalOutcome (reasoning_steps,
+    conversation_id, response_id) on success and attaches the same three attributes to its
+    raised *AssertionError on failure -- no kind is exempt.
     """
     kind = item.test_kind
     eo = item.expected_output
@@ -174,13 +174,14 @@ def _dispatch_agentic(
             **lf_kw,
         )
     elif kind == "agentic_kda_skill":
-        evaluate_agentic_kda_skill(
+        return evaluate_agentic_kda_skill(
             host=host,
             token=token,
             workspace_id=workspace_id,
             question=item.question,
             expected_output=eo if isinstance(eo, dict) else {},
             k=k,
+            agent_id=agent_id,
             **lf_kw,
         )
     elif kind == "agentic_conversation":

@@ -5,11 +5,11 @@ from __future__ import annotations
 
 import logging
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import ToolCallEvent
+from gooddata_eval.core.models import AgenticEvalOutcome, ToolCallEvent
 
 _log = logging.getLogger(__name__)
 
@@ -159,6 +159,8 @@ class KdaRunResult:
     # Wall-clock time of the turn that called create (None if create never happened) --
     # not any earlier disambiguation turn. See run_agentic_kda_skill's _run_once.
     turn_wall_clock_sec: float | None = None
+    reasoning_steps: list[str] = field(default_factory=list)
+    response_id: str | None = None
 
 
 @dataclass
@@ -199,6 +201,7 @@ def run_agentic_kda_skill(
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    agent_id: str | None = None,
 ) -> AgenticKdaSummary:
     """Run the KDA-skill agentic evaluation K times and return a summary.
 
@@ -215,7 +218,9 @@ def run_agentic_kda_skill(
         # k=0 or negative would otherwise silently run once, indistinguishable from k=1.
         raise ValueError(f"k must be >= 1, got {k}")
     run_results: list[KdaRunResult] = []
-    client = ChatClient(host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort)
+    client = ChatClient(
+        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+    )
 
     def _run_once(conv_id: str) -> KdaRunResult:
         create_args: dict | None = None
@@ -224,6 +229,8 @@ def run_agentic_kda_skill(
         turn_completed = False
         disambiguated = False
         current_question = question
+        reasoning_steps: list[str] = []
+        response_id: str | None = None
 
         for iteration in range(max_iterations):
             try:
@@ -237,6 +244,8 @@ def run_agentic_kda_skill(
                         turn_wall_clock_sec = partial.turn_wall_clock_sec
                 turn_completed = False
                 break
+            reasoning_steps.extend(chat_result.reasoning_steps or [])
+            response_id = chat_result.response_id or response_id
             create_args, execute_result = _extract_kda_calls(chat_result.tool_call_events or [])
             response_text = (chat_result.text_response or "").strip()
             turn_completed = chat_result.stream_ended and bool(response_text)
@@ -273,6 +282,8 @@ def run_agentic_kda_skill(
             actual_create_args=create_args,
             actual_execute_result=execute_result,
             turn_wall_clock_sec=turn_wall_clock_sec,
+            reasoning_steps=reasoning_steps,
+            response_id=response_id,
         )
 
     try:
@@ -312,6 +323,9 @@ class KdaSkillAssertionError(AssertionError):
     """Raised when a KDA-skill evaluation fails."""
 
     __tracebackhide__ = True
+    reasoning_steps: list[str]
+    conversation_id: str
+    response_id: str | None
 
 
 def evaluate_agentic_kda_skill(
@@ -323,6 +337,7 @@ def evaluate_agentic_kda_skill(
     k: int = _DEFAULT_K,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
+    agent_id: str | None = None,
     langfuse: object | None = None,
     dataset_item_id: str = "",
     dataset_name: str = "kda_skill",
@@ -330,8 +345,13 @@ def evaluate_agentic_kda_skill(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
-) -> None:
-    """Run KDA-skill evaluation, log to Langfuse, and raise KdaSkillAssertionError on failure."""
+) -> AgenticEvalOutcome:
+    """Run KDA-skill evaluation, log to Langfuse, and raise KdaSkillAssertionError on failure.
+
+    Returns the best run's outcome (reasoning_steps, conversation_id, response_id) as an
+    AgenticEvalOutcome on success; on failure the same three values are attached to the
+    raised exception as ``.reasoning_steps``/``.conversation_id``/``.response_id``.
+    """
     from datetime import datetime as _dt  # noqa: PLC0415
     from datetime import timezone as _tz  # noqa: PLC0415
 
@@ -350,6 +370,7 @@ def evaluate_agentic_kda_skill(
         max_iterations=max_iterations,
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
     )
 
     if langfuse is not None and dataset_item_id:
@@ -420,4 +441,13 @@ def evaluate_agentic_kda_skill(
             f"Actual create args: {best.actual_create_args}. "
             f"Actual execute result: {best.actual_execute_result}."
         )
-        raise KdaSkillAssertionError(message)
+        exc = KdaSkillAssertionError(message)
+        exc.reasoning_steps = best.reasoning_steps
+        exc.conversation_id = best.conversation_id
+        exc.response_id = best.response_id
+        raise exc
+    return AgenticEvalOutcome(
+        reasoning_steps=summary.best.reasoning_steps,
+        conversation_id=summary.best.conversation_id,
+        response_id=summary.best.response_id,
+    )
