@@ -302,6 +302,25 @@ def test_evaluate_agentic_visualization_returns_reasoning_steps_on_pass():
     assert outcome.reasoning_steps == ["building the chart"]
     assert outcome.conversation_id == "conv-1"
     assert outcome.response_id == "resp-1"
+    assert outcome.detail == {
+        "visualization_created": True,
+        "cross_ref_valid": True,
+        "cross_ref_errors": [],
+        "metrics_correct": True,
+        "dimensions_correct": True,
+        "filters_correct": True,
+        "filter_date_score": True,
+        "filter_ranking_score": True,
+        "filter_attribute_score": True,
+        "viz_type_hard": True,
+        "skill_activated": False,
+        "expected_metric_uris": ["metric/revenue"],
+        "actual_metric_uris": ["metric/revenue"],
+        "expected_dim_uris": ["label/date.quarter"],
+        "actual_dim_uris": ["label/date.quarter"],
+        "expected_filters": {"date": [], "ranking": [], "attribute": []},
+        "actual_filters": {"date": [], "ranking": [], "attribute": []},
+    }
 
 
 def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on_fail():
@@ -333,3 +352,22 @@ def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on
     assert exc_info.value.reasoning_steps == ["giving up"]
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id == "resp-2"
+    assert exc_info.value.detail == {
+        "visualization_created": False,
+        "cross_ref_valid": False,
+        "cross_ref_errors": ["No visualization was created"],
+        "metrics_correct": False,
+        "dimensions_correct": False,
+        "filters_correct": False,
+        "filter_date_score": False,
+        "filter_ranking_score": False,
+        "filter_attribute_score": False,
+        "viz_type_hard": False,
+        "skill_activated": False,
+        "expected_metric_uris": ["metric/revenue"],
+        "actual_metric_uris": [],
+        "expected_dim_uris": ["label/date.quarter"],
+        "actual_dim_uris": [],
+        "expected_filters": {"date": [], "ranking": [], "attribute": []},
+        "actual_filters": {"date": [], "ranking": [], "attribute": []},
+    }

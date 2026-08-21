@@ -142,6 +142,7 @@ class SearchToolAssertionError(AssertionError):
     reasoning_steps: list[str]
     conversation_id: str
     response_id: str | None
+    detail: dict
 
 
 def evaluate_agentic_search_tool(
@@ -236,9 +237,20 @@ def evaluate_agentic_search_tool(
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
+        exc.detail = {
+            "tool_selected": best.tool_selected,
+            "tool_correct": best.tool_correct,
+            "tool_call_names": best.tool_call_names,
+        }
         raise exc
+    best = summary.best
     return AgenticEvalOutcome(
-        reasoning_steps=summary.best.reasoning_steps,
-        conversation_id=summary.best.conversation_id,
-        response_id=summary.best.response_id,
+        reasoning_steps=best.reasoning_steps,
+        conversation_id=best.conversation_id,
+        response_id=best.response_id,
+        detail={
+            "tool_selected": best.tool_selected,
+            "tool_correct": best.tool_correct,
+            "tool_call_names": best.tool_call_names,
+        },
     )

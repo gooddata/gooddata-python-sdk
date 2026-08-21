@@ -163,6 +163,11 @@ def test_evaluate_agentic_search_tool_returns_reasoning_steps_on_pass():
     assert outcome.reasoning_steps == ["deciding what to search for"]
     assert outcome.conversation_id == "conv-1"
     assert outcome.response_id == "resp-1"
+    assert outcome.detail == {
+        "tool_selected": True,
+        "tool_correct": True,
+        "tool_call_names": ["search_objects"],
+    }
 
 
 def test_evaluate_agentic_search_tool_attaches_reasoning_steps_to_exception_on_fail():
@@ -193,3 +198,8 @@ def test_evaluate_agentic_search_tool_attaches_reasoning_steps_to_exception_on_f
     assert exc_info.value.reasoning_steps == ["giving up early"]
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id == "resp-2"
+    assert exc_info.value.detail == {
+        "tool_selected": False,
+        "tool_correct": False,
+        "tool_call_names": [],
+    }

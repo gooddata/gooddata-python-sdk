@@ -90,8 +90,8 @@ def _dispatch_agentic(
     """Call the appropriate evaluate_agentic_* function for the item's test_kind.
 
     Every evaluate_agentic_* function returns an AgenticEvalOutcome (reasoning_steps,
-    conversation_id, response_id) on success and attaches the same three attributes to its
-    raised *AssertionError on failure -- no kind is exempt.
+    conversation_id, response_id, detail) on success and attaches the same four attributes
+    to its raised *AssertionError on failure -- no kind is exempt.
     """
     kind = item.test_kind
     eo = item.expected_output
@@ -241,19 +241,22 @@ def run_agentic_items(
                 reasoning_steps = outcome.reasoning_steps
                 conversation_id = outcome.conversation_id
                 response_id = outcome.response_id
+                detail = outcome.detail
             else:
-                reasoning_steps, conversation_id, response_id = outcome, None, None
+                reasoning_steps, conversation_id, response_id, detail = outcome, None, None, {}
             item_report.pass_at_k = True
             item_report.runs = k
             item_report.reasoning_steps = reasoning_steps or []
             item_report.conversation_id = conversation_id
             item_report.response_id = response_id
+            item_report.best_detail = detail or {}
         except AssertionError as exc:
             item_report.pass_at_k = False
             item_report.runs = k
             item_report.reasoning_steps = getattr(exc, "reasoning_steps", None) or []
             item_report.conversation_id = getattr(exc, "conversation_id", None)
             item_report.response_id = getattr(exc, "response_id", None)
+            item_report.best_detail = getattr(exc, "detail", None) or {}
             print(f"[agentic] {item.id} FAIL: {exc}", flush=True)
         except Exception as exc:
             item_report.error = f"{type(exc).__name__}: {exc}"

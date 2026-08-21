@@ -328,6 +328,7 @@ class KdaSkillAssertionError(AssertionError):
     reasoning_steps: list[str]
     conversation_id: str
     response_id: str | None
+    detail: dict
 
 
 def evaluate_agentic_kda_skill(
@@ -447,9 +448,29 @@ def evaluate_agentic_kda_skill(
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
+        exc.detail = {
+            "triggered": ev.triggered,
+            "executed": ev.executed,
+            "success": ev.success,
+            "turn_completed": ev.turn_completed,
+            "disambiguated": ev.disambiguated,
+            "actual_create_args": best.actual_create_args,
+            "actual_execute_result": best.actual_execute_result,
+        }
         raise exc
+    best = summary.best
+    ev = best.evaluation
     return AgenticEvalOutcome(
-        reasoning_steps=summary.best.reasoning_steps,
-        conversation_id=summary.best.conversation_id,
-        response_id=summary.best.response_id,
+        reasoning_steps=best.reasoning_steps,
+        conversation_id=best.conversation_id,
+        response_id=best.response_id,
+        detail={
+            "triggered": ev.triggered,
+            "executed": ev.executed,
+            "success": ev.success,
+            "turn_completed": ev.turn_completed,
+            "disambiguated": ev.disambiguated,
+            "actual_create_args": best.actual_create_args,
+            "actual_execute_result": best.actual_execute_result,
+        },
     )

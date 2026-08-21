@@ -16,6 +16,7 @@ from gooddata_eval.core.evaluators.visualization import (
     EvaluationResult,
     _check_visualization_skill_activated,
     _evaluate_against_candidates,
+    evaluation_result_detail,
 )
 from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, ToolCallEvent
 from gooddata_eval.core.scoring import get_dimension_uri_set, get_metric_uri_set, uri_to_display_name
@@ -263,6 +264,7 @@ class VisualizationAssertionError(AssertionError):
     reasoning_steps: list[str]
     conversation_id: str
     response_id: str | None
+    detail: dict
 
 
 def _filter_diff(category: str, ev: EvaluationResult) -> str:
@@ -432,9 +434,12 @@ def evaluate_agentic_visualization(
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
+        exc.detail = evaluation_result_detail(ev)
         raise exc
+    best = summary.best
     return AgenticEvalOutcome(
-        reasoning_steps=summary.best.reasoning_steps,
-        conversation_id=summary.best.conversation_id,
-        response_id=summary.best.response_id,
+        reasoning_steps=best.reasoning_steps,
+        conversation_id=best.conversation_id,
+        response_id=best.response_id,
+        detail=evaluation_result_detail(best.eval_result),
     )

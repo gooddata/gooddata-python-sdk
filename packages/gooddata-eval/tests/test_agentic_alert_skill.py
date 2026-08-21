@@ -656,6 +656,16 @@ def test_evaluate_agentic_alert_skill_returns_reasoning_steps_on_pass():
     assert outcome.reasoning_steps == ["thinking about it"]
     assert outcome.conversation_id == "conv-1"
     assert outcome.response_id is None
+    assert outcome.detail == {
+        "alert_created": True,
+        "operator_correct": True,
+        "threshold_correct": True,
+        "trigger_correct": True,
+        "filters_correct": True,
+        "metric_correct": True,
+        "recipients_correct": True,
+        "actual_alert_arguments": {"operator": "GREATER_THAN", "threshold": 500},
+    }
 
 
 def test_evaluate_agentic_alert_skill_attaches_reasoning_steps_to_exception_on_fail():
@@ -686,3 +696,13 @@ def test_evaluate_agentic_alert_skill_attaches_reasoning_steps_to_exception_on_f
     assert exc_info.value.reasoning_steps == ["confused thinking"]
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id is None
+    assert exc_info.value.detail == {
+        "alert_created": False,
+        "operator_correct": False,
+        "threshold_correct": False,
+        "trigger_correct": False,
+        "filters_correct": False,
+        "metric_correct": False,
+        "recipients_correct": False,
+        "actual_alert_arguments": {},
+    }

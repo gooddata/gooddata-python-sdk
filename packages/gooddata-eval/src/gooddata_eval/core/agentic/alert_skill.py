@@ -584,6 +584,7 @@ class AlertSkillAssertionError(AssertionError):
     reasoning_steps: list[str]
     conversation_id: str
     response_id: str | None
+    detail: dict
 
 
 def evaluate_agentic_alert_skill(
@@ -697,9 +698,31 @@ def evaluate_agentic_alert_skill(
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
+        exc.detail = {
+            "alert_created": ev.alert_created,
+            "operator_correct": ev.operator_correct,
+            "threshold_correct": ev.threshold_correct,
+            "trigger_correct": ev.trigger_correct,
+            "filters_correct": ev.filters_correct,
+            "metric_correct": ev.metric_correct,
+            "recipients_correct": ev.recipients_correct,
+            "actual_alert_arguments": best.actual_alert_arguments,
+        }
         raise exc
+    best = summary.best
+    ev = best.eval
     return AgenticEvalOutcome(
-        reasoning_steps=summary.best.reasoning_steps,
-        conversation_id=summary.best.conversation_id,
-        response_id=summary.best.response_id,
+        reasoning_steps=best.reasoning_steps,
+        conversation_id=best.conversation_id,
+        response_id=best.response_id,
+        detail={
+            "alert_created": ev.alert_created,
+            "operator_correct": ev.operator_correct,
+            "threshold_correct": ev.threshold_correct,
+            "trigger_correct": ev.trigger_correct,
+            "filters_correct": ev.filters_correct,
+            "metric_correct": ev.metric_correct,
+            "recipients_correct": ev.recipients_correct,
+            "actual_alert_arguments": best.actual_alert_arguments,
+        },
     )

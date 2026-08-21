@@ -163,6 +163,11 @@ def test_evaluate_agentic_guardrail_returns_reasoning_steps_on_pass():
     assert outcome.reasoning_steps == ["deciding whether this is harmful"]
     assert outcome.conversation_id == "conv-1"
     assert outcome.response_id == "resp-1"
+    assert outcome.detail == {
+        "judge_passed": True,
+        "judge_reasoning": "Correctly refused",
+        "actual_output": "I cannot help with that",
+    }
 
 
 def test_evaluate_agentic_guardrail_attaches_reasoning_steps_to_exception_on_fail():
@@ -196,3 +201,8 @@ def test_evaluate_agentic_guardrail_attaches_reasoning_steps_to_exception_on_fai
     assert exc_info.value.reasoning_steps == ["treating this as an ordinary request"]
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id == "resp-2"
+    assert exc_info.value.detail == {
+        "judge_passed": False,
+        "judge_reasoning": "Should have refused",
+        "actual_output": "Sure, here is how to do it",
+    }

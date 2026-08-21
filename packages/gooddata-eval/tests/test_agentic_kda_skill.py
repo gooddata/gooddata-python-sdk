@@ -1125,6 +1125,15 @@ def test_evaluate_agentic_kda_skill_returns_reasoning_steps_on_pass():
     assert outcome.reasoning_steps == ["analyzing drivers"]
     assert outcome.conversation_id == "conv-1"
     assert outcome.response_id == "resp-1"
+    assert outcome.detail == {
+        "triggered": True,
+        "executed": True,
+        "success": True,
+        "turn_completed": True,
+        "disambiguated": False,
+        "actual_create_args": {"measure": {"type": "metric", "id": "revenue"}},
+        "actual_execute_result": {"success": True, "data": {"summary": {}}},
+    }
 
 
 def test_evaluate_agentic_kda_skill_attaches_reasoning_steps_to_exception_on_fail():
@@ -1153,6 +1162,15 @@ def test_evaluate_agentic_kda_skill_attaches_reasoning_steps_to_exception_on_fai
     assert exc_info.value.reasoning_steps == ["could not find a measure"]
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id == "resp-2"
+    assert exc_info.value.detail == {
+        "triggered": False,
+        "executed": False,
+        "success": False,
+        "turn_completed": True,
+        "disambiguated": False,
+        "actual_create_args": None,
+        "actual_execute_result": None,
+    }
 
 
 def test_evaluate_agentic_kda_skill_preserves_reasoning_from_a_chat_error_partial_result():

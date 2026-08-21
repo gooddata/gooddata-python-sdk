@@ -165,6 +165,11 @@ def test_evaluate_agentic_general_question_returns_reasoning_steps_on_pass():
     assert outcome.reasoning_steps == ["recalling the answer"]
     assert outcome.conversation_id == "conv-1"
     assert outcome.response_id == "resp-1"
+    assert outcome.detail == {
+        "judge_passed": True,
+        "judge_reasoning": "Correct answer",
+        "actual_output": "42",
+    }
 
 
 def test_evaluate_agentic_general_question_attaches_reasoning_steps_to_exception_on_fail():
@@ -198,3 +203,8 @@ def test_evaluate_agentic_general_question_attaches_reasoning_steps_to_exception
     assert exc_info.value.reasoning_steps == ["unable to find the answer"]
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id == "resp-2"
+    assert exc_info.value.detail == {
+        "judge_passed": False,
+        "judge_reasoning": "Wrong answer",
+        "actual_output": "I don't know",
+    }
