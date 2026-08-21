@@ -6,8 +6,11 @@ All tests mock ChatClient so no network is needed.
 
 from unittest.mock import MagicMock, call, patch
 
+import pytest
 from gooddata_eval.core.agentic.visualization import (
+    VisualizationAssertionError,
     _execute_single_run,
+    evaluate_agentic_visualization,
     run_agentic_visualization,
 )
 from gooddata_eval.core.models import ChatResult, CreatedVisualization
@@ -241,3 +244,92 @@ def test_run_agentic_visualization_creates_conversation_when_no_initial_id():
 
     assert instance.create_conversation.call_count == 2
     assert instance.delete_conversation.call_count == 2
+
+
+def test_execute_single_run_accumulates_reasoning_steps_across_iterations(monkeypatch):
+    """Reasoning steps from every turn (clarification + final) are accumulated, not just the last."""
+    client = MagicMock()
+    clarify = ChatResult.model_validate(
+        {
+            "textResponse": "Which metrics?",
+            "toolCallEvents": [],
+            "reasoningSteps": ["step one"],
+            "responseId": "resp-1",
+        }
+    )
+    final = ChatResult.model_validate(
+        {
+            "createdVisualizations": {"objects": [_viz()], "reasoning": ""},
+            "toolCallEvents": [],
+            "reasoningSteps": ["step two"],
+            "responseId": "resp-2",
+        }
+    )
+    client.send_message.side_effect = [clarify, final]
+    monkeypatch.setattr(
+        "gooddata_eval.core.agentic.visualization.generate_simulated_response",
+        lambda msg, exp: "Revenue please",
+    )
+
+    result = _execute_single_run(client, "conv-1", "Show me a chart", [_expected()])
+
+    assert result.reasoning_steps == ["step one", "step two"]
+    assert result.response_id == "resp-2"
+
+
+def test_evaluate_agentic_visualization_returns_reasoning_steps_on_pass():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {
+            "createdVisualizations": {"objects": [_viz()], "reasoning": ""},
+            "toolCallEvents": [],
+            "reasoningSteps": ["building the chart"],
+            "responseId": "resp-1",
+        }
+    )
+
+    with patch("gooddata_eval.core.agentic.visualization.ChatClient", return_value=mock_client):
+        outcome = evaluate_agentic_visualization(
+            host="https://example.com",
+            token="tok",
+            workspace_id="ws",
+            question="Show revenue",
+            expected_outputs=[_expected()],
+            k=1,
+        )
+
+    assert outcome.reasoning_steps == ["building the chart"]
+    assert outcome.conversation_id == "conv-1"
+    assert outcome.response_id == "resp-1"
+
+
+def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on_fail():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {
+            "textResponse": "I could not build that",
+            "toolCallEvents": [],
+            "reasoningSteps": ["giving up"],
+            "responseId": "resp-2",
+        }
+    )
+
+    with (
+        patch("gooddata_eval.core.agentic.visualization.ChatClient", return_value=mock_client),
+        pytest.raises(VisualizationAssertionError) as exc_info,
+    ):
+        evaluate_agentic_visualization(
+            host="https://example.com",
+            token="tok",
+            workspace_id="ws",
+            question="Show revenue",
+            expected_outputs=[_expected()],
+            k=1,
+            max_iterations=1,
+        )
+
+    assert exc_info.value.reasoning_steps == ["giving up"]
+    assert exc_info.value.conversation_id == "conv-1"
+    assert exc_info.value.response_id == "resp-2"

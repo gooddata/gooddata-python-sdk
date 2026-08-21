@@ -8,7 +8,7 @@ Langfuse logging and VisAssertionError remain in the Tavern shim.
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
@@ -17,7 +17,7 @@ from gooddata_eval.core.evaluators.visualization import (
     _check_visualization_skill_activated,
     _evaluate_against_candidates,
 )
-from gooddata_eval.core.models import CreatedVisualization, ToolCallEvent
+from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, ToolCallEvent
 from gooddata_eval.core.scoring import get_dimension_uri_set, get_metric_uri_set, uri_to_display_name
 
 _DEFAULT_K = 2
@@ -34,6 +34,8 @@ class RunResult:
     best_expected: CreatedVisualization
     total_turns: float
     total_steps: float
+    reasoning_steps: list[str] = field(default_factory=list)
+    response_id: str | None = None
 
 
 @dataclass
@@ -158,6 +160,8 @@ def _execute_single_run(
     total_turns = 0.0
     total_steps = 0.0
     all_tool_call_events: list[ToolCallEvent] = []
+    reasoning_steps: list[str] = []
+    response_id: str | None = None
     simulated_response_guide = expected_outputs[0]  # primary candidate guides the simulated user
 
     current_result = client.send_message(conversation_id, question)
@@ -166,6 +170,8 @@ def _execute_single_run(
         total_turns += 1.0
         total_steps += float(current_result.reasoning_step_count)
         all_tool_call_events.extend(current_result.tool_call_events)
+        reasoning_steps.extend(current_result.reasoning_steps or [])
+        response_id = current_result.response_id or response_id
 
         viz_produced = bool(current_result.created_visualizations and current_result.created_visualizations.objects)
         if viz_produced:
@@ -192,6 +198,8 @@ def _execute_single_run(
         best_expected=best_expected,
         total_turns=total_turns,
         total_steps=total_steps,
+        reasoning_steps=reasoning_steps,
+        response_id=response_id,
     )
 
 
@@ -252,6 +260,9 @@ class VisualizationAssertionError(AssertionError):
     """Raised when a visualization evaluation fails."""
 
     __tracebackhide__ = True
+    reasoning_steps: list[str]
+    conversation_id: str
+    response_id: str | None
 
 
 def _filter_diff(category: str, ev: EvaluationResult) -> str:
@@ -284,8 +295,13 @@ def evaluate_agentic_visualization(
     run_metadata_extra: dict | None = None,
     record_output_path: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
-) -> None:
-    """Run visualization evaluation, log to Langfuse, and raise VisualizationAssertionError on failure."""
+) -> AgenticEvalOutcome:
+    """Run visualization evaluation, log to Langfuse, and raise VisualizationAssertionError on failure.
+
+    Returns the best run's outcome (reasoning_steps, conversation_id, response_id) as an
+    AgenticEvalOutcome on success; on failure the same three values are attached to the
+    raised exception as ``.reasoning_steps``/``.conversation_id``/``.response_id``.
+    """
     import json as _json  # noqa: PLC0415
     from datetime import datetime as _dt  # noqa: PLC0415
     from datetime import timezone as _tz  # noqa: PLC0415
@@ -384,7 +400,7 @@ def evaluate_agentic_visualization(
         cross_ref_detail = (" → " + "; ".join(ev.cross_ref_errors)) if ev.cross_ref_errors else ""
         expected_dump = best.best_expected.model_dump(exclude_none=True)
         actual_dump = best.actual_output.model_dump(exclude_none=True) if best.actual_output else None
-        raise VisualizationAssertionError(
+        exc = VisualizationAssertionError(
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             "Agentic Visualization Assertion Failed! (Critical Mode)\n"
             "------------------------------------------\n"
@@ -413,3 +429,12 @@ def evaluate_agentic_visualization(
             f"  Viz Type Hard         : {ev.viz_type_hard}\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
         )
+        exc.reasoning_steps = best.reasoning_steps
+        exc.conversation_id = best.conversation_id
+        exc.response_id = best.response_id
+        raise exc
+    return AgenticEvalOutcome(
+        reasoning_steps=summary.best.reasoning_steps,
+        conversation_id=summary.best.conversation_id,
+        response_id=summary.best.response_id,
+    )
