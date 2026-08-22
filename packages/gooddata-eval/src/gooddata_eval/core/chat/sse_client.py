@@ -229,7 +229,14 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
             # Only a transport-level failure (e.g. connection drop mid-stream) is rescued
             # here -- a bug in the processing below must propagate uncaught, not get
             # mislabeled as a network error.
-            raise ChatError(f"SSE stream error: {exc}", partial_result=_build_chat_result(acc)) from exc
+            partial = _build_chat_result(acc)
+            if isinstance(exc, httpx.RemoteProtocolError):
+                # Same mid-stream disconnect _is_retryable_exc already retries when it happens
+                # at connect time -- here it surfaces from `next(it)` instead, so it must be
+                # raised as TransientChatError or the wrapping below would mask it as
+                # non-retryable and defeat the retry this class exists for.
+                raise TransientChatError(f"SSE stream error: {exc}", partial_result=partial) from exc
+            raise ChatError(f"SSE stream error: {exc}", partial_result=partial) from exc
         line = raw_line.decode("utf-8") if isinstance(raw_line, bytes) else raw_line
         if not line:
             current_event = "message"  # blank line ends one event block per the SSE spec
