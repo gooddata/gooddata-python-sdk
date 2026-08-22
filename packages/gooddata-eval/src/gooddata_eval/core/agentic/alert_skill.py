@@ -160,8 +160,18 @@ def _check_recipients(expected: CatalogMetricAlert, actual_args: dict, sdk: Good
         act_recip = []
     if set(expected.recipients) == set(act_recip or []):
         return True
-    act_internal = actual_args.get("internal_recipients")
-    if sdk is not None and isinstance(act_internal, list) and act_internal:
+    act_internal_raw = actual_args.get("internal_recipients")
+    # internal_recipients is declared `anyOf: [array of string, string, null]` in the
+    # create_metric_alert tool schema -- a single id as a bare string is schema-legal,
+    # not a malformed call, so it needs the same string/list normalization already
+    # applied to recipients/external_recipients above.
+    if isinstance(act_internal_raw, str):
+        act_internal = [act_internal_raw]
+    elif isinstance(act_internal_raw, list):
+        act_internal = act_internal_raw
+    else:
+        act_internal = []
+    if sdk is not None and act_internal:
         internal_recipient_ids = _resolve_internal_recipient_ids(sdk, expected.recipients)
         if internal_recipient_ids & set(act_internal):
             return True
