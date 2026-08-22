@@ -89,6 +89,12 @@ def _is_retryable_exc(exc: Exception) -> bool:
         return True
     if isinstance(exc, httpx.HTTPStatusError):
         return exc.response.status_code in _RETRYABLE_STATUS_CODES
+    if isinstance(exc, httpx.RemoteProtocolError):
+        # Mid-stream disconnect ("peer closed connection without sending complete
+        # message body") -- pure network flake, not a real agent/content failure.
+        # Confirmed live: contaminated ~1-4% of visualization runs with a hard
+        # fail and zero retry attempts.
+        return True
     return False
 
 

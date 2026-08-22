@@ -380,6 +380,26 @@ def test_create_conversation_retries_then_succeeds(monkeypatch):
     assert sleeps == [5, 10]
 
 
+def test_create_conversation_retries_remote_protocol_error(monkeypatch):
+    # "peer closed connection without sending complete message body" -- a pure
+    # network flake, not a real agent/content failure. Previously not retried
+    # at all: hard-failed on the first occurrence with zero retry attempts.
+    sleeps = []
+    monkeypatch.setattr(sse_mod.time, "sleep", lambda s: sleeps.append(s))
+    calls = {"n": 0}
+
+    def handler(request):
+        calls["n"] += 1
+        if calls["n"] < 3:
+            raise httpx.RemoteProtocolError("peer closed connection without sending complete message body")
+        return httpx.Response(200, json={"conversationId": "abc"})
+
+    client = _client_with_handler(handler)
+    assert client.create_conversation() == "abc"
+    assert calls["n"] == 3
+    assert sleeps == [5, 10]
+
+
 def test_create_conversation_does_not_retry_4xx(monkeypatch):
     sleeps = []
     monkeypatch.setattr(sse_mod.time, "sleep", lambda s: sleeps.append(s))
