@@ -141,9 +141,7 @@ def test_build_latency_breakdown_uses_bold_title_as_reasoning_name():
         ),
     ]
     reasoning_events = [
-        ReasoningStepEvent(
-            summary="**Picking the right metric**\n\nLots more detail follows here.", ts=2.5, index=0
-        )
+        ReasoningStepEvent(summary="**Picking the right metric**\n\nLots more detail follows here.", ts=2.5, index=0)
     ]
     result = build_latency_breakdown(tool_events, reasoning_events)
     reasoning_step = next(s for s in result if s["kind"] == "reasoning")

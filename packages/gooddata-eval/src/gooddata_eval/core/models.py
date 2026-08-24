@@ -175,9 +175,7 @@ def build_latency_breakdown(
             continue
         points.append((tc.call_ts, "tool_start", tc.function_name, tc.index))
         points.append((tc.result_ts, "tool_end", tc.function_name, tc.index))
-    points.extend(
-        (rs.ts, "reasoning", _reasoning_title(rs.summary), rs.index) for rs in reasoning_step_events or []
-    )
+    points.extend((rs.ts, "reasoning", _reasoning_title(rs.summary), rs.index) for rs in reasoning_step_events or [])
     points.sort(key=lambda p: p[0])
 
     steps: list[dict] = []
