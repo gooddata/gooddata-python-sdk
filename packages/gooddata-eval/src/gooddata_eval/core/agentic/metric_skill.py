@@ -163,11 +163,22 @@ class AgenticMetricSummary:
 
 
 def _extract_metric_result(tool_call_events: list[ToolCallEvent]) -> dict | None:
-    for tc in tool_call_events:
-        if tc.function_name == "create_metric" and tc.result:
-            result_data = tc.parsed_result()
-            if result_data is not None:
-                return result_data.get("data", result_data)
+    """Result payload of the create_metric tool call.
+
+    Prefers the most recent successful call in this turn -- when the agent retries
+    after a validation error, the earlier failed attempt must not shadow it. Shared
+    with ``conversation.py``, which imports this instead of keeping its own copy.
+    """
+    for tc in reversed(tool_call_events):
+        if tc.function_name != "create_metric" or not tc.result:
+            continue
+        result_data = tc.parsed_result()
+        if not isinstance(result_data, dict):
+            continue
+        payload = result_data.get("data", result_data)
+        if not isinstance(payload, dict) or not payload or payload.get("isError"):
+            continue
+        return payload
     return None
 
 
@@ -223,7 +234,7 @@ def _execute_single_metric_run(
     """
     primary_expected = expected_outputs[0] if expected_outputs else {}
     metric_result: dict | None = None
-    metric_id_to_delete: str | None = None
+    created_metric_ids: list[str] = []
     turns = 0
     current_question = question
     reasoning_steps: list[str] = []
@@ -235,10 +246,12 @@ def _execute_single_metric_run(
             chat_result = client.send_message(conversation_id, current_question)
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
+            for metric_id in _extract_created_metric_ids(chat_result.tool_call_events or []):
+                if metric_id not in created_metric_ids:
+                    created_metric_ids.append(metric_id)
             candidate = _extract_metric_result(chat_result.tool_call_events or [])
             if candidate is not None:
                 metric_result = candidate
-                metric_id_to_delete = candidate.get("metric_id")
                 break
             response_text = (chat_result.text_response or "").strip()
             if not response_text and not chat_result.tool_call_events:
@@ -265,8 +278,8 @@ def _execute_single_metric_run(
             response_id=response_id,
         )
     finally:
-        if metric_id_to_delete:
-            _delete_metric(sdk, workspace_id, metric_id_to_delete)
+        for metric_id in created_metric_ids:
+            _delete_metric(sdk, workspace_id, metric_id)
 
 
 def run_agentic_metric_skill(
