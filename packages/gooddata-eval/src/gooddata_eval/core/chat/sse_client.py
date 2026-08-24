@@ -165,7 +165,7 @@ def _handle_multipart(content: dict[str, Any], acc: _SseAccumulator) -> None:
 def _handle_reasoning(content: dict[str, Any], acc: _SseAccumulator) -> None:
     summary = content.get("summary", "")
     if summary:
-        acc.reasoning_steps.append({"summary": summary})
+        acc.reasoning_steps.append({"summary": summary, "ts": round(time.monotonic() - acc.t0, 3)})
 
 
 def _handle_tool_call(content: dict[str, Any], acc: _SseAccumulator) -> None:
@@ -202,6 +202,7 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
         "toolCallEvents": acc.tool_call_events,
         "reasoningStepCount": len(acc.reasoning_steps),
         "reasoningSteps": [step["summary"] for step in acc.reasoning_steps],
+        "reasoningStepEvents": acc.reasoning_steps,
     }
     if acc.visualizations:
         payload["createdVisualizations"] = {

@@ -5,7 +5,7 @@ import httpx
 import pytest
 from gooddata_eval.core.chat import sse_client as sse_mod
 from gooddata_eval.core.chat.sse_client import ChatClient, ChatError, TransientChatError, parse_sse_lines
-from gooddata_eval.core.models import DatasetItem, ToolCallEvent, build_latency_breakdown
+from gooddata_eval.core.models import DatasetItem, ReasoningStepEvent, ToolCallEvent, build_latency_breakdown
 
 
 def test_parse_sse_lines_collects_text_and_visualization(fixtures_dir):
@@ -94,12 +94,47 @@ def test_parse_sse_lines_stamps_call_and_result_receipt_time(monkeypatch):
 
 
 def test_build_latency_breakdown_sums_by_tool_name():
+    # Adjacent, back-to-back calls (no gap between them) so the only two labels are the
+    # tools themselves -- the tool_end-to-tool_start gap case is covered separately below.
     events = [
         ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5),
-        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=3.0, result_ts=4.0),
-        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=4.0, result_ts=64.2),
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=2.5, result_ts=3.5),
+        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=3.5, result_ts=63.7),
     ]
-    assert build_latency_breakdown(events) == {"search_tool": 3.5, "create_metric_alert": 60.2}
+    assert build_latency_breakdown(events) == {"tool:search_tool": 3.5, "tool:create_metric_alert": 60.2}
+
+
+def test_build_latency_breakdown_attributes_gaps_to_reasoning_steps():
+    # search_tool runs 0-2.5s. Then a gap: the model emits a reasoning step at 2.5s, then
+    # goes idle until the next tool call starts at 5.0s -- that whole 2.5s idle gap belongs
+    # to the reasoning step, not to "search_tool" (which already finished) or nothing.
+    tool_events = [
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5),
+        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=65.0),
+    ]
+    reasoning_events = [ReasoningStepEvent(summary="Picking the right metric", ts=2.5)]
+    result = build_latency_breakdown(tool_events, reasoning_events)
+    assert result == {
+        "tool:search_tool": 2.5,
+        "reasoning:Picking the right metric": 2.5,
+        "tool:create_metric_alert": 60.0,
+    }
+
+
+def test_build_latency_breakdown_gap_with_no_reasoning_events_gets_a_catch_all_label():
+    # A gap between two tool calls with zero reasoning events supplied at all (e.g. an
+    # older chat backend, or reasoning capture disabled) must not be silently dropped --
+    # it needs a label that doesn't fake having a real summary for it.
+    tool_events = [
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5),
+        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=65.0),
+    ]
+    result = build_latency_breakdown(tool_events, reasoning_step_events=None)
+    assert result == {
+        "tool:search_tool": 2.5,
+        "reasoning:(before first step)": 2.5,
+        "tool:create_metric_alert": 60.0,
+    }
 
 
 def test_build_latency_breakdown_skips_calls_missing_a_timestamp():
@@ -253,6 +288,17 @@ def test_parse_sse_lines_reasoning_steps_empty_when_no_reasoning_events():
     result = parse_sse_lines(lines)
     assert result.reasoning_step_count == 0
     assert result.reasoning_steps == []
+
+
+def test_parse_sse_lines_stamps_reasoning_step_receipt_time(monkeypatch):
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([100.0, 104.5, 110.0]).__next__)
+    lines = [
+        'data: {"item": {"role": "assistant", "content": {"type": "reasoning", "summary": "step one"}}}',
+        'data: {"item": {"role": "assistant", "content": {"type": "reasoning", "summary": "step two"}}}',
+    ]
+    result = parse_sse_lines(lines)
+    assert [e.summary for e in result.reasoning_step_events] == ["step one", "step two"]
+    assert [e.ts for e in result.reasoning_step_events] == [4.5, 10.0]
 
 
 def test_parse_sse_lines_prefers_multipart_viz_over_adhoc_fallback():

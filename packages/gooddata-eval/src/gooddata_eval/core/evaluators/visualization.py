@@ -205,6 +205,8 @@ class VisualizationEvaluator:
             rank_key=(ev.strict_pass, ev.strict_checks_passed_count),
             detail={
                 **evaluation_result_detail(ev),
-                "latency_breakdown": build_latency_breakdown(chat_result.tool_call_events),
+                "latency_breakdown": build_latency_breakdown(
+                    chat_result.tool_call_events, chat_result.reasoning_step_events
+                ),
             },
         )

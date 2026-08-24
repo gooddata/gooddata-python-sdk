@@ -90,19 +90,64 @@ class ToolCallEvent(BaseModel):
             return None
 
 
-def build_latency_breakdown(tool_call_events: list[ToolCallEvent]) -> dict[str, float]:
-    """Wall time per tool name, summed across calls, from call receipt to result receipt.
+class ReasoningStepEvent(BaseModel):
+    """One reasoning step with its client-observed receipt time (see ToolCallEvent.call_ts)."""
+
+    summary: str
+    ts: float
+
+
+def build_latency_breakdown(
+    tool_call_events: list[ToolCallEvent],
+    reasoning_step_events: list[ReasoningStepEvent] | None = None,
+) -> dict[str, float]:
+    """Wall time attributed to each tool call and each reasoning step in the turn.
+
+    Without ``reasoning_step_events``, this is just per-tool wall time (call receipt to
+    result receipt) summed by name -- the gaps between tool calls (the model "thinking")
+    are left unaccounted for.
+
+    With them, every point in the turn -- a tool call starting, a tool call's result
+    arriving, or a reasoning step being emitted -- is merged into one timeline and sorted.
+    The gap between consecutive points is charged to whatever was "active" during it: a
+    tool call while it's outstanding (call event to result event), or the most recently
+    emitted reasoning step's own summary otherwise (its gap runs until the next point,
+    whatever that turns out to be -- another reasoning step, or the next tool call
+    starting). This accounts for effectively the whole turn, not just its tool-call
+    portion; only the time before the first point and after the last (connection
+    setup/teardown) is left out, since this function has no reference to the turn's total
+    duration.
 
     Calls missing either timestamp (stalled, or from a chat backend that predates this
     capture) are skipped rather than counted as zero -- an absent entry means "unknown",
     not "instant".
     """
-    by_tool: dict[str, float] = {}
+    points: list[tuple[float, str, str]] = []  # (ts, kind, label); kind: tool_start/tool_end/reasoning
     for tc in tool_call_events:
         if tc.call_ts is None or tc.result_ts is None:
             continue
-        by_tool[tc.function_name] = by_tool.get(tc.function_name, 0.0) + (tc.result_ts - tc.call_ts)
-    return {name: round(secs, 2) for name, secs in by_tool.items()}
+        points.append((tc.call_ts, "tool_start", tc.function_name))
+        points.append((tc.result_ts, "tool_end", tc.function_name))
+    points.extend((rs.ts, "reasoning", rs.summary) for rs in reasoning_step_events or [])
+    points.sort(key=lambda p: p[0])
+
+    by_label: dict[str, float] = {}
+    current_reasoning_label = "reasoning:(before first step)"
+    for (ts, kind, label), (next_ts, _, _) in zip(points, points[1:]):
+        gap = next_ts - ts
+        if gap <= 0:
+            continue
+        if kind == "tool_start":
+            key = f"tool:{label}"
+        else:
+            # A tool call resolving, or a reasoning step being emitted, both hand control
+            # back to "whatever the model is doing until the next point" -- which is this
+            # reasoning step once one has been seen, else the pre-first-step catch-all.
+            key = f"reasoning:{label}" if kind == "reasoning" else current_reasoning_label
+        by_label[key] = by_label.get(key, 0.0) + gap
+        if kind == "reasoning":
+            current_reasoning_label = f"reasoning:{label}"
+    return {name: round(secs, 2) for name, secs in by_label.items()}
 
 
 class ChatResult(BaseModel):
@@ -119,6 +164,7 @@ class ChatResult(BaseModel):
     tool_call_events: list[ToolCallEvent] = Field(default_factory=list, alias="toolCallEvents")
     reasoning_step_count: int = Field(default=0, alias="reasoningStepCount")
     reasoning_steps: list[str] = Field(default_factory=list, alias="reasoningSteps")
+    reasoning_step_events: list[ReasoningStepEvent] = Field(default_factory=list, alias="reasoningStepEvents")
     conversation_id: str | None = Field(default=None, alias="conversationId")
     response_id: str | None = Field(default=None, alias="responseId")
     # True once gen-ai's response_ended event arrived.
