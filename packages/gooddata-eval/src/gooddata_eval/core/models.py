@@ -75,6 +75,12 @@ class ToolCallEvent(BaseModel):
     # tool-result events stream in. None when the call never got a result (stalled turn).
     call_ts: float | None = None
     result_ts: float | None = None
+    # This call's 0-based position among tool calls in the turn (mirrors
+    # ReasoningStepEvent.index) -- lets build_latency_breakdown's timeline point back at
+    # this exact ToolCallEvent (its arguments/result) even when the same tool is called
+    # more than once. Optional/None for callers that build a ToolCallEvent by hand (most
+    # existing tests, and any real event from a chat backend older than this capture).
+    index: int | None = None
 
     def parsed_arguments(self) -> dict[str, Any]:
         try:
@@ -115,65 +121,85 @@ _REASONING_TITLE_RE = re.compile(r"^\*\*(.+?)\*\*")
 _REASONING_LABEL_MAX_LEN = 60
 
 
-def _reasoning_label(step: "ReasoningStepEvent") -> str:
-    m = _REASONING_TITLE_RE.match(step.summary.strip())
-    title = m.group(1) if m else step.summary.strip().replace("\n", " ")
-    if len(title) > _REASONING_LABEL_MAX_LEN:
-        title = title[:_REASONING_LABEL_MAX_LEN] + "…"
-    return f"{step.index}:{title}"
+def _reasoning_title(summary: str) -> str:
+    m = _REASONING_TITLE_RE.match(summary.strip())
+    title = m.group(1) if m else summary.strip().replace("\n", " ")
+    return title if len(title) <= _REASONING_LABEL_MAX_LEN else title[:_REASONING_LABEL_MAX_LEN] + "…"
 
 
 def build_latency_breakdown(
     tool_call_events: list[ToolCallEvent],
     reasoning_step_events: list[ReasoningStepEvent] | None = None,
-) -> dict[str, float]:
-    """Wall time attributed to each tool call and each reasoning step in the turn.
+) -> list[dict]:
+    """The turn's tool calls and reasoning steps, in EXECUTION ORDER, each with its own
+    wall time -- reconstructs the actual pipeline, not just a per-name total.
 
-    Without ``reasoning_step_events``, this is just per-tool wall time (call receipt to
-    result receipt) summed by name -- the gaps between tool calls (the model "thinking")
-    are left unaccounted for.
+    Each entry: ``{"seq", "kind", "name", "index", "duration_s"}``.
+
+    - ``seq``: 0-based position in execution order across tools AND reasoning combined.
+      This is what answers "what ran before what" -- unlike a dict keyed by name, nothing
+      here is aggregated together just for sharing a label, so the same tool called twice
+      produces two separate entries in their real order, not one summed one.
+    - ``kind``: ``"tool"`` or ``"reasoning"``.
+    - ``name``: the tool's ``function_name``, or the reasoning step's title (see
+      ``_reasoning_title``).
+    - ``index``: this step's position within its OWN kind's source list --
+      ``ToolCallEvent.index`` for tools, ``ReasoningStepEvent.index`` for reasoning (the
+      same position it occupies in the ``.reasoning.json`` sidecar's ``reasoning`` list).
+      Use it to look up the full record -- the tool call's arguments/result, or the
+      reasoning step's full paragraph in the sidecar -- since this function only ever
+      keeps the short name/title. ``None`` for the "nothing reasoned yet" catch-all before
+      the first real reasoning step.
+    - ``duration_s``: wall time attributed to this step.
+
+    Without ``reasoning_step_events``, only tool-call entries are produced (call receipt
+    to result receipt) -- the gaps between them (the model "thinking") are left out
+    entirely rather than invented as a fake step.
 
     With them, every point in the turn -- a tool call starting, a tool call's result
     arriving, or a reasoning step being emitted -- is merged into one timeline and sorted.
-    The gap between consecutive points is charged to whatever was "active" during it: a
-    tool call while it's outstanding (call event to result event), or the most recently
-    emitted reasoning step's own summary otherwise (its gap runs until the next point,
-    whatever that turns out to be -- another reasoning step, or the next tool call
-    starting). This accounts for effectively the whole turn, not just its tool-call
-    portion; only the time before the first point and after the last (connection
-    setup/teardown) is left out, since this function has no reference to the turn's total
-    duration.
+    The gap between consecutive points becomes one entry, attributed to whatever was
+    "active" during it: the tool while its call is outstanding, or the most recently
+    emitted reasoning step otherwise (its gap runs until the next point, whatever that
+    turns out to be). This accounts for effectively the whole turn, not just its
+    tool-call portion; only the time before the first point and after the last
+    (connection setup/teardown) is left out, since this function has no reference to the
+    turn's total duration.
 
-    Calls missing either timestamp (stalled, or from a chat backend that predates this
-    capture) are skipped rather than counted as zero -- an absent entry means "unknown",
-    not "instant".
+    Tool calls missing either timestamp (stalled, or from a chat backend that predates
+    this capture) are skipped entirely rather than producing a zero-duration entry.
     """
-    points: list[tuple[float, str, str]] = []  # (ts, kind, label); kind: tool_start/tool_end/reasoning
+    points: list[tuple[float, str, str, int | None]] = []  # (ts, point_kind, name, index)
     for tc in tool_call_events:
         if tc.call_ts is None or tc.result_ts is None:
             continue
-        points.append((tc.call_ts, "tool_start", tc.function_name))
-        points.append((tc.result_ts, "tool_end", tc.function_name))
-    points.extend((rs.ts, "reasoning", _reasoning_label(rs)) for rs in reasoning_step_events or [])
+        points.append((tc.call_ts, "tool_start", tc.function_name, tc.index))
+        points.append((tc.result_ts, "tool_end", tc.function_name, tc.index))
+    points.extend(
+        (rs.ts, "reasoning", _reasoning_title(rs.summary), rs.index) for rs in reasoning_step_events or []
+    )
     points.sort(key=lambda p: p[0])
 
-    by_label: dict[str, float] = {}
-    current_reasoning_label = "reasoning:(before first step)"
-    for (ts, kind, label), (next_ts, _, _) in zip(points, points[1:]):
+    steps: list[dict] = []
+    current_reasoning_name, current_reasoning_index = "(before first step)", None
+    seq = 0
+    for (ts, point_kind, name, index), (next_ts, _, _, _) in zip(points, points[1:]):
         gap = next_ts - ts
         if gap <= 0:
             continue
-        if kind == "tool_start":
-            key = f"tool:{label}"
-        else:
-            # A tool call resolving, or a reasoning step being emitted, both hand control
-            # back to "whatever the model is doing until the next point" -- which is this
-            # reasoning step once one has been seen, else the pre-first-step catch-all.
-            key = f"reasoning:{label}" if kind == "reasoning" else current_reasoning_label
-        by_label[key] = by_label.get(key, 0.0) + gap
-        if kind == "reasoning":
-            current_reasoning_label = f"reasoning:{label}"
-    return {name: round(secs, 2) for name, secs in by_label.items()}
+        if point_kind == "tool_start":
+            step_kind, step_name, step_index = "tool", name, index
+        elif point_kind == "reasoning":
+            step_kind, step_name, step_index = "reasoning", name, index
+        else:  # tool_end -- control passes to whatever reasoning is (or isn't yet) active
+            step_kind, step_name, step_index = "reasoning", current_reasoning_name, current_reasoning_index
+        steps.append(
+            {"seq": seq, "kind": step_kind, "name": step_name, "index": step_index, "duration_s": round(gap, 2)}
+        )
+        seq += 1
+        if point_kind == "reasoning":
+            current_reasoning_name, current_reasoning_index = name, index
+    return steps
 
 
 class ChatResult(BaseModel):

@@ -91,17 +91,25 @@ def test_parse_sse_lines_stamps_call_and_result_receipt_time(monkeypatch):
     tc = result.tool_call_events[0]
     assert tc.call_ts == 5.0
     assert tc.result_ts == 30.5
+    assert tc.index == 0
 
 
-def test_build_latency_breakdown_sums_by_tool_name():
-    # Adjacent, back-to-back calls (no gap between them) so the only two labels are the
-    # tools themselves -- the tool_end-to-tool_start gap case is covered separately below.
+def test_build_latency_breakdown_gives_repeated_tool_calls_separate_entries_in_order():
+    # Same tool called twice, back-to-back (no gap between them). A dict keyed by tool
+    # name would sum these into one number and lose which call was slower -- each call
+    # must stay its own entry, in the order it actually ran, identifiable by its index.
     events = [
-        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5),
-        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=2.5, result_ts=3.5),
-        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=3.5, result_ts=63.7),
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5, index=0),
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=2.5, result_ts=3.5, index=1),
+        ToolCallEvent(
+            function_name="create_metric_alert", function_arguments="{}", call_ts=3.5, result_ts=63.7, index=2
+        ),
     ]
-    assert build_latency_breakdown(events) == {"tool:search_tool": 3.5, "tool:create_metric_alert": 60.2}
+    assert build_latency_breakdown(events) == [
+        {"seq": 0, "kind": "tool", "name": "search_tool", "index": 0, "duration_s": 2.5},
+        {"seq": 1, "kind": "tool", "name": "search_tool", "index": 1, "duration_s": 1.0},
+        {"seq": 2, "kind": "tool", "name": "create_metric_alert", "index": 2, "duration_s": 60.2},
+    ]
 
 
 def test_build_latency_breakdown_attributes_gaps_to_reasoning_steps():
@@ -109,29 +117,28 @@ def test_build_latency_breakdown_attributes_gaps_to_reasoning_steps():
     # goes idle until the next tool call starts at 5.0s -- that whole 2.5s idle gap belongs
     # to the reasoning step, not to "search_tool" (which already finished) or nothing.
     tool_events = [
-        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5),
-        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=65.0),
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5, index=0),
+        ToolCallEvent(
+            function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=65.0, index=1
+        ),
     ]
     reasoning_events = [ReasoningStepEvent(summary="Picking the right metric", ts=2.5, index=0)]
     result = build_latency_breakdown(tool_events, reasoning_events)
-    assert result == {
-        "tool:search_tool": 2.5,
-        # The leading "0:" is this step's index -- the same position it occupies in
-        # ChatResult.reasoning_steps / the .reasoning.json sidecar's ordered list, so the
-        # two files can be cross-referenced by an exact index instead of matching on
-        # (non-unique) title text.
-        "reasoning:0:Picking the right metric": 2.5,
-        "tool:create_metric_alert": 60.0,
-    }
+    assert result == [
+        {"seq": 0, "kind": "tool", "name": "search_tool", "index": 0, "duration_s": 2.5},
+        {"seq": 1, "kind": "reasoning", "name": "Picking the right metric", "index": 0, "duration_s": 2.5},
+        {"seq": 2, "kind": "tool", "name": "create_metric_alert", "index": 1, "duration_s": 60.0},
+    ]
 
 
-def test_build_latency_breakdown_uses_bold_title_as_reasoning_label():
-    # Real reasoning summaries are a bolded title followed by a full paragraph -- the
-    # label must be just the title, not the whole thing (unreadable as a dict key). A
-    # second tool call after the reasoning step gives its gap somewhere to end.
+def test_build_latency_breakdown_uses_bold_title_as_reasoning_name():
+    # Real reasoning summaries are a bolded title followed by a full paragraph -- "name"
+    # must be just the title, not the whole thing.
     tool_events = [
-        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5),
-        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=6.0),
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5, index=0),
+        ToolCallEvent(
+            function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=6.0, index=1
+        ),
     ]
     reasoning_events = [
         ReasoningStepEvent(
@@ -139,53 +146,88 @@ def test_build_latency_breakdown_uses_bold_title_as_reasoning_label():
         )
     ]
     result = build_latency_breakdown(tool_events, reasoning_events)
-    assert "reasoning:0:Picking the right metric" in result
-    assert not any("Lots more detail" in key for key in result)
+    reasoning_step = next(s for s in result if s["kind"] == "reasoning")
+    assert reasoning_step["name"] == "Picking the right metric"
+    assert "Lots more detail" not in reasoning_step["name"]
 
 
-def test_build_latency_breakdown_reasoning_label_includes_its_sidecar_index():
+def test_build_latency_breakdown_disambiguates_reasoning_steps_sharing_a_title_by_index():
     # Two reasoning steps sharing the same title (a real, common occurrence) must stay
-    # distinguishable -- their index makes each key unique even when the title repeats.
+    # distinguishable via "index" even though "name" repeats.
     tool_events = [
-        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=1.0),
-        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=4.0, result_ts=5.0),
-        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=8.0, result_ts=9.0),
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=1.0, index=0),
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=4.0, result_ts=5.0, index=1),
+        ToolCallEvent(
+            function_name="create_metric_alert", function_arguments="{}", call_ts=8.0, result_ts=9.0, index=2
+        ),
     ]
     reasoning_events = [
         ReasoningStepEvent(summary="**Considering data analysis**", ts=1.0, index=0),
         ReasoningStepEvent(summary="**Considering data analysis**", ts=5.0, index=1),
     ]
     result = build_latency_breakdown(tool_events, reasoning_events)
-    assert result["reasoning:0:Considering data analysis"] == 3.0
-    assert result["reasoning:1:Considering data analysis"] == 3.0
+    reasoning_steps = [s for s in result if s["kind"] == "reasoning"]
+    assert [s["index"] for s in reasoning_steps] == [0, 1]
+    assert all(s["name"] == "Considering data analysis" for s in reasoning_steps)
+    assert [s["duration_s"] for s in reasoning_steps] == [3.0, 3.0]
 
 
-def test_build_latency_breakdown_truncates_untitled_reasoning_labels():
+def test_build_latency_breakdown_truncates_untitled_reasoning_names():
     tool_events = [
-        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5),
-        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=6.0),
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5, index=0),
+        ToolCallEvent(
+            function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=6.0, index=1
+        ),
     ]
     long_summary = "x" * 200
     reasoning_events = [ReasoningStepEvent(summary=long_summary, ts=2.5, index=0)]
     result = build_latency_breakdown(tool_events, reasoning_events)
-    (label,) = (k for k in result if k.startswith("reasoning:"))
-    assert len(label) < len(long_summary)
+    reasoning_step = next(s for s in result if s["kind"] == "reasoning")
+    assert len(reasoning_step["name"]) < len(long_summary)
 
 
-def test_build_latency_breakdown_gap_with_no_reasoning_events_gets_a_catch_all_label():
+def test_build_latency_breakdown_seq_reflects_true_execution_order():
+    # Interleaved on purpose: reasoning, tool, reasoning, tool -- seq must follow actual
+    # chronological order, not group all tools first or all reasoning first.
+    tool_events = [
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=1.0, result_ts=2.0, index=0),
+        ToolCallEvent(
+            function_name="create_metric_alert", function_arguments="{}", call_ts=4.0, result_ts=5.0, index=1
+        ),
+    ]
+    reasoning_events = [
+        ReasoningStepEvent(summary="**First**", ts=0.0, index=0),
+        ReasoningStepEvent(summary="**Second**", ts=3.0, index=1),
+    ]
+    result = build_latency_breakdown(tool_events, reasoning_events)
+    # "First" appears twice: once for the 0.0-1.0 gap before search_tool starts, and again
+    # for the 2.0-3.0 gap after it resolves -- "First" is still the last-emitted reasoning
+    # step until "Second" itself arrives at 3.0, so that gap is correctly its too.
+    assert [(s["seq"], s["kind"], s["name"]) for s in result] == [
+        (0, "reasoning", "First"),
+        (1, "tool", "search_tool"),
+        (2, "reasoning", "First"),
+        (3, "reasoning", "Second"),
+        (4, "tool", "create_metric_alert"),
+    ]
+
+
+def test_build_latency_breakdown_gap_with_no_reasoning_events_gets_a_catch_all_name():
     # A gap between two tool calls with zero reasoning events supplied at all (e.g. an
     # older chat backend, or reasoning capture disabled) must not be silently dropped --
-    # it needs a label that doesn't fake having a real summary for it.
+    # it needs a name that doesn't fake having a real summary for it.
     tool_events = [
-        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5),
-        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=65.0),
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5, index=0),
+        ToolCallEvent(
+            function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=65.0, index=1
+        ),
     ]
     result = build_latency_breakdown(tool_events, reasoning_step_events=None)
-    assert result == {
-        "tool:search_tool": 2.5,
-        "reasoning:(before first step)": 2.5,
-        "tool:create_metric_alert": 60.0,
-    }
+    assert result == [
+        {"seq": 0, "kind": "tool", "name": "search_tool", "index": 0, "duration_s": 2.5},
+        {"seq": 1, "kind": "reasoning", "name": "(before first step)", "index": None, "duration_s": 2.5},
+        {"seq": 2, "kind": "tool", "name": "create_metric_alert", "index": 1, "duration_s": 60.0},
+    ]
 
 
 def test_build_latency_breakdown_skips_calls_missing_a_timestamp():
@@ -193,7 +235,7 @@ def test_build_latency_breakdown_skips_calls_missing_a_timestamp():
         ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=None),
         ToolCallEvent(function_name="create_metric_alert", function_arguments="{}"),
     ]
-    assert build_latency_breakdown(events) == {}
+    assert build_latency_breakdown(events) == []
 
 
 def test_parse_sse_lines_raw_transport_error_also_carries_partial_result():

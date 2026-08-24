@@ -172,13 +172,15 @@ def _handle_reasoning(content: dict[str, Any], acc: _SseAccumulator) -> None:
 
 def _handle_tool_call(content: dict[str, Any], acc: _SseAccumulator) -> None:
     call_id = content.get("callId", "")
-    acc.call_id_to_event_index[call_id] = len(acc.tool_call_events)
+    idx = len(acc.tool_call_events)
+    acc.call_id_to_event_index[call_id] = idx
     acc.tool_call_events.append(
         {
             "functionName": content.get("name", ""),
             "functionArguments": json.dumps(content.get("arguments", {})),
             "result": None,
             "call_ts": round(time.monotonic() - acc.t0, 3),
+            "index": idx,
         }
     )
     # Stash visualization definition from create_adhoc_visualization so we can

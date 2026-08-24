@@ -174,6 +174,7 @@ def _execute_single_run(
     response_id: str | None = None
     turn_offset = 0.0  # each turn's call_ts/ts restarts near 0 -- shift by prior turns' wall time
     reasoning_index_offset = 0  # ditto for ReasoningStepEvent.index, which also restarts per turn
+    tool_index_offset = 0  # ditto for ToolCallEvent.index
     simulated_response_guide = expected_outputs[0]  # primary candidate guides the simulated user
 
     current_result = client.send_message(conversation_id, question)
@@ -186,11 +187,14 @@ def _execute_single_run(
                 tc.call_ts += turn_offset
             if tc.result_ts is not None:
                 tc.result_ts += turn_offset
+            if tc.index is not None:
+                tc.index += tool_index_offset
         for rs in current_result.reasoning_step_events:
             rs.ts += turn_offset
             rs.index += reasoning_index_offset
         all_tool_call_events.extend(current_result.tool_call_events)
         all_reasoning_step_events.extend(current_result.reasoning_step_events)
+        tool_index_offset += len(current_result.tool_call_events)
         reasoning_index_offset += len(current_result.reasoning_step_events)
         reasoning_steps.extend(current_result.reasoning_steps or [])
         response_id = current_result.response_id or response_id
