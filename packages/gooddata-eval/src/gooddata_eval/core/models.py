@@ -92,10 +92,19 @@ class ToolCallEvent(BaseModel):
 
 
 class ReasoningStepEvent(BaseModel):
-    """One reasoning step with its client-observed receipt time (see ToolCallEvent.call_ts)."""
+    """One reasoning step with its client-observed receipt time (see ToolCallEvent.call_ts).
+
+    ``index`` is this step's 0-based position among reasoning steps in the turn -- the same
+    position it occupies in ``ChatResult.reasoning_steps`` and, downstream, in the
+    ``.reasoning.json`` sidecar's ``reasoning`` list. It's embedded in
+    ``build_latency_breakdown``'s label precisely so the two files can be cross-referenced
+    by an exact index instead of fuzzy-matching on title text (which is not unique -- the
+    same title can recur, e.g. two distinct "Considering data analysis" steps).
+    """
 
     summary: str
     ts: float
+    index: int
 
 
 # Reasoning summaries are full paragraphs, e.g. "**Identifying analytics needs**\n\nI'm
@@ -106,12 +115,12 @@ _REASONING_TITLE_RE = re.compile(r"^\*\*(.+?)\*\*")
 _REASONING_LABEL_MAX_LEN = 60
 
 
-def _reasoning_label(summary: str) -> str:
-    m = _REASONING_TITLE_RE.match(summary.strip())
-    if m:
-        return m.group(1)
-    stripped = summary.strip().replace("\n", " ")
-    return stripped if len(stripped) <= _REASONING_LABEL_MAX_LEN else stripped[:_REASONING_LABEL_MAX_LEN] + "…"
+def _reasoning_label(step: "ReasoningStepEvent") -> str:
+    m = _REASONING_TITLE_RE.match(step.summary.strip())
+    title = m.group(1) if m else step.summary.strip().replace("\n", " ")
+    if len(title) > _REASONING_LABEL_MAX_LEN:
+        title = title[:_REASONING_LABEL_MAX_LEN] + "…"
+    return f"{step.index}:{title}"
 
 
 def build_latency_breakdown(
@@ -145,7 +154,7 @@ def build_latency_breakdown(
             continue
         points.append((tc.call_ts, "tool_start", tc.function_name))
         points.append((tc.result_ts, "tool_end", tc.function_name))
-    points.extend((rs.ts, "reasoning", _reasoning_label(rs.summary)) for rs in reasoning_step_events or [])
+    points.extend((rs.ts, "reasoning", _reasoning_label(rs)) for rs in reasoning_step_events or [])
     points.sort(key=lambda p: p[0])
 
     by_label: dict[str, float] = {}

@@ -165,7 +165,9 @@ def _handle_multipart(content: dict[str, Any], acc: _SseAccumulator) -> None:
 def _handle_reasoning(content: dict[str, Any], acc: _SseAccumulator) -> None:
     summary = content.get("summary", "")
     if summary:
-        acc.reasoning_steps.append({"summary": summary, "ts": round(time.monotonic() - acc.t0, 3)})
+        acc.reasoning_steps.append(
+            {"summary": summary, "ts": round(time.monotonic() - acc.t0, 3), "index": len(acc.reasoning_steps)}
+        )
 
 
 def _handle_tool_call(content: dict[str, Any], acc: _SseAccumulator) -> None:

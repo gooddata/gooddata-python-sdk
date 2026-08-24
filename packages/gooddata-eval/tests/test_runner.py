@@ -277,6 +277,33 @@ def test_run_items_reasoning_steps_empty_when_chat_result_has_none():
     assert report.items[0].reasoning_steps == []
 
 
+def test_run_items_reasoning_steps_come_from_the_best_run_not_the_last_one():
+    """reasoning_steps (and any latency_breakdown inside best_detail) must describe the
+    SAME run -- otherwise the .reasoning.json sidecar and detail.latency_breakdown can
+    each be narrating a different attempt whenever the best-ranked run isn't the last one.
+    """
+
+    class _BestIsFirstBackend:
+        def __init__(self):
+            self.calls = 0
+
+        def ask(self, item: DatasetItem) -> ChatResult:
+            self.calls += 1
+            if self.calls == 1:  # passes -- this becomes `best`
+                return ChatResult.model_validate(
+                    {
+                        "createdVisualizations": {"objects": [_viz_obj()], "reasoning": ""},
+                        "reasoningSteps": ["run 1: correct approach"],
+                    }
+                )
+            # run 2 fails, runs last -- must NOT overwrite reasoning_steps from run 1
+            return ChatResult.model_validate({"textResponse": "which metric?", "reasoningSteps": ["run 2: gave up"]})
+
+    report = run_items([_item()], _BestIsFirstBackend(), runs=2)
+    assert report.items[0].pass_at_k is True
+    assert report.items[0].reasoning_steps == ["run 1: correct approach"]
+
+
 def test_run_items_reasoning_steps_keeps_earlier_run_when_later_run_is_empty():
     """A later run with no reasoning events must not clobber an earlier run's steps (runner.py:120's `or`)."""
 

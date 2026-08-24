@@ -112,11 +112,15 @@ def test_build_latency_breakdown_attributes_gaps_to_reasoning_steps():
         ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5),
         ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=65.0),
     ]
-    reasoning_events = [ReasoningStepEvent(summary="Picking the right metric", ts=2.5)]
+    reasoning_events = [ReasoningStepEvent(summary="Picking the right metric", ts=2.5, index=0)]
     result = build_latency_breakdown(tool_events, reasoning_events)
     assert result == {
         "tool:search_tool": 2.5,
-        "reasoning:Picking the right metric": 2.5,
+        # The leading "0:" is this step's index -- the same position it occupies in
+        # ChatResult.reasoning_steps / the .reasoning.json sidecar's ordered list, so the
+        # two files can be cross-referenced by an exact index instead of matching on
+        # (non-unique) title text.
+        "reasoning:0:Picking the right metric": 2.5,
         "tool:create_metric_alert": 60.0,
     }
 
@@ -130,11 +134,30 @@ def test_build_latency_breakdown_uses_bold_title_as_reasoning_label():
         ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=6.0),
     ]
     reasoning_events = [
-        ReasoningStepEvent(summary="**Picking the right metric**\n\nLots more detail follows here.", ts=2.5)
+        ReasoningStepEvent(
+            summary="**Picking the right metric**\n\nLots more detail follows here.", ts=2.5, index=0
+        )
     ]
     result = build_latency_breakdown(tool_events, reasoning_events)
-    assert "reasoning:Picking the right metric" in result
+    assert "reasoning:0:Picking the right metric" in result
     assert not any("Lots more detail" in key for key in result)
+
+
+def test_build_latency_breakdown_reasoning_label_includes_its_sidecar_index():
+    # Two reasoning steps sharing the same title (a real, common occurrence) must stay
+    # distinguishable -- their index makes each key unique even when the title repeats.
+    tool_events = [
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=1.0),
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=4.0, result_ts=5.0),
+        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=8.0, result_ts=9.0),
+    ]
+    reasoning_events = [
+        ReasoningStepEvent(summary="**Considering data analysis**", ts=1.0, index=0),
+        ReasoningStepEvent(summary="**Considering data analysis**", ts=5.0, index=1),
+    ]
+    result = build_latency_breakdown(tool_events, reasoning_events)
+    assert result["reasoning:0:Considering data analysis"] == 3.0
+    assert result["reasoning:1:Considering data analysis"] == 3.0
 
 
 def test_build_latency_breakdown_truncates_untitled_reasoning_labels():
@@ -143,7 +166,7 @@ def test_build_latency_breakdown_truncates_untitled_reasoning_labels():
         ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=6.0),
     ]
     long_summary = "x" * 200
-    reasoning_events = [ReasoningStepEvent(summary=long_summary, ts=2.5)]
+    reasoning_events = [ReasoningStepEvent(summary=long_summary, ts=2.5, index=0)]
     result = build_latency_breakdown(tool_events, reasoning_events)
     (label,) = (k for k in result if k.startswith("reasoning:"))
     assert len(label) < len(long_summary)
@@ -327,6 +350,7 @@ def test_parse_sse_lines_stamps_reasoning_step_receipt_time(monkeypatch):
     result = parse_sse_lines(lines)
     assert [e.summary for e in result.reasoning_step_events] == ["step one", "step two"]
     assert [e.ts for e in result.reasoning_step_events] == [4.5, 10.0]
+    assert [e.index for e in result.reasoning_step_events] == [0, 1]
 
 
 def test_parse_sse_lines_prefers_multipart_viz_over_adhoc_fallback():

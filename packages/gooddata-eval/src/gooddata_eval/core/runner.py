@@ -111,19 +111,24 @@ def _run_one_item(
 
     evaluator = get_evaluator(item.test_kind)
     best: ItemEvaluation | None = None
+    # Tracked alongside `best`, not just the last run's chat_result -- `best_detail` (and
+    # any latency_breakdown inside it) must describe the SAME run as `reasoning_steps`
+    # (the .reasoning.json sidecar's source), or the two files can disagree about which
+    # attempt they're each describing whenever the best-ranked run isn't also the last one.
+    best_chat_result: ChatResult | None = None
     try:
         for run_index in range(1, runs + 1):
             t0 = time.perf_counter()
             chat_result = backend.ask(item)
             report.conversation_id = getattr(chat_result, "conversation_id", None) or report.conversation_id
             report.response_id = getattr(chat_result, "response_id", None) or report.response_id
-            report.reasoning_steps = getattr(chat_result, "reasoning_steps", None) or report.reasoning_steps
             evaluation = evaluator.evaluate(item, chat_result)
             latency = time.perf_counter() - t0
             report.runs += 1
             report.latency_s += latency
             if best is None or evaluation.rank_key > best.rank_key:
                 best = evaluation
+                best_chat_result = chat_result
             if evaluation.passed:
                 report.pass_at_k = True
             if on_run_done is not None:
@@ -134,10 +139,14 @@ def _run_one_item(
         report.error = f"{type(e).__name__}: {e}" + (f" [conversation_id={conv_id}]" if conv_id else "")
         if best is not None:
             report.best_detail = best.detail
+        if best_chat_result is not None:
+            report.reasoning_steps = getattr(best_chat_result, "reasoning_steps", None) or []
         return report
 
     if best is not None:
         report.best_detail = best.detail
+    if best_chat_result is not None:
+        report.reasoning_steps = getattr(best_chat_result, "reasoning_steps", None) or []
     return report
 
 
