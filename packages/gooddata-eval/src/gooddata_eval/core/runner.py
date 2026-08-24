@@ -30,6 +30,11 @@ class ItemReport:
     error: str | None = None
     runs: int = 0
     latency_s: float = 0.0  # total wall-clock across this item's runs
+    # The specific latency of whichever run best_detail/reasoning_steps describe -- NOT
+    # comparable to avg_latency_s (a mean across all K runs) once runs > 1: a
+    # detail.latency_breakdown always belongs to this one run, and checking how much of
+    # IT that breakdown explains needs this number, not the cross-run average.
+    best_run_latency_s: float | None = None
     best_detail: dict = field(default_factory=dict)
     conversation_id: str | None = None
     response_id: str | None = None
@@ -116,6 +121,7 @@ def _run_one_item(
     # (the .reasoning.json sidecar's source), or the two files can disagree about which
     # attempt they're each describing whenever the best-ranked run isn't also the last one.
     best_chat_result: ChatResult | None = None
+    best_run_latency: float | None = None
     try:
         for run_index in range(1, runs + 1):
             t0 = time.perf_counter()
@@ -129,6 +135,7 @@ def _run_one_item(
             if best is None or evaluation.rank_key > best.rank_key:
                 best = evaluation
                 best_chat_result = chat_result
+                best_run_latency = latency
             if evaluation.passed:
                 report.pass_at_k = True
             if on_run_done is not None:
@@ -139,12 +146,14 @@ def _run_one_item(
         report.error = f"{type(e).__name__}: {e}" + (f" [conversation_id={conv_id}]" if conv_id else "")
         if best is not None:
             report.best_detail = best.detail
+            report.best_run_latency_s = best_run_latency
         if best_chat_result is not None:
             report.reasoning_steps = getattr(best_chat_result, "reasoning_steps", None) or []
         return report
 
     if best is not None:
         report.best_detail = best.detail
+        report.best_run_latency_s = best_run_latency
     if best_chat_result is not None:
         report.reasoning_steps = getattr(best_chat_result, "reasoning_steps", None) or []
     return report
