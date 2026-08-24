@@ -168,6 +168,19 @@ def test_check_recipients_matches_internal_recipients_via_resolved_user_id():
     mock_sdk._client.entities_api.get_all_entities_users.assert_called_once_with(filter="email=in=('user@example.com')")
 
 
+def test_check_recipients_matches_internal_recipients_as_a_bare_string():
+    # internal_recipients is declared `anyOf: [array of string, string, null]` in the
+    # create_metric_alert tool schema -- a single id as a bare string is schema-legal,
+    # not a malformed call. Confirmed live: gpt-5.5 passed a bare string for a
+    # single-recipient alert and this comparison silently failed before the fix.
+    expected = _normalize_expected_output({"Recipients": ["user@example.com"]})
+    mock_sdk = MagicMock()
+    mock_sdk._client.entities_api.get_all_entities_users.return_value.data = [
+        MagicMock(id="user.abc123"),
+    ]
+    assert _check_recipients(expected, {"internal_recipients": "user.abc123"}, sdk=mock_sdk) is True
+
+
 def test_check_recipients_escapes_apostrophe_in_email_for_rsql_filter():
     # o'hara@example.com must not break the RSQL filter string -- the apostrophe
     # has to be escaped before interpolation, same as the query engine requires.
@@ -656,6 +669,16 @@ def test_evaluate_agentic_alert_skill_returns_reasoning_steps_on_pass():
     assert outcome.reasoning_steps == ["thinking about it"]
     assert outcome.conversation_id == "conv-1"
     assert outcome.response_id is None
+    assert outcome.detail == {
+        "alert_created": True,
+        "operator_correct": True,
+        "threshold_correct": True,
+        "trigger_correct": True,
+        "filters_correct": True,
+        "metric_correct": True,
+        "recipients_correct": True,
+        "actual_alert_arguments": {"operator": "GREATER_THAN", "threshold": 500},
+    }
 
 
 def test_evaluate_agentic_alert_skill_attaches_reasoning_steps_to_exception_on_fail():
@@ -686,3 +709,13 @@ def test_evaluate_agentic_alert_skill_attaches_reasoning_steps_to_exception_on_f
     assert exc_info.value.reasoning_steps == ["confused thinking"]
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id is None
+    assert exc_info.value.detail == {
+        "alert_created": False,
+        "operator_correct": False,
+        "threshold_correct": False,
+        "trigger_correct": False,
+        "filters_correct": False,
+        "metric_correct": False,
+        "recipients_correct": False,
+        "actual_alert_arguments": {},
+    }

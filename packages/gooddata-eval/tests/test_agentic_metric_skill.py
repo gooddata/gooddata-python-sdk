@@ -522,6 +522,12 @@ def test_evaluate_agentic_metric_skill_returns_reasoning_steps_on_pass():
     assert outcome.reasoning_steps == ["thinking about it"]
     assert outcome.conversation_id == "conv-1"
     assert outcome.response_id is None
+    assert outcome.detail == {
+        "metric_created": True,
+        "maql_correct": True,
+        "expected_maql_candidates": ["SELECT {metric/foo}"],
+        "actual_maql": "SELECT {metric/foo}",
+    }
 
 
 def test_evaluate_agentic_metric_skill_attaches_reasoning_steps_to_exception_on_fail():
@@ -548,5 +554,11 @@ def test_evaluate_agentic_metric_skill_attaches_reasoning_steps_to_exception_on_
             max_iterations=1,
         )
     assert exc_info.value.reasoning_steps == ["confused thinking"]
+    assert exc_info.value.detail == {
+        "metric_created": False,
+        "maql_correct": False,
+        "expected_maql_candidates": ["SELECT {metric/foo}"],
+        "actual_maql": "",
+    }
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id is None

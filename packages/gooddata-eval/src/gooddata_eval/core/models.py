@@ -108,11 +108,19 @@ class ChatResult(BaseModel):
 
 
 class AgenticEvalOutcome(BaseModel):
-    """Reasoning trace and trace-lookup IDs returned by an evaluate_agentic_* call on success."""
+    """Reasoning trace, trace-lookup IDs, and per-kind diagnostics from an evaluate_agentic_* call.
+
+    ``detail`` mirrors the single-shot path's ``ItemEvaluation.detail`` -- a kind-specific
+    dict of whatever diagnostic fields that evaluator already tracks internally (e.g.
+    ``actual_maql`` for metric_skill, the full per-check breakdown for visualization). Both
+    ``reasoning_steps``/etc. and ``detail`` are populated on success; on failure the same
+    fields are attached directly to the raised ``*AssertionError`` instead.
+    """
 
     reasoning_steps: list[str] = Field(default_factory=list)
     conversation_id: str | None = None
     response_id: str | None = None
+    detail: dict = Field(default_factory=dict)
 
 
 class SummaryInput(BaseModel):

@@ -393,6 +393,24 @@ def run_agentic_conversation(
     )
 
 
+def _conversation_detail(result: ConversationResult) -> dict:
+    return {
+        "full_skill_coverage": result.full_skill_coverage,
+        "total_clarification_turns": result.total_clarification_turns,
+        "turns": [
+            {
+                "turn_id": tr.turn_id,
+                "expected_skill": tr.expected_skill,
+                "skill_routing": tr.skill_routing,
+                "output_present": tr.output_present,
+                "output_correct": tr.output_correct,
+                "activated_skills": tr.activated_skills,
+            }
+            for tr in result.turn_results
+        ],
+    }
+
+
 class ConversationAssertionError(AssertionError):
     """Raised when a conversation evaluation fails."""
 
@@ -400,6 +418,7 @@ class ConversationAssertionError(AssertionError):
     reasoning_steps: list[str]
     conversation_id: str
     response_id: str | None
+    detail: dict
 
 
 def evaluate_agentic_conversation(
@@ -511,9 +530,11 @@ def evaluate_agentic_conversation(
         exc.reasoning_steps = result.reasoning_steps
         exc.conversation_id = result.conversation_id
         exc.response_id = result.response_id
+        exc.detail = _conversation_detail(result)
         raise exc
     return AgenticEvalOutcome(
         reasoning_steps=result.reasoning_steps,
         conversation_id=result.conversation_id,
         response_id=result.response_id,
+        detail=_conversation_detail(result),
     )

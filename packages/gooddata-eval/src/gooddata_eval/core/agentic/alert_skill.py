@@ -160,8 +160,18 @@ def _check_recipients(expected: CatalogMetricAlert, actual_args: dict, sdk: Good
         act_recip = []
     if set(expected.recipients) == set(act_recip or []):
         return True
-    act_internal = actual_args.get("internal_recipients")
-    if sdk is not None and isinstance(act_internal, list) and act_internal:
+    act_internal_raw = actual_args.get("internal_recipients")
+    # internal_recipients is declared `anyOf: [array of string, string, null]` in the
+    # create_metric_alert tool schema -- a single id as a bare string is schema-legal,
+    # not a malformed call, so it needs the same string/list normalization already
+    # applied to recipients/external_recipients above.
+    if isinstance(act_internal_raw, str):
+        act_internal = [act_internal_raw]
+    elif isinstance(act_internal_raw, list):
+        act_internal = act_internal_raw
+    else:
+        act_internal = []
+    if sdk is not None and act_internal:
         internal_recipient_ids = _resolve_internal_recipient_ids(sdk, expected.recipients)
         if internal_recipient_ids & set(act_internal):
             return True
@@ -584,6 +594,7 @@ class AlertSkillAssertionError(AssertionError):
     reasoning_steps: list[str]
     conversation_id: str
     response_id: str | None
+    detail: dict
 
 
 def evaluate_agentic_alert_skill(
@@ -697,9 +708,31 @@ def evaluate_agentic_alert_skill(
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
+        exc.detail = {
+            "alert_created": ev.alert_created,
+            "operator_correct": ev.operator_correct,
+            "threshold_correct": ev.threshold_correct,
+            "trigger_correct": ev.trigger_correct,
+            "filters_correct": ev.filters_correct,
+            "metric_correct": ev.metric_correct,
+            "recipients_correct": ev.recipients_correct,
+            "actual_alert_arguments": best.actual_alert_arguments,
+        }
         raise exc
+    best = summary.best
+    ev = best.eval
     return AgenticEvalOutcome(
-        reasoning_steps=summary.best.reasoning_steps,
-        conversation_id=summary.best.conversation_id,
-        response_id=summary.best.response_id,
+        reasoning_steps=best.reasoning_steps,
+        conversation_id=best.conversation_id,
+        response_id=best.response_id,
+        detail={
+            "alert_created": ev.alert_created,
+            "operator_correct": ev.operator_correct,
+            "threshold_correct": ev.threshold_correct,
+            "trigger_correct": ev.trigger_correct,
+            "filters_correct": ev.filters_correct,
+            "metric_correct": ev.metric_correct,
+            "recipients_correct": ev.recipients_correct,
+            "actual_alert_arguments": best.actual_alert_arguments,
+        },
     )
