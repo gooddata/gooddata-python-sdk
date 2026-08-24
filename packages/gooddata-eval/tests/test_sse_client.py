@@ -85,6 +85,28 @@ def test_parse_sse_lines_raw_transport_error_also_carries_partial_result():
     assert partial.tool_call_events[0].function_name == "create_key_driver_analysis"
 
 
+def test_parse_sse_lines_remote_protocol_error_mid_stream_is_retryable():
+    # httpx.RemoteProtocolError raised from `next(it)` (mid-stream, not at connect time) must
+    # come out as TransientChatError -- otherwise _is_retryable_exc never sees the raw
+    # RemoteProtocolError (only the ChatError parse_sse_lines wraps it in) and the retry this
+    # class exists for never fires. Same partial_result guarantee as any other transport error.
+    def _lines():
+        yield (
+            'data: {"item": {"role": "assistant", "content": '
+            + json.dumps({"type": "toolCall", "callId": "c1", "name": "create_key_driver_analysis"})
+            + "}}"
+        )
+        yield ""
+        raise httpx.RemoteProtocolError("peer closed connection without sending complete message body")
+
+    with pytest.raises(TransientChatError) as ei:
+        parse_sse_lines(_lines())
+    partial = ei.value.partial_result
+    assert partial is not None
+    assert len(partial.tool_call_events) == 1
+    assert partial.tool_call_events[0].function_name == "create_key_driver_analysis"
+
+
 def test_parse_sse_lines_a_real_parsing_bug_propagates_uncaught_not_as_a_chat_error():
     # A malformed payload (here: "item" is a string, not a dict) crashes the processing
     # code itself with a plain AttributeError -- must surface loudly as that bug, not get
@@ -372,6 +394,26 @@ def test_create_conversation_retries_then_succeeds(monkeypatch):
         calls["n"] += 1
         if calls["n"] < 3:
             return httpx.Response(503)
+        return httpx.Response(200, json={"conversationId": "abc"})
+
+    client = _client_with_handler(handler)
+    assert client.create_conversation() == "abc"
+    assert calls["n"] == 3
+    assert sleeps == [5, 10]
+
+
+def test_create_conversation_retries_remote_protocol_error(monkeypatch):
+    # "peer closed connection without sending complete message body" -- a pure
+    # network flake, not a real agent/content failure. Previously not retried
+    # at all: hard-failed on the first occurrence with zero retry attempts.
+    sleeps = []
+    monkeypatch.setattr(sse_mod.time, "sleep", lambda s: sleeps.append(s))
+    calls = {"n": 0}
+
+    def handler(request):
+        calls["n"] += 1
+        if calls["n"] < 3:
+            raise httpx.RemoteProtocolError("peer closed connection without sending complete message body")
         return httpx.Response(200, json={"conversationId": "abc"})
 
     client = _client_with_handler(handler)
