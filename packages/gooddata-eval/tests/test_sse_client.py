@@ -121,6 +121,34 @@ def test_build_latency_breakdown_attributes_gaps_to_reasoning_steps():
     }
 
 
+def test_build_latency_breakdown_uses_bold_title_as_reasoning_label():
+    # Real reasoning summaries are a bolded title followed by a full paragraph -- the
+    # label must be just the title, not the whole thing (unreadable as a dict key). A
+    # second tool call after the reasoning step gives its gap somewhere to end.
+    tool_events = [
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5),
+        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=6.0),
+    ]
+    reasoning_events = [
+        ReasoningStepEvent(summary="**Picking the right metric**\n\nLots more detail follows here.", ts=2.5)
+    ]
+    result = build_latency_breakdown(tool_events, reasoning_events)
+    assert "reasoning:Picking the right metric" in result
+    assert not any("Lots more detail" in key for key in result)
+
+
+def test_build_latency_breakdown_truncates_untitled_reasoning_labels():
+    tool_events = [
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5),
+        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=5.0, result_ts=6.0),
+    ]
+    long_summary = "x" * 200
+    reasoning_events = [ReasoningStepEvent(summary=long_summary, ts=2.5)]
+    result = build_latency_breakdown(tool_events, reasoning_events)
+    (label,) = (k for k in result if k.startswith("reasoning:"))
+    assert len(label) < len(long_summary)
+
+
 def test_build_latency_breakdown_gap_with_no_reasoning_events_gets_a_catch_all_label():
     # A gap between two tool calls with zero reasoning events supplied at all (e.g. an
     # older chat backend, or reasoning capture disabled) must not be silently dropped --

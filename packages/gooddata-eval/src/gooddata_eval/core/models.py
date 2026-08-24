@@ -5,6 +5,7 @@ Ported from gdc-nas tavern-e2e app/llm_as_judge/schemas/chat.py.
 """
 
 import json
+import re
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -97,6 +98,22 @@ class ReasoningStepEvent(BaseModel):
     ts: float
 
 
+# Reasoning summaries are full paragraphs, e.g. "**Identifying analytics needs**\n\nI'm
+# analyzing..." -- using the whole thing as a latency_breakdown label would make every
+# entry an unreadable wall of text. Same bolded-title convention this repo's own reasoning
+# tooling already keys off of (see gdc-mic-ai-evaluation's generate_dashboard_summary.py).
+_REASONING_TITLE_RE = re.compile(r"^\*\*(.+?)\*\*")
+_REASONING_LABEL_MAX_LEN = 60
+
+
+def _reasoning_label(summary: str) -> str:
+    m = _REASONING_TITLE_RE.match(summary.strip())
+    if m:
+        return m.group(1)
+    stripped = summary.strip().replace("\n", " ")
+    return stripped if len(stripped) <= _REASONING_LABEL_MAX_LEN else stripped[:_REASONING_LABEL_MAX_LEN] + "…"
+
+
 def build_latency_breakdown(
     tool_call_events: list[ToolCallEvent],
     reasoning_step_events: list[ReasoningStepEvent] | None = None,
@@ -128,7 +145,7 @@ def build_latency_breakdown(
             continue
         points.append((tc.call_ts, "tool_start", tc.function_name))
         points.append((tc.result_ts, "tool_end", tc.function_name))
-    points.extend((rs.ts, "reasoning", rs.summary) for rs in reasoning_step_events or [])
+    points.extend((rs.ts, "reasoning", _reasoning_label(rs.summary)) for rs in reasoning_step_events or [])
     points.sort(key=lambda p: p[0])
 
     by_label: dict[str, float] = {}
