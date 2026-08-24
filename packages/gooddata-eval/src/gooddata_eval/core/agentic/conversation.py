@@ -15,7 +15,13 @@ from gooddata_eval.core.agentic.alert_skill import render_alert_proposal
 from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids, _extract_metric_result
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import AgenticEvalOutcome, ChatResult, ToolCallEvent
+from gooddata_eval.core.models import (
+    AgenticEvalOutcome,
+    ChatResult,
+    ReasoningStepEvent,
+    ToolCallEvent,
+    build_latency_breakdown,
+)
 from gooddata_eval.core.scoring import (
     check_filters,
     check_viz_type,
@@ -254,6 +260,8 @@ class ConversationResult:
     total_clarification_turns: int
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
+    tool_call_events: list[ToolCallEvent] = field(default_factory=list)
+    reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
 
 
 def run_agentic_conversation(
@@ -287,6 +295,14 @@ def run_agentic_conversation(
     created_metric_ids: list[str] = []
     reasoning_steps: list[str] = []
     response_id: str | None = None
+    conversation_tool_call_events: list[ToolCallEvent] = []
+    conversation_reasoning_step_events: list[ReasoningStepEvent] = []
+    # Every send_message() call (across every logical turn AND every clarification
+    # sub-turn within it) restarts call_ts/ts near 0 -- these run across the whole
+    # conversation, not reset per logical turn, so every one of those calls shifts them.
+    turn_offset = 0.0
+    tool_index_offset = 0
+    reasoning_index_offset = 0
 
     try:
         if initial_conversation_id is not None:
@@ -322,7 +338,22 @@ def run_agentic_conversation(
             for _iter in range(max_clarification_turns + 1):
                 chat_result = client.send_message(conversation_id, current_message)
                 final_result = chat_result
+                for tc in chat_result.tool_call_events or []:
+                    if tc.call_ts is not None:
+                        tc.call_ts += turn_offset
+                    if tc.result_ts is not None:
+                        tc.result_ts += turn_offset
+                    if tc.index is not None:
+                        tc.index += tool_index_offset
+                for rs in chat_result.reasoning_step_events or []:
+                    rs.ts += turn_offset
+                    rs.index += reasoning_index_offset
                 all_tool_calls.extend(chat_result.tool_call_events or [])
+                conversation_tool_call_events.extend(chat_result.tool_call_events or [])
+                conversation_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
+                tool_index_offset += len(chat_result.tool_call_events or [])
+                reasoning_index_offset += len(chat_result.reasoning_step_events or [])
+                turn_offset += chat_result.turn_wall_clock_sec or 0.0
                 reasoning_steps.extend(chat_result.reasoning_steps or [])
                 response_id = chat_result.response_id or response_id
 
@@ -390,6 +421,8 @@ def run_agentic_conversation(
         total_clarification_turns=total_clarification_turns,
         reasoning_steps=reasoning_steps,
         response_id=response_id,
+        tool_call_events=conversation_tool_call_events,
+        reasoning_step_events=conversation_reasoning_step_events,
     )
 
 
@@ -408,6 +441,7 @@ def _conversation_detail(result: ConversationResult) -> dict:
             }
             for tr in result.turn_results
         ],
+        "latency_breakdown": build_latency_breakdown(result.tool_call_events, result.reasoning_step_events),
     }
 
 

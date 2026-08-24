@@ -12,7 +12,7 @@ from gooddata_sdk import GoodDataSdk
 
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import AgenticEvalOutcome, ToolCallEvent
+from gooddata_eval.core.models import AgenticEvalOutcome, ReasoningStepEvent, ToolCallEvent, build_latency_breakdown
 
 try:
     from openai import OpenAI as _OpenAI
@@ -150,6 +150,8 @@ class MetricRunResult:
     total_turns: float
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
+    tool_call_events: list[ToolCallEvent] = field(default_factory=list)
+    reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
 
 
 @dataclass
@@ -239,6 +241,11 @@ def _execute_single_metric_run(
     current_question = question
     reasoning_steps: list[str] = []
     response_id: str | None = None
+    all_tool_call_events: list[ToolCallEvent] = []
+    all_reasoning_step_events: list[ReasoningStepEvent] = []
+    turn_offset = 0.0  # each turn's call_ts/ts restarts near 0 -- shift by prior turns' wall time
+    tool_index_offset = 0
+    reasoning_index_offset = 0
 
     try:
         for _iteration in range(max_iterations):
@@ -246,6 +253,21 @@ def _execute_single_metric_run(
             chat_result = client.send_message(conversation_id, current_question)
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
+            for tc in chat_result.tool_call_events or []:
+                if tc.call_ts is not None:
+                    tc.call_ts += turn_offset
+                if tc.result_ts is not None:
+                    tc.result_ts += turn_offset
+                if tc.index is not None:
+                    tc.index += tool_index_offset
+            for rs in chat_result.reasoning_step_events or []:
+                rs.ts += turn_offset
+                rs.index += reasoning_index_offset
+            all_tool_call_events.extend(chat_result.tool_call_events or [])
+            all_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
+            tool_index_offset += len(chat_result.tool_call_events or [])
+            reasoning_index_offset += len(chat_result.reasoning_step_events or [])
+            turn_offset += chat_result.turn_wall_clock_sec or 0.0
             for metric_id in _extract_created_metric_ids(chat_result.tool_call_events or []):
                 if metric_id not in created_metric_ids:
                     created_metric_ids.append(metric_id)
@@ -276,6 +298,8 @@ def _execute_single_metric_run(
             total_turns=float(turns),
             reasoning_steps=reasoning_steps,
             response_id=response_id,
+            tool_call_events=all_tool_call_events,
+            reasoning_step_events=all_reasoning_step_events,
         )
     finally:
         for metric_id in created_metric_ids:
@@ -457,6 +481,7 @@ def evaluate_agentic_metric_skill(
             "maql_correct": best.maql_correct,
             "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
             "actual_maql": best.actual_maql,
+            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
         }
         raise exc
     best = summary.best
@@ -470,5 +495,6 @@ def evaluate_agentic_metric_skill(
             "maql_correct": best.maql_correct,
             "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
             "actual_maql": best.actual_maql,
+            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
         },
     )

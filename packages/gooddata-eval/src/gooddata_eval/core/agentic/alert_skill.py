@@ -14,7 +14,7 @@ from gooddata_sdk import GoodDataSdk
 from gooddata_eval.core.agentic._catalog import CatalogMetricAlert
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import AgenticEvalOutcome, ToolCallEvent
+from gooddata_eval.core.models import AgenticEvalOutcome, ReasoningStepEvent, ToolCallEvent, build_latency_breakdown
 
 try:
     from openai import OpenAI as _OpenAI
@@ -345,6 +345,8 @@ class AlertRunResult:
     actual_alert_arguments: dict
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
+    tool_call_events: list[ToolCallEvent] = field(default_factory=list)
+    reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
 
 
 @dataclass
@@ -495,6 +497,11 @@ def run_agentic_alert_skill(
             tool_called = False
             reasoning_steps: list[str] = []
             response_id: str | None = None
+            all_tool_call_events: list[ToolCallEvent] = []
+            all_reasoning_step_events: list[ReasoningStepEvent] = []
+            turn_offset = 0.0  # each turn's call_ts/ts restarts near 0 -- shift by prior turns' wall time
+            tool_index_offset = 0
+            reasoning_index_offset = 0
             # conversation_history stores prior turns for GPT-4o context.
             # Roles follow GPT-4o's perspective: "assistant"=agent text, "user"=sim-user reply.
             conversation_history: list = []
@@ -504,6 +511,21 @@ def run_agentic_alert_skill(
                 chat_result = client.send_message(conv_id, current_question)
                 reasoning_steps.extend(chat_result.reasoning_steps or [])
                 response_id = chat_result.response_id or response_id
+                for tc in chat_result.tool_call_events or []:
+                    if tc.call_ts is not None:
+                        tc.call_ts += turn_offset
+                    if tc.result_ts is not None:
+                        tc.result_ts += turn_offset
+                    if tc.index is not None:
+                        tc.index += tool_index_offset
+                for rs in chat_result.reasoning_step_events or []:
+                    rs.ts += turn_offset
+                    rs.index += reasoning_index_offset
+                all_tool_call_events.extend(chat_result.tool_call_events or [])
+                all_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
+                tool_index_offset += len(chat_result.tool_call_events or [])
+                reasoning_index_offset += len(chat_result.reasoning_step_events or [])
+                turn_offset += chat_result.turn_wall_clock_sec or 0.0
                 alert_id, actual_args, tool_called = _extract_alert_call(chat_result.tool_call_events or [])
                 if tool_called:
                     alert_id_to_delete = alert_id
@@ -541,6 +563,8 @@ def run_agentic_alert_skill(
                 actual_alert_arguments=actual_args,
                 reasoning_steps=reasoning_steps,
                 response_id=response_id,
+                tool_call_events=all_tool_call_events,
+                reasoning_step_events=all_reasoning_step_events,
             )
         finally:
             if alert_id_to_delete:
@@ -717,6 +741,7 @@ def evaluate_agentic_alert_skill(
             "metric_correct": ev.metric_correct,
             "recipients_correct": ev.recipients_correct,
             "actual_alert_arguments": best.actual_alert_arguments,
+            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
         }
         raise exc
     best = summary.best
@@ -734,5 +759,6 @@ def evaluate_agentic_alert_skill(
             "metric_correct": ev.metric_correct,
             "recipients_correct": ev.recipients_correct,
             "actual_alert_arguments": best.actual_alert_arguments,
+            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
         },
     )

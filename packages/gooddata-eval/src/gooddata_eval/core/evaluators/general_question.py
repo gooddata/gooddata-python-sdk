@@ -4,7 +4,7 @@
 from gooddata_eval.core.evaluators._llm_judge import LLMJudge
 from gooddata_eval.core.evaluators._text_utils import extract_text
 from gooddata_eval.core.evaluators.base import ItemEvaluation
-from gooddata_eval.core.models import ChatResult, DatasetItem
+from gooddata_eval.core.models import ChatResult, DatasetItem, build_latency_breakdown
 
 _EVALUATION_STEPS = [
     "Read the INPUT (the user's question) and the EXPECTED OUTPUT (a description of what a correct answer must contain).",
@@ -30,5 +30,11 @@ class GeneralQuestionEvaluator:
         return ItemEvaluation(
             passed=passed,
             rank_key=(int(passed),),
-            detail={"judge_reasoning": reasoning, "actual_output": actual},
+            detail={
+                "judge_reasoning": reasoning,
+                "actual_output": actual,
+                "latency_breakdown": build_latency_breakdown(
+                    chat_result.tool_call_events, chat_result.reasoning_step_events
+                ),
+            },
         )
