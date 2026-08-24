@@ -173,6 +173,8 @@ def _handle_reasoning(content: dict[str, Any], acc: _SseAccumulator) -> None:
 def _handle_tool_call(content: dict[str, Any], acc: _SseAccumulator) -> None:
     call_id = content.get("callId", "")
     idx = len(acc.tool_call_events)
+    import sys as _sys
+    print(f"[DEBUG toolCall] idx={idx} callId={call_id!r} name={content.get('name')!r} already_seen={call_id in acc.call_id_to_event_index}", file=_sys.stderr)
     acc.call_id_to_event_index[call_id] = idx
     acc.tool_call_events.append(
         {
@@ -194,6 +196,8 @@ def _handle_tool_call(content: dict[str, Any], acc: _SseAccumulator) -> None:
 def _handle_tool_result(content: dict[str, Any], acc: _SseAccumulator) -> None:
     call_id = content.get("callId", "")
     idx = acc.call_id_to_event_index.get(call_id)
+    import sys as _sys
+    print(f"[DEBUG toolResult] callId={call_id!r} matched_idx={idx}", file=_sys.stderr)
     if idx is not None:
         acc.tool_call_events[idx]["result"] = content.get("result", "")
         acc.tool_call_events[idx]["result_ts"] = round(time.monotonic() - acc.t0, 3)
