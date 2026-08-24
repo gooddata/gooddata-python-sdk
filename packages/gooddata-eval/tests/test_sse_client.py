@@ -5,7 +5,7 @@ import httpx
 import pytest
 from gooddata_eval.core.chat import sse_client as sse_mod
 from gooddata_eval.core.chat.sse_client import ChatClient, ChatError, TransientChatError, parse_sse_lines
-from gooddata_eval.core.models import DatasetItem
+from gooddata_eval.core.models import DatasetItem, ToolCallEvent, build_latency_breakdown
 
 
 def test_parse_sse_lines_collects_text_and_visualization(fixtures_dir):
@@ -61,6 +61,53 @@ def test_parse_sse_lines_error_carries_partial_result_with_tool_calls_already_se
     assert len(partial.tool_call_events) == 1
     assert partial.tool_call_events[0].function_name == "create_key_driver_analysis"
     assert partial.tool_call_events[0].result == '{"success": true}'
+
+
+def test_parse_sse_lines_stamps_call_and_result_receipt_time(monkeypatch):
+    # t0 (accumulator construction) = 100.0, tool_call received at 105.0, tool_result
+    # received at 130.5 -- call_ts/result_ts are offsets from t0, so 5.0 and 30.5.
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([100.0, 105.0, 130.5]).__next__)
+    lines = [
+        json.dumps(
+            {
+                "item": {
+                    "role": "assistant",
+                    "content": {"type": "toolCall", "callId": "c1", "name": "create_key_driver_analysis"},
+                }
+            }
+        ),
+        "",
+        json.dumps(
+            {
+                "item": {
+                    "role": "tool",
+                    "content": {"type": "toolResult", "callId": "c1", "result": json.dumps({"success": True})},
+                }
+            }
+        ),
+    ]
+    lines = [f"data: {line}" if line else line for line in lines]
+    result = parse_sse_lines(lines)
+    tc = result.tool_call_events[0]
+    assert tc.call_ts == 5.0
+    assert tc.result_ts == 30.5
+
+
+def test_build_latency_breakdown_sums_by_tool_name():
+    events = [
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=2.5),
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=3.0, result_ts=4.0),
+        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}", call_ts=4.0, result_ts=64.2),
+    ]
+    assert build_latency_breakdown(events) == {"search_tool": 3.5, "create_metric_alert": 60.2}
+
+
+def test_build_latency_breakdown_skips_calls_missing_a_timestamp():
+    events = [
+        ToolCallEvent(function_name="search_tool", function_arguments="{}", call_ts=0.0, result_ts=None),
+        ToolCallEvent(function_name="create_metric_alert", function_arguments="{}"),
+    ]
+    assert build_latency_breakdown(events) == {}
 
 
 def test_parse_sse_lines_raw_transport_error_also_carries_partial_result():
@@ -351,7 +398,8 @@ def test_send_message_does_not_retry_non_transient(monkeypatch):
 
 
 def test_send_message_sets_turn_wall_clock_sec_on_success(monkeypatch):
-    monkeypatch.setattr(sse_mod.time, "monotonic", iter([100.0, 102.5]).__next__)
+    # 3 monotonic() calls per attempt now: t0, _SseAccumulator's own t0, final wall-clock.
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([100.0, 100.0, 102.5]).__next__)
     client = _client_with_handler(lambda request: httpx.Response(200, content=_OK_SSE))
     result = client.send_message("conv", "q")
     assert result.turn_wall_clock_sec == pytest.approx(2.5)
@@ -363,7 +411,8 @@ def test_send_message_wall_clock_excludes_retry_backoff(monkeypatch):
     # between attempts (harness/network overhead, not gen-ai's time) would inflate the
     # reported latency.
     monkeypatch.setattr(sse_mod.time, "sleep", lambda s: None)
-    monkeypatch.setattr(sse_mod.time, "monotonic", iter([1000.0, 1000.5, 2000.0, 2001.2]).__next__)
+    # 3 monotonic() calls per attempt now: t0, _SseAccumulator's own t0, final wall-clock.
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([1000.0, 1000.0, 1000.5, 2000.0, 2000.0, 2001.2]).__next__)
     calls = {"n": 0}
 
     def handler(request):
@@ -377,7 +426,8 @@ def test_send_message_wall_clock_excludes_retry_backoff(monkeypatch):
 
 
 def test_send_message_stamps_turn_wall_clock_sec_on_partial_result_too(monkeypatch):
-    monkeypatch.setattr(sse_mod.time, "monotonic", iter([50.0, 51.0]).__next__)
+    # 3 monotonic() calls now: t0, _SseAccumulator's own t0, partial-result wall-clock.
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([50.0, 50.0, 51.0]).__next__)
     client = _client_with_handler(lambda request: httpx.Response(200, content=_NONRETRY_SSE))
     with pytest.raises(ChatError) as ei:
         client.send_message("conv", "q")

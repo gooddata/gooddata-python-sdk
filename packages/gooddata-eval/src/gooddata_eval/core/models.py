@@ -69,6 +69,11 @@ class ToolCallEvent(BaseModel):
     function_name: str = Field(alias="functionName")
     function_arguments: str = Field(alias="functionArguments")
     result: str | None = None
+    # Client-observed receipt time (seconds since the turn's first SSE line), not a
+    # server-side execution measurement -- set by sse_client.py as the tool-call and
+    # tool-result events stream in. None when the call never got a result (stalled turn).
+    call_ts: float | None = None
+    result_ts: float | None = None
 
     def parsed_arguments(self) -> dict[str, Any]:
         try:
@@ -83,6 +88,21 @@ class ToolCallEvent(BaseModel):
             return json.loads(self.result)
         except json.JSONDecodeError:
             return None
+
+
+def build_latency_breakdown(tool_call_events: list[ToolCallEvent]) -> dict[str, float]:
+    """Wall time per tool name, summed across calls, from call receipt to result receipt.
+
+    Calls missing either timestamp (stalled, or from a chat backend that predates this
+    capture) are skipped rather than counted as zero -- an absent entry means "unknown",
+    not "instant".
+    """
+    by_tool: dict[str, float] = {}
+    for tc in tool_call_events:
+        if tc.call_ts is None or tc.result_ts is None:
+            continue
+        by_tool[tc.function_name] = by_tool.get(tc.function_name, 0.0) + (tc.result_ts - tc.call_ts)
+    return {name: round(secs, 2) for name, secs in by_tool.items()}
 
 
 class ChatResult(BaseModel):

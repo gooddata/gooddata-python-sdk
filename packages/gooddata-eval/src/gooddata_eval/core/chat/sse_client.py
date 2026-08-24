@@ -132,6 +132,11 @@ class _SseAccumulator:
     adhoc_viz_args: list[dict[str, Any]] = field(default_factory=list)
     response_id: str | None = None
     stream_ended: bool = False
+    # Reference point for call_ts/result_ts below -- client-observed receipt time, not a
+    # server timestamp, so only meaningful as an offset within this one turn. Wrapped in a
+    # lambda, not passed as `time.monotonic` directly -- a bare function reference binds at
+    # class-body execution (import time), before tests can monkeypatch `sse_mod.time.monotonic`.
+    t0: float = field(default_factory=lambda: time.monotonic())
 
 
 def _handle_text(content: dict[str, Any], acc: _SseAccumulator) -> None:
@@ -171,6 +176,7 @@ def _handle_tool_call(content: dict[str, Any], acc: _SseAccumulator) -> None:
             "functionName": content.get("name", ""),
             "functionArguments": json.dumps(content.get("arguments", {})),
             "result": None,
+            "call_ts": round(time.monotonic() - acc.t0, 3),
         }
     )
     # Stash visualization definition from create_adhoc_visualization so we can
@@ -186,6 +192,7 @@ def _handle_tool_result(content: dict[str, Any], acc: _SseAccumulator) -> None:
     idx = acc.call_id_to_event_index.get(call_id)
     if idx is not None:
         acc.tool_call_events[idx]["result"] = content.get("result", "")
+        acc.tool_call_events[idx]["result_ts"] = round(time.monotonic() - acc.t0, 3)
 
 
 def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
