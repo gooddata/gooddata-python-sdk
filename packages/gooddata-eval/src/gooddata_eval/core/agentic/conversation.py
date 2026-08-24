@@ -12,7 +12,7 @@ from gooddata_sdk import GoodDataSdk
 from pydantic import BaseModel
 
 from gooddata_eval.core.agentic.alert_skill import render_alert_proposal
-from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids
+from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids, _extract_metric_result
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import AgenticEvalOutcome, ChatResult, ToolCallEvent
@@ -120,26 +120,13 @@ def _check_output_present(turn: TurnDefinition, chat_result: ChatResult) -> bool
             and getattr(chat_result.created_visualizations, "objects", chat_result.created_visualizations)
         )
     if otype == "metric":
-        return any(tc.function_name == "create_metric" for tc in (chat_result.tool_call_events or []))
+        return _extract_metric_result(chat_result.tool_call_events or []) is not None
     if otype == "tool_call":
         expected_tool = turn.expected_tool_name
         if not expected_tool:
             return bool(chat_result.tool_call_events)
         return any(tc.function_name == expected_tool for tc in (chat_result.tool_call_events or []))
     return False
-
-
-def _extract_metric_from_turn(tool_call_events: list[ToolCallEvent]) -> dict | None:
-    """Extract the result payload from the create_metric tool call, if present."""
-    for tc in tool_call_events:
-        if tc.function_name != "create_metric":
-            continue
-        if not tc.result:
-            continue
-        result_data = tc.parsed_result()
-        if result_data is not None:
-            return result_data.get("data", result_data)
-    return None
 
 
 def _check_output_correct(turn: TurnDefinition, chat_result: ChatResult) -> bool | None:
@@ -186,7 +173,7 @@ def _check_output_correct(turn: TurnDefinition, chat_result: ChatResult) -> bool
         return all(results) if results else None
 
     if otype == "metric":
-        metric_result = _extract_metric_from_turn(chat_result.tool_call_events or [])
+        metric_result = _extract_metric_result(chat_result.tool_call_events or [])
         if not metric_result:
             return False
         return _normalize_maql(metric_result.get("maql", "")) == _normalize_maql(expected.get("maql", ""))
@@ -362,7 +349,7 @@ def run_agentic_conversation(
 
             # Capture metric output for $ref resolution in subsequent turns.
             if final_result and turn.expected_output_type == "metric":
-                metric_data = _extract_metric_from_turn(all_tool_calls)
+                metric_data = _extract_metric_result(all_tool_calls)
                 if metric_data:
                     turn_outputs[turn.turn_id] = metric_data
 

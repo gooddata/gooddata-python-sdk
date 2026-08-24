@@ -30,6 +30,14 @@ def _create_metric_tc(metric_id):
     return tc
 
 
+def _create_metric_tc_error(message):
+    tc = MagicMock(spec=ToolCallEvent)
+    tc.function_name = "create_metric"
+    tc.result = "{}"  # truthy; content comes from parsed_result
+    tc.parsed_result = lambda msg=message: {"data": {"isError": True, "error": {"text": msg}}}
+    return tc
+
+
 def _metric_turn_result(tool_calls):
     r = MagicMock()
     r.text_response = "done"
@@ -469,6 +477,47 @@ def test_run_agentic_conversation_records_a_failed_turn_when_a_ref_cannot_be_res
     assert result.turn_results[1].no_error is False
     assert result.turn_results[2].skill_success is True
     assert result.conversation_success is False
+
+
+def test_run_agentic_conversation_sends_the_next_turn_after_a_self_corrected_retry():
+    """QA-29053 regression: turn 1 self-corrects create_metric after a failed first attempt;
+    turn 2's message must still be sent, resolving its $ref against the successful retry."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _metric_turn_result([_skills_tc("metric"), _create_metric_tc_error("invalid MAQL"), _create_metric_tc("m1")]),
+        _viz_turn_result(text="Here is your chart", viz=[MagicMock()], tool_calls=[_skills_tc("visualization")]),
+    ]
+    fixture = ConversationFixture(
+        id="test-retry",
+        expected_skills=["metric", "visualization"],
+        turns=[
+            TurnDefinition(turn_id="t1", message="Create it", expected_skill="metric", expected_output_type="metric"),
+            TurnDefinition(
+                turn_id="t2",
+                message="Chart it",
+                expected_skill="visualization",
+                expected_output={"metrics": ["metric/$ref:t1.metric_id"]},
+            ),
+        ],
+    )
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+        )
+
+    assert mock_client.send_message.call_count == 2
+    mock_client.send_message.assert_any_call("conv-1", "Chart it")
+    assert result.turn_results[0].skill_success is True
+    assert result.turn_results[1].no_error is True
+    assert result.conversation_success is True
 
 
 def test_run_agentic_conversation_accumulates_reasoning_steps_across_turns():

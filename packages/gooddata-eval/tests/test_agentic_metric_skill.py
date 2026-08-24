@@ -12,12 +12,75 @@ from gooddata_eval.core.agentic.metric_skill import (
     MetricSkillAssertionError,
     SimulatedResponseError,
     _delete_metric,
+    _extract_metric_result,
     _normalize_maql,
     evaluate_agentic_metric_skill,
     generate_simulated_response,
     run_agentic_metric_skill,
 )
-from gooddata_eval.core.models import ChatResult
+from gooddata_eval.core.models import ChatResult, ToolCallEvent
+
+
+def _create_metric_call(result: str) -> ToolCallEvent:
+    return ToolCallEvent(function_name="create_metric", function_arguments="{}", result=result)
+
+
+_FAILED_RESULT = '{"data": {"isError": true, "error": {"text": "invalid MAQL"}}}'
+
+
+def test_extract_metric_result_skips_a_failed_retry_and_returns_the_successful_one():
+    """QA-29053 regression: agent self-corrects an invalid MAQL by retrying create_metric
+    within the same turn; the successful retry must be captured, not the failed first call."""
+    calls = [
+        _create_metric_call(_FAILED_RESULT),
+        _create_metric_call('{"data": {"metric_id": "m1", "maql": "SELECT {metric/foo}"}}'),
+    ]
+    assert _extract_metric_result(calls) == {"metric_id": "m1", "maql": "SELECT {metric/foo}"}
+
+
+def test_extract_metric_result_returns_none_when_every_attempt_failed():
+    calls = [_create_metric_call(_FAILED_RESULT), _create_metric_call(_FAILED_RESULT)]
+    assert _extract_metric_result(calls) is None
+
+
+def test_extract_metric_result_skips_a_failed_call_after_an_earlier_success():
+    # The failed call is last, so reversed() reaches it first and must skip past it.
+    calls = [_create_metric_call('{"data": {"metric_id": "m1"}}'), _create_metric_call(_FAILED_RESULT)]
+    assert _extract_metric_result(calls) == {"metric_id": "m1"}
+
+
+def test_extract_metric_result_prefers_the_most_recent_successful_call():
+    """Two distinct successful create_metric calls in one turn (not a retry after a
+    failure) -- the later one wins."""
+    calls = [
+        _create_metric_call('{"data": {"metric_id": "m1"}}'),
+        _create_metric_call('{"data": {"metric_id": "m2"}}'),
+    ]
+    assert _extract_metric_result(calls) == {"metric_id": "m2"}
+
+
+def test_extract_metric_result_skips_a_non_dict_payload():
+    # The non-dict payload is last, so reversed() reaches it first and must skip past it.
+    calls = [
+        _create_metric_call('{"data": {"metric_id": "m2"}}'),
+        _create_metric_call('{"data": [{"metric_id": "m1"}]}'),
+    ]
+    assert _extract_metric_result(calls) == {"metric_id": "m2"}
+
+
+def test_extract_metric_result_skips_a_non_dict_decoded_result():
+    # The whole decoded result (not just its "data" field) is a non-dict here.
+    calls = [_create_metric_call('{"metric_id": "m2"}'), _create_metric_call("[]")]
+    assert _extract_metric_result(calls) == {"metric_id": "m2"}
+
+
+def test_extract_metric_result_skips_an_empty_payload():
+    # The empty payload is last, so reversed() reaches it first and must skip past it.
+    calls = [
+        _create_metric_call('{"data": {"metric_id": "m2"}}'),
+        _create_metric_call('{"data": {}}'),
+    ]
+    assert _extract_metric_result(calls) == {"metric_id": "m2"}
 
 
 def test_normalize_maql_strips_whitespace():
@@ -266,6 +329,49 @@ def test_run_agentic_metric_skill_deletes_created_metric():
             max_iterations=1,
         )
     # The metric the run created is deleted on the way out, by its exact id, via the SDK.
+    mock_sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "foo_metric")
+
+
+def test_run_agentic_metric_skill_deletes_the_metric_created_by_a_self_corrected_retry():
+    """QA-29053 regression: a failed create_metric call followed by a successful retry, in the
+    same turn, used to leave metric_id_to_delete unset -- the metric the retry created leaked
+    into the shared workspace."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {
+            "textResponse": "done",
+            "toolCallEvents": [
+                {
+                    "functionName": "create_metric",
+                    "functionArguments": "{}",
+                    "result": '{"data": {"isError": true, "error": {"text": "invalid MAQL"}}}',
+                },
+                {
+                    "functionName": "create_metric",
+                    "functionArguments": "{}",
+                    "result": '{"data": {"maql": "SELECT {metric/foo}", "metric_id": "foo_metric"}}',
+                },
+            ],
+            "reasoningStepCount": 1,
+        }
+    )
+    with (
+        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.metric_skill.GoodDataSdk") as mock_sdk_cls,
+    ):
+        mock_sdk = mock_sdk_cls.create.return_value
+        summary = run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=1,
+        )
+    assert summary.best.metric_created is True
+    assert summary.best.maql_correct is True
     mock_sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "foo_metric")
 
 
