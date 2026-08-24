@@ -349,6 +349,7 @@ class MetricSkillAssertionError(AssertionError):
     reasoning_steps: list[str]
     conversation_id: str
     response_id: str | None
+    detail: dict
 
 
 def evaluate_agentic_metric_skill(
@@ -451,9 +452,23 @@ def evaluate_agentic_metric_skill(
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
+        exc.detail = {
+            "metric_created": best.metric_created,
+            "maql_correct": best.maql_correct,
+            "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
+            "actual_maql": best.actual_maql,
+        }
         raise exc
+    best = summary.best
+    expected_outputs_list = expected_output if isinstance(expected_output, list) else [expected_output]
     return AgenticEvalOutcome(
-        reasoning_steps=summary.best.reasoning_steps,
-        conversation_id=summary.best.conversation_id,
-        response_id=summary.best.response_id,
+        reasoning_steps=best.reasoning_steps,
+        conversation_id=best.conversation_id,
+        response_id=best.response_id,
+        detail={
+            "metric_created": best.metric_created,
+            "maql_correct": best.maql_correct,
+            "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
+            "actual_maql": best.actual_maql,
+        },
     )
