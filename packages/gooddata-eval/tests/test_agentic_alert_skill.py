@@ -168,6 +168,19 @@ def test_check_recipients_matches_internal_recipients_via_resolved_user_id():
     mock_sdk._client.entities_api.get_all_entities_users.assert_called_once_with(filter="email=in=('user@example.com')")
 
 
+def test_check_recipients_matches_internal_recipients_as_a_bare_string():
+    # internal_recipients is declared `anyOf: [array of string, string, null]` in the
+    # create_metric_alert tool schema -- a single id as a bare string is schema-legal,
+    # not a malformed call. Confirmed live: gpt-5.5 passed a bare string for a
+    # single-recipient alert and this comparison silently failed before the fix.
+    expected = _normalize_expected_output({"Recipients": ["user@example.com"]})
+    mock_sdk = MagicMock()
+    mock_sdk._client.entities_api.get_all_entities_users.return_value.data = [
+        MagicMock(id="user.abc123"),
+    ]
+    assert _check_recipients(expected, {"internal_recipients": "user.abc123"}, sdk=mock_sdk) is True
+
+
 def test_check_recipients_escapes_apostrophe_in_email_for_rsql_filter():
     # o'hara@example.com must not break the RSQL filter string -- the apostrophe
     # has to be escaped before interpolation, same as the query engine requires.
