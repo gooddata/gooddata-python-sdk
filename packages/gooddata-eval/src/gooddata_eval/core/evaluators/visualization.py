@@ -4,7 +4,13 @@
 from dataclasses import dataclass
 
 from gooddata_eval.core.evaluators.base import ItemEvaluation
-from gooddata_eval.core.models import ChatResult, CreatedVisualization, DatasetItem, ToolCallEvent
+from gooddata_eval.core.models import (
+    ChatResult,
+    CreatedVisualization,
+    DatasetItem,
+    ToolCallEvent,
+    build_latency_breakdown,
+)
 from gooddata_eval.core.scoring import (
     check_filters,
     check_viz_type,
@@ -197,5 +203,8 @@ class VisualizationEvaluator:
         return ItemEvaluation(
             passed=ev.strict_pass,
             rank_key=(ev.strict_pass, ev.strict_checks_passed_count),
-            detail=evaluation_result_detail(ev),
+            detail={
+                **evaluation_result_detail(ev),
+                "latency_breakdown": build_latency_breakdown(chat_result.tool_call_events),
+            },
         )

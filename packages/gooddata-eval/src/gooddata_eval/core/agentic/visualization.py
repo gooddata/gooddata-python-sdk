@@ -18,7 +18,7 @@ from gooddata_eval.core.evaluators.visualization import (
     _evaluate_against_candidates,
     evaluation_result_detail,
 )
-from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, ToolCallEvent
+from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, ToolCallEvent, build_latency_breakdown
 from gooddata_eval.core.scoring import get_dimension_uri_set, get_metric_uri_set, uri_to_display_name
 
 _DEFAULT_K = 2
@@ -37,6 +37,7 @@ class RunResult:
     total_steps: float
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
+    tool_call_events: list[ToolCallEvent] = field(default_factory=list)
 
 
 @dataclass
@@ -201,6 +202,7 @@ def _execute_single_run(
         total_steps=total_steps,
         reasoning_steps=reasoning_steps,
         response_id=response_id,
+        tool_call_events=all_tool_call_events,
     )
 
 
@@ -434,12 +436,18 @@ def evaluate_agentic_visualization(
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
-        exc.detail = evaluation_result_detail(ev)
+        exc.detail = {
+            **evaluation_result_detail(ev),
+            "latency_breakdown": build_latency_breakdown(best.tool_call_events),
+        }
         raise exc
     best = summary.best
     return AgenticEvalOutcome(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
-        detail=evaluation_result_detail(best.eval_result),
+        detail={
+            **evaluation_result_detail(best.eval_result),
+            "latency_breakdown": build_latency_breakdown(best.tool_call_events),
+        },
     )
