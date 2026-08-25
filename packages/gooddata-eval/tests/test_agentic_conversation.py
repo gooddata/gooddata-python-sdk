@@ -17,6 +17,9 @@ from gooddata_eval.core.models import ChatResult, ToolCallEvent
 
 def _skills_tc(*skills):
     tc = MagicMock(spec=ToolCallEvent)
+    tc.call_ts = None
+    tc.result_ts = None
+    tc.index = None
     tc.function_name = "set_skills"
     tc.parsed_arguments = lambda: {"skills": list(skills)}
     return tc
@@ -24,6 +27,9 @@ def _skills_tc(*skills):
 
 def _create_metric_tc(metric_id):
     tc = MagicMock(spec=ToolCallEvent)
+    tc.call_ts = None
+    tc.result_ts = None
+    tc.index = None
     tc.function_name = "create_metric"
     tc.result = "{}"  # truthy so cleanup collection processes it; content comes from parsed_result
     tc.parsed_result = lambda mid=metric_id: {"data": {"metric_id": mid, "maql": "SELECT 1"}}
@@ -32,6 +38,9 @@ def _create_metric_tc(metric_id):
 
 def _create_metric_tc_error(message):
     tc = MagicMock(spec=ToolCallEvent)
+    tc.call_ts = None
+    tc.result_ts = None
+    tc.index = None
     tc.function_name = "create_metric"
     tc.result = "{}"  # truthy; content comes from parsed_result
     tc.parsed_result = lambda msg=message: {"data": {"isError": True, "error": {"text": msg}}}
@@ -43,6 +52,8 @@ def _metric_turn_result(tool_calls):
     r.text_response = "done"
     r.created_visualizations = None
     r.tool_call_events = tool_calls
+    r.reasoning_step_events = []
+    r.turn_wall_clock_sec = None
     return r
 
 
@@ -100,12 +111,17 @@ def test_run_agentic_conversation_single_turn():
     mock_client = MagicMock()
     mock_client.create_conversation.return_value = "conv-1"
     tc = MagicMock(spec=ToolCallEvent)
+    tc.call_ts = None
+    tc.result_ts = None
+    tc.index = None
     tc.function_name = "set_skills"
     tc.parsed_arguments = lambda: {"skills": ["visualization"]}
     mock_chat_result = MagicMock()
     mock_chat_result.text_response = "Here is your visualization"
     mock_chat_result.created_visualizations = [MagicMock()]
     mock_chat_result.tool_call_events = [tc]
+    mock_chat_result.reasoning_step_events = []
+    mock_chat_result.turn_wall_clock_sec = None
     mock_client.send_message.return_value = mock_chat_result
 
     fixture = ConversationFixture(
@@ -139,9 +155,14 @@ def test_run_agentic_conversation_uses_initial_conversation_id():
     mock_chat_result.text_response = "Here is your visualization"
     mock_chat_result.created_visualizations = [MagicMock()]
     tc = MagicMock(spec=ToolCallEvent)
+    tc.call_ts = None
+    tc.result_ts = None
+    tc.index = None
     tc.function_name = "set_skills"
     tc.parsed_arguments = lambda: {"skills": ["visualization"]}
     mock_chat_result.tool_call_events = [tc]
+    mock_chat_result.reasoning_step_events = []
+    mock_chat_result.turn_wall_clock_sec = None
     mock_client.send_message.return_value = mock_chat_result
 
     fixture = ConversationFixture(
@@ -176,9 +197,14 @@ def test_run_agentic_conversation_creates_and_deletes_conversation():
     mock_chat_result.text_response = "Here is your visualization"
     mock_chat_result.created_visualizations = [MagicMock()]
     tc = MagicMock(spec=ToolCallEvent)
+    tc.call_ts = None
+    tc.result_ts = None
+    tc.index = None
     tc.function_name = "set_skills"
     tc.parsed_arguments = lambda: {"skills": ["visualization"]}
     mock_chat_result.tool_call_events = [tc]
+    mock_chat_result.reasoning_step_events = []
+    mock_chat_result.turn_wall_clock_sec = None
     mock_client.send_message.return_value = mock_chat_result
 
     fixture = ConversationFixture(
@@ -369,6 +395,8 @@ def _viz_turn_result(text=None, viz=None, tool_calls=()):
     r.text_response = text
     r.created_visualizations = viz
     r.tool_call_events = list(tool_calls)
+    r.reasoning_step_events = []
+    r.turn_wall_clock_sec = None
     r.alert_proposals = []
     return r
 
@@ -524,6 +552,9 @@ def test_run_agentic_conversation_accumulates_reasoning_steps_across_turns():
     mock_client = MagicMock()
     mock_client.create_conversation.return_value = "conv-1"
     tc = MagicMock(spec=ToolCallEvent)
+    tc.call_ts = None
+    tc.result_ts = None
+    tc.index = None
     tc.function_name = "set_skills"
     tc.parsed_arguments = lambda: {"skills": ["visualization"]}
 
@@ -531,12 +562,16 @@ def test_run_agentic_conversation_accumulates_reasoning_steps_across_turns():
     turn1_result.text_response = "Here is your visualization"
     turn1_result.created_visualizations = [MagicMock()]
     turn1_result.tool_call_events = [tc]
+    turn1_result.reasoning_step_events = []
+    turn1_result.turn_wall_clock_sec = None
     turn1_result.reasoning_steps = ["turn one reasoning"]
 
     turn2_result = MagicMock()
     turn2_result.text_response = "Here is another visualization"
     turn2_result.created_visualizations = [MagicMock()]
     turn2_result.tool_call_events = [tc]
+    turn2_result.reasoning_step_events = []
+    turn2_result.turn_wall_clock_sec = None
     turn2_result.reasoning_steps = ["turn two reasoning"]
 
     mock_client.send_message.side_effect = [turn1_result, turn2_result]
@@ -574,12 +609,17 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
     mock_client = MagicMock()
     mock_client.create_conversation.return_value = "conv-1"
     tc = MagicMock(spec=ToolCallEvent)
+    tc.call_ts = None
+    tc.result_ts = None
+    tc.index = None
     tc.function_name = "set_skills"
     tc.parsed_arguments = lambda: {"skills": ["visualization"]}
     chat_result = MagicMock()
     chat_result.text_response = "Here is your visualization"
     chat_result.created_visualizations = [MagicMock()]
     chat_result.tool_call_events = [tc]
+    chat_result.reasoning_step_events = []
+    chat_result.turn_wall_clock_sec = None
     chat_result.reasoning_steps = ["thinking about it"]
     chat_result.response_id = "resp-1"
     mock_client.send_message.return_value = chat_result
@@ -619,6 +659,7 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
                 "activated_skills": ["visualization"],
             }
         ],
+        "latency_breakdown": [],
     }
 
 
@@ -626,12 +667,17 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
     mock_client = MagicMock()
     mock_client.create_conversation.return_value = "conv-1"
     tc = MagicMock(spec=ToolCallEvent)
+    tc.call_ts = None
+    tc.result_ts = None
+    tc.index = None
     tc.function_name = "set_skills"
     tc.parsed_arguments = lambda: {"skills": ["other_skill"]}
     chat_result = MagicMock()
     chat_result.text_response = "Here is something else"
     chat_result.created_visualizations = None
     chat_result.tool_call_events = [tc]
+    chat_result.reasoning_step_events = []
+    chat_result.turn_wall_clock_sec = None
     chat_result.alert_proposals = []
     chat_result.reasoning_steps = ["confused thinking"]
     chat_result.response_id = "resp-2"
@@ -676,4 +722,5 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
                 "activated_skills": ["other_skill"],
             }
         ],
+        "latency_breakdown": [],
     }

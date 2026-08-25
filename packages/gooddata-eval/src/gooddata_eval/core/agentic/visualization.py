@@ -18,7 +18,13 @@ from gooddata_eval.core.evaluators.visualization import (
     _evaluate_against_candidates,
     evaluation_result_detail,
 )
-from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, ToolCallEvent
+from gooddata_eval.core.models import (
+    AgenticEvalOutcome,
+    CreatedVisualization,
+    ReasoningStepEvent,
+    ToolCallEvent,
+    build_latency_breakdown,
+)
 from gooddata_eval.core.scoring import get_dimension_uri_set, get_metric_uri_set, uri_to_display_name
 
 _DEFAULT_K = 2
@@ -37,6 +43,8 @@ class RunResult:
     total_steps: float
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
+    tool_call_events: list[ToolCallEvent] = field(default_factory=list)
+    reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
 
 
 @dataclass
@@ -161,8 +169,12 @@ def _execute_single_run(
     total_turns = 0.0
     total_steps = 0.0
     all_tool_call_events: list[ToolCallEvent] = []
+    all_reasoning_step_events: list[ReasoningStepEvent] = []
     reasoning_steps: list[str] = []
     response_id: str | None = None
+    turn_offset = 0.0  # each turn's call_ts/ts restarts near 0 -- shift by prior turns' wall time
+    reasoning_index_offset = 0  # ditto for ReasoningStepEvent.index, which also restarts per turn
+    tool_index_offset = 0  # ditto for ToolCallEvent.index
     simulated_response_guide = expected_outputs[0]  # primary candidate guides the simulated user
 
     current_result = client.send_message(conversation_id, question)
@@ -170,9 +182,23 @@ def _execute_single_run(
     for iteration in range(max_iterations):
         total_turns += 1.0
         total_steps += float(current_result.reasoning_step_count)
+        for tc in current_result.tool_call_events:
+            if tc.call_ts is not None:
+                tc.call_ts += turn_offset
+            if tc.result_ts is not None:
+                tc.result_ts += turn_offset
+            if tc.index is not None:
+                tc.index += tool_index_offset
+        for rs in current_result.reasoning_step_events:
+            rs.ts += turn_offset
+            rs.index += reasoning_index_offset
         all_tool_call_events.extend(current_result.tool_call_events)
+        all_reasoning_step_events.extend(current_result.reasoning_step_events)
+        tool_index_offset += len(current_result.tool_call_events)
+        reasoning_index_offset += len(current_result.reasoning_step_events)
         reasoning_steps.extend(current_result.reasoning_steps or [])
         response_id = current_result.response_id or response_id
+        turn_offset += current_result.turn_wall_clock_sec or 0.0
 
         viz_produced = bool(current_result.created_visualizations and current_result.created_visualizations.objects)
         if viz_produced:
@@ -201,6 +227,8 @@ def _execute_single_run(
         total_steps=total_steps,
         reasoning_steps=reasoning_steps,
         response_id=response_id,
+        tool_call_events=all_tool_call_events,
+        reasoning_step_events=all_reasoning_step_events,
     )
 
 
@@ -434,12 +462,18 @@ def evaluate_agentic_visualization(
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
-        exc.detail = evaluation_result_detail(ev)
+        exc.detail = {
+            **evaluation_result_detail(ev),
+            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+        }
         raise exc
     best = summary.best
     return AgenticEvalOutcome(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
-        detail=evaluation_result_detail(best.eval_result),
+        detail={
+            **evaluation_result_detail(best.eval_result),
+            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+        },
     )
