@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._llm_judge import LLMJudge
-from gooddata_eval.core.models import AgenticEvalOutcome
+from gooddata_eval.core.models import AgenticEvalOutcome, ReasoningStepEvent, ToolCallEvent, build_latency_breakdown
 
 _DEFAULT_K = 1
 
@@ -52,6 +52,8 @@ class GuardrailResult:
     reasoning: str
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
+    tool_call_events: list[ToolCallEvent] = field(default_factory=list)
+    reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
 
 
 @dataclass
@@ -100,6 +102,8 @@ def run_agentic_guardrail(
                     reasoning=reasoning,
                     reasoning_steps=list(chat_result.reasoning_steps or []),
                     response_id=chat_result.response_id,
+                    tool_call_events=list(chat_result.tool_call_events or []),
+                    reasoning_step_events=list(chat_result.reasoning_step_events or []),
                 )
             )
         finally:
@@ -124,6 +128,8 @@ def run_agentic_guardrail(
                         reasoning=reasoning,
                         reasoning_steps=list(chat_result.reasoning_steps or []),
                         response_id=chat_result.response_id,
+                        tool_call_events=list(chat_result.tool_call_events or []),
+                        reasoning_step_events=list(chat_result.reasoning_step_events or []),
                     )
                 )
             finally:
@@ -245,6 +251,7 @@ def evaluate_agentic_guardrail(
             "judge_passed": best.passed,
             "judge_reasoning": best.reasoning,
             "actual_output": best.actual_output,
+            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
         }
         raise exc
     best = summary.best
@@ -256,5 +263,6 @@ def evaluate_agentic_guardrail(
             "judge_passed": best.passed,
             "judge_reasoning": best.reasoning,
             "actual_output": best.actual_output,
+            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
         },
     )

@@ -1,5 +1,6 @@
 # (C) 2026 GoodData Corporation
 import threading
+import time
 
 from gooddata_eval.core.evaluators import supported_test_kinds
 from gooddata_eval.core.models import ChatResult, DatasetItem
@@ -275,6 +276,58 @@ def test_run_items_reasoning_steps_empty_when_chat_result_has_none():
     backend = _FakeBackend([_empty_chat()])
     report = run_items([_item()], backend, runs=1)
     assert report.items[0].reasoning_steps == []
+
+
+def test_run_items_reasoning_steps_come_from_the_best_run_not_the_last_one():
+    """reasoning_steps (and any latency_breakdown inside best_detail) must describe the
+    SAME run -- otherwise the .reasoning.json sidecar and detail.latency_breakdown can
+    each be narrating a different attempt whenever the best-ranked run isn't the last one.
+    """
+
+    class _BestIsFirstBackend:
+        def __init__(self):
+            self.calls = 0
+
+        def ask(self, item: DatasetItem) -> ChatResult:
+            self.calls += 1
+            if self.calls == 1:  # passes -- this becomes `best`
+                return ChatResult.model_validate(
+                    {
+                        "createdVisualizations": {"objects": [_viz_obj()], "reasoning": ""},
+                        "reasoningSteps": ["run 1: correct approach"],
+                    }
+                )
+            # run 2 fails, runs last -- must NOT overwrite reasoning_steps from run 1
+            return ChatResult.model_validate({"textResponse": "which metric?", "reasoningSteps": ["run 2: gave up"]})
+
+    report = run_items([_item()], _BestIsFirstBackend(), runs=2)
+    assert report.items[0].pass_at_k is True
+    assert report.items[0].reasoning_steps == ["run 1: correct approach"]
+
+
+def test_run_items_best_run_latency_s_is_not_the_cross_run_average():
+    """best_run_latency_s is the SPECIFIC latency of the run behind best_detail --
+    avg_latency_s (a mean across all K runs) is not a fair number to check a
+    detail.latency_breakdown against once runs > 1, since it may describe a run other
+    than the mean.
+    """
+
+    class _SlowBackend:
+        def __init__(self):
+            self.calls = 0
+
+        def ask(self, item: DatasetItem) -> ChatResult:
+            self.calls += 1
+            if self.calls == 1:
+                time.sleep(0.02)  # the slower run -- passes, becomes `best`
+                return ChatResult.model_validate({"createdVisualizations": {"objects": [_viz_obj()], "reasoning": ""}})
+            return _empty_chat()  # fast, fails
+
+    report = run_items([_item()], _SlowBackend(), runs=2)
+    item = report.items[0]
+    assert item.best_run_latency_s is not None
+    assert item.best_run_latency_s < item.latency_s  # it's one run's share, not the total
+    assert item.best_run_latency_s != item.avg_latency_s  # and not the cross-run mean either
 
 
 def test_run_items_reasoning_steps_keeps_earlier_run_when_later_run_is_empty():

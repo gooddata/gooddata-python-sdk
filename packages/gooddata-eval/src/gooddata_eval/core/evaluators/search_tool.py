@@ -2,7 +2,7 @@
 """Evaluator for search_tool: agent must call the catalog search with expected parameters."""
 
 from gooddata_eval.core.evaluators.base import ItemEvaluation
-from gooddata_eval.core.models import ChatResult, DatasetItem
+from gooddata_eval.core.models import ChatResult, DatasetItem, build_latency_breakdown
 
 
 def _normalize_str_list(value: object, *, lowercase: bool = False) -> list[str]:
@@ -55,5 +55,8 @@ class SearchToolEvaluator:
                 "tool_correctness": tool_correctness,
                 "expected_function": expected_fn,
                 "calls_found": len(matching_events),
+                "latency_breakdown": build_latency_breakdown(
+                    chat_result.tool_call_events, chat_result.reasoning_step_events
+                ),
             },
         )

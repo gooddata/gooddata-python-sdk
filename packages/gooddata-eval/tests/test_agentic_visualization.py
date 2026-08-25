@@ -320,6 +320,7 @@ def test_evaluate_agentic_visualization_returns_reasoning_steps_on_pass():
         "actual_dim_uris": ["label/date.quarter"],
         "expected_filters": {"date": [], "ranking": [], "attribute": []},
         "actual_filters": {"date": [], "ranking": [], "attribute": []},
+        "latency_breakdown": [],
     }
 
 
@@ -370,4 +371,5 @@ def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on
         "actual_dim_uris": [],
         "expected_filters": {"date": [], "ranking": [], "attribute": []},
         "actual_filters": {"date": [], "ranking": [], "attribute": []},
+        "latency_breakdown": [],
     }
