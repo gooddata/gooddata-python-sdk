@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import json
 import re
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from typing import Literal
 
 from gooddata_sdk import GoodDataSdk
@@ -69,6 +69,17 @@ class TurnResult(BaseModel):
     @property
     def skill_success(self) -> bool:
         return self.skill_routing and self.output_present and self.no_error
+
+    def detail(self) -> dict:
+        """The subset of this result reported in detail["turns"] for one conversation turn."""
+        return {
+            "turn_id": self.turn_id,
+            "expected_skill": self.expected_skill,
+            "skill_routing": self.skill_routing,
+            "output_present": self.output_present,
+            "output_correct": self.output_correct,
+            "activated_skills": self.activated_skills,
+        }
 
 
 def _resolve_refs(
@@ -426,35 +437,11 @@ def run_agentic_conversation(
     )
 
 
-@dataclass
-class TurnDetail:
-    """The subset of a TurnResult reported in detail["turns"] for one conversation turn."""
-
-    turn_id: str
-    expected_skill: str
-    skill_routing: bool
-    output_present: bool
-    output_correct: bool | None
-    activated_skills: list[str]
-
-
 def _conversation_detail(result: ConversationResult) -> dict:
     return {
         "full_skill_coverage": result.full_skill_coverage,
         "total_clarification_turns": result.total_clarification_turns,
-        "turns": [
-            asdict(
-                TurnDetail(
-                    turn_id=tr.turn_id,
-                    expected_skill=tr.expected_skill,
-                    skill_routing=tr.skill_routing,
-                    output_present=tr.output_present,
-                    output_correct=tr.output_correct,
-                    activated_skills=tr.activated_skills,
-                )
-            )
-            for tr in result.turn_results
-        ],
+        "turns": [tr.detail() for tr in result.turn_results],
         "latency_breakdown": build_latency_breakdown(result.tool_call_events, result.reasoning_step_events),
     }
 
