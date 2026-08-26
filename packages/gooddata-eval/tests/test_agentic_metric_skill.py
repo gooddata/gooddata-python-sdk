@@ -13,6 +13,7 @@ from gooddata_eval.core.agentic.metric_skill import (
     SimulatedResponseError,
     _delete_metric,
     _extract_metric_result,
+    _no_where_clause_hint,
     _normalize_maql,
     evaluate_agentic_metric_skill,
     generate_simulated_response,
@@ -91,6 +92,54 @@ def test_normalize_maql_removes_select_wrapper():
     assert _normalize_maql("(SELECT {metric/abc})") == "{metric/abc}"
 
 
+def test_no_where_clause_hint_is_empty_when_a_candidate_has_a_where_clause():
+    assert _no_where_clause_hint(['SELECT {metric/foo} WHERE {label/status} = "active"']) == ""
+
+
+def test_no_where_clause_hint_is_present_when_no_candidate_has_a_where_clause():
+    """QA-29094 follow-up: whether to add a filter must not be left to the simulating LLM's
+    judgment of what the original request "implies" -- that fuzzy reasoning is exactly what
+    caused it to inject an unrequested filter in the first place."""
+    hint = _no_where_clause_hint(["SELECT SUM({fact/order_unit_quantity})"])
+    assert hint != ""
+    assert "no filter is needed" in hint
+
+
+def test_no_where_clause_hint_stays_silent_if_any_candidate_has_a_where_clause():
+    """PR #1760 review (Henry): _no_where_clause_hint used to see only expected_outputs[0].
+    A fixture like agent_metric_skill_4.json lists an unfiltered candidate first and a
+    filtered one second -- both accepted by _best_maql_match. Hinting "no filter needed"
+    off candidate 0 alone would steer the agent away from the filtered candidate even
+    though the scorer would still take it -- the mirror image of the original QA-29094 bug.
+    """
+    candidates = [
+        "SELECT SUM({fact/order_unit_quantity})",
+        'SELECT SUM({fact/order_unit_quantity}) WHERE {label/order_status} = "Processed"',
+    ]
+    assert _no_where_clause_hint(candidates) == ""
+
+
+def test_no_where_clause_hint_ignores_where_inside_an_identifier():
+    """CodeRabbit finding on PR #1760: a naive substring check treats the "where" inside
+    an identifier like {metric/somewhere_sales} as a real WHERE clause and wrongly stays
+    silent -- it must be stripped as a protected span before matching."""
+    assert _no_where_clause_hint(["SELECT {metric/somewhere_sales}"]) != ""
+
+
+def test_no_where_clause_hint_ignores_where_inside_a_quoted_literal():
+    assert _no_where_clause_hint(['SELECT {metric/x} = "somewhere nearby"']) != ""
+
+
+def test_no_where_clause_hint_ignores_where_inside_a_literal_with_an_escaped_quote():
+    """CodeRabbit finding on PR #1760: an escaped quote inside a quoted literal ended the
+    protected-span match early, leaking the rest of the literal's text -- including a
+    standalone WHERE -- as unprotected. Uses _HINT_PROTECTED_RE (escape-aware), kept
+    separate from the shared _PROTECTED_RE that feeds the maql_correct comparator (PR
+    #1760 review, Henry) -- see test_normalize_maql_does_not_consume_escape_sequences."""
+    maql = 'SELECT {metric/x} = "Jane\\"s store WHERE something"'
+    assert _no_where_clause_hint([maql]) != ""
+
+
 def test_generate_simulated_response_prompt_preserves_maql_fidelity(monkeypatch):
     """Regression test for a live-reproduced bug: the old prompt ("reply briefly",
     no instruction to cover clauses the assistant didn't ask about) let the
@@ -111,17 +160,73 @@ def test_generate_simulated_response_prompt_preserves_maql_fidelity(monkeypatch)
     monkeypatch.setitem(sys.modules, "openai", fake_openai_module)
 
     expected_output = {"maql": 'SELECT {metric/spend_amount_-_cutcgco} WHERE {label/ecommerce_indicator_code} = "1"'}
-    generate_simulated_response("Which base metric should I use?", expected_output)
+    generate_simulated_response(
+        "Which base metric should I use?", [expected_output], "I need a metric for spend amount"
+    )
 
     call_kwargs = mock_client.chat.completions.create.call_args.kwargs
     sent_prompt = call_kwargs["messages"][0]["content"]
 
     assert expected_output["maql"] in sent_prompt
     assert "verbatim" in sent_prompt
-    assert "every clause" in sent_prompt
-    assert "WHERE" in sent_prompt or "filter" in sent_prompt.lower()
-    assert "reply briefly" not in sent_prompt.lower()
+    assert "filter" in sent_prompt.lower()
+    # Guards against a truncated reply mid-MAQL -- the LLM was cutting fidelity short under
+    # the old, lower budget before this was raised (see the docstring above).
     assert call_kwargs["max_tokens"] >= 300
+
+
+def test_generate_simulated_response_prompt_agrees_when_the_original_request_is_already_satisfied(monkeypatch):
+    """Regression test for QA-29094: the old prompt told the simulated user to force every
+    clause of the ground-truth MAQL regardless of what the original request actually asked
+    for, so it would inject filters/constraints the user never mentioned even when the
+    assistant's proposal already matched the request. The prompt must now carry the
+    original request and instruct the simulated user to agree when it's already satisfied.
+    """
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    mock_client = MagicMock()
+    mock_response = MagicMock()
+    mock_response.choices = [MagicMock(message=MagicMock(content="ok"))]
+    mock_client.chat.completions.create.return_value = mock_response
+    fake_openai_module = types.SimpleNamespace(OpenAI=MagicMock(return_value=mock_client), OpenAIError=Exception)
+    monkeypatch.setitem(sys.modules, "openai", fake_openai_module)
+
+    original_question = "I need a metric for total ordered units called Total Order Quantity"
+    expected_output = {"maql": "SELECT SUM({fact/order_unit_quantity}) WHERE {fact/order_status} != 'cancelled'"}
+    generate_simulated_response("Should I create this metric?", [expected_output], original_question)
+
+    sent_prompt = mock_client.chat.completions.create.call_args.kwargs["messages"][0]["content"]
+
+    # Structural checks on the interpolated data -- robust to prompt-wording edits.
+    assert original_question in sent_prompt
+    assert expected_output["maql"] in sent_prompt
+    assert "reply briefly" not in sent_prompt.lower()
+    # A ground-truth MAQL with a WHERE clause must not trigger the no-filter-needed hint.
+    assert "no filter is needed" not in sent_prompt
+
+
+def test_generate_simulated_response_prompt_handles_a_clarifying_question(monkeypatch):
+    """QA-29094 follow-up: the two-branch prompt ("already satisfies" / "missing something")
+    both assume the assistant made a proposal -- but the dominant real case is the assistant
+    asking a clarifying question first (no proposal exists yet to judge as satisfying or not).
+    Without an explicit instruction, the simulating LLM could classify "nothing proposed yet"
+    as trivially "satisfied" and reply "yes, that works", leaving the agent no closer to a
+    usable metric and burning iterations."""
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    mock_client = MagicMock()
+    mock_response = MagicMock()
+    mock_response.choices = [MagicMock(message=MagicMock(content="ok"))]
+    mock_client.chat.completions.create.return_value = mock_response
+    fake_openai_module = types.SimpleNamespace(OpenAI=MagicMock(return_value=mock_client), OpenAIError=Exception)
+    monkeypatch.setitem(sys.modules, "openai", fake_openai_module)
+
+    expected_output = {"maql": "SELECT SUM({fact/order_unit_quantity})"}
+    generate_simulated_response("Which base metric should I use?", [expected_output], "I need total ordered units")
+
+    sent_prompt = mock_client.chat.completions.create.call_args.kwargs["messages"][0]["content"]
+
+    assert "clarifying question" in sent_prompt
+    # No WHERE clause in the ground truth -- the no-filter hint must fire here too.
+    assert "no filter is needed" in sent_prompt
 
 
 def test_normalize_maql_is_case_insensitive_for_keywords():
@@ -145,6 +250,19 @@ def test_normalize_maql_preserves_quoted_literal_case():
     case-sensitive data -- not keywords. Two literals differing only in case
     must NOT be treated as equal; that would be a false positive."""
     assert _normalize_maql('WHERE {label/status} = "Active"') != _normalize_maql('WHERE {label/status} = "active"')
+
+
+def test_normalize_maql_does_not_consume_escape_sequences():
+    """PR #1760 review (Henry): _PROTECTED_RE feeds this comparator (via
+    _casefold_outside_protected), so it must NOT treat \\X as an escape sequence unless
+    MAQL literals are confirmed to support backslash escaping (unconfirmed). A `\\"`
+    inside a literal must still end that literal at the next real quote -- not swallow
+    everything up to the following quoted value, which would leave a real keyword like
+    AND uncasefolded and a later literal's case wrongly casefolded."""
+    maql = 'SELECT {metric/x} WHERE {label/path} = "C:\\" AND {label/y} = "Active"'
+    normalized = _normalize_maql(maql)
+    assert "and {label/y}" in normalized  # AND is a keyword outside the literal -- casefolded
+    assert '"Active"' in normalized  # the second literal's case is untouched -- not "active"
 
 
 def test_metric_run_result_fields():
@@ -228,7 +346,7 @@ def test_run_agentic_metric_skill_closes_client_on_no_result():
     mock_client.close.assert_called_once()
     assert summary.pass_at_k is False
     assert summary.best.metric_created is False
-    mock_sim.assert_called_once_with("I will work on that.", {"maql": "SELECT {metric/foo}"})
+    mock_sim.assert_called_once_with("I will work on that.", [{"maql": "SELECT {metric/foo}"}], "Create metric foo")
 
 
 def test_run_agentic_metric_skill_uses_initial_conversation_for_run_0():
@@ -408,7 +526,7 @@ def test_generate_simulated_response_without_an_api_key():
         patch.dict(os.environ, {}, clear=True),
         pytest.raises(SimulatedResponseError, match="OPENAI_API_KEY"),
     ):
-        generate_simulated_response("Which brand field?", {"maql": "SELECT {metric/foo}"})
+        generate_simulated_response("Which brand field?", [{"maql": "SELECT {metric/foo}"}], "I need a metric for foo")
 
 
 def test_generate_simulated_response_without_the_openai_package():
@@ -416,7 +534,7 @@ def test_generate_simulated_response_without_the_openai_package():
         patch.dict(sys.modules, {"openai": None}),
         pytest.raises(SimulatedResponseError, match="openai package is required"),
     ):
-        generate_simulated_response("Which brand field?", {"maql": "SELECT {metric/foo}"})
+        generate_simulated_response("Which brand field?", [{"maql": "SELECT {metric/foo}"}], "I need a metric for foo")
 
 
 def test_run_agentic_metric_skill_fails_the_run_when_the_simulated_reply_cannot_be_generated():
@@ -448,7 +566,9 @@ def test_run_agentic_metric_skill_fails_the_run_when_the_simulated_reply_cannot_
     assert summary.best.metric_created is False
     assert summary.best.total_turns == 1.0
     mock_client.close.assert_called_once()
-    mock_sim.assert_called_once_with("Which brand field should I count?", {"maql": "SELECT {metric/foo}"})
+    mock_sim.assert_called_once_with(
+        "Which brand field should I count?", [{"maql": "SELECT {metric/foo}"}], "Create metric foo"
+    )
 
 
 def test_run_agentic_metric_skill_accumulates_reasoning_steps_across_iterations():
