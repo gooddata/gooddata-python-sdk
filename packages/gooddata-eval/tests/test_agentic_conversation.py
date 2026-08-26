@@ -8,6 +8,7 @@ from gooddata_eval.core.agentic.conversation import (
     ConversationFixture,
     TurnDefinition,
     TurnResult,
+    _get_sim_user_response,
     _resolve_refs,
     evaluate_agentic_conversation,
     run_agentic_conversation,
@@ -105,6 +106,30 @@ def test_resolve_refs_substitutes():
     turn_outputs = {"t1": {"maql": "SELECT {metric/foo}"}}
     result = _resolve_refs({"maql": "$ref:t1.maql"}, turn_outputs)
     assert result == {"maql": "SELECT {metric/foo}"}
+
+
+def test_get_sim_user_response_metric_branch_forwards_the_turn_message():
+    """QA-29094 follow-up: every test in this file patches out `_get_sim_user_response`
+    itself, so its metric branch (which forwards to
+    ``metric_skill.generate_simulated_response``) had 0% coverage -- a future signature
+    change there would raise inside the bare ``except Exception`` and silently fall through
+    to the generic fallback prompt instead of failing loudly."""
+    turn = TurnDefinition(
+        turn_id="t1",
+        message="I need a metric for total ordered units",
+        expected_skill="metric",
+        expected_output_type="metric",
+    )
+    expected_output = {"maql": "SELECT SUM({fact/order_unit_quantity})"}
+
+    with patch(
+        "gooddata_eval.core.agentic.metric_skill.generate_simulated_response",
+        return_value="Yes, that works.",
+    ) as mock_sim:
+        reply = _get_sim_user_response("Should I create this metric?", turn, expected_output)
+
+    assert reply == "Yes, that works."
+    mock_sim.assert_called_once_with("Should I create this metric?", [expected_output], turn.message)
 
 
 def test_run_agentic_conversation_single_turn():

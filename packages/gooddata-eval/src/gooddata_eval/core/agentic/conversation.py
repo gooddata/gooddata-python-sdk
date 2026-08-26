@@ -205,9 +205,12 @@ def _get_sim_user_response(agent_message: str, turn: TurnDefinition, expected_ou
                 generate_simulated_response,
             )
 
-            return generate_simulated_response(agent_message, expected_output)
-        except Exception:
-            pass
+            # A conversation turn only ever carries one expected_output (no multi-candidate
+            # list like agent_metric_skill's fixtures) -- wrap it as a single-item list to
+            # match generate_simulated_response's signature.
+            return generate_simulated_response(agent_message, [expected_output], turn.message)
+        except Exception as exc:
+            print(f"[SIM-USER] metric branch failed for turn {turn.turn_id}: {exc}")
 
     # Generic fallback for other skill types or when expected_output is absent
     import os  # noqa: PLC0415
