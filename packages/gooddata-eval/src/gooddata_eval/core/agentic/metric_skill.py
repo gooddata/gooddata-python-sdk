@@ -30,6 +30,11 @@ _INNER_SELECT_RE = re.compile(r"\(\s*SELECT\s*\{([^}]+)\}\s*\)", re.IGNORECASE)
 # Everything else in MAQL (keywords, operators, numbers, punctuation) carries no
 # case-sensitive meaning, per the MAQL reference (SELECT/BY/WHERE/FOR PREVIOUS/etc.
 # are case-insensitive; only {..} identifiers and quoted literal values are not).
+# Feeds _normalize_maql, the scoring comparator (_best_maql_match) -- do not widen this
+# to handle \X escapes without confirming MAQL literals actually support backslash
+# escaping (unconfirmed; see PR #1760 review). A wrong guess here silently changes
+# maql_correct for the whole eval dataset, not just a hint. _no_where_clause_hint()
+# below has its own, separately-scoped regex for that reason.
 _PROTECTED_RE = re.compile(r"\{[^}]*\}|\"[^\"]*\"|'[^']*'")
 
 
@@ -99,8 +104,42 @@ class SimulatedResponseError(RuntimeError):
     """
 
 
-def generate_simulated_response(agent_message: str, expected_output: dict) -> str:
+# Separate from _PROTECTED_RE on purpose: this one only feeds a same-turn LLM-prompt hint
+# (see _no_where_clause_hint), never the scoring comparator, so it can afford to consume
+# \X escape sequences inside quoted literals without risking maql_correct semantics.
+_HINT_PROTECTED_RE = re.compile(r"\{[^}]*\}|\"(?:[^\"\\]|\\.)*\"|'(?:[^'\\]|\\.)*'")
+
+
+def _no_where_clause_hint(expected_maqls: list[str]) -> str:
+    """Deterministic nudge for when NONE of the accepted candidate MAQLs has a WHERE clause.
+
+    Without this, whether to add a filter is left entirely to the simulating LLM's judgment
+    of what the original request "implies" -- the same fuzzy reasoning that caused it to
+    inject an unrequested filter in the first place (QA-29094). Checks every candidate, not
+    just the first: _best_maql_match accepts any of them, so hinting off just candidate 0
+    would risk steering the agent away from a filtered candidate the scorer would still have
+    accepted (the mirror-image of the original bug). Strips {type/id} identifiers and quoted
+    literals first so a "where" substring inside one of those -- e.g.
+    `{metric/somewhere_sales}`, or a literal value containing the word -- doesn't get
+    mistaken for a real WHERE clause.
+    """
+    for maql in expected_maqls:
+        outside_protected = _HINT_PROTECTED_RE.sub(" ", maql)
+        if re.search(r"\bWHERE\b", outside_protected, re.IGNORECASE):
+            return ""
+    return (
+        " This metric needs no filter. If the assistant asks about excluding or filtering "
+        "anything, say no filter is needed."
+    )
+
+
+def generate_simulated_response(agent_message: str, expected_outputs: list[dict], original_question: str) -> str:
     """Generate a user reply to keep the metric-skill conversation going (gpt-4o-mini).
+
+    ``expected_outputs`` is the fixture's full candidate list (as accepted by
+    ``_best_maql_match``), not just the first one -- the ground-truth MAQL woven into the
+    prompt still comes from candidate 0, but the no-filter hint checks all of them (see
+    ``_no_where_clause_hint``).
 
     Raises:
         SimulatedResponseError: openai is not installed, OPENAI_API_KEY is unset, or the
@@ -116,15 +155,23 @@ def generate_simulated_response(agent_message: str, expected_output: dict) -> st
         raise SimulatedResponseError("OPENAI_API_KEY environment variable is not set")
 
     client = OpenAI(api_key=api_key)
-    expected_maql = expected_output.get("maql", "")
+    expected_maql = expected_outputs[0].get("maql", "") if expected_outputs else ""
+    expected_maqls = [eo.get("maql", "") for eo in expected_outputs]
     prompt = (
         f"You are simulating a user in a conversation with a BI assistant that creates metrics. "
+        f"The user's original request was: '{original_question}'. "
         f"The assistant said: '{agent_message}'. "
         f"The user's ground-truth intended metric is exactly this MAQL: {expected_maql}. "
-        f"Reply as the user. You MUST ensure every clause of that MAQL (including any WHERE/filter "
-        f"conditions) is eventually satisfied, and quote field/label identifiers verbatim from it -- "
-        f"never paraphrase or drop a clause, even if the assistant's question doesn't explicitly ask "
-        f"about it. If the assistant's offered options omit a required filter, add it yourself."
+        f"Reply as the user. If the assistant is asking a clarifying question rather than proposing "
+        f"a metric, answer that question directly using the ground-truth MAQL -- quote field/label "
+        f"identifiers verbatim -- instead of merely agreeing. "
+        f"If the assistant's proposal already satisfies the ORIGINAL REQUEST above, agree and confirm "
+        f"-- do not introduce new requirements the original request never mentioned. "
+        f"Only if the assistant's proposal is missing something the original request actually implies "
+        f"(e.g. a filter/clause from the ground-truth MAQL that is a reasonable reading of the original "
+        f"request), point it out and add it yourself, quoting field/label identifiers verbatim from the "
+        f"ground-truth MAQL."
+        f"{_no_where_clause_hint(expected_maqls)}"
     )
     try:
         response = client.chat.completions.create(
@@ -234,7 +281,6 @@ def _execute_single_metric_run(
     ``_delete_metric``) so it cannot leak into — and be reused by — a later test
     sharing the workspace.
     """
-    primary_expected = expected_outputs[0] if expected_outputs else {}
     metric_result: dict | None = None
     created_metric_ids: list[str] = []
     turns = 0
@@ -281,7 +327,7 @@ def _execute_single_metric_run(
             if _iteration >= max_iterations - 1:
                 break
             try:
-                current_question = generate_simulated_response(response_text, primary_expected)
+                current_question = generate_simulated_response(response_text, expected_outputs, question)
             except SimulatedResponseError as exc:
                 print(f"[SIM-USER] Simulated reply failed for conversation {conversation_id}: {exc}")
                 break
