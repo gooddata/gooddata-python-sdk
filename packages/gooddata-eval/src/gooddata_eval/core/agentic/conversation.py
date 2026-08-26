@@ -327,6 +327,10 @@ def run_agentic_conversation(
     response_id: str | None = None
     conversation_tool_call_events: list[ToolCallEvent] = []
     conversation_reasoning_step_events: list[ReasoningStepEvent] = []
+    # Skills activated by any turn so far. The platform keeps a skill active across
+    # turns once set -- an agent correctly reuses the already-active skill without
+    # re-issuing set_skills, so routing credit must not require a fresh call every turn.
+    activated_skills_so_far: set[str] = set()
     # Every send_message() call (across every logical turn AND every clarification
     # sub-turn within it) restarts call_ts/ts near 0 -- these run across the whole
     # conversation, not reset per logical turn, so every one of those calls shifts them.
@@ -402,7 +406,8 @@ def run_agentic_conversation(
                 current_message = _get_sim_user_response(response_text, resolved_turn, resolved_expected)
 
             activated = _activated_skills(all_tool_calls)
-            skill_routing = turn.expected_skill in activated if activated else False
+            activated_skills_so_far |= set(activated)
+            skill_routing = turn.expected_skill in activated_skills_so_far
             output_present = _check_output_present(resolved_turn, final_result) if final_result else False
             output_correct = (
                 _check_output_correct(resolved_turn, final_result) if (final_result and output_present) else None

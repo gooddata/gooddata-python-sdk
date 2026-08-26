@@ -357,6 +357,64 @@ def test_run_agentic_conversation_deletes_every_unique_metric_across_turns():
     assert deleted == [("ws1", "extra"), ("ws1", "shared")]
 
 
+def test_run_agentic_conversation_skill_routing_persists_across_turns():
+    """A skill activated in an earlier turn stays credited when a later turn reuses it
+    without re-issuing set_skills -- the platform keeps a skill active once set, so an
+    agent correctly omits a redundant set_skills call. Requiring a fresh call every turn
+    produced false FAILs on turns that did the right thing (found via
+    debug_conversation.py replaying analyst-explores-dynamic-currency-conversion,
+    turns t4/t5: create_adhoc_visualization/create_metric both ran and succeeded, but
+    skill_routing was False solely because set_skills wasn't repeated)."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m1")]),
+        _metric_turn_result([_create_metric_tc("m2")]),  # no set_skills -- skill already active
+    ]
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_two_metric_turn_fixture(),
+        )
+
+    assert result.turn_results[0].skill_routing is True
+    assert result.turn_results[1].skill_routing is True
+
+
+def test_run_agentic_conversation_skill_routing_false_when_skill_never_activated():
+    """Guard against the fix being too lenient: a skill that no turn ever activated
+    must still fail routing, not be credited by the cumulative-set change."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _metric_turn_result([_create_metric_tc("m1")])
+
+    fixture = ConversationFixture(
+        id="test-never-activated",
+        expected_skills=["metric"],
+        turns=[
+            TurnDefinition(turn_id="t1", message="Create x", expected_skill="metric", expected_output_type="metric"),
+        ],
+    )
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+        )
+
+    assert result.turn_results[0].skill_routing is False
+
+
 def test_run_agentic_conversation_deletes_metrics_even_when_a_later_turn_raises():
     mock_client = MagicMock()
     mock_client.create_conversation.return_value = "conv-1"
