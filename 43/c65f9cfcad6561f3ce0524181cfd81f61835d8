@@ -15,7 +15,7 @@ packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/layout/notification_
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.0",
-  "base_commit_sha": "9d9d649a5e6142b375562a2123b7991cc61df55b",
+  "base_commit_sha": "43c65f9cfcad6561f3ce0524181cfd81f61835d8",
   "prompts": {},
   "sessions": {
     "s_bcf6588db246d3": {
