@@ -140,6 +140,10 @@ from gooddata_sdk.catalog.organization.layout.export_template import (
 )
 from gooddata_sdk.catalog.organization.layout.notification_channel import (
     CatalogDeclarativeNotificationChannel,
+    CatalogDefaultSmtp,
+    CatalogInPlatform,
+    CatalogNotificationChannelDestination,
+    CatalogSmtp,
     CatalogWebhook,
 )
 from gooddata_sdk.catalog.organization.service import (
