@@ -1,0 +1,19 @@
+packages/gooddata-sdk/tests/catalog/unit_tests/test_composed_oneof_unions.py
+  s_bcf6588db246d3::t_f0d497cf49da4d 16-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "a5a0f29e302080b710c629a0cff35a1db9208d9d",
+  "prompts": {},
+  "sessions": {
+    "s_bcf6588db246d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5a88e812-8a98-4252-90c6-60c9f1eed485",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}
