@@ -1,5 +1,5 @@
 packages/gooddata-sdk/src/gooddata_sdk/__init__.py
-  s_bcf6588db246d3::t_7c3d176da29d22 138-141
+  s_bcf6588db246d3::t_7c3d176da29d22 138-141,143-146
 packages/gooddata-sdk/tests/catalog/unit_tests/test_notification_channel_destinations.py
   s_bcf6588db246d3::t_7a65a2ab695c8a 1-7,10-105,107-121
   s_bcf6588db246d3::t_07652012a1ce47 8-9
