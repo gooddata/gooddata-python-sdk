@@ -18,7 +18,7 @@ gooddata-api-client/gooddata_api_client/model_utils.py
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.0",
-  "base_commit_sha": "3e416bf334f2db268bf9a06d6d427d44eb59d8ff",
+  "base_commit_sha": "2d4ee793ecbfe85ca8a98e099b95b36429dcc525",
   "prompts": {},
   "sessions": {
     "s_bcf6588db246d3": {
