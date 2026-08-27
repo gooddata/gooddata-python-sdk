@@ -20,18 +20,26 @@ _EAGER_EVALUATORS: dict[str, Evaluator] = {
     )
 }
 
-# LLM-judge evaluators (general_question, guardrail, dashboard_summary) require the
-# [llm-judge] extra. Their modules are imported lazily on first use so the CLI
+# LLM-judge evaluators (general_question, guardrail, dashboard_summary, knowledge_question)
+# require the [llm-judge] extra. Their modules are imported lazily on first use so the CLI
 # starts without openai.
+#
+# knowledge_question reuses GeneralQuestionEvaluator directly: both are free-text-rubric,
+# LLM-judged prose answers -- knowledge_question just covers platform/product/policy facts
+# instead of LDM-grounded ones. `ItemReport.test_kind` is tagged from the dataset item's own
+# `test_kind` field (see runner.py), not from the evaluator class, so sharing one class
+# across both kinds does not mislabel results.
 _LAZY_EVALUATOR_MODULES: dict[str, str] = {
     "general_question": "gooddata_eval.core.evaluators.general_question",
     "guardrail": "gooddata_eval.core.evaluators.guardrail",
     "dashboard_summary": "gooddata_eval.core.evaluators.summary",
+    "knowledge_question": "gooddata_eval.core.evaluators.general_question",
 }
 _LAZY_EVALUATOR_CLASSES: dict[str, str] = {
     "general_question": "GeneralQuestionEvaluator",
     "guardrail": "GuardrailEvaluator",
     "dashboard_summary": "DashboardSummaryEvaluator",
+    "knowledge_question": "GeneralQuestionEvaluator",
 }
 
 
