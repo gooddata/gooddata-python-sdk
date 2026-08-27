@@ -120,6 +120,59 @@ def composed_model_input_classes(cls):
     return []
 
 
+def composed_oneof_members(cls):
+    """The oneOf/anyOf member classes of a composed model, () for other models."""
+    composed = getattr(cls, '_composed_schemas', None)
+    if not composed:
+        return ()
+    return tuple(composed.get('oneOf') or ()) + tuple(composed.get('anyOf') or ())
+
+
+def composed_union_types(cls, name):
+    """Union of the types the oneOf/anyOf members declare for property `name`.
+
+    openapi-generator flattens the oneOf members' properties into the composed
+    parent, but for a property that several members declare it keeps only the
+    last member's type. The parent then rejects payloads that are valid for
+    every other member - e.g. an LLM provider config whose `auth` is typed as
+    `OpenAiProviderAuth` alone cannot carry Bedrock or Azure Foundry auth.
+
+    Widening to the union loses no validation: the value is still checked
+    against the composed schemas themselves by validate_get_composed_info.
+
+    Returns () when no member declares `name`, so the caller keeps the
+    parent's own type.
+
+    A member is not necessarily a model: `oneOf: [$ref, {type: string}]` emits
+    `'oneOf': [Thing, str]`, and a primitive has no `openapi_types`, hence the
+    getattr fallback rather than a direct attribute read.
+    """
+    types = []
+    for member in composed_oneof_members(cls):
+        for member_type in getattr(member, 'openapi_types', {}).get(name, ()):
+            if member_type not in types:
+                types.append(member_type)
+    return tuple(types)
+
+
+def composed_union_allowed_values(cls, name):
+    """Union of the enum values the oneOf/anyOf members allow for `name`.
+
+    Same generator defect as composed_union_types: the flattened parent keeps
+    only the last member's enum, so a discriminator-like `type` property ends
+    up accepting exactly one of the variants and which one depends on the order
+    of the oneOf array in the OpenAPI document.
+
+    Returns {} when no member constrains `name`, so the caller falls back to
+    the parent's own allowed_values. Tolerates non-model members for the same
+    reason as composed_union_types.
+    """
+    merged = {}
+    for member in composed_oneof_members(cls):
+        merged.update(getattr(member, 'allowed_values', {}).get((name,), {}))
+    return merged
+
+
 class OpenApiModel(object):
     """The base class for all OpenAPIModels"""
 
@@ -132,7 +185,13 @@ class OpenApiModel(object):
         path_to_item.append(name)
 
         if name in self.openapi_types:
-            required_types_mixed = self.openapi_types[name]
+            # Widened from upstream: for a composed (oneOf/anyOf) model the
+            # generator flattens the members' properties into the parent but
+            # keeps only the last member's type, so the parent alone rejects
+            # payloads valid for every other member. See composed_union_types.
+            required_types_mixed = (
+                composed_union_types(type(self), name) or self.openapi_types[name]
+            )
         elif self.additional_properties_type is None:
             raise ApiAttributeError(
                 "{0} has no attribute '{1}'".format(
@@ -160,9 +219,15 @@ class OpenApiModel(object):
             value = validate_and_convert_types(
                 value, required_types_mixed, path_to_item, self._spec_property_naming,
                 self._check_type, configuration=self._configuration)
-        if (name,) in self.allowed_values:
+        # Widened from upstream for the same reason as required_types_mixed
+        # above: the flattened parent keeps only the last member's enum.
+        allowed_values = (
+            composed_union_allowed_values(type(self), name)
+            or self.allowed_values.get((name,))
+        )
+        if allowed_values:
             check_allowed_values(
-                self.allowed_values,
+                {(name,): allowed_values},
                 (name,),
                 value
             )
@@ -1469,6 +1534,7 @@ def attempt_convert_item(input_value, valid_classes, path_to_item,
         if configuration is None or not configuration.discard_unknown_keys:
             raise get_type_error(input_value, path_to_item, valid_classes,
                                  key_type=key_type)
+    last_conversion_exc = None
     for valid_class in valid_classes_coercible:
         try:
             if issubclass(valid_class, OpenApiModel):
@@ -1480,11 +1546,14 @@ def attempt_convert_item(input_value, valid_classes, path_to_item,
             return deserialize_primitive(input_value, valid_class,
                                          path_to_item)
         except (ApiTypeError, ApiValueError, ApiKeyError) as conversion_exc:
-            if must_convert:
-                raise conversion_exc
-            # if we have conversion errors when must_convert == False
-            # we ignore the exception and move on to the next class
+            # Upstream re-raises immediately when must_convert is True, which
+            # gives a property whose type came from a oneOf/anyOf union only
+            # one attempt: the first candidate class. Try them all and report
+            # the last failure only if none matched.
+            last_conversion_exc = conversion_exc
             continue
+    if must_convert and last_conversion_exc is not None:
+        raise last_conversion_exc
     # we were unable to convert, must_convert == False
     return input_value
 
