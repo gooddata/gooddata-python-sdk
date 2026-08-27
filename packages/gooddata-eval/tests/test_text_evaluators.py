@@ -1,6 +1,7 @@
 # (C) 2026 GoodData Corporation
 from unittest.mock import MagicMock, patch
 
+from gooddata_eval.core.evaluators import get_evaluator
 from gooddata_eval.core.evaluators.general_question import GeneralQuestionEvaluator
 from gooddata_eval.core.evaluators.guardrail import GuardrailEvaluator
 from gooddata_eval.core.models import ChatResult, DatasetItem
@@ -13,6 +14,16 @@ def _gq_item() -> DatasetItem:
         test_kind="general_question",
         question="How do I share a dashboard?",
         expected_output="A correct answer explains clicking Share and adding recipients.",
+    )
+
+
+def _kq_item() -> DatasetItem:
+    return DatasetItem(
+        id="kq-001",
+        dataset_name="d",
+        test_kind="knowledge_question",
+        question="How can I get access to more ICAs?",
+        expected_output="Must explain the process for requesting additional ICAs, e.g. contacting an account manager.",
     )
 
 
@@ -56,6 +67,23 @@ def test_general_question_passes_when_judge_scores_1():
 def test_general_question_fails_when_judge_scores_0():
     with patch("gooddata_eval.core.evaluators.general_question.LLMJudge", return_value=_make_judge(False)):
         result = GeneralQuestionEvaluator().evaluate(_gq_item(), _chat_text("I don't know."))
+    assert result.passed is False
+
+
+def test_knowledge_question_dispatches_to_general_question_evaluator():
+    with patch("gooddata_eval.core.evaluators.general_question.LLMJudge", return_value=_make_judge(True)):
+        assert isinstance(get_evaluator("knowledge_question"), GeneralQuestionEvaluator)
+
+
+def test_knowledge_question_passes_when_judge_scores_1():
+    with patch("gooddata_eval.core.evaluators.general_question.LLMJudge", return_value=_make_judge(True)):
+        result = GeneralQuestionEvaluator().evaluate(_kq_item(), _chat_text("Contact your account manager."))
+    assert result.passed is True
+
+
+def test_knowledge_question_fails_when_judge_scores_0():
+    with patch("gooddata_eval.core.evaluators.general_question.LLMJudge", return_value=_make_judge(False)):
+        result = GeneralQuestionEvaluator().evaluate(_kq_item(), _chat_text("I don't know."))
     assert result.passed is False
 
 
