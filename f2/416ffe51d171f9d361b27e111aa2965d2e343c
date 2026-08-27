@@ -29,3 +29,24 @@ packages/gooddata-sdk/tests/catalog/unit_tests/test_composed_oneof_unions.py
     }
   }
 }
+
+packages/gooddata-sdk/tests/catalog/unit_tests/test_composed_oneof_unions.py
+  s_bcf6588db246d3::t_3c89451ef75e51 135
+  s_bcf6588db246d3::t_43a4f33dfc8672 124-125,127-134,136-145,150-153,155-157
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "2857bf29b8d2d8725c682d7afa490ba287522ddd",
+  "prompts": {},
+  "sessions": {
+    "s_bcf6588db246d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5a88e812-8a98-4252-90c6-60c9f1eed485",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}
