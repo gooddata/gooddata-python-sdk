@@ -1,0 +1,20 @@
+packages/gooddata-sdk/tests/catalog/unit_tests/test_notification_channel_destinations.py
+  s_bcf6588db246d3::t_4d099543835aa8 5-10,19
+  s_bcf6588db246d3::t_022a0cedad7942 110-111,121-133
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "3471005fc69f6c9100eff749afef8a0214243acb",
+  "prompts": {},
+  "sessions": {
+    "s_bcf6588db246d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5a88e812-8a98-4252-90c6-60c9f1eed485",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}
