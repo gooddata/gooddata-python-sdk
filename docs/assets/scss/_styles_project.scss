@@ -1,10 +1,12 @@
-// Import external styles TODO: link those directly from gooddata/gdc-website repository
+// Functions, mixins and variables (resolved from the gooddata-docs-theme module)
 @import "functions/functions.pxtorem";
 @import "mixins/mixins.media-queries";
 @import "variables/variables.colors";
 @import "variables/variables.media-queries";
 
-// Local styles
+// Component styles (all resolved from the theme module; local shadow copies
+// have been removed). Project-specific tweaks live in _local-overrides.scss,
+// which is imported last so it layers on top of these.
 @import "typography";
 @import "header";
 @import "breadcrumbs";
@@ -31,6 +33,13 @@
 @import "skip-links";
 @import "heading-anchor";
 @import "ask-ai-button";
+@import "theme-switcher";
+
+// Project-local overrides — must come after all theme component imports above.
+@import "local-overrides";
+
+// Dark-mode overrides — must come last so [data-theme="dark"] rules win.
+@import "dark-theme";
 
 #print {
   display: none; // Hide print functionality for now
@@ -43,5 +52,34 @@
 
   &-buttons svg {
     vertical-align: top;
+  }
+
+  // Mirrored from the theme's _styles_project.scss (which this file shadows).
+  // Match the live www.gooddata.ai footer; selectors must outrank
+  // learn-assets Footer.css, which loads after the theme stylesheet.
+  .gd-footer-buttons {
+    gap: 12px;
+  }
+
+  .gd-footer-buttons-item {
+    margin: 0;
+  }
+
+  .gd-footer-buttons-item-icon-button {
+    width: 48px;
+    height: 48px;
+  }
+
+  @media only screen and (min-width: 993px) {
+    .gd-footer-banner-links .gd-footer-banner-links-item {
+      padding: 80px 40px;
+    }
+  }
+
+  .gd-footer-banner-links-item-wrap {
+    p {
+      margin: 32px 0 24px;
+      line-height: 24px;
+    }
   }
 }

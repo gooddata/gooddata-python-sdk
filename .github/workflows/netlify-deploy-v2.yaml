@@ -126,7 +126,7 @@ jobs:
         working-directory: ./docs
         env:
           HUGO_ENV: production
-        run: hugo --minify
+        run: hugo_env=public hugo --minify
       - name: Publish (draft)
         uses: netlify/actions/cli@master
         with:
