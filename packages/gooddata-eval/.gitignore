@@ -1,0 +1,8 @@
+# (C) 2026 GoodData Corporation
+
+# Unit test / coverage reports
+.tox/
+.coverage
+.coverage.*
+coverage.xml
+.json-report-*.json
