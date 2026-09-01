@@ -1,0 +1,64 @@
+# (C) 2026 GoodData Corporation
+name: Release tag checks
+description: >
+  Answers the two questions the release workflows ask about the tag that triggered them.
+  They are not the same question, and they disagree exactly on the backport cases:
+
+  is_latest    -- is this the highest version released so far? Decides the "Latest" badge
+                  on the GitHub release. A patch of an older line (v1.60.1 while v1.73.0
+                  exists) must not take it.
+  is_on_master -- is this tag an ancestor of the default branch? Decides whether the
+                  documentation is rebuilt. A patch is branched from a release branch and
+                  never merged back, so its tree is behind master; deploying it with --prod
+                  would revert any documentation merged since that release.
+
+  Requires the repository to be checked out with fetch-depth: 0, so that every tag and the
+  default branch are present. A shallower checkout fails the ancestry check loudly rather
+  than answering either question wrongly. On a non-tag ref (e.g. a manual workflow_dispatch)
+  both outputs are 'true'.
+
+outputs:
+  is_latest:
+    description: "'true' when the triggering tag is the highest v*.*.* tag, otherwise 'false'"
+    value: ${{ steps.check.outputs.is_latest }}
+  is_on_master:
+    description: "'true' when the triggering tag is an ancestor of the default branch, otherwise 'false'"
+    value: ${{ steps.check.outputs.is_on_master }}
+
+runs:
+  using: composite
+  steps:
+    - id: check
+      shell: bash
+      env:
+        TAG: ${{ github.ref_name }}
+        REF_TYPE: ${{ github.ref_type }}
+        DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      run: |
+        set -euo pipefail
+
+        if [ "$REF_TYPE" != "tag" ]; then
+          echo "Ref '$TAG' is not a tag; nothing to guard against."
+          echo "is_latest=true" >> "$GITHUB_OUTPUT"
+          echo "is_on_master=true" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        # Only stable vX.Y.Z tags count. The trigger glob v*.*.* would also match something
+        # like v0.0.1-test, which sort -V could pick as the highest -- marking every real
+        # release from then on as not-latest. A non-stable TAG never equals a stable
+        # $highest, so it correctly comes out as not-latest without a separate check.
+        highest=$(git tag -l 'v*.*.*' | { grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' || true; } | sort -V | tail -n 1)
+        if [ -n "$highest" ] && [ "$TAG" = "$highest" ]; then is_latest=true; else is_latest=false; fi
+
+        if git merge-base --is-ancestor "$TAG" "origin/$DEFAULT_BRANCH"; then
+          is_on_master=true
+        else
+          is_on_master=false
+        fi
+
+        echo "tag=$TAG highest=$highest is_latest=$is_latest is_on_master=$is_on_master"
+        {
+          echo "is_latest=$is_latest"
+          echo "is_on_master=$is_on_master"
+        } >> "$GITHUB_OUTPUT"

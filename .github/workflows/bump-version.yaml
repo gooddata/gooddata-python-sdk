@@ -14,6 +14,14 @@ on:
           - minor
           - patch
 
+# One bump per branch at a time, so two dispatches cannot race to bump, merge and tag.
+# Keyed by branch rather than globally, so a bump from a hotfix branch is not
+# blocked by one from master. Never cancels: interrupting this
+# between the master push and the tag push would leave a release half-made.
+concurrency:
+  group: bump-${{ github.ref_name }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   pull-requests: write
@@ -21,8 +29,6 @@ permissions:
 jobs:
     bump-version:
       runs-on: ubuntu-latest
-      outputs:
-        new_version: ${{ steps.bump.outputs.new_version }}
       steps:
         - name: Checkout
           uses: actions/checkout@v5
@@ -40,7 +46,7 @@ jobs:
           id: bump
           run: |
             NEW_VERSION=$(uv run python ./scripts/bump_version.py ${{ github.event.inputs.bump_type }})
-            echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+            echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
 
         - name: Bump version in documentation
           run: |
@@ -50,40 +56,28 @@ jobs:
           run: |
             make release-ci VERSION=${{ steps.bump.outputs.new_version }}
 
-        - name: Specify release branch
-          id: branch
-          run: |
-            if [ "${{ github.event.inputs.bump_type }}" == "patch" ]; then
-              RELEASE_BRANCH="patch/${{ steps.bump.outputs.new_version }}"
-            else
-              RELEASE_BRANCH="rel/${{ steps.bump.outputs.new_version }}"
-            fi
-            echo "release_branch=$RELEASE_BRANCH" >> $GITHUB_OUTPUT
-
         - name: Create and push the new version ${{steps.bump.outputs.new_version}}
+          env:
+            VERSION: ${{ steps.bump.outputs.new_version }}
           run: |
             git config user.name github-actions
             git config user.email github-actions@github.com
-            git checkout -b ${{ steps.branch.outputs.release_branch }}
+
+            # Every release branch is rel/X.Y.Z, patches included. The docs build
+            # (scripts/generate.sh) and the pre-merge pipeline both key off rel/**.
+            git checkout -b "rel/$VERSION"
             git add -A
-            git commit -m "Release ${{steps.bump.outputs.new_version}}"
-            git push origin ${{ steps.branch.outputs.release_branch }}
+            git commit -m "Release $VERSION"
+
+            # Order matters: the docs build enumerates remote rel/* branches, so
+            # rel/$VERSION has to be on the remote before the tag starts anything.
+            git push origin "rel/$VERSION"
             git checkout master
-            git merge ${{ steps.branch.outputs.release_branch }}
+            git merge "rel/$VERSION"
             git push origin master
 
-# TODO: this part waits for docs build and publish optimization it takes too long (~15 minutes)
-#    trigger-release:
-#      needs:
-#        - bump-version
-#        - create-release-branch
-#      runs-on: ubuntu-latest
-#      steps:
-#        - name: Checkout
-#          uses: actions/checkout@v5
-#        - name: Push new tag – v${{ needs.bump-version.outputs.new_version }}
-#          run: |
-#            git config user.name GitHub Actions
-#            git config user.email github-actions@github.com
-#            git tag v${{ needs.bump-version.outputs.new_version }}
-#            git push origin v${{ needs.bump-version.outputs.new_version }}
+            # The tag push is the single trigger for build-release and netlify-deploy.
+            # It works only because the checkout above uses TOKEN_GITHUB_YENKINS_ADMIN --
+            # GitHub does not trigger workflows from pushes made with GITHUB_TOKEN.
+            git tag "v$VERSION"
+            git push origin "v$VERSION"
