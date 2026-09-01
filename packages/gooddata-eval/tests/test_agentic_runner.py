@@ -3,7 +3,7 @@
 from unittest.mock import patch
 
 import pytest
-from gooddata_eval.cli.agentic_runner import _dispatch_agentic, run_agentic_items
+from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, _dispatch_agentic, run_agentic_items
 from gooddata_eval.core.agentic.alert_skill import AlertSkillAssertionError
 from gooddata_eval.core.models import AgenticEvalOutcome, DatasetItem
 
@@ -81,8 +81,6 @@ def test_all_agentic_kind_cases_covers_every_registered_kind():
     """Guards the two parametrized tests below against silently going stale: a kind added
     to AGENTIC_TEST_KINDS without a matching case here would otherwise just not get tested,
     not fail loudly."""
-    from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS
-
     covered = {kind for kind, _, _ in _ALL_AGENTIC_KIND_CASES}
     assert covered == set(AGENTIC_TEST_KINDS)
 
@@ -194,8 +192,6 @@ def test_dispatch_agentic_returns_a_real_outcome_for_every_kind(kind, expected_o
     evaluator produced -- not None, not the outcome's reasoning_steps list alone, not any
     other bare value the old `isinstance(outcome, tuple)`/`isinstance(outcome, AgenticEvalOutcome)`
     fallback could silently swallow."""
-    from gooddata_eval.core.models import AgenticEvalOutcome
-
     item = DatasetItem(
         id="q1",
         dataset_name="ds",
