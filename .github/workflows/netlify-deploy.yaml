@@ -1,9 +1,42 @@
 name: Netlify Deploy
 on:
   workflow_dispatch:
+  # Released together with the packages: the tag pushed by bump-version triggers
+  # this workflow and build-release.yaml at the same time, so docs and packages
+  # build in parallel.
+  push:
+    tags:
+      - v*.*.*
+
+# One production deploy at a time, whatever triggered it -- the deploy target is a single
+# shared resource, so overlapping runs race to decide what is live. Never cancels: a
+# cancelled `netlify deploy --prod` can leave the site partly updated.
+concurrency:
+  group: netlify-prod
+  cancel-in-progress: false
 
 jobs:
+  tag-checks:
+    name: Check the triggering tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      is_on_master: ${{ steps.check.outputs.is_on_master }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # the checks need every tag and the default branch
+      - id: check
+        uses: ./.github/actions/release-tag-checks
+
   netlify-deploy:
+    # Only tags that are on master publish documentation: the hugo action checks out the
+    # triggering tag, so deploying from a patch tag would put an outdated site live.
+    # See .github/actions/release-tag-checks for why this is not the is_latest check.
+    needs: tag-checks
+    if: needs.tag-checks.outputs.is_on_master == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

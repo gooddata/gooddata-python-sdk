@@ -1,4 +1,7 @@
 name: Netlify Deploy V2 (Draft)
+
+# TODO: when this replaces netlify-deploy.yaml, bring the tag-checks gate with it
+# (see .github/actions/release-tag-checks).
 on:
   workflow_dispatch:
 
