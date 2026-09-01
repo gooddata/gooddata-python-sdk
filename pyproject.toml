@@ -24,9 +24,6 @@ package = false
 # So a bare `uv sync` can run every make target (ruff, ty, pytest, tox). Not "all":
 # `release` would then be installed by every CI `uv sync --group ...` too.
 default-groups = ["dev", "lint", "type", "test", "tox"]
-# tox-uv depends on `uv` with no upper bound and its console script replaces the uv binary
-# in the Docker image; keep the locked uv inside required-version above.
-constraint-dependencies = ["uv~=0.12.0"]
 
 [tool.uv.sources]
 gooddata-sdk = { workspace = true }
@@ -99,7 +96,10 @@ release = [
 ]
 tox = [
     "tox~=4.56.1",
-    "tox-uv~=1.35.2",
+    # tox-uv-bare carries the actual plugin; the `tox-uv` wrapper only adds a dependency on
+    # the 58MB `uv` PyPI package, which the image already has as a binary and the host has
+    # on PATH. Requires `uv` to be on PATH, which holds in both places.
+    "tox-uv-bare~=1.35.2",
 ]
 
 [tool.ruff]

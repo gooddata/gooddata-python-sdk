@@ -1,6 +1,6 @@
 # (C) 2021 GoodData Corporation
 ARG PY_TAG
-FROM ghcr.io/astral-sh/uv:0.12 AS uv
+FROM ghcr.io/astral-sh/uv:0.12.5 AS uv
 FROM python:${PY_TAG}
 
 ARG PY_TAG
@@ -42,8 +42,8 @@ COPY pyproject.toml uv.lock ./
 # Install tox and tox-uv as system packages so they're available globally.
 # Via `uv export` and not `uv pip install --group`: the latter re-resolves fresh from the
 # index, while export reads uv.lock, so the image gets exactly the pinned versions.
-# NOTE: tox-uv's `uv` dependency installs a console script over the binary COPYed above;
-# [tool.uv] constraint-dependencies keeps the locked version inside required-version.
+# The group uses tox-uv-bare, so nothing here installs a `uv` console script over the
+# binary COPYed above -- that COPY is the image's only uv, hence its exact pin.
 # Clean up dependency files after installation to reduce image size
 RUN set -x \
   && uv export --frozen --only-group tox -o /tmp/tox-requirements.txt \
