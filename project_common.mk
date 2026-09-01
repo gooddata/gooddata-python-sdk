@@ -5,6 +5,10 @@ ROOT_DIR = ../..
 RUFF = ./.venv/bin/ruff
 # ty needs uv run (unlike ruff) because it resolves imports from installed packages
 TY = uv run ty
+# `uv run` so a host dev gets tox+tox-uv from the lock without activating the venv. The
+# test image overrides this to bare `tox` (it installs the same lock-pinned versions
+# system-wide), which skips an entire redundant project sync inside every container.
+TOX ?= uv run tox
 PKG_PATH = packages/$(CURR_DIR_BASE_NAME)
 
 TOX_FLAGS =
@@ -59,7 +63,7 @@ types: type-check
 
 .PHONY: test
 test:
-	uv run tox -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
+	$(TOX) -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
 
 .PHONY: test-ci
 test-ci:
@@ -69,7 +73,7 @@ test-ci:
 .PHONY: test-staging
 test-staging:
 	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required." && exit 1)
-	TOKEN=$(TOKEN) DS_PASSWORD=$(DS_PASSWORD) GD_TEST_ENV=staging uv run tox -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
+	TOKEN=$(TOKEN) DS_PASSWORD=$(DS_PASSWORD) GD_TEST_ENV=staging $(TOX) -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
 
 # this is effective for gooddata-sdk only now - it should be part of test fixtures
 # remove this target once implemented in pytest global fixture

@@ -104,13 +104,13 @@ test-staging:
 clean-staging:
 	@test -n "$(STAGING_ADMIN_TOKEN)" || (echo "ERROR: STAGING_ADMIN_TOKEN is required. Set it in .env or pass on CLI." && exit 1)
 	@test -n "$(STAGING_DS_PASSWORD)" || (echo "ERROR: STAGING_DS_PASSWORD is required. Set it in .env or pass on CLI." && exit 1)
-	cd packages/tests-support && STAGING=1 TOKEN="$(STAGING_ADMIN_TOKEN)" DS_PASSWORD="$(STAGING_DS_PASSWORD)" python clean_staging.py
+	cd packages/tests-support && STAGING=1 TOKEN="$(STAGING_ADMIN_TOKEN)" DS_PASSWORD="$(STAGING_DS_PASSWORD)" uv run --locked python clean_staging.py
 
 .PHONY: load-staging
 load-staging:
 	@test -n "$(STAGING_ADMIN_TOKEN)" || (echo "ERROR: STAGING_ADMIN_TOKEN is required. Set it in .env or pass on CLI." && exit 1)
 	@test -n "$(STAGING_DS_PASSWORD)" || (echo "ERROR: STAGING_DS_PASSWORD is required. Set it in .env or pass on CLI." && exit 1)
-	cd packages/tests-support && STAGING=1 TOKEN="$(STAGING_ADMIN_TOKEN)" DS_PASSWORD="$(STAGING_DS_PASSWORD)" python upload_demo_layout.py
+	cd packages/tests-support && STAGING=1 TOKEN="$(STAGING_ADMIN_TOKEN)" DS_PASSWORD="$(STAGING_DS_PASSWORD)" uv run --locked python upload_demo_layout.py
 
 .PHONY: release
 release:
