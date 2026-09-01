@@ -19,6 +19,14 @@ dependencies = [
 
 [tool.uv]
 required-version = "~=0.12.0"
+# The root only aggregates the members; it is never built or published.
+package = false
+# So a bare `uv sync` can run every make target (ruff, ty, pytest, tox). Not "all":
+# `release` would then be installed by every CI `uv sync --group ...` too.
+default-groups = ["dev", "lint", "type", "test", "tox"]
+# tox-uv depends on `uv` with no upper bound and its console script replaces the uv binary
+# in the Docker image; keep the locked uv inside required-version above.
+constraint-dependencies = ["uv~=0.12.0"]
 
 [tool.uv.sources]
 gooddata-sdk = { workspace = true }
@@ -34,7 +42,20 @@ gooddata-api-client = { path = "gooddata-api-client", editable = true }
 
 [tool.uv.workspace]
 # note gooddata-api-client is not a workspace package, it is a dependency of other packages
-members = ["packages/*"]
+# Listed explicitly, not as a "packages/*" glob: any stray directory under packages/ would
+# match and, lacking a pyproject.toml, break every uv command in the repo. A new package
+# needs three entries -- here, [project].dependencies above, and [tool.uv.sources].
+members = [
+    "packages/gooddata-dbt",
+    "packages/gooddata-eval",
+    "packages/gooddata-fdw",
+    "packages/gooddata-flexconnect",
+    "packages/gooddata-flight-server",
+    "packages/gooddata-pandas",
+    "packages/gooddata-pipelines",
+    "packages/gooddata-sdk",
+    "packages/tests-support",
+]
 
 [dependency-groups]
 dev = [
@@ -48,27 +69,29 @@ type = [
     "ty~=0.0.55",
 ]
 test = [
-    # Common test dependencies used across all workspace packages
+    # Declared only here: consumed by the scripts/docs/ tests (`make test-docs-scripts`).
     "pytest~=8.3.4",
-    # Required by scripts/docs/ tests
     "toml~=0.10.2",
     "griffe>=1.0",
     "docstring_parser~=0.15",
     "jinja2~=3.1",
-    "pytest-cov~=6.0.0",
-    "pytest-json-report==1.5.0",
-    # Additional test dependencies used by multiple packages
-    "pytest-snapshot==0.9.0",
-    "pytest-order~=1.3.0",
-    "vcrpy~=8.2.1",
-    "urllib3~=2.6.0",
-    "python-dotenv~=1.0.0",
-    "deepdiff~=8.5.0",
-    "pytest-mock>=3.14.0",
-    # Package-specific dependencies (only needed by some packages)
-    # but included here for convenience when working on the full workspace
-    "moto>=5.1.6",
-    "orjson>=3.11.3",
+    # Mirror of the members' `test` groups so the root venv can run any package's tests
+    # (`uv run pytest -k ...`, see scripts/validate_python.sh). Add to it when a member
+    # adds a test dependency, or that member's tests stop collecting from the root venv.
+    # Unbounded on purpose: the authoritative bounds live in each member's own group, and
+    # the single workspace lock resolves one version for everything anyway.
+    "pytest-cov",
+    "jsonschema",
+    "pytest-json-report",
+    "pytest-snapshot",
+    "pytest-order",
+    "pytest-mock",
+    "vcrpy",
+    "urllib3",
+    "python-dotenv",
+    "deepdiff",
+    "moto",
+    "orjson",
 ]
 release = [
     "tbump~=6.11.0",
@@ -77,12 +100,6 @@ release = [
 tox = [
     "tox~=4.56.1",
     "tox-uv~=1.35.2",
-    # tox-uv depends on the uv PyPI package without a version bound, and the Dockerfile
-    # installs this group with `uv pip install`, which resolves fresh instead of reading
-    # uv.lock. Without this bound the resolver picks the newest uv, whose console script
-    # then shadows the pinned binary in the image and trips required-version at runtime.
-    # Keep in sync with [tool.uv] required-version above.
-    "uv~=0.12.0",
 ]
 
 [tool.ruff]
