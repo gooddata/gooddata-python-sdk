@@ -1,0 +1,21 @@
+packages/gooddata-eval/pyproject.toml
+  s_3b0266ed62e026::t_f52363b86a1be5 33-35
+uv.lock
+  s_3b0266ed62e026::t_4d2c596f11f5fe 869
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "ea8375e94e8ee2673e84a0e7cd88998d145e1925",
+  "prompts": {},
+  "sessions": {
+    "s_3b0266ed62e026": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1e330095-adac-4a1b-adfe-036195dd8bdb",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
