@@ -1,0 +1,23 @@
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/_llm_judge.py
+  s_3b0266ed62e026::t_a07c5fd98216d0 4
+packages/gooddata-eval/README.md
+  s_3b0266ed62e026::t_a07c5fd98216d0 151-158,166-167,169-172,202-216
+  s_3b0266ed62e026::t_a2be10c1fdb55c 147
+  s_3b0266ed62e026::t_1eb157dfc16b97 217
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "e5f5cedd5771dc04639d3fadd7e2dcb4448e5922",
+  "prompts": {},
+  "sessions": {
+    "s_3b0266ed62e026": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1e330095-adac-4a1b-adfe-036195dd8bdb",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
