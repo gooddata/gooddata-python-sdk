@@ -749,3 +749,85 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
         ],
         "latency_breakdown": [],
     }
+
+
+def _viz_result(tool_calls):
+    r = MagicMock()
+    r.text_response = "done"
+    r.created_visualizations = [MagicMock()]
+    r.tool_call_events = tool_calls
+    r.reasoning_step_events = []
+    r.turn_wall_clock_sec = None
+    return r
+
+
+def test_skill_routing_counts_skills_activated_in_an_earlier_turn():
+    """Skills stay active for the rest of the conversation, so a later turn that uses an
+    already-active skill must pass routing even though it activates nothing itself.
+
+    Regression: `all_tool_calls` is per-turn, so judging routing against only that turn's
+    set_skills calls failed turns 2..n of every multi-turn fixture. Measured on a real
+    424-turn corpus: 103 of 105 routing failures had the expected skill activated in an
+    earlier turn of the same conversation, 12 of them with correct output.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    # t1 activates visualization; t2 activates nothing.
+    mock_client.send_message.side_effect = [
+        _viz_result([_skills_tc("visualization")]),
+        _viz_result([]),
+    ]
+
+    fixture = ConversationFixture(
+        id="test-cumulative",
+        expected_skills=["visualization"],
+        turns=[
+            TurnDefinition(turn_id="t1", message="Make a chart", expected_skill="visualization",
+                           expected_output_type="visualization"),
+            TurnDefinition(turn_id="t2", message="Now as a percent of total",
+                           expected_skill="visualization", expected_output_type="visualization"),
+        ],
+    )
+    with patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok", workspace_id="ws1", fixture=fixture,
+        )
+
+    t1, t2 = result.turn_results
+    assert t1.skill_routing is True
+    assert t2.skill_routing is True, "t2 used the skill activated in t1 and must pass routing"
+    # activated_skills stays per-turn (newly activated), so *when* a skill was switched
+    # on is still visible in the report.
+    assert t1.activated_skills == ["visualization"]
+    assert t2.activated_skills == []
+
+
+def test_skill_routing_still_fails_when_the_skill_was_never_activated():
+    """The 2 genuine misses in that corpus must stay failures."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _viz_result([_skills_tc("metric")]),
+        _viz_result([]),
+    ]
+
+    fixture = ConversationFixture(
+        id="test-never",
+        expected_skills=["metric", "search"],
+        turns=[
+            TurnDefinition(turn_id="t1", message="Create a metric", expected_skill="metric",
+                           expected_output_type="visualization"),
+            TurnDefinition(turn_id="t2", message="Search for related objects",
+                           expected_skill="search", expected_output_type="visualization"),
+        ],
+    )
+    with patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok", workspace_id="ws1", fixture=fixture,
+        )
+
+    t1, t2 = result.turn_results
+    assert t1.skill_routing is True
+    assert t2.skill_routing is False, "search was never activated -- this is a real miss"

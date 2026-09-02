@@ -306,6 +306,12 @@ def run_agentic_conversation(
     turn_offset = 0.0
     tool_index_offset = 0
     reasoning_index_offset = 0
+    # Skills stay active for the rest of the conversation once set_skills switches them
+    # on, so routing must be judged against everything active *by* this turn, not just
+    # what this turn newly activated. `all_tool_calls` is per-turn (reset below), so
+    # without this a 5-turn fixture failed skill_routing on turns 2-5 even when the
+    # agent used the already-active skill and produced correct output.
+    skills_active: set[str] = set()
 
     try:
         if initial_conversation_id is not None:
@@ -375,7 +381,8 @@ def run_agentic_conversation(
                 current_message = _get_sim_user_response(response_text, resolved_turn, resolved_expected)
 
             activated = _activated_skills(all_tool_calls)
-            skill_routing = turn.expected_skill in activated if activated else False
+            skills_active.update(activated)
+            skill_routing = turn.expected_skill in skills_active
             output_present = _check_output_present(resolved_turn, final_result) if final_result else False
             output_correct = (
                 _check_output_correct(resolved_turn, final_result) if (final_result and output_present) else None
