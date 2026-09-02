@@ -5,9 +5,18 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._trace_linker import (
+    RunIdentity,
+    RunTraceContext,
+    SubmitTraceLink,
+    open_trace_window,
+    run_trace_link_inline,
+    submit_trace_scoring,
+    utc_now,
+)
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import AgenticEvalOutcome, ToolCallEvent
+from gooddata_eval.core.models import AgenticAssertionError, AgenticEvalOutcome, ToolCallEvent
 
 _DEFAULT_K = 1
 
@@ -135,14 +144,8 @@ def run_agentic_search_tool(
     )
 
 
-class SearchToolAssertionError(AssertionError):
+class SearchToolAssertionError(AgenticAssertionError):
     """Raised when a search-tool evaluation fails."""
-
-    __tracebackhide__ = True
-    reasoning_steps: list[str]
-    conversation_id: str
-    response_id: str | None
-    detail: dict
 
 
 def evaluate_agentic_search_tool(
@@ -161,6 +164,7 @@ def evaluate_agentic_search_tool(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    submit_trace_link: SubmitTraceLink = run_trace_link_inline,
 ) -> AgenticEvalOutcome:
     """Run search-tool evaluation, log to Langfuse, and raise SearchToolAssertionError on failure.
 
@@ -168,14 +172,7 @@ def evaluate_agentic_search_tool(
     AgenticEvalOutcome on success; on failure the same three values are attached to the
     raised exception as ``.reasoning_steps``/``.conversation_id``/``.response_id``.
     """
-    from datetime import datetime as _dt  # noqa: PLC0415
-    from datetime import timezone as _tz  # noqa: PLC0415
-
-    from gooddata_eval.core.agentic._langfuse import try_make_langfuse_client  # noqa: PLC0415
-
-    if langfuse is None:
-        langfuse = try_make_langfuse_client()
-    window_start = _dt.now(_tz.utc)
+    langfuse, window_start = open_trace_window(langfuse)
     summary = run_agentic_search_tool(
         host=host,
         token=token,
@@ -189,46 +186,56 @@ def evaluate_agentic_search_tool(
     )
 
     if langfuse is not None and dataset_item_id:
-        from gooddata_eval.core.agentic._langfuse import (  # noqa: PLC0415
-            build_run_context,
-            find_traces_per_conversation,
-            log_quality_and_value_scores,
-            observe,
-            score_safe,
+        # Pinned on the calling thread: a deferred poll must not widen its query window.
+        window_end = utc_now()
+
+        def _write_scores(ctx: RunTraceContext) -> None:
+
+            for run_idx, run in enumerate(summary.run_results):
+                pt = ctx.trace(run.conversation_id)
+                with ctx.observe(pt, run_idx) as tid:
+                    ctx.score(tid, name="tool_selection", value=float(run.tool_selected), data_type="BOOLEAN")
+                    ctx.score(tid, name="tool_correctness", value=float(run.tool_correct), data_type="BOOLEAN")
+                    ctx.quality(
+                        tid,
+                        strict_checks={"tool_selection": run.tool_selected},
+                        latency_sec=pt.latency if pt else None,
+                        cost_usd=pt.total_cost if pt else None,
+                    )
+
+        # Before the pass@K raise: a failing item's scores are the ones worth having.
+        submit_trace_scoring(
+            submit_trace_link,
+            RunIdentity(
+                host,
+                token,
+                workspace_id,
+                dataset_name,
+                run_timestamp,
+                model_version_override,
+                run_metadata_extra,
+                reasoning_effort,
+            ),
+            langfuse=langfuse,
+            dataset_item_id=dataset_item_id,
+            conversation_ids=[r.conversation_id for r in summary.run_results],
+            window_start=window_start,
+            window_end=window_end,
+            suffix_runs=len(summary.run_results) > 1,
+            write_scores=_write_scores,
         )
 
-        run_name_base, run_metadata = build_run_context(
-            host,
-            token,
-            workspace_id,
-            dataset_name,
-            run_timestamp,
-            model_version_override,
-            run_metadata_extra,
-            reasoning_effort,
-        )
-        traces_by_conv = find_traces_per_conversation(
-            langfuse,
-            [r.conversation_id for r in summary.run_results],
-            window_start,
-        )
-        suffix_needed = len(summary.run_results) > 1
-        for run_idx, run in enumerate(summary.run_results):
-            pt = traces_by_conv.get(run.conversation_id)
-            run_name = f"{run_name_base}_run{run_idx}" if suffix_needed else run_name_base
-            with observe(langfuse, pt.id if pt else None, dataset_item_id, run_name, run_metadata) as tid:
-                score_safe(langfuse, tid, name="tool_selection", value=float(run.tool_selected), data_type="BOOLEAN")
-                score_safe(langfuse, tid, name="tool_correctness", value=float(run.tool_correct), data_type="BOOLEAN")
-                log_quality_and_value_scores(
-                    langfuse,
-                    tid,
-                    strict_checks={"tool_selection": run.tool_selected},
-                    latency_sec=pt.latency if pt else None,
-                    cost_usd=pt.total_cost if pt else None,
-                )
+    runs_passed = sum(1 for r in summary.run_results if r.tool_selected)
+    runs_effective = len(summary.run_results)
+
+    best = summary.best
+    detail = {
+        "tool_selected": best.tool_selected,
+        "tool_correct": best.tool_correct,
+        "tool_call_names": best.tool_call_names,
+    }
 
     if not summary.pass_at_k:
-        best = summary.best
         exc = SearchToolAssertionError(
             f"Search tool assertion failed. "
             f"tool_selected={best.tool_selected}, tool_correct={best.tool_correct}. "
@@ -237,20 +244,15 @@ def evaluate_agentic_search_tool(
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
-        exc.detail = {
-            "tool_selected": best.tool_selected,
-            "tool_correct": best.tool_correct,
-            "tool_call_names": best.tool_call_names,
-        }
+        exc.detail = detail
+        exc.runs_passed = runs_passed
+        exc.runs_effective = runs_effective
         raise exc
-    best = summary.best
     return AgenticEvalOutcome(
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
-        detail={
-            "tool_selected": best.tool_selected,
-            "tool_correct": best.tool_correct,
-            "tool_call_names": best.tool_call_names,
-        },
+        detail=detail,
     )

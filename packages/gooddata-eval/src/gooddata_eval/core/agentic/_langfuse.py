@@ -6,6 +6,7 @@ from __future__ import annotations
 import base64
 import logging
 import os
+import threading
 import time
 import uuid
 from collections.abc import Iterator
@@ -15,7 +16,8 @@ from typing import Any
 
 import httpx
 
-from gooddata_eval.core.config import ReasoningEffort, normalize_reasoning_effort
+from gooddata_eval.core.agentic._trace_linker import link_cancel_event, linking_is_inline, warn_from_worker
+from gooddata_eval.core.config import ReasoningEffort, env_flag, normalize_reasoning_effort
 
 _log = logging.getLogger(__name__)
 
@@ -44,14 +46,37 @@ class _TraceAPI:
     def __init__(self, client: httpx.Client) -> None:
         self._client = client
 
-    def list(self, from_timestamp: Any, to_timestamp: Any, limit: int) -> _TraceListResult:
+    def list(
+        self, from_timestamp: Any, to_timestamp: Any, limit: int, session_id: str | None = None
+    ) -> _TraceListResult:
+        """List traces in a window, optionally narrowed to one session server-side.
+
+        ``session_id`` is what makes ``limit`` a non-issue. Without it the endpoint returns
+        every trace in the window newest-first and the caller filters locally, so an eval
+        workspace busy enough to put more than ``limit`` traces inside one item's window
+        pushes that item's OWN (oldest) trace off the page -- it then polls its whole retry
+        budget against a page that can never contain it, and the score orphans with only a
+        generic "no trace found" line to show for it. Concurrency makes that likelier by
+        overlapping every item's window. Named ``session_id`` because
+        ``_fetch_traces_for_session`` probes for exactly that parameter before it will stop
+        filtering locally; gen-ai sets sessionId = conversationId.
+        """
+
         def _ts(v: Any) -> str:
             return v.isoformat() if hasattr(v, "isoformat") else str(v)
 
-        resp = self._client.get(
-            "/api/public/traces",
-            params={"fromTimestamp": _ts(from_timestamp), "toTimestamp": _ts(to_timestamp), "limit": limit},
-        )
+        params: dict[str, Any] = {
+            "fromTimestamp": _ts(from_timestamp),
+            "toTimestamp": _ts(to_timestamp),
+            "limit": limit,
+        }
+        # `is not None`, not truthiness: _fetch_traces_for_session puts session_id into its
+        # kwargs unconditionally and then skips local filtering because it is there, so an
+        # empty id dropped here would return the whole padded window unfiltered -- and the
+        # max-latency pick would attach this item's scores to a stranger's trace.
+        if session_id is not None:
+            params["sessionId"] = session_id
+        resp = self._client.get("/api/public/traces", params=params)
         resp.raise_for_status()
         return _TraceListResult([_TraceObj(t) for t in resp.json().get("data", [])])
 
@@ -161,6 +186,15 @@ def make_langfuse_client() -> HttpxLangfuseClient:
     return HttpxLangfuseClient()
 
 
+def langfuse_credentials_present() -> bool:
+    """Whether the environment could build a Langfuse client.
+
+    Separate from ``try_make_langfuse_client`` so a caller can ask the question without
+    opening an httpx client it does not intend to use.
+    """
+    return bool(os.environ.get("LANGFUSE_PUBLIC_KEY")) and bool(os.environ.get("LANGFUSE_SECRET_KEY"))
+
+
 def try_make_langfuse_client() -> HttpxLangfuseClient | None:
     """Create Langfuse client from env vars; return None if credentials are missing."""
     try:
@@ -173,6 +207,28 @@ def try_make_langfuse_client() -> HttpxLangfuseClient | None:
 
 SKIP_ENV_VAR = "TAVERN_E2E_SKIP_TRACE_LINK"
 
+# Run names whose dataset-run assembly has already been reported as impossible. A 404 from
+# dataset-run-items means the dataset item id is not in Langfuse, which is a property of
+# the dataset and not of the attempt -- so it recurs identically for every item and every
+# run of that dataset, and reporting it per conversation buries the run's real output under
+# dozens of copies of the same HTTP error. Guarded by a lock because linking runs on the
+# drain pool's worker threads.
+_UNLINKABLE_RUNS: set[str] = set()
+_UNLINKABLE_RUNS_LOCK = threading.Lock()
+
+
+def _first_report_for_run(run_name: str) -> bool:
+    """True the first time this run is seen, False afterwards. Thread-safe."""
+    # A run is suffixed _run0.._runK per K, one per pass over the same dataset; the cause
+    # is shared across all of them, so collapse to the base name.
+    base = run_name.rsplit("_run", 1)[0]
+    with _UNLINKABLE_RUNS_LOCK:
+        if base in _UNLINKABLE_RUNS:
+            return False
+        _UNLINKABLE_RUNS.add(base)
+        return True
+
+
 _MAX_LATENCY_SEC = 60.0
 _MAX_COST_USD = 0.05
 _QUALITY_WEIGHT = 0.6
@@ -180,8 +236,22 @@ _SPEED_WEIGHT = 0.2
 _COST_WEIGHT = 0.2
 
 _INITIAL_DELAY = 0.5
-_MAX_ATTEMPTS = 8
 _BACKOFF = 1.6
+# Ceiling on any single backoff sleep, so a long budget is spent on many steady retries
+# rather than one enormous final wait.
+_MAX_DELAY = 15.0
+# Budget for one item's batched poll, which blocks nobody. Sized against Langfuse ingestion
+# lag on us.cloud, which runs from tens of seconds to several minutes. Shared across the
+# item's conversations, so the batch tail does not grow with --runs.
+_LINK_BUDGET_SEC = 120.0
+# Budget for a poll that is NOT batched: a direct library caller (the tavern e2e suite) gets
+# run_trace_link_inline, so the wait lands on the test that triggered it, under a step
+# timeout. Deliberately tighter than _LINK_BUDGET_SEC: no inline caller should pay for a
+# budget sized for the CLI's batched tail.
+_INLINE_LINK_BUDGET_SEC = 35.0
+# Sanity bound so the retry loop can never spin: the deadline is wall-clock and only the
+# sleeps advance it. Comfortably above the ~12 attempts the budget actually affords.
+_MAX_ATTEMPTS = 20
 _WINDOW_PADDING_SEC = 2
 _FETCH_LIMIT = 100
 
@@ -243,38 +313,100 @@ def _fetch_traces_for_session(
     return traces
 
 
+# Longest a running poll may stay asleep after cancellation is signalled. Without a bound,
+# a Ctrl-C mid-drain waits out the rest of that poll's backoff -- up to _MAX_DELAY per sleep
+# and _LINK_BUDGET_SEC overall -- because the interpreter joins executor workers at exit.
+_CANCEL_CHECK_SEC = 0.5
+
+
+def _wait_between_attempts(delay: float) -> bool:
+    """Wait ``delay`` before the next poll attempt. False means "stop polling".
+
+    Outside a batched drain nobody can cancel the wait -- an inline poll is charged to the
+    caller that asked for it -- so it stays a single sleep. Inside a drain the wait is served
+    in slices, so an interrupt is noticed within ``_CANCEL_CHECK_SEC`` rather than after the
+    whole backoff. Slicing keeps the total unchanged, so the retry ladder is unaffected.
+    """
+    cancel = link_cancel_event()
+    if cancel is None:
+        time.sleep(delay)
+        return True
+    remaining = delay
+    while remaining > 0:
+        if cancel.is_set():
+            return False
+        step = min(_CANCEL_CHECK_SEC, remaining)
+        time.sleep(step)
+        remaining -= step
+    return not cancel.is_set()
+
+
 def find_traces_per_conversation(
     langfuse: Any,
     conversation_ids: list[str],
     window_start: datetime,
+    window_end: datetime | None = None,
+    deadline: float | None = None,
 ) -> dict[str, Any]:
-    """Poll Langfuse until traces matching all conversation_ids are found or retries exhaust."""
-    if bool(os.environ.get(SKIP_ENV_VAR)):
+    """Poll Langfuse until traces matching all conversation_ids are found or retries exhaust.
+
+    ``window_end`` bounds the trace query and should be pinned by the caller to the moment
+    the conversations ended. It matters because this poll is normally deferred onto a
+    worker thread (see ``agentic/_trace_linker.py``): defaulting it to "now" would stretch
+    the window by however long the task waited in the queue, and since
+    ``_fetch_traces_for_session`` pages at ``_FETCH_LIMIT`` and filters by session locally,
+    a wide enough window can push the wanted trace off the page. Defaults to now only for
+    direct callers that poll immediately.
+    """
+    if env_flag(SKIP_ENV_VAR):
+        # Say so. Skipping returns all-None, which downstream renders as observe()'s
+        # generic "No trace found for dataset run ...; scores will be orphaned" -- the
+        # same message a real lookup failure produces. Left silent, an eval run looks
+        # like Langfuse is broken when trace linking was simply switched off.
+        warn_from_worker(
+            f"[langfuse] trace linking SKIPPED by {SKIP_ENV_VAR}: "
+            f"{len(conversation_ids)} conversation(s) will have orphaned scores. "
+            f"Unset it to link traces."
+        )
         return dict.fromkeys(conversation_ids)
 
     by_conv: dict[str, Any] = dict.fromkeys(conversation_ids)
-    window_end = datetime.now(timezone.utc)
+    window_end = window_end or datetime.now(timezone.utc)
     pad = timedelta(seconds=_WINDOW_PADDING_SEC)
 
+    # One budget for the whole item. Per conversation it would multiply by --runs, and the
+    # batch tail is meant to be bounded by the budget however many runs an item has.
+    budget = _INLINE_LINK_BUDGET_SEC if linking_is_inline() else _LINK_BUDGET_SEC
+    stop_at = deadline if deadline is not None else time.monotonic() + budget
+
     for cid in conversation_ids:
+        cancel = link_cancel_event()
+        if cancel is not None and cancel.is_set():
+            # The run is being interrupted; the remaining conversations are not worth a
+            # round trip, and their scores were never going to be written.
+            break
         delay = _INITIAL_DELAY
         found: list[Any] = []
-        for _ in range(_MAX_ATTEMPTS):
-            time.sleep(delay)
+        for _attempt in range(_MAX_ATTEMPTS):
+            # Attempt first, sleep only between attempts: a trace that is already ingested
+            # when we look must cost nothing, which is the common case once linking is
+            # batched to the end of the run.
             try:
                 found = _fetch_traces_for_session(langfuse, cid, window_start, window_end, pad)
             except Exception as exc:
                 _log.debug("Langfuse trace fetch failed for %s: %s", cid, exc)
-            if found:
+            if found or time.monotonic() + delay > stop_at:
                 break
-            delay *= _BACKOFF
+            if not _wait_between_attempts(delay):
+                break
+            delay = min(delay * _BACKOFF, _MAX_DELAY)
         if found:
             by_conv[cid] = max(found, key=lambda t: getattr(t, "latency", None) or 0.0)
         else:
             _log.warning(
                 "[langfuse] No trace found for conversation %s in window [%s, %s]", cid, window_start, window_end
             )
-            print(f"[langfuse] WARNING: no trace found for conversation {cid}", flush=True)
+            warn_from_worker(f"[langfuse] WARNING: no trace found for conversation {cid}")
 
     return by_conv
 
@@ -313,11 +445,33 @@ def observe(
             _log.debug(
                 "[langfuse] Created dataset run item: run=%s trace=%s item=%s", run_name, trace_id, dataset_item_id
             )
+        except httpx.HTTPStatusError as exc:
+            if exc.response.status_code != 404:
+                _log.warning("Failed to link trace %s to run %s: %s", trace_id, run_name, exc)
+                warn_from_worker(
+                    f"[langfuse] WARNING: failed to create dataset run item "
+                    f"run={run_name} trace={trace_id} item={dataset_item_id}: {exc}"
+                )
+            elif _first_report_for_run(run_name):
+                # Say what it means and what to do, once. A raw 404 names an endpoint,
+                # which tells the reader nothing about the cause being their --dataset.
+                _log.warning(
+                    "Dataset item %s is not in Langfuse; run %s cannot be assembled.", dataset_item_id, run_name
+                )
+                warn_from_worker(
+                    f"[langfuse] WARNING: dataset item {dataset_item_id!r} does not exist in Langfuse, "
+                    f"so the run {run_name!r} cannot be assembled (404 from dataset-run-items). "
+                    f"Scores ARE still written to the traces themselves -- only the per-run grouping "
+                    f"used to compare models is missing. This is what happens when --dataset points at "
+                    f"a local folder: its item ids are local, not Langfuse dataset item ids. Use "
+                    f"--langfuse-dataset to get comparable runs, or set {SKIP_ENV_VAR}=1 to skip linking "
+                    f"altogether. Further occurrences for this run are suppressed."
+                )
         except Exception as exc:
             _log.warning("Failed to link trace %s to run %s: %s", trace_id, run_name, exc)
-            print(
-                f"[langfuse] WARNING: failed to create dataset run item run={run_name} trace={trace_id} item={dataset_item_id}: {exc}",
-                flush=True,
+            warn_from_worker(
+                f"[langfuse] WARNING: failed to create dataset run item "
+                f"run={run_name} trace={trace_id} item={dataset_item_id}: {exc}"
             )
         model_version = (run_metadata or {}).get("model_version")
         if model_version:

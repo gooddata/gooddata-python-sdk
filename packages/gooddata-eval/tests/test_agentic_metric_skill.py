@@ -1,8 +1,8 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
-import os
 import sys
 import types
+from contextlib import ExitStack, contextmanager
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -20,6 +20,59 @@ from gooddata_eval.core.agentic.metric_skill import (
     run_agentic_metric_skill,
 )
 from gooddata_eval.core.models import ChatResult, ToolCallEvent
+from gooddata_eval.core.timing import TIMERS_ENV_VAR
+
+# --- time.monotonic() side effects ---------------------------------------------------
+#
+# metric_skill reads the clock twice per agent turn (start, stop) and twice more per
+# simulated-user reply, so a two-turn conversation needs six values. Named rather than
+# inlined because a single new clock read on the production path breaks every one of these
+# at once with StopIteration -- and repairing a bare literal means hand-counting clock
+# reads at each call site.
+
+# one turn, metric created straight away: agent 3.0s, no simulated user
+_CLOCK_ONE_TURN = [5.0, 8.0]
+# two turns: agent 1.0s then 0.5s, with a 2.5s simulated-user reply between them
+_CLOCK_TWO_TURNS = [20.0, 21.0, 21.0, 23.5, 23.5, 24.0]
+
+
+def _client() -> MagicMock:
+    """A chat client whose conversations are all ``conv-1``.
+
+    Callers override only what they vary -- ``send_message`` and the rest are ordinary
+    mock attributes.
+    """
+    client = MagicMock()
+    client.create_conversation.return_value = "conv-1"
+    return client
+
+
+@contextmanager
+def _patched(client, *, simulated_reply=None, simulated_error=None, sdk=False, monotonic=None):
+    """Patch metric_skill's ChatClient plus whichever collaborators a test needs.
+
+    ``simulated_reply``/``simulated_error`` patch the simulated user (reply, or raise);
+    ``sdk`` patches GoodDataSdk (the created metric's cleanup path); ``monotonic`` feeds
+    the clock one of the ``_CLOCK_*`` constants above. Yields
+    ``(mock_generate_simulated_response, mock_GoodDataSdk)`` -- None for whatever was not
+    patched.
+    """
+    with ExitStack() as stack:
+        stack.enter_context(patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=client))
+        mock_sim = mock_sdk_cls = None
+        if simulated_reply is not None or simulated_error is not None:
+            mock_sim = stack.enter_context(
+                patch(
+                    "gooddata_eval.core.agentic.metric_skill.generate_simulated_response",
+                    return_value=simulated_reply,
+                    side_effect=simulated_error,
+                )
+            )
+        if sdk:
+            mock_sdk_cls = stack.enter_context(patch("gooddata_eval.core.agentic.metric_skill.GoodDataSdk"))
+        if monotonic is not None:
+            stack.enter_context(patch("time.monotonic", side_effect=monotonic))
+        yield mock_sim, mock_sdk_cls
 
 
 def _create_metric_call(result: str) -> ToolCallEvent:
@@ -285,8 +338,7 @@ def test_agentic_metric_summary_pass_at_k():
 
 
 def test_run_agentic_metric_skill_creates_conversation(monkeypatch):
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = ChatResult.model_validate(
         {
             "textResponse": "done",
@@ -301,7 +353,7 @@ def test_run_agentic_metric_skill_creates_conversation(monkeypatch):
         }
     )
 
-    with patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         summary = run_agentic_metric_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -318,8 +370,7 @@ def test_run_agentic_metric_skill_creates_conversation(monkeypatch):
 
 
 def test_run_agentic_metric_skill_closes_client_on_no_result():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = ChatResult.model_validate(
         {
             "textResponse": "I will work on that.",
@@ -327,13 +378,7 @@ def test_run_agentic_metric_skill_closes_client_on_no_result():
             "reasoningStepCount": 1,
         }
     )
-    with (
-        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.metric_skill.generate_simulated_response",
-            return_value="Go ahead and create it.",
-        ) as mock_sim,
-    ):
+    with _patched(mock_client, simulated_reply="Go ahead and create it.") as (mock_sim, _):
         summary = run_agentic_metric_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -349,6 +394,37 @@ def test_run_agentic_metric_skill_closes_client_on_no_result():
     mock_sim.assert_called_once_with("I will work on that.", [{"maql": "SELECT {metric/foo}"}], "Create metric foo")
 
 
+def test_run_agentic_metric_skill_logs_simulated_user_timing(monkeypatch, capsys):
+    monkeypatch.setenv(TIMERS_ENV_VAR, "1")
+    mock_client = _client()
+    mock_client.send_message.side_effect = [
+        ChatResult.model_validate(
+            {
+                "textResponse": "Which field should I use?",
+                "toolCallEvents": [],
+                "reasoningStepCount": 1,
+            }
+        ),
+        _create_metric_chat_result(),
+    ]
+
+    with _patched(mock_client, simulated_reply="Use the foo field.", sdk=True, monotonic=_CLOCK_TWO_TURNS):
+        run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+        )
+
+    output = capsys.readouterr().out
+    assert (
+        "[timer] metric_skill conv-1 GoodData turn 1 complete after 1.00s; waiting for gpt-4o-mini simulated user"
+        in output
+    )
+    assert "[timer] metric_skill conv-1 gpt-4o-mini simulated user complete after 2.50s" in output
+
+
 def test_run_agentic_metric_skill_uses_initial_conversation_for_run_0():
     mock_client = MagicMock()
     mock_client.send_message.return_value = ChatResult.model_validate(
@@ -358,7 +434,7 @@ def test_run_agentic_metric_skill_uses_initial_conversation_for_run_0():
             "reasoningStepCount": 1,
         }
     )
-    with patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         run_agentic_metric_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -383,7 +459,7 @@ def test_run_agentic_metric_skill_creates_fresh_conversations_for_remaining_runs
             "reasoningStepCount": 1,
         }
     )
-    with patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         run_agentic_metric_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -429,13 +505,9 @@ def _create_metric_chat_result(metric_id: str = "foo_metric"):
 
 
 def test_run_agentic_metric_skill_deletes_created_metric():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _create_metric_chat_result()
-    with (
-        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic.metric_skill.GoodDataSdk") as mock_sdk_cls,
-    ):
+    with _patched(mock_client, sdk=True) as (_, mock_sdk_cls):
         mock_sdk = mock_sdk_cls.create.return_value
         run_agentic_metric_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
@@ -454,8 +526,7 @@ def test_run_agentic_metric_skill_deletes_the_metric_created_by_a_self_corrected
     """QA-29053 regression: a failed create_metric call followed by a successful retry, in the
     same turn, used to leave metric_id_to_delete unset -- the metric the retry created leaked
     into the shared workspace."""
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = ChatResult.model_validate(
         {
             "textResponse": "done",
@@ -474,10 +545,7 @@ def test_run_agentic_metric_skill_deletes_the_metric_created_by_a_self_corrected
             "reasoningStepCount": 1,
         }
     )
-    with (
-        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic.metric_skill.GoodDataSdk") as mock_sdk_cls,
-    ):
+    with _patched(mock_client, sdk=True) as (_, mock_sdk_cls):
         mock_sdk = mock_sdk_cls.create.return_value
         summary = run_agentic_metric_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
@@ -496,14 +564,12 @@ def test_run_agentic_metric_skill_deletes_the_metric_created_by_a_self_corrected
 def test_run_agentic_metric_skill_deletes_metric_even_when_teardown_fails():
     # A metric is created, then conversation teardown raises; the created metric must still
     # have been cleaned up (its deletion happens inside the per-run finally, before teardown).
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _create_metric_chat_result()
     mock_client.delete_conversation.side_effect = RuntimeError("teardown boom")
 
     with (
-        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic.metric_skill.GoodDataSdk") as mock_sdk_cls,
+        _patched(mock_client, sdk=True) as (_, mock_sdk_cls),
         pytest.raises(RuntimeError),
     ):
         mock_sdk = mock_sdk_cls.create.return_value
@@ -520,10 +586,10 @@ def test_run_agentic_metric_skill_deletes_metric_even_when_teardown_fails():
     mock_sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "foo_metric")
 
 
-def test_generate_simulated_response_without_an_api_key():
+def test_generate_simulated_response_without_an_api_key(monkeypatch):
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     with (
         patch.dict(sys.modules, {"openai": MagicMock()}),
-        patch.dict(os.environ, {}, clear=True),
         pytest.raises(SimulatedResponseError, match="OPENAI_API_KEY"),
     ):
         generate_simulated_response("Which brand field?", [{"maql": "SELECT {metric/foo}"}], "I need a metric for foo")
@@ -539,8 +605,7 @@ def test_generate_simulated_response_without_the_openai_package():
 
 def test_run_agentic_metric_skill_fails_the_run_when_the_simulated_reply_cannot_be_generated():
     exc = SimulatedResponseError("OPENAI_API_KEY environment variable is not set")
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = ChatResult.model_validate(
         {
             "textResponse": "Which brand field should I count?",
@@ -548,10 +613,7 @@ def test_run_agentic_metric_skill_fails_the_run_when_the_simulated_reply_cannot_
             "reasoningStepCount": 1,
         }
     )
-    with (
-        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic.metric_skill.generate_simulated_response", side_effect=exc) as mock_sim,
-    ):
+    with _patched(mock_client, simulated_error=exc) as (mock_sim, _):
         summary = run_agentic_metric_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -592,14 +654,10 @@ def test_run_agentic_metric_skill_accumulates_reasoning_steps_across_iterations(
             "reasoningSteps": ["step two"],
         }
     )
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.side_effect = [clarify_turn, created_turn]
 
-    with (
-        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic.metric_skill.generate_simulated_response", return_value="It's foo"),
-    ):
+    with _patched(mock_client, simulated_reply="It's foo"):
         summary = run_agentic_metric_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -614,8 +672,7 @@ def test_run_agentic_metric_skill_accumulates_reasoning_steps_across_iterations(
 
 
 def test_evaluate_agentic_metric_skill_returns_reasoning_steps_on_pass():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = ChatResult.model_validate(
         {
             "textResponse": "done",
@@ -629,7 +686,7 @@ def test_evaluate_agentic_metric_skill_returns_reasoning_steps_on_pass():
             "reasoningSteps": ["thinking about it"],
         }
     )
-    with patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         outcome = evaluate_agentic_metric_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -652,8 +709,7 @@ def test_evaluate_agentic_metric_skill_returns_reasoning_steps_on_pass():
 
 
 def test_evaluate_agentic_metric_skill_attaches_reasoning_steps_to_exception_on_fail():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = ChatResult.model_validate(
         {
             "textResponse": "I will work on that.",
@@ -661,10 +717,7 @@ def test_evaluate_agentic_metric_skill_attaches_reasoning_steps_to_exception_on_
             "reasoningSteps": ["confused thinking"],
         }
     )
-    with (
-        patch("gooddata_eval.core.agentic.metric_skill.ChatClient", return_value=mock_client),
-        pytest.raises(MetricSkillAssertionError) as exc_info,
-    ):
+    with _patched(mock_client), pytest.raises(MetricSkillAssertionError) as exc_info:
         evaluate_agentic_metric_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -684,3 +737,74 @@ def test_evaluate_agentic_metric_skill_attaches_reasoning_steps_to_exception_on_
     }
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id is None
+
+
+def test_records_agent_and_simulated_user_latency_separately():
+    # metric_skill's OpenAI call is the simulated user, not a judge, and it sits ON the
+    # critical path -- the next agent turn cannot be sent until the reply exists. Keeping
+    # it in its own bucket is what makes that visible: agent_s is GoodData's cost across
+    # both turns, simulated_user_s is ours.
+    mock_client = _client()
+    mock_client.send_message.side_effect = [
+        ChatResult.model_validate(
+            {"textResponse": "Which field should I use?", "toolCallEvents": [], "reasoningStepCount": 1}
+        ),
+        _create_metric_chat_result(),
+    ]
+
+    with _patched(mock_client, simulated_reply="Use the foo field.", sdk=True, monotonic=_CLOCK_TWO_TURNS):
+        summary = run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+        )
+
+    timings = summary.run_results[0].timings
+    assert timings.agent_s == 1.5  # 1.0s turn 1 + 0.5s turn 2
+    assert timings.simulated_user_s == 2.5
+    # metric_skill has no judge; conflating its simulated user with one would misreport
+    # a blocking call as a deferrable one.
+    assert timings.judge_s == 0.0
+
+
+def test_evaluate_metric_skill_surfaces_timings_on_the_outcome():
+    # The item report reads timings off the outcome, so a kind that measures phases but
+    # does not propagate them reports zeroes and looks instantaneous.
+    mock_client = _client()
+    mock_client.send_message.return_value = _create_metric_chat_result()
+
+    with _patched(mock_client, sdk=True, monotonic=_CLOCK_ONE_TURN):
+        outcome = evaluate_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+        )
+
+    assert outcome.timings.agent_s == 3.0
+    assert outcome.timings.simulated_user_s == 0.0
+
+
+def test_no_timer_output_by_default(monkeypatch, capsys):
+    # metric_skill emits four [timer] lines per turn-pair; on a multi-turn conversation
+    # that is the bulk of the run's output. Off unless asked for.
+    monkeypatch.delenv(TIMERS_ENV_VAR, raising=False)
+    mock_client = _client()
+    mock_client.send_message.return_value = _create_metric_chat_result()
+
+    with _patched(mock_client, sdk=True, monotonic=_CLOCK_ONE_TURN):
+        summary = run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+        )
+
+    assert "[timer]" not in capsys.readouterr().out
+    # Silenced, not un-measured.
+    assert summary.run_results[0].timings.agent_s == 3.0

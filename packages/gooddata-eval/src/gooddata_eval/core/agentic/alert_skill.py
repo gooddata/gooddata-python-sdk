@@ -12,9 +12,24 @@ from typing import Any
 from gooddata_sdk import GoodDataSdk
 
 from gooddata_eval.core.agentic._catalog import CatalogMetricAlert
+from gooddata_eval.core.agentic._trace_linker import (
+    RunIdentity,
+    RunTraceContext,
+    SubmitTraceLink,
+    open_trace_window,
+    run_trace_link_inline,
+    submit_trace_scoring,
+    utc_now,
+)
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import AgenticEvalOutcome, ReasoningStepEvent, ToolCallEvent, build_latency_breakdown
+from gooddata_eval.core.models import (
+    AgenticAssertionError,
+    AgenticEvalOutcome,
+    ReasoningStepEvent,
+    ToolCallEvent,
+    build_latency_breakdown,
+)
 
 try:
     from openai import OpenAI as _OpenAI
@@ -611,14 +626,8 @@ def run_agentic_alert_skill(
     )
 
 
-class AlertSkillAssertionError(AssertionError):
+class AlertSkillAssertionError(AgenticAssertionError):
     """Raised when an alert-skill evaluation fails."""
-
-    __tracebackhide__ = True
-    reasoning_steps: list[str]
-    conversation_id: str
-    response_id: str | None
-    detail: dict
 
 
 def evaluate_agentic_alert_skill(
@@ -638,6 +647,7 @@ def evaluate_agentic_alert_skill(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    submit_trace_link: SubmitTraceLink = run_trace_link_inline,
 ) -> AgenticEvalOutcome:
     """Run alert-skill evaluation, log to Langfuse, and raise AlertSkillAssertionError on failure.
 
@@ -648,14 +658,7 @@ def evaluate_agentic_alert_skill(
     `conversation_id`-on-exception idiom in `ChatClient.ask()`) so callers can retrieve them
     either way.
     """
-    from datetime import datetime as _dt  # noqa: PLC0415
-    from datetime import timezone as _tz  # noqa: PLC0415
-
-    from gooddata_eval.core.agentic._langfuse import try_make_langfuse_client  # noqa: PLC0415
-
-    if langfuse is None:
-        langfuse = try_make_langfuse_client()
-    window_start = _dt.now(_tz.utc)
+    langfuse, window_start = open_trace_window(langfuse)
     summary = run_agentic_alert_skill(
         host=host,
         token=token,
@@ -670,57 +673,73 @@ def evaluate_agentic_alert_skill(
     )
 
     if langfuse is not None and dataset_item_id:
-        from gooddata_eval.core.agentic._langfuse import (  # noqa: PLC0415
-            build_run_context,
-            find_traces_per_conversation,
-            log_quality_and_value_scores,
-            observe,
-            score_safe,
+        # Pinned on the calling thread: a deferred poll must not widen its query window.
+        window_end = utc_now()
+
+        def _write_scores(ctx: RunTraceContext) -> None:
+
+            for run_idx, run in enumerate(summary.run_results):
+                pt = ctx.trace(run.conversation_id)
+                ev = run.eval
+                strict_checks = {
+                    "alert_created": ev.alert_created,
+                    "operator_correct": ev.operator_correct,
+                    "threshold_correct": ev.threshold_correct,
+                    "trigger_correct": ev.trigger_correct,
+                    "filters_correct": ev.filters_correct,
+                    "metric_correct": ev.metric_correct,
+                    "recipients_correct": ev.recipients_correct,
+                }
+                with ctx.observe(pt, run_idx) as tid:
+                    for score_name, value in strict_checks.items():
+                        ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
+                    ctx.quality(
+                        tid,
+                        strict_checks=strict_checks,
+                        latency_sec=pt.latency if pt else None,
+                        cost_usd=pt.total_cost if pt else None,
+                    )
+
+        # Before the pass@K raise: a failing item's scores are the ones worth having.
+        submit_trace_scoring(
+            submit_trace_link,
+            RunIdentity(
+                host,
+                token,
+                workspace_id,
+                dataset_name,
+                run_timestamp,
+                model_version_override,
+                run_metadata_extra,
+                reasoning_effort,
+            ),
+            langfuse=langfuse,
+            dataset_item_id=dataset_item_id,
+            conversation_ids=[r.conversation_id for r in summary.run_results],
+            window_start=window_start,
+            window_end=window_end,
+            suffix_runs=len(summary.run_results) > 1,
+            write_scores=_write_scores,
         )
 
-        run_name_base, run_metadata = build_run_context(
-            host,
-            token,
-            workspace_id,
-            dataset_name,
-            run_timestamp,
-            model_version_override,
-            run_metadata_extra,
-            reasoning_effort,
-        )
-        traces_by_conv = find_traces_per_conversation(
-            langfuse,
-            [r.conversation_id for r in summary.run_results],
-            window_start,
-        )
-        suffix_needed = len(summary.run_results) > 1
-        for run_idx, run in enumerate(summary.run_results):
-            pt = traces_by_conv.get(run.conversation_id)
-            run_name = f"{run_name_base}_run{run_idx}" if suffix_needed else run_name_base
-            ev = run.eval
-            strict_checks = {
-                "alert_created": ev.alert_created,
-                "operator_correct": ev.operator_correct,
-                "threshold_correct": ev.threshold_correct,
-                "trigger_correct": ev.trigger_correct,
-                "filters_correct": ev.filters_correct,
-                "metric_correct": ev.metric_correct,
-                "recipients_correct": ev.recipients_correct,
-            }
-            with observe(langfuse, pt.id if pt else None, dataset_item_id, run_name, run_metadata) as tid:
-                for score_name, value in strict_checks.items():
-                    score_safe(langfuse, tid, name=score_name, value=float(value), data_type="BOOLEAN")
-                log_quality_and_value_scores(
-                    langfuse,
-                    tid,
-                    strict_checks=strict_checks,
-                    latency_sec=pt.latency if pt else None,
-                    cost_usd=pt.total_cost if pt else None,
-                )
+    runs_passed = sum(1 for r in summary.run_results if r.eval.strict_pass)
+    runs_effective = len(summary.run_results)
+
+    best = summary.best
+    ev = best.eval
+    detail = {
+        "alert_created": ev.alert_created,
+        "operator_correct": ev.operator_correct,
+        "threshold_correct": ev.threshold_correct,
+        "trigger_correct": ev.trigger_correct,
+        "filters_correct": ev.filters_correct,
+        "metric_correct": ev.metric_correct,
+        "recipients_correct": ev.recipients_correct,
+        "actual_alert_arguments": best.actual_alert_arguments,
+        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+    }
 
     if not summary.pass_at_k:
-        best = summary.best
-        ev = best.eval
         exc = AlertSkillAssertionError(
             f"Alert skill assertion failed. strict_pass={ev.strict_pass}. "
             f"alert_created={ev.alert_created}, operator_correct={ev.operator_correct}, "
@@ -732,33 +751,15 @@ def evaluate_agentic_alert_skill(
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
-        exc.detail = {
-            "alert_created": ev.alert_created,
-            "operator_correct": ev.operator_correct,
-            "threshold_correct": ev.threshold_correct,
-            "trigger_correct": ev.trigger_correct,
-            "filters_correct": ev.filters_correct,
-            "metric_correct": ev.metric_correct,
-            "recipients_correct": ev.recipients_correct,
-            "actual_alert_arguments": best.actual_alert_arguments,
-            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-        }
+        exc.detail = detail
+        exc.runs_passed = runs_passed
+        exc.runs_effective = runs_effective
         raise exc
-    best = summary.best
-    ev = best.eval
     return AgenticEvalOutcome(
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
-        detail={
-            "alert_created": ev.alert_created,
-            "operator_correct": ev.operator_correct,
-            "threshold_correct": ev.threshold_correct,
-            "trigger_correct": ev.trigger_correct,
-            "filters_correct": ev.filters_correct,
-            "metric_correct": ev.metric_correct,
-            "recipients_correct": ev.recipients_correct,
-            "actual_alert_arguments": best.actual_alert_arguments,
-            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-        },
+        detail=detail,
     )

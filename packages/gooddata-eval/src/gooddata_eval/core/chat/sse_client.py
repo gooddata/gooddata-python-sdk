@@ -354,12 +354,18 @@ class ChatClient:
         except httpx.HTTPError:
             pass  # best-effort cleanup
 
-    def send_message(self, conversation_id: str, question: str) -> ChatResult:
+    def send_message(
+        self, conversation_id: str, question: str, *, user_context: dict[str, Any] | None = None
+    ) -> ChatResult:
         url = f"{self._base}/{conversation_id}/messages"
         headers = {**self._auth, "Accept": "text/event-stream", "Content-Type": "application/json"}
         body: dict[str, Any] = {"item": {"role": "user", "content": {"type": "text", "text": question}}}
         if self._reasoning_effort is not None:
             body["options"] = {"reasoningEffort": self._reasoning_effort}
+        # Only when there is one: gen-ai accepts an explicit null, so assigning
+        # unconditionally would quietly change every request that has no attachment.
+        if user_context is not None:
+            body["userContext"] = user_context
 
         def _do() -> ChatResult:
             # Set fresh on every retry attempt (before opening this attempt's stream, so its

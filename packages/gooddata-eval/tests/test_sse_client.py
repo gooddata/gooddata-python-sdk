@@ -867,3 +867,31 @@ def test_invalid_reasoning_effort_fails_at_construction():
     """Fail locally rather than as an out-of-enum request partway through a run."""
     with pytest.raises(ValueError, match="Invalid reasoning effort"):
         ChatClient(host="https://example.invalid", token="t", workspace_id="w", reasoning_effort="maximum")
+
+
+_ATTACHMENT = {"referencedObjects": [{"objects": [{"type": "WIDGET", "id": "campaign_spend"}]}]}
+
+
+def _capture_body(store):
+    def handler(request):
+        store["body"] = json.loads(request.read())
+        return httpx.Response(200, content=_OK_SSE)
+
+    return handler
+
+
+def test_send_message_puts_the_user_context_on_the_wire():
+    captured = {}
+    client = _client_with_handler(_capture_body(captured))
+    client.send_message("conv", "q", user_context=_ATTACHMENT)
+    assert captured["body"]["userContext"] == _ATTACHMENT
+
+
+def test_send_message_omits_user_context_entirely_when_there_is_no_attachment():
+    """An explicit ``"userContext": null`` would be ACCEPTED by gen-ai, so a sloppy
+    unconditional assignment would silently alter every request in every existing dataset
+    rather than failing loudly. This is the guard against that."""
+    captured = {}
+    client = _client_with_handler(_capture_body(captured))
+    client.send_message("conv", "q")
+    assert "userContext" not in captured["body"]
