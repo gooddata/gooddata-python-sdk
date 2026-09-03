@@ -231,16 +231,20 @@ Each item additionally carries a per-phase breakdown:
 }
 ```
 
-An item may also carry `unscored_runs` / `judge_errors` in its `detail` (and a
-`dashboard_summary` item `ungraded_criteria`). These appear only when the LLM judge returned something
-unreadable for part of an item. Such a run — or, for `dashboard_summary`, such a criterion — is excluded from
-pass@K and from the quality score rather than counted as a failure: scoring it 0 would be indistinguishable from
-the judge genuinely failing the answer, which is the confusion `JudgeResponseError` exists to end. `pass@K` still
-holds on the runs that *were* graded, so an item can pass with `unscored_runs` set; `pass^K` cannot, because a
-run nobody graded leaves "all K passed" unverified. When *no* run or criterion could be graded the item errors
-instead of reporting failures. Their presence means the pass@K was computed over fewer runs than `--runs` asked
-for, so treat the result as weaker evidence and check the judge (`GD_EVAL_JUDGE_DIAGNOSTICS=1`, or raise
-`JUDGE_MAX_COMPLETION_TOKENS` if the cause is `finish_reason=length`).
+Every item reports `runs_ungraded` beside `runs_passed`: runs the agent answered but the LLM judge returned
+nothing readable for. Agentic items also list them as `unscored_runs` / `judge_errors` in their `detail`, and a
+`dashboard_summary` item carries `ungraded_criteria`. Such a run — or, for `dashboard_summary`, such a
+criterion — is excluded from pass@K and from the quality score rather than counted as a failure: scoring it 0
+would be indistinguishable from the judge genuinely failing the answer, which is the confusion
+`JudgeResponseError` exists to end. `pass@K` still holds on the runs that *were* graded, so an item can pass with
+`runs_ungraded` set; `pass^K` cannot, because a run nobody graded leaves "all K passed" unverified. For
+`dashboard_summary` an ungraded `must_include` / `must_not_include` criterion likewise cannot carry a pass —
+"the judge could not tell" is not evidence the fact is present — while an ungraded `rubric` line only narrows
+the quality score. When *no* run could be graded (for `dashboard_summary`: no gating criterion on any run) the
+item errors instead of reporting failures. A non-zero count means pass@K was computed over fewer runs than
+`--runs` asked for, so treat the result as weaker evidence and check the judge (`GD_EVAL_JUDGE_DIAGNOSTICS=1`,
+or raise `JUDGE_MAX_COMPLETION_TOKENS` if the cause is `finish_reason=length`). The console says so in `Notes`
+(`1 run(s) ungraded`, `2 criterion(s) ungraded`).
 
 `agent_s` + `judge_s` + `simulated_user_s` are the instrumented parts of the item's `latency_s`; they do not add
 up to it exactly, because `latency_s` is wall-clock around the whole item and also covers the conversation

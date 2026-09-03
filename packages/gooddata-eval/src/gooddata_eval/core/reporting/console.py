@@ -4,7 +4,16 @@
 from rich.console import Console
 from rich.table import Table
 
-from gooddata_eval.core.runner import EvalReport
+from gooddata_eval.core.runner import EvalReport, ItemReport
+
+
+def _ungraded_note(item: ItemReport) -> str:
+    """What the verdict was NOT computed over: runs, or (dashboard_summary) criteria, that
+    the judge returned nothing readable for. Empty when everything was graded."""
+    if item.runs_ungraded:
+        return f"{item.runs_ungraded} run(s) ungraded"
+    criteria = item.best_detail.get("ungraded_criteria")
+    return f"{criteria} criterion(s) ungraded" if criteria else ""
 
 
 def render_console(report: EvalReport, *, console: Console | None = None) -> str:
@@ -42,8 +51,12 @@ def render_console(report: EvalReport, *, console: Console | None = None) -> str
             failing = [k for k, v in item.best_detail.items() if v is False]
             notes = "failed: " + ", ".join(failing) if failing else "did not pass strict checks"
             result = "FAIL"
-        latency = "-" if item.runs == 0 else f"{item.latency_s:.2f}s"
-        avg = "-" if item.runs == 0 else f"{item.avg_latency_s:.2f}s"
+        if result in ("PASS", "FAIL") and (ungraded := _ungraded_note(item)):
+            # Said on both verdicts: a PASS over fewer runs is weaker evidence, and a FAIL
+            # with no False check is otherwise unexplained.
+            notes = f"{notes}; {ungraded}" if notes else ungraded
+        latency = "-" if item.runs_total == 0 else f"{item.latency_s:.2f}s"
+        avg = "-" if item.runs_total == 0 else f"{item.avg_latency_s:.2f}s"
         quality = "-" if item.skipped else f"{item.quality_score:.0%}"
         runs_col = str(item.runs_total)
         table.add_row(item.id, item.test_kind, result, runs_col, latency, avg, quality, notes)

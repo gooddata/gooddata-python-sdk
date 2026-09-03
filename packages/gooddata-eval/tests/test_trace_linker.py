@@ -399,10 +399,20 @@ def test_an_interrupt_signals_cancellation_before_it_shuts_the_pool_down():
     the rest of the batch budget (measured: 110s, against 0.5s with it).
     """
     events: list[str] = []
+    started = threading.Event()
+    release = threading.Event()
+    seen: list[threading.Event | None] = []
     real_shutdown = ThreadPoolExecutor.shutdown
 
+    def poll() -> None:
+        # The signal is visible on the worker's own thread, so the worker reports it.
+        seen.append(_trace_linker.link_cancel_event())
+        started.set()
+        release.wait(timeout=5)
+
     def fake_shutdown(self, wait=True, *, cancel_futures=False):
-        cancel = _trace_linker.link_cancel_event()
+        assert started.wait(timeout=5), "the poll never started"
+        cancel = seen[0]
         events.append(
             f"shutdown(wait={wait},cancel_futures={cancel_futures},signalled={cancel is not None and cancel.is_set()})"
         )
@@ -411,9 +421,12 @@ def test_an_interrupt_signals_cancellation_before_it_shuts_the_pool_down():
         return real_shutdown(self, wait=wait, cancel_futures=cancel_futures)
 
     linker = BackgroundTraceLinker(max_workers=1)
-    linker.submit(lambda: None, item_id="a")
-    with patch.object(ThreadPoolExecutor, "shutdown", fake_shutdown), pytest.raises(KeyboardInterrupt):
-        linker.drain()
+    linker.submit(poll, item_id="a")
+    try:
+        with patch.object(ThreadPoolExecutor, "shutdown", fake_shutdown), pytest.raises(KeyboardInterrupt):
+            linker.drain()
+    finally:
+        release.set()
 
     assert events == [
         "shutdown(wait=True,cancel_futures=False,signalled=False)",
@@ -488,9 +501,54 @@ def test_cancelling_mid_backoff_stops_the_poll_without_finishing_the_sleep():
 def test_an_interrupted_drain_leaves_the_cancellation_visible_to_late_workers():
     """shutdown(wait=False) returns before the workers notice.
 
-    Clearing the signal in the `finally` would let a worker that reaches its next wait just
-    after that read None and go back to an uninterruptible sleep for the rest of its budget.
-    A fresh event per drain is what keeps a set one from leaking into the next run.
+    A worker that reaches its next wait only after drain() has already raised must still
+    read a SET event, or it goes back to an uninterruptible sleep for the rest of its budget.
+    The signal lives on the worker's own thread, so nothing is left behind on the caller's:
+    the next drain starts clean.
+    """
+    started = threading.Event()
+    release = threading.Event()
+    done = threading.Event()
+    late: list[bool] = []
+    real_shutdown = ThreadPoolExecutor.shutdown
+
+    def poll() -> None:
+        started.set()
+        release.wait(timeout=5)  # still running when drain() raises
+        cancel = _trace_linker.link_cancel_event()
+        late.append(cancel is not None and cancel.is_set())
+        done.set()
+
+    def fake_shutdown(self, wait=True, *, cancel_futures=False):
+        if wait:
+            assert started.wait(timeout=5), "the poll never started"
+            raise KeyboardInterrupt
+        return real_shutdown(self, wait=wait, cancel_futures=cancel_futures)
+
+    linker = BackgroundTraceLinker(max_workers=1)
+    linker.submit(poll, item_id="a")
+    with patch.object(ThreadPoolExecutor, "shutdown", fake_shutdown), pytest.raises(KeyboardInterrupt):
+        linker.drain()
+
+    assert _trace_linker.link_cancel_event() is None, "the interrupt leaked onto the calling thread"
+    release.set()
+    assert done.wait(timeout=5), "the late worker never finished"
+    assert late == [True], "a late worker stopped seeing the interrupt"
+
+    # And the next drain is unaffected by it.
+    fresh: list[bool] = []
+    second = BackgroundTraceLinker(max_workers=1)
+    second.submit(lambda: fresh.append(_trace_linker.link_cancel_event().is_set()), item_id="b")
+    second.drain()
+    assert fresh == [False], "the previous run's interrupt leaked into this drain"
+    assert _trace_linker.link_cancel_event() is None
+
+
+def test_an_interrupted_drain_does_not_cancel_a_later_inline_link():
+    """A caller that survives the interrupt -- the test suite, or a library user catching
+    KeyboardInterrupt -- must still be able to link inline afterwards. Kept in a module
+    global, the set event was read by run_trace_link_inline, and
+    find_traces_per_conversation broke before its first fetch, orphaning every score.
     """
     real_shutdown = ThreadPoolExecutor.shutdown
 
@@ -504,13 +562,7 @@ def test_an_interrupted_drain_leaves_the_cancellation_visible_to_late_workers():
     with patch.object(ThreadPoolExecutor, "shutdown", fake_shutdown), pytest.raises(KeyboardInterrupt):
         linker.drain()
 
-    cancel = _trace_linker.link_cancel_event()
-    assert cancel is not None and cancel.is_set(), "a late worker would stop seeing the interrupt"
+    seen: list[threading.Event | None] = []
+    run_trace_link_inline(lambda: seen.append(_trace_linker.link_cancel_event()))
 
-    # And the next drain is unaffected by it.
-    fresh: list[bool] = []
-    second = BackgroundTraceLinker(max_workers=1)
-    second.submit(lambda: fresh.append(_trace_linker.link_cancel_event().is_set()), item_id="b")
-    second.drain()
-    assert fresh == [False], "the previous run's interrupt leaked into this drain"
-    assert _trace_linker.link_cancel_event() is None
+    assert seen == [None], "an inline link inherited the interrupted drain's cancellation"

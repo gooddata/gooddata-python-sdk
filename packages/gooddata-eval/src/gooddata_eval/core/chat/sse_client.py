@@ -396,7 +396,7 @@ class ChatClient:
         conversation_id = self.create_conversation()
         success = False
         try:
-            result = self.send_message(conversation_id, item.question)
+            result = self.send_message(conversation_id, item.question, user_context=item.user_context)
             result.conversation_id = conversation_id
             success = True
             return result

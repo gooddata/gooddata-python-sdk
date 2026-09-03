@@ -37,13 +37,16 @@ def _build_run_dict(report: EvalReport) -> dict:
                 "pass_at_k": item.pass_at_k,
                 "skipped": item.skipped,
                 "error": item.error,
-                "runs": item.runs,
+                # What actually ran, not the requested K: agentic_conversation runs once.
+                "runs": item.runs_total,
                 "latency_s": round(item.latency_s, 3),
                 "avg_latency_s": round(item.avg_latency_s, 3),
                 # Beside `runs`, not folded into it: "4 of 5 passed" is a different fact
                 # from pass_at_k and the only one that separates a reliable item from a
-                # coin-flip. pass_power_k is the unanimity flag beside it.
+                # coin-flip. pass_power_k is the unanimity flag beside it, and
+                # runs_ungraded says how many runs pass@K was NOT computed over.
                 "runs_passed": item.runs_passed,
+                "runs_ungraded": item.runs_ungraded,
                 "pass_power_k": item.pass_power_k,
                 "best_run_latency_s": (
                     round(item.best_run_latency_s, 3) if item.best_run_latency_s is not None else None

@@ -76,7 +76,9 @@ def _rejects_temperature(exc: Exception) -> bool:
     gateways (LiteLLM, vLLM) echo the request back inside that body -- so any 400 from one
     of those carries the literal text ``"temperature": 0``. ``param`` is authoritative;
     providers that omit it get a substring check against the error *message* only, which
-    is prose rather than a serialized request.
+    is prose rather than a serialized request. A body that is present but not a dict is
+    response text the SDK could not parse as JSON -- the SDK also makes it the exception
+    message -- so it is the same serialized request, not prose, and is not read at all.
     """
     body = getattr(exc, "body", None)
     if isinstance(body, dict):
@@ -88,7 +90,9 @@ def _rejects_temperature(exc: Exception) -> bool:
         return "temperature" in message.lower() if isinstance(message, str) else False
     if getattr(exc, "param", None) == "temperature":
         return True
-    return "temperature" in str(exc if body is None else body).lower()
+    if body is not None:
+        return False
+    return "temperature" in str(exc).lower()
 
 
 def _bit(name: str, read: Callable[[], Any]) -> str:
@@ -274,6 +278,17 @@ class JudgeVerdict(NamedTuple):
     passed: bool
     reasoning: str
     error: str | None = None
+
+    @property
+    def rank(self) -> int:
+        """1 for a pass, 0 for a fail, -1 for no verdict.
+
+        For an evaluator's ``rank_key``: an ungraded run sorts below every graded one, so
+        the run a report describes is one that has a verdict whenever any run does.
+        """
+        if self.error is not None:
+            return -1
+        return int(self.passed)
 
 
 def score_run(judge: LLMJudge, *, input: str, expected_output: str, actual_output: str) -> JudgeVerdict:

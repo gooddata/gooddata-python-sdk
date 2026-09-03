@@ -504,6 +504,28 @@ def test_the_eval_text_cannot_trigger_the_temperature_fallback():
     assert judge._supports_temperature is True
 
 
+def test_an_unparseable_error_body_is_not_read_as_a_temperature_rejection():
+    """A body the SDK could not parse as JSON arrives as raw text, and the SDK then uses that
+    same text as the exception message. A gateway that echoes the failed request inside it
+    puts ``"temperature": 0`` in both places, so neither is prose to substring-match.
+    """
+    body = '{"error":{"message":"model not found"},"request":{"model":"gpt-4o","temperature":0}}'
+    calls: list[dict] = []
+
+    def create(**kwargs):
+        calls.append(dict(kwargs))
+        raise _api_error(body, body=body)
+
+    judge = _make_judge()
+    judge._client.chat.completions.create.side_effect = create
+
+    with pytest.raises(Exception, match="model not found"):
+        judge.score(input="i", expected_output="e", actual_output="a")
+
+    assert len(calls) == 1, "a wasted retry without temperature"
+    assert judge._supports_temperature is True
+
+
 # --- score_run: one run's judge fault is not the item's problem (H1) ---
 
 

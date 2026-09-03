@@ -75,16 +75,20 @@ def run_trace_link_inline(task: TraceLinkTask, *, item_id: str = "") -> None:
         _INLINE_LINKING.reset(token)
 
 
-# Set for the duration of one batched drain, so a running poll can be told to stop sleeping.
-# Deliberately None outside a drain: the inline path has nobody to cancel it, and leaving a
-# module-level Event permanently in place would let one run's Ctrl-C poison the next --model
-# pass. A fresh Event per drain scopes the signal to exactly that batch.
-_ACTIVE_CANCEL: threading.Event | None = None
+# The signal a running batched poll watches to stop sleeping, visible only on the worker
+# thread running that poll: BackgroundTraceLinker._run sets it for the task's duration. A
+# ContextVar rather than a module global, for the same reason as _INLINE_LINKING: the inline
+# path never sets it, so nobody can cancel a poll charged to its own caller, and an
+# interrupted drain's set Event lives on with exactly the workers it was meant for -- there is
+# no shared slot for it to linger in and stop the next --model pass or a later inline link.
+_CANCEL: contextvars.ContextVar[threading.Event | None] = contextvars.ContextVar(
+    "gd_eval_trace_link_cancel", default=None
+)
 
 
 def link_cancel_event() -> threading.Event | None:
-    """The cancellation signal for the drain in progress, or None if none is."""
-    return _ACTIVE_CANCEL
+    """The cancellation signal for the batched poll running on this thread, or None."""
+    return _CANCEL.get()
 
 
 def utc_now() -> datetime:
@@ -229,6 +233,8 @@ class BackgroundTraceLinker:
         self._clock = clock
         self._queue: list[tuple[TraceLinkTask, str]] = []
         self.durations: dict[str, float] = {}
+        # The drain in flight's signal, so abandon() can reach its workers.
+        self._cancel: threading.Event | None = None
 
     def submit(self, task: TraceLinkTask, *, item_id: str = "") -> None:
         """Queue the task. Nothing runs until ``drain``."""
@@ -239,7 +245,11 @@ class BackgroundTraceLinker:
         """How many links are queued and waiting for ``drain``."""
         return len(self._queue)
 
-    def _run(self, task: TraceLinkTask, item_id: str) -> None:
+    def _run(self, task: TraceLinkTask, item_id: str, cancel: threading.Event) -> None:
+        # Runs on the worker thread, so this scopes the signal to exactly this task: a worker
+        # still polling after drain() has raised keeps reading the same (set) event, and
+        # nothing outside the pool ever sees it.
+        token = _CANCEL.set(cancel)
         started = self._clock()
         try:
             task()
@@ -250,6 +260,7 @@ class BackgroundTraceLinker:
             # Recorded on the failure path too: an item whose poll exhausted its budget and
             # then errored is precisely the one whose Langfuse cost the report should show.
             self.durations[item_id] = self._clock() - started
+            _CANCEL.reset(token)
 
     def drain(self) -> None:
         """Run every queued link in parallel and wait for the batch to finish."""
@@ -261,29 +272,23 @@ class BackgroundTraceLinker:
         # mid-batch would run every QUEUED poll -- almost entirely time.sleep -- to
         # completion first. abandon() cannot help here (the queue moved into `queue` above),
         # so the cancellation has to happen on the pool itself.
-        global _ACTIVE_CANCEL
         pool = ThreadPoolExecutor(max_workers=min(len(queue), self._max_workers), thread_name_prefix="trace-link")
-        _ACTIVE_CANCEL = threading.Event()
+        cancel = threading.Event()
+        self._cancel = cancel
         try:
             for task, item_id in queue:
-                pool.submit(self._run, task, item_id)
+                pool.submit(self._run, task, item_id, cancel)
             pool.shutdown(wait=True)
         except BaseException:
             # Signalled BEFORE the shutdown: cancel_futures only drops what has not started,
             # and a poll already running sits in a backoff sleep until its deadline -- which
             # the interpreter then waits out, because it joins executor workers at exit. So a
             # Ctrl-C could hang for the whole batch budget. This wakes them instead.
-            _ACTIVE_CANCEL.set()
+            cancel.set()
             pool.shutdown(wait=False, cancel_futures=True)
             raise
         finally:
-            # Cleared only when nothing was cancelled. Leaving a SET event in place is
-            # deliberate: shutdown(wait=False) returns before the workers notice, and a
-            # worker that reaches its next wait after this line would otherwise read None
-            # and go back to an uninterruptible sleep for the rest of its budget. The next
-            # drain installs a fresh event, so a set one cannot leak into it.
-            if not _ACTIVE_CANCEL.is_set():
-                _ACTIVE_CANCEL = None
+            self._cancel = None
 
     def abandon(self) -> None:
         """Discard the queue without running it.
@@ -292,6 +297,6 @@ class BackgroundTraceLinker:
         than making the user sit through a batch of retrying polls.
         """
         self._queue.clear()
-        if _ACTIVE_CANCEL is not None:
-            # Harmless when nothing is running, and correct if a drain is somehow in flight.
-            _ACTIVE_CANCEL.set()
+        if self._cancel is not None:
+            # Only when a drain is in flight on another thread; harmless then too.
+            self._cancel.set()

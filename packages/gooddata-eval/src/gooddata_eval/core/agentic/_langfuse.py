@@ -52,14 +52,13 @@ class _TraceAPI:
         """List traces in a window, optionally narrowed to one session server-side.
 
         ``session_id`` is what makes ``limit`` a non-issue. Without it the endpoint returns
-        every trace in the window newest-first and the caller filters locally, so an eval
-        workspace busy enough to put more than ``limit`` traces inside one item's window
-        pushes that item's OWN (oldest) trace off the page -- it then polls its whole retry
-        budget against a page that can never contain it, and the score orphans with only a
-        generic "no trace found" line to show for it. Concurrency makes that likelier by
-        overlapping every item's window. Named ``session_id`` because
-        ``_fetch_traces_for_session`` probes for exactly that parameter before it will stop
-        filtering locally; gen-ai sets sessionId = conversationId.
+        every trace in the window newest-first, so an eval workspace busy enough to put more
+        than ``limit`` traces inside one item's window pushes that item's OWN (oldest) trace
+        off the page -- it then polls its whole retry budget against a page that can never
+        contain it, and the score orphans with only a generic "no trace found" line to show
+        for it. Concurrency makes that likelier by overlapping every item's window. Named
+        ``session_id`` because ``_fetch_traces_for_session`` probes for exactly that
+        parameter; gen-ai sets sessionId = conversationId.
         """
 
         def _ts(v: Any) -> str:
@@ -70,10 +69,9 @@ class _TraceAPI:
             "toTimestamp": _ts(to_timestamp),
             "limit": limit,
         }
-        # `is not None`, not truthiness: _fetch_traces_for_session puts session_id into its
-        # kwargs unconditionally and then skips local filtering because it is there, so an
-        # empty id dropped here would return the whole padded window unfiltered -- and the
-        # max-latency pick would attach this item's scores to a stranger's trace.
+        # `is not None`, not truthiness: an empty id is a real filter value that matches
+        # nothing. Dropped here, the query would return the whole padded window for the
+        # caller's post-check to throw away, page after page, for the poll's whole budget.
         if session_id is not None:
             params["sessionId"] = session_id
         resp = self._client.get("/api/public/traces", params=params)
@@ -278,6 +276,15 @@ def get_model_version(
     return ""
 
 
+def _matches_session(trace: Any, session_id: str) -> bool:
+    """Whether a trace belongs to the conversation, by sessionId or by its metadata."""
+    sid = getattr(trace, "session_id", None)
+    if isinstance(sid, str) and sid == session_id:
+        return True
+    metadata = getattr(trace, "metadata", None)
+    return isinstance(metadata, dict) and metadata.get("conversation_id") == session_id
+
+
 def _fetch_traces_for_session(
     langfuse: Any,
     session_id: str,
@@ -291,7 +298,8 @@ def _fetch_traces_for_session(
         "to_timestamp": window_end + pad,
         "limit": _FETCH_LIMIT,
     }
-    # Langfuse v4+ supports sessionId as a direct filter; older SDK / httpx path may not.
+    # Langfuse v4+ SDKs and the httpx client take session_id as a server-side filter; older
+    # SDKs do not, and then the page is the whole window.
     try:
         import inspect  # noqa: PLC0415
 
@@ -301,16 +309,10 @@ def _fetch_traces_for_session(
     except Exception:
         pass
     response = langfuse.api.trace.list(**kwargs)
-    traces = response.data or []
-    # If sessionId filter was not applied server-side, filter locally.
-    if "session_id" not in kwargs:
-        traces = [
-            t
-            for t in traces
-            if (isinstance(getattr(t, "session_id", None), str) and t.session_id == session_id)
-            or (isinstance(getattr(t, "metadata", None), dict) and t.metadata.get("conversation_id") == session_id)
-        ]
-    return traces
+    # A post-check, not a fallback: the Langfuse API drops a query parameter it does not know
+    # rather than rejecting it, and an unfiltered page would hand the caller's max-latency
+    # pick a stranger's trace with no warning. On a server that did filter it is a no-op.
+    return [t for t in (response.data or []) if _matches_session(t, session_id)]
 
 
 # Longest a running poll may stay asleep after cancellation is signalled. Without a bound,

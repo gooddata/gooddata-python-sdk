@@ -256,6 +256,11 @@ def _apply_run_counts(item_report: ItemReport, source: Any) -> None:
     if effective:
         # Only when the kind knows better than K -- agentic_conversation runs once.
         item_report.runs_effective = effective
+    # The agentic kinds record their unscored runs in the detail; the report field is the
+    # one place every kind's count is read from.
+    unscored = (getattr(source, "detail", None) or {}).get("unscored_runs")
+    if isinstance(unscored, int):
+        item_report.runs_ungraded = unscored
 
 
 def _apply_timings(item_report: ItemReport, timings: Any) -> None:

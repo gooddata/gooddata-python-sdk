@@ -404,3 +404,41 @@ def test_avg_per_run_divides_by_the_runs_actually_taken():
 
     assert once.runs_total == 1
     assert once.avg_latency_s == 10.0
+
+
+def test_json_runs_and_the_aggregate_average_use_the_runs_actually_taken():
+    # Same divisor everywhere: the item's own average already used runs_total, but the JSON
+    # `runs` field and the run-level average still reported the requested K.
+    once = _item("conv", runs=5, runs_passed=1, passed=True, effective=1)
+    once.latency_s = 10.0
+    report = EvalReport(model="m", items=[once])
+
+    data = build_json_report(report)
+
+    assert data["items"]["conv"]["runs"] == 1
+    assert report.total_runs == 1
+    assert data["summary"]["avg_latency_s"] == 10.0
+
+
+def test_the_report_counts_the_runs_the_judge_could_not_grade():
+    item = _item("a", runs=3, runs_passed=2, passed=True)
+    item.runs_ungraded = 1
+    report = EvalReport(model="m", items=[item])
+
+    data = build_json_report(report)
+    out = _rendered(report)
+
+    assert data["items"]["a"]["runs_ungraded"] == 1
+    assert "2/3 runs passed; 1 run(s) ungraded" in out
+
+
+def test_a_failed_item_says_when_a_criterion_went_ungraded():
+    # `passed` is False with no False bool in the detail, so the generic "did not pass strict
+    # checks" alone would hide why: a mandatory criterion the judge never assessed.
+    item = _item("s", runs=1, runs_passed=0, passed=False)
+    item.best_detail = {"include_0": True, "ungraded_criteria": 1}
+    report = EvalReport(model="m", items=[item])
+
+    out = _rendered(report)
+
+    assert "did not pass strict checks; 1 criterion(s) ungraded" in out

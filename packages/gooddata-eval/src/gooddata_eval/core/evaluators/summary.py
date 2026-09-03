@@ -15,13 +15,19 @@ runner's `quality_score` becomes the fraction of satisfied criteria. The item
 *passes* only when every `must_include` is satisfied and no `must_not_include`
 is violated; `rubric` items contribute to quality but do not gate pass/fail.
 
+A criterion the judge returns nothing readable for is *ungraded*: it is neither
+satisfied nor violated, so it is stored without a bool and stays out of the
+quality denominator. An ungraded gating criterion cannot carry a pass, though --
+"the judge could not tell" is not evidence the fact is present. When no gating
+criterion was graded at all the run has no verdict and is reported as such.
+
 As a fallback, a non-dict `expected_output` is treated as a single rubric
 criterion (same behaviour as `general_question`).
 """
 
 from typing import Any
 
-from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError, LLMJudge, score_run
+from gooddata_eval.core.evaluators._llm_judge import LLMJudge, score_run
 from gooddata_eval.core.evaluators._text_utils import extract_text
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import ChatResult, DatasetItem
@@ -75,9 +81,9 @@ class DashboardSummaryEvaluator:
         # One judge request PER CRITERION, so an unreadable response has to be confined to
         # its own criterion: letting it raise would discard every criterion already graded
         # and abandon the ones after it, losing a 7-criterion item to one bad body. An
-        # ungraded criterion is recorded but stored without a bool, which
-        # keeps it out of both `passed` and the quality denominator below: counting it as
-        # failed would invent a score the judge never gave.
+        # ungraded criterion is recorded but stored without a bool, which keeps it out of
+        # the failing list and the quality denominator below: counting it as failed would
+        # invent a score the judge never gave.
         ungraded = 0
 
         def _grade(judge: LLMJudge, criterion: str, key: str, *, invert: bool = False) -> bool | None:
@@ -94,27 +100,40 @@ class DashboardSummaryEvaluator:
             detail[f"{key}_reason"] = verdict.reasoning
             return ok
 
+        # `is True`, not `is not False`: a gating criterion the judge could not grade is not
+        # a failure, but it cannot carry a pass either.
         for i, criterion in enumerate(must_include):
             ok = _grade(self._positive_judge, criterion, f"include_{i}")
-            passed = passed and (ok is not False)
+            passed = passed and ok is True
 
         for i, criterion in enumerate(must_not_include):
             ok = _grade(self._violation_judge, criterion, f"exclude_{i}", invert=True)
-            passed = passed and (ok is not False)
+            passed = passed and ok is True
 
         for i, criterion in enumerate(rubric):
             # Rubric criteria inform quality but never gate `passed`.
             _grade(self._positive_judge, criterion, f"rubric_{i}")
 
-        bool_checks = [v for v in detail.values() if isinstance(v, bool)]
-        if ungraded and not bool_checks:
-            # Not one criterion was graded, so `passed` is still its initial True and
-            # quality would be 0.0 -- a pass nobody assessed. No verdict at all: raise.
-            raise JudgeResponseError(
-                f"judge returned no readable verdict for any of the {ungraded} criterion(s) of this item."
-            )
         if ungraded:
             detail["ungraded_criteria"] = ungraded
+        bool_checks = [v for v in detail.values() if isinstance(v, bool)]
         quality = sum(1 for v in bool_checks if v) / len(bool_checks) if bool_checks else 0.0
+
+        # Keyed on the criteria that decide the verdict, not on any graded bool: rubric
+        # criteria never gate `passed`, so one graded rubric line must not certify a pass
+        # whose every mandatory fact went unassessed. A rubric-only item has no gating
+        # criteria, so there any graded line is a verdict.
+        gating = len(must_include) + len(must_not_include)
+        graded_gating = [v for k, v in detail.items() if isinstance(v, bool) and not k.startswith("rubric_")]
+        if ungraded and not (graded_gating if gating else bool_checks):
+            return ItemEvaluation(
+                passed=False,
+                rank_key=(-1, quality),
+                detail=detail,
+                error=(
+                    f"judge returned no readable verdict for any of the {gating or ungraded} criterion(s) "
+                    "that decide this item."
+                ),
+            )
 
         return ItemEvaluation(passed=passed, rank_key=(int(passed), quality), detail=detail)

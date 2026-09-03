@@ -300,7 +300,37 @@ def test_the_trace_lookup_filters_by_session_server_side(monkeypatch):
     assert captured[0]["params"]["sessionId"] == "conv-abc", "the session filter never reached the server"
 
 
-def test_the_local_filter_is_only_a_fallback_for_clients_without_the_parameter():
+def test_a_server_that_ignores_the_session_filter_cannot_hand_over_a_foreign_trace(monkeypatch):
+    """The Langfuse API drops a query parameter it does not know rather than rejecting it.
+
+    The httpx client declares ``session_id``, which used to switch the local filter off for
+    it -- so a server that ignored the parameter returned the whole window, and the
+    max-latency pick attached this item's scores to a stranger's trace with no warning.
+    The server-side filter is still sent (paging); the local one is a post-check, not a
+    fallback.
+    """
+    monkeypatch.setenv("LANGFUSE_PUBLIC_KEY", "pk")
+    monkeypatch.setenv("LANGFUSE_SECRET_KEY", "sk")
+    monkeypatch.setenv("LANGFUSE_HOST", "https://lf.test")
+    client = make_langfuse_client()
+    page = {
+        "data": [
+            {"id": "t-other", "sessionId": "conv-zzz", "latency": 9.0},
+            {"id": "t-mine", "sessionId": "conv-abc", "latency": 1.0},
+        ]
+    }
+    client._http = MagicMock(
+        get=lambda url, params=None, **_kw: MagicMock(raise_for_status=lambda: None, json=lambda: page)
+    )
+    client.api = type(client.api)(client._http)
+    now = datetime.now(timezone.utc)
+
+    found = _fetch_traces_for_session(client, "conv-abc", now, now, timedelta(seconds=2))
+
+    assert [t.id for t in found] == ["t-mine"]
+
+
+def test_a_client_without_the_session_parameter_is_filtered_locally_too():
     # A client whose trace.list cannot take session_id still gets correct results, just by
     # filtering the page itself -- that path must keep working.
     wanted = MagicMock(session_id="conv-abc", latency=1.0)
@@ -487,10 +517,9 @@ def test_a_worker_thread_is_never_treated_as_inline():
 def test_an_empty_conversation_id_still_sends_the_server_side_filter():
     """The filter must reach the server even when the id is empty.
 
-    _fetch_traces_for_session puts session_id into its kwargs unconditionally and then skips
-    local filtering because it is present. Dropping the query parameter on a falsy id would
-    therefore return the entire padded window unfiltered, and the max-latency pick would
-    attach this item's scores to some other conversation's trace.
+    An empty id is a real filter value that matches nothing. Dropping the query parameter on
+    a falsy id would fetch the entire padded window for the local post-check to throw away,
+    so the poll would spend its whole budget on pages that can never match.
     """
     seen: list[dict] = []
 

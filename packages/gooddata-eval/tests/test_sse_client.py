@@ -895,3 +895,29 @@ def test_send_message_omits_user_context_entirely_when_there_is_no_attachment():
     client = _client_with_handler(_capture_body(captured))
     client.send_message("conv", "q")
     assert "userContext" not in captured["body"]
+
+
+def test_ask_puts_the_item_attachment_on_the_wire():
+    """The single-turn path goes through ask(), so an item's user_context has to be
+    forwarded there too, or every non-agentic item with an attachment is asked bare."""
+    captured = {}
+
+    def handler(request):
+        if request.method == "POST" and request.url.path.endswith("/conversations"):
+            return httpx.Response(200, json={"conversationId": "conv-abc"})
+        if request.method == "POST" and "messages" in str(request.url):
+            captured["body"] = json.loads(request.read())
+            return httpx.Response(200, content=_OK_SSE)
+        return httpx.Response(204)
+
+    client = _client_with_handler(handler)
+    item = DatasetItem(
+        id="t1",
+        dataset_name="d",
+        test_kind="general_question",
+        question="q",
+        expected_output="e",
+        user_context=_ATTACHMENT,
+    )
+    client.ask(item)
+    assert captured["body"]["userContext"] == _ATTACHMENT

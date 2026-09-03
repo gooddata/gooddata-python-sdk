@@ -53,6 +53,10 @@ class ItemReport:
     # PASS, same 100% quality (quality_score reads best_detail, which is the winning run
     # alone), same empty Notes.
     runs_passed: int = 0
+    # Runs the agent answered but the judge produced no verdict for. Never a pass and never
+    # a failure: excluded from runs_passed and from pass@K, and pass^K is False while any
+    # exist. Counted in `runs`, because they cost real agent time.
+    runs_ungraded: int = 0
     # What the item actually ran, when the kind knows better than the requested K.
     # agentic_conversation drives its fixture exactly once whatever --runs says, so
     # trusting K there reports four runs that never happened.
@@ -135,7 +139,8 @@ class EvalReport:
 
     @property
     def total_runs(self) -> int:
-        return sum(i.runs for i in self.items)
+        """Runs actually taken across the dataset -- the same divisor each item's average uses."""
+        return sum(i.runs_total for i in self.items)
 
     @property
     def avg_latency_s(self) -> float:
@@ -169,6 +174,7 @@ def _run_one_item(
     # attempt they're each describing whenever the best-ranked run isn't also the last one.
     best_chat_result: ChatResult | None = None
     best_run_latency: float | None = None
+    judge_errors: list[str] = []
     try:
         for run_index in range(1, runs + 1):
             t0 = time.perf_counter()
@@ -179,6 +185,9 @@ def _run_one_item(
             latency = time.perf_counter() - t0
             report.runs += 1
             report.latency_s += latency
+            if evaluation.error is not None:
+                report.runs_ungraded += 1
+                judge_errors.append(evaluation.error)
             if best is None or evaluation.rank_key > best.rank_key:
                 best = evaluation
                 best_chat_result = chat_result
@@ -198,6 +207,15 @@ def _run_one_item(
         if best_chat_result is not None:
             report.reasoning_steps = getattr(best_chat_result, "reasoning_steps", None) or []
         return report
+
+    if report.runs and report.runs_ungraded == report.runs:
+        # Every run was answered and none was graded, so there is no verdict to report: an
+        # error, not K failures. Decided here, after the loop, so that one judge fault cannot
+        # abandon the runs behind it -- the agent's answers are still evaluated when the
+        # judge recovers on a later run.
+        report.error = (
+            f"JudgeResponseError: no run of this item could be graded ({report.runs} run(s)); last: {judge_errors[-1]}"
+        )
 
     if best is not None:
         report.best_detail = best.detail
