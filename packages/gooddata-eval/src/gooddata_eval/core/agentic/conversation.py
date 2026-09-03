@@ -65,7 +65,23 @@ class ConversationFixture(BaseModel):
 
 
 class TurnResult(BaseModel):
-    """Evaluation result for a single conversation turn."""
+    """Evaluation result for a single conversation turn.
+
+    ``skill_routing`` and ``activated_skills`` deliberately measure DIFFERENT SCOPES, so
+    a turn can legitimately report ``skill_routing=True`` alongside an empty
+    ``activated_skills``:
+
+    - ``activated_skills`` -- skills THIS turn's own tool calls activated. Empty whenever
+      the agent reused a skill without re-declaring it.
+    - ``skill_routing`` -- whether ``expected_skill`` was active by this point in the
+      CONVERSATION, counting every earlier turn's activations too. The platform keeps a
+      skill active once ``set_skills`` is called, so an agent correctly omits a redundant
+      call on a later turn that reuses the same skill.
+
+    That combination is the reused-skill case, not a scoring bug. Read ``skill_routing``
+    for "did the right skill run"; read ``activated_skills`` only for "what did this
+    specific turn declare".
+    """
 
     turn_id: str
     expected_skill: str
@@ -405,6 +421,10 @@ def run_agentic_conversation(
                 total_clarification_turns += 1
                 current_message = _get_sim_user_response(response_text, resolved_turn, resolved_expected)
 
+            # `activated` is this turn's own declarations; `activated_skills_so_far` is the
+            # conversation-wide set. Both are reported (see TurnResult's docstring): the
+            # per-turn list stays per-turn precisely so a report can still show what each
+            # turn declared, while routing credit is judged against the cumulative set.
             activated = _activated_skills(all_tool_calls)
             activated_skills_so_far |= set(activated)
             skill_routing = turn.expected_skill in activated_skills_so_far

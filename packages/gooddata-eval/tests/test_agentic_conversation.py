@@ -386,6 +386,13 @@ def test_run_agentic_conversation_skill_routing_persists_across_turns():
     assert result.turn_results[0].skill_routing is True
     assert result.turn_results[1].skill_routing is True
 
+    # The two fields measure different scopes (see TurnResult's docstring), so the reused
+    # turn reports routing credit alongside an empty own-declarations list. Asserted so the
+    # combination is pinned as intended output rather than read as a scoring bug by whoever
+    # triages the report next.
+    assert result.turn_results[0].activated_skills == ["metric"]
+    assert result.turn_results[1].activated_skills == []
+
 
 def test_run_agentic_conversation_skill_routing_false_when_skill_never_activated():
     """Guard against the fix being too lenient: a skill that no turn ever activated
