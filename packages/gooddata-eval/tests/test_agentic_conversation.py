@@ -392,6 +392,59 @@ def test_run_agentic_conversation_skill_routing_persists_across_turns():
     # triages the report next.
     assert result.turn_results[0].activated_skills == ["metric"]
     assert result.turn_results[1].activated_skills == []
+    # active_skills shows where t2's credit came from -- without it, skill_routing=True
+    # next to an empty activated_skills reads as a scoring bug.
+    assert result.turn_results[0].active_skills == ["metric"]
+    assert result.turn_results[1].active_skills == ["metric"]
+
+
+def test_run_agentic_conversation_skill_routing_false_after_a_later_call_deactivates_it():
+    """set_skills REPLACES the active set, so a skill dropped by a later call is no longer
+    active and must lose routing credit.
+
+    Replace-not-append was verified against the gen-ai service's skill registry, and is
+    stated in the set_skills tool's own description. Tracking activations as a running
+    union instead would credit `metric` on t3 here even though t2 switched it off --
+    turning the false FAIL this PR fixes into a false PASS, which is worse: it reports a
+    broken conversation as working.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        # t1 activates metric and uses it.
+        _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m1")]),
+        # t2 replaces the active set with visualization -- metric is now OFF.
+        _metric_turn_result([_skills_tc("visualization"), _create_metric_tc("m2")]),
+        # t3 expects metric and declares nothing, so it inherits t2's set: no metric.
+        _metric_turn_result([_create_metric_tc("m3")]),
+    ]
+
+    fixture = ConversationFixture(
+        id="test-deactivated",
+        expected_skills=["metric", "visualization"],
+        turns=[
+            TurnDefinition(turn_id="t1", message="Create a", expected_skill="metric", expected_output_type="metric"),
+            TurnDefinition(
+                turn_id="t2", message="Chart it", expected_skill="visualization", expected_output_type="metric"
+            ),
+            TurnDefinition(turn_id="t3", message="Create b", expected_skill="metric", expected_output_type="metric"),
+        ],
+    )
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+        )
+
+    assert result.turn_results[0].skill_routing is True  # metric active
+    assert result.turn_results[1].skill_routing is True  # visualization active, replaced metric
+    assert result.turn_results[2].skill_routing is False  # metric was deactivated by t2
+    assert result.turn_results[2].active_skills == ["visualization"]
 
 
 def test_run_agentic_conversation_skill_routing_false_when_skill_never_activated():
@@ -775,6 +828,7 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
                 "output_present": True,
                 "output_correct": None,
                 "activated_skills": ["visualization"],
+                "active_skills": ["visualization"],
             }
         ],
         "latency_breakdown": [],
@@ -838,6 +892,7 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
                 "output_present": False,
                 "output_correct": None,
                 "activated_skills": ["other_skill"],
+                "active_skills": ["other_skill"],
             }
         ],
         "latency_breakdown": [],

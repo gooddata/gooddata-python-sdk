@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from typing import ClassVar, Literal
 
 from gooddata_sdk import GoodDataSdk
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
@@ -67,20 +67,18 @@ class ConversationFixture(BaseModel):
 class TurnResult(BaseModel):
     """Evaluation result for a single conversation turn.
 
-    ``skill_routing`` and ``activated_skills`` deliberately measure DIFFERENT SCOPES, so
-    a turn can legitimately report ``skill_routing=True`` alongside an empty
-    ``activated_skills``:
+    The two skill fields measure DIFFERENT SCOPES, so a turn can legitimately report
+    ``skill_routing=True`` with an empty ``activated_skills``:
 
-    - ``activated_skills`` -- skills THIS turn's own tool calls activated. Empty whenever
-      the agent reused a skill without re-declaring it.
-    - ``skill_routing`` -- whether ``expected_skill`` was active by this point in the
-      CONVERSATION, counting every earlier turn's activations too. The platform keeps a
-      skill active once ``set_skills`` is called, so an agent correctly omits a redundant
-      call on a later turn that reuses the same skill.
+    - ``activated_skills`` -- what THIS turn's own ``set_skills`` call declared. Empty
+      whenever the agent reused an already-active skill without re-declaring it.
+    - ``active_skills`` -- what was actually active DURING this turn: the last declared
+      set, carried over on turns that declare nothing. This is the set ``skill_routing``
+      is judged against, so a report never has to infer it.
+    - ``skill_routing`` -- whether ``expected_skill`` appears in ``active_skills``.
 
-    That combination is the reused-skill case, not a scoring bug. Read ``skill_routing``
-    for "did the right skill run"; read ``activated_skills`` only for "what did this
-    specific turn declare".
+    ``skill_routing=True`` with ``activated_skills=[]`` is the reused-skill case, not a
+    scoring bug -- ``active_skills`` shows where the credit came from.
     """
 
     turn_id: str
@@ -89,6 +87,8 @@ class TurnResult(BaseModel):
     output_present: bool
     no_error: bool
     activated_skills: list[str]
+    # Sorted for stable output: the source is a set, whose iteration order is not.
+    active_skills: list[str] = Field(default_factory=list)
     clarification_turns_used: int = 0
     output_correct: bool | None = None
 
@@ -107,6 +107,9 @@ class TurnResult(BaseModel):
         "output_present",
         "output_correct",
         "activated_skills",
+        # What skill_routing was judged against -- without it, a turn showing
+        # skill_routing=True and activated_skills=[] looks like a scoring bug.
+        "active_skills",
     }
 
     def detail(self) -> dict:
@@ -343,10 +346,13 @@ def run_agentic_conversation(
     response_id: str | None = None
     conversation_tool_call_events: list[ToolCallEvent] = []
     conversation_reasoning_step_events: list[ReasoningStepEvent] = []
-    # Skills activated by any turn so far. The platform keeps a skill active across
-    # turns once set -- an agent correctly reuses the already-active skill without
-    # re-issuing set_skills, so routing credit must not require a fresh call every turn.
-    activated_skills_so_far: set[str] = set()
+    # The skills active right now, mirroring the platform's own state machine: set_skills
+    # REPLACES the active set rather than adding to it -- verified against the gen-ai
+    # service's skill registry, and stated in the tool's own description. So a turn that
+    # issues no set_skills call inherits the previous turn's set unchanged, while a turn
+    # that does issue one drops whatever it left out. Tracking this as a running UNION
+    # would credit a skill a later call had already switched off.
+    active_skills: set[str] = set()
     # Every send_message() call (across every logical turn AND every clarification
     # sub-turn within it) restarts call_ts/ts near 0 -- these run across the whole
     # conversation, not reset per logical turn, so every one of those calls shifts them.
@@ -421,13 +427,14 @@ def run_agentic_conversation(
                 total_clarification_turns += 1
                 current_message = _get_sim_user_response(response_text, resolved_turn, resolved_expected)
 
-            # `activated` is this turn's own declarations; `activated_skills_so_far` is the
-            # conversation-wide set. Both are reported (see TurnResult's docstring): the
-            # per-turn list stays per-turn precisely so a report can still show what each
-            # turn declared, while routing credit is judged against the cumulative set.
+            # `activated` is what THIS turn declared; `active_skills` is what is actually
+            # active during it. A turn with no set_skills call carries the previous set
+            # over; a turn with one replaces it outright (see active_skills' declaration).
+            # Both are reported -- see TurnResult's docstring.
             activated = _activated_skills(all_tool_calls)
-            activated_skills_so_far |= set(activated)
-            skill_routing = turn.expected_skill in activated_skills_so_far
+            if activated:
+                active_skills = set(activated)
+            skill_routing = turn.expected_skill in active_skills
             output_present = _check_output_present(resolved_turn, final_result) if final_result else False
             output_correct = (
                 _check_output_correct(resolved_turn, final_result) if (final_result and output_present) else None
@@ -452,6 +459,7 @@ def run_agentic_conversation(
                     output_present=output_present,
                     no_error=True,  # SDK raises on errors; reaching here means no critical error.
                     activated_skills=activated,
+                    active_skills=sorted(active_skills),
                     clarification_turns_used=clarification_turns,
                     output_correct=output_correct,
                 )
