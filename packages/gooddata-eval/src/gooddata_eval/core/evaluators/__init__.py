@@ -65,9 +65,9 @@ def _openai_available() -> bool:
 def supported_test_kinds() -> set[str]:
     """Return all supported test_kind values.
 
-    LLM-judge kinds (general_question, guardrail) are excluded when the
-    [llm-judge] extra (openai) is not installed — those items are skipped
-    rather than erroring out mid-run.
+    LLM-judge kinds (general_question, guardrail, dashboard_summary,
+    knowledge_question) are excluded when the [llm-judge] extra (openai) is
+    not installed — those items are skipped rather than erroring out mid-run.
     """
     kinds = set(_EAGER_EVALUATORS)
     if _openai_available():
