@@ -1,8 +1,17 @@
 # (C) 2026 GoodData Corporation
 from unittest.mock import MagicMock, patch
 
+from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.evaluators.summary import DashboardSummaryEvaluator
 from gooddata_eval.core.models import ChatResult, DatasetItem
+
+
+def _next_verdict(it):
+    """Next scripted judge result, raising it if it is an exception."""
+    v = next(it)
+    if isinstance(v, Exception):
+        raise v
+    return v
 
 
 def _make_evaluator():
@@ -85,3 +94,99 @@ def test_non_dict_expected_output_is_single_rubric_criterion():
     assert res.passed is True
     assert res.rank_key == (1, 1.0)
     ev._positive_judge.score.assert_called_once()
+
+
+# --- one unreadable judge body must not cost every other criterion ---
+
+
+def test_one_ungraded_criterion_does_not_discard_the_ones_already_graded():
+    """dashboard_summary makes ONE judge request PER CRITERION.
+
+    Letting JudgeResponseError raise out of the loop discarded every criterion already
+    graded and abandoned the ones after it -- a 4-criterion item losing all 4 to one bad
+    body, ending as runs=0 with an empty best_detail, and dropping out of
+    avg_quality_score's denominator entirely while the CLI still exited 0.
+    """
+    ev = _make_evaluator()
+    verdicts = iter([(True, "ok"), JudgeResponseError("empty body twice"), (True, "ok")])
+    ev._positive_judge.score = MagicMock(side_effect=lambda *a, **k: _next_verdict(verdicts))
+    ev._violation_judge.score = MagicMock(return_value=(False, "characteristic absent"))
+
+    item = _item({"must_include": ["a", "b"], "must_not_include": ["x"], "rubric": ["r"]})
+    res = ev.evaluate(item, _chat())
+
+    # include_0 graded True, include_1 ungraded, exclude_0 graded True, rubric_0 graded True.
+    assert res.detail["include_0"] is True
+    assert "include_1" not in res.detail, "an ungraded criterion must not be stored as a bool"
+    assert "UNGRADED" in res.detail["include_1_reason"]
+    assert res.detail["exclude_0"] is True
+    assert res.detail["rubric_0"] is True
+    assert res.detail["ungraded_criteria"] == 1
+    assert res.error is None, "three criteria were graded; this run has a verdict"
+    # An ungraded criterion is not a failed one -- no bool, so it stays out of the quality
+    # denominator (3 graded checks, all True) -- but a mandatory fact the judge could not
+    # confirm cannot carry a pass either.
+    assert res.passed is False
+    assert res.rank_key == (0, 1.0)
+
+
+def test_an_ungraded_rubric_criterion_does_not_fail_the_item():
+    # Rubric criteria never gate `passed`, so one the judge could not grade cannot either.
+    ev = _make_evaluator()
+    verdicts = iter([(True, "ok"), JudgeResponseError("empty body twice")])
+    ev._positive_judge.score = MagicMock(side_effect=lambda *a, **k: _next_verdict(verdicts))
+
+    item = _item({"must_include": ["a"], "rubric": ["r"]})
+    res = ev.evaluate(item, _chat())
+
+    assert res.passed is True
+    assert res.rank_key == (1, 1.0)
+    assert res.detail["ungraded_criteria"] == 1
+
+
+def test_an_ungraded_criterion_still_cannot_mask_a_real_failure():
+    ev = _make_evaluator()
+    verdicts = iter([(False, "missing"), JudgeResponseError("unparseable JSON")])
+    ev._positive_judge.score = MagicMock(side_effect=lambda *a, **k: _next_verdict(verdicts))
+
+    item = _item({"must_include": ["a", "b"]})
+    res = ev.evaluate(item, _chat())
+
+    assert res.passed is False
+    assert res.rank_key == (0, 0.0)
+
+
+def test_an_item_with_no_gradeable_criterion_is_an_ungraded_run():
+    # Nothing was assessed, so `passed` would still be its initial True -- a pass nobody
+    # made. That is not a verdict: the run is reported ungraded, and the runner errors the
+    # item only if none of its runs could be graded.
+    ev = _make_evaluator()
+    ev._positive_judge.score = MagicMock(side_effect=JudgeResponseError("empty body twice"))
+
+    item = _item({"must_include": ["a", "b"]})
+    res = ev.evaluate(item, _chat())
+
+    assert res.error is not None and "no readable verdict for any of the 2 criterion" in res.error
+    assert res.passed is False
+    assert res.rank_key < (0, 0.0), "an ungraded run must rank below every graded one"
+
+
+def test_a_graded_rubric_cannot_carry_a_pass_when_every_gating_criterion_went_ungraded():
+    """Both mandatory facts ungraded, one rubric line graded True.
+
+    Keyed on "any bool in detail", the no-verdict guard was satisfied by the rubric bool,
+    `passed` kept its initial True and quality read 100% -- a clean PASS with not one
+    criterion that decides the verdict assessed. Worse than a silent FAIL: a false PASS is
+    never investigated.
+    """
+    ev = _make_evaluator()
+    verdicts = iter([JudgeResponseError("length"), JudgeResponseError("length"), (True, "nice prose")])
+    ev._positive_judge.score = MagicMock(side_effect=lambda *a, **k: _next_verdict(verdicts))
+
+    item = _item({"must_include": ["FACT A", "FACT B"], "rubric": ["r"]})
+    res = ev.evaluate(item, _chat())
+
+    assert res.passed is False
+    assert res.error is not None and "2 criterion" in res.error
+    assert res.detail["rubric_0"] is True, "what was graded is still kept"
+    assert res.detail["ungraded_criteria"] == 2

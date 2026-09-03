@@ -11,11 +11,21 @@ from typing import Literal
 from gooddata_sdk import GoodDataSdk
 from pydantic import BaseModel
 
+from gooddata_eval.core.agentic._trace_linker import (
+    RunIdentity,
+    RunTraceContext,
+    SubmitTraceLink,
+    open_trace_window,
+    run_trace_link_inline,
+    submit_trace_scoring,
+    utc_now,
+)
 from gooddata_eval.core.agentic.alert_skill import render_alert_proposal
 from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids, _extract_metric_result
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import (
+    AgenticAssertionError,
     AgenticEvalOutcome,
     ChatResult,
     ReasoningStepEvent,
@@ -448,14 +458,8 @@ def _conversation_detail(result: ConversationResult) -> dict:
     }
 
 
-class ConversationAssertionError(AssertionError):
+class ConversationAssertionError(AgenticAssertionError):
     """Raised when a conversation evaluation fails."""
-
-    __tracebackhide__ = True
-    reasoning_steps: list[str]
-    conversation_id: str
-    response_id: str | None
-    detail: dict
 
 
 def evaluate_agentic_conversation(
@@ -473,6 +477,7 @@ def evaluate_agentic_conversation(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    submit_trace_link: SubmitTraceLink = run_trace_link_inline,
 ) -> AgenticEvalOutcome:
     """Run conversation evaluation, log to Langfuse, and raise on failure.
 
@@ -483,14 +488,7 @@ def evaluate_agentic_conversation(
     `conversation_id`-on-exception idiom in `ChatClient.ask()`) so callers can retrieve them
     either way.
     """
-    from datetime import datetime as _dt  # noqa: PLC0415
-    from datetime import timezone as _tz  # noqa: PLC0415
-
-    from gooddata_eval.core.agentic._langfuse import try_make_langfuse_client  # noqa: PLC0415
-
-    if langfuse is None:
-        langfuse = try_make_langfuse_client()
-    window_start = _dt.now(_tz.utc)
+    langfuse, window_start = open_trace_window(langfuse)
     result = run_agentic_conversation(
         host=host,
         token=token,
@@ -503,59 +501,68 @@ def evaluate_agentic_conversation(
     )
 
     if langfuse is not None and dataset_item_id:
-        from gooddata_eval.core.agentic._langfuse import (  # noqa: PLC0415
-            build_run_context,
-            find_traces_per_conversation,
-            log_quality_and_value_scores,
-            observe,
-            score_safe,
-        )
+        # Pinned on the calling thread: a deferred poll must not widen its query window.
+        window_end = utc_now()
+        # Resolved here, not inside the task: deferring it would make the queued task hold
+        # the whole fixture until the drain.
+        ds_name = dataset_name or fixture.dataset_name
 
-        run_name_base, run_metadata = build_run_context(
-            host,
-            token,
-            workspace_id,
-            dataset_name or fixture.dataset_name,
-            run_timestamp,
-            model_version_override,
-            run_metadata_extra,
-            reasoning_effort,
-        )
-        traces_by_conv = find_traces_per_conversation(
-            langfuse,
-            [result.conversation_id],
-            window_start,
-        )
-        pt = traces_by_conv.get(result.conversation_id)
-        with observe(langfuse, pt.id if pt else None, dataset_item_id, run_name_base, run_metadata) as tid:
-            score_safe(
-                langfuse,
-                tid,
-                name="conversation_success",
-                value=float(result.conversation_success),
-                data_type="BOOLEAN",
-            )
-            score_safe(
-                langfuse, tid, name="full_skill_coverage", value=float(result.full_skill_coverage), data_type="BOOLEAN"
-            )
-            for tr in result.turn_results:
-                score_safe(
-                    langfuse,
+        def _write_scores(ctx: RunTraceContext) -> None:
+
+            pt = ctx.trace(result.conversation_id)
+            with ctx.observe(pt, 0) as tid:
+                ctx.score(
                     tid,
-                    name=f"turn_{tr.turn_id}_skill_success",
-                    value=float(tr.skill_success),
+                    name="conversation_success",
+                    value=float(result.conversation_success),
                     data_type="BOOLEAN",
                 )
-            log_quality_and_value_scores(
-                langfuse,
-                tid,
-                strict_checks={
-                    "conversation_success": result.conversation_success,
-                    "full_skill_coverage": result.full_skill_coverage,
-                },
-                latency_sec=pt.latency if pt else None,
-                cost_usd=pt.total_cost if pt else None,
-            )
+                ctx.score(
+                    tid,
+                    name="full_skill_coverage",
+                    value=float(result.full_skill_coverage),
+                    data_type="BOOLEAN",
+                )
+                for tr in result.turn_results:
+                    ctx.score(
+                        tid,
+                        name=f"turn_{tr.turn_id}_skill_success",
+                        value=float(tr.skill_success),
+                        data_type="BOOLEAN",
+                    )
+                ctx.quality(
+                    tid,
+                    strict_checks={
+                        "conversation_success": result.conversation_success,
+                        "full_skill_coverage": result.full_skill_coverage,
+                    },
+                    latency_sec=pt.latency if pt else None,
+                    cost_usd=pt.total_cost if pt else None,
+                )
+
+        # Before the pass@K raise: a failing item's scores are the ones worth having.
+        submit_trace_scoring(
+            submit_trace_link,
+            RunIdentity(
+                host,
+                token,
+                workspace_id,
+                ds_name,
+                run_timestamp,
+                model_version_override,
+                run_metadata_extra,
+                reasoning_effort,
+            ),
+            langfuse=langfuse,
+            dataset_item_id=dataset_item_id,
+            conversation_ids=[result.conversation_id],
+            window_start=window_start,
+            window_end=window_end,
+            suffix_runs=False,
+            write_scores=_write_scores,
+        )
+
+    detail = _conversation_detail(result)
 
     if not result.conversation_success:
         failed_turns = [tr for tr in result.turn_results if not tr.skill_success]
@@ -567,11 +574,17 @@ def evaluate_agentic_conversation(
         exc.reasoning_steps = result.reasoning_steps
         exc.conversation_id = result.conversation_id
         exc.response_id = result.response_id
-        exc.detail = _conversation_detail(result)
+        exc.detail = detail
+        # This kind takes no k and drives its fixture exactly once, whatever --runs asks
+        # for. Saying so explicitly stops the report claiming K runs that never happened.
+        exc.runs_passed = 0
+        exc.runs_effective = 1
         raise exc
     return AgenticEvalOutcome(
         reasoning_steps=result.reasoning_steps,
         conversation_id=result.conversation_id,
         response_id=result.response_id,
-        detail=_conversation_detail(result),
+        detail=detail,
+        runs_passed=1,
+        runs_effective=1,
     )

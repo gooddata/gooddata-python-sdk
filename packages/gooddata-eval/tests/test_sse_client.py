@@ -867,3 +867,57 @@ def test_invalid_reasoning_effort_fails_at_construction():
     """Fail locally rather than as an out-of-enum request partway through a run."""
     with pytest.raises(ValueError, match="Invalid reasoning effort"):
         ChatClient(host="https://example.invalid", token="t", workspace_id="w", reasoning_effort="maximum")
+
+
+_ATTACHMENT = {"referencedObjects": [{"objects": [{"type": "WIDGET", "id": "campaign_spend"}]}]}
+
+
+def _capture_body(store):
+    def handler(request):
+        store["body"] = json.loads(request.read())
+        return httpx.Response(200, content=_OK_SSE)
+
+    return handler
+
+
+def test_send_message_puts_the_user_context_on_the_wire():
+    captured = {}
+    client = _client_with_handler(_capture_body(captured))
+    client.send_message("conv", "q", user_context=_ATTACHMENT)
+    assert captured["body"]["userContext"] == _ATTACHMENT
+
+
+def test_send_message_omits_user_context_entirely_when_there_is_no_attachment():
+    """An explicit ``"userContext": null`` would be ACCEPTED by gen-ai, so a sloppy
+    unconditional assignment would silently alter every request in every existing dataset
+    rather than failing loudly. This is the guard against that."""
+    captured = {}
+    client = _client_with_handler(_capture_body(captured))
+    client.send_message("conv", "q")
+    assert "userContext" not in captured["body"]
+
+
+def test_ask_puts_the_item_attachment_on_the_wire():
+    """The single-turn path goes through ask(), so an item's user_context has to be
+    forwarded there too, or every non-agentic item with an attachment is asked bare."""
+    captured = {}
+
+    def handler(request):
+        if request.method == "POST" and request.url.path.endswith("/conversations"):
+            return httpx.Response(200, json={"conversationId": "conv-abc"})
+        if request.method == "POST" and "messages" in str(request.url):
+            captured["body"] = json.loads(request.read())
+            return httpx.Response(200, content=_OK_SSE)
+        return httpx.Response(204)
+
+    client = _client_with_handler(handler)
+    item = DatasetItem(
+        id="t1",
+        dataset_name="d",
+        test_kind="general_question",
+        question="q",
+        expected_output="e",
+        user_context=_ATTACHMENT,
+    )
+    client.ask(item)
+    assert captured["body"]["userContext"] == _ATTACHMENT

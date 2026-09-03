@@ -4,7 +4,16 @@
 from rich.console import Console
 from rich.table import Table
 
-from gooddata_eval.core.runner import EvalReport
+from gooddata_eval.core.runner import EvalReport, ItemReport
+
+
+def _ungraded_note(item: ItemReport) -> str:
+    """What the verdict was NOT computed over: runs, or (dashboard_summary) criteria, that
+    the judge returned nothing readable for. Empty when everything was graded."""
+    if item.runs_ungraded:
+        return f"{item.runs_ungraded} run(s) ungraded"
+    criteria = item.best_detail.get("ungraded_criteria")
+    return f"{criteria} criterion(s) ungraded" if criteria else ""
 
 
 def render_console(report: EvalReport, *, console: Console | None = None) -> str:
@@ -30,7 +39,11 @@ def render_console(report: EvalReport, *, console: Console | None = None) -> str
         elif item.error:
             result, notes = "ERROR", item.error
         elif item.pass_at_k:
-            result, notes = "PASS", ""
+            # A pass@K that was not unanimous is a materially weaker result than one that
+            # was, and every other column looks identical for the two: quality_score reads
+            # best_detail, which describes the winning run alone. So say it here.
+            result = "PASS"
+            notes = "" if item.pass_power_k else f"{item.runs_passed}/{item.runs_total} runs passed"
         else:
             # Evaluator-agnostic: report whichever boolean checks came back False
             # (visualization uses metrics_correct/…; dashboard_summary uses
@@ -38,20 +51,31 @@ def render_console(report: EvalReport, *, console: Console | None = None) -> str
             failing = [k for k, v in item.best_detail.items() if v is False]
             notes = "failed: " + ", ".join(failing) if failing else "did not pass strict checks"
             result = "FAIL"
-        latency = "-" if item.runs == 0 else f"{item.latency_s:.2f}s"
-        avg = "-" if item.runs == 0 else f"{item.avg_latency_s:.2f}s"
+        if result in ("PASS", "FAIL") and (ungraded := _ungraded_note(item)):
+            # Said on both verdicts: a PASS over fewer runs is weaker evidence, and a FAIL
+            # with no False check is otherwise unexplained.
+            notes = f"{notes}; {ungraded}" if notes else ungraded
+        latency = "-" if item.runs_total == 0 else f"{item.latency_s:.2f}s"
+        avg = "-" if item.runs_total == 0 else f"{item.avg_latency_s:.2f}s"
         quality = "-" if item.skipped else f"{item.quality_score:.0%}"
-        table.add_row(item.id, item.test_kind, result, str(item.runs), latency, avg, quality, notes)
+        runs_col = str(item.runs_total)
+        table.add_row(item.id, item.test_kind, result, runs_col, latency, avg, quality, notes)
 
     out.print(table)
     _wall = report.wall_clock_s
-    _agent = report.latency_s
-    if _wall > 0 and abs(_wall - _agent) > 1:  # concurrency > 1: show both
-        timing = f"{_wall:.2f}s wall-clock, {_agent:.2f}s agent time (avg {report.avg_latency_s:.2f}s/run)"
+    # Sum of every item's own critical path -- agent plus judge plus simulated user, not
+    # the agent alone (ItemReport.agent_latency_s is that). It differs from wall-clock
+    # under --concurrency, and on the agentic path where deferred Langfuse trace linking
+    # runs outside any item's path but inside the run's elapsed time.
+    _items = report.latency_s
+    if _wall > 0 and abs(_wall - _items) > 1:
+        timing = f"{_wall:.2f}s wall-clock, {_items:.2f}s in items (avg {report.avg_latency_s:.2f}s/run)"
     else:
-        timing = f"{_agent:.2f}s (avg {report.avg_latency_s:.2f}s/run)"
+        timing = f"{_items:.2f}s (avg {report.avg_latency_s:.2f}s/run)"
+    # passed_all_runs alongside passed: the gap between them is the inconsistency signal.
+    unanimous = "" if report.passed_all_runs == report.passed else f", {report.passed_all_runs} on every run"
     out.print(
-        f"\nSummary: {report.passed}/{report.total} passed "
+        f"\nSummary: {report.passed}/{report.total} passed{unanimous} "
         f"({report.skipped} skipped, {report.errored} errored) "
         f"avg quality {report.avg_quality_score:.0%} in {timing}"
     )
