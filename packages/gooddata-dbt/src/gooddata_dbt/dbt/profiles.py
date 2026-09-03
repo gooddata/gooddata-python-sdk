@@ -2,6 +2,7 @@
 import argparse
 import os
 import re
+from pathlib import Path
 from typing import Union
 from urllib.parse import quote_plus
 
@@ -14,6 +15,7 @@ from gooddata_sdk import (
     CatalogDataSourceRedshift,
     CatalogDataSourceSnowflake,
     CatalogDataSourceVertica,
+    KeyPairCredentials,
     MotherDuckAttributes,
     PostgresAttributes,
     RedshiftAttributes,
@@ -93,13 +95,30 @@ class DbtOutputSnowflake(Base):
     title: str
     account: str
     user: str
-    password: str = attrs.field(repr=lambda value: "***")
+    password: str | None = attrs.field(default=None, repr=lambda value: "***")
+    # Key-pair auth alternative to password. private_key takes precedence when both are set;
+    # private_key_path is read at registration time (kept out of dbt manifests/logs as a raw value).
+    private_key: str | None = attrs.field(default=None, repr=lambda value: "***")
+    private_key_path: str | None = None
     database: str
     warehouse: str
     schema: str
     query_tag: str | None = None
 
+    def _resolve_private_key(self) -> str | None:
+        if self.private_key:
+            return self.private_key
+        if self.private_key_path:
+            return Path(self.private_key_path).read_text()
+        return None
+
     def to_gooddata(self, data_source_id: str, schema_name: str) -> CatalogDataSourceSnowflake:
+        private_key = self._resolve_private_key()
+        credentials = (
+            KeyPairCredentials(username=self.user, private_key=private_key)
+            if private_key
+            else BasicCredentials(username=self.user, password=self.password)
+        )
         return CatalogDataSourceSnowflake(
             id=data_source_id,
             name=self.title,
@@ -111,10 +130,7 @@ class DbtOutputSnowflake(Base):
             ),
             # Schema name is collected from dbt manifest from relevant tables
             schema=schema_name,
-            credentials=BasicCredentials(
-                username=self.user,
-                password=self.password,
-            ),
+            credentials=credentials,
         )
 
 
