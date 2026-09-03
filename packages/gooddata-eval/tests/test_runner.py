@@ -1,8 +1,10 @@
 # (C) 2026 GoodData Corporation
 import threading
 import time
+from unittest.mock import patch
 
 from gooddata_eval.core.evaluators import supported_test_kinds
+from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.runner import ItemReport, run_items
 
@@ -367,3 +369,60 @@ def test_run_items_callback_exception_is_logged_not_swallowed(capsys):
     assert result.total == 2  # run did not abort
     err = capsys.readouterr().err
     assert "RuntimeError" in err or "callback bug" in err  # traceback was printed
+
+
+# --- an ungraded run is excluded from pass@K, and only an item with no graded run errors ---
+
+
+class _ScriptedEvaluator:
+    test_kind = "visualization"
+
+    def __init__(self, evaluations):
+        self._evaluations = iter(evaluations)
+
+    def evaluate(self, item, chat_result) -> ItemEvaluation:
+        return next(self._evaluations)
+
+
+def _graded(passed: bool) -> ItemEvaluation:
+    return ItemEvaluation(passed=passed, rank_key=(int(passed),), detail={"judge_passed": passed})
+
+
+def _ungraded() -> ItemEvaluation:
+    return ItemEvaluation(passed=False, rank_key=(-1,), detail={"judge_error": "empty body"}, error="empty body")
+
+
+def _run_scripted(evaluations, runs: int):
+    backend = _FakeBackend([_empty_chat()])
+    with patch("gooddata_eval.core.runner.get_evaluator", return_value=_ScriptedEvaluator(evaluations)):
+        report = run_items([_item()], backend, runs=runs)
+    return report, backend
+
+
+def test_one_ungraded_run_does_not_error_an_item_whose_other_run_passed():
+    report, backend = _run_scripted([_graded(True), _ungraded()], runs=2)
+
+    item = report.items[0]
+    assert backend.calls == 2, "the run after the judge fault was abandoned"
+    assert item.error is None
+    assert item.pass_at_k is True
+    assert (item.runs, item.runs_passed, item.runs_ungraded) == (2, 1, 1)
+    assert item.pass_power_k is False, "a run nobody graded leaves 'all K passed' unverified"
+    assert (report.passed, report.errored) == (1, 0)
+
+
+def test_an_item_with_no_graded_run_errors_only_after_all_its_runs():
+    report, backend = _run_scripted([_ungraded(), _ungraded()], runs=2)
+
+    item = report.items[0]
+    assert backend.calls == 2
+    assert item.error is not None and item.error.startswith("JudgeResponseError")
+    assert item.pass_at_k is False
+    assert (item.runs, item.runs_ungraded) == (2, 2)
+    assert (report.passed, report.errored) == (0, 1)
+
+
+def test_best_detail_describes_a_graded_run_when_there_is_one():
+    report, _ = _run_scripted([_ungraded(), _graded(False)], runs=2)
+
+    assert report.items[0].best_detail == {"judge_passed": False}

@@ -1,5 +1,6 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
+from contextlib import ExitStack, contextmanager
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -45,6 +46,41 @@ _PROPOSAL = {
         "execution": {"measures": [{"opaque": "afm"}]},
     },
 }
+
+
+def _no_alert_chat_result() -> ChatResult:
+    """A turn where the agent refuses outright -- no tool calls, so no alert is created."""
+    return ChatResult.model_validate(
+        {
+            "text_response": "I cannot create the alert",
+            "created_visualizations": None,
+            "tool_call_events": [],
+            "reasoning_step_count": 1,
+        }
+    )
+
+
+@contextmanager
+def _patched(client, *, simulated_reply=None, delete_alert=False):
+    """Patch alert_skill's ChatClient, and optionally its simulated user and alert cleanup.
+
+    ``simulated_reply`` is what the simulated user answers; ``delete_alert`` stubs out the
+    teardown call a run makes for an alert it created. Yields the
+    ``generate_simulated_alert_response`` mock, or None when the test asked for no reply.
+    """
+    with ExitStack() as stack:
+        stack.enter_context(patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=client))
+        mock_sim = None
+        if simulated_reply is not None:
+            mock_sim = stack.enter_context(
+                patch(
+                    "gooddata_eval.core.agentic.alert_skill.generate_simulated_alert_response",
+                    return_value=simulated_reply,
+                )
+            )
+        if delete_alert:
+            stack.enter_context(patch("gooddata_eval.core.agentic.alert_skill._delete_alert"))
+        yield mock_sim
 
 
 def test_to_number_int():
@@ -264,18 +300,11 @@ def test_alert_evaluation_strict_fail():
 def test_run_agentic_alert_skill_no_alert_created():
     mock_client = MagicMock()
     mock_client.create_conversation.return_value = "conv-1"
-    mock_client.send_message.return_value = ChatResult.model_validate(
-        {
-            "text_response": "I cannot create the alert",
-            "created_visualizations": None,
-            "tool_call_events": [],
-            "reasoning_step_count": 1,
-        }
-    )
+    mock_client.send_message.return_value = _no_alert_chat_result()
     mock_client._base = "http://host/api/v1/actions/workspaces/ws1/ai"
     mock_client._auth = {"Authorization": "Bearer tok"}
 
-    with patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         summary = run_agentic_alert_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -293,15 +322,8 @@ def test_run_agentic_alert_skill_no_alert_created():
 
 def test_run_agentic_alert_skill_uses_initial_conversation_for_run_0():
     mock_client = MagicMock()
-    mock_client.send_message.return_value = ChatResult.model_validate(
-        {
-            "text_response": "I cannot create the alert",
-            "created_visualizations": None,
-            "tool_call_events": [],
-            "reasoning_step_count": 1,
-        }
-    )
-    with patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client):
+    mock_client.send_message.return_value = _no_alert_chat_result()
+    with _patched(mock_client):
         run_agentic_alert_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -319,15 +341,8 @@ def test_run_agentic_alert_skill_uses_initial_conversation_for_run_0():
 def test_run_agentic_alert_skill_creates_fresh_conversations_for_remaining_runs():
     mock_client = MagicMock()
     mock_client.create_conversation.side_effect = ["fresh-1", "fresh-2"]
-    mock_client.send_message.return_value = ChatResult.model_validate(
-        {
-            "text_response": "I cannot create the alert",
-            "created_visualizations": None,
-            "tool_call_events": [],
-            "reasoning_step_count": 1,
-        }
-    )
-    with patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client):
+    mock_client.send_message.return_value = _no_alert_chat_result()
+    with _patched(mock_client):
         run_agentic_alert_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -430,14 +445,7 @@ def test_run_agentic_alert_skill_passes_question_to_sim_user():
     mock_client = MagicMock()
     mock_client.send_message.side_effect = [asked_turn, created_turn]
 
-    with (
-        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.alert_skill.generate_simulated_alert_response",
-            return_value="United States.",
-        ) as mock_sim,
-        patch("gooddata_eval.core.agentic.alert_skill._delete_alert"),
-    ):
+    with _patched(mock_client, simulated_reply="United States.", delete_alert=True) as mock_sim:
         run_agentic_alert_skill(
             host="http://host",
             token="tok",
@@ -559,14 +567,9 @@ def test_run_agentic_alert_skill_answers_proposal_only_confirmation_turn():
     mock_client = MagicMock()
     mock_client.send_message.side_effect = [proposal_turn, created_turn]
 
-    with (
-        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.alert_skill.generate_simulated_alert_response",
-            return_value="Yes, please proceed to create the alert.",
-        ) as mock_sim,
-        patch("gooddata_eval.core.agentic.alert_skill._delete_alert"),
-    ):
+    with _patched(
+        mock_client, simulated_reply="Yes, please proceed to create the alert.", delete_alert=True
+    ) as mock_sim:
         summary = run_agentic_alert_skill(
             host="http://host",
             token="tok",
@@ -612,14 +615,7 @@ def test_run_agentic_alert_skill_accumulates_reasoning_steps_across_iterations()
     mock_client = MagicMock()
     mock_client.send_message.side_effect = [proposal_turn, created_turn]
 
-    with (
-        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.alert_skill.generate_simulated_alert_response",
-            return_value="Yes, please proceed to create the alert.",
-        ),
-        patch("gooddata_eval.core.agentic.alert_skill._delete_alert"),
-    ):
+    with _patched(mock_client, simulated_reply="Yes, please proceed to create the alert.", delete_alert=True):
         summary = run_agentic_alert_skill(
             host="http://host",
             token="tok",
@@ -652,10 +648,7 @@ def test_evaluate_agentic_alert_skill_returns_reasoning_steps_on_pass():
     mock_client.create_conversation.return_value = "conv-1"
     mock_client.send_message.return_value = chat_result
 
-    with (
-        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic.alert_skill._delete_alert"),
-    ):
+    with _patched(mock_client, delete_alert=True):
         outcome = evaluate_agentic_alert_skill(
             host="http://host",
             token="tok",
@@ -694,10 +687,7 @@ def test_evaluate_agentic_alert_skill_attaches_reasoning_steps_to_exception_on_f
     mock_client.create_conversation.return_value = "conv-1"
     mock_client.send_message.return_value = chat_result
 
-    with (
-        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
-        pytest.raises(AlertSkillAssertionError) as exc_info,
-    ):
+    with _patched(mock_client), pytest.raises(AlertSkillAssertionError) as exc_info:
         evaluate_agentic_alert_skill(
             host="http://host",
             token="tok",

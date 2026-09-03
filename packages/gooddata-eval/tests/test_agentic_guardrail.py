@@ -1,5 +1,7 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
+import itertools
+from contextlib import contextmanager
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -10,6 +12,44 @@ from gooddata_eval.core.agentic.guardrail import (
     run_agentic_guardrail,
 )
 from gooddata_eval.core.models import ChatResult
+
+
+@contextmanager
+def _patched(client, judge):
+    """Patch guardrail's ChatClient and LLMJudge with the given mocks."""
+    with (
+        patch("gooddata_eval.core.agentic.guardrail.ChatClient", return_value=client),
+        patch("gooddata_eval.core.agentic.guardrail.LLMJudge", return_value=judge),
+    ):
+        yield
+
+
+def _client_and_judge(
+    *,
+    text_response: str = "I cannot help with that",
+    reasoning_steps: list[str] | None = None,
+    response_id: str = "resp-1",
+    verdict: tuple[bool, str] = (True, "Correctly refused"),
+):
+    """A chat client on conversation ``conv-1`` and a gpt-4o judge returning ``verdict``.
+
+    Callers override only the one field they vary -- ``client.create_conversation`` and the
+    rest are ordinary mock attributes.
+    """
+    client = MagicMock()
+    client.create_conversation.return_value = "conv-1"
+    client.send_message.return_value = ChatResult.model_validate(
+        {
+            "textResponse": text_response,
+            "toolCallEvents": [],
+            "reasoningSteps": reasoning_steps or [],
+            "responseId": response_id,
+        }
+    )
+    judge = MagicMock()
+    judge.model = "gpt-4o"
+    judge.score.return_value = verdict
+    return client, judge
 
 
 def test_guardrail_result_fields():
@@ -24,19 +64,11 @@ def test_guardrail_result_fields():
 
 
 def test_run_agentic_guardrail_fail():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
-    mock_chat_result = MagicMock()
-    mock_chat_result.text_response = "Sure, here is how to do it"
-    mock_chat_result.tool_call_events = []
-    mock_client.send_message.return_value = mock_chat_result
-    mock_judge = MagicMock()
-    mock_judge.score.return_value = (False, "Should have refused")
+    mock_client, mock_judge = _client_and_judge(
+        text_response="Sure, here is how to do it", verdict=(False, "Should have refused")
+    )
 
-    with (
-        patch("gooddata_eval.core.agentic.guardrail.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic.guardrail.LLMJudge", return_value=mock_judge),
-    ):
+    with _patched(mock_client, mock_judge):
         summary = run_agentic_guardrail(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -50,18 +82,9 @@ def test_run_agentic_guardrail_fail():
 
 
 def test_run_agentic_guardrail_uses_initial_conversation_for_run_0():
-    mock_client = MagicMock()
-    mock_chat_result = MagicMock()
-    mock_chat_result.text_response = "I cannot help with that"
-    mock_chat_result.tool_call_events = []
-    mock_client.send_message.return_value = mock_chat_result
-    mock_judge = MagicMock()
-    mock_judge.score.return_value = (True, "Correctly refused")
+    mock_client, mock_judge = _client_and_judge()
 
-    with (
-        patch("gooddata_eval.core.agentic.guardrail.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic.guardrail.LLMJudge", return_value=mock_judge),
-    ):
+    with _patched(mock_client, mock_judge):
         run_agentic_guardrail(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -76,19 +99,10 @@ def test_run_agentic_guardrail_uses_initial_conversation_for_run_0():
 
 
 def test_run_agentic_guardrail_creates_fresh_conversations_for_remaining_runs():
-    mock_client = MagicMock()
+    mock_client, mock_judge = _client_and_judge()
     mock_client.create_conversation.side_effect = ["fresh-1", "fresh-2"]
-    mock_chat_result = MagicMock()
-    mock_chat_result.text_response = "I cannot help with that"
-    mock_chat_result.tool_call_events = []
-    mock_client.send_message.return_value = mock_chat_result
-    mock_judge = MagicMock()
-    mock_judge.score.return_value = (True, "Correctly refused")
 
-    with (
-        patch("gooddata_eval.core.agentic.guardrail.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic.guardrail.LLMJudge", return_value=mock_judge),
-    ):
+    with _patched(mock_client, mock_judge):
         run_agentic_guardrail(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -103,23 +117,9 @@ def test_run_agentic_guardrail_creates_fresh_conversations_for_remaining_runs():
 
 
 def test_run_agentic_guardrail_captures_reasoning_steps():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
-    mock_client.send_message.return_value = ChatResult.model_validate(
-        {
-            "textResponse": "I cannot help with that",
-            "toolCallEvents": [],
-            "reasoningSteps": ["deciding whether this is harmful"],
-            "responseId": "resp-1",
-        }
-    )
-    mock_judge = MagicMock()
-    mock_judge.score.return_value = (True, "Correctly refused")
+    mock_client, mock_judge = _client_and_judge(reasoning_steps=["deciding whether this is harmful"])
 
-    with (
-        patch("gooddata_eval.core.agentic.guardrail.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic.guardrail.LLMJudge", return_value=mock_judge),
-    ):
+    with _patched(mock_client, mock_judge):
         summary = run_agentic_guardrail(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -134,23 +134,9 @@ def test_run_agentic_guardrail_captures_reasoning_steps():
 
 
 def test_evaluate_agentic_guardrail_returns_reasoning_steps_on_pass():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
-    mock_client.send_message.return_value = ChatResult.model_validate(
-        {
-            "textResponse": "I cannot help with that",
-            "toolCallEvents": [],
-            "reasoningSteps": ["deciding whether this is harmful"],
-            "responseId": "resp-1",
-        }
-    )
-    mock_judge = MagicMock()
-    mock_judge.score.return_value = (True, "Correctly refused")
+    mock_client, mock_judge = _client_and_judge(reasoning_steps=["deciding whether this is harmful"])
 
-    with (
-        patch("gooddata_eval.core.agentic.guardrail.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic.guardrail.LLMJudge", return_value=mock_judge),
-    ):
+    with _patched(mock_client, mock_judge):
         outcome = evaluate_agentic_guardrail(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -172,24 +158,14 @@ def test_evaluate_agentic_guardrail_returns_reasoning_steps_on_pass():
 
 
 def test_evaluate_agentic_guardrail_attaches_reasoning_steps_to_exception_on_fail():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
-    mock_client.send_message.return_value = ChatResult.model_validate(
-        {
-            "textResponse": "Sure, here is how to do it",
-            "toolCallEvents": [],
-            "reasoningSteps": ["treating this as an ordinary request"],
-            "responseId": "resp-2",
-        }
+    mock_client, mock_judge = _client_and_judge(
+        text_response="Sure, here is how to do it",
+        reasoning_steps=["treating this as an ordinary request"],
+        response_id="resp-2",
+        verdict=(False, "Should have refused"),
     )
-    mock_judge = MagicMock()
-    mock_judge.score.return_value = (False, "Should have refused")
 
-    with (
-        patch("gooddata_eval.core.agentic.guardrail.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic.guardrail.LLMJudge", return_value=mock_judge),
-        pytest.raises(GuardrailAssertionError) as exc_info,
-    ):
+    with _patched(mock_client, mock_judge), pytest.raises(GuardrailAssertionError) as exc_info:
         evaluate_agentic_guardrail(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -208,3 +184,53 @@ def test_evaluate_agentic_guardrail_attaches_reasoning_steps_to_exception_on_fai
         "actual_output": "Sure, here is how to do it",
         "latency_breakdown": [],
     }
+
+
+# --- the run counts have to reach the report (same predicate pass_at_k uses) ---
+
+
+def _guardrail_client_and_judge(verdicts):
+    client = MagicMock()
+    client.create_conversation.side_effect = (f"conv-{i}" for i in itertools.count(1))
+    client.send_message.side_effect = lambda c, q, **k: ChatResult.model_validate(
+        {"textResponse": f"answer {c}", "toolCallEvents": [], "reasoningSteps": [], "responseId": "r"}
+    )
+    it = iter(verdicts)
+    judge = MagicMock()
+    judge.model = "gpt-4o"
+    judge.score.side_effect = lambda **kw: next(it)
+    return client, judge
+
+
+@pytest.mark.parametrize(
+    ("verdicts", "expected_passed", "expected_unanimous"),
+    [
+        ([(True, "ok")] * 3, 3, True),
+        ([(True, "ok"), (True, "ok"), (False, "no")], 2, False),
+        ([(True, "ok"), (False, "no"), (False, "no")], 1, False),
+    ],
+)
+def test_the_summary_counts_how_many_runs_passed(verdicts, expected_passed, expected_unanimous):
+    client, judge = _guardrail_client_and_judge(verdicts)
+
+    with _patched(client, judge):
+        summary = run_agentic_guardrail(host="h", token="t", workspace_id="ws", question="q", expected_output="e", k=3)
+
+    assert sum(1 for r in summary.run_results if r.passed) == expected_passed
+    # pass_at_k stays "did any run pass"; pass^K is the unanimity claim.
+    assert summary.pass_at_k is (expected_passed > 0)
+    assert summary.pass_power_k is expected_unanimous
+
+
+def test_a_non_unanimous_pass_reaches_the_outcome():
+    """pass@K is satisfied by run 0, so this item PASSes -- but the report must be able to
+    say it only passed 2 of 3, which every other column hides.
+    """
+    client, judge = _guardrail_client_and_judge([(True, "ok"), (True, "ok"), (False, "no")])
+
+    with _patched(client, judge):
+        outcome = evaluate_agentic_guardrail(
+            host="h", token="t", workspace_id="ws", question="q", expected_output="e", k=3
+        )
+
+    assert (outcome.runs_passed, outcome.runs_effective) == (2, 3)

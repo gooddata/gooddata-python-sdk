@@ -866,7 +866,7 @@ test = [
 requires-dist = [
     { name = "gooddata-sdk", editable = "packages/gooddata-sdk" },
     { name = "httpx", specifier = ">=0.27,<1.0" },
-    { name = "openai", marker = "extra == 'llm-judge'", specifier = ">=1.40,<2.0" },
+    { name = "openai", marker = "extra == 'llm-judge'", specifier = ">=1.45,<2.0" },
     { name = "orjson", specifier = ">=3.9.15,<4.0.0" },
     { name = "pydantic", specifier = ">=2.6,<3.0" },
     { name = "rich", specifier = ">=13.0,<15.0" },

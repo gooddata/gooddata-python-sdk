@@ -1,7 +1,7 @@
 # (C) 2026 GoodData Corporation
 """Evaluator for general_question: LLM-as-judge scores the agent's text response."""
 
-from gooddata_eval.core.evaluators._llm_judge import LLMJudge
+from gooddata_eval.core.evaluators._llm_judge import LLMJudge, score_run
 from gooddata_eval.core.evaluators._text_utils import extract_text
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import ChatResult, DatasetItem, build_latency_breakdown
@@ -22,19 +22,21 @@ class GeneralQuestionEvaluator:
 
     def evaluate(self, item: DatasetItem, chat_result: ChatResult) -> ItemEvaluation:
         actual = extract_text(chat_result)
-        passed, reasoning = self._judge.score(
+        # score_run, not judge.score: a judge fault is this run's, not the item's (see score_run).
+        verdict = score_run(
+            self._judge,
             input=item.question,
             expected_output=str(item.expected_output),
             actual_output=actual,
         )
-        return ItemEvaluation(
-            passed=passed,
-            rank_key=(int(passed),),
-            detail={
-                "judge_reasoning": reasoning,
-                "actual_output": actual,
-                "latency_breakdown": build_latency_breakdown(
-                    chat_result.tool_call_events, chat_result.reasoning_step_events
-                ),
-            },
-        )
+        detail = {
+            "actual_output": actual,
+            "latency_breakdown": build_latency_breakdown(
+                chat_result.tool_call_events, chat_result.reasoning_step_events
+            ),
+        }
+        if verdict.error is None:
+            detail["judge_reasoning"] = verdict.reasoning
+        else:
+            detail["judge_error"] = verdict.error
+        return ItemEvaluation(passed=verdict.passed, rank_key=(verdict.rank,), detail=detail, error=verdict.error)

@@ -5,10 +5,25 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._trace_linker import (
+    RunIdentity,
+    RunTraceContext,
+    SubmitTraceLink,
+    open_trace_window,
+    run_trace_link_inline,
+    submit_trace_scoring,
+    utc_now,
+)
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.evaluators._llm_judge import LLMJudge
-from gooddata_eval.core.models import AgenticEvalOutcome, ReasoningStepEvent, ToolCallEvent, build_latency_breakdown
+from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError, LLMJudge, score_run
+from gooddata_eval.core.models import (
+    AgenticAssertionError,
+    AgenticEvalOutcome,
+    ReasoningStepEvent,
+    ToolCallEvent,
+    build_latency_breakdown,
+)
 
 _DEFAULT_K = 1
 
@@ -54,6 +69,9 @@ class GuardrailResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
+    # Set when the judge returned something unreadable for THIS run. Excluded from pass@K
+    # and from Langfuse scoring rather than counted as a failure -- see score_run.
+    judge_error: str | None = None
 
 
 @dataclass
@@ -64,6 +82,45 @@ class AgenticGuardrailSummary:
     pass_at_k: bool
     pass_power_k: bool
     best: GuardrailResult
+
+    @property
+    def scored_run_results(self) -> list[GuardrailResult]:
+        """The runs the judge actually graded -- the only ones pass@K may consider."""
+        return [r for r in self.run_results if r.judge_error is None]
+
+    @property
+    def judge_errors(self) -> list[str]:
+        """One message per run the judge could not grade."""
+        return [r.judge_error for r in self.run_results if r.judge_error is not None]
+
+
+def _run_single_guardrail(
+    client: ChatClient,
+    judge: LLMJudge,
+    conversation_id: str,
+    question: str,
+    expected_output: str,
+) -> GuardrailResult:
+    """Ask once and grade once.
+
+    Extracted so the two call sites below (the first conversation, which may be supplied,
+    and the remaining K-1) cannot drift -- they had already duplicated the whole body once.
+    """
+    chat_result = client.send_message(conversation_id, question)
+    actual_output = (chat_result.text_response or "").strip()
+    verdict = score_run(judge, input=question, expected_output=expected_output, actual_output=actual_output)
+    return GuardrailResult(
+        conversation_id=conversation_id,
+        actual_output=actual_output,
+        passed=verdict.passed,
+        llm_judge_score=1.0 if verdict.passed else 0.0,
+        reasoning=verdict.reasoning,
+        reasoning_steps=list(chat_result.reasoning_steps or []),
+        response_id=chat_result.response_id,
+        tool_call_events=list(chat_result.tool_call_events or []),
+        reasoning_step_events=list(chat_result.reasoning_step_events or []),
+        judge_error=verdict.error,
+    )
 
 
 def run_agentic_guardrail(
@@ -82,30 +139,12 @@ def run_agentic_guardrail(
     client = ChatClient(
         host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
     )
-    judge = LLMJudge(_GUARDRAIL_EVALUATION_STEPS, model="gpt-4o")
+    judge = LLMJudge(_GUARDRAIL_EVALUATION_STEPS)
 
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
-            chat_result = client.send_message(conv_id_0, question)
-            actual_output = (chat_result.text_response or "").strip()
-            passed, reasoning = judge.score(
-                input=question, expected_output=expected_output, actual_output=actual_output
-            )
-            llm_judge_score = 1.0 if passed else 0.0
-            run_results.append(
-                GuardrailResult(
-                    conversation_id=conv_id_0,
-                    actual_output=actual_output,
-                    passed=passed,
-                    llm_judge_score=llm_judge_score,
-                    reasoning=reasoning,
-                    reasoning_steps=list(chat_result.reasoning_steps or []),
-                    response_id=chat_result.response_id,
-                    tool_call_events=list(chat_result.tool_call_events or []),
-                    reasoning_step_events=list(chat_result.reasoning_step_events or []),
-                )
-            )
+            run_results.append(_run_single_guardrail(client, judge, conv_id_0, question, expected_output))
         finally:
             if initial_conversation_id is None:
                 client.delete_conversation(conv_id_0)
@@ -113,33 +152,20 @@ def run_agentic_guardrail(
         for _ in range(1, k):
             conv_id = client.create_conversation()
             try:
-                chat_result = client.send_message(conv_id, question)
-                actual_output = (chat_result.text_response or "").strip()
-                passed, reasoning = judge.score(
-                    input=question, expected_output=expected_output, actual_output=actual_output
-                )
-                llm_judge_score = 1.0 if passed else 0.0
-                run_results.append(
-                    GuardrailResult(
-                        conversation_id=conv_id,
-                        actual_output=actual_output,
-                        passed=passed,
-                        llm_judge_score=llm_judge_score,
-                        reasoning=reasoning,
-                        reasoning_steps=list(chat_result.reasoning_steps or []),
-                        response_id=chat_result.response_id,
-                        tool_call_events=list(chat_result.tool_call_events or []),
-                        reasoning_step_events=list(chat_result.reasoning_step_events or []),
-                    )
-                )
+                run_results.append(_run_single_guardrail(client, judge, conv_id, question, expected_output))
             finally:
                 client.delete_conversation(conv_id)
     finally:
         client.close()
 
-    pass_at_k = any(r.passed for r in run_results)
-    pass_power_k = all(r.passed for r in run_results)
-    best = max(run_results, key=lambda r: r.llm_judge_score)
+    # The two aggregates treat an ungraded run differently, on purpose. pass@K asks "did
+    # any run pass", which an ungraded run cannot change, so it is excluded. pass^K claims
+    # every run passed, which one ungraded run leaves unverified, so it is False. With
+    # nothing graded at all there is no verdict either way and this raises.
+    scored = [r for r in run_results if r.judge_error is None]
+    pass_at_k = any(r.passed for r in scored)
+    pass_power_k = len(scored) == len(run_results) and bool(scored) and all(r.passed for r in scored)
+    best = max(scored or run_results, key=lambda r: r.llm_judge_score)
     return AgenticGuardrailSummary(
         run_results=run_results,
         pass_at_k=pass_at_k,
@@ -148,14 +174,8 @@ def run_agentic_guardrail(
     )
 
 
-class GuardrailAssertionError(AssertionError):
+class GuardrailAssertionError(AgenticAssertionError):
     """Raised when a guardrail evaluation fails."""
-
-    __tracebackhide__ = True
-    reasoning_steps: list[str]
-    conversation_id: str
-    response_id: str | None
-    detail: dict
 
 
 def evaluate_agentic_guardrail(
@@ -174,6 +194,7 @@ def evaluate_agentic_guardrail(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    submit_trace_link: SubmitTraceLink = run_trace_link_inline,
 ) -> AgenticEvalOutcome:
     """Run guardrail evaluation, log to Langfuse, and raise GuardrailAssertionError on failure.
 
@@ -182,14 +203,7 @@ def evaluate_agentic_guardrail(
     raised exception as ``.reasoning_steps``/``.conversation_id``/``.response_id`` (mirrors
     `evaluate_agentic_metric_skill`'s idiom) so callers can retrieve them either way.
     """
-    from datetime import datetime as _dt  # noqa: PLC0415
-    from datetime import timezone as _tz  # noqa: PLC0415
-
-    from gooddata_eval.core.agentic._langfuse import try_make_langfuse_client  # noqa: PLC0415
-
-    if langfuse is None:
-        langfuse = try_make_langfuse_client()
-    window_start = _dt.now(_tz.utc)
+    langfuse, window_start = open_trace_window(langfuse)
     summary = run_agentic_guardrail(
         host=host,
         token=token,
@@ -203,66 +217,89 @@ def evaluate_agentic_guardrail(
     )
 
     if langfuse is not None and dataset_item_id:
-        from gooddata_eval.core.agentic._langfuse import (  # noqa: PLC0415
-            build_run_context,
-            find_traces_per_conversation,
-            log_quality_and_value_scores,
-            observe,
-            score_safe,
+        # Pinned on the calling thread: a deferred poll must not widen its query window.
+        window_end = utc_now()
+
+        def _write_scores(ctx: RunTraceContext) -> None:
+
+            for run_idx, run in enumerate(summary.run_results):
+                if run.judge_error is not None:
+                    # No verdict, so nothing truthful to publish: float(run.passed) would
+                    # write a 0 the judge never returned.
+                    continue
+                pt = ctx.trace(run.conversation_id)
+                with ctx.observe(pt, run_idx) as tid:
+                    ctx.score(tid, name="guardrail_pass", value=float(run.passed), data_type="BOOLEAN")
+                    ctx.score(tid, name="llm_judge_score", value=run.llm_judge_score, data_type="NUMERIC")
+                    ctx.quality(
+                        tid,
+                        strict_checks={"guardrail_pass": run.passed},
+                        latency_sec=pt.latency if pt else None,
+                        cost_usd=pt.total_cost if pt else None,
+                    )
+
+        # Before the pass@K raise: a failing item's scores are the ones worth having.
+        submit_trace_scoring(
+            submit_trace_link,
+            RunIdentity(
+                host,
+                token,
+                workspace_id,
+                dataset_name,
+                run_timestamp,
+                model_version_override,
+                run_metadata_extra,
+                reasoning_effort,
+            ),
+            langfuse=langfuse,
+            dataset_item_id=dataset_item_id,
+            # Ungraded runs are skipped above, so polling for their traces would only spend
+            # the item's shared retry budget on scores that never get written.
+            conversation_ids=[r.conversation_id for r in summary.scored_run_results],
+            window_start=window_start,
+            window_end=window_end,
+            suffix_runs=len(summary.run_results) > 1,
+            write_scores=_write_scores,
         )
 
-        run_name_base, run_metadata = build_run_context(
-            host,
-            token,
-            workspace_id,
-            dataset_name,
-            run_timestamp,
-            model_version_override,
-            run_metadata_extra,
-            reasoning_effort,
+    unscored = summary.judge_errors
+
+    if not summary.scored_run_results:
+        # No readable verdict for any run: an error, not K failures. Raised after the
+        # trace link is queued so whatever the agent did is still linked.
+        raise JudgeResponseError(
+            f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
+            + " | ".join(unscored)
         )
-        traces_by_conv = find_traces_per_conversation(
-            langfuse,
-            [r.conversation_id for r in summary.run_results],
-            window_start,
-        )
-        suffix_needed = len(summary.run_results) > 1
-        for run_idx, run in enumerate(summary.run_results):
-            pt = traces_by_conv.get(run.conversation_id)
-            run_name = f"{run_name_base}_run{run_idx}" if suffix_needed else run_name_base
-            with observe(langfuse, pt.id if pt else None, dataset_item_id, run_name, run_metadata) as tid:
-                score_safe(langfuse, tid, name="guardrail_pass", value=float(run.passed), data_type="BOOLEAN")
-                score_safe(langfuse, tid, name="llm_judge_score", value=run.llm_judge_score, data_type="NUMERIC")
-                log_quality_and_value_scores(
-                    langfuse,
-                    tid,
-                    strict_checks={"guardrail_pass": run.passed},
-                    latency_sec=pt.latency if pt else None,
-                    cost_usd=pt.total_cost if pt else None,
-                )
+
+    runs_passed = sum(1 for r in summary.scored_run_results if r.passed)
+    runs_effective = len(summary.run_results)
+
+    best = summary.best
+    detail = {
+        "judge_passed": best.passed,
+        "judge_reasoning": best.reasoning,
+        "actual_output": best.actual_output,
+        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+        # Only present when it happened, so the usual JSON shape is unchanged. A
+        # pass@K over fewer runs than --runs asked for is a weaker result.
+        **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),
+    }
 
     if not summary.pass_at_k:
-        best = summary.best
         exc = GuardrailAssertionError(f"Guardrail assertion failed. passed={best.passed}. Reasoning: {best.reasoning}")
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
-        exc.detail = {
-            "judge_passed": best.passed,
-            "judge_reasoning": best.reasoning,
-            "actual_output": best.actual_output,
-            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-        }
+        exc.detail = detail
+        exc.runs_passed = runs_passed
+        exc.runs_effective = runs_effective
         raise exc
-    best = summary.best
     return AgenticEvalOutcome(
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
-        detail={
-            "judge_passed": best.passed,
-            "judge_reasoning": best.reasoning,
-            "actual_output": best.actual_output,
-            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-        },
+        detail=detail,
     )

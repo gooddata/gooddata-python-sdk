@@ -10,6 +10,15 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._trace_linker import (
+    RunIdentity,
+    RunTraceContext,
+    SubmitTraceLink,
+    open_trace_window,
+    run_trace_link_inline,
+    submit_trace_scoring,
+    utc_now,
+)
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators.visualization import (
@@ -19,6 +28,7 @@ from gooddata_eval.core.evaluators.visualization import (
     evaluation_result_detail,
 )
 from gooddata_eval.core.models import (
+    AgenticAssertionError,
     AgenticEvalOutcome,
     CreatedVisualization,
     ReasoningStepEvent,
@@ -285,14 +295,8 @@ def run_agentic_visualization(
     )
 
 
-class VisualizationAssertionError(AssertionError):
+class VisualizationAssertionError(AgenticAssertionError):
     """Raised when a visualization evaluation fails."""
-
-    __tracebackhide__ = True
-    reasoning_steps: list[str]
-    conversation_id: str
-    response_id: str | None
-    detail: dict
 
 
 def _filter_diff(category: str, ev: EvaluationResult) -> str:
@@ -325,6 +329,7 @@ def evaluate_agentic_visualization(
     run_metadata_extra: dict | None = None,
     record_output_path: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    submit_trace_link: SubmitTraceLink = run_trace_link_inline,
 ) -> AgenticEvalOutcome:
     """Run visualization evaluation, log to Langfuse, and raise VisualizationAssertionError on failure.
 
@@ -333,14 +338,8 @@ def evaluate_agentic_visualization(
     raised exception as ``.reasoning_steps``/``.conversation_id``/``.response_id``.
     """
     import json as _json  # noqa: PLC0415
-    from datetime import datetime as _dt  # noqa: PLC0415
-    from datetime import timezone as _tz  # noqa: PLC0415
 
-    from gooddata_eval.core.agentic._langfuse import try_make_langfuse_client  # noqa: PLC0415
-
-    if langfuse is None:
-        langfuse = try_make_langfuse_client()
-    window_start = _dt.now(_tz.utc)
+    langfuse, window_start = open_trace_window(langfuse)
     summary = run_agentic_visualization(
         host=host,
         token=token,
@@ -355,63 +354,61 @@ def evaluate_agentic_visualization(
     )
 
     if langfuse is not None and dataset_item_id:
-        from gooddata_eval.core.agentic._langfuse import (  # noqa: PLC0415
-            build_run_context,
-            find_traces_per_conversation,
-            log_quality_and_value_scores,
-            observe,
-            score_safe,
-        )
+        # Pinned on the calling thread: a deferred poll must not widen its query window.
+        window_end = utc_now()
 
-        run_name_base, run_metadata = build_run_context(
-            host,
-            token,
-            workspace_id,
-            dataset_name,
-            run_timestamp,
-            model_version_override,
-            run_metadata_extra,
-            reasoning_effort,
+        def _write_scores(ctx: RunTraceContext) -> None:
+
+            K = len(summary.run_results)
+            for run_idx, run in enumerate(summary.run_results):
+                pt = ctx.trace(run.conversation_id)
+                ev = run.eval_result
+                with ctx.observe(pt, run_idx) as tid:
+                    ctx.score(tid, name="assertion-cross-ref-valid", value=ev.cross_ref_valid, data_type="BOOLEAN")
+                    ctx.score(tid, name="assertion-vis-metric", value=ev.metrics_correct, data_type="BOOLEAN")
+                    ctx.score(tid, name="assertion-vis-dimensions", value=ev.dimensions_correct, data_type="BOOLEAN")
+                    ctx.score(tid, name="assertion-vis-filters", value=ev.filters_correct, data_type="BOOLEAN")
+                    ctx.score(tid, name="assertion-vis-type", value=ev.viz_type_hard, data_type="BOOLEAN")
+                    ctx.score(tid, name="skill_selection", value=ev.skill_activated, data_type="BOOLEAN")
+                    ctx.score(tid, name=f"pass_at_{K}", value=summary.pass_at_k, data_type="BOOLEAN")
+                    ctx.score(tid, name=f"pass_power_{K}", value=summary.pass_power_k, data_type="BOOLEAN")
+                    ctx.score(tid, name="turns", value=run.total_turns, data_type="NUMERIC")
+                    ctx.score(tid, name="steps", value=run.total_steps, data_type="NUMERIC")
+                    ctx.quality(
+                        tid,
+                        strict_checks={
+                            "assertion-cross-ref-valid": ev.cross_ref_valid,
+                            "assertion-vis-metric": ev.metrics_correct,
+                            "assertion-vis-dimensions": ev.dimensions_correct,
+                            "assertion-vis-filters": ev.filters_correct,
+                            "assertion-vis-type": ev.viz_type_hard,
+                        },
+                        latency_sec=pt.latency if pt else None,
+                        cost_usd=pt.total_cost if pt else None,
+                    )
+
+        # Before the pass@K raise: a failing item's scores are the ones worth having.
+        submit_trace_scoring(
+            submit_trace_link,
+            RunIdentity(
+                host,
+                token,
+                workspace_id,
+                dataset_name,
+                run_timestamp,
+                model_version_override,
+                run_metadata_extra,
+                reasoning_effort,
+            ),
+            langfuse=langfuse,
+            dataset_item_id=dataset_item_id,
+            conversation_ids=[r.conversation_id for r in summary.run_results],
+            window_start=window_start,
+            window_end=window_end,
+            # Unlike the other runners, this one suffixes every run, K=1 included.
+            suffix_runs=True,
+            write_scores=_write_scores,
         )
-        K = len(summary.run_results)
-        traces_by_conv = find_traces_per_conversation(
-            langfuse,
-            [r.conversation_id for r in summary.run_results],
-            window_start,
-        )
-        for run_idx, run in enumerate(summary.run_results):
-            pt = traces_by_conv.get(run.conversation_id)
-            ev = run.eval_result
-            with observe(
-                langfuse, pt.id if pt else None, dataset_item_id, f"{run_name_base}_run{run_idx}", run_metadata
-            ) as tid:
-                score_safe(
-                    langfuse, tid, name="assertion-cross-ref-valid", value=ev.cross_ref_valid, data_type="BOOLEAN"
-                )
-                score_safe(langfuse, tid, name="assertion-vis-metric", value=ev.metrics_correct, data_type="BOOLEAN")
-                score_safe(
-                    langfuse, tid, name="assertion-vis-dimensions", value=ev.dimensions_correct, data_type="BOOLEAN"
-                )
-                score_safe(langfuse, tid, name="assertion-vis-filters", value=ev.filters_correct, data_type="BOOLEAN")
-                score_safe(langfuse, tid, name="assertion-vis-type", value=ev.viz_type_hard, data_type="BOOLEAN")
-                score_safe(langfuse, tid, name="skill_selection", value=ev.skill_activated, data_type="BOOLEAN")
-                score_safe(langfuse, tid, name=f"pass_at_{K}", value=summary.pass_at_k, data_type="BOOLEAN")
-                score_safe(langfuse, tid, name=f"pass_power_{K}", value=summary.pass_power_k, data_type="BOOLEAN")
-                score_safe(langfuse, tid, name="turns", value=run.total_turns, data_type="NUMERIC")
-                score_safe(langfuse, tid, name="steps", value=run.total_steps, data_type="NUMERIC")
-                log_quality_and_value_scores(
-                    langfuse,
-                    tid,
-                    strict_checks={
-                        "assertion-cross-ref-valid": ev.cross_ref_valid,
-                        "assertion-vis-metric": ev.metrics_correct,
-                        "assertion-vis-dimensions": ev.dimensions_correct,
-                        "assertion-vis-filters": ev.filters_correct,
-                        "assertion-vis-type": ev.viz_type_hard,
-                    },
-                    latency_sec=pt.latency if pt else None,
-                    cost_usd=pt.total_cost if pt else None,
-                )
 
     if record_output_path and summary.best.actual_output is not None:
         import json as _j  # noqa: PLC0415
@@ -422,9 +419,17 @@ def evaluate_agentic_visualization(
         with open(record_output_path, "w") as _f:
             _j.dump(_fixture, _f, indent=2)
 
+    runs_passed = sum(1 for r in summary.run_results if r.eval_result.strict_pass)
+    runs_effective = len(summary.run_results)
+
+    best = summary.best
+    ev = best.eval_result
+    detail = {
+        **evaluation_result_detail(ev),
+        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+    }
+
     if not summary.pass_at_k:
-        best = summary.best
-        ev = best.eval_result
         n = len(expected_outputs)
         candidate_note = f" (closest of {n} candidates)" if n > 1 else ""
         cross_ref_detail = (" → " + "; ".join(ev.cross_ref_errors)) if ev.cross_ref_errors else ""
@@ -462,18 +467,15 @@ def evaluate_agentic_visualization(
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
-        exc.detail = {
-            **evaluation_result_detail(ev),
-            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-        }
+        exc.detail = detail
+        exc.runs_passed = runs_passed
+        exc.runs_effective = runs_effective
         raise exc
-    best = summary.best
     return AgenticEvalOutcome(
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
-        detail={
-            **evaluation_result_detail(best.eval_result),
-            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-        },
+        detail=detail,
     )

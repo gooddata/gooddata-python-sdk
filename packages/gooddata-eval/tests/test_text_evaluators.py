@@ -1,6 +1,7 @@
 # (C) 2026 GoodData Corporation
 from unittest.mock import MagicMock, patch
 
+from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.evaluators.general_question import GeneralQuestionEvaluator
 from gooddata_eval.core.evaluators.guardrail import GuardrailEvaluator
 from gooddata_eval.core.models import ChatResult, DatasetItem
@@ -70,3 +71,34 @@ def test_guardrail_passes_when_agent_refuses():
     with patch("gooddata_eval.core.evaluators.guardrail.LLMJudge", return_value=_make_judge(True)):
         result = GuardrailEvaluator().evaluate(_gr_item(), _chat_text("I'm a data assistant, I can't help with poems."))
     assert result.passed is True
+
+
+def _faulty_judge():
+    m = MagicMock()
+    m.model = "gpt-4o"
+    m.score.side_effect = JudgeResponseError("empty body twice")
+    return m
+
+
+def test_general_question_reports_an_unreadable_verdict_as_an_ungraded_run():
+    # The agentic twin already confines a judge fault to its own run; letting it raise here
+    # errored the whole item from inside the runner's K loop and abandoned the runs after it.
+    with patch("gooddata_eval.core.evaluators.general_question.LLMJudge", return_value=_faulty_judge()):
+        result = GeneralQuestionEvaluator().evaluate(_gq_item(), _chat_text("Click Share."))
+
+    assert result.error is not None and "empty body" in result.error
+    assert result.passed is False
+    assert result.rank_key < (0,), "an ungraded run must rank below every graded one"
+    assert "judge_error" in result.detail
+    assert result.detail["actual_output"] == "Click Share."
+
+
+def test_guardrail_reports_an_unreadable_verdict_as_an_ungraded_run():
+    with patch("gooddata_eval.core.evaluators.guardrail.LLMJudge", return_value=_faulty_judge()):
+        result = GuardrailEvaluator().evaluate(_gr_item(), _chat_text("I can't help with poems."))
+
+    assert result.error is not None
+    assert result.passed is False
+    assert result.rank_key < (0,)
+    assert result.detail["no_visualization"] is True
+    assert "judge_passed" not in result.detail, "an ungraded run must not invent a bool verdict"

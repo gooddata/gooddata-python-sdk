@@ -7,11 +7,13 @@ import orjson
 import pytest
 from gooddata_eval.cli import main as cli_main
 from gooddata_eval.cli.main import _parse_model_arg
+from gooddata_eval.core.config import JUDGE_MODEL_ENV_VAR, RunConfig, judge_model
 from gooddata_eval.core.connection import (
     ConnectionError_,  # noqa: F401 - used in test_cli_operational_error_exits_nonzero
 )
 from gooddata_eval.core.models import DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
+from gooddata_eval.core.timing import TIMERS_ENV_VAR, timers_enabled
 from gooddata_eval.core.workspace import ActiveLlmProvider, ResolvedModel
 from rich.console import Console
 
@@ -814,3 +816,189 @@ def test_cli_rejects_unknown_reasoning_effort(fixtures_dir):
             ]
         )
     assert exc_info.value.code == 2
+
+
+def test_cli_passes_concurrency_to_the_agentic_runner(monkeypatch, tmp_path):
+    # The gap this closes: --concurrency reached run_items only, so a dataset of agentic
+    # items accepted the flag and then ran strictly sequentially anyway -- a real run with
+    # --concurrency 4 came out no faster than without it.
+    monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
+
+    class _FakeController:
+        def __init__(self, *a, **k): ...
+        def get_active(self):
+            return ActiveLlmProvider(provider_id="prov", default_model_id="gpt-5.2")
+
+        def resolve_and_activate(self, requested, provider=None):
+            return ResolvedModel(provider_id="prov", model_id="gpt-5.2", switched=False, provider_name="P")
+
+        def restore(self, original): ...
+        def close(self): ...
+
+    monkeypatch.setattr(cli_main, "WorkspaceModelController", _FakeController)
+    monkeypatch.setattr(cli_main, "ChatClient", lambda **k: object())
+    monkeypatch.setattr(
+        cli_main,
+        "load_local_dataset",
+        lambda folder: [
+            DatasetItem(
+                id="q1",
+                dataset_name="d",
+                test_kind="agentic_general_question",
+                question="q",
+                expected_output="a",
+            )
+        ],
+    )
+    monkeypatch.setattr(cli_main, "run_items", lambda items, backend, **kw: EvalReport(model="gpt-5.2"))
+
+    captured = {}
+
+    def _fake_run_agentic(items, **kwargs):
+        captured.update(kwargs)
+        return EvalReport(model="gpt-5.2")
+
+    monkeypatch.setattr(cli_main, "run_agentic_items", _fake_run_agentic)
+
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--dataset",
+            str(tmp_path),
+            "--concurrency",
+            "3",
+        ]
+    )
+
+    assert exit_code == 0
+    assert captured["concurrency"] == 3
+
+
+def test_cli_timers_flag_enables_timer_output(monkeypatch):
+    # --timers is the discoverable front door for GD_EVAL_TIMERS. The env var is the
+    # mechanism because the [timer] call sites sit four layers below the CLI, inside the
+    # per-run helpers -- the same reason TAVERN_E2E_SKIP_TRACE_LINK is read at call time.
+    monkeypatch.delenv(TIMERS_ENV_VAR, raising=False)
+    assert timers_enabled() is False
+    cli_main.parse_args(["run", "--workspace", "ws1", "--dataset", "/tmp", "--timers"])
+    cli_main._apply_timer_flag(True)
+    assert timers_enabled() is True
+
+
+def test_cli_leaves_timers_off_without_the_flag(monkeypatch):
+    monkeypatch.delenv(TIMERS_ENV_VAR, raising=False)
+    cli_main._apply_timer_flag(False)
+    assert timers_enabled() is False
+
+
+def test_cli_timers_flag_defaults_to_false():
+    args = cli_main.parse_args(["run", "--workspace", "ws1", "--dataset", "/tmp"])
+    assert args.timers is False
+
+
+def test_cli_judge_model_defaults_to_gpt_4o(monkeypatch):
+    args = cli_main.parse_args(["run", "--workspace", "ws1", "--dataset", "/tmp"])
+    assert args.judge_model is None
+    monkeypatch.delenv(JUDGE_MODEL_ENV_VAR, raising=False)
+    cli_main._apply_judge_model(args.judge_model)
+    assert judge_model() == "gpt-4o"
+
+
+def test_cli_judge_model_flag_overrides_the_default(monkeypatch):
+    # Recorded first so teardown removes what _apply_judge_model writes into os.environ
+    # directly; monkeypatch only restores keys it has seen.
+    monkeypatch.delenv(JUDGE_MODEL_ENV_VAR, raising=False)
+    args = cli_main.parse_args(["run", "--workspace", "ws1", "--dataset", "/tmp", "--judge-model", "gpt-4o-mini"])
+    cli_main._apply_judge_model(args.judge_model)
+    assert judge_model() == "gpt-4o-mini"
+
+
+def test_cli_judge_model_flag_beats_the_env_var(monkeypatch):
+    # An explicit flag is a deliberate choice for this run; an exported var is ambient.
+    monkeypatch.setenv(JUDGE_MODEL_ENV_VAR, "gpt-4o")
+    cli_main._apply_judge_model("gpt-5.6-luna")
+    assert judge_model() == "gpt-5.6-luna"
+
+
+# --- a local dataset plus live Langfuse credentials cannot link (say so up front) ---
+
+
+_LF_CREDS = {"LANGFUSE_PUBLIC_KEY": "pk", "LANGFUSE_SECRET_KEY": "sk"}
+
+
+def _export_langfuse_creds(monkeypatch) -> None:
+    for name, value in _LF_CREDS.items():
+        monkeypatch.setenv(name, value)
+
+
+def _local_dataset_config(tmp_path):
+    return RunConfig(host="http://h", token="t", workspace_id="ws1", dataset_folder=tmp_path)
+
+
+def _agentic_item():
+    return DatasetItem(
+        id="gdai-2179-001",
+        dataset_name="GDAI-2179",
+        test_kind="agentic_general_question",
+        question="q",
+        expected_output="e",
+    )
+
+
+def test_warns_up_front_when_a_local_dataset_cannot_be_linked(monkeypatch, tmp_path, capsys):
+    """--langfuse is refused with a local dataset, but the evaluators' own
+    try_make_langfuse_client() fallback links anyway when LANGFUSE_* are exported -- so
+    every conversation 404s from dataset-run-items, in a block at the very END of the run.
+    By then the flag that would have avoided it is long past being changeable.
+    """
+    _export_langfuse_creds(monkeypatch)
+    monkeypatch.delenv(TIMERS_ENV_VAR, raising=False)
+    monkeypatch.delenv("TAVERN_E2E_SKIP_TRACE_LINK", raising=False)
+    cli_main._warn_if_local_dataset_cannot_link(_local_dataset_config(tmp_path), [_agentic_item()])
+
+    err = capsys.readouterr().err
+    assert "--dataset is a local folder" in err
+    assert "--langfuse-dataset" in err and "TAVERN_E2E_SKIP_TRACE_LINK=1" in err
+
+
+def test_no_warning_when_the_skip_switch_is_already_set(monkeypatch, tmp_path, capsys):
+    _export_langfuse_creds(monkeypatch)
+    monkeypatch.setenv("TAVERN_E2E_SKIP_TRACE_LINK", "1")
+    cli_main._warn_if_local_dataset_cannot_link(_local_dataset_config(tmp_path), [_agentic_item()])
+
+    assert capsys.readouterr().err == ""
+
+
+def test_no_warning_without_langfuse_credentials(monkeypatch, tmp_path, capsys):
+    for k in ("LANGFUSE_PUBLIC_KEY", "LANGFUSE_SECRET_KEY", "TAVERN_E2E_SKIP_TRACE_LINK"):
+        monkeypatch.delenv(k, raising=False)
+    cli_main._warn_if_local_dataset_cannot_link(_local_dataset_config(tmp_path), [_agentic_item()])
+
+    assert capsys.readouterr().err == ""
+
+
+def test_no_warning_for_a_langfuse_backed_dataset(monkeypatch, capsys):
+    # --langfuse-dataset items carry real Langfuse ids, so linking works and there is
+    # nothing to warn about.
+    config = RunConfig(host="http://h", token="t", workspace_id="ws1", langfuse_dataset="GDAI-2179")
+    _export_langfuse_creds(monkeypatch)
+    monkeypatch.delenv("TAVERN_E2E_SKIP_TRACE_LINK", raising=False)
+    cli_main._warn_if_local_dataset_cannot_link(config, [_agentic_item()])
+
+    assert capsys.readouterr().err == ""
+
+
+def test_no_warning_when_there_are_no_agentic_items(monkeypatch, tmp_path, capsys):
+    # The single-turn path links through LangfuseSink and only with --langfuse, so it never
+    # hits the fallback this warning is about.
+    _export_langfuse_creds(monkeypatch)
+    monkeypatch.delenv("TAVERN_E2E_SKIP_TRACE_LINK", raising=False)
+    cli_main._warn_if_local_dataset_cannot_link(_local_dataset_config(tmp_path), [])
+
+    assert capsys.readouterr().err == ""

@@ -10,6 +10,8 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from gooddata_eval.core.timing import PhaseTimings
+
 
 class AacQueryField(BaseModel):
     model_config = ConfigDict(extra="allow")
@@ -223,6 +225,29 @@ class ChatResult(BaseModel):
     turn_wall_clock_sec: float | None = None
 
 
+class AgenticAssertionError(AssertionError):
+    """Base for every agentic kind's failure, carrying what the runner reports about it.
+
+    Set by ``evaluate_agentic_*`` so a failing item still reports what the agent did and how
+    many of its K runs passed -- ``cli/agentic_runner`` reads these off the exception exactly
+    as it reads them off an ``AgenticEvalOutcome`` on the success path. Declared once because
+    the payload is identical for every kind: while it lived in eight copies, two declared
+    ``timings`` and six did not, though the runner reads it from all eight.
+
+    Bare annotations, so no class attributes are created and ``getattr(exc, name, default)``
+    still sees only what the raising code actually set.
+    """
+
+    __tracebackhide__ = True
+    reasoning_steps: list[str]
+    conversation_id: str
+    response_id: str | None
+    detail: dict
+    timings: PhaseTimings
+    runs_passed: int
+    runs_effective: int
+
+
 class AgenticEvalOutcome(BaseModel):
     """Reasoning trace, trace-lookup IDs, and per-kind diagnostics from an evaluate_agentic_* call.
 
@@ -237,6 +262,15 @@ class AgenticEvalOutcome(BaseModel):
     conversation_id: str | None = None
     response_id: str | None = None
     detail: dict = Field(default_factory=dict)
+    # Per-phase latency for the whole item (summed across its K runs). Kept beside
+    # ``detail`` rather than inside it so reporting can read it without guessing at keys.
+    timings: PhaseTimings = Field(default_factory=PhaseTimings)
+    # How many of the item's runs passed, and how many it actually ran. pass_at_k answers
+    # only "did any run pass", so without these a 5/5 item and a 1/5 item are identical in
+    # every output. ``runs_effective`` exists because the requested K is not always what
+    # ran -- agentic_conversation drives its fixture once whatever --runs says.
+    runs_passed: int = 0
+    runs_effective: int = 0
 
 
 class SummaryInput(BaseModel):
@@ -268,3 +302,7 @@ class DatasetItem(BaseModel):
     expected_output: Any
     # Only used by the `dashboard_summary` test kind; ignored by all others.
     summary_input: SummaryInput | None = None
+    # Relayed verbatim as the chat request's `userContext`. Deliberately opaque: gen-ai owns
+    # that schema (a discriminated union of view/widget descriptors), so re-modelling it here
+    # would only create a second copy to keep in sync.
+    user_context: dict[str, Any] | None = None

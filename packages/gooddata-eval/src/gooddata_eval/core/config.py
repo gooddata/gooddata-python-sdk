@@ -1,9 +1,34 @@
 # (C) 2026 GoodData Corporation
 """Validated run configuration produced by the CLI and consumed by the runner."""
 
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal, cast, get_args
+
+# Values that mean "off" when read from the environment. Needed because every non-empty
+# string is truthy in Python, so a bare bool() on an env var reads FOO=0 -- the obvious way
+# to write "off" -- as ON.
+_ENV_FALSE = frozenset({"", "0", "false", "no", "off"})
+
+
+def env_flag(name: str) -> bool:
+    """True only when the variable is set to something that does not mean "off"."""
+    return os.environ.get(name, "").strip().lower() not in _ENV_FALSE
+
+
+# The judge model, overridable for comparison experiments. The default is deliberate on
+# two counts: gpt-4o honours temperature=0, so a given response always gets the same
+# verdict; and it is NOT the family under test, so the judge is not grading its own
+# output. Changing it trades one or both of those away -- see LLMJudge.score.
+JUDGE_MODEL_ENV_VAR = "GD_EVAL_JUDGE_MODEL"
+DEFAULT_JUDGE_MODEL = "gpt-4o"
+
+
+def judge_model() -> str:
+    """The LLM-as-judge model, from the environment or the default."""
+    return os.environ.get(JUDGE_MODEL_ENV_VAR, "").strip() or DEFAULT_JUDGE_MODEL
+
 
 ReasoningEffort = Literal["LOW", "MEDIUM", "HIGH"]
 """Effort values the AI chat endpoint accepts, uppercase as the server enum requires."""
