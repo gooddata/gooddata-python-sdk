@@ -18,7 +18,15 @@ from gooddata_eval.core.agentic._trace_linker import (
 )
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import AgenticAssertionError, AgenticEvalOutcome, ToolCallEvent
+from gooddata_eval.core.models import (
+    AgenticAssertionError,
+    AgenticEvalOutcome,
+    ChatResult,
+    ReasoningStepEvent,
+    ToolCallEvent,
+    build_latency_breakdown,
+    shift_and_index_events,
+)
 
 _log = logging.getLogger(__name__)
 
@@ -170,6 +178,8 @@ class KdaRunResult:
     turn_wall_clock_sec: float | None = None
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
+    tool_call_events: list[ToolCallEvent] = field(default_factory=list)
+    reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
 
 
 @dataclass
@@ -240,6 +250,22 @@ def run_agentic_kda_skill(
         current_question = question
         reasoning_steps: list[str] = []
         response_id: str | None = None
+        all_tool_call_events: list[ToolCallEvent] = []
+        all_reasoning_step_events: list[ReasoningStepEvent] = []
+        turn_offset = 0.0  # each turn's call_ts/ts restarts near 0 -- shift by prior turns' wall time
+        tool_index_offset = 0
+        reasoning_index_offset = 0
+
+        def _accumulate(result: ChatResult) -> None:
+            nonlocal turn_offset, tool_index_offset, reasoning_index_offset
+            turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
+                result,
+                turn_offset=turn_offset,
+                tool_index_offset=tool_index_offset,
+                reasoning_index_offset=reasoning_index_offset,
+            )
+            all_tool_call_events.extend(result.tool_call_events or [])
+            all_reasoning_step_events.extend(result.reasoning_step_events or [])
 
         for iteration in range(max_iterations):
             try:
@@ -250,6 +276,7 @@ def run_agentic_kda_skill(
                 if partial is not None:
                     reasoning_steps.extend(partial.reasoning_steps or [])
                     response_id = partial.response_id or response_id
+                    _accumulate(partial)
                     create_args, execute_result = _extract_kda_calls(partial.tool_call_events or [])
                     if create_args is not None:
                         turn_wall_clock_sec = partial.turn_wall_clock_sec
@@ -257,6 +284,7 @@ def run_agentic_kda_skill(
                 break
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
+            _accumulate(chat_result)
             create_args, execute_result = _extract_kda_calls(chat_result.tool_call_events or [])
             response_text = (chat_result.text_response or "").strip()
             turn_completed = chat_result.stream_ended and bool(response_text)
@@ -295,6 +323,8 @@ def run_agentic_kda_skill(
             turn_wall_clock_sec=turn_wall_clock_sec,
             reasoning_steps=reasoning_steps,
             response_id=response_id,
+            tool_call_events=all_tool_call_events,
+            reasoning_step_events=all_reasoning_step_events,
         )
 
     try:
@@ -451,6 +481,7 @@ def evaluate_agentic_kda_skill(
         "disambiguated": ev.disambiguated,
         "actual_create_args": best.actual_create_args,
         "actual_execute_result": best.actual_execute_result,
+        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
 
     if not summary.pass_at_k:

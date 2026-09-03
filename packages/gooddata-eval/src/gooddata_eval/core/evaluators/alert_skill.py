@@ -6,7 +6,7 @@ from typing import Any
 
 from gooddata_eval.core.evaluators._deep_subset import deep_subset
 from gooddata_eval.core.evaluators.base import ItemEvaluation
-from gooddata_eval.core.models import ChatResult, DatasetItem
+from gooddata_eval.core.models import ChatResult, DatasetItem, build_latency_breakdown
 
 _TRIGGER_MAP = {"Every time": "ALWAYS", "One time": "ONCE"}
 
@@ -72,7 +72,13 @@ class AlertSkillEvaluator:
             return ItemEvaluation(
                 passed=False,
                 rank_key=(False,) * 7,
-                detail={"alert_created": False, "automation_id": None},
+                detail={
+                    "alert_created": False,
+                    "automation_id": None,
+                    "latency_breakdown": build_latency_breakdown(
+                        chat_result.tool_call_events, chat_result.reasoning_step_events
+                    ),
+                },
             )
 
         args = tool_event.parsed_arguments()
@@ -145,5 +151,8 @@ class AlertSkillEvaluator:
                 # lets a caller (e.g. a cleanup step) delete the exact object
                 # created instead of diffing the workspace catalog before/after.
                 "automation_id": automation_id,
+                "latency_breakdown": build_latency_breakdown(
+                    chat_result.tool_call_events, chat_result.reasoning_step_events
+                ),
             },
         )
