@@ -1,0 +1,80 @@
+packages/gooddata-eval/src/gooddata_eval/core/runner.py
+  s_f72c482f1281a5::t_d707fb11b7f0cc 142-143
+  s_f72c482f1281a5::t_7ee39fa8d804e7 56-59
+  s_f72c482f1281a5::t_b746470baa32f1 177,188-190
+  s_f72c482f1281a5::t_9fea8ba7776e36 217
+  s_f72c482f1281a5::t_60535dafc87e5b 211-216,218-219
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/general_question.py
+  s_f72c482f1281a5::t_07e69e6f8553c5 25
+  s_f72c482f1281a5::t_50c022aafcaeb0 26-27,32-33,37-42
+  s_f72c482f1281a5::t_756a4fad828ab5 4
+  s_f72c482f1281a5::t_9fea8ba7776e36 34-36
+packages/gooddata-eval/tests/test_summary_evaluator.py
+  s_f72c482f1281a5::t_14f5858b35dfed 125-141,144,159,161-162,167,169-192
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_langfuse.py
+  s_f72c482f1281a5::t_1ff38617a8ce04 55-61
+  s_f72c482f1281a5::t_1d09770e7328de 72-74
+  s_f72c482f1281a5::t_c483ead0e6066b 279-287,301-302,312-315
+packages/gooddata-eval/tests/test_runner.py
+  s_f72c482f1281a5::t_583d17dea01d13 372-428
+  s_f72c482f1281a5::t_e1044264189a31 4,7
+packages/gooddata-eval/tests/test_text_evaluators.py
+  s_f72c482f1281a5::t_5f6dd12c725f92 4
+  s_f72c482f1281a5::t_583d17dea01d13 74-104
+packages/gooddata-eval/src/gooddata_eval/core/reporting/json_report.py
+  s_f72c482f1281a5::t_30177a4f18876f 40-41,46-47,49
+packages/gooddata-eval/tests/test_llm_judge.py
+  s_f72c482f1281a5::t_3ec048a6d1899b 507-528
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_trace_linker.py
+  s_f72c482f1281a5::t_984d4c81ea378c 236-237
+  s_f72c482f1281a5::t_9e890ec895e01a 78-86,90-91
+  s_f72c482f1281a5::t_5f0774087de4f7 248-252,263,276-277,280,287,291,300-302
+packages/gooddata-eval/README.md
+  s_f72c482f1281a5::t_262654b77d8d1b 234-247
+packages/gooddata-eval/tests/test_agentic_langfuse_trace.py
+  s_f72c482f1281a5::t_244e97b6f269dd 303-333
+  s_f72c482f1281a5::t_ed5f582afb8236 520-522
+packages/gooddata-eval/tests/test_sse_client.py
+  s_f72c482f1281a5::t_583d17dea01d13 898-923
+packages/gooddata-eval/tests/test_reporting.py
+  s_f72c482f1281a5::t_583d17dea01d13 407-444
+packages/gooddata-eval/src/gooddata_eval/core/reporting/console.py
+  s_f72c482f1281a5::t_dd296ab06ce73f 7-16
+  s_f72c482f1281a5::t_0196817ef178a6 54-59
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/guardrail.py
+  s_f72c482f1281a5::t_7685dc2d3ea57c 42
+  s_f72c482f1281a5::t_9fea8ba7776e36 54-56
+  s_f72c482f1281a5::t_4c1e4d361c5eb7 4
+  s_f72c482f1281a5::t_248e3a6246e9a4 43-44,49-53,57-64
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/_llm_judge.py
+  s_f72c482f1281a5::t_774c4026216583 79-81,93-95
+  s_f72c482f1281a5::t_fa060972bfab20 282-292
+packages/gooddata-eval/tests/test_trace_linker.py
+  s_f72c482f1281a5::t_8c129b1d198a58 402-404,407-412,414-415,424-429
+  s_f72c482f1281a5::t_162f2341c5483d 504-507,509-512,515-521,524,529,533-536,545-568
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_f72c482f1281a5::t_373bf0597bdca9 399
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/summary.py
+  s_f72c482f1281a5::t_de4ba9d6c9929a 103-104,107,111,119,122-137
+  s_f72c482f1281a5::t_03c51226b3d972 84-86
+  s_f72c482f1281a5::t_75a144d07d1b8c 18-23,30
+  s_f72c482f1281a5::t_f4952104dc692a 138
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_f72c482f1281a5::t_16d09fdc8b703f 259-263
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "7f04d926e4b1f17a56fb174ad25cf17fb8a26d93",
+  "prompts": {},
+  "sessions": {
+    "s_f72c482f1281a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b5d1871e-77b9-47a5-b176-ff99ff4bd896",
+        "model": "unknown"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
