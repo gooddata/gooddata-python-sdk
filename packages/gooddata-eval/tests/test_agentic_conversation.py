@@ -97,6 +97,25 @@ def test_turn_result_skill_success():
     assert r.skill_success is True
 
 
+def test_turn_result_detail_returns_independent_activated_skills_list():
+    """Regression: detail()'s activated_skills must be a copy -- a caller mutating the
+    returned dict must not be able to mutate the TurnResult it came from.
+    """
+    r = TurnResult(
+        turn_id="t1",
+        expected_skill="visualization",
+        skill_routing=True,
+        output_present=True,
+        no_error=True,
+        activated_skills=["visualization"],
+        clarification_turns_used=0,
+        output_correct=None,
+    )
+    d = r.detail()
+    d["activated_skills"].append("mutated")
+    assert r.activated_skills == ["visualization"]
+
+
 def test_resolve_refs_no_refs():
     assert _resolve_refs({"key": "value"}, {}) == {"key": "value"}
 

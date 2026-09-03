@@ -78,7 +78,7 @@ class TurnResult(BaseModel):
             "skill_routing": self.skill_routing,
             "output_present": self.output_present,
             "output_correct": self.output_correct,
-            "activated_skills": self.activated_skills,
+            "activated_skills": list(self.activated_skills),
         }
 
 
