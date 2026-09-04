@@ -3,7 +3,7 @@
 """Provisioning base class for GoodData Pipelines."""
 
 from pathlib import Path
-from typing import Generic, Type, TypeVar
+from typing import Generic, TypeVar
 
 from gooddata_sdk.utils import PROFILES_FILE_PATH, profile_content
 
@@ -35,16 +35,14 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
         self.fatal_exception: str = ""
 
     @classmethod
-    def create(
-        cls: Type[TProvisioning], host: str, token: str
-    ) -> TProvisioning:
+    def create(cls: type[TProvisioning], host: str, token: str) -> TProvisioning:
         """Creates a provisioner instance using provided host and token."""
         cls._validate_credentials(host, token)
         return cls(host=host, token=token)
 
     @classmethod
     def create_from_profile(
-        cls: Type[TProvisioning],
+        cls: type[TProvisioning],
         profile: str = "default",
         profiles_path: Path = PROFILES_FILE_PATH,
     ) -> TProvisioning:
@@ -63,9 +61,7 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
             raise ValueError("Token is required.")
 
     @staticmethod
-    def _create_groups(
-        source_id: set[str], panther_id: set[str]
-    ) -> EntityGroupIds:
+    def _create_groups(source_id: set[str], panther_id: set[str]) -> EntityGroupIds:
         """Creates groups for provisioning as sets of IDs.
 
         Sorts the IDs into three categories:
@@ -90,19 +86,13 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
     ) -> None:
         """Validates data type of the source data."""
         if not all(isinstance(record, model) for record in source_data):
-            raise TypeError(
-                f"Not all elements in source data are instances of {model.__name__}"
-            )
+            raise TypeError(f"Not all elements in source data are instances of {model.__name__}")
 
     def _provision_incremental_load(self) -> None:
-        raise NotImplementedError(
-            "Provisioning method to be implemented in the subclass."
-        )
+        raise NotImplementedError("Provisioning method to be implemented in the subclass.")
 
     def _provision_full_load(self) -> None:
-        raise NotImplementedError(
-            "Provisioning method to be implemented in the subclass."
-        )
+        raise NotImplementedError("Provisioning method to be implemented in the subclass.")
 
     def full_load(self, source_data: list[TFullLoadSourceData]) -> None:
         """Runs full provisioning workflow with the provided source data.
@@ -126,9 +116,7 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
         except Exception as e:
             self._handle_fatal_exception(e)
 
-    def incremental_load(
-        self, source_data: list[TIncrementalSourceData]
-    ) -> None:
+    def incremental_load(self, source_data: list[TIncrementalSourceData]) -> None:
         """Runs incremental provisioning workflow with the provided source data.
 
         Incremental provisioning is used to modify a subset of the upstream workspaces
@@ -136,9 +124,7 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
         data will be applied.
         """
         try:
-            self._validate_source_data_type(
-                source_data, self.INCREMENTAL_LOAD_TYPE
-            )
+            self._validate_source_data_type(source_data, self.INCREMENTAL_LOAD_TYPE)
             self.source_group_incremental = source_data
             self._provision_incremental_load()
             self.logger.info("Provisioning completed.")
@@ -153,15 +139,9 @@ class Provisioning(Generic[TFullLoadSourceData, TIncrementalSourceData]):
         """
         self.fatal_exception = str(e)
 
-        if hasattr(e, "__dict__"):
-            exception_context = f"Context: {e.__dict__}"
-        else:
-            exception_context = ""
+        exception_context = f"Context: {e.__dict__}" if hasattr(e, "__dict__") else ""
 
-        exception_message = (
-            f"Provisioning failed. Error: {self.fatal_exception}. "
-            + exception_context
-        )
+        exception_message = f"Provisioning failed. Error: {self.fatal_exception}. " + exception_context
 
         self.logger.error(exception_message)
 

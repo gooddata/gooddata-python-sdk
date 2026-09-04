@@ -13,9 +13,7 @@ class AttributesMixin:
     Mixin class to provide a method for getting attributes of an object which may or may not exist.
     """
 
-    def get_attrs(
-        self, *objects: object, overrides: dict[str, str] | None = None
-    ) -> dict[str, str]:
+    def get_attrs(self, *objects: object, overrides: dict[str, str] | None = None) -> dict[str, str]:
         """
         Returns a dictionary of attributes from the given objects.
 
@@ -36,18 +34,12 @@ class AttributesMixin:
                 attributes.update(
                     {
                         "http_status": str(context_object.status_code),
-                        "http_method": getattr(
-                            context_object.request, "method", "NA"
-                        ),
-                        "api_endpoint": getattr(
-                            context_object.request, "url", "NA"
-                        ),
+                        "http_method": getattr(context_object.request, "method", "NA"),
+                        "api_endpoint": getattr(context_object.request, "url", "NA"),
                     }
                 )
             elif attrs.has(type(context_object)):
-                for key, value in attrs.asdict(
-                    cast(attrs.AttrsInstance, context_object)
-                ).items():
+                for key, value in attrs.asdict(cast(attrs.AttrsInstance, context_object)).items():
                     self._add_to_dict(attributes, key, value)
             elif hasattr(context_object, "__dict__"):
                 # Generic handling for other objects
@@ -62,9 +54,7 @@ class AttributesMixin:
 
         return attributes
 
-    def _add_to_dict(
-        self, attributes: dict[str, str], key: str, value: Any
-    ) -> None:
+    def _add_to_dict(self, attributes: dict[str, str], key: str, value: Any) -> None:
         if value is None:
             return
 

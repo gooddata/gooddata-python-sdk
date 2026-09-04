@@ -43,7 +43,9 @@ class BackupInputProcessor:
             + "filter=parent.id=={parent_id}"
             + f"&include=parent&page=0&size={self.page_size}&sort=name,asc&metaInclude=page,hierarchy"
         )
-        self.all_workspaces_endpoint = f"{self.base_workspace_endpoint}?page=0&size={self.page_size}&sort=name,asc&metaInclude=page"
+        self.all_workspaces_endpoint = (
+            f"{self.base_workspace_endpoint}?page=0&size={self.page_size}&sort=name,asc&metaInclude=page"
+        )
 
     @attrs.define
     class _ProcessDataOutput:
@@ -59,9 +61,7 @@ class BackupInputProcessor:
         if response.ok:
             return WorkspaceResponse(**response.json())
         else:
-            raise RuntimeError(
-                f"Failed to fetch data from the API. URL: {endpoint}"
-            )
+            raise RuntimeError(f"Failed to fetch data from the API. URL: {endpoint}")
 
     @staticmethod
     def process_data(data: list[Workspace]) -> _ProcessDataOutput:
@@ -74,9 +74,8 @@ class BackupInputProcessor:
             children.append(workspace.id)
 
             # if hierarchy is present and has children, append child workspace ID to sub_parents
-            if workspace.meta and workspace.meta.hierarchy:
-                if workspace.meta.hierarchy.children_count > 0:
-                    sub_parents.append(workspace.id)
+            if workspace.meta and workspace.meta.hierarchy and workspace.meta.hierarchy.children_count > 0:
+                sub_parents.append(workspace.id)
         return BackupInputProcessor._ProcessDataOutput(children, sub_parents)
 
     def log_paging_progress(self, response: WorkspaceResponse) -> None:
@@ -94,9 +93,7 @@ class BackupInputProcessor:
         if current_page and total_pages:
             self.logger.info(f"Fetched page: {current_page} of {total_pages}")
 
-    def _paginate(
-        self, url: str | None
-    ) -> list["BackupInputProcessor._ProcessDataOutput"]:
+    def _paginate(self, url: str | None) -> list["BackupInputProcessor._ProcessDataOutput"]:
         """Paginates through the API responses and returns a list of workspace IDs."""
         result: list[BackupInputProcessor._ProcessDataOutput] = []
         while url:
@@ -114,9 +111,7 @@ class BackupInputProcessor:
 
         all_children, sub_parents = [], []
 
-        results: list[BackupInputProcessor._ProcessDataOutput] = self._paginate(
-            url
-        )
+        results: list[BackupInputProcessor._ProcessDataOutput] = self._paginate(url)
 
         for result in results:
             all_children.extend(result.workspace_ids)
@@ -127,9 +122,7 @@ class BackupInputProcessor:
             all_children += self.get_hierarchy(subparent)
 
         if not all_children:
-            self.logger.warning(
-                f"No child workspaces found for parent workspace ID: {parent_id}"
-            )
+            self.logger.warning(f"No child workspaces found for parent workspace ID: {parent_id}")
 
         return all_children
 
@@ -144,9 +137,7 @@ class BackupInputProcessor:
 
         all_workspaces: list[str] = []
 
-        results: list[BackupInputProcessor._ProcessDataOutput] = self._paginate(
-            url
-        )
+        results: list[BackupInputProcessor._ProcessDataOutput] = self._paginate(url)
 
         for result in results:
             all_workspaces.extend(result.workspace_ids)

@@ -1,14 +1,13 @@
 # (C) 2025 GoodData Corporation
 
-from gooddata_sdk.catalog.workspace.entity_model.workspace import (
-    CatalogWorkspace,
-)
-
 from gooddata_pipelines.provisioning.entities.workspaces.models import (
     WorkspaceFullLoad,
 )
 from gooddata_pipelines.provisioning.entities.workspaces.workspace_data_parser import (
     WorkspaceDataParser,
+)
+from gooddata_sdk.catalog.workspace.entity_model.workspace import (
+    CatalogWorkspace,
 )
 
 parser = WorkspaceDataParser()

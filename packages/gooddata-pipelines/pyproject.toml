@@ -19,10 +19,6 @@ dependencies = [
     "types-pyyaml (>=6.0.12.20250326,<7.0.0)",
 ]
 
-[tool.ruff]
-exclude = [".venv"]
-line-length = 80
-
 [dependency-groups]
 test = [
     "pytest~=9.1.1",

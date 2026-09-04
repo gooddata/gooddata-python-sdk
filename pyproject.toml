@@ -60,7 +60,7 @@ dev = [
     "gitlint~=0.19.1",
 ]
 lint = [
-    "ruff~=0.15.20",
+    "ruff~=0.16.6",
 ]
 type = [
     "ty~=0.0.55",
@@ -151,7 +151,8 @@ target-version = "py310"
 "packages/gooddata-eval/src/gooddata_eval/*/__init__.py" = ["F401"]
 
 [tool.ruff.format]
-exclude = ['(gooddata-api-client|.*\.snapshot\..*)']
+# ruff 0.16 started formatting python code blocks inside markdown; keep docs out
+exclude = ['(gooddata-api-client|.*\.snapshot\..*)', '*.md']
 # use ruff to format code examples in docstrings as well
 docstring-code-format = true
 

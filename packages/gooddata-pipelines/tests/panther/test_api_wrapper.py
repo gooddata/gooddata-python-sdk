@@ -1,7 +1,6 @@
 # (C) 2025 GoodData Corporation
 
 import pytest
-
 from gooddata_pipelines.api.gooddata_api import (
     API_VERSION,
     ApiMethods,
