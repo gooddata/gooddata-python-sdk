@@ -483,6 +483,60 @@ def test_run_agentic_conversation_only_the_last_set_skills_call_in_a_turn_counts
     assert result.turn_results[0].active_skills == ["visualization"]
     assert result.turn_results[0].activated_skills == ["visualization"]
     assert result.turn_results[0].skill_routing is False  # metric was replaced within the turn
+    # ...but `metric` WAS exercised, so coverage still holds. The two metrics ask different
+    # questions and must not be derived from the same field.
+    assert result.full_skill_coverage is True
+
+
+def test_run_agentic_conversation_coverage_counts_a_skill_replaced_within_its_own_turn():
+    """full_skill_coverage asks "was every expected skill ever exercised", which is
+    cumulative over ALL declarations -- unlike skill_routing, which asks what is active now.
+
+    Deriving it from TurnResult.activated_skills (each turn's FINAL declaration) drops any
+    skill a turn declared and then replaced across its own clarification sub-turns: a false
+    FAIL on a skill that genuinely ran. Only bites within a turn, which is why every other
+    coverage test -- one declaration per turn -- stays green either way.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    # Sub-turn 1 routes to `metric` but produces no output, triggering a clarification
+    # round; sub-turn 2 replaces the active set with `visualization` and completes.
+    clarification = MagicMock()
+    clarification.text_response = "which measure did you mean?"
+    clarification.created_visualizations = None
+    clarification.tool_call_events = [_skills_tc("metric")]
+    clarification.reasoning_step_events = []
+    clarification.turn_wall_clock_sec = None
+    clarification.alert_proposals = None
+    mock_client.send_message.side_effect = [
+        clarification,
+        _metric_turn_result([_skills_tc("visualization"), _create_metric_tc("m1")]),
+    ]
+
+    fixture = ConversationFixture(
+        id="test-coverage-within-turn",
+        expected_skills=["metric", "visualization"],
+        turns=[
+            TurnDefinition(
+                turn_id="t1", message="Chart revenue", expected_skill="visualization", expected_output_type="metric"
+            ),
+        ],
+    )
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+        patch("gooddata_eval.core.agentic.conversation._get_sim_user_response", return_value="revenue"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+        )
+
+    assert result.turn_results[0].activated_skills == ["visualization"]
+    assert result.turn_results[0].active_skills == ["visualization"]
+    assert result.full_skill_coverage is True
 
 
 def test_run_agentic_conversation_an_empty_set_skills_call_clears_active_skills():
