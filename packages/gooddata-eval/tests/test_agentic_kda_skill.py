@@ -485,6 +485,83 @@ def test_run_agentic_kda_skill_marks_disambiguated_after_a_simulated_reply():
     assert summary.best.evaluation.triggered is True
 
 
+def test_run_agentic_kda_skill_shifts_timestamps_and_indices_across_iterations():
+    """Regression: the shift/accumulate logic must rebase each iteration's own-zeroed
+    call_ts/result_ts/ts and index onto the whole run's timeline, not just carry events
+    through unshifted.
+
+    Iteration 1 has one reasoning step and no tool call, so after it: tool_index_offset
+    stays 0 but reasoning_index_offset becomes 1. Iteration 2's create/execute calls must
+    land at iteration 1's turn_wall_clock_sec (10.0) plus their own within-turn call_ts,
+    with index starting from 0; its reasoning event's index must start from 1, not 0 --
+    exactly where an off-by-one or a double-shift would hide.
+    """
+    mock_client = _client()
+    iteration_1 = ChatResult.model_validate(
+        {
+            "textResponse": "Which measure should I analyze?",
+            "toolCallEvents": [],
+            "reasoningStepEvents": [{"summary": "**Considering measure**", "ts": 0.5, "index": 0}],
+            "reasoningStepCount": 1,
+            "stream_ended": True,
+            "turn_wall_clock_sec": 10.0,
+        }
+    )
+    iteration_2 = ChatResult.model_validate(
+        {
+            "textResponse": "Here is the analysis.",
+            "toolCallEvents": [
+                {
+                    "functionName": "create_key_driver_analysis",
+                    "functionArguments": json.dumps({"measure": {"type": "metric", "id": "revenue"}}),
+                    "call_ts": 0.2,
+                    "result_ts": 0.3,
+                    "index": 0,
+                },
+                {
+                    "functionName": "execute_key_driver_analysis",
+                    "functionArguments": "{}",
+                    "result": json.dumps({"success": True, "data": {"summary": {}}}),
+                    "call_ts": 0.3,
+                    "result_ts": 0.4,
+                    "index": 1,
+                },
+            ],
+            "reasoningStepEvents": [{"summary": "**Running analysis**", "ts": 0.1, "index": 0}],
+            "reasoningStepCount": 1,
+            "stream_ended": True,
+            "turn_wall_clock_sec": 5.0,
+        }
+    )
+    mock_client.send_message.side_effect = [iteration_1, iteration_2]
+
+    with _patched(mock_client, simulated_reply="Use the revenue metric."):
+        summary = run_agentic_kda_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="What drove revenue change?",
+            expected_output=_EXPECTED,
+            k=1,
+            max_iterations=2,
+        )
+
+    best = summary.best
+    create_tc, execute_tc = best.tool_call_events
+    assert create_tc.call_ts == pytest.approx(10.2)
+    assert create_tc.result_ts == pytest.approx(10.3)
+    assert create_tc.index == 0
+    assert execute_tc.call_ts == pytest.approx(10.3)
+    assert execute_tc.result_ts == pytest.approx(10.4)
+    assert execute_tc.index == 1
+
+    assert len(best.reasoning_step_events) == 2
+    assert best.reasoning_step_events[0].ts == pytest.approx(0.5)
+    assert best.reasoning_step_events[0].index == 0
+    assert best.reasoning_step_events[1].ts == pytest.approx(10.1)
+    assert best.reasoning_step_events[1].index == 1
+
+
 def test_run_agentic_kda_skill_disambiguates_on_question_followed_by_option_list():
     # Regression (QA-28800): the real captured response ends with a bullet list of
     # candidate metrics. Before this module dropped text classification in favor of
@@ -1055,6 +1132,7 @@ def test_evaluate_agentic_kda_skill_returns_reasoning_steps_on_pass():
         "disambiguated": False,
         "actual_create_args": {"measure": {"type": "metric", "id": "revenue"}},
         "actual_execute_result": {"success": True, "data": {"summary": {}}},
+        "latency_breakdown": [],
     }
 
 
@@ -1087,6 +1165,7 @@ def test_evaluate_agentic_kda_skill_attaches_reasoning_steps_to_exception_on_fai
         "disambiguated": False,
         "actual_create_args": None,
         "actual_execute_result": None,
+        "latency_breakdown": [],
     }
 
 

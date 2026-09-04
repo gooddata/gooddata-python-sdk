@@ -29,6 +29,7 @@ from gooddata_eval.core.models import (
     ReasoningStepEvent,
     ToolCallEvent,
     build_latency_breakdown,
+    shift_and_index_events,
 )
 
 try:
@@ -526,21 +527,14 @@ def run_agentic_alert_skill(
                 chat_result = client.send_message(conv_id, current_question)
                 reasoning_steps.extend(chat_result.reasoning_steps or [])
                 response_id = chat_result.response_id or response_id
-                for tc in chat_result.tool_call_events or []:
-                    if tc.call_ts is not None:
-                        tc.call_ts += turn_offset
-                    if tc.result_ts is not None:
-                        tc.result_ts += turn_offset
-                    if tc.index is not None:
-                        tc.index += tool_index_offset
-                for rs in chat_result.reasoning_step_events or []:
-                    rs.ts += turn_offset
-                    rs.index += reasoning_index_offset
+                turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
+                    chat_result,
+                    turn_offset=turn_offset,
+                    tool_index_offset=tool_index_offset,
+                    reasoning_index_offset=reasoning_index_offset,
+                )
                 all_tool_call_events.extend(chat_result.tool_call_events or [])
                 all_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
-                tool_index_offset += len(chat_result.tool_call_events or [])
-                reasoning_index_offset += len(chat_result.reasoning_step_events or [])
-                turn_offset += chat_result.turn_wall_clock_sec or 0.0
                 alert_id, actual_args, tool_called = _extract_alert_call(chat_result.tool_call_events or [])
                 if tool_called:
                     alert_id_to_delete = alert_id

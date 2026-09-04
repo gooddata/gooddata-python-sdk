@@ -2,7 +2,7 @@
 """Evaluator for metric_skill: agent must create the correct metric via create_metric tool call."""
 
 from gooddata_eval.core.evaluators.base import ItemEvaluation
-from gooddata_eval.core.models import ChatResult, DatasetItem
+from gooddata_eval.core.models import ChatResult, DatasetItem, build_latency_breakdown
 
 
 def _find_create_metric(chat_result: ChatResult):
@@ -28,7 +28,15 @@ class MetricSkillEvaluator:
             return ItemEvaluation(
                 passed=False,
                 rank_key=(False, False, False),
-                detail={"metric_created": False, "maql_correct": False, "format_correct": False, "metric_id": None},
+                detail={
+                    "metric_created": False,
+                    "maql_correct": False,
+                    "format_correct": False,
+                    "metric_id": None,
+                    "latency_breakdown": build_latency_breakdown(
+                        chat_result.tool_call_events, chat_result.reasoning_step_events
+                    ),
+                },
             )
 
         result = tool_event.parsed_result()
@@ -59,5 +67,8 @@ class MetricSkillEvaluator:
                 # delete the exact object created instead of diffing the workspace
                 # catalog before/after and guessing by name.
                 "metric_id": payload.get("metric_id"),
+                "latency_breakdown": build_latency_breakdown(
+                    chat_result.tool_call_events, chat_result.reasoning_step_events
+                ),
             },
         )
