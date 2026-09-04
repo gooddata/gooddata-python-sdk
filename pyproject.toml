@@ -63,7 +63,7 @@ lint = [
     "ruff~=0.16.6",
 ]
 type = [
-    "ty~=0.0.55",
+    "ty~=0.0.78",
 ]
 test = [
     # Declared only here: consumed by the scripts/docs/ tests (`make test-docs-scripts`).

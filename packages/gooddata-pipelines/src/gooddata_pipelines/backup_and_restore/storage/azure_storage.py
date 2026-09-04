@@ -1,7 +1,6 @@
 # (C) 2025 GoodData Corporation
 
 import os
-from typing import cast
 
 from azure.core.credentials import TokenCredential
 from azure.identity import ClientSecretCredential, DefaultAzureCredential
@@ -105,5 +104,5 @@ class AzureStorage(BackupStorage):
         blob_client = self._container_client.get_blob_client(blob.name)
 
         with open(local_target_path, "wb") as download_file:
-            blob_data = cast(bytes, blob_client.download_blob().readall())
+            blob_data = blob_client.download_blob().readall()
             download_file.write(blob_data)
