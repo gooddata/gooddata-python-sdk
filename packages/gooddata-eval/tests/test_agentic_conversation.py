@@ -22,7 +22,10 @@ def _skills_tc(*skills):
     tc.result_ts = None
     tc.index = None
     tc.function_name = "set_skills"
-    tc.parsed_arguments = lambda: {"skills": list(skills)}
+    # `skill_names` is the key the real set_skills tool declares and reads. These tests
+    # previously used a bare `skills`, which only passed via _activated_skills' fallback
+    # spelling -- so they exercised a payload shape the platform never actually sends.
+    tc.parsed_arguments = lambda: {"skill_names": list(skills)}
     return tc
 
 
