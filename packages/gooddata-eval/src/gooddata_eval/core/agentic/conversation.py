@@ -153,15 +153,31 @@ def _resolve_refs(
     return json.loads(resolved_raw)
 
 
-def _activated_skills(tool_call_events: list[ToolCallEvent]) -> list[str]:
-    """Collect all skill names passed to set_skills across all tool call events."""
-    skills: list[str] = []
+def _final_skill_declaration(tool_call_events: list[ToolCallEvent]) -> list[str] | None:
+    """The skill list from the LAST set_skills call, or None when there was no call.
+
+    set_skills replaces the active set, so when a turn issues several calls -- which it can,
+    since these events span every clarification sub-turn within one logical turn -- only the
+    final one describes the resulting state. Merging them would credit a skill that an
+    earlier call declared and a later one dropped.
+
+    An empty list is a real declaration: it deactivates everything. That has to stay
+    distinguishable from ``None`` ("no call at all"), which leaves the previous turn's set
+    untouched -- hence the Optional rather than just an empty list for both.
+    """
+    declaration: list[str] | None = None
     for tc in tool_call_events:
         if tc.function_name != "set_skills":
             continue
         args = tc.parsed_arguments() or {}
-        skills.extend(args.get("skill_names") or args.get("skills") or [])
-    return list(set(skills))
+        # `skill_names` is the key the tool declares; `skills` is a legacy spelling kept as
+        # a fallback. A call carrying neither is treated as declaring nothing, which is what
+        # the platform would do with an empty list.
+        names = args.get("skill_names")
+        if names is None:
+            names = args.get("skills")
+        declaration = list(names or [])
+    return declaration
 
 
 def _check_output_present(turn: TurnDefinition, chat_result: ChatResult) -> bool:
@@ -427,13 +443,13 @@ def run_agentic_conversation(
                 total_clarification_turns += 1
                 current_message = _get_sim_user_response(response_text, resolved_turn, resolved_expected)
 
-            # `activated` is what THIS turn declared; `active_skills` is what is actually
-            # active during it. A turn with no set_skills call carries the previous set
-            # over; a turn with one replaces it outright (see active_skills' declaration).
-            # Both are reported -- see TurnResult's docstring.
-            activated = _activated_skills(all_tool_calls)
-            if activated:
-                active_skills = set(activated)
+            # `declared` is what THIS turn's final set_skills call asked for (None when it
+            # made no call); `active_skills` is what is actually active during the turn. No
+            # call carries the previous set over; a call replaces it outright, including
+            # when it declares an empty list. See active_skills' declaration above.
+            declared = _final_skill_declaration(all_tool_calls)
+            if declared is not None:
+                active_skills = set(declared)
             skill_routing = turn.expected_skill in active_skills
             output_present = _check_output_present(resolved_turn, final_result) if final_result else False
             output_correct = (
@@ -458,7 +474,7 @@ def run_agentic_conversation(
                     skill_routing=skill_routing,
                     output_present=output_present,
                     no_error=True,  # SDK raises on errors; reaching here means no critical error.
-                    activated_skills=activated,
+                    activated_skills=declared or [],
                     active_skills=sorted(active_skills),
                     clarification_turns_used=clarification_turns,
                     output_correct=output_correct,
