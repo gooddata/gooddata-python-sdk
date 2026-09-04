@@ -22,7 +22,10 @@ def _skills_tc(*skills):
     tc.result_ts = None
     tc.index = None
     tc.function_name = "set_skills"
-    tc.parsed_arguments = lambda: {"skills": list(skills)}
+    # `skill_names` is the key the real set_skills tool declares and reads. These tests
+    # previously used a bare `skills`, which only passed via _activated_skills' fallback
+    # spelling -- so they exercised a payload shape the platform never actually sends.
+    tc.parsed_arguments = lambda: {"skill_names": list(skills)}
     return tc
 
 
@@ -355,6 +358,249 @@ def test_run_agentic_conversation_deletes_every_unique_metric_across_turns():
     # Metrics from all turns are cleaned up, and each unique id is deleted exactly once.
     deleted = sorted(c.args for c in mock_sdk._client.entities_api.delete_entity_metrics.call_args_list)
     assert deleted == [("ws1", "extra"), ("ws1", "shared")]
+
+
+def test_run_agentic_conversation_skill_routing_persists_across_turns():
+    """A skill activated in an earlier turn stays credited when a later turn reuses it
+    without re-issuing set_skills -- the platform keeps a skill active once set, so an
+    agent correctly omits a redundant set_skills call. Requiring a fresh call every turn
+    produced false FAILs on turns that did the right thing (found via
+    debug_conversation.py replaying analyst-explores-dynamic-currency-conversion,
+    turns t4/t5: create_adhoc_visualization/create_metric both ran and succeeded, but
+    skill_routing was False solely because set_skills wasn't repeated)."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m1")]),
+        _metric_turn_result([_create_metric_tc("m2")]),  # no set_skills -- skill already active
+    ]
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_two_metric_turn_fixture(),
+        )
+
+    assert result.turn_results[0].skill_routing is True
+    assert result.turn_results[1].skill_routing is True
+
+    # The two fields measure different scopes (see TurnResult's docstring), so the reused
+    # turn reports routing credit alongside an empty own-declarations list. Asserted so the
+    # combination is pinned as intended output rather than read as a scoring bug by whoever
+    # triages the report next.
+    assert result.turn_results[0].activated_skills == ["metric"]
+    assert result.turn_results[1].activated_skills == []
+    # active_skills shows where t2's credit came from -- without it, skill_routing=True
+    # next to an empty activated_skills reads as a scoring bug.
+    assert result.turn_results[0].active_skills == ["metric"]
+    assert result.turn_results[1].active_skills == ["metric"]
+
+
+def test_run_agentic_conversation_skill_routing_false_after_a_later_call_deactivates_it():
+    """set_skills REPLACES the active set, so a skill dropped by a later call is no longer
+    active and must lose routing credit.
+
+    Replace-not-append was verified against the gen-ai service's skill registry, and is
+    stated in the set_skills tool's own description. Tracking activations as a running
+    union instead would credit `metric` on t3 here even though t2 switched it off --
+    turning the false FAIL this PR fixes into a false PASS, which is worse: it reports a
+    broken conversation as working.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        # t1 activates metric and uses it.
+        _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m1")]),
+        # t2 replaces the active set with visualization -- metric is now OFF.
+        _metric_turn_result([_skills_tc("visualization"), _create_metric_tc("m2")]),
+        # t3 expects metric and declares nothing, so it inherits t2's set: no metric.
+        _metric_turn_result([_create_metric_tc("m3")]),
+    ]
+
+    fixture = ConversationFixture(
+        id="test-deactivated",
+        expected_skills=["metric", "visualization"],
+        turns=[
+            TurnDefinition(turn_id="t1", message="Create a", expected_skill="metric", expected_output_type="metric"),
+            TurnDefinition(
+                turn_id="t2", message="Chart it", expected_skill="visualization", expected_output_type="metric"
+            ),
+            TurnDefinition(turn_id="t3", message="Create b", expected_skill="metric", expected_output_type="metric"),
+        ],
+    )
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+        )
+
+    assert result.turn_results[0].skill_routing is True  # metric active
+    assert result.turn_results[1].skill_routing is True  # visualization active, replaced metric
+    assert result.turn_results[2].skill_routing is False  # metric was deactivated by t2
+    assert result.turn_results[2].active_skills == ["visualization"]
+
+
+def test_run_agentic_conversation_only_the_last_set_skills_call_in_a_turn_counts():
+    """Several set_skills calls can land within one logical turn (its clarification
+    sub-turns share one tool-call list). Since each call replaces the active set, only the
+    final one describes the result -- merging them would credit `metric` here even though
+    the same turn went on to replace it with `visualization`.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _metric_turn_result(
+        [_skills_tc("metric"), _skills_tc("visualization"), _create_metric_tc("m1")]
+    )
+
+    fixture = ConversationFixture(
+        id="test-last-call-wins",
+        expected_skills=["metric"],
+        turns=[
+            TurnDefinition(turn_id="t1", message="Create a", expected_skill="metric", expected_output_type="metric"),
+        ],
+    )
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+        )
+
+    assert result.turn_results[0].active_skills == ["visualization"]
+    assert result.turn_results[0].activated_skills == ["visualization"]
+    assert result.turn_results[0].skill_routing is False  # metric was replaced within the turn
+    # ...but `metric` WAS exercised, so coverage still holds. The two metrics ask different
+    # questions and must not be derived from the same field.
+    assert result.full_skill_coverage is True
+
+
+def test_run_agentic_conversation_coverage_counts_a_skill_replaced_within_its_own_turn():
+    """full_skill_coverage asks "was every expected skill ever exercised", which is
+    cumulative over ALL declarations -- unlike skill_routing, which asks what is active now.
+
+    Deriving it from TurnResult.activated_skills (each turn's FINAL declaration) drops any
+    skill a turn declared and then replaced across its own clarification sub-turns: a false
+    FAIL on a skill that genuinely ran. Only bites within a turn, which is why every other
+    coverage test -- one declaration per turn -- stays green either way.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    # Sub-turn 1 routes to `metric` but produces no output, triggering a clarification
+    # round; sub-turn 2 replaces the active set with `visualization` and completes.
+    clarification = MagicMock()
+    clarification.text_response = "which measure did you mean?"
+    clarification.created_visualizations = None
+    clarification.tool_call_events = [_skills_tc("metric")]
+    clarification.reasoning_step_events = []
+    clarification.turn_wall_clock_sec = None
+    clarification.alert_proposals = None
+    mock_client.send_message.side_effect = [
+        clarification,
+        _metric_turn_result([_skills_tc("visualization"), _create_metric_tc("m1")]),
+    ]
+
+    fixture = ConversationFixture(
+        id="test-coverage-within-turn",
+        expected_skills=["metric", "visualization"],
+        turns=[
+            TurnDefinition(
+                turn_id="t1", message="Chart revenue", expected_skill="visualization", expected_output_type="metric"
+            ),
+        ],
+    )
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+        patch("gooddata_eval.core.agentic.conversation._get_sim_user_response", return_value="revenue"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+        )
+
+    assert result.turn_results[0].activated_skills == ["visualization"]
+    assert result.turn_results[0].active_skills == ["visualization"]
+    assert result.full_skill_coverage is True
+
+
+def test_run_agentic_conversation_an_empty_set_skills_call_clears_active_skills():
+    """`set_skills([])` is a real declaration -- it deactivates everything -- so it must be
+    distinguishable from making no call at all, which carries the previous set over.
+    Treating both as "nothing declared" would leave t2 credited for t1's skill.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m1")]),
+        _metric_turn_result([_skills_tc(), _create_metric_tc("m2")]),  # set_skills([]) -- clears
+    ]
+
+    fixture = ConversationFixture(
+        id="test-explicit-clear",
+        expected_skills=["metric"],
+        turns=[
+            TurnDefinition(turn_id="t1", message="Create a", expected_skill="metric", expected_output_type="metric"),
+            TurnDefinition(turn_id="t2", message="Create b", expected_skill="metric", expected_output_type="metric"),
+        ],
+    )
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+        )
+
+    assert result.turn_results[0].skill_routing is True
+    assert result.turn_results[1].skill_routing is False  # cleared, not carried over
+    assert result.turn_results[1].active_skills == []
+
+
+def test_run_agentic_conversation_skill_routing_false_when_skill_never_activated():
+    """Guard against the fix being too lenient: a skill that no turn ever activated
+    must still fail routing, not be credited by the cumulative-set change."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _metric_turn_result([_create_metric_tc("m1")])
+
+    fixture = ConversationFixture(
+        id="test-never-activated",
+        expected_skills=["metric"],
+        turns=[
+            TurnDefinition(turn_id="t1", message="Create x", expected_skill="metric", expected_output_type="metric"),
+        ],
+    )
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+        )
+
+    assert result.turn_results[0].skill_routing is False
 
 
 def test_run_agentic_conversation_deletes_metrics_even_when_a_later_turn_raises():
@@ -710,6 +956,7 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
                 "output_present": True,
                 "output_correct": None,
                 "activated_skills": ["visualization"],
+                "active_skills": ["visualization"],
             }
         ],
         "latency_breakdown": [],
@@ -773,6 +1020,7 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
                 "output_present": False,
                 "output_correct": None,
                 "activated_skills": ["other_skill"],
+                "active_skills": ["other_skill"],
             }
         ],
         "latency_breakdown": [],
