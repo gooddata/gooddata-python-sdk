@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import ClassVar, Literal
 
 from gooddata_sdk import GoodDataSdk
 from pydantic import BaseModel
@@ -79,6 +79,23 @@ class TurnResult(BaseModel):
     @property
     def skill_success(self) -> bool:
         return self.skill_routing and self.output_present and self.no_error
+
+    # Reported per turn in detail["turns"]. A name listed here that no longer exists on the
+    # model raises rather than silently emitting a stale key, which a hand-written dict
+    # literal of the same fields would not -- and model_dump deep-copies activated_skills,
+    # so a caller mutating the returned dict cannot reach back into this TurnResult.
+    _DETAIL_FIELDS: ClassVar[set[str]] = {
+        "turn_id",
+        "expected_skill",
+        "skill_routing",
+        "output_present",
+        "output_correct",
+        "activated_skills",
+    }
+
+    def detail(self) -> dict:
+        """The subset of this result reported in detail["turns"] for one conversation turn."""
+        return self.model_dump(include=self._DETAIL_FIELDS)
 
 
 def _resolve_refs(
@@ -443,17 +460,7 @@ def _conversation_detail(result: ConversationResult) -> dict:
     return {
         "full_skill_coverage": result.full_skill_coverage,
         "total_clarification_turns": result.total_clarification_turns,
-        "turns": [
-            {
-                "turn_id": tr.turn_id,
-                "expected_skill": tr.expected_skill,
-                "skill_routing": tr.skill_routing,
-                "output_present": tr.output_present,
-                "output_correct": tr.output_correct,
-                "activated_skills": tr.activated_skills,
-            }
-            for tr in result.turn_results
-        ],
+        "turns": [tr.detail() for tr in result.turn_results],
         "latency_breakdown": build_latency_breakdown(result.tool_call_events, result.reasoning_step_events),
     }
 
