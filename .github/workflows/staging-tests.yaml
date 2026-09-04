@@ -50,8 +50,9 @@ jobs:
           ref: ${{ steps.pr.outputs.sha || github.event.pull_request.head.sha || github.sha }}
 
       - name: Set up Python
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@v10.0.1
         with:
+          prune-cache: true
           python-version: '3.14'
           # self-hosted runners are ephemeral and the default 'auto' only caches
           # on GitHub-hosted runners, so enable the cache explicitly
