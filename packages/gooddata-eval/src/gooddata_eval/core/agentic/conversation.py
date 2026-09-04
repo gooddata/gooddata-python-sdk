@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from typing import ClassVar, Literal
 
 from gooddata_sdk import GoodDataSdk
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
@@ -66,7 +66,21 @@ class ConversationFixture(BaseModel):
 
 
 class TurnResult(BaseModel):
-    """Evaluation result for a single conversation turn."""
+    """Evaluation result for a single conversation turn.
+
+    The two skill fields measure DIFFERENT SCOPES, so a turn can legitimately report
+    ``skill_routing=True`` with an empty ``activated_skills``:
+
+    - ``activated_skills`` -- what THIS turn's own ``set_skills`` call declared. Empty
+      whenever the agent reused an already-active skill without re-declaring it.
+    - ``active_skills`` -- what was actually active DURING this turn: the last declared
+      set, carried over on turns that declare nothing. This is the set ``skill_routing``
+      is judged against, so a report never has to infer it.
+    - ``skill_routing`` -- whether ``expected_skill`` appears in ``active_skills``.
+
+    ``skill_routing=True`` with ``activated_skills=[]`` is the reused-skill case, not a
+    scoring bug -- ``active_skills`` shows where the credit came from.
+    """
 
     turn_id: str
     expected_skill: str
@@ -74,6 +88,8 @@ class TurnResult(BaseModel):
     output_present: bool
     no_error: bool
     activated_skills: list[str]
+    # Sorted for stable output: the source is a set, whose iteration order is not.
+    active_skills: list[str] = Field(default_factory=list)
     clarification_turns_used: int = 0
     output_correct: bool | None = None
 
@@ -92,6 +108,9 @@ class TurnResult(BaseModel):
         "output_present",
         "output_correct",
         "activated_skills",
+        # What skill_routing was judged against -- without it, a turn showing
+        # skill_routing=True and activated_skills=[] looks like a scoring bug.
+        "active_skills",
     }
 
     def detail(self) -> dict:
@@ -135,15 +154,42 @@ def _resolve_refs(
     return json.loads(resolved_raw)
 
 
-def _activated_skills(tool_call_events: list[ToolCallEvent]) -> list[str]:
-    """Collect all skill names passed to set_skills across all tool call events."""
-    skills: list[str] = []
+def _set_skills_declarations(tool_call_events: list[ToolCallEvent]) -> list[list[str]]:
+    """Every set_skills declaration in these events, in call order.
+
+    `skill_names` is the key the tool declares; `skills` is a legacy spelling kept as a
+    fallback. A call carrying neither is treated as declaring an empty list, which is what
+    the platform would do with one.
+    """
+    declarations: list[list[str]] = []
     for tc in tool_call_events:
         if tc.function_name != "set_skills":
             continue
         args = tc.parsed_arguments() or {}
-        skills.extend(args.get("skill_names") or args.get("skills") or [])
-    return list(set(skills))
+        names = args.get("skill_names")
+        if names is None:
+            names = args.get("skills")
+        declarations.append(list(names or []))
+    return declarations
+
+
+def _final_skill_declaration(tool_call_events: list[ToolCallEvent]) -> list[str] | None:
+    """The skill list from the LAST set_skills call, or None when there was no call.
+
+    set_skills replaces the active set, so when a turn issues several calls -- which it can,
+    since these events span every clarification sub-turn within one logical turn -- only the
+    final one describes the resulting state. Merging them would credit a skill that an
+    earlier call declared and a later one dropped.
+
+    An empty list is a real declaration: it deactivates everything. That has to stay
+    distinguishable from ``None`` ("no call at all"), which leaves the previous turn's set
+    untouched -- hence the Optional rather than just an empty list for both.
+
+    This answers "what is active NOW". For "was this skill ever exercised" -- what
+    full_skill_coverage asks -- use every declaration, not just the last one.
+    """
+    declarations = _set_skills_declarations(tool_call_events)
+    return declarations[-1] if declarations else None
 
 
 def _check_output_present(turn: TurnDefinition, chat_result: ChatResult) -> bool:
@@ -328,6 +374,20 @@ def run_agentic_conversation(
     response_id: str | None = None
     conversation_tool_call_events: list[ToolCallEvent] = []
     conversation_reasoning_step_events: list[ReasoningStepEvent] = []
+    # The skills active right now, mirroring the platform's own state machine: set_skills
+    # REPLACES the active set rather than adding to it -- verified against the gen-ai
+    # service's skill registry, and stated in the tool's own description. So a turn that
+    # issues no set_skills call inherits the previous turn's set unchanged, while a turn
+    # that does issue one drops whatever it left out. Tracking this as a running UNION
+    # would credit a skill a later call had already switched off.
+    active_skills: set[str] = set()
+    # Every skill declared at any point, for full_skill_coverage. This asks a DIFFERENT
+    # question from active_skills -- "did the conversation ever exercise this skill" rather
+    # than "is it active now" -- so replace semantics do not apply: a skill switched on and
+    # later switched off was still exercised. Deriving coverage from the per-turn final
+    # declaration instead would drop any skill a turn declared and then replaced within
+    # itself (across its clarification sub-turns), a false FAIL on a genuine activation.
+    ever_declared_skills: set[str] = set()
     # Every send_message() call (across every logical turn AND every clarification
     # sub-turn within it) restarts call_ts/ts near 0 -- these run across the whole
     # conversation, not reset per logical turn, so every one of those calls shifts them.
@@ -355,6 +415,10 @@ def run_agentic_conversation(
                         output_present=False,
                         no_error=False,
                         activated_skills=[],
+                        # The turn never ran, so it declared nothing -- but a set carried over
+                        # from an earlier turn is still active, and reporting [] here would
+                        # read as "nothing was active", which is a different claim.
+                        active_skills=sorted(active_skills),
                         output_correct=False,
                     )
                 )
@@ -395,8 +459,17 @@ def run_agentic_conversation(
                 total_clarification_turns += 1
                 current_message = _get_sim_user_response(response_text, resolved_turn, resolved_expected)
 
-            activated = _activated_skills(all_tool_calls)
-            skill_routing = turn.expected_skill in activated if activated else False
+            # `declared` is what THIS turn's final set_skills call asked for (None when it
+            # made no call); `active_skills` is what is actually active during the turn. No
+            # call carries the previous set over; a call replaces it outright, including
+            # when it declares an empty list. See active_skills' declaration above.
+            declarations = _set_skills_declarations(all_tool_calls)
+            for declaration in declarations:
+                ever_declared_skills.update(declaration)
+            declared = declarations[-1] if declarations else None
+            if declared is not None:
+                active_skills = set(declared)
+            skill_routing = turn.expected_skill in active_skills
             output_present = _check_output_present(resolved_turn, final_result) if final_result else False
             output_correct = (
                 _check_output_correct(resolved_turn, final_result) if (final_result and output_present) else None
@@ -420,7 +493,8 @@ def run_agentic_conversation(
                     skill_routing=skill_routing,
                     output_present=output_present,
                     no_error=True,  # SDK raises on errors; reaching here means no critical error.
-                    activated_skills=activated,
+                    activated_skills=declared or [],
+                    active_skills=sorted(active_skills),
                     clarification_turns_used=clarification_turns,
                     output_correct=output_correct,
                 )
@@ -433,8 +507,10 @@ def run_agentic_conversation(
             _delete_metric(sdk, workspace_id, metric_id)
         client.close()
 
-    activated_all = {skill for tr in turn_results for skill in tr.activated_skills}
-    full_skill_coverage = set(fixture.expected_skills).issubset(activated_all)
+    # Not derived from TurnResult.activated_skills: that field carries only each turn's FINAL
+    # declaration, so a skill replaced within its own turn is absent from it despite having
+    # been activated. See ever_declared_skills' declaration above.
+    full_skill_coverage = set(fixture.expected_skills).issubset(ever_declared_skills)
     conversation_success = all(tr.skill_success for tr in turn_results)
 
     return ConversationResult(
