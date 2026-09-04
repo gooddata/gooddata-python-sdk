@@ -3,7 +3,6 @@
 from typing import Any
 
 import pytest
-
 from gooddata_pipelines.utils.decorators import log_and_reraise_exception
 
 
@@ -35,6 +34,4 @@ def test_log_and_re_raise_logs_and_reraises(mocked_logger):
     with pytest.raises(ValueError, match="explosion"):
         target(1, 2, a=3)
 
-    mocked_logger.error.assert_called_once_with(
-        "boom, target, Args: (1, 2), Kwargs: {'a': 3}"
-    )
+    mocked_logger.error.assert_called_once_with("boom, target, Args: (1, 2), Kwargs: {'a': 3}")

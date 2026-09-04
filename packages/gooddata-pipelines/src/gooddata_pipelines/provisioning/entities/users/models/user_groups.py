@@ -18,9 +18,7 @@ class UserGroupBase(BaseModel):
 
     @field_validator("user_group_name", mode="before")
     @classmethod
-    def validate_user_group_name(
-        cls, v: str | None, info: ValidationInfo
-    ) -> str:
+    def validate_user_group_name(cls, v: str | None, info: ValidationInfo) -> str:
         """If user_group_name is None or empty, default to user_group_id."""
         if not v:  # handles None and empty string
             return info.data.get("user_group_id", "")

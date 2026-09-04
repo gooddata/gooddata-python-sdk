@@ -47,9 +47,7 @@ class GoodDataApi(ApiMethods):
             raise RuntimeError("Host is not set. Please provide a valid host.")
 
         if host == "":
-            raise ValueError(
-                "Host is an empty string. Please provide a valid host."
-            )
+            raise ValueError("Host is an empty string. Please provide a valid host.")
 
         # Remove trailing slash if present.
         if host[-1] == "/":

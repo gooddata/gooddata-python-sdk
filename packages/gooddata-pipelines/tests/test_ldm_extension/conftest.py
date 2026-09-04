@@ -1,6 +1,5 @@
 # (C) 2025 GoodData Corporation
 import pytest
-
 from gooddata_pipelines.ldm_extension.models.custom_data_object import (
     ColumnDataType,
     CustomDataset,

@@ -6,13 +6,6 @@ import pytest
 from gooddata_api_client.exceptions import (  # type: ignore[import]
     NotFoundException,
 )
-from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier
-from gooddata_sdk.catalog.permission.declarative_model.permission import (
-    CatalogDeclarativeSingleWorkspacePermission,
-    CatalogDeclarativeWorkspacePermissions,
-)
-from pytest_mock import MockerFixture
-
 from gooddata_pipelines.provisioning.entities.users.models.permissions import (
     EntityType,
     PermissionDeclaration,
@@ -22,6 +15,13 @@ from gooddata_pipelines.provisioning.entities.users.models.permissions import (
 from gooddata_pipelines.provisioning.entities.users.permissions import (
     PermissionProvisioner,
 )
+from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier
+from gooddata_sdk.catalog.permission.declarative_model.permission import (
+    CatalogDeclarativeSingleWorkspacePermission,
+    CatalogDeclarativeWorkspacePermissions,
+)
+from pytest_mock import MockerFixture
+
 from tests.conftest import TEST_DATA_DIR
 
 TEST_DATA_SUBDIR = f"{TEST_DATA_DIR}/provisioning/entities/permissions"
@@ -34,18 +34,12 @@ UG_2 = CatalogAssigneeIdentifier(id="ug_2", type="userGroup")
 UG_3 = CatalogAssigneeIdentifier(id="ug_3", type="userGroup")
 
 UPSTREAM_PERMISSIONS = [
-    CatalogDeclarativeSingleWorkspacePermission(
-        name="ANALYZE", assignee=USER_1
-    ),
+    CatalogDeclarativeSingleWorkspacePermission(name="ANALYZE", assignee=USER_1),
     CatalogDeclarativeSingleWorkspacePermission(name="VIEW", assignee=USER_1),
     CatalogDeclarativeSingleWorkspacePermission(name="MANAGE", assignee=USER_1),
-    CatalogDeclarativeSingleWorkspacePermission(
-        name="ANALYZE", assignee=USER_2
-    ),
+    CatalogDeclarativeSingleWorkspacePermission(name="ANALYZE", assignee=USER_2),
     CatalogDeclarativeSingleWorkspacePermission(name="VIEW", assignee=USER_2),
-    CatalogDeclarativeSingleWorkspacePermission(
-        name="ANALYZE", assignee=USER_3
-    ),
+    CatalogDeclarativeSingleWorkspacePermission(name="ANALYZE", assignee=USER_3),
     CatalogDeclarativeSingleWorkspacePermission(name="ANALYZE", assignee=UG_1),
     CatalogDeclarativeSingleWorkspacePermission(name="VIEW", assignee=UG_1),
     CatalogDeclarativeSingleWorkspacePermission(name="MANAGE", assignee=UG_1),
@@ -67,9 +61,7 @@ WS_PERMISSION_DECLARATION = PermissionDeclaration(
     },
 )
 
-UPSTREAM_WS_PERMISSION = CatalogDeclarativeWorkspacePermissions(
-    permissions=UPSTREAM_PERMISSIONS
-)
+UPSTREAM_WS_PERMISSION = CatalogDeclarativeWorkspacePermissions(permissions=UPSTREAM_PERMISSIONS)
 
 UPSTREAM_WS_PERMISSIONS = {
     "ws_id_1": UPSTREAM_WS_PERMISSION,
@@ -107,18 +99,10 @@ def test_declaration_with_inactive_to_sdk_api_obj():
     api_obj = declaration.to_sdk_api()
     expected = CatalogDeclarativeWorkspacePermissions(
         permissions=[
-            CatalogDeclarativeSingleWorkspacePermission(
-                name="ANALYZE", assignee=USER_1
-            ),
-            CatalogDeclarativeSingleWorkspacePermission(
-                name="ANALYZE", assignee=USER_2
-            ),
-            CatalogDeclarativeSingleWorkspacePermission(
-                name="ANALYZE", assignee=UG_1
-            ),
-            CatalogDeclarativeSingleWorkspacePermission(
-                name="ANALYZE", assignee=UG_2
-            ),
+            CatalogDeclarativeSingleWorkspacePermission(name="ANALYZE", assignee=USER_1),
+            CatalogDeclarativeSingleWorkspacePermission(name="ANALYZE", assignee=USER_2),
+            CatalogDeclarativeSingleWorkspacePermission(name="ANALYZE", assignee=UG_1),
+            CatalogDeclarativeSingleWorkspacePermission(name="ANALYZE", assignee=UG_2),
         ]
     )
     assert api_obj == expected
@@ -157,9 +141,7 @@ def test_add_new_active_user_perm() -> None:
     )
 
     declaration.add_incremental_permission(permission)
-    assert declaration.users == {
-        "user_1": {"ANALYZE": True, "VIEW": False, "MANAGE": True}
-    }
+    assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": False, "MANAGE": True}}
     assert declaration.user_groups == {"ug_1": {"VIEW": True, "ANALYZE": False}}
 
 
@@ -177,9 +159,7 @@ def test_add_new_inactive_user_perm() -> None:
     )
 
     declaration.add_incremental_permission(permission)
-    assert declaration.users == {
-        "user_1": {"ANALYZE": True, "VIEW": False, "MANAGE": False}
-    }
+    assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": False, "MANAGE": False}}
     assert declaration.user_groups == {"ug_1": {"VIEW": True, "ANALYZE": False}}
 
 
@@ -278,9 +258,7 @@ def test_add_new_active_ug_perm() -> None:
     )
     declaration.add_incremental_permission(permission)
     assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": False}}
-    assert declaration.user_groups == {
-        "ug_1": {"VIEW": True, "ANALYZE": False, "MANAGE": True}
-    }
+    assert declaration.user_groups == {"ug_1": {"VIEW": True, "ANALYZE": False, "MANAGE": True}}
 
 
 def test_add_new_inactive_ug_perm() -> None:
@@ -297,9 +275,7 @@ def test_add_new_inactive_ug_perm() -> None:
     )
     declaration.add_incremental_permission(permission)
     assert declaration.users == {"user_1": {"ANALYZE": True, "VIEW": False}}
-    assert declaration.user_groups == {
-        "ug_1": {"VIEW": True, "ANALYZE": False, "MANAGE": False}
-    }
+    assert declaration.user_groups == {"ug_1": {"VIEW": True, "ANALYZE": False, "MANAGE": False}}
 
 
 def test_overwrite_inactive_ug_perm() -> None:
@@ -405,21 +381,18 @@ def mock_upstream_perms(ws_id: str) -> CatalogDeclarativeWorkspacePermissions:
 def parse_expected_permissions(
     raw_data: dict,
 ) -> dict[str, list[CatalogDeclarativeSingleWorkspacePermission]]:
-    expected_result: dict[
-        str, list[CatalogDeclarativeSingleWorkspacePermission]
-    ] = {}
+    expected_result: dict[str, list[CatalogDeclarativeSingleWorkspacePermission]] = {}
     for workspace_id, workspace_permissions in raw_data.items():
-        expected_permissions = []
-        for permission in workspace_permissions:
-            expected_permissions.append(
-                CatalogDeclarativeSingleWorkspacePermission(
-                    name=permission["name"],
-                    assignee=CatalogAssigneeIdentifier(
-                        id=permission["assignee_id"],
-                        type=permission["assignee_type"],
-                    ),
-                )
+        expected_permissions = [
+            CatalogDeclarativeSingleWorkspacePermission(
+                name=permission["name"],
+                assignee=CatalogAssigneeIdentifier(
+                    id=permission["assignee_id"],
+                    type=permission["assignee_type"],
+                ),
             )
+            for permission in workspace_permissions
+        ]
         expected_result[workspace_id] = expected_permissions
     return expected_result
 
@@ -451,22 +424,16 @@ def test_permission_provisioner(
     full_load_data: list[PermissionFullLoad] = []
 
     # Load existing upstream permissions
-    EXISTING_UPSTREAM_PERMISSIONS_PATH = (
-        f"{TEST_DATA_SUBDIR}/existing_upstream_permissions.json"
-    )
-    with open(EXISTING_UPSTREAM_PERMISSIONS_PATH, "r") as f:
+    EXISTING_UPSTREAM_PERMISSIONS_PATH = f"{TEST_DATA_SUBDIR}/existing_upstream_permissions.json"
+    with open(EXISTING_UPSTREAM_PERMISSIONS_PATH) as f:
         raw_existing_upstream_permissions = orjson.loads(f.read())
 
-    existing_upstream_permissions = parse_expected_permissions(
-        raw_existing_upstream_permissions
-    )
+    existing_upstream_permissions = parse_expected_permissions(raw_existing_upstream_permissions)
 
     def mock_get_declarative_permissions(
         ws_id: str,
     ) -> CatalogDeclarativeWorkspacePermissions:
-        return CatalogDeclarativeWorkspacePermissions(
-            permissions=existing_upstream_permissions[ws_id]
-        )
+        return CatalogDeclarativeWorkspacePermissions(permissions=existing_upstream_permissions[ws_id])
 
     # Patch the get method to return existing upstream permissions
     mocker.patch.object(
@@ -476,11 +443,11 @@ def test_permission_provisioner(
     )
 
     # Load source data
-    with open(f"{TEST_DATA_SUBDIR}/{source_data_path}", "r") as f:
+    with open(f"{TEST_DATA_SUBDIR}/{source_data_path}") as f:
         source_data = orjson.loads(f.read())
 
     # Load and parse expected data
-    with open(f"{TEST_DATA_SUBDIR}/{expected_data_path}", "r") as f:
+    with open(f"{TEST_DATA_SUBDIR}/{expected_data_path}") as f:
         raw_expected_result = orjson.loads(f.read())
 
     expected_result = parse_expected_permissions(raw_expected_result)
@@ -495,12 +462,8 @@ def test_permission_provisioner(
 
         assert len(actual_permissions) == len(expected_permissions)
 
-        actual_sorted_permissions = sorted(
-            actual_permissions, key=lambda x: x.assignee.id
-        )
-        expected_sorted_permissions = sorted(
-            expected_permissions, key=lambda x: x.assignee.id
-        )
+        actual_sorted_permissions = sorted(actual_permissions, key=lambda x: x.assignee.id)
+        expected_sorted_permissions = sorted(expected_permissions, key=lambda x: x.assignee.id)
         assert actual_sorted_permissions == expected_sorted_permissions
 
     mocker.patch.object(
@@ -510,9 +473,7 @@ def test_permission_provisioner(
     )
 
     if load_method == "incremental_load":
-        incremental_load_data = [
-            PermissionIncrementalLoad(**row) for row in source_data
-        ]
+        incremental_load_data = [PermissionIncrementalLoad(**row) for row in source_data]
         permission_provisioner.incremental_load(incremental_load_data)
     else:
         full_load_data = [PermissionFullLoad(**row) for row in source_data]

@@ -28,16 +28,12 @@ from gooddata_pipelines.provisioning.utils.context_objects import (
 from gooddata_pipelines.provisioning.utils.exceptions import WorkspaceException
 
 
-class WorkspaceProvisioner(
-    Provisioning[WorkspaceFullLoad, WorkspaceIncrementalLoad]
-):
+class WorkspaceProvisioner(Provisioning[WorkspaceFullLoad, WorkspaceIncrementalLoad]):
     source_group_full: list[WorkspaceFullLoad]
     source_group_incremental: list[WorkspaceIncrementalLoad]
 
     FULL_LOAD_TYPE: type[WorkspaceFullLoad] = WorkspaceFullLoad
-    INCREMENTAL_LOAD_TYPE: type[WorkspaceIncrementalLoad] = (
-        WorkspaceIncrementalLoad
-    )
+    INCREMENTAL_LOAD_TYPE: type[WorkspaceIncrementalLoad] = WorkspaceIncrementalLoad
 
     upstream_group: list[CatalogWorkspace]
 
@@ -49,9 +45,7 @@ class WorkspaceProvisioner(
         methods to run the provisioning.
         """
         super().__init__(*args, **kwargs)
-        self.validator: WorkspaceDataValidator = WorkspaceDataValidator(
-            self._api
-        )
+        self.validator: WorkspaceDataValidator = WorkspaceDataValidator(self._api)
         self.parser: WorkspaceDataParser = WorkspaceDataParser()
         self.maps: WorkspaceDataMaps = WorkspaceDataMaps()
 
@@ -67,9 +61,7 @@ class WorkspaceProvisioner(
         name in GoodData Cloud is different from the source, the workspace will
         be updated. The rest of the workspaces will be ignored.
         """
-        existing_workspaces: dict[str, CatalogWorkspace] = {
-            workspace.id: workspace for workspace in panther_group
-        }
+        existing_workspaces: dict[str, CatalogWorkspace] = {workspace.id: workspace for workspace in panther_group}
 
         ids_to_update: set[str] = set()
 
@@ -92,9 +84,7 @@ class WorkspaceProvisioner(
 
         return ids_to_update
 
-    def _get_panther_children_workspaces(
-        self, parent_workspace_ids: set[str]
-    ) -> list[CatalogWorkspace]:
+    def _get_panther_children_workspaces(self, parent_workspace_ids: set[str]) -> list[CatalogWorkspace]:
         """
         Calls GoodData Python SDK to retrieve all workspaces in domain and filters the
         result by the set of parent workspace IDs.
@@ -105,14 +95,10 @@ class WorkspaceProvisioner(
         Returns:
             list[CatalogWorkspace]: List of child workspaces in the parent workspace.
         """
-        all_workspaces: list[CatalogWorkspace] = (
-            self._api._sdk.catalog_workspace.list_workspaces()
-        )
+        all_workspaces: list[CatalogWorkspace] = self._api._sdk.catalog_workspace.list_workspaces()
 
         children: list[CatalogWorkspace] = [
-            workspace
-            for workspace in all_workspaces
-            if workspace.parent_id in parent_workspace_ids
+            workspace for workspace in all_workspaces if workspace.parent_id in parent_workspace_ids
         ]
 
         return children
@@ -152,9 +138,7 @@ class WorkspaceProvisioner(
                         parent_id=parent_workspace_id,
                     )
                 )
-                self.logger.info(
-                    f"{action.title()}d workspace: {context.workspace_id}"
-                )
+                self.logger.info(f"{action.title()}d workspace: {context.workspace_id}")
 
             except Exception as e:
                 self.logger.error(
@@ -163,17 +147,13 @@ class WorkspaceProvisioner(
                 )
 
             # If child workspace has WDF settings, apply them
-            child_wdfs: dict[str, list[str]] = workspace_id_to_wdf_map.get(
-                context.workspace_id, {}
-            )
+            child_wdfs: dict[str, list[str]] = workspace_id_to_wdf_map.get(context.workspace_id, {})
             if child_wdfs:
                 self.wdf_manager.check_wdf_settings(
                     context,
                 )
 
-    def delete_panther_workspaces(
-        self, ids_to_delete: set[str], workspace_id_to_name_map: dict[str, str]
-    ) -> None:
+    def delete_panther_workspaces(self, ids_to_delete: set[str], workspace_id_to_name_map: dict[str, str]) -> None:
         for workspace_id in ids_to_delete:
             workspace_context: WorkspaceContext = WorkspaceContext(
                 workspace_id=workspace_id,
@@ -181,9 +161,7 @@ class WorkspaceProvisioner(
             )
             try:
                 self._api._sdk.catalog_workspace.delete_workspace(workspace_id)
-                self.logger.info(
-                    f"Deleted workspace: {workspace_context.workspace_id}"
-                )
+                self.logger.info(f"Deleted workspace: {workspace_context.workspace_id}")
 
             except Exception as e:
                 self.logger.error(
@@ -197,27 +175,19 @@ class WorkspaceProvisioner(
         parent_workspace_ids: set[str],
     ) -> None:
         """Verifies that upstream content is equal to the source data."""
-        source_ids_names: set[tuple[str, str]] = {
-            (item.workspace_id, item.workspace_name) for item in source_group
-        }
+        source_ids_names: set[tuple[str, str]] = {(item.workspace_id, item.workspace_name) for item in source_group}
 
-        panther_workspaces: list[CatalogWorkspace] = (
-            self._get_panther_children_workspaces(parent_workspace_ids)
-        )
+        panther_workspaces: list[CatalogWorkspace] = self._get_panther_children_workspaces(parent_workspace_ids)
 
         panther_ids_names: set[tuple[str, str]] = {
-            (workspace.workspace_id, workspace.name)
-            for workspace in panther_workspaces
+            (workspace.workspace_id, workspace.name) for workspace in panther_workspaces
         }
 
-        diff: set[tuple[str, str]] = source_ids_names.symmetric_difference(
-            panther_ids_names
-        )
+        diff: set[tuple[str, str]] = source_ids_names.symmetric_difference(panther_ids_names)
 
         if diff:
             raise WorkspaceException(
-                "Provisioning failed. The source and Panther workspaces do not "
-                + f"match. Difference: {diff}"
+                "Provisioning failed. The source and Panther workspaces do not " + f"match. Difference: {diff}"
             )
 
     def _provision_full_load(self) -> None:
@@ -227,27 +197,19 @@ class WorkspaceProvisioner(
         self.validator.validate_source_data(self.source_group_full)
 
         # Set the maps based on the source data.
-        self.maps = self.parser.set_maps_based_on_source(
-            self.maps, self.source_group_full
-        )
+        self.maps = self.parser.set_maps_based_on_source(self.maps, self.source_group_full)
 
         # Get upstream children of all parent workspaces.
-        self.upstream_group = self._get_panther_children_workspaces(
-            self.maps.parent_ids
-        )
+        self.upstream_group = self._get_panther_children_workspaces(self.maps.parent_ids)
 
         # Set maps that require upstream data.
-        self.maps = self.parser.set_maps_with_upstream_data(
-            self.maps, self.source_group_full, self.upstream_group
-        )
+        self.maps = self.parser.set_maps_with_upstream_data(self.maps, self.source_group_full, self.upstream_group)
 
         # Create an instance of WDF manager with the created maps.
         self.wdf_manager = WorkspaceDataFilterManager(self._api, self.maps)
 
         # Sort the ids to groups based on provisioning logic.
-        id_groups = self._create_groups(
-            self.maps.source_ids, self.maps.upstream_ids
-        )
+        id_groups = self._create_groups(self.maps.source_ids, self.maps.upstream_ids)
 
         # Find out which workspaces to update.
         self.ids_to_update: set[str] = self._find_workspaces_to_update(
@@ -257,9 +219,7 @@ class WorkspaceProvisioner(
         )
 
         # Delete the workspaces that are not in the source.
-        self.delete_panther_workspaces(
-            id_groups.ids_to_delete, self.maps.workspace_id_to_name_map
-        )
+        self.delete_panther_workspaces(id_groups.ids_to_delete, self.maps.workspace_id_to_name_map)
 
         # Create or update selected workspaces.
         self._create_or_update_panther_workspaces(
@@ -272,36 +232,26 @@ class WorkspaceProvisioner(
 
         # Check WDF settings of ignored workspaces.
         ignored_workspace_ids: set[str] = self.maps.source_ids.difference(
-            id_groups.ids_to_create.union(self.ids_to_update).union(
-                id_groups.ids_to_delete
-            )
+            id_groups.ids_to_create.union(self.ids_to_update).union(id_groups.ids_to_delete)
         )
 
         for ignored_workspace_id in ignored_workspace_ids:
             ignored_workspace_context: WorkspaceContext = WorkspaceContext(
                 workspace_id=ignored_workspace_id,
-                workspace_name=self.maps.workspace_id_to_name_map.get(
-                    ignored_workspace_id
-                ),
+                workspace_name=self.maps.workspace_id_to_name_map.get(ignored_workspace_id),
             )
             self.wdf_manager.check_wdf_settings(ignored_workspace_context)
 
         # Verify the provisioning by queries to GoodData Cloud.
-        self.verify_workspace_provisioning(
-            self.source_group_full, self.maps.parent_ids
-        )
+        self.verify_workspace_provisioning(self.source_group_full, self.maps.parent_ids)
 
     def _provision_incremental_load(self) -> None:
         """Incremental workspace provisioning."""
         # Set the maps based on the source data.
-        self.maps = self.parser.set_maps_based_on_source(
-            self.maps, self.source_group_incremental
-        )
+        self.maps = self.parser.set_maps_based_on_source(self.maps, self.source_group_incremental)
 
         # Get upstream children of all parent workspaces.
-        self.upstream_group = self._get_panther_children_workspaces(
-            self.maps.parent_ids
-        )
+        self.upstream_group = self._get_panther_children_workspaces(self.maps.parent_ids)
 
         # Set maps that require upstream data.
         self.maps = self.parser.set_maps_with_upstream_data(
@@ -329,6 +279,4 @@ class WorkspaceProvisioner(
             self.source_group_incremental,
         )
 
-        self.delete_panther_workspaces(
-            ids_to_delete, self.maps.workspace_id_to_name_map
-        )
+        self.delete_panther_workspaces(ids_to_delete, self.maps.workspace_id_to_name_map)

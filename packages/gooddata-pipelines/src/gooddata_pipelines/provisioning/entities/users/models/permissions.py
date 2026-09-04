@@ -47,9 +47,7 @@ class PermissionDeclaration:
     user_groups: TargetsPermissionDict
 
     @classmethod
-    def from_sdk_api(
-        cls, declaration: CatalogDeclarativeWorkspacePermissions
-    ) -> "PermissionDeclaration":
+    def from_sdk_api(cls, declaration: CatalogDeclarativeWorkspacePermissions) -> "PermissionDeclaration":
         """
         Constructs an WSPermissionDeclaration instance
         from GoodData SDK CatalogDeclarativeWorkspacePermissions.
@@ -63,10 +61,7 @@ class PermissionDeclaration:
                 permission.assignee.id,
             )
 
-            if permission_type == EntityType.user.value:
-                target_dict = users
-            else:
-                target_dict = user_groups
+            target_dict = users if permission_type == EntityType.user.value else user_groups
 
             id_permissions = target_dict.get(id)
             if not id_permissions:
@@ -82,9 +77,7 @@ class PermissionDeclaration:
     ) -> CatalogDeclarativeSingleWorkspacePermission | None:
         """Constructs single permission declaration for the SDK API."""
         try:
-            return CatalogDeclarativeSingleWorkspacePermission(
-                name=permission, assignee=assignee
-            )
+            return CatalogDeclarativeSingleWorkspacePermission(name=permission, assignee=assignee)
         except Exception as e:
             raise BaseUserException(
                 f"Failed to construct SDK declaration for type={assignee.type} ",
@@ -98,9 +91,7 @@ class PermissionDeclaration:
         for permission, is_active in permissions.items():
             if not is_active:
                 continue
-            declaration = self._construct_upstream_permission(
-                permission, assignee
-            )
+            declaration = self._construct_upstream_permission(permission, assignee)
             if not declaration:
                 continue
             yield declaration
@@ -110,45 +101,25 @@ class PermissionDeclaration:
         Constructs the GoodData SDK CatalogDeclarativeWorkspacePermissions
         object from the WSPermissionDeclaration instance.
         """
-        permission_declarations: list[
-            CatalogDeclarativeSingleWorkspacePermission
-        ] = []
+        permission_declarations: list[CatalogDeclarativeSingleWorkspacePermission] = []
 
         for user_id, permissions in self.users.items():
-            assignee = CatalogAssigneeIdentifier(
-                id=user_id, type=EntityType.user.value
-            )
-            for declaration in self._permissions_for_target(
-                permissions, assignee
-            ):
-                permission_declarations.append(declaration)
+            assignee = CatalogAssigneeIdentifier(id=user_id, type=EntityType.user.value)
+            permission_declarations.extend(self._permissions_for_target(permissions, assignee))
 
         for ug_id, permissions in self.user_groups.items():
-            assignee = CatalogAssigneeIdentifier(
-                id=ug_id, type=EntityType.user_group.value
-            )
-            for declaration in self._permissions_for_target(
-                permissions, assignee
-            ):
-                permission_declarations.append(declaration)
+            assignee = CatalogAssigneeIdentifier(id=ug_id, type=EntityType.user_group.value)
+            permission_declarations.extend(self._permissions_for_target(permissions, assignee))
 
-        return CatalogDeclarativeWorkspacePermissions(
-            permissions=permission_declarations
-        )
+        return CatalogDeclarativeWorkspacePermissions(permissions=permission_declarations)
 
-    def add_incremental_permission(
-        self, permission: PermissionIncrementalLoad
-    ) -> None:
+    def add_incremental_permission(self, permission: PermissionIncrementalLoad) -> None:
         """
         Adds WSPermission object into respective field within the instance.
         Handles duplicate permissions and different combinations of input
         and upstream is_active permission states.
         """
-        target_dict = (
-            self.users
-            if permission.entity_type == EntityType.user
-            else self.user_groups
-        )
+        target_dict = self.users if permission.entity_type == EntityType.user else self.user_groups
 
         if permission.entity_id not in target_dict:
             target_dict[permission.entity_id] = {}
@@ -177,11 +148,7 @@ class PermissionDeclaration:
         Handles duplicate permissions and different combinations of input
         and upstream is_active permission states.
         """
-        target_dict = (
-            self.users
-            if permission.entity_type == EntityType.user
-            else self.user_groups
-        )
+        target_dict = self.users if permission.entity_type == EntityType.user else self.user_groups
 
         if permission.entity_id not in target_dict:
             target_dict[permission.entity_id] = {}

@@ -25,9 +25,7 @@ from gooddata_pipelines.provisioning.provisioning import Provisioning
 from gooddata_pipelines.provisioning.utils.exceptions import ContextException
 
 
-class UserDataFilterProvisioner(
-    Provisioning[UserDataFilterFullLoad, UserDataFilterIncrementalLoad]
-):
+class UserDataFilterProvisioner(Provisioning[UserDataFilterFullLoad, UserDataFilterIncrementalLoad]):
     """Provisioning class for user data filters in GoodData workspaces.
 
     This class handles the creation, update, and deletion of user data filters
@@ -76,22 +74,15 @@ class UserDataFilterProvisioner(
         ws_map: dict[str, dict[str, set[str]]] = {}
 
         for udf in user_data_filters:
-            ws_map.setdefault(udf.workspace_id, {}).setdefault(
-                udf.udf_id, set()
-            ).add(str(udf.udf_value))
+            ws_map.setdefault(udf.workspace_id, {}).setdefault(udf.udf_id, set()).add(str(udf.udf_value))
 
         result: list[WorkspaceUserDataFilters] = []
 
         for ws_id, udf_dict in ws_map.items():
             udf_groups = [
-                UserDataFilterGroup(udf_id=udf_id, udf_values=list(values))
-                for udf_id, values in udf_dict.items()
+                UserDataFilterGroup(udf_id=udf_id, udf_values=list(values)) for udf_id, values in udf_dict.items()
             ]
-            result.append(
-                WorkspaceUserDataFilters(
-                    workspace_id=ws_id, user_data_filters=udf_groups
-                )
-            )
+            result.append(WorkspaceUserDataFilters(workspace_id=ws_id, user_data_filters=udf_groups))
         return result
 
     @staticmethod
@@ -100,29 +91,21 @@ class UserDataFilterProvisioner(
         numbers = re.findall(r'"\d+"', maql)
         return [number.strip('"') for number in numbers]
 
-    def _skip_user_data_filter_update(
-        self, existing_udf: list[CatalogUserDataFilter], udf_value: list[str]
-    ) -> bool:
+    def _skip_user_data_filter_update(self, existing_udf: list[CatalogUserDataFilter], udf_value: list[str]) -> bool:
         """Check if the user data filter update can be skipped."""
         if not existing_udf:
             return False
-        existing_udfs = self._extract_numbers_from_maql(
-            existing_udf[0].attributes.maql
-        )
+        existing_udfs = self._extract_numbers_from_maql(existing_udf[0].attributes.maql)
         return set(udf_value) == set(existing_udfs)
 
-    def _create_user_data_filters(
-        self, user_data_filter_ids_to_create: list[WorkspaceUserDataFilters]
-    ) -> None:
+    def _create_user_data_filters(self, user_data_filter_ids_to_create: list[WorkspaceUserDataFilters]) -> None:
         """Create or update user data filters in GoodData workspaces."""
         for workspace_user_data_filter in user_data_filter_ids_to_create:
             workspace_id = workspace_user_data_filter.workspace_id
             user_data_filters = workspace_user_data_filter.user_data_filters
 
-            gd_user_data_filters: list[CatalogUserDataFilter] = (
-                self._api._sdk.catalog_workspace.list_user_data_filters(
-                    workspace_id
-                )
+            gd_user_data_filters: list[CatalogUserDataFilter] = self._api._sdk.catalog_workspace.list_user_data_filters(
+                workspace_id
             )
 
             gd_udf_ids = {
@@ -141,29 +124,17 @@ class UserDataFilterProvisioner(
                 udf_id: str = udf_group.udf_id
                 udf_values: list[str] = udf_group.udf_values
 
-                existing_udf: list[CatalogUserDataFilter] = [
-                    udf for udf in gd_user_data_filters if udf.id == udf_id
-                ]
+                existing_udf: list[CatalogUserDataFilter] = [udf for udf in gd_user_data_filters if udf.id == udf_id]
                 if self._skip_user_data_filter_update(existing_udf, udf_values):
                     continue
 
-                formatted_udf_values = '", "'.join(
-                    str(value) for value in udf_values
-                )
+                formatted_udf_values = '", "'.join(str(value) for value in udf_values)
                 maql = f'{self.maql_column_name} IN ("{formatted_udf_values}")'
 
                 attributes = CatalogUserDataFilterAttributes(maql=maql)
                 relationships = CatalogUserDataFilterRelationships(
-                    labels={
-                        "data": [
-                            CatalogEntityIdentifier(
-                                id=self.ldm_column_name, type="label"
-                            )
-                        ]
-                    },
-                    user={
-                        "data": CatalogEntityIdentifier(id=udf_id, type="user")
-                    },
+                    labels={"data": [CatalogEntityIdentifier(id=self.ldm_column_name, type="label")]},
+                    user={"data": CatalogEntityIdentifier(id=udf_id, type="user")},
                 )
                 user_data_filter = CatalogUserDataFilter(
                     id=udf_id,
@@ -172,9 +143,7 @@ class UserDataFilterProvisioner(
                 )
 
                 try:
-                    self._api._sdk.catalog_workspace.create_or_update_user_data_filter(
-                        workspace_id, user_data_filter
-                    )
+                    self._api._sdk.catalog_workspace.create_or_update_user_data_filter(workspace_id, user_data_filter)
                     self.logger.info(
                         "Created or updated user data filters for user with id "
                         + f"{udf_id} for client with id {workspace_id}"
@@ -186,38 +155,24 @@ class UserDataFilterProvisioner(
                         user_data_filter,
                     ) from e
 
-    def _delete_user_data_filters(
-        self, workspace_id: str, udf_ids_to_delete: set[str]
-    ) -> None:
+    def _delete_user_data_filters(self, workspace_id: str, udf_ids_to_delete: set[str]) -> None:
         """Delete user data filters in GoodData workspaces."""
         for udf_id in udf_ids_to_delete:
             try:
-                self._api._sdk.catalog_workspace.delete_user_data_filter(
-                    workspace_id, udf_id
-                )
-                self.logger.info(
-                    f"Deleted user data filters for user with id {udf_id}"
-                )
-            except Exception as e:
-                raise ContextException(
-                    f"Failed to delete user data filters: {e}"
-                ) from e
+                self._api._sdk.catalog_workspace.delete_user_data_filter(workspace_id, udf_id)
+                self.logger.info(f"Deleted user data filters for user with id {udf_id}")
+            except Exception as e:  # noqa: PERF203 - needs the failing udf_id for the error context
+                raise ContextException(f"Failed to delete user data filters: {e}") from e
 
     def _provision_full_load(self) -> None:
         """Provision user data filters in GoodData workspaces."""
 
         if not self.maql_column_name:
-            raise ContextException(
-                "MAQL column name is not set. Please set it before provisioning."
-            )
+            raise ContextException("MAQL column name is not set. Please set it before provisioning.")
         if not self.ldm_column_name:
-            raise ContextException(
-                "LDM column name is not set. Please set it before provisioning."
-            )
+            raise ContextException("LDM column name is not set. Please set it before provisioning.")
 
-        grouped_db_user_data_filters = (
-            self._group_db_user_data_filters_by_ws_id(self.source_group_full)
-        )
+        grouped_db_user_data_filters = self._group_db_user_data_filters_by_ws_id(self.source_group_full)
         self._create_user_data_filters(grouped_db_user_data_filters)
 
     def _provision_incremental_load(self) -> None:

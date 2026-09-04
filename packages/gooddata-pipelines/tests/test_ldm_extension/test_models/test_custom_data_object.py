@@ -1,7 +1,5 @@
 # (C) 2025 GoodData Corporation
 import pytest
-from pydantic import ValidationError
-
 from gooddata_pipelines.ldm_extension.models.custom_data_object import (
     ColumnDataType,
     CustomDataset,
@@ -10,6 +8,7 @@ from gooddata_pipelines.ldm_extension.models.custom_data_object import (
     CustomFieldType,
     ParentDatasetReference,
 )
+from pydantic import ValidationError
 
 
 def make_valid_field_def(**kwargs):
@@ -65,33 +64,24 @@ def test_custom_dataset_definition_valid_table():
 
 
 def test_custom_dataset_definition_valid_sql():
-    data = make_valid_dataset_def(
-        dataset_source_table=None, dataset_source_sql="SELECT 1"
-    )
+    data = make_valid_dataset_def(dataset_source_table=None, dataset_source_sql="SELECT 1")
     ds = CustomDatasetDefinition(**data)
     assert ds.dataset_source_sql == "SELECT 1"
     assert ds.dataset_source_table is None
 
 
 def test_custom_dataset_definition_both_none_raises():
-    data = make_valid_dataset_def(
-        dataset_source_table=None, dataset_source_sql=None
-    )
+    data = make_valid_dataset_def(dataset_source_table=None, dataset_source_sql=None)
     with pytest.raises(ValidationError) as exc:
         CustomDatasetDefinition(**data)
     assert "must be provided" in str(exc.value)
 
 
 def test_custom_dataset_definition_both_provided_raises():
-    data = make_valid_dataset_def(
-        dataset_source_table="table1", dataset_source_sql="SELECT 1"
-    )
+    data = make_valid_dataset_def(dataset_source_table="table1", dataset_source_sql="SELECT 1")
     with pytest.raises(ValidationError) as exc:
         CustomDatasetDefinition(**data)
-    assert (
-        "Only one of dataset_source_table and dataset_source_sql can be provided"
-        in str(exc.value)
-    )
+    assert "Only one of dataset_source_table and dataset_source_sql can be provided" in str(exc.value)
 
 
 def test_custom_dataset_model():
@@ -182,27 +172,21 @@ def test_custom_dataset_definition_legacy_reference_fields_optional():
 
 
 def test_custom_dataset_definition_wdf_optional_both_none():
-    data = make_valid_dataset_def(
-        workspace_data_filter_id=None, workspace_data_filter_column_name=None
-    )
+    data = make_valid_dataset_def(workspace_data_filter_id=None, workspace_data_filter_column_name=None)
     ds = CustomDatasetDefinition(**data)
     assert ds.workspace_data_filter_id is None
     assert ds.workspace_data_filter_column_name is None
 
 
 def test_custom_dataset_definition_wdf_only_id_raises():
-    data = make_valid_dataset_def(
-        workspace_data_filter_id="wdf1", workspace_data_filter_column_name=None
-    )
+    data = make_valid_dataset_def(workspace_data_filter_id="wdf1", workspace_data_filter_column_name=None)
     with pytest.raises(ValidationError) as exc:
         CustomDatasetDefinition(**data)
     assert "both be set or both be omitted" in str(exc.value)
 
 
 def test_custom_dataset_definition_wdf_only_column_raises():
-    data = make_valid_dataset_def(
-        workspace_data_filter_id=None, workspace_data_filter_column_name="col1"
-    )
+    data = make_valid_dataset_def(workspace_data_filter_id=None, workspace_data_filter_column_name="col1")
     with pytest.raises(ValidationError) as exc:
         CustomDatasetDefinition(**data)
     assert "both be set or both be omitted" in str(exc.value)

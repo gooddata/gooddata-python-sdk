@@ -14,18 +14,14 @@ class CSVReader:
         """
 
         with open(file_path) as csv_file:
-            reader: Iterator[list[str]] = csv.reader(
-                csv_file, skipinitialspace=True
-            )
+            reader: Iterator[list[str]] = csv.reader(csv_file, skipinitialspace=True)
 
             try:
                 # Skip the header
                 headers = next(reader)
 
                 if len(headers) > 1:
-                    raise ValueError(
-                        "Input file contains more than one column. Please check the input and try again."
-                    )
+                    raise ValueError("Input file contains more than one column. Please check the input and try again.")
 
             except StopIteration:
                 # Raise an error if the iterator is empty

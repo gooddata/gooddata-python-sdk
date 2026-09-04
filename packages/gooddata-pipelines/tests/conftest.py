@@ -5,9 +5,6 @@ from unittest.mock import Mock
 
 import boto3
 import pytest
-from moto import mock_aws
-from pytest_mock import MockerFixture
-
 from gooddata_pipelines import (
     PermissionProvisioner,
     UserDataFilterProvisioner,
@@ -16,6 +13,8 @@ from gooddata_pipelines import (
     WorkspaceProvisioner,
 )
 from gooddata_pipelines.api import GoodDataApi
+from moto import mock_aws
+from pytest_mock import MockerFixture
 
 TEST_DATA_DIR = str((Path(__file__).parent / "data").absolute())
 

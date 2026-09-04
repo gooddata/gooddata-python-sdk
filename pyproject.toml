@@ -56,18 +56,18 @@ members = [
 
 [dependency-groups]
 dev = [
-    "pre-commit~=4.6.0",
+    "pre-commit~=4.6.2",
     "gitlint~=0.19.1",
 ]
 lint = [
-    "ruff~=0.15.20",
+    "ruff~=0.16.6",
 ]
 type = [
-    "ty~=0.0.55",
+    "ty~=0.0.78",
 ]
 test = [
     # Declared only here: consumed by the scripts/docs/ tests (`make test-docs-scripts`).
-    "pytest~=8.3.4",
+    "pytest~=9.1.1",
     "toml~=0.10.2",
     "griffe>=1.0",
     "docstring_parser~=0.15",
@@ -95,11 +95,11 @@ release = [
     "tomlkit>=0.11"
 ]
 tox = [
-    "tox~=4.56.1",
+    "tox~=4.61.2",
     # tox-uv-bare carries the actual plugin; the `tox-uv` wrapper only adds a dependency on
     # the 58MB `uv` PyPI package, which the image already has as a binary and the host has
     # on PATH. Requires `uv` to be on PATH, which holds in both places.
-    "tox-uv-bare~=1.35.2",
+    "tox-uv-bare~=1.36.0",
 ]
 
 [tool.ruff]
@@ -151,7 +151,8 @@ target-version = "py310"
 "packages/gooddata-eval/src/gooddata_eval/*/__init__.py" = ["F401"]
 
 [tool.ruff.format]
-exclude = ['(gooddata-api-client|.*\.snapshot\..*)']
+# ruff 0.16 started formatting python code blocks inside markdown; keep docs out
+exclude = ['(gooddata-api-client|.*\.snapshot\..*)', '*.md']
 # use ruff to format code examples in docstrings as well
 docstring-code-format = true
 
