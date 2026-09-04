@@ -18,7 +18,13 @@ from gooddata_eval.core.agentic._trace_linker import (
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError, LLMJudge, score_run
-from gooddata_eval.core.models import AgenticAssertionError, AgenticEvalOutcome
+from gooddata_eval.core.models import (
+    AgenticAssertionError,
+    AgenticEvalOutcome,
+    ReasoningStepEvent,
+    ToolCallEvent,
+    build_latency_breakdown,
+)
 from gooddata_eval.core.timing import PhaseTimings, log_timer, sum_timings
 
 _DEFAULT_K = 1
@@ -71,6 +77,8 @@ class GeneralQuestionResult:
     # excluded from pass@K and from Langfuse scoring rather than counted as a failure:
     # scoring it 0 would publish a verdict the judge never gave.
     judge_error: str | None = None
+    tool_call_events: list[ToolCallEvent] = field(default_factory=list)
+    reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
 
 
 @dataclass
@@ -132,6 +140,8 @@ def _run_single_general_question(
         # agent still answered, and that measurement is the one worth keeping.
         timings=PhaseTimings(agent_s=agent_elapsed, judge_s=judge_elapsed),
         judge_error=verdict.error,
+        tool_call_events=list(chat_result.tool_call_events or []),
+        reasoning_step_events=list(chat_result.reasoning_step_events or []),
     )
 
 
@@ -303,6 +313,7 @@ def evaluate_agentic_general_question(
         "judge_passed": best.passed,
         "judge_reasoning": best.reasoning,
         "actual_output": best.actual_output,
+        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
         # Only present when it happened, so the usual JSON shape is unchanged. A
         # pass@K computed over fewer runs than --runs asked for is a weaker result and
         # the report has to say so.

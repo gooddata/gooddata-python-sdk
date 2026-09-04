@@ -16,7 +16,13 @@ from gooddata_eval.core.agentic._trace_linker import (
 )
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import AgenticAssertionError, AgenticEvalOutcome, ToolCallEvent
+from gooddata_eval.core.models import (
+    AgenticAssertionError,
+    AgenticEvalOutcome,
+    ReasoningStepEvent,
+    ToolCallEvent,
+    build_latency_breakdown,
+)
 
 _DEFAULT_K = 1
 
@@ -59,6 +65,8 @@ class SearchResult:
     tool_call_names: list[str]
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
+    tool_call_events: list[ToolCallEvent] = field(default_factory=list)
+    reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
 
 
 @dataclass
@@ -103,6 +111,8 @@ def run_agentic_search_tool(
                     tool_call_names=[tc.function_name for tc in tcs],
                     reasoning_steps=list(chat_result.reasoning_steps or []),
                     response_id=chat_result.response_id,
+                    tool_call_events=list(chat_result.tool_call_events or []),
+                    reasoning_step_events=list(chat_result.reasoning_step_events or []),
                 )
             )
         finally:
@@ -124,6 +134,8 @@ def run_agentic_search_tool(
                         tool_call_names=[tc.function_name for tc in tcs],
                         reasoning_steps=list(chat_result.reasoning_steps or []),
                         response_id=chat_result.response_id,
+                        tool_call_events=list(chat_result.tool_call_events or []),
+                        reasoning_step_events=list(chat_result.reasoning_step_events or []),
                     )
                 )
             finally:
@@ -233,6 +245,7 @@ def evaluate_agentic_search_tool(
         "tool_selected": best.tool_selected,
         "tool_correct": best.tool_correct,
         "tool_call_names": best.tool_call_names,
+        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
 
     if not summary.pass_at_k:

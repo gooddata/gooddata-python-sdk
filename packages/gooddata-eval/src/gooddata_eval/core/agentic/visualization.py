@@ -34,6 +34,7 @@ from gooddata_eval.core.models import (
     ReasoningStepEvent,
     ToolCallEvent,
     build_latency_breakdown,
+    shift_and_index_events,
 )
 from gooddata_eval.core.scoring import get_dimension_uri_set, get_metric_uri_set, uri_to_display_name
 
@@ -192,23 +193,16 @@ def _execute_single_run(
     for iteration in range(max_iterations):
         total_turns += 1.0
         total_steps += float(current_result.reasoning_step_count)
-        for tc in current_result.tool_call_events:
-            if tc.call_ts is not None:
-                tc.call_ts += turn_offset
-            if tc.result_ts is not None:
-                tc.result_ts += turn_offset
-            if tc.index is not None:
-                tc.index += tool_index_offset
-        for rs in current_result.reasoning_step_events:
-            rs.ts += turn_offset
-            rs.index += reasoning_index_offset
+        turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
+            current_result,
+            turn_offset=turn_offset,
+            tool_index_offset=tool_index_offset,
+            reasoning_index_offset=reasoning_index_offset,
+        )
         all_tool_call_events.extend(current_result.tool_call_events)
         all_reasoning_step_events.extend(current_result.reasoning_step_events)
-        tool_index_offset += len(current_result.tool_call_events)
-        reasoning_index_offset += len(current_result.reasoning_step_events)
         reasoning_steps.extend(current_result.reasoning_steps or [])
         response_id = current_result.response_id or response_id
-        turn_offset += current_result.turn_wall_clock_sec or 0.0
 
         viz_produced = bool(current_result.created_visualizations and current_result.created_visualizations.objects)
         if viz_produced:

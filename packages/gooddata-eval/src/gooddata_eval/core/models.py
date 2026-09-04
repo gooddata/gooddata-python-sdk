@@ -225,6 +225,46 @@ class ChatResult(BaseModel):
     turn_wall_clock_sec: float | None = None
 
 
+def shift_and_index_events(
+    result: ChatResult,
+    *,
+    turn_offset: float,
+    tool_index_offset: int,
+    reasoning_index_offset: int,
+) -> tuple[float, int, int]:
+    """Rebase one turn's tool-call/reasoning-step timestamps and indices onto a shared,
+    conversation-wide timeline, mutating the events in place.
+
+    Each turn's own SSE stream times its events from ~0 and indexes them from 0 within
+    that turn alone -- call_ts/result_ts/ts and index must be shifted by every prior
+    turn's contribution before events from multiple turns can be merged into one
+    chronologically ordered ``build_latency_breakdown`` across a whole multi-turn run.
+
+    Returns the updated ``(turn_offset, tool_index_offset, reasoning_index_offset)`` to
+    pass into the next turn's call -- the caller still owns accumulating the shifted
+    events themselves (e.g. into an ``all_tool_call_events`` list) since callers differ
+    in whether/how they also need the raw per-turn events for other purposes.
+
+    Note: ``turn_offset`` advances by ``turn_wall_clock_sec`` only, so time spent
+    generating a simulated-user reply between turns is not represented -- inter-turn
+    gaps compress in the reconstructed timeline.
+    """
+    for tc in result.tool_call_events or []:
+        if tc.call_ts is not None:
+            tc.call_ts += turn_offset
+        if tc.result_ts is not None:
+            tc.result_ts += turn_offset
+        if tc.index is not None:
+            tc.index += tool_index_offset
+    for rs in result.reasoning_step_events or []:
+        rs.ts += turn_offset
+        rs.index += reasoning_index_offset
+    tool_index_offset += len(result.tool_call_events or [])
+    reasoning_index_offset += len(result.reasoning_step_events or [])
+    turn_offset += result.turn_wall_clock_sec or 0.0
+    return turn_offset, tool_index_offset, reasoning_index_offset
+
+
 class AgenticAssertionError(AssertionError):
     """Base for every agentic kind's failure, carrying what the runner reports about it.
 

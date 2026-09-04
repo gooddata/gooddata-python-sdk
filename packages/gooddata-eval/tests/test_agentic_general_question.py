@@ -197,6 +197,45 @@ def test_run_agentic_general_question_captures_reasoning_steps():
     assert summary.best.response_id == "resp-1"
 
 
+def test_run_agentic_general_question_captures_tool_call_events_on_every_run():
+    """Every run must carry its own tool_call_events, not just the first.
+
+    All K runs are built in one place now, so a per-run gap can't arise the way it did
+    when run 0 and the k>1 loop each constructed their own result -- this guards the
+    field being populated at all, and that a future re-split doesn't silently drop it
+    for later runs (which would leave them with an empty latency_breakdown).
+    """
+    client, judge = _pass_client_and_judge()
+    client.create_conversation.side_effect = ["conv-1", "conv-2"]
+    # A fresh object per run: one shared object would let a double-mutation bug pass,
+    # since both runs would point at the same already-shifted events.
+    client.send_message.side_effect = [
+        ChatResult.model_validate(
+            {
+                "textResponse": "42",
+                "toolCallEvents": [{"functionName": "search_objects", "functionArguments": "{}"}],
+                "reasoningSteps": ["recalling the answer"],
+                "responseId": response_id,
+            }
+        )
+        for response_id in ("resp-1", "resp-2")
+    ]
+
+    with _patched(client, judge):
+        summary = run_agentic_general_question(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="What is the answer?",
+            expected_output="42",
+            k=2,
+        )
+
+    assert len(summary.run_results) == 2
+    for run in summary.run_results:
+        assert len(run.tool_call_events) == 1
+
+
 def test_evaluate_agentic_general_question_returns_reasoning_steps_on_pass():
     client, judge = _pass_client_and_judge(reasoning_steps=["recalling the answer"])
 
@@ -217,6 +256,7 @@ def test_evaluate_agentic_general_question_returns_reasoning_steps_on_pass():
         "judge_passed": True,
         "judge_reasoning": "Correct answer",
         "actual_output": "42",
+        "latency_breakdown": [],
     }
 
 
@@ -243,6 +283,7 @@ def test_evaluate_agentic_general_question_attaches_reasoning_steps_to_exception
         "judge_passed": False,
         "judge_reasoning": "Wrong answer",
         "actual_output": "I don't know",
+        "latency_breakdown": [],
     }
 
 
