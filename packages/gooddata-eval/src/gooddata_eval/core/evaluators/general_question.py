@@ -15,6 +15,10 @@ _EVALUATION_STEPS = [
 
 
 class GeneralQuestionEvaluator:
+    # Also registered under "knowledge_question" (core/evaluators/__init__.py) -- this
+    # attribute is unused by that registration (which keys off item.test_kind, not this
+    # class attribute, see the comment there), so it's harmless as-is, but don't derive
+    # an output label from it without accounting for the second kind it now backs.
     test_kind = "general_question"
 
     def __init__(self):
