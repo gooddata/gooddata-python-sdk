@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import ClassVar, Literal
 
 from gooddata_sdk import GoodDataSdk
 from pydantic import BaseModel
@@ -70,16 +70,22 @@ class TurnResult(BaseModel):
     def skill_success(self) -> bool:
         return self.skill_routing and self.output_present and self.no_error
 
+    # Reported per turn in detail["turns"]. A name listed here that no longer exists on the
+    # model raises rather than silently emitting a stale key, which a hand-written dict
+    # literal of the same fields would not -- and model_dump deep-copies activated_skills,
+    # so a caller mutating the returned dict cannot reach back into this TurnResult.
+    _DETAIL_FIELDS: ClassVar[set[str]] = {
+        "turn_id",
+        "expected_skill",
+        "skill_routing",
+        "output_present",
+        "output_correct",
+        "activated_skills",
+    }
+
     def detail(self) -> dict:
         """The subset of this result reported in detail["turns"] for one conversation turn."""
-        return {
-            "turn_id": self.turn_id,
-            "expected_skill": self.expected_skill,
-            "skill_routing": self.skill_routing,
-            "output_present": self.output_present,
-            "output_correct": self.output_correct,
-            "activated_skills": list(self.activated_skills),
-        }
+        return self.model_dump(include=self._DETAIL_FIELDS)
 
 
 def _resolve_refs(

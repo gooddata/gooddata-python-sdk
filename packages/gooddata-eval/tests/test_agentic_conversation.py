@@ -97,11 +97,8 @@ def test_turn_result_skill_success():
     assert r.skill_success is True
 
 
-def test_turn_result_detail_returns_independent_activated_skills_list():
-    """Regression: detail()'s activated_skills must be a copy -- a caller mutating the
-    returned dict must not be able to mutate the TurnResult it came from.
-    """
-    r = TurnResult(
+def _turn_result() -> TurnResult:
+    return TurnResult(
         turn_id="t1",
         expected_skill="visualization",
         skill_routing=True,
@@ -111,9 +108,21 @@ def test_turn_result_detail_returns_independent_activated_skills_list():
         clarification_turns_used=0,
         output_correct=None,
     )
+
+
+def test_turn_result_detail_copies_activated_skills():
+    """A caller mutating the returned dict must not reach back into the TurnResult."""
+    r = _turn_result()
     d = r.detail()
     d["activated_skills"].append("mutated")
     assert r.activated_skills == ["visualization"]
+
+
+def test_turn_result_detail_fields_all_exist_on_the_model():
+    """_DETAIL_FIELDS is a hand-listed subset, so a renamed field must fail here rather
+    than silently drop a key from every report."""
+    assert set(TurnResult.model_fields) >= TurnResult._DETAIL_FIELDS
+    assert set(_turn_result().detail()) == TurnResult._DETAIL_FIELDS
 
 
 def test_resolve_refs_no_refs():
