@@ -2,16 +2,6 @@
 from unittest.mock import MagicMock
 
 import pytest
-from pytest_mock import MockerFixture
-
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset import (
-    CatalogDeclarativeDataset,
-)
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import (
-    CatalogDeclarativeLdm,
-    CatalogDeclarativeModel,
-)
-
 from gooddata_pipelines.ldm_extension.input_processor import (
     LdmExtensionDataProcessor,
 )
@@ -25,6 +15,14 @@ from gooddata_pipelines.ldm_extension.models.analytical_object import (
     AnalyticalObject,
     Attributes,
 )
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset import (
+    CatalogDeclarativeDataset,
+)
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import (
+    CatalogDeclarativeLdm,
+    CatalogDeclarativeModel,
+)
+from pytest_mock import MockerFixture
 
 
 @pytest.fixture
@@ -47,29 +45,21 @@ def validated_data(mocker: MockerFixture):
     return {"workspace_1": {"dataset_1": mocker.MagicMock()}}
 
 
-def make_analytical_object(
-    id, title="Title", type="type", are_relations_valid=True
-):
+def make_analytical_object(id, title="Title", type="type", are_relations_valid=True):
     obj = AnalyticalObject(
         id=id,
         type=type,
-        attributes=Attributes(
-            title=title, areRelationsValid=are_relations_valid
-        ),
+        attributes=Attributes(title=title, areRelationsValid=are_relations_valid),
     )
     return obj
 
 
-def test_relations_check_success(
-    manager, validated_data, mocker: MockerFixture
-):
+def test_relations_check_success(manager, validated_data, mocker: MockerFixture):
     """Relation check passes, workspace layout not reverted."""
     mocker.patch.object(
         manager._sdk.catalog_workspace,
         "get_declarative_workspace",
-        return_value=mocker.MagicMock(
-            json=mocker.MagicMock(return_value="layout_json")
-        ),
+        return_value=mocker.MagicMock(json=mocker.MagicMock(return_value="layout_json")),
     )
     mocker.patch.object(
         manager,
@@ -87,27 +77,17 @@ def test_relations_check_success(
             set(),  # new_invalid_relations
         ],
     )
-    mocker.patch.object(
-        manager._processor, "datasets_to_ldm", return_value="ldm"
-    )
-    mocker.patch.object(
-        manager._sdk.catalog_workspace_content, "put_declarative_ldm"
-    )
-    mocker.patch.object(
-        manager, "_new_ldm_does_not_invalidate_relations", return_value=True
-    )
-    mocker.patch.object(
-        manager._sdk.catalog_workspace, "put_declarative_workspace"
-    )
+    mocker.patch.object(manager._processor, "datasets_to_ldm", return_value="ldm")
+    mocker.patch.object(manager._sdk.catalog_workspace_content, "put_declarative_ldm")
+    mocker.patch.object(manager, "_new_ldm_does_not_invalidate_relations", return_value=True)
+    mocker.patch.object(manager._sdk.catalog_workspace, "put_declarative_workspace")
 
     manager._process_with_relations_check(validated_data)
     manager._sdk.catalog_workspace_content.put_declarative_ldm.assert_called_once()
     manager._sdk.catalog_workspace.put_declarative_workspace.assert_not_called()
 
 
-def test_relations_check_failure_and_revert(
-    manager, validated_data, capsys, mocker: MockerFixture
-):
+def test_relations_check_failure_and_revert(manager, validated_data, capsys, mocker: MockerFixture):
     """Relation check fails, workspace layout is reverted."""
     mocker.patch.object(manager._api, "get_workspace_layout")
     obj1 = make_analytical_object("a", "A", "type", False)
@@ -120,41 +100,27 @@ def test_relations_check_failure_and_revert(
             [obj1, obj2],  # new_invalid_relations (one more invalid)
         ],
     )
-    mocker.patch.object(
-        manager._processor, "datasets_to_ldm", return_value="ldm"
-    )
-    mocker.patch.object(
-        manager._sdk.catalog_workspace_content, "put_declarative_ldm"
-    )
-    mocker.patch.object(
-        manager, "_new_ldm_does_not_invalidate_relations", return_value=False
-    )
-    mocker.patch.object(
-        manager._sdk.catalog_workspace, "put_declarative_workspace"
-    )
+    mocker.patch.object(manager._processor, "datasets_to_ldm", return_value="ldm")
+    mocker.patch.object(manager._sdk.catalog_workspace_content, "put_declarative_ldm")
+    mocker.patch.object(manager, "_new_ldm_does_not_invalidate_relations", return_value=False)
+    mocker.patch.object(manager._sdk.catalog_workspace, "put_declarative_workspace")
 
     manager._process_with_relations_check(validated_data)
 
     manager._sdk.catalog_workspace.put_declarative_workspace.assert_called_once()
     out = capsys.readouterr().out
-    assert (
-        "Difference in invalid relations found in workspace workspace_1." in out
-    )
+    assert "Difference in invalid relations found in workspace workspace_1." in out
     assert "b (type) B" in out
     assert "Reverting the workspace layout to the original state." in out
 
 
-def test_relations_check_fewer_invalid_relations(
-    manager, validated_data, mocker: MockerFixture
-):
+def test_relations_check_fewer_invalid_relations(manager, validated_data, mocker: MockerFixture):
     """Fewer invalid relations after LDM update, no revert needed."""
     obj1 = make_analytical_object("a", "A", "type", False)
     mocker.patch.object(
         manager._sdk.catalog_workspace,
         "get_declarative_workspace",
-        return_value=mocker.MagicMock(
-            json=mocker.MagicMock(return_value="layout_json")
-        ),
+        return_value=mocker.MagicMock(json=mocker.MagicMock(return_value="layout_json")),
     )
     mocker.patch.object(
         manager,
@@ -167,18 +133,10 @@ def test_relations_check_fewer_invalid_relations(
             [obj1],  # new_invalid_relations (fewer)
         ],
     )
-    mocker.patch.object(
-        manager._processor, "datasets_to_ldm", return_value="ldm"
-    )
-    mocker.patch.object(
-        manager._sdk.catalog_workspace_content, "put_declarative_ldm"
-    )
-    mocker.patch.object(
-        manager, "_new_ldm_does_not_invalidate_relations", return_value=True
-    )
-    mocker.patch.object(
-        manager._sdk.catalog_workspace, "put_declarative_workspace"
-    )
+    mocker.patch.object(manager._processor, "datasets_to_ldm", return_value="ldm")
+    mocker.patch.object(manager._sdk.catalog_workspace_content, "put_declarative_ldm")
+    mocker.patch.object(manager, "_new_ldm_does_not_invalidate_relations", return_value=True)
+    mocker.patch.object(manager._sdk.catalog_workspace, "put_declarative_workspace")
 
     manager._process_with_relations_check(validated_data)
     manager._sdk.catalog_workspace.put_declarative_workspace.assert_not_called()
@@ -244,13 +202,9 @@ def test_ldm_payload_merges_with_existing_ldm(mock_custom_dataset):
         grain=[],
         references=[],
     )
-    existing = CatalogDeclarativeModel(
-        ldm=CatalogDeclarativeLdm(datasets=[inherited], date_instances=[])
-    )
+    existing = CatalogDeclarativeModel(ldm=CatalogDeclarativeLdm(datasets=[inherited], date_instances=[]))
     sdk_mock = MagicMock()
-    sdk_mock.catalog_workspace_content.get_declarative_ldm.return_value = (
-        existing
-    )
+    sdk_mock.catalog_workspace_content.get_declarative_ldm.return_value = existing
     bare = _bare_manager(sdk_mock)
 
     payload = bare._ldm_payload_for_workspace(
@@ -261,9 +215,7 @@ def test_ldm_payload_merges_with_existing_ldm(mock_custom_dataset):
         management_tag=None,
     )
 
-    sdk_mock.catalog_workspace_content.get_declarative_ldm.assert_called_once_with(
-        "workspace1"
-    )
+    sdk_mock.catalog_workspace_content.get_declarative_ldm.assert_called_once_with("workspace1")
     assert payload.ldm is not None
     assert {d.id for d in payload.ldm.datasets} == {"parent_only", "ds1"}
 
@@ -276,13 +228,9 @@ def test_ldm_payload_merge_forwards_cleanup_flags(mock_custom_dataset):
         references=[],
         tags=["bca_tooling_managed"],
     )
-    existing = CatalogDeclarativeModel(
-        ldm=CatalogDeclarativeLdm(datasets=[managed_old], date_instances=[])
-    )
+    existing = CatalogDeclarativeModel(ldm=CatalogDeclarativeLdm(datasets=[managed_old], date_instances=[]))
     sdk_mock = MagicMock()
-    sdk_mock.catalog_workspace_content.get_declarative_ldm.return_value = (
-        existing
-    )
+    sdk_mock.catalog_workspace_content.get_declarative_ldm.return_value = existing
     bare = _bare_manager(sdk_mock)
 
     payload = bare._ldm_payload_for_workspace(
@@ -300,13 +248,9 @@ def test_ldm_payload_merge_forwards_cleanup_flags(mock_custom_dataset):
 def test_process_without_relations_check_forwards_merge_kwargs(
     mock_custom_dataset,
 ):
-    existing = CatalogDeclarativeModel(
-        ldm=CatalogDeclarativeLdm(datasets=[], date_instances=[])
-    )
+    existing = CatalogDeclarativeModel(ldm=CatalogDeclarativeLdm(datasets=[], date_instances=[]))
     sdk_mock = MagicMock()
-    sdk_mock.catalog_workspace_content.get_declarative_ldm.return_value = (
-        existing
-    )
+    sdk_mock.catalog_workspace_content.get_declarative_ldm.return_value = existing
     bare = _bare_manager(sdk_mock)
 
     bare._process_without_relations_check(
@@ -316,9 +260,7 @@ def test_process_without_relations_check_forwards_merge_kwargs(
         management_tag=None,
     )
 
-    sdk_mock.catalog_workspace_content.get_declarative_ldm.assert_called_once_with(
-        "workspace1"
-    )
+    sdk_mock.catalog_workspace_content.get_declarative_ldm.assert_called_once_with("workspace1")
     put_call = sdk_mock.catalog_workspace_content.put_declarative_ldm
     put_call.assert_called_once()
     kwargs = put_call.call_args.kwargs
@@ -338,9 +280,7 @@ def test_process_with_relations_check_happy_path(mock_custom_dataset):
         management_tag=None,
     )
 
-    sdk_mock.catalog_workspace.get_declarative_workspace.assert_called_once_with(
-        "workspace1"
-    )
+    sdk_mock.catalog_workspace.get_declarative_workspace.assert_called_once_with("workspace1")
     put_call = sdk_mock.catalog_workspace_content.put_declarative_ldm
     put_call.assert_called_once()
     assert put_call.call_args.kwargs["workspace_id"] == "workspace1"

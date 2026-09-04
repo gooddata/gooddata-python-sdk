@@ -7,7 +7,6 @@ import tempfile
 from pathlib import Path
 
 import pytest
-
 from gooddata_pipelines.backup_and_restore.constants import DirNames
 from gooddata_pipelines.backup_and_restore.models.storage import (
     BackupRestoreConfig,
@@ -20,6 +19,7 @@ from gooddata_pipelines.backup_and_restore.restore_manager import (
     WorkspaceToRestore,
 )
 from gooddata_pipelines.backup_and_restore.storage.s3_storage import S3Storage
+
 from tests.conftest import TEST_DATA_DIR
 
 TEST_DATA_SUBDIR = f"{TEST_DATA_DIR}/restore"
@@ -95,9 +95,7 @@ def test_s3_storage_success(s3_storage, s3_bucket, mocker):
     with tempfile.TemporaryDirectory() as tempdir:
         target_path = Path(tempdir, MOCK_DL_TARGET)
         s3_storage.get_ws_declaration("ws_id/", target_path)
-        s3_bucket.download_file.assert_called_once_with(
-            zip_obj.key, target_path
-        )
+        s3_bucket.download_file.assert_called_once_with(zip_obj.key, target_path)
 
 
 def test_s3_storage_no_target_only_dir(s3_storage, s3_bucket, mocker):
@@ -116,9 +114,7 @@ def test_s3_storage_no_target(s3_storage, s3_bucket, mocker):
 
 def test_restore_empty_workspace(restore_manager, gd_api_instance, mocker):
     """RestoreManager: valid layout triggers LDM and AM PUTs."""
-    mocker.patch.object(
-        restore_manager.storage, "get_ws_declaration", return_value=None
-    )
+    mocker.patch.object(restore_manager.storage, "get_ws_declaration", return_value=None)
 
     def create_empty_ws(_, destination: Path):
         os.mkdir(destination / DirNames.LAYOUTS)
@@ -128,31 +124,19 @@ def test_restore_empty_workspace(restore_manager, gd_api_instance, mocker):
         os.mkdir(destination / DirNames.LAYOUTS / "filter_views")
         os.mkdir(destination / DirNames.LAYOUTS / "automations")
 
-    mocker.patch.object(
-        restore_manager, "_extract_zip_archive", side_effect=create_empty_ws
-    )
+    mocker.patch.object(restore_manager, "_extract_zip_archive", side_effect=create_empty_ws)
 
-    workspace_model = WorkspaceModel(
-        logical_data_model=mocker.Mock(), analytics_model=mocker.Mock()
-    )
-    mocker.patch.object(
-        restore_manager, "_load_workspace_layout", return_value=workspace_model
-    )
+    workspace_model = WorkspaceModel(logical_data_model=mocker.Mock(), analytics_model=mocker.Mock())
+    mocker.patch.object(restore_manager, "_load_workspace_layout", return_value=workspace_model)
     mocker.patch.object(
         restore_manager,
         "_load_user_data_filters",
         return_value={"userDataFilters": []},
     )
-    mocker.patch.object(
-        restore_manager, "_load_and_put_filter_views", return_value=None
-    )
-    mocker.patch.object(
-        restore_manager, "_load_and_post_automations", return_value=None
-    )
+    mocker.patch.object(restore_manager, "_load_and_put_filter_views", return_value=None)
+    mocker.patch.object(restore_manager, "_load_and_post_automations", return_value=None)
 
-    restore_manager.restore(
-        [WorkspaceToRestore(id="ws_id", path="some/ws/path")]
-    )
+    restore_manager.restore([WorkspaceToRestore(id="ws_id", path="some/ws/path")])
 
     gd_api_instance._sdk.catalog_workspace_content.put_declarative_ldm.assert_called_once_with(
         "ws_id", workspace_model.logical_data_model
@@ -162,40 +146,28 @@ def test_restore_empty_workspace(restore_manager, gd_api_instance, mocker):
     )
 
 
-def test_invalid_workspace_on_disk_is_skipped(
-    restore_manager, gd_api_instance, mocker
-):
+def test_invalid_workspace_on_disk_is_skipped(restore_manager, gd_api_instance, mocker):
     """RestoreManager: invalid layout (missing dirs) is skipped; no PUTs."""
-    mocker.patch.object(
-        restore_manager.storage, "get_ws_declaration", return_value=None
-    )
+    mocker.patch.object(restore_manager.storage, "get_ws_declaration", return_value=None)
 
     def create_invalid_ws(_, destination: Path):
         os.mkdir(destination / DirNames.LAYOUTS)
         os.mkdir(destination / DirNames.LAYOUTS / DirNames.LDM)
         # Missing AM and UDF
 
-    mocker.patch.object(
-        restore_manager, "_extract_zip_archive", side_effect=create_invalid_ws
-    )
+    mocker.patch.object(restore_manager, "_extract_zip_archive", side_effect=create_invalid_ws)
 
-    restore_manager.restore(
-        [WorkspaceToRestore(id="ws_id", path="some/ws/path")]
-    )
+    restore_manager.restore([WorkspaceToRestore(id="ws_id", path="some/ws/path")])
 
     gd_api_instance._sdk.catalog_workspace_content.put_declarative_ldm.assert_not_called()
     gd_api_instance._sdk.catalog_workspace_content.put_declarative_analytics_model.assert_not_called()
 
 
-def test_restore_multiple_workspaces_with_partial_failure(
-    restore_manager, gd_api_instance, mocker
-):
+def test_restore_multiple_workspaces_with_partial_failure(restore_manager, gd_api_instance, mocker):
     """RestoreManager: multiple targets; on partial failure only successful PUTs occur."""
     ws_catalog = gd_api_instance._sdk.catalog_workspace_content
 
-    mocker.patch.object(
-        restore_manager.storage, "get_ws_declaration", return_value=None
-    )
+    mocker.patch.object(restore_manager.storage, "get_ws_declaration", return_value=None)
 
     def create_valid_ws(_, destination: Path):
         os.mkdir(destination / DirNames.LAYOUTS)
@@ -203,13 +175,9 @@ def test_restore_multiple_workspaces_with_partial_failure(
         os.mkdir(destination / DirNames.LAYOUTS / DirNames.AM)
         os.mkdir(destination / DirNames.LAYOUTS / DirNames.UDF)
 
-    mocker.patch.object(
-        restore_manager, "_extract_zip_archive", side_effect=create_valid_ws
-    )
+    mocker.patch.object(restore_manager, "_extract_zip_archive", side_effect=create_valid_ws)
 
-    workspace_model = WorkspaceModel(
-        logical_data_model=mocker.Mock(), analytics_model=mocker.Mock()
-    )
+    workspace_model = WorkspaceModel(logical_data_model=mocker.Mock(), analytics_model=mocker.Mock())
     # First load succeeds, second raises
     mocker.patch.object(
         restore_manager,
@@ -228,18 +196,10 @@ def test_restore_multiple_workspaces_with_partial_failure(
     ]
     restore_manager.restore(targets)
 
-    ws_catalog.put_declarative_ldm.assert_any_call(
-        "ws_id_1", workspace_model.logical_data_model
-    )
-    ws_catalog.put_declarative_analytics_model.assert_any_call(
-        "ws_id_1", workspace_model.analytics_model
-    )
-    assert_not_called_with(
-        ws_catalog.put_declarative_ldm, "ws_id_2", mocker.ANY
-    )
-    assert_not_called_with(
-        ws_catalog.put_declarative_analytics_model, "ws_id_2", mocker.ANY
-    )
+    ws_catalog.put_declarative_ldm.assert_any_call("ws_id_1", workspace_model.logical_data_model)
+    ws_catalog.put_declarative_analytics_model.assert_any_call("ws_id_1", workspace_model.analytics_model)
+    assert_not_called_with(ws_catalog.put_declarative_ldm, "ws_id_2", mocker.ANY)
+    assert_not_called_with(ws_catalog.put_declarative_analytics_model, "ws_id_2", mocker.ANY)
 
 
 def test_load_user_data_filters_reads_yaml(mocker):
@@ -296,13 +256,8 @@ def test_load_user_data_filters_reads_yaml(mocker):
         ]
     }
 
-    sorted_result = sorted(
-        json.dumps(d, sort_keys=True) for d in result["userDataFilters"]
-    )
-    sorted_expected = sorted(
-        json.dumps(d, sort_keys=True)
-        for d in user_data_filters_expected["userDataFilters"]
-    )
+    sorted_result = sorted(json.dumps(d, sort_keys=True) for d in result["userDataFilters"])
+    sorted_expected = sorted(json.dumps(d, sort_keys=True) for d in user_data_filters_expected["userDataFilters"])
 
     assert sorted_result == sorted_expected
 

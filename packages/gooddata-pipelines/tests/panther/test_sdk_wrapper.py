@@ -5,9 +5,7 @@ from gooddata_sdk.catalog.workspace.entity_model.workspace import (
 )
 
 
-def test_get_panther_children_workspaces_empty_response(
-    workspace_provisioner, mocker
-) -> None:
+def test_get_panther_children_workspaces_empty_response(workspace_provisioner, mocker) -> None:
     parent_ids: set[str] = {"parent_id_1", "parent_id_2"}
 
     mocker.patch.object(
@@ -16,9 +14,7 @@ def test_get_panther_children_workspaces_empty_response(
         return_value=[],
     )
 
-    panther_children = workspace_provisioner._get_panther_children_workspaces(
-        parent_ids
-    )
+    panther_children = workspace_provisioner._get_panther_children_workspaces(parent_ids)
 
     assert panther_children == []
 
@@ -43,9 +39,7 @@ def test_get_panther_children_full_match(workspace_provisioner, mocker) -> None:
         ],
     )
 
-    panther_children = workspace_provisioner._get_panther_children_workspaces(
-        parent_ids
-    )
+    panther_children = workspace_provisioner._get_panther_children_workspaces(parent_ids)
 
     assert len(panther_children) == 2
     assert panther_children[0].workspace_id == "workspace_id1"
@@ -72,8 +66,6 @@ def test_get_panther_children_no_match(workspace_provisioner, mocker) -> None:
         ],
     )
 
-    panther_children = workspace_provisioner._get_panther_children_workspaces(
-        parent_ids
-    )
+    panther_children = workspace_provisioner._get_panther_children_workspaces(parent_ids)
 
     assert len(panther_children) == 0

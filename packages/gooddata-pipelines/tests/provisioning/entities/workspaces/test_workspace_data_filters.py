@@ -4,9 +4,6 @@ from typing import Any
 
 import orjson
 import pytest
-from pydantic import ValidationError
-from requests import Response
-
 from gooddata_pipelines.provisioning.entities.workspaces.workspace_data_filters import (
     WDFSetting,
     WorkspaceDataFilterManager,
@@ -18,6 +15,9 @@ from gooddata_pipelines.provisioning.utils.context_objects import (
     WorkspaceContext,
 )
 from gooddata_pipelines.provisioning.utils.exceptions import WorkspaceException
+from pydantic import ValidationError
+from requests import Response
+
 from tests.data.mock_responses import (
     WDF_ACTUAL_WDF_SETTINGS,
     WDF_VALID_PAYLOAD,
@@ -39,27 +39,17 @@ def test_create_wdf_setting_dict(wdf_manager) -> None:
         "data": {
             "attributes": {"filterValues": wdf_values},
             "id": wdf_setting_id,
-            "relationships": {
-                "workspaceDataFilter": {
-                    "data": {"id": wdf_id, "type": "workspaceDataFilter"}
-                }
-            },
+            "relationships": {"workspaceDataFilter": {"data": {"id": wdf_id, "type": "workspaceDataFilter"}}},
             "type": "workspaceDataFilterSetting",
         }
     }
 
-    result_setting: dict[str, Any] = wdf_manager._create_wdf_setting_dict(
-        wdf_setting_id, wdf_id, wdf_values
-    )
+    result_setting: dict[str, Any] = wdf_manager._create_wdf_setting_dict(wdf_setting_id, wdf_id, wdf_values)
 
-    assert result_setting == expected_setting, (
-        f"Expected {expected_setting}, but got {result_setting}"
-    )
+    assert result_setting == expected_setting, f"Expected {expected_setting}, but got {result_setting}"
 
 
-def test_get_wdf_settings_for_workspace_valid_payload(
-    wdf_manager, mock_gooddata_api, mocker
-) -> None:
+def test_get_wdf_settings_for_workspace_valid_payload(wdf_manager, mock_gooddata_api, mocker) -> None:
     """Test processing of a valid response"""
     workspace_id: str = "expected_workspace_id"
     mock_response: Response = Response()
@@ -77,14 +67,10 @@ def test_get_wdf_settings_for_workspace_valid_payload(
 
     result = wdf_manager._get_wdf_settings_for_workspace(workspace_id)
 
-    assert isinstance(result[0], WDFSetting), (
-        f"Expected WDFSetting instance, but got {type(result)}"
-    )
+    assert isinstance(result[0], WDFSetting), f"Expected WDFSetting instance, but got {type(result)}"
 
 
-def test_get_wdf_settings_for_workspace_invalid_payload(
-    wdf_manager, mock_gooddata_api, mocker
-) -> None:
+def test_get_wdf_settings_for_workspace_invalid_payload(wdf_manager, mock_gooddata_api, mocker) -> None:
     """Test with an invalid payload -> will raise ValidationError / ValueError"""
     workspace_id: str = "expected_workspace_id"
     mock_response: Response = Response()
@@ -120,10 +106,8 @@ def test_get_actual_wdf_setting_id_and_values(wdf_manager) -> None:
     actual_wdf_settings: list[WDFSetting] = [WDFSetting(**data)]  # type: ignore[arg-type]
     wdf_id: str = "expected_wdf_id"
 
-    actual_wdf_setting_id, actual_wdf_values = (
-        wdf_manager._get_actual_wdf_setting_id_and_values(
-            actual_wdf_settings, wdf_id
-        )
+    actual_wdf_setting_id, actual_wdf_values = wdf_manager._get_actual_wdf_setting_id_and_values(
+        actual_wdf_settings, wdf_id
     )
 
     assert actual_wdf_setting_id == "expected_wdf_setting_id", (
@@ -141,10 +125,8 @@ def test_get_actual_wdf_setting_id_and_values_no_actuals(wdf_manager) -> None:
     wdf_id: str = "expected_wdf_id"
 
     with pytest.raises(WorkspaceException):
-        actual_wdf_setting_id, actual_wdf_values = (
-            wdf_manager._get_actual_wdf_setting_id_and_values(
-                actual_wdf_settings, wdf_id
-            )
+        actual_wdf_setting_id, actual_wdf_values = wdf_manager._get_actual_wdf_setting_id_and_values(
+            actual_wdf_settings, wdf_id
         )
 
 
@@ -155,32 +137,24 @@ def test_get_actual_wdf_setting_id_and_values_no_match(wdf_manager) -> None:
     wdf_id: str = "non_existent_wdf_id"
 
     with pytest.raises(WorkspaceException):
-        actual_wdf_setting_id, actual_wdf_values = (
-            wdf_manager._get_actual_wdf_setting_id_and_values(
-                actual_wdf_settings, wdf_id
-            )
+        actual_wdf_setting_id, actual_wdf_values = wdf_manager._get_actual_wdf_setting_id_and_values(
+            actual_wdf_settings, wdf_id
         )
 
 
 def test_compare_wdf_settings(wdf_manager, mocker) -> None:
     """Test the comparison of WDF settings."""
-    workspace_context: WorkspaceContext = WorkspaceContext(
-        workspace_id="workspace_id", workspace_name="workspace_name"
-    )
+    workspace_context: WorkspaceContext = WorkspaceContext(workspace_id="workspace_id", workspace_name="workspace_name")
     source_wdf_config: dict[str, list[str]] = {
         "expected_wdf_id": ["expected", "wdf", "values"],
         "expected_wdf_id_2": ["unexpected", "wdf", "values"],
         "expected_wdf_id_3": ["expected", "wdf", "values"],
     }
-    actual_wdf_settings: list[WDFSetting] = [
-        WDFSetting(**setting) for setting in WDF_ACTUAL_WDF_SETTINGS
-    ]
+    actual_wdf_settings: list[WDFSetting] = [WDFSetting(**setting) for setting in WDF_ACTUAL_WDF_SETTINGS]
 
     mock_put = mocker.patch.object(wdf_manager, "_put_wdf_setting")
     mock_post = mocker.patch.object(wdf_manager, "_post_wdf_setting")
-    mock_delete = mocker.patch.object(
-        wdf_manager, "_delete_redundant_wdf_setting"
-    )
+    mock_delete = mocker.patch.object(wdf_manager, "_delete_redundant_wdf_setting")
 
     wdf_manager._compare_wdf_settings(
         workspace_context,

@@ -21,9 +21,5 @@ class BackupStorage(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_ws_declaration(
-        self, target_path: str, local_target_path: str
-    ) -> None:
-        raise NotImplementedError(
-            "This method should be implemented by the subclass."
-        )
+    def get_ws_declaration(self, target_path: str, local_target_path: str) -> None:
+        raise NotImplementedError("This method should be implemented by the subclass.")

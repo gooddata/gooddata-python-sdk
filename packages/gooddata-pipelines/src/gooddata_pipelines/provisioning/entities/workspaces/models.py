@@ -12,9 +12,7 @@ class WorkspaceDataMaps:
     """Dataclass to hold various mappings related to workspace data."""
 
     child_to_parent_id_map: dict[str, str] = attrs.field(factory=dict)
-    workspace_id_to_wdf_map: dict[str, dict[str, list[str]]] = attrs.field(
-        factory=dict
-    )
+    workspace_id_to_wdf_map: dict[str, dict[str, list[str]]] = attrs.field(factory=dict)
     parent_ids: set[str] = attrs.field(factory=set)
     source_ids: set[str] = attrs.field(factory=set)
     workspace_id_to_name_map: dict[str, str] = attrs.field(factory=dict)

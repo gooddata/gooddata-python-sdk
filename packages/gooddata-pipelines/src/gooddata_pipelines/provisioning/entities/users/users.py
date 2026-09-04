@@ -55,9 +55,7 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
 
         return profile.user_id
 
-    def _try_get_user(
-        self, user: UserModel, model: type[UserModel]
-    ) -> UserModel | None:
+    def _try_get_user(self, user: UserModel, model: type[UserModel]) -> UserModel | None:
         try:
             if user.user_id in self.upstream_user_cache:
                 return self.upstream_user_cache[user.user_id]
@@ -72,12 +70,10 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
         for group in groups:
             try:
                 self._api._sdk.catalog_user.get_user_group(group)
-            except NotFoundException:
+            except NotFoundException:  # noqa: PERF203 - per-item recovery, the try cannot leave the loop
                 #  Create the user gtoup if it does not exist
                 self._api._sdk.catalog_user.create_or_update_user_group(
-                    CatalogUserGroup.init(
-                        user_group_id=group, user_group_name=group
-                    ),
+                    CatalogUserGroup.init(user_group_id=group, user_group_name=group),
                 )
                 self.logger.info(f"Created user group: {group}")
 
@@ -106,9 +102,7 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
                     return False
         return True
 
-    def _create_or_update_user(
-        self, user: UserModel, model: type[UserModel]
-    ) -> None:
+    def _create_or_update_user(self, user: UserModel, model: type[UserModel]) -> None:
         """Creates or updates user in the project.
 
         Determines if the user needs to be updated or created by getting the
@@ -139,8 +133,7 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
         """Deletes user from the project."""
         if user_id in self.protected_users:
             self.logger.warning(
-                f"Skipping deletion of protected user: {user_id}."
-                + " Protected users should not be deleted.",
+                f"Skipping deletion of protected user: {user_id}." + " Protected users should not be deleted.",
             )
             return
 
@@ -168,10 +161,8 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
             # Attempt to process each user. On failure, log the error and continue
             try:
                 self._manage_user(user)
-            except Exception as e:
-                self.logger.error(
-                    f"Failed to manage user {user.user_id}. Error: {e} Context: {user.__dict__}"
-                )
+            except Exception as e:  # noqa: PERF203 - one user may fail without stopping the rest
+                self.logger.error(f"Failed to manage user {user.user_id}. Error: {e} Context: {user.__dict__}")
 
     def _provision_full_load(self) -> None:
         """Runs the full load provisioning logic."""
@@ -180,19 +171,13 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
         self.protected_users.append(self._get_current_user_id())
 
         # Get all upstream users
-        catalog_upstream_users: list[CatalogUser] = (
-            self._api._sdk.catalog_user.list_users()
-        )
+        catalog_upstream_users: list[CatalogUser] = self._api._sdk.catalog_user.list_users()
 
         # Convert catalog users to user models
-        upstream_users: list[UserFullLoad] = [
-            UserFullLoad.from_sdk_obj(user) for user in catalog_upstream_users
-        ]
+        upstream_users: list[UserFullLoad] = [UserFullLoad.from_sdk_obj(user) for user in catalog_upstream_users]
 
         # Cache the upstream users in a dict. It will be reused in `_try_get_user`
-        self.upstream_user_cache = {
-            user.user_id: user for user in upstream_users
-        }
+        self.upstream_user_cache = {user.user_id: user for user in upstream_users}
         # Get source IDs
         source_ids: set[str] = {user.user_id for user in self.source_group_full}
 
@@ -206,10 +191,7 @@ class UserProvisioner(Provisioning[UserFullLoad, UserIncrementalLoad]):
         for user in self.source_group_full:
             user_id = user.user_id
 
-            if (
-                user_id in id_groups.ids_to_create
-                or user_id in id_groups.ids_in_both_systems
-            ):
+            if user_id in id_groups.ids_to_create or user_id in id_groups.ids_in_both_systems:
                 self._create_or_update_user(user, UserFullLoad)
 
         # Delete users marked for deletion

@@ -5,15 +5,15 @@ from gooddata_pipelines.ldm_extension.input_processor import (
 from gooddata_pipelines.ldm_extension.models.custom_data_object import (
     ColumnDataType,
     CustomDataset,
+    CustomDatasetDefinition,
     CustomFieldDefinition,
     CustomFieldType,
+    ParentDatasetReference,
 )
 
 
 def test_attribute_from_field(mock_custom_field_attribute):
-    attr = LdmExtensionDataProcessor._attribute_from_field(
-        "dataset_name", mock_custom_field_attribute
-    )
+    attr = LdmExtensionDataProcessor._attribute_from_field("dataset_name", mock_custom_field_attribute)
     assert attr.id == "attr1"
     assert attr.title == "Attribute 1"
     assert attr.source_column == "col_attr1"
@@ -34,17 +34,13 @@ def test_attribute_from_field_custom_tags_and_description():
         tags=["t1", "t2"],
         description="Attr desc",
     )
-    attr = LdmExtensionDataProcessor._attribute_from_field(
-        "dataset_name", field
-    )
+    attr = LdmExtensionDataProcessor._attribute_from_field("dataset_name", field)
     assert attr.tags == ["t1", "t2"]
     assert attr.description == "Attr desc"
 
 
 def test_fact_from_field(mock_custom_field_fact):
-    fact = LdmExtensionDataProcessor._fact_from_field(
-        "dataset_name", mock_custom_field_fact
-    )
+    fact = LdmExtensionDataProcessor._fact_from_field("dataset_name", mock_custom_field_fact)
     assert fact.id == "fact1"
     assert fact.title == "Fact 1"
     assert fact.source_column == "col_fact1"
@@ -66,17 +62,13 @@ def test_date_from_field_second_granularities_disabled(
 ):
     processor = LdmExtensionDataProcessor()
     date_ds = processor._date_from_field("dataset_name", mock_custom_field_date)
-    assert not set(date_ds.granularities) & set(
-        processor._SECOND_DATE_GRANULARITIES
-    )
+    assert not set(date_ds.granularities) & set(processor._SECOND_DATE_GRANULARITIES)
 
 
 def test_date_from_field_second_granularities_enabled(mock_custom_field_date):
     processor = LdmExtensionDataProcessor(enable_second_granularities=True)
     date_ds = processor._date_from_field("dataset_name", mock_custom_field_date)
-    assert set(date_ds.granularities) == set(
-        processor.DATE_GRANULARITIES + processor._SECOND_DATE_GRANULARITIES
-    )
+    assert set(date_ds.granularities) == set(processor.DATE_GRANULARITIES + processor._SECOND_DATE_GRANULARITIES)
 
 
 def test_date_ref_from_field(mock_custom_field_date):
@@ -89,9 +81,7 @@ def test_date_ref_from_field(mock_custom_field_date):
 
 def test_get_sources_table_only(mock_dataset_definition):
     mock_dataset_definition.dataset_source_sql = None
-    dataset = CustomDataset(
-        definition=mock_dataset_definition, custom_fields=[]
-    )
+    dataset = CustomDataset(definition=mock_dataset_definition, custom_fields=[])
     table_id, sql = LdmExtensionDataProcessor._get_sources(dataset)
     assert table_id is not None
     assert table_id.id == "table1"
@@ -101,9 +91,7 @@ def test_get_sources_table_only(mock_dataset_definition):
 def test_get_sources_sql_only(mock_dataset_definition):
     mock_dataset_definition.dataset_source_table = None
     mock_dataset_definition.dataset_source_sql = "SELECT * FROM foo"
-    dataset = CustomDataset(
-        definition=mock_dataset_definition, custom_fields=[]
-    )
+    dataset = CustomDataset(definition=mock_dataset_definition, custom_fields=[])
     table_id, sql = LdmExtensionDataProcessor._get_sources(dataset)
     assert table_id is None
     assert sql is not None
@@ -151,11 +139,6 @@ def test_datasets_to_ldm(mock_custom_dataset):
 
 def test_datasets_to_ldm_parent_dataset_references_composite():
     """Multi-column references via `parent_dataset_references` produce N sources."""
-    from gooddata_pipelines.ldm_extension.models.custom_data_object import (
-        CustomDatasetDefinition,
-        ParentDatasetReference,
-    )
-
     definition = CustomDatasetDefinition(
         workspace_id="workspace1",
         dataset_id="ds_composite",

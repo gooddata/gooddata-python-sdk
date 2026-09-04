@@ -90,7 +90,12 @@ class CatalogAttribute(AttrCatalogEntity):
 
     def find_label(self, id_obj: IdObjType) -> Union[CatalogLabel, None]:
         obj_key = id_obj_to_key(id_obj)
-        return next(filter(lambda x: id_obj_to_key(x.obj_id) == obj_key, self.labels), None)
+        # Bound to a local on purpose. Returning the next() directly lets the declared
+        # return type flow back into filter's element type, so ty infers the lambda
+        # parameter as CatalogLabel | None and rejects the x.obj_id access.
+        # https://github.com/astral-sh/ty/issues/4016 - inline this again once it is fixed.
+        label = next(filter(lambda x: id_obj_to_key(x.obj_id) == obj_key, self.labels), None)
+        return label
 
     # TODO add missing properties
 

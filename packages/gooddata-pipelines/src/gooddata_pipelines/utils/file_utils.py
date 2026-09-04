@@ -35,7 +35,7 @@ class JsonUtils:
         """Loads a JSON file."""
         self.path_utils.check_path_exists(path)
 
-        with open(path, "r") as f:
+        with open(path) as f:
             return json.load(f)
 
     def dump(self, path: Path, data: Any) -> None:
@@ -54,7 +54,7 @@ class YamlUtils:
         """Safe loads a YAML file."""
         self.path_utils.check_path_exists(path)
 
-        with open(path, "r") as f:
+        with open(path) as f:
             return yaml.safe_load(f)
 
     def dump(self, path: str, data: Any) -> None:

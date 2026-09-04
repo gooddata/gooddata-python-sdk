@@ -32,10 +32,10 @@ dependencies = [
     "opentelemetry-api>=1.24.0,<=2.0.0",
     "opentelemetry-sdk>=1.24.0,<=2.0.0",
     "orjson>=3.8.5,<4.0.0",
-    "prometheus-client~=0.20.0",
+    "prometheus-client~=0.26.0",
     "pyarrow>=16.1.0",
     "readerwriterlock~=1.0.9",
-    "structlog>=24.0.0,<25.0.0",
+    "structlog>=24.0.0,<=26.1.0",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -60,8 +60,8 @@ gooddata-flight-server = "gooddata_flight_server.cli:server_cli"
 
 [dependency-groups]
 test = [
-    "pytest~=8.3.4",
-    "pytest-cov~=6.0.0",
+    "pytest~=9.1.1",
+    "pytest-cov~=7.1.0",
     "pytest-json-report==1.5.0",
 ]
 

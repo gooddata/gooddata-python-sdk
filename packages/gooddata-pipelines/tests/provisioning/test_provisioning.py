@@ -3,8 +3,6 @@ import os
 from pathlib import Path
 
 import pytest
-from pydantic import BaseModel, ValidationError
-
 from gooddata_pipelines import (
     EntityType,
     PermissionFullLoad,
@@ -20,6 +18,8 @@ from gooddata_pipelines.provisioning.entities.workspaces.models import (
     WorkspaceIncrementalLoad,
 )
 from gooddata_pipelines.provisioning.provisioning import Provisioning
+from pydantic import BaseModel, ValidationError
+
 from tests.conftest import TEST_DATA_DIR
 
 WORKSPACE_DATA_TO_FAIL = [
@@ -96,9 +96,7 @@ TEST_CASES = [
     "provisioner_name, data_to_fail",
     TEST_CASES,
 )
-def test_fail_type_validation(
-    request: pytest.FixtureRequest, provisioner_name: str, data_to_fail: list
-) -> None:
+def test_fail_type_validation(request: pytest.FixtureRequest, provisioner_name: str, data_to_fail: list) -> None:
     """Data type validation of source data should fail when input data is not
     all of the same type."""
     provisioner = request.getfixturevalue(provisioner_name)

@@ -17,14 +17,10 @@ from gooddata_pipelines.provisioning.entities.users.models.permissions import (
 from gooddata_pipelines.provisioning.provisioning import Provisioning
 
 # Type variable for permission models (PermissionIncrementalLoad or PermissionFullLoad)
-PermissionModel = TypeVar(
-    "PermissionModel", PermissionIncrementalLoad, PermissionFullLoad
-)
+PermissionModel = TypeVar("PermissionModel", PermissionIncrementalLoad, PermissionFullLoad)
 
 
-class PermissionProvisioner(
-    Provisioning[PermissionFullLoad, PermissionIncrementalLoad]
-):
+class PermissionProvisioner(Provisioning[PermissionFullLoad, PermissionIncrementalLoad]):
     """Provisioning class for user permissions in GoodData workspaces.
 
     This class handles the provisioning of user permissions based on the provided
@@ -36,28 +32,20 @@ class PermissionProvisioner(
     source_group_full: list[PermissionFullLoad]
 
     FULL_LOAD_TYPE: type[PermissionFullLoad] = PermissionFullLoad
-    INCREMENTAL_LOAD_TYPE: type[PermissionIncrementalLoad] = (
-        PermissionIncrementalLoad
-    )
+    INCREMENTAL_LOAD_TYPE: type[PermissionIncrementalLoad] = PermissionIncrementalLoad
 
     def _get_ws_declaration(self, ws_id: str) -> PermissionDeclaration:
         users: TargetsPermissionDict = {}
         user_groups: TargetsPermissionDict = {}
 
-        upstream_declaration = (
-            self._api._sdk.catalog_permission.get_declarative_permissions(ws_id)
-        )
+        upstream_declaration = self._api._sdk.catalog_permission.get_declarative_permissions(ws_id)
 
         for permission in upstream_declaration.permissions:
             permission_type, id = (
                 permission.assignee.type,
                 permission.assignee.id,
             )
-            target_dict = (
-                users
-                if permission_type == EntityType.user.value
-                else user_groups
-            )
+            target_dict = users if permission_type == EntityType.user.value else user_groups
 
             id_permissions = target_dict.get(id)
             if not id_permissions:
@@ -67,18 +55,12 @@ class PermissionProvisioner(
 
         return PermissionDeclaration(users, user_groups)
 
-    def _get_upstream_declaration(
-        self, ws_id: str
-    ) -> PermissionDeclaration | None:
+    def _get_upstream_declaration(self, ws_id: str) -> PermissionDeclaration | None:
         """Retrieves upstream permission declaration for a workspace."""
-        declaration = (
-            self._api._sdk.catalog_permission.get_declarative_permissions(ws_id)
-        )
+        declaration = self._api._sdk.catalog_permission.get_declarative_permissions(ws_id)
         return PermissionDeclaration.from_sdk_api(declaration)
 
-    def _get_upstream_declarations(
-        self, input_ws_ids: list[str]
-    ) -> WSPermissionsDeclarations:
+    def _get_upstream_declarations(self, input_ws_ids: list[str]) -> WSPermissionsDeclarations:
         """Retrieves upstream permission declarations for a list of workspaces."""
         ws_dict: WSPermissionsDeclarations = {}
         for ws_id in input_ws_ids:
@@ -111,9 +93,7 @@ class PermissionProvisioner(
         """Checks if user group with provided ID exists."""
         self._api._sdk.catalog_user.get_user_group(ug_id)
 
-    def _validate_permission(
-        self, permission: PermissionFullLoad | PermissionIncrementalLoad
-    ) -> bool:
+    def _validate_permission(self, permission: PermissionFullLoad | PermissionIncrementalLoad) -> bool:
         """Validates that all entities referenced in the permission exist.
 
         Raises:
@@ -126,17 +106,13 @@ class PermissionProvisioner(
             else:
                 self._api._sdk.catalog_user.get_user_group(permission.entity_id)
 
-            self._api._sdk.catalog_workspace.get_workspace(
-                permission.workspace_id
-            )
+            self._api._sdk.catalog_workspace.get_workspace(permission.workspace_id)
 
         except NotFoundException:
             all_entities_exist = False
 
         except Exception as e:
-            raise RuntimeError(
-                f"Failed to validate permission: {e.__class__.__name__}: {e}"
-            )
+            raise RuntimeError(f"Failed to validate permission: {e.__class__.__name__}: {e}")
 
         return all_entities_exist
 
@@ -163,9 +139,7 @@ class PermissionProvisioner(
         Modifies existing upstream workspace permission declarations for each
         input workspace and skips rest of the workspaces.
         """
-        valid_permissions = self._filter_invalid_permissions(
-            self.source_group_incremental
-        )
+        valid_permissions = self._filter_invalid_permissions(self.source_group_incremental)
 
         input_declarations = self._construct_declarations(valid_permissions)
 
@@ -180,9 +154,7 @@ class PermissionProvisioner(
 
             ws_permissions = upstream_declarations[ws_id].to_sdk_api()
 
-            self._api._sdk.catalog_permission.put_declarative_permissions(
-                ws_id, ws_permissions
-            )
+            self._api._sdk.catalog_permission.put_declarative_permissions(ws_id, ws_permissions)
             self.logger.info(f"Updated permissions for workspace {ws_id}")
 
     def _provision_full_load(self) -> None:
@@ -192,16 +164,12 @@ class PermissionProvisioner(
         skips non-existent workspace ids. Overwrites any existing configuration
         of the workspace permissions.
         """
-        valid_permissions = self._filter_invalid_permissions(
-            self.source_group_full
-        )
+        valid_permissions = self._filter_invalid_permissions(self.source_group_full)
 
         input_declarations = self._construct_declarations(valid_permissions)
 
         for ws_id, declaration in input_declarations.items():
             ws_permissions = declaration.to_sdk_api()
 
-            self._api._sdk.catalog_permission.put_declarative_permissions(
-                ws_id, ws_permissions
-            )
+            self._api._sdk.catalog_permission.put_declarative_permissions(ws_id, ws_permissions)
             self.logger.info(f"Updated permissions for workspace {ws_id}")
