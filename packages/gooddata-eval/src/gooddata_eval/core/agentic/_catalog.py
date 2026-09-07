@@ -28,6 +28,8 @@ class CatalogMetricAlert:
     """List of recipient email addresses."""
     filters: list | str | None = None
     """Attribute filters applied to the alert condition."""
+    attributes: list | None = None
+    """Expected group-by attributes; ``None`` means the fixture states no expectation."""
 
     @classmethod
     def from_dict(cls, d: dict) -> CatalogMetricAlert:
@@ -46,4 +48,5 @@ class CatalogMetricAlert:
             metric_id=d.get("metric_id"),
             recipients=recipients,
             filters=d.get("filters"),
+            attributes=d.get("attributes"),
         )
