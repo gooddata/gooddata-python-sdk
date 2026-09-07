@@ -311,7 +311,9 @@ function openDrawer(r) {
   d.querySelectorAll('.tl .row').forEach((el) => {
     el.onclick = () => {
       const box = $('#tl-detail');
-      box.innerHTML = el.dataset.text ? `<pre>${esc(el.dataset.text)}</pre>` : '<div class="sub">No expanded record for this step in the JSON report.</div>';
+      box.innerHTML = el.dataset.text
+        ? `<pre>${esc(el.dataset.text)}</pre>`
+        : `<div class="sub">${esc(el.dataset.note || 'No expanded record for this step.')}</div>`;
     };
   });
 }
@@ -395,17 +397,32 @@ function timelineHtml(it) {
   // into `detail.tool_calls` for a tool call. The breakdown itself only carries the name,
   // so this lookup is what turns "create_visualization took 18s" into what it was asked
   // for and what it returned.
+  const calls = (it.detail || {}).tool_calls || [];
   const byIndex = {};
-  for (const c of (it.detail || {}).tool_calls || []) byIndex[c.index] = c;
+  for (const c of calls) byIndex[c.index] = c;
+  // A step with nothing to show has three quite different causes, and "no record" alone
+  // sends you looking for a bug in the report instead of at the run that produced it.
+  const noToolCalls = calls.length === 0;
   const rows = tl.map((s) => {
-    let text = '';
-    if (s.kind === 'reasoning' && s.index != null) {
-      text = (it.reasoning || [])[s.index] || '';
-    } else if (s.kind === 'tool' && byIndex[s.index]) {
+    let text = '', note = '';
+    if (s.kind === 'reasoning') {
+      text = (s.index != null && (it.reasoning || [])[s.index]) || '';
+      if (!text) {
+        note = s.index == null
+          ? 'Time before the first reasoning step — nothing had been emitted yet.'
+          : 'No reasoning paragraph was recorded for this step.';
+      }
+    } else if (byIndex[s.index]) {
       const c = byIndex[s.index];
       text = `${c.name}\n\nARGUMENTS\n${fmt(c.arguments)}\n\nRESULT\n${c.result == null ? '(none)' : c.result}`;
+    } else {
+      note = noToolCalls
+        ? 'This run predates tool-call capture: it recorded the timeline but not what each ' +
+          'call was given. Re-run the eval to get arguments and results — re-rendering an ' +
+          'existing JSON report cannot add them.'
+        : 'This call arrived without an index, so nothing can be joined to it.';
     }
-    return `<div class="row ${esc(s.kind)}" data-text="${esc(text)}">
+    return `<div class="row ${esc(s.kind)}" data-text="${esc(text)}" data-note="${esc(note)}">
       <div class="nm" title="${esc(s.name)}">${esc(s.name)}</div>
       <div class="track"><i style="width:${((s.duration_s || 0) / max * 100).toFixed(1)}%"></i></div>
       <div class="d">${num(s.duration_s)}s</div></div>`;
