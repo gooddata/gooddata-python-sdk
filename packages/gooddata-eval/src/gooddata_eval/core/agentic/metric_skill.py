@@ -12,7 +12,7 @@ from gooddata_sdk import GoodDataSdk
 
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import AgenticEvalOutcome, ReasoningStepEvent, ToolCallEvent, build_latency_breakdown
+from gooddata_eval.core.models import AgenticEvalOutcome, ReasoningStepEvent, ToolCallEvent, timeline_detail
 
 try:
     from openai import OpenAI as _OpenAI
@@ -527,7 +527,7 @@ def evaluate_agentic_metric_skill(
             "maql_correct": best.maql_correct,
             "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
             "actual_maql": best.actual_maql,
-            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+            **timeline_detail(best.tool_call_events, best.reasoning_step_events),
         }
         raise exc
     best = summary.best
@@ -541,6 +541,6 @@ def evaluate_agentic_metric_skill(
             "maql_correct": best.maql_correct,
             "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
             "actual_maql": best.actual_maql,
-            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+            **timeline_detail(best.tool_call_events, best.reasoning_step_events),
         },
     )

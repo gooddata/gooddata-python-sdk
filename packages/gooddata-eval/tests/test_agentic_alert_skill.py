@@ -679,6 +679,7 @@ def test_evaluate_agentic_alert_skill_returns_reasoning_steps_on_pass():
         "recipients_correct": True,
         "actual_alert_arguments": {"operator": "GREATER_THAN", "threshold": 500},
         "latency_breakdown": [],
+        "tool_calls": [],
     }
 
 
@@ -720,4 +721,5 @@ def test_evaluate_agentic_alert_skill_attaches_reasoning_steps_to_exception_on_f
         "recipients_correct": False,
         "actual_alert_arguments": {},
         "latency_breakdown": [],
+        "tool_calls": [],
     }

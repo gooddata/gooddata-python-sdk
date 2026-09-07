@@ -28,7 +28,10 @@ _REDACTED_ITEM_FIELDS = frozenset({"conversation_id", "response_id", "reasoning"
 # Same, one level down inside `detail`. The transcript goes because the simulated user is
 # primed with the expected output -- showing the exchange discloses how we score, not just
 # what scored. `turns` (a count) stays: "this needed a clarification round" is a fair fact.
-_REDACTED_DETAIL_FIELDS = frozenset({"transcript"})
+# tool_calls goes because a tool result carries semantic-layer internals and real query
+# rows; `latency_breakdown` stays, so the redacted timeline still shows which tool ran and
+# for how long, just not what it was handed or what came back.
+_REDACTED_DETAIL_FIELDS = frozenset({"transcript", "tool_calls"})
 
 
 def _redact_item(item: dict) -> dict:

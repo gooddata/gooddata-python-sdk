@@ -14,7 +14,7 @@ from gooddata_sdk import GoodDataSdk
 from gooddata_eval.core.agentic._catalog import CatalogMetricAlert
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import AgenticEvalOutcome, ReasoningStepEvent, ToolCallEvent, build_latency_breakdown
+from gooddata_eval.core.models import AgenticEvalOutcome, ReasoningStepEvent, ToolCallEvent, timeline_detail
 
 try:
     from openai import OpenAI as _OpenAI
@@ -741,7 +741,7 @@ def evaluate_agentic_alert_skill(
             "metric_correct": ev.metric_correct,
             "recipients_correct": ev.recipients_correct,
             "actual_alert_arguments": best.actual_alert_arguments,
-            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+            **timeline_detail(best.tool_call_events, best.reasoning_step_events),
         }
         raise exc
     best = summary.best
@@ -759,6 +759,6 @@ def evaluate_agentic_alert_skill(
             "metric_correct": ev.metric_correct,
             "recipients_correct": ev.recipients_correct,
             "actual_alert_arguments": best.actual_alert_arguments,
-            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+            **timeline_detail(best.tool_call_events, best.reasoning_step_events),
         },
     )

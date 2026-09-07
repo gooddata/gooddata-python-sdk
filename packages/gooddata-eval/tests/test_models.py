@@ -3,7 +3,10 @@ from gooddata_eval.core.models import (
     ChatResult,
     CreatedVisualization,
     DatasetItem,
+    ReasoningStepEvent,
     ToolCallEvent,
+    build_tool_calls,
+    timeline_detail,
 )
 
 
@@ -88,3 +91,50 @@ def test_tool_call_event_parsed_result_parses_json():
         }
     )
     assert ev.parsed_result() == {"data": {"maql": "SELECT {metric/a}", "format": "#,##0"}}
+
+
+def _tc(name: str, args: str, result: str | None, index: int | None, call_ts=0.0, result_ts=1.0) -> ToolCallEvent:
+    return ToolCallEvent.model_validate(
+        {
+            "functionName": name,
+            "functionArguments": args,
+            "result": result,
+            "call_ts": call_ts,
+            "result_ts": result_ts,
+            "index": index,
+        }
+    )
+
+
+def test_build_tool_calls_keeps_args_and_result_keyed_by_index():
+    calls = build_tool_calls([_tc("search_metrics", '{"q": "revenue"}', '{"hits": 3}', 0)])
+
+    assert calls == [{"index": 0, "name": "search_metrics", "arguments": {"q": "revenue"}, "result": '{"hits": 3}'}]
+
+
+def test_build_tool_calls_skips_events_without_an_index():
+    # Nothing can join to them, and guessing a position would attribute the wrong args.
+    assert build_tool_calls([_tc("f", "{}", "ok", None)]) == []
+
+
+def test_build_tool_calls_clips_a_huge_result():
+    call = build_tool_calls([_tc("run_query", "{}", "x" * 5000, 0)])[0]
+
+    assert len(call["result"]) < 5000
+    assert "clipped, 5000 chars total" in call["result"]
+
+
+def test_build_tool_calls_keeps_unparseable_arguments_as_text():
+    assert build_tool_calls([_tc("f", "not json", None, 0)])[0]["arguments"] == "not json"
+
+
+def test_timeline_detail_indexes_line_up_with_the_breakdown():
+    events = [_tc("search_metrics", "{}", "ok", 0, 0.0, 1.0), _tc("create_visualization", "{}", "ok", 1, 1.0, 4.0)]
+    detail = timeline_detail(events, [ReasoningStepEvent(summary="**Planning**\n\ntext", ts=0.5, index=0)])
+
+    # Every tool step in the timeline must resolve to a real tool_calls entry by index --
+    # that join is the whole reason the breakdown only carries a name.
+    by_index = {c["index"]: c for c in detail["tool_calls"]}
+    tool_steps = [s for s in detail["latency_breakdown"] if s["kind"] == "tool"]
+    assert tool_steps
+    assert all(by_index[s["index"]]["name"] == s["name"] for s in tool_steps)

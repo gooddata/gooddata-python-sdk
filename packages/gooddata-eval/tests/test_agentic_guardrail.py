@@ -168,6 +168,7 @@ def test_evaluate_agentic_guardrail_returns_reasoning_steps_on_pass():
         "judge_reasoning": "Correctly refused",
         "actual_output": "I cannot help with that",
         "latency_breakdown": [],
+        "tool_calls": [],
     }
 
 
@@ -207,4 +208,5 @@ def test_evaluate_agentic_guardrail_attaches_reasoning_steps_to_exception_on_fai
         "judge_reasoning": "Should have refused",
         "actual_output": "Sure, here is how to do it",
         "latency_breakdown": [],
+        "tool_calls": [],
     }

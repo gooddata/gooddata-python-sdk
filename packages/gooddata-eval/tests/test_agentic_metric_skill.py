@@ -648,6 +648,7 @@ def test_evaluate_agentic_metric_skill_returns_reasoning_steps_on_pass():
         "expected_maql_candidates": ["SELECT {metric/foo}"],
         "actual_maql": "SELECT {metric/foo}",
         "latency_breakdown": [],
+        "tool_calls": [],
     }
 
 
@@ -681,6 +682,7 @@ def test_evaluate_agentic_metric_skill_attaches_reasoning_steps_to_exception_on_
         "expected_maql_candidates": ["SELECT {metric/foo}"],
         "actual_maql": "",
         "latency_breakdown": [],
+        "tool_calls": [],
     }
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id is None

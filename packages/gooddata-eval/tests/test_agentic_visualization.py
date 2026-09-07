@@ -321,6 +321,7 @@ def test_evaluate_agentic_visualization_returns_reasoning_steps_on_pass():
         "expected_filters": {"date": [], "ranking": [], "attribute": []},
         "actual_filters": {"date": [], "ranking": [], "attribute": []},
         "latency_breakdown": [],
+        "tool_calls": [],
     }
 
 
@@ -372,4 +373,5 @@ def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on
         "expected_filters": {"date": [], "ranking": [], "attribute": []},
         "actual_filters": {"date": [], "ranking": [], "attribute": []},
         "latency_breakdown": [],
+        "tool_calls": [],
     }

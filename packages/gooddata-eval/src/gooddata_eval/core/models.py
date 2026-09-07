@@ -200,6 +200,68 @@ def build_latency_breakdown(
     return steps
 
 
+# A tool result can be a whole visualization definition or a page of query rows. Kept whole
+# they would dominate the JSON report and the HTML built from it, so each side is clipped
+# and told how much was cut -- enough to see what the agent asked for and what came back,
+# without the report becoming a data dump.
+_TOOL_PAYLOAD_MAX_LEN = 2000
+
+
+def _clip(text: str) -> str:
+    if len(text) <= _TOOL_PAYLOAD_MAX_LEN:
+        return text
+    return text[:_TOOL_PAYLOAD_MAX_LEN] + f"… [clipped, {len(text)} chars total]"
+
+
+def build_tool_calls(tool_call_events: list[ToolCallEvent]) -> list[dict]:
+    """The turn's tool calls with their arguments and results, in execution order.
+
+    The counterpart to the ``.reasoning`` list: ``build_latency_breakdown`` keeps only a
+    tool's *name*, and its entries point back here by ``index`` exactly as reasoning
+    entries point into ``reasoning``. That is what lets a latency timeline answer "what
+    did this call actually ask for" without every timeline entry carrying its payload.
+
+    Each entry: ``{"index", "name", "arguments", "result"}``. ``arguments`` is the parsed
+    object when it parses and is small enough, otherwise the raw (clipped) string.
+
+    Calls whose position is unknown (``index is None`` -- a hand-built event, or a chat
+    backend older than the index capture) are skipped: without an index nothing can join
+    to them, and a positional guess would silently attribute the wrong args to a step.
+    """
+    calls: list[dict] = []
+    for tc in tool_call_events:
+        if tc.index is None:
+            continue
+        raw_args = tc.function_arguments or ""
+        calls.append(
+            {
+                "index": tc.index,
+                "name": tc.function_name,
+                "arguments": _clip(raw_args)
+                if len(raw_args) > _TOOL_PAYLOAD_MAX_LEN
+                else (tc.parsed_arguments() or raw_args),
+                "result": _clip(tc.result) if tc.result else None,
+            }
+        )
+    return calls
+
+
+def timeline_detail(
+    tool_call_events: list[ToolCallEvent],
+    reasoning_step_events: list[ReasoningStepEvent] | None = None,
+) -> dict:
+    """The `detail` keys describing how a turn actually ran: the timeline and what fills it.
+
+    Every evaluator wants both and they must be built from the same events to stay
+    index-aligned, so they are produced together rather than at a dozen call sites that
+    could drift apart.
+    """
+    return {
+        "latency_breakdown": build_latency_breakdown(tool_call_events, reasoning_step_events),
+        "tool_calls": build_tool_calls(tool_call_events),
+    }
+
+
 class ChatResult(BaseModel):
     """Subset of the agent chat response needed for Phase 1 evaluation."""
 

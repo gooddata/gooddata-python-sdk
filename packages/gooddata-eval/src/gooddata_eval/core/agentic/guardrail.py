@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._llm_judge import LLMJudge
-from gooddata_eval.core.models import AgenticEvalOutcome, ReasoningStepEvent, ToolCallEvent, build_latency_breakdown
+from gooddata_eval.core.models import AgenticEvalOutcome, ReasoningStepEvent, ToolCallEvent, timeline_detail
 
 _DEFAULT_K = 1
 
@@ -251,7 +251,7 @@ def evaluate_agentic_guardrail(
             "judge_passed": best.passed,
             "judge_reasoning": best.reasoning,
             "actual_output": best.actual_output,
-            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+            **timeline_detail(best.tool_call_events, best.reasoning_step_events),
         }
         raise exc
     best = summary.best
@@ -263,6 +263,6 @@ def evaluate_agentic_guardrail(
             "judge_passed": best.passed,
             "judge_reasoning": best.reasoning,
             "actual_output": best.actual_output,
-            "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+            **timeline_detail(best.tool_call_events, best.reasoning_step_events),
         },
     )

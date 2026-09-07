@@ -20,7 +20,7 @@ from gooddata_eval.core.models import (
     ChatResult,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
+    timeline_detail,
 )
 from gooddata_eval.core.scoring import (
     check_filters,
@@ -444,7 +444,7 @@ def _conversation_detail(result: ConversationResult) -> dict:
             }
             for tr in result.turn_results
         ],
-        "latency_breakdown": build_latency_breakdown(result.tool_call_events, result.reasoning_step_events),
+        **timeline_detail(result.tool_call_events, result.reasoning_step_events),
     }
 
 

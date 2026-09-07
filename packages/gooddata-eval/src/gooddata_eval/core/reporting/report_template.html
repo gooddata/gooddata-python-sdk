@@ -334,8 +334,9 @@ function transcriptHtml(it) {
 const ROLE = { user: 'question', assistant: 'agent', simulated_user: 'simulated user', note: 'note' };
 
 function detailHtml(detail) {
-  // transcript/turns get their own section above; latency_breakdown drives the timeline.
-  const skip = new Set(['latency_breakdown', 'transcript', 'turns']);
+  // transcript/turns get their own section above; latency_breakdown and tool_calls drive
+  // the timeline, where a tool step expands to the args and result it joins to.
+  const skip = new Set(['latency_breakdown', 'tool_calls', 'transcript', 'turns']);
   const keys = Object.keys(detail).filter((k) => !skip.has(k));
   if (!keys.length) return '';
   const done = new Set(), parts = [];
@@ -366,11 +367,21 @@ function timelineHtml(it) {
   const sum = tl.reduce((a, s) => a + (s.duration_s || 0), 0);
   const total = it.best_run_latency_s;
   const gap = typeof total === 'number' ? total - sum : null;
+  // `index` joins a step back to its full record -- into `reasoning` for a reasoning step,
+  // into `detail.tool_calls` for a tool call. The breakdown itself only carries the name,
+  // so this lookup is what turns "create_visualization took 18s" into what it was asked
+  // for and what it returned.
+  const byIndex = {};
+  for (const c of (it.detail || {}).tool_calls || []) byIndex[c.index] = c;
   const rows = tl.map((s) => {
-    // `index` joins a step back to its full record: for reasoning that is the paragraph
-    // in this item's `reasoning` list. Tool args/results are not in the JSON report yet.
-    const text = s.kind === 'reasoning' && s.index != null ? (it.reasoning || [])[s.index] : '';
-    return `<div class="row ${esc(s.kind)}" data-text="${esc(text || '')}">
+    let text = '';
+    if (s.kind === 'reasoning' && s.index != null) {
+      text = (it.reasoning || [])[s.index] || '';
+    } else if (s.kind === 'tool' && byIndex[s.index]) {
+      const c = byIndex[s.index];
+      text = `${c.name}\n\nARGUMENTS\n${fmt(c.arguments)}\n\nRESULT\n${c.result == null ? '(none)' : c.result}`;
+    }
+    return `<div class="row ${esc(s.kind)}" data-text="${esc(text)}">
       <div class="nm" title="${esc(s.name)}">${esc(s.name)}</div>
       <div class="track"><i style="width:${((s.duration_s || 0) / max * 100).toFixed(1)}%"></i></div>
       <div class="d">${num(s.duration_s)}s</div></div>`;
