@@ -358,7 +358,31 @@ function detailHtml(detail) {
     rest.map((k) => `<div class="sub" style="margin-top:6px">${esc(k)}</div><pre>${esc(fmt(detail[k]))}</pre>`).join('') +
     '</section>';
 }
-const fmt = (v) => (typeof v === 'string' ? v : JSON.stringify(v, null, 1));
+// Some values are already JSON *text* by design, not by accident: normalized_filters
+// stores each filter as the canonical string equality is tested on, and tool arguments
+// arrive as a serialized blob. Stringifying those again gives a wall of \" escapes, so
+// they are reparsed for DISPLAY only -- `d` in the expression filter still sees the raw
+// string, because that string is what the score was actually computed from.
+function unwrapJson(v) {
+  if (typeof v === 'string') {
+    const t = v.trim();
+    if (t.startsWith('{') || t.startsWith('[')) {
+      try { return unwrapJson(JSON.parse(t)); } catch (e) { return v; }
+    }
+    return v;
+  }
+  if (Array.isArray(v)) return v.map(unwrapJson);
+  if (v && typeof v === 'object') {
+    const out = {};
+    for (const k of Object.keys(v)) out[k] = unwrapJson(v[k]);
+    return out;
+  }
+  return v;
+}
+function fmt(v) {
+  const u = unwrapJson(v);
+  return typeof u === 'string' ? u : JSON.stringify(u, null, 1);
+}
 
 function timelineHtml(it) {
   const tl = (it.detail || {}).latency_breakdown || [];
