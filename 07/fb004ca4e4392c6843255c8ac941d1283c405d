@@ -1,0 +1,21 @@
+packages/gooddata-eval/tests/test_deep_subset.py
+  s_90905292b36e6b::t_30cd54eb625eed 1-34
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/_deep_subset.py
+  s_90905292b36e6b::t_e5cf9b14dd5a8c 1-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "07fb004ca4e4392c6843255c8ac941d1283c405d",
+  "prompts": {},
+  "sessions": {
+    "s_90905292b36e6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4819d826-2ce0-4f89-89e2-8b5af18493a9",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

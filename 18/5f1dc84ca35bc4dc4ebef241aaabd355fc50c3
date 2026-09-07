@@ -1,0 +1,20 @@
+docs/superpowers/plans/2026-06-19-genai-sse-transient-retry.md
+  s_e6c884eec37467::t_63d52544bc03f2 82,242-251,253
+  s_e6c884eec37467::t_8b98062439616c 1-81,83-241,252,254-431
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "185f1dc84ca35bc4dc4ebef241aaabd355fc50c3",
+  "prompts": {},
+  "sessions": {
+    "s_e6c884eec37467": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "344e2547-ffc7-4a6d-b168-745374c4524f",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

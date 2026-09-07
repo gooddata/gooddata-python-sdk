@@ -1,0 +1,29 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/search_tool.py
+  s_ee5cc41b994920::t_9e8372bcb83b38 147,162-167
+packages/gooddata-eval/src/gooddata_eval/core/agentic/guardrail.py
+  s_ee5cc41b994920::t_dce81d01991d9f 162,177-182
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_ee5cc41b994920::t_eca2ab95714568 217,232-237
+packages/gooddata-eval/src/gooddata_eval/core/agentic/general_question.py
+  s_ee5cc41b994920::t_a90797f2e53ca7 165,180-185
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_ee5cc41b994920::t_2d6888edc73057 348,361-369,371,373-377
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_ee5cc41b994920::t_7f7a32dbf3aa78 403,417-425
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "2ed30154eadd3fd00f51e7f6bf98b88592267a6c",
+  "prompts": {},
+  "sessions": {
+    "s_ee5cc41b994920": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a4aa36d-5864-4014-bd73-a9160c2f8d78",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

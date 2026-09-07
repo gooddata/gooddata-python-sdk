@@ -1,0 +1,19 @@
+packages/gooddata-eval/tests/test_scoring.py
+  s_cad071b0602650::t_a790cc10df07b5 135-140,142-146,148,152-153
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "9820e09d62da4813e70eba74ca95fb074adb5071",
+  "prompts": {},
+  "sessions": {
+    "s_cad071b0602650": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2e258cf4-72cf-4715-8db1-00ce09db15d8",
+        "model": "claude-opus-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

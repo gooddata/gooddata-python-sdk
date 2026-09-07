@@ -1,0 +1,19 @@
+packages/gooddata-eval/tests/test_agentic_run_context.py
+  s_96ee128288a9f7::t_9f8ed7bca7b641 1-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.11",
+  "base_commit_sha": "034db70cb3c5bd66a70f4ec897af7fce9dd8bc35",
+  "prompts": {},
+  "sessions": {
+    "s_96ee128288a9f7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ce332428-29dd-431e-97a9-a120cdceef73",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

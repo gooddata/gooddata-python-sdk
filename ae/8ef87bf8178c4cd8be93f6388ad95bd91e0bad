@@ -1,0 +1,27 @@
+docs/content/en/latest/data/ai-lake/analyze_statistics.md
+  s_61f6f3745f96ee::t_334beacd8c8b69 1-54
+docs/content/en/latest/administration/organization/_index.md
+  s_61f6f3745f96ee::t_1243b1ce2ae9a8 19-20
+docs/content/en/latest/data/ai-lake/get_operation.md
+  s_61f6f3745f96ee::t_cca3ef861e05e2 1-43
+docs/content/en/latest/data/ai-lake/wait_for_operation.md
+  s_61f6f3745f96ee::t_d2389b0d30c548 1-64
+docs/content/en/latest/data/ai-lake/_index.md
+  s_61f6f3745f96ee::t_22af0577c31e2c 1-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.1",
+  "base_commit_sha": "ae8ef87bf8178c4cd8be93f6388ad95bd91e0bad",
+  "prompts": {},
+  "sessions": {
+    "s_61f6f3745f96ee": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c8e7346f-ecd6-42b4-950d-02aa766e7181",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>"
+    }
+  }
+}

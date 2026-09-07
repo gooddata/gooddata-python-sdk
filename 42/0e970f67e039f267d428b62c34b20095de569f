@@ -1,0 +1,31 @@
+docs/content/en/latest/workspace/workspaces/get_and_store_aac_workspace.md
+  4ae20b1ad5b5317e 1-61
+docs/content/en/latest/workspace/workspaces/_index.md
+  4ae20b1ad5b5317e 33-37
+.aida/rules/packages/gooddata-sdk.mdc
+  4ae20b1ad5b5317e 18-19,36-40
+docs/content/en/latest/getting-started.md
+  4ae20b1ad5b5317e 58-72
+docs/content/en/latest/workspace/workspaces/load_and_put_aac_workspace.md
+  4ae20b1ad5b5317e 1-72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "420e970f67e039f267d428b62c34b20095de569f",
+  "prompts": {
+    "4ae20b1ad5b5317e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c1a16e11-2c02-4f84-92fa-3f303de4930c",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>",
+      "messages": [],
+      "total_additions": 160,
+      "total_deletions": 1,
+      "accepted_lines": 160,
+      "overriden_lines": 0
+    }
+  }
+}

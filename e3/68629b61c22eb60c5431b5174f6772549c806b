@@ -1,0 +1,47 @@
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_67829915e8e29f::t_49f67fd10642c9 256-260
+  s_67829915e8e29f::t_9753ed95ce20b8 254-255
+  s_67829915e8e29f::t_a36191fd3c7ef6 290-292
+  s_67829915e8e29f::t_703b8435c8e990 245-252,261,266
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_langfuse.py
+  s_67829915e8e29f::t_cbd7410a1a6f0d 411-414,418-419
+  s_67829915e8e29f::t_5a621a76dd1ca4 387,403-404
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_67829915e8e29f::t_54b94f41d95473 27,84,95,182,209
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  s_67829915e8e29f::t_c4690b39b75af8 107-113,339,353,445
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_67829915e8e29f::t_4abf83c02ec092 345,350,460,486,506
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_67829915e8e29f::t_10dc0e4b4544e8 281,289,401,425,445
+packages/gooddata-eval/src/gooddata_eval/core/agentic/general_question.py
+  s_67829915e8e29f::t_590b5a5d1eb484 74,78,151,176,196
+packages/gooddata-eval/src/gooddata_eval/core/agentic/guardrail.py
+  s_67829915e8e29f::t_3334c69daf9d86 71,75,148,173,193
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_67829915e8e29f::t_67e7cbc0e7417a 235,244,298,324,344
+packages/gooddata-eval/src/gooddata_eval/core/agentic/search_tool.py
+  s_67829915e8e29f::t_73a038253075ac 70,75,142,167,187
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_67829915e8e29f::t_50c70e7449b549 206,215,262,290,310
+packages/gooddata-eval/src/gooddata_eval/core/config.py
+  s_67829915e8e29f::t_5c99079071c182 23
+packages/gooddata-eval/tests/test_sse_client.py
+  s_67829915e8e29f::t_aeba0e2f256789 381-433
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "e368629b61c22eb60c5431b5174f6772549c806b",
+  "prompts": {},
+  "sessions": {
+    "s_67829915e8e29f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9e8e6bc6-5404-491e-bc32-52bd5413d4c6",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

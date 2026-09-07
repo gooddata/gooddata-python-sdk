@@ -1,0 +1,22 @@
+packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/service.py
+  s_457bf75216eb20::t_1219a8e71d6184 724-726,732-734
+packages/gooddata-sdk/tests/catalog/unit_tests/test_ip_allowlist_policy.py
+  s_457bf75216eb20::t_d4d64c0200147e 148
+  s_457bf75216eb20::t_1592316c158853 123-124
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "56e24468af39e0a10ed3de2478ca5e12f7134c85",
+  "prompts": {},
+  "sessions": {
+    "s_457bf75216eb20": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "26eb20c4-d796-4bd6-baf0-89591f4874f2",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "dmitriinikitingd <dmitrii.nikitin@gooddata.com>"
+    }
+  }
+}

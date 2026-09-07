@@ -1,0 +1,19 @@
+docs/superpowers/specs/2026-07-02-master-orchestrated-release-design.md
+  s_21215b218089d0::t_3fa2087d46bb0e 1-196
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.9",
+  "base_commit_sha": "207d1aa99f064191b6b6d3828306bb716bf0ec53",
+  "prompts": {},
+  "sessions": {
+    "s_21215b218089d0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2db60762-f98d-442b-8201-11178f58ec0c",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

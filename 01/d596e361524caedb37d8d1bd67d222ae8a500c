@@ -1,0 +1,19 @@
+docs/superpowers/specs/2026-06-19-genai-sse-transient-retry-design.md
+  s_e6c884eec37467::t_d838a0011823e0 1-189
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "01d596e361524caedb37d8d1bd67d222ae8a500c",
+  "prompts": {},
+  "sessions": {
+    "s_e6c884eec37467": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "344e2547-ffc7-4a6d-b168-745374c4524f",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

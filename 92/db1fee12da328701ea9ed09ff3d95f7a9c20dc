@@ -1,0 +1,37 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/__init__.py
+  s_7e53738a17b0e6::t_a51eb5d6cebad7 67
+  s_7e53738a17b0e6::t_62136d484f40a6 104
+  s_7e53738a17b0e6::t_f74b15bfb08830 81-83
+  s_7e53738a17b0e6::t_d3433f275257d9 33-40
+  s_7e53738a17b0e6::t_0f736f6b412457 96
+packages/gooddata-eval/src/gooddata_eval/core/agentic/kda_skill.py
+  s_7e53738a17b0e6::t_ca078cd7e1e944 190-196,204,219-221
+  s_7e53738a17b0e6::t_058434f2a95224 7,15-19
+  s_7e53738a17b0e6::t_8854c71e42e5d2 380,383-389,398
+  s_7e53738a17b0e6::t_f7814f20cc5636 22-34,39,42-48,52,55,63-65,67
+  s_7e53738a17b0e6::t_b0533843f6ecd4 323
+  s_7e53738a17b0e6::t_3b917f75f856a8 1-6,8-14,20-21,35-38,40-41,49-51,53-54,56-62,66,68-69,115-135,142-143,145,151-159,161-189,197-199,201-203,205-209,211-218,222-237,239-242,249-253,271-299,301-322,324-347,349-379,381-382,390-397,399-410,417-418,420-422
+  s_7e53738a17b0e6::t_4d9efd754ddcea 136-141,144,146-150,160
+  s_7e53738a17b0e6::t_b6e787e21e6cf5 70-114
+  s_7e53738a17b0e6::t_b79f54b6eaee4a 200,210
+  s_7e53738a17b0e6::t_42658251707ef9 238,243-248,254-270
+  s_7e53738a17b0e6::t_45d35b74054407 300
+  s_7e53738a17b0e6::t_3b7bf2ca688e2a 411-416,419,423
+  s_7e53738a17b0e6::t_2214d39a040d7e 348
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "92db1fee12da328701ea9ed09ff3d95f7a9c20dc",
+  "prompts": {},
+  "sessions": {
+    "s_7e53738a17b0e6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d7605be7-c26c-4dfd-83ba-5b457d0ca5a5",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Frank Huynh <duy.huynh@gooddata.com>"
+    }
+  }
+}

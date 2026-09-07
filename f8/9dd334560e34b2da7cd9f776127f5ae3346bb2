@@ -1,0 +1,23 @@
+packages/tests-support/src/tests_support/vcrpy_utils.py
+  7e126f4011864424 15,79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.12",
+  "base_commit_sha": "f89dd334560e34b2da7cd9f776127f5ae3346bb2",
+  "prompts": {
+    "7e126f4011864424": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "07b35a77-10b8-4b8e-a3ad-0ac31a19b32c",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 2,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    }
+  }
+}

@@ -1,0 +1,9 @@
+packages/gooddata-sdk/tests/catalog/test_catalog_data_source.py
+  ai_agent 10,12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.1",
+  "base_commit_sha": "dbf442a181a00a16c479cdaf2b71370d4ec119c5",
+  "prompts": {}
+}

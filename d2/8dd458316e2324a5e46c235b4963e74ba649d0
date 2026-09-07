@@ -1,0 +1,22 @@
+packages/gooddata-eval/tests/test_workspace.py
+  s_90905292b36e6b::t_2d06e628c24ccb 7,38-57
+packages/gooddata-eval/src/gooddata_eval/core/workspace.py
+  s_90905292b36e6b::t_6123faf0416773 7,55-78,84,88,94-98,107-109,125,127-129
+  s_90905292b36e6b::t_5aef98220fa4a9 110-114
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "d28dd458316e2324a5e46c235b4963e74ba649d0",
+  "prompts": {},
+  "sessions": {
+    "s_90905292b36e6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4819d826-2ce0-4f89-89e2-8b5af18493a9",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

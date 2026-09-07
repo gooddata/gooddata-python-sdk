@@ -1,0 +1,147 @@
+packages/gooddata-eval/tests/test_reporting.py
+  ai_agent 1-60
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/base.py
+  ai_agent 1-24
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/sink.py
+  ai_agent 1-166
+packages/gooddata-eval/src/gooddata_eval/core/scoring.py
+  ai_agent 1-155
+packages/gooddata-eval/tests/test_langfuse_sink.py
+  ai_agent 1-142
+.github/workflows/dev-release.yaml
+  ai_agent 12
+packages/gooddata-eval/pyproject.toml
+  ai_agent 1-65
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/_deep_subset.py
+  ai_agent 1-33
+packages/gooddata-eval/Makefile
+  ai_agent 1-2
+packages/gooddata-eval/tests/fixtures/sse_visualization_stream.txt
+  ai_agent 1-3
+packages/gooddata-eval/src/gooddata_eval/core/workspace.py
+  ai_agent 1-201
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  ai_agent 1-97
+packages/gooddata-eval/src/gooddata_eval/_version.py
+  ai_agent 1-7
+packages/gooddata-eval/tests/test_cli.py
+  ai_agent 1-288
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  ai_agent 1-209
+packages/gooddata-eval/tests/conftest.py
+  ai_agent 1-9
+.github/workflows/fossa.yaml
+  ai_agent 39
+packages/gooddata-eval/tests/test_scoring.py
+  ai_agent 1-66
+packages/gooddata-eval/tests/test_connection.py
+  ai_agent 1-36
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/alert_skill.py
+  s_90905292b36e6b::t_115c792ccd6f42 38-42
+  s_90905292b36e6b::t_4219c0080ac589 18-37
+packages/gooddata-eval/tests/test_visualization_evaluator.py
+  ai_agent 1-57
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/_text_utils.py
+  ai_agent 1-11
+uv.lock
+  ai_agent 13,33-46,725-733,876-917,1141,1192,1336-1372,1442-1544,1581-1592,1678-1686,1890-1908,2041,2043,2045,2352-2360,2644-2656,2840-2848,3008-3019,3218-3282
+packages/gooddata-eval/src/gooddata_eval/__init__.py
+  ai_agent 1-6
+packages/gooddata-eval/src/gooddata_eval/core/reporting/console.py
+  ai_agent 1-55
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/guardrail.py
+  s_90905292b36e6b::t_7bc80eea38bc8c 31-45
+packages/gooddata-eval/tests/test_text_evaluators.py
+  s_90905292b36e6b::t_302d1fc7c015eb 66
+packages/gooddata-eval/src/gooddata_eval/core/__init__.py
+  ai_agent 1
+packages/gooddata-eval/src/gooddata_eval/core/connection.py
+  ai_agent 1-33
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/__init__.py
+  ai_agent 1
+packages/gooddata-eval/src/gooddata_eval/core/dataset/__init__.py
+  ai_agent 1
+packages/gooddata-eval/tests/test_models.py
+  ai_agent 1-90
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/search_tool.py
+  ai_agent 1-40
+packages/gooddata-eval/tests/test_deep_subset.py
+  ai_agent 1-34
+packages/gooddata-eval/src/gooddata_eval/core/config.py
+  ai_agent 1-20
+packages/gooddata-eval/src/gooddata_eval/core/runner.py
+  ai_agent 1-174
+packages/gooddata-eval/tests/test_langfuse_source.py
+  ai_agent 1-71
+.github/workflows/build-release.yaml
+  ai_agent 18
+.github/workflows/rw-python-tests.yaml
+  ai_agent 27
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  ai_agent 1-178
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/visualization.py
+  ai_agent 1-156
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/_llm_judge.py
+  ai_agent 1-66
+packages/gooddata-eval/tests/test_search_tool_evaluator.py
+  ai_agent 1-66
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/__init__.py
+  s_90905292b36e6b::t_4219c0080ac589 48-49,51-64
+  s_90905292b36e6b::t_115c792ccd6f42 50
+packages/gooddata-eval/tests/fixtures/sample_dataset/metric_skill_create.json
+  ai_agent 1-16
+packages/gooddata-eval/tests/__init__.py
+  ai_agent 1
+packages/gooddata-eval/src/gooddata_eval/core/reporting/__init__.py
+  ai_agent 1
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/metric_skill.py
+  ai_agent 1-58
+packages/gooddata-eval/tests/test_sse_client.py
+  ai_agent 1-68
+packages/gooddata-eval/src/gooddata_eval/cli/__init__.py
+  ai_agent 1
+packages/gooddata-eval/tests/test_metric_skill_evaluator.py
+  ai_agent 1-50
+packages/gooddata-eval/README.md
+  ai_agent 1-141
+packages/gooddata-eval/src/gooddata_eval/core/dataset/local.py
+  ai_agent 1-39
+packages/gooddata-eval/tests/fixtures/sample_dataset/visualization_revenue.json
+  ai_agent 1-23
+packages/gooddata-eval/src/gooddata_eval/core/chat/__init__.py
+  ai_agent 1
+packages/gooddata-eval/tests/test_alert_skill_evaluator.py
+  ai_agent 1-66
+packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
+  ai_agent 1-104
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/general_question.py
+  ai_agent 1-34
+packages/gooddata-eval/tests/test_local_loader.py
+  ai_agent 1-21
+packages/gooddata-eval/tests/test_workspace.py
+  ai_agent 1-108
+packages/gooddata-eval/tests/test_llm_judge.py
+  ai_agent 1-45
+pyproject.toml
+  ai_agent 16,31,127,290-297
+packages/gooddata-eval/tests/test_runner.py
+  ai_agent 1-137
+packages/gooddata-eval/src/gooddata_eval/core/reporting/json_report.py
+  ai_agent 1-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "d90f37d8cef9f4ed7263cf99625d91d97351a427",
+  "prompts": {},
+  "sessions": {
+    "s_90905292b36e6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4819d826-2ce0-4f89-89e2-8b5af18493a9",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": null
+    }
+  }
+}
