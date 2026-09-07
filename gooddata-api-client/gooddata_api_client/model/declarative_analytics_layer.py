@@ -34,6 +34,7 @@ def lazy_import():
     from gooddata_api_client.model.declarative_analytical_dashboard import DeclarativeAnalyticalDashboard
     from gooddata_api_client.model.declarative_analytical_dashboard_extension import DeclarativeAnalyticalDashboardExtension
     from gooddata_api_client.model.declarative_attribute_hierarchy import DeclarativeAttributeHierarchy
+    from gooddata_api_client.model.declarative_computed_attribute import DeclarativeComputedAttribute
     from gooddata_api_client.model.declarative_dashboard_plugin import DeclarativeDashboardPlugin
     from gooddata_api_client.model.declarative_export_definition import DeclarativeExportDefinition
     from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
@@ -44,6 +45,7 @@ def lazy_import():
     globals()['DeclarativeAnalyticalDashboard'] = DeclarativeAnalyticalDashboard
     globals()['DeclarativeAnalyticalDashboardExtension'] = DeclarativeAnalyticalDashboardExtension
     globals()['DeclarativeAttributeHierarchy'] = DeclarativeAttributeHierarchy
+    globals()['DeclarativeComputedAttribute'] = DeclarativeComputedAttribute
     globals()['DeclarativeDashboardPlugin'] = DeclarativeDashboardPlugin
     globals()['DeclarativeExportDefinition'] = DeclarativeExportDefinition
     globals()['DeclarativeFilterContext'] = DeclarativeFilterContext
@@ -109,6 +111,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
             'analytical_dashboard_extensions': ([DeclarativeAnalyticalDashboardExtension],),  # noqa: E501
             'analytical_dashboards': ([DeclarativeAnalyticalDashboard],),  # noqa: E501
             'attribute_hierarchies': ([DeclarativeAttributeHierarchy],),  # noqa: E501
+            'computed_attributes': ([DeclarativeComputedAttribute],),  # noqa: E501
             'dashboard_plugins': ([DeclarativeDashboardPlugin],),  # noqa: E501
             'export_definitions': ([DeclarativeExportDefinition],),  # noqa: E501
             'filter_contexts': ([DeclarativeFilterContext],),  # noqa: E501
@@ -127,6 +130,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
         'analytical_dashboard_extensions': 'analyticalDashboardExtensions',  # noqa: E501
         'analytical_dashboards': 'analyticalDashboards',  # noqa: E501
         'attribute_hierarchies': 'attributeHierarchies',  # noqa: E501
+        'computed_attributes': 'computedAttributes',  # noqa: E501
         'dashboard_plugins': 'dashboardPlugins',  # noqa: E501
         'export_definitions': 'exportDefinitions',  # noqa: E501
         'filter_contexts': 'filterContexts',  # noqa: E501
@@ -180,6 +184,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
             analytical_dashboard_extensions ([DeclarativeAnalyticalDashboardExtension]): A list of dashboard permissions assigned to a related dashboard.. [optional]  # noqa: E501
             analytical_dashboards ([DeclarativeAnalyticalDashboard]): A list of analytical dashboards available in the model.. [optional]  # noqa: E501
             attribute_hierarchies ([DeclarativeAttributeHierarchy]): A list of attribute hierarchies.. [optional]  # noqa: E501
+            computed_attributes ([DeclarativeComputedAttribute]): A list of computed attributes available in the model.. [optional]  # noqa: E501
             dashboard_plugins ([DeclarativeDashboardPlugin]): A list of dashboard plugins available in the model.. [optional]  # noqa: E501
             export_definitions ([DeclarativeExportDefinition]): A list of export definitions.. [optional]  # noqa: E501
             filter_contexts ([DeclarativeFilterContext]): A list of filter contexts available in the model.. [optional]  # noqa: E501
@@ -275,6 +280,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
             analytical_dashboard_extensions ([DeclarativeAnalyticalDashboardExtension]): A list of dashboard permissions assigned to a related dashboard.. [optional]  # noqa: E501
             analytical_dashboards ([DeclarativeAnalyticalDashboard]): A list of analytical dashboards available in the model.. [optional]  # noqa: E501
             attribute_hierarchies ([DeclarativeAttributeHierarchy]): A list of attribute hierarchies.. [optional]  # noqa: E501
+            computed_attributes ([DeclarativeComputedAttribute]): A list of computed attributes available in the model.. [optional]  # noqa: E501
             dashboard_plugins ([DeclarativeDashboardPlugin]): A list of dashboard plugins available in the model.. [optional]  # noqa: E501
             export_definitions ([DeclarativeExportDefinition]): A list of export definitions.. [optional]  # noqa: E501
             filter_contexts ([DeclarativeFilterContext]): A list of filter contexts available in the model.. [optional]  # noqa: E501

@@ -256,6 +256,7 @@
                 "enum": [
                   "analyticalDashboard",
                   "attribute",
+                  "computedAttribute",
                   "dashboardPlugin",
                   "dataset",
                   "fact",
@@ -325,7 +326,8 @@
                   "attribute",
                   "label",
                   "fact",
-                  "metric"
+                  "metric",
+                  "computedAttribute"
                 ],
                 "type": "string"
               }
@@ -382,7 +384,8 @@
               },
               "type": {
                 "enum": [
-                  "label"
+                  "label",
+                  "computedAttribute"
                 ],
                 "type": "string"
               }
@@ -1602,6 +1605,7 @@
                   "aggregatedFact",
                   "label",
                   "metric",
+                  "computedAttribute",
                   "userDataFilter",
                   "parameter",
                   "exportDefinition",

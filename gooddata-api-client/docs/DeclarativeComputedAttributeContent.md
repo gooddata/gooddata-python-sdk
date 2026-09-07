@@ -1,5 +1,6 @@
-# JsonApiMetricInAttributesContent
+# DeclarativeComputedAttributeContent
 
+A definition of the computed attribute content.
 
 ## Properties
 Name | Type | Description | Notes

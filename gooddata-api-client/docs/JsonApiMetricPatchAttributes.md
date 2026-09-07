@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **are_relations_valid** | **bool** |  | [optional] 
-**content** | [**JsonApiMetricInAttributesContent**](JsonApiMetricInAttributesContent.md) |  | [optional] 
+**content** | [**JsonApiComputedAttributeInAttributesContent**](JsonApiComputedAttributeInAttributesContent.md) |  | [optional] 
 **description** | **str** |  | [optional] 
 **is_hidden** | **bool** |  | [optional] 
 **is_hidden_from_kda** | **bool** |  | [optional] 

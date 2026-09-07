@@ -13,6 +13,7 @@ from gooddata_sdk import (
 )
 from gooddata_sdk.catalog.organization.entity_model.export_template import CatalogExportTemplateAttributes
 from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
+from gooddata_sdk.catalog.workspace.entity_model.content_objects.computed_attribute import CatalogComputedAttribute
 from gooddata_sdk.catalog.workspace.entity_model.filter_view import CatalogFilterView
 from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import CatalogUserDataFilter
 from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceService
@@ -20,7 +21,10 @@ from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceService
 # The create/update branch is decided by whether the preceding entity GET raises
 # NotFoundException, so these stub that getter instead of replaying a cassette.
 # They cover what no cassette covers upstream: filter views, export templates,
-# and the update branch of user data filters.
+# and the update branch of user data filters. Computed attributes are covered by
+# cassettes too (test_catalog_workspace.py); the stubs here additionally pin which
+# generated endpoint each branch calls, because create and update take different
+# request bodies.
 
 
 def _service(cls, getter: str, *, found: bool):
@@ -45,6 +49,12 @@ def _user_data_filter(user_data_filter_id: str | None = "udf") -> CatalogUserDat
         user_id="demo_user",
     )
     return evolve(udf, id=user_data_filter_id)
+
+
+def _computed_attribute(computed_attribute_id: str | None = "ca") -> CatalogComputedAttribute:
+    return CatalogComputedAttribute.init(
+        computed_attribute_id=computed_attribute_id, maql="SELECT 1", title="Test computed attribute"
+    )
 
 
 def _export_template() -> CatalogExportTemplate:
@@ -93,6 +103,48 @@ class TestWorkspaceSettingOutcome:
         service._entities_api.update_entity_workspace_settings.assert_called_once()
 
 
+class TestComputedAttributeOutcome:
+    def test_created_when_absent(self):
+        service = _service(CatalogWorkspaceService, "get_computed_attribute", found=False)
+        assert service.create_or_update_computed_attribute("demo", _computed_attribute()) == UpsertOutcome.CREATED
+        service._entities_api.create_entity_computed_attributes.assert_called_once()
+        service._entities_api.update_entity_computed_attributes.assert_not_called()
+
+    def test_updated_when_present(self):
+        service = _service(CatalogWorkspaceService, "get_computed_attribute", found=True)
+        assert service.create_or_update_computed_attribute("demo", _computed_attribute()) == UpsertOutcome.UPDATED
+        service._entities_api.update_entity_computed_attributes.assert_called_once()
+        service._entities_api.create_entity_computed_attributes.assert_not_called()
+
+    def test_create_bodies_are_not_interchangeable(self):
+        """Create takes the `PostOptionalId` document, update takes the `In` document.
+
+        Regression test: the create branch was first wired to the `In` document, copied
+        from the filter-view template above, which raised a TypeError from the generated
+        client. Asserting on the keyword pins each endpoint to its own body.
+        """
+        service = _service(CatalogWorkspaceService, "get_computed_attribute", found=False)
+        service.create_or_update_computed_attribute("demo", _computed_attribute())
+        create_kwargs = service._entities_api.create_entity_computed_attributes.call_args.kwargs
+        assert "json_api_computed_attribute_post_optional_id_document" in create_kwargs
+
+        service = _service(CatalogWorkspaceService, "get_computed_attribute", found=True)
+        service.create_or_update_computed_attribute("demo", _computed_attribute())
+        update_kwargs = service._entities_api.update_entity_computed_attributes.call_args.kwargs
+        assert "json_api_computed_attribute_in_document" in update_kwargs
+
+    def test_id_less_create_skips_the_lookup(self):
+        """With no id there is nothing to look up, so it goes straight to create.
+
+        Computed attributes are the one entity where this genuinely works -- see
+        TestIdLessCreateIsUnreachable for why the others cannot.
+        """
+        service = _service(CatalogWorkspaceService, "get_computed_attribute", found=True)
+        assert service.create_or_update_computed_attribute("demo", _computed_attribute(None)) == UpsertOutcome.CREATED
+        service.get_computed_attribute.assert_not_called()
+        service._entities_api.create_entity_computed_attributes.assert_called_once()
+
+
 class TestExportTemplateOutcome:
     def test_created_when_absent(self):
         service = _service(CatalogOrganizationService, "get_export_template", found=False)
@@ -115,6 +167,10 @@ class TestIdLessCreateIsUnreachable:
     "accept None". These are strict xfails so that fixing the generated client
     (or the entity models) trips them and this file gets revisited, rather than
     the outcome contract silently claiming to cover a dead path.
+
+    CatalogComputedAttribute shows the way out: its `to_post_api()` omits the id
+    key entirely instead of passing None, so its id-less create really does work
+    (TestComputedAttributeOutcome.test_id_less_create_skips_the_lookup).
     """
 
     @pytest.mark.xfail(raises=ApiTypeError, strict=True, reason="generated client rejects a None id")

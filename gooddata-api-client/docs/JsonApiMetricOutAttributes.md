@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | [**JsonApiMetricInAttributesContent**](JsonApiMetricInAttributesContent.md) |  | 
+**content** | [**JsonApiComputedAttributeInAttributesContent**](JsonApiComputedAttributeInAttributesContent.md) |  | 
 **are_relations_valid** | **bool** |  | [optional] 
 **certification** | **str** | Certification status of the entity. | [optional]  if omitted the server will use the default value of "CERTIFIED"
 **certification_message** | **str, none_type** | Optional message associated with the certification. | [optional] 

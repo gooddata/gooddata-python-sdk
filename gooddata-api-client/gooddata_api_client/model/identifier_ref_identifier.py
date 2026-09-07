@@ -66,6 +66,7 @@ class IdentifierRefIdentifier(ModelNormal):
             'AGGREGATEDFACT': "aggregatedFact",
             'LABEL': "label",
             'METRIC': "metric",
+            'COMPUTEDATTRIBUTE': "computedAttribute",
             'USERDATAFILTER': "userDataFilter",
             'PARAMETER': "parameter",
             'EXPORTDEFINITION': "exportDefinition",

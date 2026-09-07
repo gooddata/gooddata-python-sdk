@@ -33,11 +33,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
     from gooddata_api_client.model.json_api_analytical_dashboard_out_with_links import JsonApiAnalyticalDashboardOutWithLinks
+    from gooddata_api_client.model.json_api_computed_attribute_out_relationships import JsonApiComputedAttributeOutRelationships
     from gooddata_api_client.model.json_api_dashboard_plugin_out_with_links import JsonApiDashboardPluginOutWithLinks
     from gooddata_api_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
     from gooddata_api_client.model.json_api_filter_context_out_with_links import JsonApiFilterContextOutWithLinks
     from gooddata_api_client.model.json_api_label_out_with_links import JsonApiLabelOutWithLinks
-    from gooddata_api_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
     from gooddata_api_client.model.json_api_metric_out_with_links import JsonApiMetricOutWithLinks
     from gooddata_api_client.model.json_api_parameter_out_with_links import JsonApiParameterOutWithLinks
     from gooddata_api_client.model.json_api_user_identifier_out_with_links import JsonApiUserIdentifierOutWithLinks
@@ -46,11 +46,11 @@ def lazy_import():
     from gooddata_api_client.model.object_links import ObjectLinks
     globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
     globals()['JsonApiAnalyticalDashboardOutWithLinks'] = JsonApiAnalyticalDashboardOutWithLinks
+    globals()['JsonApiComputedAttributeOutRelationships'] = JsonApiComputedAttributeOutRelationships
     globals()['JsonApiDashboardPluginOutWithLinks'] = JsonApiDashboardPluginOutWithLinks
     globals()['JsonApiDatasetOutWithLinks'] = JsonApiDatasetOutWithLinks
     globals()['JsonApiFilterContextOutWithLinks'] = JsonApiFilterContextOutWithLinks
     globals()['JsonApiLabelOutWithLinks'] = JsonApiLabelOutWithLinks
-    globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
     globals()['JsonApiMetricOutWithLinks'] = JsonApiMetricOutWithLinks
     globals()['JsonApiParameterOutWithLinks'] = JsonApiParameterOutWithLinks
     globals()['JsonApiUserIdentifierOutWithLinks'] = JsonApiUserIdentifierOutWithLinks
@@ -121,7 +121,7 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
         lazy_import()
         return {
             'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
-            'relationships': (JsonApiMetricOutRelationships,),  # noqa: E501
+            'relationships': (JsonApiComputedAttributeOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
             'attributes': (JsonApiVisualizationObjectOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
@@ -182,7 +182,7 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
+            relationships (JsonApiComputedAttributeOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
             attributes (JsonApiVisualizationObjectOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
@@ -291,7 +291,7 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
+            relationships (JsonApiComputedAttributeOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
             attributes (JsonApiVisualizationObjectOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501

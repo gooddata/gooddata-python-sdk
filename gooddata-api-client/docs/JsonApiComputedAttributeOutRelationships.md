@@ -1,4 +1,4 @@
-# JsonApiMetricOutRelationships
+# JsonApiComputedAttributeOutRelationships
 
 
 ## Properties
@@ -6,9 +6,10 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **attributes** | [**JsonApiAttributeHierarchyOutRelationshipsAttributes**](JsonApiAttributeHierarchyOutRelationshipsAttributes.md) |  | [optional] 
 **certified_by** | [**JsonApiAgentOutRelationshipsCreatedBy**](JsonApiAgentOutRelationshipsCreatedBy.md) |  | [optional] 
+**computed_attributes** | [**JsonApiComputedAttributeOutRelationshipsComputedAttributes**](JsonApiComputedAttributeOutRelationshipsComputedAttributes.md) |  | [optional] 
 **created_by** | [**JsonApiAgentOutRelationshipsCreatedBy**](JsonApiAgentOutRelationshipsCreatedBy.md) |  | [optional] 
 **datasets** | [**JsonApiAnalyticalDashboardOutRelationshipsDatasets**](JsonApiAnalyticalDashboardOutRelationshipsDatasets.md) |  | [optional] 
-**facts** | [**JsonApiDatasetOutRelationshipsFacts**](JsonApiDatasetOutRelationshipsFacts.md) |  | [optional] 
+**facts** | [**JsonApiComputedAttributeOutRelationshipsFacts**](JsonApiComputedAttributeOutRelationshipsFacts.md) |  | [optional] 
 **labels** | [**JsonApiAnalyticalDashboardOutRelationshipsLabels**](JsonApiAnalyticalDashboardOutRelationshipsLabels.md) |  | [optional] 
 **metrics** | [**JsonApiAnalyticalDashboardOutRelationshipsMetrics**](JsonApiAnalyticalDashboardOutRelationshipsMetrics.md) |  | [optional] 
 **modified_by** | [**JsonApiAgentOutRelationshipsCreatedBy**](JsonApiAgentOutRelationshipsCreatedBy.md) |  | [optional] 

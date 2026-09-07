@@ -1986,7 +1986,7 @@ with gooddata_api_client.ApiClient() as api_client:
         validate_by=[
             ValidateByItem(
                 id="id_example",
-                type="fact",
+                type="label",
             ),
         ],
     ) # ElementsRequest | 

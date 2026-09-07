@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_metric_in_attributes_content import JsonApiMetricInAttributesContent
-    globals()['JsonApiMetricInAttributesContent'] = JsonApiMetricInAttributesContent
+    from gooddata_api_client.model.json_api_computed_attribute_in_attributes_content import JsonApiComputedAttributeInAttributesContent
+    globals()['JsonApiComputedAttributeInAttributesContent'] = JsonApiComputedAttributeInAttributesContent
 
 
 class JsonApiMetricOutAttributes(ModelNormal):
@@ -112,7 +112,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
         """
         lazy_import()
         return {
-            'content': (JsonApiMetricInAttributesContent,),  # noqa: E501
+            'content': (JsonApiComputedAttributeInAttributesContent,),  # noqa: E501
             'are_relations_valid': (bool,),  # noqa: E501
             'certification': (str,),  # noqa: E501
             'certification_message': (str, none_type,),  # noqa: E501
@@ -157,7 +157,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
         """JsonApiMetricOutAttributes - a model defined in OpenAPI
 
         Args:
-            content (JsonApiMetricInAttributesContent):
+            content (JsonApiComputedAttributeInAttributesContent):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -257,7 +257,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
         """JsonApiMetricOutAttributes - a model defined in OpenAPI
 
         Args:
-            content (JsonApiMetricInAttributesContent):
+            content (JsonApiComputedAttributeInAttributesContent):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

@@ -301,6 +301,7 @@
                 "enum": [
                   "analyticalDashboard",
                   "attribute",
+                  "computedAttribute",
                   "dashboardPlugin",
                   "dataset",
                   "fact",
@@ -370,7 +371,8 @@
                   "attribute",
                   "label",
                   "fact",
-                  "metric"
+                  "metric",
+                  "computedAttribute"
                 ],
                 "type": "string"
               }
@@ -427,7 +429,8 @@
               },
               "type": {
                 "enum": [
-                  "label"
+                  "label",
+                  "computedAttribute"
                 ],
                 "type": "string"
               }
@@ -3297,6 +3300,13 @@
             },
             "type": "array"
           },
+          "computedAttributes": {
+            "description": "A list of computed attributes available in the model.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeComputedAttribute"
+            },
+            "type": "array"
+          },
           "dashboardPlugins": {
             "description": "A list of dashboard plugins available in the model.",
             "items": {
@@ -3790,6 +3800,171 @@
         "required": [
           "dataType",
           "name"
+        ],
+        "type": "object"
+      },
+      "DeclarativeComputedAttribute": {
+        "properties": {
+          "certification": {
+            "description": "Certification status of the entity.",
+            "enum": [
+              "CERTIFIED"
+            ],
+            "type": "string"
+          },
+          "certificationMessage": {
+            "description": "Optional message associated with the certification.",
+            "nullable": true,
+            "type": "string"
+          },
+          "certifiedAt": {
+            "description": "Time when the certification was set.",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "certifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
+          "content": {
+            "$ref": "#/components/schemas/DeclarativeComputedAttributeContent"
+          },
+          "createdAt": {
+            "description": "Time of the entity creation.",
+            "example": "2023-07-20 12:30",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
+          "dataType": {
+            "description": "Computed attribute data type",
+            "enum": [
+              "INT",
+              "STRING",
+              "DATE",
+              "NUMERIC",
+              "TIMESTAMP",
+              "TIMESTAMP_TZ",
+              "BOOLEAN",
+              "HLL"
+            ],
+            "example": "STRING",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "description": {
+            "description": "Computed attribute description.",
+            "example": "Sales for all the data available.",
+            "maxLength": 10000,
+            "type": "string"
+          },
+          "id": {
+            "description": "Computed attribute ID.",
+            "example": "total-sales",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "isHidden": {
+            "description": "If true, this computed attribute is hidden from AI search results.",
+            "example": false,
+            "type": "boolean"
+          },
+          "isNullable": {
+            "description": "Flag indicating whether the associated source column allows null values.",
+            "example": false,
+            "type": "boolean"
+          },
+          "locale": {
+            "description": "Default locale for primary computed label.",
+            "example": "en-US",
+            "type": "string"
+          },
+          "modifiedAt": {
+            "description": "Time of the last entity modification.",
+            "example": "2023-07-20 12:30",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
+          "nullValue": {
+            "description": "Value used in coalesce during joins instead of null.",
+            "example": "empty_value",
+            "type": "string"
+          },
+          "tags": {
+            "description": "A list of tags.",
+            "example": [
+              "Revenues"
+            ],
+            "items": {
+              "description": "A list of tags.",
+              "example": "[\"Revenues\"]",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "description": "Computed attribute title.",
+            "example": "Total sales",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "valueType": {
+            "description": "Specific type of the computed attribute value",
+            "enum": [
+              "TEXT",
+              "HYPERLINK",
+              "GEO",
+              "GEO_LONGITUDE",
+              "GEO_LATITUDE",
+              "GEO_AREA",
+              "GEO_ICON",
+              "IMAGE",
+              "HYPERLOGLOG"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "content",
+          "id",
+          "title"
+        ],
+        "type": "object"
+      },
+      "DeclarativeComputedAttributeContent": {
+        "description": "A definition of the computed attribute content.",
+        "properties": {
+          "format": {
+            "description": "Excel-like format string with optional dynamic tokens. Filter value tokens: [$FILTER:<label_id>] for raw filter value passthrough. Currency tokens: [$CURRENCY:<label_id>] for currency symbol, with optional forms :symbol, :narrow, :code, :name. Locale abbreviations: [$K], [$M], [$B], [$T] for locale-specific scale abbreviations. Tokens are resolved at execution time based on AFM filters and user's format locale. Single-value filters only; multi-value filters use fallback values.",
+            "example": "%0.2f",
+            "maxLength": 2048,
+            "nullable": true,
+            "type": "string"
+          },
+          "maql": {
+            "example": "SELECT 1",
+            "maxLength": 10000,
+            "type": "string"
+          },
+          "metricType": {
+            "description": "Categorizes metric semantics (e.g., currency).",
+            "enum": [
+              "UNSPECIFIED",
+              "CURRENCY"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "maql"
         ],
         "type": "object"
       },
@@ -6957,6 +7132,7 @@
               "fact",
               "label",
               "metric",
+              "computedAttribute",
               "userDataFilter",
               "parameter",
               "automation",
@@ -7079,6 +7255,7 @@
               "fact",
               "label",
               "metric",
+              "computedAttribute",
               "userDataFilter",
               "parameter",
               "automation",
@@ -7728,6 +7905,7 @@
                   "aggregatedFact",
                   "label",
                   "metric",
+                  "computedAttribute",
                   "userDataFilter",
                   "parameter",
                   "exportDefinition",
@@ -11633,6 +11811,793 @@
           "data"
         ],
         "type": "object"
+      },
+      "JsonApiComputedAttributeIn": {
+        "description": "JSON:API representation of computedAttribute entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "content": {
+                "properties": {
+                  "format": {
+                    "description": "Excel-like format string with optional dynamic tokens. Filter value tokens: [$FILTER:<label_id>] for raw filter value passthrough. Currency tokens: [$CURRENCY:<label_id>] for currency symbol, with optional forms :symbol, :narrow, :code, :name. Locale abbreviations: [$K], [$M], [$B], [$T] for locale-specific scale abbreviations. Tokens are resolved at execution time based on AFM filters and user's format locale. Single-value filters only; multi-value filters use fallback values.",
+                    "maxLength": 2048,
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "maql": {
+                    "maxLength": 10000,
+                    "type": "string"
+                  },
+                  "metricType": {
+                    "description": "Categorizes metric semantics (e.g., currency).",
+                    "enum": [
+                      "UNSPECIFIED",
+                      "CURRENCY"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "maql"
+                ],
+                "type": "object"
+              },
+              "dataType": {
+                "enum": [
+                  "INT",
+                  "STRING",
+                  "DATE",
+                  "NUMERIC",
+                  "TIMESTAMP",
+                  "TIMESTAMP_TZ",
+                  "BOOLEAN",
+                  "HLL"
+                ],
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "isHidden": {
+                "type": "boolean"
+              },
+              "isNullable": {
+                "type": "boolean"
+              },
+              "locale": {
+                "type": "string"
+              },
+              "nullValue": {
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "valueType": {
+                "enum": [
+                  "TEXT",
+                  "HYPERLINK",
+                  "GEO",
+                  "GEO_LONGITUDE",
+                  "GEO_LATITUDE",
+                  "GEO_AREA",
+                  "GEO_ICON",
+                  "IMAGE",
+                  "HYPERLOGLOG"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "content"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "computedAttribute"
+            ],
+            "example": "computedAttribute",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiComputedAttributeInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiComputedAttributeIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiComputedAttributeLinkage": {
+        "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "computedAttribute"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiComputedAttributeOut": {
+        "description": "JSON:API representation of computedAttribute entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "certification": {
+                "description": "Certification status of the entity.",
+                "enum": [
+                  "CERTIFIED"
+                ],
+                "type": "string"
+              },
+              "certificationMessage": {
+                "description": "Optional message associated with the certification.",
+                "nullable": true,
+                "type": "string"
+              },
+              "certifiedAt": {
+                "description": "Time when the certification was set.",
+                "example": "2023-07-20 12:30",
+                "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+                "type": "string"
+              },
+              "content": {
+                "properties": {
+                  "format": {
+                    "description": "Excel-like format string with optional dynamic tokens. Filter value tokens: [$FILTER:<label_id>] for raw filter value passthrough. Currency tokens: [$CURRENCY:<label_id>] for currency symbol, with optional forms :symbol, :narrow, :code, :name. Locale abbreviations: [$K], [$M], [$B], [$T] for locale-specific scale abbreviations. Tokens are resolved at execution time based on AFM filters and user's format locale. Single-value filters only; multi-value filters use fallback values.",
+                    "maxLength": 2048,
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "maql": {
+                    "maxLength": 10000,
+                    "type": "string"
+                  },
+                  "metricType": {
+                    "description": "Categorizes metric semantics (e.g., currency).",
+                    "enum": [
+                      "UNSPECIFIED",
+                      "CURRENCY"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "maql"
+                ],
+                "type": "object"
+              },
+              "createdAt": {
+                "description": "Time of the entity creation.",
+                "example": "2023-07-20 12:30",
+                "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+                "type": "string"
+              },
+              "dataType": {
+                "enum": [
+                  "INT",
+                  "STRING",
+                  "DATE",
+                  "NUMERIC",
+                  "TIMESTAMP",
+                  "TIMESTAMP_TZ",
+                  "BOOLEAN",
+                  "HLL"
+                ],
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "isHidden": {
+                "type": "boolean"
+              },
+              "isNullable": {
+                "type": "boolean"
+              },
+              "locale": {
+                "type": "string"
+              },
+              "modifiedAt": {
+                "description": "Time of the last entity modification.",
+                "example": "2023-07-20 12:30",
+                "format": "date-time",
+                "nullable": true,
+                "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+                "type": "string"
+              },
+              "nullValue": {
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "valueType": {
+                "enum": [
+                  "TEXT",
+                  "HYPERLINK",
+                  "GEO",
+                  "GEO_LONGITUDE",
+                  "GEO_LATITUDE",
+                  "GEO_AREA",
+                  "GEO_ICON",
+                  "IMAGE",
+                  "HYPERLOGLOG"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "content"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "meta": {
+            "properties": {
+              "origin": {
+                "properties": {
+                  "originId": {
+                    "description": "defines id of the workspace where the entity comes from",
+                    "type": "string"
+                  },
+                  "originType": {
+                    "description": "defines type of the origin of the entity",
+                    "enum": [
+                      "NATIVE",
+                      "PARENT"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "originId",
+                  "originType"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "relationships": {
+            "properties": {
+              "attributes": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAttributeToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "certifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "computedAttributes": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiComputedAttributeToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "createdBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "datasets": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiDatasetToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "facts": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiFactToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "labels": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiLabelToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "metrics": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiMetricToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "modifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "parameters": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiParameterToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "computedAttribute"
+            ],
+            "example": "computedAttribute",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiComputedAttributeOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiComputedAttributeOut"
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiComputedAttributeOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiComputedAttributeOutIncludes": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiAttributeOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiComputedAttributeOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiFactOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiLabelOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiMetricOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiParameterOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+          }
+        ]
+      },
+      "JsonApiComputedAttributeOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiComputedAttributeOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiComputedAttributeOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiComputedAttributeOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiComputedAttributeOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiComputedAttributePatch": {
+        "description": "JSON:API representation of patching computedAttribute entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "content": {
+                "properties": {
+                  "format": {
+                    "description": "Excel-like format string with optional dynamic tokens. Filter value tokens: [$FILTER:<label_id>] for raw filter value passthrough. Currency tokens: [$CURRENCY:<label_id>] for currency symbol, with optional forms :symbol, :narrow, :code, :name. Locale abbreviations: [$K], [$M], [$B], [$T] for locale-specific scale abbreviations. Tokens are resolved at execution time based on AFM filters and user's format locale. Single-value filters only; multi-value filters use fallback values.",
+                    "maxLength": 2048,
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "maql": {
+                    "maxLength": 10000,
+                    "type": "string"
+                  },
+                  "metricType": {
+                    "description": "Categorizes metric semantics (e.g., currency).",
+                    "enum": [
+                      "UNSPECIFIED",
+                      "CURRENCY"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "maql"
+                ],
+                "type": "object"
+              },
+              "dataType": {
+                "enum": [
+                  "INT",
+                  "STRING",
+                  "DATE",
+                  "NUMERIC",
+                  "TIMESTAMP",
+                  "TIMESTAMP_TZ",
+                  "BOOLEAN",
+                  "HLL"
+                ],
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "isHidden": {
+                "type": "boolean"
+              },
+              "isNullable": {
+                "type": "boolean"
+              },
+              "locale": {
+                "type": "string"
+              },
+              "nullValue": {
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "valueType": {
+                "enum": [
+                  "TEXT",
+                  "HYPERLINK",
+                  "GEO",
+                  "GEO_LONGITUDE",
+                  "GEO_LATITUDE",
+                  "GEO_AREA",
+                  "GEO_ICON",
+                  "IMAGE",
+                  "HYPERLOGLOG"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "computedAttribute"
+            ],
+            "example": "computedAttribute",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiComputedAttributePatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiComputedAttributePatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiComputedAttributePostOptionalId": {
+        "description": "JSON:API representation of computedAttribute entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "content": {
+                "properties": {
+                  "format": {
+                    "description": "Excel-like format string with optional dynamic tokens. Filter value tokens: [$FILTER:<label_id>] for raw filter value passthrough. Currency tokens: [$CURRENCY:<label_id>] for currency symbol, with optional forms :symbol, :narrow, :code, :name. Locale abbreviations: [$K], [$M], [$B], [$T] for locale-specific scale abbreviations. Tokens are resolved at execution time based on AFM filters and user's format locale. Single-value filters only; multi-value filters use fallback values.",
+                    "maxLength": 2048,
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "maql": {
+                    "maxLength": 10000,
+                    "type": "string"
+                  },
+                  "metricType": {
+                    "description": "Categorizes metric semantics (e.g., currency).",
+                    "enum": [
+                      "UNSPECIFIED",
+                      "CURRENCY"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "maql"
+                ],
+                "type": "object"
+              },
+              "dataType": {
+                "enum": [
+                  "INT",
+                  "STRING",
+                  "DATE",
+                  "NUMERIC",
+                  "TIMESTAMP",
+                  "TIMESTAMP_TZ",
+                  "BOOLEAN",
+                  "HLL"
+                ],
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "isHidden": {
+                "type": "boolean"
+              },
+              "isNullable": {
+                "type": "boolean"
+              },
+              "locale": {
+                "type": "string"
+              },
+              "nullValue": {
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "valueType": {
+                "enum": [
+                  "TEXT",
+                  "HYPERLINK",
+                  "GEO",
+                  "GEO_LONGITUDE",
+                  "GEO_LATITUDE",
+                  "GEO_AREA",
+                  "GEO_ICON",
+                  "IMAGE",
+                  "HYPERLOGLOG"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "content"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "computedAttribute"
+            ],
+            "example": "computedAttribute",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiComputedAttributePostOptionalIdDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiComputedAttributePostOptionalId"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiComputedAttributeToManyLinkage": {
+        "description": "References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "items": {
+          "$ref": "#/components/schemas/JsonApiComputedAttributeLinkage"
+        },
+        "type": "array"
       },
       "JsonApiCookieSecurityConfigurationIn": {
         "description": "JSON:API representation of cookieSecurityConfiguration entity.",
@@ -17611,7 +18576,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000.0
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -17663,7 +18628,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000.0
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -17785,7 +18750,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000.0
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -17841,7 +18806,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000.0
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -18051,7 +19016,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000.0
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -18103,7 +19068,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000.0
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -18217,7 +19182,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000.0
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -18269,7 +19234,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000.0
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -19789,6 +20754,17 @@
                 ],
                 "type": "object"
               },
+              "computedAttributes": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiComputedAttributeToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "createdBy": {
                 "properties": {
                   "data": {
@@ -19893,7 +20869,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiMetricOutIncludes"
+              "$ref": "#/components/schemas/JsonApiComputedAttributeOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -19906,31 +20882,6 @@
           "data"
         ],
         "type": "object"
-      },
-      "JsonApiMetricOutIncludes": {
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/JsonApiAttributeOutWithLinks"
-          },
-          {
-            "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
-          },
-          {
-            "$ref": "#/components/schemas/JsonApiFactOutWithLinks"
-          },
-          {
-            "$ref": "#/components/schemas/JsonApiLabelOutWithLinks"
-          },
-          {
-            "$ref": "#/components/schemas/JsonApiMetricOutWithLinks"
-          },
-          {
-            "$ref": "#/components/schemas/JsonApiParameterOutWithLinks"
-          },
-          {
-            "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
-          }
-        ]
       },
       "JsonApiMetricOutList": {
         "description": "A JSON:API document with a list of resources",
@@ -19945,7 +20896,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiMetricOutIncludes"
+              "$ref": "#/components/schemas/JsonApiComputedAttributeOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -22634,6 +23585,17 @@
                 ],
                 "type": "object"
               },
+              "computedAttributes": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiComputedAttributeToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "datasets": {
                 "properties": {
                   "data": {
@@ -22756,6 +23718,9 @@
         "oneOf": [
           {
             "$ref": "#/components/schemas/JsonApiAttributeOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiComputedAttributeOutWithLinks"
           },
           {
             "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
@@ -24192,6 +25157,17 @@
                 ],
                 "type": "object"
               },
+              "computedAttributes": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiComputedAttributeToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "createdBy": {
                 "properties": {
                   "data": {
@@ -24296,7 +25272,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiMetricOutIncludes"
+              "$ref": "#/components/schemas/JsonApiComputedAttributeOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -24323,7 +25299,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiMetricOutIncludes"
+              "$ref": "#/components/schemas/JsonApiComputedAttributeOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -29654,7 +30630,8 @@
             "enum": [
               "metric",
               "visualizationObject",
-              "analyticalDashboard"
+              "analyticalDashboard",
+              "computedAttribute"
             ],
             "type": "string"
           }
@@ -44673,6 +45650,696 @@
           "description": "Contains minimal permission level required to manage this object type.",
           "permissions": [
             "CREATE_AUTOMATION"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/computedAttributes": {
+      "get": {
+        "operationId": "getAllEntities@ComputedAttributes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,computedAttributes,metrics,datasets,parameters",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "facts",
+                  "attributes",
+                  "labels",
+                  "computedAttributes",
+                  "metrics",
+                  "datasets",
+                  "parameters",
+                  "createdBy",
+                  "modifiedBy",
+                  "certifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiComputedAttributeOutList"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiComputedAttributeOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get all Computed Attributes",
+        "tags": [
+          "Computed Attributes",
+          "entities",
+          "computed-attribute-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      },
+      "post": {
+        "operationId": "createEntity@ComputedAttributes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,computedAttributes,metrics,datasets,parameters",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "facts",
+                  "attributes",
+                  "labels",
+                  "computedAttributes",
+                  "metrics",
+                  "datasets",
+                  "parameters",
+                  "createdBy",
+                  "modifiedBy",
+                  "certifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiComputedAttributePostOptionalIdDocument"
+              }
+            },
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiComputedAttributePostOptionalIdDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiComputedAttributeOutDocument"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiComputedAttributeOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Post Computed Attributes",
+        "tags": [
+          "Computed Attributes",
+          "entities",
+          "computed-attribute-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/computedAttributes/search": {
+      "post": {
+        "operationId": "searchEntities@ComputedAttributes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiComputedAttributeOutList"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiComputedAttributeOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "The search endpoint (beta)",
+        "tags": [
+          "Computed Attributes",
+          "entities",
+          "computed-attribute-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId}": {
+      "delete": {
+        "operationId": "deleteEntity@ComputedAttributes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "summary": "Delete a Computed Attribute",
+        "tags": [
+          "Computed Attributes",
+          "entities",
+          "computed-attribute-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "get": {
+        "operationId": "getEntity@ComputedAttributes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,computedAttributes,metrics,datasets,parameters",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "facts",
+                  "attributes",
+                  "labels",
+                  "computedAttributes",
+                  "metrics",
+                  "datasets",
+                  "parameters",
+                  "createdBy",
+                  "modifiedBy",
+                  "certifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiComputedAttributeOutDocument"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiComputedAttributeOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get a Computed Attribute",
+        "tags": [
+          "Computed Attributes",
+          "entities",
+          "computed-attribute-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      },
+      "patch": {
+        "operationId": "patchEntity@ComputedAttributes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,computedAttributes,metrics,datasets,parameters",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "facts",
+                  "attributes",
+                  "labels",
+                  "computedAttributes",
+                  "metrics",
+                  "datasets",
+                  "parameters",
+                  "createdBy",
+                  "modifiedBy",
+                  "certifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiComputedAttributePatchDocument"
+              }
+            },
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiComputedAttributePatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiComputedAttributeOutDocument"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiComputedAttributeOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Patch a Computed Attribute",
+        "tags": [
+          "Computed Attributes",
+          "entities",
+          "computed-attribute-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "put": {
+        "operationId": "updateEntity@ComputedAttributes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "createdBy,modifiedBy,certifiedBy,facts,attributes,labels,computedAttributes,metrics,datasets,parameters",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "facts",
+                  "attributes",
+                  "labels",
+                  "computedAttributes",
+                  "metrics",
+                  "datasets",
+                  "parameters",
+                  "createdBy",
+                  "modifiedBy",
+                  "certifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiComputedAttributeInDocument"
+              }
+            },
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiComputedAttributeInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiComputedAttributeOutDocument"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiComputedAttributeOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Put a Computed Attribute",
+        "tags": [
+          "Computed Attributes",
+          "entities",
+          "computed-attribute-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
           ]
         }
       }

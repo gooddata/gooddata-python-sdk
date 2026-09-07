@@ -222,6 +222,8 @@ from gooddata_sdk.catalog.workspace.aac import (
 from gooddata_sdk.catalog.workspace.content_service import CatalogWorkspaceContent, CatalogWorkspaceContentService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
     CatalogDeclarativeAnalytics,
+    CatalogDeclarativeComputedAttribute,
+    CatalogDeclarativeComputedAttributeContent,
     CatalogDeclarativeMemoryItem,
     CatalogDeclarativeMetric,
     CatalogDeclarativeParameter,
@@ -269,6 +271,13 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import
     CatalogDeclarativeWorkspaceDataFilterSetting,
     CatalogDeclarativeWorkspaceModel,
     CatalogDeclarativeWorkspaces,
+)
+from gooddata_sdk.catalog.workspace.entity_model.content_objects.computed_attribute import (
+    CatalogComputedAttribute,
+    CatalogComputedAttributeAttributes,
+    CatalogComputedAttributeContent,
+    CatalogComputedAttributeDocument,
+    CatalogComputedAttributePostDocument,
 )
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
     CatalogAttribute,

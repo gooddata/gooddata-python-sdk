@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_metric_in_attributes_content import JsonApiMetricInAttributesContent
-    globals()['JsonApiMetricInAttributesContent'] = JsonApiMetricInAttributesContent
+    from gooddata_api_client.model.json_api_computed_attribute_in_attributes_content import JsonApiComputedAttributeInAttributesContent
+    globals()['JsonApiComputedAttributeInAttributesContent'] = JsonApiComputedAttributeInAttributesContent
 
 
 class JsonApiMetricPatchAttributes(ModelNormal):
@@ -95,7 +95,7 @@ class JsonApiMetricPatchAttributes(ModelNormal):
         lazy_import()
         return {
             'are_relations_valid': (bool,),  # noqa: E501
-            'content': (JsonApiMetricInAttributesContent,),  # noqa: E501
+            'content': (JsonApiComputedAttributeInAttributesContent,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
             'is_hidden_from_kda': (bool,),  # noqa: E501
@@ -160,7 +160,7 @@ class JsonApiMetricPatchAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
-            content (JsonApiMetricInAttributesContent): [optional]  # noqa: E501
+            content (JsonApiComputedAttributeInAttributesContent): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
             is_hidden_from_kda (bool): [optional]  # noqa: E501
@@ -252,7 +252,7 @@ class JsonApiMetricPatchAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
-            content (JsonApiMetricInAttributesContent): [optional]  # noqa: E501
+            content (JsonApiComputedAttributeInAttributesContent): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
             is_hidden_from_kda (bool): [optional]  # noqa: E501

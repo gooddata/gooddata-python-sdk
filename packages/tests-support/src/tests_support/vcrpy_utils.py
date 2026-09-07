@@ -61,14 +61,18 @@ _password_replacements: list[tuple[re.Pattern, str]] = []
 _normalization_configured: bool = False
 
 # --- Timestamp normalization ---
-_CREATED_AT_RE = re.compile(
-    r'(?<=createdAt": ")\d{4}-\d{2}-\d{2} \d{2}:\d{2}'  # JSON (stdlib): "createdAt": "..."
-    r"|"
-    r'(?<=createdAt":")\d{4}-\d{2}-\d{2} \d{2}:\d{2}'  # JSON (orjson):  "createdAt":"..."
-    r"|"
-    r"(?<=createdAt: )\d{4}-\d{2}-\d{2} \d{2}:\d{2}"  # YAML: createdAt: ...
+# Entity timestamps change on every recording, so canonicalize them: otherwise a
+# re-recorded cassette differs from its predecessor by timestamps alone. Every key
+# needs three variants - stdlib JSON ("key": "val"), orjson ("key":"val") and YAML.
+_TIMESTAMP_KEYS = ("createdAt", "modifiedAt")
+_TIMESTAMP_VALUE = r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}"
+_TIMESTAMP_RE = re.compile(
+    "|".join(
+        rf'(?<={key}": "){_TIMESTAMP_VALUE}|(?<={key}":"){_TIMESTAMP_VALUE}|(?<={key}: ){_TIMESTAMP_VALUE}'
+        for key in _TIMESTAMP_KEYS
+    )
 )
-_CANONICAL_CREATED_AT = "2000-01-01 00:00"
+_CANONICAL_TIMESTAMP = "2000-01-01 00:00"
 
 # --- Transient server value normalization ---
 # All patterns need both stdlib JSON ("key": "val") and orjson ("key":"val") variants.
@@ -280,7 +284,7 @@ def _normalize_hashes_in_text(text: str) -> str:
     """Replace transient server values with deterministic placeholders."""
     text = _EXEC_HASH_BODY_RE.sub(_exec_hash_replacer, text)
     text = _EXPORT_HASH_BODY_RE.sub(_export_hash_replacer, text)
-    text = _CREATED_AT_RE.sub(_CANONICAL_CREATED_AT, text)
+    text = _TIMESTAMP_RE.sub(_CANONICAL_TIMESTAMP, text)
     text = _TRACE_ID_RE.sub(_CANONICAL_TRACE_ID, text)
     text = _AUTH_ID_RE.sub(_CANONICAL_AUTH_ID, text)
     text = _BEARER_TOKEN_RE.sub(_CANONICAL_BEARER_TOKEN, text)

@@ -44,7 +44,7 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiMetricPostOptionalId(
             attributes=JsonApiMetricInAttributes(
                 are_relations_valid=True,
-                content=JsonApiMetricInAttributesContent(
+                content=JsonApiComputedAttributeInAttributesContent(
                     format="format_example",
                     maql="maql_example",
                     metric_type="UNSPECIFIED",
@@ -399,7 +399,7 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiMetricPatch(
             attributes=JsonApiMetricPatchAttributes(
                 are_relations_valid=True,
-                content=JsonApiMetricInAttributesContent(
+                content=JsonApiComputedAttributeInAttributesContent(
                     format="format_example",
                     maql="maql_example",
                     metric_type="UNSPECIFIED",
@@ -603,7 +603,7 @@ with gooddata_api_client.ApiClient() as api_client:
         data=JsonApiMetricIn(
             attributes=JsonApiMetricInAttributes(
                 are_relations_valid=True,
-                content=JsonApiMetricInAttributesContent(
+                content=JsonApiComputedAttributeInAttributesContent(
                     format="format_example",
                     maql="maql_example",
                     metric_type="UNSPECIFIED",

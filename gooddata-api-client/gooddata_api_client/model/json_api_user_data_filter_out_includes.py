@@ -33,6 +33,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
     from gooddata_api_client.model.json_api_attribute_out_with_links import JsonApiAttributeOutWithLinks
+    from gooddata_api_client.model.json_api_computed_attribute_out_with_links import JsonApiComputedAttributeOutWithLinks
     from gooddata_api_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
     from gooddata_api_client.model.json_api_fact_out_with_links import JsonApiFactOutWithLinks
     from gooddata_api_client.model.json_api_label_out_with_links import JsonApiLabelOutWithLinks
@@ -45,6 +46,7 @@ def lazy_import():
     from gooddata_api_client.model.object_links import ObjectLinks
     globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
     globals()['JsonApiAttributeOutWithLinks'] = JsonApiAttributeOutWithLinks
+    globals()['JsonApiComputedAttributeOutWithLinks'] = JsonApiComputedAttributeOutWithLinks
     globals()['JsonApiDatasetOutWithLinks'] = JsonApiDatasetOutWithLinks
     globals()['JsonApiFactOutWithLinks'] = JsonApiFactOutWithLinks
     globals()['JsonApiLabelOutWithLinks'] = JsonApiLabelOutWithLinks
@@ -366,6 +368,7 @@ class JsonApiUserDataFilterOutIncludes(ModelComposed):
           ],
           'oneOf': [
               JsonApiAttributeOutWithLinks,
+              JsonApiComputedAttributeOutWithLinks,
               JsonApiDatasetOutWithLinks,
               JsonApiFactOutWithLinks,
               JsonApiLabelOutWithLinks,

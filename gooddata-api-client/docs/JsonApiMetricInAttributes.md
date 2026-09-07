@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | [**JsonApiMetricInAttributesContent**](JsonApiMetricInAttributesContent.md) |  | 
+**content** | [**JsonApiComputedAttributeInAttributesContent**](JsonApiComputedAttributeInAttributesContent.md) |  | 
 **are_relations_valid** | **bool** |  | [optional] 
 **description** | **str** |  | [optional] 
 **is_hidden** | **bool** |  | [optional] 

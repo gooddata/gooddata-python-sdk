@@ -58,6 +58,7 @@ class AfmObjectIdentifierLabelIdentifier(ModelNormal):
     allowed_values = {
         ('type',): {
             'LABEL': "label",
+            'COMPUTEDATTRIBUTE': "computedAttribute",
         },
     }
 
@@ -111,14 +112,14 @@ class AfmObjectIdentifierLabelIdentifier(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, type, *args, **kwargs):  # noqa: E501
         """AfmObjectIdentifierLabelIdentifier - a model defined in OpenAPI
 
         Args:
             id (str):
+            type (str):
 
         Keyword Args:
-            type (str): defaults to "label", must be one of ["label", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -151,7 +152,6 @@ class AfmObjectIdentifierLabelIdentifier(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
-        type = kwargs.get('type', "label")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -203,14 +203,14 @@ class AfmObjectIdentifierLabelIdentifier(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, type, *args, **kwargs):  # noqa: E501
         """AfmObjectIdentifierLabelIdentifier - a model defined in OpenAPI
 
         Args:
             id (str):
+            type (str):
 
         Keyword Args:
-            type (str): defaults to "label", must be one of ["label", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -243,7 +243,6 @@ class AfmObjectIdentifierLabelIdentifier(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
-        type = kwargs.get('type', "label")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
