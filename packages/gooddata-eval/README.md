@@ -16,6 +16,7 @@ Or install `gd-eval` as a standalone tool:
 | Command | Description |
 |---|---|
 | `gd-eval run` | Run an evaluation dataset against one or more models. |
+| `gd-eval report` | Render JSON report(s) as one self-contained HTML file. |
 | `gd-eval models` | List LLM providers and models configured in the org. |
 
 ---
@@ -134,6 +135,8 @@ gd-eval run \
 | Flag | Description |
 |---|---|
 | `--json PATH` | Write a JSON report to this path. Always uses the nested `{models, runs, comparison}` shape even for a single model. |
+| `--html PATH` | Write a self-contained HTML report to this path (same output as `gd-eval report`). |
+| `--redact` | Make the HTML customer-safe. See `gd-eval report`. |
 | `--quiet` | Suppress per-item progress. Per-model result tables and the comparison summary are still printed. |
 
 #### Langfuse sink
@@ -161,6 +164,51 @@ The JSON report always uses the nested multi-model shape:
 ```
 
 Winner is selected by **pass rate → quality score → latency** (lower latency wins all-equal ties).
+
+---
+
+## `gd-eval report`
+
+Turns JSON report(s) into one HTML file you can actually navigate. No server, no
+credentials, no external assets — it opens over `file://`, attaches to a Jira issue and
+survives a Slack thread.
+
+```bash
+# one run
+gd-eval report results.json -o report.html
+
+# several runs side by side -- each file becomes its own column
+gd-eval report aug-21.json sep-07.json -o comparison.html --title "H200 regression check"
+
+# customer-safe
+gd-eval report results.json -o customer.html --redact
+```
+
+| Flag | Description |
+|---|---|
+| `-o, --out PATH` | Where to write the HTML. Required. |
+| `--title TEXT` | Title shown in the report header. |
+| `--redact` | Drop conversation/response ids and raw reasoning, and rename models to `Model A`, `Model B`, … Pass rate, per-item results, questions and latency survive. |
+
+The report is a *view* over the JSON — it computes no numbers of its own. It gives you:
+
+- **Run cards and a comparison table** — pass rate, quality, latency per run.
+- **An item table** with a pass/fail column per run, so a model or run-over-run
+  regression is one glance rather than a hand-assembled spreadsheet.
+- **An expression filter** for cross-cutting questions the fixed filters can't
+  anticipate, e.g. `d.filter_ranking_score === false` or
+  `d.expected_metric_uris.length > 1 && !d.metrics_correct`. Available variables:
+  `d` (the focused run's `detail`), `it` (its item), `i` (the row, `i.per[label]` for any
+  run), `q` (question), `kind`.
+- **A per-item drawer** — checks as pass/fail chips, expected vs actual side by side,
+  full reasoning, conversation/response ids.
+- **A latency timeline** from `detail.latency_breakdown`, in execution order, one bar per
+  step. Clicking a reasoning step expands the full paragraph it was summarised from
+  (joined by `index`). Tool arguments and results are not in the JSON report, so tool
+  steps show name and duration only.
+
+Passing several files keyed by file name is the whole run-over-run mechanism: no
+database, no run registry, just the JSON files you already have on disk.
 
 ---
 

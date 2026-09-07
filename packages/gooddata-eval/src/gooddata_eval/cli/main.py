@@ -22,7 +22,8 @@ from gooddata_eval.core.dataset.local import load_local_dataset
 from gooddata_eval.core.langfuse.sink import LangfuseSink
 from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.reporting.console import render_comparison, render_console
-from gooddata_eval.core.reporting.json_report import write_multi_model_report
+from gooddata_eval.core.reporting.html_report import load_report_files, write_html_report
+from gooddata_eval.core.reporting.json_report import build_multi_model_report, write_multi_model_report
 from gooddata_eval.core.runner import ItemReport, run_items
 from gooddata_eval.core.summary.http_client import SummaryClient
 from gooddata_eval.core.workspace import ModelResolutionError, WorkspaceModelController
@@ -99,6 +100,18 @@ def _build_parser() -> argparse.ArgumentParser:
         "Increase to load-test the agent under simultaneous requests.",
     )
     run.add_argument("--json", dest="json_path", help="Write a JSON report to this path.")
+    run.add_argument(
+        "--html",
+        dest="html_path",
+        help="Write a self-contained HTML report to this path. Same output as `gd-eval report`, "
+        "for the single-run case where you do not want to keep the JSON around.",
+    )
+    run.add_argument(
+        "--redact",
+        action="store_true",
+        help="Customer-safe HTML: drop conversation/response ids and raw reasoning, and replace "
+        "model names with 'Model A', 'Model B', ...",
+    )
     run.add_argument("--quiet", action="store_true", help="Suppress per-item progress output.")
     run.add_argument(
         "--preserve-failed",
@@ -128,6 +141,22 @@ def _build_parser() -> argparse.ArgumentParser:
             "resolves, which may not have every skill under test enabled."
         ),
     )
+    report = sub.add_parser(
+        "report",
+        help="Render JSON report(s) as one self-contained HTML file.",
+        description="Render JSON report(s) as one self-contained HTML file. Pass several files to "
+        "compare runs side by side -- each becomes its own column, keyed by file name.",
+    )
+    report.add_argument("json_paths", nargs="+", metavar="REPORT.json", help="JSON report file(s) from `run --json`.")
+    report.add_argument("-o", "--out", required=True, help="Path to write the HTML file to.")
+    report.add_argument("--title", default="gd-eval report", help="Title shown in the report header.")
+    report.add_argument(
+        "--redact",
+        action="store_true",
+        help="Customer-safe output: drop conversation/response ids and raw reasoning, and replace "
+        "model names with 'Model A', 'Model B', ...",
+    )
+
     models_cmd = sub.add_parser("models", help="List LLM providers and models configured in the org.")
     models_cmd.add_argument("--host", help="GoodData host URL.")
     models_cmd.add_argument("--token", help="API token (or set GOODDATA_TOKEN).")
@@ -435,6 +464,16 @@ def _run(config: RunConfig) -> int:
     if config.json_path is not None:
         write_multi_model_report(reports, config.json_path)
 
+    if config.html_path is not None:
+        write_html_report(build_multi_model_report(reports), config.html_path, redact=config.redact)
+
+    return _EXIT_OK
+
+
+def _report(args: argparse.Namespace) -> int:
+    paths = [Path(p) for p in args.json_paths]
+    write_html_report(load_report_files(paths), Path(args.out), redact=args.redact, title=args.title)
+    print(f"Wrote {args.out}")
     return _EXIT_OK
 
 
@@ -444,6 +483,11 @@ def main(argv: list[str] | None = None) -> int:
         print("error: --concurrency must be >= 1.", file=sys.stderr)
         return _EXIT_OPERATIONAL_ERROR
     try:
+        # Rendering existing JSON needs no host, token or workspace -- dispatch before
+        # resolve_connection so `report` works on a laptop with no credentials at all.
+        if args.command == "report":
+            return _report(args)
+
         host, token = resolve_connection(host=args.host, token=args.token, profile=args.profile)
         if args.command == "models":
             return _list_models(host, token, getattr(args, "workspace", None))
@@ -457,6 +501,8 @@ def main(argv: list[str] | None = None) -> int:
             runs=args.runs,
             concurrency=args.concurrency,
             json_path=Path(args.json_path) if args.json_path else None,
+            html_path=Path(args.html_path) if args.html_path else None,
+            redact=args.redact,
             log_to_langfuse=args.langfuse,
             quiet=args.quiet,
             kind=args.kind,

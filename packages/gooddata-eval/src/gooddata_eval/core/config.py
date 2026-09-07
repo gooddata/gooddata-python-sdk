@@ -39,6 +39,8 @@ class RunConfig:
     runs: int = 2
     concurrency: int = 1
     json_path: Path | None = None
+    html_path: Path | None = None
+    redact: bool = False
     log_to_langfuse: bool = False
     quiet: bool = False
     kind: str = "visualization"
