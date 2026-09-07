@@ -25,6 +25,19 @@ _PLACEHOLDER = "__GD_EVAL_DATA__"
 # reading the embedded data blob: internal ids, and the model's own raw reasoning text.
 _REDACTED_ITEM_FIELDS = frozenset({"conversation_id", "response_id", "reasoning"})
 
+# Same, one level down inside `detail`. The transcript goes because the simulated user is
+# primed with the expected output -- showing the exchange discloses how we score, not just
+# what scored. `turns` (a count) stays: "this needed a clarification round" is a fair fact.
+_REDACTED_DETAIL_FIELDS = frozenset({"transcript"})
+
+
+def _redact_item(item: dict) -> dict:
+    out = {k: v for k, v in item.items() if k not in _REDACTED_ITEM_FIELDS}
+    detail = out.get("detail")
+    if isinstance(detail, dict):
+        out["detail"] = {k: v for k, v in detail.items() if k not in _REDACTED_DETAIL_FIELDS}
+    return out
+
 
 def _redact(doc: dict) -> dict:
     """Strip internal ids and replace model names with stable aliases.
@@ -39,10 +52,7 @@ def _redact(doc: dict) -> dict:
             **run,
             "model": alias[label],
             "workspace_id": "",
-            "items": {
-                item_id: {k: v for k, v in item.items() if k not in _REDACTED_ITEM_FIELDS}
-                for item_id, item in (run.get("items") or {}).items()
-            },
+            "items": {item_id: _redact_item(item) for item_id, item in (run.get("items") or {}).items()},
         }
         for label, run in doc.get("runs", {}).items()
     }

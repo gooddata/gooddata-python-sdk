@@ -79,6 +79,12 @@
   .tl .track > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
   .tl .row.reasoning .track > i { background: #9aa5bb; }
   .tl .d { text-align: right; font-variant-numeric: tabular-nums; color: var(--dim); }
+  .turn { margin: 0 0 8px; padding: 6px 10px; border-left: 3px solid var(--line); background: #f7f7f5; border-radius: 0 4px 4px 0; }
+  .turn.assistant { border-left-color: var(--accent); background: #f2f5fd; }
+  .turn.simulated_user { border-left-color: #b07d2b; background: #fdf7ec; }
+  .turn.note { border-left-color: var(--skip); background: #fdf3d5; font-style: italic; }
+  .turn .who { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--dim); font-weight: 600; }
+  .turn .said { font-size: 12.5px; white-space: pre-wrap; overflow-wrap: anywhere; }
   .chip { display: inline-block; padding: 0 6px; border-radius: 3px; font-size: 11px; background: #eceae5; margin-right: 4px; }
   .chip.y { background: #e2f3e9; color: var(--pass); } .chip.n { background: #fbe9e7; color: var(--fail); }
   .close { float: right; cursor: pointer; color: var(--dim); background: none; border: 0; font-size: 18px; line-height: 1; }
@@ -296,6 +302,7 @@ function openDrawer(r) {
       ${it.classification ? `<span class="chip">${esc(it.classification)}</span>` : ''}
     </div>
     ${it.error ? `<section><h2>Error</h2><pre>${esc(it.error)}</pre></section>` : ''}
+    ${transcriptHtml(it)}
     ${detailHtml(it.detail || {})}
     ${timelineHtml(it)}
     ${reasoningHtml(it)}
@@ -309,8 +316,27 @@ function openDrawer(r) {
   });
 }
 
+// The agentic path drives a real multi-turn exchange: an answer without a visualization
+// gets a simulated-user follow-up. Reading who said what is how you tell "the agent got
+// there" apart from "the simulated user handed it the answer" -- so the turns are laid
+// out as a conversation, with the simulated user visibly marked as not a real person.
+function transcriptHtml(it) {
+  const turns = (it.detail || {}).transcript || [];
+  if (!turns.length) return '';
+  const n = (it.detail || {}).turns;
+  return `<section><h2>Conversation${n ? ` (${n} turn${n > 1 ? 's' : ''})` : ''}</h2>` +
+    turns.map((t) => `<div class="turn ${esc(t.role)}">
+      <div class="who">${esc(ROLE[t.role] || t.role)}${t.turn ? ` · turn ${esc(t.turn)}` : ''}</div>
+      <div class="said">${esc(t.text || '')}</div>
+      ${t.visualization ? `<pre>${esc(fmt(t.visualization))}</pre>` : ''}
+    </div>`).join('') + '</section>';
+}
+const ROLE = { user: 'question', assistant: 'agent', simulated_user: 'simulated user', note: 'note' };
+
 function detailHtml(detail) {
-  const keys = Object.keys(detail).filter((k) => k !== 'latency_breakdown');
+  // transcript/turns get their own section above; latency_breakdown drives the timeline.
+  const skip = new Set(['latency_breakdown', 'transcript', 'turns']);
+  const keys = Object.keys(detail).filter((k) => !skip.has(k));
   if (!keys.length) return '';
   const done = new Set(), parts = [];
   for (const k of keys) {

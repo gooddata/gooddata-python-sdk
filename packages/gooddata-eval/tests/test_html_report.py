@@ -29,6 +29,12 @@ def _doc(model: str, passed: bool) -> dict:
                             "latency_breakdown": [
                                 {"seq": 0, "kind": "tool", "name": "search", "index": 0, "duration_s": 1.0}
                             ],
+                            "turns": 2,
+                            "transcript": [
+                                {"turn": 1, "role": "user", "text": "How many orders?"},
+                                {"turn": 1, "role": "assistant", "text": "Which order status?"},
+                                {"turn": 2, "role": "simulated_user", "text": "primed with the expected answer"},
+                            ],
                         },
                     }
                 },
@@ -81,6 +87,17 @@ def test_redact_drops_ids_reasoning_and_model_name():
     # The evaluation itself survives redaction -- only identity goes.
     assert data["runs"]["Model A"]["items"]["item-1"]["question"] == "How many orders?"
     assert data["runs"]["Model A"]["items"]["item-1"]["detail"]["latency_breakdown"]
+
+
+def test_redact_drops_the_transcript_but_keeps_the_turn_count():
+    html = build_html(_doc("gpt-5", False), redact=True)
+
+    # The simulated user is primed with the expected output, so the exchange discloses how
+    # we score. "It took 2 turns" is still a fair thing to show a customer.
+    assert "primed with the expected answer" not in html
+    detail = _embedded(html)["runs"]["Model A"]["items"]["item-1"]["detail"]
+    assert "transcript" not in detail
+    assert detail["turns"] == 2
 
 
 def test_closing_script_tag_in_data_cannot_break_out():
