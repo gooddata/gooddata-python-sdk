@@ -2,6 +2,12 @@
 # Load .env if it exists (staging secrets, gitignored)
 -include .env
 
+# Exported so the staging recipes can read them as shell variables ($$VAR) instead of make
+# interpolations. An interpolated secret is printed by `make -n` even on an @-prefixed recipe
+# line, and lands in the sub-make's argv where any user can see it via `ps`.
+export STAGING_ADMIN_TOKEN
+export STAGING_DS_PASSWORD
+
 # list all full paths to files and directories in CWD containing "gooddata", filter out ones ending by "client"
 NO_CLIENT_GD_PROJECTS_ABS = $(filter-out %client, $(wildcard $(CURDIR)/packages/*gooddata*))
 # for each path, take only the base name of the path
@@ -25,9 +31,12 @@ all:
 	echo "Nothing here yet."
 
 .PHONY: dev
+# The second install wires up the commit-msg stage, where gitlint runs; plain
+# `pre-commit install` only installs the pre-commit stage.
 dev:
 	uv sync --all-groups
 	.venv/bin/pre-commit install
+	.venv/bin/pre-commit install --hook-type commit-msg
 
 .PHONY: lint
 lint:
@@ -96,21 +105,21 @@ test:
 
 .PHONY: test-staging
 test-staging:
-	@test -n "$(STAGING_ADMIN_TOKEN)" || (echo "ERROR: STAGING_ADMIN_TOKEN is required. Set it in .env or pass on CLI." && exit 1)
-	@test -n "$(STAGING_DS_PASSWORD)" || (echo "ERROR: STAGING_DS_PASSWORD is required. Set it in .env or pass on CLI." && exit 1)
-	$(MAKE) -C packages/gooddata-sdk test-staging TOKEN=$(STAGING_ADMIN_TOKEN) DS_PASSWORD=$(STAGING_DS_PASSWORD)
+	@test -n "$${STAGING_ADMIN_TOKEN}" || (echo "ERROR: STAGING_ADMIN_TOKEN is required. Set it in .env or export it." && exit 1)
+	@test -n "$${STAGING_DS_PASSWORD}" || (echo "ERROR: STAGING_DS_PASSWORD is required. Set it in .env or export it." && exit 1)
+	@TOKEN="$${STAGING_ADMIN_TOKEN}" DS_PASSWORD="$${STAGING_DS_PASSWORD}" $(MAKE) -C packages/gooddata-sdk test-staging
 
 .PHONY: clean-staging
 clean-staging:
-	@test -n "$(STAGING_ADMIN_TOKEN)" || (echo "ERROR: STAGING_ADMIN_TOKEN is required. Set it in .env or pass on CLI." && exit 1)
-	@test -n "$(STAGING_DS_PASSWORD)" || (echo "ERROR: STAGING_DS_PASSWORD is required. Set it in .env or pass on CLI." && exit 1)
-	cd packages/tests-support && STAGING=1 TOKEN="$(STAGING_ADMIN_TOKEN)" DS_PASSWORD="$(STAGING_DS_PASSWORD)" uv run --locked python clean_staging.py
+	@test -n "$${STAGING_ADMIN_TOKEN}" || (echo "ERROR: STAGING_ADMIN_TOKEN is required. Set it in .env or export it." && exit 1)
+	@test -n "$${STAGING_DS_PASSWORD}" || (echo "ERROR: STAGING_DS_PASSWORD is required. Set it in .env or export it." && exit 1)
+	@cd packages/tests-support && STAGING=1 TOKEN="$${STAGING_ADMIN_TOKEN}" DS_PASSWORD="$${STAGING_DS_PASSWORD}" uv run --locked python clean_staging.py
 
 .PHONY: load-staging
 load-staging:
-	@test -n "$(STAGING_ADMIN_TOKEN)" || (echo "ERROR: STAGING_ADMIN_TOKEN is required. Set it in .env or pass on CLI." && exit 1)
-	@test -n "$(STAGING_DS_PASSWORD)" || (echo "ERROR: STAGING_DS_PASSWORD is required. Set it in .env or pass on CLI." && exit 1)
-	cd packages/tests-support && STAGING=1 TOKEN="$(STAGING_ADMIN_TOKEN)" DS_PASSWORD="$(STAGING_DS_PASSWORD)" uv run --locked python upload_demo_layout.py
+	@test -n "$${STAGING_ADMIN_TOKEN}" || (echo "ERROR: STAGING_ADMIN_TOKEN is required. Set it in .env or export it." && exit 1)
+	@test -n "$${STAGING_DS_PASSWORD}" || (echo "ERROR: STAGING_DS_PASSWORD is required. Set it in .env or export it." && exit 1)
+	@cd packages/tests-support && STAGING=1 TOKEN="$${STAGING_ADMIN_TOKEN}" DS_PASSWORD="$${STAGING_DS_PASSWORD}" uv run --locked python upload_demo_layout.py
 
 .PHONY: release
 release:

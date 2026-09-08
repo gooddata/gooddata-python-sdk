@@ -309,24 +309,55 @@ Only one staging test run executes at a time (concurrency group `staging-tests`,
 
 ### Running staging tests locally
 
-You need a staging API token (`TOKEN`). The workflow uses the `PYTHON_SDK_STG_API_KEY` secret; locally you
-pass it via the `TOKEN=` make argument:
+All three staging targets require **two** values: `STAGING_ADMIN_TOKEN` (a staging API token) and
+`STAGING_DS_PASSWORD` (the demo data source password). Each target fails fast with an explicit error if
+either is missing.
+
+Put them in a gitignored `.env` at the repository root — the root `Makefile` does `-include .env`, so
+they are picked up automatically:
+
+```
+STAGING_ADMIN_TOKEN=<your-staging-token>
+STAGING_DS_PASSWORD=<data-source-password>
+```
+
+Then:
 
 ```bash
 # 1. Clean the staging workspace (removes previous test data)
-make clean-staging TOKEN=<your-staging-token>
+make clean-staging
 
 # 2. Load the demo layout into staging
-make load-staging TOKEN=<your-staging-token>
+make load-staging
 
 # 3. Run the tests
-make test-staging TOKEN=<your-staging-token>
+make test-staging
 
 # Optionally limit python version and test filter:
-make test-staging TOKEN=<your-staging-token> TEST_ENVS=py312 ADD_ARGS="-k test_catalog"
+make test-staging TEST_ENVS=py312 ADD_ARGS="-k test_catalog"
 ```
 
-The token is passed as a CLI argument (`--gd-test-token`) to pytest, **not** as an environment variable.
+Exporting them in your shell works too. Prefer either of those over
+`make test-staging STAGING_ADMIN_TOKEN=...`: a value passed as a make argument is visible to every
+user on the machine in `ps` output for as long as the run lasts, and it stays in your shell history.
+
+The root targets rename these on the way down, exporting them into the package-level `test-staging`
+as `TOKEN` and `DS_PASSWORD` alongside `GD_TEST_ENV=staging`. All three reach pytest as
+**environment variables** (declared in each `tox.ini`'s `pass_env` and read from `os.environ` by
+`tests/conftest.py`) — there is no pytest command-line flag for the token.
+
+The staging recipes deliberately reference these as shell variables (`$${VAR}`) rather than make
+variables, and are `@`-prefixed. A make variable holding a secret is printed by `make -n` even from
+an `@` line, and interpolating one into a sub-make command line puts it in that process's argv. Keep
+that shape when editing those targets.
+
+> **The CI workflow does not currently supply these.** `.github/workflows/staging-tests.yaml` sets only
+> `TOKEN` from the `PYTHON_SDK_STG_API_KEY` secret, while the Makefile has required
+> `STAGING_ADMIN_TOKEN` and `STAGING_DS_PASSWORD` since the `.env` support was added. A triggered run
+> would therefore fail immediately at "Clean staging environment". This has gone unnoticed because the
+> job's trigger conditions mean recent runs have all been skipped rather than executed. Fixing it needs
+> the workflow to export both names — and a repository secret for the data source password — so it is
+> left as a deliberate follow-up rather than a silent edit.
 
 ## Run continuous integration tests
 Tests in pull request (PR) are executed using docker. The following is done to make test environment as close
