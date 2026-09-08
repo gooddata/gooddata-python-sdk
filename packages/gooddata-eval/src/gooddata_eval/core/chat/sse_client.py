@@ -80,12 +80,14 @@ def _float_env(name: str, default: float) -> float:
     return float(raw) if raw else default
 
 
-# Retry budget. Defaults give a ~2 min worst-case cap per send (5/10/20/40/60s);
-# overridable via env so CI can retune without cutting a new gooddata-eval release.
-_MAX_RETRIES = _int_env("GOODDATA_EVAL_CHAT_MAX_RETRIES", 5)
-_INITIAL_BACKOFF_S = _float_env("GOODDATA_EVAL_CHAT_INITIAL_BACKOFF_S", 5.0)
-_BACKOFF_FACTOR = _float_env("GOODDATA_EVAL_CHAT_BACKOFF_FACTOR", 2.0)
-_MAX_BACKOFF_S = _float_env("GOODDATA_EVAL_CHAT_MAX_BACKOFF_S", 60.0)
+# Retry budget defaults, giving a ~2 min worst-case cap per send (5/10/20/40/60s).
+# Each is overridable via env so CI can retune without cutting a new release --
+# read per call rather than at import, so an exported value cannot silently
+# rewrite what a test that patches these attributes expects.
+_MAX_RETRIES_DEFAULT = 5
+_INITIAL_BACKOFF_S_DEFAULT = 5.0
+_BACKOFF_FACTOR_DEFAULT = 2.0
+_MAX_BACKOFF_S_DEFAULT = 60.0
 
 # Wall-clock cap on a single agent turn, 0 = uncapped. httpx's `timeout` is per-read,
 # so an agent that keeps emitting reasoning events can stream for many minutes without
@@ -131,23 +133,26 @@ def _is_retryable_exc(exc: Exception) -> bool:
 
 def _retry_transient(operation: Callable[[], T], *, is_retryable: Callable[[Exception], bool]) -> T:
     """Run ``operation``; retry retryable failures with bounded exponential backoff."""
-    delay = _INITIAL_BACKOFF_S
-    for attempt in range(_MAX_RETRIES + 1):  # 0..N => N retries + 1 initial attempt
+    max_retries = _int_env("GOODDATA_EVAL_CHAT_MAX_RETRIES", _MAX_RETRIES_DEFAULT)
+    delay = _float_env("GOODDATA_EVAL_CHAT_INITIAL_BACKOFF_S", _INITIAL_BACKOFF_S_DEFAULT)
+    factor = _float_env("GOODDATA_EVAL_CHAT_BACKOFF_FACTOR", _BACKOFF_FACTOR_DEFAULT)
+    max_backoff = _float_env("GOODDATA_EVAL_CHAT_MAX_BACKOFF_S", _MAX_BACKOFF_S_DEFAULT)
+    for attempt in range(max_retries + 1):  # 0..N => N retries + 1 initial attempt
         try:
             return operation()
         except Exception as exc:  # noqa: PERF203 — retry loop: per-attempt try/except is intentional
-            if attempt == _MAX_RETRIES or not is_retryable(exc):
+            if attempt == max_retries or not is_retryable(exc):
                 raise
-            sleep_s = min(delay, _MAX_BACKOFF_S)
+            sleep_s = min(delay, max_backoff)
             _log.warning(
                 "Transient gen-ai error (attempt %d/%d): %s; retrying in %.0fs",
                 attempt + 1,
-                _MAX_RETRIES + 1,
+                max_retries + 1,
                 exc,
                 sleep_s,
             )
             time.sleep(sleep_s)
-            delay *= _BACKOFF_FACTOR
+            delay *= factor
     raise AssertionError("unreachable")  # loop either returns or raises
 
 
