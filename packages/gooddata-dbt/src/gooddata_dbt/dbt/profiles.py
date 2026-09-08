@@ -224,7 +224,10 @@ class DbtProfiles:
 
     @staticmethod
     def inject_env_vars(output_def: dict) -> None:
-        env_re = re.compile(r"\{\{ env_var\('([^']+)'(,\s*'([^']+)')?\) \}\}")
+        # Default value group uses [^']* (not +): an empty-string default, e.g.
+        # env_var('SNOWFLAKE_PRIVATE_KEY_PATH', ''), previously failed to match at all here, silently
+        # leaving the raw "{{ env_var(...) }}" template in place instead of resolving it.
+        env_re = re.compile(r"\{\{ env_var\('([^']+)'(,\s*'([^']*)')?\) \}\}")
         for output_key, output_value in output_def.items():
             if (env_match := env_re.search(str(output_value))) is not None:
                 default_value = None
