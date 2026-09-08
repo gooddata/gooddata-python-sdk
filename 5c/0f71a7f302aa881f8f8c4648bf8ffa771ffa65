@@ -1,0 +1,33 @@
+.claude/skills/cassette-update/SKILL.md
+  s_ff2589ec1b117a::t_f4a63c1215588b 43,46-51
+.claude/skills/commit/SKILL.md
+  s_ff2589ec1b117a::t_4cd2735e8c577e 41
+AGENTS.md
+  s_ff2589ec1b117a::t_22419c1981d31d 132,137-141,216
+CONTRIBUTING.md
+  s_ff2589ec1b117a::t_7cfe142f30f905 340-352
+Makefile
+  s_ff2589ec1b117a::t_1ee36b5dbbdc07 5-10,108-110,114-116,120-122
+packages/tests-support/AGENTS.md
+  s_ff2589ec1b117a::t_d692fccb4bdd6d 59-62,66,69-73
+project_common.mk
+  s_ff2589ec1b117a::t_4bcc1c8807098f 74-75,77-78
+scripts/conventional_commit_gitlint_rule.py
+  s_ff2589ec1b117a::t_6e3c1ae365cb4a 143-151,155
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "5c0f71a7f302aa881f8f8c4648bf8ffa771ffa65",
+  "prompts": {},
+  "sessions": {
+    "s_ff2589ec1b117a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b53ed987-b22e-400c-93eb-3d8c29f94a2d",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
