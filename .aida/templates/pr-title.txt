@@ -1,1 +1,0 @@
-{type}{repository_part}: {title}

@@ -7,7 +7,7 @@ ignore=T1, B1, B2, B5, T5
 regex-style-search=true
 
 # enable our extended conventional commits rule
-extra-path=packages/repo-tools/src/quiver_monorepo/conventional_commit_gitlint_rule.py
+extra-path=scripts/conventional_commit_gitlint_rule.py
 
 # ignore all release commits (merge and revert commits are ignored by default)
 [ignore-by-title]
@@ -16,4 +16,6 @@ ignore=all
 
 # add the most likely scopes for each package
 [gdc-title-conventional-commits]
-scopes=gooddata-api-client,gooddata-dbt,gooddata-fdw,gooddata-flexconnect,gooddata-flight-server,gooddata-pandas,gooddata-sdk
+scopes=gooddata-api-client,gooddata-dbt,gooddata-eval,gooddata-fdw,gooddata-flexconnect,
+       gooddata-flight-server,gooddata-pandas,gooddata-pipelines,gooddata-sdk,tests-support,
+       ci,docs,repo
