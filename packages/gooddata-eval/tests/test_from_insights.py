@@ -3,6 +3,7 @@ import json
 
 import pytest
 from gooddata_eval.core.dataset.from_insights import (
+    PromisedRanking,
     Unsupported,
     _rules_for,
     _validation_errors,
@@ -22,7 +23,10 @@ from gooddata_eval.core.dataset.from_insights import (
     mint_id,
     pick_derived,
     rankable,
+    rescued,
     resolve_type,
+    spec_signature,
+    title_direction,
 )
 from gooddata_eval.core.dataset.local import load_local_dataset
 from gooddata_eval.core.models import CreatedVisualization
@@ -867,3 +871,169 @@ def test_element_counts_stop_at_the_ceiling_and_survive_an_unservable_label():
         catalog_workspace_content = _Content()
 
     assert element_counts(_Sdk(), "ws", {"label/merchant.NAME", "label/bad"}) == {"label/merchant.NAME": 7}
+
+
+# --- rescuing insights whose titles promised a ranking ------------------------
+
+
+@pytest.mark.parametrize(
+    "title,direction",
+    [
+        ("Top Returned Reasons", "top"),
+        ("Products With the Highest Return Rate", "top"),
+        ("Products by Most Items Sold", "top"),
+        ("Largest Accounts", "top"),
+        ("Products With the Lowest Return Rate", "bottom"),
+        ("Products by Least Items Sold", "bottom"),
+        ("Worst Performing Merchants", "bottom"),
+        # Names both ends, so it names neither: implementing one would be a coin flip.
+        ("Top and Bottom Products", None),
+        ("Spend by Merchant", None),
+    ],
+)
+def test_title_direction(title, direction):
+    assert title_direction(title) == direction
+
+
+def test_a_promised_ranking_carries_the_spec_and_the_intent():
+    with pytest.raises(PromisedRanking) as caught:
+        convert(spend_by_merchant(title="Top 10 Merchants by Spend"), DATE_IDS)
+
+    assert caught.value.direction == "top"
+    assert caught.value.n == 10
+    assert caught.value.spec["metrics"] == ["m_spend"]
+    assert isinstance(caught.value, Unsupported), "still unusable as a copied fixture"
+
+
+def test_a_promised_ranking_without_a_number_leaves_n_open():
+    with pytest.raises(PromisedRanking) as caught:
+        convert(spend_by_merchant(title="Top Merchants"), DATE_IDS)
+    assert caught.value.n is None
+
+
+def test_an_ambiguous_ranking_title_is_a_plain_skip():
+    with pytest.raises(Unsupported) as caught:
+        convert(spend_by_merchant(title="Top and Bottom Merchants"), DATE_IDS)
+    assert not isinstance(caught.value, PromisedRanking)
+
+
+def _promised(title):
+    with pytest.raises(PromisedRanking) as caught:
+        convert(spend_by_merchant(title=title), DATE_IDS)
+    return caught.value
+
+
+def test_a_lowest_title_is_implemented_as_a_bottom_n():
+    items = rescued([_promised("Merchants With the Lowest Spend")], DATE_IDS, {"label/merchant.NAME": 40})
+
+    ranking = next(iter(items[0]["query"]["filter_by"].values()))
+    assert ranking == {"type": "ranking_filter", "using": "m_spend", "bottom": 5}
+    assert items[0]["_derived_basis"] == "title", "the human's title asked for this, not the generator"
+
+
+def test_an_explicit_n_in_the_title_wins_over_the_default():
+    items = rescued([_promised("Top 10 Merchants by Spend")], DATE_IDS, {"label/merchant.NAME": 40})
+    assert next(iter(items[0]["query"]["filter_by"].values()))["top"] == 10
+
+
+def test_a_title_asking_for_more_rows_than_exist_is_not_rescued():
+    assert rescued([_promised("Top 10 Merchants by Spend")], DATE_IDS, {"label/merchant.NAME": 7}) == []
+
+
+def test_a_promised_ranking_on_an_unrankable_shape_is_not_rescued():
+    error = PromisedRanking(
+        "promises a ranking",
+        convert(
+            viz(
+                "local:line",
+                [
+                    {"localIdentifier": "measures", "items": [measure("m", "spend")]},
+                    {"localIdentifier": "trend", "items": [attribute("a", "process_date.month")]},
+                ],
+            ),
+            DATE_IDS,
+        ),
+        "top",
+        5,
+    )
+    assert rescued([error], DATE_IDS, {}) == []
+
+
+def test_rescued_items_are_spent_before_anything_the_generator_invents():
+    # A base unrelated to the rescued one, so ordering is what is under test here and
+    # not the dedup that would otherwise collapse two identical rankings.
+    specs = [convert(_bar("revenue", "region.NAME"), DATE_IDS)]
+    promised = [_promised("Top Merchants by Spend")]
+
+    picked = pick_derived(specs, DATE_IDS, 1, counts={}, promised=promised)
+    assert [p["_derived_basis"] for p in picked] == ["title"]
+
+    picked = pick_derived(specs, DATE_IDS, 3, counts={}, promised=promised)
+    assert [p["_derived_basis"] for p in picked] == ["title", "shape", "shape"]
+
+
+def test_element_counts_cover_the_rescue_candidates_too():
+    promised = [_promised("Top Merchants by Spend")]
+    assert derived_candidates([], DATE_IDS, promised) == {"label/merchant.NAME"}
+
+
+def test_a_bottom_sort_is_ascending():
+    out = derive(convert(_bar("spend", "merchant.NAME"), DATE_IDS), "sort_by", 3, DATE_IDS, direction="bottom")
+    assert out["sort_by"] == [{"field": "m_spend", "direction": "ASC"}]
+
+
+def test_an_unknown_direction_is_a_programming_error():
+    base = convert(_bar("spend", "merchant.NAME"), DATE_IDS)
+    with pytest.raises(ValueError, match="direction"):
+        derive(base, "ranking_filter", 3, DATE_IDS, direction="middle")
+
+
+def test_a_rescued_item_is_scorable_and_says_the_title_asked_for_it():
+    items = rescued([_promised("Top 5 Merchants by Spend")], DATE_IDS, {"label/merchant.NAME": 40})
+    envelope = build(items[0], "What are the top 5 Merchants by Spend?", "d", set())
+
+    assert _validation_errors(envelope) is None
+    assert envelope["derived_basis"] == "title"
+    assert langfuse_payload([envelope], "d", "ws", "o")["items"][0]["metadata"]["derived_basis"] == "title"
+
+
+def test_a_bottom_ranking_is_briefed_as_bottom():
+    items = rescued([_promised("Merchants With the Lowest Spend")], DATE_IDS, {"label/merchant.NAME": 40})
+    assert "bottom 5 by Spend Amount" in describe(items[0], DISPLAY)
+    assert "the bottom 5 Merchant Name" in _rules_for(items[0], DISPLAY)
+
+
+def test_two_insights_with_one_definition_do_not_become_two_items():
+    # loop has "Products by Most Items Sold" and "Products Driving the Highest Number of
+    # Repeat Purchases" over the same metric and dimension. Both promise a ranking, and
+    # deriving from each produced the identical question twice.
+    promised = [_promised("Products by Most Items Sold"), _promised("Products With the Highest Spend")]
+    picked = pick_derived([], DATE_IDS, 5, counts={"label/merchant.NAME": 40}, promised=promised)
+
+    assert len(picked) == 1
+    assert len({spec_signature(spec) for spec in picked}) == 1
+
+
+def test_dedup_compares_what_is_asked_not_how_it_is_titled():
+    base = convert(_bar("spend", "merchant.NAME"), DATE_IDS)
+    same = derive(base, "ranking_filter", 5, DATE_IDS)
+    renamed = derive({**base, "title": "Something Else", "id": "v_other"}, "ranking_filter", 5, DATE_IDS)
+    assert spec_signature(same) == spec_signature(renamed)
+
+    other_n = derive(base, "ranking_filter", 3, DATE_IDS)
+    other_end = derive(base, "ranking_filter", 5, DATE_IDS, direction="bottom")
+    assert len({spec_signature(s) for s in (same, other_n, other_end)}) == 3
+
+
+def test_a_rescue_and_an_invented_ranking_that_agree_yield_one_item():
+    # `pick_derived` spends rescues first, so the surviving item is the grounded one.
+    base = convert(_bar("spend", "merchant.NAME"), DATE_IDS)
+    picked = pick_derived(
+        [base],
+        DATE_IDS,
+        5,
+        counts={"label/merchant.NAME": 40},
+        promised=[_promised("Top 5 Merchants by Spend")],
+    )
+    ranked = [spec for spec in picked if spec["_derived_kind"] == "ranking_filter"]
+    assert [spec["_derived_basis"] for spec in ranked] == ["title"]

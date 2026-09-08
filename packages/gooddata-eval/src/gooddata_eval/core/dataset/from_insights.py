@@ -123,6 +123,13 @@ FILTER_WORDS = re.compile(
     re.I,
 )
 
+# Which end of the ranking a title names. A title using both ("Top and Bottom Products")
+# names no single direction and is left alone.
+TOP_WORDS = re.compile(r"\b(top|most|highest|largest|greatest|best)\b", re.I)
+BOTTOM_WORDS = re.compile(r"\b(bottom|least|fewest|lowest|smallest|worst)\b", re.I)
+# "Top 10 Products" states the N outright; most titles do not.
+TITLE_N = re.compile(r"\b(?:top|bottom|first|last)\s+(\d{1,3})\b", re.I)
+
 # A slot the writer failed to fill: it copied the instruction instead of a real name.
 PLACEHOLDER = re.compile(r"\b(breakdown|split|filter)\s+dimension\b|[{}<>]")
 # The text a question breaks down by. `(?<!...)` keeps a bare "by" from matching the
@@ -152,6 +159,21 @@ _HASH_LEN = 4
 
 class Unsupported(Exception):
     """This insight cannot be expressed as an AAC spec without guessing."""
+
+
+class PromisedRanking(Unsupported):
+    """The title names a ranking the definition never implemented.
+
+    Still unusable as a copied fixture -- but unlike every other `Unsupported`, the
+    missing piece is written down: a human titled the chart "Products With the Highest
+    Return Rate" and then saved it without the sort. `--enrich-ranked` implements what
+    the title says instead of throwing the insight away, so the exception carries the
+    converted spec and the intent parsed out of the title.
+    """
+
+    def __init__(self, message: str, spec: dict, direction: str, n: int | None):
+        super().__init__(message)
+        self.spec, self.direction, self.n = spec, direction, n
 
 
 def _slugify(text: str) -> str:
@@ -386,9 +408,22 @@ def _reject_degenerate(spec: dict) -> None:
     """
     title = spec["title"] or ""
     if RANK_WORDS.search(title) and not ranks(spec):
-        raise Unsupported(f"title '{title}' promises a ranking the definition has no sort/ranking filter for")
+        message = f"title '{title}' promises a ranking the definition has no sort/ranking filter for"
+        direction = title_direction(title)
+        if direction is None:
+            raise Unsupported(message)
+        found = TITLE_N.search(title)
+        raise PromisedRanking(message, spec, direction, int(found.group(1)) if found else None)
     if FILTER_WORDS.search(title) and not filters(spec):
         raise Unsupported(f"title '{title}' promises a filter the definition has no date/attribute filter for")
+
+
+def title_direction(title: str) -> str | None:
+    """Which end of the ranking `title` names, or None if it names both or neither."""
+    top, bottom = bool(TOP_WORDS.search(title)), bool(BOTTOM_WORDS.search(title))
+    if top == bottom:
+        return None
+    return "top" if top else "bottom"
 
 
 def classify(spec: dict, date_instance_ids: set) -> str:
@@ -463,28 +498,41 @@ def derived_n(element_count: int | None) -> int | None:
     return None
 
 
-def derive(spec: dict, kind: str, n: int, date_instance_ids: set) -> dict:
-    """A copy of `spec` with a ranking filter or a descending sort added.
+def derive(
+    spec: dict,
+    kind: str,
+    n: int,
+    date_instance_ids: set,
+    direction: str = "top",
+    basis: str = "shape",
+) -> dict:
+    """A copy of `spec` with a ranking filter or a sort added.
 
     The two kinds are never combined in one item: "the top 3" limits the rows and
     "sorted by" only orders them, they score on different checks, and an item asserting
     both is an item you cannot diagnose from its result.
+
+    `basis` records who wanted the ranking -- "title" when a human's own chart title
+    asked for it, "shape" when this generator chose to add one.
     """
     if kind not in DERIVED_KINDS:
         raise ValueError(f"unknown derived kind '{kind}'")
+    if direction not in ("top", "bottom"):
+        raise ValueError(f"unknown ranking direction '{direction}'")
     out = json.loads(json.dumps(spec))
     metric = out["metrics"][0]
     if kind == "ranking_filter":
         key = f"f{len(out['query']['filter_by'])}"
-        out["query"]["filter_by"][key] = {"type": "ranking_filter", "using": metric, "top": n}
-        out["id"] = f"{out['id']}_top{n}"[:30]
-        out["title"] = f"{spec['title']} (top {n})"
+        out["query"]["filter_by"][key] = {"type": "ranking_filter", "using": metric, direction: n}
+        out["id"] = f"{out['id']}_{direction}{n}"[:30]
+        out["title"] = f"{spec['title']} ({direction} {n})"
     else:
-        out["sort_by"] = [{"field": metric, "direction": "DESC"}]
+        out["sort_by"] = [{"field": metric, "direction": "DESC" if direction == "top" else "ASC"}]
         out["id"] = f"{out['id']}_sorted"[:30]
         out["title"] = f"{spec['title']} (sorted)"
     out["_derived_from"] = spec["id"]
     out["_derived_kind"] = kind
+    out["_derived_basis"] = basis
     out["_shape"] = classify(out, date_instance_ids)
     return out
 
@@ -508,15 +556,96 @@ def element_counts(sdk, workspace_id: str, label_uris: set) -> dict:
     return {uri: n for uri in sorted(label_uris) if (n := count(uri)) is not None}
 
 
-def pick_derived(specs: list, date_instance_ids: set, limit: int, counts: dict | None = None) -> list:
-    """Up to `limit` derived variants, spread across distinct metrics.
+def rescued(promised: list, date_instance_ids: set, counts: dict | None = None) -> list:
+    """Ranked items for insights whose titles promised a ranking they never implemented.
 
-    Expanding every eligible insight would turn one popular metric into a third of the
-    corpus, and the pass rate into a measurement of one skill. Bases are taken
-    round-robin by metric, and ranking-filter variants are exhausted before any sort-only
-    variant is added, so a small `limit` yields the shape the corpus is missing most.
+    Higher confidence than anything derived from shape alone: the direction comes from
+    the human's own words, and often the N does too. A title's explicit N is honoured
+    even when it differs from what the cardinality would have chosen, but a title asking
+    for a top 10 of seven values still yields nothing -- the words do not make the data
+    deeper.
     """
     counts = counts or {}
+    out = []
+    for error in promised:
+        spec = error.spec
+        alias = rankable(spec, date_instance_ids)
+        if alias is None:
+            continue
+        count = counts.get(field_uri(spec["query"]["fields"], alias))
+        if error.n is None:
+            n = derived_n(count)
+        elif count is None or count >= error.n + _ELEMENT_HEADROOM:
+            n = error.n
+        else:
+            n = None
+        if n is None:
+            continue
+        out.append(derive(spec, "ranking_filter", n, date_instance_ids, error.direction, basis="title"))
+    return out
+
+
+def spec_signature(spec: dict) -> str:
+    """What the item actually asks for, as a comparable string.
+
+    Two differently-titled insights can carry the same definition -- loop has both
+    "Products by Most Items Sold" and "Products Driving the Highest Number of Repeat
+    Purchases" over Units Sold by Product Title -- and deriving from each produces the
+    same question twice. Identity is the resolved fields, filters and sorts; titles and
+    ids are not part of it.
+    """
+    fields = spec["query"]["fields"]
+
+    def resolve(value):
+        if isinstance(value, str):
+            return field_uri(fields, value)
+        if isinstance(value, dict):
+            return {k: resolve(v) for k, v in sorted(value.items())}
+        if isinstance(value, list):
+            return [resolve(v) for v in value]
+        return value
+
+    return json.dumps(
+        {
+            "metrics": sorted(resolve(a) for a in spec["metrics"]),
+            "dims": sorted(resolve(a) for a in spec["view_by"] + spec["segment_by"] + spec["columns"] + spec["rows"]),
+            "filters": sorted(json.dumps(resolve(f), sort_keys=True) for f in spec["query"]["filter_by"].values()),
+            "sorts": [resolve(entry) for entry in spec["sort_by"]],
+        },
+        sort_keys=True,
+    )
+
+
+def pick_derived(
+    specs: list,
+    date_instance_ids: set,
+    limit: int,
+    counts: dict | None = None,
+    promised: list | None = None,
+) -> list:
+    """Up to `limit` derived variants, best-grounded first.
+
+    Order matters because the budget is small: rescued items (a human titled the chart
+    "Top Returned Reasons") come before ranking filters this generator invented, which
+    come before sort-only variants. Within the invented ones, expanding every eligible
+    insight would turn one popular metric into a third of the corpus and the pass rate
+    into a measurement of one skill, so bases are taken round-robin by metric.
+    """
+    counts = counts or {}
+    seen, out = set(), []
+
+    def take(spec: dict) -> bool:
+        """Keep `spec` unless an item already asks the same thing. Reports the budget."""
+        signature = spec_signature(spec)
+        if signature not in seen:
+            seen.add(signature)
+            out.append(spec)
+        return len(out) < limit
+
+    for spec in rescued(promised or [], date_instance_ids, counts):
+        if not take(spec):
+            break
+
     by_metric: dict[str, list] = {}
     for spec in specs:
         alias = rankable(spec, date_instance_ids)
@@ -528,7 +657,6 @@ def pick_derived(specs: list, date_instance_ids: set, limit: int, counts: dict |
             continue
         by_metric.setdefault(field_uri(fields, spec["metrics"][0]), []).append((spec, n))
 
-    out = []
     for kind in DERIVED_KINDS:
         queues = [list(group) for group in by_metric.values()]
         while queues and len(out) < limit:
@@ -536,17 +664,16 @@ def pick_derived(specs: list, date_instance_ids: set, limit: int, counts: dict |
                 if not queue:
                     continue
                 spec, n = queue.pop(0)
-                out.append(derive(spec, kind, n, date_instance_ids))
-                if len(out) >= limit:
-                    break
+                if not take(derive(spec, kind, n, date_instance_ids)):
+                    return out
             queues = [q for q in queues if q]
     return out
 
 
-def derived_candidates(specs: list, date_instance_ids: set) -> set:
+def derived_candidates(specs: list, date_instance_ids: set, promised: list | None = None) -> set:
     """Label uris whose element count decides whether a base can be derived from."""
     uris = set()
-    for spec in specs:
+    for spec in list(specs) + [e.spec for e in promised or []]:
         alias = rankable(spec, date_instance_ids)
         if alias is not None:
             uris.add(field_uri(spec["query"]["fields"], alias))
@@ -858,6 +985,7 @@ def resolve_type(spec: dict, question: str) -> str:
 
 def build(spec: dict, question: str, dataset_name: str, existing_ids: set) -> dict:
     derived_from, derived_kind = spec.get("_derived_from"), spec.get("_derived_kind")
+    derived_basis = spec.get("_derived_basis")
     spec = {k: v for k, v in spec.items() if not k.startswith("_")}
     spec["type"] = resolve_type(spec, question)
     question_id = mint_id(question, existing_ids)
@@ -875,6 +1003,7 @@ def build(spec: dict, question: str, dataset_name: str, existing_ids: set) -> di
         # and the pass rate has to be computable both ways.
         envelope["derived_from"] = derived_from
         envelope["derived_kind"] = derived_kind
+        envelope["derived_basis"] = derived_basis
     return envelope
 
 
@@ -898,7 +1027,11 @@ def langfuse_payload(envelopes: list, dataset: str, workspace_id: str, origin: s
                     "workspace": workspace_id,
                     "origin": origin,
                     **(
-                        {"derived_from": e["derived_from"], "derived_kind": e["derived_kind"]}
+                        {
+                            "derived_from": e["derived_from"],
+                            "derived_kind": e["derived_kind"],
+                            "derived_basis": e["derived_basis"],
+                        }
                         if e.get("derived_from")
                         else {}
                     ),
@@ -942,7 +1075,7 @@ def generate(args, sdk_factory=None) -> int:
             return 1
         visualizations = [v for v in visualizations if v.get("id") in keep]
 
-    specs, skipped = [], []
+    specs, skipped, promised = [], [], []
     for viz in visualizations:
         if viz.get("isHidden"):
             # Hidden objects are invisible to the AI assistant's catalog search, so a
@@ -951,6 +1084,12 @@ def generate(args, sdk_factory=None) -> int:
             continue
         try:
             specs.append(convert(viz, date_instance_ids, display_names))
+        except PromisedRanking as exc:
+            # Unusable as a copy, but the title says what the definition forgot. Kept
+            # aside for `--enrich-ranked`; still a skip when enrichment is off.
+            promised.append(exc)
+            if not args.enrich_ranked:
+                skipped.append((viz.get("id"), str(exc)))
         except Unsupported as exc:
             skipped.append((viz.get("id"), str(exc)))
 
@@ -958,7 +1097,7 @@ def generate(args, sdk_factory=None) -> int:
     derived = []
     if args.enrich_ranked:
         counts = dict(snapshot.get("label_cardinality") or {})
-        wanted = derived_candidates(specs, date_instance_ids)
+        wanted = derived_candidates(specs, date_instance_ids, promised)
         missing = wanted - set(counts)
         if sdk is not None and missing:
             counts.update(element_counts(sdk, snapshot["workspace_id"], missing))
@@ -971,8 +1110,26 @@ def generate(args, sdk_factory=None) -> int:
                 f"deriving with the smallest N",
                 file=sys.stderr,
             )
-        derived = pick_derived(specs, date_instance_ids, args.enrich_ranked, counts)
+        derived = pick_derived(specs, date_instance_ids, args.enrich_ranked, counts, promised)
         specs = specs + derived
+        rescued_ids = {spec["_derived_from"] for spec in derived if spec["_derived_basis"] == "title"}
+        # A promised ranking that did not make it was either ineligible or a duplicate of
+        # something already derived. Reporting the original "promises a ranking" message
+        # for a duplicate would send the reader looking for a problem in the wrong place.
+        taken = {spec_signature(spec) for spec in derived}
+        duplicates = {
+            spec["_derived_from"]
+            for spec in rescued(promised, date_instance_ids, counts)
+            if spec["_derived_from"] not in rescued_ids and spec_signature(spec) in taken
+        }
+        skipped.extend(
+            (
+                e.spec["id"],
+                "definition duplicates an item already derived" if e.spec["id"] in duplicates else str(e),
+            )
+            for e in promised
+            if e.spec["id"] not in rescued_ids
+        )
 
     shapes: dict[str, list] = {}
     for spec in specs:
@@ -994,6 +1151,8 @@ def generate(args, sdk_factory=None) -> int:
             by_kind[spec["_derived_kind"]] = by_kind.get(spec["_derived_kind"], 0) + 1
         summary = ", ".join(f"{n} {kind}" for kind, n in by_kind.items()) or "none eligible"
         print(f"  derived from a base      {len(derived)} ({summary}), {n_base} from real insights")
+        n_rescued = sum(1 for spec in derived if spec["_derived_basis"] == "title")
+        print(f"    of those, title-asked  {n_rescued} of {len(promised)} insight(s) that promised a ranking")
     for viz_id, reason in skipped:
         print(f"  SKIP {viz_id}: {reason}")
 
