@@ -22,6 +22,7 @@ from gooddata_eval.core.agentic._trace_linker import (
 )
 from gooddata_eval.core.agentic.alert_skill import render_alert_proposal
 from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids, _extract_metric_result
+from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import (
@@ -214,7 +215,7 @@ def _check_output_correct(turn: TurnDefinition, chat_result: ChatResult) -> bool
 
     Returns None when expected_output is absent (presence check only).
     """
-    from gooddata_eval.core.agentic.metric_skill import _normalize_maql  # noqa: PLC0415
+    from gooddata_eval.core.evaluators._maql import normalize_maql  # noqa: PLC0415
 
     otype = turn.expected_output_type
     expected = turn.expected_output
@@ -256,7 +257,7 @@ def _check_output_correct(turn: TurnDefinition, chat_result: ChatResult) -> bool
         metric_result = _extract_metric_result(chat_result.tool_call_events or [])
         if not metric_result:
             return False
-        return _normalize_maql(metric_result.get("maql", "")) == _normalize_maql(expected.get("maql", ""))
+        return normalize_maql(metric_result.get("maql", "")) == normalize_maql(expected.get("maql", ""))
 
     return None
 
@@ -451,6 +452,8 @@ def run_agentic_conversation(
                 response_text = (chat_result.text_response or "").strip()
                 if not response_text and chat_result.alert_proposals:
                     response_text = render_alert_proposal(chat_result.alert_proposals[-1])
+                if not response_text:
+                    response_text = render_answer_text(chat_result)
                 if not response_text and not chat_result.tool_call_events:
                     break
                 if clarification_turns >= max_clarification_turns:

@@ -11,7 +11,7 @@ from typing import Any
 
 from gooddata_sdk import GoodDataSdk
 
-from gooddata_eval.core.agentic._catalog import CatalogMetricAlert
+from gooddata_eval.core.agentic._catalog import AnomalyDetectionGranularity, CatalogMetricAlert
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -21,6 +21,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     submit_trace_scoring,
     utc_now,
 )
+from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import (
@@ -199,6 +200,22 @@ def _check_attributes(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     return exp_ids == act_ids
 
 
+def _check_granularity(expected: CatalogMetricAlert, actual_args: dict) -> bool:
+    """Compare the ANOMALY detection interval when the fixture states one.
+
+    ``None`` means unasserted, mirroring ``attributes``: only the ANOMALY items carry a
+    ``Granularity``, and every other item must stay unaffected. The expectation is already
+    canonical by the time it lands here; the tool argument is a raw string, so only that
+    side needs folding.
+    """
+    if expected.granularity is None:
+        return True
+    actual = actual_args.get("granularity")
+    if not actual:
+        return False
+    return str(actual).strip().upper() == expected.granularity.value
+
+
 def _check_metric(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     if not expected.metric_id:
         return True
@@ -330,18 +347,36 @@ def generate_simulated_alert_response(
         )
     elif filters == []:
         filters_rule = (
-            "5. Your alert must have NO filters and NO date/time window — it evaluates over all time. "
-            "If the agent asks which time period each check should cover, or offers a choice such as "
-            "'last Day / Week / Month', do NOT pick one: reply that you want no date filter at all, "
-            "all time. Never invent a period, a granularity or an 'evaluate each run on a X basis' "
-            "instruction the goal did not ask for.\n"
+            "5. Your alert must have NO filters and NO date/time window on the metric — it evaluates "
+            "over all time. If the agent asks which time period each check should cover, or offers a "
+            "choice such as 'last Day / Week / Month', do NOT pick one: reply that you want no date "
+            "filter at all, all time.\n"
         )
     else:
         filters_rule = (
             "5. Ask only for the filters your original request implies — do not invent an evaluation "
-            "period, granularity or date window that was not requested. If the agent offers a choice "
+            "period or date window that was not requested. If the agent offers a choice "
             "such as 'last Day / Week / Month' that your request never mentioned, say you do not want "
             "a date window.\n"
+        )
+
+    if operator == "ANOMALY":
+        # The fallback keeps the conversation alive when the fixture names no interval -- an
+        # anomaly alert cannot be created without one. It is deliberately NOT mirrored into
+        # `expected.granularity`: `_check_granularity` asserts only what the fixture stated,
+        # and scoring an item against an interval it never asked for is the defect this rule
+        # exists to undo.
+        granularity = (expected.granularity or AnomalyDetectionGranularity.DAY).value
+        anomaly_rule = (
+            "7. This is an ANOMALY alert. Anomaly detection REQUIRES a time granularity, and that "
+            f"granularity is NOT a date filter. State it in your first reply and repeat it whenever "
+            f"asked: use {granularity} granularity. Rule 5 constrains filters on the metric only — it "
+            "never applies to this detection interval, so never refuse to give one.\n"
+        )
+    else:
+        anomaly_rule = (
+            "7. Do not invent an evaluation period, a granularity or an 'evaluate each run on a X "
+            "basis' instruction your goal never asked for.\n"
         )
 
     original_request = f'Your original request to the agent was: "{question}"\n' if question else ""
@@ -367,8 +402,7 @@ def generate_simulated_alert_response(
         "   Do not wait for the agent to ask — state it alongside the metric and condition answers.\n"
         + filters_rule
         + f"6. Proactively state how often you want to be alerted in your first reply: {trigger_request}. "
-        "   Repeat it if the agent proposes a different cadence.\n"
-        "Reply concisely and directly."
+        "   Repeat it if the agent proposes a different cadence.\n" + anomaly_rule + "Reply concisely and directly."
     )
 
     messages: list = [{"role": "system", "content": system_prompt}]
@@ -408,6 +442,7 @@ class AlertEvaluation:
     metric_correct: bool
     recipients_correct: bool
     attributes_correct: bool = True
+    granularity_correct: bool = True
 
     @property
     def strict_pass(self) -> bool:
@@ -421,6 +456,7 @@ class AlertEvaluation:
                 self.metric_correct,
                 self.recipients_correct,
                 self.attributes_correct,
+                self.granularity_correct,
             ]
         )
 
@@ -539,6 +575,10 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
     filters = _normalize_expected_filters(expected)
     attributes = _normalize_expected_attributes(expected)
 
+    granularity = AnomalyDetectionGranularity.parse(
+        _case_insensitive_get(expected, "granularity", "detection granularity")
+    )
+
     return CatalogMetricAlert(
         operator=operator,
         threshold=threshold,
@@ -549,6 +589,7 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
         recipients=recipients,
         filters=filters,
         attributes=attributes,
+        granularity=granularity,
     )
 
 
@@ -647,6 +688,8 @@ def run_agentic_alert_skill(
                 response_text = (chat_result.text_response or "").strip()
                 if not response_text and chat_result.alert_proposals:
                     response_text = render_alert_proposal(chat_result.alert_proposals[-1])
+                if not response_text:
+                    response_text = render_answer_text(chat_result)
                 # Stop if agent gave a completely empty response (stuck)
                 if not response_text and not chat_result.tool_call_events:
                     break
@@ -670,6 +713,7 @@ def run_agentic_alert_skill(
                 metric_correct=tool_called and _check_metric(expected, actual_args),
                 recipients_correct=tool_called and _check_recipients(expected, actual_args, sdk=sdk),
                 attributes_correct=tool_called and _check_attributes(expected, actual_args),
+                granularity_correct=tool_called and _check_granularity(expected, actual_args),
             )
             return AlertRunResult(
                 conversation_id=conv_id,
@@ -716,6 +760,7 @@ def run_agentic_alert_skill(
                 r.eval.metric_correct,
                 r.eval.recipients_correct,
                 r.eval.attributes_correct,
+                r.eval.granularity_correct,
             ]
         ),
     )
@@ -791,6 +836,7 @@ def evaluate_agentic_alert_skill(
                     "metric_correct": ev.metric_correct,
                     "recipients_correct": ev.recipients_correct,
                     "attributes_correct": ev.attributes_correct,
+                    "granularity_correct": ev.granularity_correct,
                 }
                 with ctx.observe(pt, run_idx) as tid:
                     for score_name, value in strict_checks.items():
@@ -838,6 +884,7 @@ def evaluate_agentic_alert_skill(
         "metric_correct": ev.metric_correct,
         "recipients_correct": ev.recipients_correct,
         "attributes_correct": ev.attributes_correct,
+        "granularity_correct": ev.granularity_correct,
         "actual_alert_arguments": best.actual_alert_arguments,
         "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
@@ -849,7 +896,8 @@ def evaluate_agentic_alert_skill(
             f"threshold_correct={ev.threshold_correct}, trigger_correct={ev.trigger_correct}, "
             f"filters_correct={ev.filters_correct}, metric_correct={ev.metric_correct}, "
             f"recipients_correct={ev.recipients_correct}, "
-            f"attributes_correct={ev.attributes_correct}. "
+            f"attributes_correct={ev.attributes_correct}, "
+            f"granularity_correct={ev.granularity_correct}. "
             f"Actual args: {best.actual_alert_arguments}"
         )
         exc.reasoning_steps = best.reasoning_steps

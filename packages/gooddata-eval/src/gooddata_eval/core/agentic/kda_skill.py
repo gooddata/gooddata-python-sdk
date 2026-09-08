@@ -16,6 +16,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     submit_trace_scoring,
     utc_now,
 )
+from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import (
@@ -286,7 +287,7 @@ def run_agentic_kda_skill(
             response_id = chat_result.response_id or response_id
             _accumulate(chat_result)
             create_args, execute_result = _extract_kda_calls(chat_result.tool_call_events or [])
-            response_text = (chat_result.text_response or "").strip()
+            response_text = render_answer_text(chat_result)
             turn_completed = chat_result.stream_ended and bool(response_text)
             if create_args is not None:
                 # This turn's own time -- the turn that called create, not any earlier
