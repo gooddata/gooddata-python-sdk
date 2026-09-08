@@ -7,6 +7,7 @@ import pytest
 from gooddata_eval.core.agentic.alert_skill import (
     AlertEvaluation,
     AlertSkillAssertionError,
+    _check_attributes,
     _check_filters,
     _check_recipients,
     _check_trigger,
@@ -34,6 +35,20 @@ _ATTR_FILTER = {
         "in": {"values": ["United States"]},
     }
 }
+
+# Group-by entries arrive in two vocabularies for the same thing: fixtures author the AAC
+# tool-input form, `create_metric_alert` receives the resolved AFM form forwarded verbatim
+# from prepare_metric_alert_proposal. A test pairing AFM against AFM would prove nothing.
+_AFM_MONTH_GROUPING = {
+    "localIdentifier": "a0",
+    "label": {"identifier": {"id": "customer_created_date.month", "type": "label"}},
+}
+_AFM_BRAND_GROUPING = {
+    "localIdentifier": "a0",
+    "label": {"identifier": {"id": "product_brand", "type": "label"}},
+}
+_AAC_MONTH_GROUPING = {"using": "label/customer_created_date.month"}
+_AAC_BRAND_GROUPING = {"using": "label/product_brand"}
 
 _PROPOSAL = {
     "title": "# of Orders Alert - Greater Than 500",
@@ -670,6 +685,7 @@ def test_evaluate_agentic_alert_skill_returns_reasoning_steps_on_pass():
         "filters_correct": True,
         "metric_correct": True,
         "recipients_correct": True,
+        "attributes_correct": True,
         "actual_alert_arguments": {"operator": "GREATER_THAN", "threshold": 500},
         "latency_breakdown": [],
     }
@@ -708,6 +724,184 @@ def test_evaluate_agentic_alert_skill_attaches_reasoning_steps_to_exception_on_f
         "filters_correct": False,
         "metric_correct": False,
         "recipients_correct": False,
+        "attributes_correct": False,
         "actual_alert_arguments": {},
         "latency_breakdown": [],
     }
+
+
+# --- attributes: a date narrows an alert as a group-by too ----------------------------------
+#
+# `_check_filters` reads only `filters`, and a group-by in `attributes` narrows an alert just
+# as much: it makes the alert fire per period value instead of on the latest one, which is a
+# different alert from the one the fixture describes. The expectation mirrors the `filters`
+# contract — absent means unasserted, `[]` means "no grouping", a list means that grouping —
+# but the comparison cannot: the fixture side is AAC-shaped and the actual side is AFM-shaped,
+# so both are canonicalised to a label id first.
+
+
+def test_check_attributes_absent_expectation_is_not_asserted():
+    expected = _normalize_expected_output({"Operator": "GREATER_THAN"})
+    assert expected.attributes is None
+    assert _check_attributes(expected, {"attributes": [_AFM_MONTH_GROUPING]}) is True
+
+
+def test_explicit_empty_attributes_rejects_month_grouping():
+    expected = _normalize_expected_output({"Attributes": []})
+    assert expected.attributes == []
+    assert _check_attributes(expected, {"attributes": [_AFM_MONTH_GROUPING]}) is False
+
+
+def test_explicit_empty_attributes_accepts_no_grouping():
+    expected = _normalize_expected_output({"Attributes": []})
+    assert _check_attributes(expected, {"attributes": []}) is True
+    assert _check_attributes(expected, {}) is True
+    assert _check_attributes(expected, {"attributes": None}) is True
+
+
+def test_display_format_none_reads_as_no_grouping():
+    """Fixtures are written in display format, where "None" is how absence is spelled."""
+    expected = _normalize_expected_output({"Attributes": "None"})
+    assert expected.attributes == []
+    assert _check_attributes(expected, {"attributes": [_AFM_MONTH_GROUPING]}) is False
+
+
+def test_aac_expectation_matches_resolved_afm_actual():
+    """The two sides name the same grouping in different vocabularies and must still match."""
+    expected = _normalize_expected_output({"Attributes": [_AAC_BRAND_GROUPING]})
+    assert _check_attributes(expected, {"attributes": [_AFM_BRAND_GROUPING]}) is True
+
+
+def test_stored_product_brand_fixture_still_passes():
+    """The one dataset item that already carries an Attributes expectation, verbatim."""
+    expected = _normalize_expected_output(
+        {
+            "Metric": "Returns (returns)",
+            "Operator": "GREATER_THAN",
+            "Threshold": "30",
+            "Attributes": [{"using": "label/product_brand"}],
+            "Time window/Filters": "For: each value of Product Brand",
+        }
+    )
+    actual = {
+        "attributes": [{"localIdentifier": "a0", "label": {"identifier": {"id": "product_brand", "type": "label"}}}]
+    }
+    assert _check_attributes(expected, actual) is True
+
+
+def test_afm_spelled_expectation_matches_the_same_actual():
+    """A fixture may also be written AFM-side; both spellings mean one grouping."""
+    expected = _normalize_expected_output({"Attributes": [_AFM_BRAND_GROUPING]})
+    assert _check_attributes(expected, {"attributes": [_AFM_BRAND_GROUPING]}) is True
+
+
+def test_date_group_by_keeps_its_granularity_suffix():
+    """`customer_created_date.month` and `customer_created_date` are different groupings."""
+    expected = _normalize_expected_output({"Attributes": [_AAC_MONTH_GROUPING]})
+    assert _check_attributes(expected, {"attributes": [_AFM_MONTH_GROUPING]}) is True
+    coarser = {"localIdentifier": "a0", "label": {"identifier": {"id": "customer_created_date", "type": "label"}}}
+    assert _check_attributes(expected, {"attributes": [coarser]}) is False
+
+
+def test_bare_string_and_identifier_spellings_are_accepted():
+    for spelling in ("product_brand", "label/product_brand", {"identifier": {"id": "product_brand"}}):
+        expected = _normalize_expected_output({"Attributes": [spelling]})
+        assert _check_attributes(expected, {"attributes": [_AFM_BRAND_GROUPING]}) is True
+
+
+def test_explicit_attributes_list_rejects_no_grouping():
+    expected = _normalize_expected_output({"Attributes": [_AAC_BRAND_GROUPING]})
+    assert _check_attributes(expected, {"attributes": []}) is False
+    assert _check_attributes(expected, {}) is False
+
+
+def test_explicit_attributes_list_rejects_an_added_date_grouping():
+    """Requiring a grouping must not license a second, unrequested one."""
+    expected = _normalize_expected_output({"Attributes": [_AAC_BRAND_GROUPING]})
+    actual = {"attributes": [_AFM_BRAND_GROUPING, _AFM_MONTH_GROUPING]}
+    assert _check_attributes(expected, actual) is False
+
+
+def test_grouping_comparison_is_order_insensitive():
+    expected = _normalize_expected_output({"Attributes": [_AAC_MONTH_GROUPING, _AAC_BRAND_GROUPING]})
+    actual = {"attributes": [_AFM_BRAND_GROUPING, _AFM_MONTH_GROUPING]}
+    assert _check_attributes(expected, actual) is True
+
+
+def test_show_all_values_is_not_asserted():
+    """The check compares identity; per-entry properties are the agent's to choose."""
+    expected = _normalize_expected_output({"Attributes": [_AAC_BRAND_GROUPING]})
+    actual = {"attributes": [{**_AFM_BRAND_GROUPING, "showAllValues": True}]}
+    assert _check_attributes(expected, actual) is True
+
+
+def test_unrecognised_expectation_shape_raises():
+    """A spelling the canonicaliser does not know must fail loudly, not compare unequal."""
+    with pytest.raises(ValueError, match="expected group-by"):
+        _normalize_expected_output({"Attributes": [{"dimension": "product_brand"}]})
+    with pytest.raises(ValueError, match="expected group-by"):
+        _normalize_expected_output({"Attributes": [{"using": "attribute/product_brand"}]})
+
+
+def test_malformed_actual_attributes_fail_rather_than_error():
+    """A non-list argument is the agent answering wrongly, and a wrong answer is a FAIL.
+
+    An ERROR would be excluded from the run's failure count, ranking a malformed answer
+    above a merely wrong one.
+    """
+    expected_none = _normalize_expected_output({"Attributes": []})
+    for malformed in ({}, "", 0, {"using": "label/product_brand"}, "product_brand"):
+        assert _check_attributes(expected_none, {"attributes": malformed}) is False
+
+    expected_brand = _normalize_expected_output({"Attributes": [_AAC_BRAND_GROUPING]})
+    for malformed in ({}, "", 0, "product_brand", {"using": "label/product_brand"}):
+        assert _check_attributes(expected_brand, {"attributes": malformed}) is False
+
+
+def test_unrecognised_actual_shape_raises():
+    expected = _normalize_expected_output({"Attributes": [_AAC_BRAND_GROUPING]})
+    with pytest.raises(ValueError, match="actual group-by"):
+        _check_attributes(expected, {"attributes": [{"dimension": "product_brand"}]})
+
+
+def test_attributes_prose_is_not_asserted():
+    """Prose describes a grouping without encoding it, so it cannot be compared."""
+    expected = _normalize_expected_output({"Attributes": "Product Brand"})
+    assert expected.attributes is None
+    assert _check_attributes(expected, {"attributes": [_AFM_MONTH_GROUPING]}) is True
+
+
+def test_attributes_expectation_of_a_wrong_type_fails_loudly():
+    """A malformed fixture must not silently degrade into "not asserted"."""
+    with pytest.raises(ValueError, match="Attributes"):
+        _normalize_expected_output({"Attributes": 7})
+
+
+def test_alert_evaluation_strict_fail_on_attributes_alone():
+    """A group-by alone sinks strict_pass, with every other check passing."""
+    ev = AlertEvaluation(
+        alert_created=True,
+        operator_correct=True,
+        threshold_correct=True,
+        trigger_correct=True,
+        filters_correct=True,
+        metric_correct=True,
+        recipients_correct=True,
+        attributes_correct=False,
+    )
+    assert ev.strict_pass is False
+
+
+def test_alert_evaluation_attributes_correct_defaults_to_true():
+    """Fixtures stating no grouping expectation must not be failed by the new check."""
+    ev = AlertEvaluation(
+        alert_created=True,
+        operator_correct=True,
+        threshold_correct=True,
+        trigger_correct=True,
+        filters_correct=True,
+        metric_correct=True,
+        recipients_correct=True,
+    )
+    assert ev.attributes_correct is True
+    assert ev.strict_pass is True
