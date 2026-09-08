@@ -37,9 +37,10 @@ from pathlib import Path
 # Import the Entity Provisioner class and corresponding model from the gooddata_pipelines library
 from gooddata_pipelines import UserFullLoad, UserProvisioner
 
-# Create the Provisioner instance - you can also create the instance from a GDC yaml profile
-provisioner = UserProvisioner(
-    host=os.environ["GDC_HOSTNAME"], token=os.environ["GDC_AUTH_TOKEN"]
+# Create the Provisioner instance - you can also create the instance from a GDC yaml
+# profile with UserProvisioner.create_from_profile(profile="default")
+provisioner = UserProvisioner.create(
+    os.environ["GDC_HOSTNAME"], os.environ["GDC_AUTH_TOKEN"]
 )
 
 # Optional: set up logging and subscribe to logs emitted by the provisioner
@@ -52,10 +53,12 @@ source_data_path: Path = Path("path/to/some.csv")
 source_data_reader = DictReader(source_data_path.read_text().splitlines())
 source_data = [row for row in source_data_reader]
 
-# Validate your input data
-full_load_data: list[UserFullLoad] = UserFullLoad.from_list_of_dicts(
-    source_data
-)
+# Validate your input data. UserFullLoad forbids unknown keys, and user_groups must be a
+# list, so split the delimited CSV column before validating.
+full_load_data: list[UserFullLoad] = [
+    UserFullLoad(**{**row, "user_groups": row["user_groups"].split("|")})
+    for row in source_data
+]
 
 # Run the provisioning
 provisioner.full_load(full_load_data)

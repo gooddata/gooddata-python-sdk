@@ -73,7 +73,7 @@ test = [
     "docstring_parser~=0.15",
     "jinja2~=3.1",
     # Mirror of the members' `test` groups so the root venv can run any package's tests
-    # (`uv run pytest -k ...`, see scripts/validate_python.sh). Add to it when a member
+    # directly (`uv run pytest -k ...`) without going through tox. Add to it when a member
     # adds a test dependency, or that member's tests stop collecting from the root venv.
     # Unbounded on purpose: the authoritative bounds live in each member's own group, and
     # the single workspace lock resolves one version for everything anyway.

@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "aida": {
-      "command": "aida-mcp",
-      "args": []
-    }
-  }
-}
