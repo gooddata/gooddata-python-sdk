@@ -127,6 +127,78 @@ def _check_filters(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     return _deep_subset(exp_filters, act_filters)
 
 
+def _attribute_label_ids(items: list, *, side: str) -> list[str]:
+    """Canonicalise group-by entries to bare label ids, whatever spelling they arrive in.
+
+    The two sides of the comparison speak different vocabularies for the same grouping.
+    Fixtures author the AAC tool-input form, ``{"using": "label/x"}``; ``create_metric_alert``
+    receives the resolved AFM form, ``{"localIdentifier": "a0", "label": {"identifier":
+    {"id": "x", "type": "label"}}}``, forwarded verbatim from ``prepare_metric_alert_proposal``.
+    Identity is therefore the only thing they can be compared on.
+
+    A shape not listed here, or a URI prefix other than ``label/``, raises: ``label/x`` and
+    ``attribute/x`` are different objects, and an unknown spelling must fail loudly rather
+    than quietly compare unequal.
+    """
+    if not isinstance(items, list):
+        raise ValueError(f"Unrecognised {side} group-by attributes, expected a list: {items!r}")
+    ids: list[str] = []
+    for item in items:
+        raw: object = None
+        if isinstance(item, str):
+            raw = item
+        elif isinstance(item, dict):
+            label = item.get("label")
+            identifier = item.get("identifier")
+            if isinstance(item.get("using"), str):
+                raw = item["using"]
+            elif isinstance(label, dict) and isinstance(label.get("identifier"), dict):
+                raw = label["identifier"].get("id")
+            elif isinstance(identifier, dict):
+                raw = identifier.get("id")
+        if not isinstance(raw, str) or not raw:
+            raise ValueError(f"Unrecognised {side} group-by attribute entry: {item!r}")
+        prefix, slash, rest = raw.partition("/")
+        if not slash:
+            ids.append(raw)
+        elif prefix == "label" and rest:
+            ids.append(rest)
+        else:
+            raise ValueError(f"Unrecognised {side} group-by attribute reference: {raw!r}")
+    return ids
+
+
+def _check_attributes(expected: CatalogMetricAlert, actual_args: dict) -> bool:
+    """Compare group-by identity only.
+
+    Per-entry properties — ``showAllValues``, the converter-assigned ``localIdentifier`` —
+    are deliberately not asserted, and the comparison is a multiset so entry order does not
+    matter.
+    """
+    exp_attributes = expected.attributes
+    if exp_attributes is None:
+        return True
+    act_attributes = actual_args.get("attributes")
+    if act_attributes is None:
+        # Arguments are raw `json.loads` output, where an unset nullable argument arrives as
+        # null rather than absent. Both spellings of "no grouping" have to land on [], which
+        # is why this is not `actual_args.get("attributes", [])`.
+        act_attributes = []
+    elif not isinstance(act_attributes, list):
+        # An argument that is not a list of groupings is the agent answering wrongly, so it
+        # scores False. Raising instead would make the runner record an ERROR, and errored
+        # items are excluded from the failure count — a malformed answer must not rank above
+        # a merely wrong one. An unreadable *entry* still raises, in `_attribute_label_ids`:
+        # entries are typed at the tool boundary, so the plausible cause there is the wire
+        # format moving, which has to be unmissable.
+        return False
+    if not exp_attributes:
+        return not act_attributes
+    exp_ids = sorted(_attribute_label_ids(exp_attributes, side="expected"))
+    act_ids = sorted(_attribute_label_ids(act_attributes, side="actual"))
+    return exp_ids == act_ids
+
+
 def _check_metric(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     if not expected.metric_id:
         return True
@@ -335,6 +407,7 @@ class AlertEvaluation:
     filters_correct: bool
     metric_correct: bool
     recipients_correct: bool
+    attributes_correct: bool = True
 
     @property
     def strict_pass(self) -> bool:
@@ -347,6 +420,7 @@ class AlertEvaluation:
                 self.filters_correct,
                 self.metric_correct,
                 self.recipients_correct,
+                self.attributes_correct,
             ]
         )
 
@@ -410,6 +484,35 @@ def _normalize_expected_filters(expected: dict) -> list | str | None:
     return None
 
 
+_NO_GROUPING_MARKERS = ("none", "no grouping")
+
+
+def _normalize_expected_attributes(expected: dict) -> list | None:
+    """
+    * ``Attributes`` list        -> that list (exact expectation)
+    * "None" / "no grouping"     -> ``[]``   (stated: no group-by; extras fail)
+    * absent, or other prose     -> ``None`` (unstated; grouping not asserted)
+
+    A date narrows an alert as a group-by as well as a filter, and a group-by makes it fire
+    per period value instead of on the latest one — so ``[]`` has to be expressible separately
+    from "absent", exactly as it is for ``filters``.
+
+    The simulated user is told nothing about groupings, so a non-empty expectation requires the
+    item's own question to request that grouping; ``[]`` needs no such support, because the
+    simulated user does not invent a grouping and the check verifies it did not.
+    """
+    attributes = _case_insensitive_get(expected, "attributes")
+    if isinstance(attributes, list):
+        # Validated here so a malformed fixture fails before the run spends an API call.
+        _attribute_label_ids(attributes, side="expected")
+        return attributes
+    if attributes is None:
+        return None
+    if isinstance(attributes, str):
+        return [] if any(kw in attributes.lower() for kw in _NO_GROUPING_MARKERS) else None
+    raise ValueError(f"Attributes expectation must be a list or a display string, got {type(attributes).__name__}")
+
+
 def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
     """Parse expected_output dict into CatalogMetricAlert, accepting display-format or internal-format keys."""
     operator = _case_insensitive_get(expected, "operator") or "GREATER_THAN"
@@ -434,6 +537,7 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
         recipients = list(raw_recip)
 
     filters = _normalize_expected_filters(expected)
+    attributes = _normalize_expected_attributes(expected)
 
     return CatalogMetricAlert(
         operator=operator,
@@ -444,6 +548,7 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
         metric_id=metric_id,
         recipients=recipients,
         filters=filters,
+        attributes=attributes,
     )
 
 
@@ -564,6 +669,7 @@ def run_agentic_alert_skill(
                 filters_correct=tool_called and _check_filters(expected, actual_args),
                 metric_correct=tool_called and _check_metric(expected, actual_args),
                 recipients_correct=tool_called and _check_recipients(expected, actual_args, sdk=sdk),
+                attributes_correct=tool_called and _check_attributes(expected, actual_args),
             )
             return AlertRunResult(
                 conversation_id=conv_id,
@@ -609,6 +715,7 @@ def run_agentic_alert_skill(
                 r.eval.filters_correct,
                 r.eval.metric_correct,
                 r.eval.recipients_correct,
+                r.eval.attributes_correct,
             ]
         ),
     )
@@ -683,6 +790,7 @@ def evaluate_agentic_alert_skill(
                     "filters_correct": ev.filters_correct,
                     "metric_correct": ev.metric_correct,
                     "recipients_correct": ev.recipients_correct,
+                    "attributes_correct": ev.attributes_correct,
                 }
                 with ctx.observe(pt, run_idx) as tid:
                     for score_name, value in strict_checks.items():
@@ -729,6 +837,7 @@ def evaluate_agentic_alert_skill(
         "filters_correct": ev.filters_correct,
         "metric_correct": ev.metric_correct,
         "recipients_correct": ev.recipients_correct,
+        "attributes_correct": ev.attributes_correct,
         "actual_alert_arguments": best.actual_alert_arguments,
         "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
@@ -739,7 +848,8 @@ def evaluate_agentic_alert_skill(
             f"alert_created={ev.alert_created}, operator_correct={ev.operator_correct}, "
             f"threshold_correct={ev.threshold_correct}, trigger_correct={ev.trigger_correct}, "
             f"filters_correct={ev.filters_correct}, metric_correct={ev.metric_correct}, "
-            f"recipients_correct={ev.recipients_correct}. "
+            f"recipients_correct={ev.recipients_correct}, "
+            f"attributes_correct={ev.attributes_correct}. "
             f"Actual args: {best.actual_alert_arguments}"
         )
         exc.reasoning_steps = best.reasoning_steps
