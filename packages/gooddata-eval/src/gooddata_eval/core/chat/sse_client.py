@@ -62,6 +62,12 @@ class TransientChatError(ChatError):
     """Retryable transient error: gen-ai temporarily unavailable or still syncing metadata."""
 
 
+class TurnTimeoutError(ChatError):
+    """The agent exceeded a wall-clock budget -- either the per-turn one or the per-item
+    one spanning every turn of a conversation. Not retryable: a slow turn stays slow, and
+    retrying it spends the budget again."""
+
+
 def _int_env(name: str, default: int) -> int:
     """Read an int from the environment, falling back to ``default`` when unset or blank."""
     raw = os.getenv(name)
@@ -80,6 +86,33 @@ _MAX_RETRIES = _int_env("GOODDATA_EVAL_CHAT_MAX_RETRIES", 5)
 _INITIAL_BACKOFF_S = _float_env("GOODDATA_EVAL_CHAT_INITIAL_BACKOFF_S", 5.0)
 _BACKOFF_FACTOR = _float_env("GOODDATA_EVAL_CHAT_BACKOFF_FACTOR", 2.0)
 _MAX_BACKOFF_S = _float_env("GOODDATA_EVAL_CHAT_MAX_BACKOFF_S", 60.0)
+
+# Wall-clock cap on a single agent turn, 0 = uncapped. httpx's `timeout` is per-read,
+# so an agent that keeps emitting reasoning events can stream for many minutes without
+# ever tripping it -- this is what bounds a runaway item and lets the run move on.
+_TURN_TIMEOUT_S = _float_env("GOODDATA_EVAL_CHAT_TURN_TIMEOUT_S", 0.0)
+
+# Wall-clock cap on one whole item, 0 = uncapped. Anchored at conversation creation, so
+# for a multi-turn agentic item it bounds every turn together -- a turn cap alone lets a
+# 4-turn conversation run to 4x the budget, which is not what a user would sit through.
+_ITEM_TIMEOUT_S = _float_env("GOODDATA_EVAL_CHAT_ITEM_TIMEOUT_S", 0.0)
+
+
+def set_default_turn_timeout(seconds: float | None) -> None:
+    """Set the per-turn budget every ChatClient built afterwards inherits.
+
+    The agentic evaluators construct their own clients deep in the call tree, so a CLI
+    flag has to land here rather than being threaded through eight signatures.
+    """
+    global _TURN_TIMEOUT_S
+    _TURN_TIMEOUT_S = seconds or 0.0
+
+
+def set_default_item_timeout(seconds: float | None) -> None:
+    """Set the per-item budget every ChatClient built afterwards inherits."""
+    global _ITEM_TIMEOUT_S
+    _ITEM_TIMEOUT_S = seconds or 0.0
+
 
 T = TypeVar("T")
 
@@ -225,6 +258,23 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
     return result
 
 
+def _until_deadline(
+    lines: Iterable[str], deadline: float | None, budget: float = 0.0, scope: str = "turn"
+) -> Iterable[str]:
+    """Yield `lines`, aborting once `deadline` (a monotonic timestamp) has passed.
+
+    Checked between events rather than mid-read, so the effective cap is the budget plus
+    the time of the event in flight; the client's read timeout bounds that tail.
+    """
+    if deadline is None:
+        yield from lines
+        return
+    for line in lines:
+        if time.monotonic() > deadline:
+            raise TurnTimeoutError(f"agent exceeded the {budget:.0f}s {scope} budget")
+        yield line
+
+
 def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
     """Parse an SSE stream (iterable of decoded lines) into a ChatResult."""
     acc = _SseAccumulator()
@@ -240,6 +290,13 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
             # here -- a bug in the processing below must propagate uncaught, not get
             # mislabeled as a network error.
             partial = _build_chat_result(acc)
+            if isinstance(exc, ChatError):
+                # Already classified by the iterator (e.g. the turn-timeout guard):
+                # re-wrapping would relabel it as a transport failure and, for
+                # TransientChatError, silently flip it to non-retryable.
+                if exc.partial_result is None:
+                    exc.partial_result = partial
+                raise
             if isinstance(exc, httpx.RemoteProtocolError):
                 # Same mid-stream disconnect _is_retryable_exc already retries when it happens
                 # at connect time -- here it surfaces from `next(it)` instead, so it must be
@@ -315,6 +372,8 @@ class ChatClient:
         workspace_id: str,
         *,
         timeout: float = 300.0,
+        turn_timeout_s: float | None = None,
+        item_timeout_s: float | None = None,
         preserve_failed: bool = False,
         reasoning_effort: ReasoningEffort | None = None,
         agent_id: str | None = None,
@@ -329,6 +388,17 @@ class ChatClient:
         """
         self._base = f"{host.rstrip('/')}/api/v1/ai/workspaces/{workspace_id}/chat/conversations"
         self._auth = {"Authorization": f"Bearer {token}"}
+        # 0/None disables the cap. Also lowered onto the read timeout: the wall-clock check
+        # fires between events, so a turn that goes silent needs the transport to give up too.
+        budget = _TURN_TIMEOUT_S if turn_timeout_s is None else turn_timeout_s
+        self._turn_timeout_s = budget or None
+        item_budget = _ITEM_TIMEOUT_S if item_timeout_s is None else item_timeout_s
+        self._item_timeout_s = item_budget or None
+        # Anchored when a conversation is created; spans every turn taken on it.
+        self._conversation_started: float | None = None
+        caps = [c for c in (self._turn_timeout_s, self._item_timeout_s) if c is not None]
+        if caps:
+            timeout = httpx.Timeout(timeout, read=min(timeout, *caps))
         self._client = httpx.Client(timeout=timeout)
         self._preserve_failed = preserve_failed
         self._reasoning_effort = normalize_reasoning_effort(reasoning_effort)
@@ -346,7 +416,11 @@ class ChatClient:
 
         # NOTE: retrying create is not idempotent — a created-then-503 can leak an
         # orphaned (ephemeral) conversation. Acceptable for eval; do not reuse blindly.
-        return _retry_transient(_do, is_retryable=_is_retryable_exc)
+        conversation_id = _retry_transient(_do, is_retryable=_is_retryable_exc)
+        # Anchor the per-item clock here: for an agentic item this conversation carries
+        # every turn, so the budget must run from its creation, not from each send.
+        self._conversation_started = time.monotonic()
+        return conversation_id
 
     def delete_conversation(self, conversation_id: str) -> None:
         try:
@@ -366,10 +440,11 @@ class ChatClient:
             # own connection setup time counts) -- excludes not just the sleep backoff between
             # attempts, but the entire duration of any earlier failed attempt.
             t0 = time.monotonic()
+            deadline, budget, scope = self._deadline(t0)
             with self._client.stream("POST", url, json=body, headers=headers) as resp:
                 resp.raise_for_status()
                 try:
-                    result = parse_sse_lines(resp.iter_lines())
+                    result = parse_sse_lines(_until_deadline(resp.iter_lines(), deadline, budget, scope))
                 except ChatError as exc:
                     if exc.partial_result is not None:
                         exc.partial_result.turn_wall_clock_sec = time.monotonic() - t0
@@ -378,6 +453,21 @@ class ChatClient:
                 return result
 
         return _retry_transient(_do, is_retryable=_is_retryable_exc)
+
+    def _deadline(self, t0: float) -> tuple[float | None, float, str]:
+        """The earlier of the turn and item caps, as (deadline, budget, scope).
+
+        The item cap runs from conversation creation, so on a multi-turn conversation the
+        remaining budget shrinks with every turn already spent.
+        """
+        candidates = []
+        if self._turn_timeout_s is not None:
+            candidates.append((t0 + self._turn_timeout_s, self._turn_timeout_s, "turn"))
+        if self._item_timeout_s is not None and self._conversation_started is not None:
+            candidates.append((self._conversation_started + self._item_timeout_s, self._item_timeout_s, "item"))
+        if not candidates:
+            return None, 0.0, "turn"
+        return min(candidates)
 
     def ask(self, item: DatasetItem) -> ChatResult:
         """Run one conversation: create, send, parse, clean up.

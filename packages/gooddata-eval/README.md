@@ -18,6 +18,7 @@ Or install `gd-eval` as a standalone tool:
 | `gd-eval run` | Run an evaluation dataset against one or more models. |
 | `gd-eval report` | Render JSON report(s) as one self-contained HTML file. |
 | `gd-eval models` | List LLM providers and models configured in the org. |
+| `gd-eval generate` | Generate a `visualization` dataset from a workspace's existing insights. |
 
 ---
 
@@ -240,6 +241,90 @@ gd-eval models \
 
 ---
 
+## `gd-eval generate`
+
+Reverse-engineers a `visualization` dataset out of the charts a customer has already
+built, so you get eval questions without hand-authoring any. Reads the workspace's
+declarative analytics model (read-only), translates each visible insight's buckets,
+sorts and filters into an `expected_output.visualization` spec, then asks an LLM to
+write the analyst question that chart answers. Because `expected_output` is copied from
+a live object rather than authored, every question is grounded in the real LDM by
+construction — the LLM only writes English.
+
+**Setup:** host + token (read access to the workspace), and `OPENAI_API_KEY` plus the
+`llm-judge` extra for the phrasing step (`uv add 'gooddata-eval[llm-judge]'`; skip both
+with `--no-phrase`).
+
+```bash
+export GOODDATA_TOKEN='your-api-token'
+
+# 1. see what a workspace yields before writing anything
+gd-eval generate \
+  --host  https://your.gooddata.cloud \
+  --workspace  ecommerce_demo \
+  --dataset-name  ecommerce \
+  --dry-run
+
+# 2. generate, phrase, validate, and export
+gd-eval generate \
+  --host  https://your.gooddata.cloud \
+  --workspace  ecommerce_demo \
+  --dataset-name  ecommerce \
+  --dashboard  dash_1_returns \
+  --out  ./my-dataset \
+  --langfuse-out  out/langfuse-dataset.json
+
+# 3. run it
+gd-eval run --host … --workspace ecommerce_demo --dataset ./my-dataset --model gpt-5.2
+```
+
+`--workspace` is where insights are read from; `--dataset-name` is the `dataset_name`
+written into every item (and the default output folder).
+
+| Flag | Effect |
+|---|---|
+| `--dashboard <id>` | restrict to insights on that dashboard (repeatable); default is the whole workspace |
+| `--out <dir>` | output folder (default `./<dataset-name>`); this is what `gd-eval run --dataset` reads |
+| `--snapshot-out` / `--snapshot-in` | save/replay the fetched model — replay needs no host, token, or network |
+| `--langfuse-out <file>` | also write a Langfuse-importable dataset JSON |
+| `--id-prefix` | prefix exported Langfuse item ids (they're unique per *project*, so re-importing an item under its original id is a 409) |
+| `--no-phrase` | skip the LLM; emit mechanical `Show <title>` questions |
+| `--phrase-model` | OpenAI model for phrasing (default `gpt-4o`) |
+| `--no-viz-type` | always blank the expected chart type |
+| `--min-questions` / `--min-shapes` / `--min-filtered` | quality gate, default 15, 3 and 1 |
+
+**The question must never contradict its own expected output.** Four rules enforce that:
+
+- The writer is briefed on buckets, sorts and filters only — never the insight title,
+  and never the chart type. Titles routinely describe intent the definition doesn't
+  implement ("Products by Most Items Sold" over `sorts: []`).
+- Every generated question is checked against its spec, and any hit is a hard error:
+  ranking words (`top`, `most`, `highest`, …) require a real sort or ranking filter;
+  filter words (`only`, `last quarter`, `in 2025`, …) require a real date or attribute
+  filter; a breakdown clause requires a non-empty `view_by`/`segment_by` and vice versa;
+  a metric may never be broken down by itself; and no template residue (`breakdown
+  dimension`, `{…}`) may survive. A violation is fed back once for a rewrite, then
+  dropped — and a drop fails the run.
+- The writer's rules are built per insight, so an insight with no `view_by` is never
+  asked to name a breakdown at all.
+- `type` is set only when the question actually names a chart form. An insight's
+  `visualizationUrl` records what a human clicked, not what the question constrains.
+
+Everything the writer sees is a display name (`Spend Amount`, `Merchant Name`), never a
+raw URI, so questions read like a person wrote them.
+
+**What it won't do.** Insights it can't express without guessing are skipped with a
+printed reason, never approximated: derived (arithmetic/PoP) measures, measure-level
+filters, `uris`-form attribute filters, unmapped chart types, hidden objects, and
+insights whose title promises behaviour their definition lacks. If too few survive, the
+quality gate fails the run rather than fabricating items to hit the minimum — point at
+more dashboards, or lower `--min-questions`.
+
+Every written item is validated as a `DatasetItem` with a scorable AAC visualization
+before the command reports success.
+
+---
+
 ## Dataset format
 
 A dataset is a folder of `.json` files, one per question:
@@ -310,7 +395,8 @@ is the fraction of satisfied criteria.
 
 ### `[llm-judge]` — LLM-as-judge evaluators
 
-`general_question` and `guardrail` items are scored by a GPT-4o judge.
+`general_question` and `guardrail` items are scored by a GPT-4o judge, and
+`gd-eval generate` uses the same package to write question text.
 Requires the OpenAI package and `OPENAI_API_KEY`:
 
 ```bash
@@ -319,13 +405,15 @@ uv add 'gooddata-eval[llm-judge]'
 uv tool install 'gooddata-eval[llm-judge]'
 ```
 
-Without `[llm-judge]`, those items are **skipped**.
+Without `[llm-judge]`, those items are **skipped** and `gd-eval generate` needs
+`--no-phrase`.
 
 ## Exit codes
 
 | Code | Meaning |
 |---|---|
 | `0` | Run completed. Evaluation failures do **not** cause a non-zero exit. |
+| `1` | `gd-eval generate` only: a quality gate failed, an item was dropped, or a written item failed validation. |
 | `2` | Operational error: bad connection, missing model, unreadable dataset, missing credentials. |
 
 ## Scores (in JSON report and Langfuse)

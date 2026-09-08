@@ -867,3 +867,59 @@ def test_invalid_reasoning_effort_fails_at_construction():
     """Fail locally rather than as an out-of-enum request partway through a run."""
     with pytest.raises(ValueError, match="Invalid reasoning effort"):
         ChatClient(host="https://example.invalid", token="t", workspace_id="w", reasoning_effort="maximum")
+
+
+def test_turn_timeout_aborts_a_streaming_turn_and_is_not_retried(monkeypatch):
+    """A chatty-but-slow agent must be cut off: httpx's per-read timeout never fires
+    for one, so only the wall-clock budget bounds the item."""
+    clock = iter([0.0, 0.0, 1.0, 61.0, 61.0, 61.0])
+    monkeypatch.setattr(sse_mod.time, "monotonic", lambda: next(clock))
+
+    def forever():
+        while True:
+            yield 'data: {"role":"assistant","content":{"type":"reasoning","text":"thinking"}}'
+
+    with pytest.raises(sse_mod.TurnTimeoutError, match="exceeded the 60s turn budget"):
+        sse_mod.parse_sse_lines(sse_mod._until_deadline(forever(), deadline=60.0, budget=60.0))
+
+    assert sse_mod._is_retryable_exc(sse_mod.TurnTimeoutError("x")) is False
+
+
+def test_no_turn_timeout_leaves_the_stream_untouched():
+    lines = ['data: {"role":"assistant","content":{"type":"text","text":"hi"}}']
+    assert list(sse_mod._until_deadline(iter(lines), deadline=None)) == lines
+
+
+def test_default_turn_timeout_reaches_clients_built_later(monkeypatch):
+    """The agentic evaluators build their own ChatClient, so the CLI flag has to be a
+    module default rather than a constructor argument threaded through them."""
+    monkeypatch.setattr(sse_mod, "_TURN_TIMEOUT_S", 0.0)
+    sse_mod.set_default_turn_timeout(60)
+    client = sse_mod.ChatClient(host="http://h", token="t", workspace_id="w")
+    assert client._turn_timeout_s == 60
+
+    sse_mod.set_default_turn_timeout(None)
+    assert sse_mod.ChatClient(host="http://h", token="t", workspace_id="w")._turn_timeout_s is None
+
+
+def test_item_budget_shrinks_across_turns_of_one_conversation(monkeypatch):
+    """A per-turn cap alone lets a 4-turn agentic item run to 4x the budget. The item cap
+    is anchored at conversation creation, so later turns inherit what is left of it."""
+    monkeypatch.setattr(sse_mod, "_TURN_TIMEOUT_S", 0.0)
+    monkeypatch.setattr(sse_mod, "_ITEM_TIMEOUT_S", 0.0)
+    client = sse_mod.ChatClient(host="http://h", token="t", workspace_id="w", turn_timeout_s=60, item_timeout_s=90)
+    client._conversation_started = 0.0
+
+    # First turn: the turn cap (60s) bites before the item cap (90s).
+    assert client._deadline(0.0) == (60.0, 60, "turn")
+    # Third turn, 80s already spent: the item cap is what is left, and it is what fires.
+    assert client._deadline(80.0) == (90.0, 90, "item")
+
+
+def test_item_timeout_alone_still_caps_a_turn(monkeypatch):
+    monkeypatch.setattr(sse_mod, "_TURN_TIMEOUT_S", 0.0)
+    monkeypatch.setattr(sse_mod, "_ITEM_TIMEOUT_S", 0.0)
+    client = sse_mod.ChatClient(host="http://h", token="t", workspace_id="w", item_timeout_s=300)
+    assert client._deadline(0.0) == (None, 0.0, "turn")  # no conversation yet
+    client._conversation_started = 10.0
+    assert client._deadline(20.0) == (310.0, 300, "item")
