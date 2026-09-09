@@ -9,11 +9,18 @@ from __future__ import annotations
 import threading
 import time
 import uuid
+from datetime import datetime, timezone
 from typing import Any
 
 import httpx
 
 from gooddata_eval.core.langfuse import _env, observations, otlp
+from gooddata_eval.core.langfuse.experiment import (
+    ExperimentItem,
+    ExperimentRun,
+    ScoreTarget,
+    build_experiment_root_span,
+)
 from gooddata_eval.core.langfuse.observations import TraceSummary
 
 _SCORES_PATH = "/api/public/scores"
@@ -71,9 +78,49 @@ class _TraceAPI:
         )
 
 
+class _DatasetRunItemsAPI:
+    """`api.dataset_run_items.create` for external callers on the dataset-run vocabulary: a v4 run is one span."""
+
+    def __init__(self, owner: HttpxLangfuseClient) -> None:
+        self._owner = owner
+
+    def create(
+        self,
+        run_name: str,
+        dataset_item_id: str,
+        trace_id: str,
+        metadata: dict | None = None,
+        run_description: str = "",
+    ) -> ScoreTarget:
+        """Export one experiment root span for `dataset_item_id` and return where to score it.
+
+        The span is its own trace, so `trace_id` is carried as metadata and is NOT what an
+        experiment-item score attaches to -- Langfuse reads those off the root observation.
+        The returned target names both, and `score_safe` writes to each; scoring the bare
+        `trace_id` instead reaches the gen-ai trace only and leaves the run item unscored.
+        """
+        dataset_id = self._owner.dataset_id_for_item(dataset_item_id)
+        if dataset_id is None:
+            raise LookupError(f"dataset item {dataset_item_id!r} not found in Langfuse")
+        now = datetime.now(timezone.utc)
+        span = build_experiment_root_span(
+            ExperimentRun(run_name, dataset_id, metadata, run_description or None),
+            ExperimentItem(dataset_item_id, input={"dataset_item_id": dataset_item_id}),
+            start=now,
+            end=now,
+            trace_name=f"gd-eval: {dataset_item_id}",
+            tags=("gd-eval",),
+            observation_metadata={"gen_ai_trace_id": trace_id},
+            trace_metadata={"run_name": run_name},
+        )
+        self._owner.export_spans([span])
+        return ScoreTarget(trace_id, span.trace_id, span.span_id)
+
+
 class _LangfuseAPI:
     def __init__(self, owner: HttpxLangfuseClient) -> None:
         self.trace = _TraceAPI(owner)
+        self.dataset_run_items = _DatasetRunItemsAPI(owner)
 
 
 class HttpxLangfuseClient:

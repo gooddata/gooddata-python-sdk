@@ -317,3 +317,63 @@ def test_a_negative_retry_after_never_reaches_sleep(make_client, monkeypatch):
     make_client(handler).create_score("t-1", "quality_score", 1.0, "NUMERIC")
 
     assert slept == [0.5]
+
+
+def test_a_dataset_run_item_is_exported_as_an_experiment_root_span(make_client):
+    seen: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        if request.url.path.startswith("/api/public/dataset-items/"):
+            return httpx.Response(200, json={"id": "item-1", "datasetId": "ds-1"})
+        return _ok(request)
+
+    make_client(handler).api.dataset_run_items.create(
+        run_name="ds_2026_model",
+        dataset_item_id="item-1",
+        trace_id="t-1",
+        metadata={"model_version": "m"},
+        run_description="desc",
+    )
+
+    assert [request.url.path for request in seen] == ["/api/public/dataset-items/item-1", "/api/public/otel/v1/traces"]
+    assert seen[1].headers["x-langfuse-ingestion-version"] == "4"
+    span = json.loads(seen[1].content)["resourceSpans"][0]["scopeSpans"][0]["spans"][0]
+    attrs = {attr["key"]: attr["value"].get("stringValue") for attr in span["attributes"]}
+    assert attrs["langfuse.experiment.name"] == "ds_2026_model"
+    assert attrs["langfuse.experiment.dataset.id"] == "ds-1"
+    assert attrs["langfuse.experiment.item.id"] == "item-1"
+    assert attrs["langfuse.experiment.item.root_observation_id"] == span["spanId"]
+    assert attrs["langfuse.experiment.description"] == "desc"
+    assert attrs["langfuse.experiment.metadata.model_version"] == "m"
+    assert attrs["langfuse.observation.metadata.gen_ai_trace_id"] == "t-1"
+
+
+def test_a_dataset_run_item_returns_the_score_target_for_the_span_it_exported(make_client):
+    seen: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        if request.url.path.startswith("/api/public/dataset-items/"):
+            return httpx.Response(200, json={"id": "item-1", "datasetId": "ds-1"})
+        return _ok(request)
+
+    target = make_client(handler).api.dataset_run_items.create(
+        run_name="ds_2026_model", dataset_item_id="item-1", trace_id="t-1"
+    )
+
+    span = json.loads(seen[1].content)["resourceSpans"][0]["scopeSpans"][0]["spans"][0]
+    # The run item IS the root observation, so an experiment-item score needs the span's own
+    # trace and span id -- neither is recoverable from the gen-ai trace id the caller passed.
+    assert target.gen_ai_trace_id == "t-1"
+    assert target.experiment_trace_id == span["traceId"]
+    assert target.experiment_span_id == span["spanId"]
+    assert target.destinations() == [("t-1", None), (span["traceId"], span["spanId"])]
+    # Still a str equal to the gen-ai trace id, so a caller that treats it as one keeps working.
+    assert target == "t-1"
+
+
+def test_a_dataset_run_item_for_an_unknown_item_raises(make_client):
+    client = make_client(lambda request: httpx.Response(404, json={}))
+    with pytest.raises(LookupError):
+        client.api.dataset_run_items.create(run_name="run", dataset_item_id="local", trace_id="t-1")

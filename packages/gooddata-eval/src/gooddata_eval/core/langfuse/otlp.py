@@ -19,8 +19,6 @@ if TYPE_CHECKING:
 ATTR_OBSERVATION_TYPE = "langfuse.observation.type"
 ATTR_OBSERVATION_INPUT = "langfuse.observation.input"
 ATTR_OBSERVATION_OUTPUT = "langfuse.observation.output"
-ATTR_OBSERVATION_LEVEL = "langfuse.observation.level"
-ATTR_OBSERVATION_STATUS_MESSAGE = "langfuse.observation.status_message"
 ATTR_OBSERVATION_METADATA_PREFIX = "langfuse.observation.metadata"
 
 # Trace-wide attributes, copied onto every span of the trace.

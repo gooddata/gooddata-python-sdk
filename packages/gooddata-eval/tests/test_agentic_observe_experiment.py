@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import re
+import threading
 from datetime import datetime, timezone
 from typing import Any
 from unittest.mock import MagicMock
@@ -12,7 +13,7 @@ from unittest.mock import MagicMock
 import httpx
 import pytest
 from gooddata_eval.core.agentic._langfuse import SKIP_ENV_VAR, observe, score_safe
-from gooddata_eval.core.agentic._trace_linker import RunTraceContext
+from gooddata_eval.core.agentic._trace_linker import _CANCEL, RunTraceContext
 from gooddata_eval.core.langfuse.client import HttpxLangfuseClient
 from gooddata_eval.core.langfuse.experiment import ScoreTarget, experiment_id_for
 from gooddata_eval.core.langfuse.observations import TraceSummary
@@ -210,6 +211,45 @@ def test_a_score_target_writes_to_both_the_gen_ai_trace_and_the_experiment_span(
     assert "observationId" not in bodies[0]
     assert bodies[1]["observationId"] == "1" * 16
     assert [body["value"] for body in bodies] == [1.0, 1.0]
+
+
+def test_a_refused_gen_ai_score_still_reaches_the_experiment_span():
+    """One destination rejecting a score must not cost the other one its copy."""
+    bodies: list[dict] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        body = json.loads(request.content)
+        bodies.append(body)
+        return httpx.Response(400 if body["traceId"] == "gen-ai-id" else 200, json={})
+
+    client = HttpxLangfuseClient(transport=httpx.MockTransport(handler))
+    try:
+        score_safe(
+            client, ScoreTarget("gen-ai-id", "0" * 32, "1" * 16), name="pass_at_k", value=True, data_type="BOOLEAN"
+        )
+    finally:
+        client.close()
+
+    assert [body["traceId"] for body in bodies] == ["gen-ai-id", "0" * 32]
+    assert bodies[1]["observationId"] == "1" * 16
+
+
+def test_a_cancelled_drain_reaches_no_langfuse_http(rec):
+    """An interrupt has to be answered before the HTTP, not by the retry ladder inside it."""
+    cancelled = threading.Event()
+    cancelled.set()
+    token = _CANCEL.set(cancelled)
+    try:
+        with observe(rec.client, "gen-ai-id", "item-1", "run0", {}) as tid:
+            pass
+        score_safe(
+            rec.client, ScoreTarget("gen-ai-id", "0" * 32, "1" * 16), name="pass_at_k", value=True, data_type="BOOLEAN"
+        )
+    finally:
+        _CANCEL.reset(token)
+
+    assert tid is None
+    assert rec.requests == []
 
 
 def test_a_plain_trace_id_still_writes_exactly_one_score(rec):

@@ -346,3 +346,31 @@ def test_a_rate_limited_score_is_retried_and_lands(fake_langfuse: FakeLangfuse) 
     assert len(bodies) == 9
     posted_twice = [b for b in bodies if bodies.count(b) == 2]
     assert len(posted_twice) == 2, "exactly one score body was posted twice"
+
+
+def test_the_dataset_run_item_shim_exports_one_experiment_span(fake_langfuse: FakeLangfuse) -> None:
+    """The keyword shape gdc-nas's trace linker calls on this client."""
+    client = HttpxLangfuseClient()
+    try:
+        client.api.dataset_run_items.create(
+            run_name="nas_run",
+            dataset_item_id="item-1",
+            trace_id="gen-ai-id",
+            metadata={"testing_framework": "tavern-e2e"},
+            run_description="",
+        )
+    finally:
+        client.close()
+
+    assert len(fake_langfuse.calls("GET", f"{_DATASET_ITEMS}/item-1")) == 1
+    (span,) = _spans(fake_langfuse)
+    attrs = _attrs(span)
+    assert attrs["langfuse.experiment.name"] == "nas_run"
+    assert attrs["langfuse.experiment.dataset.id"] == fake_langfuse.dataset_id
+    assert attrs["langfuse.experiment.item.id"] == "item-1"
+    assert attrs["langfuse.experiment.item.root_observation_id"] == span["spanId"]
+    assert attrs["langfuse.experiment.metadata.testing_framework"] == "tavern-e2e"
+    assert attrs["langfuse.observation.metadata.gen_ai_trace_id"] == "gen-ai-id"
+    assert attrs["langfuse.trace.metadata.run_name"] == "nas_run"
+    # An empty run_description is no description at all.
+    assert "langfuse.experiment.description" not in attrs

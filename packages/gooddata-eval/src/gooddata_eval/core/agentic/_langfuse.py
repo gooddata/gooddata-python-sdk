@@ -172,6 +172,12 @@ def _fetch_traces_for_session(
 _CANCEL_CHECK_SEC = 0.5
 
 
+def _drain_is_cancelled() -> bool:
+    """Whether the batched drain running on this thread has been interrupted."""
+    cancel = link_cancel_event()
+    return cancel is not None and cancel.is_set()
+
+
 def _wait_between_attempts(delay: float) -> bool:
     """Wait ``delay`` before the next poll attempt. False means "stop polling".
 
@@ -233,8 +239,7 @@ def find_traces_per_conversation(
     stop_at = deadline if deadline is not None else time.monotonic() + budget
 
     for cid in conversation_ids:
-        cancel = link_cancel_event()
-        if cancel is not None and cancel.is_set():
+        if _drain_is_cancelled():
             # The run is being interrupted; the remaining conversations are not worth a
             # round trip, and their scores were never going to be written.
             break
@@ -298,18 +303,21 @@ def _experiment_root_span(
     start, end = _span_window(trace, window)
     session_id = conversation_id or getattr(trace, "session_id", None)
     tags = tuple(tag for tag in ("gd-eval", run_metadata.get("testing_framework")) if tag)
+    # One predicate for both the name and the input, so a falsy question cannot name the span
+    # after the item while the input still says "question".
+    has_input = item_input is not None
     return build_experiment_root_span(
         ExperimentRun(run_name, dataset_id, run_metadata or None),
         ExperimentItem(
             dataset_item_id,
-            input={"question": item_input} if item_input is not None else {"dataset_item_id": dataset_item_id},
+            input={"question": item_input} if has_input else {"dataset_item_id": dataset_item_id},
             output=output,
         ),
         start=start,
         end=end,
         # Never the gen-ai trace's own name: the two traces sit side by side in Langfuse and
         # only the prefix says which of them gd-eval wrote.
-        trace_name=f"gd-eval: {str(item_input)[:80]}" if item_input else f"gd-eval: {dataset_item_id}",
+        trace_name=f"gd-eval: {str(item_input)[:80]}" if has_input else f"gd-eval: {dataset_item_id}",
         session_id=session_id,
         version=run_metadata.get("model_version"),
         tags=tags,
@@ -319,7 +327,7 @@ def _experiment_root_span(
             "gen_ai_cost_usd": getattr(trace, "total_cost", None),
             "conversation_id": session_id,
         },
-        trace_metadata={"dataset_name": run_metadata.get("dataset_name"), "run_name": run_name},
+        trace_metadata={"run_name": run_name},
         environment=os.environ.get("LANGFUSE_TRACING_ENVIRONMENT"),
     )
 
@@ -343,6 +351,11 @@ def observe(
     A run belongs to a Langfuse experiment through the attributes on that span, so the span
     IS the run item. The yielded target names both the gen-ai trace and the span; either
     half may be missing, and ``score_safe`` writes to whichever are there.
+
+    The yielded value is a ``ScoreTarget``: a ``str`` equal to the gen-ai trace id when one
+    was found, else to gd-eval's own experiment trace id. A caller that writes scores
+    directly with ``create_score(trace_id=tid)`` therefore scores that one trace and no
+    other; pass the target to ``score_safe(langfuse, tid, ...)`` to reach both destinations.
     """
     fallback = ScoreTarget(trace_id) if trace_id else None
     # isinstance, not hasattr: a MagicMock answers every attribute, and the skill suites
@@ -357,6 +370,10 @@ def observe(
     # flag is also how an operator gets through a run with Langfuse unreachable, and a
     # score write would then fail per item.
     if env_flag(SKIP_ENV_VAR):
+        yield None
+        return
+
+    if _drain_is_cancelled():
         yield None
         return
 
@@ -410,9 +427,7 @@ def observe(
         return
 
     if trace_id is None:
-        _log.warning(
-            "No gen-ai trace found for dataset run %s; scores go to the gd-eval experiment span only.", run_name
-        )
+        _log.warning("No gen-ai trace found for run %s; scores go to the gd-eval experiment span only.", run_name)
     yield ScoreTarget(trace_id, span.trace_id, span.span_id)
 
 
@@ -423,6 +438,10 @@ def score_safe(langfuse: Any, trace_id: Any, **kwargs: Any) -> None:
     call every client already accepts.
     """
     if not trace_id:
+        return
+    # ``create_score`` answers a throttled write by sleeping and trying again, so an
+    # interrupted drain has to stop short of the call rather than wait its retries out.
+    if _drain_is_cancelled():
         return
     targets = trace_id.destinations() if isinstance(trace_id, ScoreTarget) else [(str(trace_id), None)]
     for target_id, observation_id in targets:
