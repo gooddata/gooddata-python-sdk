@@ -251,8 +251,16 @@ def test_check_filters_quarter_and_year_offsets_resolve():
     assert check_filters(y, _date_viz(**{"from": "2026-01-01", "to": "2026-12-31"}), _TODAY).date_ok is True
 
 
-def test_check_filters_week_granularity_falls_back_to_literal_comparison():
-    """WEEK start-of-week convention varies, so it is compared literally rather than guessed."""
+def test_check_filters_week_us_resolves_to_a_sunday_start_week():
+    """WEEK_US is well defined (Sunday-start), unlike a bare WEEK."""
+    expected = _date_viz(**{"from": 0, "to": 0, "granularity": "WEEK_US"})
+    # 2026-09-09 is a Wednesday; its WEEK_US bucket runs Sun 09-06 .. Sat 09-12.
+    assert check_filters(expected, _date_viz(**{"from": "2026-09-06", "to": "2026-09-12"}), _TODAY).date_ok is True
+    assert check_filters(expected, _date_viz(**{"from": "2026-09-06", "to": "2026-09-09"}), _TODAY).date_ok is False
+
+
+def test_check_filters_bare_week_granularity_falls_back_to_literal_comparison():
+    """A bare WEEK is not in the AAC enum and names no convention, so it is not guessed."""
     expected = _date_viz(**{"from": -2, "to": -1, "granularity": "WEEK"})
     assert check_filters(expected, _date_viz(**{"from": -2, "to": -1, "granularity": "WEEK"}), _TODAY).date_ok is True
     assert check_filters(expected, _date_viz(**{"from": -13, "to": 0, "granularity": "DAY"}), _TODAY).date_ok is False

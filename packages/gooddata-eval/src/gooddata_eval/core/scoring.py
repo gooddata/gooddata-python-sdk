@@ -118,13 +118,17 @@ def _shift_month(anchor: date, offset: int) -> tuple[date, date]:
 def _absolute_span(granularity: str, start_offset: int, end_offset: int, today: date) -> tuple[date, date] | None:
     """Resolve a relative date filter to the inclusive absolute span it denotes.
 
-    Returns None for granularities this cannot resolve unambiguously -- notably the
-    WEEK family, whose start-of-week convention varies (WEEK vs WEEK_US vs ...).
-    Guessing there would trade a false negative for a false positive.
+    Returns None for granularities this cannot resolve unambiguously -- notably a bare
+    ``WEEK``, which is not in the AAC granularity enum and states no start-of-week
+    convention. ``WEEK_US`` *is* well defined (Sunday-start), so it resolves.
+    Guessing the bare case would trade a false negative for a false positive.
     """
     gran = granularity.upper()
     if gran == "DAY":
         return today + timedelta(days=start_offset), today + timedelta(days=end_offset)
+    if gran == "WEEK_US":
+        sunday = today - timedelta(days=(today.weekday() + 1) % 7)
+        return sunday + timedelta(weeks=start_offset), sunday + timedelta(weeks=end_offset, days=6)
     if gran == "MONTH":
         return _shift_month(today, start_offset)[0], _shift_month(today, end_offset)[1]
     if gran == "QUARTER":
