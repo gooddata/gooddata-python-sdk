@@ -1120,6 +1120,99 @@
         ],
         "type": "object"
       },
+      "AttributePermissions": {
+        "properties": {
+          "rules": {
+            "description": "List of rules",
+            "items": {
+              "$ref": "#/components/schemas/RulePermission"
+            },
+            "type": "array"
+          },
+          "userGroups": {
+            "description": "List of user groups",
+            "items": {
+              "$ref": "#/components/schemas/UserGroupPermission"
+            },
+            "type": "array"
+          },
+          "users": {
+            "description": "List of users",
+            "items": {
+              "$ref": "#/components/schemas/UserPermission"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "rules",
+          "userGroups",
+          "users"
+        ],
+        "type": "object"
+      },
+      "AttributePermissionsAssignment": {
+        "description": "Desired levels of permissions on an attribute for an assignee.",
+        "properties": {
+          "permissions": {
+            "items": {
+              "enum": [
+                "EDIT",
+                "SHARE",
+                "VIEW"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "permissions"
+        ],
+        "type": "object"
+      },
+      "AttributePermissionsForAssignee": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AttributePermissionsAssignment"
+          },
+          {
+            "properties": {
+              "assigneeIdentifier": {
+                "$ref": "#/components/schemas/AssigneeIdentifier"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Desired levels of attribute permissions for an assignee identified by an identifier.",
+        "required": [
+          "assigneeIdentifier",
+          "permissions"
+        ],
+        "type": "object"
+      },
+      "AttributePermissionsForAssigneeRule": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AttributePermissionsAssignment"
+          },
+          {
+            "properties": {
+              "assigneeRule": {
+                "$ref": "#/components/schemas/AssigneeRule"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Desired levels of attribute permissions for a collection of assignees identified by a rule.",
+        "required": [
+          "assigneeRule",
+          "permissions"
+        ],
+        "type": "object"
+      },
       "AutomationAlert": {
         "properties": {
           "condition": {
@@ -7220,6 +7313,99 @@
           {
             "$ref": "#/components/schemas/TabularExportRequest"
           }
+        ],
+        "type": "object"
+      },
+      "FactPermissions": {
+        "properties": {
+          "rules": {
+            "description": "List of rules",
+            "items": {
+              "$ref": "#/components/schemas/RulePermission"
+            },
+            "type": "array"
+          },
+          "userGroups": {
+            "description": "List of user groups",
+            "items": {
+              "$ref": "#/components/schemas/UserGroupPermission"
+            },
+            "type": "array"
+          },
+          "users": {
+            "description": "List of users",
+            "items": {
+              "$ref": "#/components/schemas/UserPermission"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "rules",
+          "userGroups",
+          "users"
+        ],
+        "type": "object"
+      },
+      "FactPermissionsAssignment": {
+        "description": "Desired levels of permissions on a fact for an assignee.",
+        "properties": {
+          "permissions": {
+            "items": {
+              "enum": [
+                "EDIT",
+                "SHARE",
+                "VIEW"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "permissions"
+        ],
+        "type": "object"
+      },
+      "FactPermissionsForAssignee": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FactPermissionsAssignment"
+          },
+          {
+            "properties": {
+              "assigneeIdentifier": {
+                "$ref": "#/components/schemas/AssigneeIdentifier"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Desired levels of fact permissions for an assignee identified by an identifier.",
+        "required": [
+          "assigneeIdentifier",
+          "permissions"
+        ],
+        "type": "object"
+      },
+      "FactPermissionsForAssigneeRule": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FactPermissionsAssignment"
+          },
+          {
+            "properties": {
+              "assigneeRule": {
+                "$ref": "#/components/schemas/AssigneeRule"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Desired levels of fact permissions for a collection of assignees identified by a rule.",
+        "required": [
+          "assigneeRule",
+          "permissions"
         ],
         "type": "object"
       },
@@ -27570,7 +27756,7 @@
         ],
         "type": "object"
       },
-      "LdmObjectPermissions": {
+      "LabelPermissions": {
         "properties": {
           "rules": {
             "description": "List of rules",
@@ -27601,8 +27787,8 @@
         ],
         "type": "object"
       },
-      "LdmObjectPermissionsAssignment": {
-        "description": "Desired levels of permissions on an LDM object (attribute, label, fact) for an assignee.",
+      "LabelPermissionsAssignment": {
+        "description": "Desired levels of permissions on a label for an assignee.",
         "properties": {
           "permissions": {
             "items": {
@@ -27621,10 +27807,10 @@
         ],
         "type": "object"
       },
-      "LdmObjectPermissionsForAssignee": {
+      "LabelPermissionsForAssignee": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/LdmObjectPermissionsAssignment"
+            "$ref": "#/components/schemas/LabelPermissionsAssignment"
           },
           {
             "properties": {
@@ -27635,17 +27821,17 @@
             "type": "object"
           }
         ],
-        "description": "Desired levels of LDM-object permissions for an assignee identified by an identifier.",
+        "description": "Desired levels of label permissions for an assignee identified by an identifier.",
         "required": [
           "assigneeIdentifier",
           "permissions"
         ],
         "type": "object"
       },
-      "LdmObjectPermissionsForAssigneeRule": {
+      "LabelPermissionsForAssigneeRule": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/LdmObjectPermissionsAssignment"
+            "$ref": "#/components/schemas/LabelPermissionsAssignment"
           },
           {
             "properties": {
@@ -27656,7 +27842,7 @@
             "type": "object"
           }
         ],
-        "description": "Desired levels of LDM-object permissions for a collection of assignees identified by a rule.",
+        "description": "Desired levels of label permissions for a collection of assignees identified by a rule.",
         "required": [
           "assigneeRule",
           "permissions"
@@ -32558,10 +32744,10 @@
                 "items": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/LdmObjectPermissionsForAssignee"
+                      "$ref": "#/components/schemas/AttributePermissionsForAssignee"
                     },
                     {
-                      "$ref": "#/components/schemas/LdmObjectPermissionsForAssigneeRule"
+                      "$ref": "#/components/schemas/AttributePermissionsForAssigneeRule"
                     }
                   ]
                 },
@@ -32610,7 +32796,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LdmObjectPermissions"
+                  "$ref": "#/components/schemas/AttributePermissions"
                 }
               }
             },
@@ -32997,10 +33183,10 @@
                 "items": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/LdmObjectPermissionsForAssignee"
+                      "$ref": "#/components/schemas/FactPermissionsForAssignee"
                     },
                     {
-                      "$ref": "#/components/schemas/LdmObjectPermissionsForAssigneeRule"
+                      "$ref": "#/components/schemas/FactPermissionsForAssigneeRule"
                     }
                   ]
                 },
@@ -33049,7 +33235,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LdmObjectPermissions"
+                  "$ref": "#/components/schemas/FactPermissions"
                 }
               }
             },
@@ -33176,10 +33362,10 @@
                 "items": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/LdmObjectPermissionsForAssignee"
+                      "$ref": "#/components/schemas/LabelPermissionsForAssignee"
                     },
                     {
-                      "$ref": "#/components/schemas/LdmObjectPermissionsForAssigneeRule"
+                      "$ref": "#/components/schemas/LabelPermissionsForAssigneeRule"
                     }
                   ]
                 },
@@ -33228,7 +33414,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LdmObjectPermissions"
+                  "$ref": "#/components/schemas/LabelPermissions"
                 }
               }
             },

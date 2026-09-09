@@ -1,10 +1,12 @@
-# DeclarativeAnalyticalDashboardPermissionForAssigneeRuleAllOf
+# AttributePermissionsForAssignee
 
+Desired levels of attribute permissions for an assignee identified by an identifier.
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**assignee_rule** | [**AssigneeRule**](AssigneeRule.md) |  | [optional] 
+**permissions** | **[str]** |  | 
+**assignee_identifier** | [**AssigneeIdentifier**](AssigneeIdentifier.md) |  | 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

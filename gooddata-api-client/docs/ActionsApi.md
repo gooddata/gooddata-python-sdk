@@ -1023,7 +1023,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **attribute_permissions**
-> LdmObjectPermissions attribute_permissions(workspace_id, attribute_id)
+> AttributePermissions attribute_permissions(workspace_id, attribute_id)
 
 Get Attribute Permissions
 
@@ -1034,7 +1034,7 @@ Get Attribute Permissions
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.ldm_object_permissions import LdmObjectPermissions
+from gooddata_api_client.model.attribute_permissions import AttributePermissions
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1069,7 +1069,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**LdmObjectPermissions**](LdmObjectPermissions.md)
+[**AttributePermissions**](AttributePermissions.md)
 
 ### Authorization
 
@@ -3785,7 +3785,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **fact_permissions**
-> LdmObjectPermissions fact_permissions(workspace_id, fact_id)
+> FactPermissions fact_permissions(workspace_id, fact_id)
 
 Get Fact Permissions
 
@@ -3796,7 +3796,7 @@ Get Fact Permissions
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.ldm_object_permissions import LdmObjectPermissions
+from gooddata_api_client.model.fact_permissions import FactPermissions
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3831,7 +3831,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**LdmObjectPermissions**](LdmObjectPermissions.md)
+[**FactPermissions**](FactPermissions.md)
 
 ### Authorization
 
@@ -6000,7 +6000,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **label_permissions**
-> LdmObjectPermissions label_permissions(workspace_id, label_id)
+> LabelPermissions label_permissions(workspace_id, label_id)
 
 Get Label Permissions
 
@@ -6011,7 +6011,7 @@ Get Label Permissions
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.ldm_object_permissions import LdmObjectPermissions
+from gooddata_api_client.model.label_permissions import LabelPermissions
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -6046,7 +6046,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**LdmObjectPermissions**](LdmObjectPermissions.md)
+[**LabelPermissions**](LabelPermissions.md)
 
 ### Authorization
 
@@ -6645,7 +6645,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **manage_fact_permissions**
-> manage_fact_permissions(workspace_id, fact_id, manage_attribute_permissions_request_inner)
+> manage_fact_permissions(workspace_id, fact_id, manage_fact_permissions_request_inner)
 
 Manage Permissions for a Fact
 
@@ -6656,7 +6656,7 @@ Manage Permissions for a Fact
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.manage_attribute_permissions_request_inner import ManageAttributePermissionsRequestInner
+from gooddata_api_client.model.manage_fact_permissions_request_inner import ManageFactPermissionsRequestInner
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -6671,14 +6671,14 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     fact_id = "factId_example" # str | 
-    manage_attribute_permissions_request_inner = [
-        ManageAttributePermissionsRequestInner(None),
-    ] # [ManageAttributePermissionsRequestInner] | 
+    manage_fact_permissions_request_inner = [
+        ManageFactPermissionsRequestInner(None),
+    ] # [ManageFactPermissionsRequestInner] | 
 
     # example passing only required values which don't have defaults set
     try:
         # Manage Permissions for a Fact
-        api_instance.manage_fact_permissions(workspace_id, fact_id, manage_attribute_permissions_request_inner)
+        api_instance.manage_fact_permissions(workspace_id, fact_id, manage_fact_permissions_request_inner)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->manage_fact_permissions: %s\n" % e)
 ```
@@ -6690,7 +6690,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **fact_id** | **str**|  |
- **manage_attribute_permissions_request_inner** | [**[ManageAttributePermissionsRequestInner]**](ManageAttributePermissionsRequestInner.md)|  |
+ **manage_fact_permissions_request_inner** | [**[ManageFactPermissionsRequestInner]**](ManageFactPermissionsRequestInner.md)|  |
 
 ### Return type
 
@@ -6715,7 +6715,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **manage_label_permissions**
-> manage_label_permissions(workspace_id, label_id, manage_attribute_permissions_request_inner)
+> manage_label_permissions(workspace_id, label_id, manage_label_permissions_request_inner)
 
 Manage Permissions for a Label
 
@@ -6726,7 +6726,7 @@ Manage Permissions for a Label
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.manage_attribute_permissions_request_inner import ManageAttributePermissionsRequestInner
+from gooddata_api_client.model.manage_label_permissions_request_inner import ManageLabelPermissionsRequestInner
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -6741,14 +6741,14 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     label_id = "labelId_example" # str | 
-    manage_attribute_permissions_request_inner = [
-        ManageAttributePermissionsRequestInner(None),
-    ] # [ManageAttributePermissionsRequestInner] | 
+    manage_label_permissions_request_inner = [
+        ManageLabelPermissionsRequestInner(None),
+    ] # [ManageLabelPermissionsRequestInner] | 
 
     # example passing only required values which don't have defaults set
     try:
         # Manage Permissions for a Label
-        api_instance.manage_label_permissions(workspace_id, label_id, manage_attribute_permissions_request_inner)
+        api_instance.manage_label_permissions(workspace_id, label_id, manage_label_permissions_request_inner)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->manage_label_permissions: %s\n" % e)
 ```
@@ -6760,7 +6760,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **label_id** | **str**|  |
- **manage_attribute_permissions_request_inner** | [**[ManageAttributePermissionsRequestInner]**](ManageAttributePermissionsRequestInner.md)|  |
+ **manage_label_permissions_request_inner** | [**[ManageLabelPermissionsRequestInner]**](ManageLabelPermissionsRequestInner.md)|  |
 
 ### Return type
 

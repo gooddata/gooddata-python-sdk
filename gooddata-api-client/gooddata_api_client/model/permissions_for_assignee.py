@@ -32,11 +32,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.assignee_identifier import AssigneeIdentifier
+    from gooddata_api_client.model.attribute_permissions_for_assignee_all_of import AttributePermissionsForAssigneeAllOf
     from gooddata_api_client.model.dashboard_permissions_assignment import DashboardPermissionsAssignment
-    from gooddata_api_client.model.ldm_object_permissions_for_assignee_all_of import LdmObjectPermissionsForAssigneeAllOf
     globals()['AssigneeIdentifier'] = AssigneeIdentifier
+    globals()['AttributePermissionsForAssigneeAllOf'] = AttributePermissionsForAssigneeAllOf
     globals()['DashboardPermissionsAssignment'] = DashboardPermissionsAssignment
-    globals()['LdmObjectPermissionsForAssigneeAllOf'] = LdmObjectPermissionsForAssigneeAllOf
 
 
 class PermissionsForAssignee(ModelComposed):
@@ -326,8 +326,8 @@ class PermissionsForAssignee(ModelComposed):
           'anyOf': [
           ],
           'allOf': [
+              AttributePermissionsForAssigneeAllOf,
               DashboardPermissionsAssignment,
-              LdmObjectPermissionsForAssigneeAllOf,
           ],
           'oneOf': [
           ],
