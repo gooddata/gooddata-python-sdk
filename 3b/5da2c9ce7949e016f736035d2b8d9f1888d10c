@@ -61,6 +61,7 @@ packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
 packages/gooddata-eval/tests/test_agentic_alert_skill.py
   s_79aee309cead37::t_c9504af59dba63 731-732,910-913,915-945
   s_79aee309cead37::t_5e5c6112759ee1 914
+  s_79aee309cead37::t_9513ad5c260d59 908-909
 packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
   s_79aee309cead37::t_ee92789018d58a 666-667
   s_79aee309cead37::t_d22f9b82018ec4 24
