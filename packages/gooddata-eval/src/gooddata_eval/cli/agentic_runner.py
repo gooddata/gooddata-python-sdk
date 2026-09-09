@@ -12,6 +12,7 @@ from gooddata_eval.core.agentic._langfuse import make_langfuse_client
 from gooddata_eval.core.agentic._trace_linker import BackgroundTraceLinker, SubmitTraceLink, run_trace_link_inline
 from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
 from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluate_agentic_conversation
+from gooddata_eval.core.agentic.dashboard_summary import evaluate_agentic_dashboard_summary
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.kda_skill import evaluate_agentic_kda_skill
@@ -44,6 +45,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_guardrail",
         "agentic_conversation",
         "agentic_kda_skill",
+        "agentic_dashboard_summary",
     }
 )
 
@@ -224,6 +226,23 @@ def _dispatch_agentic(
             workspace_id=workspace_id,
             question=item.question,
             expected_output=eo if isinstance(eo, dict) else {},
+            k=k,
+            agent_id=agent_id,
+            **lf_kw,
+        )
+    elif kind == "agentic_dashboard_summary":
+        summary_input = item.summary_input
+        if summary_input is None:
+            raise ValueError(f"agentic_dashboard_summary item '{item.id}' is missing required 'summary_input'.")
+        return evaluate_agentic_dashboard_summary(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            dashboard_id=summary_input.dashboard_id,
+            expected_output=eo,
+            # The fixture's own wording is the prompt under test -- a localized fixture is
+            # only meaningful if its own phrasing is what reaches the agent.
+            question=item.question,
             k=k,
             agent_id=agent_id,
             **lf_kw,
