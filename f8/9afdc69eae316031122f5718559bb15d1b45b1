@@ -27,7 +27,7 @@ packages/gooddata-eval/src/gooddata_eval/core/langfuse/observations.py
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.2",
-  "base_commit_sha": "9ebec1405a9ecc98f6ac76b0485534c9d2494e0b",
+  "base_commit_sha": "f89afdc69eae316031122f5718559bb15d1b45b1",
   "prompts": {},
   "sessions": {
     "s_152f0704157226": {
