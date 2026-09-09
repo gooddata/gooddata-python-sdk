@@ -3,12 +3,9 @@
 
 from __future__ import annotations
 
-import base64
 import logging
-import os
 import threading
 import time
-import uuid
 from collections.abc import Iterator
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
@@ -18,166 +15,13 @@ import httpx
 
 from gooddata_eval.core.agentic._trace_linker import link_cancel_event, linking_is_inline, warn_from_worker
 from gooddata_eval.core.config import ReasoningEffort, env_flag, normalize_reasoning_effort
-from gooddata_eval.core.langfuse._env import resolve_base_url
+from gooddata_eval.core.langfuse._env import credentials_present
+from gooddata_eval.core.langfuse.client import HttpxLangfuseClient
+
+# Part of this module's public surface: external callers import both names from here.
+from gooddata_eval.core.langfuse.observations import TraceSummary as _TraceObj  # noqa: F401
 
 _log = logging.getLogger(__name__)
-
-# ---------------------------------------------------------------------------
-# httpx-based Langfuse client — Python 3.14 safe (no Langfuse SDK required)
-# ---------------------------------------------------------------------------
-
-
-class _TraceObj:
-    """Duck-type wrapper around a raw Langfuse trace dict."""
-
-    def __init__(self, raw: dict) -> None:
-        self.id: str = raw.get("id", "")
-        self.metadata: dict = raw.get("metadata") or {}
-        self.session_id: str | None = raw.get("sessionId") or raw.get("session_id")
-        self.latency: float = float(raw.get("latency") or 0.0)
-        self.total_cost: float = float(raw.get("totalCost") or raw.get("total_cost") or 0.0)
-
-
-class _TraceListResult:
-    def __init__(self, data: list[_TraceObj]) -> None:
-        self.data = data
-
-
-class _TraceAPI:
-    def __init__(self, client: httpx.Client) -> None:
-        self._client = client
-
-    def list(
-        self, from_timestamp: Any, to_timestamp: Any, limit: int, session_id: str | None = None
-    ) -> _TraceListResult:
-        """List traces in a window, optionally narrowed to one session server-side.
-
-        ``session_id`` is what makes ``limit`` a non-issue. Without it the endpoint returns
-        every trace in the window newest-first, so an eval workspace busy enough to put more
-        than ``limit`` traces inside one item's window pushes that item's OWN (oldest) trace
-        off the page -- it then polls its whole retry budget against a page that can never
-        contain it, and the score orphans with only a generic "no trace found" line to show
-        for it. Concurrency makes that likelier by overlapping every item's window. Named
-        ``session_id`` because ``_fetch_traces_for_session`` probes for exactly that
-        parameter; gen-ai sets sessionId = conversationId.
-        """
-
-        def _ts(v: Any) -> str:
-            return v.isoformat() if hasattr(v, "isoformat") else str(v)
-
-        params: dict[str, Any] = {
-            "fromTimestamp": _ts(from_timestamp),
-            "toTimestamp": _ts(to_timestamp),
-            "limit": limit,
-        }
-        # `is not None`, not truthiness: an empty id is a real filter value that matches
-        # nothing. Dropped here, the query would return the whole padded window for the
-        # caller's post-check to throw away, page after page, for the poll's whole budget.
-        if session_id is not None:
-            params["sessionId"] = session_id
-        resp = self._client.get("/api/public/traces", params=params)
-        resp.raise_for_status()
-        return _TraceListResult([_TraceObj(t) for t in resp.json().get("data", [])])
-
-
-class _DatasetRunItemsAPI:
-    def __init__(self, client: httpx.Client) -> None:
-        self._client = client
-
-    def create(
-        self,
-        run_name: str,
-        dataset_item_id: str,
-        trace_id: str,
-        metadata: dict | None = None,
-        run_description: str = "",
-    ) -> None:
-        self._client.post(
-            "/api/public/dataset-run-items",
-            json={
-                "runName": run_name,
-                "datasetItemId": dataset_item_id,
-                "traceId": trace_id,
-                "metadata": metadata or {},
-                "runDescription": run_description,
-            },
-        ).raise_for_status()
-
-
-class _LangfuseAPI:
-    def __init__(self, client: httpx.Client) -> None:
-        self.trace = _TraceAPI(client)
-        self.dataset_run_items = _DatasetRunItemsAPI(client)
-
-
-class HttpxLangfuseClient:
-    """Minimal Langfuse client using httpx — works on Python 3.14 (no Langfuse SDK needed)."""
-
-    def __init__(self) -> None:
-        host = resolve_base_url()
-        pub = os.environ.get("LANGFUSE_PUBLIC_KEY", "")
-        sec = os.environ.get("LANGFUSE_SECRET_KEY", "")
-        if not pub or not sec:
-            raise RuntimeError(
-                "Langfuse credentials not set. "
-                "Export LANGFUSE_PUBLIC_KEY and LANGFUSE_SECRET_KEY before using --langfuse."
-            )
-        creds = base64.b64encode(f"{pub}:{sec}".encode()).decode()
-        self._http = httpx.Client(
-            base_url=host,
-            headers={"Authorization": f"Basic {creds}"},
-            timeout=10,
-        )
-        self.api = _LangfuseAPI(self._http)
-
-    def create_score(
-        self,
-        trace_id: str,
-        name: str,
-        value: float,
-        data_type: str,
-        comment: str | None = None,
-    ) -> None:
-        now = datetime.now(timezone.utc).isoformat()
-        # Langfuse API requires numeric value for BOOLEAN type (1.0/0.0), not JSON booleans
-        if isinstance(value, bool):
-            value = 1.0 if value else 0.0
-        body: dict[str, Any] = {
-            "id": str(uuid.uuid4()),
-            "traceId": trace_id,
-            "name": name,
-            "value": value,
-            "dataType": data_type,
-        }
-        if comment:
-            body["comment"] = comment
-        self._http.post(
-            "/api/public/ingestion",
-            json={"batch": [{"id": str(uuid.uuid4()), "timestamp": now, "type": "score-create", "body": body}]},
-        ).raise_for_status()
-
-    def update_trace_version(self, trace_id: str, version: str) -> None:
-        """Upsert the trace version field via the ingestion endpoint."""
-        now = datetime.now(timezone.utc).isoformat()
-        self._http.post(
-            "/api/public/ingestion",
-            json={
-                "batch": [
-                    {
-                        "id": str(uuid.uuid4()),
-                        "timestamp": now,
-                        "type": "trace-create",
-                        "body": {"id": trace_id, "version": version},
-                    }
-                ]
-            },
-        ).raise_for_status()
-
-    def flush(self) -> None:
-        pass  # no client-side batching
-
-    def close(self) -> None:
-        self._http.close()
 
 
 def make_langfuse_client() -> HttpxLangfuseClient:
@@ -191,7 +35,7 @@ def langfuse_credentials_present() -> bool:
     Separate from ``try_make_langfuse_client`` so a caller can ask the question without
     opening an httpx client it does not intend to use.
     """
-    return bool(os.environ.get("LANGFUSE_PUBLIC_KEY")) and bool(os.environ.get("LANGFUSE_SECRET_KEY"))
+    return credentials_present()
 
 
 def try_make_langfuse_client() -> HttpxLangfuseClient | None:
@@ -418,11 +262,7 @@ def _set_trace_version(langfuse: Any, trace_id: str, version: str) -> None:
     """Write model version into the Langfuse trace version field."""
     try:
         if hasattr(langfuse, "update_trace_version"):
-            # HttpxLangfuseClient path
             langfuse.update_trace_version(trace_id, version)
-        elif hasattr(langfuse, "trace"):
-            # Langfuse Python SDK path (v2+)
-            langfuse.trace(id=trace_id, version=version)
     except Exception as exc:
         _log.warning("Failed to set trace version %r on %s: %s", version, trace_id, exc)
 

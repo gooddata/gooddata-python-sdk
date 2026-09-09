@@ -12,13 +12,11 @@ Credentials are read from the standard Langfuse environment variables:
   LANGFUSE_HOST         — base URL, legacy alias for LANGFUSE_BASE_URL
 """
 
-import base64
-import os
 from typing import Any, TypeVar, cast
 
 import httpx
 
-from gooddata_eval.core.langfuse._env import resolve_base_url
+from gooddata_eval.core.langfuse._env import make_http_client
 from gooddata_eval.core.models import DatasetItem, SummaryInput
 
 _PAGE_SIZE = 100
@@ -28,16 +26,7 @@ _T = TypeVar("_T")
 
 def _make_client() -> httpx.Client:
     """Build an httpx client with Langfuse basic-auth headers."""
-    host = resolve_base_url()
-    pub = os.environ.get("LANGFUSE_PUBLIC_KEY", "")
-    sec = os.environ.get("LANGFUSE_SECRET_KEY", "")
-    if not pub or not sec:
-        raise RuntimeError(
-            "Langfuse credentials not set. "
-            "Export LANGFUSE_PUBLIC_KEY and LANGFUSE_SECRET_KEY before using --langfuse-dataset."
-        )
-    creds = base64.b64encode(f"{pub}:{sec}".encode()).decode()
-    return httpx.Client(base_url=host, headers={"Authorization": f"Basic {creds}"}, timeout=30)
+    return make_http_client(timeout=30)
 
 
 def _question_from_input(raw_input: Any) -> str:
