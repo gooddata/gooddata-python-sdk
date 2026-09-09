@@ -21,7 +21,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     utc_now,
 )
 from gooddata_eval.core.chat.render import render_answer_text
-from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._maql import normalize_maql
 from gooddata_eval.core.models import (
@@ -268,7 +268,16 @@ def _execute_single_metric_run(
         for _iteration in range(max_iterations):
             turns += 1
             agent_started = time.monotonic()
-            chat_result = client.send_message(conversation_id, current_question)
+            try:
+                chat_result = client.send_message(conversation_id, current_question)
+            except ChatError as exc:
+                # Without this the exception escapes run_agentic_metric_skill entirely,
+                # discarding every K-run already completed along with any exit_reason. A
+                # GoodData-side fault, so recorded like the simulated-user one below.
+                timings.agent_s += time.monotonic() - agent_started
+                print(f"[CHAT] send_message failed for conversation {conversation_id}: {exc}")
+                exit_reason = LoopExit.CHAT_ERROR
+                break
             agent_elapsed = time.monotonic() - agent_started
             timings.agent_s += agent_elapsed
             reasoning_steps.extend(chat_result.reasoning_steps or [])

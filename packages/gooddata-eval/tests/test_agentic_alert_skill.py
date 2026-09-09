@@ -21,7 +21,8 @@ from gooddata_eval.core.agentic.alert_skill import (
     render_alert_proposal,
     run_agentic_alert_skill,
 )
-from gooddata_eval.core.models import ChatResult
+from gooddata_eval.core.chat.sse_client import ChatError
+from gooddata_eval.core.models import ChatResult, LoopExit
 
 _DATE_FILTER = {
     "relativeDateFilter": {
@@ -1017,6 +1018,23 @@ def _text_only_result(text="Which dashboard should I bind it to?"):
     return ChatResult.model_validate({"text_response": text, "toolCallEvents": [], "reasoningSteps": []})
 
 
+def _alert_created_result() -> ChatResult:
+    """A turn where the agent actually calls the tool -- the run passes."""
+    return ChatResult.model_validate(
+        {
+            "text_response": "Alert created.",
+            "toolCallEvents": [
+                {
+                    "functionName": "create_metric_alert",
+                    "functionArguments": '{"operator": "GREATER_THAN", "threshold": 500}',
+                    "result": '{"id": "alert-1"}',
+                }
+            ],
+            "reasoningSteps": [],
+        }
+    )
+
+
 def _run_alert(mock_client, *, max_iterations, simulated_reply="the revenue one"):
     with _patched(mock_client, simulated_reply=simulated_reply, delete_alert=True):
         try:
@@ -1114,3 +1132,76 @@ def test_budget_exhausted_and_agent_silent_are_otherwise_identical():
     assert {k: d_talky[k] for k in scored} == {k: d_silent[k] for k in scored}
     assert all(d_talky[k] is False for k in scored)
     assert d_talky["exit_reason"] != d_silent["exit_reason"]
+
+
+def test_exit_reason_chat_error_keeps_the_run_instead_of_losing_the_whole_item():
+    """A mid-run chat fault used to escape run_agentic_alert_skill entirely.
+
+    That discarded every K-run already completed along with any exit_reason, so an
+    infrastructure blip on the last run erased the results of the ones that had worked.
+    It is now recorded on the run, leaving the fault distinguishable from an agent that
+    simply never created the alert.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = ChatError("gen-ai fell over")
+
+    detail = _run_alert(mock_client, max_iterations=3)
+
+    assert detail["exit_reason"] == "chat_error"
+    assert detail["alert_created"] is False
+    # Distinct from the budget case: the loop stopped on turn 1, it did not use its 3.
+    assert detail["turns_used"] == 1
+
+
+def test_exit_reason_simulated_user_failed_is_recorded_not_raised():
+    """The harness's own simulated user failing is a harness fault, not an agent one.
+
+    It used to propagate as a hard error, which did keep it from being scored as a content
+    failure -- but also threw away the completed K-runs. SIMULATED_USER_FAILED separates the
+    two just as well while keeping them, matching metric_skill and kda_skill.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _text_only_result()
+
+    with _patched(mock_client, simulated_reply="unused", delete_alert=True) as mock_sim:
+        mock_sim.side_effect = RuntimeError("openai down")
+        try:
+            detail = evaluate_agentic_alert_skill(
+                host="http://host",
+                token="tok",
+                workspace_id="ws1",
+                question="Notify me whenever the number of orders goes above 500",
+                expected_output={"operator": "GREATER_THAN", "threshold": 500},
+                k=1,
+                max_iterations=3,
+            ).detail
+        except AlertSkillAssertionError as exc:
+            detail = exc.detail
+
+    assert detail["exit_reason"] == "simulated_user_failed"
+    assert detail["alert_created"] is False
+
+
+def test_a_chat_error_on_a_later_run_does_not_discard_the_earlier_ones():
+    """K-run preservation, which is the whole point of catching rather than raising."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.side_effect = ["conv-1", "conv-2"]
+    mock_client.send_message.side_effect = [_alert_created_result(), ChatError("boom")]
+
+    with _patched(mock_client, delete_alert=True):
+        summary = run_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Notify me whenever the number of orders goes above 500",
+            expected_output={"operator": "GREATER_THAN", "threshold": 500},
+            k=2,
+            max_iterations=3,
+        )
+
+    assert len(summary.run_results) == 2
+    assert summary.run_results[0].exit_reason is LoopExit.SUCCESS
+    assert summary.run_results[1].exit_reason is LoopExit.CHAT_ERROR
+    assert summary.pass_at_k is True  # run 0 still counts

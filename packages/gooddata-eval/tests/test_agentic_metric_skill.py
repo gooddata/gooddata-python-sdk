@@ -18,7 +18,8 @@ from gooddata_eval.core.agentic.metric_skill import (
     generate_simulated_response,
     run_agentic_metric_skill,
 )
-from gooddata_eval.core.models import ChatResult, ToolCallEvent
+from gooddata_eval.core.chat.sse_client import ChatError
+from gooddata_eval.core.models import ChatResult, LoopExit, ToolCallEvent
 from gooddata_eval.core.timing import TIMERS_ENV_VAR
 
 # --- time.monotonic() side effects ---------------------------------------------------
@@ -832,3 +833,29 @@ def test_exit_reason_budget_exhausted_differs_from_simulated_user_failure():
     assert detail["turns_used"] == 3
     assert detail["max_iterations"] == 3
     assert detail["metric_created"] is False
+
+
+def test_chat_error_ends_the_run_and_is_recorded_rather_than_raised():
+    """A mid-run chat fault used to escape run_agentic_metric_skill entirely.
+
+    That discarded every K-run already completed. It is now recorded like the
+    simulated-user fault beside it, so an infrastructure blip stays distinguishable from
+    the agent failing to create the metric.
+    """
+    mock_client = _client()
+    mock_client.send_message.side_effect = ChatError("gen-ai fell over")
+
+    with _patched(mock_client):
+        summary = run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=3,
+        )
+
+    assert summary.run_results[0].exit_reason is LoopExit.CHAT_ERROR
+    assert summary.run_results[0].metric_created is False
+    assert summary.pass_at_k is False

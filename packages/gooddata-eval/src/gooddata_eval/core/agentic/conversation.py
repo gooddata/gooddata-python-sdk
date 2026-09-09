@@ -23,7 +23,7 @@ from gooddata_eval.core.agentic._trace_linker import (
 from gooddata_eval.core.agentic.alert_skill import render_alert_proposal
 from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids, _extract_metric_result
 from gooddata_eval.core.chat.render import render_answer_text
-from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import (
     AgenticAssertionError,
@@ -452,7 +452,23 @@ def run_agentic_conversation(
             # that simply runs out of range() is labelled correctly with no trailing else.
             turn_exit = LoopExit.BUDGET_EXHAUSTED
             for _iter in range(max_clarification_turns + 1):
-                chat_result = client.send_message(conversation_id, current_message)
+                try:
+                    chat_result = client.send_message(conversation_id, current_message)
+                except ChatError as exc:
+                    # Recorded rather than raised so the turns already completed keep their
+                    # results, and so this turn is distinguishable from one where the agent
+                    # simply failed to produce output. no_error below reads this back.
+                    print(f"[CHAT] send_message failed for conversation {conversation_id}: {exc}")
+                    partial = getattr(exc, "partial_result", None)
+                    if partial is not None:
+                        final_result = partial
+                        all_tool_calls.extend(partial.tool_call_events or [])
+                        conversation_tool_call_events.extend(partial.tool_call_events or [])
+                        conversation_reasoning_step_events.extend(partial.reasoning_step_events or [])
+                        reasoning_steps.extend(partial.reasoning_steps or [])
+                        response_id = partial.response_id or response_id
+                    turn_exit = LoopExit.CHAT_ERROR
+                    break
                 final_result = chat_result
                 turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
                     chat_result,
@@ -517,7 +533,10 @@ def run_agentic_conversation(
                     expected_skill=turn.expected_skill,
                     skill_routing=skill_routing,
                     output_present=output_present,
-                    no_error=True,  # SDK raises on errors; reaching here means no critical error.
+                    # A chat fault used to escape the whole run, so reaching here did mean no
+                    # error. Now that it is caught and recorded, this has to read it back --
+                    # otherwise a turn whose chat call failed reports no_error=True.
+                    no_error=turn_exit is not LoopExit.CHAT_ERROR,
                     activated_skills=declared or [],
                     active_skills=sorted(active_skills),
                     clarification_turns_used=clarification_turns,

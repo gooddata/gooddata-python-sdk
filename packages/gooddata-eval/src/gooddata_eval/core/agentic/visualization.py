@@ -20,7 +20,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     utc_now,
 )
 from gooddata_eval.core.chat.render import render_answer_text
-from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators.visualization import (
     EvaluationResult,
@@ -31,6 +31,7 @@ from gooddata_eval.core.evaluators.visualization import (
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
+    ChatResult,
     CreatedVisualization,
     LoopExit,
     ReasoningStepEvent,
@@ -193,17 +194,26 @@ def _execute_single_run(
     tool_index_offset = 0  # ditto for ToolCallEvent.index
     simulated_response_guide = expected_outputs[0]  # primary candidate guides the simulated user
 
-    current_result = client.send_message(conversation_id, question)
+    # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop that
+    # simply runs out of range() is labelled correctly with no trailing else.
+    exit_reason = LoopExit.BUDGET_EXHAUSTED
+
+    try:
+        current_result = client.send_message(conversation_id, question)
+    except ChatError as exc:
+        # The opening request, so there is no partial conversation to evaluate: fall through
+        # to the empty-result path with CHAT_ERROR recorded. Raising here would discard every
+        # K-run already completed along with any exit_reason.
+        print(f"[CHAT] send_message failed for conversation {conversation_id}: {exc}")
+        current_result = getattr(exc, "partial_result", None) or ChatResult()
+        exit_reason = LoopExit.CHAT_ERROR
     # Counted here, not at the top of the loop: this request is sent unconditionally, so
     # with max_iterations=0 the loop body never runs and total_turns would report 0 turns
     # for a conversation the agent did receive. The loop's own increment is skipped on its
     # first pass to compensate, keeping total_turns == number of send_message calls.
     total_turns += 1.0
 
-    # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop that
-    # simply runs out of range() is labelled correctly with no trailing else.
-    exit_reason = LoopExit.BUDGET_EXHAUSTED
-    for iteration in range(max_iterations):
+    for iteration in range(max_iterations if exit_reason is not LoopExit.CHAT_ERROR else 0):
         if iteration:
             total_turns += 1.0
         total_steps += float(current_result.reasoning_step_count)
@@ -232,8 +242,23 @@ def _execute_single_run(
         if iteration >= max_iterations - 1:
             break
 
-        follow_up = generate_simulated_response(response_text, simulated_response_guide)
-        current_result = client.send_message(conversation_id, follow_up)
+        try:
+            follow_up = generate_simulated_response(response_text, simulated_response_guide)
+        except Exception as exc:  # noqa: BLE001 -- harness-side fault; end only this run
+            print(f"[SIM-USER] Simulated reply failed for conversation {conversation_id}: {exc}")
+            exit_reason = LoopExit.SIMULATED_USER_FAILED
+            break
+        try:
+            current_result = client.send_message(conversation_id, follow_up)
+        except ChatError as exc:
+            # Unlike the opening request there IS a conversation to evaluate here, so the
+            # last good result stands and whatever the agent had produced is still scored.
+            print(f"[CHAT] send_message failed for conversation {conversation_id}: {exc}")
+            partial = getattr(exc, "partial_result", None)
+            if partial is not None:
+                current_result = partial
+            exit_reason = LoopExit.CHAT_ERROR
+            break
 
     skill_activated = _check_visualization_skill_activated(all_tool_call_events)
     actual_output: CreatedVisualization | None = None

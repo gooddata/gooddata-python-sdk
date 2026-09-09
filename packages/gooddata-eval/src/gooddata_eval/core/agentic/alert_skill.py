@@ -22,7 +22,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     utc_now,
 )
 from gooddata_eval.core.chat.render import render_answer_text
-from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import (
     AgenticAssertionError,
@@ -682,7 +682,14 @@ def run_agentic_alert_skill(
             turns_used = 0
             for _iteration in range(max_iterations):
                 turns_used = _iteration + 1
-                chat_result = client.send_message(conv_id, current_question)
+                try:
+                    chat_result = client.send_message(conv_id, current_question)
+                except ChatError as exc:
+                    # Without this the exception escapes run_agentic_alert_skill entirely,
+                    # discarding every K-run already completed along with any exit_reason.
+                    print(f"[CHAT] send_message failed for conversation {conv_id}: {exc}")
+                    exit_reason = LoopExit.CHAT_ERROR
+                    break
                 reasoning_steps.extend(chat_result.reasoning_steps or [])
                 response_id = chat_result.response_id or response_id
                 turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
@@ -710,14 +717,19 @@ def run_agentic_alert_skill(
                 # Stop before generating a follow-up for the last iteration
                 if _iteration >= max_iterations - 1:
                     break
-                # No try/except here on purpose: a simulated-user failure in this evaluator
-                # already propagates as a hard error rather than being swallowed into a
-                # content failure, which is the behaviour we want. Contrast metric_skill,
-                # which catches SimulatedResponseError and breaks -- that one needs
-                # LoopExit.SIMULATED_USER_FAILED to stay distinguishable.
-                follow_up = generate_simulated_alert_response(
-                    response_text, expected, conversation_history, question=question
-                )
+                # Recorded rather than raised, matching metric_skill and kda_skill. Letting it
+                # propagate did keep a harness fault from being scored as a content failure,
+                # but it also discarded the K-runs already completed -- and SIMULATED_USER_FAILED
+                # achieves the same separation while keeping them, since reporting reads the
+                # exit reason to classify the run as an error rather than an agent failure.
+                try:
+                    follow_up = generate_simulated_alert_response(
+                        response_text, expected, conversation_history, question=question
+                    )
+                except Exception as exc:  # noqa: BLE001 -- harness-side fault; end only this run
+                    print(f"[SIM-USER] Simulated reply failed for conversation {conv_id}: {exc}")
+                    exit_reason = LoopExit.SIMULATED_USER_FAILED
+                    break
                 # Record this exchange so the next call has full history
                 conversation_history.append({"role": "assistant", "content": response_text})
                 conversation_history.append({"role": "user", "content": follow_up})

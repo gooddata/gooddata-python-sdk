@@ -13,7 +13,8 @@ from gooddata_eval.core.agentic.conversation import (
     evaluate_agentic_conversation,
     run_agentic_conversation,
 )
-from gooddata_eval.core.models import ChatResult, ToolCallEvent
+from gooddata_eval.core.chat.sse_client import ChatError
+from gooddata_eval.core.models import ChatResult, LoopExit, ToolCallEvent
 
 
 def _skills_tc(*skills):
@@ -1033,3 +1034,62 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
         ],
         "latency_breakdown": [],
     }
+
+
+def test_a_chat_error_ends_only_its_own_turn_and_is_recorded():
+    """A chat fault used to escape the whole conversation, discarding the turns already done.
+
+    t1 completes; t2's chat call fails. t1's result must survive, and t2 must be reported as
+    an infrastructure fault -- both exit_reason and no_error say so, so it is not counted as
+    the agent failing to produce output.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m1")]),
+        ChatError("stream died"),
+    ]
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_two_metric_turn_fixture(),
+        )
+
+    assert len(result.turn_results) == 2
+    assert result.turn_results[0].exit_reason is LoopExit.SUCCESS
+    assert result.turn_results[0].output_present is True
+
+    assert result.turn_results[1].exit_reason is LoopExit.CHAT_ERROR
+    assert result.turn_results[1].output_present is False
+    # no_error used to be hardcoded True on the reasoning that a chat fault would have
+    # escaped before reaching here. Now that it is caught, it has to read the exit back.
+    assert result.turn_results[1].no_error is False
+    assert result.turn_results[1].skill_success is False
+
+
+def test_a_non_chat_exception_still_propagates():
+    """Only chat faults are absorbed. A programming error must not be relabelled CHAT_ERROR."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m1")]),
+        TypeError("a real bug"),
+    ]
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+        pytest.raises(TypeError),
+    ):
+        run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_two_metric_turn_fixture(),
+        )
