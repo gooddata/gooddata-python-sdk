@@ -2,10 +2,13 @@
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 from unittest.mock import MagicMock, patch
 
+import gooddata_sdk
+import gooddata_sdk.table as table_module
 import pytest
 from gooddata_eval.core.agentic.dashboard_summary import (
     DashboardSummaryAssertionError,
     DashboardWidget,
+    _execute_widget,
     _insight_widgets,
     build_dashboard_user_context,
     evaluate_agentic_dashboard_summary,
@@ -270,3 +273,95 @@ def test_a_failing_item_raises_with_the_same_detail_attached():
 
 def test_dashboard_widget_defaults_to_no_result():
     assert DashboardWidget(widget_id="w", title="t", visualization_id="v").result_id is None
+
+
+def test_only_visualizations_keeps_just_the_named_charts():
+    """A fixture asserting on a handful of charts should not pay to execute thirty. Names
+    are matched against the visualization id and the widget id, since a fixture author
+    reading a dashboard's AAC sees both."""
+    sdk = MagicMock()
+    layout = [_widget("w0", "viz-0"), _widget("w1", "viz-1"), _widget("w2", "viz-2")]
+    with (
+        _patched_dashboard(layout),
+        patch(f"{_MODULE}._execute_widget", return_value="res") as execute,
+    ):
+        _, widgets = build_dashboard_user_context(
+            sdk, "http://h", "tok", "ws1", "dash-1", only_visualizations=["viz-1", "w2"]
+        )
+
+    assert [w.widget_id for w in widgets] == ["w1", "w2"]
+    assert execute.call_count == 2
+
+
+def test_only_visualizations_and_max_widgets_compose():
+    sdk = MagicMock()
+    layout = [_widget(f"w{i}", f"viz-{i}") for i in range(4)]
+    with (
+        _patched_dashboard(layout),
+        patch(f"{_MODULE}._execute_widget", return_value="res"),
+    ):
+        _, widgets = build_dashboard_user_context(
+            sdk,
+            "http://h",
+            "tok",
+            "ws1",
+            "dash-1",
+            only_visualizations=["viz-1", "viz-2", "viz-3"],
+            max_widgets=2,
+        )
+
+    assert [w.widget_id for w in widgets] == ["w1", "w2"]
+
+
+def test_a_failed_conversation_creation_does_not_discard_completed_runs():
+    """create_conversation sat outside any handler, so a transient failure on run 2 of 3
+    threw away run 1 -- the same failure mode the ChatError path already guards."""
+    client = MagicMock()
+    client.create_conversation.side_effect = ["conv-1", RuntimeError("no conversation for you"), "conv-3"]
+    client.send_message.return_value = _summary_result()
+    evaluator = MagicMock()
+    evaluator.evaluate.return_value = ItemEvaluation(passed=True, rank_key=(1, 1.0), detail={"actual_output": "t"})
+    with (
+        patch(f"{_MODULE}.ChatClient", return_value=client),
+        patch(f"{_MODULE}.GoodDataSdk"),
+        patch(f"{_MODULE}.DashboardSummaryEvaluator", return_value=evaluator),
+        _patched_dashboard([_widget("w1", "viz-1")]),
+        patch(f"{_MODULE}._execute_widget", return_value="res"),
+    ):
+        summary = run_agentic_dashboard_summary(
+            host="http://h",
+            token="tok",
+            workspace_id="ws1",
+            dashboard_id="dash-1",
+            expected_output={"must_include": ["x"]},
+            k=3,
+        )
+
+    assert len(summary.run_results) == 3
+    assert [r.chat_error is None for r in summary.run_results] == [True, False, True]
+    assert "conversation creation failed" in summary.run_results[1].chat_error
+    assert summary.pass_at_k is True
+    # The lost run has no conversation to score, so it must not certify an all-passed item.
+    assert summary.pass_power_k is False
+
+
+def test_execute_widget_fails_loudly_when_the_sdk_moves_its_private_helpers():
+    """gooddata-sdk is depended on as ~=1.74.0, so a patch release may rename the private
+    helpers this borrows. Without the check that surfaces as an AttributeError on the first
+    widget of a run rather than as the dependency problem it is."""
+    stripped = MagicMock(spec=[])  # a gooddata_sdk.table exposing none of the three helpers
+    # Both bindings: `import a.b as c` reads the parent package's attribute, while
+    # sys.modules is what keeps a re-import from restoring the real one.
+    with (
+        patch.dict("sys.modules", {"gooddata_sdk.table": stripped}),
+        patch.object(gooddata_sdk, "table", stripped),
+        pytest.raises(RuntimeError, match="no longer provides"),
+    ):
+        _execute_widget(MagicMock(), "ws1", "viz-1")
+
+
+def test_execute_widget_guard_passes_against_the_installed_sdk():
+    """The guard must not be a permanent tripwire: the helpers exist in the pinned version,
+    so a real call gets past it and fails (if at all) on the network, not on the check."""
+    for name in ("_vis_is_table", "_get_exec_for_pivot", "get_exec_for_non_pivot"):
+        assert hasattr(table_module, name), f"gooddata_sdk.table.{name} is gone -- update _execute_widget"

@@ -243,6 +243,10 @@ def _dispatch_agentic(
             # The fixture's own wording is the prompt under test -- a localized fixture is
             # only meaningful if its own phrasing is what reaches the agent.
             question=item.question,
+            # Each widget costs an execution, so a fixture asserting on a handful of charts
+            # can name them instead of paying for the whole dashboard. Same field and meaning
+            # the headless /summary endpoint gives it; None summarizes everything.
+            only_visualizations=summary_input.visualizations,
             k=k,
             agent_id=agent_id,
             **lf_kw,

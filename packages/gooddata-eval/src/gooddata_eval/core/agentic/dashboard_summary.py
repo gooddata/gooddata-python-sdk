@@ -55,9 +55,9 @@ from gooddata_eval.core.timing import PhaseTimings, log_timer
 
 _DEFAULT_K = 1
 
-# What the "Summarize" menu item pre-fills. Kept verbatim rather than taken from the
-# fixture: the fixture's own question is the localized/paraphrased prompt under test, and
-# every fixture must still reach the same skill.
+# What the "Summarize" menu item pre-fills, used when no question is supplied. A fixture's
+# own question wins: it is the localized or paraphrased wording under test, and the dispatch
+# passes it through for exactly that reason. This is the default for direct callers only.
 _DEFAULT_PROMPT = "Summarize this dashboard"
 
 
@@ -116,8 +116,27 @@ def _execute_widget(sdk: GoodDataSdk, workspace_id: str, visualization_id: str) 
 
     Reuses the table service's own pivot/non-pivot split so the execution matches what the
     client would run for that visualization; only the result id is wanted, not the data.
+
+    ``sdk.tables.for_visualization`` is the public equivalent, but it reads the whole result
+    into an ExecutionTable and returns that instead of the response -- which discards the one
+    field wanted here and pays for every row to do it. Two of the three helpers it delegates
+    to are private, so they are checked up front: ``gooddata-sdk`` is depended on as
+    ``~=1.74.0`` and a patch release may rename them, which would otherwise surface as an
+    AttributeError on the first widget of a run rather than as a dependency problem.
     """
     import gooddata_sdk.table as table_module  # noqa: PLC0415 -- private helpers, imported at use site
+
+    missing = [
+        name
+        for name in ("_vis_is_table", "_get_exec_for_pivot", "get_exec_for_non_pivot")
+        if not hasattr(table_module, name)
+    ]
+    if missing:
+        raise RuntimeError(
+            f"gooddata_sdk.table no longer provides {', '.join(missing)}, so a dashboard widget cannot be "
+            "executed for its result id. The installed gooddata-sdk has moved these helpers -- either pin it "
+            "back or port _execute_widget onto whatever replaced them."
+        )
 
     visualization = sdk.visualizations.get_visualization(workspace_id, visualization_id)
     is_pivot = table_module._vis_is_table(visualization) or visualization.has_bucket_of_type(
@@ -153,6 +172,7 @@ def build_dashboard_user_context(
     workspace_id: str,
     dashboard_id: str,
     *,
+    only_visualizations: list[str] | None = None,
     max_widgets: int | None = None,
 ) -> tuple[dict, list[DashboardWidget]]:
     """Assemble the ``userContext`` for one dashboard, executing its widgets to get result ids.
@@ -162,13 +182,19 @@ def build_dashboard_user_context(
     (reporting needs to know the summary was partial) but is left out of the context, since
     the skill would drop it anyway.
 
-    ``max_widgets`` caps how many widgets are executed. A dashboard of thirty widgets costs
-    thirty executions per run, so a fixture that only asserts on headline figures can bound
-    the cost -- at the price of summarizing less than the user would see.
+    A dashboard of thirty widgets costs thirty executions per item, so both arguments exist
+    to bound that -- at the price of summarizing less than the user would see.
+    ``only_visualizations`` keeps just the named visualizations, which is what a fixture sets
+    (via ``summary_input.visualizations``, the same field and meaning the headless endpoint
+    gives it) because naming the widgets a rubric asserts on stays stable as the dashboard
+    grows. ``max_widgets`` truncates in layout order and is a blunt cap for direct callers.
     """
     title, content = _fetch_dashboard(host, token, workspace_id, dashboard_id)
 
     widgets = _insight_widgets(content)
+    if only_visualizations is not None:
+        wanted = set(only_visualizations)
+        widgets = [w for w in widgets if w.visualization_id in wanted or w.widget_id in wanted]
     if max_widgets is not None:
         widgets = widgets[:max_widgets]
 
@@ -233,13 +259,16 @@ class AgenticDashboardSummarySummary:
     best: DashboardSummaryRunResult
 
 
-def _failed_run(conversation_id: str, message: str, widgets_total: int, widgets_executed: int, agent_s: float):
+def _failed_run(
+    conversation_id: str, message: str, widgets: list[DashboardWidget], agent_s: float
+) -> DashboardSummaryRunResult:
+    """A run that never produced a summary, recorded so the completed runs survive."""
     return DashboardSummaryRunResult(
         conversation_id=conversation_id,
         actual_output="",
         evaluation=ItemEvaluation(passed=False, rank_key=(-1, 0.0), detail={}, error=message),
-        widgets_total=widgets_total,
-        widgets_executed=widgets_executed,
+        widgets_total=len(widgets),
+        widgets_executed=sum(1 for w in widgets if w.result_id is not None),
         timings=PhaseTimings(agent_s=agent_s),
         chat_error=message,
     )
@@ -261,9 +290,7 @@ def _run_single_dashboard_summary(
     try:
         chat_result = client.send_message(conversation_id, prompt, user_context=user_context)
     except ChatError as exc:
-        return _failed_run(
-            conversation_id, f"chat failed: {exc}", widgets_total, widgets_executed, time.monotonic() - agent_started
-        )
+        return _failed_run(conversation_id, f"chat failed: {exc}", widgets, time.monotonic() - agent_started)
     agent_elapsed = time.monotonic() - agent_started
 
     judge_started = time.monotonic()
@@ -300,6 +327,7 @@ def run_agentic_dashboard_summary(
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
+    only_visualizations: list[str] | None = None,
     max_widgets: int | None = None,
     dataset_item_id: str = "",
     dataset_name: str = "dashboard_summary",
@@ -327,7 +355,13 @@ def run_agentic_dashboard_summary(
     try:
         context_started = time.monotonic()
         user_context, widgets = build_dashboard_user_context(
-            sdk, host, token, workspace_id, dashboard_id, max_widgets=max_widgets
+            sdk,
+            host,
+            token,
+            workspace_id,
+            dashboard_id,
+            only_visualizations=only_visualizations,
+            max_widgets=max_widgets,
         )
         log_timer(
             f"[timer] dashboard_summary {dashboard_id} context built in "
@@ -344,7 +378,13 @@ def run_agentic_dashboard_summary(
                 client.delete_conversation(conv_id_0)
 
         for _ in range(1, k):
-            conv_id = client.create_conversation()
+            try:
+                conv_id = client.create_conversation()
+            except Exception as exc:  # noqa: BLE001 -- a lost conversation must not discard completed runs
+                # Same contract as the ChatError path below: this line used to sit outside any
+                # handler, so a transient failure here on run 2 of 3 threw away run 1.
+                run_results.append(_failed_run("", f"conversation creation failed: {exc}", widgets, 0.0))
+                continue
             try:
                 run_results.append(
                     _run_single_dashboard_summary(client, evaluator, conv_id, item, user_context, widgets, question)
@@ -402,6 +442,7 @@ def evaluate_agentic_dashboard_summary(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    only_visualizations: list[str] | None = None,
     max_widgets: int | None = None,
 ) -> AgenticEvalOutcome:
     """Run the evaluation, log to Langfuse, and raise DashboardSummaryAssertionError on failure."""
@@ -417,6 +458,7 @@ def evaluate_agentic_dashboard_summary(
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
+        only_visualizations=only_visualizations,
         max_widgets=max_widgets,
         dataset_item_id=dataset_item_id,
         dataset_name=dataset_name,
