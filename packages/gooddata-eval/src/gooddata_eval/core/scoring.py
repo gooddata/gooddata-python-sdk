@@ -1,8 +1,10 @@
 # (C) 2026 GoodData Corporation
 """Visualization scoring — ported from gdc-nas tavern-e2e app/vis_assertions/metrics.py."""
 
+import calendar
 import json
 from dataclasses import dataclass
+from datetime import date, timedelta
 
 from gooddata_eval.core.models import AacBucketRef, AacQueryField, CreatedVisualization
 
@@ -106,13 +108,81 @@ def validate_cross_references(viz: CreatedVisualization) -> tuple[bool, list[str
     return len(errors) == 0, errors
 
 
-def _normalize_date_filter(filter_dict: dict, _fields: dict) -> dict:
+def _shift_month(anchor: date, offset: int) -> tuple[date, date]:
+    """First and last day of the calendar month ``offset`` months from ``anchor``."""
+    total = anchor.year * 12 + (anchor.month - 1) + offset
+    year, month = divmod(total, 12)
+    return date(year, month + 1, 1), date(year, month + 1, calendar.monthrange(year, month + 1)[1])
+
+
+def _absolute_span(granularity: str, start_offset: int, end_offset: int, today: date) -> tuple[date, date] | None:
+    """Resolve a relative date filter to the inclusive absolute span it denotes.
+
+    Returns None for granularities this cannot resolve unambiguously -- notably the
+    WEEK family, whose start-of-week convention varies (WEEK vs WEEK_US vs ...).
+    Guessing there would trade a false negative for a false positive.
+    """
+    gran = granularity.upper()
+    if gran == "DAY":
+        return today + timedelta(days=start_offset), today + timedelta(days=end_offset)
+    if gran == "MONTH":
+        return _shift_month(today, start_offset)[0], _shift_month(today, end_offset)[1]
+    if gran == "QUARTER":
+        q_start_month = (today.month - 1) // 3 * 3 + 1
+        anchor = date(today.year, q_start_month, 1)
+        return _shift_month(anchor, start_offset * 3)[0], _shift_month(anchor, end_offset * 3 + 2)[1]
+    if gran == "YEAR":
+        return date(today.year + start_offset, 1, 1), date(today.year + end_offset, 12, 31)
+    return None
+
+
+def _as_date(value: object) -> date | None:
+    if isinstance(value, str):
+        try:
+            return date.fromisoformat(value[:10])
+        except ValueError:
+            return None
+    return None
+
+
+def _normalize_date_filter(filter_dict: dict, _fields: dict, today: date | None = None) -> dict:
+    """Canonicalize a date filter, resolving relative offsets to an absolute span.
+
+    The agent may answer "last month" either relatively (``granularity: MONTH,
+    from: -1, to: -1``) or absolutely (``from: 2026-08-01, to: 2026-08-31``).
+    Compared literally these never match, so a correct answer in the encoding the
+    fixture did not happen to use was scored as a wrong date period. Both forms
+    collapse to the same absolute span here.
+
+    Resolution is relative to today, which is the same "today" the agent resolved
+    against -- scoring runs in the same process as the turn. Re-scoring an archived
+    result at a later date would therefore drift; nothing currently does that.
+    """
+    raw_from, raw_to = filter_dict.get("from"), filter_dict.get("to")
+    granularity = filter_dict.get("granularity")
+    span: tuple[date, date] | None = None
+
+    if isinstance(raw_from, int) and isinstance(raw_to, int) and isinstance(granularity, str):
+        span = _absolute_span(granularity, raw_from, raw_to, today or date.today())
+    else:
+        start, end = _as_date(raw_from), _as_date(raw_to)
+        if start and end:
+            span = (start, end)
+
+    if span is not None:
+        return {
+            "type": "date_filter",
+            "dataset_uri": filter_dict.get("using", ""),
+            "from": span[0].isoformat(),
+            "to": span[1].isoformat(),
+        }
+    # Unresolvable (e.g. the WEEK family): fall back to literal comparison.
     return {
         "type": "date_filter",
         "dataset_uri": filter_dict.get("using", ""),
-        "from": filter_dict.get("from"),
-        "to": filter_dict.get("to"),
-        "granularity": filter_dict.get("granularity"),
+        "from": raw_from,
+        "to": raw_to,
+        "granularity": granularity,
     }
 
 
@@ -171,7 +241,9 @@ def _normalize_attribute_filter(filter_dict: dict, _fields: dict) -> dict:
     }
 
 
-def _split_and_normalize_filters(viz: CreatedVisualization) -> tuple[set[str], set[str], set[str]]:
+def _split_and_normalize_filters(
+    viz: CreatedVisualization, today: date | None = None
+) -> tuple[set[str], set[str], set[str]]:
     date_set: set[str] = set()
     ranking_set: set[str] = set()
     attr_set: set[str] = set()
@@ -180,7 +252,7 @@ def _split_and_normalize_filters(viz: CreatedVisualization) -> tuple[set[str], s
     for filter_dict in viz.query.filter_by.values():
         ft = filter_dict.get("type")
         if ft == "date_filter":
-            date_set.add(json.dumps(_normalize_date_filter(filter_dict, fields), sort_keys=True))
+            date_set.add(json.dumps(_normalize_date_filter(filter_dict, fields, today), sort_keys=True))
         elif ft == "ranking_filter":
             ranking_set.add(json.dumps(_normalize_ranking_filter(filter_dict, fields, sole_dim_uri), sort_keys=True))
         elif ft == "attribute_filter":
@@ -188,7 +260,7 @@ def _split_and_normalize_filters(viz: CreatedVisualization) -> tuple[set[str], s
     return date_set, ranking_set, attr_set
 
 
-def normalized_filters(viz: CreatedVisualization) -> dict[str, list[str]]:
+def normalized_filters(viz: CreatedVisualization, today: date | None = None) -> dict[str, list[str]]:
     """A visualization's filters exactly as `check_filters` compares them.
 
     Grouped by the three categories it scores separately and sorted for stable output.
@@ -197,13 +269,18 @@ def normalized_filters(viz: CreatedVisualization) -> dict[str, list[str]]:
     a `filter_date_score` of False otherwise gives no clue whether the period differed,
     the granularity did, or the dataset the filter hangs off did.
     """
-    date_set, ranking_set, attr_set = _split_and_normalize_filters(viz)
+    date_set, ranking_set, attr_set = _split_and_normalize_filters(viz, today)
     return {"date": sorted(date_set), "ranking": sorted(ranking_set), "attribute": sorted(attr_set)}
 
 
-def check_filters(expected: CreatedVisualization, actual: CreatedVisualization) -> FilterScores:
-    exp_date, exp_rank, exp_attr = _split_and_normalize_filters(expected)
-    act_date, act_rank, act_attr = _split_and_normalize_filters(actual)
+def check_filters(
+    expected: CreatedVisualization, actual: CreatedVisualization, today: date | None = None
+) -> FilterScores:
+    # One anchor for both sides: resolving each against its own date.today() would
+    # score inconsistently for a run that straddles midnight.
+    today = today or date.today()
+    exp_date, exp_rank, exp_attr = _split_and_normalize_filters(expected, today)
+    act_date, act_rank, act_attr = _split_and_normalize_filters(actual, today)
     return FilterScores(
         date_ok=act_date == exp_date,
         ranking_ok=act_rank == exp_rank,

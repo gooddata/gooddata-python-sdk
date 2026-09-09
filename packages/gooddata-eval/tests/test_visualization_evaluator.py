@@ -1,4 +1,6 @@
 # (C) 2026 GoodData Corporation
+import re
+
 from gooddata_eval.core.evaluators import get_evaluator
 from gooddata_eval.core.models import ChatResult, DatasetItem
 
@@ -158,8 +160,11 @@ def test_detail_reports_the_filters_that_were_compared():
 
     assert result.detail["filter_date_score"] is False
     expected, actual = result.detail["expected_filters"], result.detail["actual_filters"]
-    assert '"from": -11' in expected["date"][0]
-    assert '"from": -12' in actual["date"][0]
+    # Relative offsets are reported as the absolute span they resolve to, so the two
+    # periods are legible side by side and visibly different -- which is the point.
+    assert re.search(r'"from": "\d{4}-\d{2}-\d{2}"', expected["date"][0])
+    assert re.search(r'"from": "\d{4}-\d{2}-\d{2}"', actual["date"][0])
+    assert expected["date"] != actual["date"]
     assert expected["ranking"] == actual["ranking"] == []
     assert expected["attribute"] == actual["attribute"] == []
 
