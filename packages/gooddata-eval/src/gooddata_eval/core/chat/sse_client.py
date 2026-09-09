@@ -34,6 +34,9 @@ _RESPONSE_ENDED_EVENT = "response_ended"
 
 _RETRYABLE_STATUS_CODES: frozenset[int] = frozenset({429, 502, 503, 504})
 _METADATA_SYNC_MARKER = "METADATA_SYNC_IN_PROGRESS"
+# Stands in for the `id` a persisted visualization would carry, on the fallback path
+# where the agent's create_adhoc_visualization call failed and only its arguments survive.
+_ADHOC_VIZ_ID = "adhoc-visualization-not-persisted"
 
 _KNOWN_PART_TYPES: frozenset[str] = frozenset(
     {
@@ -247,8 +250,14 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
         # Fallback: the agent produced a correct visualization definition via
         # create_adhoc_visualization but the call failed (e.g. data source not
         # accessible). The last attempt is the agent's best answer.
+        #
+        # These are raw tool-call arguments, so they carry no `id` -- nothing was
+        # ever persisted. CreatedVisualization requires one, so synthesize a
+        # sentinel rather than letting the whole ChatResult fail to validate:
+        # dropping the turn entirely would score a stalled data source as a
+        # content failure, which is exactly what this fallback exists to prevent.
         payload["createdVisualizations"] = {
-            "objects": [acc.adhoc_viz_args[-1]],
+            "objects": [{"id": _ADHOC_VIZ_ID, **acc.adhoc_viz_args[-1]}],
             "reasoning": "\n".join(acc.viz_reasoning_parts),
         }
     result = ChatResult.model_validate(payload)
