@@ -32,7 +32,11 @@ SSE_EVENT_PREFIX = "event: "
 # gen-ai's last event, only if at least one item was already emitted (conversations_controller.py).
 _RESPONSE_ENDED_EVENT = "response_ended"
 
-_RETRYABLE_STATUS_CODES: frozenset[int] = frozenset({429, 502, 503, 504})
+# 500 is here on evidence, not on principle: in one visualization eval batch it hard-failed
+# 10 of 56 runs with zero retry attempts, and every affected question scored normally when the
+# same question/model ran again the next day -- i.e. transient gen-ai faults, not deterministic
+# server bugs. A genuinely deterministic 500 still terminates, just after the bounded backoff.
+_RETRYABLE_STATUS_CODES: frozenset[int] = frozenset({429, 500, 502, 503, 504})
 _METADATA_SYNC_MARKER = "METADATA_SYNC_IN_PROGRESS"
 # Stands in for the `id` a persisted visualization would carry, on the fallback path
 # where the agent's create_adhoc_visualization call failed and only its arguments survive.

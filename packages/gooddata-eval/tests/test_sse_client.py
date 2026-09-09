@@ -18,8 +18,9 @@ def test_parse_sse_lines_collects_text_and_visualization(fixtures_dir):
 
 
 def test_parse_sse_lines_raises_on_error_event():
-    lines = ['data: {"statusCode": 500, "detail": "boom"}']
-    with pytest.raises(RuntimeError, match="SSE error 500"):
+    # 400: a code outside _RETRYABLE_STATUS_CODES, so this exercises the terminal path.
+    lines = ['data: {"statusCode": 400, "detail": "boom"}']
+    with pytest.raises(RuntimeError, match="SSE error 400"):
         parse_sse_lines(lines)
 
 
@@ -51,7 +52,7 @@ def test_parse_sse_lines_error_carries_partial_result_with_tool_calls_already_se
             }
         ),
         "",
-        json.dumps({"statusCode": 500, "detail": "boom"}),
+        json.dumps({"statusCode": 400, "detail": "boom"}),
     ]
     lines = [f"data: {line}" if line else line for line in lines]
     with pytest.raises(ChatError) as ei:
@@ -472,7 +473,7 @@ def test_parse_sse_lines_has_no_alert_proposals_by_default():
     assert parse_sse_lines(lines).alert_proposals == []
 
 
-@pytest.mark.parametrize("code", [429, 502, 503, 504])
+@pytest.mark.parametrize("code", [429, 500, 502, 503, 504])
 def test_parse_sse_lines_transient_status_codes(code):
     with pytest.raises(TransientChatError) as ei:
         parse_sse_lines([f'data: {{"statusCode": {code}, "detail": null}}'])
