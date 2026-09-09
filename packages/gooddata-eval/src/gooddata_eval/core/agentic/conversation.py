@@ -29,6 +29,7 @@ from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
     ChatResult,
+    LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
     build_latency_breakdown,
@@ -93,6 +94,10 @@ class TurnResult(BaseModel):
     active_skills: list[str] = Field(default_factory=list)
     clarification_turns_used: int = 0
     output_correct: bool | None = None
+    # Why this turn's clarification loop stopped -- see LoopExit. output_present=False alone
+    # cannot separate a turn that ran out of clarification budget from one where the agent
+    # went silent, and skill_success folds both into the same failure.
+    exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
 
     @property
     def skill_success(self) -> bool:
@@ -112,6 +117,8 @@ class TurnResult(BaseModel):
         # What skill_routing was judged against -- without it, a turn showing
         # skill_routing=True and activated_skills=[] looks like a scoring bug.
         "active_skills",
+        # Why the clarification loop ended on this turn.
+        "exit_reason",
     }
 
     def detail(self) -> dict:
@@ -421,6 +428,10 @@ def run_agentic_conversation(
                         # read as "nothing was active", which is a different claim.
                         active_skills=sorted(active_skills),
                         output_correct=False,
+                        # This turn's loop never ran at all -- a $ref pointing at an earlier
+                        # turn's output could not be resolved. Labelling it BUDGET_EXHAUSTED
+                        # (the field default) would claim it ran out of clarification turns.
+                        exit_reason=LoopExit.NOT_RUN,
                     )
                 )
                 continue
@@ -431,6 +442,9 @@ def run_agentic_conversation(
             current_message = turn.message
             final_result: ChatResult | None = None
 
+            # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop
+            # that simply runs out of range() is labelled correctly with no trailing else.
+            turn_exit = LoopExit.BUDGET_EXHAUSTED
             for _iter in range(max_clarification_turns + 1):
                 chat_result = client.send_message(conversation_id, current_message)
                 final_result = chat_result
@@ -447,6 +461,7 @@ def run_agentic_conversation(
                 response_id = chat_result.response_id or response_id
 
                 if _check_output_present(resolved_turn, chat_result):
+                    turn_exit = LoopExit.SUCCESS
                     break
 
                 response_text = (chat_result.text_response or "").strip()
@@ -455,6 +470,7 @@ def run_agentic_conversation(
                 if not response_text:
                     response_text = render_answer_text(chat_result)
                 if not response_text and not chat_result.tool_call_events:
+                    turn_exit = LoopExit.AGENT_SILENT
                     break
                 if clarification_turns >= max_clarification_turns:
                     break
@@ -500,6 +516,7 @@ def run_agentic_conversation(
                     active_skills=sorted(active_skills),
                     clarification_turns_used=clarification_turns,
                     output_correct=output_correct,
+                    exit_reason=turn_exit,
                 )
             )
 

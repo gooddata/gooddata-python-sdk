@@ -320,6 +320,9 @@ def test_evaluate_agentic_visualization_returns_reasoning_steps_on_pass():
         "actual_dim_uris": ["label/date.quarter"],
         "expected_filters": {"date": [], "ranking": [], "attribute": []},
         "actual_filters": {"date": [], "ranking": [], "attribute": []},
+        "exit_reason": "success",
+        "turns_used": 1,
+        "max_iterations": 4,
         "latency_breakdown": [],
     }
 
@@ -371,5 +374,10 @@ def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on
         "actual_dim_uris": [],
         "expected_filters": {"date": [], "ranking": [], "attribute": []},
         "actual_filters": {"date": [], "ranking": [], "attribute": []},
+        # No visualization and only one iteration available: the loop ran out of budget.
+        # Every check above reads False, which is exactly why exit_reason has to be here.
+        "exit_reason": "budget_exhausted",
+        "turns_used": 1,
+        "max_iterations": 1,
         "latency_breakdown": [],
     }

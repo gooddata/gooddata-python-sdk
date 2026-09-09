@@ -32,6 +32,7 @@ from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
     CreatedVisualization,
+    LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
     build_latency_breakdown,
@@ -57,6 +58,9 @@ class RunResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
+    # Why the simulated-user loop stopped. visualization_created=False alone cannot separate
+    # a refusal from a run that hit max_iterations while still on track -- see LoopExit.
+    exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
 
 
 @dataclass
@@ -191,6 +195,9 @@ def _execute_single_run(
 
     current_result = client.send_message(conversation_id, question)
 
+    # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop that
+    # simply runs out of range() is labelled correctly with no trailing else.
+    exit_reason = LoopExit.BUDGET_EXHAUSTED
     for iteration in range(max_iterations):
         total_turns += 1.0
         total_steps += float(current_result.reasoning_step_count)
@@ -207,9 +214,14 @@ def _execute_single_run(
 
         viz_produced = bool(current_result.created_visualizations and current_result.created_visualizations.objects)
         if viz_produced:
+            exit_reason = LoopExit.SUCCESS
             break
+        # render_answer_text (QA-29230) is the broader emptiness test: a turn carrying
+        # search results but no plain text is not silent. Keeping it means AGENT_SILENT
+        # labels only genuinely empty turns.
         response_text = render_answer_text(current_result)
         if not response_text:
+            exit_reason = LoopExit.AGENT_SILENT
             break
         if iteration >= max_iterations - 1:
             break
@@ -235,6 +247,7 @@ def _execute_single_run(
         response_id=response_id,
         tool_call_events=all_tool_call_events,
         reasoning_step_events=all_reasoning_step_events,
+        exit_reason=exit_reason,
     )
 
 
@@ -422,6 +435,11 @@ def evaluate_agentic_visualization(
     ev = best.eval_result
     detail = {
         **evaluation_result_detail(ev),
+        # Why the loop stopped -- see LoopExit. total_turns is already the turn count for
+        # this run, so it doubles as turns_used.
+        "exit_reason": best.exit_reason.value,
+        "turns_used": int(best.total_turns),
+        "max_iterations": max_iterations,
         "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
 

@@ -957,6 +957,7 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
                 "output_correct": None,
                 "activated_skills": ["visualization"],
                 "active_skills": ["visualization"],
+                "exit_reason": "success",
             }
         ],
         "latency_breakdown": [],
@@ -1021,6 +1022,9 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
                 "output_correct": None,
                 "activated_skills": ["other_skill"],
                 "active_skills": ["other_skill"],
+                # Output never appeared and the clarification budget ran out -- the turn is
+                # not a refusal, which skill_routing/output_present alone cannot show.
+                "exit_reason": "budget_exhausted",
             }
         ],
         "latency_breakdown": [],
