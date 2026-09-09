@@ -188,6 +188,20 @@ def test_every_kind_hands_a_pinned_window_to_the_linker(module_name, _func_name)
 
 
 @pytest.mark.parametrize(("module_name", "_func_name"), _EVALUATE_FUNCS)
+def test_every_kind_passes_its_item_input_to_the_linker(module_name, _func_name):
+    """The scored item's question must travel with the score, not just its conversation id."""
+    module = importlib.import_module(f"gooddata_eval.core.agentic.{module_name}")
+    tree = ast.parse(inspect.getsource(module))
+
+    submits = [n for n in ast.walk(tree) if isinstance(n, ast.Call) and _callee_name(n) == "submit_trace_scoring"]
+    assert submits, f"{module_name} no longer defers its Langfuse block to the linker"
+    for call in submits:
+        assert any(kw.arg == "item_input" for kw in call.keywords), (
+            f"{module_name} scores a run without recording what question it answered"
+        )
+
+
+@pytest.mark.parametrize(("module_name", "_func_name"), _EVALUATE_FUNCS)
 def test_every_kind_captures_the_window_before_deferring(module_name, _func_name):
     # The other half: window_end must actually be a captured timestamp. Passing a name that
     # nothing ever assigns would satisfy the check above while sending None to the query.
