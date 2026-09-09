@@ -15,12 +15,11 @@ from typing import Any
 import httpx
 
 from gooddata_eval.core.langfuse import _env, observations, otlp
+from gooddata_eval.core.langfuse.experiment import ExperimentItem, ExperimentRun, build_experiment_root_span
 from gooddata_eval.core.langfuse.observations import TraceSummary
 
 _SCORES_PATH = "/api/public/scores"
 _OTLP_PATH = "/api/public/otel/v1/traces"
-_INGESTION_PATH = "/api/public/ingestion"
-_DATASET_RUN_ITEMS_PATH = "/api/public/dataset-run-items"
 
 _MAX_SCORE_ATTEMPTS = 3
 _DEFAULT_RETRY_DELAY = 0.5
@@ -75,8 +74,14 @@ class _TraceAPI:
 
 
 class _DatasetRunItemsAPI:
-    def __init__(self, client: httpx.Client) -> None:
-        self._client = client
+    """The `api.dataset_run_items.create` shape external callers duck-type.
+
+    Langfuse v4 has no dataset-run-items endpoint: a run is assembled from the experiment
+    attributes on the item's own root span, so the call exports one such span.
+    """
+
+    def __init__(self, owner: HttpxLangfuseClient) -> None:
+        self._owner = owner
 
     def create(
         self,
@@ -86,22 +91,27 @@ class _DatasetRunItemsAPI:
         metadata: dict | None = None,
         run_description: str = "",
     ) -> None:
-        self._client.post(
-            _DATASET_RUN_ITEMS_PATH,
-            json={
-                "runName": run_name,
-                "datasetItemId": dataset_item_id,
-                "traceId": trace_id,
-                "metadata": metadata or {},
-                "runDescription": run_description,
-            },
-        ).raise_for_status()
+        dataset_id = self._owner.dataset_id_for_item(dataset_item_id)
+        if dataset_id is None:
+            raise LookupError(f"dataset item {dataset_item_id!r} not found in Langfuse")
+        now = datetime.now(timezone.utc)
+        span = build_experiment_root_span(
+            ExperimentRun(run_name, dataset_id, metadata, run_description or None),
+            ExperimentItem(dataset_item_id, input={"dataset_item_id": dataset_item_id}),
+            start=now,
+            end=now,
+            trace_name=f"gd-eval: {dataset_item_id}",
+            tags=("gd-eval",),
+            observation_metadata={"gen_ai_trace_id": trace_id},
+            trace_metadata={"run_name": run_name},
+        )
+        self._owner.export_spans([span])
 
 
 class _LangfuseAPI:
     def __init__(self, owner: HttpxLangfuseClient) -> None:
         self.trace = _TraceAPI(owner)
-        self.dataset_run_items = _DatasetRunItemsAPI(owner._http)
+        self.dataset_run_items = _DatasetRunItemsAPI(owner)
 
 
 class HttpxLangfuseClient:
@@ -177,23 +187,6 @@ class HttpxLangfuseClient:
         return observations.list_traces_in_window(
             self._http, from_time=from_time, to_time=to_time, limit=limit, session_id=session_id
         )
-
-    def update_trace_version(self, trace_id: str, version: str) -> None:
-        """Upsert the trace version field via the ingestion endpoint."""
-        now = datetime.now(timezone.utc).isoformat()
-        self._http.post(
-            _INGESTION_PATH,
-            json={
-                "batch": [
-                    {
-                        "id": str(uuid.uuid4()),
-                        "timestamp": now,
-                        "type": "trace-create",
-                        "body": {"id": trace_id, "version": version},
-                    }
-                ]
-            },
-        ).raise_for_status()
 
     def flush(self) -> None:
         pass  # no client-side batching
