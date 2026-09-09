@@ -32,11 +32,18 @@ def _is_retryable(resp: httpx.Response) -> bool:
 
 
 def _retry_delay(resp: httpx.Response) -> float:
-    """Seconds to wait before the next attempt, from `Retry-After` when the server names one."""
+    """Seconds to wait before the next attempt, from `Retry-After` when the server names one.
+
+    Unparsable, negative or NaN values fall back to the default; the cap bounds the wait so a
+    throttled score cannot hold a linking worker for long.
+    """
     try:
-        return min(float(resp.headers.get("Retry-After", "")), _MAX_RETRY_DELAY)
+        asked_for = float(resp.headers.get("Retry-After", ""))
     except ValueError:
         return _DEFAULT_RETRY_DELAY
+    if not asked_for >= 0:
+        return _DEFAULT_RETRY_DELAY
+    return min(asked_for, _MAX_RETRY_DELAY)
 
 
 class _TraceListResult:

@@ -139,6 +139,24 @@ def test_a_retry_delay_the_server_did_not_name_falls_back_to_a_short_one(make_cl
     assert slept == [0.5]
 
 
+@pytest.mark.parametrize("header", ["-5", "nan"])
+def test_a_retry_after_that_cannot_be_slept_falls_back_to_the_default(header):
+    # time.sleep rejects a negative or NaN delay, so either would turn a retry into an exception.
+    assert client_module._retry_delay(httpx.Response(429, headers={"Retry-After": header})) == 0.5
+
+
+def test_a_retry_after_beyond_the_cap_is_clamped():
+    assert client_module._retry_delay(httpx.Response(429, headers={"Retry-After": "60"})) == 5.0
+
+
+def test_a_retry_after_given_as_a_date_falls_back_to_the_default():
+    # Retry-After is allowed to be an HTTP-date; this client reads seconds only. Langfuse
+    # documents the header as a number of seconds, and the cap already bounds the wait, so
+    # parsing a date could only turn the 0.5s fallback into the same 5s ceiling.
+    response = httpx.Response(429, headers={"Retry-After": "Wed, 21 Oct 2026 07:28:00 GMT"})
+    assert client_module._retry_delay(response) == 0.5
+
+
 def test_a_score_gives_up_after_three_attempts(make_client, monkeypatch):
     monkeypatch.setattr(client_module.time, "sleep", lambda _seconds: None)
     attempts = 0
