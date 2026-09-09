@@ -19,6 +19,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     submit_trace_scoring,
     utc_now,
 )
+from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators.visualization import (
@@ -207,12 +208,13 @@ def _execute_single_run(
         viz_produced = bool(current_result.created_visualizations and current_result.created_visualizations.objects)
         if viz_produced:
             break
-        if not current_result.text_response:
+        response_text = render_answer_text(current_result)
+        if not response_text:
             break
         if iteration >= max_iterations - 1:
             break
 
-        follow_up = generate_simulated_response(current_result.text_response, simulated_response_guide)
+        follow_up = generate_simulated_response(response_text, simulated_response_guide)
         current_result = client.send_message(conversation_id, follow_up)
 
     skill_activated = _check_visualization_skill_activated(all_tool_call_events)

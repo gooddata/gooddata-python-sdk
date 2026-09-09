@@ -14,7 +14,6 @@ from gooddata_eval.core.agentic.metric_skill import (
     _delete_metric,
     _extract_metric_result,
     _no_where_clause_hint,
-    _normalize_maql,
     evaluate_agentic_metric_skill,
     generate_simulated_response,
     run_agentic_metric_skill,
@@ -137,14 +136,6 @@ def test_extract_metric_result_skips_an_empty_payload():
     assert _extract_metric_result(calls) == {"metric_id": "m2"}
 
 
-def test_normalize_maql_strips_whitespace():
-    assert _normalize_maql("  SELECT  { metric/foo }  ") == "select {metric/foo}"
-
-
-def test_normalize_maql_removes_select_wrapper():
-    assert _normalize_maql("(SELECT {metric/abc})") == "{metric/abc}"
-
-
 def test_no_where_clause_hint_is_empty_when_a_candidate_has_a_where_clause():
     assert _no_where_clause_hint(['SELECT {metric/foo} WHERE {label/status} = "active"']) == ""
 
@@ -187,8 +178,9 @@ def test_no_where_clause_hint_ignores_where_inside_a_literal_with_an_escaped_quo
     """CodeRabbit finding on PR #1760: an escaped quote inside a quoted literal ended the
     protected-span match early, leaking the rest of the literal's text -- including a
     standalone WHERE -- as unprotected. Uses _HINT_PROTECTED_RE (escape-aware), kept
-    separate from the shared _PROTECTED_RE that feeds the maql_correct comparator (PR
-    #1760 review, Henry) -- see test_normalize_maql_does_not_consume_escape_sequences."""
+    separate from evaluators._maql._PROTECTED_RE, which feeds the maql_correct comparator
+    (PR #1760 review, Henry) -- see
+    test_maql_normalize.test_does_not_consume_escape_sequences."""
     maql = 'SELECT {metric/x} = "Jane\\"s store WHERE something"'
     assert _no_where_clause_hint([maql]) != ""
 
@@ -280,42 +272,6 @@ def test_generate_simulated_response_prompt_handles_a_clarifying_question(monkey
     assert "clarifying question" in sent_prompt
     # No WHERE clause in the ground truth -- the no-filter hint must fire here too.
     assert "no filter is needed" in sent_prompt
-
-
-def test_normalize_maql_is_case_insensitive_for_keywords():
-    """Regression test for a live-reproduced bug: 'FOR PREVIOUS(...)' vs
-    'FOR Previous(...)' scored as a mismatch even though MAQL keywords are
-    case-insensitive -- a semantically identical agent answer failed the eval
-    purely on keyword casing."""
-    actual = "SELECT {metric/active_card_count_-_txn_-_cutcgco} FOR PREVIOUS({label/process_date.year})"
-    expected = "SELECT {metric/active_card_count_-_txn_-_cutcgco}\n  FOR Previous({label/process_date.year})"
-    assert _normalize_maql(actual) == _normalize_maql(expected)
-
-
-def test_normalize_maql_preserves_identifier_case():
-    # {type/id} references are real, case-sensitive ids -- must never be casefolded.
-    assert "Mixed_Case_Id" in _normalize_maql("SELECT {metric/Mixed_Case_Id}")
-
-
-def test_normalize_maql_preserves_quoted_literal_case():
-    """The bug this guards against: naively lowercasing everything outside {..}
-    would also lowercase quoted WHERE-clause literal values, which are real,
-    case-sensitive data -- not keywords. Two literals differing only in case
-    must NOT be treated as equal; that would be a false positive."""
-    assert _normalize_maql('WHERE {label/status} = "Active"') != _normalize_maql('WHERE {label/status} = "active"')
-
-
-def test_normalize_maql_does_not_consume_escape_sequences():
-    """PR #1760 review (Henry): _PROTECTED_RE feeds this comparator (via
-    _casefold_outside_protected), so it must NOT treat \\X as an escape sequence unless
-    MAQL literals are confirmed to support backslash escaping (unconfirmed). A `\\"`
-    inside a literal must still end that literal at the next real quote -- not swallow
-    everything up to the following quoted value, which would leave a real keyword like
-    AND uncasefolded and a later literal's case wrongly casefolded."""
-    maql = 'SELECT {metric/x} WHERE {label/path} = "C:\\" AND {label/y} = "Active"'
-    normalized = _normalize_maql(maql)
-    assert "and {label/y}" in normalized  # AND is a keyword outside the literal -- casefolded
-    assert '"Active"' in normalized  # the second literal's case is untouched -- not "active"
 
 
 def test_metric_run_result_fields():

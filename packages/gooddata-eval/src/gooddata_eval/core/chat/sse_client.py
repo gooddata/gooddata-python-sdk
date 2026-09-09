@@ -35,6 +35,20 @@ _RESPONSE_ENDED_EVENT = "response_ended"
 _RETRYABLE_STATUS_CODES: frozenset[int] = frozenset({429, 502, 503, 504})
 _METADATA_SYNC_MARKER = "METADATA_SYNC_IN_PROGRESS"
 
+_KNOWN_PART_TYPES: frozenset[str] = frozenset(
+    {
+        "text",
+        "visualization",
+        "dashboard",
+        "dashboardPatch",
+        "kda",
+        "whatIf",
+        "searchResults",
+        "alertProposal",
+        "clarifyingQuestions",
+    }
+)
+
 
 class ChatError(RuntimeError):
     """Non-retryable error reported by the chat SSE stream.
@@ -124,6 +138,8 @@ class _SseAccumulator:
     viz_reasoning_parts: list[str] = field(default_factory=list)
     visualizations: list[dict[str, Any]] = field(default_factory=list)
     alert_proposals: list[dict[str, Any]] = field(default_factory=list)
+    search_results: list[dict[str, Any]] = field(default_factory=list)
+    unhandled_parts: list[dict[str, Any]] = field(default_factory=list)
     tool_call_events: list[dict[str, Any]] = field(default_factory=list)
     call_id_to_event_index: dict[str, int] = field(default_factory=dict)
     reasoning_steps: list[dict[str, Any]] = field(default_factory=list)
@@ -151,13 +167,20 @@ def _handle_multipart(content: dict[str, Any], acc: _SseAccumulator) -> None:
             if t:
                 acc.text_parts.append(t)
                 acc.viz_reasoning_parts.append(t)
-        elif ptype == "visualization" and part.get("visualization"):
-            acc.visualizations.append(part["visualization"])
+        elif ptype == "visualization":
+            if part.get("visualization"):
+                acc.visualizations.append(part["visualization"])
         elif ptype == "alertProposal":
             # Record the part even when the server could not resolve the proposal payload
             # (``alertProposal: null``) — its mere presence is the confirmation signal, and
             # the reader falls back to a default CTA.
             acc.alert_proposals.append(part.get("alertProposal") or {})
+        elif ptype == "searchResults":
+            acc.search_results.append(part)
+        else:
+            if ptype not in _KNOWN_PART_TYPES:
+                _log.warning("unknown multipart part type %r; captured as an unhandled part", ptype)
+            acc.unhandled_parts.append(part)
 
 
 def _handle_reasoning(content: dict[str, Any], acc: _SseAccumulator) -> None:
@@ -198,9 +221,18 @@ def _handle_tool_result(content: dict[str, Any], acc: _SseAccumulator) -> None:
 
 
 def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
+    if not acc.text_parts and (acc.search_results or acc.unhandled_parts):
+        _log.warning(
+            "assistant turn produced no text part; %d non-text part(s) captured (%d searchResults, %d unhandled)",
+            len(acc.search_results) + len(acc.unhandled_parts),
+            len(acc.search_results),
+            len(acc.unhandled_parts),
+        )
     payload: dict[str, Any] = {
         "textResponse": "\n".join(acc.text_parts) or None,
         "alertProposals": acc.alert_proposals,
+        "searchResults": acc.search_results,
+        "unhandledParts": acc.unhandled_parts,
         "toolCallEvents": acc.tool_call_events,
         "reasoningStepCount": len(acc.reasoning_steps),
         "reasoningSteps": [step["summary"] for step in acc.reasoning_steps],

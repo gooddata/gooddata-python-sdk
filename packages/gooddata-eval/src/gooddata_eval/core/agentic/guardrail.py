@@ -14,6 +14,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     submit_trace_scoring,
     utc_now,
 )
+from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError, LLMJudge, score_run
@@ -107,7 +108,7 @@ def _run_single_guardrail(
     and the remaining K-1) cannot drift -- they had already duplicated the whole body once.
     """
     chat_result = client.send_message(conversation_id, question)
-    actual_output = (chat_result.text_response or "").strip()
+    actual_output = render_answer_text(chat_result)
     verdict = score_run(judge, input=question, expected_output=expected_output, actual_output=actual_output)
     return GuardrailResult(
         conversation_id=conversation_id,
