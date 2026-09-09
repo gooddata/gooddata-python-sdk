@@ -213,6 +213,8 @@ class ChatResult(BaseModel):
     # step emits ONLY this part (no text part), so its `cta` is the only "the agent is asking
     # a question" signal the simulated-user loops can key off.
     alert_proposals: list[dict] = Field(default_factory=list, alias="alertProposals")
+    search_results: list[dict] = Field(default_factory=list, alias="searchResults")
+    unhandled_parts: list[dict] = Field(default_factory=list, alias="unhandledParts")
     tool_call_events: list[ToolCallEvent] = Field(default_factory=list, alias="toolCallEvents")
     reasoning_step_count: int = Field(default=0, alias="reasoningStepCount")
     reasoning_steps: list[str] = Field(default_factory=list, alias="reasoningSteps")

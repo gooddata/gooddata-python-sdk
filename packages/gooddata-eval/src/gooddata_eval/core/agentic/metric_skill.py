@@ -20,8 +20,10 @@ from gooddata_eval.core.agentic._trace_linker import (
     submit_trace_scoring,
     utc_now,
 )
+from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
+from gooddata_eval.core.evaluators._maql import normalize_maql
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
@@ -40,76 +42,16 @@ except ImportError:
 _DEFAULT_K = 1
 _DEFAULT_MAX_ITERATIONS = 7
 
-_IFNULL_RE = re.compile(r"IFNULL\s*\([^,]+,\s*0\)", re.IGNORECASE)
-_SELECT_WRAP_RE = re.compile(r"^\s*\(\s*SELECT\s*\{([^}]+)\}\s*\)\s*$", re.IGNORECASE)
-_INNER_SELECT_RE = re.compile(r"\(\s*SELECT\s*\{([^}]+)\}\s*\)", re.IGNORECASE)
-# Matches whichever comes first: a {type/id} identifier reference or a quoted string
-# literal -- both are case-sensitive data and must survive casefolding untouched.
-# Everything else in MAQL (keywords, operators, numbers, punctuation) carries no
-# case-sensitive meaning, per the MAQL reference (SELECT/BY/WHERE/FOR PREVIOUS/etc.
-# are case-insensitive; only {..} identifiers and quoted literal values are not).
-# Feeds _normalize_maql, the scoring comparator (_best_maql_match) -- do not widen this
-# to handle \X escapes without confirming MAQL literals actually support backslash
-# escaping (unconfirmed; see PR #1760 review). A wrong guess here silently changes
-# maql_correct for the whole eval dataset, not just a hint. _no_where_clause_hint()
-# below has its own, separately-scoped regex for that reason.
-_PROTECTED_RE = re.compile(r"\{[^}]*\}|\"[^\"]*\"|'[^']*'")
-
-
-def _strip_outer_parens(s: str) -> str:
-    """Strip one balanced layer of outer () if they wrap the entire expression."""
-    if not (s.startswith("(") and s.endswith(")")):
-        return s
-    depth = 0
-    for i, ch in enumerate(s):
-        if ch == "(":
-            depth += 1
-        elif ch == ")":
-            depth -= 1
-            if depth == 0 and i < len(s) - 1:
-                return s  # Closing paren found before end — not a simple outer wrapper
-    return s[1:-1].strip()
-
-
-def _casefold_outside_protected(s: str) -> str:
-    """Lowercase MAQL keywords/operators while preserving case-sensitive {type/id}
-    identifiers and quoted string literal values (e.g. WHERE {label/x} = "Active")."""
-    parts = []
-    last = 0
-    for m in _PROTECTED_RE.finditer(s):
-        parts.append(s[last : m.start()].lower())
-        parts.append(m.group(0))
-        last = m.end()
-    parts.append(s[last:].lower())
-    return "".join(parts)
-
-
-def _normalize_maql(maql: str) -> str:
-    """Semantic normalisation: strip whitespace, unwrap IFNULL/SELECT wrappers, casefold keywords."""
-    if not maql:
-        return ""
-    m = maql.strip()
-    m = _IFNULL_RE.sub(
-        lambda mo: _strip_outer_parens(mo.group(0).split(",")[0].strip()[len("IFNULL(") :].strip()),
-        m,
-    )
-    m = _SELECT_WRAP_RE.sub(r"{\1}", m)
-    m = _INNER_SELECT_RE.sub(r"{\1}", m)
-    m = re.sub(r"\{\s+", "{", m)
-    m = re.sub(r"\s+\}", "}", m)
-    m = re.sub(r"\s+", " ", m)
-    return _casefold_outside_protected(m.strip())
-
 
 def _best_maql_match(actual_maql: str, expected_outputs: list[dict]) -> tuple[bool, str]:
     """Try actual MAQL against every candidate; return (matched, best_expected_maql).
 
     First match wins. First candidate is used for error reporting when none match.
     """
-    normalized_actual = _normalize_maql(actual_maql)
+    normalized_actual = normalize_maql(actual_maql)
     for candidate in expected_outputs:
         expected_maql = candidate.get("maql", "")
-        if normalized_actual == _normalize_maql(expected_maql):
+        if normalized_actual == normalize_maql(expected_maql):
             return True, expected_maql
     return False, expected_outputs[0].get("maql", "") if expected_outputs else ""
 
@@ -122,9 +64,9 @@ class SimulatedResponseError(RuntimeError):
     """
 
 
-# Separate from _PROTECTED_RE on purpose: this one only feeds a same-turn LLM-prompt hint
-# (see _no_where_clause_hint), never the scoring comparator, so it can afford to consume
-# \X escape sequences inside quoted literals without risking maql_correct semantics.
+# Separate from evaluators._maql._PROTECTED_RE on purpose: this one only feeds a same-turn
+# LLM-prompt hint (see _no_where_clause_hint), never the scoring comparator, so it can afford
+# to consume \X escape sequences inside quoted literals without risking maql_correct semantics.
 _HINT_PROTECTED_RE = re.compile(r"\{[^}]*\}|\"(?:[^\"\\]|\\.)*\"|'(?:[^'\\]|\\.)*'")
 
 
@@ -342,6 +284,8 @@ def _execute_single_metric_run(
                 metric_result = candidate
                 break
             response_text = (chat_result.text_response or "").strip()
+            if not response_text:
+                response_text = render_answer_text(chat_result)
             if not response_text and not chat_result.tool_call_events:
                 break
             if _iteration >= max_iterations - 1:

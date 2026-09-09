@@ -1,6 +1,7 @@
 # (C) 2026 GoodData Corporation
 """Evaluator for metric_skill: agent must create the correct metric via create_metric tool call."""
 
+from gooddata_eval.core.evaluators._maql import normalize_maql
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import ChatResult, DatasetItem, build_latency_breakdown
 
@@ -47,8 +48,8 @@ class MetricSkillEvaluator:
         expected_maql = expected.get("maql", "")
         expected_format = expected.get("format", "")
 
-        maql_correct = actual_maql == expected_maql
-        format_correct = actual_format == expected_format
+        maql_correct = normalize_maql(actual_maql) == normalize_maql(expected_maql)
+        format_correct = actual_format.strip() == expected_format.strip()
         passed = maql_correct and format_correct
 
         return ItemEvaluation(

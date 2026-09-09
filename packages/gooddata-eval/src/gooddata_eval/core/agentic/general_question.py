@@ -15,6 +15,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     submit_trace_scoring,
     utc_now,
 )
+from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError, LLMJudge, score_run
@@ -112,7 +113,7 @@ def _run_single_general_question(
     item_started = time.monotonic()
     agent_started = time.monotonic()
     chat_result = client.send_message(conversation_id, question, user_context=user_context)
-    actual_output = (chat_result.text_response or "").strip()
+    actual_output = render_answer_text(chat_result)
     agent_elapsed = time.monotonic() - agent_started
     log_timer(
         f"[timer] general_question {conversation_id} GoodData response complete after "

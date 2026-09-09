@@ -4,11 +4,13 @@ from contextlib import ExitStack, contextmanager
 from unittest.mock import MagicMock, patch
 
 import pytest
+from gooddata_eval.core.agentic._catalog import AnomalyDetectionGranularity
 from gooddata_eval.core.agentic.alert_skill import (
     AlertEvaluation,
     AlertSkillAssertionError,
     _check_attributes,
     _check_filters,
+    _check_granularity,
     _check_recipients,
     _check_trigger,
     _deep_subset,
@@ -686,6 +688,7 @@ def test_evaluate_agentic_alert_skill_returns_reasoning_steps_on_pass():
         "metric_correct": True,
         "recipients_correct": True,
         "attributes_correct": True,
+        "granularity_correct": True,
         "actual_alert_arguments": {"operator": "GREATER_THAN", "threshold": 500},
         "latency_breakdown": [],
     }
@@ -725,6 +728,7 @@ def test_evaluate_agentic_alert_skill_attaches_reasoning_steps_to_exception_on_f
         "metric_correct": False,
         "recipients_correct": False,
         "attributes_correct": False,
+        "granularity_correct": False,
         "actual_alert_arguments": {},
         "latency_breakdown": [],
     }
@@ -905,3 +909,90 @@ def test_alert_evaluation_attributes_correct_defaults_to_true():
     )
     assert ev.attributes_correct is True
     assert ev.strict_pass is True
+
+
+# --- ANOMALY granularity ----------------------------------------------------------------
+
+
+def test_sim_user_supplies_the_granularity_an_anomaly_alert_needs():
+    prompt = _sim_user_prompt({"Operator": "ANOMALY", "Granularity": "DAY", "Time window/Filters": "None (All time)"})
+    assert "use DAY granularity" in prompt
+    assert "never refuse to give one" in prompt
+
+
+def test_sim_user_is_not_told_to_refuse_a_granularity_for_an_anomaly_alert():
+    prompt = _sim_user_prompt({"Operator": "ANOMALY", "Time window/Filters": "None (All time)"})
+    assert "invent" not in prompt.lower()
+
+
+def test_sim_user_still_refuses_an_unrequested_granularity_for_a_normal_alert():
+    prompt = _sim_user_prompt({"Operator": "GREATER_THAN", "Time window/Filters": "None (All time)"})
+    assert "Do not invent an evaluation period, a granularity" in prompt
+    assert "no date filter at all" in prompt
+
+
+def test_sim_user_falls_back_to_day_when_an_anomaly_item_states_no_granularity():
+    prompt = _sim_user_prompt({"Operator": "ANOMALY"})
+    assert "use DAY granularity" in prompt
+
+
+def test_normalize_expected_output_reads_granularity():
+    assert _normalize_expected_output({"Operator": "ANOMALY", "Granularity": "WEEK"}).granularity == "WEEK"
+    assert _normalize_expected_output({"Operator": "ANOMALY"}).granularity is None
+
+
+def test_granularity_is_not_mistaken_for_a_filter():
+    expected = _normalize_expected_output(
+        {"Operator": "ANOMALY", "Granularity": "DAY", "Time window/Filters": "None (All time)"}
+    )
+    assert expected.filters == []
+    assert expected.granularity == "DAY"
+
+
+def test_granularity_is_asserted_when_the_fixture_states_one():
+    expected = _normalize_expected_output({"Operator": "ANOMALY", "Granularity": "DAY"})
+    assert _check_granularity(expected, {"granularity": "DAY"}) is True
+    assert _check_granularity(expected, {"granularity": "MONTH"}) is False
+    assert _check_granularity(expected, {}) is False
+
+
+def test_granularity_comparison_is_case_insensitive():
+    expected = _normalize_expected_output({"Operator": "ANOMALY", "Granularity": "day"})
+    assert _check_granularity(expected, {"granularity": "DAY"}) is True
+
+
+def test_granularity_is_unasserted_when_the_fixture_states_none():
+    expected = _normalize_expected_output({"Operator": "GREATER_THAN"})
+    assert _check_granularity(expected, {"granularity": "MONTH"}) is True
+    assert _check_granularity(expected, {}) is True
+
+
+def test_a_mismatched_granularity_fails_strict_pass():
+    ev = AlertEvaluation(
+        alert_created=True,
+        operator_correct=True,
+        threshold_correct=True,
+        trigger_correct=True,
+        filters_correct=True,
+        metric_correct=True,
+        recipients_correct=True,
+        granularity_correct=False,
+    )
+    assert ev.strict_pass is False
+
+
+def test_granularity_is_canonicalised_to_the_enum():
+    expected = _normalize_expected_output({"Operator": "ANOMALY", "Granularity": " week "})
+    assert expected.granularity is AnomalyDetectionGranularity.WEEK
+
+
+def test_an_unknown_granularity_is_rejected_before_the_run_starts():
+    with pytest.raises(ValueError, match="Invalid granularity"):
+        _normalize_expected_output({"Operator": "ANOMALY", "Granularity": "fortnight"})
+
+
+def test_every_gen_ai_interval_is_accepted():
+    for value in ("HOUR", "DAY", "WEEK", "MONTH", "QUARTER", "YEAR"):
+        assert AnomalyDetectionGranularity.parse(value.lower()) is AnomalyDetectionGranularity(value)
+    assert AnomalyDetectionGranularity.parse(None) is None
+    assert AnomalyDetectionGranularity.parse("  ") is None
