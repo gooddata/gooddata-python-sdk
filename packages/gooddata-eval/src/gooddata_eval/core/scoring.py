@@ -122,21 +122,30 @@ def _absolute_span(granularity: str, start_offset: int, end_offset: int, today: 
     ``WEEK``, which is not in the AAC granularity enum and states no start-of-week
     convention. ``WEEK_US`` *is* well defined (Sunday-start), so it resolves.
     Guessing the bare case would trade a false negative for a false positive.
+
+    An offset far enough out to leave the representable date range resolves to None
+    rather than raising: every granularity here can be pushed past it (a YEAR offset of
+    ``-today.year`` alone lands on year 0), and letting that escape would abort scoring
+    for the whole item over one malformed filter. None puts the filter back on the
+    literal-comparison path, which is what an unresolvable span already does.
     """
     gran = granularity.upper()
-    if gran == "DAY":
-        return today + timedelta(days=start_offset), today + timedelta(days=end_offset)
-    if gran == "WEEK_US":
-        sunday = today - timedelta(days=(today.weekday() + 1) % 7)
-        return sunday + timedelta(weeks=start_offset), sunday + timedelta(weeks=end_offset, days=6)
-    if gran == "MONTH":
-        return _shift_month(today, start_offset)[0], _shift_month(today, end_offset)[1]
-    if gran == "QUARTER":
-        q_start_month = (today.month - 1) // 3 * 3 + 1
-        anchor = date(today.year, q_start_month, 1)
-        return _shift_month(anchor, start_offset * 3)[0], _shift_month(anchor, end_offset * 3 + 2)[1]
-    if gran == "YEAR":
-        return date(today.year + start_offset, 1, 1), date(today.year + end_offset, 12, 31)
+    try:
+        if gran == "DAY":
+            return today + timedelta(days=start_offset), today + timedelta(days=end_offset)
+        if gran == "WEEK_US":
+            sunday = today - timedelta(days=(today.weekday() + 1) % 7)
+            return sunday + timedelta(weeks=start_offset), sunday + timedelta(weeks=end_offset, days=6)
+        if gran == "MONTH":
+            return _shift_month(today, start_offset)[0], _shift_month(today, end_offset)[1]
+        if gran == "QUARTER":
+            q_start_month = (today.month - 1) // 3 * 3 + 1
+            anchor = date(today.year, q_start_month, 1)
+            return _shift_month(anchor, start_offset * 3)[0], _shift_month(anchor, end_offset * 3 + 2)[1]
+        if gran == "YEAR":
+            return date(today.year + start_offset, 1, 1), date(today.year + end_offset, 12, 31)
+    except (ValueError, OverflowError):
+        return None
     return None
 
 

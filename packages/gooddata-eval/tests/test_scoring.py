@@ -1,6 +1,7 @@
 # (C) 2026 GoodData Corporation
 from datetime import date
 
+import pytest
 from gooddata_eval.core.models import CreatedVisualization
 from gooddata_eval.core.scoring import (
     check_filters,
@@ -270,3 +271,26 @@ def test_check_filters_date_still_distinguishes_the_dataset_it_hangs_off():
     expected = _date_viz(**{"from": -1, "to": -1, "granularity": "MONTH"})
     actual = _date_viz(using="dataset/dt_date", **{"from": -1, "to": -1, "granularity": "MONTH"})
     assert check_filters(expected, actual, _TODAY).date_ok is False
+
+
+@pytest.mark.parametrize(
+    ("granularity", "offset"),
+    [
+        ("YEAR", -_TODAY.year),  # lands on year 0
+        ("DAY", -(10**9)),  # past timedelta's magnitude limit
+        ("WEEK_US", -(10**8)),
+        ("MONTH", -30000),
+        ("QUARTER", -10000),
+    ],
+)
+def test_check_filters_out_of_range_offsets_fall_back_instead_of_raising(granularity, offset):
+    """An offset outside the representable date range must not abort scoring.
+
+    Every granularity can be pushed past date's 1..9999 year range (or timedelta's
+    magnitude limit). Letting the ValueError/OverflowError escape would fail the whole
+    item on one malformed filter, so the span resolves to None and the filter goes back
+    to literal comparison -- which still matches an identically malformed expectation.
+    """
+    expected = _date_viz(**{"from": offset, "to": 0, "granularity": granularity})
+    assert check_filters(expected, _date_viz(**{"from": offset, "to": 0, "granularity": granularity}), _TODAY).date_ok
+    assert not check_filters(expected, _date_viz(**{"from": -1, "to": -1, "granularity": "MONTH"}), _TODAY).date_ok
