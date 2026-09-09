@@ -20,8 +20,8 @@ packages/gooddata-eval/src/gooddata_eval/core/langfuse/sink.py
   s_152f0704157226::t_ad845bdb80034b 113-114
   s_152f0704157226::t_0772eb6a0a8a72 118,146
 packages/gooddata-eval/src/gooddata_eval/core/langfuse/client.py
-  s_152f0704157226::t_3b75891512524c 98-99
-  s_152f0704157226::t_07aff124769107 100
+  s_152f0704157226::t_3b75891512524c 98-99,102-103
+  s_152f0704157226::t_07aff124769107 100,104
 packages/gooddata-eval/tests/test_agentic_langfuse_trace.py
   s_152f0704157226::t_aac4a2c9a1c574 199-203
 ---

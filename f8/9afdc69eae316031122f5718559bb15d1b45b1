@@ -1,9 +1,9 @@
 packages/gooddata-eval/tests/test_langfuse_client.py
-  s_152f0704157226::t_cdc3e462831c5e 302-348
+  s_152f0704157226::t_cdc3e462831c5e 302-348,312-353
 packages/gooddata-eval/src/gooddata_eval/core/langfuse/client.py
   s_152f0704157226::t_d3ed8c17c898a5 12,18
-  s_152f0704157226::t_d897e163c43703 72,74-102,106
-  s_152f0704157226::t_0d31fb430d5163 73
+  s_152f0704157226::t_d897e163c43703 72,74-102,76,78-106,106,110
+  s_152f0704157226::t_0d31fb430d5163 73,77
 packages/gooddata-eval/tests/test_langfuse_e2e_fake_server.py
   s_152f0704157226::t_1bbd46a624a25a 349-376
 packages/gooddata-eval/tests/test_agentic_observe_experiment.py
