@@ -153,6 +153,14 @@ def parse_export_response(resp: httpx.Response) -> None:
     if not isinstance(body, dict):
         return None
     partial = body.get("partialSuccess")
-    if isinstance(partial, dict) and partial.get("rejectedSpans", 0) > 0:
+    if isinstance(partial, dict) and _rejected_spans(partial) > 0:
         raise RuntimeError(f"Langfuse OTLP export partially rejected: {partial.get('errorMessage', '')}")
     return None
+
+
+def _rejected_spans(partial: dict[str, Any]) -> int:
+    """`partialSuccess.rejectedSpans`, an int64 that OTLP/JSON may encode as a decimal string."""
+    try:
+        return int(partial.get("rejectedSpans") or 0)
+    except (TypeError, ValueError):
+        return 0

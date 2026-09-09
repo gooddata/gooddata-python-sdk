@@ -174,6 +174,13 @@ def test_parse_export_response_partial_success_raises():
         parse_export_response(resp)
 
 
+def test_parse_export_response_partial_success_string_count_raises():
+    # OTLP/JSON encodes int64 fields as decimal strings.
+    resp = httpx.Response(200, json={"partialSuccess": {"rejectedSpans": "1", "errorMessage": "bad span"}})
+    with pytest.raises(RuntimeError, match="bad span"):
+        parse_export_response(resp)
+
+
 def test_parse_export_response_partial_success_zero_rejected_ok():
     resp = httpx.Response(200, json={"partialSuccess": {"rejectedSpans": 0}})
     assert parse_export_response(resp) is None

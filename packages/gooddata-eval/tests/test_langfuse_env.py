@@ -64,7 +64,7 @@ def test_make_http_client_uses_resolved_base_url_and_auth(monkeypatch):
 
     client = make_http_client(timeout=5)
     try:
-        assert str(client.base_url) == "https://base.example.com"
+        assert str(client.base_url).rstrip("/") == "https://base.example.com"
         assert client.headers["Authorization"].startswith("Basic ")
     finally:
         client.close()

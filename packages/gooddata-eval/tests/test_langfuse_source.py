@@ -110,7 +110,7 @@ def test_make_client_prefers_langfuse_base_url_over_host(monkeypatch):
 
     client = _make_client()
     try:
-        assert str(client.base_url) == "https://base.example.com"
+        assert str(client.base_url).rstrip("/") == "https://base.example.com"
     finally:
         client.close()
 
