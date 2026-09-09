@@ -805,6 +805,7 @@ def test_exit_reason_simulated_user_failed_is_not_an_agent_failure():
     assert detail["exit_reason"] == "simulated_user_failed"
     # Broke on turn 1 of a 6-turn budget: not the agent running out of room, and not a refusal.
     assert detail["turns_used"] == 1
+    assert detail["max_iterations"] == 6
     assert detail["metric_created"] is False
 
 

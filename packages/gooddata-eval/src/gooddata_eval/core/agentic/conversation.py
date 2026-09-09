@@ -117,8 +117,10 @@ class TurnResult(BaseModel):
         # What skill_routing was judged against -- without it, a turn showing
         # skill_routing=True and activated_skills=[] looks like a scoring bug.
         "active_skills",
-        # Why the clarification loop ended on this turn.
+        # Why the clarification loop ended on this turn, and how much of the budget it
+        # took to get there -- exit_reason alone cannot be related to the limit without it.
         "exit_reason",
+        "clarification_turns_used",
     }
 
     def detail(self) -> dict:
@@ -343,6 +345,10 @@ class ConversationResult:
     full_skill_coverage: bool
     conversation_success: bool
     total_clarification_turns: int
+    # The configured per-turn clarification budget, so a reader can tell a turn that used
+    # its whole allowance from one that stopped early. Every other agentic kind reports its
+    # limit in detail; without this, conversation is the exception to that contract.
+    max_clarification_turns: int = _DEFAULT_MAX_CLARIFICATION_TURNS
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
@@ -539,6 +545,7 @@ def run_agentic_conversation(
         full_skill_coverage=full_skill_coverage,
         conversation_success=conversation_success,
         total_clarification_turns=total_clarification_turns,
+        max_clarification_turns=max_clarification_turns,
         reasoning_steps=reasoning_steps,
         response_id=response_id,
         tool_call_events=conversation_tool_call_events,
@@ -550,6 +557,7 @@ def _conversation_detail(result: ConversationResult) -> dict:
     return {
         "full_skill_coverage": result.full_skill_coverage,
         "total_clarification_turns": result.total_clarification_turns,
+        "max_clarification_turns": result.max_clarification_turns,
         "turns": [tr.detail() for tr in result.turn_results],
         "latency_breakdown": build_latency_breakdown(result.tool_call_events, result.reasoning_step_events),
     }

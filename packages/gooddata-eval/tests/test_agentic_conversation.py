@@ -948,6 +948,7 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
     assert outcome.detail == {
         "full_skill_coverage": True,
         "total_clarification_turns": 0,
+        "max_clarification_turns": 7,
         "turns": [
             {
                 "turn_id": "t1",
@@ -958,6 +959,7 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
                 "activated_skills": ["visualization"],
                 "active_skills": ["visualization"],
                 "exit_reason": "success",
+                "clarification_turns_used": 0,
             }
         ],
         "latency_breakdown": [],
@@ -1013,6 +1015,7 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
     assert exc_info.value.detail == {
         "full_skill_coverage": False,
         "total_clarification_turns": 0,
+        "max_clarification_turns": 0,
         "turns": [
             {
                 "turn_id": "t1",
@@ -1025,6 +1028,7 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
                 # Output never appeared and the clarification budget ran out -- the turn is
                 # not a refusal, which skill_routing/output_present alone cannot show.
                 "exit_reason": "budget_exhausted",
+                "clarification_turns_used": 0,
             }
         ],
         "latency_breakdown": [],

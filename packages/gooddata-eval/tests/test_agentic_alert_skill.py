@@ -1061,6 +1061,7 @@ def test_exit_reason_agent_silent_is_not_budget_exhausted():
     assert detail["exit_reason"] == "agent_silent"
     # Stopped on the first turn rather than burning all six -- the distinction the field exists for.
     assert detail["turns_used"] == 1
+    assert detail["max_iterations"] == 6
     assert detail["alert_created"] is False
 
 

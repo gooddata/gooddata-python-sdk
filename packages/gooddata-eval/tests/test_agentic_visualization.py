@@ -381,3 +381,29 @@ def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on
         "max_iterations": 1,
         "latency_breakdown": [],
     }
+
+
+# --- turns_used counts every send_message, including the pre-loop one ------------------------
+
+
+@pytest.mark.parametrize("max_iterations", [0, 1, 2, 3])
+def test_turns_used_equals_the_number_of_requests_sent(max_iterations):
+    """The initial request is sent before the loop, so counting only loop passes undercounts.
+
+    With max_iterations=0 the loop body never runs, yet the agent has already received one
+    message -- reporting turns_used=0 there would claim a conversation that did happen never
+    did. The agent never produces a visualization here, so no run breaks early and the count
+    is driven purely by the budget.
+    """
+    client = MagicMock()
+    client.send_message.return_value = ChatResult.model_validate(
+        {"textResponse": "Which metric did you mean?", "createdVisualizations": None}
+    )
+    expected = [CreatedVisualization.model_validate({"id": "v", "type": "COLUMN", "query": {"fields": {}}})]
+
+    with patch("gooddata_eval.core.agentic.visualization.generate_simulated_response", return_value="the revenue one"):
+        run = _execute_single_run(client, "conv-1", "chart revenue", expected, max_iterations=max_iterations)
+
+    assert int(run.total_turns) == client.send_message.call_count
+    # A request was sent regardless of the budget, so the count is never zero.
+    assert int(run.total_turns) >= 1

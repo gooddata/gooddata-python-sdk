@@ -194,12 +194,18 @@ def _execute_single_run(
     simulated_response_guide = expected_outputs[0]  # primary candidate guides the simulated user
 
     current_result = client.send_message(conversation_id, question)
+    # Counted here, not at the top of the loop: this request is sent unconditionally, so
+    # with max_iterations=0 the loop body never runs and total_turns would report 0 turns
+    # for a conversation the agent did receive. The loop's own increment is skipped on its
+    # first pass to compensate, keeping total_turns == number of send_message calls.
+    total_turns += 1.0
 
     # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop that
     # simply runs out of range() is labelled correctly with no trailing else.
     exit_reason = LoopExit.BUDGET_EXHAUSTED
     for iteration in range(max_iterations):
-        total_turns += 1.0
+        if iteration:
+            total_turns += 1.0
         total_steps += float(current_result.reasoning_step_count)
         turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
             current_result,
