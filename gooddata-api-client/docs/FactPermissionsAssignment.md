@@ -1,6 +1,6 @@
-# LdmObjectPermissionsAssignment
+# FactPermissionsAssignment
 
-Desired levels of permissions on an LDM object (attribute, label, fact) for an assignee.
+Desired levels of permissions on a fact for an assignee.
 
 ## Properties
 Name | Type | Description | Notes

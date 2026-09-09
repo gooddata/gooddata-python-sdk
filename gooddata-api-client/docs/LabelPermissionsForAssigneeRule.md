@@ -1,12 +1,12 @@
-# LdmObjectPermissionsForAssignee
+# LabelPermissionsForAssigneeRule
 
-Desired levels of LDM-object permissions for an assignee identified by an identifier.
+Desired levels of label permissions for a collection of assignees identified by a rule.
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **permissions** | **[str]** |  | 
-**assignee_identifier** | [**AssigneeIdentifier**](AssigneeIdentifier.md) |  | 
+**assignee_rule** | [**AssigneeRule**](AssigneeRule.md) |  | 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
