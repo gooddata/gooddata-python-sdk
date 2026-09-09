@@ -19,6 +19,7 @@ packages/gooddata-eval/tests/test_langfuse_client.py
   s_152f0704157226::t_0cbd47ce2f515a 27-28,30,34-35,37-41,94,109,151-152,161-162,166-167,176-177,193-194,202-203,203-204,212-213,214,224,228,235,238,245,313,323
   s_152f0704157226::t_33436745b9bbf3 142-143,152-153
   s_152f0704157226::t_d88633f5c75c91 257,267
+  s_152f0704157226::t_ccc14dcae57723 341
 packages/gooddata-eval/src/gooddata_eval/core/langfuse/client.py
   s_152f0704157226::t_2cb77ddddf937e 18,36,39-41,40,73-80,77-84,90-104,94-108,110,114
   s_152f0704157226::t_3021703b8e2fd1 108-109,112-113
@@ -88,7 +89,7 @@ packages/gooddata-eval/tests/conftest.py
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.2",
-  "base_commit_sha": "e3400a1da85bd7008255b12fa177da581409a5f7",
+  "base_commit_sha": "9ae6bf7a617bd09536ab178508a1f73a672017ae",
   "prompts": {},
   "sessions": {
     "s_152f0704157226": {
