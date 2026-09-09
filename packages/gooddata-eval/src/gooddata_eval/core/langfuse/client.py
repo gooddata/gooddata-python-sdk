@@ -9,13 +9,11 @@ from __future__ import annotations
 import threading
 import time
 import uuid
-from datetime import datetime, timezone
 from typing import Any
 
 import httpx
 
 from gooddata_eval.core.langfuse import _env, observations, otlp
-from gooddata_eval.core.langfuse.experiment import ExperimentItem, ExperimentRun, build_experiment_root_span
 from gooddata_eval.core.langfuse.observations import TraceSummary
 
 _SCORES_PATH = "/api/public/scores"
@@ -73,45 +71,9 @@ class _TraceAPI:
         )
 
 
-class _DatasetRunItemsAPI:
-    """The `api.dataset_run_items.create` shape external callers duck-type.
-
-    Langfuse v4 has no dataset-run-items endpoint: a run is assembled from the experiment
-    attributes on the item's own root span, so the call exports one such span.
-    """
-
-    def __init__(self, owner: HttpxLangfuseClient) -> None:
-        self._owner = owner
-
-    def create(
-        self,
-        run_name: str,
-        dataset_item_id: str,
-        trace_id: str,
-        metadata: dict | None = None,
-        run_description: str = "",
-    ) -> None:
-        dataset_id = self._owner.dataset_id_for_item(dataset_item_id)
-        if dataset_id is None:
-            raise LookupError(f"dataset item {dataset_item_id!r} not found in Langfuse")
-        now = datetime.now(timezone.utc)
-        span = build_experiment_root_span(
-            ExperimentRun(run_name, dataset_id, metadata, run_description or None),
-            ExperimentItem(dataset_item_id, input={"dataset_item_id": dataset_item_id}),
-            start=now,
-            end=now,
-            trace_name=f"gd-eval: {dataset_item_id}",
-            tags=("gd-eval",),
-            observation_metadata={"gen_ai_trace_id": trace_id},
-            trace_metadata={"run_name": run_name},
-        )
-        self._owner.export_spans([span])
-
-
 class _LangfuseAPI:
     def __init__(self, owner: HttpxLangfuseClient) -> None:
         self.trace = _TraceAPI(owner)
-        self.dataset_run_items = _DatasetRunItemsAPI(owner)
 
 
 class HttpxLangfuseClient:
@@ -137,8 +99,9 @@ class HttpxLangfuseClient:
             "id": str(uuid.uuid4()),
             "traceId": trace_id,
             "name": name,
-            # BOOLEAN scores go over the wire as 1.0/0.0, not as JSON booleans.
-            "value": (1.0 if value else 0.0) if isinstance(value, bool) else value,
+            # A BOOLEAN score goes over the wire as 1.0/0.0 whatever its Python type: the
+            # sink's compute_scores yields int 1/0 and the agentic path float 1.0/0.0.
+            "value": (1.0 if value else 0.0) if data_type == "BOOLEAN" else value,
             "dataType": data_type,
         }
         if comment:

@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import os
 import sys
 from datetime import datetime, timedelta, timezone
 from typing import TYPE_CHECKING, Any
@@ -109,9 +110,12 @@ class LangfuseSink:
     def _build_span(self, report: ItemReport, dataset_item_id: str, run: ExperimentRun | None) -> Span:
         end = datetime.now(timezone.utc)
         start = end - timedelta(seconds=report.avg_latency_s)
+        # "gd-eval" leads, exactly as on the agentic path, so one tag filter in Langfuse
+        # finds both single-shot and agentic traces this package wrote.
         tags = tuple(
             t
             for t in (
+                "gd-eval",
                 report.test_kind,
                 self._provider_type,
                 f"effort-{self._reasoning_effort.lower()}" if self._reasoning_effort else None,
@@ -139,6 +143,7 @@ class LangfuseSink:
                 "provider_type": self._provider_type,
                 "reasoning_effort": self._reasoning_effort,
             },
+            environment=os.environ.get("LANGFUSE_TRACING_ENVIRONMENT"),
         )
 
     def log_item(self, report: ItemReport, *, dataset_item_id: str) -> None:

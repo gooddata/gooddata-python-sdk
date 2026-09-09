@@ -108,9 +108,16 @@ def _make_sink(monkeypatch, handler, **kwargs) -> LangfuseSink:
     )
 
 
+def _spans_from(requests: list[httpx.Request]) -> list[dict]:
+    return [
+        json.loads(r.content)["resourceSpans"][0]["scopeSpans"][0]["spans"][0]
+        for r in requests
+        if r.url.path == "/api/public/otel/v1/traces"
+    ]
+
+
 def _span_from(requests: list[httpx.Request]) -> dict:
-    otlp_req = next(r for r in requests if r.url.path == "/api/public/otel/v1/traces")
-    return json.loads(otlp_req.content)["resourceSpans"][0]["scopeSpans"][0]["spans"][0]
+    return _spans_from(requests)[0]
 
 
 def test_langfuse_sink_exports_one_span_and_four_scores(monkeypatch):
@@ -139,7 +146,10 @@ def test_langfuse_sink_exports_one_span_and_four_scores(monkeypatch):
     assert attrs["langfuse.experiment.item.id"]["stringValue"] == "item-1"
     assert attrs["langfuse.experiment.item.root_observation_id"]["stringValue"] == span["spanId"]
     assert json.loads(attrs["langfuse.observation.input"]["stringValue"]) == {"question": "Show revenue by month"}
-    assert attrs["langfuse.trace.tags"]["arrayValue"]["values"]
+    tags = [v["stringValue"] for v in attrs["langfuse.trace.tags"]["arrayValue"]["values"]]
+    # "gd-eval" leads on both paths, so one Langfuse tag filter finds every trace we write.
+    assert tags[0] == "gd-eval"
+    assert "visualization" in tags
 
     score_names = set()
     for score_req in score_calls:
@@ -153,6 +163,17 @@ def test_langfuse_sink_exports_one_span_and_four_scores(monkeypatch):
     pass_score = next(json.loads(r.content) for r in score_calls if json.loads(r.content)["name"] == "pass_at_k")
     assert pass_score["dataType"] == "BOOLEAN"
     assert pass_score["value"] == 1.0
+
+
+def test_langfuse_sink_stamps_the_tracing_environment(monkeypatch):
+    monkeypatch.setenv("LANGFUSE_TRACING_ENVIRONMENT", "staging")
+    requests: list[httpx.Request] = []
+    sink = _make_sink(monkeypatch, _known_item_handler(requests))
+
+    sink.log_item(_passing_report(), dataset_item_id="item-1")
+
+    attrs = {a["key"]: a["value"] for a in _span_from(requests)["attributes"]}
+    assert attrs["langfuse.environment"]["stringValue"] == "staging"
 
 
 def test_langfuse_sink_sets_span_version_to_model(monkeypatch):
@@ -177,15 +198,18 @@ def test_langfuse_sink_posts_plain_span_when_dataset_item_is_unknown(monkeypatch
     sink = _make_sink(monkeypatch, handler)
 
     sink.log_item(_passing_report(), dataset_item_id="item-1")
+    # Twice: the item is missing for every item of the same --dataset, so the explanation
+    # is worth exactly one line per sink.
+    sink.log_item(_passing_report(), dataset_item_id="item-1")
 
     span = _span_from(requests)
     assert not any(a["key"].startswith("langfuse.experiment.") for a in span["attributes"])
     score_calls = [r for r in requests if r.url.path == "/api/public/scores"]
-    assert len(score_calls) == 4
+    assert len(score_calls) == 8
+    trace_of_span = {s["spanId"]: s["traceId"] for s in _spans_from(requests)}
     for score_req in score_calls:
         body = json.loads(score_req.content)
-        assert body["traceId"] == span["traceId"]
-        assert body["observationId"] == span["spanId"]
+        assert trace_of_span[body["observationId"]] == body["traceId"]
 
     err = capsys.readouterr().err
     assert err.count("warning:") == 1

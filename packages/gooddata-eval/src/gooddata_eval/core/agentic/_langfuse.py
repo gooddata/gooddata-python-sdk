@@ -379,7 +379,7 @@ def observe(
                 f"[langfuse] WARNING: dataset item {dataset_item_id!r} does not exist in Langfuse, "
                 f"so the run {run_name!r} cannot be assembled (404 from dataset-items). "
                 f"Scores ARE still written to the traces themselves -- only the per-run grouping "
-                f"used to compare models is missing. This is what happens when --dataset points at "
+                f"that makes models comparable is missing. This is what happens when --dataset points at "
                 f"a local folder: its item ids are local, not Langfuse dataset item ids. Use "
                 f"--langfuse-dataset to get comparable runs, or set {SKIP_ENV_VAR}=1 to skip linking "
                 f"altogether. Further occurrences for this run are suppressed."

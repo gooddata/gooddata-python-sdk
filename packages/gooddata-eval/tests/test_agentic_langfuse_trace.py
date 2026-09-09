@@ -196,12 +196,11 @@ def test_every_conversation_is_still_looked_up_once_after_the_budget_is_spent():
     assert set(looked_up) == {"c1", "c2", "c3"}
 
 
-def test_the_skip_switch_announces_itself_instead_of_silently_orphaning_scores(monkeypatch):
-    # TAVERN_E2E_SKIP_TRACE_LINK returns all-None before any polling, so every score is
-    # orphaned and the only symptom is observe()'s generic "No trace found for dataset run"
-    # -- indistinguishable from a genuine lookup failure. That ambiguity cost a long
-    # debugging detour on a real run: Langfuse was healthy and every trace was present.
-    # If linking is switched off, say so.
+def test_the_skip_switch_announces_itself(monkeypatch):
+    # TAVERN_E2E_SKIP_TRACE_LINK turns off the whole Langfuse write path: the poll returns
+    # all-None before any request and observe() writes nothing. A run under it therefore
+    # looks exactly like a run against a broken Langfuse, so the switch says once that it
+    # is on and how many conversations it covers.
     monkeypatch.setenv(SKIP_ENV_VAR, "1")
     with (
         patch("gooddata_eval.core.agentic._langfuse._fetch_traces_for_session") as mock_fetch,
