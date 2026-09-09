@@ -34,11 +34,11 @@ packages/gooddata-eval/tests/test_agentic_observe_experiment.py
   s_152f0704157226::t_78df93ff46b11d 14,32,227-242
   s_152f0704157226::t_4506a02888ef1d 61-64,92,142,175,202,215,222
 packages/gooddata-eval/tests/test_langfuse_otlp.py
-  s_152f0704157226::t_9cb26b5669f55c 182-186
-  s_152f0704157226::t_56ae095261192d 1-181,187-190
+  s_152f0704157226::t_9cb26b5669f55c 182-186,189-193
+  s_152f0704157226::t_56ae095261192d 1-181,1-176,184-188,187-190,194-197
 packages/gooddata-eval/tests/test_langfuse_source.py
   s_152f0704157226::t_b092a713131a59 5-10
-  s_152f0704157226::t_5d060cadc07cc0 105-117
+  s_152f0704157226::t_5d060cadc07cc0 105-117,105-112,114-117
 packages/gooddata-eval/tests/test_langfuse_experiment.py
   s_152f0704157226::t_385aafbaf70422 1-34,39-47,52-57,62-69,74-85,90-101,108-116,121-138,143-151,180-206
   s_152f0704157226::t_c55ea73344dc65 35-38,48-51,58-61,70-73,86-89,102-107,117-120,139-142
@@ -51,14 +51,14 @@ packages/gooddata-eval/src/gooddata_eval/core/langfuse/sink.py
   s_152f0704157226::t_f0c1ba783cfb1f 15-16
   s_152f0704157226::t_b4cf3aedca7117 67
 packages/gooddata-eval/tests/test_langfuse_env.py
-  s_152f0704157226::t_fa2dde25f02ea2 1-3,6,8-70
+  s_152f0704157226::t_fa2dde25f02ea2 1-3,6,8-70,8-66,68-70
   s_152f0704157226::t_c9027d6277ac14 4-5,7
 packages/gooddata-eval/src/gooddata_eval/core/langfuse/_env.py
   s_152f0704157226::t_1b73fdc5d70699 1-39
 packages/gooddata-eval/src/gooddata_eval/core/langfuse/experiment.py
   s_152f0704157226::t_1b1f73c8b06f75 1-156
 packages/gooddata-eval/src/gooddata_eval/core/langfuse/otlp.py
-  s_152f0704157226::t_bad70a5cf722a9 1-148,153-158
+  s_152f0704157226::t_bad70a5cf722a9 1-148,153-158,153-155,157-158
   s_152f0704157226::t_35eb8878dd73e6 149-152
 packages/gooddata-eval/tests/test_langfuse_observations.py
   s_152f0704157226::t_7316b17f30cc90 1-234
