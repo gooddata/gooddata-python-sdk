@@ -1,0 +1,34 @@
+packages/gooddata-eval/tests/test_agentic_alert_skill.py
+  s_f72c482f1281a5::t_008418f1c7ecfc 722
+  s_13b13cb0e9ae41::t_85fcc32fc967f6 3,13,17,24-26,720-721,723-916
+packages/gooddata-eval/README.md
+  s_13b13cb0e9ae41::t_3c47d2992e0b7a 359-384
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_catalog.py
+  s_13b13cb0e9ae41::t_c15c6609148f00 31-32,51
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_13b13cb0e9ae41::t_a932fc91e4ae0d 137-175,376-377,381-392,407,480-482,492,620-622,629-631,671,747-748,797-801,804,811
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "2817e28531ac4215b5ad1abb8b3d92426dc119c0",
+  "prompts": {},
+  "sessions": {
+    "s_13b13cb0e9ae41": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "38c03b18-ab41-4f9b-a875-2992fd144d65",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    },
+    "s_f72c482f1281a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b5d1871e-77b9-47a5-b176-ff99ff4bd896",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}

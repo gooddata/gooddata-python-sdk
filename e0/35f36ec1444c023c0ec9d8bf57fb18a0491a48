@@ -1,0 +1,23 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_732b0ecf528d18::t_8fe73f3229925d 140-145
+packages/gooddata-eval/tests/test_agentic_conversation.py
+  s_732b0ecf528d18::t_c20607673538f5 100-111
+  s_732b0ecf528d18::t_ab31e965f55002 34-41
+  s_732b0ecf528d18::t_f9c43cd6e8ff4a 11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "e035f36ec1444c023c0ec9d8bf57fb18a0491a48",
+  "prompts": {},
+  "sessions": {
+    "s_732b0ecf528d18": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "03501712-58cc-4278-ac9a-527c4366c8bb",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Frank Huynh <duy.huynh@gooddata.com>"
+    }
+  }
+}

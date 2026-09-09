@@ -1,0 +1,28 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_732b0ecf528d18::t_5c371c4d55c632 208
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  s_732b0ecf528d18::t_924bd6d7f2e8da 475-477
+  s_732b0ecf528d18::t_cc6de770a77eaa 255
+  s_732b0ecf528d18::t_f70775ca08420f 121-147
+  s_732b0ecf528d18::t_5d2f78f8fea193 114
+  s_732b0ecf528d18::t_65d1368c811d3f 435,443
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_732b0ecf528d18::t_6a34cd6c6f1b00 102,122,125-130
+  s_732b0ecf528d18::t_6642fc95cd9139 287
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "fd3129f43eec02f387a2fb82d323168b25e8018c",
+  "prompts": {},
+  "sessions": {
+    "s_732b0ecf528d18": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "03501712-58cc-4278-ac9a-527c4366c8bb",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Frank Huynh <duy.huynh@gooddata.com>"
+    }
+  }
+}

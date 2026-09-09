@@ -1,0 +1,57 @@
+packages/gooddata-eval/tests/test_agentic_conversation.py
+  s_edc85ea91fd2e1::t_80748c9cba19d2 355-469
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  s_edc85ea91fd2e1::t_f022e8f042dee3 90-96,109,268-269,271
+  s_edc85ea91fd2e1::t_7f0604134b0058 238-267,270,272-285
+  s_edc85ea91fd2e1::t_cc0a2e6c53337f 3-4,11,14
+  s_edc85ea91fd2e1::t_d6474aa5bd8d58 286
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_edc85ea91fd2e1::t_52b95959d3db16 75-79,81-82,113-114
+  s_ff58a109afe9d1::t_c24ecf01299a6c 219
+  s_2bdc7200f34cd9::t_257410d252a95a 112
+  s_edc85ea91fd2e1::t_4851e8de1730e8 220,222-223
+  s_edc85ea91fd2e1::t_e71fbe182cf590 216-218
+  s_ee5cc41b994920::t_9e8a99bb8c28dc 80,84-89,91,93,97,107-111,115
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_edc85ea91fd2e1::t_614c407cd205ba 28-29,275,305-320,339-341,343-345,409
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "626ff3f5153391408906fb5864defcf6675b51da",
+  "prompts": {},
+  "sessions": {
+    "s_2bdc7200f34cd9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6cb149b2-0118-4268-9ed7-ecae5a8bac0e",
+        "model": "claude-opus-5"
+      },
+      "human_author": null
+    },
+    "s_edc85ea91fd2e1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e31df106-d4d0-4b89-ad60-b46772b96c21",
+        "model": "claude-opus-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    },
+    "s_ee5cc41b994920": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a4aa36d-5864-4014-bd73-a9160c2f8d78",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    },
+    "s_ff58a109afe9d1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "16642f8f-be33-4845-94e9-46a9cf8bf57c",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": null
+    }
+  }
+}
