@@ -12,6 +12,7 @@ from gooddata_eval.core.agentic._langfuse import make_langfuse_client
 from gooddata_eval.core.agentic._trace_linker import BackgroundTraceLinker, SubmitTraceLink, run_trace_link_inline
 from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
 from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluate_agentic_conversation
+from gooddata_eval.core.agentic.forecasting import evaluate_agentic_forecasting
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.kda_skill import evaluate_agentic_kda_skill
@@ -44,6 +45,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_guardrail",
         "agentic_conversation",
         "agentic_kda_skill",
+        "agentic_forecasting",
     }
 )
 
@@ -219,6 +221,17 @@ def _dispatch_agentic(
         )
     elif kind == "agentic_kda_skill":
         return evaluate_agentic_kda_skill(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo if isinstance(eo, dict) else {},
+            k=k,
+            agent_id=agent_id,
+            **lf_kw,
+        )
+    elif kind == "agentic_forecasting":
+        return evaluate_agentic_forecasting(
             host=host,
             token=token,
             workspace_id=workspace_id,
