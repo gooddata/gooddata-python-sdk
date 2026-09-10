@@ -10,19 +10,21 @@ from pathlib import Path
 from typing import get_args
 
 import httpx
-from gooddata_api_client.exceptions import ApiException
+from gooddata_api_client.exceptions import ApiException, ApiTypeError
 from rich.console import Console
 from rich.table import Table
 
 from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, run_agentic_items
-from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.chat.sse_client import ChatClient, set_default_item_timeout, set_default_turn_timeout
 from gooddata_eval.core.config import DEFAULT_JUDGE_MODEL, JUDGE_MODEL_ENV_VAR, ReasoningEffort, RunConfig
 from gooddata_eval.core.connection import ConnectionError_, resolve_connection
+from gooddata_eval.core.dataset.from_insights import generate as generate_from_insights
 from gooddata_eval.core.dataset.local import load_local_dataset
 from gooddata_eval.core.langfuse.sink import LangfuseSink
 from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.reporting.console import render_comparison, render_console
-from gooddata_eval.core.reporting.json_report import write_multi_model_report
+from gooddata_eval.core.reporting.html_report import load_report_files, write_html_report
+from gooddata_eval.core.reporting.json_report import build_multi_model_report, write_multi_model_report
 from gooddata_eval.core.runner import ItemReport, run_items
 from gooddata_eval.core.summary.http_client import SummaryClient
 from gooddata_eval.core.timing import TIMERS_ENV_VAR
@@ -118,7 +120,33 @@ def _build_parser() -> argparse.ArgumentParser:
         "Off by default because a large run emits hundreds of lines; the same measurements "
         "are always in the JSON report's latency_breakdown_s. Equivalent to GD_EVAL_TIMERS=1.",
     )
+    run.add_argument(
+        "--turn-timeout",
+        dest="turn_timeout",
+        type=float,
+        help="Wall-clock seconds a single agent turn may take before the item is failed and the "
+        "run moves on (or set GOODDATA_EVAL_CHAT_TURN_TIMEOUT_S). Default: uncapped.",
+    )
+    run.add_argument(
+        "--item-timeout",
+        dest="item_timeout",
+        type=float,
+        help="Wall-clock seconds one item may take across ALL its turns before it is failed and "
+        "the run moves on (or set GOODDATA_EVAL_CHAT_ITEM_TIMEOUT_S). Default: uncapped.",
+    )
     run.add_argument("--json", dest="json_path", help="Write a JSON report to this path.")
+    run.add_argument(
+        "--html",
+        dest="html_path",
+        help="Write a self-contained HTML report to this path. Same output as `gd-eval report`, "
+        "for the single-run case where you do not want to keep the JSON around.",
+    )
+    run.add_argument(
+        "--redact",
+        action="store_true",
+        help="Customer-safe HTML: drop conversation/response ids and raw reasoning, and replace "
+        "model names with 'Model A', 'Model B', ...",
+    )
     run.add_argument("--quiet", action="store_true", help="Suppress per-item progress output.")
     run.add_argument(
         "--preserve-failed",
@@ -148,6 +176,96 @@ def _build_parser() -> argparse.ArgumentParser:
             "resolves, which may not have every skill under test enabled."
         ),
     )
+    report = sub.add_parser(
+        "report",
+        help="Render JSON report(s) as one self-contained HTML file.",
+        description="Render JSON report(s) as one self-contained HTML file. Pass several files to "
+        "compare runs side by side -- each becomes its own column, keyed by file name.",
+    )
+    report.add_argument("json_paths", nargs="+", metavar="REPORT.json", help="JSON report file(s) from `run --json`.")
+    report.add_argument("-o", "--out", required=True, help="Path to write the HTML file to.")
+    report.add_argument("--title", default="gd-eval report", help="Title shown in the report header.")
+    report.add_argument(
+        "--redact",
+        action="store_true",
+        help="Customer-safe output: drop conversation/response ids and raw reasoning, and replace "
+        "model names with 'Model A', 'Model B', ...",
+    )
+
+    gen = sub.add_parser(
+        "generate",
+        help="Generate a visualization dataset by reverse-engineering a workspace's insights.",
+    )
+    gen.add_argument("--host", help="GoodData host URL.")
+    gen.add_argument("--token", help="API token (or set GOODDATA_TOKEN).")
+    gen.add_argument("--profile", help="Profile name in ~/.gooddata/profiles.yaml.")
+    gen.add_argument("--workspace", help="Workspace id to read insights from.")
+    gen.add_argument(
+        "--dataset-name", dest="dataset_name", required=True, help="`dataset_name` written into every item."
+    )
+    gen.add_argument("--out", help="Output folder for the dataset JSON files (default: ./<dataset-name>).")
+    gen.add_argument(
+        "--dashboard",
+        action="append",
+        default=[],
+        help="Restrict to insights placed on this dashboard (repeatable). Default: the whole workspace.",
+    )
+    gen.add_argument(
+        "--snapshot-in", dest="snapshot_in", help="Replay a saved model snapshot instead of calling the API."
+    )
+    gen.add_argument("--snapshot-out", dest="snapshot_out", help="Save the fetched model snapshot for later replay.")
+    gen.add_argument("--langfuse-out", dest="langfuse_out", help="Also write a Langfuse-importable dataset JSON here.")
+    gen.add_argument(
+        "--id-prefix",
+        dest="id_prefix",
+        default="",
+        help="Prefix every exported Langfuse item id. Langfuse ids are unique per PROJECT, so "
+        "carrying an item into a second dataset under its original id is a 409.",
+    )
+    gen.add_argument(
+        "--no-phrase", dest="no_phrase", action="store_true", help="Skip the LLM step; emit mechanical questions."
+    )
+    gen.add_argument(
+        "--phrase-model", dest="phrase_model", default="gpt-4o", help="OpenAI model for the phrasing step."
+    )
+    gen.add_argument(
+        "--no-viz-type", dest="no_viz_type", action="store_true", help="Always blank the expected chart type."
+    )
+    gen.add_argument(
+        "--min-questions", dest="min_questions", type=int, default=15, help="Fail below this many questions."
+    )
+    gen.add_argument(
+        "--min-shapes", dest="min_shapes", type=int, default=3, help="Fail below this many distinct question shapes."
+    )
+    gen.add_argument(
+        "--min-filtered",
+        dest="min_filtered",
+        type=int,
+        default=1,
+        help="Fail below this many questions carrying a filter.",
+    )
+    gen.add_argument(
+        "--enrich-ranked",
+        dest="enrich_ranked",
+        type=int,
+        default=0,
+        metavar="N",
+        help="Additionally derive up to N ranked questions. Best-grounded first: insights whose "
+        "own title promised a ranking their definition never implemented ('Top Returned Reasons' "
+        "saved with no sort) are implemented as the title asks, then ranking filters this "
+        "generator adds to a plain breakdown, then sort-only variants. Use when the workspace has "
+        "no ranked insights of its own. Derived items carry `derived_from` and `derived_basis`. "
+        "Default: 0 (off).",
+    )
+    gen.add_argument(
+        "--skip-ambiguous",
+        dest="skip_ambiguous",
+        action="store_true",
+        help="Drop items whose metric or dimension name matches more than one object in the model "
+        "(loop has six labels titled 'Product Title'). Such a question cannot say which object it "
+        "means, so a defensible answer still scores zero. Reported either way.",
+    )
+    gen.add_argument("--dry-run", dest="dry_run", action="store_true", help="Report only; write nothing.")
     models_cmd = sub.add_parser("models", help="List LLM providers and models configured in the org.")
     models_cmd.add_argument("--host", help="GoodData host URL.")
     models_cmd.add_argument("--token", help="API token (or set GOODDATA_TOKEN).")
@@ -332,6 +450,9 @@ def _list_models(host: str, token: str, workspace_id: str | None) -> int:
 
 
 def _run(config: RunConfig) -> int:
+    # Applies to the agentic evaluators' own clients too, which this function never sees.
+    set_default_turn_timeout(config.turn_timeout_s)
+    set_default_item_timeout(config.item_timeout_s)
     if config.log_to_langfuse and config.langfuse_dataset is None:
         print(
             "error: --langfuse requires --langfuse-dataset (local datasets have no Langfuse item ids to link to).",
@@ -435,6 +556,8 @@ def _run(config: RunConfig) -> int:
                     preserve_failed=config.preserve_failed,
                     reasoning_effort=config.reasoning_effort,
                     agent_id=config.agent_id,
+                    turn_timeout_s=config.turn_timeout_s,
+                    item_timeout_s=config.item_timeout_s,
                 ),
                 SummaryClient(host=config.host, token=config.token, workspace_id=config.workspace_id),
             )
@@ -500,7 +623,34 @@ def _run(config: RunConfig) -> int:
     if config.json_path is not None:
         write_multi_model_report(reports, config.json_path)
 
+    if config.html_path is not None:
+        write_html_report(build_multi_model_report(reports), config.html_path, redact=config.redact)
+
     return _EXIT_OK
+
+
+def _report(args: argparse.Namespace) -> int:
+    paths = [Path(p) for p in args.json_paths]
+    write_html_report(load_report_files(paths), Path(args.out), redact=args.redact, title=args.title)
+    print(f"Wrote {args.out}")
+    return _EXIT_OK
+
+
+def _generate(args: argparse.Namespace) -> int:
+    """`gd-eval generate` -- reverse-engineer a dataset from a workspace's insights."""
+    if not args.snapshot_in and not args.workspace:
+        print("error: generate needs --workspace, or --snapshot-in to replay a saved model.", file=sys.stderr)
+        return _EXIT_OPERATIONAL_ERROR
+    if args.out is None:
+        args.out = args.dataset_name
+
+    def sdk_factory():
+        from gooddata_sdk import GoodDataSdk  # noqa: PLC0415
+
+        host, token = resolve_connection(host=args.host, token=args.token, profile=args.profile)
+        return GoodDataSdk.create(host, token)
+
+    return generate_from_insights(args, sdk_factory)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -511,6 +661,14 @@ def main(argv: list[str] | None = None) -> int:
         print("error: --concurrency must be >= 1.", file=sys.stderr)
         return _EXIT_OPERATIONAL_ERROR
     try:
+        # Rendering existing JSON needs no host, token or workspace -- dispatch before
+        # resolve_connection so `report` works on a laptop with no credentials at all.
+        if args.command == "report":
+            return _report(args)
+
+        if args.command == "generate":
+            return _generate(args)
+
         host, token = resolve_connection(host=args.host, token=args.token, profile=args.profile)
         if args.command == "models":
             return _list_models(host, token, getattr(args, "workspace", None))
@@ -524,12 +682,16 @@ def main(argv: list[str] | None = None) -> int:
             runs=args.runs,
             concurrency=args.concurrency,
             json_path=Path(args.json_path) if args.json_path else None,
+            html_path=Path(args.html_path) if args.html_path else None,
+            redact=args.redact,
             log_to_langfuse=args.langfuse,
             quiet=args.quiet,
             kind=args.kind,
             preserve_failed=args.preserve_failed,
             reasoning_effort=args.reasoning_effort,
             agent_id=args.agent_id or os.environ.get("GD_EVAL_AGENT_ID"),
+            turn_timeout_s=args.turn_timeout,
+            item_timeout_s=args.item_timeout,
         )
         return _run(config)
     except (
@@ -539,6 +701,9 @@ def main(argv: list[str] | None = None) -> int:
         ValueError,
         httpx.HTTPError,
         ApiException,
+        # A host pointing at the UI (or any non-API endpoint) deserializes as HTML, not
+        # a model -- an operator error, not a bug worth a traceback.
+        ApiTypeError,
         RuntimeError,
     ) as e:
         print(f"error: {e}", file=sys.stderr)

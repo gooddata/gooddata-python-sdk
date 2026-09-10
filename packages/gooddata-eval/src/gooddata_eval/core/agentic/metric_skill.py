@@ -29,8 +29,8 @@ from gooddata_eval.core.models import (
     AgenticEvalOutcome,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
     shift_and_index_events,
+    timeline_detail,
 )
 from gooddata_eval.core.timing import PhaseTimings, log_timer, sum_timings
 
@@ -498,7 +498,7 @@ def evaluate_agentic_metric_skill(
         "maql_correct": best.maql_correct,
         "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
         "actual_maql": best.actual_maql,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
     }
 
     if not summary.pass_at_k:

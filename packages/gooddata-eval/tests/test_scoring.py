@@ -205,3 +205,26 @@ def test_normalized_filters_is_empty_per_category_when_unfiltered():
         }
     )
     assert normalized_filters(viz) == {"date": [], "ranking": [], "attribute": []}
+
+
+def test_a_date_granularity_compares_equal_whichever_prefix_it_carries():
+    # A date dataset exposes each granularity as an attribute whose only label carries
+    # the same id, so both spellings denote one breakdown. gpt-5.6-luna returned
+    # `attribute/ORDER_CREATED_AT.month` for a chart the insight recorded as
+    # `label/ORDER_CREATED_AT.month`, and the raw string compare failed a correct chart.
+    as_label = _viz(query={"fields": {"d": {"using": "label/ORDER_CREATED_AT.month"}}, "filter_by": {}}, view_by=["d"])
+    as_attribute = _viz(
+        query={"fields": {"d": {"using": "attribute/ORDER_CREATED_AT.month"}}, "filter_by": {}}, view_by=["d"]
+    )
+    assert get_dimension_uri_set(as_label) == get_dimension_uri_set(as_attribute)
+
+
+def test_the_granularity_itself_still_has_to_match():
+    sequential = _viz(query={"fields": {"d": {"using": "label/d.month"}}, "filter_by": {}}, view_by=["d"])
+    cyclical = _viz(query={"fields": {"d": {"using": "label/d.monthOfYear"}}, "filter_by": {}}, view_by=["d"])
+    assert get_dimension_uri_set(sequential) != get_dimension_uri_set(cyclical)
+
+
+def test_a_plain_attribute_is_not_rewritten_as_a_label():
+    viz = _viz(query={"fields": {"d": {"using": "attribute/product.title"}}, "filter_by": {}}, view_by=["d"])
+    assert get_dimension_uri_set(viz) == {"attribute/product.title"}

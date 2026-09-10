@@ -1,0 +1,1366 @@
+# (C) 2026 GoodData Corporation
+"""Reverse-generate `visualization` dataset items from a workspace's real insights.
+
+The inverse of hand-authoring: instead of writing a question and then guessing the
+expected metric/dimension/filter, this reads the *existing* visualizations a customer
+already built (via the read-only declarative analytics model), translates each one's
+buckets/filters into an `expected_output.visualization` AAC spec, and only then asks an
+LLM to write the analyst question a user would ask to get that chart back.
+
+`expected_output` is therefore copied out of a real object, never invented -- which is
+what satisfies "answerable with the current data model" and "expected answers reference
+metrics that exist in the LDM" by construction. The LLM only writes English.
+
+`--enrich-ranked` additionally *derives* ranked items from those real specs (see
+`pick_derived`), which is a weaker guarantee than copying but a much stronger one than
+synthesizing from the LDM: adding a limit or a sort to a definition that already
+executes cannot make it unanswerable. Derived items are marked with `derived_from`.
+
+Driven by `gd-eval generate`; the functions here are importable for programmatic use.
+"""
+
+import hashlib
+import json
+import os
+import re
+import sys
+import unicodedata
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+from gooddata_eval.core.granularity import (
+    GRANULARITIES,
+    GRANULARITY_BY_ID,
+    _camel,
+    canonical_date_uri,
+    granularity_of,
+)
+from gooddata_eval.core.models import CreatedVisualization, DatasetItem
+
+# AD `visualizationUrl` -> AAC type. Explicit and exhaustive: an unmapped url raises
+# `Unsupported` and the insight is skipped loudly, rather than silently degrading to an
+# unscored "". Types outside the evaluator's own type map still normalize predictably
+# (`x_chart` -> `X`), so keeping them is safe.
+VIZ_TYPE_MAP = {
+    "local:area": "area_chart",
+    "local:bar": "bar_chart",
+    "local:bubble": "bubble_chart",
+    "local:bullet": "bullet_chart",
+    "local:column": "column_chart",
+    "local:combo": "combo_chart",
+    "local:combo2": "combo_chart",
+    "local:dependencywheel": "dependency_wheel_chart",
+    "local:donut": "donut_chart",
+    "local:funnel": "funnel_chart",
+    "local:headline": "headline",
+    "local:heatmap": "heatmap",
+    "local:line": "line_chart",
+    "local:pie": "pie_chart",
+    "local:pushpin": "geo_pushpin_chart",
+    "local:pyramid": "pyramid_chart",
+    "local:repeater": "repeater",
+    "local:sankey": "sankey_chart",
+    "local:scatter": "scatter_plot",
+    "local:table": "table",
+    "local:treemap": "treemap",
+    "local:waterfall": "waterfall_chart",
+    "local:xirr": "xirr",
+}
+
+# Words that make a question *name* a chart form. `expected_output.type` is only set
+# when the question actually constrains the form -- an insight's `visualizationUrl`
+# records what a human clicked, not what the question asks for, so copying it in
+# unconditionally scores the agent on a choice the question never made.
+TYPE_WORDS = {
+    "area_chart": ("area chart",),
+    "bar_chart": ("bar chart", "bar graph"),
+    "bubble_chart": ("bubble chart",),
+    "bullet_chart": ("bullet chart",),
+    "column_chart": ("column chart",),
+    "combo_chart": ("combo chart", "combination chart"),
+    "donut_chart": ("donut chart", "doughnut chart"),
+    "funnel_chart": ("funnel chart",),
+    "geo_pushpin_chart": ("map", "pushpin"),
+    "headline": ("headline", "single number", "kpi", "big number"),
+    "heatmap": ("heatmap", "heat map"),
+    "line_chart": ("line chart", "line graph"),
+    "pie_chart": ("pie chart",),
+    "pyramid_chart": ("pyramid chart",),
+    "scatter_plot": ("scatter plot", "scatterplot"),
+    "table": ("table",),
+    "treemap": ("treemap", "tree map"),
+    "waterfall_chart": ("waterfall chart",),
+}
+
+# AD bucket localIdentifier -> AAC bucket. The evaluator unions view_by/segment_by/
+# rows/columns into one dimension set when scoring, so an imperfect row/column split
+# costs nothing.
+BUCKET_MAP = {
+    "measures": "metrics",
+    "secondary_measures": "metrics",
+    "view": "view_by",
+    "attribute": "view_by",
+    "trend": "view_by",
+    "segment": "segment_by",
+    "stack": "segment_by",
+    "columns": "columns",
+}
+
+SHAPES = (
+    "single_metric_callout",
+    "breakdown_by_dimension",
+    "filtered_view",
+    "time_series",
+    "comparison",
+)
+
+# A question may only use ranking language if the spec actually ranks, and filter
+# language if the spec actually filters. Otherwise the expected output contradicts the
+# question and the item punishes the agent for reading it correctly.
+RANK_WORDS = re.compile(
+    r"\b(top|bottom|most|least|fewest|highest|lowest|largest|smallest|greatest|best|worst"
+    r"|ranked|rank|limit it to)\b",
+    re.I,
+)
+FILTER_WORDS = re.compile(
+    r"\b(only|excluding|exclude|filtered|restricted to|limited to|just the"
+    r"|last (?:year|quarter|month|week)|this (?:year|quarter|month|week)"
+    r"|year to date|ytd|in \d{4})\b",
+    re.I,
+)
+
+# Which end of the ranking a title names. A title using both ("Top and Bottom Products")
+# names no single direction and is left alone.
+TOP_WORDS = re.compile(r"\b(top|most|highest|largest|greatest|best)\b", re.I)
+BOTTOM_WORDS = re.compile(r"\b(bottom|least|fewest|lowest|smallest|worst)\b", re.I)
+# "Top 10 Products" states the N outright; most titles do not.
+TITLE_N = re.compile(r"\b(?:top|bottom|first|last)\s+(\d{1,3})\b", re.I)
+
+# A slot the writer failed to fill: it copied the instruction instead of a real name.
+PLACEHOLDER = re.compile(r"\b(breakdown|split|filter)\s+dimension\b|[{}<>]")
+# The text a question breaks down by. `(?<!...)` keeps a bare "by" from matching the
+# ranking phrasing ("top 5 by Spend"), which is legitimate without any dimension.
+BY_CLAUSE = re.compile(
+    r"\b(?:broken down by|split by|grouped by|(?<!ranked )(?<!sorted )(?<!\d )by)\s+(.+?)(?:\?|$|,| for | with | in | over )",
+    re.I,
+)
+# Phrasings that deliberately assert the absence of a breakdown.
+NO_BREAKDOWN = re.compile(
+    r"\b(?:no|without|not)\b[^?.]{0,40}?"
+    r"\b(?:breakdown|break(?:ing)? (?:it|them) down|split|splits|grouping|dimensions?)\b",
+    re.I,
+)
+
+PHRASE_SYSTEM = (
+    "You write the question a business analyst would type into a BI chat assistant to get "
+    "a specific chart back. You are given that chart's exact definition. Reply with the "
+    "question only -- no quotes, no preamble, no explanation."
+)
+
+TEST_KIND = "visualization"
+
+_MAX_SLUG_LEN = 50
+_HASH_LEN = 4
+
+
+class Unsupported(Exception):
+    """This insight cannot be expressed as an AAC spec without guessing."""
+
+
+class PromisedRanking(Unsupported):
+    """The title names a ranking the definition never implemented.
+
+    Still unusable as a copied fixture -- but unlike every other `Unsupported`, the
+    missing piece is written down: a human titled the chart "Products With the Highest
+    Return Rate" and then saved it without the sort. `--enrich-ranked` implements what
+    the title says instead of throwing the insight away, so the exception carries the
+    converted spec and the intent parsed out of the title.
+    """
+
+    def __init__(self, message: str, spec: dict, direction: str, n: int | None):
+        super().__init__(message)
+        self.spec, self.direction, self.n = spec, direction, n
+
+
+def _slugify(text: str) -> str:
+    ascii_text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii").lower()
+    slug = re.sub(r"[^a-z0-9]+", "-", ascii_text).strip("-")
+    if len(slug) <= _MAX_SLUG_LEN:
+        return slug
+    truncated = slug[:_MAX_SLUG_LEN]
+    if "-" in truncated:
+        truncated = truncated.rsplit("-", 1)[0]
+    return truncated.strip("-")
+
+
+def mint_id(question: str, existing_ids: set[str]) -> str:
+    """Stable slug id for a question, with a content hash appended on collision."""
+    candidate = _slugify(question) or "question"
+    if candidate not in existing_ids:
+        return candidate
+    return f"{candidate}-{hashlib.sha256(question.encode()).hexdigest()[:_HASH_LEN]}"
+
+
+def list_ids(directory: Path) -> set[str]:
+    """Ids already present in `directory` (recursively), so new ones don't collide."""
+    ids: set[str] = set()
+    if not Path(directory).is_dir():
+        return ids
+    for path in Path(directory).glob("**/*.json"):
+        try:
+            raw = json.loads(path.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        if isinstance(raw, dict) and isinstance(raw.get("id"), str):
+            ids.add(raw["id"])
+    return ids
+
+
+def _alias(prefix: str, uri: str, taken: set) -> str:
+    stem = re.sub(r"[^a-z0-9]+", "_", uri.split("/", 1)[-1].lower()).strip("_")
+    base = prefix + re.sub(rf"^{prefix}", "", stem)[:40]
+    alias, n = base, 2
+    while alias in taken:
+        alias, n = f"{base}_{n}", n + 1
+    taken.add(alias)
+    return alias
+
+
+def _measure_field(measure: dict) -> dict:
+    """AD measure -> AAC query field. Raises `Unsupported` for anything derived."""
+    definition = measure.get("definition") or {}
+    simple = definition.get("measureDefinition")
+    if simple is None:
+        raise Unsupported(f"derived measure ({', '.join(definition) or 'unknown'})")
+    if simple.get("filters"):
+        # Measure-level filters have no AAC `filter_by` equivalent -- they'd silently
+        # vanish and turn a filtered number into an unfiltered one.
+        raise Unsupported("measure-level filters")
+    identifier = (simple.get("item") or {}).get("identifier") or {}
+    obj_id, obj_type = identifier.get("id"), identifier.get("type")
+    if not obj_id or obj_type not in ("metric", "fact"):
+        raise Unsupported(f"unresolvable measure item ({obj_type})")
+    field = {"using": f"{obj_type}/{obj_id}"}
+    if obj_type == "fact":
+        field["aggregation"] = (simple.get("aggregation") or "sum").upper()
+    return field
+
+
+def _granularity(raw: str) -> str:
+    """'GDC.time.month' -> 'MONTH'."""
+    return (raw or "").rsplit(".", 1)[-1].upper()
+
+
+def _local_id(ref) -> str | None:
+    """A field reference, in either the bare-string or `{"localIdentifier": ...}` form."""
+    if isinstance(ref, dict):
+        return ref.get("localIdentifier")
+    return ref if isinstance(ref, str) else None
+
+
+def _convert_filter(raw: dict, alias_of: dict) -> dict | None:
+    """AD filter -> AAC filter_by entry.
+
+    Returns None for a no-op filter (AD's "All" selection), which carries no meaning to
+    express and must not make the whole insight unusable. Raises `Unsupported` when a
+    filter does mean something this can't express.
+    """
+    if "relativeDateFilter" in raw:
+        f = raw["relativeDateFilter"]
+        if f.get("from") is None and f.get("to") is None:
+            return None  # all-time window: no restriction to state
+        return {
+            "type": "date_filter",
+            "using": f"dataset/{(f.get('dataSet') or {}).get('identifier', {}).get('id', '')}",
+            "granularity": _granularity(f.get("granularity")),
+            "from": f.get("from"),
+            "to": f.get("to"),
+        }
+    if "absoluteDateFilter" in raw:
+        f = raw["absoluteDateFilter"]
+        return {
+            "type": "date_filter",
+            "using": f"dataset/{(f.get('dataSet') or {}).get('identifier', {}).get('id', '')}",
+            "from": f.get("from"),
+            "to": f.get("to"),
+        }
+    for key, state_key in (("positiveAttributeFilter", "include"), ("negativeAttributeFilter", "exclude")):
+        if key in raw:
+            f = raw[key]
+            elements = f.get("in") if "in" in f else f.get("notIn") or {}
+            values = elements.get("values")
+            if values == []:
+                # AD's "All" selection -- an empty exclusion restricts nothing, and an empty
+                # inclusion is not something a question can ask for either.
+                return None
+            if not values:
+                # `uris`-form element refs can't be turned back into the literal strings
+                # the evaluator compares on -- authoring a guessed string fails silently.
+                raise Unsupported(f"{key} without literal values")
+            label_id = (f.get("displayForm") or {}).get("identifier", {}).get("id")
+            if not label_id:
+                raise Unsupported(f"{key} without a resolvable displayForm")
+            return {"type": "attribute_filter", "using": f"label/{label_id}", "state": {state_key: values}}
+    if "rankingFilter" in raw:
+        f = raw["rankingFilter"]
+        # Both AD spellings: plural lists of local ids, and the singular object form.
+        measures = f.get("measures") or ([f["measure"]] if f.get("measure") else [])
+        measure_id = _local_id(measures[0]) if measures else None
+        if measure_id not in alias_of:
+            raise Unsupported("ranking filter over an unresolvable measure")
+        entry = {"type": "ranking_filter", "using": alias_of[measure_id]}
+        attributes = f.get("attributes") or ([f["attribute"]] if f.get("attribute") else [])
+        attribute_id = _local_id(attributes[0]) if attributes else None
+        if attribute_id in alias_of:
+            entry["attribute"] = alias_of[attribute_id]
+        entry["bottom" if f.get("operator") == "BOTTOM" else "top"] = f.get("value")
+        return entry
+    raise Unsupported(f"filter type {', '.join(raw) or 'unknown'}")
+
+
+def _sorts(content: dict, alias_of: dict) -> list:
+    """AD sorts -> AAC `sort_by`. Raises `Unsupported` for an unresolvable sort."""
+    out = []
+    for raw in content.get("sorts") or []:
+        if "attributeSortItem" in raw:
+            item = raw["attributeSortItem"]
+            local_id = item.get("attributeIdentifier")
+        elif "measureSortItem" in raw:
+            item = raw["measureSortItem"]
+            locators = item.get("locators") or []
+            local_id = next(
+                (loc["measureLocatorItem"].get("measureIdentifier") for loc in locators if "measureLocatorItem" in loc),
+                None,
+            )
+        else:
+            raise Unsupported(f"sort type {', '.join(raw) or 'unknown'}")
+        if local_id not in alias_of:
+            raise Unsupported("sort over an unresolvable field")
+        out.append({"field": alias_of[local_id], "direction": (item.get("direction") or "desc").upper()})
+    return out
+
+
+def convert(viz: dict, date_instance_ids: set, display_names: dict | None = None) -> dict:
+    """Declarative visualization object -> AAC `visualization` spec. Raises `Unsupported`."""
+    content = viz.get("content") or {}
+    url = content.get("visualizationUrl")
+    if url not in VIZ_TYPE_MAP:
+        raise Unsupported(f"unmapped visualizationUrl '{url}' -- add it to VIZ_TYPE_MAP")
+    spec: dict[str, Any] = {
+        "id": re.sub(r"[^a-z0-9_]+", "_", (viz.get("id") or "viz").lower())[:30],
+        "type": VIZ_TYPE_MAP[url],
+        "title": viz.get("title") or viz.get("id"),
+        "query": {"fields": {}, "filter_by": {}},
+        "metrics": [],
+        "view_by": [],
+        "segment_by": [],
+        "columns": [],
+        "rows": [],
+        "sort_by": [],
+    }
+    fields, taken, alias_of = spec["query"]["fields"], set(), {}
+
+    for bucket in content.get("buckets") or []:
+        target = BUCKET_MAP.get(bucket.get("localIdentifier"))
+        if target is None:
+            raise Unsupported(f"unknown bucket '{bucket.get('localIdentifier')}'")
+        for item in bucket.get("items") or []:
+            if "measure" in item:
+                measure = item["measure"]
+                field = _measure_field(measure)
+                alias = _alias("m_", field["using"], taken)
+                alias_of[measure.get("localIdentifier")] = alias
+            elif "attribute" in item:
+                attribute = item["attribute"]
+                label_id = (attribute.get("displayForm") or {}).get("identifier", {}).get("id")
+                if not label_id:
+                    raise Unsupported("attribute without a resolvable displayForm")
+                field = {"using": f"label/{label_id}"}
+                alias = _alias("d_", field["using"], taken)
+                alias_of[attribute.get("localIdentifier")] = alias
+            else:
+                raise Unsupported(f"unknown bucket item ({', '.join(item) or 'empty'})")
+            fields[alias] = field
+            spec[target].append(alias)
+
+    if not spec["metrics"]:
+        raise Unsupported("no measures")
+
+    converted = [_convert_filter(raw, alias_of) for raw in content.get("filters") or []]
+    for i, entry in enumerate(f for f in converted if f is not None):
+        spec["query"]["filter_by"][f"f{i}"] = entry
+    spec["sort_by"] = _sorts(content, alias_of)
+
+    _reject_degenerate(spec)
+    spec["_shape"] = classify(spec, date_instance_ids)
+    return spec
+
+
+def ranks(spec: dict) -> bool:
+    return bool(spec["sort_by"]) or any(f.get("type") == "ranking_filter" for f in spec["query"]["filter_by"].values())
+
+
+def filters(spec: dict) -> bool:
+    return any(f.get("type") in ("date_filter", "attribute_filter") for f in spec["query"]["filter_by"].values())
+
+
+def _reject_degenerate(spec: dict) -> None:
+    """Skip insights whose title promises behaviour their definition doesn't implement.
+
+    A chart called "Products by Most Items Sold" with `sorts: []` and `filters: []` is a
+    mis-specified object, not a fixture: any faithful question about its definition
+    contradicts its name, and any question true to its name contradicts its
+    `expected_output`. Excluding it is the only honest option.
+    """
+    title = spec["title"] or ""
+    if RANK_WORDS.search(title) and not ranks(spec):
+        message = f"title '{title}' promises a ranking the definition has no sort/ranking filter for"
+        direction = title_direction(title)
+        if direction is None:
+            raise Unsupported(message)
+        found = TITLE_N.search(title)
+        raise PromisedRanking(message, spec, direction, int(found.group(1)) if found else None)
+    if FILTER_WORDS.search(title) and not filters(spec):
+        raise Unsupported(f"title '{title}' promises a filter the definition has no date/attribute filter for")
+
+
+def title_direction(title: str) -> str | None:
+    """Which end of the ranking `title` names, or None if it names both or neither."""
+    top, bottom = bool(TOP_WORDS.search(title)), bool(BOTTOM_WORDS.search(title))
+    if top == bottom:
+        return None
+    return "top" if top else "bottom"
+
+
+def classify(spec: dict, date_instance_ids: set) -> str:
+    """Question shape, for the coverage report.
+
+    ponytail: first-match-wins heuristic -- a top-5 breakdown counts as `filtered_view`,
+    not `breakdown_by_dimension`. Good enough to prove the corpus isn't all one type;
+    replace with per-insight labels if the mix ever needs to be exact.
+    """
+    dims = spec["view_by"] + spec["segment_by"] + spec["columns"] + spec["rows"]
+    fields = spec["query"]["fields"]
+    filter_types = {f.get("type") for f in spec["query"]["filter_by"].values()}
+    if filter_types & {"attribute_filter", "ranking_filter"}:
+        return "filtered_view"
+    if not dims:
+        return "single_metric_callout"
+    if any(field_uri(fields, a).split("/", 1)[-1].split(".", 1)[0] in date_instance_ids for a in dims):
+        return "time_series"
+    if spec["segment_by"] or len(spec["metrics"]) > 1:
+        return "comparison"
+    return "breakdown_by_dimension"
+
+
+# --- derived ranking variants -------------------------------------------------
+
+# Analysts sort in Analytical Designer and save the chart without persisting the sort,
+# so `sort_by`/`ranking_filter` coverage is near zero on most customer models: the eval
+# can punish a spurious ranking but never confirm the agent builds a required one.
+#
+# A ranked variant is *derived*, not synthesized. Adding ORDER BY / LIMIT to a spec that
+# already executes cannot make it unanswerable -- the LDM is untouched -- and "the top 3
+# X by Y" has exactly one correct spec, so a derived item is less ambiguous to grade than
+# the insight it came from. What it loses is provenance: no human ever asked for it.
+DERIVED_KINDS = ("ranking_filter", "sort_by")
+# Preferred N first; the first one the dimension has headroom for wins.
+_DERIVED_N = (5, 3)
+# A top-5 over six values ranks nothing. Require slack before calling it a ranking.
+_ELEMENT_HEADROOM = 2
+
+
+def rankable(spec: dict, date_instance_ids: set) -> str | None:
+    """The one dimension alias `spec` may be ranked by, or None if it may not be.
+
+    Deliberately narrow, because every relaxation buys ambiguity: two metrics leave
+    "top 3 by what?" unanswered, a second dimension leaves it unclear whether the N
+    applies to the pair or within a group, and a date dimension turns the result into
+    "top 3 months", which nobody asks. An insight that already sorts or ranks covers
+    this shape on its own and is left alone.
+    """
+    if len(spec["metrics"]) != 1 or spec["segment_by"]:
+        return None
+    dims = spec["view_by"] + spec["columns"] + spec["rows"]
+    if len(dims) != 1 or ranks(spec):
+        return None
+    uri = field_uri(spec["query"]["fields"], dims[0])
+    if uri.split("/", 1)[-1].split(".", 1)[0] in date_instance_ids:
+        return None
+    return dims[0]
+
+
+def derived_n(element_count: int | None) -> int | None:
+    """The N to rank by for a dimension with `element_count` values, or None if too few.
+
+    `None` means the count is unknown (an offline snapshot taken before this step
+    existed); the smallest N is then the safest choice rather than a reason to skip.
+    """
+    if element_count is None:
+        return min(_DERIVED_N)
+    for n in _DERIVED_N:
+        if element_count >= n + _ELEMENT_HEADROOM:
+            return n
+    return None
+
+
+def derive(
+    spec: dict,
+    kind: str,
+    n: int,
+    date_instance_ids: set,
+    direction: str = "top",
+    basis: str = "shape",
+) -> dict:
+    """A copy of `spec` with a ranking filter or a sort added.
+
+    The two kinds are never combined in one item: "the top 3" limits the rows and
+    "sorted by" only orders them, they score on different checks, and an item asserting
+    both is an item you cannot diagnose from its result.
+
+    `basis` records who wanted the ranking -- "title" when a human's own chart title
+    asked for it, "shape" when this generator chose to add one.
+    """
+    if kind not in DERIVED_KINDS:
+        raise ValueError(f"unknown derived kind '{kind}'")
+    if direction not in ("top", "bottom"):
+        raise ValueError(f"unknown ranking direction '{direction}'")
+    out = json.loads(json.dumps(spec))
+    metric = out["metrics"][0]
+    if kind == "ranking_filter":
+        key = f"f{len(out['query']['filter_by'])}"
+        out["query"]["filter_by"][key] = {"type": "ranking_filter", "using": metric, direction: n}
+        out["id"] = f"{out['id']}_{direction}{n}"[:30]
+        out["title"] = f"{spec['title']} ({direction} {n})"
+    else:
+        out["sort_by"] = [{"field": metric, "direction": "DESC" if direction == "top" else "ASC"}]
+        out["id"] = f"{out['id']}_sorted"[:30]
+        out["title"] = f"{spec['title']} (sorted)"
+    out["_derived_from"] = spec["id"]
+    out["_derived_kind"] = kind
+    out["_derived_basis"] = basis
+    out["_shape"] = classify(out, date_instance_ids)
+    return out
+
+
+def element_counts(sdk, workspace_id: str, label_uris: set) -> dict:
+    """`{label uri: element count}`, counted only as far as deriving needs.
+
+    `limit` caps the count at the largest N plus its headroom: the question is only
+    ever "does this dimension have more values than the N we would rank by", so paging
+    a 50,000-element label to completion would be wasted.
+    """
+    ceiling = max(_DERIVED_N) + _ELEMENT_HEADROOM
+
+    def count(uri: str) -> int | None:
+        try:
+            return len(sdk.catalog_workspace_content.get_label_elements(workspace_id, uri, limit=ceiling))
+        except Exception as exc:  # a label the elements API cannot serve is simply not derived from
+            print(f"  no element count for {uri}: {exc}", file=sys.stderr)
+            return None
+
+    return {uri: n for uri in sorted(label_uris) if (n := count(uri)) is not None}
+
+
+def rescued(promised: list, date_instance_ids: set, counts: dict | None = None) -> list:
+    """Ranked items for insights whose titles promised a ranking they never implemented.
+
+    Higher confidence than anything derived from shape alone: the direction comes from
+    the human's own words, and often the N does too. A title's explicit N is honoured
+    even when it differs from what the cardinality would have chosen, but a title asking
+    for a top 10 of seven values still yields nothing -- the words do not make the data
+    deeper.
+    """
+    counts = counts or {}
+    out = []
+    for error in promised:
+        spec = error.spec
+        alias = rankable(spec, date_instance_ids)
+        if alias is None:
+            continue
+        count = counts.get(field_uri(spec["query"]["fields"], alias))
+        if error.n is None:
+            n = derived_n(count)
+        elif count is None or count >= error.n + _ELEMENT_HEADROOM:
+            n = error.n
+        else:
+            n = None
+        if n is None:
+            continue
+        out.append(derive(spec, "ranking_filter", n, date_instance_ids, error.direction, basis="title"))
+    return out
+
+
+def spec_signature(spec: dict) -> str:
+    """What the item actually asks for, as a comparable string.
+
+    Two differently-titled insights can carry the same definition -- loop has both
+    "Products by Most Items Sold" and "Products Driving the Highest Number of Repeat
+    Purchases" over Units Sold by Product Title -- and deriving from each produces the
+    same question twice. Identity is the resolved fields, filters and sorts; titles and
+    ids are not part of it.
+    """
+    fields = spec["query"]["fields"]
+
+    def resolve(value):
+        if isinstance(value, str):
+            return field_uri(fields, value)
+        if isinstance(value, dict):
+            return {k: resolve(v) for k, v in sorted(value.items())}
+        if isinstance(value, list):
+            return [resolve(v) for v in value]
+        return value
+
+    return json.dumps(
+        {
+            "metrics": sorted(resolve(a) for a in spec["metrics"]),
+            "dims": sorted(resolve(a) for a in spec["view_by"] + spec["segment_by"] + spec["columns"] + spec["rows"]),
+            "filters": sorted(json.dumps(resolve(f), sort_keys=True) for f in spec["query"]["filter_by"].values()),
+            "sorts": [resolve(entry) for entry in spec["sort_by"]],
+        },
+        sort_keys=True,
+    )
+
+
+def pick_derived(
+    specs: list,
+    date_instance_ids: set,
+    limit: int,
+    counts: dict | None = None,
+    promised: list | None = None,
+) -> list:
+    """Up to `limit` derived variants, best-grounded first.
+
+    Order matters because the budget is small: rescued items (a human titled the chart
+    "Top Returned Reasons") come before ranking filters this generator invented, which
+    come before sort-only variants. Within the invented ones, expanding every eligible
+    insight would turn one popular metric into a third of the corpus and the pass rate
+    into a measurement of one skill, so bases are taken round-robin by metric.
+    """
+    counts = counts or {}
+    seen, out = set(), []
+
+    def take(spec: dict) -> bool:
+        """Keep `spec` unless an item already asks the same thing. Reports the budget."""
+        signature = spec_signature(spec)
+        if signature not in seen:
+            seen.add(signature)
+            out.append(spec)
+        return len(out) < limit
+
+    for spec in rescued(promised or [], date_instance_ids, counts):
+        if not take(spec):
+            break
+
+    by_metric: dict[str, list] = {}
+    for spec in specs:
+        alias = rankable(spec, date_instance_ids)
+        if alias is None:
+            continue
+        fields = spec["query"]["fields"]
+        n = derived_n(counts.get(field_uri(fields, alias)))
+        if n is None:
+            continue
+        by_metric.setdefault(field_uri(fields, spec["metrics"][0]), []).append((spec, n))
+
+    for kind in DERIVED_KINDS:
+        queues = [list(group) for group in by_metric.values()]
+        while queues and len(out) < limit:
+            for queue in queues:
+                if not queue:
+                    continue
+                spec, n = queue.pop(0)
+                if not take(derive(spec, kind, n, date_instance_ids)):
+                    return out
+            queues = [q for q in queues if q]
+    return out
+
+
+def derived_candidates(specs: list, date_instance_ids: set, promised: list | None = None) -> set:
+    """Label uris whose element count decides whether a base can be derived from."""
+    uris = set()
+    for spec in list(specs) + [e.spec for e in promised or []]:
+        alias = rankable(spec, date_instance_ids)
+        if alias is not None:
+            uris.add(field_uri(spec["query"]["fields"], alias))
+    return uris
+
+
+def fetch_snapshot(sdk, workspace_id: str) -> dict:
+    """Two read-only SDK calls, assembled into a replayable JSON snapshot."""
+    analytics = sdk.catalog_workspace_content.get_declarative_analytics_model(workspace_id).analytics.to_dict(
+        camel_case=True
+    )
+    ldm = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id).ldm.to_dict(camel_case=True)
+    return {
+        "workspace_id": workspace_id,
+        "fetched_at": datetime.now(timezone.utc).isoformat(),
+        "analytics": analytics,
+        "date_instance_ids": sorted(di["id"] for di in ldm.get("dateInstances") or []),
+        "display_names": build_display_names(analytics, ldm),
+    }
+
+
+def insight_ids_on(analytics: dict, dashboard_ids: list) -> set:
+    """Insight ids placed on the given dashboards, walking nested layout sections."""
+    wanted = set(dashboard_ids)
+    found = set()
+
+    def walk(node):
+        if isinstance(node, dict):
+            if node.get("type") == "insight":
+                identifier = (node.get("insight") or {}).get("identifier") or {}
+                if identifier.get("id"):
+                    found.add(identifier["id"])
+            for value in node.values():
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    for dashboard in analytics.get("analyticalDashboards") or []:
+        if dashboard.get("id") in wanted:
+            walk(dashboard.get("content") or {})
+    return found
+
+
+def build_display_names(analytics: dict, ldm: dict) -> dict:
+    """`{uri: human title}` for every metric, fact, label and date dataset.
+
+    Raw ids leak into question text otherwise ("the metric metric/m_units_sold"), which
+    is both unreadable and a giveaway that no analyst wrote the question.
+    """
+    names = {}
+    for metric in analytics.get("metrics") or []:
+        names[f"metric/{metric['id']}"] = metric.get("title") or metric["id"]
+    for dataset in ldm.get("datasets") or []:
+        names[f"dataset/{dataset['id']}"] = dataset.get("title") or dataset["id"]
+        for fact in dataset.get("facts") or []:
+            names[f"fact/{fact['id']}"] = fact.get("title") or fact["id"]
+        for attribute in dataset.get("attributes") or []:
+            labels = attribute.get("labels") or []
+            for label in labels:
+                names[f"label/{label['id']}"] = label.get("title") or label["id"]
+            if not labels:
+                # An attribute with no explicit label is referenced by its own id.
+                names[f"label/{attribute['id']}"] = attribute.get("title") or attribute["id"]
+    for instance in ldm.get("dateInstances") or []:
+        title = instance.get("title") or instance["id"]
+        names[f"dataset/{instance['id']}"] = title
+        for granularity in instance.get("granularities") or []:
+            enum = GRANULARITY_BY_ID.get(granularity, granularity.upper())
+            suffix = GRANULARITIES.get(enum, (granularity.title(), ""))[0]
+            # Registered under every spelling: the LDM declares MONTH_OF_YEAR, the API
+            # returns `monthOfYear`, and a lookup under one must not miss the other and
+            # fall back to a de-slugged id ("Order Created At - Monthofyear").
+            for spelling in {_camel(enum), enum.lower(), granularity}:
+                names[f"label/{instance['id']}.{spelling}"] = f"{title} - {suffix}"
+    return names
+
+
+def display_name(uri: str, display_names: dict) -> str:
+    """Human title for a URI, falling back to a de-slugged id."""
+    if uri in display_names:
+        return display_names[uri]
+    for key, value in display_names.items():  # ids are case-inconsistent across LDM/AD
+        if key.lower() == uri.lower():
+            return value
+    return uri.split("/", 1)[-1].replace(".", " - ").replace("_", " ").strip().title()
+
+
+def _filter_phrase(f: dict, fields: dict, display_names: dict) -> str:
+    """One filter, in words -- never raw JSON, which the writer would copy verbatim."""
+
+    def resolve(alias: str) -> str:
+        return display_name(field_uri(fields, alias), display_names)
+
+    if f["type"] == "date_filter":
+        on = display_name(f.get("using", ""), display_names)
+        if isinstance(f.get("from"), str):
+            return f"date range {f['from']} to {f['to']} on {on}"
+        granularity = (f.get("granularity") or "period").lower()
+        return (
+            f"a relative {granularity} window from {f.get('from')} to {f.get('to')} "
+            f"({granularity}s back from the current one, 0 = current) on {on}"
+        )
+    if f["type"] == "attribute_filter":
+        on = display_name(f.get("using", ""), display_names)
+        state = f.get("state") or {}
+        if state.get("include"):
+            return f"only these {on} values: {', '.join(state['include'])}"
+        return f"excluding these {on} values: {', '.join(state.get('exclude') or [])}"
+    if f["type"] == "ranking_filter":
+        n = f.get("top") or f.get("bottom")
+        end = "top" if "top" in f else "bottom"
+        within = f", ranked within {resolve(f['attribute'])}" if f.get("attribute") else ""
+        return f"{end} {n} by {resolve(f.get('using', ''))}{within}"
+    return json.dumps(f)
+
+
+def describe(spec: dict, display_names: dict | None = None) -> str:
+    """The writer's brief: buckets, sorts and filters as display names.
+
+    Deliberately excludes the insight title and the chart type. Titles describe intent
+    the definition often doesn't implement, and every contradiction between a generated
+    question and its `expected_output` traced back to one; the chart type is a UI choice
+    the question isn't meant to constrain.
+    """
+    display_names = display_names or {}
+    fields = spec["query"]["fields"]
+
+    def name(alias: str) -> str:
+        return display_name(field_uri(fields, alias), display_names)
+
+    def dim(aliases: list) -> list:
+        return _dim_briefs(spec, display_names, aliases)
+
+    lines = [f"metric: {name(a)}" for a in spec["metrics"]]
+    lines += [f"broken down by: {d}" for d in dim(spec["view_by"] + spec["columns"] + spec["rows"])]
+    lines += [f"split by: {d}" for d in dim(spec["segment_by"])]
+    lines += [f"sorted by: {name(s['field'])}, {s['direction'].lower()}ending" for s in spec["sort_by"]]
+    lines += [f"filter: {_filter_phrase(f, fields, display_names)}" for f in spec["query"]["filter_by"].values()]
+    return "\n".join(lines)
+
+
+def ambiguous_titles(display_names: dict) -> set:
+    """Display titles that more than one object in the model carries.
+
+    Loop has six labels all titled "Product Title". A question naming one of them cannot
+    say which is meant, so the expected dimension is unguessable and the item punishes a
+    defensible answer -- `label/product_title_at_time_of_return` instead of
+    `label/product_details.LINE_ITEM_TITLE` scored zero on an otherwise perfect chart.
+    """
+    seen, dupes = {}, set()
+    for uri, title in display_names.items():
+        # Every granularity is registered under several spellings of one label, so the
+        # aliases must fold together or each date dimension looks like a name collision.
+        canonical = canonical_date_uri(uri)
+        key = _normalize(title)
+        if key in seen and seen[key] != canonical:
+            dupes.add(key)
+        seen.setdefault(key, canonical)
+    return dupes
+
+
+def ambiguous_fields(spec: dict, display_names: dict, dupes: set | None = None) -> list:
+    """The display names in `spec` that do not identify one object in the model."""
+    dupes = ambiguous_titles(display_names) if dupes is None else dupes
+    names = _metric_names(spec, display_names) + _dim_names(spec, display_names)
+    return sorted({name for name in names if _normalize(name) in dupes})
+
+
+def field_uri(fields: dict, alias: str) -> str:
+    """Resolve a bucket alias to its URI.
+
+    A field may be `{"using": uri}` or a bare uri string (the AAC schema allows both),
+    and an alias may already be a uri.
+    """
+    field = fields.get(alias)
+    if field is None:
+        return alias
+    return field["using"] if isinstance(field, dict) else field
+
+
+def granularity_phrase(uri: str, display_names: dict) -> str | None:
+    """What a date breakdown does, in words, or None if `uri` is not a date granularity.
+
+    "Order Created At - Month" is a label name, not something a person says, and it does
+    not distinguish the sequential granularity from its cyclical twin. The phrase does
+    both: it pins the date dataset and states which reading is meant.
+    """
+    enum = granularity_of(uri)
+    if enum is None:
+        return None
+    dataset = uri.split("/", 1)[-1].rpartition(".")[0]
+    return f"{display_name(f'dataset/{dataset}', display_names)}, {GRANULARITIES[enum][1]}"
+
+
+def _dim_briefs(spec: dict, display_names: dict, aliases: list) -> list:
+    """Dimension names for the writer: date dimensions as phrases, labels verbatim."""
+    fields = spec["query"]["fields"]
+    out = []
+    for alias in aliases:
+        uri = field_uri(fields, alias)
+        out.append(granularity_phrase(uri, display_names) or display_name(uri, display_names))
+    return out
+
+
+def _dim_names(spec: dict, display_names: dict) -> list:
+    fields = spec["query"]["fields"]
+    aliases = spec["view_by"] + spec["segment_by"] + spec["columns"] + spec["rows"]
+    return [display_name(field_uri(fields, a), display_names) for a in aliases]
+
+
+def _metric_names(spec: dict, display_names: dict) -> list:
+    fields = spec["query"]["fields"]
+    return [display_name(field_uri(fields, a), display_names) for a in spec["metrics"]]
+
+
+def _normalize(text: str) -> str:
+    return re.sub(r"[^a-z0-9 ]+", "", text.lower()).strip()
+
+
+def _mentions(name: str, question: str) -> bool:
+    """Whether `question` names `name`, tolerating plurals and word order."""
+    lowered = question.lower()
+    tokens = [t for t in _normalize(name).split() if len(t) >= 4]
+    return any(t in lowered for t in tokens) if tokens else _normalize(name) in lowered
+
+
+def _without_field_names(question: str, spec: dict, display_names: dict) -> str:
+    """`question` with the spec's own field names blanked out.
+
+    A field may be called "Most Recent Label Created At" or "Top Tier Customers". A
+    question naming it verbatim -- which the rules require -- is not thereby claiming a
+    ranking, so the claim checks have to read around the names.
+    """
+    fields = spec["query"]["fields"]
+    names = [display_name(field_uri(fields, a), display_names) for a in fields]
+    names += [display_name(f.get("using", ""), display_names) for f in spec["query"]["filter_by"].values()]
+    # A date label reads "Most Recent Label Created At - Month" but the question names
+    # the dataset and the granularity separately ("by month for Most Recent Label
+    # Created At"), so each side of the separator has to be maskable on its own.
+    names += [part for name in list(names) for part in name.split(" - ")]
+    for name in sorted(names, key=len, reverse=True):
+        if len(name.strip()) > 3:
+            question = re.sub(re.escape(name.strip()), " ", question, flags=re.I)
+    return question
+
+
+def contradictions(question: str, spec: dict, display_names: dict | None = None) -> list:
+    """Ways `question` and `spec` disagree. Any hit is a hard error, never a warning."""
+    display_names = display_names or {}
+    problems = []
+    claims = _without_field_names(question, spec, display_names)
+    if not ranks(spec):
+        hit = RANK_WORDS.search(claims)
+        if hit:
+            problems.append(f"uses ranking word '{hit.group(0)}' but the chart has no sort or ranking filter")
+    if not filters(spec):
+        hit = FILTER_WORDS.search(claims)
+        if hit:
+            problems.append(f"uses filter word '{hit.group(0)}' but the chart has no date or attribute filter")
+
+    hit = PLACEHOLDER.search(question)
+    if hit:
+        problems.append(f"leaks the un-substituted placeholder '{hit.group(0)}'")
+
+    dims = _dim_names(spec, display_names)
+    clause = BY_CLAUSE.search(question)
+    if clause:
+        subject = _normalize(clause.group(1))
+        echoes_metric = any(subject == _normalize(m) for m in _metric_names(spec, display_names))
+        if echoes_metric and not ranks(spec):
+            # "Show me X by X" -- the metric echoed into its own breakdown slot. Harmless
+            # when the chart ranks, where "by <metric>" is how you say what it ranks on.
+            problems.append(f"breaks down '{clause.group(1).strip()}' by itself; it is a metric, not a dimension")
+        elif not dims and not NO_BREAKDOWN.search(question):
+            problems.append(f"asks for a breakdown by '{clause.group(1).strip()}' but view_by and segment_by are empty")
+    elif dims and not any(_mentions(d, question) for d in dims):
+        # The inverse error: the chart breaks down, the question never says so.
+        problems.append(f"names no dimension, but the chart breaks down by {', '.join(dims)}")
+    return problems
+
+
+def _rules_for(spec: dict, display_names: dict) -> str:
+    dims = _dim_names(spec, display_names)
+    all_dims = spec["view_by"] + spec["segment_by"] + spec["columns"] + spec["rows"]
+    dated = [
+        phrase
+        for alias in all_dims
+        if (phrase := granularity_phrase(field_uri(spec["query"]["fields"], alias), display_names))
+    ]
+    segments = [display_name(field_uri(spec["query"]["fields"], a), display_names) for a in spec["segment_by"]]
+    lines = [
+        "Write the question an analyst would ask to get exactly this chart. Rules:",
+        "- Name every metric listed above explicitly, using its name verbatim.",
+    ]
+    ranking = next((f for f in spec["query"]["filter_by"].values() if f.get("type") == "ranking_filter"), None)
+    ranked_dim = dims[0] if ranking and dims and not ranking.get("attribute") else None
+    if ranking is not None and ranked_dim:
+        # The ranking phrasing already names the dimension. Asking for the breakdown as
+        # well produces "broken down by Carrier, showing the top 3 Carriers by Returns" --
+        # the dimension twice, which no analyst writes. One instruction, not two.
+        n = ranking.get("top") or ranking.get("bottom")
+        end = "top" if "top" in ranking else "bottom"
+        lines.append(
+            f"- This chart keeps only the {end} {n} rows of {ranked_dim}. Ask for 'the {end} {n} "
+            f"{ranked_dim} by <metric>' and name {ranked_dim} exactly once -- do not also say "
+            f"'broken down by {ranked_dim}'."
+        )
+    elif dated:
+        # A date breakdown is the one dimension not to quote verbatim: "broken down by
+        # Order Created At - Month" is a label id in prose, and it leaves the agent to
+        # guess between the sequential granularity and its cyclical twin.
+        plain = [name for name in dims if not any(name.startswith(p.split(",")[0]) for p in dated)]
+        lines.append(
+            "- Say the question is broken down by " + "; and ".join(dated) + ". Write that in "
+            "natural words ('by month', 'monthly', 'per month'), never as a label name like "
+            "'Order Created At - Month', but do keep the date dataset's name."
+        )
+        if plain:
+            lines.append("- It is also broken down by " + ", ".join(plain) + ", naming each verbatim.")
+    elif dims:
+        lines.append("- Say the question is broken down by " + ", ".join(dims) + ", naming each verbatim.")
+    else:
+        lines += [
+            "- This chart has NO breakdown. Ask for the metric on its own -- do not write "
+            "'by ...', 'broken down by ...' or 'grouped by ...' at all. Never break a metric "
+            "down by itself.",
+            # "What is the Upsell Ratio?" is answered as a definition, and "Show me Gross
+            # Revenue" is answered by looking the metric up -- the agent activates only its
+            # search skill and builds nothing. Naming the chart form is what makes a bare
+            # metric a charting request, so a no-breakdown question has to name it.
+            "- Ask for it AS A CHART, naming the form: 'as a single number', 'as a KPI' or "
+            "'as a headline'. Never a bare 'What is <metric>?' (answered as a definition) and "
+            "never a bare 'Show me <metric>' (answered by looking the metric up).",
+        ]
+    if segments:
+        lines.append("- Say it is split by " + ", ".join(segments) + ".")
+    lines += [
+        "- State every filter and sort listed above in words (time period, included values, top/bottom N).",
+        "- Claim NOTHING that is not listed above. If no sort or ranking is listed, do not say "
+        "top/bottom/most/highest/lowest/ranked. If no filter is listed, do not restrict to a "
+        "time period or a subset of values.",
+        "- Write real names only. Never emit a literal word like 'breakdown dimension', 'metric' "
+        "or 'dimension' as a stand-in for a name.",
+        # A single-metric chart is the exception: without a named form the request is
+        # indistinguishable from a metric lookup, so there the form is the question.
+        *([] if not dims else ["- Do not name the chart type; the assistant should infer it."]),
+        "- Sound like a person asking a colleague, not like a chart title.",
+        "- One sentence.",
+    ]
+    return "\n".join(lines)
+
+
+def phrase(specs: list, model: str, display_names: dict) -> list:
+    """Question per insight, or None where the writer kept contradicting the spec.
+
+    One retry with the specific contradiction quoted back; a second failure drops the
+    item rather than shipping a question its own `expected_output` disagrees with.
+    """
+    try:
+        from openai import OpenAI  # noqa: PLC0415
+    except ImportError as err:
+        raise ImportError(
+            "Question phrasing requires the llm-judge extra: uv add 'gooddata-eval[llm-judge]' (or pass --no-phrase)"
+        ) from err
+    if not os.environ.get("OPENAI_API_KEY"):
+        raise OSError("OPENAI_API_KEY environment variable is required for the phrasing step.")
+
+    client = OpenAI()
+    questions = []
+    for i, spec in enumerate(specs, 1):
+        messages: list = [
+            {"role": "system", "content": PHRASE_SYSTEM},
+            {"role": "user", "content": f"{describe(spec, display_names)}\n\n{_rules_for(spec, display_names)}"},
+        ]
+        question, problems = None, []
+        for _attempt in range(2):
+            reply = client.chat.completions.create(model=model, messages=messages)
+            # `content` is None when the model returns a refusal or no text at all; an
+            # empty candidate fails the contradiction check and takes the retry, which is
+            # what should happen anyway.
+            candidate = (reply.choices[0].message.content or "").strip().strip('"')
+            problems = contradictions(candidate, spec, display_names)
+            if not problems:
+                question = candidate
+                break
+            messages += [
+                {"role": "assistant", "content": candidate},
+                {
+                    "role": "user",
+                    "content": "That question "
+                    + "; and ".join(problems)
+                    + ". Rewrite it describing only what the definition above actually contains.",
+                },
+            ]
+        if question is None:
+            print(f"  DROP {spec['title']}: {'; '.join(problems)}", file=sys.stderr)
+        questions.append(question)
+        print(f"  phrased {i}/{len(specs)}", file=sys.stderr)
+    return questions
+
+
+def resolve_type(spec: dict, question: str) -> str:
+    """The insight's chart type, but only when the question actually names that form."""
+    lowered = question.lower()
+    return spec["type"] if any(w in lowered for w in TYPE_WORDS.get(spec["type"], ())) else ""
+
+
+def build(spec: dict, question: str, dataset_name: str, existing_ids: set) -> dict:
+    derived_from, derived_kind = spec.get("_derived_from"), spec.get("_derived_kind")
+    derived_basis = spec.get("_derived_basis")
+    spec = {k: v for k, v in spec.items() if not k.startswith("_")}
+    spec["type"] = resolve_type(spec, question)
+    question_id = mint_id(question, existing_ids)
+    existing_ids.add(question_id)
+    envelope = {
+        "id": question_id,
+        "dataset_name": dataset_name,
+        "test_kind": TEST_KIND,
+        "question": question,
+        "expected_output": {"visualization": spec},
+    }
+    if derived_from:
+        # Provenance on the item itself: months later, "42 of these came from real charts
+        # and 10 were derived" has to be answerable from the dataset, not from memory --
+        # and the pass rate has to be computable both ways.
+        envelope["derived_from"] = derived_from
+        envelope["derived_kind"] = derived_kind
+        envelope["derived_basis"] = derived_basis
+    return envelope
+
+
+def langfuse_payload(envelopes: list, dataset: str, workspace_id: str, origin: str, id_prefix: str = "") -> dict:
+    """Langfuse-importable dataset JSON.
+
+    `id_prefix` rewrites ids on export only: Langfuse item ids are unique per PROJECT,
+    so importing the same item into a second dataset under its original id is a 409.
+    """
+    return {
+        "dataset": dataset,
+        "workspace": workspace_id,
+        "items": [
+            {
+                "id": id_prefix + e["id"],
+                "input": {"question": e["question"]},
+                "expected_output": e["expected_output"],
+                "metadata": {
+                    "synthetic": True,
+                    "test_kind": TEST_KIND,
+                    "workspace": workspace_id,
+                    "origin": origin,
+                    **(
+                        {
+                            "derived_from": e["derived_from"],
+                            "derived_kind": e["derived_kind"],
+                            "derived_basis": e["derived_basis"],
+                        }
+                        if e.get("derived_from")
+                        else {}
+                    ),
+                },
+            }
+            for e in envelopes
+        ],
+    }
+
+
+def _validation_errors(envelope: dict) -> str | None:
+    """The envelope must load as both a DatasetItem and a scorable AAC visualization."""
+    try:
+        DatasetItem.model_validate(envelope)
+        CreatedVisualization.model_validate(envelope["expected_output"]["visualization"])
+    except Exception as exc:  # pydantic ValidationError, or a missing key
+        return str(exc)
+    return None
+
+
+def generate(args, sdk_factory=None) -> int:
+    """Run the whole generation pipeline. Returns a process exit code."""
+    sdk = None
+    if args.snapshot_in:
+        snapshot = json.loads(Path(args.snapshot_in).read_text())
+    else:
+        if sdk_factory is None:
+            raise ValueError("a live run needs an SDK; pass --snapshot-in to replay a saved model instead")
+        sdk = sdk_factory()
+        snapshot = fetch_snapshot(sdk, args.workspace)
+
+    if args.snapshot_out:
+        Path(args.snapshot_out).write_text(json.dumps(snapshot, indent=2))
+
+    analytics = snapshot["analytics"]
+    date_instance_ids = set(snapshot.get("date_instance_ids") or [])
+    display_names = snapshot.get("display_names") or {}
+    visualizations = analytics.get("visualizationObjects") or []
+    if args.dashboard:
+        keep = insight_ids_on(analytics, args.dashboard)
+        if not keep:
+            print(f"ERROR: no insights found on dashboard(s) {', '.join(args.dashboard)}", file=sys.stderr)
+            return 1
+        visualizations = [v for v in visualizations if v.get("id") in keep]
+
+    specs, skipped, promised = [], [], []
+    for viz in visualizations:
+        if viz.get("isHidden"):
+            # Hidden objects are invisible to the AI assistant's catalog search, so a
+            # question about one is unwinnable rather than merely hard.
+            skipped.append((viz.get("id"), "hidden"))
+            continue
+        try:
+            specs.append(convert(viz, date_instance_ids, display_names))
+        except PromisedRanking as exc:
+            # Unusable as a copy, but the title says what the definition forgot. Kept
+            # aside for `--enrich-ranked`; still a skip when enrichment is off.
+            promised.append(exc)
+            if not args.enrich_ranked:
+                skipped.append((viz.get("id"), str(exc)))
+        except Unsupported as exc:
+            skipped.append((viz.get("id"), str(exc)))
+
+    n_base = len(specs)
+    derived = []
+    if args.enrich_ranked:
+        counts = dict(snapshot.get("label_cardinality") or {})
+        wanted = derived_candidates(specs, date_instance_ids, promised)
+        missing = wanted - set(counts)
+        if sdk is not None and missing:
+            counts.update(element_counts(sdk, snapshot["workspace_id"], missing))
+            snapshot["label_cardinality"] = counts
+            if args.snapshot_out:
+                Path(args.snapshot_out).write_text(json.dumps(snapshot, indent=2))
+        elif missing:
+            print(
+                f"  no element counts for {len(missing)} candidate dimension(s) (replayed snapshot): "
+                f"deriving with the smallest N",
+                file=sys.stderr,
+            )
+        derived = pick_derived(specs, date_instance_ids, args.enrich_ranked, counts, promised)
+        specs = specs + derived
+        rescued_ids = {spec["_derived_from"] for spec in derived if spec["_derived_basis"] == "title"}
+        # A promised ranking that did not make it was either ineligible or a duplicate of
+        # something already derived. Reporting the original "promises a ranking" message
+        # for a duplicate would send the reader looking for a problem in the wrong place.
+        taken = {spec_signature(spec) for spec in derived}
+        duplicates = {
+            spec["_derived_from"]
+            for spec in rescued(promised, date_instance_ids, counts)
+            if spec["_derived_from"] not in rescued_ids and spec_signature(spec) in taken
+        }
+        skipped.extend(
+            (
+                e.spec["id"],
+                "definition duplicates an item already derived" if e.spec["id"] in duplicates else str(e),
+            )
+            for e in promised
+            if e.spec["id"] not in rescued_ids
+        )
+
+    shapes: dict[str, list] = {}
+    for spec in specs:
+        shapes.setdefault(spec["_shape"], []).append(spec["title"])
+
+    dupes = ambiguous_titles(display_names)
+    ambiguous = [(spec, names) for spec in specs if (names := ambiguous_fields(spec, display_names, dupes))]
+    if args.skip_ambiguous:
+        drop = {id(spec) for spec, _ in ambiguous}
+        specs = [spec for spec in specs if id(spec) not in drop]
+        derived = [spec for spec in derived if id(spec) not in drop]
+
+    n_filtered = sum(1 for s in specs if filters(s))
+    n_ranked = sum(1 for s in specs if ranks(s))
+    print(
+        f"workspace {snapshot['workspace_id']}: {len(visualizations)} insights read, "
+        f"{len(specs)} convertible, {len(skipped)} skipped"
+    )
+    for shape in SHAPES:
+        print(f"  {shape:<24} {len(shapes.get(shape, []))}")
+    print(f"  with filters             {n_filtered}")
+    print(f"  with sort/ranking        {n_ranked}")
+    if args.enrich_ranked:
+        by_kind: dict[str, int] = {}
+        for spec in derived:
+            by_kind[spec["_derived_kind"]] = by_kind.get(spec["_derived_kind"], 0) + 1
+        summary = ", ".join(f"{n} {kind}" for kind, n in by_kind.items()) or "none eligible"
+        print(f"  derived from a base      {len(derived)} ({summary}), {n_base} from real insights")
+        n_rescued = sum(1 for spec in derived if spec["_derived_basis"] == "title")
+        print(f"    of those, title-asked  {n_rescued} of {len(promised)} insight(s) that promised a ranking")
+    if ambiguous:
+        verb = "dropped" if args.skip_ambiguous else "kept"
+        print(
+            f"  ambiguous field names    {len(ambiguous)} item(s) {verb}: a name below matches "
+            f"more than one object in the model, so the question cannot say which is meant"
+        )
+        for spec, names in ambiguous[:5]:
+            print(f"    {spec['title'][:40]:<40} {', '.join(names)}")
+        if len(ambiguous) > 5:
+            print(f"    ... and {len(ambiguous) - 5} more")
+        if not args.skip_ambiguous:
+            print("    pass --skip-ambiguous to exclude them", file=sys.stderr)
+    for viz_id, reason in skipped:
+        print(f"  SKIP {viz_id}: {reason}")
+
+    failures = []
+    if len(specs) < args.min_questions:
+        failures.append(f"only {len(specs)} questions, need >= {args.min_questions}")
+    if len(shapes) < args.min_shapes:
+        failures.append(
+            f"only {len(shapes)} distinct shapes ({', '.join(shapes) or 'none'}), need >= {args.min_shapes}"
+        )
+    if n_filtered < args.min_filtered:
+        # With zero filtered items the eval can only punish a spurious filter, never
+        # confirm the agent builds a required one -- half the behaviour goes untested.
+        failures.append(
+            f"only {n_filtered} items carry a filter, need >= {args.min_filtered}; "
+            "point at dashboards whose insights actually filter"
+        )
+    for failure in failures:
+        print(f"QUALITY GATE: {failure}", file=sys.stderr)
+    if failures:
+        print(
+            "Not enough real insights to build a usable dataset -- nothing is fabricated to "
+            "fill the gap. Point at more dashboards, or accept a smaller set with "
+            "--min-questions/--min-shapes.",
+            file=sys.stderr,
+        )
+
+    if args.dry_run:
+        for spec in specs:
+            print(f"\n[{spec['_shape']}] {spec['title']}\n{describe(spec, display_names)}")
+        return 1 if failures else 0
+
+    if args.no_phrase:
+        questions = [f"Show {s['title']}" for s in specs]
+    else:
+        questions = phrase(specs, args.phrase_model, display_names)
+
+    dropped = [spec["title"] for spec, q in zip(specs, questions) if q is None]
+    specs, questions = zip(*[(s, q) for s, q in zip(specs, questions) if q]) if any(questions) else ([], [])
+    if dropped:
+        failures.append(f"{len(dropped)} question(s) dropped as self-contradictory: {', '.join(dropped[:5])}")
+        print(f"DROPPED {len(dropped)} self-contradictory question(s)", file=sys.stderr)
+
+    out_dir = Path(args.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    existing_ids = list_ids(out_dir)
+    envelopes = [build(spec, q, args.dataset_name, existing_ids) for spec, q in zip(specs, questions)]
+    if args.no_viz_type:
+        for envelope in envelopes:
+            envelope["expected_output"]["visualization"]["type"] = ""
+
+    written = []
+    for envelope in envelopes:
+        path = out_dir / f"{envelope['id']}.json"
+        path.write_text(json.dumps(envelope, indent=2) + "\n")
+        written.append(path)
+    print(f"wrote {len(written)} questions to {out_dir}")
+
+    if args.langfuse_out:
+        origin = (
+            f"AUTO-GENERATED by reverse-engineering real insights in workspace "
+            f"{snapshot['workspace_id']} -- expected_output copied from live "
+            f"visualization definitions, question text written by "
+            f"{'a mechanical template' if args.no_phrase else args.phrase_model}"
+            + (
+                f"; {len(derived)} item(s) derived from a base insight by adding a ranking "
+                f"filter or a sort (see `derived_from`)"
+                if derived
+                else ""
+            )
+        )
+        payload = langfuse_payload(envelopes, args.dataset_name, snapshot["workspace_id"], origin, args.id_prefix)
+        Path(args.langfuse_out).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.langfuse_out).write_text(json.dumps(payload, indent=2) + "\n")
+        print(f"wrote Langfuse dataset to {args.langfuse_out}")
+
+    invalid = [(e["id"], err) for e in envelopes if (err := _validation_errors(e))]
+    if invalid:
+        print(f"VALIDATION FAILED for {len(invalid)} item(s):", file=sys.stderr)
+        for item_id, err in invalid[:5]:
+            print(f"  {item_id}: {err}", file=sys.stderr)
+        return 1
+    print(f"validated {len(written)}/{len(written)}")
+    return 1 if failures else 0

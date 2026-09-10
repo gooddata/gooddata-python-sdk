@@ -64,9 +64,15 @@ class RunConfig:
     runs: int = 2
     concurrency: int = 1
     json_path: Path | None = None
+    html_path: Path | None = None
+    redact: bool = False
     log_to_langfuse: bool = False
     quiet: bool = False
     kind: str = "visualization"
     preserve_failed: bool = False
     reasoning_effort: ReasoningEffort | None = None
     agent_id: str | None = None
+    turn_timeout_s: float | None = None
+    """Wall-clock cap per agent turn; None keeps GOODDATA_EVAL_CHAT_TURN_TIMEOUT_S (0 = off)."""
+    item_timeout_s: float | None = None
+    """Wall-clock cap per item across all its turns; None keeps GOODDATA_EVAL_CHAT_ITEM_TIMEOUT_S."""

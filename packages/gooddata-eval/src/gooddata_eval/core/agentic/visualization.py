@@ -34,8 +34,8 @@ from gooddata_eval.core.models import (
     CreatedVisualization,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
     shift_and_index_events,
+    timeline_detail,
 )
 from gooddata_eval.core.scoring import get_dimension_uri_set, get_metric_uri_set, uri_to_display_name
 
@@ -424,7 +424,7 @@ def evaluate_agentic_visualization(
     ev = best.eval_result
     detail = {
         **evaluation_result_detail(ev),
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
     }
 
     if not summary.pass_at_k:

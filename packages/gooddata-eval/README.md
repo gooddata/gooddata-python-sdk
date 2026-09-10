@@ -16,7 +16,10 @@ Or install `gd-eval` as a standalone tool:
 | Command | Description |
 |---|---|
 | `gd-eval run` | Run an evaluation dataset against one or more models. |
+| `gd-eval report` | Render JSON report(s) as one self-contained HTML file. |
 | `gd-eval models` | List LLM providers and models configured in the org. |
+| `gd-eval generate` | Generate a `visualization` dataset from a workspace's existing insights. |
+
 
 ---
 
@@ -144,6 +147,8 @@ interleaves when K > 1, and per-item latencies rise, so they stop being clean si
 | Flag | Description |
 |---|---|
 | `--json PATH` | Write a JSON report to this path. Always uses the nested `{models, runs, comparison}` shape even for a single model. |
+| `--html PATH` | Write a self-contained HTML report to this path (same output as `gd-eval report`). |
+| `--redact` | Make the HTML customer-safe. See `gd-eval report`. |
 | `--quiet` | Suppress per-item progress. Per-model result tables and the comparison summary are still printed. |
 | `--preserve-failed` | Keep failed conversations on the server instead of deleting them, so they can be inspected afterwards. Applies to the single-turn chat path; agentic kinds manage their own conversation lifecycle. |
 | `--timers` | Print per-turn `[timer]` diagnostics — GoodData response, judge, and simulated-user seconds as they happen. Off by default: an 18-item `--runs 2` run emits ~72 lines and buries the progress output. The same measurements are always in the JSON report's `latency_breakdown_s`, so this only adds a live view. Also settable via `GD_EVAL_TIMERS=1`. |
@@ -294,6 +299,59 @@ linking ran. Pass `TAVERN_E2E_SKIP_TRACE_LINK=1` to opt out of linking altogethe
 
 ---
 
+## `gd-eval report`
+
+Turns JSON report(s) into one HTML file you can actually navigate. No server, no
+credentials, no external assets — it opens over `file://`, attaches to a Jira issue and
+survives a Slack thread.
+
+```bash
+# one run
+gd-eval report results.json -o report.html
+
+# several runs side by side -- each file becomes its own column
+gd-eval report aug-21.json sep-07.json -o comparison.html --title "H200 regression check"
+
+# customer-safe
+gd-eval report results.json -o customer.html --redact
+```
+
+| Flag | Description |
+|---|---|
+| `-o, --out PATH` | Where to write the HTML. Required. |
+| `--title TEXT` | Title shown in the report header. |
+| `--redact` | Drop conversation/response ids and raw reasoning, and rename models to `Model A`, `Model B`, … Pass rate, per-item results, questions and latency survive. |
+
+The report is a *view* over the JSON — it computes no numbers of its own. It gives you:
+
+- **Run cards and a comparison table** — pass rate, quality, latency per run.
+- **An item table** with a pass/fail column per run, so a model or run-over-run
+  regression is one glance rather than a hand-assembled spreadsheet.
+- **An expression filter** for cross-cutting questions the fixed filters can't
+  anticipate, e.g. `d.filter_ranking_score === false` or
+  `d.expected_metric_uris.length > 1 && !d.metrics_correct`. Available variables:
+  `d` (the focused run's `detail`), `it` (its item), `i` (the row, `i.per[label]` for any
+  run), `q` (question), `kind`.
+- **The conversation**, when the item ran the agentic multi-turn path — every turn in
+  order, with the simulated user marked apart from a real question, so you can see
+  whether the agent got there or was handed the answer.
+- **A per-item drawer** — checks as pass/fail chips, expected vs actual side by side,
+  full reasoning, conversation/response ids.
+- **A latency timeline** from `detail.latency_breakdown`, in execution order, one bar per
+  step. Clicking a step expands its full record, joined by `index`: the paragraph a
+  reasoning step was summarised from, or a tool call's arguments and result from
+  `detail.tool_calls`.
+
+`--redact` additionally drops `transcript` and `tool_calls`: the exchange shows that the
+simulated user is primed with the expected output, and a tool result carries
+semantic-layer internals and real query rows. The turn count and the timeline shape
+survive.
+
+Passing several files keyed by file name is the whole run-over-run mechanism: no
+database, no run registry, just the JSON files you already have on disk.
+
+---
+
 ## `gd-eval models`
 
 List all LLM providers and their models in the org. Marks the active model
@@ -311,6 +369,143 @@ gd-eval models \
 │                │             │ gpt-4o            │ OPENAI    │          │
 │ HN_Anthropic   │ hn_anthr_…  │ claude-opus-4-7   │ ANTHROPIC │          │
 ```
+
+---
+
+## `gd-eval generate`
+
+Reverse-engineers a `visualization` dataset out of the charts a customer has already
+built, so you get eval questions without hand-authoring any. Reads the workspace's
+declarative analytics model (read-only), translates each visible insight's buckets,
+sorts and filters into an `expected_output.visualization` spec, then asks an LLM to
+write the analyst question that chart answers. Because `expected_output` is copied from
+a live object rather than authored, every question is grounded in the real LDM by
+construction — the LLM only writes English.
+
+**Setup:** host + token (read access to the workspace), and `OPENAI_API_KEY` plus the
+`llm-judge` extra for the phrasing step (`uv add 'gooddata-eval[llm-judge]'`; skip both
+with `--no-phrase`).
+
+```bash
+export GOODDATA_TOKEN='your-api-token'
+
+# 1. see what a workspace yields before writing anything
+gd-eval generate \
+  --host  https://your.gooddata.cloud \
+  --workspace  ecommerce_demo \
+  --dataset-name  ecommerce \
+  --dry-run
+
+# 2. generate, phrase, validate, and export
+gd-eval generate \
+  --host  https://your.gooddata.cloud \
+  --workspace  ecommerce_demo \
+  --dataset-name  ecommerce \
+  --dashboard  dash_1_returns \
+  --out  ./my-dataset \
+  --langfuse-out  out/langfuse-dataset.json
+
+# 3. run it
+gd-eval run --host … --workspace ecommerce_demo --dataset ./my-dataset --model gpt-5.2
+```
+
+`--workspace` is where insights are read from; `--dataset-name` is the `dataset_name`
+written into every item (and the default output folder).
+
+| Flag | Effect |
+|---|---|
+| `--dashboard <id>` | restrict to insights on that dashboard (repeatable); default is the whole workspace |
+| `--out <dir>` | output folder (default `./<dataset-name>`); this is what `gd-eval run --dataset` reads |
+| `--snapshot-out` / `--snapshot-in` | save/replay the fetched model — replay needs no host, token, or network |
+| `--langfuse-out <file>` | also write a Langfuse-importable dataset JSON |
+| `--id-prefix` | prefix exported Langfuse item ids (they're unique per *project*, so re-importing an item under its original id is a 409) |
+| `--no-phrase` | skip the LLM; emit mechanical `Show <title>` questions |
+| `--phrase-model` | OpenAI model for phrasing (default `gpt-4o`) |
+| `--no-viz-type` | always blank the expected chart type |
+| `--enrich-ranked <N>` | additionally derive up to N ranked questions (see below); default 0 (off) |
+| `--skip-ambiguous` | drop items naming something the model carries more than once; reported either way |
+| `--min-questions` / `--min-shapes` / `--min-filtered` | quality gate, default 15, 3 and 1 |
+
+### Ranked questions (`--enrich-ranked`)
+
+Analysts sort in Analytical Designer and save the chart without persisting the sort, so
+`sort_by`/`ranking_filter` coverage is near zero on most real models — the eval can
+punish a spurious ranking but never confirm the agent builds a required one.
+`--enrich-ranked N` fills that gap by *deriving* ranked items from the specs already
+extracted. Adding a limit or a sort to a definition that executes cannot make it
+unanswerable, and "the top 3 X by Y" has exactly one correct spec, so a derived item is
+less ambiguous to grade than the insight it came from.
+
+The budget is spent best-grounded first:
+
+1. **Insights whose own title promised a ranking their definition never implemented** —
+   "Top Returned Reasons" saved with `sorts: []`. The direction comes from the title
+   (`highest`/`most`/`largest` vs `lowest`/`least`/`worst`) and the N too when it states
+   one; a title naming both ends names neither and is still skipped.
+2. **Ranking filters added to a plain breakdown** — one metric, one non-date dimension,
+   no existing sort. N follows the dimension's element count, so a top-5 over six values
+   is never emitted.
+3. **Sort-only variants**, which order without limiting.
+
+Eligibility is deliberately narrow: two metrics leave "top 3 by what?" unanswered, a
+second dimension leaves the N ambiguous between the pair and within a group, and a date
+dimension turns the result into "top 3 months", which nobody asks. Variants are
+deduplicated by resolved definition — differently-titled insights over one metric and
+dimension would otherwise produce the same question twice — and bases are taken
+round-robin by metric so one popular metric cannot become a third of the corpus.
+
+Derived items carry `derived_from` (the insight id) and `derived_basis` (`title` when a
+human's chart title asked for the ranking, `shape` when this generator chose to add
+one), so a pass rate over each can be computed separately.
+
+### Items that cannot say what they mean
+
+Two classes of question are unwinnable however well the agent behaves, and both are
+reported:
+
+- **A name the model carries more than once.** One workspace has six labels all titled
+  "Product Title"; a question naming one cannot say which is meant, and a perfect chart
+  over the wrong one scores zero. `--skip-ambiguous` drops them; the count and the
+  offending names are printed either way.
+- **A date granularity's cyclical twin.** `MONTH` walks consecutive calendar months,
+  `MONTH_OF_YEAR` stacks every January together. Date dimensions are therefore briefed
+  by what they do ("one point per calendar month over time, not month-of-year") and the
+  writer is told to say it in natural words while keeping the date dataset's name —
+  never as a label id in prose ("Order Created At - Month").
+
+**The question must never contradict its own expected output.** Four rules enforce that:
+
+- The writer is briefed on buckets, sorts and filters only — never the insight title,
+  and never the chart type. Titles routinely describe intent the definition doesn't
+  implement ("Products by Most Items Sold" over `sorts: []`).
+- Every generated question is checked against its spec, and any hit is a hard error:
+  ranking words (`top`, `most`, `highest`, …) require a real sort or ranking filter;
+  filter words (`only`, `last quarter`, `in 2025`, …) require a real date or attribute
+  filter; a breakdown clause requires a non-empty `view_by`/`segment_by` and vice versa;
+  a metric may never be broken down by itself; and no template residue (`breakdown
+  dimension`, `{…}`) may survive. A violation is fed back once for a rewrite, then
+  dropped — and a drop fails the run.
+- The writer's rules are built per insight, so an insight with no `view_by` is never
+  asked to name a breakdown at all.
+- `type` is set only when the question actually names a chart form. An insight's
+  `visualizationUrl` records what a human clicked, not what the question constrains —
+  with one exception: a chart with no breakdown *must* name its form ("as a KPI", "as a
+  single number"). Without it the agent reads a bare "Show me Gross Revenue" as a metric
+  lookup, activates only its search skill and builds nothing.
+
+Everything the writer sees is a display name (`Spend Amount`, `Merchant Name`), never a
+raw URI, so questions read like a person wrote them.
+
+**What it won't do.** Insights it can't express without guessing are skipped with a
+printed reason, never approximated: derived (arithmetic/PoP) measures, measure-level
+filters, `uris`-form attribute filters, unmapped chart types, hidden objects, and
+insights whose title promises behaviour their definition lacks (though `--enrich-ranked`
+implements a promised *ranking* rather than discarding it). If too few survive, the
+quality gate fails the run rather than fabricating items to hit the minimum — point at
+more dashboards, or lower `--min-questions`.
+
+Every written item is validated as a `DatasetItem` with a scorable AAC visualization
+before the command reports success.
 
 ---
 
@@ -384,7 +579,8 @@ is the fraction of satisfied criteria.
 
 ### `[llm-judge]` — LLM-as-judge evaluators
 
-`general_question` and `guardrail` items are scored by a GPT-4o judge.
+`general_question` and `guardrail` items are scored by a GPT-4o judge, and
+`gd-eval generate` uses the same package to write question text.
 Requires the OpenAI package and `OPENAI_API_KEY`:
 
 ```bash
@@ -393,13 +589,15 @@ uv add 'gooddata-eval[llm-judge]'
 uv tool install 'gooddata-eval[llm-judge]'
 ```
 
-Without `[llm-judge]`, those items are **skipped**.
+Without `[llm-judge]`, those items are **skipped** and `gd-eval generate` needs
+`--no-phrase`.
 
 ## Exit codes
 
 | Code | Meaning |
 |---|---|
 | `0` | Run completed. Evaluation failures do **not** cause a non-zero exit. |
+| `1` | `gd-eval generate` only: a quality gate failed, an item was dropped, or a written item failed validation. |
 | `2` | Operational error: bad connection, missing model, unreadable dataset, missing credentials. |
 
 ## Scores (in JSON report and Langfuse)

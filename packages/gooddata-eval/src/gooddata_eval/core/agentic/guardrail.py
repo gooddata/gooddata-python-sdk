@@ -23,7 +23,7 @@ from gooddata_eval.core.models import (
     AgenticEvalOutcome,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
+    timeline_detail,
 )
 
 _DEFAULT_K = 1
@@ -284,7 +284,7 @@ def evaluate_agentic_guardrail(
         "judge_passed": best.passed,
         "judge_reasoning": best.reasoning,
         "actual_output": best.actual_output,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
         # Only present when it happened, so the usual JSON shape is unchanged. A
         # pass@K over fewer runs than --runs asked for is a weaker result.
         **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),
