@@ -8,6 +8,7 @@ import pytest
 def fixtures_dir() -> Path:
     return Path(__file__).parent / "fixtures"
 
+
 # gd-eval reads connection and retry settings from the environment, so a developer
 # shell that exports them (as a real eval run must) would otherwise rewrite what
 # these tests expect -- e.g. GOODDATA_EVAL_CHAT_MAX_RETRIES=1 turns the expected

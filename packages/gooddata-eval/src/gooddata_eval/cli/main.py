@@ -224,6 +224,16 @@ def _build_parser() -> argparse.ArgumentParser:
         default=1,
         help="Fail below this many questions carrying a filter.",
     )
+    gen.add_argument(
+        "--enrich-ranked",
+        dest="enrich_ranked",
+        type=int,
+        default=0,
+        metavar="N",
+        help="Additionally derive up to N ranked questions from eligible base insights by adding a "
+        "ranking filter ('the top 3 X by Y') or a descending sort. Use when the workspace has no "
+        "ranked insights of its own. Derived items carry `derived_from`. Default: 0 (off).",
+    )
     gen.add_argument("--dry-run", dest="dry_run", action="store_true", help="Report only; write nothing.")
     models_cmd = sub.add_parser("models", help="List LLM providers and models configured in the org.")
     models_cmd.add_argument("--host", help="GoodData host URL.")

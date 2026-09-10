@@ -4,17 +4,24 @@ import json
 import pytest
 from gooddata_eval.core.dataset.from_insights import (
     Unsupported,
+    _rules_for,
     _validation_errors,
     build,
     build_display_names,
     contradictions,
     convert,
+    derive,
+    derived_candidates,
+    derived_n,
     describe,
     display_name,
+    element_counts,
     insight_ids_on,
     langfuse_payload,
     list_ids,
     mint_id,
+    pick_derived,
+    rankable,
     resolve_type,
 )
 from gooddata_eval.core.dataset.local import load_local_dataset
@@ -387,6 +394,23 @@ def test_filters_are_briefed_in_words_not_json():
     assert "{" not in brief
 
 
+@pytest.mark.parametrize(
+    "title",
+    [
+        "Products by Most Items Sold",
+        # "Least"/"Worst"/"Largest" name a ranking as plainly as "Most" does. Missing any
+        # of them lets a mis-specified insight through as a base, and `--enrich-ranked`
+        # then derives a *top* N from a chart whose own title says the opposite.
+        "Products by Least Items Sold",
+        "Worst Performing Merchants",
+        "Largest Accounts",
+    ],
+)
+def test_degenerate_ranking_titles_are_skipped(title):
+    with pytest.raises(Unsupported, match="promises a ranking"):
+        convert(spend_by_merchant(title=title), DATE_IDS)
+
+
 def test_degenerate_titles_are_skipped_rather_than_contradicted():
     with pytest.raises(Unsupported, match="promises a ranking"):
         convert(spend_by_merchant(title="Products by Most Items Sold"), DATE_IDS)
@@ -626,3 +650,220 @@ def test_uri_form_attribute_filter_is_still_skipped():
             ),
             DATE_IDS,
         )
+
+
+# --- derived ranking variants -------------------------------------------------
+
+
+def _bar(metric_id, label_id, **kw):
+    return viz(
+        "local:bar",
+        [
+            {"localIdentifier": "measures", "items": [measure("m", metric_id)]},
+            {"localIdentifier": "view", "items": [attribute("a", label_id)]},
+        ],
+        **kw,
+    )
+
+
+def test_a_plain_single_metric_breakdown_is_rankable():
+    spec = convert(_bar("spend", "merchant.NAME"), DATE_IDS)
+    assert rankable(spec, DATE_IDS) == "d_merchant_name"
+
+
+@pytest.mark.parametrize(
+    "content,reason",
+    [
+        (
+            viz(
+                "local:bar",
+                [
+                    {
+                        "localIdentifier": "measures",
+                        "items": [measure("m", "spend"), measure("m2", "gross_revenue")],
+                    },
+                    {"localIdentifier": "view", "items": [attribute("a", "merchant.NAME")]},
+                ],
+            ),
+            "two metrics leave 'top 3 by what?' unanswered",
+        ),
+        (
+            viz(
+                "local:bar",
+                [
+                    {"localIdentifier": "measures", "items": [measure("m", "spend")]},
+                    {"localIdentifier": "view", "items": [attribute("a", "merchant.NAME")]},
+                    {"localIdentifier": "segment", "items": [attribute("b", "region.NAME")]},
+                ],
+            ),
+            "a segment makes the N ambiguous between the pair and within a group",
+        ),
+        (
+            viz(
+                "local:line",
+                [
+                    {"localIdentifier": "measures", "items": [measure("m", "spend")]},
+                    {"localIdentifier": "trend", "items": [attribute("a", "process_date.month")]},
+                ],
+            ),
+            "'top 3 months' is not a question anyone asks",
+        ),
+        (
+            _bar("spend", "merchant.NAME", sorts=[{"attributeSortItem": {"attributeIdentifier": "a"}}]),
+            "already sorts, so the shape is covered by the real insight",
+        ),
+    ],
+)
+def test_ineligible_bases_are_not_ranked(content, reason):
+    assert rankable(convert(content, DATE_IDS), DATE_IDS) is None, reason
+
+
+def test_headline_without_a_dimension_is_not_rankable():
+    spec = convert(viz("local:headline", [{"localIdentifier": "measures", "items": [measure("m", "spend")]}]), DATE_IDS)
+    assert rankable(spec, DATE_IDS) is None
+
+
+@pytest.mark.parametrize("count,expected", [(None, 3), (2, None), (4, None), (5, 3), (6, 3), (7, 5), (50, 5)])
+def test_n_needs_headroom_over_the_element_count(count, expected):
+    assert derived_n(count) == expected
+
+
+def test_ranking_variant_limits_the_rows_and_keeps_the_base_intact():
+    base = convert(_bar("spend", "merchant.NAME"), DATE_IDS)
+    out = derive(base, "ranking_filter", 3, DATE_IDS)
+
+    assert list(out["query"]["filter_by"].values()) == [{"type": "ranking_filter", "using": "m_spend", "top": 3}]
+    assert out["sort_by"] == []
+    assert out["_derived_from"] == "v_x"
+    assert out["_derived_kind"] == "ranking_filter"
+    assert out["id"] != base["id"]
+    assert base["query"]["filter_by"] == {}, "the base spec must not be mutated"
+
+
+def test_sort_variant_orders_without_limiting():
+    out = derive(convert(_bar("spend", "merchant.NAME"), DATE_IDS), "sort_by", 3, DATE_IDS)
+
+    assert out["sort_by"] == [{"field": "m_spend", "direction": "DESC"}]
+    assert out["query"]["filter_by"] == {}, "a sort must not silently limit the rows"
+
+
+def test_derived_variants_are_scorable_and_valid():
+    base = convert(_bar("spend", "merchant.NAME"), DATE_IDS)
+    for kind in ("ranking_filter", "sort_by"):
+        envelope = build(derive(base, kind, 3, DATE_IDS), "Show the top 3 Merchants by Spend", "d", set())
+        assert _validation_errors(envelope) is None
+        CreatedVisualization.model_validate(envelope["expected_output"]["visualization"])
+
+
+def test_a_derived_item_records_where_it_came_from():
+    base = convert(_bar("spend", "merchant.NAME"), DATE_IDS)
+    envelope = build(derive(base, "ranking_filter", 5, DATE_IDS), "Show the top 5 Merchants by Spend", "d", set())
+
+    assert envelope["derived_from"] == "v_x"
+    assert envelope["derived_kind"] == "ranking_filter"
+    assert "_derived_from" not in envelope["expected_output"]["visualization"], "provenance is not part of the spec"
+
+    payload = langfuse_payload([envelope], "d", "ws", "origin")
+    assert payload["items"][0]["metadata"]["derived_from"] == "v_x"
+
+
+def test_a_base_item_carries_no_provenance_keys():
+    envelope = build(convert(_bar("spend", "merchant.NAME"), DATE_IDS), "Show Spend by Merchant", "d", set())
+    assert "derived_from" not in envelope
+    assert "derived_kind" not in langfuse_payload([envelope], "d", "ws", "o")["items"][0]["metadata"]
+
+
+def test_derived_ranking_reads_as_a_ranking_not_a_breakdown():
+    base = convert(_bar("spend", "merchant.NAME"), DATE_IDS)
+    rules = _rules_for(derive(base, "ranking_filter", 3, DATE_IDS), DISPLAY)
+    assert "the top 3 Merchant Name" in rules
+    assert "exactly once" in rules
+    assert "- Say the question is broken down by" not in rules, "the ranking line replaces the breakdown line"
+
+
+def test_a_ranking_within_an_attribute_still_asks_for_the_breakdown():
+    # `ranked within <attribute>` ranks inside each group, so the breakdown is real and
+    # the question has to name it.
+    spec = convert(spend_by_merchant(), DATE_IDS)
+    spec["query"]["filter_by"]["f0"] = {
+        "type": "ranking_filter",
+        "using": "m_spend",
+        "attribute": "d_merchant_name",
+        "top": 3,
+    }
+    assert "- Say the question is broken down by" in _rules_for(spec, DISPLAY)
+
+
+def test_a_derived_question_naming_the_ranking_is_not_a_contradiction():
+    spec = derive(convert(_bar("spend", "merchant.NAME"), DATE_IDS), "ranking_filter", 3, DATE_IDS)
+    assert contradictions("Show me the top 3 Merchant Name values by Spend", spec, DISPLAY) == []
+
+
+def test_picks_spread_across_metrics_before_repeating_one():
+    specs = [
+        convert(_bar("spend", "merchant.NAME"), DATE_IDS),
+        convert(_bar("spend", "region.NAME"), DATE_IDS),
+        convert(_bar("gross_revenue", "merchant.NAME"), DATE_IDS),
+    ]
+    picked = pick_derived(specs, DATE_IDS, 2, counts={})
+
+    metrics = {p["metrics"][0] for p in picked}
+    assert len(metrics) == 2, "one popular metric must not take the whole budget"
+
+
+def test_ranking_variants_are_exhausted_before_any_sort_variant():
+    specs = [convert(_bar("spend", "merchant.NAME"), DATE_IDS), convert(_bar("gross_revenue", "region.NAME"), DATE_IDS)]
+
+    assert [p["_derived_kind"] for p in pick_derived(specs, DATE_IDS, 2, counts={})] == [
+        "ranking_filter",
+        "ranking_filter",
+    ]
+    kinds = [p["_derived_kind"] for p in pick_derived(specs, DATE_IDS, 4, counts={})]
+    assert sorted(kinds) == ["ranking_filter", "ranking_filter", "sort_by", "sort_by"]
+
+
+def test_the_budget_is_a_hard_cap():
+    specs = [convert(_bar("spend", f"d{i}.NAME"), DATE_IDS) for i in range(10)]
+    assert len(pick_derived(specs, DATE_IDS, 3, counts={})) == 3
+
+
+def test_a_low_cardinality_dimension_is_not_ranked():
+    specs = [convert(_bar("spend", "merchant.NAME"), DATE_IDS)]
+    assert pick_derived(specs, DATE_IDS, 5, counts={"label/merchant.NAME": 3}) == []
+
+
+def test_n_follows_the_element_count():
+    specs = [convert(_bar("spend", "merchant.NAME"), DATE_IDS)]
+    picked = pick_derived(specs, DATE_IDS, 1, counts={"label/merchant.NAME": 40})
+    assert next(iter(picked[0]["query"]["filter_by"].values()))["top"] == 5
+
+
+def test_candidates_are_only_the_dimensions_a_derivation_would_need():
+    specs = [
+        convert(_bar("spend", "merchant.NAME"), DATE_IDS),
+        convert(
+            viz(
+                "local:line",
+                [
+                    {"localIdentifier": "measures", "items": [measure("m", "spend")]},
+                    {"localIdentifier": "trend", "items": [attribute("a", "process_date.month")]},
+                ],
+            ),
+            DATE_IDS,
+        ),
+    ]
+    assert derived_candidates(specs, DATE_IDS) == {"label/merchant.NAME"}
+
+
+def test_element_counts_stop_at_the_ceiling_and_survive_an_unservable_label():
+    class _Content:
+        def get_label_elements(self, workspace_id, label_id, limit=None):
+            if label_id == "label/bad":
+                raise RuntimeError("no such label")
+            assert limit == 7, "counting further than the largest N plus headroom is wasted work"
+            return ["v"] * limit
+
+    class _Sdk:
+        catalog_workspace_content = _Content()
+
+    assert element_counts(_Sdk(), "ws", {"label/merchant.NAME", "label/bad"}) == {"label/merchant.NAME": 7}

@@ -11,6 +11,11 @@ LLM to write the analyst question a user would ask to get that chart back.
 what satisfies "answerable with the current data model" and "expected answers reference
 metrics that exist in the LDM" by construction. The LLM only writes English.
 
+`--enrich-ranked` additionally *derives* ranked items from those real specs (see
+`pick_derived`), which is a weaker guarantee than copying but a much stronger one than
+synthesizing from the LDM: adding a limit or a sort to a definition that already
+executes cannot make it unanswerable. Derived items are marked with `derived_from`.
+
 Driven by `gd-eval generate`; the functions here are importable for programmatic use.
 """
 
@@ -106,7 +111,11 @@ SHAPES = (
 # A question may only use ranking language if the spec actually ranks, and filter
 # language if the spec actually filters. Otherwise the expected output contradicts the
 # question and the item punishes the agent for reading it correctly.
-RANK_WORDS = re.compile(r"\b(top|bottom|most|fewest|highest|lowest|ranked|rank|limit it to)\b", re.I)
+RANK_WORDS = re.compile(
+    r"\b(top|bottom|most|least|fewest|highest|lowest|largest|smallest|greatest|best|worst"
+    r"|ranked|rank|limit it to)\b",
+    re.I,
+)
 FILTER_WORDS = re.compile(
     r"\b(only|excluding|exclude|filtered|restricted to|limited to|just the"
     r"|last (?:year|quarter|month|week)|this (?:year|quarter|month|week)"
@@ -403,6 +412,147 @@ def classify(spec: dict, date_instance_ids: set) -> str:
     return "breakdown_by_dimension"
 
 
+# --- derived ranking variants -------------------------------------------------
+
+# Analysts sort in Analytical Designer and save the chart without persisting the sort,
+# so `sort_by`/`ranking_filter` coverage is near zero on most customer models: the eval
+# can punish a spurious ranking but never confirm the agent builds a required one.
+#
+# A ranked variant is *derived*, not synthesized. Adding ORDER BY / LIMIT to a spec that
+# already executes cannot make it unanswerable -- the LDM is untouched -- and "the top 3
+# X by Y" has exactly one correct spec, so a derived item is less ambiguous to grade than
+# the insight it came from. What it loses is provenance: no human ever asked for it.
+DERIVED_KINDS = ("ranking_filter", "sort_by")
+# Preferred N first; the first one the dimension has headroom for wins.
+_DERIVED_N = (5, 3)
+# A top-5 over six values ranks nothing. Require slack before calling it a ranking.
+_ELEMENT_HEADROOM = 2
+
+
+def rankable(spec: dict, date_instance_ids: set) -> str | None:
+    """The one dimension alias `spec` may be ranked by, or None if it may not be.
+
+    Deliberately narrow, because every relaxation buys ambiguity: two metrics leave
+    "top 3 by what?" unanswered, a second dimension leaves it unclear whether the N
+    applies to the pair or within a group, and a date dimension turns the result into
+    "top 3 months", which nobody asks. An insight that already sorts or ranks covers
+    this shape on its own and is left alone.
+    """
+    if len(spec["metrics"]) != 1 or spec["segment_by"]:
+        return None
+    dims = spec["view_by"] + spec["columns"] + spec["rows"]
+    if len(dims) != 1 or ranks(spec):
+        return None
+    uri = field_uri(spec["query"]["fields"], dims[0])
+    if uri.split("/", 1)[-1].split(".", 1)[0] in date_instance_ids:
+        return None
+    return dims[0]
+
+
+def derived_n(element_count: int | None) -> int | None:
+    """The N to rank by for a dimension with `element_count` values, or None if too few.
+
+    `None` means the count is unknown (an offline snapshot taken before this step
+    existed); the smallest N is then the safest choice rather than a reason to skip.
+    """
+    if element_count is None:
+        return min(_DERIVED_N)
+    for n in _DERIVED_N:
+        if element_count >= n + _ELEMENT_HEADROOM:
+            return n
+    return None
+
+
+def derive(spec: dict, kind: str, n: int, date_instance_ids: set) -> dict:
+    """A copy of `spec` with a ranking filter or a descending sort added.
+
+    The two kinds are never combined in one item: "the top 3" limits the rows and
+    "sorted by" only orders them, they score on different checks, and an item asserting
+    both is an item you cannot diagnose from its result.
+    """
+    if kind not in DERIVED_KINDS:
+        raise ValueError(f"unknown derived kind '{kind}'")
+    out = json.loads(json.dumps(spec))
+    metric = out["metrics"][0]
+    if kind == "ranking_filter":
+        key = f"f{len(out['query']['filter_by'])}"
+        out["query"]["filter_by"][key] = {"type": "ranking_filter", "using": metric, "top": n}
+        out["id"] = f"{out['id']}_top{n}"[:30]
+        out["title"] = f"{spec['title']} (top {n})"
+    else:
+        out["sort_by"] = [{"field": metric, "direction": "DESC"}]
+        out["id"] = f"{out['id']}_sorted"[:30]
+        out["title"] = f"{spec['title']} (sorted)"
+    out["_derived_from"] = spec["id"]
+    out["_derived_kind"] = kind
+    out["_shape"] = classify(out, date_instance_ids)
+    return out
+
+
+def element_counts(sdk, workspace_id: str, label_uris: set) -> dict:
+    """`{label uri: element count}`, counted only as far as deriving needs.
+
+    `limit` caps the count at the largest N plus its headroom: the question is only
+    ever "does this dimension have more values than the N we would rank by", so paging
+    a 50,000-element label to completion would be wasted.
+    """
+    ceiling = max(_DERIVED_N) + _ELEMENT_HEADROOM
+
+    def count(uri: str) -> int | None:
+        try:
+            return len(sdk.catalog_workspace_content.get_label_elements(workspace_id, uri, limit=ceiling))
+        except Exception as exc:  # a label the elements API cannot serve is simply not derived from
+            print(f"  no element count for {uri}: {exc}", file=sys.stderr)
+            return None
+
+    return {uri: n for uri in sorted(label_uris) if (n := count(uri)) is not None}
+
+
+def pick_derived(specs: list, date_instance_ids: set, limit: int, counts: dict | None = None) -> list:
+    """Up to `limit` derived variants, spread across distinct metrics.
+
+    Expanding every eligible insight would turn one popular metric into a third of the
+    corpus, and the pass rate into a measurement of one skill. Bases are taken
+    round-robin by metric, and ranking-filter variants are exhausted before any sort-only
+    variant is added, so a small `limit` yields the shape the corpus is missing most.
+    """
+    counts = counts or {}
+    by_metric: dict[str, list] = {}
+    for spec in specs:
+        alias = rankable(spec, date_instance_ids)
+        if alias is None:
+            continue
+        fields = spec["query"]["fields"]
+        n = derived_n(counts.get(field_uri(fields, alias)))
+        if n is None:
+            continue
+        by_metric.setdefault(field_uri(fields, spec["metrics"][0]), []).append((spec, n))
+
+    out = []
+    for kind in DERIVED_KINDS:
+        queues = [list(group) for group in by_metric.values()]
+        while queues and len(out) < limit:
+            for queue in queues:
+                if not queue:
+                    continue
+                spec, n = queue.pop(0)
+                out.append(derive(spec, kind, n, date_instance_ids))
+                if len(out) >= limit:
+                    break
+            queues = [q for q in queues if q]
+    return out
+
+
+def derived_candidates(specs: list, date_instance_ids: set) -> set:
+    """Label uris whose element count decides whether a base can be derived from."""
+    uris = set()
+    for spec in specs:
+        alias = rankable(spec, date_instance_ids)
+        if alias is not None:
+            uris.add(field_uri(spec["query"]["fields"], alias))
+    return uris
+
+
 def fetch_snapshot(sdk, workspace_id: str) -> dict:
     """Two read-only SDK calls, assembled into a replayable JSON snapshot."""
     analytics = sdk.catalog_workspace_content.get_declarative_analytics_model(workspace_id).analytics.to_dict(
@@ -617,7 +767,20 @@ def _rules_for(spec: dict, display_names: dict) -> str:
         "Write the question an analyst would ask to get exactly this chart. Rules:",
         "- Name every metric listed above explicitly, using its name verbatim.",
     ]
-    if dims:
+    ranking = next((f for f in spec["query"]["filter_by"].values() if f.get("type") == "ranking_filter"), None)
+    ranked_dim = dims[0] if ranking and dims and not ranking.get("attribute") else None
+    if ranked_dim:
+        # The ranking phrasing already names the dimension. Asking for the breakdown as
+        # well produces "broken down by Carrier, showing the top 3 Carriers by Returns" --
+        # the dimension twice, which no analyst writes. One instruction, not two.
+        n = ranking.get("top") or ranking.get("bottom")
+        end = "top" if "top" in ranking else "bottom"
+        lines.append(
+            f"- This chart keeps only the {end} {n} rows of {ranked_dim}. Ask for 'the {end} {n} "
+            f"{ranked_dim} by <metric>' and name {ranked_dim} exactly once -- do not also say "
+            f"'broken down by {ranked_dim}'."
+        )
+    elif dims:
         lines.append("- Say the question is broken down by " + ", ".join(dims) + ", naming each verbatim.")
     else:
         lines.append(
@@ -694,17 +857,25 @@ def resolve_type(spec: dict, question: str) -> str:
 
 
 def build(spec: dict, question: str, dataset_name: str, existing_ids: set) -> dict:
-    spec = {k: v for k, v in spec.items() if k != "_shape"}
+    derived_from, derived_kind = spec.get("_derived_from"), spec.get("_derived_kind")
+    spec = {k: v for k, v in spec.items() if not k.startswith("_")}
     spec["type"] = resolve_type(spec, question)
     question_id = mint_id(question, existing_ids)
     existing_ids.add(question_id)
-    return {
+    envelope = {
         "id": question_id,
         "dataset_name": dataset_name,
         "test_kind": TEST_KIND,
         "question": question,
         "expected_output": {"visualization": spec},
     }
+    if derived_from:
+        # Provenance on the item itself: months later, "42 of these came from real charts
+        # and 10 were derived" has to be answerable from the dataset, not from memory --
+        # and the pass rate has to be computable both ways.
+        envelope["derived_from"] = derived_from
+        envelope["derived_kind"] = derived_kind
+    return envelope
 
 
 def langfuse_payload(envelopes: list, dataset: str, workspace_id: str, origin: str, id_prefix: str = "") -> dict:
@@ -726,6 +897,11 @@ def langfuse_payload(envelopes: list, dataset: str, workspace_id: str, origin: s
                     "test_kind": TEST_KIND,
                     "workspace": workspace_id,
                     "origin": origin,
+                    **(
+                        {"derived_from": e["derived_from"], "derived_kind": e["derived_kind"]}
+                        if e.get("derived_from")
+                        else {}
+                    ),
                 },
             }
             for e in envelopes
@@ -745,6 +921,7 @@ def _validation_errors(envelope: dict) -> str | None:
 
 def generate(args, sdk_factory=None) -> int:
     """Run the whole generation pipeline. Returns a process exit code."""
+    sdk = None
     if args.snapshot_in:
         snapshot = json.loads(Path(args.snapshot_in).read_text())
     else:
@@ -777,6 +954,26 @@ def generate(args, sdk_factory=None) -> int:
         except Unsupported as exc:
             skipped.append((viz.get("id"), str(exc)))
 
+    n_base = len(specs)
+    derived = []
+    if args.enrich_ranked:
+        counts = dict(snapshot.get("label_cardinality") or {})
+        wanted = derived_candidates(specs, date_instance_ids)
+        missing = wanted - set(counts)
+        if sdk is not None and missing:
+            counts.update(element_counts(sdk, snapshot["workspace_id"], missing))
+            snapshot["label_cardinality"] = counts
+            if args.snapshot_out:
+                Path(args.snapshot_out).write_text(json.dumps(snapshot, indent=2))
+        elif missing:
+            print(
+                f"  no element counts for {len(missing)} candidate dimension(s) (replayed snapshot): "
+                f"deriving with the smallest N",
+                file=sys.stderr,
+            )
+        derived = pick_derived(specs, date_instance_ids, args.enrich_ranked, counts)
+        specs = specs + derived
+
     shapes: dict[str, list] = {}
     for spec in specs:
         shapes.setdefault(spec["_shape"], []).append(spec["title"])
@@ -791,6 +988,12 @@ def generate(args, sdk_factory=None) -> int:
         print(f"  {shape:<24} {len(shapes.get(shape, []))}")
     print(f"  with filters             {n_filtered}")
     print(f"  with sort/ranking        {n_ranked}")
+    if args.enrich_ranked:
+        by_kind: dict[str, int] = {}
+        for spec in derived:
+            by_kind[spec["_derived_kind"]] = by_kind.get(spec["_derived_kind"], 0) + 1
+        summary = ", ".join(f"{n} {kind}" for kind, n in by_kind.items()) or "none eligible"
+        print(f"  derived from a base      {len(derived)} ({summary}), {n_base} from real insights")
     for viz_id, reason in skipped:
         print(f"  SKIP {viz_id}: {reason}")
 
@@ -855,6 +1058,12 @@ def generate(args, sdk_factory=None) -> int:
             f"{snapshot['workspace_id']} -- expected_output copied from live "
             f"visualization definitions, question text written by "
             f"{'a mechanical template' if args.no_phrase else args.phrase_model}"
+            + (
+                f"; {len(derived)} item(s) derived from a base insight by adding a ranking "
+                f"filter or a sort (see `derived_from`)"
+                if derived
+                else ""
+            )
         )
         payload = langfuse_payload(envelopes, args.dataset_name, snapshot["workspace_id"], origin, args.id_prefix)
         Path(args.langfuse_out).parent.mkdir(parents=True, exist_ok=True)
