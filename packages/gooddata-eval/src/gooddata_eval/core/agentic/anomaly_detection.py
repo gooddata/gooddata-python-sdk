@@ -13,9 +13,10 @@ the measure and the time granularity are the whole of the question "did it look 
 right series", and getting either wrong makes the result meaningless however well the
 detection itself performed.
 
-Granularity is resolved in the tool's own order -- field tokens first, then a relative date
-filter's granularity -- so the evaluation reads the chart the way the service does. It
-differs in one respect, deliberately: see ``_granularity_from``.
+Granularity is resolved with the tool's own token map and in its own order -- field tokens
+first, then a relative date filter's granularity -- so the evaluation reads the chart the
+way the service does. It differs only in which token wins inside a single reference, and
+only where the service itself is not deterministic: see ``_granularity_from``.
 
 The count of flagged points is reported but never asserted: whether a real series contains
 anomalies is a property of the data, not of the agent, and a fixture that demanded some
@@ -59,13 +60,17 @@ _DEFAULT_K = 1
 # is disambiguation headroom for questions that name an ambiguous measure.
 _DEFAULT_MAX_ITERATIONS = 4
 
-# The granularities the detection tool recognises, keyed by the tokens it looks for. Copied
-# from gen-ai's own token map -- note "date" maps to DAY there, which is what makes a label
-# like process_date.month ambiguous (see _granularity_from).
+# Copied verbatim from gen-ai's own token map, so a chart this scores as monthly is the one
+# the tool analysed monthly. Note there is deliberately no "date" key: `label/process_date`
+# with no granularity suffix matches nothing, and the tool then refuses the call rather than
+# guessing daily -- an evaluator that guessed instead would score a granularity the service
+# never used. "week_us" is unreachable through tokenization (it splits into "week" and "us")
+# but is kept so this stays a copy rather than an edit.
 _TOKEN_TO_GRANULARITY = {
+    "hour": "HOUR",
     "day": "DAY",
-    "date": "DAY",
     "week": "WEEK",
+    "week_us": "WEEK",
     "month": "MONTH",
     "quarter": "QUARTER",
     "year": "YEAR",
@@ -142,12 +147,14 @@ def _extract_anomaly_calls(tool_call_events: list[ToolCallEvent]) -> tuple[dict 
 def _granularity_from(value: str) -> str | None:
     """The granularity a field reference names, taking the LAST recognised token.
 
-    Deliberately not the service's own rule. gen-ai tokenizes the same string into a *set*
-    and returns the first match it happens to iterate, so ``label/process_date.month``
-    yields MONTH or DAY depending on hash order -- ``date`` and ``month`` both map. Taking
-    the last token instead reads the suffix, which is what a dotted label means, and is
-    deterministic. The divergence only shows up on references that name two granularities,
-    where the service's answer is not stable anyway.
+    gen-ai tokenizes the same string into a *set* and returns the first match it iterates,
+    which is stable for a reference naming one granularity -- the normal case, including
+    every date label in the eval workspace. It is not stable for a reference naming two,
+    e.g. a snake_case ``first_day_quarter.month`` whose tokens contain "day", "quarter" and
+    "month": there the service's answer depends on set iteration order. Reading the last
+    token instead takes the suffix, which is what a dotted label means, and is
+    deterministic either way -- a scorer must not be a coin flip even where the thing it
+    scores is one.
     """
     parts = [part for part in re.split(r"[^a-zA-Z0-9]+", value.lower()) if part]
     for part in reversed(parts):

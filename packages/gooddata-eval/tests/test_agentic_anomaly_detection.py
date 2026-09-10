@@ -127,18 +127,27 @@ def test_granularity_comes_from_the_field_token_first():
     assert _inferred_granularity(_viz(dimension="label/process_date.month")) == "MONTH"
     assert _inferred_granularity(_viz(dimension="label/process_date.quarter")) == "QUARTER"
     assert _inferred_granularity(_viz(dimension="label/process_date.year")) == "YEAR"
+    assert _inferred_granularity(_viz(dimension="label/process_date.hour")) == "HOUR"
 
 
-def test_an_ambiguous_label_resolves_to_its_suffix_deterministically():
-    """`process_date.month` contains both "date" (-> DAY) and "month" (-> MONTH).
+def test_a_reference_naming_two_granularities_resolves_to_its_suffix():
+    """A snake_case `first_day_quarter.month` tokenizes to {first, day, quarter, month},
+    where "day", "quarter" and "month" all map. gen-ai iterates a set and returns whichever
+    comes first, so its own answer there is not stable; taking the last token reads the
+    suffix, which is what a dotted label means, and is the same every run.
 
-    gen-ai tokenizes into a set and returns whichever it iterates first, so its own answer
-    here is not stable. Taking the last token reads the suffix, which is what a dotted
-    label means, and gives the same answer every run -- a scorer cannot be a coin flip.
+    This is rare -- no label in the eval workspace names two granularities -- but a scorer
+    must not be a coin flip even where the thing it scores is one.
     """
-    assert _inferred_granularity(_viz(dimension="label/process_date.month")) == "MONTH"
-    assert _inferred_granularity(_viz(dimension="label/order_date.quarter")) == "QUARTER"
-    assert _inferred_granularity(_viz(dimension="label/process_date")) == "DAY"
+    assert _inferred_granularity(_viz(dimension="label/first_day_quarter.month")) == "MONTH"
+    assert _inferred_granularity(_viz(dimension="label/day_of_week")) == "WEEK"
+
+
+def test_a_date_attribute_without_a_granularity_suffix_names_none():
+    """`label/process_date` matches no token: the tool has no "date" key and refuses the
+    call rather than guessing daily, so guessing DAY here would score a granularity the
+    service never used."""
+    assert _inferred_granularity(_viz(dimension="label/process_date", filter_granularity=None)) is None
 
 
 def test_granularity_falls_back_to_the_date_filter():
