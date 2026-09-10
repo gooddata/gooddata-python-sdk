@@ -18,8 +18,9 @@ def test_parse_sse_lines_collects_text_and_visualization(fixtures_dir):
 
 
 def test_parse_sse_lines_raises_on_error_event():
-    lines = ['data: {"statusCode": 500, "detail": "boom"}']
-    with pytest.raises(RuntimeError, match="SSE error 500"):
+    # 400: a code outside _RETRYABLE_STATUS_CODES, so this exercises the terminal path.
+    lines = ['data: {"statusCode": 400, "detail": "boom"}']
+    with pytest.raises(RuntimeError, match="SSE error 400"):
         parse_sse_lines(lines)
 
 
@@ -51,7 +52,7 @@ def test_parse_sse_lines_error_carries_partial_result_with_tool_calls_already_se
             }
         ),
         "",
-        json.dumps({"statusCode": 500, "detail": "boom"}),
+        json.dumps({"statusCode": 400, "detail": "boom"}),
     ]
     lines = [f"data: {line}" if line else line for line in lines]
     with pytest.raises(ChatError) as ei:
@@ -362,6 +363,28 @@ def test_parse_sse_lines_falls_back_to_adhoc_viz_when_multipart_viz_is_null():
     assert result.created_visualizations.objects[0].type == "line_chart"
 
 
+def test_parse_sse_lines_adhoc_fallback_synthesizes_id_when_args_have_none():
+    """A create_adhoc_visualization definition carries no `id` -- nothing was persisted.
+
+    CreatedVisualization requires one, so without a synthesized stand-in the whole
+    ChatResult fails to validate and the turn is lost. Regression test: real agent
+    tool arguments have no `id`, unlike the hand-written fixtures above.
+    """
+    viz_def = {
+        "type": "line_chart",
+        "query": {"fields": {"m": {"using": "metric/total_sales"}}, "filter_by": {}},
+        "metrics": ["m"],
+    }
+    lines = [
+        f'data: {{"item": {{"role": "assistant", "content": {{"type": "toolCall", "callId": "c1", "name": "create_adhoc_visualization", "arguments": {{"visualization": {json.dumps(viz_def)}}}}}}}}}',
+        'data: {"item": {"role": "assistant", "content": {"type": "multipart", "parts": [{"type": "visualization", "visualization": null}]}}}',
+    ]
+    result = parse_sse_lines(lines)
+    assert result.created_visualizations is not None
+    assert result.created_visualizations.objects[0].id == "adhoc-visualization-not-persisted"
+    assert result.created_visualizations.objects[0].type == "line_chart"
+
+
 def test_parse_sse_lines_counts_reasoning_steps():
     lines = [
         'data: {"item": {"role": "assistant", "content": {"type": "reasoning", "summary": "step one"}}}',
@@ -450,7 +473,7 @@ def test_parse_sse_lines_has_no_alert_proposals_by_default():
     assert parse_sse_lines(lines).alert_proposals == []
 
 
-@pytest.mark.parametrize("code", [429, 502, 503, 504])
+@pytest.mark.parametrize("code", [429, 500, 502, 503, 504])
 def test_parse_sse_lines_transient_status_codes(code):
     with pytest.raises(TransientChatError) as ei:
         parse_sse_lines([f'data: {{"statusCode": {code}, "detail": null}}'])
