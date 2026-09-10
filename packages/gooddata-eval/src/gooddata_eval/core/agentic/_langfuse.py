@@ -3,180 +3,31 @@
 
 from __future__ import annotations
 
-import base64
 import logging
 import os
 import threading
 import time
-import uuid
 from collections.abc import Iterator
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
-import httpx
-
 from gooddata_eval.core.agentic._trace_linker import link_cancel_event, linking_is_inline, warn_from_worker
 from gooddata_eval.core.config import ReasoningEffort, env_flag, normalize_reasoning_effort
+from gooddata_eval.core.langfuse._env import credentials_present
+from gooddata_eval.core.langfuse.client import HttpxLangfuseClient
+from gooddata_eval.core.langfuse.experiment import (
+    ExperimentItem,
+    ExperimentRun,
+    ScoreTarget,
+    build_experiment_root_span,
+)
+
+# Part of this module's public surface: external callers import both names from here.
+from gooddata_eval.core.langfuse.observations import TraceSummary as _TraceObj  # noqa: F401
+from gooddata_eval.core.langfuse.otlp import Span
 
 _log = logging.getLogger(__name__)
-
-# ---------------------------------------------------------------------------
-# httpx-based Langfuse client — Python 3.14 safe (no Langfuse SDK required)
-# ---------------------------------------------------------------------------
-
-
-class _TraceObj:
-    """Duck-type wrapper around a raw Langfuse trace dict."""
-
-    def __init__(self, raw: dict) -> None:
-        self.id: str = raw.get("id", "")
-        self.metadata: dict = raw.get("metadata") or {}
-        self.session_id: str | None = raw.get("sessionId") or raw.get("session_id")
-        self.latency: float = float(raw.get("latency") or 0.0)
-        self.total_cost: float = float(raw.get("totalCost") or raw.get("total_cost") or 0.0)
-
-
-class _TraceListResult:
-    def __init__(self, data: list[_TraceObj]) -> None:
-        self.data = data
-
-
-class _TraceAPI:
-    def __init__(self, client: httpx.Client) -> None:
-        self._client = client
-
-    def list(
-        self, from_timestamp: Any, to_timestamp: Any, limit: int, session_id: str | None = None
-    ) -> _TraceListResult:
-        """List traces in a window, optionally narrowed to one session server-side.
-
-        ``session_id`` is what makes ``limit`` a non-issue. Without it the endpoint returns
-        every trace in the window newest-first, so an eval workspace busy enough to put more
-        than ``limit`` traces inside one item's window pushes that item's OWN (oldest) trace
-        off the page -- it then polls its whole retry budget against a page that can never
-        contain it, and the score orphans with only a generic "no trace found" line to show
-        for it. Concurrency makes that likelier by overlapping every item's window. Named
-        ``session_id`` because ``_fetch_traces_for_session`` probes for exactly that
-        parameter; gen-ai sets sessionId = conversationId.
-        """
-
-        def _ts(v: Any) -> str:
-            return v.isoformat() if hasattr(v, "isoformat") else str(v)
-
-        params: dict[str, Any] = {
-            "fromTimestamp": _ts(from_timestamp),
-            "toTimestamp": _ts(to_timestamp),
-            "limit": limit,
-        }
-        # `is not None`, not truthiness: an empty id is a real filter value that matches
-        # nothing. Dropped here, the query would return the whole padded window for the
-        # caller's post-check to throw away, page after page, for the poll's whole budget.
-        if session_id is not None:
-            params["sessionId"] = session_id
-        resp = self._client.get("/api/public/traces", params=params)
-        resp.raise_for_status()
-        return _TraceListResult([_TraceObj(t) for t in resp.json().get("data", [])])
-
-
-class _DatasetRunItemsAPI:
-    def __init__(self, client: httpx.Client) -> None:
-        self._client = client
-
-    def create(
-        self,
-        run_name: str,
-        dataset_item_id: str,
-        trace_id: str,
-        metadata: dict | None = None,
-        run_description: str = "",
-    ) -> None:
-        self._client.post(
-            "/api/public/dataset-run-items",
-            json={
-                "runName": run_name,
-                "datasetItemId": dataset_item_id,
-                "traceId": trace_id,
-                "metadata": metadata or {},
-                "runDescription": run_description,
-            },
-        ).raise_for_status()
-
-
-class _LangfuseAPI:
-    def __init__(self, client: httpx.Client) -> None:
-        self.trace = _TraceAPI(client)
-        self.dataset_run_items = _DatasetRunItemsAPI(client)
-
-
-class HttpxLangfuseClient:
-    """Minimal Langfuse client using httpx — works on Python 3.14 (no Langfuse SDK needed)."""
-
-    def __init__(self) -> None:
-        host = os.environ.get("LANGFUSE_HOST", "https://cloud.langfuse.com").rstrip("/")
-        pub = os.environ.get("LANGFUSE_PUBLIC_KEY", "")
-        sec = os.environ.get("LANGFUSE_SECRET_KEY", "")
-        if not pub or not sec:
-            raise RuntimeError(
-                "Langfuse credentials not set. "
-                "Export LANGFUSE_PUBLIC_KEY and LANGFUSE_SECRET_KEY before using --langfuse."
-            )
-        creds = base64.b64encode(f"{pub}:{sec}".encode()).decode()
-        self._http = httpx.Client(
-            base_url=host,
-            headers={"Authorization": f"Basic {creds}"},
-            timeout=10,
-        )
-        self.api = _LangfuseAPI(self._http)
-
-    def create_score(
-        self,
-        trace_id: str,
-        name: str,
-        value: float,
-        data_type: str,
-        comment: str | None = None,
-    ) -> None:
-        now = datetime.now(timezone.utc).isoformat()
-        # Langfuse API requires numeric value for BOOLEAN type (1.0/0.0), not JSON booleans
-        if isinstance(value, bool):
-            value = 1.0 if value else 0.0
-        body: dict[str, Any] = {
-            "id": str(uuid.uuid4()),
-            "traceId": trace_id,
-            "name": name,
-            "value": value,
-            "dataType": data_type,
-        }
-        if comment:
-            body["comment"] = comment
-        self._http.post(
-            "/api/public/ingestion",
-            json={"batch": [{"id": str(uuid.uuid4()), "timestamp": now, "type": "score-create", "body": body}]},
-        ).raise_for_status()
-
-    def update_trace_version(self, trace_id: str, version: str) -> None:
-        """Upsert the trace version field via the ingestion endpoint."""
-        now = datetime.now(timezone.utc).isoformat()
-        self._http.post(
-            "/api/public/ingestion",
-            json={
-                "batch": [
-                    {
-                        "id": str(uuid.uuid4()),
-                        "timestamp": now,
-                        "type": "trace-create",
-                        "body": {"id": trace_id, "version": version},
-                    }
-                ]
-            },
-        ).raise_for_status()
-
-    def flush(self) -> None:
-        pass  # no client-side batching
-
-    def close(self) -> None:
-        self._http.close()
 
 
 def make_langfuse_client() -> HttpxLangfuseClient:
@@ -190,7 +41,7 @@ def langfuse_credentials_present() -> bool:
     Separate from ``try_make_langfuse_client`` so a caller can ask the question without
     opening an httpx client it does not intend to use.
     """
-    return bool(os.environ.get("LANGFUSE_PUBLIC_KEY")) and bool(os.environ.get("LANGFUSE_SECRET_KEY"))
+    return credentials_present()
 
 
 def try_make_langfuse_client() -> HttpxLangfuseClient | None:
@@ -205,10 +56,10 @@ def try_make_langfuse_client() -> HttpxLangfuseClient | None:
 
 SKIP_ENV_VAR = "TAVERN_E2E_SKIP_TRACE_LINK"
 
-# Run names whose dataset-run assembly has already been reported as impossible. A 404 from
-# dataset-run-items means the dataset item id is not in Langfuse, which is a property of
-# the dataset and not of the attempt -- so it recurs identically for every item and every
-# run of that dataset, and reporting it per conversation buries the run's real output under
+# Run names whose experiment assembly has already been reported as impossible. A 404 from
+# dataset-items means the dataset item id is not in Langfuse, which is a property of the
+# dataset and not of the attempt -- so it recurs identically for every item and every run
+# of that dataset, and reporting it per conversation buries the run's real output under
 # dozens of copies of the same HTTP error. Guarded by a lock because linking runs on the
 # drain pool's worker threads.
 _UNLINKABLE_RUNS: set[str] = set()
@@ -321,6 +172,12 @@ def _fetch_traces_for_session(
 _CANCEL_CHECK_SEC = 0.5
 
 
+def _drain_is_cancelled() -> bool:
+    """Whether the batched drain running on this thread has been interrupted."""
+    cancel = link_cancel_event()
+    return cancel is not None and cancel.is_set()
+
+
 def _wait_between_attempts(delay: float) -> bool:
     """Wait ``delay`` before the next poll attempt. False means "stop polling".
 
@@ -355,19 +212,19 @@ def find_traces_per_conversation(
     ``window_end`` bounds the trace query and should be pinned by the caller to the moment
     the conversations ended. It matters because this poll is normally deferred onto a
     worker thread (see ``agentic/_trace_linker.py``): defaulting it to "now" would stretch
-    the window by however long the task waited in the queue, and since
-    ``_fetch_traces_for_session`` pages at ``_FETCH_LIMIT`` and filters by session locally,
-    a wide enough window can push the wanted trace off the page. Defaults to now only for
-    direct callers that poll immediately.
+    the window by however long the task waited in the queue, and the reader pages at 500
+    rows over at most four pages and then keeps the newest ``_FETCH_LIMIT`` traces of what
+    that returns, so a wide enough window can push the wanted trace off the page. Defaults
+    to now only for direct callers that poll immediately.
     """
     if env_flag(SKIP_ENV_VAR):
-        # Say so. Skipping returns all-None, which downstream renders as observe()'s
-        # generic "No trace found for dataset run ...; scores will be orphaned" -- the
-        # same message a real lookup failure produces. Left silent, an eval run looks
-        # like Langfuse is broken when trace linking was simply switched off.
+        # The one place the switch is announced: ``observe`` also honours it but stays
+        # silent, so a run says once that its Langfuse work was turned off rather than
+        # once per item. Left unsaid entirely, an eval run with no scores looks like
+        # Langfuse is broken.
         warn_from_worker(
             f"[langfuse] trace linking SKIPPED by {SKIP_ENV_VAR}: "
-            f"{len(conversation_ids)} conversation(s) will have orphaned scores. "
+            f"{len(conversation_ids)} conversation(s) will not be linked or scored in Langfuse. "
             f"Unset it to link traces."
         )
         return dict.fromkeys(conversation_ids)
@@ -382,8 +239,7 @@ def find_traces_per_conversation(
     stop_at = deadline if deadline is not None else time.monotonic() + budget
 
     for cid in conversation_ids:
-        cancel = link_cancel_event()
-        if cancel is not None and cancel.is_set():
+        if _drain_is_cancelled():
             # The run is being interrupted; the remaining conversations are not worth a
             # round trip, and their scores were never going to be written.
             break
@@ -413,17 +269,67 @@ def find_traces_per_conversation(
     return by_conv
 
 
-def _set_trace_version(langfuse: Any, trace_id: str, version: str) -> None:
-    """Write model version into the Langfuse trace version field."""
-    try:
-        if hasattr(langfuse, "update_trace_version"):
-            # HttpxLangfuseClient path
-            langfuse.update_trace_version(trace_id, version)
-        elif hasattr(langfuse, "trace"):
-            # Langfuse Python SDK path (v2+)
-            langfuse.trace(id=trace_id, version=version)
-    except Exception as exc:
-        _log.warning("Failed to set trace version %r on %s: %s", version, trace_id, exc)
+def _span_window(trace: Any, window: tuple[datetime, datetime] | None) -> tuple[datetime, datetime]:
+    """When gd-eval's span starts and ends: the gen-ai turn it describes, else the item's
+    trace window, else this instant.
+
+    The only clock read on the linking path, and deliberately here rather than in the
+    deferred task, whose run time says nothing about when the agent answered.
+    """
+    start = getattr(trace, "start_time", None)
+    end = getattr(trace, "end_time", None)
+    if start is not None and end is not None:
+        return start, end
+    if window is not None:
+        return window
+    now = datetime.now(timezone.utc)
+    return now, now
+
+
+def _experiment_root_span(
+    trace_id: str | None,
+    dataset_item_id: str,
+    dataset_id: str,
+    run_name: str,
+    run_metadata: dict[str, Any],
+    *,
+    trace: Any,
+    window: tuple[datetime, datetime] | None,
+    conversation_id: str | None,
+    item_input: Any,
+    output: Any,
+) -> Span:
+    """gd-eval's own root span for one (dataset item, run) -- the whole experiment item."""
+    start, end = _span_window(trace, window)
+    session_id = conversation_id or getattr(trace, "session_id", None)
+    tags = tuple(tag for tag in ("gd-eval", run_metadata.get("testing_framework")) if tag)
+    # One predicate for both the name and the input, so a falsy question cannot name the span
+    # after the item while the input still says "question".
+    has_input = item_input is not None
+    return build_experiment_root_span(
+        ExperimentRun(run_name, dataset_id, run_metadata or None),
+        ExperimentItem(
+            dataset_item_id,
+            input={"question": item_input} if has_input else {"dataset_item_id": dataset_item_id},
+            output=output,
+        ),
+        start=start,
+        end=end,
+        # Never the gen-ai trace's own name: the two traces sit side by side in Langfuse and
+        # only the prefix says which of them gd-eval wrote.
+        trace_name=f"gd-eval: {str(item_input)[:80]}" if has_input else f"gd-eval: {dataset_item_id}",
+        session_id=session_id,
+        version=run_metadata.get("model_version"),
+        tags=tags,
+        observation_metadata={
+            "gen_ai_trace_id": trace_id,
+            "gen_ai_latency_s": getattr(trace, "latency", None),
+            "gen_ai_cost_usd": getattr(trace, "total_cost", None),
+            "conversation_id": session_id,
+        },
+        trace_metadata={"run_name": run_name},
+        environment=os.environ.get("LANGFUSE_TRACING_ENVIRONMENT"),
+    )
 
 
 @contextmanager
@@ -433,64 +339,117 @@ def observe(
     dataset_item_id: str,
     run_name: str,
     run_metadata: dict[str, Any] | None = None,
-) -> Iterator[str | None]:
-    """Create a Langfuse dataset run item and yield the trace_id."""
-    if trace_id is not None:
-        try:
-            langfuse.api.dataset_run_items.create(
-                run_name=run_name,
-                dataset_item_id=dataset_item_id,
-                trace_id=trace_id,
-                metadata=run_metadata or {},
-                run_description="",
-            )
-            _log.debug(
-                "[langfuse] Created dataset run item: run=%s trace=%s item=%s", run_name, trace_id, dataset_item_id
-            )
-        except httpx.HTTPStatusError as exc:
-            if exc.response.status_code != 404:
-                _log.warning("Failed to link trace %s to run %s: %s", trace_id, run_name, exc)
-                warn_from_worker(
-                    f"[langfuse] WARNING: failed to create dataset run item "
-                    f"run={run_name} trace={trace_id} item={dataset_item_id}: {exc}"
-                )
-            elif _first_report_for_run(run_name):
-                # Say what it means and what to do, once. A raw 404 names an endpoint,
-                # which tells the reader nothing about the cause being their --dataset.
-                _log.warning(
-                    "Dataset item %s is not in Langfuse; run %s cannot be assembled.", dataset_item_id, run_name
-                )
-                warn_from_worker(
-                    f"[langfuse] WARNING: dataset item {dataset_item_id!r} does not exist in Langfuse, "
-                    f"so the run {run_name!r} cannot be assembled (404 from dataset-run-items). "
-                    f"Scores ARE still written to the traces themselves -- only the per-run grouping "
-                    f"used to compare models is missing. This is what happens when --dataset points at "
-                    f"a local folder: its item ids are local, not Langfuse dataset item ids. Use "
-                    f"--langfuse-dataset to get comparable runs, or set {SKIP_ENV_VAR}=1 to skip linking "
-                    f"altogether. Further occurrences for this run are suppressed."
-                )
-        except Exception as exc:
-            _log.warning("Failed to link trace %s to run %s: %s", trace_id, run_name, exc)
+    *,
+    trace: Any = None,
+    window: tuple[datetime, datetime] | None = None,
+    conversation_id: str | None = None,
+    item_input: Any = None,
+    output: Any = None,
+) -> Iterator[ScoreTarget | None]:
+    """Export gd-eval's experiment root span for one run and yield where to score it.
+
+    A run belongs to a Langfuse experiment through the attributes on that span, so the span
+    IS the run item. The yielded target names both the gen-ai trace and the span; either
+    half may be missing, and ``score_safe`` writes to whichever are there.
+
+    The yielded value is a ``ScoreTarget``: a ``str`` equal to the gen-ai trace id when one
+    was found, else to gd-eval's own experiment trace id. A caller that writes scores
+    directly with ``create_score(trace_id=tid)`` therefore scores that one trace and no
+    other; pass the target to ``score_safe(langfuse, tid, ...)`` to reach both destinations.
+    """
+    fallback = ScoreTarget(trace_id) if trace_id else None
+    # isinstance, not hasattr: a MagicMock answers every attribute, and the skill suites
+    # hand this one exactly that.
+    if not isinstance(langfuse, HttpxLangfuseClient):
+        yield fallback
+        return
+
+    # The operational off-switch for the whole agentic Langfuse write path, so it has to
+    # cover the span export and the scores as well as the poll that already announced it.
+    # Yielding None rather than the trace id is what stops ``score_safe`` writing: the
+    # flag is also how an operator gets through a run with Langfuse unreachable, and a
+    # score write would then fail per item.
+    if env_flag(SKIP_ENV_VAR):
+        yield None
+        return
+
+    if _drain_is_cancelled():
+        yield None
+        return
+
+    try:
+        dataset_id = langfuse.dataset_id_for_item(dataset_item_id)
+    except Exception as exc:
+        _log.warning("Failed to resolve dataset item %s for run %s: %s", dataset_item_id, run_name, exc)
+        warn_from_worker(
+            f"[langfuse] WARNING: failed to resolve dataset item {dataset_item_id!r} for run {run_name!r}: {exc}"
+        )
+        yield fallback
+        return
+
+    if dataset_id is None:
+        if _first_report_for_run(run_name):
+            # Say what it means and what to do, once. A raw 404 names an endpoint, which
+            # tells the reader nothing about the cause being their --dataset.
+            _log.warning("Dataset item %s is not in Langfuse; run %s cannot be assembled.", dataset_item_id, run_name)
             warn_from_worker(
-                f"[langfuse] WARNING: failed to create dataset run item "
-                f"run={run_name} trace={trace_id} item={dataset_item_id}: {exc}"
+                f"[langfuse] WARNING: dataset item {dataset_item_id!r} does not exist in Langfuse, "
+                f"so the run {run_name!r} cannot be assembled (404 from dataset-items). "
+                f"Scores ARE still written to the traces themselves -- only the per-run grouping "
+                f"that makes models comparable is missing. This is what happens when --dataset points at "
+                f"a local folder: its item ids are local, not Langfuse dataset item ids. Use "
+                f"--langfuse-dataset to get comparable runs, or set {SKIP_ENV_VAR}=1 to skip linking "
+                f"altogether. Further occurrences for this run are suppressed."
             )
-        model_version = (run_metadata or {}).get("model_version")
-        if model_version:
-            _set_trace_version(langfuse, trace_id, model_version)
-    else:
-        _log.warning("No trace found for dataset run %s; scores will be orphaned.", run_name)
-    yield trace_id
+        yield fallback
+        return
+
+    span = _experiment_root_span(
+        trace_id,
+        dataset_item_id,
+        dataset_id,
+        run_name,
+        run_metadata or {},
+        trace=trace,
+        window=window,
+        conversation_id=conversation_id,
+        item_input=item_input,
+        output=output,
+    )
+    try:
+        langfuse.export_spans([span])
+    except Exception as exc:
+        _log.warning("Failed to export the experiment span for run %s: %s", run_name, exc)
+        warn_from_worker(
+            f"[langfuse] WARNING: failed to export experiment span run={run_name} item={dataset_item_id}: {exc}"
+        )
+        yield fallback
+        return
+
+    if trace_id is None:
+        _log.warning("No gen-ai trace found for run %s; scores go to the gd-eval experiment span only.", run_name)
+    yield ScoreTarget(trace_id, span.trace_id, span.span_id)
 
 
-def score_safe(langfuse: Any, trace_id: str | None, **kwargs: Any) -> None:
-    """Create a Langfuse score, ignoring errors."""
+def score_safe(langfuse: Any, trace_id: Any, **kwargs: Any) -> None:
+    """Create one Langfuse score per destination the target names, ignoring errors.
+
+    ``observation_id`` is sent only for the experiment span, so the gen-ai write stays the
+    call every client already accepts.
+    """
     if not trace_id:
         return
-    try:
-        langfuse.create_score(trace_id=trace_id, **kwargs)
-    except Exception as exc:
-        _log.warning("Failed to log score %s: %s", kwargs.get("name"), exc)
+    # ``create_score`` answers a throttled write by sleeping and trying again, so an
+    # interrupted drain has to stop short of the call rather than wait its retries out.
+    if _drain_is_cancelled():
+        return
+    targets = trace_id.destinations() if isinstance(trace_id, ScoreTarget) else [(str(trace_id), None)]
+    for target_id, observation_id in targets:
+        extra = {"observation_id": observation_id} if observation_id else {}
+        try:
+            langfuse.create_score(trace_id=target_id, **kwargs, **extra)
+        except Exception as exc:
+            _log.warning("Failed to log score %s: %s", kwargs.get("name"), exc)
 
 
 def log_quality_and_value_scores(
