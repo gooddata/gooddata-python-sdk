@@ -127,7 +127,7 @@ gd-eval run \
 | Flag | Default | Description |
 |---|---|---|
 | `--runs K` | `2` | Independent runs per item. |
-| `--gate` | `any` | Which verdict decides an item: `any` = pass@K (a run passing is enough), `power` = pass^K (every run must pass, so the verdict measures stability). Identical at `--runs 1`. Agentic kinds only — `power` is refused when the dataset also has non-agentic items, which are always decided on pass@K. |
+| `--gate` | `any` | Which verdict decides an item: `any` = pass@K (a run passing is enough), `power` = pass^K (every run must pass, so the verdict measures stability). Identical at `--runs 1`. Kinds that repeat K runs only — `power` is refused when the dataset also has non-agentic items or `agentic_conversation`, which are always decided on pass@K. |
 | `--concurrency K` | `1` | Number of items evaluated concurrently. `1` = sequential (default). Increase to load-test the agent under simultaneous requests — see *Concurrency and workspace safety* below. |
 | `--judge-model MODEL` | `gpt-4o` | Model used for LLM-as-judge scoring — `agentic_general_question`, `agentic_guardrail`, `general_question`, `guardrail` and `dashboard_summary`. Also settable via `GD_EVAL_JUDGE_MODEL`. Two things to weigh before changing it: the gpt-5 family rejects `temperature=0`, so verdicts stop being reproducible (the run warns when this happens); and choosing the same model the agent runs means the judge grades its own family's output. |
 | `--reasoning-effort LEVEL` | server default | `LOW`, `MEDIUM` or `HIGH`, sent as `options.reasoningEffort` on every chat message. Requires the `enableGenAiReasoningEffort` feature flag on the target organization — without it the server ignores the value. Applies to chat items only; `dashboard_summary` items go through the summary endpoint, which has no such option. |
@@ -232,10 +232,12 @@ Winner is selected by **pass rate → quality score → latency** (lower latency
 Each item reports **how many of its runs passed**, not only whether one did:
 
 ```json
-"runs": 5, "runs_passed": 4, "pass_at_k": true, "pass_power_k": false
+"runs": 5, "runs_passed": 4, "pass_at_k": true, "pass_power_k": false, "gate_passed": true
 ```
 
-`pass_at_k` is "did any run pass" and is what `passed` counts. `runs_passed` is the fact that separates a
+`pass_at_k` is "did any run pass" — always literal, whatever the gate. `gate_passed` is the verdict the item
+was decided on and is what `passed` counts; the two differ only under `--gate power`, where an item that
+passed 4 of 5 runs is `"pass_at_k": true, "gate_passed": false`. `runs_passed` is the fact that separates a
 reliable item from a coin-flip — without it a 5/5 item and a 1/5 item are identical in every field, because
 `quality_score` is derived from the best run alone. `pass_power_k` is true only when every run passed, and the
 run summary carries `passed_all_runs` beside `passed`; a large gap between the two means the model is
@@ -248,7 +250,10 @@ no K and drives its fixture exactly once.
 Which of the two decides pass/fail is `--gate`: `any` (default) gates on `pass_at_k`, `power` gates on
 `pass_power_k`. The run records it as a top-level `gate`, and a failure under `power` says so —
 `Gate pass^3 failed: 2/3 runs passed — unstable, not a clean failure` — because the message body describes
-the best run, which under pass^K can be a run that passed. `agentic_conversation` has no K gate.
+the best run, which under pass^K can be a run that passed, and the console repeats the count in `Notes` for
+the same reason. When some runs were ungraded the note says so instead of calling the remainder unstable.
+`agentic_conversation` has no K gate, so `--gate power` is refused for a dataset containing one rather than
+labelling a report `power` that only part of the dataset was decided under.
 
 Each item additionally carries a per-phase breakdown:
 

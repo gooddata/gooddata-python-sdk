@@ -23,7 +23,7 @@ def _build_run_dict(report: EvalReport) -> dict:
             # Counted explicitly rather than by subtraction: an errored item has
             # pass_at_k False and skipped False, so subtraction would count it as both a
             # failure and an error. A judge fault is an error, not K failures.
-            "failed": sum(1 for i in report.items if not i.pass_at_k and not i.skipped and i.error is None),
+            "failed": sum(1 for i in report.items if not i.passed and not i.skipped and i.error is None),
             "skipped": report.skipped,
             "errored": report.errored,
             "latency_s": round(report.latency_s, 3),
@@ -35,7 +35,12 @@ def _build_run_dict(report: EvalReport) -> dict:
                 "dataset_name": item.dataset_name,
                 "test_kind": item.test_kind,
                 "question": item.question,
+                # Both, because under --gate power they differ: pass_at_k stays literal
+                # (any run passed) and matches the Langfuse score of that name, while
+                # gate_passed is the verdict the run was decided on and drives the summary
+                # counts and the exit code.
                 "pass_at_k": item.pass_at_k,
+                "gate_passed": item.passed,
                 "skipped": item.skipped,
                 "error": item.error,
                 # What actually ran, not the requested K: agentic_conversation runs once.

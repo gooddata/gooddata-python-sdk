@@ -7,7 +7,8 @@ import inspect
 from unittest.mock import MagicMock, patch
 
 import pytest
-from gooddata_eval.cli.main import _reject_power_gate_on_non_agentic_items
+from gooddata_eval.cli.agentic_runner import run_agentic_items
+from gooddata_eval.cli.main import _reject_power_gate_on_ungated_items
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     gate_failure_note,
@@ -16,12 +17,16 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic.alert_skill import AlertSkillAssertionError
 from gooddata_eval.core.agentic.general_question import (
     GeneralQuestionAssertionError,
     evaluate_agentic_general_question,
 )
 from gooddata_eval.core.config import RunConfig, normalize_gate
-from gooddata_eval.core.models import ChatResult, DatasetItem
+from gooddata_eval.core.models import AgenticEvalOutcome, ChatResult, DatasetItem
+from gooddata_eval.core.reporting.console import render_console
+from gooddata_eval.core.reporting.json_report import build_json_report
+from gooddata_eval.core.runner import EvalReport, ItemReport
 
 
 def test_the_default_gate_is_the_historic_pass_at_k():
@@ -84,6 +89,14 @@ def test_failure_note_does_not_call_a_clean_failure_unstable():
     assert "unstable" not in gate_failure_note("power", 0, 3)
     assert "0/3" in gate_failure_note("power", 0, 3)
     assert "0/1" in gate_failure_note("any", 0, 1)
+
+
+def test_failure_note_blames_the_judge_not_the_agent_for_an_ungraded_run():
+    """An ungraded run is in runs_total but can never be in runs_passed, so calling the
+    remainder instability reports a judge outage as a flaky agent."""
+    note = gate_failure_note("power", 1, 2, 1)
+    assert "1 ungraded" in note
+    assert "unstable" not in note
 
 
 def test_gate_scores_use_K_stable_names():
@@ -229,21 +242,140 @@ def _config(gate):
 def test_power_gate_is_refused_when_the_dataset_has_non_agentic_items():
     """test_kind is resolved per item, so a dataset can mix the two paths. Running anyway
     would decide half the items on pass@K and still label the report `power`."""
-    with pytest.raises(ValueError, match="applies to agentic kinds only"):
-        _reject_power_gate_on_non_agentic_items(_config("power"), [_item("visualization")])
+    with pytest.raises(ValueError, match="applies to kinds that repeat K runs"):
+        _reject_power_gate_on_ungated_items(_config("power"), [_item("visualization")])
+
+
+def test_power_gate_is_refused_for_an_agentic_kind_that_takes_no_k():
+    """agentic_conversation is in AGENTIC_TEST_KINDS but _dispatch_agentic passes it no
+    gate, so accepting it labels a report `power` that it was not decided under."""
+    with pytest.raises(ValueError, match="agentic_conversation"):
+        _reject_power_gate_on_ungated_items(
+            _config("power"), [_item("agentic_visualization", "i1"), _item("agentic_conversation", "i2")]
+        )
+
+
+def test_an_unsupported_kind_is_skipped_rather_than_refused():
+    """run_items skips it with a warning under --gate any; refusing here would make one
+    misspelled test_kind abort a dataset the default gate runs in full."""
+    _reject_power_gate_on_ungated_items(
+        _config("power"), [_item("agentic_visualization", "i1"), _item("nonsense_kind", "i2")]
+    )
 
 
 def test_the_refusal_names_the_kinds_to_split_out():
     with pytest.raises(ValueError) as exc:
-        _reject_power_gate_on_non_agentic_items(_config("power"), [_item("visualization", "i1"), _item("search", "i2")])
+        _reject_power_gate_on_ungated_items(
+            _config("power"), [_item("visualization", "i1"), _item("search_tool", "i2")]
+        )
     assert "2 item(s)" in str(exc.value)
-    assert "['search', 'visualization']" in str(exc.value)
+    assert "['search_tool', 'visualization']" in str(exc.value)
 
 
 def test_a_purely_agentic_dataset_is_accepted_under_the_power_gate():
-    _reject_power_gate_on_non_agentic_items(_config("power"), [])
+    _reject_power_gate_on_ungated_items(_config("power"), [_item("agentic_visualization")])
+    _reject_power_gate_on_ungated_items(_config("power"), [])
 
 
 def test_the_default_gate_accepts_a_mixed_dataset():
     """pass@K is what the non-agentic path already does, so nothing is misrepresented."""
-    _reject_power_gate_on_non_agentic_items(_config("any"), [_item("visualization")])
+    _reject_power_gate_on_ungated_items(_config("any"), [_item("visualization")])
+
+
+# --------------------------------------------------------------------------- #
+# reporting — the gate verdict and pass@K are different facts and both are reported
+# --------------------------------------------------------------------------- #
+def _flaky_item():
+    """2 of 3 runs passed: pass@K true, pass^K false, and the best run is a passing one."""
+    return ItemReport(
+        id="i1",
+        dataset_name="d",
+        test_kind="agentic_general_question",
+        question="q",
+        pass_at_k=True,
+        gate_passed=False,
+        runs=3,
+        runs_passed=2,
+        best_detail={"general_question_pass": True},
+    )
+
+
+def test_pass_at_k_stays_literal_when_the_power_gate_fails_the_item():
+    """The Langfuse score named pass_at_k is summary.pass_at_k, so a JSON field of the same
+    name reporting the gate instead makes two outputs of one run disagree."""
+    data = build_json_report(EvalReport(model="m", gate="power", items=[_flaky_item()]))
+
+    assert data["items"]["i1"]["pass_at_k"] is True
+    assert data["items"]["i1"]["gate_passed"] is False
+    assert data["summary"]["passed"] == 0
+    assert data["summary"]["failed"] == 1
+
+
+def test_an_ungated_item_reports_pass_at_k_as_its_verdict():
+    """run_items has no gate, so nothing sets gate_passed and pass@K decides."""
+    item = ItemReport(id="i1", dataset_name="d", test_kind="visualization", question="q", pass_at_k=True, runs=2)
+    data = build_json_report(EvalReport(model="m", items=[item]))
+
+    assert data["items"]["i1"]["gate_passed"] is True
+    assert data["summary"]["passed"] == 1
+
+
+def test_the_console_says_why_a_power_gate_failure_is_a_failure():
+    """best_detail describes the best run, which under pass^K passed -- so no check reads
+    False and Quality prints 100%. Without the count the row is an unexplained FAIL."""
+    text = render_console(EvalReport(model="m", gate="power", items=[_flaky_item()]))
+
+    assert "pass^3 failed" in text
+    assert "2/3 runs passed" in text
+    assert "did not pass strict checks" not in text
+
+
+# --------------------------------------------------------------------------- #
+# ungated kinds — gate_passed must stay None so it keeps meaning "a gate ran"
+# --------------------------------------------------------------------------- #
+def _run_one(test_kind: str, **dispatch):
+    """One item through run_agentic_items with _dispatch_agentic stubbed.
+
+    Stubbed at the dispatch seam rather than at an evaluator: the kinds differ in what they
+    load from the item, and what is under test is how _process_item records the verdict.
+    """
+    with patch("gooddata_eval.cli.agentic_runner._dispatch_agentic", **dispatch):
+        report = run_agentic_items(
+            [_item(test_kind, "i1")],
+            host="http://h",
+            token="tok",
+            workspace_id="ws",
+            k=2,
+            run_ts="2026-01-01",
+            gate="power",
+        )
+    return report.items[0]
+
+
+def test_an_ungated_kind_records_no_gate_verdict():
+    """_dispatch_agentic passes agentic_conversation no gate, so a Boolean here would claim
+    a gate decided the item and make an ungated result indistinguishable from a gated one."""
+    outcome = AgenticEvalOutcome(reasoning_steps=[], conversation_id="c-1", response_id="r-1", detail={})
+    item = _run_one("agentic_conversation", return_value=outcome)
+
+    assert item.error is None
+    assert item.gate_passed is None
+    assert (item.pass_at_k, item.passed) == (True, True)  # passed falls back to pass@K
+
+
+def test_an_ungated_kind_records_no_gate_verdict_on_failure_either():
+    item = _run_one("agentic_conversation", side_effect=AssertionError("nope"))
+
+    assert item.gate_passed is None
+    assert (item.pass_at_k, item.passed) == (False, False)
+
+
+def test_a_gated_kind_records_the_verdict_the_gate_produced():
+    exc = AlertSkillAssertionError("nope")
+    exc.runs_passed = 1
+    exc.detail = {"alert_created": True}
+    item = _run_one("agentic_alert_skill", side_effect=exc)
+
+    assert item.gate_passed is False
+    assert item.pass_at_k is True  # 1 of 2 runs passed: pass^2 failed, pass@2 did not
+    assert item.passed is False

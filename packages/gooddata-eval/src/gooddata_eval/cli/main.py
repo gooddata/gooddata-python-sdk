@@ -14,7 +14,7 @@ from gooddata_api_client.exceptions import ApiException
 from rich.console import Console
 from rich.table import Table
 
-from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, run_agentic_items
+from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, UNGATED_AGENTIC_TEST_KINDS, run_agentic_items
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import (
     DEFAULT_GATE,
@@ -27,6 +27,7 @@ from gooddata_eval.core.config import (
 )
 from gooddata_eval.core.connection import ConnectionError_, resolve_connection
 from gooddata_eval.core.dataset.local import load_local_dataset
+from gooddata_eval.core.evaluators import supported_test_kinds
 from gooddata_eval.core.langfuse.sink import LangfuseSink
 from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.reporting.console import render_comparison, render_console
@@ -196,18 +197,32 @@ def _apply_timer_flag(enabled: bool) -> None:
         os.environ[TIMERS_ENV_VAR] = "1"
 
 
-def _reject_power_gate_on_non_agentic_items(config: RunConfig, non_agentic_items: list) -> None:
+def _reject_power_gate_on_ungated_items(config: RunConfig, items: list) -> None:
     """Refuse a pass^K request the run cannot honour for every item.
 
-    `run_items` has no gate: the non-agentic path always decides on pass@K. Running a mixed
-    dataset anyway would decide half the items under each rule and label the whole report
+    Two kinds of item are never gated: everything on the non-agentic path, because
+    `run_items` has no gate and always decides on pass@K, and agentic_conversation, which
+    drives its fixture once whatever --runs says and so has no K to gate over. Running a
+    mixed dataset anyway would decide part of it under each rule and label the whole report
     `power`. test_kind is resolved per item, so a dataset does not have to be homogeneous.
+
+    Kinds no evaluator supports are not counted: those items are skipped rather than
+    decided, so refusing on them would make --gate power fail where --gate any runs.
     """
-    if normalize_gate(config.gate) != "power" or not non_agentic_items:
+    if normalize_gate(config.gate) != "power":
         return
-    kinds = sorted({i.test_kind for i in non_agentic_items})
+    supported = supported_test_kinds()
+    ungated = [
+        i
+        for i in items
+        if i.test_kind in UNGATED_AGENTIC_TEST_KINDS
+        or (i.test_kind not in AGENTIC_TEST_KINDS and i.test_kind in supported)
+    ]
+    if not ungated:
+        return
+    kinds = sorted({i.test_kind for i in ungated})
     raise ValueError(
-        f"--gate power applies to agentic kinds only, but this dataset has {len(non_agentic_items)} "
+        f"--gate power applies to kinds that repeat K runs, but this dataset has {len(ungated)} "
         f"item(s) of kind {kinds}, which are always decided on pass@K. Run them separately, or "
         f"use --gate any."
     )
@@ -285,7 +300,7 @@ def _make_progress_callbacks(console: Console):
             tag = "[yellow]SKIP[/yellow]"
         elif report.error:
             tag = "[red]ERR [/red]"
-        elif report.pass_at_k:
+        elif report.passed:
             tag = "[green]PASS[/green]"
         else:
             tag = "[red]FAIL[/red]"
@@ -375,7 +390,7 @@ def _run(config: RunConfig) -> int:
     items = _load_dataset(config)
     agentic_items = [i for i in items if i.test_kind in AGENTIC_TEST_KINDS]
     non_agentic_items = [i for i in items if i.test_kind not in AGENTIC_TEST_KINDS]
-    _reject_power_gate_on_non_agentic_items(config, non_agentic_items)
+    _reject_power_gate_on_ungated_items(config, items)
     _warn_if_local_dataset_cannot_link(config, agentic_items)
     models = config.models or []
     run_ts = datetime.now(timezone.utc).strftime("%Y-%m-%d-%H-%M")

@@ -336,7 +336,7 @@ def evaluate_agentic_general_question(
     }
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
+        gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
         exc = GeneralQuestionAssertionError(
             f"General question assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}"
         )

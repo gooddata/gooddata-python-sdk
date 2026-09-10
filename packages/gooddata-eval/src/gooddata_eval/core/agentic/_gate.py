@@ -29,16 +29,22 @@ def gate_label(gate: str | None, k: int) -> str:
     return f"pass^{k}" if normalize_gate(gate) == "power" else f"pass@{k}"
 
 
-def gate_failure_note(gate: str | None, runs_passed: int, runs_total: int) -> str:
+def gate_failure_note(gate: str | None, runs_passed: int, runs_total: int, runs_ungraded: int = 0) -> str:
     """Gate and how many runs met it, for the assertion message.
 
     Needed because the message body describes the BEST run, which under pass^K can be a run
     that passed — so the reported detail on its own looks like a pass.
+
+    An ungraded run counts in runs_total but can never count in runs_passed, so the remainder
+    is not evidence of instability — saying so would blame the agent for a judge outage.
     """
     label = gate_label(gate, runs_total)
+    note = f"Gate {label} failed: {runs_passed}/{runs_total} runs passed"
+    if runs_ungraded:
+        return f"{note}, {runs_ungraded} ungraded."
     if normalize_gate(gate) == "power" and runs_passed:
-        return f"Gate {label} failed: {runs_passed}/{runs_total} runs passed — unstable, not a clean failure."
-    return f"Gate {label} failed: {runs_passed}/{runs_total} runs passed."
+        return f"{note} — unstable, not a clean failure."
+    return f"{note}."
 
 
 def log_gate_scores(ctx: Any, trace_id: Any, *, gate: str | None, pass_at_k: bool, pass_power_k: bool) -> None:

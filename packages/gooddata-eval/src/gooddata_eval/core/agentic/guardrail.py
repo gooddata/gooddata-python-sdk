@@ -302,7 +302,7 @@ def evaluate_agentic_guardrail(
     }
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
+        gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
         exc = GuardrailAssertionError(
             f"Guardrail assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}"
         )
