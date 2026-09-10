@@ -1,6 +1,5 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
-import os
 import time
 from datetime import datetime, timedelta, timezone
 from unittest.mock import MagicMock, patch
@@ -13,9 +12,9 @@ from gooddata_eval.core.agentic._langfuse import (
     _LINK_BUDGET_SEC,
     _MAX_DELAY,
     SKIP_ENV_VAR,
+    HttpxLangfuseClient,
     _fetch_traces_for_session,
     find_traces_per_conversation,
-    make_langfuse_client,
     observe,
 )
 from gooddata_eval.core.agentic._trace_linker import (
@@ -266,20 +265,30 @@ def test_skip_switch_treats_explicit_off_values_as_off(monkeypatch, value, shoul
 # --- the session filter has to reach the server (M8) ---
 
 
-def _stub_langfuse_http(monkeypatch, captured: list[dict]):
-    """A HttpxLangfuseClient whose httpx GET is recorded instead of sent."""
+def _observation_row(trace_id: str, session_id: str, latency: float) -> dict:
+    """A root observation row as /v2/observations returns it."""
+    return {
+        "traceId": trace_id,
+        "id": f"o-{trace_id}",
+        "parentObservationId": None,
+        "sessionId": session_id,
+        "latency": latency,
+        "totalCost": 0.01,
+    }
+
+
+def _stub_langfuse_http(monkeypatch, captured: list[httpx.Request], page: dict | None = None):
+    """A HttpxLangfuseClient whose requests are recorded instead of sent."""
     monkeypatch.setenv("LANGFUSE_PUBLIC_KEY", "pk")
     monkeypatch.setenv("LANGFUSE_SECRET_KEY", "sk")
     monkeypatch.setenv("LANGFUSE_HOST", "https://lf.test")
-    client = make_langfuse_client()
+    body = page if page is not None else {"data": [], "meta": {}}
 
-    def _get(url, params=None, **_kw):
-        captured.append({"url": url, "params": params})
-        return MagicMock(raise_for_status=lambda: None, json=lambda: {"data": []})
+    def handler(request: httpx.Request) -> httpx.Response:
+        captured.append(request)
+        return httpx.Response(200, json=body)
 
-    client._http = MagicMock(get=_get)
-    client.api = type(client.api)(client._http)
-    return client
+    return HttpxLangfuseClient(transport=httpx.MockTransport(handler))
 
 
 def test_the_trace_lookup_filters_by_session_server_side(monkeypatch):
@@ -289,7 +298,7 @@ def test_the_trace_lookup_filters_by_session_server_side(monkeypatch):
     overlapping every item's window. The score then orphans after a full retry budget
     spent on a page that could never contain it.
     """
-    captured: list[dict] = []
+    captured: list[httpx.Request] = []
     client = _stub_langfuse_http(monkeypatch, captured)
 
     _fetch_traces_for_session(
@@ -297,32 +306,24 @@ def test_the_trace_lookup_filters_by_session_server_side(monkeypatch):
     )
 
     assert len(captured) == 1
-    assert captured[0]["params"]["sessionId"] == "conv-abc", "the session filter never reached the server"
+    assert captured[0].url.path == "/api/public/v2/observations"
+    assert dict(captured[0].url.params)["sessionId"] == "conv-abc", "the session filter never reached the server"
 
 
 def test_a_server_that_ignores_the_session_filter_cannot_hand_over_a_foreign_trace(monkeypatch):
     """The Langfuse API drops a query parameter it does not know rather than rejecting it.
 
-    The httpx client declares ``session_id``, which used to switch the local filter off for
-    it -- so a server that ignored the parameter returned the whole window, and the
-    max-latency pick attached this item's scores to a stranger's trace with no warning.
-    The server-side filter is still sent (paging); the local one is a post-check, not a
-    fallback.
+    A server that ignores the parameter answers with the whole window, and an unchecked
+    max-latency pick would then attach this item's scores to a stranger's trace with no
+    warning. The server-side filter is still sent (paging); the local one is a post-check,
+    not a fallback.
     """
-    monkeypatch.setenv("LANGFUSE_PUBLIC_KEY", "pk")
-    monkeypatch.setenv("LANGFUSE_SECRET_KEY", "sk")
-    monkeypatch.setenv("LANGFUSE_HOST", "https://lf.test")
-    client = make_langfuse_client()
+    captured: list[httpx.Request] = []
     page = {
-        "data": [
-            {"id": "t-other", "sessionId": "conv-zzz", "latency": 9.0},
-            {"id": "t-mine", "sessionId": "conv-abc", "latency": 1.0},
-        ]
+        "data": [_observation_row("t-other", "conv-zzz", 9.0), _observation_row("t-mine", "conv-abc", 1.0)],
+        "meta": {},
     }
-    client._http = MagicMock(
-        get=lambda url, params=None, **_kw: MagicMock(raise_for_status=lambda: None, json=lambda: page)
-    )
-    client.api = type(client.api)(client._http)
+    client = _stub_langfuse_http(monkeypatch, captured, page)
     now = datetime.now(timezone.utc)
 
     found = _fetch_traces_for_session(client, "conv-abc", now, now, timedelta(seconds=2))
@@ -514,39 +515,20 @@ def test_a_worker_thread_is_never_treated_as_inline():
     assert seen == [False]
 
 
-def test_an_empty_conversation_id_still_sends_the_server_side_filter():
+def test_an_empty_conversation_id_still_sends_the_server_side_filter(monkeypatch):
     """The filter must reach the server even when the id is empty.
 
     An empty id is a real filter value that matches nothing. Dropping the query parameter on
     a falsy id would fetch the entire padded window for the local post-check to throw away,
     so the poll would spend its whole budget on pages that can never match.
     """
-    seen: list[dict] = []
-
-    def handler(request: httpx.Request) -> httpx.Response:
-        seen.append(dict(request.url.params))
-        return httpx.Response(200, json={"data": []})
-
-    real_client = httpx.Client
-
-    def fake_client(*args, **kwargs):
-        kwargs.pop("transport", None)
-        return real_client(*args, transport=httpx.MockTransport(handler), **kwargs)
-
-    with (
-        patch.dict(
-            os.environ,
-            {"LANGFUSE_HOST": "https://lf.test", "LANGFUSE_PUBLIC_KEY": "pk", "LANGFUSE_SECRET_KEY": "sk"},
-        ),
-        patch.object(lf_module.httpx, "Client", fake_client),
-    ):
-        client = make_langfuse_client()
+    captured: list[httpx.Request] = []
+    client = _stub_langfuse_http(monkeypatch, captured)
 
     now = datetime.now(timezone.utc)
-    with patch.object(lf_module.httpx, "Client", fake_client):
-        _fetch_traces_for_session(client, "", now - timedelta(minutes=5), now, timedelta(seconds=2))
+    _fetch_traces_for_session(client, "", now - timedelta(minutes=5), now, timedelta(seconds=2))
 
-    assert seen, "no request was made"
-    assert seen[0].get("sessionId") == "", (
-        f"the empty id was dropped, so the server returned the whole window: {seen[0]}"
-    )
+    assert captured, "no request was made"
+    assert captured[0].url.path == "/api/public/v2/observations"
+    params = dict(captured[0].url.params)
+    assert params.get("sessionId") == "", f"the empty id was dropped, so the server returned the whole window: {params}"
