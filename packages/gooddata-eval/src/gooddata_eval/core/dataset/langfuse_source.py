@@ -8,7 +8,8 @@ Pydantic-v1 shims break at import time.
 Credentials are read from the standard Langfuse environment variables:
   LANGFUSE_PUBLIC_KEY   — your public key (pk-lf-...)
   LANGFUSE_SECRET_KEY   — your secret key (sk-lf-...)
-  LANGFUSE_HOST         — base URL, e.g. https://us.cloud.langfuse.com (default)
+  LANGFUSE_BASE_URL     — base URL, e.g. https://us.cloud.langfuse.com (preferred)
+  LANGFUSE_HOST         — base URL, legacy alias for LANGFUSE_BASE_URL
 """
 
 import base64
@@ -17,9 +18,9 @@ from typing import Any, TypeVar, cast
 
 import httpx
 
+from gooddata_eval.core.langfuse._env import resolve_base_url
 from gooddata_eval.core.models import DatasetItem, SummaryInput
 
-_DEFAULT_HOST = "https://cloud.langfuse.com"
 _PAGE_SIZE = 100
 
 _T = TypeVar("_T")
@@ -27,7 +28,7 @@ _T = TypeVar("_T")
 
 def _make_client() -> httpx.Client:
     """Build an httpx client with Langfuse basic-auth headers."""
-    host = os.environ.get("LANGFUSE_HOST", _DEFAULT_HOST).rstrip("/")
+    host = resolve_base_url()
     pub = os.environ.get("LANGFUSE_PUBLIC_KEY", "")
     sec = os.environ.get("LANGFUSE_SECRET_KEY", "")
     if not pub or not sec:
