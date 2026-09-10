@@ -13,7 +13,8 @@ from gooddata_eval.core.agentic.visualization import (
     evaluate_agentic_visualization,
     run_agentic_visualization,
 )
-from gooddata_eval.core.models import ChatResult, CreatedVisualization
+from gooddata_eval.core.chat.sse_client import ChatError
+from gooddata_eval.core.models import ChatResult, CreatedVisualization, LoopExit
 
 
 def _viz(id_: str = "v1") -> dict:
@@ -320,6 +321,9 @@ def test_evaluate_agentic_visualization_returns_reasoning_steps_on_pass():
         "actual_dim_uris": ["label/date.quarter"],
         "expected_filters": {"date": [], "ranking": [], "attribute": []},
         "actual_filters": {"date": [], "ranking": [], "attribute": []},
+        "exit_reason": "success",
+        "turns_used": 1,
+        "max_iterations": 4,
         "latency_breakdown": [],
     }
 
@@ -371,5 +375,90 @@ def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on
         "actual_dim_uris": [],
         "expected_filters": {"date": [], "ranking": [], "attribute": []},
         "actual_filters": {"date": [], "ranking": [], "attribute": []},
+        # No visualization and only one iteration available: the loop ran out of budget.
+        # Every check above reads False, which is exactly why exit_reason has to be here.
+        "exit_reason": "budget_exhausted",
+        "turns_used": 1,
+        "max_iterations": 1,
         "latency_breakdown": [],
     }
+
+
+# --- turns_used counts every send_message, including the pre-loop one ------------------------
+
+
+@pytest.mark.parametrize("max_iterations", [0, 1, 2, 3])
+def test_turns_used_equals_the_number_of_requests_sent(max_iterations):
+    """The initial request is sent before the loop, so counting only loop passes undercounts.
+
+    With max_iterations=0 the loop body never runs, yet the agent has already received one
+    message -- reporting turns_used=0 there would claim a conversation that did happen never
+    did. The agent never produces a visualization here, so no run breaks early and the count
+    is driven purely by the budget.
+    """
+    client = MagicMock()
+    client.send_message.return_value = ChatResult.model_validate(
+        {"textResponse": "Which metric did you mean?", "createdVisualizations": None}
+    )
+    expected = [CreatedVisualization.model_validate({"id": "v", "type": "COLUMN", "query": {"fields": {}}})]
+
+    with patch("gooddata_eval.core.agentic.visualization.generate_simulated_response", return_value="the revenue one"):
+        run = _execute_single_run(client, "conv-1", "chart revenue", expected, max_iterations=max_iterations)
+
+    assert int(run.total_turns) == client.send_message.call_count
+    # A request was sent regardless of the budget, so the count is never zero.
+    assert int(run.total_turns) >= 1
+
+
+# ── chat faults end the run, they do not abort the item ─────────────────────
+
+
+def test_execute_single_run_records_chat_error_on_the_opening_request():
+    """The very first send_message failing leaves no conversation to evaluate.
+
+    It must still return a RunResult rather than raise: raising discards the K-runs already
+    completed. The run scores as no-visualization, but exit_reason says infrastructure, not
+    a refusal.
+    """
+    client = MagicMock()
+    client.send_message.side_effect = ChatError("gen-ai unavailable")
+
+    result = _execute_single_run(client, "conv-1", "Show revenue", [_expected()])
+
+    assert result.exit_reason is LoopExit.CHAT_ERROR
+    assert result.actual_output is None
+    assert result.eval_result.visualization_created is False
+    # The request was still sent, so it counts -- the same rule the max_iterations=0 case follows.
+    assert result.total_turns == 1.0
+    # The loop must not run after the opening failure.
+    assert client.send_message.call_count == 1
+
+
+def test_execute_single_run_records_chat_error_on_a_follow_up_request(monkeypatch):
+    """A later failure keeps whatever the conversation had already produced."""
+    monkeypatch.setattr(
+        "gooddata_eval.core.agentic.visualization.generate_simulated_response", lambda *a, **k: "the revenue one"
+    )
+    client = MagicMock()
+    client.send_message.side_effect = [_chat_clarification(), ChatError("stream died")]
+
+    result = _execute_single_run(client, "conv-1", "Show revenue", [_expected()])
+
+    assert result.exit_reason is LoopExit.CHAT_ERROR
+    assert client.send_message.call_count == 2
+
+
+def test_execute_single_run_records_simulated_user_failure_separately(monkeypatch):
+    """A harness-side fault must not read as the agent failing to produce a chart."""
+
+    def _boom(*_a, **_k):
+        raise RuntimeError("openai down")
+
+    monkeypatch.setattr("gooddata_eval.core.agentic.visualization.generate_simulated_response", _boom)
+    client = MagicMock()
+    client.send_message.return_value = _chat_clarification()
+
+    result = _execute_single_run(client, "conv-1", "Show revenue", [_expected()])
+
+    assert result.exit_reason is LoopExit.SIMULATED_USER_FAILED
+    assert result.eval_result.visualization_created is False

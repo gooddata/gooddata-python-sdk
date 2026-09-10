@@ -22,11 +22,12 @@ from gooddata_eval.core.agentic._trace_linker import (
     utc_now,
 )
 from gooddata_eval.core.chat.render import render_answer_text
-from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
+    LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
     build_latency_breakdown,
@@ -473,6 +474,12 @@ class AlertRunResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
+    # Why the simulated-user loop stopped, and how many turns it took. Without these a run
+    # that ran out of turns is indistinguishable from one that refused: both land on
+    # alert_created=False, and every downstream check is `alert_created and ...`, so both
+    # also report operator/threshold/metric/recipients as False.
+    exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
+    turns_used: int = 0
 
 
 @dataclass
@@ -669,8 +676,20 @@ def run_agentic_alert_skill(
             conversation_history: list = []
             current_question = question
 
+            # Defaults to BUDGET_EXHAUSTED: every other exit sets it explicitly, so a loop
+            # that simply runs out of range() is correctly labelled without a trailing else.
+            exit_reason = LoopExit.BUDGET_EXHAUSTED
+            turns_used = 0
             for _iteration in range(max_iterations):
-                chat_result = client.send_message(conv_id, current_question)
+                turns_used = _iteration + 1
+                try:
+                    chat_result = client.send_message(conv_id, current_question)
+                except ChatError as exc:
+                    # Without this the exception escapes run_agentic_alert_skill entirely,
+                    # discarding every K-run already completed along with any exit_reason.
+                    print(f"[CHAT] send_message failed for conversation {conv_id}: {exc}")
+                    exit_reason = LoopExit.CHAT_ERROR
+                    break
                 reasoning_steps.extend(chat_result.reasoning_steps or [])
                 response_id = chat_result.response_id or response_id
                 turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
@@ -684,6 +703,7 @@ def run_agentic_alert_skill(
                 alert_id, actual_args, tool_called = _extract_alert_call(chat_result.tool_call_events or [])
                 if tool_called:
                     alert_id_to_delete = alert_id
+                    exit_reason = LoopExit.SUCCESS
                     break
                 response_text = (chat_result.text_response or "").strip()
                 if not response_text and chat_result.alert_proposals:
@@ -692,13 +712,24 @@ def run_agentic_alert_skill(
                     response_text = render_answer_text(chat_result)
                 # Stop if agent gave a completely empty response (stuck)
                 if not response_text and not chat_result.tool_call_events:
+                    exit_reason = LoopExit.AGENT_SILENT
                     break
                 # Stop before generating a follow-up for the last iteration
                 if _iteration >= max_iterations - 1:
                     break
-                follow_up = generate_simulated_alert_response(
-                    response_text, expected, conversation_history, question=question
-                )
+                # Recorded rather than raised, matching metric_skill and kda_skill. Letting it
+                # propagate did keep a harness fault from being scored as a content failure,
+                # but it also discarded the K-runs already completed -- and SIMULATED_USER_FAILED
+                # achieves the same separation while keeping them, since reporting reads the
+                # exit reason to classify the run as an error rather than an agent failure.
+                try:
+                    follow_up = generate_simulated_alert_response(
+                        response_text, expected, conversation_history, question=question
+                    )
+                except Exception as exc:  # noqa: BLE001 -- harness-side fault; end only this run
+                    print(f"[SIM-USER] Simulated reply failed for conversation {conv_id}: {exc}")
+                    exit_reason = LoopExit.SIMULATED_USER_FAILED
+                    break
                 # Record this exchange so the next call has full history
                 conversation_history.append({"role": "assistant", "content": response_text})
                 conversation_history.append({"role": "user", "content": follow_up})
@@ -724,6 +755,8 @@ def run_agentic_alert_skill(
                 response_id=response_id,
                 tool_call_events=all_tool_call_events,
                 reasoning_step_events=all_reasoning_step_events,
+                exit_reason=exit_reason,
+                turns_used=turns_used,
             )
         finally:
             if alert_id_to_delete:
@@ -887,6 +920,11 @@ def evaluate_agentic_alert_skill(
         "attributes_correct": ev.attributes_correct,
         "granularity_correct": ev.granularity_correct,
         "actual_alert_arguments": best.actual_alert_arguments,
+        # Why the loop stopped. alert_created=False alone cannot tell a refusal from a run
+        # that hit max_iterations while still on track -- see LoopExit.
+        "exit_reason": best.exit_reason.value,
+        "turns_used": best.turns_used,
+        "max_iterations": max_iterations,
         "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
 

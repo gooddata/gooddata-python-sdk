@@ -21,7 +21,8 @@ from gooddata_eval.core.agentic.alert_skill import (
     render_alert_proposal,
     run_agentic_alert_skill,
 )
-from gooddata_eval.core.models import ChatResult
+from gooddata_eval.core.chat.sse_client import ChatError
+from gooddata_eval.core.models import ChatResult, LoopExit
 
 _DATE_FILTER = {
     "relativeDateFilter": {
@@ -690,6 +691,9 @@ def test_evaluate_agentic_alert_skill_returns_reasoning_steps_on_pass():
         "attributes_correct": True,
         "granularity_correct": True,
         "actual_alert_arguments": {"operator": "GREATER_THAN", "threshold": 500},
+        "exit_reason": "success",
+        "turns_used": 1,
+        "max_iterations": 1,
         "latency_breakdown": [],
     }
 
@@ -730,6 +734,11 @@ def test_evaluate_agentic_alert_skill_attaches_reasoning_steps_to_exception_on_f
         "attributes_correct": False,
         "granularity_correct": False,
         "actual_alert_arguments": {},
+        # The agent replied but never called create_metric_alert, and the loop had only one
+        # iteration to give -- budget_exhausted, not a refusal.
+        "exit_reason": "budget_exhausted",
+        "turns_used": 1,
+        "max_iterations": 1,
         "latency_breakdown": [],
     }
 
@@ -996,3 +1005,203 @@ def test_every_gen_ai_interval_is_accepted():
         assert AnomalyDetectionGranularity.parse(value.lower()) is AnomalyDetectionGranularity(value)
     assert AnomalyDetectionGranularity.parse(None) is None
     assert AnomalyDetectionGranularity.parse("  ") is None
+
+
+# --- LoopExit: why the simulated-user loop stopped ------------------------------------------
+# alert_created=False is reached three different ways, and before exit_reason existed they
+# were indistinguishable in the result. Every downstream check is `alert_created and ...`, so
+# a run that merely ran out of turns also reported operator/threshold/metric/recipients as
+# False -- six specific-sounding content failures for work never attempted.
+
+
+def _text_only_result(text="Which dashboard should I bind it to?"):
+    return ChatResult.model_validate({"text_response": text, "toolCallEvents": [], "reasoningSteps": []})
+
+
+def _alert_created_result() -> ChatResult:
+    """A turn where the agent actually calls the tool -- the run passes."""
+    return ChatResult.model_validate(
+        {
+            "text_response": "Alert created.",
+            "toolCallEvents": [
+                {
+                    "functionName": "create_metric_alert",
+                    "functionArguments": '{"operator": "GREATER_THAN", "threshold": 500}',
+                    "result": '{"id": "alert-1"}',
+                }
+            ],
+            "reasoningSteps": [],
+        }
+    )
+
+
+def _run_alert(mock_client, *, max_iterations, simulated_reply="the revenue one"):
+    with _patched(mock_client, simulated_reply=simulated_reply, delete_alert=True):
+        try:
+            outcome = evaluate_agentic_alert_skill(
+                host="http://host",
+                token="tok",
+                workspace_id="ws1",
+                question="Notify me whenever the number of orders goes above 500",
+                expected_output={"operator": "GREATER_THAN", "threshold": 500},
+                k=1,
+                max_iterations=max_iterations,
+            )
+            return outcome.detail
+        except AlertSkillAssertionError as exc:
+            return exc.detail
+
+
+def test_exit_reason_budget_exhausted_when_the_agent_keeps_talking():
+    """The agent is responsive and on-topic but never reaches the tool inside the budget."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _text_only_result()
+
+    detail = _run_alert(mock_client, max_iterations=3)
+
+    assert detail["exit_reason"] == "budget_exhausted"
+    assert detail["turns_used"] == 3
+    assert detail["max_iterations"] == 3
+    assert detail["alert_created"] is False
+
+
+def test_exit_reason_agent_silent_is_not_budget_exhausted():
+    """An empty response stops the loop early -- a different failure from running out of turns."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {"text_response": "", "toolCallEvents": [], "reasoningSteps": []}
+    )
+
+    detail = _run_alert(mock_client, max_iterations=6)
+
+    assert detail["exit_reason"] == "agent_silent"
+    # Stopped on the first turn rather than burning all six -- the distinction the field exists for.
+    assert detail["turns_used"] == 1
+    assert detail["max_iterations"] == 6
+    assert detail["alert_created"] is False
+
+
+def test_exit_reason_success_records_the_turn_the_tool_landed_on():
+    """Turn count is the point: it says how much of the budget a passing run needed."""
+    created = ChatResult.model_validate(
+        {
+            "text_response": "Alert created.",
+            "toolCallEvents": [
+                {
+                    "functionName": "create_metric_alert",
+                    "functionArguments": '{"operator": "GREATER_THAN", "threshold": 500}',
+                    "result": '{"id": "alert-1"}',
+                }
+            ],
+            "reasoningSteps": [],
+        }
+    )
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [_text_only_result(), _text_only_result(), created]
+
+    detail = _run_alert(mock_client, max_iterations=6)
+
+    assert detail["exit_reason"] == "success"
+    assert detail["turns_used"] == 3
+    assert detail["alert_created"] is True
+
+
+def test_budget_exhausted_and_agent_silent_are_otherwise_identical():
+    """The regression guard: without exit_reason these two are the same result.
+
+    Both fail, both report every per-field check False. If a future change drops the field
+    or stops assigning it, this is what catches it.
+    """
+    talky = MagicMock()
+    talky.create_conversation.return_value = "conv-1"
+    talky.send_message.return_value = _text_only_result()
+
+    silent = MagicMock()
+    silent.create_conversation.return_value = "conv-1"
+    silent.send_message.return_value = ChatResult.model_validate(
+        {"text_response": "", "toolCallEvents": [], "reasoningSteps": []}
+    )
+
+    scored = ("alert_created", "operator_correct", "threshold_correct", "metric_correct", "recipients_correct")
+    d_talky = _run_alert(talky, max_iterations=2)
+    d_silent = _run_alert(silent, max_iterations=2)
+
+    assert {k: d_talky[k] for k in scored} == {k: d_silent[k] for k in scored}
+    assert all(d_talky[k] is False for k in scored)
+    assert d_talky["exit_reason"] != d_silent["exit_reason"]
+
+
+def test_exit_reason_chat_error_keeps_the_run_instead_of_losing_the_whole_item():
+    """A mid-run chat fault used to escape run_agentic_alert_skill entirely.
+
+    That discarded every K-run already completed along with any exit_reason, so an
+    infrastructure blip on the last run erased the results of the ones that had worked.
+    It is now recorded on the run, leaving the fault distinguishable from an agent that
+    simply never created the alert.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = ChatError("gen-ai fell over")
+
+    detail = _run_alert(mock_client, max_iterations=3)
+
+    assert detail["exit_reason"] == "chat_error"
+    assert detail["alert_created"] is False
+    # Distinct from the budget case: the loop stopped on turn 1, it did not use its 3.
+    assert detail["turns_used"] == 1
+
+
+def test_exit_reason_simulated_user_failed_is_recorded_not_raised():
+    """The harness's own simulated user failing is a harness fault, not an agent one.
+
+    It used to propagate as a hard error, which did keep it from being scored as a content
+    failure -- but also threw away the completed K-runs. SIMULATED_USER_FAILED separates the
+    two just as well while keeping them, matching metric_skill and kda_skill.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _text_only_result()
+
+    with _patched(mock_client, simulated_reply="unused", delete_alert=True) as mock_sim:
+        mock_sim.side_effect = RuntimeError("openai down")
+        try:
+            detail = evaluate_agentic_alert_skill(
+                host="http://host",
+                token="tok",
+                workspace_id="ws1",
+                question="Notify me whenever the number of orders goes above 500",
+                expected_output={"operator": "GREATER_THAN", "threshold": 500},
+                k=1,
+                max_iterations=3,
+            ).detail
+        except AlertSkillAssertionError as exc:
+            detail = exc.detail
+
+    assert detail["exit_reason"] == "simulated_user_failed"
+    assert detail["alert_created"] is False
+
+
+def test_a_chat_error_on_a_later_run_does_not_discard_the_earlier_ones():
+    """K-run preservation, which is the whole point of catching rather than raising."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.side_effect = ["conv-1", "conv-2"]
+    mock_client.send_message.side_effect = [_alert_created_result(), ChatError("boom")]
+
+    with _patched(mock_client, delete_alert=True):
+        summary = run_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Notify me whenever the number of orders goes above 500",
+            expected_output={"operator": "GREATER_THAN", "threshold": 500},
+            k=2,
+            max_iterations=3,
+        )
+
+    assert len(summary.run_results) == 2
+    assert summary.run_results[0].exit_reason is LoopExit.SUCCESS
+    assert summary.run_results[1].exit_reason is LoopExit.CHAT_ERROR
+    assert summary.pass_at_k is True  # run 0 still counts

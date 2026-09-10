@@ -23,12 +23,13 @@ from gooddata_eval.core.agentic._trace_linker import (
 from gooddata_eval.core.agentic.alert_skill import render_alert_proposal
 from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids, _extract_metric_result
 from gooddata_eval.core.chat.render import render_answer_text
-from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
     ChatResult,
+    LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
     build_latency_breakdown,
@@ -93,6 +94,10 @@ class TurnResult(BaseModel):
     active_skills: list[str] = Field(default_factory=list)
     clarification_turns_used: int = 0
     output_correct: bool | None = None
+    # Why this turn's clarification loop stopped -- see LoopExit. output_present=False alone
+    # cannot separate a turn that ran out of clarification budget from one where the agent
+    # went silent, and skill_success folds both into the same failure.
+    exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
 
     @property
     def skill_success(self) -> bool:
@@ -112,6 +117,10 @@ class TurnResult(BaseModel):
         # What skill_routing was judged against -- without it, a turn showing
         # skill_routing=True and activated_skills=[] looks like a scoring bug.
         "active_skills",
+        # Why the clarification loop ended on this turn, and how much of the budget it
+        # took to get there -- exit_reason alone cannot be related to the limit without it.
+        "exit_reason",
+        "clarification_turns_used",
     }
 
     def detail(self) -> dict:
@@ -336,6 +345,10 @@ class ConversationResult:
     full_skill_coverage: bool
     conversation_success: bool
     total_clarification_turns: int
+    # The configured per-turn clarification budget, so a reader can tell a turn that used
+    # its whole allowance from one that stopped early. Every other agentic kind reports its
+    # limit in detail; without this, conversation is the exception to that contract.
+    max_clarification_turns: int = _DEFAULT_MAX_CLARIFICATION_TURNS
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
@@ -421,6 +434,10 @@ def run_agentic_conversation(
                         # read as "nothing was active", which is a different claim.
                         active_skills=sorted(active_skills),
                         output_correct=False,
+                        # This turn's loop never ran at all -- a $ref pointing at an earlier
+                        # turn's output could not be resolved. Labelling it BUDGET_EXHAUSTED
+                        # (the field default) would claim it ran out of clarification turns.
+                        exit_reason=LoopExit.NOT_RUN,
                     )
                 )
                 continue
@@ -431,8 +448,27 @@ def run_agentic_conversation(
             current_message = turn.message
             final_result: ChatResult | None = None
 
+            # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop
+            # that simply runs out of range() is labelled correctly with no trailing else.
+            turn_exit = LoopExit.BUDGET_EXHAUSTED
             for _iter in range(max_clarification_turns + 1):
-                chat_result = client.send_message(conversation_id, current_message)
+                try:
+                    chat_result = client.send_message(conversation_id, current_message)
+                except ChatError as exc:
+                    # Recorded rather than raised so the turns already completed keep their
+                    # results, and so this turn is distinguishable from one where the agent
+                    # simply failed to produce output. no_error below reads this back.
+                    print(f"[CHAT] send_message failed for conversation {conversation_id}: {exc}")
+                    partial = getattr(exc, "partial_result", None)
+                    if partial is not None:
+                        final_result = partial
+                        all_tool_calls.extend(partial.tool_call_events or [])
+                        conversation_tool_call_events.extend(partial.tool_call_events or [])
+                        conversation_reasoning_step_events.extend(partial.reasoning_step_events or [])
+                        reasoning_steps.extend(partial.reasoning_steps or [])
+                        response_id = partial.response_id or response_id
+                    turn_exit = LoopExit.CHAT_ERROR
+                    break
                 final_result = chat_result
                 turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
                     chat_result,
@@ -447,6 +483,7 @@ def run_agentic_conversation(
                 response_id = chat_result.response_id or response_id
 
                 if _check_output_present(resolved_turn, chat_result):
+                    turn_exit = LoopExit.SUCCESS
                     break
 
                 response_text = (chat_result.text_response or "").strip()
@@ -455,6 +492,7 @@ def run_agentic_conversation(
                 if not response_text:
                     response_text = render_answer_text(chat_result)
                 if not response_text and not chat_result.tool_call_events:
+                    turn_exit = LoopExit.AGENT_SILENT
                     break
                 if clarification_turns >= max_clarification_turns:
                     break
@@ -495,11 +533,15 @@ def run_agentic_conversation(
                     expected_skill=turn.expected_skill,
                     skill_routing=skill_routing,
                     output_present=output_present,
-                    no_error=True,  # SDK raises on errors; reaching here means no critical error.
+                    # A chat fault used to escape the whole run, so reaching here did mean no
+                    # error. Now that it is caught and recorded, this has to read it back --
+                    # otherwise a turn whose chat call failed reports no_error=True.
+                    no_error=turn_exit is not LoopExit.CHAT_ERROR,
                     activated_skills=declared or [],
                     active_skills=sorted(active_skills),
                     clarification_turns_used=clarification_turns,
                     output_correct=output_correct,
+                    exit_reason=turn_exit,
                 )
             )
 
@@ -522,6 +564,7 @@ def run_agentic_conversation(
         full_skill_coverage=full_skill_coverage,
         conversation_success=conversation_success,
         total_clarification_turns=total_clarification_turns,
+        max_clarification_turns=max_clarification_turns,
         reasoning_steps=reasoning_steps,
         response_id=response_id,
         tool_call_events=conversation_tool_call_events,
@@ -533,6 +576,7 @@ def _conversation_detail(result: ConversationResult) -> dict:
     return {
         "full_skill_coverage": result.full_skill_coverage,
         "total_clarification_turns": result.total_clarification_turns,
+        "max_clarification_turns": result.max_clarification_turns,
         "turns": [tr.detail() for tr in result.turn_results],
         "latency_breakdown": build_latency_breakdown(result.tool_call_events, result.reasoning_step_events),
     }

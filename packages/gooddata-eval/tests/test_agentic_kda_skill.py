@@ -1132,6 +1132,9 @@ def test_evaluate_agentic_kda_skill_returns_reasoning_steps_on_pass():
         "disambiguated": False,
         "actual_create_args": {"measure": {"type": "metric", "id": "revenue"}},
         "actual_execute_result": {"success": True, "data": {"summary": {}}},
+        "exit_reason": "success",
+        "turns_used": 1,
+        "max_iterations": 1,
         "latency_breakdown": [],
     }
 
@@ -1165,6 +1168,11 @@ def test_evaluate_agentic_kda_skill_attaches_reasoning_steps_to_exception_on_fai
         "disambiguated": False,
         "actual_create_args": None,
         "actual_execute_result": None,
+        # The agent answered but never called create -- the loop simply ran out of turns.
+        # triggered/executed/success are all False, none of which says that.
+        "exit_reason": "budget_exhausted",
+        "turns_used": 1,
+        "max_iterations": 1,
         "latency_breakdown": [],
     }
 

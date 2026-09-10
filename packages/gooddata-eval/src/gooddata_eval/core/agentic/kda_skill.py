@@ -23,6 +23,7 @@ from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
     ChatResult,
+    LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
     build_latency_breakdown,
@@ -181,6 +182,10 @@ class KdaRunResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
+    # Why the simulated-user loop stopped -- see LoopExit. `triggered=False` alone cannot
+    # separate a refusal from a run that hit max_iterations while still on track.
+    exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
+    turns_used: int = 0
 
 
 @dataclass
@@ -268,7 +273,12 @@ def run_agentic_kda_skill(
             all_tool_call_events.extend(result.tool_call_events or [])
             all_reasoning_step_events.extend(result.reasoning_step_events or [])
 
+        # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop that
+        # simply runs out of range() is labelled correctly with no trailing else.
+        exit_reason = LoopExit.BUDGET_EXHAUSTED
+        turns_used = 0
         for iteration in range(max_iterations):
+            turns_used = iteration + 1
             try:
                 chat_result = client.send_message(conv_id, current_question)
             except Exception as exc:  # noqa: BLE001 -- end this run, not the whole assertion
@@ -282,6 +292,7 @@ def run_agentic_kda_skill(
                     if create_args is not None:
                         turn_wall_clock_sec = partial.turn_wall_clock_sec
                 turn_completed = False
+                exit_reason = LoopExit.CHAT_ERROR
                 break
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
@@ -296,8 +307,10 @@ def run_agentic_kda_skill(
                 # final either way -- execute_result may still be None (e.g. the skill's
                 # execute tool isn't available at all when data-sharing is off for the org).
                 turn_wall_clock_sec = chat_result.turn_wall_clock_sec
+                exit_reason = LoopExit.SUCCESS
                 break
             if not response_text:
+                exit_reason = LoopExit.AGENT_SILENT
                 break
             if iteration >= max_iterations - 1:
                 break
@@ -313,6 +326,7 @@ def run_agentic_kda_skill(
                 disambiguated = True
             except Exception as exc:  # noqa: BLE001 -- safety net, not the assertion; end only this run
                 _log.warning("Simulated KDA user reply failed for conversation %s: %s", conv_id, exc)
+                exit_reason = LoopExit.SIMULATED_USER_FAILED
                 break
 
         ev = _evaluate_run(create_args, execute_result, turn_completed, disambiguated)
@@ -326,6 +340,8 @@ def run_agentic_kda_skill(
             response_id=response_id,
             tool_call_events=all_tool_call_events,
             reasoning_step_events=all_reasoning_step_events,
+            exit_reason=exit_reason,
+            turns_used=turns_used,
         )
 
     try:
@@ -483,6 +499,10 @@ def evaluate_agentic_kda_skill(
         "disambiguated": ev.disambiguated,
         "actual_create_args": best.actual_create_args,
         "actual_execute_result": best.actual_execute_result,
+        # Why the loop stopped -- see LoopExit.
+        "exit_reason": best.exit_reason.value,
+        "turns_used": best.turns_used,
+        "max_iterations": max_iterations,
         "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
 

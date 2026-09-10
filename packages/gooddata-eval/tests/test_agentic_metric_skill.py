@@ -18,7 +18,8 @@ from gooddata_eval.core.agentic.metric_skill import (
     generate_simulated_response,
     run_agentic_metric_skill,
 )
-from gooddata_eval.core.models import ChatResult, ToolCallEvent
+from gooddata_eval.core.chat.sse_client import ChatError
+from gooddata_eval.core.models import ChatResult, LoopExit, ToolCallEvent
 from gooddata_eval.core.timing import TIMERS_ENV_VAR
 
 # --- time.monotonic() side effects ---------------------------------------------------
@@ -660,6 +661,9 @@ def test_evaluate_agentic_metric_skill_returns_reasoning_steps_on_pass():
         "maql_correct": True,
         "expected_maql_candidates": ["SELECT {metric/foo}"],
         "actual_maql": "SELECT {metric/foo}",
+        "exit_reason": "success",
+        "turns_used": 1,
+        "max_iterations": 1,
         "latency_breakdown": [],
     }
 
@@ -689,6 +693,9 @@ def test_evaluate_agentic_metric_skill_attaches_reasoning_steps_to_exception_on_
         "maql_correct": False,
         "expected_maql_candidates": ["SELECT {metric/foo}"],
         "actual_maql": "",
+        "exit_reason": "budget_exhausted",
+        "turns_used": 1,
+        "max_iterations": 1,
         "latency_breakdown": [],
     }
     assert exc_info.value.conversation_id == "conv-1"
@@ -764,3 +771,91 @@ def test_no_timer_output_by_default(monkeypatch, capsys):
     assert "[timer]" not in capsys.readouterr().out
     # Silenced, not un-measured.
     assert summary.run_results[0].timings.agent_s == 3.0
+
+
+# --- LoopExit: a harness fault must not read as an agent failure -----------------------------
+
+
+def test_exit_reason_simulated_user_failed_is_not_an_agent_failure():
+    """metric_skill catches SimulatedResponseError and breaks -- silently, before this field.
+
+    The harness's own simulated user failing produced exactly the same result as the agent
+    getting the MAQL wrong: metric_created=False, maql_correct=False. That is a harness
+    outage scored against the product, and nothing in the output said so.
+    """
+    mock_client = _client()
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {"textResponse": "Which measure did you mean?", "toolCallEvents": [], "reasoningSteps": []}
+    )
+
+    with (
+        _patched(mock_client, simulated_error=SimulatedResponseError("simulated user unavailable")),
+        pytest.raises(MetricSkillAssertionError) as exc_info,
+    ):
+        evaluate_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=6,
+        )
+
+    detail = exc_info.value.detail
+    assert detail["exit_reason"] == "simulated_user_failed"
+    # Broke on turn 1 of a 6-turn budget: not the agent running out of room, and not a refusal.
+    assert detail["turns_used"] == 1
+    assert detail["max_iterations"] == 6
+    assert detail["metric_created"] is False
+
+
+def test_exit_reason_budget_exhausted_differs_from_simulated_user_failure():
+    """Same scored booleans, different cause -- the distinction the field exists to make."""
+    mock_client = _client()
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {"textResponse": "Which measure did you mean?", "toolCallEvents": [], "reasoningSteps": []}
+    )
+
+    with _patched(mock_client, simulated_reply="the revenue one"), pytest.raises(MetricSkillAssertionError) as exc:
+        evaluate_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=3,
+        )
+
+    detail = exc.value.detail
+    assert detail["exit_reason"] == "budget_exhausted"
+    assert detail["turns_used"] == 3
+    assert detail["max_iterations"] == 3
+    assert detail["metric_created"] is False
+
+
+def test_chat_error_ends_the_run_and_is_recorded_rather_than_raised():
+    """A mid-run chat fault used to escape run_agentic_metric_skill entirely.
+
+    That discarded every K-run already completed. It is now recorded like the
+    simulated-user fault beside it, so an infrastructure blip stays distinguishable from
+    the agent failing to create the metric.
+    """
+    mock_client = _client()
+    mock_client.send_message.side_effect = ChatError("gen-ai fell over")
+
+    with _patched(mock_client):
+        summary = run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=3,
+        )
+
+    assert summary.run_results[0].exit_reason is LoopExit.CHAT_ERROR
+    assert summary.run_results[0].metric_created is False
+    assert summary.pass_at_k is False
