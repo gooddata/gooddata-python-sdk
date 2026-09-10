@@ -1,6 +1,7 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 import json
+from contextlib import contextmanager
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -349,3 +350,90 @@ def test_the_maql_still_matches_when_the_right_adjustment_is_on_the_right_metric
         ],
     }
     assert _evaluate(create, {"success": True}).strict_pass is True
+
+
+# ── Langfuse scoring ────────────────────────────────────────────────────────
+
+
+class _FakeCtx:
+    """Records what the deferred Langfuse block writes, without a Langfuse."""
+
+    def __init__(self):
+        self.scores: dict[str, float] = {}
+        # Not named `quality`: the method below would overwrite itself on first call.
+        self.quality_call: dict = {}
+
+    def trace(self, _conversation_id):
+        return None
+
+    @contextmanager
+    def observe(self, _trace, _run_idx):
+        yield "trace-id"
+
+    def score(self, _tid, *, name, value, data_type):
+        self.scores[name] = value
+
+    def quality(self, _tid, *, strict_checks, latency_sec, cost_usd):
+        self.quality_call = {"strict_checks": strict_checks, "latency_sec": latency_sec, "cost_usd": cost_usd}
+
+
+def _scored(expected_output, calls=None):
+    """Run one item with Langfuse on, then execute the deferred block against a fake ctx."""
+    client = MagicMock()
+    client.create_conversation.return_value = "conv-1"
+    client.send_message.return_value = _chat(calls if calls is not None else _pair())
+    captured = {}
+
+    def _capture(_link, _identity, **kwargs):
+        captured.update(kwargs)
+
+    with (
+        patch(f"{_MODULE}.ChatClient", return_value=client),
+        patch(f"{_MODULE}.submit_trace_scoring", side_effect=_capture),
+    ):
+        try:
+            evaluate_agentic_what_if(
+                host="http://h",
+                token="tok",
+                workspace_id="ws1",
+                question="What if revenue rose 10%?",
+                expected_output=expected_output,
+                langfuse=MagicMock(),
+                dataset_item_id="ds-1",
+            )
+        except WhatIfAssertionError:
+            pass  # scores are written before the pass@K raise, which is the point
+
+    ctx = _FakeCtx()
+    captured["write_scores"](ctx)
+    return ctx
+
+
+def test_only_the_checks_the_fixture_pinned_are_scored():
+    """An unasserted check is True internally so it cannot fail a run. Publishing that as a
+    BOOLEAN 1 would claim the evaluator verified something it never looked at."""
+    ctx = _scored({"metric_id": "revenue"})  # maql, scenario count, baseline unpinned
+
+    assert ctx.scores["what_if_metric_correct"] == 1.0
+    for absent in ("what_if_maql_correct", "what_if_scenario_count_correct", "what_if_baseline_correct"):
+        assert absent not in ctx.scores
+    # The process checks are unconditional -- they are always actually evaluated.
+    assert set(ctx.scores) >= {"what_if_triggered", "what_if_executed", "what_if_success"}
+
+
+def test_every_pinned_check_is_scored():
+    ctx = _scored({**_EXPECTED, "scenarios": 1, "include_baseline": True})
+    for name in (
+        "what_if_metric_correct",
+        "what_if_maql_correct",
+        "what_if_scenario_count_correct",
+        "what_if_baseline_correct",
+    ):
+        assert ctx.scores[name] == 1.0
+
+
+def test_cost_is_reported_even_when_the_tool_was_never_reached():
+    """A run that answered without building a scenario still spent tokens; gating cost on
+    ev.triggered hid that and understated what the item cost."""
+    ctx = _scored(_EXPECTED, calls=[])
+    assert "cost_usd" in ctx.quality_call
