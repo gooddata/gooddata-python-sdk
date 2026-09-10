@@ -557,6 +557,9 @@ def evaluate_agentic_forecasting(
             window_end=window_end,
             suffix_runs=len(summary.run_results) > 1,
             write_scores=_write_scores,
+            # The question this run answered, so a score is readable without resolving the
+            # conversation back to its item.
+            item_input=question,
         )
 
     best = summary.best
