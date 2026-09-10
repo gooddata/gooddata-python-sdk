@@ -95,7 +95,7 @@ packages/gooddata-eval/tests/conftest.py
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.2",
-  "base_commit_sha": "9ae6bf7a617bd09536ab178508a1f73a672017ae",
+  "base_commit_sha": "225f9522db1a5e93bf670ab98fe9a7beeb4e711e",
   "prompts": {},
   "sessions": {
     "s_152f0704157226": {
