@@ -434,9 +434,10 @@ class ChatClient:
         # Anchored when a conversation is created; spans every turn taken on it.
         self._conversation_started: float | None = None
         caps = [c for c in (self._turn_timeout_s, self._item_timeout_s) if c is not None]
+        http_timeout: float | httpx.Timeout = timeout
         if caps:
-            timeout = httpx.Timeout(timeout, read=min(timeout, *caps))
-        self._client = httpx.Client(timeout=timeout)
+            http_timeout = httpx.Timeout(timeout, read=min(timeout, *caps))
+        self._client = httpx.Client(timeout=http_timeout)
         self._preserve_failed = preserve_failed
         self._reasoning_effort = normalize_reasoning_effort(reasoning_effort)
         self._agent_id = agent_id

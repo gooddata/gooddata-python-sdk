@@ -978,7 +978,7 @@ def _rules_for(spec: dict, display_names: dict) -> str:
     ]
     ranking = next((f for f in spec["query"]["filter_by"].values() if f.get("type") == "ranking_filter"), None)
     ranked_dim = dims[0] if ranking and dims and not ranking.get("attribute") else None
-    if ranked_dim:
+    if ranking is not None and ranked_dim:
         # The ranking phrasing already names the dimension. Asking for the breakdown as
         # well produces "broken down by Carrier, showing the top 3 Carriers by Returns" --
         # the dimension twice, which no analyst writes. One instruction, not two.
@@ -1052,14 +1052,17 @@ def phrase(specs: list, model: str, display_names: dict) -> list:
     client = OpenAI()
     questions = []
     for i, spec in enumerate(specs, 1):
-        messages = [
+        messages: list = [
             {"role": "system", "content": PHRASE_SYSTEM},
             {"role": "user", "content": f"{describe(spec, display_names)}\n\n{_rules_for(spec, display_names)}"},
         ]
         question, problems = None, []
         for _attempt in range(2):
             reply = client.chat.completions.create(model=model, messages=messages)
-            candidate = reply.choices[0].message.content.strip().strip('"')
+            # `content` is None when the model returns a refusal or no text at all; an
+            # empty candidate fails the contradiction check and takes the retry, which is
+            # what should happen anyway.
+            candidate = (reply.choices[0].message.content or "").strip().strip('"')
             problems = contradictions(candidate, spec, display_names)
             if not problems:
                 question = candidate
@@ -1161,6 +1164,8 @@ def generate(args, sdk_factory=None) -> int:
     if args.snapshot_in:
         snapshot = json.loads(Path(args.snapshot_in).read_text())
     else:
+        if sdk_factory is None:
+            raise ValueError("a live run needs an SDK; pass --snapshot-in to replay a saved model instead")
         sdk = sdk_factory()
         snapshot = fetch_snapshot(sdk, args.workspace)
 
