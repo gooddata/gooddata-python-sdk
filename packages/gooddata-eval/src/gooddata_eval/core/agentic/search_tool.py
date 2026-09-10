@@ -5,6 +5,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._gate import (
+    DEFAULT_GATE,
+    EvalGate,
+    gate_failure_note,
+    gate_passed,
+    log_gate_scores,
+    stamp_gate_metadata,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -167,6 +175,7 @@ def evaluate_agentic_search_tool(
     question: str,
     expected_tool_call: dict,
     k: int = _DEFAULT_K,
+    gate: EvalGate = DEFAULT_GATE,
     initial_conversation_id: str | None = None,
     agent_id: str | None = None,
     langfuse: object | None = None,
@@ -202,6 +211,7 @@ def evaluate_agentic_search_tool(
         window_end = utc_now()
 
         def _write_scores(ctx: RunTraceContext) -> None:
+            stamp_gate_metadata(ctx.run_metadata, k=len(summary.run_results), gate=gate)
 
             for run_idx, run in enumerate(summary.run_results):
                 pt = ctx.trace(run.conversation_id)
@@ -210,6 +220,7 @@ def evaluate_agentic_search_tool(
                 ) as tid:
                     ctx.score(tid, name="tool_selection", value=float(run.tool_selected), data_type="BOOLEAN")
                     ctx.score(tid, name="tool_correctness", value=float(run.tool_correct), data_type="BOOLEAN")
+                    log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
                     ctx.quality(
                         tid,
                         strict_checks={"tool_selection": run.tool_selected},
@@ -251,9 +262,10 @@ def evaluate_agentic_search_tool(
         "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
 
-    if not summary.pass_at_k:
+    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
         exc = SearchToolAssertionError(
-            f"Search tool assertion failed. "
+            f"Search tool assertion failed. {gate_note} "
             f"tool_selected={best.tool_selected}, tool_correct={best.tool_correct}. "
             f"Tool calls made: {best.tool_call_names}"
         )

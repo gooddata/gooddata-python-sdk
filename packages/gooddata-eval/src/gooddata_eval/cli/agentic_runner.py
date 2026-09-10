@@ -8,6 +8,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, TypedDict
 
+from gooddata_eval.core.agentic._gate import DEFAULT_GATE, EvalGate, normalize_gate
 from gooddata_eval.core.agentic._langfuse import make_langfuse_client
 from gooddata_eval.core.agentic._trace_linker import BackgroundTraceLinker, SubmitTraceLink, run_trace_link_inline
 from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
@@ -128,8 +129,11 @@ def _dispatch_agentic(
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Call the appropriate evaluate_agentic_* function for the item's test_kind.
+
+    `gate` reaches every kind except agentic_conversation, which has no K to gate over.
 
     Every evaluate_agentic_* function returns an AgenticEvalOutcome (reasoning_steps,
     conversation_id, response_id, detail) on success and attaches the same four attributes
@@ -155,6 +159,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_outputs=_parse_visualization_expected(eo),
             k=k,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )
@@ -166,6 +171,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, (dict, list)) else {},
             k=k,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )
@@ -177,6 +183,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, dict) else {},
             k=k,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )
@@ -191,6 +198,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_tool_call=expected_args,
             k=k,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )
@@ -202,6 +210,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, str) else str(eo),
             k=k,
+            gate=gate,
             agent_id=agent_id,
             user_context=item.user_context,
             **lf_kw,
@@ -214,6 +223,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, str) else str(eo),
             k=k,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )
@@ -225,6 +235,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, dict) else {},
             k=k,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )
@@ -291,6 +302,7 @@ def run_agentic_items(
     on_item_done: Any = None,
     agent_id: str | None = None,
     concurrency: int = 1,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> EvalReport:
     """Run agentic items through evaluate_agentic_* and return an EvalReport.
 
@@ -303,7 +315,7 @@ def run_agentic_items(
     """
     langfuse = make_langfuse_client() if use_langfuse else None
 
-    report = EvalReport(model=model_version)
+    report = EvalReport(model=model_version, gate=normalize_gate(gate))
     total = len(items)
     # Trace linking runs here rather than inside each evaluate_agentic_*, so an item's
     # Langfuse poll overlaps the NEXT item's agent call instead of extending its own
@@ -339,6 +351,7 @@ def run_agentic_items(
                 reasoning_effort,
                 agent_id,
                 submit_trace_link=linker.submit,
+                gate=gate,
             )
             if isinstance(outcome, AgenticEvalOutcome):
                 reasoning_steps = outcome.reasoning_steps

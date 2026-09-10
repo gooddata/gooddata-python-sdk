@@ -126,7 +126,8 @@ gd-eval run \
 
 | Flag | Default | Description |
 |---|---|---|
-| `--runs K` | `2` | Independent runs per item (pass@K). An item passes if any run passes. |
+| `--runs K` | `2` | Independent runs per item. |
+| `--gate` | `any` | Which verdict decides an item: `any` = pass@K (a run passing is enough), `power` = pass^K (every run must pass, so the verdict measures stability). Identical at `--runs 1`. Agentic kinds only. |
 | `--concurrency K` | `1` | Number of items evaluated concurrently. `1` = sequential (default). Increase to load-test the agent under simultaneous requests — see *Concurrency and workspace safety* below. |
 | `--judge-model MODEL` | `gpt-4o` | Model used for LLM-as-judge scoring — `agentic_general_question`, `agentic_guardrail`, `general_question`, `guardrail` and `dashboard_summary`. Also settable via `GD_EVAL_JUDGE_MODEL`. Two things to weigh before changing it: the gpt-5 family rejects `temperature=0`, so verdicts stop being reproducible (the run warns when this happens); and choosing the same model the agent runs means the judge grades its own family's output. |
 | `--reasoning-effort LEVEL` | server default | `LOW`, `MEDIUM` or `HIGH`, sent as `options.reasoningEffort` on every chat message. Requires the `enableGenAiReasoningEffort` feature flag on the target organization — without it the server ignores the value. Applies to chat items only; `dashboard_summary` items go through the summary endpoint, which has no such option. |
@@ -243,6 +244,11 @@ stays quiet for a unanimous one, and its summary line reads `3/4 passed, 1 on ev
 
 `runs` is what the item actually ran, which is not always the requested `--runs`: `agentic_conversation` takes
 no K and drives its fixture exactly once.
+
+Which of the two decides pass/fail is `--gate`: `any` (default) gates on `pass_at_k`, `power` gates on
+`pass_power_k`. The run records it as a top-level `gate`, and a failure under `power` says so —
+`Gate pass^3 failed: 2/3 runs passed — unstable, not a clean failure` — because the message body describes
+the best run, which under pass^K can be a run that passed. `agentic_conversation` has no K gate.
 
 Each item additionally carries a per-phase breakdown:
 
@@ -410,8 +416,13 @@ the item's own root span. On the agentic path each score is mirrored onto the ag
 
 | Score | Description |
 |---|---|
-| `pass_at_k` | 1 if any of the K runs passed strict checks, else 0. |
+| `pass_at_k` | 1 if **any** of the K runs passed strict checks, else 0. |
+| `pass_power_k` | 1 only if **every** one of the K runs passed. Agentic kinds only. |
+| `gate_passed` | The verdict that decided the item: `pass_at_k` under `--gate any`, `pass_power_k` under `--gate power`. Agentic kinds only. |
 | `quality_score` | Fraction of strict check flags that are `True` (0.0–1.0). Shown in CLI as a percentage. |
 | `value_score` | Weighted blend: 0.6 × quality + 0.2 × speed (speed = max(0, 1 − latency/60s)). |
 | `latency_s` | Average per-run latency in seconds. |
 | `provider_type` | Model vendor + gateway label (e.g. `ANTHROPIC`, `BEDROCK/ANTHROPIC`, `AZURE/OPENAI`). Stored in Langfuse trace metadata and tags. |
+
+Score names carry no K; K and the gate are on the dataset-run metadata as `eval_k` and `eval_gate`.
+`agentic_visualization` also still writes its historic `pass_at_{K}` / `pass_power_{K}` pair.

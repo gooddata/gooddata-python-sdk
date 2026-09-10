@@ -10,6 +10,14 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._gate import (
+    DEFAULT_GATE,
+    EvalGate,
+    gate_failure_note,
+    gate_passed,
+    log_gate_scores,
+    stamp_gate_metadata,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -314,6 +322,7 @@ def evaluate_agentic_visualization(
     question: str,
     expected_outputs: list[CreatedVisualization],
     k: int = _DEFAULT_K,
+    gate: EvalGate = DEFAULT_GATE,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
     agent_id: str | None = None,
@@ -354,6 +363,7 @@ def evaluate_agentic_visualization(
         window_end = utc_now()
 
         def _write_scores(ctx: RunTraceContext) -> None:
+            stamp_gate_metadata(ctx.run_metadata, k=len(summary.run_results), gate=gate)
 
             K = len(summary.run_results)
             for run_idx, run in enumerate(summary.run_results):
@@ -373,10 +383,13 @@ def evaluate_agentic_visualization(
                     ctx.score(tid, name="assertion-vis-filters", value=ev.filters_correct, data_type="BOOLEAN")
                     ctx.score(tid, name="assertion-vis-type", value=ev.viz_type_hard, data_type="BOOLEAN")
                     ctx.score(tid, name="skill_selection", value=ev.skill_activated, data_type="BOOLEAN")
+                    # Superseded by log_gate_scores' K-stable names, kept until the readers
+                    # migrate: gdc-nas combo_report.py matches on the literal "pass_at_2".
                     ctx.score(tid, name=f"pass_at_{K}", value=summary.pass_at_k, data_type="BOOLEAN")
                     ctx.score(tid, name=f"pass_power_{K}", value=summary.pass_power_k, data_type="BOOLEAN")
                     ctx.score(tid, name="turns", value=run.total_turns, data_type="NUMERIC")
                     ctx.score(tid, name="steps", value=run.total_steps, data_type="NUMERIC")
+                    log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
                     ctx.quality(
                         tid,
                         strict_checks=strict_checks,
@@ -427,7 +440,8 @@ def evaluate_agentic_visualization(
         "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
 
-    if not summary.pass_at_k:
+    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
         n = len(expected_outputs)
         candidate_note = f" (closest of {n} candidates)" if n > 1 else ""
         cross_ref_detail = (" → " + "; ".join(ev.cross_ref_errors)) if ev.cross_ref_errors else ""
@@ -436,6 +450,7 @@ def evaluate_agentic_visualization(
         exc = VisualizationAssertionError(
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             "Agentic Visualization Assertion Failed! (Critical Mode)\n"
+            f"{gate_note}\n"
             "------------------------------------------\n"
             f"Question:\n{question}\n"
             "------------------------------------------\n"

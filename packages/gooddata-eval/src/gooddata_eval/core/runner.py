@@ -8,6 +8,7 @@ from dataclasses import dataclass, field
 from functools import partial
 from typing import Callable, Protocol
 
+from gooddata_eval.core.config import DEFAULT_GATE, EvalGate
 from gooddata_eval.core.evaluators import get_evaluator, supported_test_kinds
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import ChatResult, DatasetItem
@@ -105,6 +106,7 @@ class EvalReport:
     provider_name: str = ""
     provider_type: str = ""
     workspace_id: str = ""
+    gate: EvalGate = DEFAULT_GATE
     items: list[ItemReport] = field(default_factory=list)
     wall_clock_s: float = 0.0  # actual elapsed time; differs from latency_s under concurrency
 

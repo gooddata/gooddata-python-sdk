@@ -16,7 +16,15 @@ from rich.table import Table
 
 from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, run_agentic_items
 from gooddata_eval.core.chat.sse_client import ChatClient
-from gooddata_eval.core.config import DEFAULT_JUDGE_MODEL, JUDGE_MODEL_ENV_VAR, ReasoningEffort, RunConfig
+from gooddata_eval.core.config import (
+    DEFAULT_GATE,
+    DEFAULT_JUDGE_MODEL,
+    JUDGE_MODEL_ENV_VAR,
+    EvalGate,
+    ReasoningEffort,
+    RunConfig,
+    normalize_gate,
+)
 from gooddata_eval.core.connection import ConnectionError_, resolve_connection
 from gooddata_eval.core.dataset.local import load_local_dataset
 from gooddata_eval.core.langfuse.sink import LangfuseSink
@@ -91,7 +99,15 @@ def _build_parser() -> argparse.ArgumentParser:
             "Default: workspace's current active model."
         ),
     )
-    run.add_argument("--runs", type=int, default=2, help="Independent runs per item (pass@K). Default 2.")
+    run.add_argument("--runs", type=int, default=2, help="Independent runs per item. Default 2.")
+    run.add_argument(
+        "--gate",
+        choices=get_args(EvalGate),
+        default=DEFAULT_GATE,
+        help="Which verdict decides an item: 'any' = pass@K (a run passing is enough, the "
+        "default and historic behaviour), 'power' = pass^K (every run must pass, so the verdict "
+        "measures stability). Identical at --runs 1. Agentic kinds only.",
+    )
     run.add_argument(
         "--concurrency",
         type=int,
@@ -416,6 +432,7 @@ def _run(config: RunConfig) -> int:
                     token=config.token,
                     workspace_id=config.workspace_id,
                     k=config.runs,
+                    gate=config.gate,
                     model_version=resolved.model_id,
                     reasoning_effort=config.reasoning_effort,
                     use_langfuse=config.log_to_langfuse,
@@ -529,6 +546,7 @@ def main(argv: list[str] | None = None) -> int:
             kind=args.kind,
             preserve_failed=args.preserve_failed,
             reasoning_effort=args.reasoning_effort,
+            gate=normalize_gate(args.gate),
             agent_id=args.agent_id or os.environ.get("GD_EVAL_AGENT_ID"),
         )
         return _run(config)

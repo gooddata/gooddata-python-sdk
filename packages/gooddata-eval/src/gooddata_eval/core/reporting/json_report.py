@@ -13,6 +13,7 @@ def _build_run_dict(report: EvalReport) -> dict:
     return {
         "model": report.model,
         "workspace_id": report.workspace_id,
+        "gate": report.gate,
         "summary": {
             "total": report.total,
             "passed": report.passed,
