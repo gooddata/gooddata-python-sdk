@@ -163,7 +163,19 @@ def _normalize_ranking_filter(
 
 def _normalize_attribute_filter(filter_dict: dict, _fields: dict) -> dict:
     raw_state = filter_dict.get("state") or {}
-    state = {k: v for k, v in raw_state.items() if v}
+    # Sort the element lists: `include`/`exclude` name a SET of elements, but the caller
+    # serialises this dict with json.dumps(..., sort_keys=True), which orders the dict
+    # KEYS and leaves the lists alone. Without this, the same filter written in a
+    # different order compares unequal, and an agent has no reason to keep that order
+    # stable between runs -- so a question needing a multi-element filter passed or
+    # failed partly at random, reported as `filters_correct: false` and indistinguishable
+    # from the agent genuinely filtering wrongly.
+    #
+    # `key=str` rather than a bare sort: a mixed-type list (["A", 2]) would raise
+    # TypeError from inside scoring, which is worse than the mismatch this fixes.
+    # validate_cross_references reports malformed filter values separately, so this only
+    # has to avoid crashing on them.
+    state = {k: (sorted(v, key=str) if isinstance(v, list) else v) for k, v in raw_state.items() if v}
     return {
         "type": "attribute_filter",
         "field_uri": filter_dict.get("using", ""),
