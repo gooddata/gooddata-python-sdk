@@ -43,3 +43,25 @@ packages/gooddata-eval/src/gooddata_eval/core/langfuse/otlp.py
     }
   }
 }
+
+packages/gooddata-eval/tests/test_langfuse_env.py
+  s_3901116e435dfe::t_e461a62522b3eb 25
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/_env.py
+  s_3901116e435dfe::t_e461a62522b3eb 11,15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "2a5d0449eb09ae38b9d69a4cbee7d9fd6d33ee0e",
+  "prompts": {},
+  "sessions": {
+    "s_3901116e435dfe": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "34c3014c-1711-4a61-bc4d-512d2b99b1f8",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
