@@ -819,6 +819,30 @@ def describe(spec: dict, display_names: dict | None = None) -> str:
     return "\n".join(lines)
 
 
+def ambiguous_titles(display_names: dict) -> set:
+    """Display titles that more than one object in the model carries.
+
+    Loop has six labels all titled "Product Title". A question naming one of them cannot
+    say which is meant, so the expected dimension is unguessable and the item punishes a
+    defensible answer -- `label/product_title_at_time_of_return` instead of
+    `label/product_details.LINE_ITEM_TITLE` scored zero on an otherwise perfect chart.
+    """
+    seen, dupes = {}, set()
+    for uri, title in display_names.items():
+        key = _normalize(title)
+        if key in seen and seen[key] != uri:
+            dupes.add(key)
+        seen.setdefault(key, uri)
+    return dupes
+
+
+def ambiguous_fields(spec: dict, display_names: dict, dupes: set | None = None) -> list:
+    """The display names in `spec` that do not identify one object in the model."""
+    dupes = ambiguous_titles(display_names) if dupes is None else dupes
+    names = _metric_names(spec, display_names) + _dim_names(spec, display_names)
+    return sorted({name for name in names if _normalize(name) in dupes})
+
+
 def field_uri(fields: dict, alias: str) -> str:
     """Resolve a bucket alias to its URI.
 
@@ -910,11 +934,18 @@ def _rules_for(spec: dict, display_names: dict) -> str:
     elif dims:
         lines.append("- Say the question is broken down by " + ", ".join(dims) + ", naming each verbatim.")
     else:
-        lines.append(
+        lines += [
             "- This chart has NO breakdown. Ask for the metric on its own -- do not write "
             "'by ...', 'broken down by ...' or 'grouped by ...' at all. Never break a metric "
-            "down by itself."
-        )
+            "down by itself.",
+            # "What is the Upsell Ratio?" is answered as a definition, and "Show me Gross
+            # Revenue" is answered by looking the metric up -- the agent activates only its
+            # search skill and builds nothing. Naming the chart form is what makes a bare
+            # metric a charting request, so a no-breakdown question has to name it.
+            "- Ask for it AS A CHART, naming the form: 'as a single number', 'as a KPI' or "
+            "'as a headline'. Never a bare 'What is <metric>?' (answered as a definition) and "
+            "never a bare 'Show me <metric>' (answered by looking the metric up).",
+        ]
     if segments:
         lines.append("- Say it is split by " + ", ".join(segments) + ".")
     lines += [
@@ -924,7 +955,9 @@ def _rules_for(spec: dict, display_names: dict) -> str:
         "time period or a subset of values.",
         "- Write real names only. Never emit a literal word like 'breakdown dimension', 'metric' "
         "or 'dimension' as a stand-in for a name.",
-        "- Do not name the chart type; the assistant should infer it.",
+        # A single-metric chart is the exception: without a named form the request is
+        # indistinguishable from a metric lookup, so there the form is the question.
+        *([] if not dims else ["- Do not name the chart type; the assistant should infer it."]),
         "- Sound like a person asking a colleague, not like a chart title.",
         "- One sentence.",
     ]
@@ -1135,6 +1168,13 @@ def generate(args, sdk_factory=None) -> int:
     for spec in specs:
         shapes.setdefault(spec["_shape"], []).append(spec["title"])
 
+    dupes = ambiguous_titles(display_names)
+    ambiguous = [(spec, names) for spec in specs if (names := ambiguous_fields(spec, display_names, dupes))]
+    if args.skip_ambiguous:
+        drop = {id(spec) for spec, _ in ambiguous}
+        specs = [spec for spec in specs if id(spec) not in drop]
+        derived = [spec for spec in derived if id(spec) not in drop]
+
     n_filtered = sum(1 for s in specs if filters(s))
     n_ranked = sum(1 for s in specs if ranks(s))
     print(
@@ -1153,6 +1193,18 @@ def generate(args, sdk_factory=None) -> int:
         print(f"  derived from a base      {len(derived)} ({summary}), {n_base} from real insights")
         n_rescued = sum(1 for spec in derived if spec["_derived_basis"] == "title")
         print(f"    of those, title-asked  {n_rescued} of {len(promised)} insight(s) that promised a ranking")
+    if ambiguous:
+        verb = "dropped" if args.skip_ambiguous else "kept"
+        print(
+            f"  ambiguous field names    {len(ambiguous)} item(s) {verb}: a name below matches "
+            f"more than one object in the model, so the question cannot say which is meant"
+        )
+        for spec, names in ambiguous[:5]:
+            print(f"    {spec['title'][:40]:<40} {', '.join(names)}")
+        if len(ambiguous) > 5:
+            print(f"    ... and {len(ambiguous) - 5} more")
+        if not args.skip_ambiguous:
+            print("    pass --skip-ambiguous to exclude them", file=sys.stderr)
     for viz_id, reason in skipped:
         print(f"  SKIP {viz_id}: {reason}")
 

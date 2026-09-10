@@ -237,6 +237,14 @@ def _build_parser() -> argparse.ArgumentParser:
         "no ranked insights of its own. Derived items carry `derived_from` and `derived_basis`. "
         "Default: 0 (off).",
     )
+    gen.add_argument(
+        "--skip-ambiguous",
+        dest="skip_ambiguous",
+        action="store_true",
+        help="Drop items whose metric or dimension name matches more than one object in the model "
+        "(loop has six labels titled 'Product Title'). Such a question cannot say which object it "
+        "means, so a defensible answer still scores zero. Reported either way.",
+    )
     gen.add_argument("--dry-run", dest="dry_run", action="store_true", help="Report only; write nothing.")
     models_cmd = sub.add_parser("models", help="List LLM providers and models configured in the org.")
     models_cmd.add_argument("--host", help="GoodData host URL.")

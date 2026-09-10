@@ -7,6 +7,8 @@ from gooddata_eval.core.dataset.from_insights import (
     Unsupported,
     _rules_for,
     _validation_errors,
+    ambiguous_fields,
+    ambiguous_titles,
     build,
     build_display_names,
     contradictions,
@@ -1037,3 +1039,48 @@ def test_a_rescue_and_an_invented_ranking_that_agree_yield_one_item():
     )
     ranked = [spec for spec in picked if spec["_derived_kind"] == "ranking_filter"]
     assert [spec["_derived_basis"] for spec in ranked] == ["title"]
+
+
+# --- items that cannot name what they mean ------------------------------------
+
+
+def test_a_question_asking_for_one_number_must_ask_to_see_it():
+    # A bare "What is the Upsell Ratio?" reads as a request for a definition, and the
+    # agent answers in prose: seven of loop's headline items failed with no chart built.
+    spec = convert(viz("local:headline", [{"localIdentifier": "measures", "items": [measure("m", "spend")]}]), DATE_IDS)
+    rules = _rules_for(spec, DISPLAY)
+    assert "AS A CHART" in rules
+    assert "as a single number" in rules
+    assert "Never a bare 'What is <metric>?'" in rules
+    assert "Do not name the chart type" not in rules, "a single number needs its form named"
+
+
+def test_a_broken_down_question_is_not_told_to_name_a_chart_form():
+    assert "AS A CHART" not in _rules_for(convert(spend_by_merchant(), DATE_IDS), DISPLAY)
+
+
+def test_titles_carried_by_more_than_one_object_are_ambiguous():
+    names = {
+        "label/product_details.LINE_ITEM_TITLE": "Product Title",
+        "label/EXT__RETURNED_ITEMS.PRODUCT_TITLE": "Product Title",
+        "label/merchant.NAME": "Merchant Name",
+        "metric/spend": "Spend Amount",
+    }
+    assert ambiguous_titles(names) == {"product title"}
+
+
+def test_the_same_object_listed_twice_is_not_ambiguous():
+    assert ambiguous_titles({"label/a": "Product Title"}) == set()
+
+
+def test_an_item_naming_an_ambiguous_dimension_is_reported():
+    spec = convert(_bar("spend", "merchant.NAME"), DATE_IDS)
+    names = {**DISPLAY, "label/other_dataset.NAME": "Merchant Name"}
+    assert ambiguous_fields(spec, names) == ["Merchant Name"]
+    assert ambiguous_fields(spec, DISPLAY) == []
+
+
+def test_an_ambiguous_metric_name_counts_too():
+    spec = convert(_bar("spend", "merchant.NAME"), DATE_IDS)
+    names = {**DISPLAY, "metric/spend_v2": "Spend Amount"}
+    assert ambiguous_fields(spec, names) == ["Spend Amount"]
