@@ -1,7 +1,10 @@
 # (C) 2026 GoodData Corporation
 import json
+from types import SimpleNamespace
+from unittest.mock import patch
 
 import pytest
+from gooddata_eval.core.dataset import from_insights as from_insights_mod
 from gooddata_eval.core.dataset.from_insights import (
     PromisedRanking,
     Unsupported,
@@ -19,6 +22,7 @@ from gooddata_eval.core.dataset.from_insights import (
     describe,
     display_name,
     element_counts,
+    generate,
     granularity_phrase,
     insight_ids_on,
     langfuse_payload,
@@ -1199,3 +1203,280 @@ def test_granularity_aliases_are_one_object_not_a_collision():
     )
     # Each granularity is registered under several spellings; the aliases must fold.
     assert ambiguous_titles(names) == set()
+
+
+# --- the generate() pipeline --------------------------------------------------
+
+
+def _snapshot(*vizs, granularities=("MONTH",)):
+    return {
+        "workspace_id": "ws",
+        "analytics": {
+            "visualizationObjects": list(vizs),
+            "metrics": [{"id": "spend", "title": "Spend Amount"}],
+        },
+        "date_instance_ids": ["process_date"],
+        "display_names": {
+            "metric/spend": "Spend Amount",
+            "metric/revenue": "Revenue Amount",
+            "label/merchant.NAME": "Merchant Name",
+            "label/region.NAME": "Region Name",
+            "dataset/process_date": "Process Date",
+        },
+        "label_cardinality": {"label/merchant.NAME": 40, "label/region.NAME": 40},
+    }
+
+
+def _args(tmp_path, **kw):
+    base = {
+        "workspace": "ws",
+        "dataset_name": "d",
+        "out": str(tmp_path / "out"),
+        "dashboard": [],
+        "snapshot_in": None,
+        "snapshot_out": None,
+        "langfuse_out": None,
+        "id_prefix": "",
+        "no_phrase": True,
+        "phrase_model": "gpt-4o",
+        "no_viz_type": False,
+        "min_questions": 1,
+        "min_shapes": 1,
+        "min_filtered": 0,
+        "enrich_ranked": 0,
+        "skip_ambiguous": False,
+        "dry_run": False,
+    }
+    return SimpleNamespace(**{**base, **kw})
+
+
+def _snapshot_file(tmp_path, snapshot):
+    path = tmp_path / "snap.json"
+    path.write_text(json.dumps(snapshot))
+    return str(path)
+
+
+def test_generate_writes_a_validated_item_per_insight(tmp_path):
+    snapshot = _snapshot(_bar("spend", "merchant.NAME"), _bar("revenue", "region.NAME"))
+    args = _args(tmp_path, snapshot_in=_snapshot_file(tmp_path, snapshot))
+
+    assert generate(args) == 0
+
+    written = sorted(p.name for p in (tmp_path / "out").glob("*.json"))
+    assert len(written) == 2
+    for path in (tmp_path / "out").glob("*.json"):
+        assert _validation_errors(json.loads(path.read_text())) is None
+
+
+def test_generate_fails_the_run_when_too_few_insights_survive(tmp_path):
+    # The gate exists so a thin workspace fails loudly instead of quietly shipping a
+    # dataset too small to mean anything.
+    args = _args(tmp_path, snapshot_in=_snapshot_file(tmp_path, _snapshot(_bar("spend", "merchant.NAME"))))
+    args.min_questions = 15
+
+    assert generate(args) == 1
+    assert list((tmp_path / "out").glob("*.json")), "the items are still written; only the exit code fails"
+
+
+def test_generate_skips_hidden_insights(tmp_path):
+    # Hidden objects are invisible to the assistant's catalog search, so a question about
+    # one is unwinnable rather than merely hard.
+    hidden = _bar("spend", "merchant.NAME")
+    hidden["isHidden"] = True
+    args = _args(tmp_path, snapshot_in=_snapshot_file(tmp_path, _snapshot(hidden, _bar("revenue", "region.NAME"))))
+
+    assert generate(args) == 0
+    assert len(list((tmp_path / "out").glob("*.json"))) == 1
+
+
+def test_generate_dry_run_writes_nothing(tmp_path):
+    args = _args(
+        tmp_path, snapshot_in=_snapshot_file(tmp_path, _snapshot(_bar("spend", "merchant.NAME"))), dry_run=True
+    )
+
+    assert generate(args) == 0
+    assert not (tmp_path / "out").exists()
+
+
+def test_generate_exports_a_langfuse_dataset_with_prefixed_ids(tmp_path):
+    args = _args(
+        tmp_path,
+        snapshot_in=_snapshot_file(tmp_path, _snapshot(_bar("spend", "merchant.NAME"))),
+        langfuse_out=str(tmp_path / "lf.json"),
+        id_prefix="lr-",
+    )
+    assert generate(args) == 0
+
+    payload = json.loads((tmp_path / "lf.json").read_text())
+    assert payload["workspace"] == "ws"
+    assert all(item["id"].startswith("lr-") for item in payload["items"])
+
+
+def test_generate_derives_ranked_items_and_records_their_provenance(tmp_path):
+    args = _args(
+        tmp_path,
+        snapshot_in=_snapshot_file(tmp_path, _snapshot(_bar("spend", "merchant.NAME"))),
+        enrich_ranked=2,
+    )
+    assert generate(args) == 0
+
+    items = [json.loads(p.read_text()) for p in (tmp_path / "out").glob("*.json")]
+    derived = [i for i in items if i.get("derived_from")]
+    assert len(derived) == 2
+    assert {i["derived_kind"] for i in derived} == {"ranking_filter", "sort_by"}
+
+
+def test_generate_can_drop_the_items_that_name_something_ambiguous(tmp_path):
+    snapshot = _snapshot(_bar("spend", "merchant.NAME"), _bar("revenue", "region.NAME"))
+    snapshot["display_names"]["label/other.NAME"] = "Merchant Name"  # a second "Merchant Name"
+    args = _args(tmp_path, snapshot_in=_snapshot_file(tmp_path, snapshot), skip_ambiguous=True)
+
+    assert generate(args) == 0
+    kept = [json.loads(p.read_text())["question"] for p in (tmp_path / "out").glob("*.json")]
+    assert len(kept) == 1, "the item naming the duplicated label is dropped"
+
+
+def test_generate_restricts_to_the_requested_dashboard(tmp_path):
+    keep, drop = _bar("spend", "merchant.NAME"), _bar("revenue", "region.NAME")
+    keep["id"], drop["id"] = "v_keep", "v_drop"
+    snapshot = _snapshot(keep, drop)
+    snapshot["analytics"]["analyticalDashboards"] = [
+        {"id": "dash", "content": {"layout": [{"type": "insight", "insight": {"identifier": {"id": "v_keep"}}}]}}
+    ]
+    args = _args(tmp_path, snapshot_in=_snapshot_file(tmp_path, snapshot), dashboard=["dash"])
+
+    assert generate(args) == 0
+    assert len(list((tmp_path / "out").glob("*.json"))) == 1
+
+
+def test_generate_reports_an_unknown_dashboard_instead_of_generating_everything(tmp_path):
+    args = _args(tmp_path, snapshot_in=_snapshot_file(tmp_path, _snapshot(_bar("spend", "merchant.NAME"))))
+    args.dashboard = ["nope"]
+
+    assert generate(args) == 1
+    assert not (tmp_path / "out").exists()
+
+
+def test_generate_saves_the_fetched_snapshot_for_replay(tmp_path):
+    class _Sdk:
+        pass
+
+    calls = {}
+
+    def fake_fetch(sdk, workspace_id):
+        calls["workspace"] = workspace_id
+        return _snapshot(_bar("spend", "merchant.NAME"))
+
+    args = _args(tmp_path, snapshot_out=str(tmp_path / "snap-out.json"))
+    with patch.object(from_insights_mod, "fetch_snapshot", fake_fetch):
+        assert generate(args, sdk_factory=_Sdk) == 0
+
+    assert calls["workspace"] == "ws"
+    assert json.loads((tmp_path / "snap-out.json").read_text())["workspace_id"] == "ws"
+
+
+def test_generate_without_a_snapshot_or_an_sdk_says_which_is_missing(tmp_path):
+    with pytest.raises(ValueError, match="snapshot-in"):
+        generate(_args(tmp_path))
+
+
+def test_generate_blanks_every_expected_chart_type_on_request(tmp_path):
+    args = _args(tmp_path, snapshot_in=_snapshot_file(tmp_path, _snapshot(_bar("spend", "merchant.NAME"))))
+    args.no_viz_type = True
+    assert generate(args) == 0
+
+    items = [json.loads(p.read_text()) for p in (tmp_path / "out").glob("*.json")]
+    assert all(i["expected_output"]["visualization"]["type"] == "" for i in items)
+
+
+# --- the phrasing step --------------------------------------------------------
+
+
+def _reply(text):
+    return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=text))])
+
+
+def _fake_openai(*replies):
+    """An OpenAI stub returning `replies` in order, recording the prompts it received."""
+    sent = []
+
+    class _Completions:
+        def create(self, model, messages):
+            sent.append(messages)
+            return replies[min(len(sent) - 1, len(replies) - 1)]
+
+    class _Client:
+        chat = SimpleNamespace(completions=_Completions())
+
+    return _Client, sent
+
+
+def _phrase(specs, *replies):
+    client_cls, sent = _fake_openai(*replies)
+    with (
+        patch("openai.OpenAI", client_cls),
+        patch.dict("os.environ", {"OPENAI_API_KEY": "sk-test"}),
+    ):
+        return from_insights_mod.phrase(specs, "gpt-4o", DISPLAY), sent
+
+
+def test_phrase_returns_a_question_the_spec_agrees_with():
+    spec = convert(spend_by_merchant(), DATE_IDS)
+    (questions, sent) = _phrase([spec], _reply('"Show me Spend Amount by Merchant Name"'))
+
+    assert questions == ["Show me Spend Amount by Merchant Name"], "surrounding quotes are stripped"
+    assert len(sent) == 1, "a clean question is not re-asked"
+
+
+def test_phrase_feeds_a_contradiction_back_once_and_keeps_the_rewrite():
+    spec = convert(spend_by_merchant(), DATE_IDS)
+    (questions, sent) = _phrase(
+        [spec],
+        _reply("Show me the top 5 Merchant Name by Spend Amount"),  # ranking the spec lacks
+        _reply("Show me Spend Amount by Merchant Name"),
+    )
+
+    assert questions == ["Show me Spend Amount by Merchant Name"]
+    assert len(sent) == 2
+    assert "ranking word" in sent[1][-1]["content"], "the specific contradiction is quoted back"
+
+
+def test_phrase_drops_an_item_the_writer_keeps_contradicting():
+    # Shipping a question its own expected_output disagrees with is worse than shipping
+    # fewer questions, so the second failure drops the item.
+    spec = convert(spend_by_merchant(), DATE_IDS)
+    (questions, sent) = _phrase([spec], _reply("Show me the top 5 Merchant Name by Spend Amount"))
+
+    assert questions == [None]
+    assert len(sent) == 2, "one retry, then give up"
+
+
+def test_phrase_treats_a_refusal_with_no_text_as_a_failed_attempt():
+    # `message.content` is None for a refusal; .strip() on it used to crash the run.
+    spec = convert(spend_by_merchant(), DATE_IDS)
+    (questions, _) = _phrase([spec], _reply(None))
+    assert questions == [None]
+
+
+def test_phrase_requires_the_api_key_rather_than_failing_per_item():
+    spec = convert(spend_by_merchant(), DATE_IDS)
+    client_cls, _ = _fake_openai(_reply("x"))
+    with (
+        patch("openai.OpenAI", client_cls),
+        patch.dict("os.environ", {}, clear=True),
+        pytest.raises(OSError, match="OPENAI_API_KEY"),
+    ):
+        from_insights_mod.phrase([spec], "gpt-4o", DISPLAY)
+
+
+def test_generate_uses_the_phrasing_step_when_it_is_not_disabled(tmp_path):
+    args = _args(tmp_path, snapshot_in=_snapshot_file(tmp_path, _snapshot(_bar("spend", "merchant.NAME"))))
+    args.no_phrase = False
+    client_cls, sent = _fake_openai(_reply("Show me Spend Amount by Merchant Name"))
+
+    with patch("openai.OpenAI", client_cls), patch.dict("os.environ", {"OPENAI_API_KEY": "sk-test"}):
+        assert generate(args) == 0
+
+    assert sent, "the LLM was asked"
+    written = [json.loads(p.read_text()) for p in (tmp_path / "out").glob("*.json")]
+    assert written[0]["question"] == "Show me Spend Amount by Merchant Name"
