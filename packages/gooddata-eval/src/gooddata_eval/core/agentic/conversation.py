@@ -634,7 +634,15 @@ def evaluate_agentic_conversation(
         def _write_scores(ctx: RunTraceContext) -> None:
 
             pt = ctx.trace(result.conversation_id)
-            with ctx.observe(pt, 0) as tid:
+            with ctx.observe(
+                pt,
+                0,
+                conversation_id=result.conversation_id,
+                output={
+                    "conversation_success": result.conversation_success,
+                    "full_skill_coverage": result.full_skill_coverage,
+                },
+            ) as tid:
                 ctx.score(
                     tid,
                     name="conversation_success",
@@ -684,6 +692,7 @@ def evaluate_agentic_conversation(
             window_end=window_end,
             suffix_runs=False,
             write_scores=_write_scores,
+            item_input=fixture.turns[0].message if fixture.turns else fixture.id,
         )
 
     detail = _conversation_detail(result)

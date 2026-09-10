@@ -473,7 +473,12 @@ def evaluate_agentic_metric_skill(
 
             for run_idx, run in enumerate(summary.run_results):
                 pt = ctx.trace(run.conversation_id)
-                with ctx.observe(pt, run_idx) as tid:
+                with ctx.observe(
+                    pt,
+                    run_idx,
+                    conversation_id=run.conversation_id,
+                    output={"metric_created": run.metric_created, "maql_correct": run.maql_correct},
+                ) as tid:
                     ctx.score(tid, name="metric_created", value=float(run.metric_created), data_type="BOOLEAN")
                     ctx.score(tid, name="maql_correct", value=float(run.maql_correct), data_type="BOOLEAN")
                     ctx.quality(
@@ -503,6 +508,7 @@ def evaluate_agentic_metric_skill(
             window_end=window_end,
             suffix_runs=len(summary.run_results) > 1,
             write_scores=_write_scores,
+            item_input=question,
         )
 
     item_timings = sum_timings([r.timings for r in summary.run_results])

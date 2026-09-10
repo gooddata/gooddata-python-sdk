@@ -142,6 +142,8 @@ class RunTraceContext:
     _base_name: str
     _suffix_runs: bool
     _traces: dict[str, Any]
+    _window: tuple[datetime, datetime] | None = None
+    _item_input: Any = None
 
     def run_name(self, run_idx: int) -> str:
         """Dataset-run name for one run, suffixed only when the item has more than one."""
@@ -151,12 +153,13 @@ class RunTraceContext:
         """The trace picked for a conversation, or None when the poll never found one."""
         return self._traces.get(conversation_id)
 
-    def observe(self, trace: Any, run_idx: int) -> Any:
-        """Attach this run to its dataset-run item, yielding the trace id to score against.
+    def observe(self, trace: Any, run_idx: int, *, conversation_id: str | None = None, output: Any = None) -> Any:
+        """Attach this run to its experiment item, yielding what to write its scores against.
 
         ``trace`` may be None -- a conversation whose trace never showed up is still
-        observed, so the run appears in the experiment with its scores orphaned rather than
-        missing entirely.
+        observed, so the run appears in the experiment scored against gd-eval's own span
+        rather than missing entirely. The window and the item's question travel on the
+        context, so a kind's scoring block never resolves them itself.
         """
         return self._lf.observe(
             self._client,
@@ -164,6 +167,11 @@ class RunTraceContext:
             self._dataset_item_id,
             self.run_name(run_idx),
             self.run_metadata,
+            trace=trace,
+            window=self._window,
+            conversation_id=conversation_id,
+            item_input=self._item_input,
+            output=output,
         )
 
     def score(self, trace_id: Any, *, name: str, value: Any, data_type: str) -> None:
@@ -188,6 +196,7 @@ def submit_trace_scoring(
     window_end: datetime,
     suffix_runs: bool,
     write_scores: Callable[[RunTraceContext], None],
+    item_input: Any = None,
 ) -> None:
     """Defer one item's whole Langfuse block: resolve its run context, then write scores.
 
@@ -212,7 +221,17 @@ def submit_trace_scoring(
         )
         traces = _langfuse.find_traces_per_conversation(langfuse, conversation_ids, window_start, window_end)
         write_scores(
-            RunTraceContext(run_metadata, _langfuse, langfuse, dataset_item_id, base_name, suffix_runs, traces)
+            RunTraceContext(
+                run_metadata,
+                _langfuse,
+                langfuse,
+                dataset_item_id,
+                base_name,
+                suffix_runs,
+                traces,
+                (window_start, window_end),
+                item_input,
+            )
         )
 
     submit_trace_link(_link_traces, item_id=dataset_item_id)

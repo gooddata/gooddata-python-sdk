@@ -954,8 +954,8 @@ def _agentic_item():
 def test_warns_up_front_when_a_local_dataset_cannot_be_linked(monkeypatch, tmp_path, capsys):
     """--langfuse is refused with a local dataset, but the evaluators' own
     try_make_langfuse_client() fallback links anyway when LANGFUSE_* are exported -- so
-    every conversation 404s from dataset-run-items, in a block at the very END of the run.
-    By then the flag that would have avoided it is long past being changeable.
+    every conversation reports its item missing from Langfuse, in a block at the very END
+    of the run. By then the flag that would have avoided it is long past being changeable.
     """
     _export_langfuse_creds(monkeypatch)
     monkeypatch.delenv(TIMERS_ENV_VAR, raising=False)

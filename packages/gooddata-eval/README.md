@@ -113,7 +113,7 @@ gd-eval run \
 | Flag | Description |
 |---|---|
 | `--dataset PATH` | Flat folder of JSON files — one question per file. |
-| `--langfuse-dataset NAME` | Pull items by name from a Langfuse dataset. Requires `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, `LANGFUSE_HOST`. |
+| `--langfuse-dataset NAME` | Pull items by name from a Langfuse dataset. Requires `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY` and `LANGFUSE_BASE_URL` (or the legacy `LANGFUSE_HOST`). |
 | `--kind TEST_KIND` | Fallback `test_kind` for dataset items that do not embed one. Defaults to `visualization`; use e.g. `agentic_metric_skill` for multi-turn agentic evaluation. Items that declare their own `test_kind` ignore this. |
 
 #### Model selection
@@ -152,15 +152,39 @@ interleaves when K > 1, and per-item latencies rise, so they stop being clean si
 
 | Flag | Description |
 |---|---|
-| `--langfuse` | Log scores and traces to Langfuse after each item. Requires `--langfuse-dataset`. Names each experiment run `{dataset_name}_{timestamp}_{model}`, suffixed `_effort-{level}` when `--reasoning-effort` is set (so runs differing only by effort stay separate) and `_run{N}` per run when `--runs` > 1 — e.g. `general_question_2026-09-02-11-13_gpt-5.2_run0`. Requires `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, `LANGFUSE_HOST`. |
+| `--langfuse` | Log scores and traces to Langfuse after each item. Requires `--langfuse-dataset`. Names each experiment run `{dataset_name}_{timestamp}_{model}`, suffixed `_effort-{level}` when `--reasoning-effort` is set (so runs differing only by effort stay separate) and `_run{N}` per run when `--runs` > 1 — e.g. `general_question_2026-09-02-11-13_gpt-5.2_run0`. Requires `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY` and `LANGFUSE_BASE_URL` (or the legacy `LANGFUSE_HOST`). |
 
-Set `TAVERN_E2E_SKIP_TRACE_LINK=1` to skip trace lookup entirely (scores are then orphaned; the run says so).
+##### Langfuse v4
 
-**A local `--dataset` cannot be attached to a Langfuse run.** `--langfuse` is refused alongside `--dataset`
-because a local folder's item ids are not Langfuse dataset item ids. But trace linking does not depend on that
-flag — each `evaluate_agentic_*` builds its own client whenever `LANGFUSE_PUBLIC_KEY`/`LANGFUSE_SECRET_KEY` are
-exported — so a local run still finds its traces and writes its scores onto them, and only the per-run grouping
-fails, with one `404 from dataset-run-items` reported per run. The run warns about this before it starts. Use
+One run is one Langfuse **experiment**. Each evaluated item becomes its own trace whose root span carries the
+experiment and dataset-item attributes (`langfuse.experiment.name`, `langfuse.experiment.dataset.id`,
+`langfuse.experiment.item.id`), and the four scores attach to that root observation. gd-eval speaks to Langfuse
+over four REST endpoints and uses no Langfuse SDK, so it runs on every Python version the package supports:
+
+| Endpoint | Used for |
+|---|---|
+| `POST /api/public/otel/v1/traces` | exporting the experiment root span as OTLP/HTTP JSON |
+| `POST /api/public/scores` | one score per write, on a trace or on a single observation inside it |
+| `GET /api/public/v2/observations` | finding the agent's gen-ai trace for a conversation |
+| `GET /api/public/dataset-items` | loading `--langfuse-dataset` items, and resolving an item's dataset id |
+
+Two consequences of v4's immutable observations. gd-eval sets `version` only on its own experiment span, never on
+the agent's gen-ai trace — filter on the gd-eval experiment's `langfuse.version` to compare models. And on the
+agentic kinds the latency in `value_score` is the gen-ai trace's root generation latency, read from the
+observations endpoint; the single-shot `--langfuse` sink keeps using the item's own measured average latency.
+
+Langfuse Cloud drops v3 on **2026-11-16**; a self-hosted Langfuse must be on v4 for any of this to work.
+
+Set `TAVERN_E2E_SKIP_TRACE_LINK=1` to turn the whole **agentic** Langfuse write path off — no trace lookup, no
+span export and no scores for `agentic_*` items. The run says so once. It does not reach the `--langfuse` sink,
+which still writes a span and four scores for every single-shot item; drop `--langfuse` to silence that too.
+
+**A local `--dataset` cannot be attached to a Langfuse experiment.** `--langfuse` is refused alongside
+`--dataset` because a local folder's item ids are not Langfuse dataset item ids. But trace linking does not
+depend on that flag — each `evaluate_agentic_*` builds its own client whenever
+`LANGFUSE_PUBLIC_KEY`/`LANGFUSE_SECRET_KEY` are exported — so a local run still finds its traces and writes its
+scores onto them, and only the per-run grouping fails: the dataset-item lookup 404s and the run reports the item
+as one that does not exist in Langfuse, once. The run also warns about this before it starts. Use
 `--langfuse-dataset` when you want runs that are comparable across models, or `TAVERN_E2E_SKIP_TRACE_LINK=1` to
 skip linking altogether.
 
@@ -379,6 +403,10 @@ Without `[llm-judge]`, those items are **skipped**.
 | `2` | Operational error: bad connection, missing model, unreadable dataset, missing credentials. |
 
 ## Scores (in JSON report and Langfuse)
+
+In Langfuse every score is written to the experiment run's root observation — `traceId` plus `observationId` of
+the item's own root span. On the agentic path each score is mirrored onto the agent's gen-ai trace as well
+(`traceId` only), so a score survives even when one of the two traces is missing.
 
 | Score | Description |
 |---|---|

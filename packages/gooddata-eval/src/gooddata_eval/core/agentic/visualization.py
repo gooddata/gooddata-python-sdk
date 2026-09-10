@@ -403,7 +403,14 @@ def evaluate_agentic_visualization(
             for run_idx, run in enumerate(summary.run_results):
                 pt = ctx.trace(run.conversation_id)
                 ev = run.eval_result
-                with ctx.observe(pt, run_idx) as tid:
+                strict_checks = {
+                    "assertion-cross-ref-valid": ev.cross_ref_valid,
+                    "assertion-vis-metric": ev.metrics_correct,
+                    "assertion-vis-dimensions": ev.dimensions_correct,
+                    "assertion-vis-filters": ev.filters_correct,
+                    "assertion-vis-type": ev.viz_type_hard,
+                }
+                with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
                     ctx.score(tid, name="assertion-cross-ref-valid", value=ev.cross_ref_valid, data_type="BOOLEAN")
                     ctx.score(tid, name="assertion-vis-metric", value=ev.metrics_correct, data_type="BOOLEAN")
                     ctx.score(tid, name="assertion-vis-dimensions", value=ev.dimensions_correct, data_type="BOOLEAN")
@@ -416,13 +423,7 @@ def evaluate_agentic_visualization(
                     ctx.score(tid, name="steps", value=run.total_steps, data_type="NUMERIC")
                     ctx.quality(
                         tid,
-                        strict_checks={
-                            "assertion-cross-ref-valid": ev.cross_ref_valid,
-                            "assertion-vis-metric": ev.metrics_correct,
-                            "assertion-vis-dimensions": ev.dimensions_correct,
-                            "assertion-vis-filters": ev.filters_correct,
-                            "assertion-vis-type": ev.viz_type_hard,
-                        },
+                        strict_checks=strict_checks,
                         latency_sec=pt.latency if pt else None,
                         cost_usd=pt.total_cost if pt else None,
                     )
@@ -448,6 +449,7 @@ def evaluate_agentic_visualization(
             # Unlike the other runners, this one suffixes every run, K=1 included.
             suffix_runs=True,
             write_scores=_write_scores,
+            item_input=question,
         )
 
     if record_output_path and summary.best.actual_output is not None:

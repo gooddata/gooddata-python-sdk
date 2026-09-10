@@ -205,7 +205,9 @@ def evaluate_agentic_search_tool(
 
             for run_idx, run in enumerate(summary.run_results):
                 pt = ctx.trace(run.conversation_id)
-                with ctx.observe(pt, run_idx) as tid:
+                with ctx.observe(
+                    pt, run_idx, conversation_id=run.conversation_id, output={"tool_selection": run.tool_selected}
+                ) as tid:
                     ctx.score(tid, name="tool_selection", value=float(run.tool_selected), data_type="BOOLEAN")
                     ctx.score(tid, name="tool_correctness", value=float(run.tool_correct), data_type="BOOLEAN")
                     ctx.quality(
@@ -235,6 +237,7 @@ def evaluate_agentic_search_tool(
             window_end=window_end,
             suffix_runs=len(summary.run_results) > 1,
             write_scores=_write_scores,
+            item_input=question,
         )
 
     runs_passed = sum(1 for r in summary.run_results if r.tool_selected)

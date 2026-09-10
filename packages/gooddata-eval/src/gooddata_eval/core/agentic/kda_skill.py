@@ -444,7 +444,7 @@ def evaluate_agentic_kda_skill(
                 _log.info(
                     "[kda-report] %s: strict_pass=%s latency_sec=%s", run_name, ev.strict_pass, turn_wall_clock_sec
                 )
-                with ctx.observe(pt, run_idx) as tid:
+                with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
                     ctx.score(tid, name="kda_disambiguated", value=float(ev.disambiguated), data_type="BOOLEAN")
@@ -483,6 +483,7 @@ def evaluate_agentic_kda_skill(
             window_end=window_end,
             suffix_runs=len(summary.run_results) > 1,
             write_scores=_write_scores,
+            item_input=question,
         )
 
     runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
