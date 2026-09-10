@@ -368,6 +368,8 @@ def test_check_filters_out_of_range_offsets_fall_back_instead_of_raising(granula
     expected = _date_viz(**{"from": offset, "to": 0, "granularity": granularity})
     assert check_filters(expected, _date_viz(**{"from": offset, "to": 0, "granularity": granularity}), _TODAY).date_ok
     assert not check_filters(expected, _date_viz(**{"from": -1, "to": -1, "granularity": "MONTH"}), _TODAY).date_ok
+
+
 def _attr_viz(values, key="include", using="label/cross_border_name"):
     return _viz(
         query={
