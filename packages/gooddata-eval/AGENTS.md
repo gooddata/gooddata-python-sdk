@@ -4,15 +4,15 @@
 `gdc-nas`) through a dataset of natural-language questions and scores what comes back,
 including side-by-side comparison across models. Each dataset item is a JSON envelope
 loaded from a local folder or pulled from a Langfuse dataset. Results are aggregated into
-pass@K / pass^K reports and optionally pushed to Langfuse as scored traces tied to a
-dataset run. The newest and most actively developed package in the repo.
+pass@K / pass^K reports and optionally pushed to Langfuse as scored traces tied to an
+experiment. The newest and most actively developed package in the repo.
 
 ## Owns
 
 - The `gd-eval` CLI (`gd-eval run`, `gd-eval models`)
 - Dataset loading and the evaluation run loop
 - Per-capability evaluators and their scoring
-- Result reporting, and pushing runs, scores and trace links to Langfuse
+- Result reporting, and pushing experiments, scores and trace links to Langfuse
 
 ## Does NOT Own
 
@@ -29,7 +29,7 @@ dataset run. The newest and most actively developed package in the repo.
 | `core/summary/` | HTTP client for the dedicated dashboard-summary endpoint — a single-shot chat backend, not reporting |
 | `core/dataset/` | dataset format and loading |
 | `core/evaluators/` | single-shot evaluators and their registry |
-| `core/langfuse/` | `sink.py` only — pushes single-turn scores and dataset-run items |
+| `core/langfuse/` | the whole Langfuse v4 client: `_env` (base URL + credentials), `otlp` (OTLP/JSON encoding), `experiment` (root-span construction, score targets), `observations` (trace reads), `client` (httpx calls), `sink` (single-shot results as experiments) |
 | `core/reporting/` | console and JSON output rendering |
 | `core/scoring.py`, `core/runner.py` | scoring and orchestration |
 | `core/models.py` | `DatasetItem`, `ChatResult`, `ItemReport` and friends |
