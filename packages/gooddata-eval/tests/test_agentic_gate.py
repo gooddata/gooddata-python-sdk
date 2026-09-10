@@ -2,9 +2,12 @@
 """The K gate: which of pass@K / pass^K decides an item, and what reaches Langfuse."""
 
 import contextlib
+import importlib
+import inspect
 from unittest.mock import MagicMock, patch
 
 import pytest
+from gooddata_eval.cli.main import _reject_power_gate_on_non_agentic_items
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     gate_failure_note,
@@ -17,8 +20,8 @@ from gooddata_eval.core.agentic.general_question import (
     GeneralQuestionAssertionError,
     evaluate_agentic_general_question,
 )
-from gooddata_eval.core.config import normalize_gate
-from gooddata_eval.core.models import ChatResult
+from gooddata_eval.core.config import RunConfig, normalize_gate
+from gooddata_eval.core.models import ChatResult, DatasetItem
 
 
 def test_the_default_gate_is_the_historic_pass_at_k():
@@ -169,3 +172,78 @@ def test_a_hard_failure_fails_under_both_gates():
     for gate in ("any", "power"):
         with pytest.raises(GeneralQuestionAssertionError):
             _evaluate(gate, (False, False, False))
+
+
+# --------------------------------------------------------------------------- #
+# signature compatibility — `gate` must not shift an existing positional argument
+# --------------------------------------------------------------------------- #
+@pytest.mark.parametrize(
+    "module_name",
+    [
+        "visualization",
+        "metric_skill",
+        "alert_skill",
+        "kda_skill",
+        "general_question",
+        "guardrail",
+        "search_tool",
+    ],
+)
+def test_gate_is_the_last_parameter_of_every_evaluator(module_name):
+    """Inserted anywhere earlier, a positional caller binds max_iterations or
+    initial_conversation_id to `gate`, which then reaches normalize_gate and raises."""
+    module = importlib.import_module(f"gooddata_eval.core.agentic.{module_name}")
+    fn = next(v for k, v in vars(module).items() if k.startswith("evaluate_agentic_"))
+    names = [p.name for p in inspect.signature(fn).parameters.values()]
+
+    assert names[-1] == "gate"
+    assert names[5] == "k"
+    assert names[6] in ("max_iterations", "initial_conversation_id")
+
+
+def test_a_positional_seventh_argument_still_binds_where_it_used_to():
+    """The regression the parameter order protects: 7 positional args, no keywords."""
+    with _judged(True):
+        evaluate_agentic_general_question(
+            "https://example.com",  # host
+            "tok",  # token
+            "ws",  # workspace_id
+            "Q",  # question
+            "rubric",  # expected_output
+            1,  # k
+            "conv-0",  # initial_conversation_id -- NOT gate
+        )
+
+
+# --------------------------------------------------------------------------- #
+# mixed datasets — run_items has no gate, so pass^K cannot be honoured for it
+# --------------------------------------------------------------------------- #
+def _item(test_kind, item_id="i1"):
+    return DatasetItem(id=item_id, dataset_name="d", test_kind=test_kind, question="q", expected_output="e")
+
+
+def _config(gate):
+    return RunConfig(host="https://h", token="t", workspace_id="w", gate=gate)
+
+
+def test_power_gate_is_refused_when_the_dataset_has_non_agentic_items():
+    """test_kind is resolved per item, so a dataset can mix the two paths. Running anyway
+    would decide half the items on pass@K and still label the report `power`."""
+    with pytest.raises(ValueError, match="applies to agentic kinds only"):
+        _reject_power_gate_on_non_agentic_items(_config("power"), [_item("visualization")])
+
+
+def test_the_refusal_names_the_kinds_to_split_out():
+    with pytest.raises(ValueError) as exc:
+        _reject_power_gate_on_non_agentic_items(_config("power"), [_item("visualization", "i1"), _item("search", "i2")])
+    assert "2 item(s)" in str(exc.value)
+    assert "['search', 'visualization']" in str(exc.value)
+
+
+def test_a_purely_agentic_dataset_is_accepted_under_the_power_gate():
+    _reject_power_gate_on_non_agentic_items(_config("power"), [])
+
+
+def test_the_default_gate_accepts_a_mixed_dataset():
+    """pass@K is what the non-agentic path already does, so nothing is misrepresented."""
+    _reject_power_gate_on_non_agentic_items(_config("any"), [_item("visualization")])

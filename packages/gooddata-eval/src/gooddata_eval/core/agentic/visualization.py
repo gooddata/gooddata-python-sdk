@@ -322,7 +322,6 @@ def evaluate_agentic_visualization(
     question: str,
     expected_outputs: list[CreatedVisualization],
     k: int = _DEFAULT_K,
-    gate: EvalGate = DEFAULT_GATE,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
     agent_id: str | None = None,
@@ -335,6 +334,7 @@ def evaluate_agentic_visualization(
     record_output_path: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run visualization evaluation, log to Langfuse, and raise VisualizationAssertionError on failure.
 

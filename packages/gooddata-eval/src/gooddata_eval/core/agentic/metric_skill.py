@@ -413,7 +413,6 @@ def evaluate_agentic_metric_skill(
     question: str,
     expected_output: dict | list,
     k: int = _DEFAULT_K,
-    gate: EvalGate = DEFAULT_GATE,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
     agent_id: str | None = None,
@@ -425,6 +424,7 @@ def evaluate_agentic_metric_skill(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run metric-skill evaluation, log to Langfuse, and raise MetricSkillAssertionError on failure.
 

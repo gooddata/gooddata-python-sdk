@@ -221,7 +221,6 @@ def evaluate_agentic_general_question(
     question: str,
     expected_output: str,
     k: int = _DEFAULT_K,
-    gate: EvalGate = DEFAULT_GATE,
     initial_conversation_id: str | None = None,
     agent_id: str | None = None,
     langfuse: object | None = None,
@@ -233,6 +232,7 @@ def evaluate_agentic_general_question(
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
     user_context: dict | None = None,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run general-question evaluation, log to Langfuse, and raise GeneralQuestionAssertionError on failure.
 

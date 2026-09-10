@@ -196,6 +196,23 @@ def _apply_timer_flag(enabled: bool) -> None:
         os.environ[TIMERS_ENV_VAR] = "1"
 
 
+def _reject_power_gate_on_non_agentic_items(config: RunConfig, non_agentic_items: list) -> None:
+    """Refuse a pass^K request the run cannot honour for every item.
+
+    `run_items` has no gate: the non-agentic path always decides on pass@K. Running a mixed
+    dataset anyway would decide half the items under each rule and label the whole report
+    `power`. test_kind is resolved per item, so a dataset does not have to be homogeneous.
+    """
+    if normalize_gate(config.gate) != "power" or not non_agentic_items:
+        return
+    kinds = sorted({i.test_kind for i in non_agentic_items})
+    raise ValueError(
+        f"--gate power applies to agentic kinds only, but this dataset has {len(non_agentic_items)} "
+        f"item(s) of kind {kinds}, which are always decided on pass@K. Run them separately, or "
+        f"use --gate any."
+    )
+
+
 def _warn_if_local_dataset_cannot_link(config: RunConfig, agentic_items: list) -> None:
     """Say up front that experiment assembly will fail, rather than after the run.
 
@@ -358,6 +375,7 @@ def _run(config: RunConfig) -> int:
     items = _load_dataset(config)
     agentic_items = [i for i in items if i.test_kind in AGENTIC_TEST_KINDS]
     non_agentic_items = [i for i in items if i.test_kind not in AGENTIC_TEST_KINDS]
+    _reject_power_gate_on_non_agentic_items(config, non_agentic_items)
     _warn_if_local_dataset_cannot_link(config, agentic_items)
     models = config.models or []
     run_ts = datetime.now(timezone.utc).strftime("%Y-%m-%d-%H-%M")
@@ -482,6 +500,7 @@ def _run(config: RunConfig) -> int:
                 provider_name=resolved.provider_name or resolved.provider_id,
                 provider_type=resolved.provider_type,
                 workspace_id=config.workspace_id,
+                gate=config.gate,
             )
             if agentic_report is not None:
                 report.items.extend(agentic_report.items)
