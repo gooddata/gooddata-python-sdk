@@ -1,0 +1,202 @@
+# (C) 2026 GoodData Corporation
+"""Minimal httpx Langfuse client: scores, OTLP export, dataset lookups and trace reads.
+
+No Langfuse SDK, so it works on every Python version the package supports.
+"""
+
+from __future__ import annotations
+
+import threading
+import time
+import uuid
+from datetime import datetime, timezone
+from typing import Any
+
+import httpx
+
+from gooddata_eval.core.langfuse import _env, observations, otlp
+from gooddata_eval.core.langfuse.observations import TraceSummary
+
+_SCORES_PATH = "/api/public/scores"
+_OTLP_PATH = "/api/public/otel/v1/traces"
+_INGESTION_PATH = "/api/public/ingestion"
+_DATASET_RUN_ITEMS_PATH = "/api/public/dataset-run-items"
+
+_MAX_SCORE_ATTEMPTS = 3
+_DEFAULT_RETRY_DELAY = 0.5
+_MAX_RETRY_DELAY = 5.0
+
+
+def _is_retryable(resp: httpx.Response) -> bool:
+    return resp.status_code == 429 or resp.status_code >= 500
+
+
+def _retry_delay(resp: httpx.Response) -> float:
+    """Seconds to wait before the next attempt, from `Retry-After` when the server names one.
+
+    Unparsable, negative or NaN values fall back to the default; the cap bounds the wait so a
+    throttled score cannot hold a linking worker for long.
+    """
+    try:
+        asked_for = float(resp.headers.get("Retry-After", ""))
+    except ValueError:
+        return _DEFAULT_RETRY_DELAY
+    if not asked_for >= 0:
+        return _DEFAULT_RETRY_DELAY
+    return min(asked_for, _MAX_RETRY_DELAY)
+
+
+class _TraceListResult:
+    def __init__(self, data: list[TraceSummary]) -> None:
+        self.data = data
+
+
+class _TraceAPI:
+    """The `api.trace.list` shape external callers duck-type, served from observations."""
+
+    def __init__(self, owner: HttpxLangfuseClient) -> None:
+        self._owner = owner
+
+    def list(
+        self, from_timestamp: Any, to_timestamp: Any, limit: int, session_id: str | None = None
+    ) -> _TraceListResult:
+        """List traces in a window, optionally narrowed to one session server-side.
+
+        ``session_id`` is what makes ``limit`` a non-issue. Without it the window holds every
+        trace, newest-first, so an eval workspace busy enough to put more than ``limit``
+        traces inside one item's window pushes that item's OWN (oldest) trace off the page --
+        it then polls its whole retry budget against a page that can never contain it, and
+        the score orphans. Named ``session_id`` because ``_fetch_traces_for_session`` probes
+        for exactly that parameter; gen-ai sets sessionId = conversationId.
+        """
+        return _TraceListResult(
+            self._owner.list_traces(from_time=from_timestamp, to_time=to_timestamp, limit=limit, session_id=session_id)
+        )
+
+
+class _DatasetRunItemsAPI:
+    def __init__(self, client: httpx.Client) -> None:
+        self._client = client
+
+    def create(
+        self,
+        run_name: str,
+        dataset_item_id: str,
+        trace_id: str,
+        metadata: dict | None = None,
+        run_description: str = "",
+    ) -> None:
+        self._client.post(
+            _DATASET_RUN_ITEMS_PATH,
+            json={
+                "runName": run_name,
+                "datasetItemId": dataset_item_id,
+                "traceId": trace_id,
+                "metadata": metadata or {},
+                "runDescription": run_description,
+            },
+        ).raise_for_status()
+
+
+class _LangfuseAPI:
+    def __init__(self, owner: HttpxLangfuseClient) -> None:
+        self.trace = _TraceAPI(owner)
+        self.dataset_run_items = _DatasetRunItemsAPI(owner._http)
+
+
+class HttpxLangfuseClient:
+    """Langfuse client over httpx, built from the standard Langfuse environment variables."""
+
+    def __init__(self, *, timeout: float = 10.0, transport: httpx.BaseTransport | None = None) -> None:
+        self._http = _env.make_http_client(timeout=timeout, transport=transport)
+        self._dataset_ids: dict[str, str | None] = {}
+        self._dataset_ids_lock = threading.Lock()
+        self.api = _LangfuseAPI(self)
+
+    def create_score(
+        self,
+        trace_id: str,
+        name: str,
+        value: float,
+        data_type: str,
+        comment: str | None = None,
+        observation_id: str | None = None,
+    ) -> None:
+        """Attach one score to a trace, or to a single observation inside it."""
+        body: dict[str, Any] = {
+            "id": str(uuid.uuid4()),
+            "traceId": trace_id,
+            "name": name,
+            # BOOLEAN scores go over the wire as 1.0/0.0, not as JSON booleans.
+            "value": (1.0 if value else 0.0) if isinstance(value, bool) else value,
+            "dataType": data_type,
+        }
+        if comment:
+            body["comment"] = comment
+        if observation_id:
+            body["observationId"] = observation_id
+        resp = self._http.post(_SCORES_PATH, json=body)
+        for _retry in range(_MAX_SCORE_ATTEMPTS - 1):
+            if not _is_retryable(resp):
+                break
+            time.sleep(_retry_delay(resp))
+            resp = self._http.post(_SCORES_PATH, json=body)
+        resp.raise_for_status()
+
+    def export_spans(self, spans: list[otlp.Span]) -> None:
+        """Export spans to Langfuse over OTLP/HTTP JSON. Raises on a refused or rejected export."""
+        resp = self._http.post(
+            _OTLP_PATH,
+            json=otlp.encode_export_request(spans),
+            headers={"x-langfuse-ingestion-version": "4"},
+        )
+        otlp.parse_export_response(resp)
+
+    def dataset_id_for_item(self, item_id: str) -> str | None:
+        """The Langfuse dataset an item belongs to, or None when the id is not a Langfuse item.
+
+        Cached because a run resolves the same handful of datasets once per item, from the
+        linking pool's worker threads.
+        """
+        with self._dataset_ids_lock:
+            if item_id in self._dataset_ids:
+                return self._dataset_ids[item_id]
+        resp = self._http.get(f"/api/public/dataset-items/{item_id}")
+        if resp.status_code == 404:
+            dataset_id = None
+        else:
+            resp.raise_for_status()
+            dataset_id = resp.json().get("datasetId")
+        with self._dataset_ids_lock:
+            self._dataset_ids[item_id] = dataset_id
+        return dataset_id
+
+    def list_traces(
+        self, *, from_time: Any, to_time: Any, limit: int, session_id: str | None = None
+    ) -> list[TraceSummary]:
+        return observations.list_traces_in_window(
+            self._http, from_time=from_time, to_time=to_time, limit=limit, session_id=session_id
+        )
+
+    def update_trace_version(self, trace_id: str, version: str) -> None:
+        """Upsert the trace version field via the ingestion endpoint."""
+        now = datetime.now(timezone.utc).isoformat()
+        self._http.post(
+            _INGESTION_PATH,
+            json={
+                "batch": [
+                    {
+                        "id": str(uuid.uuid4()),
+                        "timestamp": now,
+                        "type": "trace-create",
+                        "body": {"id": trace_id, "version": version},
+                    }
+                ]
+            },
+        ).raise_for_status()
+
+    def flush(self) -> None:
+        pass  # no client-side batching
+
+    def close(self) -> None:
+        self._http.close()
