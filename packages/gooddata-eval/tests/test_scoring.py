@@ -1,4 +1,7 @@
 # (C) 2026 GoodData Corporation
+from datetime import date
+
+import pytest
 from gooddata_eval.core.models import CreatedVisualization
 from gooddata_eval.core.scoring import (
     check_filters,
@@ -205,3 +208,89 @@ def test_normalized_filters_is_empty_per_category_when_unfiltered():
         }
     )
     assert normalized_filters(viz) == {"date": [], "ranking": [], "attribute": []}
+
+
+# --- relative vs absolute date filters denote the same period ---
+#
+# The agent answers "last month" either relatively (granularity MONTH, from -1, to -1)
+# or absolutely (from 2026-08-01, to 2026-08-31). Compared literally these never match,
+# so a correct answer in whichever encoding the fixture did not happen to use was scored
+# as a wrong date period. Both forms now collapse to the same absolute span.
+
+_TODAY = date(2026, 9, 9)
+
+
+def _date_viz(**overrides):
+    f = {"using": "dataset/dt_transactions", "type": "date_filter"}
+    f.update(overrides)
+    return _viz(query={"fields": {}, "filter_by": {"f_d": f}})
+
+
+def test_check_filters_relative_and_absolute_last_month_agree():
+    expected = _date_viz(**{"from": -1, "to": -1, "granularity": "MONTH"})
+    actual = _date_viz(**{"from": "2026-08-01", "to": "2026-08-31", "granularity": None})
+    assert check_filters(expected, actual, _TODAY).date_ok is True
+
+
+def test_check_filters_absolute_spanning_two_months_still_differs_from_one():
+    """Normalization must not flatten a genuinely wrong window into a match."""
+    expected = _date_viz(**{"from": -1, "to": -1, "granularity": "MONTH"})
+    actual = _date_viz(**{"from": "2026-07-01", "to": "2026-08-31", "granularity": None})
+    assert check_filters(expected, actual, _TODAY).date_ok is False
+
+
+def test_check_filters_day_offsets_resolve_and_off_by_one_still_fails():
+    expected = _date_viz(**{"from": -89, "to": 0, "granularity": "DAY"})
+    assert check_filters(expected, _date_viz(**{"from": "2026-06-12", "to": "2026-09-09"}), _TODAY).date_ok is True
+    assert check_filters(expected, _date_viz(**{"from": -90, "to": 0, "granularity": "DAY"}), _TODAY).date_ok is False
+
+
+def test_check_filters_quarter_and_year_offsets_resolve():
+    q = _date_viz(**{"from": -1, "to": -1, "granularity": "QUARTER"})
+    assert check_filters(q, _date_viz(**{"from": "2026-04-01", "to": "2026-06-30"}), _TODAY).date_ok is True
+    y = _date_viz(**{"from": 0, "to": 0, "granularity": "YEAR"})
+    assert check_filters(y, _date_viz(**{"from": "2026-01-01", "to": "2026-12-31"}), _TODAY).date_ok is True
+
+
+def test_check_filters_week_us_resolves_to_a_sunday_start_week():
+    """WEEK_US is well defined (Sunday-start), unlike a bare WEEK."""
+    expected = _date_viz(**{"from": 0, "to": 0, "granularity": "WEEK_US"})
+    # 2026-09-09 is a Wednesday; its WEEK_US bucket runs Sun 09-06 .. Sat 09-12.
+    assert check_filters(expected, _date_viz(**{"from": "2026-09-06", "to": "2026-09-12"}), _TODAY).date_ok is True
+    assert check_filters(expected, _date_viz(**{"from": "2026-09-06", "to": "2026-09-09"}), _TODAY).date_ok is False
+
+
+def test_check_filters_bare_week_granularity_falls_back_to_literal_comparison():
+    """A bare WEEK is not in the AAC enum and names no convention, so it is not guessed."""
+    expected = _date_viz(**{"from": -2, "to": -1, "granularity": "WEEK"})
+    assert check_filters(expected, _date_viz(**{"from": -2, "to": -1, "granularity": "WEEK"}), _TODAY).date_ok is True
+    assert check_filters(expected, _date_viz(**{"from": -13, "to": 0, "granularity": "DAY"}), _TODAY).date_ok is False
+
+
+def test_check_filters_date_still_distinguishes_the_dataset_it_hangs_off():
+    expected = _date_viz(**{"from": -1, "to": -1, "granularity": "MONTH"})
+    actual = _date_viz(using="dataset/dt_date", **{"from": -1, "to": -1, "granularity": "MONTH"})
+    assert check_filters(expected, actual, _TODAY).date_ok is False
+
+
+@pytest.mark.parametrize(
+    ("granularity", "offset"),
+    [
+        ("YEAR", -_TODAY.year),  # lands on year 0
+        ("DAY", -(10**9)),  # past timedelta's magnitude limit
+        ("WEEK_US", -(10**8)),
+        ("MONTH", -30000),
+        ("QUARTER", -10000),
+    ],
+)
+def test_check_filters_out_of_range_offsets_fall_back_instead_of_raising(granularity, offset):
+    """An offset outside the representable date range must not abort scoring.
+
+    Every granularity can be pushed past date's 1..9999 year range (or timedelta's
+    magnitude limit). Letting the ValueError/OverflowError escape would fail the whole
+    item on one malformed filter, so the span resolves to None and the filter goes back
+    to literal comparison -- which still matches an identically malformed expectation.
+    """
+    expected = _date_viz(**{"from": offset, "to": 0, "granularity": granularity})
+    assert check_filters(expected, _date_viz(**{"from": offset, "to": 0, "granularity": granularity}), _TODAY).date_ok
+    assert not check_filters(expected, _date_viz(**{"from": -1, "to": -1, "granularity": "MONTH"}), _TODAY).date_ok

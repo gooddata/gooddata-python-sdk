@@ -2,6 +2,7 @@
 """Agentic visualization evaluator — ported from gdc-nas tavern-e2e app/vis_agentic.py."""
 
 from dataclasses import dataclass
+from datetime import date
 
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import (
@@ -85,7 +86,13 @@ def _evaluate_visualization(
     expected: CreatedVisualization,
     actual: CreatedVisualization | None,
     skill_activated: bool = False,
+    today: date | None = None,
 ) -> EvaluationResult:
+    # One anchor for the scoring and for the filters reported beside it. check_filters
+    # already shares an anchor across its two sides, but resolving the reported filters
+    # separately would let a run that straddles midnight report periods the score was
+    # never computed from -- a detail that contradicts its own verdict.
+    today = today or date.today()
     exp_metric_uris = get_metric_uri_set(expected)
     exp_dim_uris = get_dimension_uri_set(expected)
     if actual is None:
@@ -105,13 +112,13 @@ def _evaluate_visualization(
             actual_metric_uris=set(),
             expected_dim_uris=exp_dim_uris,
             actual_dim_uris=set(),
-            expected_filters=normalized_filters(expected),
+            expected_filters=normalized_filters(expected, today),
             actual_filters={category: values.copy() for category, values in _NO_FILTERS.items()},
         )
     cross_ref_valid, cross_ref_errors = validate_cross_references(actual)
     act_metric_uris = get_metric_uri_set(actual)
     act_dim_uris = get_dimension_uri_set(actual)
-    filter_scores = check_filters(expected, actual)
+    filter_scores = check_filters(expected, actual, today)
     return EvaluationResult(
         visualization_created=True,
         cross_ref_valid=cross_ref_valid,
@@ -128,8 +135,8 @@ def _evaluate_visualization(
         actual_metric_uris=act_metric_uris,
         expected_dim_uris=exp_dim_uris,
         actual_dim_uris=act_dim_uris,
-        expected_filters=normalized_filters(expected),
-        actual_filters=normalized_filters(actual),
+        expected_filters=normalized_filters(expected, today),
+        actual_filters=normalized_filters(actual, today),
     )
 
 
@@ -137,8 +144,12 @@ def _evaluate_against_candidates(
     expected_outputs: list[CreatedVisualization],
     actual: CreatedVisualization | None,
     skill_activated: bool = False,
+    today: date | None = None,
 ) -> tuple[EvaluationResult, CreatedVisualization]:
-    pairs = [(_evaluate_visualization(exp, actual, skill_activated), exp) for exp in expected_outputs]
+    # Anchored once here too: the candidates are ranked against each other, so letting
+    # each resolve its own today could rank them on spans from different days.
+    today = today or date.today()
+    pairs = [(_evaluate_visualization(exp, actual, skill_activated, today), exp) for exp in expected_outputs]
     best_result, best_expected = max(pairs, key=lambda p: (p[0].strict_pass, p[0].strict_checks_passed_count))
     return best_result, best_expected
 
