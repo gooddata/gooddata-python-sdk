@@ -228,6 +228,7 @@ def _evaluate_run(
 
     expected_metric = expected_output.get("metric_id")
     if not expected_metric:
+        wanted: set[str] | None = None
         metric_correct = True
     else:
         asserted.append("metric_id")
@@ -239,9 +240,13 @@ def _evaluate_run(
         maql_correct = True
     else:
         asserted.append("scenario_maql")
+        # Only adjustments on the expected measure. Searching every adjustment independently
+        # lets a wrong adjustment on the right metric and a right adjustment on the wrong
+        # metric satisfy the two checks between them -- two failures scoring as a pass.
+        candidates = adjustments if wanted is None else [a for a in adjustments if a.get("metric_id") in wanted]
         maql_correct = any(
             isinstance(a.get("scenario_maql"), str) and _maql_matches(a["scenario_maql"], expected_maql)
-            for a in adjustments
+            for a in candidates
         )
 
     expected_scenarios = expected_output.get("scenarios")
@@ -518,8 +523,15 @@ def evaluate_agentic_what_if(
                     ctx.quality(
                         tid,
                         strict_checks=strict_checks,
-                        latency_sec=run.turn_wall_clock_sec,
-                        cost_usd=pt.total_cost if pt and ev.triggered else None,
+                        # pt.latency covers the whole conversation, which is the item's real
+                        # elapsed cost when the agent needed clarification turns to get
+                        # there; turn_wall_clock_sec (the goal turn alone) is the fallback.
+                        # This is what 7 of the 8 existing kinds do -- kda_skill is the
+                        # outlier and documents its own reason. Cost is not gated on
+                        # ev.triggered: a run that answered without ever reaching the tool
+                        # still spent tokens, and hiding that understates what the item cost.
+                        latency_sec=pt.latency if pt else run.turn_wall_clock_sec,
+                        cost_usd=pt.total_cost if pt else None,
                     )
 
         # Before the pass@K raise: a failing item's scores are the ones worth having.

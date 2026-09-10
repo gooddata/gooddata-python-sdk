@@ -117,10 +117,13 @@ def test_a_correct_scenario_passes_every_check():
     assert ev.asserted == ["metric_id", "scenario_maql"]
 
 
-def test_adjusting_the_wrong_measure_fails_on_metric_alone():
+def test_adjusting_the_wrong_measure_fails_both_metric_and_maql():
+    """The MAQL check is scoped to adjustments on the expected measure, so adjusting the
+    wrong one leaves it nothing valid to match. Both checks failing is the honest reading:
+    the expected measure was not adjusted at all, correctly or otherwise."""
     ev = _evaluate(_create_args(metric="orders"), {"success": True})
     assert ev.metric_correct is False
-    assert ev.maql_correct is True
+    assert ev.maql_correct is False
 
 
 def test_the_wrong_adjustment_fails_on_maql():
@@ -302,3 +305,47 @@ def test_a_spec_built_on_an_earlier_turn_is_still_the_one_scored():
     assert summary.best.evaluation.metric_correct is True
     assert summary.best.evaluation.maql_correct is True
     assert summary.pass_at_k is True
+
+
+def test_the_maql_must_match_on_the_adjustment_that_matched_the_metric():
+    """Checking the two independently lets two failures score as a pass: a wrong adjustment
+    on the right measure and a right adjustment on the wrong measure would satisfy one
+    check each."""
+    create = {
+        "visualization_ref": "viz_1",
+        "include_baseline": True,
+        "scenarios": [
+            {
+                "label": "Scenario A",
+                "adjustments": [
+                    # Right metric, wrong adjustment.
+                    {"metric_id": "revenue", "metric_type": "metric", "scenario_maql": "SELECT 0"},
+                    # Right adjustment, wrong metric.
+                    {"metric_id": "orders", "metric_type": "metric", "scenario_maql": _BASE_MAQL},
+                ],
+            }
+        ],
+    }
+    ev = _evaluate(create, {"success": True})
+
+    assert ev.metric_correct is True  # revenue was adjusted
+    assert ev.maql_correct is False  # but not with the expected expression
+    assert ev.strict_pass is False
+
+
+def test_the_maql_still_matches_when_the_right_adjustment_is_on_the_right_metric():
+    """The pairing must not reject a correct spec that also adjusts something else."""
+    create = {
+        "visualization_ref": "viz_1",
+        "include_baseline": True,
+        "scenarios": [
+            {
+                "label": "Scenario A",
+                "adjustments": [
+                    {"metric_id": "orders", "metric_type": "metric", "scenario_maql": "SELECT 0"},
+                    {"metric_id": "revenue", "metric_type": "metric", "scenario_maql": _BASE_MAQL},
+                ],
+            }
+        ],
+    }
+    assert _evaluate(create, {"success": True}).strict_pass is True
