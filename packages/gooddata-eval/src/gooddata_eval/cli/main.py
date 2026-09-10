@@ -16,7 +16,7 @@ from rich.table import Table
 
 from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, run_agentic_items
 from gooddata_eval.core.chat.sse_client import ChatClient, set_default_item_timeout, set_default_turn_timeout
-from gooddata_eval.core.config import ReasoningEffort, RunConfig
+from gooddata_eval.core.config import DEFAULT_JUDGE_MODEL, JUDGE_MODEL_ENV_VAR, ReasoningEffort, RunConfig
 from gooddata_eval.core.connection import ConnectionError_, resolve_connection
 from gooddata_eval.core.dataset.from_insights import generate as generate_from_insights
 from gooddata_eval.core.dataset.local import load_local_dataset
@@ -27,6 +27,7 @@ from gooddata_eval.core.reporting.html_report import load_report_files, write_ht
 from gooddata_eval.core.reporting.json_report import build_multi_model_report, write_multi_model_report
 from gooddata_eval.core.runner import ItemReport, run_items
 from gooddata_eval.core.summary.http_client import SummaryClient
+from gooddata_eval.core.timing import TIMERS_ENV_VAR
 from gooddata_eval.core.workspace import ModelResolutionError, WorkspaceModelController
 
 _EXIT_OK = 0
@@ -98,7 +99,26 @@ def _build_parser() -> argparse.ArgumentParser:
         type=int,
         default=1,
         help="Number of items evaluated concurrently (default 1 = sequential). "
-        "Increase to load-test the agent under simultaneous requests.",
+        "Increase to load-test the agent under simultaneous requests. Agentic kinds that "
+        "create workspace objects (metric_skill, alert_skill, conversation, kda_skill) always "
+        "run one at a time regardless, to avoid cross-test contamination.",
+    )
+    run.add_argument(
+        "--judge-model",
+        dest="judge_model",
+        metavar="MODEL",
+        help=f"OpenAI model for LLM-as-judge scoring (default: {DEFAULT_JUDGE_MODEL}). "
+        "Also settable via GD_EVAL_JUDGE_MODEL. Two things to weigh before changing it: a "
+        "model that rejects temperature=0 (the gpt-5 family does) makes verdicts "
+        "non-deterministic, and picking the same model the agent runs means the judge "
+        "grades its own family's output.",
+    )
+    run.add_argument(
+        "--timers",
+        action="store_true",
+        help="Print per-turn [timer] diagnostics (agent response, judge, simulated user). "
+        "Off by default because a large run emits hundreds of lines; the same measurements "
+        "are always in the JSON report's latency_breakdown_s. Equivalent to GD_EVAL_TIMERS=1.",
     )
     run.add_argument(
         "--turn-timeout",
@@ -261,6 +281,49 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     return _build_parser().parse_args(argv)
 
 
+def _apply_judge_model(model: str | None) -> None:
+    """Publish --judge-model for the deep LLMJudge call sites; an explicit flag wins."""
+    if model:
+        os.environ[JUDGE_MODEL_ENV_VAR] = model
+
+
+def _apply_timer_flag(enabled: bool) -> None:
+    """Publish --timers for the deep [timer] call sites.
+
+    An env var rather than a parameter because the emitters sit four layers down, and it is
+    how this package already gates cross-cutting behaviour (see TAVERN_E2E_SKIP_TRACE_LINK).
+    Only ever sets it -- never clears a value the caller exported themselves.
+    """
+    if enabled:
+        os.environ[TIMERS_ENV_VAR] = "1"
+
+
+def _warn_if_local_dataset_cannot_link(config: RunConfig, agentic_items: list) -> None:
+    """Say up front that experiment assembly will fail, rather than after the run.
+
+    --langfuse is refused outright with a local dataset because local item ids cannot be
+    linked. But every evaluate_agentic_* falls back to try_make_langfuse_client() when the
+    caller passes none, so with LANGFUSE_* exported the linking runs anyway and every
+    dataset-item lookup 404s -- arriving in a block at the very end of the run, long after
+    the flag that would have prevented it could be changed. The fallback is deliberate
+    (direct library and tavern callers rely on it), so this warns instead of disabling it.
+    """
+    from gooddata_eval.core.agentic._langfuse import SKIP_ENV_VAR, langfuse_credentials_present  # noqa: PLC0415
+    from gooddata_eval.core.config import env_flag  # noqa: PLC0415
+
+    if not agentic_items or config.dataset_folder is None:
+        return
+    if not langfuse_credentials_present() or env_flag(SKIP_ENV_VAR):
+        return
+    print(
+        f"warning: --dataset is a local folder, so its item ids are not Langfuse dataset item ids. "
+        f"Traces will be found and scored, but the per-run grouping that makes models comparable "
+        f"cannot be created and each conversation will report that its item does not exist in Langfuse. "
+        f"Use --langfuse-dataset for comparable runs, or set {SKIP_ENV_VAR}=1 to skip trace linking.",
+        file=sys.stderr,
+    )
+
+
 def _truncate(text: str, limit: int = 80) -> str:
     return text if len(text) <= limit else text[: limit - 1] + "…"
 
@@ -400,6 +463,7 @@ def _run(config: RunConfig) -> int:
     items = _load_dataset(config)
     agentic_items = [i for i in items if i.test_kind in AGENTIC_TEST_KINDS]
     non_agentic_items = [i for i in items if i.test_kind not in AGENTIC_TEST_KINDS]
+    _warn_if_local_dataset_cannot_link(config, agentic_items)
     models = config.models or []
     run_ts = datetime.now(timezone.utc).strftime("%Y-%m-%d-%H-%M")
     n_models = len(models) if models else 1
@@ -480,6 +544,7 @@ def _run(config: RunConfig) -> int:
                     on_item_start=on_item_start,
                     on_item_done=on_item_done,
                     agent_id=config.agent_id,
+                    concurrency=config.concurrency,
                 )
 
             # --- non-agentic items (single-turn, use Evaluator) ---
@@ -590,6 +655,8 @@ def _generate(args: argparse.Namespace) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv if argv is not None else sys.argv[1:])
+    _apply_timer_flag(getattr(args, "timers", False))
+    _apply_judge_model(getattr(args, "judge_model", None))
     if hasattr(args, "concurrency") and args.concurrency < 1:
         print("error: --concurrency must be >= 1.", file=sys.stderr)
         return _EXIT_OPERATIONAL_ERROR

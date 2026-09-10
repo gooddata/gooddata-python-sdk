@@ -22,13 +22,8 @@ class WorkspaceDataParser:
         upstream_group: list[CatalogWorkspace],
     ) -> dict[str, str]:
         """Creates a map of workspace IDs to their names for all known workspaces."""
-        source_map: dict[str, str] = {
-            workspace.workspace_id: workspace.workspace_name
-            for workspace in source_group
-        }
-        upstream_map: dict[str, str] = {
-            item.workspace_id: item.name for item in upstream_group
-        }
+        source_map: dict[str, str] = {workspace.workspace_id: workspace.workspace_name for workspace in source_group}
+        upstream_map: dict[str, str] = {item.workspace_id: item.name for item in upstream_group}
 
         return {**upstream_map, **source_map}
 
@@ -38,8 +33,7 @@ class WorkspaceDataParser:
     ) -> dict[str, str]:
         """Creates a map of child workspace IDs to their parent workspace IDs."""
         child_to_parent_map: dict[str, str] = {
-            workspace.workspace_id: workspace.parent_id
-            for workspace in source_group
+            workspace.workspace_id: workspace.parent_id for workspace in source_group
         }
 
         return child_to_parent_map
@@ -51,9 +45,7 @@ class WorkspaceDataParser:
     ) -> set[str]:
         """Creates a set of unique parent workspace IDs."""
         set_of_ids: set[str] = {
-            getattr(workspace, column_name)
-            for workspace in source_group
-            if getattr(workspace, column_name)
+            getattr(workspace, column_name) for workspace in source_group if getattr(workspace, column_name)
         }
         return set_of_ids
 
@@ -77,9 +69,7 @@ class WorkspaceDataParser:
         for workspace in source_group:
             child_id: str = workspace.workspace_id
             wdf_id: str | None = workspace.workspace_data_filter_id
-            wdf_values: list[str] | None = (
-                workspace.workspace_data_filter_values
-            )
+            wdf_values: list[str] | None = workspace.workspace_data_filter_values
 
             if wdf_values and wdf_id:
                 if not child_to_wdf_map.get(child_id):
@@ -94,18 +84,10 @@ class WorkspaceDataParser:
         source_group: list[WorkspaceFullLoad] | list[WorkspaceIncrementalLoad],
     ) -> WorkspaceDataMaps:
         """Creates maps which are dependent on the source group only."""
-        map_object.child_to_parent_id_map = self._get_child_to_parent_map(
-            source_group
-        )
-        map_object.workspace_id_to_wdf_map = self._get_child_to_wdfs_map(
-            source_group
-        )
-        map_object.parent_ids = self._get_set_of_ids_from_source(
-            source_group, "parent_id"
-        )
-        map_object.source_ids = self._get_set_of_ids_from_source(
-            source_group, "workspace_id"
-        )
+        map_object.child_to_parent_id_map = self._get_child_to_parent_map(source_group)
+        map_object.workspace_id_to_wdf_map = self._get_child_to_wdfs_map(source_group)
+        map_object.parent_ids = self._get_set_of_ids_from_source(source_group, "parent_id")
+        map_object.source_ids = self._get_set_of_ids_from_source(source_group, "workspace_id")
 
         return map_object
 
@@ -116,11 +98,7 @@ class WorkspaceDataParser:
         upstream_group: list[CatalogWorkspace],
     ) -> WorkspaceDataMaps:
         """Creates maps which are dependent on both the source group and upstream group."""
-        map_object.workspace_id_to_name_map = self._get_id_to_name_map(
-            source_group, upstream_group
-        )
-        map_object.upstream_ids = self.get_set_of_upstream_workspace_ids(
-            upstream_group
-        )
+        map_object.workspace_id_to_name_map = self._get_id_to_name_map(source_group, upstream_group)
+        map_object.upstream_ids = self.get_set_of_upstream_workspace_ids(upstream_group)
 
         return map_object

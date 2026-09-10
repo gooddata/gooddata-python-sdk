@@ -1,6 +1,5 @@
 # (C) 2025 GoodData Corporation
 import pytest
-
 from gooddata_pipelines.ldm_extension.input_validator import (
     LdmExtensionDataValidator,
 )
@@ -85,9 +84,7 @@ def valid_field_definitions():
 def test_validate_success(valid_dataset_definitions, valid_field_definitions):
     """Provide valid input data and expect successful validation."""
     validator = LdmExtensionDataValidator()
-    result = validator.validate(
-        valid_dataset_definitions, valid_field_definitions
-    )
+    result = validator.validate(valid_dataset_definitions, valid_field_definitions)
     assert isinstance(result, dict)
     assert "ws1" in result
     assert "ds1" in result["ws1"]

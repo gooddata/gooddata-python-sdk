@@ -39,10 +39,52 @@ class ItemReport:
     conversation_id: str | None = None
     response_id: str | None = None
     reasoning_steps: list[str] = field(default_factory=list)
+    # Per-phase breakdown of what the item's time was spent on. Additive to latency_s,
+    # which remains the item's own critical path. langfuse_latency_s is
+    # deliberately NOT part of that path -- trace linking runs off it (see
+    # agentic/_trace_linker.py) and is reported here so its cost stays visible anyway.
+    # Kinds that do not instrument a phase leave it at 0.0.
+    agent_latency_s: float = 0.0
+    judge_latency_s: float = 0.0
+    simulated_user_latency_s: float = 0.0
+    langfuse_latency_s: float = 0.0
+    # How many of `runs` actually passed. pass_at_k only answers "did ANY run pass", so
+    # without this a 5/5 item and a 1/5 item are indistinguishable in every output: same
+    # PASS, same 100% quality (quality_score reads best_detail, which is the winning run
+    # alone), same empty Notes.
+    runs_passed: int = 0
+    # Runs the agent answered but the judge produced no verdict for. Never a pass and never
+    # a failure: excluded from runs_passed and from pass@K, and pass^K is False while any
+    # exist. Counted in `runs`, because they cost real agent time.
+    runs_ungraded: int = 0
+    # What the item actually ran, when the kind knows better than the requested K.
+    # agentic_conversation drives its fixture exactly once whatever --runs says, so
+    # trusting K there reports four runs that never happened.
+    runs_effective: int | None = None
+
+    @property
+    def runs_total(self) -> int:
+        """What the item actually ran: the kind's own count when it has one, else K."""
+        return self.runs_effective or self.runs
+
+    @property
+    def pass_power_k(self) -> bool:
+        """True only when every run passed -- the stronger claim pass_at_k never makes.
+
+        An errored item can reach this with runs_passed == runs_total (earlier runs passed,
+        a later one raised before returning a verdict). That is not unanimity, it is an
+        item whose last run has no verdict at all, so an error disqualifies the claim.
+        """
+        return self.error is None and self.runs_total > 0 and self.runs_passed == self.runs_total
 
     @property
     def avg_latency_s(self) -> float:
-        return self.latency_s / self.runs if self.runs else 0.0
+        """Latency per run actually taken -- the same divisor the Runs column reports.
+
+        Dividing by the requested K instead would under-report every kind that runs fewer
+        times than asked (agentic_conversation drives its fixture once whatever --runs says).
+        """
+        return self.latency_s / self.runs_total if self.runs_total else 0.0
 
     @property
     def quality_score(self) -> float:
@@ -83,12 +125,22 @@ class EvalReport:
         return sum(1 for i in self.items if i.error is not None)
 
     @property
+    def passed_all_runs(self) -> int:
+        """Items where every run passed, not merely one of them (pass^K).
+
+        Reported beside `passed` because the two answer different questions and a gap
+        between them is the signal that a model is inconsistent rather than wrong.
+        """
+        return sum(1 for i in self.items if i.pass_power_k)
+
+    @property
     def latency_s(self) -> float:
         return sum(i.latency_s for i in self.items)
 
     @property
     def total_runs(self) -> int:
-        return sum(i.runs for i in self.items)
+        """Runs actually taken across the dataset -- the same divisor each item's average uses."""
+        return sum(i.runs_total for i in self.items)
 
     @property
     def avg_latency_s(self) -> float:
@@ -122,6 +174,7 @@ def _run_one_item(
     # attempt they're each describing whenever the best-ranked run isn't also the last one.
     best_chat_result: ChatResult | None = None
     best_run_latency: float | None = None
+    judge_errors: list[str] = []
     try:
         for run_index in range(1, runs + 1):
             t0 = time.perf_counter()
@@ -132,12 +185,16 @@ def _run_one_item(
             latency = time.perf_counter() - t0
             report.runs += 1
             report.latency_s += latency
+            if evaluation.error is not None:
+                report.runs_ungraded += 1
+                judge_errors.append(evaluation.error)
             if best is None or evaluation.rank_key > best.rank_key:
                 best = evaluation
                 best_chat_result = chat_result
                 best_run_latency = latency
             if evaluation.passed:
                 report.pass_at_k = True
+                report.runs_passed += 1
             if on_run_done is not None:
                 on_run_done(run_index, runs, evaluation.passed, latency)
     except Exception as e:  # agent/network/parse failure for this item
@@ -150,6 +207,15 @@ def _run_one_item(
         if best_chat_result is not None:
             report.reasoning_steps = getattr(best_chat_result, "reasoning_steps", None) or []
         return report
+
+    if report.runs and report.runs_ungraded == report.runs:
+        # Every run was answered and none was graded, so there is no verdict to report: an
+        # error, not K failures. Decided here, after the loop, so that one judge fault cannot
+        # abandon the runs behind it -- the agent's answers are still evaluated when the
+        # judge recovers on a later run.
+        report.error = (
+            f"JudgeResponseError: no run of this item could be graded ({report.runs} run(s)); last: {judge_errors[-1]}"
+        )
 
     if best is not None:
         report.best_detail = best.detail

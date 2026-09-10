@@ -38,8 +38,8 @@ class LdmExtensionDataValidator:
         uniqueness of combinations of identifieres on workspace level.
 
         Args:
-            raw_dataset_definitions (list[dict[str, str]]): List of raw dataset definitions to validate.
-            raw_field_definitions (list[dict[str, str]]): List of raw field definitions to validate.
+            dataset_definitions (list[CustomDatasetDefinition]): Dataset definitions to validate.
+            field_definitions (list[CustomFieldDefinition]): Field definitions to validate.
         Returns:
             dict[WorkspaceId, dict[DatasetId, CustomDataset]]:
                 Dictionary of validated dataset definitions per workspace,
@@ -59,9 +59,7 @@ class LdmExtensionDataValidator:
         validated_data = self._validate_dataset_definitions(dataset_definitions)
 
         # Then validate the field definitions and connect them to the datasets
-        validated_data = self._validate_field_definitions(
-            validated_data, field_definitions
-        )
+        validated_data = self._validate_field_definitions(validated_data, field_definitions)
 
         return validated_data
 
@@ -71,19 +69,15 @@ class LdmExtensionDataValidator:
     ) -> dict[WorkspaceId, dict[DatasetId, CustomDataset]]:
         self._check_dataset_combinations(dataset_definitions)
 
-        validated_definitions: dict[
-            WorkspaceId, dict[DatasetId, CustomDataset]
-        ] = {}
+        validated_definitions: dict[WorkspaceId, dict[DatasetId, CustomDataset]] = {}
         for definition in dataset_definitions:
-            validated_definitions.setdefault(definition.workspace_id, {})[
-                definition.dataset_id
-            ] = CustomDataset(definition=definition, custom_fields=[])
+            validated_definitions.setdefault(definition.workspace_id, {})[definition.dataset_id] = CustomDataset(
+                definition=definition, custom_fields=[]
+            )
 
         return validated_definitions
 
-    def _check_dataset_combinations(
-        self, dataset_definitions: list[CustomDatasetDefinition]
-    ) -> None:
+    def _check_dataset_combinations(self, dataset_definitions: list[CustomDatasetDefinition]) -> None:
         """Check integrity of provided dataset definitions.
 
         Validation criteria:
@@ -95,12 +89,9 @@ class LdmExtensionDataValidator:
             ValueError: If there are duplicate dataset definitions based on workspace_id and dataset_id.
         """
         workspace_dataset_combinations = [
-            (definition.workspace_id, definition.dataset_id)
-            for definition in dataset_definitions
+            (definition.workspace_id, definition.dataset_id) for definition in dataset_definitions
         ]
-        if len(workspace_dataset_combinations) != len(
-            set(workspace_dataset_combinations)
-        ):
+        if len(workspace_dataset_combinations) != len(set(workspace_dataset_combinations)):
             duplicates = self._get_duplicates(workspace_dataset_combinations)
             raise ValueError(
                 "Duplicate dataset definitions found in the raw dataset "
@@ -119,9 +110,7 @@ class LdmExtensionDataValidator:
         counts = Counter(list_to_check)
         return [item for item, count in counts.items() if count > 1]
 
-    def _check_field_combinations(
-        self, field_definitions: list[CustomFieldDefinition]
-    ) -> None:
+    def _check_field_combinations(self, field_definitions: list[CustomFieldDefinition]) -> None:
         """Check integrity of provided field definitions.
 
         Validation criteria (per workspace):
@@ -160,9 +149,7 @@ class LdmExtensionDataValidator:
 
     def _validate_field_definitions(
         self,
-        validated_definitions: dict[
-            WorkspaceId, dict[DatasetId, CustomDataset]
-        ],
+        validated_definitions: dict[WorkspaceId, dict[DatasetId, CustomDataset]],
         field_definitions: list[CustomFieldDefinition],
     ) -> dict[WorkspaceId, dict[DatasetId, CustomDataset]]:
         """Validates custom field definitions amd connects them to the datasets.
@@ -170,7 +157,7 @@ class LdmExtensionDataValidator:
         Args:
             validated_definitions (dict[WorkspaceId, dict[DatasetId, CustomDataset]]):
                 Dictionary of validated dataset definitions per workspace.
-            raw_field_definitions (list[dict[str, str]]): List of raw field definitions to validate.
+            field_definitions (list[CustomFieldDefinition]): Field definitions to validate.
         Returns:
             dict[WorkspaceId, dict[DatasetId, CustomDataset]]:
                 Updated dictionary of validated dataset definitions with custom fields added.
@@ -178,8 +165,8 @@ class LdmExtensionDataValidator:
         self._check_field_combinations(field_definitions)
 
         for field_definition in field_definitions:
-            validated_definitions[field_definition.workspace_id][
-                field_definition.dataset_id
-            ].custom_fields.append(field_definition)
+            validated_definitions[field_definition.workspace_id][field_definition.dataset_id].custom_fields.append(
+                field_definition
+            )
 
         return validated_definitions

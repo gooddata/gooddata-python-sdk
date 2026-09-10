@@ -1,9 +1,9 @@
 # (C) 2025 GoodData Corporation
 
 import time
+
 import pytest
 from gooddata_pipelines.utils.rate_limiter import RateLimiter
-
 
 # ---------------------------
 # Core wait + reset behavior
@@ -171,6 +171,5 @@ def test_context_manager_propagates_exceptions():
     class Boom(Exception):
         pass
 
-    with pytest.raises(Boom):
-        with limiter:
-            raise Boom("fail")
+    with pytest.raises(Boom), limiter:
+        raise Boom("fail")

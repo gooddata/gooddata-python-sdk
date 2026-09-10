@@ -10,6 +10,8 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from gooddata_eval.core.timing import PhaseTimings
+
 
 class AacQueryField(BaseModel):
     model_config = ConfigDict(extra="allow")
@@ -273,6 +275,8 @@ class ChatResult(BaseModel):
     # step emits ONLY this part (no text part), so its `cta` is the only "the agent is asking
     # a question" signal the simulated-user loops can key off.
     alert_proposals: list[dict] = Field(default_factory=list, alias="alertProposals")
+    search_results: list[dict] = Field(default_factory=list, alias="searchResults")
+    unhandled_parts: list[dict] = Field(default_factory=list, alias="unhandledParts")
     tool_call_events: list[ToolCallEvent] = Field(default_factory=list, alias="toolCallEvents")
     reasoning_step_count: int = Field(default=0, alias="reasoningStepCount")
     reasoning_steps: list[str] = Field(default_factory=list, alias="reasoningSteps")
@@ -283,6 +287,69 @@ class ChatResult(BaseModel):
     stream_ended: bool = False
     # Wall-clock seconds for the whole chat turn, timed by the client.
     turn_wall_clock_sec: float | None = None
+
+
+def shift_and_index_events(
+    result: ChatResult,
+    *,
+    turn_offset: float,
+    tool_index_offset: int,
+    reasoning_index_offset: int,
+) -> tuple[float, int, int]:
+    """Rebase one turn's tool-call/reasoning-step timestamps and indices onto a shared,
+    conversation-wide timeline, mutating the events in place.
+
+    Each turn's own SSE stream times its events from ~0 and indexes them from 0 within
+    that turn alone -- call_ts/result_ts/ts and index must be shifted by every prior
+    turn's contribution before events from multiple turns can be merged into one
+    chronologically ordered ``build_latency_breakdown`` across a whole multi-turn run.
+
+    Returns the updated ``(turn_offset, tool_index_offset, reasoning_index_offset)`` to
+    pass into the next turn's call -- the caller still owns accumulating the shifted
+    events themselves (e.g. into an ``all_tool_call_events`` list) since callers differ
+    in whether/how they also need the raw per-turn events for other purposes.
+
+    Note: ``turn_offset`` advances by ``turn_wall_clock_sec`` only, so time spent
+    generating a simulated-user reply between turns is not represented -- inter-turn
+    gaps compress in the reconstructed timeline.
+    """
+    for tc in result.tool_call_events or []:
+        if tc.call_ts is not None:
+            tc.call_ts += turn_offset
+        if tc.result_ts is not None:
+            tc.result_ts += turn_offset
+        if tc.index is not None:
+            tc.index += tool_index_offset
+    for rs in result.reasoning_step_events or []:
+        rs.ts += turn_offset
+        rs.index += reasoning_index_offset
+    tool_index_offset += len(result.tool_call_events or [])
+    reasoning_index_offset += len(result.reasoning_step_events or [])
+    turn_offset += result.turn_wall_clock_sec or 0.0
+    return turn_offset, tool_index_offset, reasoning_index_offset
+
+
+class AgenticAssertionError(AssertionError):
+    """Base for every agentic kind's failure, carrying what the runner reports about it.
+
+    Set by ``evaluate_agentic_*`` so a failing item still reports what the agent did and how
+    many of its K runs passed -- ``cli/agentic_runner`` reads these off the exception exactly
+    as it reads them off an ``AgenticEvalOutcome`` on the success path. Declared once because
+    the payload is identical for every kind: while it lived in eight copies, two declared
+    ``timings`` and six did not, though the runner reads it from all eight.
+
+    Bare annotations, so no class attributes are created and ``getattr(exc, name, default)``
+    still sees only what the raising code actually set.
+    """
+
+    __tracebackhide__ = True
+    reasoning_steps: list[str]
+    conversation_id: str
+    response_id: str | None
+    detail: dict
+    timings: PhaseTimings
+    runs_passed: int
+    runs_effective: int
 
 
 class AgenticEvalOutcome(BaseModel):
@@ -299,6 +366,15 @@ class AgenticEvalOutcome(BaseModel):
     conversation_id: str | None = None
     response_id: str | None = None
     detail: dict = Field(default_factory=dict)
+    # Per-phase latency for the whole item (summed across its K runs). Kept beside
+    # ``detail`` rather than inside it so reporting can read it without guessing at keys.
+    timings: PhaseTimings = Field(default_factory=PhaseTimings)
+    # How many of the item's runs passed, and how many it actually ran. pass_at_k answers
+    # only "did any run pass", so without these a 5/5 item and a 1/5 item are identical in
+    # every output. ``runs_effective`` exists because the requested K is not always what
+    # ran -- agentic_conversation drives its fixture once whatever --runs says.
+    runs_passed: int = 0
+    runs_effective: int = 0
 
 
 class SummaryInput(BaseModel):
@@ -330,3 +406,7 @@ class DatasetItem(BaseModel):
     expected_output: Any
     # Only used by the `dashboard_summary` test kind; ignored by all others.
     summary_input: SummaryInput | None = None
+    # Relayed verbatim as the chat request's `userContext`. Deliberately opaque: gen-ai owns
+    # that schema (a discriminated union of view/widget descriptors), so re-modelling it here
+    # would only create a second copy to keep in sync.
+    user_context: dict[str, Any] | None = None

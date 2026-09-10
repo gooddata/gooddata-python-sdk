@@ -2,16 +2,13 @@
 
 
 import pytest
-
 from gooddata_pipelines.provisioning.entities.users.models.user_groups import (
     UserGroupIncrementalLoad,
 )
 
 
 def test_missing_key_no_parent_groups() -> None:
-    result = UserGroupIncrementalLoad(
-        user_group_id="ug_2", user_group_name="Developers", is_active=True
-    )
+    result = UserGroupIncrementalLoad(user_group_id="ug_2", user_group_name="Developers", is_active=True)
     expected = UserGroupIncrementalLoad(
         user_group_id="ug_2",
         user_group_name="Developers",
@@ -19,9 +16,7 @@ def test_missing_key_no_parent_groups() -> None:
         is_active=True,
     )
 
-    assert result == expected, (
-        "Row without parent user groups should be parsed correctly"
-    )
+    assert result == expected, "Row without parent user groups should be parsed correctly"
 
 
 @pytest.mark.parametrize("invalid_name", [None, ""])
@@ -39,9 +34,7 @@ def test_fallback_name(invalid_name) -> None:
         is_active=False,
     )
 
-    assert result == expected, (
-        "Row with empty name should fallback to user group ID"
-    )
+    assert result == expected, "Row with empty name should fallback to user group ID"
 
 
 @pytest.mark.parametrize("empty_parent_groups", [None, "", []])
@@ -59,9 +52,7 @@ def test_no_parent_user_groups(empty_parent_groups) -> None:
         is_active=False,
     )
 
-    assert result == expected, (
-        "Row with empty parent user groups should be parsed correctly"
-    )
+    assert result == expected, "Row with empty parent user groups should be parsed correctly"
 
 
 def test_row_invalid_is_active() -> None:

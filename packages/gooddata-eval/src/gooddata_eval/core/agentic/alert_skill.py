@@ -11,10 +11,27 @@ from typing import Any
 
 from gooddata_sdk import GoodDataSdk
 
-from gooddata_eval.core.agentic._catalog import CatalogMetricAlert
+from gooddata_eval.core.agentic._catalog import AnomalyDetectionGranularity, CatalogMetricAlert
+from gooddata_eval.core.agentic._trace_linker import (
+    RunIdentity,
+    RunTraceContext,
+    SubmitTraceLink,
+    open_trace_window,
+    run_trace_link_inline,
+    submit_trace_scoring,
+    utc_now,
+)
+from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import AgenticEvalOutcome, ReasoningStepEvent, ToolCallEvent, timeline_detail
+from gooddata_eval.core.models import (
+    AgenticAssertionError,
+    AgenticEvalOutcome,
+    ReasoningStepEvent,
+    ToolCallEvent,
+    shift_and_index_events,
+    timeline_detail,
+)
 
 try:
     from openai import OpenAI as _OpenAI
@@ -109,6 +126,94 @@ def _check_filters(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     if not act_filters:
         return False
     return _deep_subset(exp_filters, act_filters)
+
+
+def _attribute_label_ids(items: list, *, side: str) -> list[str]:
+    """Canonicalise group-by entries to bare label ids, whatever spelling they arrive in.
+
+    The two sides of the comparison speak different vocabularies for the same grouping.
+    Fixtures author the AAC tool-input form, ``{"using": "label/x"}``; ``create_metric_alert``
+    receives the resolved AFM form, ``{"localIdentifier": "a0", "label": {"identifier":
+    {"id": "x", "type": "label"}}}``, forwarded verbatim from ``prepare_metric_alert_proposal``.
+    Identity is therefore the only thing they can be compared on.
+
+    A shape not listed here, or a URI prefix other than ``label/``, raises: ``label/x`` and
+    ``attribute/x`` are different objects, and an unknown spelling must fail loudly rather
+    than quietly compare unequal.
+    """
+    if not isinstance(items, list):
+        raise ValueError(f"Unrecognised {side} group-by attributes, expected a list: {items!r}")
+    ids: list[str] = []
+    for item in items:
+        raw: object = None
+        if isinstance(item, str):
+            raw = item
+        elif isinstance(item, dict):
+            label = item.get("label")
+            identifier = item.get("identifier")
+            if isinstance(item.get("using"), str):
+                raw = item["using"]
+            elif isinstance(label, dict) and isinstance(label.get("identifier"), dict):
+                raw = label["identifier"].get("id")
+            elif isinstance(identifier, dict):
+                raw = identifier.get("id")
+        if not isinstance(raw, str) or not raw:
+            raise ValueError(f"Unrecognised {side} group-by attribute entry: {item!r}")
+        prefix, slash, rest = raw.partition("/")
+        if not slash:
+            ids.append(raw)
+        elif prefix == "label" and rest:
+            ids.append(rest)
+        else:
+            raise ValueError(f"Unrecognised {side} group-by attribute reference: {raw!r}")
+    return ids
+
+
+def _check_attributes(expected: CatalogMetricAlert, actual_args: dict) -> bool:
+    """Compare group-by identity only.
+
+    Per-entry properties — ``showAllValues``, the converter-assigned ``localIdentifier`` —
+    are deliberately not asserted, and the comparison is a multiset so entry order does not
+    matter.
+    """
+    exp_attributes = expected.attributes
+    if exp_attributes is None:
+        return True
+    act_attributes = actual_args.get("attributes")
+    if act_attributes is None:
+        # Arguments are raw `json.loads` output, where an unset nullable argument arrives as
+        # null rather than absent. Both spellings of "no grouping" have to land on [], which
+        # is why this is not `actual_args.get("attributes", [])`.
+        act_attributes = []
+    elif not isinstance(act_attributes, list):
+        # An argument that is not a list of groupings is the agent answering wrongly, so it
+        # scores False. Raising instead would make the runner record an ERROR, and errored
+        # items are excluded from the failure count — a malformed answer must not rank above
+        # a merely wrong one. An unreadable *entry* still raises, in `_attribute_label_ids`:
+        # entries are typed at the tool boundary, so the plausible cause there is the wire
+        # format moving, which has to be unmissable.
+        return False
+    if not exp_attributes:
+        return not act_attributes
+    exp_ids = sorted(_attribute_label_ids(exp_attributes, side="expected"))
+    act_ids = sorted(_attribute_label_ids(act_attributes, side="actual"))
+    return exp_ids == act_ids
+
+
+def _check_granularity(expected: CatalogMetricAlert, actual_args: dict) -> bool:
+    """Compare the ANOMALY detection interval when the fixture states one.
+
+    ``None`` means unasserted, mirroring ``attributes``: only the ANOMALY items carry a
+    ``Granularity``, and every other item must stay unaffected. The expectation is already
+    canonical by the time it lands here; the tool argument is a raw string, so only that
+    side needs folding.
+    """
+    if expected.granularity is None:
+        return True
+    actual = actual_args.get("granularity")
+    if not actual:
+        return False
+    return str(actual).strip().upper() == expected.granularity.value
 
 
 def _check_metric(expected: CatalogMetricAlert, actual_args: dict) -> bool:
@@ -242,18 +347,36 @@ def generate_simulated_alert_response(
         )
     elif filters == []:
         filters_rule = (
-            "5. Your alert must have NO filters and NO date/time window — it evaluates over all time. "
-            "If the agent asks which time period each check should cover, or offers a choice such as "
-            "'last Day / Week / Month', do NOT pick one: reply that you want no date filter at all, "
-            "all time. Never invent a period, a granularity or an 'evaluate each run on a X basis' "
-            "instruction the goal did not ask for.\n"
+            "5. Your alert must have NO filters and NO date/time window on the metric — it evaluates "
+            "over all time. If the agent asks which time period each check should cover, or offers a "
+            "choice such as 'last Day / Week / Month', do NOT pick one: reply that you want no date "
+            "filter at all, all time.\n"
         )
     else:
         filters_rule = (
             "5. Ask only for the filters your original request implies — do not invent an evaluation "
-            "period, granularity or date window that was not requested. If the agent offers a choice "
+            "period or date window that was not requested. If the agent offers a choice "
             "such as 'last Day / Week / Month' that your request never mentioned, say you do not want "
             "a date window.\n"
+        )
+
+    if operator == "ANOMALY":
+        # The fallback keeps the conversation alive when the fixture names no interval -- an
+        # anomaly alert cannot be created without one. It is deliberately NOT mirrored into
+        # `expected.granularity`: `_check_granularity` asserts only what the fixture stated,
+        # and scoring an item against an interval it never asked for is the defect this rule
+        # exists to undo.
+        granularity = (expected.granularity or AnomalyDetectionGranularity.DAY).value
+        anomaly_rule = (
+            "7. This is an ANOMALY alert. Anomaly detection REQUIRES a time granularity, and that "
+            f"granularity is NOT a date filter. State it in your first reply and repeat it whenever "
+            f"asked: use {granularity} granularity. Rule 5 constrains filters on the metric only — it "
+            "never applies to this detection interval, so never refuse to give one.\n"
+        )
+    else:
+        anomaly_rule = (
+            "7. Do not invent an evaluation period, a granularity or an 'evaluate each run on a X "
+            "basis' instruction your goal never asked for.\n"
         )
 
     original_request = f'Your original request to the agent was: "{question}"\n' if question else ""
@@ -279,8 +402,7 @@ def generate_simulated_alert_response(
         "   Do not wait for the agent to ask — state it alongside the metric and condition answers.\n"
         + filters_rule
         + f"6. Proactively state how often you want to be alerted in your first reply: {trigger_request}. "
-        "   Repeat it if the agent proposes a different cadence.\n"
-        "Reply concisely and directly."
+        "   Repeat it if the agent proposes a different cadence.\n" + anomaly_rule + "Reply concisely and directly."
     )
 
     messages: list = [{"role": "system", "content": system_prompt}]
@@ -319,6 +441,8 @@ class AlertEvaluation:
     filters_correct: bool
     metric_correct: bool
     recipients_correct: bool
+    attributes_correct: bool = True
+    granularity_correct: bool = True
 
     @property
     def strict_pass(self) -> bool:
@@ -331,6 +455,8 @@ class AlertEvaluation:
                 self.filters_correct,
                 self.metric_correct,
                 self.recipients_correct,
+                self.attributes_correct,
+                self.granularity_correct,
             ]
         )
 
@@ -394,6 +520,35 @@ def _normalize_expected_filters(expected: dict) -> list | str | None:
     return None
 
 
+_NO_GROUPING_MARKERS = ("none", "no grouping")
+
+
+def _normalize_expected_attributes(expected: dict) -> list | None:
+    """
+    * ``Attributes`` list        -> that list (exact expectation)
+    * "None" / "no grouping"     -> ``[]``   (stated: no group-by; extras fail)
+    * absent, or other prose     -> ``None`` (unstated; grouping not asserted)
+
+    A date narrows an alert as a group-by as well as a filter, and a group-by makes it fire
+    per period value instead of on the latest one — so ``[]`` has to be expressible separately
+    from "absent", exactly as it is for ``filters``.
+
+    The simulated user is told nothing about groupings, so a non-empty expectation requires the
+    item's own question to request that grouping; ``[]`` needs no such support, because the
+    simulated user does not invent a grouping and the check verifies it did not.
+    """
+    attributes = _case_insensitive_get(expected, "attributes")
+    if isinstance(attributes, list):
+        # Validated here so a malformed fixture fails before the run spends an API call.
+        _attribute_label_ids(attributes, side="expected")
+        return attributes
+    if attributes is None:
+        return None
+    if isinstance(attributes, str):
+        return [] if any(kw in attributes.lower() for kw in _NO_GROUPING_MARKERS) else None
+    raise ValueError(f"Attributes expectation must be a list or a display string, got {type(attributes).__name__}")
+
+
 def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
     """Parse expected_output dict into CatalogMetricAlert, accepting display-format or internal-format keys."""
     operator = _case_insensitive_get(expected, "operator") or "GREATER_THAN"
@@ -418,6 +573,11 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
         recipients = list(raw_recip)
 
     filters = _normalize_expected_filters(expected)
+    attributes = _normalize_expected_attributes(expected)
+
+    granularity = AnomalyDetectionGranularity.parse(
+        _case_insensitive_get(expected, "granularity", "detection granularity")
+    )
 
     return CatalogMetricAlert(
         operator=operator,
@@ -428,6 +588,8 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
         metric_id=metric_id,
         recipients=recipients,
         filters=filters,
+        attributes=attributes,
+        granularity=granularity,
     )
 
 
@@ -511,21 +673,14 @@ def run_agentic_alert_skill(
                 chat_result = client.send_message(conv_id, current_question)
                 reasoning_steps.extend(chat_result.reasoning_steps or [])
                 response_id = chat_result.response_id or response_id
-                for tc in chat_result.tool_call_events or []:
-                    if tc.call_ts is not None:
-                        tc.call_ts += turn_offset
-                    if tc.result_ts is not None:
-                        tc.result_ts += turn_offset
-                    if tc.index is not None:
-                        tc.index += tool_index_offset
-                for rs in chat_result.reasoning_step_events or []:
-                    rs.ts += turn_offset
-                    rs.index += reasoning_index_offset
+                turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
+                    chat_result,
+                    turn_offset=turn_offset,
+                    tool_index_offset=tool_index_offset,
+                    reasoning_index_offset=reasoning_index_offset,
+                )
                 all_tool_call_events.extend(chat_result.tool_call_events or [])
                 all_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
-                tool_index_offset += len(chat_result.tool_call_events or [])
-                reasoning_index_offset += len(chat_result.reasoning_step_events or [])
-                turn_offset += chat_result.turn_wall_clock_sec or 0.0
                 alert_id, actual_args, tool_called = _extract_alert_call(chat_result.tool_call_events or [])
                 if tool_called:
                     alert_id_to_delete = alert_id
@@ -533,6 +688,8 @@ def run_agentic_alert_skill(
                 response_text = (chat_result.text_response or "").strip()
                 if not response_text and chat_result.alert_proposals:
                     response_text = render_alert_proposal(chat_result.alert_proposals[-1])
+                if not response_text:
+                    response_text = render_answer_text(chat_result)
                 # Stop if agent gave a completely empty response (stuck)
                 if not response_text and not chat_result.tool_call_events:
                     break
@@ -555,6 +712,8 @@ def run_agentic_alert_skill(
                 filters_correct=tool_called and _check_filters(expected, actual_args),
                 metric_correct=tool_called and _check_metric(expected, actual_args),
                 recipients_correct=tool_called and _check_recipients(expected, actual_args, sdk=sdk),
+                attributes_correct=tool_called and _check_attributes(expected, actual_args),
+                granularity_correct=tool_called and _check_granularity(expected, actual_args),
             )
             return AlertRunResult(
                 conversation_id=conv_id,
@@ -600,6 +759,8 @@ def run_agentic_alert_skill(
                 r.eval.filters_correct,
                 r.eval.metric_correct,
                 r.eval.recipients_correct,
+                r.eval.attributes_correct,
+                r.eval.granularity_correct,
             ]
         ),
     )
@@ -611,14 +772,8 @@ def run_agentic_alert_skill(
     )
 
 
-class AlertSkillAssertionError(AssertionError):
+class AlertSkillAssertionError(AgenticAssertionError):
     """Raised when an alert-skill evaluation fails."""
-
-    __tracebackhide__ = True
-    reasoning_steps: list[str]
-    conversation_id: str
-    response_id: str | None
-    detail: dict
 
 
 def evaluate_agentic_alert_skill(
@@ -638,6 +793,7 @@ def evaluate_agentic_alert_skill(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    submit_trace_link: SubmitTraceLink = run_trace_link_inline,
 ) -> AgenticEvalOutcome:
     """Run alert-skill evaluation, log to Langfuse, and raise AlertSkillAssertionError on failure.
 
@@ -648,14 +804,7 @@ def evaluate_agentic_alert_skill(
     `conversation_id`-on-exception idiom in `ChatClient.ask()`) so callers can retrieve them
     either way.
     """
-    from datetime import datetime as _dt  # noqa: PLC0415
-    from datetime import timezone as _tz  # noqa: PLC0415
-
-    from gooddata_eval.core.agentic._langfuse import try_make_langfuse_client  # noqa: PLC0415
-
-    if langfuse is None:
-        langfuse = try_make_langfuse_client()
-    window_start = _dt.now(_tz.utc)
+    langfuse, window_start = open_trace_window(langfuse)
     summary = run_agentic_alert_skill(
         host=host,
         token=token,
@@ -670,95 +819,100 @@ def evaluate_agentic_alert_skill(
     )
 
     if langfuse is not None and dataset_item_id:
-        from gooddata_eval.core.agentic._langfuse import (  # noqa: PLC0415
-            build_run_context,
-            find_traces_per_conversation,
-            log_quality_and_value_scores,
-            observe,
-            score_safe,
+        # Pinned on the calling thread: a deferred poll must not widen its query window.
+        window_end = utc_now()
+
+        def _write_scores(ctx: RunTraceContext) -> None:
+
+            for run_idx, run in enumerate(summary.run_results):
+                pt = ctx.trace(run.conversation_id)
+                ev = run.eval
+                strict_checks = {
+                    "alert_created": ev.alert_created,
+                    "operator_correct": ev.operator_correct,
+                    "threshold_correct": ev.threshold_correct,
+                    "trigger_correct": ev.trigger_correct,
+                    "filters_correct": ev.filters_correct,
+                    "metric_correct": ev.metric_correct,
+                    "recipients_correct": ev.recipients_correct,
+                    "attributes_correct": ev.attributes_correct,
+                    "granularity_correct": ev.granularity_correct,
+                }
+                with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
+                    for score_name, value in strict_checks.items():
+                        ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
+                    ctx.quality(
+                        tid,
+                        strict_checks=strict_checks,
+                        latency_sec=pt.latency if pt else None,
+                        cost_usd=pt.total_cost if pt else None,
+                    )
+
+        # Before the pass@K raise: a failing item's scores are the ones worth having.
+        submit_trace_scoring(
+            submit_trace_link,
+            RunIdentity(
+                host,
+                token,
+                workspace_id,
+                dataset_name,
+                run_timestamp,
+                model_version_override,
+                run_metadata_extra,
+                reasoning_effort,
+            ),
+            langfuse=langfuse,
+            dataset_item_id=dataset_item_id,
+            conversation_ids=[r.conversation_id for r in summary.run_results],
+            window_start=window_start,
+            window_end=window_end,
+            suffix_runs=len(summary.run_results) > 1,
+            write_scores=_write_scores,
+            item_input=question,
         )
 
-        run_name_base, run_metadata = build_run_context(
-            host,
-            token,
-            workspace_id,
-            dataset_name,
-            run_timestamp,
-            model_version_override,
-            run_metadata_extra,
-            reasoning_effort,
-        )
-        traces_by_conv = find_traces_per_conversation(
-            langfuse,
-            [r.conversation_id for r in summary.run_results],
-            window_start,
-        )
-        suffix_needed = len(summary.run_results) > 1
-        for run_idx, run in enumerate(summary.run_results):
-            pt = traces_by_conv.get(run.conversation_id)
-            run_name = f"{run_name_base}_run{run_idx}" if suffix_needed else run_name_base
-            ev = run.eval
-            strict_checks = {
-                "alert_created": ev.alert_created,
-                "operator_correct": ev.operator_correct,
-                "threshold_correct": ev.threshold_correct,
-                "trigger_correct": ev.trigger_correct,
-                "filters_correct": ev.filters_correct,
-                "metric_correct": ev.metric_correct,
-                "recipients_correct": ev.recipients_correct,
-            }
-            with observe(langfuse, pt.id if pt else None, dataset_item_id, run_name, run_metadata) as tid:
-                for score_name, value in strict_checks.items():
-                    score_safe(langfuse, tid, name=score_name, value=float(value), data_type="BOOLEAN")
-                log_quality_and_value_scores(
-                    langfuse,
-                    tid,
-                    strict_checks=strict_checks,
-                    latency_sec=pt.latency if pt else None,
-                    cost_usd=pt.total_cost if pt else None,
-                )
+    runs_passed = sum(1 for r in summary.run_results if r.eval.strict_pass)
+    runs_effective = len(summary.run_results)
+
+    best = summary.best
+    ev = best.eval
+    detail = {
+        "alert_created": ev.alert_created,
+        "operator_correct": ev.operator_correct,
+        "threshold_correct": ev.threshold_correct,
+        "trigger_correct": ev.trigger_correct,
+        "filters_correct": ev.filters_correct,
+        "metric_correct": ev.metric_correct,
+        "recipients_correct": ev.recipients_correct,
+        "attributes_correct": ev.attributes_correct,
+        "granularity_correct": ev.granularity_correct,
+        "actual_alert_arguments": best.actual_alert_arguments,
+        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
+    }
 
     if not summary.pass_at_k:
-        best = summary.best
-        ev = best.eval
         exc = AlertSkillAssertionError(
             f"Alert skill assertion failed. strict_pass={ev.strict_pass}. "
             f"alert_created={ev.alert_created}, operator_correct={ev.operator_correct}, "
             f"threshold_correct={ev.threshold_correct}, trigger_correct={ev.trigger_correct}, "
             f"filters_correct={ev.filters_correct}, metric_correct={ev.metric_correct}, "
-            f"recipients_correct={ev.recipients_correct}. "
+            f"recipients_correct={ev.recipients_correct}, "
+            f"attributes_correct={ev.attributes_correct}, "
+            f"granularity_correct={ev.granularity_correct}. "
             f"Actual args: {best.actual_alert_arguments}"
         )
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
-        exc.detail = {
-            "alert_created": ev.alert_created,
-            "operator_correct": ev.operator_correct,
-            "threshold_correct": ev.threshold_correct,
-            "trigger_correct": ev.trigger_correct,
-            "filters_correct": ev.filters_correct,
-            "metric_correct": ev.metric_correct,
-            "recipients_correct": ev.recipients_correct,
-            "actual_alert_arguments": best.actual_alert_arguments,
-            **timeline_detail(best.tool_call_events, best.reasoning_step_events),
-        }
+        exc.detail = detail
+        exc.runs_passed = runs_passed
+        exc.runs_effective = runs_effective
         raise exc
-    best = summary.best
-    ev = best.eval
     return AgenticEvalOutcome(
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
-        detail={
-            "alert_created": ev.alert_created,
-            "operator_correct": ev.operator_correct,
-            "threshold_correct": ev.threshold_correct,
-            "trigger_correct": ev.trigger_correct,
-            "filters_correct": ev.filters_correct,
-            "metric_correct": ev.metric_correct,
-            "recipients_correct": ev.recipients_correct,
-            "actual_alert_arguments": best.actual_alert_arguments,
-            **timeline_detail(best.tool_call_events, best.reasoning_step_events),
-        },
+        detail=detail,
     )

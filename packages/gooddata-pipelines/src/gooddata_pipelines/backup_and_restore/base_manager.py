@@ -2,7 +2,7 @@
 
 import abc
 from pathlib import Path
-from typing import Type, TypeVar
+from typing import TypeVar
 
 from gooddata_sdk.utils import PROFILES_FILE_PATH, profile_content
 
@@ -11,6 +11,9 @@ from gooddata_pipelines.backup_and_restore.models.storage import (
     BackupRestoreConfig,
     StorageType,
 )
+from gooddata_pipelines.backup_and_restore.storage.azure_storage import (
+    AzureStorage,
+)
 from gooddata_pipelines.backup_and_restore.storage.base_storage import (
     BackupStorage,
 )
@@ -18,9 +21,6 @@ from gooddata_pipelines.backup_and_restore.storage.local_storage import (
     LocalStorage,
 )
 from gooddata_pipelines.backup_and_restore.storage.s3_storage import S3Storage
-from gooddata_pipelines.backup_and_restore.storage.azure_storage import (
-    AzureStorage,
-)
 from gooddata_pipelines.logger import LogObserver
 from gooddata_pipelines.utils.file_utils import JsonUtils, YamlUtils
 
@@ -52,13 +52,11 @@ class BaseManager(abc.ABC):
         elif conf.storage_type == StorageType.LOCAL:
             return LocalStorage(conf)
         else:
-            raise RuntimeError(
-                f'Unsupported storage type "{conf.storage_type.value}".'
-            )
+            raise RuntimeError(f'Unsupported storage type "{conf.storage_type.value}".')
 
     @classmethod
     def create(
-        cls: Type[ManagerT],
+        cls: type[ManagerT],
         config: BackupRestoreConfig,
         host: str,
         token: str,
@@ -68,7 +66,7 @@ class BaseManager(abc.ABC):
 
     @classmethod
     def create_from_profile(
-        cls: Type[ManagerT],
+        cls: type[ManagerT],
         config: BackupRestoreConfig,
         profile: str = "default",
         profiles_path: Path = PROFILES_FILE_PATH,

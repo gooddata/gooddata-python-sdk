@@ -53,9 +53,7 @@ class WorkspaceDataValidator:
             workspace_id: str | None = workspace.workspace_id
             workspace_name: str | None = workspace.workspace_name
             wdf_id: str | None = workspace.workspace_data_filter_id
-            wdf_values: list[str] | None = (
-                workspace.workspace_data_filter_values
-            )
+            wdf_values: list[str] | None = workspace.workspace_data_filter_values
 
             # Create a context for the workspace validation
             validation_context: WorkspaceContext = WorkspaceContext(
@@ -66,9 +64,7 @@ class WorkspaceDataValidator:
             )
 
             # Raise specific error if both parent_id and workspace_id are not defined
-            if (parent_id is None or parent_id == "") and (
-                workspace_id is None or workspace_id == ""
-            ):
+            if (parent_id is None or parent_id == "") and (workspace_id is None or workspace_id == ""):
                 raise WorkspaceDataIntegrityException(
                     "Parent ID and workspace ID are not defined for at least one row. Please check the source data."
                 )
@@ -85,9 +81,7 @@ class WorkspaceDataValidator:
 
             # Raise error if workspace_id is not defined
             if workspace_id is None or workspace_id == "":
-                raise WorkspaceDataIntegrityException(
-                    f"Workspace ID is not defined for parent {parent_id}"
-                )
+                raise WorkspaceDataIntegrityException(f"Workspace ID is not defined for parent {parent_id}")
 
             # Raise error if wdf_id is not defined but has values
             if wdf_id is not None and wdf_id != "":
@@ -104,12 +98,11 @@ class WorkspaceDataValidator:
                 parent_wdf_map[parent_id].append(wdf_id)
 
             # Raise error if wdf_values are defined but wdf_id is not defined
-            if wdf_values is not None and wdf_values != []:
-                if wdf_id is None or wdf_id == "":
-                    raise WorkspaceDataIntegrityException(
-                        "WDF values are provided but WDF ID is not defined.",
-                        validation_context,
-                    )
+            if wdf_values is not None and wdf_values != [] and (wdf_id is None or wdf_id == ""):
+                raise WorkspaceDataIntegrityException(
+                    "WDF values are provided but WDF ID is not defined.",
+                    validation_context,
+                )
 
             parent_child_wdf_ids.append((parent_id, workspace_id, wdf_id))
 
@@ -117,8 +110,7 @@ class WorkspaceDataValidator:
         if len(parent_child_wdf_ids) != len(set(parent_child_wdf_ids)):
             # Log the error to the database as a warning, but continue execution
             self.logger.warning(
-                "Duplicate combinations of parent_id, workspace_id, "
-                + "wdf_id exist in the source data."
+                "Duplicate combinations of parent_id, workspace_id, " + "wdf_id exist in the source data."
             )
 
         return parent_workspaces, parent_wdf_map
@@ -137,13 +129,9 @@ class WorkspaceDataValidator:
                 workspace_id=parent_id,
             )
 
-    def _check_wdf_is_set_on_parent(
-        self, parent_id: str, source_wdf_ids: list[str]
-    ) -> None:
+    def _check_wdf_is_set_on_parent(self, parent_id: str, source_wdf_ids: list[str]) -> None:
         """Raises an error if the parent workspace does not contain any of the defined wdf_id."""
-        wdf_response: Response = self.api.get_all_workspace_data_filters(
-            parent_id
-        )
+        wdf_response: Response = self.api.get_all_workspace_data_filters(parent_id)
         wdf_json: dict[str, Any] = wdf_response.json()
         wdf_data: list[dict[str, Any]] = wdf_json.get("data", [])
         wdf_ids_on_parent: set[str] = {wdf["id"] for wdf in wdf_data}
@@ -156,9 +144,7 @@ class WorkspaceDataValidator:
                     workspace_id=parent_id,
                 )
 
-    def validate_source_data(
-        self, source_group: list[WorkspaceFullLoad]
-    ) -> None:
+    def validate_source_data(self, source_group: list[WorkspaceFullLoad]) -> None:
         """
         Validates the source data integrity.
 
@@ -176,17 +162,11 @@ class WorkspaceDataValidator:
         """
         if not source_group:
             # Raise error if source is empty
-            raise WorkspaceException(
-                "No workspaces found in the source database."
-            )
+            raise WorkspaceException("No workspaces found in the source database.")
 
-        unique_parents, parent_wdf_map = self._check_basic_integrity(
-            source_group
-        )
+        unique_parents, parent_wdf_map = self._check_basic_integrity(source_group)
 
         for parent_id in unique_parents:
             self._check_parent_exist(parent_id)
 
-            self._check_wdf_is_set_on_parent(
-                parent_id, parent_wdf_map[parent_id]
-            )
+            self._check_wdf_is_set_on_parent(parent_id, parent_wdf_map[parent_id])

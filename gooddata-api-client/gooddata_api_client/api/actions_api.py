@@ -36,6 +36,7 @@ from gooddata_api_client.model.analyze_csv_response import AnalyzeCsvResponse
 from gooddata_api_client.model.anomaly_detection_request import AnomalyDetectionRequest
 from gooddata_api_client.model.anomaly_detection_result import AnomalyDetectionResult
 from gooddata_api_client.model.api_entitlement import ApiEntitlement
+from gooddata_api_client.model.attribute_permissions import AttributePermissions
 from gooddata_api_client.model.available_assignees import AvailableAssignees
 from gooddata_api_client.model.cache_usage_data import CacheUsageData
 from gooddata_api_client.model.change_analysis_request import ChangeAnalysisRequest
@@ -65,6 +66,7 @@ from gooddata_api_client.model.elements_response import ElementsResponse
 from gooddata_api_client.model.entitlements_request import EntitlementsRequest
 from gooddata_api_client.model.execution_result import ExecutionResult
 from gooddata_api_client.model.export_response import ExportResponse
+from gooddata_api_client.model.fact_permissions import FactPermissions
 from gooddata_api_client.model.forecast_request import ForecastRequest
 from gooddata_api_client.model.forecast_result import ForecastResult
 from gooddata_api_client.model.gd_storage_file import GdStorageFile
@@ -86,12 +88,14 @@ from gooddata_api_client.model.ip_allowlist_policy_targets import IpAllowlistPol
 from gooddata_api_client.model.key_drivers_request import KeyDriversRequest
 from gooddata_api_client.model.key_drivers_response import KeyDriversResponse
 from gooddata_api_client.model.key_drivers_result import KeyDriversResult
-from gooddata_api_client.model.ldm_object_permissions import LdmObjectPermissions
+from gooddata_api_client.model.label_permissions import LabelPermissions
 from gooddata_api_client.model.list_llm_provider_models_request import ListLlmProviderModelsRequest
 from gooddata_api_client.model.list_llm_provider_models_response import ListLlmProviderModelsResponse
 from gooddata_api_client.model.locale_request import LocaleRequest
 from gooddata_api_client.model.manage_attribute_permissions_request_inner import ManageAttributePermissionsRequestInner
 from gooddata_api_client.model.manage_dashboard_permissions_request_inner import ManageDashboardPermissionsRequestInner
+from gooddata_api_client.model.manage_fact_permissions_request_inner import ManageFactPermissionsRequestInner
+from gooddata_api_client.model.manage_label_permissions_request_inner import ManageLabelPermissionsRequestInner
 from gooddata_api_client.model.manage_metric_permissions_request_inner import ManageMetricPermissionsRequestInner
 from gooddata_api_client.model.memory_item_created_by_users import MemoryItemCreatedByUsers
 from gooddata_api_client.model.metric_permissions import MetricPermissions
@@ -761,7 +765,7 @@ class ActionsApi(object):
         )
         self.attribute_permissions_endpoint = _Endpoint(
             settings={
-                'response_type': (LdmObjectPermissions,),
+                'response_type': (AttributePermissions,),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/permissions',
                 'operation_id': 'attribute_permissions',
@@ -2638,7 +2642,7 @@ class ActionsApi(object):
         )
         self.fact_permissions_endpoint = _Endpoint(
             settings={
-                'response_type': (LdmObjectPermissions,),
+                'response_type': (FactPermissions,),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/facts/{factId}/permissions',
                 'operation_id': 'fact_permissions',
@@ -4359,7 +4363,7 @@ class ActionsApi(object):
         )
         self.label_permissions_endpoint = _Endpoint(
             settings={
-                'response_type': (LdmObjectPermissions,),
+                'response_type': (LabelPermissions,),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/permissions',
                 'operation_id': 'label_permissions',
@@ -4875,12 +4879,12 @@ class ActionsApi(object):
                 'all': [
                     'workspace_id',
                     'fact_id',
-                    'manage_attribute_permissions_request_inner',
+                    'manage_fact_permissions_request_inner',
                 ],
                 'required': [
                     'workspace_id',
                     'fact_id',
-                    'manage_attribute_permissions_request_inner',
+                    'manage_fact_permissions_request_inner',
                 ],
                 'nullable': [
                 ],
@@ -4899,8 +4903,8 @@ class ActionsApi(object):
                         (str,),
                     'fact_id':
                         (str,),
-                    'manage_attribute_permissions_request_inner':
-                        ([ManageAttributePermissionsRequestInner],),
+                    'manage_fact_permissions_request_inner':
+                        ([ManageFactPermissionsRequestInner],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -4909,7 +4913,7 @@ class ActionsApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'fact_id': 'path',
-                    'manage_attribute_permissions_request_inner': 'body',
+                    'manage_fact_permissions_request_inner': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -4935,12 +4939,12 @@ class ActionsApi(object):
                 'all': [
                     'workspace_id',
                     'label_id',
-                    'manage_attribute_permissions_request_inner',
+                    'manage_label_permissions_request_inner',
                 ],
                 'required': [
                     'workspace_id',
                     'label_id',
-                    'manage_attribute_permissions_request_inner',
+                    'manage_label_permissions_request_inner',
                 ],
                 'nullable': [
                 ],
@@ -4959,8 +4963,8 @@ class ActionsApi(object):
                         (str,),
                     'label_id':
                         (str,),
-                    'manage_attribute_permissions_request_inner':
-                        ([ManageAttributePermissionsRequestInner],),
+                    'manage_label_permissions_request_inner':
+                        ([ManageLabelPermissionsRequestInner],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -4969,7 +4973,7 @@ class ActionsApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'label_id': 'path',
-                    'manage_attribute_permissions_request_inner': 'body',
+                    'manage_label_permissions_request_inner': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -8944,7 +8948,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            LdmObjectPermissions
+            AttributePermissions
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -11631,7 +11635,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            LdmObjectPermissions
+            FactPermissions
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -14133,7 +14137,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            LdmObjectPermissions
+            LabelPermissions
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -14858,7 +14862,7 @@ class ActionsApi(object):
         self,
         workspace_id,
         fact_id,
-        manage_attribute_permissions_request_inner,
+        manage_fact_permissions_request_inner,
         **kwargs
     ):
         """Manage Permissions for a Fact  # noqa: E501
@@ -14866,13 +14870,13 @@ class ActionsApi(object):
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.manage_fact_permissions(workspace_id, fact_id, manage_attribute_permissions_request_inner, async_req=True)
+        >>> thread = api.manage_fact_permissions(workspace_id, fact_id, manage_fact_permissions_request_inner, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
             fact_id (str):
-            manage_attribute_permissions_request_inner ([ManageAttributePermissionsRequestInner]):
+            manage_fact_permissions_request_inner ([ManageFactPermissionsRequestInner]):
 
         Keyword Args:
             _return_http_data_only (bool): response data without head status
@@ -14940,15 +14944,15 @@ class ActionsApi(object):
             workspace_id
         kwargs['fact_id'] = \
             fact_id
-        kwargs['manage_attribute_permissions_request_inner'] = \
-            manage_attribute_permissions_request_inner
+        kwargs['manage_fact_permissions_request_inner'] = \
+            manage_fact_permissions_request_inner
         return self.manage_fact_permissions_endpoint.call_with_http_info(**kwargs)
 
     def manage_label_permissions(
         self,
         workspace_id,
         label_id,
-        manage_attribute_permissions_request_inner,
+        manage_label_permissions_request_inner,
         **kwargs
     ):
         """Manage Permissions for a Label  # noqa: E501
@@ -14956,13 +14960,13 @@ class ActionsApi(object):
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.manage_label_permissions(workspace_id, label_id, manage_attribute_permissions_request_inner, async_req=True)
+        >>> thread = api.manage_label_permissions(workspace_id, label_id, manage_label_permissions_request_inner, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
             label_id (str):
-            manage_attribute_permissions_request_inner ([ManageAttributePermissionsRequestInner]):
+            manage_label_permissions_request_inner ([ManageLabelPermissionsRequestInner]):
 
         Keyword Args:
             _return_http_data_only (bool): response data without head status
@@ -15030,8 +15034,8 @@ class ActionsApi(object):
             workspace_id
         kwargs['label_id'] = \
             label_id
-        kwargs['manage_attribute_permissions_request_inner'] = \
-            manage_attribute_permissions_request_inner
+        kwargs['manage_label_permissions_request_inner'] = \
+            manage_label_permissions_request_inner
         return self.manage_label_permissions_endpoint.call_with_http_info(**kwargs)
 
     def manage_metric_permissions(

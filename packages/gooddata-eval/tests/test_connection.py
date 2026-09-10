@@ -16,6 +16,11 @@ def test_resolve_connection_uses_env_token(monkeypatch):
 
 
 def test_resolve_connection_uses_profile(monkeypatch):
+    # GOODDATA_TOKEN outranks the profile by design, so an exported one makes this test
+    # read the developer's real token instead of the stubbed profile. Its two siblings
+    # above already clear it; this one did not, which is why the suite showed a permanent
+    # local failure that CI never saw.
+    monkeypatch.delenv("GOODDATA_TOKEN", raising=False)
     monkeypatch.setattr(
         "gooddata_eval.core.connection.profile_content",
         lambda profile: {"host": "https://from-profile", "token": "ptok"},

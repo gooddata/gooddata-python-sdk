@@ -33,12 +33,12 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.assignee_identifier import AssigneeIdentifier
     from gooddata_api_client.model.assignee_rule import AssigneeRule
-    from gooddata_api_client.model.ldm_object_permissions_for_assignee import LdmObjectPermissionsForAssignee
-    from gooddata_api_client.model.ldm_object_permissions_for_assignee_rule import LdmObjectPermissionsForAssigneeRule
+    from gooddata_api_client.model.attribute_permissions_for_assignee import AttributePermissionsForAssignee
+    from gooddata_api_client.model.attribute_permissions_for_assignee_rule import AttributePermissionsForAssigneeRule
     globals()['AssigneeIdentifier'] = AssigneeIdentifier
     globals()['AssigneeRule'] = AssigneeRule
-    globals()['LdmObjectPermissionsForAssignee'] = LdmObjectPermissionsForAssignee
-    globals()['LdmObjectPermissionsForAssigneeRule'] = LdmObjectPermissionsForAssigneeRule
+    globals()['AttributePermissionsForAssignee'] = AttributePermissionsForAssignee
+    globals()['AttributePermissionsForAssigneeRule'] = AttributePermissionsForAssigneeRule
 
 
 class ManageAttributePermissionsRequestInner(ModelComposed):
@@ -334,7 +334,7 @@ class ManageAttributePermissionsRequestInner(ModelComposed):
           'allOf': [
           ],
           'oneOf': [
-              LdmObjectPermissionsForAssignee,
-              LdmObjectPermissionsForAssigneeRule,
+              AttributePermissionsForAssignee,
+              AttributePermissionsForAssigneeRule,
           ],
         }

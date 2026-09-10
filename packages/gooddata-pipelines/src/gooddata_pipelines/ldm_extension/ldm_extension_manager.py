@@ -43,9 +43,7 @@ class LdmExtensionManager:
     INDENT = " " * 2
 
     @classmethod
-    def create(
-        cls, host: str, token: str, enable_second_granularities: bool = False
-    ) -> "LdmExtensionManager":
+    def create(cls, host: str, token: str, enable_second_granularities: bool = False) -> "LdmExtensionManager":
         return cls(
             host=host,
             token=token,
@@ -67,20 +65,14 @@ class LdmExtensionManager:
             enable_second_granularities=enable_second_granularities,
         )
 
-    def __init__(
-        self, host: str, token: str, enable_second_granularities: bool = False
-    ):
+    def __init__(self, host: str, token: str, enable_second_granularities: bool = False):
         self._validator = LdmExtensionDataValidator()
-        self._processor = LdmExtensionDataProcessor(
-            enable_second_granularities=enable_second_granularities
-        )
+        self._processor = LdmExtensionDataProcessor(enable_second_granularities=enable_second_granularities)
         self._sdk = GoodDataSdk.create(host_=host, token_=token)
         self._api = GoodDataApi(host=host, token=token)
         self.logger = LogObserver()
 
-    def _get_objects_with_invalid_relations(
-        self, workspace_id: str
-    ) -> list[AnalyticalObject]:
+    def _get_objects_with_invalid_relations(self, workspace_id: str) -> list[AnalyticalObject]:
         """Check for invalid references in the provided analytical objects.
 
         This method checks if the references in the provided analytical objects
@@ -93,20 +85,12 @@ class LdmExtensionManager:
             list[AnalyticalObject]: Set of analytical objects with invalid references.
         """
 
-        analytical_objects: list[AnalyticalObject] = (
-            self._get_analytical_objects(workspace_id=workspace_id)
-        )
+        analytical_objects: list[AnalyticalObject] = self._get_analytical_objects(workspace_id=workspace_id)
 
-        objects_with_invalid_relations = [
-            obj
-            for obj in analytical_objects
-            if not obj.attributes.are_relations_valid
-        ]
+        objects_with_invalid_relations = [obj for obj in analytical_objects if not obj.attributes.are_relations_valid]
         return objects_with_invalid_relations
 
-    def _get_analytical_objects(
-        self, workspace_id: str
-    ) -> list[AnalyticalObject]:
+    def _get_analytical_objects(self, workspace_id: str) -> list[AnalyticalObject]:
         """Get analytical objects in the workspace.
 
         This method retrieves all analytical objects (metrics, visualizations, dashboards)
@@ -119,9 +103,7 @@ class LdmExtensionManager:
             list[AnalyticalObject]: List of analytical objects in the workspace.
         """
         metrics_response = self._api.get_all_metrics(workspace_id)
-        visualizations_response = self._api.get_all_visualization_objects(
-            workspace_id
-        )
+        visualizations_response = self._api.get_all_visualization_objects(workspace_id)
         dashboards_response = self._api.get_all_dashboards(workspace_id)
 
         self._api.raise_if_response_not_ok(
@@ -162,9 +144,7 @@ class LdmExtensionManager:
             bool: True if the new LDM does not invalidate any relations, False otherwise.
         """
         # Create a set of IDs for each group, then compare those sets
-        set_current_invalid_relations = {
-            obj.id for obj in current_invalid_relations
-        }
+        set_current_invalid_relations = {obj.id for obj in current_invalid_relations}
         set_new_invalid_relations = {obj.id for obj in new_invalid_relations}
 
         # If the set of new invalid relations is a subset of the current one,
@@ -182,9 +162,7 @@ class LdmExtensionManager:
         """Build the declarative LDM payload to upload for one workspace."""
         if not merge_into_existing_ldm:
             return self._processor.datasets_to_ldm(datasets)
-        current = self._sdk.catalog_workspace_content.get_declarative_ldm(
-            workspace_id
-        )
+        current = self._sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
         return self._processor.merge_custom_ldm_into_existing(
             current,
             datasets,
@@ -207,17 +185,9 @@ class LdmExtensionManager:
         for workspace_id, datasets in validated_data.items():
             self.logger.info(f"⚙️ Processing workspace {workspace_id}...")
             # Get current workspace layout
-            current_layout = (
-                self._sdk.catalog_workspace.get_declarative_workspace(
-                    workspace_id
-                )
-            )
+            current_layout = self._sdk.catalog_workspace.get_declarative_workspace(workspace_id)
             # Get a set of objects with invalid relations from current workspace state
-            current_invalid_relations = (
-                self._get_objects_with_invalid_relations(
-                    workspace_id=workspace_id
-                )
-            )
+            current_invalid_relations = self._get_objects_with_invalid_relations(workspace_id=workspace_id)
 
             # Put the LDM with custom datasets into the GoodData workspace.
             self._sdk.catalog_workspace_content.put_declarative_ldm(
@@ -232,35 +202,23 @@ class LdmExtensionManager:
             )
 
             # Get a set of objects with invalid relations from the new workspace state
-            new_invalid_relations = self._get_objects_with_invalid_relations(
-                workspace_id=workspace_id
-            )
+            new_invalid_relations = self._get_objects_with_invalid_relations(workspace_id=workspace_id)
 
-            if self._new_ldm_does_not_invalidate_relations(
-                current_invalid_relations, new_invalid_relations
-            ):
+            if self._new_ldm_does_not_invalidate_relations(current_invalid_relations, new_invalid_relations):
                 self._log_success_message(workspace_id)
                 continue
 
-            self.logger.error(
-                f"❌ Difference in invalid relations found in workspace {workspace_id}."
-            )
-            self._log_diff_invalid_relations(
-                current_invalid_relations, new_invalid_relations
-            )
+            self.logger.error(f"❌ Difference in invalid relations found in workspace {workspace_id}.")
+            self._log_diff_invalid_relations(current_invalid_relations, new_invalid_relations)
 
-            self.logger.info(
-                f"{self.INDENT}⚠️ Reverting the workspace layout to the original state."
-            )
+            self.logger.info(f"{self.INDENT}⚠️ Reverting the workspace layout to the original state.")
             # Put the original workspace layout back to the workspace
             try:
                 self._sdk.catalog_workspace.put_declarative_workspace(
                     workspace_id=workspace_id, workspace=current_layout
                 )
             except Exception as e:
-                self.logger.error(
-                    f"Failed to revert workspace layout in {workspace_id}: {e}"
-                )
+                self.logger.error(f"Failed to revert workspace layout in {workspace_id}: {e}")
 
     def _log_diff_invalid_relations(
         self,
@@ -273,12 +231,11 @@ class LdmExtensionManager:
         updating the LDM, are logged.
         """
         # TODO: test !
-        diff_to_log: list[str] = []
-        for obj in new_invalid_relations:
-            if obj not in current_invalid_relations:
-                diff_to_log.append(
-                    f"{self.INDENT}∙ {obj.id} ({obj.type}) {obj.attributes.title}"
-                )
+        diff_to_log: list[str] = [
+            f"{self.INDENT}∙ {obj.id} ({obj.type}) {obj.attributes.title}"
+            for obj in new_invalid_relations
+            if obj not in current_invalid_relations
+        ]
         joined_diff_to_log = "\n".join(diff_to_log)
         error_message = f"{self.INDENT}Objects with newly invalidated relations:\n{joined_diff_to_log}"
 
@@ -348,8 +305,8 @@ class LdmExtensionManager:
         """
         # Validate raw data and aggregate the custom field and dataset
         # definitions per workspace.
-        validated_data: dict[WorkspaceId, dict[DatasetId, CustomDataset]] = (
-            self._validator.validate(custom_datasets, custom_fields)
+        validated_data: dict[WorkspaceId, dict[DatasetId, CustomDataset]] = self._validator.validate(
+            custom_datasets, custom_fields
         )
 
         if check_relations:

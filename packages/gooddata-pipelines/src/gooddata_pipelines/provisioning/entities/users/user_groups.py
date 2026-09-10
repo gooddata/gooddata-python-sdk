@@ -15,9 +15,7 @@ from gooddata_pipelines.provisioning.provisioning import Provisioning
 UserGroupModel: TypeAlias = UserGroupFullLoad | UserGroupIncrementalLoad
 
 
-class UserGroupProvisioner(
-    Provisioning[UserGroupFullLoad, UserGroupIncrementalLoad]
-):
+class UserGroupProvisioner(Provisioning[UserGroupFullLoad, UserGroupIncrementalLoad]):
     """Provisioning class for user groups in GoodData workspaces.
 
     This class handles the creation, update, and deletion of user groups
@@ -30,14 +28,10 @@ class UserGroupProvisioner(
     upstream_user_groups: list[CatalogUserGroup]
 
     FULL_LOAD_TYPE: type[UserGroupFullLoad] = UserGroupFullLoad
-    INCREMENTAL_LOAD_TYPE: type[UserGroupIncrementalLoad] = (
-        UserGroupIncrementalLoad
-    )
+    INCREMENTAL_LOAD_TYPE: type[UserGroupIncrementalLoad] = UserGroupIncrementalLoad
 
     @staticmethod
-    def _is_changed(
-        group: UserGroupModel, existing_group: CatalogUserGroup
-    ) -> bool:
+    def _is_changed(group: UserGroupModel, existing_group: CatalogUserGroup) -> bool:
         """Checks if user group has some changes and needs to be updated."""
         group.parent_user_groups.sort()
         parents_changed = group.parent_user_groups != existing_group.get_parents
@@ -57,16 +51,11 @@ class UserGroupProvisioner(
             user_group_parent_ids=parent_user_groups,
         )
         try:
-            self._api._sdk.catalog_user.create_or_update_user_group(
-                user_group=catalog_user_group
-            )
-            self.logger.info(
-                f"Created/Updated user group: {group_id} - {group_name}"
-            )
+            self._api._sdk.catalog_user.create_or_update_user_group(user_group=catalog_user_group)
+            self.logger.info(f"Created/Updated user group: {group_id} - {group_name}")
         except Exception as e:
             self.logger.error(
-                f"Failed to create/update user group. Error: {e} "
-                + f"Context: {catalog_user_group.__dict__}"
+                f"Failed to create/update user group. Error: {e} " + f"Context: {catalog_user_group.__dict__}"
             )
 
     def _create_missing_user_groups(
@@ -75,9 +64,7 @@ class UserGroupProvisioner(
     ) -> None:
         """Provisions user groups that don't exist."""
         # Sort user groups to create those without parents first
-        sorted_groups = sorted(
-            groups_to_create, key=lambda x: 1 if x.parent_user_groups else 0
-        )
+        sorted_groups = sorted(groups_to_create, key=lambda x: 1 if x.parent_user_groups else 0)
 
         for group in sorted_groups:
             self._create_or_update_user_group(
@@ -109,61 +96,46 @@ class UserGroupProvisioner(
             try:
                 self._api._sdk.catalog_user.delete_user_group(group_id)
                 self.logger.info(f"Deleted user group: {group_id}")
-            except Exception as e:
+            except Exception as e:  # noqa: PERF203 - one group may fail without stopping the rest
                 self.logger.error(
-                    f"Failed to delete user group. Error: {e} "
-                    + f"Context: {{'user_group_id': {group_id}}}"
+                    f"Failed to delete user group. Error: {e} " + f"Context: {{'user_group_id': {group_id}}}"
                 )
 
     def _provision_incremental_load(self) -> None:
         """Runs incremental provisioning of user groups."""
         # Get existing user groups from GoodData Cloud
-        self.upstream_user_groups = (
-            self._api._sdk.catalog_user.list_user_groups()
-        )
+        self.upstream_user_groups = self._api._sdk.catalog_user.list_user_groups()
 
         # Create a set of upstream user group IDs
-        upstream_group_ids: set[str] = {
-            group.id for group in self.upstream_user_groups
-        }
+        upstream_group_ids: set[str] = {group.id for group in self.upstream_user_groups}
 
         # Create a set of active source user group IDs
         active_source_groups: set[str] = {
-            group.user_group_id
-            for group in self.source_group_incremental
-            if group.is_active is True
+            group.user_group_id for group in self.source_group_incremental if group.is_active is True
         }
 
         # Create a set of inactive source user group IDs
         inactive_source_groups: set[str] = {
-            group.user_group_id
-            for group in self.source_group_incremental
-            if group.is_active is False
+            group.user_group_id for group in self.source_group_incremental if group.is_active is False
         }
 
         # Create a set of user group IDs to create as the difference between active
         # source groups and upstream groups - i.e, we are creating groups marked
         # as active in the source data but which are missing upstream in GoodData Cloud.
-        group_ids_to_create: set[str] = active_source_groups.difference(
-            upstream_group_ids
-        )
+        group_ids_to_create: set[str] = active_source_groups.difference(upstream_group_ids)
 
         # Create a set of user group IDs to update as the intersection between active
         # source groups and upstream groups - i.e, we are updating groups marked
         # as active in the source data and which are present upstream in GoodData Cloud.
         # The `_update_existing_user_groups` method will check if the upstream group
         # definition differs from the source and if so, it will update the group.
-        group_ids_to_update: set[str] = active_source_groups.intersection(
-            upstream_group_ids
-        )
+        group_ids_to_update: set[str] = active_source_groups.intersection(upstream_group_ids)
 
         # Create a set of user group IDs to delete as the intersection between
         # inactive source groups and upstream groups - i.e, we are deleting groups
         # marked as inactive in the source data and which are present upstream in
         # GoodData Cloud.
-        group_ids_to_delete: set[str] = inactive_source_groups.intersection(
-            upstream_group_ids
-        )
+        group_ids_to_delete: set[str] = inactive_source_groups.intersection(upstream_group_ids)
 
         # create lists of groups to create, update and delete based on the sets
         groups_to_create: list[UserGroupIncrementalLoad] = []
@@ -176,27 +148,19 @@ class UserGroupProvisioner(
                 groups_to_update.append(group)
 
         self._create_missing_user_groups(groups_to_create)
-        self._update_existing_user_groups(
-            groups_to_update, self.upstream_user_groups
-        )
+        self._update_existing_user_groups(groups_to_update, self.upstream_user_groups)
         self._delete_user_group(group_ids_to_delete)
 
     def _provision_full_load(self) -> None:
         """Runs full load provisioning of user groups."""
         # Get upsream user groups
-        self.upstream_user_groups = (
-            self._api._sdk.catalog_user.list_user_groups()
-        )
+        self.upstream_user_groups = self._api._sdk.catalog_user.list_user_groups()
 
         # Create a set of upstream user group IDs
-        upstream_group_ids: set[str] = {
-            group.id for group in self.upstream_user_groups
-        }
+        upstream_group_ids: set[str] = {group.id for group in self.upstream_user_groups}
 
         # Create a set of source user group IDs
-        source_group_ids: set[str] = {
-            group.user_group_id for group in self.source_group_full
-        }
+        source_group_ids: set[str] = {group.user_group_id for group in self.source_group_full}
 
         # Figure out which ids are to be created, deleted or exist in both systems
         id_groups = self._create_groups(source_group_ids, upstream_group_ids)
@@ -214,9 +178,7 @@ class UserGroupProvisioner(
         self._create_missing_user_groups(groups_to_create)
 
         # Update user groups
-        self._update_existing_user_groups(
-            groups_to_update, self.upstream_user_groups
-        )
+        self._update_existing_user_groups(groups_to_update, self.upstream_user_groups)
 
         # Delete user groups
         self._delete_user_group(id_groups.ids_to_delete)

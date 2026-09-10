@@ -23,23 +23,17 @@ class LocalStorage(BackupStorage):
         """Copies the content of the folder to local storage as backup."""
 
         self.logger.info(f"Saving {org_id} to local storage")
-        shutil.copytree(
-            Path(folder), Path(Path.cwd(), export_folder), dirs_exist_ok=True
-        )
+        shutil.copytree(Path(folder), Path(Path.cwd(), export_folder), dirs_exist_ok=True)
 
     def export(self, folder: str, org_id: str) -> None:
         """Copies the content of the folder to local storage as backup."""
         try:
             self._export(folder, org_id, self._config.backup_path)
         except Exception as e:
-            self.logger.error(
-                f"Error exporting {folder} to {self._config.backup_path}: {e}"
-            )
+            self.logger.error(f"Error exporting {folder} to {self._config.backup_path}: {e}")
             raise
 
-    def get_ws_declaration(
-        self, target_path: str, local_target_path: str
-    ) -> None:
+    def get_ws_declaration(self, target_path: str, local_target_path: str) -> None:
         """Retrieves workspace declaration from local storage and copies to the local target path.
 
         The local target should be a temporary directory.

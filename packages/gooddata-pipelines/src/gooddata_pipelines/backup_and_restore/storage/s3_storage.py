@@ -31,9 +31,7 @@ class S3Storage(BackupStorage):
     def _create_boto_session(self, config: S3StorageConfig) -> boto3.Session:
         if config.aws_access_key_id and config.aws_secret_access_key:
             if not config.aws_default_region:
-                self.logger.warning(
-                    "No AWS region specified. Defaulting to us-east-1."
-                )
+                self.logger.warning("No AWS region specified. Defaulting to us-east-1.")
             try:
                 return boto3.Session(
                     aws_access_key_id=config.aws_access_key_id,
@@ -41,24 +39,18 @@ class S3Storage(BackupStorage):
                     region_name=config.aws_default_region,
                 )
             except Exception:
-                self.logger.warning(
-                    "Failed to create boto3 session with supplied credentials."
-                )
+                self.logger.warning("Failed to create boto3 session with supplied credentials.")
 
         if config.profile:
             try:
                 return boto3.Session(profile_name=config.profile)
             except Exception:
-                self.logger.warning(
-                    f"AWS profile [{config.profile}] not found."
-                )
+                self.logger.warning(f"AWS profile [{config.profile}] not found.")
 
         try:
             return boto3.Session()
         except Exception:
-            self.logger.error(
-                "Failed to create boto3 session with default IAM role or environment credentials."
-            )
+            self.logger.error("Failed to create boto3 session with default IAM role or environment credentials.")
             raise RuntimeError(
                 "Unable to create AWS session. Please check your AWS credentials, profile, or IAM role configuration."
             )
@@ -70,9 +62,7 @@ class S3Storage(BackupStorage):
         try:
             self._client.head_bucket(Bucket=self._config.bucket)
         except Exception as e:
-            raise RuntimeError(
-                f"Failed to connect to S3 bucket {self._config.bucket}: {e}"
-            )
+            raise RuntimeError(f"Failed to connect to S3 bucket {self._config.bucket}: {e}")
 
     def export(self, folder: str, org_id: str) -> None:
         """Uploads the content of the folder to S3 as a backup."""
@@ -84,13 +74,9 @@ class S3Storage(BackupStorage):
                 full_path = os.path.join(subdir, file)
                 with open(full_path, "rb") as data:
                     export_path = f"{self._backup_path}{org_id}/{full_path[len(folder) + 1 :]}"
-                    self._client.put_object(
-                        Bucket=self._config.bucket, Key=export_path, Body=data
-                    )
+                    self._client.put_object(Bucket=self._config.bucket, Key=export_path, Body=data)
 
-    def get_ws_declaration(
-        self, target_path: str, local_target_path: str
-    ) -> None:
+    def get_ws_declaration(self, target_path: str, local_target_path: str) -> None:
         """Retrieves workspace declaration from S3 bucket."""
         target_s3_prefix = f"{self._backup_path}{target_path}"
 
@@ -106,8 +92,7 @@ class S3Storage(BackupStorage):
 
         if len(objs_found) > 1:
             self.logger.warning(
-                f"Multiple backups found at {target_s3_prefix}."
-                " Continuing with the first one, ignoring the rest..."
+                f"Multiple backups found at {target_s3_prefix}. Continuing with the first one, ignoring the rest..."
             )
 
         s3_obj = objs_found[0]

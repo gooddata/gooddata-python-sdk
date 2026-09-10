@@ -138,6 +138,46 @@ def test_run_agentic_search_tool_captures_reasoning_steps():
     assert summary.best.response_id == "resp-1"
 
 
+def test_run_agentic_search_tool_captures_tool_call_events_on_every_run():
+    """Regression: a run other than the first must still carry its own tool_call_events --
+    this runner builds SearchResult in two places (run 0 and the k>1 loop), and populating
+    only the first leaves later runs on the dataclass's empty-list default, so selecting one
+    of them as `best` silently produces an empty latency_breakdown.
+    """
+
+    def _result(response_id: str) -> ChatResult:
+        # A fresh object per run -- reusing one across both mocked calls would let a
+        # double-mutation bug pass unnoticed, since both runs would point at the same
+        # already-shifted events.
+        return ChatResult.model_validate(
+            {
+                "textResponse": "Found it",
+                "toolCallEvents": [{"functionName": "search_objects", "functionArguments": '{"keywords": "revenue"}'}],
+                "reasoningSteps": ["deciding what to search for"],
+                "responseId": response_id,
+            }
+        )
+
+    mock_client = MagicMock()
+    mock_client.create_conversation.side_effect = ["conv-1", "conv-2"]
+    mock_client.send_message.side_effect = [_result("resp-1"), _result("resp-2")]
+
+    with patch("gooddata_eval.core.agentic.search_tool.ChatClient", return_value=mock_client):
+        summary = run_agentic_search_tool(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Search for revenue",
+            expected_tool_call={"keywords": "revenue"},
+            k=2,
+        )
+
+    assert len(summary.run_results) == 2
+    for run in summary.run_results:
+        assert len(run.tool_call_events) == 1
+        assert run.tool_call_events[0].function_name == "search_objects"
+
+
 def test_evaluate_agentic_search_tool_returns_reasoning_steps_on_pass():
     mock_client = MagicMock()
     mock_client.create_conversation.return_value = "conv-1"
@@ -167,6 +207,7 @@ def test_evaluate_agentic_search_tool_returns_reasoning_steps_on_pass():
         "tool_selected": True,
         "tool_correct": True,
         "tool_call_names": ["search_objects"],
+        "latency_breakdown": [],
     }
 
 
@@ -202,4 +243,5 @@ def test_evaluate_agentic_search_tool_attaches_reasoning_steps_to_exception_on_f
         "tool_selected": False,
         "tool_correct": False,
         "tool_call_names": [],
+        "latency_breakdown": [],
     }

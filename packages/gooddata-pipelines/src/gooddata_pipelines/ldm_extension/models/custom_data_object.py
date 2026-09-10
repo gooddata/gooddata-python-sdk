@@ -92,24 +92,15 @@ class CustomDatasetDefinition(BaseModel):
     parent_dataset_reference: str
     parent_dataset_reference_attribute_id: str | None = Field(
         default=None,
-        deprecated=(
-            "Use `parent_dataset_references` instead. "
-            "This field will be removed in a future release."
-        ),
+        deprecated=("Use `parent_dataset_references` instead. This field will be removed in a future release."),
     )
     dataset_reference_source_column: str | None = Field(
         default=None,
-        deprecated=(
-            "Use `parent_dataset_references` instead. "
-            "This field will be removed in a future release."
-        ),
+        deprecated=("Use `parent_dataset_references` instead. This field will be removed in a future release."),
     )
     dataset_reference_source_column_data_type: ColumnDataType | None = Field(
         default=None,
-        deprecated=(
-            "Use `parent_dataset_references` instead. "
-            "This field will be removed in a future release."
-        ),
+        deprecated=("Use `parent_dataset_references` instead. This field will be removed in a future release."),
     )
     parent_dataset_references: list[ParentDatasetReference] | None = Field(
         default=None,
@@ -130,13 +121,9 @@ class CustomDatasetDefinition(BaseModel):
     def check_source(self) -> "CustomDatasetDefinition":
         """At least one of dataset_source_table or dataset_source_sql is provided."""
         if not (self.dataset_source_table or self.dataset_source_sql):
-            raise ValueError(
-                "One of dataset_source_table and dataset_source_sql must be provided"
-            )
+            raise ValueError("One of dataset_source_table and dataset_source_sql must be provided")
         if self.dataset_source_table and self.dataset_source_sql:
-            raise ValueError(
-                "Only one of dataset_source_table and dataset_source_sql can be provided"
-            )
+            raise ValueError("Only one of dataset_source_table and dataset_source_sql can be provided")
         return self
 
     @model_validator(mode="after")
@@ -171,8 +158,7 @@ class CustomDatasetDefinition(BaseModel):
         has_col = self.workspace_data_filter_column_name is not None
         if has_id != has_col:
             raise ValueError(
-                "workspace_data_filter_id and workspace_data_filter_column_name "
-                "must both be set or both be omitted"
+                "workspace_data_filter_id and workspace_data_filter_column_name must both be set or both be omitted"
             )
         return self
 

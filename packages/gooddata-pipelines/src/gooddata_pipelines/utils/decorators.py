@@ -21,9 +21,7 @@ def log_and_reraise_exception(message: str) -> Callable:
                 return fn(*method_args, **method_kwargs)
             except Exception:
                 fn_name = getattr(fn, "__name__", repr(fn))
-                logger.error(
-                    f"{message}, {fn_name}, Args: {method_args}, Kwargs: {method_kwargs}"
-                )
+                logger.error(f"{message}, {fn_name}, Args: {method_args}, Kwargs: {method_kwargs}")
                 raise
 
         return wrapper

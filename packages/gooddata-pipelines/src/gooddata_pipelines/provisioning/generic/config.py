@@ -1,7 +1,7 @@
 # (C) 2025 GoodData Corporation
 
 from enum import Enum
-from typing import Type, TypeAlias
+from typing import TypeAlias
 
 import attrs
 
@@ -43,12 +43,7 @@ ValidationModel: TypeAlias = (
     | WorkspaceIncrementalLoad
 )
 
-Provisioner: TypeAlias = (
-    PermissionProvisioner
-    | UserProvisioner
-    | UserGroupProvisioner
-    | WorkspaceProvisioner
-)
+Provisioner: TypeAlias = PermissionProvisioner | UserProvisioner | UserGroupProvisioner | WorkspaceProvisioner
 
 
 class LoadType(str, Enum):
@@ -69,8 +64,8 @@ class WorkflowType(str, Enum):
 
 @attrs.define
 class ProvisioningConfig:
-    validation_model: Type[ValidationModel]
-    provisioner_class: Type[Provisioner]
+    validation_model: type[ValidationModel]
+    provisioner_class: type[Provisioner]
     load_type: LoadType
 
 

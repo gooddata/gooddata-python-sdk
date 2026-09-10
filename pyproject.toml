@@ -1,7 +1,7 @@
 # (C) 2021 GoodData Corporation
 [project]
 name = "gooddata-python-sdk-workspace"
-version = "1.73.0"
+version = "1.74.0"
 description = "GoodData Python SDK Workspace"
 requires-python = ">=3.10"
 dependencies = [
@@ -56,24 +56,24 @@ members = [
 
 [dependency-groups]
 dev = [
-    "pre-commit~=4.6.0",
+    "pre-commit~=4.6.2",
     "gitlint~=0.19.1",
 ]
 lint = [
-    "ruff~=0.15.20",
+    "ruff~=0.16.6",
 ]
 type = [
-    "ty~=0.0.55",
+    "ty~=0.0.78",
 ]
 test = [
     # Declared only here: consumed by the scripts/docs/ tests (`make test-docs-scripts`).
-    "pytest~=8.3.4",
+    "pytest~=9.1.1",
     "toml~=0.10.2",
     "griffe>=1.0",
     "docstring_parser~=0.15",
     "jinja2~=3.1",
     # Mirror of the members' `test` groups so the root venv can run any package's tests
-    # (`uv run pytest -k ...`, see scripts/validate_python.sh). Add to it when a member
+    # directly (`uv run pytest -k ...`) without going through tox. Add to it when a member
     # adds a test dependency, or that member's tests stop collecting from the root venv.
     # Unbounded on purpose: the authoritative bounds live in each member's own group, and
     # the single workspace lock resolves one version for everything anyway.
@@ -95,11 +95,11 @@ release = [
     "tomlkit>=0.11"
 ]
 tox = [
-    "tox~=4.56.1",
+    "tox~=4.61.2",
     # tox-uv-bare carries the actual plugin; the `tox-uv` wrapper only adds a dependency on
     # the 58MB `uv` PyPI package, which the image already has as a binary and the host has
     # on PATH. Requires `uv` to be on PATH, which holds in both places.
-    "tox-uv-bare~=1.35.2",
+    "tox-uv-bare~=1.36.0",
 ]
 
 [tool.ruff]
@@ -151,7 +151,8 @@ target-version = "py310"
 "packages/gooddata-eval/src/gooddata_eval/*/__init__.py" = ["F401"]
 
 [tool.ruff.format]
-exclude = ['(gooddata-api-client|.*\.snapshot\..*)']
+# ruff 0.16 started formatting python code blocks inside markdown; keep docs out
+exclude = ['(gooddata-api-client|.*\.snapshot\..*)', '*.md']
 # use ruff to format code examples in docstrings as well
 docstring-code-format = true
 
@@ -167,7 +168,7 @@ extra-paths = []
 # github_url = "https://github.com/<user or organization>/<project>/"
 
 [tool.tbump.version]
-current = "1.73.0"
+current = "1.74.0"
 regex = '''
   (?P<major>\d+)
   \.

@@ -95,15 +95,12 @@ class BackupManager(BaseManager):
     def _get_automations_from_api(self, workspace_id: str) -> Any:
         """Returns automations for the workspace as JSON."""
         with self._api_rate_limiter:
-            response: requests.Response = self._api.get_automations(
-                workspace_id
-            )
+            response: requests.Response = self._api.get_automations(workspace_id)
             if response.ok:
                 return response.json()
             else:
                 raise RuntimeError(
-                    f"Failed to get automations for {workspace_id}. "
-                    + f"{response.status_code}: {response.text}"
+                    f"Failed to get automations for {workspace_id}. " + f"{response.status_code}: {response.text}"
                 )
 
     def _store_automations(self, export_path: Path, workspace_id: str) -> None:
@@ -120,9 +117,7 @@ class BackupManager(BaseManager):
             "automations",
         )
 
-        automations_file_path: Path = Path(
-            automations_folder_path, "automations.json"
-        )
+        automations_file_path: Path = Path(automations_folder_path, "automations.json")
 
         os.mkdir(automations_folder_path)
 
@@ -130,15 +125,11 @@ class BackupManager(BaseManager):
         if len(automations["data"]) > 0:
             self.json_utils.dump(automations_file_path, automations)
 
-    def store_declarative_filter_views(
-        self, export_path: Path, workspace_id: str
-    ) -> None:
+    def store_declarative_filter_views(self, export_path: Path, workspace_id: str) -> None:
         """Stores the filter views in the specified export path."""
         # Get the filter views YAML files from the API
         with self._api_rate_limiter:
-            self._api._sdk.catalog_workspace.store_declarative_filter_views(
-                workspace_id, export_path
-            )
+            self._api._sdk.catalog_workspace.store_declarative_filter_views(workspace_id, export_path)
 
         # Move filter views to the subfolder containing the analytics model
         self._move_folder(
@@ -176,8 +167,7 @@ class BackupManager(BaseManager):
                 user_data_filters = self.get_user_data_filters(workspace_id)
             except Exception as e:
                 self.logger.error(
-                    f"Skipping backup of {workspace_id} - check if workspace exists."
-                    + f"{e.__class__.__name__}: {e}"
+                    f"Skipping backup of {workspace_id} - check if workspace exists." + f"{e.__class__.__name__}: {e}"
                 )
                 continue
 
@@ -188,33 +178,23 @@ class BackupManager(BaseManager):
                 # directly instead of reorganizing the folder structures. That should
                 # be more transparent/readable and possibly safer for threading
                 with self._api_rate_limiter:
-                    self._api._sdk.catalog_workspace.store_declarative_workspace(
-                        workspace_id, export_path
-                    )
+                    self._api._sdk.catalog_workspace.store_declarative_workspace(workspace_id, export_path)
                 self.store_declarative_filter_views(export_path, workspace_id)
                 self._store_automations(export_path, workspace_id)
 
-                self._store_user_data_filters(
-                    user_data_filters, export_path, workspace_id
-                )
+                self._store_user_data_filters(user_data_filters, export_path, workspace_id)
 
-                workspace_duration_ms = int(
-                    (time.time() - workspace_start_time) * 1000
-                )
+                workspace_duration_ms = int((time.time() - workspace_start_time) * 1000)
                 zip_file_path = f"{self.org_id}/{workspace_id}.zip"
 
                 self.logger.info(
-                    f"Completed backup for workspace {workspace_id} "
-                    f"to {zip_file_path} in {workspace_duration_ms}ms"
+                    f"Completed backup for workspace {workspace_id} to {zip_file_path} in {workspace_duration_ms}ms"
                 )
                 exported = True
             except Exception as e:
-                workspace_duration_ms = int(
-                    (time.time() - workspace_start_time) * 1000
-                )
+                workspace_duration_ms = int((time.time() - workspace_start_time) * 1000)
                 self.logger.error(
-                    f"Skipping {workspace_id} after {workspace_duration_ms}ms. "
-                    f"{e.__class__.__name__} encountered: {e}"
+                    f"Skipping {workspace_id} after {workspace_duration_ms}ms. {e.__class__.__name__} encountered: {e}"
                 )
 
         if not exported:
@@ -245,9 +225,7 @@ class BackupManager(BaseManager):
             raise
 
     @staticmethod
-    def _split_to_batches(
-        workspaces_to_export: list[str], batch_size: int
-    ) -> list[BackupBatch]:
+    def _split_to_batches(workspaces_to_export: list[str], batch_size: int) -> list[BackupBatch]:
         """Splits the list of workspaces into batches of the specified size.
         The batch is represented as a list of workspace IDs.
         Returns a list of batches (i.e. list of lists of IDs)
@@ -274,9 +252,7 @@ class BackupManager(BaseManager):
             with tempfile.TemporaryDirectory() as tmpdir:
                 self._get_workspace_export(tmpdir, batch.list_of_ids)
 
-                self._archive_gooddata_layouts_to_zip(
-                    str(Path(tmpdir, self.org_id))
-                )
+                self._archive_gooddata_layouts_to_zip(str(Path(tmpdir, self.org_id)))
 
                 self.storage.export(tmpdir, self.org_id)
 
@@ -367,13 +343,9 @@ class BackupManager(BaseManager):
                 path_to_csv,
                 workspace_ids,
             )
-            batches = self._split_to_batches(
-                workspaces_to_export, self.config.batch_size
-            )
+            batches = self._split_to_batches(workspaces_to_export, self.config.batch_size)
 
-            self.logger.info(
-                f"Exporting {len(workspaces_to_export)} workspaces in {len(batches)} batches."
-            )
+            self.logger.info(f"Exporting {len(workspaces_to_export)} workspaces in {len(batches)} batches.")
 
             self._process_batches(batches)
 

@@ -7,9 +7,27 @@ import logging
 import os
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._trace_linker import (
+    RunIdentity,
+    RunTraceContext,
+    SubmitTraceLink,
+    open_trace_window,
+    run_trace_link_inline,
+    submit_trace_scoring,
+    utc_now,
+)
+from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import AgenticEvalOutcome, ToolCallEvent
+from gooddata_eval.core.models import (
+    AgenticAssertionError,
+    AgenticEvalOutcome,
+    ChatResult,
+    ReasoningStepEvent,
+    ToolCallEvent,
+    build_latency_breakdown,
+    shift_and_index_events,
+)
 
 _log = logging.getLogger(__name__)
 
@@ -161,6 +179,8 @@ class KdaRunResult:
     turn_wall_clock_sec: float | None = None
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
+    tool_call_events: list[ToolCallEvent] = field(default_factory=list)
+    reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
 
 
 @dataclass
@@ -231,6 +251,22 @@ def run_agentic_kda_skill(
         current_question = question
         reasoning_steps: list[str] = []
         response_id: str | None = None
+        all_tool_call_events: list[ToolCallEvent] = []
+        all_reasoning_step_events: list[ReasoningStepEvent] = []
+        turn_offset = 0.0  # each turn's call_ts/ts restarts near 0 -- shift by prior turns' wall time
+        tool_index_offset = 0
+        reasoning_index_offset = 0
+
+        def _accumulate(result: ChatResult) -> None:
+            nonlocal turn_offset, tool_index_offset, reasoning_index_offset
+            turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
+                result,
+                turn_offset=turn_offset,
+                tool_index_offset=tool_index_offset,
+                reasoning_index_offset=reasoning_index_offset,
+            )
+            all_tool_call_events.extend(result.tool_call_events or [])
+            all_reasoning_step_events.extend(result.reasoning_step_events or [])
 
         for iteration in range(max_iterations):
             try:
@@ -241,6 +277,7 @@ def run_agentic_kda_skill(
                 if partial is not None:
                     reasoning_steps.extend(partial.reasoning_steps or [])
                     response_id = partial.response_id or response_id
+                    _accumulate(partial)
                     create_args, execute_result = _extract_kda_calls(partial.tool_call_events or [])
                     if create_args is not None:
                         turn_wall_clock_sec = partial.turn_wall_clock_sec
@@ -248,8 +285,9 @@ def run_agentic_kda_skill(
                 break
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
+            _accumulate(chat_result)
             create_args, execute_result = _extract_kda_calls(chat_result.tool_call_events or [])
-            response_text = (chat_result.text_response or "").strip()
+            response_text = render_answer_text(chat_result)
             turn_completed = chat_result.stream_ended and bool(response_text)
             if create_args is not None:
                 # This turn's own time -- the turn that called create, not any earlier
@@ -286,6 +324,8 @@ def run_agentic_kda_skill(
             turn_wall_clock_sec=turn_wall_clock_sec,
             reasoning_steps=reasoning_steps,
             response_id=response_id,
+            tool_call_events=all_tool_call_events,
+            reasoning_step_events=all_reasoning_step_events,
         )
 
     try:
@@ -321,14 +361,8 @@ def run_agentic_kda_skill(
     )
 
 
-class KdaSkillAssertionError(AssertionError):
+class KdaSkillAssertionError(AgenticAssertionError):
     """Raised when a KDA-skill evaluation fails."""
-
-    __tracebackhide__ = True
-    reasoning_steps: list[str]
-    conversation_id: str
-    response_id: str | None
-    detail: dict
 
 
 def evaluate_agentic_kda_skill(
@@ -348,6 +382,7 @@ def evaluate_agentic_kda_skill(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    submit_trace_link: SubmitTraceLink = run_trace_link_inline,
 ) -> AgenticEvalOutcome:
     """Run KDA-skill evaluation, log to Langfuse, and raise KdaSkillAssertionError on failure.
 
@@ -355,14 +390,7 @@ def evaluate_agentic_kda_skill(
     AgenticEvalOutcome on success; on failure the same three values are attached to the
     raised exception as ``.reasoning_steps``/``.conversation_id``/``.response_id``.
     """
-    from datetime import datetime as _dt  # noqa: PLC0415
-    from datetime import timezone as _tz  # noqa: PLC0415
-
-    from gooddata_eval.core.agentic._langfuse import try_make_langfuse_client  # noqa: PLC0415
-
-    if langfuse is None:
-        langfuse = try_make_langfuse_client()
-    window_start = _dt.now(_tz.utc)
+    langfuse, window_start = open_trace_window(langfuse)
     summary = run_agentic_kda_skill(
         host=host,
         token=token,
@@ -377,66 +405,88 @@ def evaluate_agentic_kda_skill(
     )
 
     if langfuse is not None and dataset_item_id:
-        from gooddata_eval.core.agentic._langfuse import (  # noqa: PLC0415
-            build_run_context,
-            find_traces_per_conversation,
-            log_quality_and_value_scores,
-            observe,
-            score_safe,
+        # Pinned on the calling thread: a deferred poll must not widen its query window.
+        window_end = utc_now()
+
+        def _write_scores(ctx: RunTraceContext) -> None:
+
+            for run_idx, run in enumerate(summary.run_results):
+                # No custom selector -- same default (max-latency) as every other skill; harmless
+                # here since latency comes from run.turn_wall_clock_sec below, not this trace.
+                pt = ctx.trace(run.conversation_id)
+                run_name = ctx.run_name(run_idx)
+                ev = run.evaluation
+                # Gates strict_pass -- current scope is completion only (see KdaEvaluation docstring).
+                strict_checks = {
+                    "kda_triggered": ev.triggered,
+                    "kda_executed": ev.executed,
+                    "kda_success": ev.success,
+                    "kda_turn_completed": ev.turn_completed,
+                }
+                # Not pt.latency: pt can be any trace of the conversation, not necessarily the KDA turn.
+                turn_wall_clock_sec = run.turn_wall_clock_sec
+                _log.info(
+                    "[kda-report] %s: strict_pass=%s latency_sec=%s", run_name, ev.strict_pass, turn_wall_clock_sec
+                )
+                with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
+                    for score_name, value in strict_checks.items():
+                        ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
+                    ctx.score(tid, name="kda_disambiguated", value=float(ev.disambiguated), data_type="BOOLEAN")
+                    if turn_wall_clock_sec is not None:
+                        # combo_report.py reads this score directly -- no trace re-resolution needed.
+                        ctx.score(
+                            tid,
+                            name="kda_turn_wall_clock_sec",
+                            value=turn_wall_clock_sec,
+                            data_type="NUMERIC",
+                        )
+                    ctx.quality(
+                        tid,
+                        strict_checks=strict_checks,
+                        latency_sec=turn_wall_clock_sec,
+                        cost_usd=pt.total_cost if pt and ev.triggered else None,
+                    )
+
+        # Before the pass@K raise: a failing item's scores are the ones worth having.
+        submit_trace_scoring(
+            submit_trace_link,
+            RunIdentity(
+                host,
+                token,
+                workspace_id,
+                dataset_name,
+                run_timestamp,
+                model_version_override,
+                run_metadata_extra,
+                reasoning_effort,
+            ),
+            langfuse=langfuse,
+            dataset_item_id=dataset_item_id,
+            conversation_ids=[r.conversation_id for r in summary.run_results],
+            window_start=window_start,
+            window_end=window_end,
+            suffix_runs=len(summary.run_results) > 1,
+            write_scores=_write_scores,
+            item_input=question,
         )
 
-        run_name_base, run_metadata = build_run_context(
-            host,
-            token,
-            workspace_id,
-            dataset_name,
-            run_timestamp,
-            model_version_override,
-            run_metadata_extra,
-            reasoning_effort,
-        )
-        # No custom selector -- same default (max-latency) as every other skill; harmless
-        # here since latency comes from run.turn_wall_clock_sec below, not this trace.
-        traces_by_conv = find_traces_per_conversation(
-            langfuse,
-            [r.conversation_id for r in summary.run_results],
-            window_start,
-        )
-        suffix_needed = len(summary.run_results) > 1
-        for run_idx, run in enumerate(summary.run_results):
-            pt = traces_by_conv.get(run.conversation_id)
-            run_name = f"{run_name_base}_run{run_idx}" if suffix_needed else run_name_base
-            ev = run.evaluation
-            # Gates strict_pass -- current scope is completion only (see KdaEvaluation docstring).
-            strict_checks = {
-                "kda_triggered": ev.triggered,
-                "kda_executed": ev.executed,
-                "kda_success": ev.success,
-                "kda_turn_completed": ev.turn_completed,
-            }
-            # Not pt.latency: pt can be any trace of the conversation, not necessarily the KDA turn.
-            turn_wall_clock_sec = run.turn_wall_clock_sec
-            _log.info("[kda-report] %s: strict_pass=%s latency_sec=%s", run_name, ev.strict_pass, turn_wall_clock_sec)
-            with observe(langfuse, pt.id if pt else None, dataset_item_id, run_name, run_metadata) as tid:
-                for score_name, value in strict_checks.items():
-                    score_safe(langfuse, tid, name=score_name, value=float(value), data_type="BOOLEAN")
-                score_safe(langfuse, tid, name="kda_disambiguated", value=float(ev.disambiguated), data_type="BOOLEAN")
-                if turn_wall_clock_sec is not None:
-                    # combo_report.py reads this score directly -- no trace re-resolution needed.
-                    score_safe(
-                        langfuse, tid, name="kda_turn_wall_clock_sec", value=turn_wall_clock_sec, data_type="NUMERIC"
-                    )
-                log_quality_and_value_scores(
-                    langfuse,
-                    tid,
-                    strict_checks=strict_checks,
-                    latency_sec=turn_wall_clock_sec,
-                    cost_usd=pt.total_cost if pt and ev.triggered else None,
-                )
+    runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
+    runs_effective = len(summary.run_results)
+
+    best = summary.best
+    ev = best.evaluation
+    detail = {
+        "triggered": ev.triggered,
+        "executed": ev.executed,
+        "success": ev.success,
+        "turn_completed": ev.turn_completed,
+        "disambiguated": ev.disambiguated,
+        "actual_create_args": best.actual_create_args,
+        "actual_execute_result": best.actual_execute_result,
+        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+    }
 
     if not summary.pass_at_k:
-        best = summary.best
-        ev = best.evaluation
         message = (
             f"KDA skill assertion failed. strict_pass={ev.strict_pass} "
             f"(triggered={ev.triggered}, executed={ev.executed}, "
@@ -448,29 +498,15 @@ def evaluate_agentic_kda_skill(
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
-        exc.detail = {
-            "triggered": ev.triggered,
-            "executed": ev.executed,
-            "success": ev.success,
-            "turn_completed": ev.turn_completed,
-            "disambiguated": ev.disambiguated,
-            "actual_create_args": best.actual_create_args,
-            "actual_execute_result": best.actual_execute_result,
-        }
+        exc.detail = detail
+        exc.runs_passed = runs_passed
+        exc.runs_effective = runs_effective
         raise exc
-    best = summary.best
-    ev = best.evaluation
     return AgenticEvalOutcome(
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
-        detail={
-            "triggered": ev.triggered,
-            "executed": ev.executed,
-            "success": ev.success,
-            "turn_completed": ev.turn_completed,
-            "disambiguated": ev.disambiguated,
-            "actual_create_args": best.actual_create_args,
-            "actual_execute_result": best.actual_execute_result,
-        },
+        detail=detail,
     )

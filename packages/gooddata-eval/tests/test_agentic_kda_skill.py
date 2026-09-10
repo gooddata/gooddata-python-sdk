@@ -1,6 +1,7 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 import json
+from contextlib import contextmanager
 from unittest.mock import MagicMock, patch
 
 import httpx
@@ -73,6 +74,66 @@ def _no_kda_chat_result(
             "turn_wall_clock_sec": turn_wall_clock_sec,
         }
     )
+
+
+def _client() -> MagicMock:
+    """A chat client whose conversations are all ``conv-1``.
+
+    Callers override only what they vary -- ``send_message`` and the rest are ordinary
+    mock attributes.
+    """
+    client = MagicMock()
+    client.create_conversation.return_value = "conv-1"
+    return client
+
+
+@contextmanager
+def _patched(client, *, simulated_reply=None, simulated_error=None):
+    """Patch kda_skill's ChatClient, and optionally its simulated-user helper.
+
+    ``simulated_reply`` is what the simulated user answers; ``simulated_error`` makes it
+    raise instead. Yields the ``generate_simulated_kda_response`` mock, or None when the
+    test asked for neither.
+    """
+    with patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=client):
+        if simulated_reply is None and simulated_error is None:
+            yield None
+        else:
+            with patch(
+                "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
+                return_value=simulated_reply,
+                side_effect=simulated_error,
+            ) as mock_simulate:
+                yield mock_simulate
+
+
+@contextmanager
+def _patched_without_langfuse(client):
+    """Patch kda_skill's ChatClient and stub Langfuse discovery out (`langfuse=None` path)."""
+    with (
+        _patched(client),
+        patch("gooddata_eval.core.agentic._langfuse.try_make_langfuse_client", return_value=None),
+    ):
+        yield
+
+
+@contextmanager
+def _patched_with_langfuse_scores(client, trace):
+    """Patch kda_skill's ChatClient plus every _langfuse helper the scoring block calls.
+
+    ``trace`` is the trace ``find_traces_per_conversation`` returns for ``conv-1``, and the
+    one ``observe`` hands back. Yields ``(mock_score_safe, mock_log_quality_and_value_scores)``.
+    """
+    with (
+        _patched(client),
+        patch("gooddata_eval.core.agentic._langfuse.build_run_context", return_value=("run-base", {})),
+        patch("gooddata_eval.core.agentic._langfuse.find_traces_per_conversation", return_value={"conv-1": trace}),
+        patch("gooddata_eval.core.agentic._langfuse.observe") as mock_observe,
+        patch("gooddata_eval.core.agentic._langfuse.score_safe") as mock_score_safe,
+        patch("gooddata_eval.core.agentic._langfuse.log_quality_and_value_scores") as mock_log_scores,
+    ):
+        mock_observe.return_value.__enter__.return_value = trace.id
+        yield mock_score_safe, mock_log_scores
 
 
 # --------------------------------------------------------------------------- #
@@ -228,11 +289,10 @@ def test_strict_pass_false_when_any_core_check_fails():
 # run_agentic_kda_skill
 # --------------------------------------------------------------------------- #
 def test_run_agentic_kda_skill_triggers_and_succeeds():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _kda_chat_result(success=True)
 
-    with patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -255,11 +315,10 @@ def test_run_agentic_kda_skill_fails_on_sse_cutoff_despite_nonempty_text():
     # suite) can still have emitted a partial, non-empty text_response before dying. Using
     # "text_response is non-empty" as the completion signal would wrongly call this turn
     # completed; only gen-ai's own response_ended event may.
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _kda_chat_result(success=True, stream_ended=False)
 
-    with patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -283,11 +342,10 @@ def test_run_agentic_kda_skill_survives_send_message_error():
     # Langfuse-logging loop entirely for this run, leaving nothing but a bare JUnit
     # failure to diagnose from. It must instead surface as a normal (failed) run result,
     # so triggered/executed/success/turn_completed all still get scored as False.
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.side_effect = TransientChatError("gen-ai returned 503")
 
-    with patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -310,11 +368,10 @@ def test_run_agentic_kda_skill_survives_a_raw_httpx_transport_error():
     # which _is_retryable_exc does not recognize as retryable and re-raises as-is -- a
     # narrower `except ChatError` (an earlier version of this fix) would NOT catch this
     # and would still propagate out of run_agentic_kda_skill uncaught.
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.side_effect = httpx.RemoteProtocolError("peer closed connection")
 
-    with patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -335,13 +392,12 @@ def test_run_agentic_kda_skill_recovers_kda_calls_from_a_chat_errors_partial_res
     # through (e.g. a later, unrelated final-summary generation failing with a 500) must
     # not misreport as "the agent never called KDA at all" -- the partial_result attached
     # to the exception is exactly the tool_call_events already seen.
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.side_effect = ChatError(
         "SSE error 500: boom", status_code=500, partial_result=_kda_chat_result(success=True)
     )
 
-    with patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -363,20 +419,13 @@ def test_run_agentic_kda_skill_resets_turn_completed_when_a_later_iteration_cras
     # iteration 0 asks a clarifying question and ends cleanly (turn_completed=True for
     # THAT iteration); iteration 1 then crashes. Without resetting, the stale True from
     # iteration 0 would still be logged for a run that never actually finished.
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.side_effect = [
         _no_kda_chat_result("Could you clarify which measure?", stream_ended=True),
         httpx.RemoteProtocolError("peer closed connection"),
     ]
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
-            return_value="Use the revenue metric.",
-        ),
-    ):
+    with _patched(mock_client, simulated_reply="Use the revenue metric."):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -394,11 +443,10 @@ def test_run_agentic_kda_skill_resets_turn_completed_when_a_later_iteration_cras
 def test_run_agentic_kda_skill_turn_not_completed_when_stream_ends_with_empty_text():
     # stream_ended alone is not enough: a turn that ends cleanly but delivers nothing to
     # the user hasn't "delivered a final answer" either (see KdaEvaluation docstring).
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _kda_chat_result(success=True, text="   ", stream_ended=True)
 
-    with patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -416,20 +464,13 @@ def test_run_agentic_kda_skill_turn_not_completed_when_stream_ends_with_empty_te
 
 
 def test_run_agentic_kda_skill_marks_disambiguated_after_a_simulated_reply():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.side_effect = [
         _no_kda_chat_result("Could you clarify which measure?"),
         _kda_chat_result(success=True),
     ]
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
-            return_value="Use the revenue metric.",
-        ),
-    ):
+    with _patched(mock_client, simulated_reply="Use the revenue metric."):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -444,6 +485,83 @@ def test_run_agentic_kda_skill_marks_disambiguated_after_a_simulated_reply():
     assert summary.best.evaluation.triggered is True
 
 
+def test_run_agentic_kda_skill_shifts_timestamps_and_indices_across_iterations():
+    """Regression: the shift/accumulate logic must rebase each iteration's own-zeroed
+    call_ts/result_ts/ts and index onto the whole run's timeline, not just carry events
+    through unshifted.
+
+    Iteration 1 has one reasoning step and no tool call, so after it: tool_index_offset
+    stays 0 but reasoning_index_offset becomes 1. Iteration 2's create/execute calls must
+    land at iteration 1's turn_wall_clock_sec (10.0) plus their own within-turn call_ts,
+    with index starting from 0; its reasoning event's index must start from 1, not 0 --
+    exactly where an off-by-one or a double-shift would hide.
+    """
+    mock_client = _client()
+    iteration_1 = ChatResult.model_validate(
+        {
+            "textResponse": "Which measure should I analyze?",
+            "toolCallEvents": [],
+            "reasoningStepEvents": [{"summary": "**Considering measure**", "ts": 0.5, "index": 0}],
+            "reasoningStepCount": 1,
+            "stream_ended": True,
+            "turn_wall_clock_sec": 10.0,
+        }
+    )
+    iteration_2 = ChatResult.model_validate(
+        {
+            "textResponse": "Here is the analysis.",
+            "toolCallEvents": [
+                {
+                    "functionName": "create_key_driver_analysis",
+                    "functionArguments": json.dumps({"measure": {"type": "metric", "id": "revenue"}}),
+                    "call_ts": 0.2,
+                    "result_ts": 0.3,
+                    "index": 0,
+                },
+                {
+                    "functionName": "execute_key_driver_analysis",
+                    "functionArguments": "{}",
+                    "result": json.dumps({"success": True, "data": {"summary": {}}}),
+                    "call_ts": 0.3,
+                    "result_ts": 0.4,
+                    "index": 1,
+                },
+            ],
+            "reasoningStepEvents": [{"summary": "**Running analysis**", "ts": 0.1, "index": 0}],
+            "reasoningStepCount": 1,
+            "stream_ended": True,
+            "turn_wall_clock_sec": 5.0,
+        }
+    )
+    mock_client.send_message.side_effect = [iteration_1, iteration_2]
+
+    with _patched(mock_client, simulated_reply="Use the revenue metric."):
+        summary = run_agentic_kda_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="What drove revenue change?",
+            expected_output=_EXPECTED,
+            k=1,
+            max_iterations=2,
+        )
+
+    best = summary.best
+    create_tc, execute_tc = best.tool_call_events
+    assert create_tc.call_ts == pytest.approx(10.2)
+    assert create_tc.result_ts == pytest.approx(10.3)
+    assert create_tc.index == 0
+    assert execute_tc.call_ts == pytest.approx(10.3)
+    assert execute_tc.result_ts == pytest.approx(10.4)
+    assert execute_tc.index == 1
+
+    assert len(best.reasoning_step_events) == 2
+    assert best.reasoning_step_events[0].ts == pytest.approx(0.5)
+    assert best.reasoning_step_events[0].index == 0
+    assert best.reasoning_step_events[1].ts == pytest.approx(10.1)
+    assert best.reasoning_step_events[1].index == 1
+
+
 def test_run_agentic_kda_skill_disambiguates_on_question_followed_by_option_list():
     # Regression (QA-28800): the real captured response ends with a bullet list of
     # candidate metrics. Before this module dropped text classification in favor of
@@ -451,8 +569,7 @@ def test_run_agentic_kda_skill_disambiguates_on_question_followed_by_option_list
     # visualization.py/alert_skill.py), a heuristic that only matched "?" endings gave
     # up after turn 1 (triggered=False) instead of ever nudging the simulated user to
     # pick one.
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.side_effect = [
         _no_kda_chat_result(
             'I found two different "Total Net Revenue" metrics in your data model. '
@@ -463,13 +580,7 @@ def test_run_agentic_kda_skill_disambiguates_on_question_followed_by_option_list
         _kda_chat_result(success=True),
     ]
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
-            return_value="Use metric_l1_sql_net_sales_summary_net_revenue.",
-        ) as mock_simulate,
-    ):
+    with _patched(mock_client, simulated_reply="Use metric_l1_sql_net_sales_summary_net_revenue.") as mock_simulate:
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -493,20 +604,13 @@ def test_run_agentic_kda_skill_retries_on_bold_markdown_option_list_with_no_spac
     # classification entirely (see run_agentic_kda_skill's docstring) makes this -- and any
     # other future response shape -- a non-issue: a non-triggering, non-empty response
     # always gets a simulated reply now, regardless of how it's formatted.
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.side_effect = [
         _no_kda_chat_result("Which one should I analyze?\n**Option 1**: revenue\n**Option 2**: gross profit"),
         _kda_chat_result(success=True),
     ]
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
-            return_value="Use revenue.",
-        ) as mock_simulate,
-    ):
+    with _patched(mock_client, simulated_reply="Use revenue.") as mock_simulate:
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -533,20 +637,13 @@ def test_run_agentic_kda_skill_disambiguates_on_period_clarification():
         "Analyzed Period": "2026-2",
         "Reference Period": "2026-1",
     }
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.side_effect = [
         _no_kda_chat_result("Which period would you like to compare?"),
         _kda_chat_result(success=True),
     ]
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
-            return_value="Compare 2026-2 to 2026-1.",
-        ) as mock_simulate,
-    ):
+    with _patched(mock_client, simulated_reply="Compare 2026-2 to 2026-1.") as mock_simulate:
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -572,20 +669,13 @@ def test_run_agentic_kda_skill_disambiguates_when_expected_output_is_not_a_dict(
     # swallowed by the broad except around generate_simulated_kda_response and disabling
     # disambiguation with only a WARNING. Guard so the call still happens, with None
     # candidates, instead of crashing.
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.side_effect = [
         _no_kda_chat_result("Could you clarify which measure?"),
         _kda_chat_result(success=True),
     ]
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
-            return_value="Use the revenue metric.",
-        ) as mock_generate,
-    ):
+    with _patched(mock_client, simulated_reply="Use the revenue metric.") as mock_generate:
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -605,20 +695,13 @@ def test_run_agentic_kda_skill_latency_is_only_the_turn_that_completed_kda():
     # The disambiguation turn's own time, and the simulated-reply generation between
     # turns, must NOT be counted -- only the turn where KDA actually completed reflects
     # gen-ai's own latency; the rest is test-harness overhead (an unrelated OpenAI call).
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.side_effect = [
         _no_kda_chat_result("Could you clarify which measure?", turn_wall_clock_sec=5.0),
         _kda_chat_result(success=True, turn_wall_clock_sec=8.0),
     ]
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
-            return_value="Use the revenue metric.",
-        ),
-    ):
+    with _patched(mock_client, simulated_reply="Use the revenue metric."):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -638,8 +721,7 @@ def test_run_agentic_kda_skill_triggered_but_not_executed_when_execute_tool_is_u
     # isn't registered as a tool at all, so create can succeed alone within a single turn
     # with no execute_result. Must be scored as triggered but not executed immediately,
     # not treated as "execute is coming in a later turn".
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     create_only = ChatResult.model_validate(
         {
             "textResponse": "The analysis is ready. Open it above to review the results.",
@@ -652,7 +734,7 @@ def test_run_agentic_kda_skill_triggered_but_not_executed_when_execute_tool_is_u
     )
     mock_client.send_message.return_value = create_only
 
-    with patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -671,11 +753,10 @@ def test_run_agentic_kda_skill_triggered_but_not_executed_when_execute_tool_is_u
 
 
 def test_run_agentic_kda_skill_not_disambiguated_when_kda_triggers_immediately():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _kda_chat_result(success=True)
 
-    with patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -690,11 +771,10 @@ def test_run_agentic_kda_skill_not_disambiguated_when_kda_triggers_immediately()
 
 
 def test_run_agentic_kda_skill_no_tool_call():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _no_kda_chat_result()
 
-    with patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -710,20 +790,13 @@ def test_run_agentic_kda_skill_no_tool_call():
 
 
 def test_run_agentic_kda_skill_resolves_after_clarification_turn():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.side_effect = [
         _no_kda_chat_result("Could you clarify which revenue measure you mean?"),
         _kda_chat_result(success=True),
     ]
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
-            return_value="The revenue metric is fine.",
-        ) as mock_simulate,
-    ):
+    with _patched(mock_client, simulated_reply="The revenue metric is fine.") as mock_simulate:
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -740,17 +813,10 @@ def test_run_agentic_kda_skill_resolves_after_clarification_turn():
 
 
 def test_run_agentic_kda_skill_gives_up_after_max_iterations_of_clarification():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _no_kda_chat_result("Could you clarify which measure?")
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
-            return_value="Please use revenue.",
-        ),
-    ):
+    with _patched(mock_client, simulated_reply="Please use revenue."):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -770,8 +836,7 @@ def test_run_agentic_kda_skill_disambiguation_then_create_without_execute():
     # create succeeds but execute_result is None (e.g. execute is unavailable for this
     # org). Confirms this still scores correctly (disambiguated + triggered, not executed)
     # instead of being mistaken for "still waiting on more turns".
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     create_only = ChatResult.model_validate(
         {
             "textResponse": "The analysis is ready. Open it above to review the results.",
@@ -786,13 +851,7 @@ def test_run_agentic_kda_skill_disambiguation_then_create_without_execute():
         create_only,
     ]
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
-            return_value="Use the revenue metric.",
-        ),
-    ):
+    with _patched(mock_client, simulated_reply="Use the revenue metric."):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -820,13 +879,7 @@ def test_run_agentic_kda_skill_survives_simulated_reply_failure():
         _no_kda_chat_result("Could you clarify which measure?"),  # run 1: asks, then helper blows up
     ]
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
-            side_effect=RuntimeError("openai down"),
-        ),
-    ):
+    with _patched(mock_client, simulated_error=RuntimeError("openai down")):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -846,7 +899,7 @@ def test_run_agentic_kda_skill_survives_simulated_reply_failure():
 def test_run_agentic_kda_skill_uses_initial_conversation_for_run_0():
     mock_client = MagicMock()
     mock_client.send_message.return_value = _kda_chat_result(success=True)
-    with patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -865,7 +918,7 @@ def test_run_agentic_kda_skill_creates_fresh_conversations_for_remaining_runs():
     mock_client = MagicMock()
     mock_client.create_conversation.side_effect = ["fresh-1", "fresh-2"]
     mock_client.send_message.return_value = _kda_chat_result(success=True)
-    with patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -897,15 +950,10 @@ def test_run_agentic_kda_skill_rejects_non_positive_k(bad_k):
 # evaluate_agentic_kda_skill
 # --------------------------------------------------------------------------- #
 def test_evaluate_agentic_kda_skill_raises_on_failure():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _no_kda_chat_result()
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic._langfuse.try_make_langfuse_client", return_value=None),
-        pytest.raises(KdaSkillAssertionError),
-    ):
+    with _patched_without_langfuse(mock_client), pytest.raises(KdaSkillAssertionError):
         evaluate_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -919,14 +967,10 @@ def test_evaluate_agentic_kda_skill_raises_on_failure():
 
 
 def test_evaluate_agentic_kda_skill_does_not_raise_on_success():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _kda_chat_result(success=True)
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic._langfuse.try_make_langfuse_client", return_value=None),
-    ):
+    with _patched_without_langfuse(mock_client):
         evaluate_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -943,26 +987,16 @@ def test_evaluate_agentic_kda_skill_never_treats_fallback_trace_latency_as_kda_l
     # Regression test: when KDA never triggered, whatever trace find_traces_per_conversation's
     # default (max-latency) selector picks is NOT a real KDA turn -- its latency/cost must not
     # be logged as the KDA run's own value_score inputs.
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _no_kda_chat_result()
 
     fallback_trace = MagicMock(id="fallback-trace", latency=999.0, total_cost=5.0)
     mock_langfuse = MagicMock()
 
     with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic._langfuse.build_run_context", return_value=("run-base", {})),
-        patch(
-            "gooddata_eval.core.agentic._langfuse.find_traces_per_conversation",
-            return_value={"conv-1": fallback_trace},
-        ),
-        patch("gooddata_eval.core.agentic._langfuse.observe") as mock_observe,
-        patch("gooddata_eval.core.agentic._langfuse.score_safe"),
-        patch("gooddata_eval.core.agentic._langfuse.log_quality_and_value_scores") as mock_log_scores,
+        _patched_with_langfuse_scores(mock_client, fallback_trace) as (_, mock_log_scores),
         pytest.raises(KdaSkillAssertionError),
     ):
-        mock_observe.return_value.__enter__.return_value = "fallback-trace"
         evaluate_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -985,25 +1019,13 @@ def test_evaluate_agentic_kda_skill_reports_trace_latency_when_kda_triggered():
     # set by ChatClient around its send_message() call), not from the trace find_traces_per_
     # conversation happens to return -- that trace isn't necessarily the KDA turn at all (see
     # kda_skill.py's comment on `pt`). Only total_cost still comes from the trace.
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _kda_chat_result(success=True, turn_wall_clock_sec=76.0)
 
     found_trace = MagicMock(id="trace-1", latency=999.0, total_cost=0.02)
     mock_langfuse = MagicMock()
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic._langfuse.build_run_context", return_value=("run-base", {})),
-        patch(
-            "gooddata_eval.core.agentic._langfuse.find_traces_per_conversation",
-            return_value={"conv-1": found_trace},
-        ),
-        patch("gooddata_eval.core.agentic._langfuse.observe") as mock_observe,
-        patch("gooddata_eval.core.agentic._langfuse.score_safe") as mock_score_safe,
-        patch("gooddata_eval.core.agentic._langfuse.log_quality_and_value_scores") as mock_log_scores,
-    ):
-        mock_observe.return_value.__enter__.return_value = "trace-1"
+    with _patched_with_langfuse_scores(mock_client, found_trace) as (mock_score_safe, mock_log_scores):
         evaluate_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -1031,25 +1053,13 @@ def test_evaluate_agentic_kda_skill_does_not_log_pass_at_k_or_pass_power_k():
     # silently splitting any Langfuse view built on the old name. Only visualization.py
     # logs this pair, with a real consumer at k=2 (combo_report.py's viz_flaky) that
     # justifies it.
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _kda_chat_result(success=True)
 
     found_trace = MagicMock(id="trace-1", total_cost=0.01)
     mock_langfuse = MagicMock()
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic._langfuse.build_run_context", return_value=("run-base", {})),
-        patch(
-            "gooddata_eval.core.agentic._langfuse.find_traces_per_conversation",
-            return_value={"conv-1": found_trace},
-        ),
-        patch("gooddata_eval.core.agentic._langfuse.observe") as mock_observe,
-        patch("gooddata_eval.core.agentic._langfuse.score_safe") as mock_score_safe,
-        patch("gooddata_eval.core.agentic._langfuse.log_quality_and_value_scores"),
-    ):
-        mock_observe.return_value.__enter__.return_value = "trace-1"
+    with _patched_with_langfuse_scores(mock_client, found_trace) as (mock_score_safe, _):
         evaluate_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -1072,20 +1082,13 @@ def test_evaluate_agentic_kda_skill_does_not_log_pass_at_k_or_pass_power_k():
 def test_run_agentic_kda_skill_accumulates_reasoning_steps_across_iterations():
     """A clarification turn's reasoning is retained even though only the final turn's
     create/execute calls determine the KDA outcome."""
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.side_effect = [
         _no_kda_chat_result("Which metric do you mean?", reasoning_steps=["step one"], response_id="resp-1"),
         _kda_chat_result(reasoning_steps=["step two"], response_id="resp-2"),
     ]
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response",
-            return_value="I mean revenue.",
-        ),
-    ):
+    with _patched(mock_client, simulated_reply="I mean revenue."):
         summary = run_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -1101,16 +1104,12 @@ def test_run_agentic_kda_skill_accumulates_reasoning_steps_across_iterations():
 
 
 def test_evaluate_agentic_kda_skill_returns_reasoning_steps_on_pass():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _kda_chat_result(
         success=True, reasoning_steps=["analyzing drivers"], response_id="resp-1"
     )
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic._langfuse.try_make_langfuse_client", return_value=None),
-    ):
+    with _patched_without_langfuse(mock_client):
         outcome = evaluate_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -1133,21 +1132,17 @@ def test_evaluate_agentic_kda_skill_returns_reasoning_steps_on_pass():
         "disambiguated": False,
         "actual_create_args": {"measure": {"type": "metric", "id": "revenue"}},
         "actual_execute_result": {"success": True, "data": {"summary": {}}},
+        "latency_breakdown": [],
     }
 
 
 def test_evaluate_agentic_kda_skill_attaches_reasoning_steps_to_exception_on_fail():
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.return_value = _no_kda_chat_result(
         reasoning_steps=["could not find a measure"], response_id="resp-2"
     )
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic._langfuse.try_make_langfuse_client", return_value=None),
-        pytest.raises(KdaSkillAssertionError) as exc_info,
-    ):
+    with _patched_without_langfuse(mock_client), pytest.raises(KdaSkillAssertionError) as exc_info:
         evaluate_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -1170,6 +1165,7 @@ def test_evaluate_agentic_kda_skill_attaches_reasoning_steps_to_exception_on_fai
         "disambiguated": False,
         "actual_create_args": None,
         "actual_execute_result": None,
+        "latency_breakdown": [],
     }
 
 
@@ -1178,8 +1174,7 @@ def test_evaluate_agentic_kda_skill_preserves_reasoning_from_a_chat_error_partia
     # (KDA create/execute already streamed before an unrelated later failure), but checking that
     # the partial_result's own reasoning_steps/response_id survive onto the exception too, not
     # just the tool-call data.
-    mock_client = MagicMock()
-    mock_client.create_conversation.return_value = "conv-1"
+    mock_client = _client()
     mock_client.send_message.side_effect = ChatError(
         "SSE error 500: boom",
         status_code=500,
@@ -1188,11 +1183,7 @@ def test_evaluate_agentic_kda_skill_preserves_reasoning_from_a_chat_error_partia
         ),
     )
 
-    with (
-        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic._langfuse.try_make_langfuse_client", return_value=None),
-        pytest.raises(KdaSkillAssertionError) as exc_info,
-    ):
+    with _patched_without_langfuse(mock_client), pytest.raises(KdaSkillAssertionError) as exc_info:
         evaluate_agentic_kda_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",

@@ -5,9 +5,14 @@
 # ignore all generated code + all snapshots; snapshots must not be processed otherwise they stop matching due to
 # addition of new lines
 exclude: (gooddata-api-client|.*\.snapshot\..*|.openapi-generator/custom_templates)
+
+# Hooks run at the pre-commit stage unless they opt into another one. The commit-msg stage
+# is also installed (see `make dev`), and without this default every hook would run there
+# too, against the commit message file -- the copyright hook would rewrite it.
+default_stages: [pre-commit]
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -15,7 +20,7 @@ repos:
         args: [ '--maxkb=890' ]
       - id: check-case-conflict
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.20
+    rev: v0.16.6
     hooks:
       # Run the linter.
       - id: ruff
@@ -34,7 +39,8 @@ repos:
     rev: v0.19.1
     hooks:
       - id: gitlint
+        stages: [commit-msg]
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.12.5
+    rev: 0.12.9
     hooks:
       - id: uv-lock

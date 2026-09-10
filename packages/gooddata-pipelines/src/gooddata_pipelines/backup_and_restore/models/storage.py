@@ -76,9 +76,7 @@ class S3StorageConfig(BaseModel):
         )
 
     @classmethod
-    def from_aws_profile(
-        cls, backup_path: str, bucket: str, profile: str
-    ) -> "S3StorageConfig":
+    def from_aws_profile(cls, backup_path: str, bucket: str, profile: str) -> "S3StorageConfig":
         """Use a named AWS CLI profile.
 
         Args:
@@ -110,9 +108,7 @@ class AzureStorageConfig(BaseModel):
     tenant_id: str | None = None
 
     @classmethod
-    def from_workload_identity(
-        cls, backup_path: str, account_name: str, container: str
-    ) -> "AzureStorageConfig":
+    def from_workload_identity(cls, backup_path: str, account_name: str, container: str) -> "AzureStorageConfig":
         """Use Azure Workload Identity (for Kubernetes).
 
         Args:
@@ -206,9 +202,7 @@ class BackupRestoreConfig(BaseModel):
     """
 
     storage_type: StorageType = Field(default=StorageType.LOCAL)
-    storage: S3StorageConfig | AzureStorageConfig | LocalStorageConfig = Field(
-        default_factory=LocalStorageConfig
-    )
+    storage: S3StorageConfig | AzureStorageConfig | LocalStorageConfig = Field(default_factory=LocalStorageConfig)
     api_page_size: Annotated[
         int,
         Field(
@@ -233,26 +227,17 @@ class BackupRestoreConfig(BaseModel):
 
     @classmethod
     def from_yaml(cls, conf_path: str) -> "BackupRestoreConfig":
-        with open(conf_path, "r") as stream:
+        with open(conf_path) as stream:
             conf: dict = yaml.safe_load(stream)
         return cls(**conf)
 
     @model_validator(mode="after")
     def validate_storage(self) -> "BackupRestoreConfig":
         """Check that the storage gets correct configuration"""
-        if self.storage_type == StorageType.S3:
-            if not isinstance(self.storage, S3StorageConfig):
-                raise ValueError(
-                    "S3 storage must be configured with S3StorageConfig object"
-                )
-        elif self.storage_type == StorageType.AZURE:
-            if not isinstance(self.storage, AzureStorageConfig):
-                raise ValueError(
-                    "Azure storage must be configured with AzureStorageConfig object"
-                )
-        elif self.storage_type == StorageType.LOCAL:
-            if not isinstance(self.storage, LocalStorageConfig):
-                raise ValueError(
-                    "Local storage must be configured with LocalStorageConfig object"
-                )
+        if self.storage_type == StorageType.S3 and not isinstance(self.storage, S3StorageConfig):
+            raise ValueError("S3 storage must be configured with S3StorageConfig object")
+        if self.storage_type == StorageType.AZURE and not isinstance(self.storage, AzureStorageConfig):
+            raise ValueError("Azure storage must be configured with AzureStorageConfig object")
+        if self.storage_type == StorageType.LOCAL and not isinstance(self.storage, LocalStorageConfig):
+            raise ValueError("Local storage must be configured with LocalStorageConfig object")
         return self

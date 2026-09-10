@@ -35,33 +35,23 @@ class WorkspaceDataFilterManager:
         self.logger: LogObserver = LogObserver()
 
     @staticmethod
-    def _create_wdf_setting_dict(
-        wdf_setting_id: str, wdf_id: str, wdf_values: list[str]
-    ) -> dict[str, Any]:
+    def _create_wdf_setting_dict(wdf_setting_id: str, wdf_id: str, wdf_values: list[str]) -> dict[str, Any]:
         """Loads a JSON template of a WDF setting and fills it with the given values."""
         values = [str(value) for value in wdf_values]
 
-        wdf_setting_path = os.path.join(
-            os.path.dirname(__file__), "../../assets/wdf_setting.json"
-        )
+        wdf_setting_path = os.path.join(os.path.dirname(__file__), "../../assets/wdf_setting.json")
         with open(os.path.abspath(wdf_setting_path)) as file:
             wdf_setting: dict[str, Any] = json.load(file)
 
         wdf_setting["data"]["attributes"]["filterValues"] = values
         wdf_setting["data"]["id"] = wdf_setting_id
-        wdf_setting["data"]["relationships"]["workspaceDataFilter"]["data"][
-            "id"
-        ] = wdf_id
+        wdf_setting["data"]["relationships"]["workspaceDataFilter"]["data"]["id"] = wdf_id
 
         return wdf_setting
 
-    def _get_wdf_settings_for_workspace(
-        self, workspace_id: str
-    ) -> list[WDFSetting]:
+    def _get_wdf_settings_for_workspace(self, workspace_id: str) -> list[WDFSetting]:
         """Gets all workspace data filter settings for a given workspace."""
-        wdf_settings_response: Response = (
-            self.api.get_workspace_data_filter_settings(workspace_id)
-        )
+        wdf_settings_response: Response = self.api.get_workspace_data_filter_settings(workspace_id)
 
         if not wdf_settings_response.ok:
             raise WorkspaceException(
@@ -74,9 +64,7 @@ class WorkspaceDataFilterManager:
 
         data: list[dict[str, Any]] = raw_wdf_settings["data"]
 
-        wdf_settings: list[WDFSetting] = [
-            WDFSetting(**wdf_setting) for wdf_setting in data
-        ]
+        wdf_settings: list[WDFSetting] = [WDFSetting(**wdf_setting) for wdf_setting in data]
 
         return wdf_settings
 
@@ -86,10 +74,7 @@ class WorkspaceDataFilterManager:
     ) -> tuple[str, list[str]]:
         """Returns WDF setting ID and values for given WDF ID."""
         for actual_wdf_setting in actual_wdf_settings:
-            if (
-                actual_wdf_setting.relationships.workspaceDataFilter["data"].id
-                == actual_wdf_id
-            ):
+            if actual_wdf_setting.relationships.workspaceDataFilter["data"].id == actual_wdf_id:
                 actual_wdf_setting_id = actual_wdf_setting.id
                 actual_wdf_values = actual_wdf_setting.attributes.filterValues
 
@@ -107,10 +92,8 @@ class WorkspaceDataFilterManager:
         actual_wdf_settings: list[WDFSetting],
     ) -> None:
         """Deletes a WDF setting."""
-        actual_wdf_setting_id, actual_wdf_values = (
-            self._get_actual_wdf_setting_id_and_values(
-                actual_wdf_settings, actual_wdf_id
-            )
+        actual_wdf_setting_id, actual_wdf_values = self._get_actual_wdf_setting_id_and_values(
+            actual_wdf_settings, actual_wdf_id
         )
         # Update context with actual values
         workspace_context.wdf_id = actual_wdf_id
@@ -118,11 +101,9 @@ class WorkspaceDataFilterManager:
 
         # If there is a WDF setting for a WDF that should not be associated with
         # the workspace, then delete the setting
-        delete_response: Response = (
-            self.api.delete_workspace_data_filter_setting(
-                workspace_context.workspace_id,
-                actual_wdf_setting_id,
-            )
+        delete_response: Response = self.api.delete_workspace_data_filter_setting(
+            workspace_context.workspace_id,
+            actual_wdf_setting_id,
         )
         if delete_response.ok:
             self.logger.info(
@@ -144,9 +125,7 @@ class WorkspaceDataFilterManager:
         wdf_setting = self._create_wdf_setting_dict(
             str(uuid4()),
             str(workspace_context.wdf_id),
-            workspace_context.wdf_values
-            if workspace_context.wdf_values
-            else [],
+            workspace_context.wdf_values if workspace_context.wdf_values else [],
         )
         post_response: Response = self.api.post_workspace_data_filter_setting(
             workspace_context.workspace_id,
@@ -176,9 +155,7 @@ class WorkspaceDataFilterManager:
         wdf_setting = self._create_wdf_setting_dict(
             actual_wdf_setting_id,
             str(workspace_context.wdf_id),
-            workspace_context.wdf_values
-            if workspace_context.wdf_values
-            else [],
+            workspace_context.wdf_values if workspace_context.wdf_values else [],
         )
 
         put_response: Response = self.api.put_workspace_data_filter_setting(
@@ -221,11 +198,9 @@ class WorkspaceDataFilterManager:
         # Create map of upstream WDF_ID : WDF values
         upstream_wdf_ids_and_values: dict[str, list[str]] = {}
         for upstream_wdf_setting in upstream_wdf_settings:
-            upstream_wdf_ids_and_values[
-                upstream_wdf_setting.relationships.workspaceDataFilter[
-                    "data"
-                ].id
-            ] = upstream_wdf_setting.attributes.filterValues
+            upstream_wdf_ids_and_values[upstream_wdf_setting.relationships.workspaceDataFilter["data"].id] = (
+                upstream_wdf_setting.attributes.filterValues
+            )
 
         # Iterate through source WDF settings
         for source_wdf_id in source_wdf_ids:
@@ -241,9 +216,7 @@ class WorkspaceDataFilterManager:
 
             # If settings exist for a WDF that should be there, then compare values
             elif source_wdf_id in upstream_wdf_ids:
-                actual_values: list[str] = upstream_wdf_ids_and_values[
-                    source_wdf_id
-                ]
+                actual_values: list[str] = upstream_wdf_ids_and_values[source_wdf_id]
 
                 # If values are different, then update the WDF settings
                 if set(source_values) != set(actual_values):
@@ -272,14 +245,8 @@ class WorkspaceDataFilterManager:
         Updates WDF setting values if they are different in source and Panther.
         Deletes WDF settings from Panther if they are not defined in source.
         """
-        actual_wdf_settings: list[WDFSetting] = (
-            self._get_wdf_settings_for_workspace(workspace_context.workspace_id)
-        )
+        actual_wdf_settings: list[WDFSetting] = self._get_wdf_settings_for_workspace(workspace_context.workspace_id)
 
-        source_wdf_config: dict[str, list[str]] = (
-            self.maps.workspace_id_to_wdf_map[workspace_context.workspace_id]
-        )
+        source_wdf_config: dict[str, list[str]] = self.maps.workspace_id_to_wdf_map[workspace_context.workspace_id]
 
-        self._compare_wdf_settings(
-            workspace_context, source_wdf_config, actual_wdf_settings
-        )
+        self._compare_wdf_settings(workspace_context, source_wdf_config, actual_wdf_settings)

@@ -1,10 +1,17 @@
 # (C) 2025 GoodData Corporation
-from typing import Literal, Optional
+from typing import Literal
 
 import attrs
 import orjson
 import pytest
 from gooddata_api_client.exceptions import NotFoundException  # type: ignore
+from gooddata_pipelines.provisioning.entities.users.models.users import (
+    UserFullLoad,
+    UserIncrementalLoad,
+)
+from gooddata_pipelines.provisioning.entities.users.users import (
+    UserProvisioner,
+)
 from gooddata_sdk.catalog.user.entity_model.user import (
     CatalogUser,
     CatalogUserAttributes,
@@ -17,13 +24,6 @@ from gooddata_sdk.catalog.user.entity_model.user_group import (
 from pytest_mock import MockerFixture
 from requests import Response
 
-from gooddata_pipelines.provisioning.entities.users.models.users import (
-    UserFullLoad,
-    UserIncrementalLoad,
-)
-from gooddata_pipelines.provisioning.entities.users.users import (
-    UserProvisioner,
-)
 from tests.conftest import TEST_DATA_DIR
 
 TEST_DATA_SUBDIR = f"{TEST_DATA_DIR}/provisioning/entities/users"
@@ -32,10 +32,10 @@ TEST_DATA_SUBDIR = f"{TEST_DATA_DIR}/provisioning/entities/users"
 @attrs.define
 class MockUser:
     id: str
-    firstname: Optional[str]
-    lastname: Optional[str]
-    email: Optional[str]
-    authenticationId: Optional[str]
+    firstname: str | None
+    lastname: str | None
+    email: str | None
+    authenticationId: str | None
     user_groups: list[str]
 
     def to_sdk(self):
@@ -68,18 +68,14 @@ class MockUser:
         if not self.user_groups:
             return data
 
-        relsdata = [
-            {"id": group, "type": "userGroup"} for group in self.user_groups
-        ]
+        relsdata = [{"id": group, "type": "userGroup"} for group in self.user_groups]
         if relsdata:
             data["relationships"] = {"userGroups": {"data": relsdata}}
         return data
 
 
 def test_user_obj_from_sdk():
-    user_input = MockUser(
-        "some.user", "some", "user", "some@email.com", "auth", ["ug"]
-    )
+    user_input = MockUser("some.user", "some", "user", "some@email.com", "auth", ["ug"])
     excepted = UserIncrementalLoad(
         user_id="some.user",
         firstname="some",
@@ -94,9 +90,7 @@ def test_user_obj_from_sdk():
 
 
 def test_user_obj_from_sdk_no_ugs():
-    user_input = MockUser(
-        "some.user", "some", "user", "some@email.com", "auth", []
-    )
+    user_input = MockUser("some.user", "some", "user", "some@email.com", "auth", [])
     excepted = UserIncrementalLoad(
         user_id="some.user",
         firstname="some",
@@ -111,9 +105,7 @@ def test_user_obj_from_sdk_no_ugs():
 
 
 def test_user_obj_to_sdk():
-    user_input = MockUser(
-        "some.user", "some", "user", "some@email.com", "auth", ["ug"]
-    )
+    user_input = MockUser("some.user", "some", "user", "some@email.com", "auth", ["ug"])
     user = UserIncrementalLoad(
         user_id="some.user",
         firstname="some",
@@ -128,9 +120,7 @@ def test_user_obj_to_sdk():
 
 
 def test_user_obj_to_sdk_no_ugs():
-    user_input = MockUser(
-        "some.user", "some", "user", "some@email.com", "auth", []
-    )
+    user_input = MockUser("some.user", "some", "user", "some@email.com", "auth", [])
     user = UserIncrementalLoad(
         user_id="some.user",
         firstname="some",
@@ -147,9 +137,7 @@ def test_user_obj_to_sdk_no_ugs():
 @pytest.fixture
 def user_provisioner(mocker: MockerFixture) -> UserProvisioner:
     """Mock instance of UserProvisioner."""
-    provisioner_instance = UserProvisioner.create(
-        host="https://localhost:3000", token="token"
-    )
+    provisioner_instance = UserProvisioner.create(host="https://localhost:3000", token="token")
 
     # Patch the API
     mocker.patch.object(provisioner_instance, "_api", return_value=None)
@@ -159,27 +147,21 @@ def user_provisioner(mocker: MockerFixture) -> UserProvisioner:
 
 def parse_user_data(user_data: list[dict]) -> list[CatalogUser]:
     """Parse json user metadata to CatalogUser objects."""
-    users: list[CatalogUser] = []
-    for user in user_data:
-        users.append(
-            CatalogUser(
-                id=user["user_id"],
-                attributes=CatalogUserAttributes(
-                    firstname=user["firstname"],
-                    lastname=user["lastname"],
-                    email=user["email"],
-                    authentication_id=user["authentication_id"],
-                ),
-                relationships=CatalogUserRelationships(
-                    user_groups=CatalogUserGroupsData(
-                        data=[
-                            CatalogUserGroup(id=group)
-                            for group in user["user_groups"]
-                        ]
-                    )
-                ),
-            )
+    users: list[CatalogUser] = [
+        CatalogUser(
+            id=user["user_id"],
+            attributes=CatalogUserAttributes(
+                firstname=user["firstname"],
+                lastname=user["lastname"],
+                email=user["email"],
+                authentication_id=user["authentication_id"],
+            ),
+            relationships=CatalogUserRelationships(
+                user_groups=CatalogUserGroupsData(data=[CatalogUserGroup(id=group) for group in user["user_groups"]])
+            ),
         )
+        for user in user_data
+    ]
     return sorted(users, key=lambda x: x.id)
 
 
@@ -224,15 +206,15 @@ def test_user_provisioning(
     attempt to create, update or delete expected users for given input."""
 
     # Load input data
-    with open(f"{TEST_DATA_SUBDIR}/{input_path}", "r") as f:
+    with open(f"{TEST_DATA_SUBDIR}/{input_path}") as f:
         input_data = orjson.loads(f.read())
 
     # Load expected data
-    with open(f"{TEST_DATA_SUBDIR}/{expected_path}", "r") as f:
+    with open(f"{TEST_DATA_SUBDIR}/{expected_path}") as f:
         raw_expected_data = orjson.loads(f.read())
 
     # Load and patch "existing users"
-    with open(f"{TEST_DATA_SUBDIR}/existing_upstream_users.json", "r") as f:
+    with open(f"{TEST_DATA_SUBDIR}/existing_upstream_users.json") as f:
         raw_upstream_users = orjson.loads(f.read())
 
     upstream_users = parse_user_data(raw_upstream_users)
@@ -247,9 +229,7 @@ def test_user_provisioning(
         """Mock the get_profile method by creating a response object with sample
         response from the API reference.
         """
-        with open(
-            f"{TEST_DATA_SUBDIR}/profile_response_content.json", "r"
-        ) as f:
+        with open(f"{TEST_DATA_SUBDIR}/profile_response_content.json") as f:
             profile_response = f.read()
         response = Response()
         response.status_code = 200
@@ -305,9 +285,7 @@ def test_user_provisioning(
 
     # Run the provisioning
     if load_method == "incremental_load":
-        incremental_load_data = [
-            UserIncrementalLoad(**row) for row in input_data
-        ]
+        incremental_load_data = [UserIncrementalLoad(**row) for row in input_data]
         user_provisioner.incremental_load(incremental_load_data)
     else:
         full_load_data = [UserFullLoad(**row) for row in input_data]
@@ -318,9 +296,7 @@ def test_user_provisioning(
     assert len(deleted_users) == len(expected_deleted_users)
 
     # Sort the actual data
-    created_or_updated_users = sorted(
-        created_or_updated_users, key=lambda x: x.id
-    )
+    created_or_updated_users = sorted(created_or_updated_users, key=lambda x: x.id)
     deleted_users = sorted(deleted_users)
 
     # Compare the actual data

@@ -44,9 +44,7 @@ from gooddata_pipelines.ldm_extension.models.custom_data_object import (
 )
 
 
-def _effective_field_tags(
-    dataset_name: str, custom_field: CustomFieldDefinition
-) -> list[str]:
+def _effective_field_tags(dataset_name: str, custom_field: CustomFieldDefinition) -> list[str]:
     if custom_field.tags is not None:
         return list(custom_field.tags)
     return [dataset_name]
@@ -153,9 +151,7 @@ class LdmExtensionDataProcessor:
     ) -> CatalogDeclarativeReference:
         """Create a date reference from a custom field definition."""
         return CatalogDeclarativeReference(
-            identifier=CatalogReferenceIdentifier(
-                id=custom_field.custom_field_id
-            ),
+            identifier=CatalogReferenceIdentifier(id=custom_field.custom_field_id),
             multivalue=False,
             sources=[
                 CatalogDeclarativeReferenceSource(
@@ -194,10 +190,7 @@ class LdmExtensionDataProcessor:
             or definition.dataset_reference_source_column is None
             or definition.dataset_reference_source_column_data_type is None
         ):
-            raise ValueError(
-                "Legacy reference fields must be set when "
-                "`parent_dataset_references` is not provided."
-            )
+            raise ValueError("Legacy reference fields must be set when `parent_dataset_references` is not provided.")
         return [
             CatalogDeclarativeReferenceSource(
                 column=definition.dataset_reference_source_column,
@@ -241,9 +234,7 @@ class LdmExtensionDataProcessor:
         )
         return dataset_source_table_id, dataset_sql
 
-    def datasets_to_ldm(
-        self, datasets: dict[DatasetId, CustomDataset]
-    ) -> CatalogDeclarativeModel:
+    def datasets_to_ldm(self, datasets: dict[DatasetId, CustomDataset]) -> CatalogDeclarativeModel:
         """Convert validated datasets to GoodData declarative model.
 
         Args:
@@ -268,18 +259,10 @@ class LdmExtensionDataProcessor:
             # Iterate through the custom fields and create the appropriate objects
             for custom_field in dataset.custom_fields:
                 if custom_field.custom_field_type == CustomFieldType.ATTRIBUTE:
-                    attributes.append(
-                        self._attribute_from_field(
-                            dataset.definition.dataset_name, custom_field
-                        )
-                    )
+                    attributes.append(self._attribute_from_field(dataset.definition.dataset_name, custom_field))
 
                 elif custom_field.custom_field_type == CustomFieldType.FACT:
-                    facts.append(
-                        self._fact_from_field(
-                            dataset.definition.dataset_name, custom_field
-                        )
-                    )
+                    facts.append(self._fact_from_field(dataset.definition.dataset_name, custom_field))
 
                 # Process date dimensions and store them to date_instances. Date
                 # dimensions are not stored in a dataset, but as a separate dataset.
@@ -288,40 +271,24 @@ class LdmExtensionDataProcessor:
                 # in the GoodData Logical Data Model.
                 elif custom_field.custom_field_type == CustomFieldType.DATE:
                     # Add the date dimension to the date_instances
-                    date_instances.append(
-                        self._date_from_field(
-                            dataset.definition.dataset_name, custom_field
-                        )
-                    )
+                    date_instances.append(self._date_from_field(dataset.definition.dataset_name, custom_field))
 
                     # Create a reference so that the date dimension is connected
                     # to the dataset in the GoodData Logical Data Model.
-                    date_references.append(
-                        self._date_ref_from_field(custom_field)
-                    )
+                    date_references.append(self._date_ref_from_field(custom_field))
 
                 else:
-                    raise ValueError(
-                        f"Unsupported custom field type: {custom_field.custom_field_type}"
-                    )
+                    raise ValueError(f"Unsupported custom field type: {custom_field.custom_field_type}")
 
             # Get the data source info
             dataset_source_table_id, dataset_sql = self._get_sources(dataset)
 
-            parent_reference_sources = self._build_parent_reference_sources(
-                dataset.definition
-            )
+            parent_reference_sources = self._build_parent_reference_sources(dataset.definition)
 
-            wdf_columns: (
-                list[CatalogDeclarativeWorkspaceDataFilterColumn] | None
-            ) = None
-            wdf_references: (
-                list[CatalogDeclarativeWorkspaceDataFilterReferences] | None
-            ) = None
+            wdf_columns: list[CatalogDeclarativeWorkspaceDataFilterColumn] | None = None
+            wdf_references: list[CatalogDeclarativeWorkspaceDataFilterReferences] | None = None
             wdf_id = dataset.definition.workspace_data_filter_id
-            wdf_column_name = (
-                dataset.definition.workspace_data_filter_column_name
-            )
+            wdf_column_name = dataset.definition.workspace_data_filter_column_name
             # `check_wdf_pair` on the model guarantees both fields are set
             # together or both omitted.
             if wdf_id is not None and wdf_column_name is not None:
@@ -333,9 +300,7 @@ class LdmExtensionDataProcessor:
                 ]
                 wdf_references = [
                     CatalogDeclarativeWorkspaceDataFilterReferences(
-                        filter_id=CatalogDatasetWorkspaceDataFilterIdentifier(
-                            id=wdf_id
-                        ),
+                        filter_id=CatalogDatasetWorkspaceDataFilterIdentifier(id=wdf_id),
                         filter_column=wdf_column_name,
                         filter_column_data_type=ColumnDataType.STRING.value,
                     )
@@ -369,9 +334,7 @@ class LdmExtensionDataProcessor:
             )
 
         # Create the Logical Data Model from the datasets and the date instances.
-        ldm = CatalogDeclarativeLdm(
-            datasets=declarative_datasets, date_instances=date_instances
-        )
+        ldm = CatalogDeclarativeLdm(datasets=declarative_datasets, date_instances=date_instances)
         return CatalogDeclarativeModel(ldm=ldm)
 
     def merge_custom_ldm_into_existing(
@@ -393,14 +356,10 @@ class LdmExtensionDataProcessor:
         are not in the incoming fragment) are preserved unchanged.
         """
         fragment = self.datasets_to_ldm(custom_datasets)
-        fragment_ldm = fragment.ldm or CatalogDeclarativeLdm(
-            datasets=[], date_instances=[]
-        )
+        fragment_ldm = fragment.ldm or CatalogDeclarativeLdm(datasets=[], date_instances=[])
 
         result = copy.deepcopy(existing)
-        result_ldm = result.ldm or CatalogDeclarativeLdm(
-            datasets=[], date_instances=[]
-        )
+        result_ldm = result.ldm or CatalogDeclarativeLdm(datasets=[], date_instances=[])
         result.ldm = result_ldm
 
         incoming_dataset_ids = {d.id for d in fragment_ldm.datasets}
@@ -409,23 +368,13 @@ class LdmExtensionDataProcessor:
         datasets = list(result_ldm.datasets)
         if remove_managed_datasets_missing_from_input and management_tag:
             datasets = [
-                d
-                for d in datasets
-                if not (
-                    d.tags
-                    and management_tag in d.tags
-                    and d.id not in incoming_dataset_ids
-                )
+                d for d in datasets if not (d.tags and management_tag in d.tags and d.id not in incoming_dataset_ids)
             ]
         datasets = [d for d in datasets if d.id not in incoming_dataset_ids]
         datasets.extend(fragment_ldm.datasets)
         result_ldm.datasets = datasets
 
-        date_instances = [
-            d
-            for d in result_ldm.date_instances
-            if d.id not in incoming_date_ids
-        ]
+        date_instances = [d for d in result_ldm.date_instances if d.id not in incoming_date_ids]
         date_instances.extend(fragment_ldm.date_instances)
         result_ldm.date_instances = date_instances
 

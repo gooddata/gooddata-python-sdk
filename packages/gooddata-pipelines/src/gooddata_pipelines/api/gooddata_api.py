@@ -38,9 +38,7 @@ class ApiMethods:
         """
         return f"{self.base_url}{endpoint}"
 
-    def get_all_workspace_data_filters(
-        self, workspace_id: str
-    ) -> requests.Response:
+    def get_all_workspace_data_filters(self, workspace_id: str) -> requests.Response:
         """Gets all workspace data filters for a given workspace.
 
         Args:
@@ -52,9 +50,7 @@ class ApiMethods:
         url = f"/entities/workspaces/{workspace_id}/workspaceDataFilters"
         return self._get(url)
 
-    def get_workspace_data_filter_settings(
-        self, workspace_id: str
-    ) -> requests.Response:
+    def get_workspace_data_filter_settings(self, workspace_id: str) -> requests.Response:
         """Gets all workspace data filter settings for a given workspace.
 
         Args:
@@ -66,9 +62,7 @@ class ApiMethods:
         url = f"/entities/workspaces/{workspace_id}/workspaceDataFilterSettings?include=workspaceDataFilters"
         return self._get(url)
 
-    def get_workspace_data_filter_setting(
-        self, workspace_id: str, wdf_id: str
-    ) -> requests.Response:
+    def get_workspace_data_filter_setting(self, workspace_id: str, wdf_id: str) -> requests.Response:
         """Gets a specific workspace data filter setting.
 
         Args:
@@ -119,9 +113,7 @@ class ApiMethods:
             requests.Response: The response from the server containing the
                 created workspace data filter setting.
         """
-        endpoint = (
-            f"/entities/workspaces/{workspace_id}/workspaceDataFilterSettings/"
-        )
+        endpoint = f"/entities/workspaces/{workspace_id}/workspaceDataFilterSettings/"
         return self._post(
             endpoint,
             wdf_setting,
@@ -153,9 +145,7 @@ class ApiMethods:
         endpoint = f"/layout/workspaces/{workspace_id}/userDataFilters"
         return self._get(endpoint)
 
-    def put_user_data_filters(
-        self, workspace_id: str, user_data_filters: dict[str, Any]
-    ) -> requests.Response:
+    def put_user_data_filters(self, workspace_id: str, user_data_filters: dict[str, Any]) -> requests.Response:
         """Puts the user data filters into GoodData workspace."""
         headers = {**self.headers, "Content-Type": "application/json"}
         return self._put(
@@ -166,25 +156,17 @@ class ApiMethods:
 
     def get_automations(self, workspace_id: str) -> requests.Response:
         """Gets the automations for a given workspace."""
-        endpoint = (
-            f"/entities/workspaces/{workspace_id}/automations?include=ALL"
-        )
+        endpoint = f"/entities/workspaces/{workspace_id}/automations?include=ALL"
         return self._get(endpoint)
 
-    def post_automation(
-        self, workspace_id: str, automation: dict[str, Any]
-    ) -> requests.Response:
+    def post_automation(self, workspace_id: str, automation: dict[str, Any]) -> requests.Response:
         """Posts an automation for a given workspace."""
         endpoint = f"/entities/workspaces/{workspace_id}/automations"
         return self._post(endpoint, automation)
 
-    def delete_automation(
-        self, workspace_id: str, automation_id: str
-    ) -> requests.Response:
+    def delete_automation(self, workspace_id: str, automation_id: str) -> requests.Response:
         """Deletes an automation for a given workspace."""
-        endpoint = (
-            f"/entities/workspaces/{workspace_id}/automations/{automation_id}"
-        )
+        endpoint = f"/entities/workspaces/{workspace_id}/automations/{automation_id}"
         return self._delete(endpoint)
 
     def get_all_metrics(self, workspace_id: str) -> requests.Response:
@@ -199,9 +181,7 @@ class ApiMethods:
         headers = {**self.headers, "X-GDC-VALIDATE-RELATIONS": "true"}
         return self._get(endpoint, headers=headers)
 
-    def get_all_visualization_objects(
-        self, workspace_id: str
-    ) -> requests.Response:
+    def get_all_visualization_objects(self, workspace_id: str) -> requests.Response:
         """Get all visualizations from the specified workspace.
 
         Args:
@@ -230,9 +210,7 @@ class ApiMethods:
         endpoint = "/profile"
         return self._get(endpoint)
 
-    def _get(
-        self, endpoint: str, headers: dict[str, str] | None = None
-    ) -> requests.Response:
+    def _get(self, endpoint: str, headers: dict[str, str] | None = None) -> requests.Response:
         """Sends a GET request to the server.
 
         Args:
@@ -267,9 +245,7 @@ class ApiMethods:
         request_headers = headers if headers else self.headers
         data_json = json.dumps(data)
 
-        return requests.post(
-            url, data=data_json, headers=request_headers, timeout=TIMEOUT
-        )
+        return requests.post(url, data=data_json, headers=request_headers, timeout=TIMEOUT)
 
     def _put(
         self,
@@ -291,9 +267,7 @@ class ApiMethods:
         request_headers = headers if headers else self.headers
         data_json = json.dumps(data)
 
-        return requests.put(
-            url, data=data_json, headers=request_headers, timeout=TIMEOUT
-        )
+        return requests.put(url, data=data_json, headers=request_headers, timeout=TIMEOUT)
 
     def _delete(
         self,

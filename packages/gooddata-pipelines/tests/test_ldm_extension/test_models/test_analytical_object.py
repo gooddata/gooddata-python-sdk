@@ -1,11 +1,11 @@
 # (C) 2025 GoodData Corporation
 import orjson
 import pytest
-
 from gooddata_pipelines.ldm_extension.models.analytical_object import (
     AnalyticalObject,
     AnalyticalObjects,
 )
+
 from tests.conftest import TEST_DATA_DIR
 
 
@@ -18,14 +18,12 @@ from tests.conftest import TEST_DATA_DIR
     ],
 )
 def test_analytical_object_model_with_metrics(file_path):
-    with open(file_path, "r") as file:
+    with open(file_path) as file:
         data = orjson.loads(file.read())
     analytical_objects = AnalyticalObjects(**data)
     assert isinstance(analytical_objects, AnalyticalObjects)
     assert isinstance(analytical_objects.data, list)
-    assert all(
-        isinstance(obj, AnalyticalObject) for obj in analytical_objects.data
-    )
+    assert all(isinstance(obj, AnalyticalObject) for obj in analytical_objects.data)
 
 
 @pytest.mark.parametrize(

@@ -6,20 +6,32 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import ClassVar, Literal
 
 from gooddata_sdk import GoodDataSdk
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
+from gooddata_eval.core.agentic._trace_linker import (
+    RunIdentity,
+    RunTraceContext,
+    SubmitTraceLink,
+    open_trace_window,
+    run_trace_link_inline,
+    submit_trace_scoring,
+    utc_now,
+)
 from gooddata_eval.core.agentic.alert_skill import render_alert_proposal
 from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids, _extract_metric_result
+from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import (
+    AgenticAssertionError,
     AgenticEvalOutcome,
     ChatResult,
     ReasoningStepEvent,
     ToolCallEvent,
+    shift_and_index_events,
     timeline_detail,
 )
 from gooddata_eval.core.scoring import (
@@ -55,7 +67,21 @@ class ConversationFixture(BaseModel):
 
 
 class TurnResult(BaseModel):
-    """Evaluation result for a single conversation turn."""
+    """Evaluation result for a single conversation turn.
+
+    The two skill fields measure DIFFERENT SCOPES, so a turn can legitimately report
+    ``skill_routing=True`` with an empty ``activated_skills``:
+
+    - ``activated_skills`` -- what THIS turn's own ``set_skills`` call declared. Empty
+      whenever the agent reused an already-active skill without re-declaring it.
+    - ``active_skills`` -- what was actually active DURING this turn: the last declared
+      set, carried over on turns that declare nothing. This is the set ``skill_routing``
+      is judged against, so a report never has to infer it.
+    - ``skill_routing`` -- whether ``expected_skill`` appears in ``active_skills``.
+
+    ``skill_routing=True`` with ``activated_skills=[]`` is the reused-skill case, not a
+    scoring bug -- ``active_skills`` shows where the credit came from.
+    """
 
     turn_id: str
     expected_skill: str
@@ -63,12 +89,34 @@ class TurnResult(BaseModel):
     output_present: bool
     no_error: bool
     activated_skills: list[str]
+    # Sorted for stable output: the source is a set, whose iteration order is not.
+    active_skills: list[str] = Field(default_factory=list)
     clarification_turns_used: int = 0
     output_correct: bool | None = None
 
     @property
     def skill_success(self) -> bool:
         return self.skill_routing and self.output_present and self.no_error
+
+    # Reported per turn in detail["turns"]. A name listed here that no longer exists on the
+    # model raises rather than silently emitting a stale key, which a hand-written dict
+    # literal of the same fields would not -- and model_dump deep-copies activated_skills,
+    # so a caller mutating the returned dict cannot reach back into this TurnResult.
+    _DETAIL_FIELDS: ClassVar[set[str]] = {
+        "turn_id",
+        "expected_skill",
+        "skill_routing",
+        "output_present",
+        "output_correct",
+        "activated_skills",
+        # What skill_routing was judged against -- without it, a turn showing
+        # skill_routing=True and activated_skills=[] looks like a scoring bug.
+        "active_skills",
+    }
+
+    def detail(self) -> dict:
+        """The subset of this result reported in detail["turns"] for one conversation turn."""
+        return self.model_dump(include=self._DETAIL_FIELDS)
 
 
 def _resolve_refs(
@@ -107,15 +155,42 @@ def _resolve_refs(
     return json.loads(resolved_raw)
 
 
-def _activated_skills(tool_call_events: list[ToolCallEvent]) -> list[str]:
-    """Collect all skill names passed to set_skills across all tool call events."""
-    skills: list[str] = []
+def _set_skills_declarations(tool_call_events: list[ToolCallEvent]) -> list[list[str]]:
+    """Every set_skills declaration in these events, in call order.
+
+    `skill_names` is the key the tool declares; `skills` is a legacy spelling kept as a
+    fallback. A call carrying neither is treated as declaring an empty list, which is what
+    the platform would do with one.
+    """
+    declarations: list[list[str]] = []
     for tc in tool_call_events:
         if tc.function_name != "set_skills":
             continue
         args = tc.parsed_arguments() or {}
-        skills.extend(args.get("skill_names") or args.get("skills") or [])
-    return list(set(skills))
+        names = args.get("skill_names")
+        if names is None:
+            names = args.get("skills")
+        declarations.append(list(names or []))
+    return declarations
+
+
+def _final_skill_declaration(tool_call_events: list[ToolCallEvent]) -> list[str] | None:
+    """The skill list from the LAST set_skills call, or None when there was no call.
+
+    set_skills replaces the active set, so when a turn issues several calls -- which it can,
+    since these events span every clarification sub-turn within one logical turn -- only the
+    final one describes the resulting state. Merging them would credit a skill that an
+    earlier call declared and a later one dropped.
+
+    An empty list is a real declaration: it deactivates everything. That has to stay
+    distinguishable from ``None`` ("no call at all"), which leaves the previous turn's set
+    untouched -- hence the Optional rather than just an empty list for both.
+
+    This answers "what is active NOW". For "was this skill ever exercised" -- what
+    full_skill_coverage asks -- use every declaration, not just the last one.
+    """
+    declarations = _set_skills_declarations(tool_call_events)
+    return declarations[-1] if declarations else None
 
 
 def _check_output_present(turn: TurnDefinition, chat_result: ChatResult) -> bool:
@@ -140,7 +215,7 @@ def _check_output_correct(turn: TurnDefinition, chat_result: ChatResult) -> bool
 
     Returns None when expected_output is absent (presence check only).
     """
-    from gooddata_eval.core.agentic.metric_skill import _normalize_maql  # noqa: PLC0415
+    from gooddata_eval.core.evaluators._maql import normalize_maql  # noqa: PLC0415
 
     otype = turn.expected_output_type
     expected = turn.expected_output
@@ -182,7 +257,7 @@ def _check_output_correct(turn: TurnDefinition, chat_result: ChatResult) -> bool
         metric_result = _extract_metric_result(chat_result.tool_call_events or [])
         if not metric_result:
             return False
-        return _normalize_maql(metric_result.get("maql", "")) == _normalize_maql(expected.get("maql", ""))
+        return normalize_maql(metric_result.get("maql", "")) == normalize_maql(expected.get("maql", ""))
 
     return None
 
@@ -300,6 +375,20 @@ def run_agentic_conversation(
     response_id: str | None = None
     conversation_tool_call_events: list[ToolCallEvent] = []
     conversation_reasoning_step_events: list[ReasoningStepEvent] = []
+    # The skills active right now, mirroring the platform's own state machine: set_skills
+    # REPLACES the active set rather than adding to it -- verified against the gen-ai
+    # service's skill registry, and stated in the tool's own description. So a turn that
+    # issues no set_skills call inherits the previous turn's set unchanged, while a turn
+    # that does issue one drops whatever it left out. Tracking this as a running UNION
+    # would credit a skill a later call had already switched off.
+    active_skills: set[str] = set()
+    # Every skill declared at any point, for full_skill_coverage. This asks a DIFFERENT
+    # question from active_skills -- "did the conversation ever exercise this skill" rather
+    # than "is it active now" -- so replace semantics do not apply: a skill switched on and
+    # later switched off was still exercised. Deriving coverage from the per-turn final
+    # declaration instead would drop any skill a turn declared and then replaced within
+    # itself (across its clarification sub-turns), a false FAIL on a genuine activation.
+    ever_declared_skills: set[str] = set()
     # Every send_message() call (across every logical turn AND every clarification
     # sub-turn within it) restarts call_ts/ts near 0 -- these run across the whole
     # conversation, not reset per logical turn, so every one of those calls shifts them.
@@ -327,6 +416,10 @@ def run_agentic_conversation(
                         output_present=False,
                         no_error=False,
                         activated_skills=[],
+                        # The turn never ran, so it declared nothing -- but a set carried over
+                        # from an earlier turn is still active, and reporting [] here would
+                        # read as "nothing was active", which is a different claim.
+                        active_skills=sorted(active_skills),
                         output_correct=False,
                     )
                 )
@@ -341,22 +434,15 @@ def run_agentic_conversation(
             for _iter in range(max_clarification_turns + 1):
                 chat_result = client.send_message(conversation_id, current_message)
                 final_result = chat_result
-                for tc in chat_result.tool_call_events or []:
-                    if tc.call_ts is not None:
-                        tc.call_ts += turn_offset
-                    if tc.result_ts is not None:
-                        tc.result_ts += turn_offset
-                    if tc.index is not None:
-                        tc.index += tool_index_offset
-                for rs in chat_result.reasoning_step_events or []:
-                    rs.ts += turn_offset
-                    rs.index += reasoning_index_offset
+                turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
+                    chat_result,
+                    turn_offset=turn_offset,
+                    tool_index_offset=tool_index_offset,
+                    reasoning_index_offset=reasoning_index_offset,
+                )
                 all_tool_calls.extend(chat_result.tool_call_events or [])
                 conversation_tool_call_events.extend(chat_result.tool_call_events or [])
                 conversation_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
-                tool_index_offset += len(chat_result.tool_call_events or [])
-                reasoning_index_offset += len(chat_result.reasoning_step_events or [])
-                turn_offset += chat_result.turn_wall_clock_sec or 0.0
                 reasoning_steps.extend(chat_result.reasoning_steps or [])
                 response_id = chat_result.response_id or response_id
 
@@ -366,6 +452,8 @@ def run_agentic_conversation(
                 response_text = (chat_result.text_response or "").strip()
                 if not response_text and chat_result.alert_proposals:
                     response_text = render_alert_proposal(chat_result.alert_proposals[-1])
+                if not response_text:
+                    response_text = render_answer_text(chat_result)
                 if not response_text and not chat_result.tool_call_events:
                     break
                 if clarification_turns >= max_clarification_turns:
@@ -374,8 +462,17 @@ def run_agentic_conversation(
                 total_clarification_turns += 1
                 current_message = _get_sim_user_response(response_text, resolved_turn, resolved_expected)
 
-            activated = _activated_skills(all_tool_calls)
-            skill_routing = turn.expected_skill in activated if activated else False
+            # `declared` is what THIS turn's final set_skills call asked for (None when it
+            # made no call); `active_skills` is what is actually active during the turn. No
+            # call carries the previous set over; a call replaces it outright, including
+            # when it declares an empty list. See active_skills' declaration above.
+            declarations = _set_skills_declarations(all_tool_calls)
+            for declaration in declarations:
+                ever_declared_skills.update(declaration)
+            declared = declarations[-1] if declarations else None
+            if declared is not None:
+                active_skills = set(declared)
+            skill_routing = turn.expected_skill in active_skills
             output_present = _check_output_present(resolved_turn, final_result) if final_result else False
             output_correct = (
                 _check_output_correct(resolved_turn, final_result) if (final_result and output_present) else None
@@ -399,7 +496,8 @@ def run_agentic_conversation(
                     skill_routing=skill_routing,
                     output_present=output_present,
                     no_error=True,  # SDK raises on errors; reaching here means no critical error.
-                    activated_skills=activated,
+                    activated_skills=declared or [],
+                    active_skills=sorted(active_skills),
                     clarification_turns_used=clarification_turns,
                     output_correct=output_correct,
                 )
@@ -412,8 +510,10 @@ def run_agentic_conversation(
             _delete_metric(sdk, workspace_id, metric_id)
         client.close()
 
-    activated_all = {skill for tr in turn_results for skill in tr.activated_skills}
-    full_skill_coverage = set(fixture.expected_skills).issubset(activated_all)
+    # Not derived from TurnResult.activated_skills: that field carries only each turn's FINAL
+    # declaration, so a skill replaced within its own turn is absent from it despite having
+    # been activated. See ever_declared_skills' declaration above.
+    full_skill_coverage = set(fixture.expected_skills).issubset(ever_declared_skills)
     conversation_success = all(tr.skill_success for tr in turn_results)
 
     return ConversationResult(
@@ -433,29 +533,13 @@ def _conversation_detail(result: ConversationResult) -> dict:
     return {
         "full_skill_coverage": result.full_skill_coverage,
         "total_clarification_turns": result.total_clarification_turns,
-        "turns": [
-            {
-                "turn_id": tr.turn_id,
-                "expected_skill": tr.expected_skill,
-                "skill_routing": tr.skill_routing,
-                "output_present": tr.output_present,
-                "output_correct": tr.output_correct,
-                "activated_skills": tr.activated_skills,
-            }
-            for tr in result.turn_results
-        ],
+        "turns": [tr.detail() for tr in result.turn_results],
         **timeline_detail(result.tool_call_events, result.reasoning_step_events),
     }
 
 
-class ConversationAssertionError(AssertionError):
+class ConversationAssertionError(AgenticAssertionError):
     """Raised when a conversation evaluation fails."""
-
-    __tracebackhide__ = True
-    reasoning_steps: list[str]
-    conversation_id: str
-    response_id: str | None
-    detail: dict
 
 
 def evaluate_agentic_conversation(
@@ -473,6 +557,7 @@ def evaluate_agentic_conversation(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    submit_trace_link: SubmitTraceLink = run_trace_link_inline,
 ) -> AgenticEvalOutcome:
     """Run conversation evaluation, log to Langfuse, and raise on failure.
 
@@ -483,14 +568,7 @@ def evaluate_agentic_conversation(
     `conversation_id`-on-exception idiom in `ChatClient.ask()`) so callers can retrieve them
     either way.
     """
-    from datetime import datetime as _dt  # noqa: PLC0415
-    from datetime import timezone as _tz  # noqa: PLC0415
-
-    from gooddata_eval.core.agentic._langfuse import try_make_langfuse_client  # noqa: PLC0415
-
-    if langfuse is None:
-        langfuse = try_make_langfuse_client()
-    window_start = _dt.now(_tz.utc)
+    langfuse, window_start = open_trace_window(langfuse)
     result = run_agentic_conversation(
         host=host,
         token=token,
@@ -503,59 +581,77 @@ def evaluate_agentic_conversation(
     )
 
     if langfuse is not None and dataset_item_id:
-        from gooddata_eval.core.agentic._langfuse import (  # noqa: PLC0415
-            build_run_context,
-            find_traces_per_conversation,
-            log_quality_and_value_scores,
-            observe,
-            score_safe,
-        )
+        # Pinned on the calling thread: a deferred poll must not widen its query window.
+        window_end = utc_now()
+        # Resolved here, not inside the task: deferring it would make the queued task hold
+        # the whole fixture until the drain.
+        ds_name = dataset_name or fixture.dataset_name
 
-        run_name_base, run_metadata = build_run_context(
-            host,
-            token,
-            workspace_id,
-            dataset_name or fixture.dataset_name,
-            run_timestamp,
-            model_version_override,
-            run_metadata_extra,
-            reasoning_effort,
-        )
-        traces_by_conv = find_traces_per_conversation(
-            langfuse,
-            [result.conversation_id],
-            window_start,
-        )
-        pt = traces_by_conv.get(result.conversation_id)
-        with observe(langfuse, pt.id if pt else None, dataset_item_id, run_name_base, run_metadata) as tid:
-            score_safe(
-                langfuse,
-                tid,
-                name="conversation_success",
-                value=float(result.conversation_success),
-                data_type="BOOLEAN",
-            )
-            score_safe(
-                langfuse, tid, name="full_skill_coverage", value=float(result.full_skill_coverage), data_type="BOOLEAN"
-            )
-            for tr in result.turn_results:
-                score_safe(
-                    langfuse,
-                    tid,
-                    name=f"turn_{tr.turn_id}_skill_success",
-                    value=float(tr.skill_success),
-                    data_type="BOOLEAN",
-                )
-            log_quality_and_value_scores(
-                langfuse,
-                tid,
-                strict_checks={
+        def _write_scores(ctx: RunTraceContext) -> None:
+
+            pt = ctx.trace(result.conversation_id)
+            with ctx.observe(
+                pt,
+                0,
+                conversation_id=result.conversation_id,
+                output={
                     "conversation_success": result.conversation_success,
                     "full_skill_coverage": result.full_skill_coverage,
                 },
-                latency_sec=pt.latency if pt else None,
-                cost_usd=pt.total_cost if pt else None,
-            )
+            ) as tid:
+                ctx.score(
+                    tid,
+                    name="conversation_success",
+                    value=float(result.conversation_success),
+                    data_type="BOOLEAN",
+                )
+                ctx.score(
+                    tid,
+                    name="full_skill_coverage",
+                    value=float(result.full_skill_coverage),
+                    data_type="BOOLEAN",
+                )
+                for tr in result.turn_results:
+                    ctx.score(
+                        tid,
+                        name=f"turn_{tr.turn_id}_skill_success",
+                        value=float(tr.skill_success),
+                        data_type="BOOLEAN",
+                    )
+                ctx.quality(
+                    tid,
+                    strict_checks={
+                        "conversation_success": result.conversation_success,
+                        "full_skill_coverage": result.full_skill_coverage,
+                    },
+                    latency_sec=pt.latency if pt else None,
+                    cost_usd=pt.total_cost if pt else None,
+                )
+
+        # Before the pass@K raise: a failing item's scores are the ones worth having.
+        submit_trace_scoring(
+            submit_trace_link,
+            RunIdentity(
+                host,
+                token,
+                workspace_id,
+                ds_name,
+                run_timestamp,
+                model_version_override,
+                run_metadata_extra,
+                reasoning_effort,
+            ),
+            langfuse=langfuse,
+            dataset_item_id=dataset_item_id,
+            conversation_ids=[result.conversation_id],
+            window_start=window_start,
+            window_end=window_end,
+            suffix_runs=False,
+            write_scores=_write_scores,
+            item_input=fixture.turns[0].message if fixture.turns else fixture.id,
+        )
+
+    detail = _conversation_detail(result)
 
     if not result.conversation_success:
         failed_turns = [tr for tr in result.turn_results if not tr.skill_success]
@@ -567,11 +663,17 @@ def evaluate_agentic_conversation(
         exc.reasoning_steps = result.reasoning_steps
         exc.conversation_id = result.conversation_id
         exc.response_id = result.response_id
-        exc.detail = _conversation_detail(result)
+        exc.detail = detail
+        # This kind takes no k and drives its fixture exactly once, whatever --runs asks
+        # for. Saying so explicitly stops the report claiming K runs that never happened.
+        exc.runs_passed = 0
+        exc.runs_effective = 1
         raise exc
     return AgenticEvalOutcome(
         reasoning_steps=result.reasoning_steps,
         conversation_id=result.conversation_id,
         response_id=result.response_id,
-        detail=_conversation_detail(result),
+        detail=detail,
+        runs_passed=1,
+        runs_effective=1,
     )

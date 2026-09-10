@@ -1,9 +1,9 @@
 # (C) 2025 GoodData Corporation
 
-import time
-import threading
 import functools
-from typing import Callable, Any, Literal
+import threading
+import time
+from typing import Any, Callable, Literal
 
 
 class RateLimiter:
@@ -53,9 +53,7 @@ class RateLimiter:
         self.wait_if_needed()
         return self
 
-    def __exit__(
-        self, exc_type: Any, exc_val: Any, exc_tb: Any
-    ) -> Literal[False]:
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> Literal[False]:
         return False
 
     def reset(self) -> None:

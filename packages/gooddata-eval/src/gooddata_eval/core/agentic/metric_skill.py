@@ -5,14 +5,34 @@ from __future__ import annotations
 
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from typing import Any
 
 from gooddata_sdk import GoodDataSdk
 
+from gooddata_eval.core.agentic._trace_linker import (
+    RunIdentity,
+    RunTraceContext,
+    SubmitTraceLink,
+    open_trace_window,
+    run_trace_link_inline,
+    submit_trace_scoring,
+    utc_now,
+)
+from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
-from gooddata_eval.core.models import AgenticEvalOutcome, ReasoningStepEvent, ToolCallEvent, timeline_detail
+from gooddata_eval.core.evaluators._maql import normalize_maql
+from gooddata_eval.core.models import (
+    AgenticAssertionError,
+    AgenticEvalOutcome,
+    ReasoningStepEvent,
+    ToolCallEvent,
+    shift_and_index_events,
+    timeline_detail,
+)
+from gooddata_eval.core.timing import PhaseTimings, log_timer, sum_timings
 
 try:
     from openai import OpenAI as _OpenAI
@@ -22,76 +42,16 @@ except ImportError:
 _DEFAULT_K = 1
 _DEFAULT_MAX_ITERATIONS = 7
 
-_IFNULL_RE = re.compile(r"IFNULL\s*\([^,]+,\s*0\)", re.IGNORECASE)
-_SELECT_WRAP_RE = re.compile(r"^\s*\(\s*SELECT\s*\{([^}]+)\}\s*\)\s*$", re.IGNORECASE)
-_INNER_SELECT_RE = re.compile(r"\(\s*SELECT\s*\{([^}]+)\}\s*\)", re.IGNORECASE)
-# Matches whichever comes first: a {type/id} identifier reference or a quoted string
-# literal -- both are case-sensitive data and must survive casefolding untouched.
-# Everything else in MAQL (keywords, operators, numbers, punctuation) carries no
-# case-sensitive meaning, per the MAQL reference (SELECT/BY/WHERE/FOR PREVIOUS/etc.
-# are case-insensitive; only {..} identifiers and quoted literal values are not).
-# Feeds _normalize_maql, the scoring comparator (_best_maql_match) -- do not widen this
-# to handle \X escapes without confirming MAQL literals actually support backslash
-# escaping (unconfirmed; see PR #1760 review). A wrong guess here silently changes
-# maql_correct for the whole eval dataset, not just a hint. _no_where_clause_hint()
-# below has its own, separately-scoped regex for that reason.
-_PROTECTED_RE = re.compile(r"\{[^}]*\}|\"[^\"]*\"|'[^']*'")
-
-
-def _strip_outer_parens(s: str) -> str:
-    """Strip one balanced layer of outer () if they wrap the entire expression."""
-    if not (s.startswith("(") and s.endswith(")")):
-        return s
-    depth = 0
-    for i, ch in enumerate(s):
-        if ch == "(":
-            depth += 1
-        elif ch == ")":
-            depth -= 1
-            if depth == 0 and i < len(s) - 1:
-                return s  # Closing paren found before end — not a simple outer wrapper
-    return s[1:-1].strip()
-
-
-def _casefold_outside_protected(s: str) -> str:
-    """Lowercase MAQL keywords/operators while preserving case-sensitive {type/id}
-    identifiers and quoted string literal values (e.g. WHERE {label/x} = "Active")."""
-    parts = []
-    last = 0
-    for m in _PROTECTED_RE.finditer(s):
-        parts.append(s[last : m.start()].lower())
-        parts.append(m.group(0))
-        last = m.end()
-    parts.append(s[last:].lower())
-    return "".join(parts)
-
-
-def _normalize_maql(maql: str) -> str:
-    """Semantic normalisation: strip whitespace, unwrap IFNULL/SELECT wrappers, casefold keywords."""
-    if not maql:
-        return ""
-    m = maql.strip()
-    m = _IFNULL_RE.sub(
-        lambda mo: _strip_outer_parens(mo.group(0).split(",")[0].strip()[len("IFNULL(") :].strip()),
-        m,
-    )
-    m = _SELECT_WRAP_RE.sub(r"{\1}", m)
-    m = _INNER_SELECT_RE.sub(r"{\1}", m)
-    m = re.sub(r"\{\s+", "{", m)
-    m = re.sub(r"\s+\}", "}", m)
-    m = re.sub(r"\s+", " ", m)
-    return _casefold_outside_protected(m.strip())
-
 
 def _best_maql_match(actual_maql: str, expected_outputs: list[dict]) -> tuple[bool, str]:
     """Try actual MAQL against every candidate; return (matched, best_expected_maql).
 
     First match wins. First candidate is used for error reporting when none match.
     """
-    normalized_actual = _normalize_maql(actual_maql)
+    normalized_actual = normalize_maql(actual_maql)
     for candidate in expected_outputs:
         expected_maql = candidate.get("maql", "")
-        if normalized_actual == _normalize_maql(expected_maql):
+        if normalized_actual == normalize_maql(expected_maql):
             return True, expected_maql
     return False, expected_outputs[0].get("maql", "") if expected_outputs else ""
 
@@ -104,9 +64,9 @@ class SimulatedResponseError(RuntimeError):
     """
 
 
-# Separate from _PROTECTED_RE on purpose: this one only feeds a same-turn LLM-prompt hint
-# (see _no_where_clause_hint), never the scoring comparator, so it can afford to consume
-# \X escape sequences inside quoted literals without risking maql_correct semantics.
+# Separate from evaluators._maql._PROTECTED_RE on purpose: this one only feeds a same-turn
+# LLM-prompt hint (see _no_where_clause_hint), never the scoring comparator, so it can afford
+# to consume \X escape sequences inside quoted literals without risking maql_correct semantics.
 _HINT_PROTECTED_RE = re.compile(r"\{[^}]*\}|\"(?:[^\"\\]|\\.)*\"|'(?:[^'\\]|\\.)*'")
 
 
@@ -199,6 +159,7 @@ class MetricRunResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
+    timings: PhaseTimings = field(default_factory=PhaseTimings)
 
 
 @dataclass
@@ -289,6 +250,7 @@ def _execute_single_metric_run(
     response_id: str | None = None
     all_tool_call_events: list[ToolCallEvent] = []
     all_reasoning_step_events: list[ReasoningStepEvent] = []
+    timings = PhaseTimings()
     turn_offset = 0.0  # each turn's call_ts/ts restarts near 0 -- shift by prior turns' wall time
     tool_index_offset = 0
     reasoning_index_offset = 0
@@ -296,41 +258,60 @@ def _execute_single_metric_run(
     try:
         for _iteration in range(max_iterations):
             turns += 1
+            agent_started = time.monotonic()
             chat_result = client.send_message(conversation_id, current_question)
+            agent_elapsed = time.monotonic() - agent_started
+            timings.agent_s += agent_elapsed
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
-            for tc in chat_result.tool_call_events or []:
-                if tc.call_ts is not None:
-                    tc.call_ts += turn_offset
-                if tc.result_ts is not None:
-                    tc.result_ts += turn_offset
-                if tc.index is not None:
-                    tc.index += tool_index_offset
-            for rs in chat_result.reasoning_step_events or []:
-                rs.ts += turn_offset
-                rs.index += reasoning_index_offset
+            turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
+                chat_result,
+                turn_offset=turn_offset,
+                tool_index_offset=tool_index_offset,
+                reasoning_index_offset=reasoning_index_offset,
+            )
             all_tool_call_events.extend(chat_result.tool_call_events or [])
             all_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
-            tool_index_offset += len(chat_result.tool_call_events or [])
-            reasoning_index_offset += len(chat_result.reasoning_step_events or [])
-            turn_offset += chat_result.turn_wall_clock_sec or 0.0
             for metric_id in _extract_created_metric_ids(chat_result.tool_call_events or []):
                 if metric_id not in created_metric_ids:
                     created_metric_ids.append(metric_id)
             candidate = _extract_metric_result(chat_result.tool_call_events or [])
             if candidate is not None:
+                log_timer(
+                    f"[timer] metric_skill {conversation_id} GoodData turn {turns} complete after "
+                    f"{agent_elapsed:.2f}s; metric result received"
+                )
                 metric_result = candidate
                 break
             response_text = (chat_result.text_response or "").strip()
+            if not response_text:
+                response_text = render_answer_text(chat_result)
             if not response_text and not chat_result.tool_call_events:
                 break
             if _iteration >= max_iterations - 1:
                 break
+            log_timer(
+                f"[timer] metric_skill {conversation_id} GoodData turn {turns} complete after "
+                f"{agent_elapsed:.2f}s; waiting for gpt-4o-mini simulated user"
+            )
+            simulated_started = time.monotonic()
             try:
                 current_question = generate_simulated_response(response_text, expected_outputs, question)
             except SimulatedResponseError as exc:
+                simulated_elapsed = time.monotonic() - simulated_started
+                timings.simulated_user_s += simulated_elapsed
                 print(f"[SIM-USER] Simulated reply failed for conversation {conversation_id}: {exc}")
+                log_timer(
+                    f"[timer] metric_skill {conversation_id} gpt-4o-mini simulated user failed after "
+                    f"{simulated_elapsed:.2f}s"
+                )
                 break
+            simulated_elapsed = time.monotonic() - simulated_started
+            timings.simulated_user_s += simulated_elapsed
+            log_timer(
+                f"[timer] metric_skill {conversation_id} gpt-4o-mini simulated user complete after "
+                f"{simulated_elapsed:.2f}s"
+            )
 
         actual_maql = (metric_result or {}).get("maql", "")
         metric_created = metric_result is not None
@@ -346,6 +327,7 @@ def _execute_single_metric_run(
             response_id=response_id,
             tool_call_events=all_tool_call_events,
             reasoning_step_events=all_reasoning_step_events,
+            timings=timings,
         )
     finally:
         for metric_id in created_metric_ids:
@@ -412,14 +394,8 @@ def run_agentic_metric_skill(
     )
 
 
-class MetricSkillAssertionError(AssertionError):
+class MetricSkillAssertionError(AgenticAssertionError):
     """Raised when a metric-skill evaluation fails."""
-
-    __tracebackhide__ = True
-    reasoning_steps: list[str]
-    conversation_id: str
-    response_id: str | None
-    detail: dict
 
 
 def evaluate_agentic_metric_skill(
@@ -439,6 +415,7 @@ def evaluate_agentic_metric_skill(
     model_version_override: str | None = None,
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
+    submit_trace_link: SubmitTraceLink = run_trace_link_inline,
 ) -> AgenticEvalOutcome:
     """Run metric-skill evaluation, log to Langfuse, and raise MetricSkillAssertionError on failure.
 
@@ -449,14 +426,7 @@ def evaluate_agentic_metric_skill(
     `conversation_id`-on-exception idiom in `ChatClient.ask()`) so callers can retrieve them
     either way.
     """
-    from datetime import datetime as _dt  # noqa: PLC0415
-    from datetime import timezone as _tz  # noqa: PLC0415
-
-    from gooddata_eval.core.agentic._langfuse import try_make_langfuse_client  # noqa: PLC0415
-
-    if langfuse is None:
-        langfuse = try_make_langfuse_client()
-    window_start = _dt.now(_tz.utc)
+    langfuse, window_start = open_trace_window(langfuse)
     summary = run_agentic_metric_skill(
         host=host,
         token=token,
@@ -471,47 +441,67 @@ def evaluate_agentic_metric_skill(
     )
 
     if langfuse is not None and dataset_item_id:
-        from gooddata_eval.core.agentic._langfuse import (  # noqa: PLC0415
-            build_run_context,
-            find_traces_per_conversation,
-            log_quality_and_value_scores,
-            observe,
-            score_safe,
+        # Pinned on the calling thread: a deferred poll must not widen its query window.
+        window_end = utc_now()
+
+        def _write_scores(ctx: RunTraceContext) -> None:
+
+            for run_idx, run in enumerate(summary.run_results):
+                pt = ctx.trace(run.conversation_id)
+                with ctx.observe(
+                    pt,
+                    run_idx,
+                    conversation_id=run.conversation_id,
+                    output={"metric_created": run.metric_created, "maql_correct": run.maql_correct},
+                ) as tid:
+                    ctx.score(tid, name="metric_created", value=float(run.metric_created), data_type="BOOLEAN")
+                    ctx.score(tid, name="maql_correct", value=float(run.maql_correct), data_type="BOOLEAN")
+                    ctx.quality(
+                        tid,
+                        strict_checks={"metric_created": run.metric_created, "maql_correct": run.maql_correct},
+                        latency_sec=pt.latency if pt else None,
+                        cost_usd=pt.total_cost if pt else None,
+                    )
+
+        # Before the pass@K raise: a failing item's scores are the ones worth having.
+        submit_trace_scoring(
+            submit_trace_link,
+            RunIdentity(
+                host,
+                token,
+                workspace_id,
+                dataset_name,
+                run_timestamp,
+                model_version_override,
+                run_metadata_extra,
+                reasoning_effort,
+            ),
+            langfuse=langfuse,
+            dataset_item_id=dataset_item_id,
+            conversation_ids=[r.conversation_id for r in summary.run_results],
+            window_start=window_start,
+            window_end=window_end,
+            suffix_runs=len(summary.run_results) > 1,
+            write_scores=_write_scores,
+            item_input=question,
         )
 
-        run_name_base, run_metadata = build_run_context(
-            host,
-            token,
-            workspace_id,
-            dataset_name,
-            run_timestamp,
-            model_version_override,
-            run_metadata_extra,
-            reasoning_effort,
-        )
-        traces_by_conv = find_traces_per_conversation(
-            langfuse,
-            [r.conversation_id for r in summary.run_results],
-            window_start,
-        )
-        suffix_needed = len(summary.run_results) > 1
-        for run_idx, run in enumerate(summary.run_results):
-            pt = traces_by_conv.get(run.conversation_id)
-            run_name = f"{run_name_base}_run{run_idx}" if suffix_needed else run_name_base
-            with observe(langfuse, pt.id if pt else None, dataset_item_id, run_name, run_metadata) as tid:
-                score_safe(langfuse, tid, name="metric_created", value=float(run.metric_created), data_type="BOOLEAN")
-                score_safe(langfuse, tid, name="maql_correct", value=float(run.maql_correct), data_type="BOOLEAN")
-                log_quality_and_value_scores(
-                    langfuse,
-                    tid,
-                    strict_checks={"metric_created": run.metric_created, "maql_correct": run.maql_correct},
-                    latency_sec=pt.latency if pt else None,
-                    cost_usd=pt.total_cost if pt else None,
-                )
+    item_timings = sum_timings([r.timings for r in summary.run_results])
+
+    runs_passed = sum(1 for r in summary.run_results if r.metric_created and r.maql_correct)
+    runs_effective = len(summary.run_results)
+
+    best = summary.best
+    expected_outputs_list: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
+    detail = {
+        "metric_created": best.metric_created,
+        "maql_correct": best.maql_correct,
+        "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
+        "actual_maql": best.actual_maql,
+        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
+    }
 
     if not summary.pass_at_k:
-        best = summary.best
-        expected_outputs_list: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
         candidates_str = "; ".join(repr(c.get("maql", "")) for c in expected_outputs_list)
         exc = MetricSkillAssertionError(
             f"Metric skill assertion failed. "
@@ -522,25 +512,17 @@ def evaluate_agentic_metric_skill(
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
-        exc.detail = {
-            "metric_created": best.metric_created,
-            "maql_correct": best.maql_correct,
-            "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
-            "actual_maql": best.actual_maql,
-            **timeline_detail(best.tool_call_events, best.reasoning_step_events),
-        }
+        exc.timings = item_timings
+        exc.detail = detail
+        exc.runs_passed = runs_passed
+        exc.runs_effective = runs_effective
         raise exc
-    best = summary.best
-    expected_outputs_list = expected_output if isinstance(expected_output, list) else [expected_output]
     return AgenticEvalOutcome(
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
-        detail={
-            "metric_created": best.metric_created,
-            "maql_correct": best.maql_correct,
-            "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
-            "actual_maql": best.actual_maql,
-            **timeline_detail(best.tool_call_events, best.reasoning_step_events),
-        },
+        detail=detail,
+        timings=item_timings,
     )

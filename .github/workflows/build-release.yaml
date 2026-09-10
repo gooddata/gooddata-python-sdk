@@ -48,7 +48,9 @@ jobs:
     steps:
     - uses: actions/checkout@v5
     - name: Install uv
-      uses: astral-sh/setup-uv@v7
+      uses: astral-sh/setup-uv@v10.0.1
+      with:
+        prune-cache: true
     - name: Build ${{ matrix.component }}
       run: |
           if [ "${{ matrix.component }}" = "gooddata-api-client" ]; then

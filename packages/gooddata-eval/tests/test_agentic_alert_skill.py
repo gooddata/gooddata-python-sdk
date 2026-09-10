@@ -1,12 +1,16 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
+from contextlib import ExitStack, contextmanager
 from unittest.mock import MagicMock, patch
 
 import pytest
+from gooddata_eval.core.agentic._catalog import AnomalyDetectionGranularity
 from gooddata_eval.core.agentic.alert_skill import (
     AlertEvaluation,
     AlertSkillAssertionError,
+    _check_attributes,
     _check_filters,
+    _check_granularity,
     _check_recipients,
     _check_trigger,
     _deep_subset,
@@ -34,6 +38,20 @@ _ATTR_FILTER = {
     }
 }
 
+# Group-by entries arrive in two vocabularies for the same thing: fixtures author the AAC
+# tool-input form, `create_metric_alert` receives the resolved AFM form forwarded verbatim
+# from prepare_metric_alert_proposal. A test pairing AFM against AFM would prove nothing.
+_AFM_MONTH_GROUPING = {
+    "localIdentifier": "a0",
+    "label": {"identifier": {"id": "customer_created_date.month", "type": "label"}},
+}
+_AFM_BRAND_GROUPING = {
+    "localIdentifier": "a0",
+    "label": {"identifier": {"id": "product_brand", "type": "label"}},
+}
+_AAC_MONTH_GROUPING = {"using": "label/customer_created_date.month"}
+_AAC_BRAND_GROUPING = {"using": "label/product_brand"}
+
 _PROPOSAL = {
     "title": "# of Orders Alert - Greater Than 500",
     "cta": "Should I create this alert?",
@@ -45,6 +63,41 @@ _PROPOSAL = {
         "execution": {"measures": [{"opaque": "afm"}]},
     },
 }
+
+
+def _no_alert_chat_result() -> ChatResult:
+    """A turn where the agent refuses outright -- no tool calls, so no alert is created."""
+    return ChatResult.model_validate(
+        {
+            "text_response": "I cannot create the alert",
+            "created_visualizations": None,
+            "tool_call_events": [],
+            "reasoning_step_count": 1,
+        }
+    )
+
+
+@contextmanager
+def _patched(client, *, simulated_reply=None, delete_alert=False):
+    """Patch alert_skill's ChatClient, and optionally its simulated user and alert cleanup.
+
+    ``simulated_reply`` is what the simulated user answers; ``delete_alert`` stubs out the
+    teardown call a run makes for an alert it created. Yields the
+    ``generate_simulated_alert_response`` mock, or None when the test asked for no reply.
+    """
+    with ExitStack() as stack:
+        stack.enter_context(patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=client))
+        mock_sim = None
+        if simulated_reply is not None:
+            mock_sim = stack.enter_context(
+                patch(
+                    "gooddata_eval.core.agentic.alert_skill.generate_simulated_alert_response",
+                    return_value=simulated_reply,
+                )
+            )
+        if delete_alert:
+            stack.enter_context(patch("gooddata_eval.core.agentic.alert_skill._delete_alert"))
+        yield mock_sim
 
 
 def test_to_number_int():
@@ -264,18 +317,11 @@ def test_alert_evaluation_strict_fail():
 def test_run_agentic_alert_skill_no_alert_created():
     mock_client = MagicMock()
     mock_client.create_conversation.return_value = "conv-1"
-    mock_client.send_message.return_value = ChatResult.model_validate(
-        {
-            "text_response": "I cannot create the alert",
-            "created_visualizations": None,
-            "tool_call_events": [],
-            "reasoning_step_count": 1,
-        }
-    )
+    mock_client.send_message.return_value = _no_alert_chat_result()
     mock_client._base = "http://host/api/v1/actions/workspaces/ws1/ai"
     mock_client._auth = {"Authorization": "Bearer tok"}
 
-    with patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client):
+    with _patched(mock_client):
         summary = run_agentic_alert_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -293,15 +339,8 @@ def test_run_agentic_alert_skill_no_alert_created():
 
 def test_run_agentic_alert_skill_uses_initial_conversation_for_run_0():
     mock_client = MagicMock()
-    mock_client.send_message.return_value = ChatResult.model_validate(
-        {
-            "text_response": "I cannot create the alert",
-            "created_visualizations": None,
-            "tool_call_events": [],
-            "reasoning_step_count": 1,
-        }
-    )
-    with patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client):
+    mock_client.send_message.return_value = _no_alert_chat_result()
+    with _patched(mock_client):
         run_agentic_alert_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -319,15 +358,8 @@ def test_run_agentic_alert_skill_uses_initial_conversation_for_run_0():
 def test_run_agentic_alert_skill_creates_fresh_conversations_for_remaining_runs():
     mock_client = MagicMock()
     mock_client.create_conversation.side_effect = ["fresh-1", "fresh-2"]
-    mock_client.send_message.return_value = ChatResult.model_validate(
-        {
-            "text_response": "I cannot create the alert",
-            "created_visualizations": None,
-            "tool_call_events": [],
-            "reasoning_step_count": 1,
-        }
-    )
-    with patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client):
+    mock_client.send_message.return_value = _no_alert_chat_result()
+    with _patched(mock_client):
         run_agentic_alert_skill(
             host="http://host/api/v1/actions/workspaces/ws1/ai",
             token="tok",
@@ -430,14 +462,7 @@ def test_run_agentic_alert_skill_passes_question_to_sim_user():
     mock_client = MagicMock()
     mock_client.send_message.side_effect = [asked_turn, created_turn]
 
-    with (
-        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.alert_skill.generate_simulated_alert_response",
-            return_value="United States.",
-        ) as mock_sim,
-        patch("gooddata_eval.core.agentic.alert_skill._delete_alert"),
-    ):
+    with _patched(mock_client, simulated_reply="United States.", delete_alert=True) as mock_sim:
         run_agentic_alert_skill(
             host="http://host",
             token="tok",
@@ -559,14 +584,9 @@ def test_run_agentic_alert_skill_answers_proposal_only_confirmation_turn():
     mock_client = MagicMock()
     mock_client.send_message.side_effect = [proposal_turn, created_turn]
 
-    with (
-        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.alert_skill.generate_simulated_alert_response",
-            return_value="Yes, please proceed to create the alert.",
-        ) as mock_sim,
-        patch("gooddata_eval.core.agentic.alert_skill._delete_alert"),
-    ):
+    with _patched(
+        mock_client, simulated_reply="Yes, please proceed to create the alert.", delete_alert=True
+    ) as mock_sim:
         summary = run_agentic_alert_skill(
             host="http://host",
             token="tok",
@@ -612,14 +632,7 @@ def test_run_agentic_alert_skill_accumulates_reasoning_steps_across_iterations()
     mock_client = MagicMock()
     mock_client.send_message.side_effect = [proposal_turn, created_turn]
 
-    with (
-        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
-        patch(
-            "gooddata_eval.core.agentic.alert_skill.generate_simulated_alert_response",
-            return_value="Yes, please proceed to create the alert.",
-        ),
-        patch("gooddata_eval.core.agentic.alert_skill._delete_alert"),
-    ):
+    with _patched(mock_client, simulated_reply="Yes, please proceed to create the alert.", delete_alert=True):
         summary = run_agentic_alert_skill(
             host="http://host",
             token="tok",
@@ -652,10 +665,7 @@ def test_evaluate_agentic_alert_skill_returns_reasoning_steps_on_pass():
     mock_client.create_conversation.return_value = "conv-1"
     mock_client.send_message.return_value = chat_result
 
-    with (
-        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
-        patch("gooddata_eval.core.agentic.alert_skill._delete_alert"),
-    ):
+    with _patched(mock_client, delete_alert=True):
         outcome = evaluate_agentic_alert_skill(
             host="http://host",
             token="tok",
@@ -677,6 +687,8 @@ def test_evaluate_agentic_alert_skill_returns_reasoning_steps_on_pass():
         "filters_correct": True,
         "metric_correct": True,
         "recipients_correct": True,
+        "attributes_correct": True,
+        "granularity_correct": True,
         "actual_alert_arguments": {"operator": "GREATER_THAN", "threshold": 500},
         "latency_breakdown": [],
         "tool_calls": [],
@@ -695,10 +707,7 @@ def test_evaluate_agentic_alert_skill_attaches_reasoning_steps_to_exception_on_f
     mock_client.create_conversation.return_value = "conv-1"
     mock_client.send_message.return_value = chat_result
 
-    with (
-        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
-        pytest.raises(AlertSkillAssertionError) as exc_info,
-    ):
+    with _patched(mock_client), pytest.raises(AlertSkillAssertionError) as exc_info:
         evaluate_agentic_alert_skill(
             host="http://host",
             token="tok",
@@ -719,7 +728,273 @@ def test_evaluate_agentic_alert_skill_attaches_reasoning_steps_to_exception_on_f
         "filters_correct": False,
         "metric_correct": False,
         "recipients_correct": False,
+        "attributes_correct": False,
+        "granularity_correct": False,
         "actual_alert_arguments": {},
         "latency_breakdown": [],
         "tool_calls": [],
     }
+
+
+# --- attributes: a date narrows an alert as a group-by too ----------------------------------
+#
+# `_check_filters` reads only `filters`, and a group-by in `attributes` narrows an alert just
+# as much: it makes the alert fire per period value instead of on the latest one, which is a
+# different alert from the one the fixture describes. The expectation mirrors the `filters`
+# contract — absent means unasserted, `[]` means "no grouping", a list means that grouping —
+# but the comparison cannot: the fixture side is AAC-shaped and the actual side is AFM-shaped,
+# so both are canonicalised to a label id first.
+
+
+def test_check_attributes_absent_expectation_is_not_asserted():
+    expected = _normalize_expected_output({"Operator": "GREATER_THAN"})
+    assert expected.attributes is None
+    assert _check_attributes(expected, {"attributes": [_AFM_MONTH_GROUPING]}) is True
+
+
+def test_explicit_empty_attributes_rejects_month_grouping():
+    expected = _normalize_expected_output({"Attributes": []})
+    assert expected.attributes == []
+    assert _check_attributes(expected, {"attributes": [_AFM_MONTH_GROUPING]}) is False
+
+
+def test_explicit_empty_attributes_accepts_no_grouping():
+    expected = _normalize_expected_output({"Attributes": []})
+    assert _check_attributes(expected, {"attributes": []}) is True
+    assert _check_attributes(expected, {}) is True
+    assert _check_attributes(expected, {"attributes": None}) is True
+
+
+def test_display_format_none_reads_as_no_grouping():
+    """Fixtures are written in display format, where "None" is how absence is spelled."""
+    expected = _normalize_expected_output({"Attributes": "None"})
+    assert expected.attributes == []
+    assert _check_attributes(expected, {"attributes": [_AFM_MONTH_GROUPING]}) is False
+
+
+def test_aac_expectation_matches_resolved_afm_actual():
+    """The two sides name the same grouping in different vocabularies and must still match."""
+    expected = _normalize_expected_output({"Attributes": [_AAC_BRAND_GROUPING]})
+    assert _check_attributes(expected, {"attributes": [_AFM_BRAND_GROUPING]}) is True
+
+
+def test_stored_product_brand_fixture_still_passes():
+    """The one dataset item that already carries an Attributes expectation, verbatim."""
+    expected = _normalize_expected_output(
+        {
+            "Metric": "Returns (returns)",
+            "Operator": "GREATER_THAN",
+            "Threshold": "30",
+            "Attributes": [{"using": "label/product_brand"}],
+            "Time window/Filters": "For: each value of Product Brand",
+        }
+    )
+    actual = {
+        "attributes": [{"localIdentifier": "a0", "label": {"identifier": {"id": "product_brand", "type": "label"}}}]
+    }
+    assert _check_attributes(expected, actual) is True
+
+
+def test_afm_spelled_expectation_matches_the_same_actual():
+    """A fixture may also be written AFM-side; both spellings mean one grouping."""
+    expected = _normalize_expected_output({"Attributes": [_AFM_BRAND_GROUPING]})
+    assert _check_attributes(expected, {"attributes": [_AFM_BRAND_GROUPING]}) is True
+
+
+def test_date_group_by_keeps_its_granularity_suffix():
+    """`customer_created_date.month` and `customer_created_date` are different groupings."""
+    expected = _normalize_expected_output({"Attributes": [_AAC_MONTH_GROUPING]})
+    assert _check_attributes(expected, {"attributes": [_AFM_MONTH_GROUPING]}) is True
+    coarser = {"localIdentifier": "a0", "label": {"identifier": {"id": "customer_created_date", "type": "label"}}}
+    assert _check_attributes(expected, {"attributes": [coarser]}) is False
+
+
+def test_bare_string_and_identifier_spellings_are_accepted():
+    for spelling in ("product_brand", "label/product_brand", {"identifier": {"id": "product_brand"}}):
+        expected = _normalize_expected_output({"Attributes": [spelling]})
+        assert _check_attributes(expected, {"attributes": [_AFM_BRAND_GROUPING]}) is True
+
+
+def test_explicit_attributes_list_rejects_no_grouping():
+    expected = _normalize_expected_output({"Attributes": [_AAC_BRAND_GROUPING]})
+    assert _check_attributes(expected, {"attributes": []}) is False
+    assert _check_attributes(expected, {}) is False
+
+
+def test_explicit_attributes_list_rejects_an_added_date_grouping():
+    """Requiring a grouping must not license a second, unrequested one."""
+    expected = _normalize_expected_output({"Attributes": [_AAC_BRAND_GROUPING]})
+    actual = {"attributes": [_AFM_BRAND_GROUPING, _AFM_MONTH_GROUPING]}
+    assert _check_attributes(expected, actual) is False
+
+
+def test_grouping_comparison_is_order_insensitive():
+    expected = _normalize_expected_output({"Attributes": [_AAC_MONTH_GROUPING, _AAC_BRAND_GROUPING]})
+    actual = {"attributes": [_AFM_BRAND_GROUPING, _AFM_MONTH_GROUPING]}
+    assert _check_attributes(expected, actual) is True
+
+
+def test_show_all_values_is_not_asserted():
+    """The check compares identity; per-entry properties are the agent's to choose."""
+    expected = _normalize_expected_output({"Attributes": [_AAC_BRAND_GROUPING]})
+    actual = {"attributes": [{**_AFM_BRAND_GROUPING, "showAllValues": True}]}
+    assert _check_attributes(expected, actual) is True
+
+
+def test_unrecognised_expectation_shape_raises():
+    """A spelling the canonicaliser does not know must fail loudly, not compare unequal."""
+    with pytest.raises(ValueError, match="expected group-by"):
+        _normalize_expected_output({"Attributes": [{"dimension": "product_brand"}]})
+    with pytest.raises(ValueError, match="expected group-by"):
+        _normalize_expected_output({"Attributes": [{"using": "attribute/product_brand"}]})
+
+
+def test_malformed_actual_attributes_fail_rather_than_error():
+    """A non-list argument is the agent answering wrongly, and a wrong answer is a FAIL.
+
+    An ERROR would be excluded from the run's failure count, ranking a malformed answer
+    above a merely wrong one.
+    """
+    expected_none = _normalize_expected_output({"Attributes": []})
+    for malformed in ({}, "", 0, {"using": "label/product_brand"}, "product_brand"):
+        assert _check_attributes(expected_none, {"attributes": malformed}) is False
+
+    expected_brand = _normalize_expected_output({"Attributes": [_AAC_BRAND_GROUPING]})
+    for malformed in ({}, "", 0, "product_brand", {"using": "label/product_brand"}):
+        assert _check_attributes(expected_brand, {"attributes": malformed}) is False
+
+
+def test_unrecognised_actual_shape_raises():
+    expected = _normalize_expected_output({"Attributes": [_AAC_BRAND_GROUPING]})
+    with pytest.raises(ValueError, match="actual group-by"):
+        _check_attributes(expected, {"attributes": [{"dimension": "product_brand"}]})
+
+
+def test_attributes_prose_is_not_asserted():
+    """Prose describes a grouping without encoding it, so it cannot be compared."""
+    expected = _normalize_expected_output({"Attributes": "Product Brand"})
+    assert expected.attributes is None
+    assert _check_attributes(expected, {"attributes": [_AFM_MONTH_GROUPING]}) is True
+
+
+def test_attributes_expectation_of_a_wrong_type_fails_loudly():
+    """A malformed fixture must not silently degrade into "not asserted"."""
+    with pytest.raises(ValueError, match="Attributes"):
+        _normalize_expected_output({"Attributes": 7})
+
+
+def test_alert_evaluation_strict_fail_on_attributes_alone():
+    """A group-by alone sinks strict_pass, with every other check passing."""
+    ev = AlertEvaluation(
+        alert_created=True,
+        operator_correct=True,
+        threshold_correct=True,
+        trigger_correct=True,
+        filters_correct=True,
+        metric_correct=True,
+        recipients_correct=True,
+        attributes_correct=False,
+    )
+    assert ev.strict_pass is False
+
+
+def test_alert_evaluation_attributes_correct_defaults_to_true():
+    """Fixtures stating no grouping expectation must not be failed by the new check."""
+    ev = AlertEvaluation(
+        alert_created=True,
+        operator_correct=True,
+        threshold_correct=True,
+        trigger_correct=True,
+        filters_correct=True,
+        metric_correct=True,
+        recipients_correct=True,
+    )
+    assert ev.attributes_correct is True
+    assert ev.strict_pass is True
+
+
+# --- ANOMALY granularity ----------------------------------------------------------------
+
+
+def test_sim_user_supplies_the_granularity_an_anomaly_alert_needs():
+    prompt = _sim_user_prompt({"Operator": "ANOMALY", "Granularity": "DAY", "Time window/Filters": "None (All time)"})
+    assert "use DAY granularity" in prompt
+    assert "never refuse to give one" in prompt
+
+
+def test_sim_user_is_not_told_to_refuse_a_granularity_for_an_anomaly_alert():
+    prompt = _sim_user_prompt({"Operator": "ANOMALY", "Time window/Filters": "None (All time)"})
+    assert "invent" not in prompt.lower()
+
+
+def test_sim_user_still_refuses_an_unrequested_granularity_for_a_normal_alert():
+    prompt = _sim_user_prompt({"Operator": "GREATER_THAN", "Time window/Filters": "None (All time)"})
+    assert "Do not invent an evaluation period, a granularity" in prompt
+    assert "no date filter at all" in prompt
+
+
+def test_sim_user_falls_back_to_day_when_an_anomaly_item_states_no_granularity():
+    prompt = _sim_user_prompt({"Operator": "ANOMALY"})
+    assert "use DAY granularity" in prompt
+
+
+def test_normalize_expected_output_reads_granularity():
+    assert _normalize_expected_output({"Operator": "ANOMALY", "Granularity": "WEEK"}).granularity == "WEEK"
+    assert _normalize_expected_output({"Operator": "ANOMALY"}).granularity is None
+
+
+def test_granularity_is_not_mistaken_for_a_filter():
+    expected = _normalize_expected_output(
+        {"Operator": "ANOMALY", "Granularity": "DAY", "Time window/Filters": "None (All time)"}
+    )
+    assert expected.filters == []
+    assert expected.granularity == "DAY"
+
+
+def test_granularity_is_asserted_when_the_fixture_states_one():
+    expected = _normalize_expected_output({"Operator": "ANOMALY", "Granularity": "DAY"})
+    assert _check_granularity(expected, {"granularity": "DAY"}) is True
+    assert _check_granularity(expected, {"granularity": "MONTH"}) is False
+    assert _check_granularity(expected, {}) is False
+
+
+def test_granularity_comparison_is_case_insensitive():
+    expected = _normalize_expected_output({"Operator": "ANOMALY", "Granularity": "day"})
+    assert _check_granularity(expected, {"granularity": "DAY"}) is True
+
+
+def test_granularity_is_unasserted_when_the_fixture_states_none():
+    expected = _normalize_expected_output({"Operator": "GREATER_THAN"})
+    assert _check_granularity(expected, {"granularity": "MONTH"}) is True
+    assert _check_granularity(expected, {}) is True
+
+
+def test_a_mismatched_granularity_fails_strict_pass():
+    ev = AlertEvaluation(
+        alert_created=True,
+        operator_correct=True,
+        threshold_correct=True,
+        trigger_correct=True,
+        filters_correct=True,
+        metric_correct=True,
+        recipients_correct=True,
+        granularity_correct=False,
+    )
+    assert ev.strict_pass is False
+
+
+def test_granularity_is_canonicalised_to_the_enum():
+    expected = _normalize_expected_output({"Operator": "ANOMALY", "Granularity": " week "})
+    assert expected.granularity is AnomalyDetectionGranularity.WEEK
+
+
+def test_an_unknown_granularity_is_rejected_before_the_run_starts():
+    with pytest.raises(ValueError, match="Invalid granularity"):
+        _normalize_expected_output({"Operator": "ANOMALY", "Granularity": "fortnight"})
+
+
+def test_every_gen_ai_interval_is_accepted():
+    for value in ("HOUR", "DAY", "WEEK", "MONTH", "QUARTER", "YEAR"):
+        assert AnomalyDetectionGranularity.parse(value.lower()) is AnomalyDetectionGranularity(value)
+    assert AnomalyDetectionGranularity.parse(None) is None
+    assert AnomalyDetectionGranularity.parse("  ") is None

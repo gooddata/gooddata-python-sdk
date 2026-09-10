@@ -138,3 +138,30 @@ def test_timeline_detail_indexes_line_up_with_the_breakdown():
     tool_steps = [s for s in detail["latency_breakdown"] if s["kind"] == "tool"]
     assert tool_steps
     assert all(by_index[s["index"]]["name"] == s["name"] for s in tool_steps)
+
+
+def test_dataset_item_carries_a_user_context_attachment():
+    item = DatasetItem.model_validate(
+        {
+            "id": "gdai-2179-001",
+            "dataset_name": "GDAI-2179",
+            "test_kind": "agentic_general_question",
+            "question": "What does the visualization I attached show?",
+            "expected_output": "Describes the attached chart.",
+            "user_context": {"referencedObjects": [{"objects": [{"type": "WIDGET", "id": "campaign_spend"}]}]},
+        }
+    )
+    assert item.user_context == {"referencedObjects": [{"objects": [{"type": "WIDGET", "id": "campaign_spend"}]}]}
+
+
+def test_dataset_item_user_context_defaults_to_none():
+    item = DatasetItem.model_validate(
+        {
+            "id": "q1",
+            "dataset_name": "d1",
+            "test_kind": "agentic_general_question",
+            "question": "What can you do?",
+            "expected_output": "Describes capabilities.",
+        }
+    )
+    assert item.user_context is None

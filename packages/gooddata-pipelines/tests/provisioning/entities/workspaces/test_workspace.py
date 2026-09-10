@@ -1,13 +1,12 @@
 # (C) 2025 GoodData Corporation
 
 import pytest
-from gooddata_sdk.catalog.workspace.entity_model.workspace import (
-    CatalogWorkspace,
-)
-
 from gooddata_pipelines.provisioning import WorkspaceProvisioner
 from gooddata_pipelines.provisioning.entities.workspaces.models import (
     WorkspaceFullLoad,
+)
+from gooddata_sdk.catalog.workspace.entity_model.workspace import (
+    CatalogWorkspace,
 )
 
 

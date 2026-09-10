@@ -37,8 +37,10 @@ packages/gooddata-sdk/tests/export/exports/default/
 
 # Staging test fixture backups (created by conftest.py, self-heal on next run)
 *.staging-backup
-.cursor/rules/aida.mdc
-.claude/CLAUDE.md
-AGENTS.md
-.aiassistant/rules/aida.md
-.junie/guidelines.md
+
+# gooddata-eval local run artifacts. Root-anchored on purpose: a bare `datasets/` would
+# also shadow packages/gooddata-pandas/tests/.../ldm/datasets/, which is tracked.
+/packages/gooddata-eval/EVAL_results
+/packages/gooddata-eval/datasets/
+# MCP tool logs, written to a relative path by whatever is started from the repo root
+/logs/

@@ -71,9 +71,11 @@ test-ci:
 
 
 .PHONY: test-staging
+# TOKEN and DS_PASSWORD are read from the environment, not interpolated: a make variable
+# holding a secret is echoed by `make -n`. tox forwards both via its pass_env.
 test-staging:
-	@test -n "$(TOKEN)" || (echo "ERROR: TOKEN is required." && exit 1)
-	TOKEN=$(TOKEN) DS_PASSWORD=$(DS_PASSWORD) GD_TEST_ENV=staging $(TOX) -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
+	@test -n "$${TOKEN}" || (echo "ERROR: TOKEN is required." && exit 1)
+	@GD_TEST_ENV=staging $(TOX) -v $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)
 
 # this is effective for gooddata-sdk only now - it should be part of test fixtures
 # remove this target once implemented in pytest global fixture

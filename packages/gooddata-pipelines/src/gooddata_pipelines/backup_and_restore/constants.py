@@ -33,8 +33,4 @@ class BackupSettings:
     API = ApiDefaults()
     MAX_RETRIES = 3
     RETRY_DELAY = 5  # seconds
-    TIMESTAMP_SDK_FOLDER = (
-        str(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
-        + "-"
-        + sdk_version.replace(".", "_")
-    )
+    TIMESTAMP_SDK_FOLDER = str(datetime.datetime.now().strftime("%Y%m%d-%H%M%S")) + "-" + sdk_version.replace(".", "_")

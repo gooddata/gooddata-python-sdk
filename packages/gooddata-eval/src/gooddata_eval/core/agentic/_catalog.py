@@ -2,6 +2,41 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from enum import Enum
+
+
+class AnomalyDetectionGranularity(str, Enum):
+    """Detection intervals an anomaly alert accepts.
+
+    Mirrors gen-ai's enum of the same name; `StrEnum` is unavailable on the 3.10 floor, so
+    the `str` mixin carries the comparison against the raw tool argument.
+    """
+
+    HOUR = "HOUR"
+    DAY = "DAY"
+    WEEK = "WEEK"
+    MONTH = "MONTH"
+    QUARTER = "QUARTER"
+    YEAR = "YEAR"
+
+    @classmethod
+    def parse(cls, value: object) -> AnomalyDetectionGranularity | None:
+        """Coerce a fixture value, or None when the fixture states none.
+
+        Raises ValueError on an unknown interval: fixtures are hand-written, and a typo has
+        to fail before the run spends an API call rather than score the item against an
+        interval the product cannot produce.
+        """
+        if value is None:
+            return None
+        candidate = str(value).strip().upper()
+        if not candidate:
+            return None
+        try:
+            return cls(candidate)
+        except ValueError:
+            expected = ", ".join(member.value for member in cls)
+            raise ValueError(f"Invalid granularity {value!r}; expected one of {expected}.") from None
 
 
 @dataclass
@@ -28,6 +63,10 @@ class CatalogMetricAlert:
     """List of recipient email addresses."""
     filters: list | str | None = None
     """Attribute filters applied to the alert condition."""
+    attributes: list | None = None
+    """Expected group-by attributes; ``None`` means the fixture states no expectation."""
+    granularity: AnomalyDetectionGranularity | None = None
+    """Detection interval for an ANOMALY alert (DAY/WEEK/MONTH/...). Not a date filter."""
 
     @classmethod
     def from_dict(cls, d: dict) -> CatalogMetricAlert:
@@ -46,4 +85,6 @@ class CatalogMetricAlert:
             metric_id=d.get("metric_id"),
             recipients=recipients,
             filters=d.get("filters"),
+            attributes=d.get("attributes"),
+            granularity=AnomalyDetectionGranularity.parse(d.get("granularity")),
         )
