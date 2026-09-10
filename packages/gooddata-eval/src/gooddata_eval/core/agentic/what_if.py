@@ -339,13 +339,16 @@ def run_agentic_what_if(
                     reasoning_steps.extend(partial.reasoning_steps or [])
                     response_id = partial.response_id or response_id
                     _accumulate(partial)
-                    create_args, execute_result = _extract_what_if_calls(partial.tool_call_events or [])
+                    create_args, execute_result = _extract_what_if_calls(all_tool_call_events)
                 turn_completed = False
                 break
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
             _accumulate(chat_result)
-            create_args, execute_result = _extract_what_if_calls(chat_result.tool_call_events or [])
+            # Over every turn so far, not just this one: the agent may build the spec on
+            # one turn and execute it on the next, and reading a single turn would drop the
+            # scenario the execution actually ran.
+            create_args, execute_result = _extract_what_if_calls(all_tool_call_events)
             response_text = render_answer_text(chat_result)
             turn_completed = chat_result.stream_ended and bool(response_text)
             if execute_result is not None:
@@ -493,11 +496,22 @@ def evaluate_agentic_what_if(
                     "what_if_executed": ev.executed,
                     "what_if_success": ev.success,
                     "what_if_turn_completed": ev.turn_completed,
-                    "what_if_metric_correct": ev.metric_correct,
-                    "what_if_maql_correct": ev.maql_correct,
-                    "what_if_scenario_count_correct": ev.scenario_count_correct,
-                    "what_if_baseline_correct": ev.baseline_correct,
                 }
+                # Only the content checks the fixture actually pinned. An unasserted check
+                # is True internally so it cannot fail a run, but publishing that as a
+                # BOOLEAN 1 would claim the evaluator verified something it never looked at.
+                strict_checks.update(
+                    {
+                        key: value
+                        for name, key, value in (
+                            ("metric_id", "what_if_metric_correct", ev.metric_correct),
+                            ("scenario_maql", "what_if_maql_correct", ev.maql_correct),
+                            ("scenarios", "what_if_scenario_count_correct", ev.scenario_count_correct),
+                            ("include_baseline", "what_if_baseline_correct", ev.baseline_correct),
+                        )
+                        if name in ev.asserted
+                    }
+                )
                 with ctx.observe(pt, run_idx) as tid:
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")

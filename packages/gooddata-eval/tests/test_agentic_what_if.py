@@ -285,3 +285,20 @@ def test_a_wrong_adjustment_raises_naming_what_the_agent_actually_did():
     assert "* 3 *" in str(error)
     assert error.runs_passed == 0
     assert error.conversation_id == "conv-1"
+
+
+def test_a_spec_built_on_an_earlier_turn_is_still_the_one_scored():
+    """The agent may build the spec on one turn and execute it on the next -- reading only
+    the current turn's calls would drop the scenario the execution actually ran and fail a
+    correct run for having no adjustments."""
+    summary = _run(
+        [
+            _chat([_tc("create_what_if_scenario", _create_args())], text="Preparing the scenario."),
+            _chat([_tc("execute_what_if_scenario", {"scenario_ref": "wia_1"}, _OK_EXECUTE)]),
+        ]
+    )
+
+    assert summary.best.evaluation.executed is True
+    assert summary.best.evaluation.metric_correct is True
+    assert summary.best.evaluation.maql_correct is True
+    assert summary.pass_at_k is True
