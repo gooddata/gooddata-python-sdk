@@ -1,5 +1,5 @@
 packages/gooddata-eval/tests/test_langfuse_client.py
-  s_152f0704157226::t_cdc3e462831c5e 302-348,312-353
+  s_152f0704157226::t_cdc3e462831c5e 302-348,310-356,312-353,320-361
 packages/gooddata-eval/src/gooddata_eval/core/langfuse/client.py
   s_152f0704157226::t_d3ed8c17c898a5 12,18
   s_152f0704157226::t_d897e163c43703 72,74-102,76,78-106,106,110
