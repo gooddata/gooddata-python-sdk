@@ -18,6 +18,7 @@ import httpx
 
 from gooddata_eval.core.agentic._trace_linker import link_cancel_event, linking_is_inline, warn_from_worker
 from gooddata_eval.core.config import ReasoningEffort, env_flag, normalize_reasoning_effort
+from gooddata_eval.core.langfuse._env import resolve_base_url
 
 _log = logging.getLogger(__name__)
 
@@ -113,7 +114,7 @@ class HttpxLangfuseClient:
     """Minimal Langfuse client using httpx — works on Python 3.14 (no Langfuse SDK needed)."""
 
     def __init__(self) -> None:
-        host = os.environ.get("LANGFUSE_HOST", "https://cloud.langfuse.com").rstrip("/")
+        host = resolve_base_url()
         pub = os.environ.get("LANGFUSE_PUBLIC_KEY", "")
         sec = os.environ.get("LANGFUSE_SECRET_KEY", "")
         if not pub or not sec:

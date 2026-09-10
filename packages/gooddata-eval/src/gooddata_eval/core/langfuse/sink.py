@@ -12,6 +12,8 @@ from typing import TYPE_CHECKING, Any
 
 import httpx
 
+from gooddata_eval.core.langfuse._env import resolve_base_url
+
 _MAX_LATENCY_S = 60.0
 _QUALITY_WEIGHT = 0.6
 _SPEED_WEIGHT = 0.2
@@ -62,7 +64,7 @@ class LangfuseSink:
         self._model_id = model_id
         self._provider_type = provider_type
         self._reasoning_effort = reasoning_effort
-        host = os.environ.get("LANGFUSE_HOST", "https://cloud.langfuse.com").rstrip("/")
+        host = resolve_base_url()
         pub = os.environ.get("LANGFUSE_PUBLIC_KEY", "")
         sec = os.environ.get("LANGFUSE_SECRET_KEY", "")
         if not pub or not sec:
