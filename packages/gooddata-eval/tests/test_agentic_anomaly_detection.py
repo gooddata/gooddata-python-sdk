@@ -318,3 +318,20 @@ def test_the_wrong_series_raises_naming_what_was_analysed():
     assert "DAY" in str(error)
     assert error.runs_passed == 0
     assert error.conversation_id == "conv-1"
+
+
+def test_a_chart_built_on_an_earlier_turn_is_still_the_one_scored():
+    """The agent may build the chart on one turn and detect on the next -- reading only the
+    current turn's calls would drop the series the detection actually ran on and fail a
+    correct run for having no metric or granularity."""
+    summary = _run(
+        [
+            _chat([_tc("create_adhoc_visualization", _viz_args())], text="Building the chart."),
+            _chat([_tc("execute_anomaly_detection", {"visualization_ref": "viz_1"}, _OK_DETECT)]),
+        ]
+    )
+
+    assert summary.best.evaluation.executed is True
+    assert summary.best.evaluation.metric_correct is True
+    assert summary.best.evaluation.granularity_correct is True
+    assert summary.pass_at_k is True

@@ -380,13 +380,16 @@ def run_agentic_anomaly_detection(
                     reasoning_steps.extend(partial.reasoning_steps or [])
                     response_id = partial.response_id or response_id
                     _accumulate(partial)
-                    viz_args, execute_result = _extract_anomaly_calls(partial.tool_call_events or [])
+                    viz_args, execute_result = _extract_anomaly_calls(all_tool_call_events)
                 turn_completed = False
                 break
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
             _accumulate(chat_result)
-            viz_args, execute_result = _extract_anomaly_calls(chat_result.tool_call_events or [])
+            # Over every turn so far, not just this one: the agent may build the chart on
+            # one turn and detect on the next, and reading a single turn would drop the
+            # series the detection actually ran on.
+            viz_args, execute_result = _extract_anomaly_calls(all_tool_call_events)
             response_text = render_answer_text(chat_result)
             turn_completed = chat_result.stream_ended and bool(response_text)
             if execute_result is not None:
@@ -530,9 +533,20 @@ def evaluate_agentic_anomaly_detection(
                     "anomaly_executed": ev.executed,
                     "anomaly_success": ev.success,
                     "anomaly_turn_completed": ev.turn_completed,
-                    "anomaly_metric_correct": ev.metric_correct,
-                    "anomaly_granularity_correct": ev.granularity_correct,
                 }
+                # Only the content checks the fixture actually pinned. An unasserted check
+                # is True internally so it cannot fail a run, but publishing that as a
+                # BOOLEAN 1 would claim the evaluator verified something it never looked at.
+                strict_checks.update(
+                    {
+                        key: value
+                        for name, key, value in (
+                            ("metric", "anomaly_metric_correct", ev.metric_correct),
+                            ("granularity", "anomaly_granularity_correct", ev.granularity_correct),
+                        )
+                        if name in ev.asserted
+                    }
+                )
                 with ctx.observe(pt, run_idx) as tid:
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
