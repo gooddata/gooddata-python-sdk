@@ -2,7 +2,7 @@
 """In-process fake Langfuse HTTP server: a pytest fixture and a runnable wire-watching script.
 
 A `threading.Thread`-hosted `http.server` answering the Langfuse v4 endpoints the package
-uses, plus the three legacy ones, with canned/synthesised data recorded on `requests`.
+uses, with canned/synthesised data recorded on `requests`.
 """
 
 from __future__ import annotations
@@ -23,9 +23,6 @@ _DATASET_ITEMS_PATH = "/api/public/dataset-items"
 _OBSERVATIONS_PATH = "/api/public/v2/observations"
 _OTLP_PATH = "/api/public/otel/v1/traces"
 _SCORES_PATH = "/api/public/scores"
-_TRACES_PATH = "/api/public/traces"
-_INGESTION_PATH = "/api/public/ingestion"
-_DATASET_RUN_ITEMS_PATH = "/api/public/dataset-run-items"
 
 _ROOT_LATENCY_SECONDS = 12.5
 _CHILD_COSTS = (0.01, 0.02)
@@ -91,7 +88,6 @@ class FakeLangfuse:
         self.otlp_status = 200
         self.otlp_body: dict = {}
         self.scores_429_once = False
-        self.ingestion_body: dict = {"successes": [], "errors": []}
         self.verbose = verbose
         self.requests: list[dict] = []
         self.on_request = None
@@ -169,12 +165,6 @@ class FakeLangfuse:
             self._respond(handler, self.otlp_status, self.otlp_body)
         elif method == "POST" and path == _SCORES_PATH:
             self._post_scores(handler)
-        elif method == "GET" and path == _TRACES_PATH:
-            self._get_traces(handler, query)
-        elif method == "POST" and path == _INGESTION_PATH:
-            self._respond(handler, 200, self.ingestion_body)
-        elif method == "POST" and path == _DATASET_RUN_ITEMS_PATH:
-            self._respond(handler, 200, {})
         else:
             self._respond(handler, 404, {"message": f"fake_langfuse: no route for {method} {path}"})
 
@@ -220,17 +210,6 @@ class FakeLangfuse:
             self._respond(handler, 200, {"data": rows[1:], "meta": {}})
             return
         self._respond(handler, 200, {"data": rows, "meta": {}})
-
-    def _get_traces(self, handler: BaseHTTPRequestHandler, query: dict) -> None:
-        session_id = query.get("sessionId", "")
-        legacy_trace = {
-            "id": _short_hash(session_id, 32),
-            "sessionId": session_id,
-            "latency": _ROOT_LATENCY_SECONDS,
-            "totalCost": sum(_CHILD_COSTS),
-            "metadata": {"conversation_id": session_id},
-        }
-        self._respond(handler, 200, {"data": [legacy_trace]})
 
     def _respond(
         self, handler: BaseHTTPRequestHandler, status: int, body: dict, *, headers: dict | None = None

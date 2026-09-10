@@ -196,12 +196,11 @@ def test_every_conversation_is_still_looked_up_once_after_the_budget_is_spent():
     assert set(looked_up) == {"c1", "c2", "c3"}
 
 
-def test_the_skip_switch_announces_itself_instead_of_silently_orphaning_scores(monkeypatch):
-    # TAVERN_E2E_SKIP_TRACE_LINK returns all-None before any polling, so every score is
-    # orphaned and the only symptom is observe()'s generic "No trace found for dataset run"
-    # -- indistinguishable from a genuine lookup failure. That ambiguity cost a long
-    # debugging detour on a real run: Langfuse was healthy and every trace was present.
-    # If linking is switched off, say so.
+def test_the_skip_switch_announces_itself(monkeypatch):
+    # TAVERN_E2E_SKIP_TRACE_LINK turns off the whole Langfuse write path: the poll returns
+    # all-None before any request and observe() writes nothing. A run under it therefore
+    # looks exactly like a run against a broken Langfuse, so the switch says once that it
+    # is on and how many conversations it covers.
     monkeypatch.setenv(SKIP_ENV_VAR, "1")
     with (
         patch("gooddata_eval.core.agentic._langfuse._fetch_traces_for_session") as mock_fetch,
@@ -277,18 +276,23 @@ def _observation_row(trace_id: str, session_id: str, latency: float) -> dict:
     }
 
 
-def _stub_langfuse_http(monkeypatch, captured: list[httpx.Request], page: dict | None = None):
-    """A HttpxLangfuseClient whose requests are recorded instead of sent."""
+def _client_with(monkeypatch, handler) -> HttpxLangfuseClient:
+    """A HttpxLangfuseClient answered by ``handler`` instead of by the network."""
     monkeypatch.setenv("LANGFUSE_PUBLIC_KEY", "pk")
     monkeypatch.setenv("LANGFUSE_SECRET_KEY", "sk")
     monkeypatch.setenv("LANGFUSE_HOST", "https://lf.test")
+    return HttpxLangfuseClient(transport=httpx.MockTransport(handler))
+
+
+def _stub_langfuse_http(monkeypatch, captured: list[httpx.Request], page: dict | None = None):
+    """A HttpxLangfuseClient whose requests are recorded instead of sent."""
     body = page if page is not None else {"data": [], "meta": {}}
 
     def handler(request: httpx.Request) -> httpx.Response:
         captured.append(request)
         return httpx.Response(200, json=body)
 
-    return HttpxLangfuseClient(transport=httpx.MockTransport(handler))
+    return _client_with(monkeypatch, handler)
 
 
 def test_the_trace_lookup_filters_by_session_server_side(monkeypatch):
@@ -346,7 +350,7 @@ def test_a_client_without_the_session_parameter_is_filtered_locally_too():
     assert found == [wanted]
 
 
-# --- a 404 from dataset-run-items is one fact about the dataset, not N failures ---
+# --- an unknown dataset item is one fact about the dataset, not N failures ---
 
 
 @pytest.fixture
@@ -359,26 +363,26 @@ def _fresh_unlinkable_runs():
         lf_module._UNLINKABLE_RUNS.clear()
 
 
-def _http_404() -> Exception:
-    request = MagicMock()
-    response = MagicMock(status_code=404)
-    return httpx.HTTPStatusError("Client error '404 Not Found'", request=request, response=response)
+def _langfuse_with_no_dataset_items(monkeypatch) -> HttpxLangfuseClient:
+    """A client for which no dataset item resolves -- what a local --dataset folder looks like."""
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.path.startswith("/api/public/dataset-items/"), (
+            f"nothing but the item lookup should be attempted, got {request.url.path}"
+        )
+        return httpx.Response(404, json={"message": "not found"})
+
+    return _client_with(monkeypatch, handler)
 
 
-def _langfuse_that_404s_on_run_items():
-    lf = MagicMock()
-    lf.api.dataset_run_items.create.side_effect = _http_404()
-    return lf
-
-
-def test_a_missing_dataset_item_is_reported_once_per_run_with_its_cause(_fresh_unlinkable_runs):
+def test_a_missing_dataset_item_is_reported_once_per_run_with_its_cause(monkeypatch, _fresh_unlinkable_runs):
     """20 identical raw 404s buried the run's real output and named an endpoint, not a cause.
 
-    The 404 means the dataset item id is not in Langfuse, which is a property of the
-    dataset -- it recurs identically for every item and every pass over it -- so it is one
-    fact to state once, with what to do about it.
+    An item id Langfuse does not know is a property of the dataset -- it recurs identically
+    for every item and every pass over it -- so it is one fact to state once, with what to
+    do about it.
     """
-    lf = _langfuse_that_404s_on_run_items()
+    lf = _langfuse_with_no_dataset_items(monkeypatch)
     said: list[str] = []
 
     with patch("gooddata_eval.core.agentic._langfuse.warn_from_worker", side_effect=said.append):
@@ -387,19 +391,19 @@ def test_a_missing_dataset_item_is_reported_once_per_run_with_its_cause(_fresh_u
                 with observe(lf, f"trace-{item}-{run_idx}", item, f"GDAI-2179_ts_model_run{run_idx}", {}):
                     pass
 
-    assert lf.api.dataset_run_items.create.call_count == 20
     assert len(said) == 1, f"expected one warning for the whole run, got {len(said)}"
     warning = said[0]
     assert "does not exist in Langfuse" in warning
+    assert "404 from dataset-items" in warning
     assert "--langfuse-dataset" in warning and SKIP_ENV_VAR in warning
     # The reader has to know the run is not a write-off.
     assert "Scores ARE still written to the traces" in warning
 
 
-def test_each_model_run_gets_its_own_report(_fresh_unlinkable_runs):
+def test_each_model_run_gets_its_own_report(monkeypatch, _fresh_unlinkable_runs):
     # --model a --model b produces two differently-named runs; each is separately
     # unlinkable and the operator should see that it affected both.
-    lf = _langfuse_that_404s_on_run_items()
+    lf = _langfuse_with_no_dataset_items(monkeypatch)
     said: list[str] = []
 
     with patch("gooddata_eval.core.agentic._langfuse.warn_from_worker", side_effect=said.append):
@@ -411,11 +415,15 @@ def test_each_model_run_gets_its_own_report(_fresh_unlinkable_runs):
     assert len(said) == 2
 
 
-def test_a_non_404_link_failure_is_still_reported_every_time(_fresh_unlinkable_runs):
+def test_a_non_404_link_failure_is_still_reported_every_time(monkeypatch, _fresh_unlinkable_runs):
     # A 500 or a timeout may be transient and item-specific, so it must not be collapsed
     # into a one-shot "this dataset cannot link" claim.
-    lf = MagicMock()
-    lf.api.dataset_run_items.create.side_effect = RuntimeError("connection reset")
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path.startswith("/api/public/dataset-items/"):
+            return httpx.Response(200, json={"id": "item-1", "datasetId": "ds-1"})
+        return httpx.Response(500, text="connection reset")
+
+    lf = _client_with(monkeypatch, handler)
     said: list[str] = []
 
     with patch("gooddata_eval.core.agentic._langfuse.warn_from_worker", side_effect=said.append):
@@ -424,12 +432,12 @@ def test_a_non_404_link_failure_is_still_reported_every_time(_fresh_unlinkable_r
                 pass
 
     assert len(said) == 3
-    assert all("failed to create dataset run item" in w for w in said)
+    assert all("failed to export experiment span" in w for w in said)
 
 
-def test_scores_still_reach_the_trace_after_a_404(_fresh_unlinkable_runs):
+def test_scores_still_reach_the_trace_after_a_404(monkeypatch, _fresh_unlinkable_runs):
     # observe() yields the trace id regardless, which is why the run was not a write-off.
-    lf = _langfuse_that_404s_on_run_items()
+    lf = _langfuse_with_no_dataset_items(monkeypatch)
 
     with (
         patch("gooddata_eval.core.agentic._langfuse.warn_from_worker"),

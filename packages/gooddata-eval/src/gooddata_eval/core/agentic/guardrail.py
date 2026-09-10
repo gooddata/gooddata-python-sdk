@@ -229,7 +229,9 @@ def evaluate_agentic_guardrail(
                     # write a 0 the judge never returned.
                     continue
                 pt = ctx.trace(run.conversation_id)
-                with ctx.observe(pt, run_idx) as tid:
+                with ctx.observe(
+                    pt, run_idx, conversation_id=run.conversation_id, output={"guardrail_pass": run.passed}
+                ) as tid:
                     ctx.score(tid, name="guardrail_pass", value=float(run.passed), data_type="BOOLEAN")
                     ctx.score(tid, name="llm_judge_score", value=run.llm_judge_score, data_type="NUMERIC")
                     ctx.quality(
@@ -261,6 +263,7 @@ def evaluate_agentic_guardrail(
             window_end=window_end,
             suffix_runs=len(summary.run_results) > 1,
             write_scores=_write_scores,
+            item_input=question,
         )
 
     unscored = summary.judge_errors

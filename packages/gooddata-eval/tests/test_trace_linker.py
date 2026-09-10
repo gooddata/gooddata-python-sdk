@@ -172,7 +172,7 @@ def test_every_kind_hands_a_pinned_window_to_the_linker(module_name, _func_name)
     tree = ast.parse(inspect.getsource(module))
 
     submits = [n for n in ast.walk(tree) if isinstance(n, ast.Call) and _callee_name(n) == "submit_trace_scoring"]
-    assert submits, f"{module_name} no longer defers its Langfuse block to the linker"
+    assert submits, f"{module_name} does not defer its Langfuse block to the linker"
     for call in submits:
         assert any(kw.arg == "window_end" for kw in call.keywords), (
             f"{module_name} leaves window_end to drift to the task's run time"
@@ -184,6 +184,20 @@ def test_every_kind_hands_a_pinned_window_to_the_linker(module_name, _func_name)
         assert not _clock_reads(block), (
             f"{module_name}'s _write_scores reads the clock itself, so anything it derives from "
             f"that widens with however long the task waited in the pool"
+        )
+
+
+@pytest.mark.parametrize(("module_name", "_func_name"), _EVALUATE_FUNCS)
+def test_every_kind_passes_its_item_input_to_the_linker(module_name, _func_name):
+    """The scored item's question must travel with the score, not just its conversation id."""
+    module = importlib.import_module(f"gooddata_eval.core.agentic.{module_name}")
+    tree = ast.parse(inspect.getsource(module))
+
+    submits = [n for n in ast.walk(tree) if isinstance(n, ast.Call) and _callee_name(n) == "submit_trace_scoring"]
+    assert submits, f"{module_name} does not defer its Langfuse block to the linker"
+    for call in submits:
+        assert any(kw.arg == "item_input" for kw in call.keywords), (
+            f"{module_name} scores a run without recording what question it answered"
         )
 
 
@@ -217,7 +231,7 @@ def test_the_linker_polls_the_window_it_was_given_instead_of_reading_the_clock()
     """
     tree = ast.parse(inspect.getsource(_trace_linker))
     blocks = [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == "_link_traces"]
-    assert blocks, "submit_trace_scoring no longer defers the trace lookup"
+    assert blocks, "submit_trace_scoring does not defer the trace lookup"
 
     for block in blocks:
         assert not _clock_reads(block), "the deferred lookup reads the clock instead of the pinned window"
