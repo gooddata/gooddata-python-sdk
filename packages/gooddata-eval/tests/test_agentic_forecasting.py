@@ -293,3 +293,54 @@ def test_a_wrong_horizon_raises_naming_what_the_agent_actually_did():
     assert error.detail["actual_forecast_config"]["forecast_period"] == 12
     assert error.runs_passed == 0
     assert error.conversation_id == "conv-1"
+
+
+# ── confidence and seasonality ──────────────────────────────────────────────
+
+
+def test_confidence_is_checked_when_pinned():
+    expected = {"forecast_confidence": 0.99}
+    assert _evaluate(_viz(confidence=0.99), {"success": True}, expected=expected).confidence_correct is True
+    assert _evaluate(_viz(confidence=0.95), {"success": True}, expected=expected).confidence_correct is False
+
+
+def test_seasonality_is_checked_when_pinned():
+    expected = {"forecast_seasonal": True}
+    assert _evaluate(_viz(seasonal=True), {"success": True}, expected=expected).seasonal_correct is True
+    assert _evaluate(_viz(seasonal=False), {"success": True}, expected=expected).seasonal_correct is False
+
+
+def test_an_absent_seasonal_counts_as_the_tools_default():
+    """The tool defaults seasonal to false, so an agent that leaves it alone has asked for
+    a non-seasonal forecast -- failing that would penalise correct behaviour."""
+    viz = _viz()
+    del viz["config"]["forecast_seasonal"]
+    assert _evaluate(viz, {"success": True}, expected={"forecast_seasonal": False}).seasonal_correct is True
+
+
+def test_confidence_and_seasonality_are_unasserted_by_default():
+    ev = _evaluate(_viz(confidence=0.5, seasonal=True), {"success": True})
+    assert ev.confidence_correct is True
+    assert ev.seasonal_correct is True
+    assert "forecast_confidence" not in ev.asserted
+    assert "forecast_seasonal" not in ev.asserted
+
+
+# ── cross-turn extraction ───────────────────────────────────────────────────
+
+
+def test_a_chart_built_on_an_earlier_turn_is_still_the_one_scored():
+    """The agent may build the chart on one turn and forecast on the next -- reading only
+    the current turn's calls would drop the visualization the forecast actually ran on and
+    fail a correct run for an empty config."""
+    summary = _run(
+        [
+            _chat([_tc("create_adhoc_visualization", _viz_args())], text="Building the chart, one moment."),
+            _chat([_tc("execute_forecast", {"visualization_ref": "viz_1"}, _OK_FORECAST)]),
+        ]
+    )
+
+    assert summary.best.evaluation.executed is True
+    assert summary.best.evaluation.period_correct is True
+    assert summary.best.evaluation.metric_correct is True
+    assert summary.pass_at_k is True

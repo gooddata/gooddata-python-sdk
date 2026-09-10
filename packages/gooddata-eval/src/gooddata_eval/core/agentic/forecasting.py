@@ -171,6 +171,8 @@ class ForecastEvaluation:
     forecast_enabled: bool
     period_correct: bool
     metric_correct: bool
+    confidence_correct: bool
+    seasonal_correct: bool
     asserted: list[str] = field(default_factory=list)
     disambiguated: bool = False
 
@@ -185,6 +187,8 @@ class ForecastEvaluation:
                 self.forecast_enabled,
                 self.period_correct,
                 self.metric_correct,
+                self.confidence_correct,
+                self.seasonal_correct,
             ]
         )
 
@@ -246,6 +250,26 @@ def _evaluate_run(
         wanted = {expected_metric} if isinstance(expected_metric, str) else set(expected_metric)
         metric_correct = bool(_metric_uris(viz_args) & wanted)
 
+    expected_confidence = expected_output.get("forecast_confidence")
+    if expected_confidence is None:
+        confidence_correct = True
+    else:
+        asserted.append("forecast_confidence")
+        actual_confidence = config.get("forecast_confidence")
+        confidence_correct = isinstance(actual_confidence, int | float) and float(actual_confidence) == float(
+            expected_confidence
+        )
+
+    expected_seasonal = expected_output.get("forecast_seasonal")
+    if expected_seasonal is None:
+        seasonal_correct = True
+    else:
+        asserted.append("forecast_seasonal")
+        # The tool defaults seasonal to False, so an absent value means "not seasonal" --
+        # reading it as a mismatch would fail an agent that simply left the default alone.
+        actual_seasonal = config.get("forecast_seasonal")
+        seasonal_correct = bool(actual_seasonal) == bool(expected_seasonal)
+
     return ForecastEvaluation(
         triggered=triggered,
         executed=executed,
@@ -254,6 +278,8 @@ def _evaluate_run(
         forecast_enabled=forecast_enabled,
         period_correct=period_correct,
         metric_correct=metric_correct,
+        confidence_correct=confidence_correct,
+        seasonal_correct=seasonal_correct,
         asserted=asserted,
         disambiguated=disambiguated,
     )
@@ -321,13 +347,16 @@ def run_agentic_forecasting(
                     reasoning_steps.extend(partial.reasoning_steps or [])
                     response_id = partial.response_id or response_id
                     _accumulate(partial)
-                    viz_args, execute_result = _extract_forecast_calls(partial.tool_call_events or [])
+                    viz_args, execute_result = _extract_forecast_calls(all_tool_call_events)
                 turn_completed = False
                 break
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
             _accumulate(chat_result)
-            viz_args, execute_result = _extract_forecast_calls(chat_result.tool_call_events or [])
+            # Over every turn so far, not just this one: the agent may build the chart on
+            # one turn and forecast on the next, and reading a single turn would drop the
+            # visualization the forecast actually ran on.
+            viz_args, execute_result = _extract_forecast_calls(all_tool_call_events)
             response_text = render_answer_text(chat_result)
             turn_completed = chat_result.stream_ended and bool(response_text)
             if execute_result is not None:
@@ -387,6 +416,8 @@ def run_agentic_forecasting(
                 r.evaluation.forecast_enabled,
                 r.evaluation.period_correct,
                 r.evaluation.metric_correct,
+                r.evaluation.confidence_correct,
+                r.evaluation.seasonal_correct,
             ]
         ),
     )
@@ -412,6 +443,8 @@ def _detail(best: ForecastRunResult) -> dict[str, Any]:
         "forecast_enabled": ev.forecast_enabled,
         "period_correct": ev.period_correct,
         "metric_correct": ev.metric_correct,
+        "confidence_correct": ev.confidence_correct,
+        "seasonal_correct": ev.seasonal_correct,
         # Which content checks the fixture pinned. Without it a run where nothing was
         # asserted is indistinguishable in the report from one where everything matched.
         "asserted": ev.asserted,
@@ -471,9 +504,18 @@ def evaluate_agentic_forecasting(
                     "forecast_success": ev.success,
                     "forecast_turn_completed": ev.turn_completed,
                     "forecast_enabled": ev.forecast_enabled,
-                    "forecast_period_correct": ev.period_correct,
-                    "forecast_metric_correct": ev.metric_correct,
                 }
+                # Only the content checks the fixture actually pinned. An unasserted check
+                # is True internally so it cannot fail a run, but publishing that as a
+                # BOOLEAN 1 would claim the evaluator verified something it never looked at.
+                for name, key, value in (
+                    ("forecast_period", "forecast_period_correct", ev.period_correct),
+                    ("metric", "forecast_metric_correct", ev.metric_correct),
+                    ("forecast_confidence", "forecast_confidence_correct", ev.confidence_correct),
+                    ("forecast_seasonal", "forecast_seasonal_correct", ev.seasonal_correct),
+                ):
+                    if name in ev.asserted:
+                        strict_checks[key] = value
                 with ctx.observe(pt, run_idx) as tid:
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
@@ -516,7 +558,8 @@ def evaluate_agentic_forecasting(
             f"Forecasting assertion failed. strict_pass={ev.strict_pass} "
             f"(triggered={ev.triggered}, executed={ev.executed}, success={ev.success}, "
             f"turn_completed={ev.turn_completed}, forecast_enabled={ev.forecast_enabled}, "
-            f"period_correct={ev.period_correct}, metric_correct={ev.metric_correct}). "
+            f"period_correct={ev.period_correct}, metric_correct={ev.metric_correct}, "
+            f"confidence_correct={ev.confidence_correct}, seasonal_correct={ev.seasonal_correct}). "
             f"Actual forecast config: {detail['actual_forecast_config']}. "
             f"Actual execute result: {best.actual_execute_result}."
         )
