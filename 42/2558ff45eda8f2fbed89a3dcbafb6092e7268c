@@ -1,0 +1,37 @@
+packages/gooddata-eval/tests/test_fake_langfuse.py
+  s_152f0704157226::t_4454c3a784122d 1-140
+packages/gooddata-eval/tests/_fake_langfuse.py
+  s_152f0704157226::t_6657fce4967dba 128,130
+  s_152f0704157226::t_111ba7ccc74fe6 193-194
+  s_152f0704157226::t_c28f6cb4cb0ac6 159-160
+  s_152f0704157226::t_a14d7c71dcc457 84,97,99
+  s_152f0704157226::t_5dd0d0409b31b1 38-41
+  s_152f0704157226::t_44c1c6b5304516 162-164,166-177
+  s_152f0704157226::t_23b23f014524df 42-54,56-65
+  s_152f0704157226::t_4ba270e5019c47 279
+  s_152f0704157226::t_a340ff6427810e 2,4-5,12
+  s_152f0704157226::t_f239deb2ea4739 226-233
+  s_152f0704157226::t_d08ff368574b00 272,283,287-289
+  s_152f0704157226::t_086ffd4a6abbc6 202-208
+  s_152f0704157226::t_50b87626263e4b 200
+  s_152f0704157226::t_d8c5e912a82155 1,3,6-11,13-37,55,66-83,85-96,98,100-127,129,131-158,161,165,178-192,195-199,201,209-225,234-259,261-263,265-271,273-278,280-282,284-286,290-294
+  s_152f0704157226::t_8e213ca128cdc4 260,264
+packages/gooddata-eval/tests/conftest.py
+  s_152f0704157226::t_7e17f662eadb9f 6-7,12-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "024d34b154fd50f5d02f1f852f800bb4d79b2186",
+  "prompts": {},
+  "sessions": {
+    "s_152f0704157226": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81049499-0417-40a7-9a8a-3bc2f0738f69",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}

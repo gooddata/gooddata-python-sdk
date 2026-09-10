@@ -1,0 +1,97 @@
+packages/gooddata-dbt/AGENTS.md
+  s_ff2589ec1b117a::t_d933d8533f34d4 3-87
+  s_ff2589ec1b117a::t_5cfa976c0c7172 1
+packages/gooddata-fdw/AGENTS.md
+  s_ff2589ec1b117a::t_627700354124d8 3-100,104
+  s_ff2589ec1b117a::t_2760c835e00b80 1,102-103
+packages/gooddata-flexconnect/AGENTS.md
+  s_ff2589ec1b117a::t_26451570973fb6 3-83
+  s_ff2589ec1b117a::t_a88f478af57d02 1
+AGENTS.md
+  s_ff2589ec1b117a::t_6fb5c887778817 170-174
+  s_ff2589ec1b117a::t_22419c1981d31d 132-141,216
+  s_ff2589ec1b117a::t_0305f61e61871d 1-131,142-169,175-215,217-315
+.claude/skills/commit/SKILL.md
+  s_ff2589ec1b117a::t_4cd2735e8c577e 41
+  s_ff2589ec1b117a::t_5c77f8184660df 1-40,42-65
+Makefile
+  s_ff2589ec1b117a::t_1ee36b5dbbdc07 5-10,34-35,39,108-110,114-116,120-122
+scripts/conventional_commit_gitlint_rule.py
+  s_ff2589ec1b117a::t_6e3c1ae365cb4a 122,124-125,138,143-155,164,172
+  s_ff2589ec1b117a::t_2dd9e11b45422a 2-5,10-11,69-121,123,126-137,139-142,156-163,165-171,173-174
+.claude/skills/cassette-update/SKILL.md
+  s_ff2589ec1b117a::t_f4a63c1215588b 43-51
+  s_ff2589ec1b117a::t_bb844228dc0afd 1-42,52-99
+packages/gooddata-pipelines/README.md
+  s_ff2589ec1b117a::t_90395b535e6985 40-43,56-61
+CONTRIBUTING.md
+  s_ff2589ec1b117a::t_7cfe142f30f905 340-352
+  s_ff2589ec1b117a::t_1f9b16cb0bd165 312-324,328,331,334,337,353-360
+packages/gooddata-sdk/AGENTS.md
+  s_ff2589ec1b117a::t_2ed75f23117d35 3-122
+  s_ff2589ec1b117a::t_01d5e188f50677 1-2,123,125-126
+packages/gooddata-pipelines/AGENTS.md
+  s_ff2589ec1b117a::t_9be5c869fdf10d 87-91
+  s_ff2589ec1b117a::t_ca877e60dd3c9d 3-86
+  s_ff2589ec1b117a::t_882760ff8d99e8 92
+  s_ff2589ec1b117a::t_0a4fcc5ac95654 1,93,95-96
+packages/gooddata-flight-server/AGENTS.md
+  s_ff2589ec1b117a::t_26451570973fb6 3-88
+  s_ff2589ec1b117a::t_dcf0f01f021345 1
+packages/gooddata-pandas/AGENTS.md
+  s_ff2589ec1b117a::t_d933d8533f34d4 3-93
+  s_ff2589ec1b117a::t_5cca104eca6dad 1
+project_common.mk
+  s_ff2589ec1b117a::t_4bcc1c8807098f 74-75,77-78
+packages/gooddata-eval/AGENTS.md
+  s_ff2589ec1b117a::t_79530a62d94a1d 3-111
+  s_ff2589ec1b117a::t_5d06daf3303cde 1-2,112-114
+packages/tests-support/AGENTS.md
+  s_ff2589ec1b117a::t_d692fccb4bdd6d 59-62,66,69-73
+  s_ff2589ec1b117a::t_ca877e60dd3c9d 3-58,63-65,67-68,74-98
+  s_ff2589ec1b117a::t_a2e4210dcab41a 1-2
+.claude/skills/api-client-regen/SKILL.md
+  s_ff2589ec1b117a::t_af9ff61479f953 1-65
+.gitlint
+  s_ff2589ec1b117a::t_f868e60d7ab824 10,19-21
+.pre-commit-config.yaml
+  s_ff2589ec1b117a::t_c0597b2b67718a 8-12,42
+CLAUDE.md
+  s_ff2589ec1b117a::t_3c243c9ec8f194 1-29
+packages/gooddata-dbt/CLAUDE.md
+  s_ff2589ec1b117a::t_f8c4b9deec49c4 1
+packages/gooddata-eval/CLAUDE.md
+  s_ff2589ec1b117a::t_50afa0889d353d 1
+packages/gooddata-fdw/CLAUDE.md
+  s_ff2589ec1b117a::t_dd44906fcff6e4 1
+packages/gooddata-flexconnect/CLAUDE.md
+  s_ff2589ec1b117a::t_d9809f71456f80 1
+packages/gooddata-flight-server/CLAUDE.md
+  s_ff2589ec1b117a::t_7b228cb1b9770d 1
+packages/gooddata-pandas/CLAUDE.md
+  s_ff2589ec1b117a::t_cf0d530e80a145 1
+packages/gooddata-pipelines/CLAUDE.md
+  s_ff2589ec1b117a::t_56f5ed470fdfeb 1
+packages/gooddata-sdk/CLAUDE.md
+  s_ff2589ec1b117a::t_585aa088febd81 1
+packages/tests-support/CLAUDE.md
+  s_ff2589ec1b117a::t_42534e5ba8d5ad 1
+pyproject.toml
+  s_ff2589ec1b117a::t_74acc7928237e2 76
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "279dc54e3c30ddfc2653ca878fac3c074c55446c",
+  "prompts": {},
+  "sessions": {
+    "s_ff2589ec1b117a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b53ed987-b22e-400c-93eb-3d8c29f94a2d",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}

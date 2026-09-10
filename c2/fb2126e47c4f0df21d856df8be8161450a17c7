@@ -1,0 +1,42 @@
+packages/gooddata-eval/tests/test_langfuse_client.py
+  s_152f0704157226::t_cdc3e462831c5e 302-348,312-353
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/client.py
+  s_152f0704157226::t_d3ed8c17c898a5 12,18
+  s_152f0704157226::t_d897e163c43703 72,74-102,76,78-106,106,110
+  s_152f0704157226::t_0d31fb430d5163 73,77
+packages/gooddata-eval/tests/test_langfuse_e2e_fake_server.py
+  s_152f0704157226::t_1bbd46a624a25a 349-376
+packages/gooddata-eval/tests/test_agentic_observe_experiment.py
+  s_152f0704157226::t_74b7bf93d07e72 216-254
+  s_152f0704157226::t_cdb76e03557eae 8,16
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_langfuse.py
+  s_152f0704157226::t_4faf116869624a 354-358,376
+  s_152f0704157226::t_8b24655ea0140f 378,442-445
+  s_152f0704157226::t_7546185d7b6f49 242
+  s_152f0704157226::t_8caafde92f4bdf 306-308,313,320
+  s_152f0704157226::t_799044991217c9 330
+  s_152f0704157226::t_d74fd3d258be4e 175-180
+  s_152f0704157226::t_45d406a3f57752 430
+  s_152f0704157226::t_a9f55023224a71 377
+  s_152f0704157226::t_083c5763ab4023 379
+packages/gooddata-eval/tests/test_langfuse_observations.py
+  s_152f0704157226::t_4c6fc8968eca05 157-186
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/observations.py
+  s_152f0704157226::t_7f51ed336bc55e 85-86,93-96,98-102
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "f89afdc69eae316031122f5718559bb15d1b45b1",
+  "prompts": {},
+  "sessions": {
+    "s_152f0704157226": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81049499-0417-40a7-9a8a-3bc2f0738f69",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
