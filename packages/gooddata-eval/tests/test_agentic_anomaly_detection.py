@@ -1,14 +1,17 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 import json
+from contextlib import contextmanager
 from unittest.mock import MagicMock, patch
 
 import pytest
 from gooddata_eval.core.agentic.anomaly_detection import (
     AnomalyDetectionAssertionError,
+    _build_clarification_prompt,
     _evaluate_run,
     _extract_anomaly_calls,
     _inferred_granularity,
+    _metric_uris,
     _point_count,
     evaluate_agentic_anomaly_detection,
     run_agentic_anomaly_detection,
@@ -344,3 +347,135 @@ def test_a_chart_built_on_an_earlier_turn_is_still_the_one_scored():
     assert summary.best.evaluation.metric_correct is True
     assert summary.best.evaluation.granularity_correct is True
     assert summary.pass_at_k is True
+
+
+# ── prompt building, string fields, and failure paths ───────────────────────
+
+
+def test_the_clarification_prompt_mentions_only_the_hints_the_fixture_supplies():
+    """An absent hint must be dropped, not asserted as a literal "None" -- that would
+    answer a question the agent never asked, with a wrong value."""
+    full = _build_clarification_prompt("Which one?", {"metric": "metric/spend", "granularity": "MONTH"})
+    assert "metric/spend" in full
+    assert "MONTH" in full
+
+    bare = _build_clarification_prompt("Which one?", {})
+    assert "None" not in bare
+    assert "For reference" not in bare
+
+
+def test_a_bare_uri_field_is_read_for_both_metric_and_granularity():
+    """Tool-call arguments are raw JSON, where a field may be a plain string rather than
+    the object a parsed visualization always has."""
+    viz = {"query": {"fields": {"m": "metric/spend", "d": "label/process_date.month"}}, "metrics": ["m"]}
+    assert _metric_uris(viz) == {"metric/spend"}
+    assert _inferred_granularity(viz) == "MONTH"
+
+
+def test_a_chat_error_keeps_what_its_partial_result_carried():
+    """A stream that broke after the detection ran still has a result worth scoring."""
+    error = RuntimeError("stream died")
+    error.partial_result = _chat(_pair())
+    summary = _run([error])
+
+    assert summary.best.evaluation.executed is True
+    # The turn did not finish, which strict_pass requires, so this is still a failure.
+    assert summary.best.evaluation.turn_completed is False
+    assert summary.pass_at_k is False
+
+
+def test_a_simulated_user_failure_ends_the_run_without_raising():
+    client = MagicMock()
+    client.create_conversation.return_value = "conv-1"
+    client.send_message.return_value = _chat([], text="Which measure?")
+    with (
+        patch(f"{_MODULE}.ChatClient", return_value=client),
+        patch(f"{_MODULE}.generate_simulated_anomaly_response", side_effect=RuntimeError("openai down")),
+    ):
+        summary = run_agentic_anomaly_detection(
+            host="http://h", token="tok", workspace_id="ws1", question="q", expected_output=_EXPECTED
+        )
+
+    assert summary.pass_at_k is False
+    assert client.send_message.call_count == 1  # ended rather than looping
+
+
+# ── Langfuse scoring ────────────────────────────────────────────────────────
+
+
+class _FakeCtx:
+    """Records what the deferred Langfuse block writes, without a Langfuse."""
+
+    def __init__(self):
+        self.scores: dict[str, float] = {}
+        # Not named `quality`: the method below would overwrite itself on first call.
+        self.quality_call: dict = {}
+
+    def trace(self, _conversation_id):
+        return None
+
+    @contextmanager
+    def observe(self, _trace, _run_idx):
+        yield "trace-id"
+
+    def score(self, _tid, *, name, value, data_type):
+        self.scores[name] = value
+
+    def quality(self, _tid, *, strict_checks, latency_sec, cost_usd):
+        self.quality_call = {"strict_checks": strict_checks, "latency_sec": latency_sec, "cost_usd": cost_usd}
+
+
+def _scored(expected_output, calls=None):
+    """Run one item with Langfuse on, then execute the deferred block against a fake ctx."""
+    client = MagicMock()
+    client.create_conversation.return_value = "conv-1"
+    client.send_message.return_value = _chat(calls if calls is not None else _pair())
+    captured = {}
+
+    def _capture(_link, _identity, **kwargs):
+        captured.update(kwargs)
+
+    with (
+        patch(f"{_MODULE}.ChatClient", return_value=client),
+        patch(f"{_MODULE}.submit_trace_scoring", side_effect=_capture),
+    ):
+        try:
+            evaluate_agentic_anomaly_detection(
+                host="http://h",
+                token="tok",
+                workspace_id="ws1",
+                question="Detect anomalies in monthly spend",
+                expected_output=expected_output,
+                langfuse=MagicMock(),
+                dataset_item_id="ds-1",
+            )
+        except AnomalyDetectionAssertionError:
+            pass  # scores are written before the pass@K raise, which is the point
+
+    ctx = _FakeCtx()
+    captured["write_scores"](ctx)
+    return ctx
+
+
+def test_only_the_checks_the_fixture_pinned_are_scored():
+    """An unasserted check is True internally so it cannot fail a run. Publishing that as a
+    BOOLEAN 1 would claim the evaluator verified something it never looked at."""
+    ctx = _scored({"metric": "metric/spend"})  # granularity deliberately unpinned
+
+    assert ctx.scores["anomaly_metric_correct"] == 1.0
+    assert "anomaly_granularity_correct" not in ctx.scores
+    # The process checks are unconditional -- they are always actually evaluated.
+    assert set(ctx.scores) >= {"anomaly_triggered", "anomaly_executed", "anomaly_success"}
+
+
+def test_both_content_checks_are_scored_when_both_are_pinned():
+    ctx = _scored(_EXPECTED)
+    assert ctx.scores["anomaly_metric_correct"] == 1.0
+    assert ctx.scores["anomaly_granularity_correct"] == 1.0
+
+
+def test_cost_is_reported_even_when_the_tool_was_never_reached():
+    """A run that answered without detecting anything still spent tokens; gating cost on
+    ev.triggered hid that and understated what the item cost."""
+    ctx = _scored(_EXPECTED, calls=[])
+    assert "cost_usd" in ctx.quality_call
