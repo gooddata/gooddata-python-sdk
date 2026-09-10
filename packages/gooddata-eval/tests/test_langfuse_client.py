@@ -109,8 +109,14 @@ def test_a_boolean_score_is_sent_as_a_number(make_client):
     client = make_client(handler)
     client.create_score("t-1", "pass_at_k", True, "BOOLEAN")
     client.create_score("t-1", "pass_at_k", False, "BOOLEAN")
+    # The sink's compute_scores yields int 1/0 for pass_at_k, so the coercion keys off
+    # dataType rather than the Python type of the value.
+    client.create_score("t-1", "pass_at_k", 1, "BOOLEAN")
+    client.create_score("t-1", "pass_at_k", 0, "BOOLEAN")
 
-    assert [body["value"] for body in bodies] == [1.0, 0.0]
+    assert [body["value"] for body in bodies] == [1.0, 0.0, 1.0, 0.0]
+    # Typed, not just equal: `1 == 1.0` in Python, but the two serialise differently.
+    assert all(isinstance(body["value"], float) for body in bodies)
 
 
 def test_a_throttled_score_is_retried_after_the_delay_the_server_asked_for(make_client, monkeypatch):
@@ -297,11 +303,29 @@ def test_the_compat_trace_api_accepts_timestamp_strings(make_client):
     assert "sessionId" not in seen[0]
 
 
-def test_a_dataset_run_item_is_posted_to_the_legacy_endpoint(make_client):
+def test_a_negative_retry_after_never_reaches_sleep(make_client, monkeypatch):
+    # time.sleep raises on a negative delay, so a server clock skew or a hostile header
+    # would turn a throttled score into an exception instead of a retry.
+    slept: list[float] = []
+    monkeypatch.setattr(client_module.time, "sleep", slept.append)
+    statuses = [429, 200]
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        status = statuses[len(slept)]
+        return httpx.Response(status, headers={"Retry-After": "-5"} if status == 429 else {}, json={})
+
+    make_client(handler).create_score("t-1", "quality_score", 1.0, "NUMERIC")
+
+    assert slept == [0.5]
+
+
+def test_a_dataset_run_item_is_exported_as_an_experiment_root_span(make_client):
     seen: list[httpx.Request] = []
 
     def handler(request: httpx.Request) -> httpx.Response:
         seen.append(request)
+        if request.url.path.startswith("/api/public/dataset-items/"):
+            return httpx.Response(200, json={"id": "item-1", "datasetId": "ds-1"})
         return _ok(request)
 
     make_client(handler).api.dataset_run_items.create(
@@ -312,33 +336,44 @@ def test_a_dataset_run_item_is_posted_to_the_legacy_endpoint(make_client):
         run_description="desc",
     )
 
-    assert seen[0].method == "POST"
-    assert seen[0].url.path == "/api/public/dataset-run-items"
-    assert json.loads(seen[0].content) == {
-        "runName": "ds_2026_model",
-        "datasetItemId": "item-1",
-        "traceId": "t-1",
-        "metadata": {"model_version": "m"},
-        "runDescription": "desc",
-    }
+    assert [request.url.path for request in seen] == ["/api/public/dataset-items/item-1", "/api/public/otel/v1/traces"]
+    assert seen[1].headers["x-langfuse-ingestion-version"] == "4"
+    span = json.loads(seen[1].content)["resourceSpans"][0]["scopeSpans"][0]["spans"][0]
+    attrs = {attr["key"]: attr["value"].get("stringValue") for attr in span["attributes"]}
+    assert attrs["langfuse.experiment.name"] == "ds_2026_model"
+    assert attrs["langfuse.experiment.dataset.id"] == "ds-1"
+    assert attrs["langfuse.experiment.item.id"] == "item-1"
+    assert attrs["langfuse.experiment.item.root_observation_id"] == span["spanId"]
+    assert attrs["langfuse.experiment.description"] == "desc"
+    assert attrs["langfuse.experiment.metadata.model_version"] == "m"
+    assert attrs["langfuse.observation.metadata.gen_ai_trace_id"] == "t-1"
 
 
-def test_a_dataset_run_item_for_an_unknown_item_raises(make_client):
-    client = make_client(lambda request: httpx.Response(404, json={}))
-    with pytest.raises(httpx.HTTPStatusError):
-        client.api.dataset_run_items.create(run_name="run", dataset_item_id="local", trace_id="t-1")
-
-
-def test_the_trace_version_upsert_uses_the_ingestion_endpoint(make_client):
+def test_a_dataset_run_item_returns_the_score_target_for_the_span_it_exported(make_client):
     seen: list[httpx.Request] = []
 
     def handler(request: httpx.Request) -> httpx.Response:
         seen.append(request)
+        if request.url.path.startswith("/api/public/dataset-items/"):
+            return httpx.Response(200, json={"id": "item-1", "datasetId": "ds-1"})
         return _ok(request)
 
-    make_client(handler).update_trace_version("t-1", "gpt-5.2")
+    target = make_client(handler).api.dataset_run_items.create(
+        run_name="ds_2026_model", dataset_item_id="item-1", trace_id="t-1"
+    )
 
-    assert seen[0].url.path == "/api/public/ingestion"
-    event = json.loads(seen[0].content)["batch"][0]
-    assert event["type"] == "trace-create"
-    assert event["body"] == {"id": "t-1", "version": "gpt-5.2"}
+    span = json.loads(seen[1].content)["resourceSpans"][0]["scopeSpans"][0]["spans"][0]
+    # The run item IS the root observation, so an experiment-item score needs the span's own
+    # trace and span id -- neither is recoverable from the gen-ai trace id the caller passed.
+    assert target.gen_ai_trace_id == "t-1"
+    assert target.experiment_trace_id == span["traceId"]
+    assert target.experiment_span_id == span["spanId"]
+    assert target.destinations() == [("t-1", None), (span["traceId"], span["spanId"])]
+    # Still a str equal to the gen-ai trace id, so a caller that treats it as one keeps working.
+    assert target == "t-1"
+
+
+def test_a_dataset_run_item_for_an_unknown_item_raises(make_client):
+    client = make_client(lambda request: httpx.Response(404, json={}))
+    with pytest.raises(LookupError):
+        client.api.dataset_run_items.create(run_name="run", dataset_item_id="local", trace_id="t-1")

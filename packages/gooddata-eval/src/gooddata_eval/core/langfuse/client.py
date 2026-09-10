@@ -15,12 +15,16 @@ from typing import Any
 import httpx
 
 from gooddata_eval.core.langfuse import _env, observations, otlp
+from gooddata_eval.core.langfuse.experiment import (
+    ExperimentItem,
+    ExperimentRun,
+    ScoreTarget,
+    build_experiment_root_span,
+)
 from gooddata_eval.core.langfuse.observations import TraceSummary
 
 _SCORES_PATH = "/api/public/scores"
 _OTLP_PATH = "/api/public/otel/v1/traces"
-_INGESTION_PATH = "/api/public/ingestion"
-_DATASET_RUN_ITEMS_PATH = "/api/public/dataset-run-items"
 
 _MAX_SCORE_ATTEMPTS = 3
 _DEFAULT_RETRY_DELAY = 0.5
@@ -75,8 +79,10 @@ class _TraceAPI:
 
 
 class _DatasetRunItemsAPI:
-    def __init__(self, client: httpx.Client) -> None:
-        self._client = client
+    """`api.dataset_run_items.create` for external callers on the dataset-run vocabulary: a v4 run is one span."""
+
+    def __init__(self, owner: HttpxLangfuseClient) -> None:
+        self._owner = owner
 
     def create(
         self,
@@ -85,23 +91,36 @@ class _DatasetRunItemsAPI:
         trace_id: str,
         metadata: dict | None = None,
         run_description: str = "",
-    ) -> None:
-        self._client.post(
-            _DATASET_RUN_ITEMS_PATH,
-            json={
-                "runName": run_name,
-                "datasetItemId": dataset_item_id,
-                "traceId": trace_id,
-                "metadata": metadata or {},
-                "runDescription": run_description,
-            },
-        ).raise_for_status()
+    ) -> ScoreTarget:
+        """Export one experiment root span for `dataset_item_id` and return where to score it.
+
+        The span is its own trace, so `trace_id` is carried as metadata and is NOT what an
+        experiment-item score attaches to -- Langfuse reads those off the root observation.
+        The returned target names both, and `score_safe` writes to each; scoring the bare
+        `trace_id` instead reaches the gen-ai trace only and leaves the run item unscored.
+        """
+        dataset_id = self._owner.dataset_id_for_item(dataset_item_id)
+        if dataset_id is None:
+            raise LookupError(f"dataset item {dataset_item_id!r} not found in Langfuse")
+        now = datetime.now(timezone.utc)
+        span = build_experiment_root_span(
+            ExperimentRun(run_name, dataset_id, metadata, run_description or None),
+            ExperimentItem(dataset_item_id, input={"dataset_item_id": dataset_item_id}),
+            start=now,
+            end=now,
+            trace_name=f"gd-eval: {dataset_item_id}",
+            tags=("gd-eval",),
+            observation_metadata={"gen_ai_trace_id": trace_id},
+            trace_metadata={"run_name": run_name},
+        )
+        self._owner.export_spans([span])
+        return ScoreTarget(trace_id, span.trace_id, span.span_id)
 
 
 class _LangfuseAPI:
     def __init__(self, owner: HttpxLangfuseClient) -> None:
         self.trace = _TraceAPI(owner)
-        self.dataset_run_items = _DatasetRunItemsAPI(owner._http)
+        self.dataset_run_items = _DatasetRunItemsAPI(owner)
 
 
 class HttpxLangfuseClient:
@@ -127,8 +146,9 @@ class HttpxLangfuseClient:
             "id": str(uuid.uuid4()),
             "traceId": trace_id,
             "name": name,
-            # BOOLEAN scores go over the wire as 1.0/0.0, not as JSON booleans.
-            "value": (1.0 if value else 0.0) if isinstance(value, bool) else value,
+            # A BOOLEAN score goes over the wire as 1.0/0.0 whatever its Python type: the
+            # sink's compute_scores yields int 1/0 and the agentic path float 1.0/0.0.
+            "value": (1.0 if value else 0.0) if data_type == "BOOLEAN" else value,
             "dataType": data_type,
         }
         if comment:
@@ -177,23 +197,6 @@ class HttpxLangfuseClient:
         return observations.list_traces_in_window(
             self._http, from_time=from_time, to_time=to_time, limit=limit, session_id=session_id
         )
-
-    def update_trace_version(self, trace_id: str, version: str) -> None:
-        """Upsert the trace version field via the ingestion endpoint."""
-        now = datetime.now(timezone.utc).isoformat()
-        self._http.post(
-            _INGESTION_PATH,
-            json={
-                "batch": [
-                    {
-                        "id": str(uuid.uuid4()),
-                        "timestamp": now,
-                        "type": "trace-create",
-                        "body": {"id": trace_id, "version": version},
-                    }
-                ]
-            },
-        ).raise_for_status()
 
     def flush(self) -> None:
         pass  # no client-side batching

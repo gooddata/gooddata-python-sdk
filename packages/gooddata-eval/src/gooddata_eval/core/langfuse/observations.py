@@ -82,15 +82,24 @@ def list_traces_in_window(
     to_time: Any,
     limit: int,
     session_id: str | None,
-    page_size: int = 500,
-    max_pages: int = 4,
+    page_size: int | None = None,
+    max_pages: int | None = None,
 ) -> list[TraceSummary]:
     """List up to ``limit`` traces whose observations start inside the window, newest first.
 
     ``session_id`` is sent whenever it is not None -- an empty id is a real filter value that
     matches nothing, and dropping it would return the whole window for the caller to throw
     away, page after page.
+
+    It also sets how deep the read goes. A filtered window holds one conversation and is
+    exhausted in a page or two; an unfiltered one holds every trace the workspace produced
+    in the same minutes, so it is read at the API's maximum page and twice as many pages.
     """
+    if page_size is None:
+        page_size = 500 if session_id is not None else 1000
+    if max_pages is None:
+        max_pages = 4 if session_id is not None else 8
+
     params: dict[str, Any] = {
         "fromStartTime": _iso(from_time),
         "toStartTime": _iso(to_time),
