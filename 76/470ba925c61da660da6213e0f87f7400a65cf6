@@ -1,0 +1,82 @@
+packages/gooddata-eval/tests/test_agentic_kda_skill.py
+  s_28f46a7e92984f::t_e32b2789520feb 1049-1051,1076-1077
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_28f46a7e92984f::t_2a0636c4f8e9c9 835,904-905
+  s_28f46a7e92984f::t_b6949dc1672766 15-22,854
+  s_28f46a7e92984f::t_c7492fadd9aaf4 907
+  s_28f46a7e92984f::t_bdf04d40be337f 805
+packages/gooddata-eval/src/gooddata_eval/core/agentic/search_tool.py
+  s_28f46a7e92984f::t_b6949dc1672766 8-15,223
+  s_28f46a7e92984f::t_2a0636c4f8e9c9 214,265-266
+  s_28f46a7e92984f::t_c7492fadd9aaf4 268
+  s_28f46a7e92984f::t_bdf04d40be337f 188
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  s_28f46a7e92984f::t_f3cea2737aadc6 19-27,102-110,453,568
+  s_28f46a7e92984f::t_bdf04d40be337f 503
+  s_28f46a7e92984f::t_4a5222384199d6 199-215,378
+packages/gooddata-eval/src/gooddata_eval/core/runner.py
+  s_28f46a7e92984f::t_92abdb235fa2e5 11,109
+packages/gooddata-eval/src/gooddata_eval/core/agentic/guardrail.py
+  s_28f46a7e92984f::t_b6949dc1672766 8-15,247
+  s_28f46a7e92984f::t_c7492fadd9aaf4 306-308
+  s_28f46a7e92984f::t_2a0636c4f8e9c9 234,304-305
+  s_28f46a7e92984f::t_bdf04d40be337f 207
+packages/gooddata-eval/README.md
+  s_28f46a7e92984f::t_499cd0c59a646f 129,248-252,419-421
+  s_28f46a7e92984f::t_b6949dc1672766 426-428
+packages/gooddata-eval/tests/test_agentic_gate.py
+  s_28f46a7e92984f::t_01d5ee91b6e97d 4,19-22,44,52,65,78-80,84-86,90-94,100-103,105-106,123,126,135-139,157,161-162,171,173
+  s_28f46a7e92984f::t_7b687bb850de44 1-3,7-9,11-18,25-43,45-51,53-64,66-77,81-83,87-89,95-99,104,107-122,124-125,127-134,140-156,158-160,163-170,172,174
+  s_28f46a7e92984f::t_c2f33f82995bd2 6,175-215
+  s_28f46a7e92984f::t_7e3b53dbe46b5d 5
+  s_28f46a7e92984f::t_3f87093a0ea815 216-249
+  s_28f46a7e92984f::t_1c8f376815050d 10,23-24
+packages/gooddata-eval/src/gooddata_eval/core/agentic/kda_skill.py
+  s_28f46a7e92984f::t_c7492fadd9aaf4 503
+  s_28f46a7e92984f::t_b6949dc1672766 10-17,453
+  s_28f46a7e92984f::t_2a0636c4f8e9c9 421,500-501
+  s_28f46a7e92984f::t_bdf04d40be337f 394
+packages/gooddata-eval/src/gooddata_eval/core/agentic/general_question.py
+  s_28f46a7e92984f::t_2a0636c4f8e9c9 262,338-339
+  s_28f46a7e92984f::t_b6949dc1672766 9-16,275,341
+  s_28f46a7e92984f::t_bdf04d40be337f 235
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_28f46a7e92984f::t_92abdb235fa2e5 305,318,354
+  s_28f46a7e92984f::t_b6949dc1672766 11
+  s_28f46a7e92984f::t_f3cea2737aadc6 132,136-137,162,174,186,201,213,226,238
+packages/gooddata-eval/src/gooddata_eval/core/reporting/json_report.py
+  s_28f46a7e92984f::t_92abdb235fa2e5 16
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_gate.py
+  s_28f46a7e92984f::t_6ff7d8465f3aba 32,35-36,38-44,50-52
+  s_28f46a7e92984f::t_7b687bb850de44 1-31,33-34,37,45-49,53-64
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_28f46a7e92984f::t_2a0636c4f8e9c9 457,515-516
+  s_28f46a7e92984f::t_b6949dc1672766 14-21,469
+  s_28f46a7e92984f::t_c7492fadd9aaf4 519
+  s_28f46a7e92984f::t_bdf04d40be337f 427
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_28f46a7e92984f::t_b6949dc1672766 13-20,392
+  s_28f46a7e92984f::t_2a0636c4f8e9c9 366,443-444
+  s_28f46a7e92984f::t_c7492fadd9aaf4 386-387,453
+  s_28f46a7e92984f::t_bdf04d40be337f 337
+packages/gooddata-eval/src/gooddata_eval/core/config.py
+  s_28f46a7e92984f::t_6ff7d8465f3aba 36-55,93
+packages/gooddata-eval/tests/test_langfuse_e2e_fake_server.py
+  s_28f46a7e92984f::t_7ee8f0a62661b6 157-165,236-238,353,355
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "76470ba925c61da660da6213e0f87f7400a65cf6",
+  "prompts": {},
+  "sessions": {
+    "s_28f46a7e92984f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "622b9cb8-427b-4e41-a7ef-8f0515a9831c",
+        "model": "claude-opus-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}
