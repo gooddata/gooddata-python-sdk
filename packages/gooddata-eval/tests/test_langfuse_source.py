@@ -2,7 +2,12 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
-from gooddata_eval.core.dataset.langfuse_source import _infer_test_kind, _item_from_raw, load_langfuse_dataset
+from gooddata_eval.core.dataset.langfuse_source import (
+    _infer_test_kind,
+    _item_from_raw,
+    _make_client,
+    load_langfuse_dataset,
+)
 
 
 def _raw_item(item_id, question, expected_output, dataset_name="ds"):
@@ -95,6 +100,19 @@ def test_load_langfuse_dataset_calls_rest_api(monkeypatch):
     call_args = mock_client.get.call_args
     assert call_args[0][0] == "/api/public/dataset-items"
     assert call_args[1]["params"]["datasetName"] == "my_dataset"
+
+
+def test_make_client_prefers_langfuse_base_url_over_host(monkeypatch):
+    monkeypatch.setenv("LANGFUSE_PUBLIC_KEY", "pk-test")
+    monkeypatch.setenv("LANGFUSE_SECRET_KEY", "sk-test")
+    monkeypatch.setenv("LANGFUSE_BASE_URL", "https://base.example.com")
+    monkeypatch.setenv("LANGFUSE_HOST", "https://host.example.com")
+
+    client = _make_client()
+    try:
+        assert str(client.base_url).rstrip("/") == "https://base.example.com"
+    finally:
+        client.close()
 
 
 def test_load_langfuse_dataset_raises_on_missing_credentials(monkeypatch):

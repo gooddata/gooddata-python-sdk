@@ -181,15 +181,14 @@ def _apply_timer_flag(enabled: bool) -> None:
 
 
 def _warn_if_local_dataset_cannot_link(config: RunConfig, agentic_items: list) -> None:
-    """Say up front that dataset-run assembly will fail, rather than after the run.
+    """Say up front that experiment assembly will fail, rather than after the run.
 
     --langfuse is refused outright with a local dataset because local item ids cannot be
     linked. But every evaluate_agentic_* falls back to try_make_langfuse_client() when the
-    caller passes none, so with LANGFUSE_* exported the linking runs anyway and each
-    conversation earns a 404 from dataset-run-items -- arriving in a block at the very end
-    of the run, long after the flag that would have prevented it could be changed. The
-    fallback is deliberate (direct library and tavern callers rely on it), so this warns
-    instead of disabling it.
+    caller passes none, so with LANGFUSE_* exported the linking runs anyway and every
+    dataset-item lookup 404s -- arriving in a block at the very end of the run, long after
+    the flag that would have prevented it could be changed. The fallback is deliberate
+    (direct library and tavern callers rely on it), so this warns instead of disabling it.
     """
     from gooddata_eval.core.agentic._langfuse import SKIP_ENV_VAR, langfuse_credentials_present  # noqa: PLC0415
     from gooddata_eval.core.config import env_flag  # noqa: PLC0415
@@ -201,7 +200,7 @@ def _warn_if_local_dataset_cannot_link(config: RunConfig, agentic_items: list) -
     print(
         f"warning: --dataset is a local folder, so its item ids are not Langfuse dataset item ids. "
         f"Traces will be found and scored, but the per-run grouping that makes models comparable "
-        f"cannot be created and each conversation will report a 404 from dataset-run-items. "
+        f"cannot be created and each conversation will report that its item does not exist in Langfuse. "
         f"Use --langfuse-dataset for comparable runs, or set {SKIP_ENV_VAR}=1 to skip trace linking.",
         file=sys.stderr,
     )
