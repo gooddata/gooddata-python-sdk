@@ -29,6 +29,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from gooddata_eval.core.granularity import (
+    GRANULARITIES,
+    GRANULARITY_BY_ID,
+    _camel,
+    canonical_date_uri,
+    granularity_of,
+)
 from gooddata_eval.core.models import CreatedVisualization, DatasetItem
 
 # AD `visualizationUrl` -> AAC type. Explicit and exhaustive: an unmapped url raises
@@ -718,17 +725,6 @@ def insight_ids_on(analytics: dict, dashboard_ids: list) -> set:
     return found
 
 
-GRANULARITY_TITLES = {
-    "minute": "Minute",
-    "hour": "Hour",
-    "day": "Day",
-    "week": "Week",
-    "month": "Month",
-    "quarter": "Quarter",
-    "year": "Year",
-}
-
-
 def build_display_names(analytics: dict, ldm: dict) -> dict:
     """`{uri: human title}` for every metric, fact, label and date dataset.
 
@@ -753,8 +749,13 @@ def build_display_names(analytics: dict, ldm: dict) -> dict:
         title = instance.get("title") or instance["id"]
         names[f"dataset/{instance['id']}"] = title
         for granularity in instance.get("granularities") or []:
-            key = granularity.lower()
-            names[f"label/{instance['id']}.{key}"] = f"{title} - {GRANULARITY_TITLES.get(key, granularity.title())}"
+            enum = GRANULARITY_BY_ID.get(granularity, granularity.upper())
+            suffix = GRANULARITIES.get(enum, (granularity.title(), ""))[0]
+            # Registered under every spelling: the LDM declares MONTH_OF_YEAR, the API
+            # returns `monthOfYear`, and a lookup under one must not miss the other and
+            # fall back to a de-slugged id ("Order Created At - Monthofyear").
+            for spelling in {_camel(enum), enum.lower(), granularity}:
+                names[f"label/{instance['id']}.{spelling}"] = f"{title} - {suffix}"
     return names
 
 
@@ -811,9 +812,12 @@ def describe(spec: dict, display_names: dict | None = None) -> str:
     def name(alias: str) -> str:
         return display_name(field_uri(fields, alias), display_names)
 
+    def dim(aliases: list) -> list:
+        return _dim_briefs(spec, display_names, aliases)
+
     lines = [f"metric: {name(a)}" for a in spec["metrics"]]
-    lines += [f"broken down by: {name(a)}" for a in spec["view_by"] + spec["columns"] + spec["rows"]]
-    lines += [f"split by: {name(a)}" for a in spec["segment_by"]]
+    lines += [f"broken down by: {d}" for d in dim(spec["view_by"] + spec["columns"] + spec["rows"])]
+    lines += [f"split by: {d}" for d in dim(spec["segment_by"])]
     lines += [f"sorted by: {name(s['field'])}, {s['direction'].lower()}ending" for s in spec["sort_by"]]
     lines += [f"filter: {_filter_phrase(f, fields, display_names)}" for f in spec["query"]["filter_by"].values()]
     return "\n".join(lines)
@@ -829,10 +833,13 @@ def ambiguous_titles(display_names: dict) -> set:
     """
     seen, dupes = {}, set()
     for uri, title in display_names.items():
+        # Every granularity is registered under several spellings of one label, so the
+        # aliases must fold together or each date dimension looks like a name collision.
+        canonical = canonical_date_uri(uri)
         key = _normalize(title)
-        if key in seen and seen[key] != uri:
+        if key in seen and seen[key] != canonical:
             dupes.add(key)
-        seen.setdefault(key, uri)
+        seen.setdefault(key, canonical)
     return dupes
 
 
@@ -853,6 +860,30 @@ def field_uri(fields: dict, alias: str) -> str:
     if field is None:
         return alias
     return field["using"] if isinstance(field, dict) else field
+
+
+def granularity_phrase(uri: str, display_names: dict) -> str | None:
+    """What a date breakdown does, in words, or None if `uri` is not a date granularity.
+
+    "Order Created At - Month" is a label name, not something a person says, and it does
+    not distinguish the sequential granularity from its cyclical twin. The phrase does
+    both: it pins the date dataset and states which reading is meant.
+    """
+    enum = granularity_of(uri)
+    if enum is None:
+        return None
+    dataset = uri.split("/", 1)[-1].rpartition(".")[0]
+    return f"{display_name(f'dataset/{dataset}', display_names)}, {GRANULARITIES[enum][1]}"
+
+
+def _dim_briefs(spec: dict, display_names: dict, aliases: list) -> list:
+    """Dimension names for the writer: date dimensions as phrases, labels verbatim."""
+    fields = spec["query"]["fields"]
+    out = []
+    for alias in aliases:
+        uri = field_uri(fields, alias)
+        out.append(granularity_phrase(uri, display_names) or display_name(uri, display_names))
+    return out
 
 
 def _dim_names(spec: dict, display_names: dict) -> list:
@@ -877,16 +908,37 @@ def _mentions(name: str, question: str) -> bool:
     return any(t in lowered for t in tokens) if tokens else _normalize(name) in lowered
 
 
+def _without_field_names(question: str, spec: dict, display_names: dict) -> str:
+    """`question` with the spec's own field names blanked out.
+
+    A field may be called "Most Recent Label Created At" or "Top Tier Customers". A
+    question naming it verbatim -- which the rules require -- is not thereby claiming a
+    ranking, so the claim checks have to read around the names.
+    """
+    fields = spec["query"]["fields"]
+    names = [display_name(field_uri(fields, a), display_names) for a in fields]
+    names += [display_name(f.get("using", ""), display_names) for f in spec["query"]["filter_by"].values()]
+    # A date label reads "Most Recent Label Created At - Month" but the question names
+    # the dataset and the granularity separately ("by month for Most Recent Label
+    # Created At"), so each side of the separator has to be maskable on its own.
+    names += [part for name in list(names) for part in name.split(" - ")]
+    for name in sorted(names, key=len, reverse=True):
+        if len(name.strip()) > 3:
+            question = re.sub(re.escape(name.strip()), " ", question, flags=re.I)
+    return question
+
+
 def contradictions(question: str, spec: dict, display_names: dict | None = None) -> list:
     """Ways `question` and `spec` disagree. Any hit is a hard error, never a warning."""
     display_names = display_names or {}
     problems = []
+    claims = _without_field_names(question, spec, display_names)
     if not ranks(spec):
-        hit = RANK_WORDS.search(question)
+        hit = RANK_WORDS.search(claims)
         if hit:
             problems.append(f"uses ranking word '{hit.group(0)}' but the chart has no sort or ranking filter")
     if not filters(spec):
-        hit = FILTER_WORDS.search(question)
+        hit = FILTER_WORDS.search(claims)
         if hit:
             problems.append(f"uses filter word '{hit.group(0)}' but the chart has no date or attribute filter")
 
@@ -913,6 +965,12 @@ def contradictions(question: str, spec: dict, display_names: dict | None = None)
 
 def _rules_for(spec: dict, display_names: dict) -> str:
     dims = _dim_names(spec, display_names)
+    all_dims = spec["view_by"] + spec["segment_by"] + spec["columns"] + spec["rows"]
+    dated = [
+        phrase
+        for alias in all_dims
+        if (phrase := granularity_phrase(field_uri(spec["query"]["fields"], alias), display_names))
+    ]
     segments = [display_name(field_uri(spec["query"]["fields"], a), display_names) for a in spec["segment_by"]]
     lines = [
         "Write the question an analyst would ask to get exactly this chart. Rules:",
@@ -931,6 +989,18 @@ def _rules_for(spec: dict, display_names: dict) -> str:
             f"{ranked_dim} by <metric>' and name {ranked_dim} exactly once -- do not also say "
             f"'broken down by {ranked_dim}'."
         )
+    elif dated:
+        # A date breakdown is the one dimension not to quote verbatim: "broken down by
+        # Order Created At - Month" is a label id in prose, and it leaves the agent to
+        # guess between the sequential granularity and its cyclical twin.
+        plain = [name for name in dims if not any(name.startswith(p.split(",")[0]) for p in dated)]
+        lines.append(
+            "- Say the question is broken down by " + "; and ".join(dated) + ". Write that in "
+            "natural words ('by month', 'monthly', 'per month'), never as a label name like "
+            "'Order Created At - Month', but do keep the date dataset's name."
+        )
+        if plain:
+            lines.append("- It is also broken down by " + ", ".join(plain) + ", naming each verbatim.")
     elif dims:
         lines.append("- Say the question is broken down by " + ", ".join(dims) + ", naming each verbatim.")
     else:

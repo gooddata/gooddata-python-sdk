@@ -20,6 +20,7 @@ Or install `gd-eval` as a standalone tool:
 | `gd-eval models` | List LLM providers and models configured in the org. |
 | `gd-eval generate` | Generate a `visualization` dataset from a workspace's existing insights. |
 
+
 ---
 
 ## `gd-eval run`
@@ -291,7 +292,56 @@ written into every item (and the default output folder).
 | `--no-phrase` | skip the LLM; emit mechanical `Show <title>` questions |
 | `--phrase-model` | OpenAI model for phrasing (default `gpt-4o`) |
 | `--no-viz-type` | always blank the expected chart type |
+| `--enrich-ranked <N>` | additionally derive up to N ranked questions (see below); default 0 (off) |
+| `--skip-ambiguous` | drop items naming something the model carries more than once; reported either way |
 | `--min-questions` / `--min-shapes` / `--min-filtered` | quality gate, default 15, 3 and 1 |
+
+### Ranked questions (`--enrich-ranked`)
+
+Analysts sort in Analytical Designer and save the chart without persisting the sort, so
+`sort_by`/`ranking_filter` coverage is near zero on most real models — the eval can
+punish a spurious ranking but never confirm the agent builds a required one.
+`--enrich-ranked N` fills that gap by *deriving* ranked items from the specs already
+extracted. Adding a limit or a sort to a definition that executes cannot make it
+unanswerable, and "the top 3 X by Y" has exactly one correct spec, so a derived item is
+less ambiguous to grade than the insight it came from.
+
+The budget is spent best-grounded first:
+
+1. **Insights whose own title promised a ranking their definition never implemented** —
+   "Top Returned Reasons" saved with `sorts: []`. The direction comes from the title
+   (`highest`/`most`/`largest` vs `lowest`/`least`/`worst`) and the N too when it states
+   one; a title naming both ends names neither and is still skipped.
+2. **Ranking filters added to a plain breakdown** — one metric, one non-date dimension,
+   no existing sort. N follows the dimension's element count, so a top-5 over six values
+   is never emitted.
+3. **Sort-only variants**, which order without limiting.
+
+Eligibility is deliberately narrow: two metrics leave "top 3 by what?" unanswered, a
+second dimension leaves the N ambiguous between the pair and within a group, and a date
+dimension turns the result into "top 3 months", which nobody asks. Variants are
+deduplicated by resolved definition — differently-titled insights over one metric and
+dimension would otherwise produce the same question twice — and bases are taken
+round-robin by metric so one popular metric cannot become a third of the corpus.
+
+Derived items carry `derived_from` (the insight id) and `derived_basis` (`title` when a
+human's chart title asked for the ranking, `shape` when this generator chose to add
+one), so a pass rate over each can be computed separately.
+
+### Items that cannot say what they mean
+
+Two classes of question are unwinnable however well the agent behaves, and both are
+reported:
+
+- **A name the model carries more than once.** One workspace has six labels all titled
+  "Product Title"; a question naming one cannot say which is meant, and a perfect chart
+  over the wrong one scores zero. `--skip-ambiguous` drops them; the count and the
+  offending names are printed either way.
+- **A date granularity's cyclical twin.** `MONTH` walks consecutive calendar months,
+  `MONTH_OF_YEAR` stacks every January together. Date dimensions are therefore briefed
+  by what they do ("one point per calendar month over time, not month-of-year") and the
+  writer is told to say it in natural words while keeping the date dataset's name —
+  never as a label id in prose ("Order Created At - Month").
 
 **The question must never contradict its own expected output.** Four rules enforce that:
 
@@ -308,7 +358,10 @@ written into every item (and the default output folder).
 - The writer's rules are built per insight, so an insight with no `view_by` is never
   asked to name a breakdown at all.
 - `type` is set only when the question actually names a chart form. An insight's
-  `visualizationUrl` records what a human clicked, not what the question constrains.
+  `visualizationUrl` records what a human clicked, not what the question constrains —
+  with one exception: a chart with no breakdown *must* name its form ("as a KPI", "as a
+  single number"). Without it the agent reads a bare "Show me Gross Revenue" as a metric
+  lookup, activates only its search skill and builds nothing.
 
 Everything the writer sees is a display name (`Spend Amount`, `Merchant Name`), never a
 raw URI, so questions read like a person wrote them.
@@ -316,7 +369,8 @@ raw URI, so questions read like a person wrote them.
 **What it won't do.** Insights it can't express without guessing are skipped with a
 printed reason, never approximated: derived (arithmetic/PoP) measures, measure-level
 filters, `uris`-form attribute filters, unmapped chart types, hidden objects, and
-insights whose title promises behaviour their definition lacks. If too few survive, the
+insights whose title promises behaviour their definition lacks (though `--enrich-ranked`
+implements a promised *ranking* rather than discarding it). If too few survive, the
 quality gate fails the run rather than fabricating items to hit the minimum — point at
 more dashboards, or lower `--min-questions`.
 

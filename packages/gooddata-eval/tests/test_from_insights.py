@@ -19,6 +19,7 @@ from gooddata_eval.core.dataset.from_insights import (
     describe,
     display_name,
     element_counts,
+    granularity_phrase,
     insight_ids_on,
     langfuse_payload,
     list_ids,
@@ -1084,3 +1085,117 @@ def test_an_ambiguous_metric_name_counts_too():
     spec = convert(_bar("spend", "merchant.NAME"), DATE_IDS)
     names = {**DISPLAY, "metric/spend_v2": "Spend Amount"}
     assert ambiguous_fields(spec, names) == ["Spend Amount"]
+
+
+# --- date granularities -------------------------------------------------------
+
+
+@pytest.mark.parametrize("spelling", ["monthOfYear", "month_of_year", "MONTH_OF_YEAR"])
+def test_every_spelling_of_a_granularity_resolves(spelling):
+    # The API returns label ids camelCase; the declarative LDM lists the enum member.
+    # A lookup under one spelling must not miss the other and fall back to a de-slugged
+    # id ("Order Created At - Monthofyear").
+    phrase = granularity_phrase(f"label/ORDER_CREATED_AT.{spelling}", {"dataset/ORDER_CREATED_AT": "Order Created At"})
+    assert phrase == "Order Created At, by month of the year (January to December), combining every year"
+
+
+def test_a_sequential_granularity_rules_out_its_cyclical_twin():
+    phrase = granularity_phrase("label/ORDER_CREATED_AT.month", {"dataset/ORDER_CREATED_AT": "Order Created At"})
+    assert "one point per calendar month over time" in phrase
+    assert "not month-of-year" in phrase
+
+
+def test_a_plain_label_has_no_granularity_phrase():
+    assert granularity_phrase("label/product_details.LINE_ITEM_TITLE", DISPLAY) is None
+    assert granularity_phrase("metric/spend", DISPLAY) is None
+
+
+def test_display_names_cover_both_spellings_of_every_granularity():
+    names = build_display_names(
+        {},
+        {
+            "dateInstances": [
+                {"id": "ORDER_CREATED_AT", "title": "Order Created At", "granularities": ["MONTH_OF_YEAR"]}
+            ]
+        },
+    )
+    assert names["label/ORDER_CREATED_AT.monthOfYear"] == "Order Created At - Month of Year"
+    assert names["label/ORDER_CREATED_AT.month_of_year"] == "Order Created At - Month of Year"
+
+
+def _monthly(metric="spend", granularity="month"):
+    return viz(
+        "local:line",
+        [
+            {"localIdentifier": "measures", "items": [measure("m", metric)]},
+            {"localIdentifier": "trend", "items": [attribute("a", f"process_date.{granularity}")]},
+        ],
+    )
+
+
+def test_a_date_breakdown_is_briefed_by_what_it_does():
+    spec = convert(_monthly(), DATE_IDS)
+    brief = describe(spec, DISPLAY)
+    assert "broken down by: Process Date, by month, one point per calendar month over time" in brief
+    assert "Process Date - Month" not in brief, "a label id in prose is not what an analyst says"
+
+
+def test_a_date_breakdown_is_not_asked_for_verbatim():
+    rules = _rules_for(convert(_monthly(), DATE_IDS), DISPLAY)
+    assert "natural words" in rules
+    assert "never as a label name" in rules
+    assert "naming each verbatim" not in rules
+
+
+def test_a_plain_dimension_is_still_asked_for_verbatim():
+    rules = _rules_for(convert(spend_by_merchant(), DATE_IDS), DISPLAY)
+    assert "broken down by Merchant Name, naming each verbatim" in rules
+    assert "natural words" not in rules
+
+
+def test_a_question_saying_by_month_still_names_the_dimension():
+    spec = convert(_monthly(), DATE_IDS)
+    assert contradictions("Can you show me Spend Amount by month for Process Date?", spec, DISPLAY) == []
+
+
+def test_a_ranking_word_inside_a_field_name_is_not_a_claim():
+    # loop's date dataset is called "Most Recent Label Created At". A question naming it
+    # verbatim -- which the rules require -- was dropped for "using ranking word 'Most'".
+    spec = convert(
+        viz(
+            "local:line",
+            [
+                {"localIdentifier": "measures", "items": [measure("m", "total_labels")]},
+                {"localIdentifier": "trend", "items": [attribute("a", "most_recent_label_created_at.month")]},
+            ],
+        ),
+        {"most_recent_label_created_at"},
+    )
+    names = {
+        "metric/total_labels": "Total Labels",
+        "dataset/most_recent_label_created_at": "Most Recent Label Created At",
+        "label/most_recent_label_created_at.month": "Most Recent Label Created At - Month",
+    }
+    question = "Can you show me Total Labels by month for Most Recent Label Created At?"
+    assert contradictions(question, spec, names) == []
+
+
+def test_a_real_ranking_claim_is_still_caught_around_the_names():
+    spec = convert(spend_by_merchant(), DATE_IDS)
+    problems = contradictions("Show me the top 5 Merchant Name values by Spend Amount", spec, DISPLAY)
+    assert any("ranking word" in p for p in problems)
+
+
+def test_a_filter_word_inside_a_field_name_is_not_a_claim():
+    spec = convert(spend_by_merchant(), DATE_IDS)
+    names = {**DISPLAY, "label/merchant.NAME": "Merchant Name Excluding Test Accounts"}
+    assert contradictions("Show me Spend Amount by Merchant Name Excluding Test Accounts", spec, names) == []
+
+
+def test_granularity_aliases_are_one_object_not_a_collision():
+    names = build_display_names(
+        {},
+        {"dateInstances": [{"id": "RETURN_AT", "title": "Return At", "granularities": ["MONTH", "MONTH_OF_YEAR"]}]},
+    )
+    # Each granularity is registered under several spellings; the aliases must fold.
+    assert ambiguous_titles(names) == set()

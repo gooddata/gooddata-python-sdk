@@ -4,6 +4,7 @@
 import json
 from dataclasses import dataclass
 
+from gooddata_eval.core.granularity import canonical_date_uri
 from gooddata_eval.core.models import AacBucketRef, AacQueryField, CreatedVisualization
 
 # Maps dataset chart-type names (and agent enum values) to a canonical token.
@@ -43,7 +44,7 @@ def _resolve_bucket_to_uri_set(bucket: list[AacBucketRef | str], fields: dict[st
     uris: set[str] = set()
     for ref in bucket:
         alias = ref.field if isinstance(ref, AacBucketRef) else ref
-        uris.add(_resolve_alias_to_uri(alias, fields))
+        uris.add(canonical_date_uri(_resolve_alias_to_uri(alias, fields)))
     return uris
 
 
