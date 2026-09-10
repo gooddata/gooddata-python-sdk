@@ -343,3 +343,20 @@ def test_a_mixed_type_element_list_does_not_crash_scoring():
     expected = _attr_viz(["A", 2])
     assert check_filters(expected, _attr_viz([2, "A"])).attribute_ok is True
     assert check_filters(expected, _attr_viz(["A", 3])).attribute_ok is False
+
+
+def test_elements_that_stringify_alike_but_differ_in_type_still_sort_stably():
+    """`key=str` collapsed 1 and "1" to the same sort key, so Python's stable sort left
+    their relative order exactly as the agent emitted it and the ordering bug survived for
+    that pair alone. The key is the element's canonical JSON instead, which distinguishes
+    the types the comparison downstream also distinguishes."""
+    assert check_filters(_attr_viz([1, "1"]), _attr_viz(["1", 1])).attribute_ok is True
+    # ...without making the two types interchangeable: one element is not the other set.
+    assert check_filters(_attr_viz([1]), _attr_viz(["1"])).attribute_ok is False
+
+
+def test_heterogeneous_element_lists_sort_without_raising():
+    """Every value here is parsed JSON, so json.dumps cannot fail on it -- which is what
+    makes it usable as a total ordering where a bare sort would raise."""
+    mixed = [None, True, 2, "a", 1.5]
+    assert check_filters(_attr_viz(mixed), _attr_viz(list(reversed(mixed)))).attribute_ok is True

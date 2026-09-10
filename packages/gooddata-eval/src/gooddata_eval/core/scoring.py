@@ -171,11 +171,17 @@ def _normalize_attribute_filter(filter_dict: dict, _fields: dict) -> dict:
     # failed partly at random, reported as `filters_correct: false` and indistinguishable
     # from the agent genuinely filtering wrongly.
     #
-    # `key=str` rather than a bare sort: a mixed-type list (["A", 2]) would raise
-    # TypeError from inside scoring, which is worse than the mismatch this fixes.
-    # validate_cross_references reports malformed filter values separately, so this only
-    # has to avoid crashing on them.
-    state = {k: (sorted(v, key=str) if isinstance(v, list) else v) for k, v in raw_state.items() if v}
+    # The key is the element's own canonical JSON, not a bare sort and not str(): a bare
+    # sort raises TypeError on a mixed-type list (["A", 2]), and a crash inside scoring is
+    # worse than the mismatch this fixes -- while str() collapses 1 and "1" to the same
+    # key, so the stable sort leaves THEIR order as it found it and the ordering bug
+    # survives for exactly that pair. These values are always parsed JSON, so json.dumps
+    # cannot fail on them and it distinguishes types the way the comparison downstream does.
+    state = {
+        k: (sorted(v, key=lambda element: json.dumps(element, sort_keys=True)) if isinstance(v, list) else v)
+        for k, v in raw_state.items()
+        if v
+    }
     return {
         "type": "attribute_filter",
         "field_uri": filter_dict.get("using", ""),
