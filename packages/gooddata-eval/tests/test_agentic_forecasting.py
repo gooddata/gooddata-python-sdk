@@ -1,5 +1,6 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
+from contextlib import contextmanager
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -344,3 +345,93 @@ def test_a_chart_built_on_an_earlier_turn_is_still_the_one_scored():
     assert summary.best.evaluation.period_correct is True
     assert summary.best.evaluation.metric_correct is True
     assert summary.pass_at_k is True
+
+
+# ── Langfuse scoring ────────────────────────────────────────────────────────
+
+
+class _FakeCtx:
+    """Records what the deferred Langfuse block writes, without a Langfuse."""
+
+    def __init__(self):
+        self.scores: dict[str, float] = {}
+        # Not named `quality`: the method below would overwrite itself on first call.
+        self.quality_call: dict = {}
+
+    def trace(self, _conversation_id):
+        return None
+
+    @contextmanager
+    def observe(self, _trace, _run_idx):
+        yield "trace-id"
+
+    def score(self, _tid, *, name, value, data_type):
+        self.scores[name] = value
+
+    def quality(self, _tid, *, strict_checks, latency_sec, cost_usd):
+        self.quality_call = {"strict_checks": strict_checks, "latency_sec": latency_sec, "cost_usd": cost_usd}
+
+
+def _scored(expected_output, calls=None):
+    """Run one item with Langfuse on, then execute the deferred block against a fake ctx."""
+    client = MagicMock()
+    client.create_conversation.return_value = "conv-1"
+    default = [_tc("create_adhoc_visualization", _viz_args()), _tc("execute_forecast", {}, _OK_FORECAST)]
+    client.send_message.return_value = _chat(calls if calls is not None else default)
+    captured = {}
+
+    def _capture(_link, _identity, **kwargs):
+        captured.update(kwargs)
+
+    with (
+        patch(f"{_MODULE}.ChatClient", return_value=client),
+        patch(f"{_MODULE}.submit_trace_scoring", side_effect=_capture),
+    ):
+        try:
+            evaluate_agentic_forecasting(
+                host="http://h",
+                token="tok",
+                workspace_id="ws1",
+                question="Forecast spend for 3 months",
+                expected_output=expected_output,
+                langfuse=MagicMock(),
+                dataset_item_id="ds-1",
+            )
+        except ForecastingAssertionError:
+            pass  # scores are written before the pass@K raise, which is the point
+
+    ctx = _FakeCtx()
+    captured["write_scores"](ctx)
+    return ctx
+
+
+def test_only_the_checks_the_fixture_pinned_are_scored():
+    """An unasserted check is True internally so it cannot fail a run. Publishing that as a
+    BOOLEAN 1 would claim the evaluator verified something it never looked at."""
+    ctx = _scored({"forecast_period": 3})  # metric, confidence, seasonality unpinned
+
+    assert ctx.scores["forecast_period_correct"] == 1.0
+    for absent in ("forecast_metric_correct", "forecast_confidence_correct", "forecast_seasonal_correct"):
+        assert absent not in ctx.scores
+    # The process checks are unconditional -- they are always actually evaluated.
+    assert set(ctx.scores) >= {"forecast_triggered", "forecast_executed", "forecast_enabled"}
+
+
+def test_every_pinned_check_is_scored():
+    ctx = _scored(
+        {"metric": "metric/spend", "forecast_period": 3, "forecast_confidence": 0.95, "forecast_seasonal": False}
+    )
+    for name in (
+        "forecast_period_correct",
+        "forecast_metric_correct",
+        "forecast_confidence_correct",
+        "forecast_seasonal_correct",
+    ):
+        assert ctx.scores[name] == 1.0
+
+
+def test_cost_is_reported_even_when_the_tool_was_never_reached():
+    """A run that answered without forecasting still spent tokens; gating cost on
+    ev.triggered hid that and understated what the item cost."""
+    ctx = _scored(_EXPECTED, calls=[])
+    assert "cost_usd" in ctx.quality_call
