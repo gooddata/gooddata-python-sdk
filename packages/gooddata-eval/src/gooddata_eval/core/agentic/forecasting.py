@@ -508,14 +508,18 @@ def evaluate_agentic_forecasting(
                 # Only the content checks the fixture actually pinned. An unasserted check
                 # is True internally so it cannot fail a run, but publishing that as a
                 # BOOLEAN 1 would claim the evaluator verified something it never looked at.
-                for name, key, value in (
-                    ("forecast_period", "forecast_period_correct", ev.period_correct),
-                    ("metric", "forecast_metric_correct", ev.metric_correct),
-                    ("forecast_confidence", "forecast_confidence_correct", ev.confidence_correct),
-                    ("forecast_seasonal", "forecast_seasonal_correct", ev.seasonal_correct),
-                ):
-                    if name in ev.asserted:
-                        strict_checks[key] = value
+                strict_checks.update(
+                    {
+                        key: value
+                        for name, key, value in (
+                            ("forecast_period", "forecast_period_correct", ev.period_correct),
+                            ("metric", "forecast_metric_correct", ev.metric_correct),
+                            ("forecast_confidence", "forecast_confidence_correct", ev.confidence_correct),
+                            ("forecast_seasonal", "forecast_seasonal_correct", ev.seasonal_correct),
+                        )
+                        if name in ev.asserted
+                    }
+                )
                 with ctx.observe(pt, run_idx) as tid:
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
