@@ -1046,13 +1046,9 @@ def test_evaluate_agentic_kda_skill_reports_trace_latency_when_kda_triggered():
     assert wall_clock_calls[0].kwargs["value"] == 76.0
 
 
-def test_evaluate_agentic_kda_skill_does_not_log_pass_at_k_or_pass_power_k():
-    # Matches metric_skill/alert_skill/guardrail/search_tool/general_question, which all
-    # compute pass_at_k/pass_power_k but never log them to Langfuse at their default k=1 --
-    # nothing reads a kda_pass_at_1 score, and the score name shifts if k ever changes,
-    # silently splitting any Langfuse view built on the old name. Only visualization.py
-    # logs this pair, with a real consumer at k=2 (combo_report.py's viz_flaky) that
-    # justifies it.
+def test_evaluate_agentic_kda_skill_does_not_log_k_suffixed_score_names():
+    # `pass_at_2` becomes `pass_at_3` the moment K changes, splitting every Langfuse view built
+    # on the old name. Only visualization.py still writes that historic pair.
     mock_client = _client()
     mock_client.send_message.return_value = _kda_chat_result(success=True)
 
@@ -1077,6 +1073,8 @@ def test_evaluate_agentic_kda_skill_does_not_log_pass_at_k_or_pass_power_k():
     assert "kda_pass_power_2" not in logged
     assert "pass_at_2" not in logged
     assert "pass_power_2" not in logged
+    assert not [name for name in logged if name[-1].isdigit()]
+    assert {"pass_at_k", "pass_power_k", "gate_passed"} <= logged
 
 
 def test_run_agentic_kda_skill_accumulates_reasoning_steps_across_iterations():

@@ -4,6 +4,7 @@
 from rich.console import Console
 from rich.table import Table
 
+from gooddata_eval.core.agentic._gate import gate_label
 from gooddata_eval.core.runner import EvalReport, ItemReport
 
 
@@ -38,7 +39,7 @@ def render_console(report: EvalReport, *, console: Console | None = None) -> str
             result, notes = "SKIPPED", f"test_kind '{item.test_kind}' not supported in this phase"
         elif item.error:
             result, notes = "ERROR", item.error
-        elif item.pass_at_k:
+        elif item.passed:
             # A pass@K that was not unanimous is a materially weaker result than one that
             # was, and every other column looks identical for the two: quality_score reads
             # best_detail, which describes the winning run alone. So say it here.
@@ -49,7 +50,16 @@ def render_console(report: EvalReport, *, console: Console | None = None) -> str
             # (visualization uses metrics_correct/…; dashboard_summary uses
             # include_*/exclude_*/rubric_*). Falls back to a generic message.
             failing = [k for k, v in item.best_detail.items() if v is False]
-            notes = "failed: " + ", ".join(failing) if failing else "did not pass strict checks"
+            if item.runs_passed:
+                # Only pass^K fails an item whose runs passed, and best_detail then
+                # describes one of those -- so no check reads False and Quality prints
+                # 100%. The count is the whole reason the row is a FAIL.
+                label = gate_label(report.gate, item.runs_total)
+                notes = f"{label} failed: {item.runs_passed}/{item.runs_total} runs passed"
+            elif failing:
+                notes = "failed: " + ", ".join(failing)
+            else:
+                notes = "did not pass strict checks"
             result = "FAIL"
         if result in ("PASS", "FAIL") and (ungraded := _ungraded_note(item)):
             # Said on both verdicts: a PASS over fewer runs is weaker evidence, and a FAIL

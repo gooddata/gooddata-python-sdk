@@ -5,6 +5,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._gate import (
+    DEFAULT_GATE,
+    EvalGate,
+    gate_failure_note,
+    gate_passed,
+    log_gate_scores,
+    stamp_gate_metadata,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -177,6 +185,7 @@ def evaluate_agentic_search_tool(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run search-tool evaluation, log to Langfuse, and raise SearchToolAssertionError on failure.
 
@@ -202,6 +211,7 @@ def evaluate_agentic_search_tool(
         window_end = utc_now()
 
         def _write_scores(ctx: RunTraceContext) -> None:
+            stamp_gate_metadata(ctx.run_metadata, k=len(summary.run_results), gate=gate)
 
             for run_idx, run in enumerate(summary.run_results):
                 pt = ctx.trace(run.conversation_id)
@@ -210,6 +220,7 @@ def evaluate_agentic_search_tool(
                 ) as tid:
                     ctx.score(tid, name="tool_selection", value=float(run.tool_selected), data_type="BOOLEAN")
                     ctx.score(tid, name="tool_correctness", value=float(run.tool_correct), data_type="BOOLEAN")
+                    log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
                     ctx.quality(
                         tid,
                         strict_checks={"tool_selection": run.tool_selected},
@@ -251,9 +262,10 @@ def evaluate_agentic_search_tool(
         "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
 
-    if not summary.pass_at_k:
+    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
         exc = SearchToolAssertionError(
-            f"Search tool assertion failed. "
+            f"Search tool assertion failed. {gate_note} "
             f"tool_selected={best.tool_selected}, tool_correct={best.tool_correct}. "
             f"Tool calls made: {best.tool_call_names}"
         )
