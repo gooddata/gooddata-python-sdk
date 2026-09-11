@@ -32,11 +32,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
+    from gooddata_api_client.model.json_api_computed_attribute_out_relationships import JsonApiComputedAttributeOutRelationships
     from gooddata_api_client.model.json_api_metric_out_attributes import JsonApiMetricOutAttributes
-    from gooddata_api_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
     globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
+    globals()['JsonApiComputedAttributeOutRelationships'] = JsonApiComputedAttributeOutRelationships
     globals()['JsonApiMetricOutAttributes'] = JsonApiMetricOutAttributes
-    globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
 
 
 class JsonApiMetricOut(ModelNormal):
@@ -104,7 +104,7 @@ class JsonApiMetricOut(ModelNormal):
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
-            'relationships': (JsonApiMetricOutRelationships,),  # noqa: E501
+            'relationships': (JsonApiComputedAttributeOutRelationships,),  # noqa: E501
         }
 
     @cached_property
@@ -167,7 +167,7 @@ class JsonApiMetricOut(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
+            relationships (JsonApiComputedAttributeOutRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "metric")
@@ -263,7 +263,7 @@ class JsonApiMetricOut(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
+            relationships (JsonApiComputedAttributeOutRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "metric")

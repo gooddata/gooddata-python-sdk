@@ -33,13 +33,13 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_datasets import JsonApiAnalyticalDashboardOutRelationshipsDatasets
     from gooddata_api_client.model.json_api_attribute_hierarchy_out_relationships_attributes import JsonApiAttributeHierarchyOutRelationshipsAttributes
+    from gooddata_api_client.model.json_api_computed_attribute_out_relationships_facts import JsonApiComputedAttributeOutRelationshipsFacts
     from gooddata_api_client.model.json_api_dataset_out_relationships_aggregated_facts import JsonApiDatasetOutRelationshipsAggregatedFacts
-    from gooddata_api_client.model.json_api_dataset_out_relationships_facts import JsonApiDatasetOutRelationshipsFacts
     from gooddata_api_client.model.json_api_dataset_out_relationships_workspace_data_filters import JsonApiDatasetOutRelationshipsWorkspaceDataFilters
     globals()['JsonApiAnalyticalDashboardOutRelationshipsDatasets'] = JsonApiAnalyticalDashboardOutRelationshipsDatasets
     globals()['JsonApiAttributeHierarchyOutRelationshipsAttributes'] = JsonApiAttributeHierarchyOutRelationshipsAttributes
+    globals()['JsonApiComputedAttributeOutRelationshipsFacts'] = JsonApiComputedAttributeOutRelationshipsFacts
     globals()['JsonApiDatasetOutRelationshipsAggregatedFacts'] = JsonApiDatasetOutRelationshipsAggregatedFacts
-    globals()['JsonApiDatasetOutRelationshipsFacts'] = JsonApiDatasetOutRelationshipsFacts
     globals()['JsonApiDatasetOutRelationshipsWorkspaceDataFilters'] = JsonApiDatasetOutRelationshipsWorkspaceDataFilters
 
 
@@ -98,7 +98,7 @@ class JsonApiDatasetOutRelationships(ModelNormal):
         return {
             'aggregated_facts': (JsonApiDatasetOutRelationshipsAggregatedFacts,),  # noqa: E501
             'attributes': (JsonApiAttributeHierarchyOutRelationshipsAttributes,),  # noqa: E501
-            'facts': (JsonApiDatasetOutRelationshipsFacts,),  # noqa: E501
+            'facts': (JsonApiComputedAttributeOutRelationshipsFacts,),  # noqa: E501
             'references': (JsonApiAnalyticalDashboardOutRelationshipsDatasets,),  # noqa: E501
             'workspace_data_filters': (JsonApiDatasetOutRelationshipsWorkspaceDataFilters,),  # noqa: E501
         }
@@ -159,7 +159,7 @@ class JsonApiDatasetOutRelationships(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             aggregated_facts (JsonApiDatasetOutRelationshipsAggregatedFacts): [optional]  # noqa: E501
             attributes (JsonApiAttributeHierarchyOutRelationshipsAttributes): [optional]  # noqa: E501
-            facts (JsonApiDatasetOutRelationshipsFacts): [optional]  # noqa: E501
+            facts (JsonApiComputedAttributeOutRelationshipsFacts): [optional]  # noqa: E501
             references (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
             workspace_data_filters (JsonApiDatasetOutRelationshipsWorkspaceDataFilters): [optional]  # noqa: E501
         """
@@ -249,7 +249,7 @@ class JsonApiDatasetOutRelationships(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             aggregated_facts (JsonApiDatasetOutRelationshipsAggregatedFacts): [optional]  # noqa: E501
             attributes (JsonApiAttributeHierarchyOutRelationshipsAttributes): [optional]  # noqa: E501
-            facts (JsonApiDatasetOutRelationshipsFacts): [optional]  # noqa: E501
+            facts (JsonApiComputedAttributeOutRelationshipsFacts): [optional]  # noqa: E501
             references (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
             workspace_data_filters (JsonApiDatasetOutRelationshipsWorkspaceDataFilters): [optional]  # noqa: E501
         """

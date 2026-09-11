@@ -60,6 +60,7 @@ class SetCertificationRequest(ModelNormal):
             'METRIC': "metric",
             'VISUALIZATIONOBJECT': "visualizationObject",
             'ANALYTICALDASHBOARD': "analyticalDashboard",
+            'COMPUTEDATTRIBUTE': "computedAttribute",
         },
         ('status',): {
             'None': None,

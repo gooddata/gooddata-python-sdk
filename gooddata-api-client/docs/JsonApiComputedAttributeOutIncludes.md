@@ -1,4 +1,4 @@
-# JsonApiMetricOutIncludes
+# JsonApiComputedAttributeOutIncludes
 
 
 ## Properties

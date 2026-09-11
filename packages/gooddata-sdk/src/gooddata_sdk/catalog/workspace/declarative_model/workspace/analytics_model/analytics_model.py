@@ -11,6 +11,8 @@ from gooddata_api_client.model.declarative_analytical_dashboard_extension import
 from gooddata_api_client.model.declarative_analytics import DeclarativeAnalytics
 from gooddata_api_client.model.declarative_analytics_layer import DeclarativeAnalyticsLayer
 from gooddata_api_client.model.declarative_attribute_hierarchy import DeclarativeAttributeHierarchy
+from gooddata_api_client.model.declarative_computed_attribute import DeclarativeComputedAttribute
+from gooddata_api_client.model.declarative_computed_attribute_content import DeclarativeComputedAttributeContent
 from gooddata_api_client.model.declarative_dashboard_plugin import DeclarativeDashboardPlugin
 from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
 from gooddata_api_client.model.declarative_memory_item import DeclarativeMemoryItem
@@ -49,6 +51,7 @@ LAYOUT_FILTER_CONTEXTS_DIR = "filter_contexts"
 LAYOUT_METRICS_DIR = "metrics"
 LAYOUT_VISUALIZATION_OBJECTS_DIR = "visualization_objects"
 ATTRIBUTE_HIERARCHY_OBJECTS_DIR = "attribute_hierarchy_objects"
+COMPUTED_ATTRIBUTES_DIR = "computed_attributes"
 EXPORT_DEFINITION_DIR = "export_definitions"
 MEMORY_ITEMS_DIR = "memory_items"
 PARAMETERS_DIR = "parameters"
@@ -77,6 +80,10 @@ class CatalogDeclarativeAnalyticsLayer(Base):
     analytical_dashboards: list[CatalogDeclarativeAnalyticalDashboard] = field(factory=list)
     analytical_dashboard_extensions: list[CatalogDeclarativeAnalyticalDashboardExtension] = field(factory=list)
     attribute_hierarchies: list[CatalogDeclarativeAttributeHierarchy] = field(factory=list)
+    # Optional, unlike its siblings: the backend omits `computedAttributes` from the layout
+    # entirely when a workspace has none (it returns `[]` for attributeHierarchies and the
+    # rest). Defaulting to an empty list would make the SDK emit a key the API never sent.
+    computed_attributes: list[CatalogDeclarativeComputedAttribute] | None = None
     dashboard_plugins: list[CatalogDeclarativeDashboardPlugin] = field(factory=list)
     filter_contexts: list[CatalogDeclarativeFilterContext] = field(factory=list)
     metrics: list[CatalogDeclarativeMetric] = field(factory=list)
@@ -138,6 +145,12 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         return folder
 
     @staticmethod
+    def get_computed_attributes_folder(analytics_model_folder: Path) -> Path:
+        folder = analytics_model_folder / COMPUTED_ATTRIBUTES_DIR
+        create_directory(folder)
+        return folder
+
+    @staticmethod
     def get_export_definition_folder(analytics_model_folder: Path) -> Path:
         folder = analytics_model_folder / EXPORT_DEFINITION_DIR
         create_directory(folder)
@@ -165,6 +178,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         metrics_folder = self.get_metrics_folder(analytics_model_folder)
         visualization_objects_folder = self.get_visualization_objects_folder(analytics_model_folder)
         attribute_hierarchy_folder = self.get_attribute_hierarchy_folder(analytics_model_folder)
+        computed_attributes_folder = self.get_computed_attributes_folder(analytics_model_folder)
         export_definition_folder = self.get_export_definition_folder(analytical_dashboards_folder)
         memory_item_folder = self.get_memory_item_folder(analytics_model_folder)
         parameters_folder = self.get_parameters_folder(analytics_model_folder)
@@ -190,6 +204,9 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         for attribute_hierarchy in self.attribute_hierarchies:
             attribute_hierarchy.store_to_disk(attribute_hierarchy_folder, sort=sort)
 
+        for computed_attribute in self.computed_attributes or []:
+            computed_attribute.store_to_disk(computed_attributes_folder, sort=sort)
+
         for export_definition in self.export_definitions:
             export_definition.store_to_disk(export_definition_folder, sort=sort)
 
@@ -209,6 +226,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         metrics_folder = cls.get_metrics_folder(analytics_model_folder)
         visualization_objects_folder = cls.get_visualization_objects_folder(analytics_model_folder)
         attribute_hierarchy_folder = cls.get_attribute_hierarchy_folder(analytics_model_folder)
+        computed_attributes_folder = cls.get_computed_attributes_folder(analytics_model_folder)
         export_definition_folder = cls.get_export_definition_folder(analytical_dashboards_folder)
         memory_item_folder = cls.get_memory_item_folder(analytics_model_folder)
         parameters_folder = cls.get_parameters_folder(analytics_model_folder)
@@ -220,6 +238,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         metric_files = get_sorted_yaml_files(metrics_folder)
         visualization_object_files = get_sorted_yaml_files(visualization_objects_folder)
         attribute_hierarchy_files = get_sorted_yaml_files(attribute_hierarchy_folder)
+        computed_attribute_files = get_sorted_yaml_files(computed_attributes_folder)
         export_definition_files = get_sorted_yaml_files(export_definition_folder)
         memory_item_files = get_sorted_yaml_files(memory_item_folder)
         parameter_files = get_sorted_yaml_files(parameters_folder)
@@ -249,6 +268,10 @@ class CatalogDeclarativeAnalyticsLayer(Base):
             CatalogDeclarativeAttributeHierarchy.load_from_disk(attribute_hierarchy_file)
             for attribute_hierarchy_file in attribute_hierarchy_files
         ]
+        computed_attributes = [
+            CatalogDeclarativeComputedAttribute.load_from_disk(computed_attribute_file)
+            for computed_attribute_file in computed_attribute_files
+        ]
         export_definitions = [
             CatalogDeclarativeExportDefinition.load_from_disk(export_definition_file)
             for export_definition_file in export_definition_files
@@ -261,6 +284,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
             analytical_dashboards=analytical_dashboards,
             analytical_dashboard_extensions=analytical_dashboard_extensions,
             attribute_hierarchies=attribute_hierarchy_objects,
+            computed_attributes=computed_attributes or None,
             dashboard_plugins=dashboard_plugins,
             filter_contexts=filter_contexts,
             metrics=metrics,
@@ -348,6 +372,35 @@ class CatalogDeclarativeAttributeHierarchy(CatalogAnalyticsBase):
     @staticmethod
     def client_class() -> type[DeclarativeAttributeHierarchy]:
         return DeclarativeAttributeHierarchy
+
+
+@define(kw_only=True)
+class CatalogDeclarativeComputedAttributeContent(Base):
+    maql: str
+    format: str | None = None
+    metric_type: str | None = None
+
+    @staticmethod
+    def client_class() -> type[DeclarativeComputedAttributeContent]:
+        return DeclarativeComputedAttributeContent
+
+
+@define(kw_only=True)
+class CatalogDeclarativeComputedAttribute(CatalogAnalyticsBaseMeta):
+    title: str
+    content: CatalogDeclarativeComputedAttributeContent
+    description: str | None = None
+    tags: list[str] | None = None
+    data_type: str | None = None
+    locale: str | None = None
+    value_type: str | None = None
+    is_hidden: bool | None = None
+    is_nullable: bool | None = None
+    null_value: str | None = None
+
+    @staticmethod
+    def client_class() -> type[DeclarativeComputedAttribute]:
+        return DeclarativeComputedAttribute
 
 
 @define(kw_only=True)

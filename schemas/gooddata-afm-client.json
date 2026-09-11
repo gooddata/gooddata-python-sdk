@@ -354,6 +354,7 @@
                 "enum": [
                   "analyticalDashboard",
                   "attribute",
+                  "computedAttribute",
                   "dashboardPlugin",
                   "dataset",
                   "fact",
@@ -423,7 +424,8 @@
                   "attribute",
                   "label",
                   "fact",
-                  "metric"
+                  "metric",
+                  "computedAttribute"
                 ],
                 "type": "string"
               }
@@ -480,7 +482,8 @@
               },
               "type": {
                 "enum": [
-                  "label"
+                  "label",
+                  "computedAttribute"
                 ],
                 "type": "string"
               }
@@ -574,7 +577,8 @@
               "enum": [
                 "facts",
                 "attributes",
-                "measures"
+                "measures",
+                "computedAttributes"
               ],
               "example": "facts",
               "type": "string"
@@ -7285,8 +7289,8 @@
             "type": "string"
           },
           "type": {
-            "description": "Specifies entity type which could be label, attribute, fact, or metric.",
-            "pattern": "^(label)|(attribute)|(fact)|(metric)$",
+            "description": "Specifies entity type which could be label, attribute, computedAttribute, fact, or metric.",
+            "pattern": "^(label|attribute|computedAttribute|fact|metric)$",
             "type": "string"
           }
         },

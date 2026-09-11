@@ -26,8 +26,15 @@ class ObjId:
         )
 
     def as_afm_id_label(self) -> afm_models.AfmObjectIdentifierLabel:
+        # A computed attribute occupies the label slot of an AFM attribute, so the type has to
+        # be sent explicitly now that the generated model accepts both values. Every other type
+        # is coerced to "label": until the type became explicit the generated model defaulted it,
+        # so any ObjId slotted in here already went to the API as a label. Coercing keeps that
+        # wire output byte for byte, rather than turning callers that pass some other type -
+        # a visualization ref carries whatever type it was stored with - into ApiValueError.
+        label_type = self._type if self._type == "computedAttribute" else "label"
         return afm_models.AfmObjectIdentifierLabel(
-            identifier=afm_models.AfmObjectIdentifierLabelIdentifier(id=self._id)
+            identifier=afm_models.AfmObjectIdentifierLabelIdentifier(id=self._id, type=label_type)
         )
 
     def as_afm_id_dataset(self) -> afm_models.AfmObjectIdentifierDataset:

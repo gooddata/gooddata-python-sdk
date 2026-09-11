@@ -9,6 +9,7 @@ import yaml
 from gooddata_sdk import (
     BasicCredentials,
     CatalogAutomationSchedule,
+    CatalogComputedAttribute,
     CatalogDataSourcePostgres,
     CatalogDeclarativeAutomation,
     CatalogDeclarativeFilterView,
@@ -860,6 +861,97 @@ def test_update_workspace_setting(test_config):
         assert setting_o == setting
     finally:
         safe_delete(sdk.catalog_workspace.delete_workspace_setting, test_config["workspace"], setting_id)
+
+
+def _computed_attribute(title: str = "Test computed attribute") -> CatalogComputedAttribute:
+    return CatalogComputedAttribute.init(
+        computed_attribute_id="test_computed_attribute",
+        maql="SELECT 1",
+        title=title,
+        format="#,##0",
+        tags=["Test"],
+    )
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "computed_attribute_life_cycle.yaml"))
+def test_computed_attribute_life_cycle(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    workspace_id = test_config["workspace"]
+    computed_attribute_id = "test_computed_attribute"
+
+    # Anything the workspace already has is none of this test's business - it must not
+    # assume an empty workspace, nor clean up computed attributes it did not create.
+    existing_ids = {ca.id for ca in sdk.catalog_workspace.list_computed_attributes(workspace_id)}
+    assert computed_attribute_id not in existing_ids
+
+    try:
+        outcome = sdk.catalog_workspace.create_or_update_computed_attribute(workspace_id, _computed_attribute())
+        assert outcome == UpsertOutcome.CREATED
+
+        computed_attribute_o = sdk.catalog_workspace.get_computed_attribute(workspace_id, computed_attribute_id)
+        assert computed_attribute_o.id == computed_attribute_id
+        assert computed_attribute_o.attributes.title == "Test computed attribute"
+        assert computed_attribute_o.attributes.content.maql == "SELECT 1"
+        assert computed_attribute_o.attributes.content.format == "#,##0"
+        assert computed_attribute_o.attributes.tags == ["Test"]
+
+        listed_ids = {ca.id for ca in sdk.catalog_workspace.list_computed_attributes(workspace_id)}
+        assert listed_ids - existing_ids == {computed_attribute_id}
+
+        # The same computed attribute must also show up in the declarative layout -
+        # analytics-as-code parity is the point of CA support (CQ-2799 / CQ-2800).
+        layout = sdk.catalog_workspace_content.get_declarative_analytics_model(workspace_id)
+        declarative = [ca for ca in layout.analytics.computed_attributes if ca.id == computed_attribute_id]
+        assert len(declarative) == 1
+        assert declarative[0].title == "Test computed attribute"
+        assert declarative[0].content.maql == "SELECT 1"
+        assert declarative[0].content.format == "#,##0"
+
+        # The update goes through a different endpoint (PUT) and a different request
+        # body (the `In` document) than the create (POST + `PostOptionalId` document).
+        outcome = sdk.catalog_workspace.create_or_update_computed_attribute(
+            workspace_id, _computed_attribute(title="Renamed")
+        )
+        assert outcome == UpsertOutcome.UPDATED
+        computed_attribute_o = sdk.catalog_workspace.get_computed_attribute(workspace_id, computed_attribute_id)
+        assert computed_attribute_o.attributes.title == "Renamed"
+
+        sdk.catalog_workspace.delete_computed_attribute(workspace_id, computed_attribute_id)
+        assert {ca.id for ca in sdk.catalog_workspace.list_computed_attributes(workspace_id)} == existing_ids
+    finally:
+        safe_delete(sdk.catalog_workspace.delete_computed_attribute, workspace_id, computed_attribute_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "computed_attribute_generated_id.yaml"))
+def test_create_computed_attribute_with_generated_id(test_config):
+    """A computed attribute created without an id gets one from the backend.
+
+    Unlike filter views, user data filters and workspace settings, the computed
+    attribute POST schema really does accept a missing id -- see
+    ``TestIdLessCreateIsUnreachable`` in test_upsert_outcome.py for why the others
+    cannot do this.
+    """
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    workspace_id = test_config["workspace"]
+    computed_attribute = CatalogComputedAttribute.init(maql="SELECT 1", title="Generated id")
+
+    existing_ids = {ca.id for ca in sdk.catalog_workspace.list_computed_attributes(workspace_id)}
+    created_ids: set[str] = set()
+    try:
+        outcome = sdk.catalog_workspace.create_or_update_computed_attribute(workspace_id, computed_attribute)
+        assert outcome == UpsertOutcome.CREATED
+
+        created_ids = {ca.id for ca in sdk.catalog_workspace.list_computed_attributes(workspace_id)} - existing_ids
+        assert len(created_ids) == 1
+        # The backend generated the id; the SDK must not have sent a literal "None".
+        generated_id = created_ids.pop()
+        created_ids = {generated_id}
+        assert generated_id
+        assert generated_id != "None"
+    finally:
+        # Only ever delete what this test created.
+        for created_id in created_ids:
+            safe_delete(sdk.catalog_workspace.delete_computed_attribute, workspace_id, created_id)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "get_metadata_localization.yaml"))

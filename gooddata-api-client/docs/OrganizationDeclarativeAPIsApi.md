@@ -1267,6 +1267,42 @@ with gooddata_api_client.ApiClient() as api_client:
                                 title="Count of goods",
                             ),
                         ],
+                        computed_attributes=[
+                            DeclarativeComputedAttribute(
+                                certification="CERTIFIED",
+                                certification_message="certification_message_example",
+                                certified_at="0480-72-88 80:01",
+                                certified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                content=DeclarativeComputedAttributeContent(
+                                    format="%0.2f",
+                                    maql="SELECT 1",
+                                    metric_type="UNSPECIFIED",
+                                ),
+                                created_at="2023-07-20 12:30",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                data_type="STRING",
+                                description="Sales for all the data available.",
+                                id="total-sales",
+                                is_hidden=False,
+                                is_nullable=False,
+                                locale="en-US",
+                                modified_at="2023-07-20 12:30",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                null_value="empty_value",
+                                tags=["Revenues"],
+                                title="Total sales",
+                                value_type="TEXT",
+                            ),
+                        ],
                         dashboard_plugins=[
                             DeclarativeDashboardPlugin(
                                 content=JsonNode(),

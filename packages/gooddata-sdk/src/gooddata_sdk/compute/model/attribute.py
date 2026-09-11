@@ -15,7 +15,9 @@ class Attribute(ExecModelEntity):
 
         Args:
             local_id: identifier of the attribute within the execution
-            label: identifier of the label to use for slicing or dicing; specified either as ObjId or str   the label id
+            label: identifier of the label to use for slicing or dicing; specified either as ObjId or str
+                the label id. An ObjId typed "computedAttribute" slices by that computed attribute
+                instead; any other ObjId type is treated as a label.
             show_all_values: request show all values functionality for a given attribute
         """
         super().__init__()

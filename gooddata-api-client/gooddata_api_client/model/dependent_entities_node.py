@@ -65,6 +65,7 @@ class DependentEntitiesNode(ModelNormal):
             'FACT': "fact",
             'LABEL': "label",
             'METRIC': "metric",
+            'COMPUTEDATTRIBUTE': "computedAttribute",
             'USERDATAFILTER': "userDataFilter",
             'PARAMETER': "parameter",
             'AUTOMATION': "automation",

@@ -290,6 +290,13 @@ Class | Method | HTTP request | Description
 *ComputationApi* | [**retrieve_execution_metadata**](docs/ComputationApi.md#retrieve_execution_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata | Get a single execution result&#39;s metadata.
 *ComputationApi* | [**retrieve_result**](docs/ComputationApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 *ComputationApi* | [**retrieve_result_binary**](docs/ComputationApi.md#retrieve_result_binary) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/binary | (BETA) Get a single execution result in Apache Arrow File or Stream format
+*ComputedAttributesApi* | [**create_entity_computed_attributes**](docs/ComputedAttributesApi.md#create_entity_computed_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/computedAttributes | Post Computed Attributes
+*ComputedAttributesApi* | [**delete_entity_computed_attributes**](docs/ComputedAttributesApi.md#delete_entity_computed_attributes) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Delete a Computed Attribute
+*ComputedAttributesApi* | [**get_all_entities_computed_attributes**](docs/ComputedAttributesApi.md#get_all_entities_computed_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/computedAttributes | Get all Computed Attributes
+*ComputedAttributesApi* | [**get_entity_computed_attributes**](docs/ComputedAttributesApi.md#get_entity_computed_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Get a Computed Attribute
+*ComputedAttributesApi* | [**patch_entity_computed_attributes**](docs/ComputedAttributesApi.md#patch_entity_computed_attributes) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Patch a Computed Attribute
+*ComputedAttributesApi* | [**search_entities_computed_attributes**](docs/ComputedAttributesApi.md#search_entities_computed_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/search | The search endpoint (beta)
+*ComputedAttributesApi* | [**update_entity_computed_attributes**](docs/ComputedAttributesApi.md#update_entity_computed_attributes) | **PUT** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Put a Computed Attribute
 *CookieSecurityConfigurationApi* | [**get_entity_cookie_security_configurations**](docs/CookieSecurityConfigurationApi.md#get_entity_cookie_security_configurations) | **GET** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Get CookieSecurityConfiguration
 *CookieSecurityConfigurationApi* | [**patch_entity_cookie_security_configurations**](docs/CookieSecurityConfigurationApi.md#patch_entity_cookie_security_configurations) | **PATCH** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Patch CookieSecurityConfiguration
 *CookieSecurityConfigurationApi* | [**update_entity_cookie_security_configurations**](docs/CookieSecurityConfigurationApi.md#update_entity_cookie_security_configurations) | **PUT** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Put CookieSecurityConfiguration
@@ -852,6 +859,13 @@ Class | Method | HTTP request | Description
 *ColorPaletteControllerApi* | [**get_entity_color_palettes**](docs/ColorPaletteControllerApi.md#get_entity_color_palettes) | **GET** /api/v1/entities/colorPalettes/{id} | Get Color Pallette
 *ColorPaletteControllerApi* | [**patch_entity_color_palettes**](docs/ColorPaletteControllerApi.md#patch_entity_color_palettes) | **PATCH** /api/v1/entities/colorPalettes/{id} | Patch Color Pallette
 *ColorPaletteControllerApi* | [**update_entity_color_palettes**](docs/ColorPaletteControllerApi.md#update_entity_color_palettes) | **PUT** /api/v1/entities/colorPalettes/{id} | Put Color Pallette
+*ComputedAttributeControllerApi* | [**create_entity_computed_attributes**](docs/ComputedAttributeControllerApi.md#create_entity_computed_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/computedAttributes | Post Computed Attributes
+*ComputedAttributeControllerApi* | [**delete_entity_computed_attributes**](docs/ComputedAttributeControllerApi.md#delete_entity_computed_attributes) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Delete a Computed Attribute
+*ComputedAttributeControllerApi* | [**get_all_entities_computed_attributes**](docs/ComputedAttributeControllerApi.md#get_all_entities_computed_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/computedAttributes | Get all Computed Attributes
+*ComputedAttributeControllerApi* | [**get_entity_computed_attributes**](docs/ComputedAttributeControllerApi.md#get_entity_computed_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Get a Computed Attribute
+*ComputedAttributeControllerApi* | [**patch_entity_computed_attributes**](docs/ComputedAttributeControllerApi.md#patch_entity_computed_attributes) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Patch a Computed Attribute
+*ComputedAttributeControllerApi* | [**search_entities_computed_attributes**](docs/ComputedAttributeControllerApi.md#search_entities_computed_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/search | The search endpoint (beta)
+*ComputedAttributeControllerApi* | [**update_entity_computed_attributes**](docs/ComputedAttributeControllerApi.md#update_entity_computed_attributes) | **PUT** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Put a Computed Attribute
 *CookieSecurityConfigurationControllerApi* | [**get_entity_cookie_security_configurations**](docs/CookieSecurityConfigurationControllerApi.md#get_entity_cookie_security_configurations) | **GET** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Get CookieSecurityConfiguration
 *CookieSecurityConfigurationControllerApi* | [**patch_entity_cookie_security_configurations**](docs/CookieSecurityConfigurationControllerApi.md#patch_entity_cookie_security_configurations) | **PATCH** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Patch CookieSecurityConfiguration
 *CookieSecurityConfigurationControllerApi* | [**update_entity_cookie_security_configurations**](docs/CookieSecurityConfigurationControllerApi.md#update_entity_cookie_security_configurations) | **PUT** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Put CookieSecurityConfiguration
@@ -905,6 +919,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**create_entity_attribute_hierarchies**](docs/EntitiesApi.md#create_entity_attribute_hierarchies) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies | Post Attribute Hierarchies
 *EntitiesApi* | [**create_entity_automations**](docs/EntitiesApi.md#create_entity_automations) | **POST** /api/v1/entities/workspaces/{workspaceId}/automations | Post Automations
 *EntitiesApi* | [**create_entity_color_palettes**](docs/EntitiesApi.md#create_entity_color_palettes) | **POST** /api/v1/entities/colorPalettes | Post Color Pallettes
+*EntitiesApi* | [**create_entity_computed_attributes**](docs/EntitiesApi.md#create_entity_computed_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/computedAttributes | Post Computed Attributes
 *EntitiesApi* | [**create_entity_csp_directives**](docs/EntitiesApi.md#create_entity_csp_directives) | **POST** /api/v1/entities/cspDirectives | Post CSP Directives
 *EntitiesApi* | [**create_entity_custom_application_settings**](docs/EntitiesApi.md#create_entity_custom_application_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | Post Custom Application Settings
 *EntitiesApi* | [**create_entity_custom_geo_collections**](docs/EntitiesApi.md#create_entity_custom_geo_collections) | **POST** /api/v1/entities/customGeoCollections | Post Custom Geo Collections
@@ -946,6 +961,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**delete_entity_attribute_hierarchies**](docs/EntitiesApi.md#delete_entity_attribute_hierarchies) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Delete an Attribute Hierarchy
 *EntitiesApi* | [**delete_entity_automations**](docs/EntitiesApi.md#delete_entity_automations) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Delete an Automation
 *EntitiesApi* | [**delete_entity_color_palettes**](docs/EntitiesApi.md#delete_entity_color_palettes) | **DELETE** /api/v1/entities/colorPalettes/{id} | Delete a Color Pallette
+*EntitiesApi* | [**delete_entity_computed_attributes**](docs/EntitiesApi.md#delete_entity_computed_attributes) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Delete a Computed Attribute
 *EntitiesApi* | [**delete_entity_csp_directives**](docs/EntitiesApi.md#delete_entity_csp_directives) | **DELETE** /api/v1/entities/cspDirectives/{id} | Delete CSP Directives
 *EntitiesApi* | [**delete_entity_custom_application_settings**](docs/EntitiesApi.md#delete_entity_custom_application_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Delete a Custom Application Setting
 *EntitiesApi* | [**delete_entity_custom_geo_collections**](docs/EntitiesApi.md#delete_entity_custom_geo_collections) | **DELETE** /api/v1/entities/customGeoCollections/{id} | Delete Custom Geo Collection
@@ -990,6 +1006,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_all_entities_attributes**](docs/EntitiesApi.md#get_all_entities_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributes | Get all Attributes
 *EntitiesApi* | [**get_all_entities_automations**](docs/EntitiesApi.md#get_all_entities_automations) | **GET** /api/v1/entities/workspaces/{workspaceId}/automations | Get all Automations
 *EntitiesApi* | [**get_all_entities_color_palettes**](docs/EntitiesApi.md#get_all_entities_color_palettes) | **GET** /api/v1/entities/colorPalettes | Get all Color Pallettes
+*EntitiesApi* | [**get_all_entities_computed_attributes**](docs/EntitiesApi.md#get_all_entities_computed_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/computedAttributes | Get all Computed Attributes
 *EntitiesApi* | [**get_all_entities_csp_directives**](docs/EntitiesApi.md#get_all_entities_csp_directives) | **GET** /api/v1/entities/cspDirectives | Get CSP Directives
 *EntitiesApi* | [**get_all_entities_custom_application_settings**](docs/EntitiesApi.md#get_all_entities_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | Get all Custom Application Settings
 *EntitiesApi* | [**get_all_entities_custom_geo_collections**](docs/EntitiesApi.md#get_all_entities_custom_geo_collections) | **GET** /api/v1/entities/customGeoCollections | Get all Custom Geo Collections
@@ -1043,6 +1060,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_entity_attributes**](docs/EntitiesApi.md#get_entity_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributes/{objectId} | Get an Attribute
 *EntitiesApi* | [**get_entity_automations**](docs/EntitiesApi.md#get_entity_automations) | **GET** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Get an Automation
 *EntitiesApi* | [**get_entity_color_palettes**](docs/EntitiesApi.md#get_entity_color_palettes) | **GET** /api/v1/entities/colorPalettes/{id} | Get Color Pallette
+*EntitiesApi* | [**get_entity_computed_attributes**](docs/EntitiesApi.md#get_entity_computed_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Get a Computed Attribute
 *EntitiesApi* | [**get_entity_cookie_security_configurations**](docs/EntitiesApi.md#get_entity_cookie_security_configurations) | **GET** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Get CookieSecurityConfiguration
 *EntitiesApi* | [**get_entity_csp_directives**](docs/EntitiesApi.md#get_entity_csp_directives) | **GET** /api/v1/entities/cspDirectives/{id} | Get CSP Directives
 *EntitiesApi* | [**get_entity_custom_application_settings**](docs/EntitiesApi.md#get_entity_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Get a Custom Application Setting
@@ -1095,6 +1113,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**patch_entity_attributes**](docs/EntitiesApi.md#patch_entity_attributes) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/attributes/{objectId} | Patch an Attribute (beta)
 *EntitiesApi* | [**patch_entity_automations**](docs/EntitiesApi.md#patch_entity_automations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Patch an Automation
 *EntitiesApi* | [**patch_entity_color_palettes**](docs/EntitiesApi.md#patch_entity_color_palettes) | **PATCH** /api/v1/entities/colorPalettes/{id} | Patch Color Pallette
+*EntitiesApi* | [**patch_entity_computed_attributes**](docs/EntitiesApi.md#patch_entity_computed_attributes) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Patch a Computed Attribute
 *EntitiesApi* | [**patch_entity_cookie_security_configurations**](docs/EntitiesApi.md#patch_entity_cookie_security_configurations) | **PATCH** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Patch CookieSecurityConfiguration
 *EntitiesApi* | [**patch_entity_csp_directives**](docs/EntitiesApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | Patch CSP Directives
 *EntitiesApi* | [**patch_entity_custom_application_settings**](docs/EntitiesApi.md#patch_entity_custom_application_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Patch a Custom Application Setting
@@ -1137,6 +1156,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**search_entities_attributes**](docs/EntitiesApi.md#search_entities_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributes/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_automation_results**](docs/EntitiesApi.md#search_entities_automation_results) | **POST** /api/v1/entities/workspaces/{workspaceId}/automationResults/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_automations**](docs/EntitiesApi.md#search_entities_automations) | **POST** /api/v1/entities/workspaces/{workspaceId}/automations/search | The search endpoint (beta)
+*EntitiesApi* | [**search_entities_computed_attributes**](docs/EntitiesApi.md#search_entities_computed_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_custom_application_settings**](docs/EntitiesApi.md#search_entities_custom_application_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_dashboard_plugins**](docs/EntitiesApi.md#search_entities_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/search | The search endpoint (beta)
 *EntitiesApi* | [**search_entities_datasets**](docs/EntitiesApi.md#search_entities_datasets) | **POST** /api/v1/entities/workspaces/{workspaceId}/datasets/search | The search endpoint (beta)
@@ -1160,6 +1180,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**update_entity_attribute_hierarchies**](docs/EntitiesApi.md#update_entity_attribute_hierarchies) | **PUT** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Put an Attribute Hierarchy
 *EntitiesApi* | [**update_entity_automations**](docs/EntitiesApi.md#update_entity_automations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/automations/{objectId} | Put an Automation
 *EntitiesApi* | [**update_entity_color_palettes**](docs/EntitiesApi.md#update_entity_color_palettes) | **PUT** /api/v1/entities/colorPalettes/{id} | Put Color Pallette
+*EntitiesApi* | [**update_entity_computed_attributes**](docs/EntitiesApi.md#update_entity_computed_attributes) | **PUT** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Put a Computed Attribute
 *EntitiesApi* | [**update_entity_cookie_security_configurations**](docs/EntitiesApi.md#update_entity_cookie_security_configurations) | **PUT** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Put CookieSecurityConfiguration
 *EntitiesApi* | [**update_entity_csp_directives**](docs/EntitiesApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | Put CSP Directives
 *EntitiesApi* | [**update_entity_custom_application_settings**](docs/EntitiesApi.md#update_entity_custom_application_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Put a Custom Application Setting
@@ -1683,6 +1704,8 @@ Class | Method | HTTP request | Description
  - [DeclarativeCalendar](docs/DeclarativeCalendar.md)
  - [DeclarativeColorPalette](docs/DeclarativeColorPalette.md)
  - [DeclarativeColumn](docs/DeclarativeColumn.md)
+ - [DeclarativeComputedAttribute](docs/DeclarativeComputedAttribute.md)
+ - [DeclarativeComputedAttributeContent](docs/DeclarativeComputedAttributeContent.md)
  - [DeclarativeCspDirective](docs/DeclarativeCspDirective.md)
  - [DeclarativeCustomApplicationSetting](docs/DeclarativeCustomApplicationSetting.md)
  - [DeclarativeCustomGeoCollection](docs/DeclarativeCustomGeoCollection.md)
@@ -2012,6 +2035,26 @@ Class | Method | HTTP request | Description
  - [JsonApiColorPalettePatch](docs/JsonApiColorPalettePatch.md)
  - [JsonApiColorPalettePatchAttributes](docs/JsonApiColorPalettePatchAttributes.md)
  - [JsonApiColorPalettePatchDocument](docs/JsonApiColorPalettePatchDocument.md)
+ - [JsonApiComputedAttributeIn](docs/JsonApiComputedAttributeIn.md)
+ - [JsonApiComputedAttributeInAttributes](docs/JsonApiComputedAttributeInAttributes.md)
+ - [JsonApiComputedAttributeInAttributesContent](docs/JsonApiComputedAttributeInAttributesContent.md)
+ - [JsonApiComputedAttributeInDocument](docs/JsonApiComputedAttributeInDocument.md)
+ - [JsonApiComputedAttributeLinkage](docs/JsonApiComputedAttributeLinkage.md)
+ - [JsonApiComputedAttributeOut](docs/JsonApiComputedAttributeOut.md)
+ - [JsonApiComputedAttributeOutAttributes](docs/JsonApiComputedAttributeOutAttributes.md)
+ - [JsonApiComputedAttributeOutDocument](docs/JsonApiComputedAttributeOutDocument.md)
+ - [JsonApiComputedAttributeOutIncludes](docs/JsonApiComputedAttributeOutIncludes.md)
+ - [JsonApiComputedAttributeOutList](docs/JsonApiComputedAttributeOutList.md)
+ - [JsonApiComputedAttributeOutRelationships](docs/JsonApiComputedAttributeOutRelationships.md)
+ - [JsonApiComputedAttributeOutRelationshipsComputedAttributes](docs/JsonApiComputedAttributeOutRelationshipsComputedAttributes.md)
+ - [JsonApiComputedAttributeOutRelationshipsFacts](docs/JsonApiComputedAttributeOutRelationshipsFacts.md)
+ - [JsonApiComputedAttributeOutWithLinks](docs/JsonApiComputedAttributeOutWithLinks.md)
+ - [JsonApiComputedAttributePatch](docs/JsonApiComputedAttributePatch.md)
+ - [JsonApiComputedAttributePatchAttributes](docs/JsonApiComputedAttributePatchAttributes.md)
+ - [JsonApiComputedAttributePatchDocument](docs/JsonApiComputedAttributePatchDocument.md)
+ - [JsonApiComputedAttributePostOptionalId](docs/JsonApiComputedAttributePostOptionalId.md)
+ - [JsonApiComputedAttributePostOptionalIdDocument](docs/JsonApiComputedAttributePostOptionalIdDocument.md)
+ - [JsonApiComputedAttributeToManyLinkage](docs/JsonApiComputedAttributeToManyLinkage.md)
  - [JsonApiCookieSecurityConfigurationIn](docs/JsonApiCookieSecurityConfigurationIn.md)
  - [JsonApiCookieSecurityConfigurationInAttributes](docs/JsonApiCookieSecurityConfigurationInAttributes.md)
  - [JsonApiCookieSecurityConfigurationInDocument](docs/JsonApiCookieSecurityConfigurationInDocument.md)
@@ -2106,7 +2149,6 @@ Class | Method | HTTP request | Description
  - [JsonApiDatasetOutList](docs/JsonApiDatasetOutList.md)
  - [JsonApiDatasetOutRelationships](docs/JsonApiDatasetOutRelationships.md)
  - [JsonApiDatasetOutRelationshipsAggregatedFacts](docs/JsonApiDatasetOutRelationshipsAggregatedFacts.md)
- - [JsonApiDatasetOutRelationshipsFacts](docs/JsonApiDatasetOutRelationshipsFacts.md)
  - [JsonApiDatasetOutRelationshipsWorkspaceDataFilters](docs/JsonApiDatasetOutRelationshipsWorkspaceDataFilters.md)
  - [JsonApiDatasetOutWithLinks](docs/JsonApiDatasetOutWithLinks.md)
  - [JsonApiDatasetPatch](docs/JsonApiDatasetPatch.md)
@@ -2300,15 +2342,12 @@ Class | Method | HTTP request | Description
  - [JsonApiMemoryItemPostOptionalIdDocument](docs/JsonApiMemoryItemPostOptionalIdDocument.md)
  - [JsonApiMetricIn](docs/JsonApiMetricIn.md)
  - [JsonApiMetricInAttributes](docs/JsonApiMetricInAttributes.md)
- - [JsonApiMetricInAttributesContent](docs/JsonApiMetricInAttributesContent.md)
  - [JsonApiMetricInDocument](docs/JsonApiMetricInDocument.md)
  - [JsonApiMetricLinkage](docs/JsonApiMetricLinkage.md)
  - [JsonApiMetricOut](docs/JsonApiMetricOut.md)
  - [JsonApiMetricOutAttributes](docs/JsonApiMetricOutAttributes.md)
  - [JsonApiMetricOutDocument](docs/JsonApiMetricOutDocument.md)
- - [JsonApiMetricOutIncludes](docs/JsonApiMetricOutIncludes.md)
  - [JsonApiMetricOutList](docs/JsonApiMetricOutList.md)
- - [JsonApiMetricOutRelationships](docs/JsonApiMetricOutRelationships.md)
  - [JsonApiMetricOutWithLinks](docs/JsonApiMetricOutWithLinks.md)
  - [JsonApiMetricPatch](docs/JsonApiMetricPatch.md)
  - [JsonApiMetricPatchAttributes](docs/JsonApiMetricPatchAttributes.md)

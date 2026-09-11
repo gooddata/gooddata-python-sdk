@@ -5,8 +5,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **attributes** | [**JsonApiAttributeHierarchyOutRelationshipsAttributes**](JsonApiAttributeHierarchyOutRelationshipsAttributes.md) |  | [optional] 
+**computed_attributes** | [**JsonApiComputedAttributeOutRelationshipsComputedAttributes**](JsonApiComputedAttributeOutRelationshipsComputedAttributes.md) |  | [optional] 
 **datasets** | [**JsonApiAnalyticalDashboardOutRelationshipsDatasets**](JsonApiAnalyticalDashboardOutRelationshipsDatasets.md) |  | [optional] 
-**facts** | [**JsonApiDatasetOutRelationshipsFacts**](JsonApiDatasetOutRelationshipsFacts.md) |  | [optional] 
+**facts** | [**JsonApiComputedAttributeOutRelationshipsFacts**](JsonApiComputedAttributeOutRelationshipsFacts.md) |  | [optional] 
 **labels** | [**JsonApiAnalyticalDashboardOutRelationshipsLabels**](JsonApiAnalyticalDashboardOutRelationshipsLabels.md) |  | [optional] 
 **metrics** | [**JsonApiAnalyticalDashboardOutRelationshipsMetrics**](JsonApiAnalyticalDashboardOutRelationshipsMetrics.md) |  | [optional] 
 **parameters** | [**JsonApiAnalyticalDashboardOutRelationshipsParameters**](JsonApiAnalyticalDashboardOutRelationshipsParameters.md) |  | [optional] 

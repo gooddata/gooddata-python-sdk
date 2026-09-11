@@ -30,6 +30,11 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import
     CatalogDeclarativeWorkspaces,
     get_workspace_folder,
 )
+from gooddata_sdk.catalog.workspace.entity_model.content_objects.computed_attribute import (
+    CatalogComputedAttribute,
+    CatalogComputedAttributeDocument,
+    CatalogComputedAttributePostDocument,
+)
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.workspace_setting import CatalogWorkspaceSetting
 from gooddata_sdk.catalog.workspace.entity_model.filter_view import (
     CatalogFilterView,
@@ -1506,6 +1511,105 @@ class CatalogWorkspaceService(CatalogServiceBase):
             None
         """
         self._entities_api.delete_entity_filter_views(workspace_id=workspace_id, object_id=filter_view_id)
+
+    def list_computed_attributes(self, workspace_id: str) -> list[CatalogComputedAttribute]:
+        """List all computed attributes.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+
+        Returns:
+            list[CatalogComputedAttribute]:
+                List of computed attribute entities.
+        """
+        get_computed_attributes = functools.partial(
+            self._entities_api.get_all_entities_computed_attributes,
+            workspace_id,
+            _check_return_type=False,
+        )
+        computed_attributes = load_all_entities_dict(get_computed_attributes, camel_case=False)
+        return [CatalogComputedAttribute.from_dict(ca, camel_case=False) for ca in computed_attributes["data"]]
+
+    def create_or_update_computed_attribute(
+        self, workspace_id: str, computed_attribute: CatalogComputedAttribute
+    ) -> UpsertOutcome:
+        """Create a new computed attribute or overwrite an existing one.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+            computed_attribute (CatalogComputedAttribute):
+                ComputedAttribute entity object.
+
+        Returns:
+            UpsertOutcome:
+                CREATED if the computed attribute did not exist yet, UPDATED if it did.
+
+        Note:
+            A computed attribute with no id always takes the create branch; the backend
+            generates the id.
+        """
+
+        def create() -> UpsertOutcome:
+            # The create endpoint takes the POST document, whose id is optional.
+            self._entities_api.create_entity_computed_attributes(
+                workspace_id=workspace_id,
+                json_api_computed_attribute_post_optional_id_document=CatalogComputedAttributePostDocument(
+                    data=computed_attribute
+                ).to_api(),
+                _check_return_type=False,
+            )
+            return UpsertOutcome.CREATED
+
+        if computed_attribute.id is None:
+            return create()
+        try:
+            self.get_computed_attribute(workspace_id=workspace_id, computed_attribute_id=computed_attribute.id)
+        except NotFoundException:
+            return create()
+        self._entities_api.update_entity_computed_attributes(
+            workspace_id=workspace_id,
+            object_id=computed_attribute.id,
+            json_api_computed_attribute_in_document=CatalogComputedAttributeDocument(data=computed_attribute).to_api(),
+            _check_return_type=False,
+        )
+        return UpsertOutcome.UPDATED
+
+    def get_computed_attribute(self, workspace_id: str, computed_attribute_id: str) -> CatalogComputedAttribute:
+        """Get computed attribute by its id.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+            computed_attribute_id (str):
+                String containing id of the computed attribute.
+
+        Returns:
+            CatalogComputedAttribute:
+                ComputedAttribute entity object.
+        """
+        computed_attribute_dict = self._entities_api.get_entity_computed_attributes(
+            workspace_id=workspace_id,
+            object_id=computed_attribute_id,
+            _check_return_type=False,
+        ).data
+
+        return CatalogComputedAttribute.from_dict(computed_attribute_dict, camel_case=True)
+
+    def delete_computed_attribute(self, workspace_id: str, computed_attribute_id: str) -> None:
+        """Delete computed attribute.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+            computed_attribute_id (str):
+                String containing id of the deleted computed attribute.
+
+        Returns:
+            None
+        """
+        self._entities_api.delete_entity_computed_attributes(workspace_id=workspace_id, object_id=computed_attribute_id)
 
     def get_declarative_filter_views(self, workspace_id: str) -> list[CatalogDeclarativeFilterView]:
         """Retrieve a list of declarative filter views.
