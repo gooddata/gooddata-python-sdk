@@ -11,6 +11,14 @@ from typing import Any
 
 from gooddata_sdk import GoodDataSdk
 
+from gooddata_eval.core.agentic._gate import (
+    DEFAULT_GATE,
+    EvalGate,
+    gate_failure_note,
+    gate_passed,
+    log_gate_scores,
+    stamp_gate_metadata,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -416,6 +424,7 @@ def evaluate_agentic_metric_skill(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run metric-skill evaluation, log to Langfuse, and raise MetricSkillAssertionError on failure.
 
@@ -445,6 +454,7 @@ def evaluate_agentic_metric_skill(
         window_end = utc_now()
 
         def _write_scores(ctx: RunTraceContext) -> None:
+            stamp_gate_metadata(ctx.run_metadata, k=len(summary.run_results), gate=gate)
 
             for run_idx, run in enumerate(summary.run_results):
                 pt = ctx.trace(run.conversation_id)
@@ -456,6 +466,7 @@ def evaluate_agentic_metric_skill(
                 ) as tid:
                     ctx.score(tid, name="metric_created", value=float(run.metric_created), data_type="BOOLEAN")
                     ctx.score(tid, name="maql_correct", value=float(run.maql_correct), data_type="BOOLEAN")
+                    log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
                     ctx.quality(
                         tid,
                         strict_checks={"metric_created": run.metric_created, "maql_correct": run.maql_correct},
@@ -501,10 +512,11 @@ def evaluate_agentic_metric_skill(
         "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
 
-    if not summary.pass_at_k:
+    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
         candidates_str = "; ".join(repr(c.get("maql", "")) for c in expected_outputs_list)
         exc = MetricSkillAssertionError(
-            f"Metric skill assertion failed. "
+            f"Metric skill assertion failed. {gate_note} "
             f"metric_created={best.metric_created}, maql_correct={best.maql_correct}. "
             f"Expected MAQL (candidates): {candidates_str}. "
             f"Actual MAQL: {best.actual_maql}."

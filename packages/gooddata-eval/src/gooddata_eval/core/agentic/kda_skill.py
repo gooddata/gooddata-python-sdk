@@ -7,6 +7,14 @@ import logging
 import os
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._gate import (
+    DEFAULT_GATE,
+    EvalGate,
+    gate_failure_note,
+    gate_passed,
+    log_gate_scores,
+    stamp_gate_metadata,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -383,6 +391,7 @@ def evaluate_agentic_kda_skill(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run KDA-skill evaluation, log to Langfuse, and raise KdaSkillAssertionError on failure.
 
@@ -409,6 +418,7 @@ def evaluate_agentic_kda_skill(
         window_end = utc_now()
 
         def _write_scores(ctx: RunTraceContext) -> None:
+            stamp_gate_metadata(ctx.run_metadata, k=len(summary.run_results), gate=gate)
 
             for run_idx, run in enumerate(summary.run_results):
                 # No custom selector -- same default (max-latency) as every other skill; harmless
@@ -440,6 +450,7 @@ def evaluate_agentic_kda_skill(
                             value=turn_wall_clock_sec,
                             data_type="NUMERIC",
                         )
+                    log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
                     ctx.quality(
                         tid,
                         strict_checks=strict_checks,
@@ -486,9 +497,10 @@ def evaluate_agentic_kda_skill(
         "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
 
-    if not summary.pass_at_k:
+    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
         message = (
-            f"KDA skill assertion failed. strict_pass={ev.strict_pass} "
+            f"KDA skill assertion failed. {gate_note} strict_pass={ev.strict_pass} "
             f"(triggered={ev.triggered}, executed={ev.executed}, "
             f"success={ev.success}, turn_completed={ev.turn_completed}). "
             f"Actual create args: {best.actual_create_args}. "
