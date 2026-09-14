@@ -9,7 +9,7 @@ from gooddata_eval.core.models import (
     CreatedVisualization,
     DatasetItem,
     ToolCallEvent,
-    build_latency_breakdown,
+    timeline_detail,
 )
 from gooddata_eval.core.scoring import (
     check_filters,
@@ -205,8 +205,6 @@ class VisualizationEvaluator:
             rank_key=(ev.strict_pass, ev.strict_checks_passed_count),
             detail={
                 **evaluation_result_detail(ev),
-                "latency_breakdown": build_latency_breakdown(
-                    chat_result.tool_call_events, chat_result.reasoning_step_events
-                ),
+                **timeline_detail(chat_result.tool_call_events, chat_result.reasoning_step_events),
             },
         )

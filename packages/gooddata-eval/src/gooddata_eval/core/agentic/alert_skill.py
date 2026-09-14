@@ -37,8 +37,8 @@ from gooddata_eval.core.models import (
     AgenticEvalOutcome,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
     shift_and_index_events,
+    timeline_detail,
 )
 
 try:
@@ -898,7 +898,7 @@ def evaluate_agentic_alert_skill(
         "attributes_correct": ev.attributes_correct,
         "granularity_correct": ev.granularity_correct,
         "actual_alert_arguments": best.actual_alert_arguments,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
     }
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):

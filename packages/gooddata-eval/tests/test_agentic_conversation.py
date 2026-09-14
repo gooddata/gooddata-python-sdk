@@ -960,6 +960,7 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
             }
         ],
         "latency_breakdown": [],
+        "tool_calls": [],
     }
 
 
@@ -1024,4 +1025,5 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
             }
         ],
         "latency_breakdown": [],
+        "tool_calls": [],
     }
