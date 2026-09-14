@@ -30,11 +30,21 @@ class AacBucketRef(BaseModel):
 class AacQuery(BaseModel):
     fields: dict[str, AacQueryField | str]
     filter_by: dict[str, dict] = Field(default_factory=dict)
+    # Entries are `{"type": "metric_sort", "direction", "metrics": [alias]}` or
+    # `{"type": "attribute_sort", "direction", "by": alias}`. Kept as raw dicts for the
+    # same reason as `filter_by`: the agent adds keys (`aggregation`) this does not read,
+    # and a typed model would reject a chart that is otherwise correct.
+    sort_by: list[dict] = Field(default_factory=list)
 
     @field_validator("filter_by", mode="before")
     @classmethod
     def _coerce_filter_by(cls, v: object) -> object:
         return v if v is not None else {}
+
+    @field_validator("sort_by", mode="before")
+    @classmethod
+    def _coerce_sort_by(cls, v: object) -> object:
+        return v if v is not None else []
 
 
 class CreatedVisualization(BaseModel):
@@ -42,7 +52,9 @@ class CreatedVisualization(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
 
-    id: str
+    # Optional on purpose: nothing scores on it, and the agent sometimes omits it. A
+    # required field here turns a scorable chart into a parse error and an errored item.
+    id: str | None = None
     title: str | None = None
     type: str
     query: AacQuery

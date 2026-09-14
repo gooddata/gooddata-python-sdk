@@ -165,3 +165,9 @@ def test_dataset_item_user_context_defaults_to_none():
         }
     )
     assert item.user_context is None
+
+
+def test_a_visualization_without_an_id_still_parses():
+    """The agent sometimes omits `id`; nothing scores on it, so it must not error the item."""
+    viz = CreatedVisualization.model_validate({"type": "bar_chart", "query": {"fields": {"m": "metric/x"}}})
+    assert viz.id is None
