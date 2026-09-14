@@ -2,10 +2,12 @@
 from gooddata_eval.core.models import CreatedVisualization
 from gooddata_eval.core.scoring import (
     check_filters,
+    check_sorts,
     check_viz_type,
     get_dimension_uri_set,
     get_metric_uri_set,
     normalized_filters,
+    normalized_sorts,
     uri_to_display_name,
     validate_cross_references,
 )
@@ -205,3 +207,89 @@ def test_normalized_filters_is_empty_per_category_when_unfiltered():
         }
     )
     assert normalized_filters(viz) == {"date": [], "ranking": [], "attribute": []}
+
+
+def test_a_date_granularity_compares_equal_whichever_prefix_it_carries():
+    # A date dataset exposes each granularity as an attribute whose only label carries
+    # the same id, so both spellings denote one breakdown. gpt-5.6-luna returned
+    # `attribute/ORDER_CREATED_AT.month` for a chart the insight recorded as
+    # `label/ORDER_CREATED_AT.month`, and the raw string compare failed a correct chart.
+    as_label = _viz(query={"fields": {"d": {"using": "label/ORDER_CREATED_AT.month"}}, "filter_by": {}}, view_by=["d"])
+    as_attribute = _viz(
+        query={"fields": {"d": {"using": "attribute/ORDER_CREATED_AT.month"}}, "filter_by": {}}, view_by=["d"]
+    )
+    assert get_dimension_uri_set(as_label) == get_dimension_uri_set(as_attribute)
+
+
+def test_the_granularity_itself_still_has_to_match():
+    sequential = _viz(query={"fields": {"d": {"using": "label/d.month"}}, "filter_by": {}}, view_by=["d"])
+    cyclical = _viz(query={"fields": {"d": {"using": "label/d.monthOfYear"}}, "filter_by": {}}, view_by=["d"])
+    assert get_dimension_uri_set(sequential) != get_dimension_uri_set(cyclical)
+
+
+def test_a_plain_attribute_is_not_rewritten_as_a_label():
+    viz = _viz(query={"fields": {"d": {"using": "attribute/product.title"}}, "filter_by": {}}, view_by=["d"])
+    assert get_dimension_uri_set(viz) == {"attribute/product.title"}
+
+
+_SORT_FIELDS = {"m_rev": {"using": "metric/revenue"}, "d_q": {"using": "label/date.quarter"}}
+
+
+def _sorted_viz(sort_by, fields=None):
+    return _viz(query={"fields": fields or _SORT_FIELDS, "filter_by": {}, "sort_by": sort_by})
+
+
+def test_sorts_survive_validation_and_resolve_to_uris():
+    viz = _sorted_viz([{"type": "metric_sort", "direction": "DESC", "metrics": ["m_rev"]}])
+    assert normalized_sorts(viz) == ['{"direction": "DESC", "fields": ["metric/revenue"], "type": "metric_sort"}']
+
+
+def test_the_same_sort_written_by_either_side_compares_equal():
+    expected = _sorted_viz([{"type": "attribute_sort", "by": "d_q", "direction": "ASC"}])
+    # The agent adds `aggregation`, and names the field with an alias of its own.
+    actual = _viz(
+        query={
+            "fields": {"dim0": "attribute/date.quarter"},
+            "filter_by": {},
+            "sort_by": [{"type": "attribute_sort", "by": "dim0", "direction": "ASC", "aggregation": None}],
+        }
+    )
+    assert check_sorts(expected, actual)
+
+
+def test_a_metric_sort_reads_metrics_even_when_the_agent_also_sends_by():
+    expected = _sorted_viz([{"type": "metric_sort", "direction": "ASC", "metrics": ["m_rev"]}])
+    actual = _sorted_viz([{"type": "metric_sort", "direction": "ASC", "metrics": ["m_rev"], "by": "d_q"}])
+    assert check_sorts(expected, actual)
+
+
+def test_a_missing_sort_fails_but_a_volunteered_one_does_not():
+    """`sort_by: []` records no sort; it does not assert the chart must be unsorted."""
+    unsorted = _sorted_viz([])
+    sorted_ = _sorted_viz([{"type": "metric_sort", "direction": "DESC", "metrics": ["m_rev"]}])
+    assert not check_sorts(sorted_, unsorted), "a sort the question asked for is required"
+    assert check_sorts(unsorted, sorted_), "chronological order on a time series is not an error"
+
+
+def test_a_wrong_sort_still_fails_when_the_fixture_records_one():
+    expected = _sorted_viz([{"type": "metric_sort", "direction": "DESC", "metrics": ["m_rev"]}])
+    assert not check_sorts(expected, _sorted_viz([{"type": "attribute_sort", "by": "d_q", "direction": "ASC"}]))
+
+
+def test_a_tiebreak_appended_after_the_required_sorts_is_free():
+    """ "State descending" is satisfied by "state descending, then city" -- not by the reverse."""
+    required = [{"type": "attribute_sort", "by": "d_q", "direction": "DESC"}]
+    tiebreak = {"type": "metric_sort", "direction": "ASC", "metrics": ["m_rev"]}
+    assert check_sorts(_sorted_viz(required), _sorted_viz(required + [tiebreak]))
+    assert not check_sorts(_sorted_viz(required), _sorted_viz([tiebreak] + required))
+
+
+def test_direction_type_and_order_all_matter():
+    base = [
+        {"type": "attribute_sort", "by": "d_q", "direction": "ASC"},
+        {"type": "metric_sort", "direction": "DESC", "metrics": ["m_rev"]},
+    ]
+    assert check_sorts(_sorted_viz(base), _sorted_viz(list(base)))
+    assert not check_sorts(_sorted_viz(base), _sorted_viz(list(reversed(base))))
+    flipped = [{**base[0], "direction": "DESC"}, base[1]]
+    assert not check_sorts(_sorted_viz(base), _sorted_viz(flipped))

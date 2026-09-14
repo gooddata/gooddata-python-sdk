@@ -9,7 +9,7 @@ experiment. The newest and most actively developed package in the repo.
 
 ## Owns
 
-- The `gd-eval` CLI (`gd-eval run`, `gd-eval models`)
+- The `gd-eval` CLI (`generate`, `run`, `report`, `models`)
 - Dataset loading and the evaluation run loop
 - Per-capability evaluators and their scoring
 - Result reporting, and pushing experiments, scores and trace links to Langfuse
@@ -27,7 +27,7 @@ experiment. The newest and most actively developed package in the repo.
 | `core/agentic/` | multi-turn agentic evaluation per capability, **plus** all Langfuse trace polling and linking (`_langfuse.py`, `_trace_linker.py`) |
 | `core/chat/` | SSE client for the agent's streaming chat endpoint |
 | `core/summary/` | HTTP client for the dedicated dashboard-summary endpoint — a single-shot chat backend, not reporting |
-| `core/dataset/` | dataset format and loading |
+| `core/dataset/` | dataset format, loading, and `from_insights.py` — dataset generation from a workspace's real insights |
 | `core/evaluators/` | single-shot evaluators and their registry |
 | `core/langfuse/` | the whole Langfuse v4 client: `_env` (base URL + credentials), `otlp` (OTLP/JSON encoding), `experiment` (root-span construction, score targets), `observations` (trace reads), `client` (httpx calls), `sink` (single-shot results as experiments) |
 | `core/reporting/` | console and JSON output rendering |
@@ -61,6 +61,106 @@ its own shape. `test_kind` on the item is what labels the result, not the evalua
 which is why `knowledge_question` can reuse `GeneralQuestionEvaluator` verbatim.
 `dashboard_summary` items additionally need `summary_input`.
 
+## Running the pipeline
+
+Four subcommands, in the order you use them. Everything runs through `uv`; never a bare
+`python`. There is no build step -- `uv run` syncs the environment from `uv.lock` on first
+use, so a fresh clone needs nothing but:
+
+```bash
+uv run --package gooddata-eval gd-eval <subcommand> --help
+```
+
+`openai` is an optional extra (`llm-judge`) so the published package stays installable
+without it, but the `dev` dependency group pulls it in, which is why a plain `uv run` here
+has the phrasing step and the LLM judge. Installing `gooddata-eval` from PyPI does not --
+there the extra is explicit, and every `openai` import site is guarded or deferred.
+
+Connection is the same for every subcommand that talks to the platform: `--host` +
+`--token`, or `GOODDATA_TOKEN` in the environment, or `--profile <name>` reading
+`~/.gooddata/profiles.yaml`. Precedence is flags > env > profile.
+
+### 1. `generate` — build a dataset from a workspace
+
+Reverse-engineers `visualization` items out of the charts a workspace already has, so the
+expected output is copied from a live object rather than invented. Needs `OPENAI_API_KEY`
+for the phrasing step, or `--no-phrase` to emit mechanical `Show <title>` questions.
+
+```bash
+uv run --package gooddata-eval gd-eval generate \
+  --host "$GOODDATA_HOST" --workspace "$WORKSPACE_ID" \
+  --dataset-name ecommerce --out ./datasets/ecommerce \
+  --snapshot-out /tmp/ws.json \
+  --phrase-model gpt-4o --skip-ambiguous
+```
+
+Iterate offline instead of re-fetching: `--snapshot-out` writes everything the generator
+read as one JSON file, and `--snapshot-in` replays it with no host, token or network. Add
+`--dry-run` to print the shape counts and each spec's brief without writing anything —
+the fastest way to see what a workspace yields.
+
+Quality gates fail the command (exit 1) below `--min-questions` (15) or `--min-filtered` (1). Lower them for a smoke test; do not lower them to ship a dataset.
+`--langfuse-out` additionally writes a Langfuse-importable file, and `--id-prefix` rewrites
+ids on that export only, because Langfuse item ids are unique per project.
+
+Insights the AAC spec cannot express without guessing are skipped with a printed reason
+(`SKIP <id>: derived measure (previousPeriodMeasure)`). Read those — they are the
+generator telling you what it refused to invent, not noise.
+
+### 2. `run` — evaluate
+
+```bash
+uv run --package gooddata-eval gd-eval run \
+  --host "$GOODDATA_HOST" --workspace "$WORKSPACE_ID" \
+  --dataset ./datasets/ecommerce --kind visualization \
+  --model gpt-5.2 --model ProviderName/gpt-4o \
+  --runs 3 --gate power --concurrency 4 \
+  --json ./results/run.json --html ./results/run.html
+```
+
+`--dataset` reads a local folder; `--langfuse-dataset` pulls one by name instead. `--kind`
+only supplies a default for items that do not carry their own `test_kind`. Repeat
+`--model` to compare models in one run. `--runs` with `--gate power` measures stability
+(every run must pass) rather than pass@K. `--langfuse` pushes the run as a scored
+experiment, needing `LANGFUSE_HOST`, `LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY`.
+
+`--concurrency` is capped for you where it matters: kinds that create workspace objects
+run one at a time regardless, see the parallel-safety gotcha below.
+
+### 3. `report` — compare runs
+
+```bash
+uv run --package gooddata-eval gd-eval report \
+  ./results/*.json -o ./results/comparison.html --title "luna vs 4o" --redact
+```
+
+Several JSON reports become side-by-side columns keyed by file name. `--redact` is the
+customer-safe form: conversation ids, response ids and raw reasoning dropped, model names
+replaced with "Model A", "Model B".
+
+### 4. `models` — what the org has configured
+
+```bash
+uv run --package gooddata-eval gd-eval models --host "$GOODDATA_HOST"
+```
+
+Run this before guessing a `--model` string.
+
+### Environment
+
+| Variable | Used by |
+|---|---|
+| `GOODDATA_TOKEN` | every platform-facing subcommand |
+| `OPENAI_API_KEY` | `generate` phrasing, and the LLM-as-judge evaluators |
+| `GD_EVAL_JUDGE_MODEL` | judge model, same as `--judge-model` |
+| `GD_EVAL_AGENT_ID` | which agent to drive, same as `--agent-id` |
+| `LANGFUSE_HOST`, `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY` | `--langfuse`, `--langfuse-dataset` |
+| `GOODDATA_EVAL_CHAT_*` | SSE retry, backoff and timeout knobs |
+| `GD_EVAL_TIMERS` | same as `--timers` |
+
+A gitignored `.env` at the repo root is the normal place for these; load it with
+`set -a && . ./.env && set +a` before the command.
+
 ## Gotchas
 
 **Adding an evaluator is a registry change, not a naming convention.** Single-shot kinds go
@@ -88,6 +188,23 @@ ingestion has no pass/fail signal and inflates or misattributes per-item latency
 `BackgroundTraceLinker` defers it and is drained before the report renders
 (`run_trace_link_inline` is the synchronous alternative). Do not "fix" a slow item by
 making trace scoring synchronous again.
+
+**A generated item's `expected_output` is copied, never invented — keep it that way.**
+`core/dataset/from_insights.py` converts each insight with the platform's own
+`declarative_visualization_to_aac()` (from `gooddata-code-convertors`, via `gooddata-sdk`),
+so the mapping is not ours to get wrong. What is ours is deciding what the evaluator cannot
+yet score — derived measures and measure-level filters convert fine and then compare wrong,
+so they are skipped with a printed reason — and stripping the no-op filters AD saves for an
+"All" selection, which would otherwise let a question claim a filter its chart lacks. Teach
+the comparator about a construct and the matching skip can go; do not make one convert by
+hand. Chart type names are the convertor's, which are also the agent's — do not rename them. One
+granularity is patched in `CONVERTOR_GRANULARITY_FIXES`: `week_us` → `WEEK_US` is a convertor
+bug, the platform enum is `WEEK`.
+
+**The snapshot is a plain-JSON contract.** `--snapshot-in`/`--snapshot-out` is what makes
+the generator testable offline and iterable without re-fetching, and it is why the
+generator reads the declarative analytics model rather than `sdk.visualizations`. Anything
+that changes the fetch shape invalidates every saved snapshot.
 
 **Scoring weights do not sum to 1.** `quality_score` is the fraction of boolean-valued keys
 in `best_detail` that are true, falling back to `pass_at_k` when there are none (text

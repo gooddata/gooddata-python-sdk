@@ -41,6 +41,9 @@ Source = "https://github.com/gooddata/gooddata-python-sdk"
 [dependency-groups]
 dev = [
     "pytest>=8.3.5",
+    # The extra itself, so a plain `uv run` has the phrasing step and the LLM judge.
+    # It stays optional for anyone installing the published package.
+    "gooddata-eval[llm-judge]",
 ]
 test = [
     "pytest~=9.1.1",
