@@ -477,6 +477,8 @@ class AlertRunResult:
     alert_id: str | None
     eval: AlertEvaluation
     actual_alert_arguments: dict
+    total_turns: int = 0
+    total_steps: int = 0
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
@@ -676,9 +678,13 @@ def run_agentic_alert_skill(
             # Roles follow GPT-4o's perspective: "assistant"=agent text, "user"=sim-user reply.
             conversation_history: list = []
             current_question = question
+            turns = 0
+            steps = 0
 
             for _iteration in range(max_iterations):
                 chat_result = client.send_message(conv_id, current_question)
+                turns += 1
+                steps += chat_result.reasoning_step_count
                 reasoning_steps.extend(chat_result.reasoning_steps or [])
                 response_id = chat_result.response_id or response_id
                 turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
@@ -728,6 +734,8 @@ def run_agentic_alert_skill(
                 alert_id=alert_id,
                 eval=ev,
                 actual_alert_arguments=actual_args,
+                total_turns=turns,
+                total_steps=steps,
                 reasoning_steps=reasoning_steps,
                 response_id=response_id,
                 tool_call_events=all_tool_call_events,
@@ -851,6 +859,8 @@ def evaluate_agentic_alert_skill(
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
+                    ctx.score(tid, name="turns", value=run.total_turns, data_type="NUMERIC")
+                    ctx.score(tid, name="steps", value=run.total_steps, data_type="NUMERIC")
                     log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
                     ctx.quality(
                         tid,

@@ -59,8 +59,8 @@ class RunResult:
     actual_output: CreatedVisualization | None
     eval_result: EvaluationResult
     best_expected: CreatedVisualization
-    total_turns: float
-    total_steps: float
+    total_turns: int
+    total_steps: int
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
@@ -186,8 +186,8 @@ def _execute_single_run(
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
 ) -> RunResult:
     """Drive one full multi-turn conversation and evaluate the result."""
-    total_turns = 0.0
-    total_steps = 0.0
+    total_turns = 0
+    total_steps = 0
     all_tool_call_events: list[ToolCallEvent] = []
     all_reasoning_step_events: list[ReasoningStepEvent] = []
     reasoning_steps: list[str] = []
@@ -200,8 +200,8 @@ def _execute_single_run(
     current_result = client.send_message(conversation_id, question)
 
     for iteration in range(max_iterations):
-        total_turns += 1.0
-        total_steps += float(current_result.reasoning_step_count)
+        total_turns += 1
+        total_steps += current_result.reasoning_step_count
         turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
             current_result,
             turn_offset=turn_offset,

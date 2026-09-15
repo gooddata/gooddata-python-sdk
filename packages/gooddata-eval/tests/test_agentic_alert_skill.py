@@ -996,3 +996,67 @@ def test_every_gen_ai_interval_is_accepted():
         assert AnomalyDetectionGranularity.parse(value.lower()) is AnomalyDetectionGranularity(value)
     assert AnomalyDetectionGranularity.parse(None) is None
     assert AnomalyDetectionGranularity.parse("  ") is None
+
+
+def test_run_agentic_alert_skill_counts_the_turns_and_reasoning_steps_it_used():
+    """QA-29110: the effort comparison reads these. A refusal still took a turn, and the turn
+    count is what separates a wrong answer from a run max_iterations cut short."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _no_alert_chat_result()
+    mock_client._base = "http://host/api/v1/actions/workspaces/ws1/ai"
+    mock_client._auth = {"Authorization": "Bearer tok"}
+
+    with _patched(mock_client, simulated_reply="Yes please"):
+        summary = run_agentic_alert_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create alert",
+            expected_output={"operator": "GREATER_THAN", "threshold": 100},
+            k=1,
+            max_iterations=2,
+        )
+
+    # _no_alert_chat_result has no tool calls and non-empty text, so the run replies once and
+    # stops at max_iterations: 2 turns, 1 reasoning step each.
+    assert summary.best.total_turns == 2
+    assert summary.best.total_steps == 2
+
+
+def test_alert_skill_writes_the_turn_and_step_counts_to_langfuse():
+    """The counters exist to reach Langfuse; asserting only the dataclass would pass even if
+    the scores were never written."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _no_alert_chat_result()
+    mock_client._base = "http://host/api/v1/actions/workspaces/ws1/ai"
+    mock_client._auth = {"Authorization": "Bearer tok"}
+    captured = {}
+
+    def _capture(_submit, _identity, **kwargs):
+        captured["write_scores"] = kwargs["write_scores"]
+
+    with (
+        _patched(mock_client),
+        patch("gooddata_eval.core.agentic.alert_skill.submit_trace_scoring", _capture),
+        pytest.raises(AlertSkillAssertionError),
+    ):
+        evaluate_agentic_alert_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create alert",
+            expected_output={"operator": "GREATER_THAN", "threshold": 100},
+            k=1,
+            max_iterations=1,
+            langfuse=MagicMock(),
+            dataset_item_id="item-1",
+        )
+
+    ctx = MagicMock()
+    captured["write_scores"](ctx)
+    scores = {c.kwargs["name"]: c.kwargs["value"] for c in ctx.score.call_args_list}
+
+    assert scores["turns"] == 1
+    assert scores["steps"] == 1
