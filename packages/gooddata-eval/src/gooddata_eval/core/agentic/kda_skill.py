@@ -185,6 +185,8 @@ class KdaRunResult:
     # Wall-clock time of the turn that called create (None if create never happened) --
     # not any earlier disambiguation turn. See run_agentic_kda_skill's _run_once.
     turn_wall_clock_sec: float | None = None
+    total_turns: float = 0.0
+    total_steps: float = 0.0
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
@@ -276,6 +278,9 @@ def run_agentic_kda_skill(
             all_tool_call_events.extend(result.tool_call_events or [])
             all_reasoning_step_events.extend(result.reasoning_step_events or [])
 
+        turns = 0
+        steps = 0.0
+
         for iteration in range(max_iterations):
             try:
                 chat_result = client.send_message(conv_id, current_question)
@@ -291,6 +296,8 @@ def run_agentic_kda_skill(
                         turn_wall_clock_sec = partial.turn_wall_clock_sec
                 turn_completed = False
                 break
+            turns += 1
+            steps += float(chat_result.reasoning_step_count)
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
             _accumulate(chat_result)
@@ -330,6 +337,8 @@ def run_agentic_kda_skill(
             actual_create_args=create_args,
             actual_execute_result=execute_result,
             turn_wall_clock_sec=turn_wall_clock_sec,
+            total_turns=float(turns),
+            total_steps=steps,
             reasoning_steps=reasoning_steps,
             response_id=response_id,
             tool_call_events=all_tool_call_events,
@@ -442,6 +451,8 @@ def evaluate_agentic_kda_skill(
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
                     ctx.score(tid, name="kda_disambiguated", value=float(ev.disambiguated), data_type="BOOLEAN")
+                    ctx.score(tid, name="turns", value=run.total_turns, data_type="NUMERIC")
+                    ctx.score(tid, name="steps", value=run.total_steps, data_type="NUMERIC")
                     if turn_wall_clock_sec is not None:
                         # combo_report.py reads this score directly -- no trace re-resolution needed.
                         ctx.score(

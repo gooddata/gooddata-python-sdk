@@ -1195,3 +1195,88 @@ def test_evaluate_agentic_kda_skill_preserves_reasoning_from_a_chat_error_partia
 
     assert exc_info.value.reasoning_steps == ["analyzing before cutoff"]
     assert exc_info.value.response_id == "resp-3"
+
+
+def test_run_agentic_kda_skill_counts_the_turns_and_reasoning_steps_it_used():
+    """QA-29110: the effort comparison reads these. A binary pass/fail cannot separate two
+    efforts on a nightly's sample, while the reasoning-step count moves with the effort."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    # Turn 1 asks for clarification, turn 2 runs the analysis: 2 turns, 1 step each.
+    mock_client.send_message.side_effect = [
+        _no_kda_chat_result("Which metric did you mean?"),
+        _kda_chat_result(success=True),
+    ]
+
+    with (
+        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.kda_skill.generate_simulated_kda_response", return_value="Revenue"),
+    ):
+        summary = run_agentic_kda_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="What drove the change?",
+            expected_output=_EXPECTED,
+            k=1,
+            max_iterations=2,
+        )
+
+    assert summary.best.total_turns == 2.0
+    assert summary.best.total_steps == 2.0
+
+
+def test_run_agentic_kda_skill_reports_no_turns_when_the_first_send_fails():
+    """A run that never got a reply must not report a turn it did not take."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = RuntimeError("stream died")
+
+    with patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client):
+        summary = run_agentic_kda_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="What drove the change?",
+            expected_output=_EXPECTED,
+            k=1,
+            max_iterations=1,
+        )
+
+    assert summary.best.total_turns == 0.0
+    assert summary.best.total_steps == 0.0
+
+
+def test_kda_skill_writes_the_turn_and_step_counts_to_langfuse():
+    """The counters exist to reach Langfuse; asserting only the dataclass would pass even if
+    the scores were never written."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _kda_chat_result(success=True)
+    captured = {}
+
+    def _capture(_submit, _identity, **kwargs):
+        captured["write_scores"] = kwargs["write_scores"]
+
+    with (
+        patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.kda_skill.submit_trace_scoring", _capture),
+    ):
+        evaluate_agentic_kda_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="What drove the change?",
+            expected_output=_EXPECTED,
+            k=1,
+            max_iterations=1,
+            langfuse=MagicMock(),
+            dataset_item_id="item-1",
+        )
+
+    ctx = MagicMock()
+    captured["write_scores"](ctx)
+    scores = {c.kwargs["name"]: c.kwargs["value"] for c in ctx.score.call_args_list}
+
+    assert scores["turns"] == 1.0
+    assert scores["steps"] == 1.0

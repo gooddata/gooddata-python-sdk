@@ -764,3 +764,86 @@ def test_no_timer_output_by_default(monkeypatch, capsys):
     assert "[timer]" not in capsys.readouterr().out
     # Silenced, not un-measured.
     assert summary.run_results[0].timings.agent_s == 3.0
+
+
+def test_run_agentic_metric_skill_counts_the_turns_and_reasoning_steps_it_used():
+    """QA-29110: the effort comparison reads these. A clarification round is part of the work
+    the effort setting changes, so its steps count with the rest."""
+    clarify_turn = ChatResult.model_validate(
+        {"textResponse": "Which foo?", "toolCallEvents": [], "reasoningStepCount": 2}
+    )
+    created_turn = ChatResult.model_validate(
+        {
+            "textResponse": "done",
+            "reasoningStepCount": 3,
+            "toolCallEvents": [
+                {
+                    "functionName": "create_metric",
+                    "functionArguments": "{}",
+                    "result": '{"data": {"maql": "SELECT {metric/foo}"}}',
+                }
+            ],
+        }
+    )
+    mock_client = _client()
+    mock_client.send_message.side_effect = [clarify_turn, created_turn]
+
+    with _patched(mock_client, simulated_reply="It's foo"):
+        summary = run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=2,
+        )
+
+    assert summary.best.total_turns == 2.0
+    assert summary.best.total_steps == 5.0
+
+
+def test_metric_skill_writes_the_turn_and_step_counts_to_langfuse():
+    """The counters exist to reach Langfuse; asserting only the dataclass would pass even if
+    the scores were never written."""
+    mock_client = _client()
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {
+            "textResponse": "done",
+            "reasoningStepCount": 4,
+            "toolCallEvents": [
+                {
+                    "functionName": "create_metric",
+                    "functionArguments": "{}",
+                    "result": '{"data": {"maql": "SELECT {metric/foo}"}}',
+                }
+            ],
+        }
+    )
+    captured = {}
+
+    def _capture(_submit, _identity, **kwargs):
+        captured["write_scores"] = kwargs["write_scores"]
+
+    with (
+        _patched(mock_client),
+        patch("gooddata_eval.core.agentic.metric_skill.submit_trace_scoring", _capture),
+    ):
+        evaluate_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=1,
+            langfuse=MagicMock(),
+            dataset_item_id="item-1",
+        )
+
+    ctx = MagicMock()
+    captured["write_scores"](ctx)
+    scores = {c.kwargs["name"]: c.kwargs["value"] for c in ctx.score.call_args_list}
+
+    assert scores["turns"] == 1.0
+    assert scores["steps"] == 4.0
