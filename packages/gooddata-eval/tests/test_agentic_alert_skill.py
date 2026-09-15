@@ -1020,8 +1020,8 @@ def test_run_agentic_alert_skill_counts_the_turns_and_reasoning_steps_it_used():
 
     # _no_alert_chat_result has no tool calls and non-empty text, so the run replies once and
     # stops at max_iterations: 2 turns, 1 reasoning step each.
-    assert summary.best.total_turns == 2.0
-    assert summary.best.total_steps == 2.0
+    assert summary.best.total_turns == 2
+    assert summary.best.total_steps == 2
 
 
 def test_alert_skill_writes_the_turn_and_step_counts_to_langfuse():
@@ -1058,5 +1058,5 @@ def test_alert_skill_writes_the_turn_and_step_counts_to_langfuse():
     captured["write_scores"](ctx)
     scores = {c.kwargs["name"]: c.kwargs["value"] for c in ctx.score.call_args_list}
 
-    assert scores["turns"] == 1.0
-    assert scores["steps"] == 1.0
+    assert scores["turns"] == 1
+    assert scores["steps"] == 1

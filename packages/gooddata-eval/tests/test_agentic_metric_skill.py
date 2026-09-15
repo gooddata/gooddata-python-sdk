@@ -582,7 +582,7 @@ def test_run_agentic_metric_skill_fails_the_run_when_the_simulated_reply_cannot_
 
     assert summary.pass_at_k is False
     assert summary.best.metric_created is False
-    assert summary.best.total_turns == 1.0
+    assert summary.best.total_turns == 1
     mock_client.close.assert_called_once()
     mock_sim.assert_called_once_with(
         "Which brand field should I count?", [{"maql": "SELECT {metric/foo}"}], "Create metric foo"
@@ -799,8 +799,8 @@ def test_run_agentic_metric_skill_counts_the_turns_and_reasoning_steps_it_used()
             max_iterations=2,
         )
 
-    assert summary.best.total_turns == 2.0
-    assert summary.best.total_steps == 5.0
+    assert summary.best.total_turns == 2
+    assert summary.best.total_steps == 5
 
 
 def test_metric_skill_writes_the_turn_and_step_counts_to_langfuse():
@@ -845,5 +845,9 @@ def test_metric_skill_writes_the_turn_and_step_counts_to_langfuse():
     captured["write_scores"](ctx)
     scores = {c.kwargs["name"]: c.kwargs["value"] for c in ctx.score.call_args_list}
 
-    assert scores["turns"] == 1.0
-    assert scores["steps"] == 4.0
+    assert scores["turns"] == 1
+    assert scores["steps"] == 4
+    # `==` does not separate 1 from 1.0, so the counts need their type pinned separately:
+    # they are counts, and a float reads as though a fraction of a turn were possible.
+    assert isinstance(scores["turns"], int)
+    assert isinstance(scores["steps"], int)

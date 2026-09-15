@@ -1069,7 +1069,7 @@ def test_run_agentic_conversation_sums_the_reasoning_steps_of_every_turn():
             fixture=_alert_turn_fixture(),
         )
 
-    assert result.total_steps == 5.0
+    assert result.total_steps == 5
     assert result.total_clarification_turns == 1
 
 
@@ -1126,6 +1126,6 @@ def test_conversation_writes_the_turn_step_and_clarification_counts_to_langfuse(
     captured["write_scores"](ctx)
     scores = {c.kwargs["name"]: c.kwargs["value"] for c in ctx.score.call_args_list}
 
-    assert scores["clarification_turns"] == 1.0
-    assert scores["turns"] == 2.0  # 1 fixture turn + 1 clarification round
-    assert scores["steps"] == 5.0
+    assert scores["clarification_turns"] == 1
+    assert scores["turns"] == 2  # 1 fixture turn + 1 clarification round
+    assert scores["steps"] == 5

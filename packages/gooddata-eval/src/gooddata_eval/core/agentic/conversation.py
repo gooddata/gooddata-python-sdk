@@ -336,7 +336,7 @@ class ConversationResult:
     full_skill_coverage: bool
     conversation_success: bool
     total_clarification_turns: int
-    total_steps: float = 0.0
+    total_steps: int = 0
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
@@ -366,7 +366,7 @@ def run_agentic_conversation(
     turn_results: list[TurnResult] = []
     turn_outputs: dict[str, dict] = {}
     total_clarification_turns = 0
-    total_steps = 0.0
+    total_steps = 0
     conversation_id: str = ""
     owns_conversation = False
     # Metrics created during this conversation, deleted after it completes so they do
@@ -436,7 +436,7 @@ def run_agentic_conversation(
             for _iter in range(max_clarification_turns + 1):
                 chat_result = client.send_message(conversation_id, current_message)
                 final_result = chat_result
-                total_steps += float(chat_result.reasoning_step_count)
+                total_steps += chat_result.reasoning_step_count
                 turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
                     chat_result,
                     turn_offset=turn_offset,
@@ -621,14 +621,14 @@ def evaluate_agentic_conversation(
                 ctx.score(
                     tid,
                     name="turns",
-                    value=float(len(result.turn_results) + result.total_clarification_turns),
+                    value=len(result.turn_results) + result.total_clarification_turns,
                     data_type="NUMERIC",
                 )
                 ctx.score(tid, name="steps", value=result.total_steps, data_type="NUMERIC")
                 ctx.score(
                     tid,
                     name="clarification_turns",
-                    value=float(result.total_clarification_turns),
+                    value=result.total_clarification_turns,
                     data_type="NUMERIC",
                 )
                 for tr in result.turn_results:

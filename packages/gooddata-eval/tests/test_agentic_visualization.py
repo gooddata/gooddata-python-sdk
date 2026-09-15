@@ -71,8 +71,8 @@ def test_execute_single_run_viz_on_first_turn():
 
     assert result.eval_result.visualization_created is True
     assert result.eval_result.strict_pass is True
-    assert result.total_turns == 1.0
-    assert result.total_steps == 2.0
+    assert result.total_turns == 1
+    assert result.total_steps == 2
     assert result.conversation_id == "conv-1"
     client.send_message.assert_called_once_with("conv-1", "Show revenue")
 
@@ -93,7 +93,7 @@ def test_execute_single_run_clarification_then_viz(monkeypatch):
     result = _execute_single_run(client, "conv-1", "Show me a chart", [_expected()])
 
     assert result.eval_result.visualization_created is True
-    assert result.total_turns == 2.0
+    assert result.total_turns == 2
     assert client.send_message.call_count == 2
     assert client.send_message.call_args_list[1] == call("conv-1", "Revenue please")
 
@@ -111,7 +111,7 @@ def test_execute_single_run_no_viz_no_text():
     result = _execute_single_run(client, "conv-1", "Show revenue", [_expected()])
 
     assert result.eval_result.visualization_created is False
-    assert result.total_turns == 1.0
+    assert result.total_turns == 1
 
 
 def test_execute_single_run_max_iterations_stops_loop(monkeypatch):

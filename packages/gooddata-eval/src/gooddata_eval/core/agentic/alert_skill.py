@@ -477,8 +477,8 @@ class AlertRunResult:
     alert_id: str | None
     eval: AlertEvaluation
     actual_alert_arguments: dict
-    total_turns: float = 0.0
-    total_steps: float = 0.0
+    total_turns: int = 0
+    total_steps: int = 0
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
@@ -679,12 +679,12 @@ def run_agentic_alert_skill(
             conversation_history: list = []
             current_question = question
             turns = 0
-            steps = 0.0
+            steps = 0
 
             for _iteration in range(max_iterations):
                 chat_result = client.send_message(conv_id, current_question)
                 turns += 1
-                steps += float(chat_result.reasoning_step_count)
+                steps += chat_result.reasoning_step_count
                 reasoning_steps.extend(chat_result.reasoning_steps or [])
                 response_id = chat_result.response_id or response_id
                 turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
@@ -734,7 +734,7 @@ def run_agentic_alert_skill(
                 alert_id=alert_id,
                 eval=ev,
                 actual_alert_arguments=actual_args,
-                total_turns=float(turns),
+                total_turns=turns,
                 total_steps=steps,
                 reasoning_steps=reasoning_steps,
                 response_id=response_id,

@@ -162,8 +162,8 @@ class MetricRunResult:
     metric_created: bool
     actual_maql: str
     maql_correct: bool
-    total_turns: float
-    total_steps: float = 0.0
+    total_turns: int
+    total_steps: int = 0
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
@@ -254,7 +254,7 @@ def _execute_single_metric_run(
     metric_result: dict | None = None
     created_metric_ids: list[str] = []
     turns = 0
-    steps = 0.0
+    steps = 0
     current_question = question
     reasoning_steps: list[str] = []
     response_id: str | None = None
@@ -282,7 +282,7 @@ def _execute_single_metric_run(
             )
             all_tool_call_events.extend(chat_result.tool_call_events or [])
             all_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
-            steps += float(chat_result.reasoning_step_count)
+            steps += chat_result.reasoning_step_count
             for metric_id in _extract_created_metric_ids(chat_result.tool_call_events or []):
                 if metric_id not in created_metric_ids:
                     created_metric_ids.append(metric_id)
@@ -333,7 +333,7 @@ def _execute_single_metric_run(
             metric_created=metric_created,
             actual_maql=actual_maql,
             maql_correct=maql_correct,
-            total_turns=float(turns),
+            total_turns=turns,
             total_steps=steps,
             reasoning_steps=reasoning_steps,
             response_id=response_id,

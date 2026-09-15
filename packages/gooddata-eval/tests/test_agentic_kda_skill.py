@@ -1222,8 +1222,8 @@ def test_run_agentic_kda_skill_counts_the_turns_and_reasoning_steps_it_used():
             max_iterations=2,
         )
 
-    assert summary.best.total_turns == 2.0
-    assert summary.best.total_steps == 2.0
+    assert summary.best.total_turns == 2
+    assert summary.best.total_steps == 2
 
 
 def test_run_agentic_kda_skill_reports_no_turns_when_the_first_send_fails():
@@ -1243,8 +1243,8 @@ def test_run_agentic_kda_skill_reports_no_turns_when_the_first_send_fails():
             max_iterations=1,
         )
 
-    assert summary.best.total_turns == 0.0
-    assert summary.best.total_steps == 0.0
+    assert summary.best.total_turns == 0
+    assert summary.best.total_steps == 0
 
 
 def test_kda_skill_writes_the_turn_and_step_counts_to_langfuse():
@@ -1278,5 +1278,5 @@ def test_kda_skill_writes_the_turn_and_step_counts_to_langfuse():
     captured["write_scores"](ctx)
     scores = {c.kwargs["name"]: c.kwargs["value"] for c in ctx.score.call_args_list}
 
-    assert scores["turns"] == 1.0
-    assert scores["steps"] == 1.0
+    assert scores["turns"] == 1
+    assert scores["steps"] == 1
