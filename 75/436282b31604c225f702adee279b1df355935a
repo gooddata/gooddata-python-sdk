@@ -1,11 +1,15 @@
 packages/gooddata-eval/tests/test_agentic_alert_skill.py
   s_4c6a5493369291::t_827d797e931f14 999-1062
+  s_4c6a5493369291::t_c9f28999b413f1 999-1062
 packages/gooddata-eval/tests/test_agentic_conversation.py
   s_4c6a5493369291::t_84631246dc446a 1074-1131
+  s_4c6a5493369291::t_d4e72b6df4ccbc 1074-1131
 packages/gooddata-eval/tests/test_agentic_kda_skill.py
   s_4c6a5493369291::t_48992596c9da3e 1248-1282
+  s_4c6a5493369291::t_a18212a5ab134b 1248-1282
 packages/gooddata-eval/tests/test_agentic_metric_skill.py
   s_4c6a5493369291::t_b60499c1915bcb 767-849
+  s_4c6a5493369291::t_209920b16d219f 767-849
 ---
 {
   "schema_version": "authorship/3.0.0",
