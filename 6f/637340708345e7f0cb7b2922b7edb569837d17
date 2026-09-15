@@ -1,0 +1,39 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_732b0ecf528d18::t_5c371c4d55c632 208
+  s_732b0ecf528d18::t_ac3fe388965a13 209-210
+packages/gooddata-eval/tests/test_agentic_conversation.py
+  s_732b0ecf528d18::t_cbcfad94636901 111-134
+  s_732b0ecf528d18::t_afaacc78abf0dc 11
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  s_732b0ecf528d18::t_9e0ff1673fd574 16
+  s_732b0ecf528d18::t_a3fcff3087f746 147-148,173,175-203
+  s_732b0ecf528d18::t_cc6de770a77eaa 310
+  s_732b0ecf528d18::t_c5f948cf1aebdb 95-107
+  s_732b0ecf528d18::t_65d1368c811d3f 490,498
+  s_732b0ecf528d18::t_5d2f78f8fea193 139
+  s_732b0ecf528d18::t_11af740c86ec73 108-118
+  s_732b0ecf528d18::t_924bd6d7f2e8da 530-532
+  s_732b0ecf528d18::t_f70775ca08420f 146,152-172,174
+  s_732b0ecf528d18::t_a0e85e8f131747 204-205
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_732b0ecf528d18::t_c5cbb44804245e 102-106,111,114-120,144-148,153
+  s_732b0ecf528d18::t_0bfcf74921d068 107-110,112-113
+  s_732b0ecf528d18::t_6a34cd6c6f1b00 121,141,149-152
+  s_732b0ecf528d18::t_6642fc95cd9139 310
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "6f637340708345e7f0cb7b2922b7edb569837d17",
+  "prompts": {},
+  "sessions": {
+    "s_732b0ecf528d18": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "03501712-58cc-4278-ac9a-527c4366c8bb",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Frank Huynh <duy.huynh@gooddata.com>"
+    }
+  }
+}

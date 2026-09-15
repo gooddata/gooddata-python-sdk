@@ -1,0 +1,26 @@
+pyproject.toml
+  s_66039599a549dc::t_b38cc45eed5e6a 99-102
+Dockerfile
+  s_66039599a549dc::t_824dbdcac3acda 3
+  s_66039599a549dc::t_f465fbe3f4ed70 45-46
+packages/gooddata-eval/.gitignore
+  s_66039599a549dc::t_d493d123650a7a 1-8
+uv.lock
+  s_66039599a549dc::t_ed74c4babf5823 1151,1202
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "a1b29d917d1bfb916a4d4e1bf445e9e430c1a9f8",
+  "prompts": {},
+  "sessions": {
+    "s_66039599a549dc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3a86f1bd-6a08-45db-a3b2-daadeaacb44c",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

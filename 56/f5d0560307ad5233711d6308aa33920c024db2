@@ -1,0 +1,53 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_langfuse.py
+  s_152f0704157226::t_aaac73411b7723 18-19,38
+  s_152f0704157226::t_f202557485b1e7 21-22
+  s_eee004a4fc0d2f::t_23d0ab778b8db1 24
+packages/gooddata-eval/tests/test_langfuse_observations.py
+  s_152f0704157226::t_7316b17f30cc90 1-234
+packages/gooddata-eval/tests/test_langfuse_client.py
+  s_152f0704157226::t_ef567823bda794 1-15,17,19-26,31,36,42-64,66-71,73-75,77-86,88-93,97-101,103-108,112-115,117-124,126-127,138,140,144-150,153-157,159-165,168-172,174-179,181-184,186-191,195-197,199-201,204-206,208-213,217-219,221-227,231-233,238-239,242-253,255-256,258-266,268-273,277-281,283-288,296-307,312-313,315-320,322-326
+  s_152f0704157226::t_92b5d4cb437b70 16,18,29,32-33,65,72,76,87,95-96,102,110-111,116,125,128-137,139,141,158,173,180,185,192,198,207,215-216,220,229-230,234,236-237,240-241,254,267,274-276,282,289-295,308,310-311,314,321
+  s_152f0704157226::t_0cbd47ce2f515a 27-28,30,34-35,37-41,94,109,151-152,166-167,193-194,202-203,214,228,235,309
+  s_152f0704157226::t_33436745b9bbf3 142-143
+  s_152f0704157226::t_d88633f5c75c91 257
+packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
+  s_152f0704157226::t_ba53f568b1dd87 19
+  s_152f0704157226::t_f221fdbd03e225 29
+packages/gooddata-eval/tests/test_agentic_langfuse_trace.py
+  s_152f0704157226::t_d41d6d62404a50 268-281,285,287-289,291,301,309-310,316-319,321,323-324,326
+  s_152f0704157226::t_1d0f4426608ea7 15
+  s_152f0704157226::t_4271e218a38c67 518,525-526,529,531-533
+  s_152f0704157226::t_d88633f5c75c91 534
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/client.py
+  s_152f0704157226::t_3021703b8e2fd1 95-97
+  s_152f0704157226::t_0d8d55dd6d28c7 1-49,52-65,67-94,98-106,108-195
+  s_152f0704157226::t_de2dd5593bf446 66
+  s_152f0704157226::t_4ce88d50b5aacf 50-51
+  s_152f0704157226::t_b5c9a213ec97b2 107
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/observations.py
+  s_152f0704157226::t_f573308680addb 1-116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "56f5d0560307ad5233711d6308aa33920c024db2",
+  "prompts": {},
+  "sessions": {
+    "s_152f0704157226": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81049499-0417-40a7-9a8a-3bc2f0738f69",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    },
+    "s_eee004a4fc0d2f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a0f8aa380f2c220bb",
+        "model": "unknown"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
