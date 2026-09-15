@@ -271,6 +271,7 @@ class ConversationResult:
     full_skill_coverage: bool
     conversation_success: bool
     total_clarification_turns: int
+    total_steps: float = 0.0
 
 
 def run_agentic_conversation(
@@ -293,6 +294,7 @@ def run_agentic_conversation(
     turn_results: list[TurnResult] = []
     turn_outputs: dict[str, dict] = {}
     total_clarification_turns = 0
+    total_steps = 0.0
     conversation_id: str = ""
     owns_conversation = False
     # Metrics created during this conversation, deleted after it completes so they do
@@ -351,6 +353,7 @@ def run_agentic_conversation(
                         )
                     raise
                 final_result = chat_result
+                total_steps += float(chat_result.reasoning_step_count)
                 all_tool_calls.extend(chat_result.tool_call_events or [])
 
                 if _check_output_present(resolved_turn, chat_result):
@@ -421,6 +424,7 @@ def run_agentic_conversation(
         full_skill_coverage=full_skill_coverage,
         conversation_success=conversation_success,
         total_clarification_turns=total_clarification_turns,
+        total_steps=total_steps,
     )
 
 
@@ -499,6 +503,24 @@ def evaluate_agentic_conversation(
             )
             score_safe(
                 langfuse, tid, name="full_skill_coverage", value=float(result.full_skill_coverage), data_type="BOOLEAN"
+            )
+            # One turn per fixture turn, plus every simulated-user round the agent triggered.
+            # The clarification count alone hides how much of the conversation the fixture asked
+            # for, so the comparison needs the total.
+            score_safe(
+                langfuse,
+                tid,
+                name="turns",
+                value=float(len(result.turn_results) + result.total_clarification_turns),
+                data_type="NUMERIC",
+            )
+            score_safe(langfuse, tid, name="steps", value=result.total_steps, data_type="NUMERIC")
+            score_safe(
+                langfuse,
+                tid,
+                name="clarification_turns",
+                value=float(result.total_clarification_turns),
+                data_type="NUMERIC",
             )
             for tr in result.turn_results:
                 score_safe(

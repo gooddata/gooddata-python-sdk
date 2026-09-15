@@ -302,6 +302,8 @@ class AlertRunResult:
     alert_id: str | None
     eval: AlertEvaluation
     actual_alert_arguments: dict
+    total_turns: float = 0.0
+    total_steps: float = 0.0
 
 
 @dataclass
@@ -451,9 +453,13 @@ def run_agentic_alert_skill(
             # Roles follow GPT-4o's perspective: "assistant"=agent text, "user"=sim-user reply.
             conversation_history: list = []
             current_question = question
+            turns = 0
+            steps = 0.0
 
             for _iteration in range(max_iterations):
                 chat_result = client.send_message(conv_id, current_question)
+                turns += 1
+                steps += float(chat_result.reasoning_step_count)
                 alert_id, actual_args, tool_called = _extract_alert_call(chat_result.tool_call_events or [])
                 if tool_called:
                     alert_id_to_delete = alert_id
@@ -489,6 +495,8 @@ def run_agentic_alert_skill(
                 alert_id=alert_id,
                 eval=ev,
                 actual_alert_arguments=actual_args,
+                total_turns=float(turns),
+                total_steps=steps,
             )
         finally:
             if alert_id_to_delete:
@@ -620,6 +628,8 @@ def evaluate_agentic_alert_skill(
             with observe(langfuse, pt.id if pt else None, dataset_item_id, run_name, run_metadata) as tid:
                 for score_name, value in strict_checks.items():
                     score_safe(langfuse, tid, name=score_name, value=float(value), data_type="BOOLEAN")
+                score_safe(langfuse, tid, name="turns", value=run.total_turns, data_type="NUMERIC")
+                score_safe(langfuse, tid, name="steps", value=run.total_steps, data_type="NUMERIC")
                 log_quality_and_value_scores(
                     langfuse,
                     tid,

@@ -159,6 +159,8 @@ class KdaRunResult:
     # Wall-clock time of the turn that called create (None if create never happened) --
     # not any earlier disambiguation turn. See run_agentic_kda_skill's _run_once.
     turn_wall_clock_sec: float | None = None
+    total_turns: float = 0.0
+    total_steps: float = 0.0
 
 
 @dataclass
@@ -224,6 +226,8 @@ def run_agentic_kda_skill(
         turn_completed = False
         disambiguated = False
         current_question = question
+        turns = 0
+        steps = 0.0
 
         for iteration in range(max_iterations):
             try:
@@ -237,6 +241,8 @@ def run_agentic_kda_skill(
                         turn_wall_clock_sec = partial.turn_wall_clock_sec
                 turn_completed = False
                 break
+            turns += 1
+            steps += float(chat_result.reasoning_step_count)
             create_args, execute_result = _extract_kda_calls(chat_result.tool_call_events or [])
             response_text = (chat_result.text_response or "").strip()
             turn_completed = chat_result.stream_ended and bool(response_text)
@@ -273,6 +279,8 @@ def run_agentic_kda_skill(
             actual_create_args=create_args,
             actual_execute_result=execute_result,
             turn_wall_clock_sec=turn_wall_clock_sec,
+            total_turns=float(turns),
+            total_steps=steps,
         )
 
     try:
@@ -397,6 +405,8 @@ def evaluate_agentic_kda_skill(
                 for score_name, value in strict_checks.items():
                     score_safe(langfuse, tid, name=score_name, value=float(value), data_type="BOOLEAN")
                 score_safe(langfuse, tid, name="kda_disambiguated", value=float(ev.disambiguated), data_type="BOOLEAN")
+                score_safe(langfuse, tid, name="turns", value=run.total_turns, data_type="NUMERIC")
+                score_safe(langfuse, tid, name="steps", value=run.total_steps, data_type="NUMERIC")
                 if turn_wall_clock_sec is not None:
                     # combo_report.py reads this score directly -- no trace re-resolution needed.
                     score_safe(

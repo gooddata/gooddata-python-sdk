@@ -130,6 +130,7 @@ class MetricRunResult:
     actual_maql: str
     maql_correct: bool
     total_turns: float
+    total_steps: float = 0.0
     created_new: bool | None = None
 
 
@@ -248,6 +249,7 @@ def _execute_single_metric_run(
     metric_result: dict | None = None
     all_tool_calls: list[ToolCallEvent] = []
     turns = 0
+    steps = 0.0
     current_question = question
 
     try:
@@ -262,6 +264,7 @@ def _execute_single_metric_run(
                     all_tool_calls.extend(exc.partial_result.tool_call_events or [])
                 raise
             all_tool_calls.extend(chat_result.tool_call_events or [])
+            steps += float(chat_result.reasoning_step_count)
             candidate = _extract_metric_result(chat_result.tool_call_events or [])
             if candidate is not None:
                 metric_result = candidate
@@ -287,6 +290,7 @@ def _execute_single_metric_run(
             actual_maql=actual_maql,
             maql_correct=maql_correct,
             total_turns=float(turns),
+            total_steps=steps,
             created_new=metric_result.get("created_new") if metric_result else None,
         )
     finally:
@@ -431,6 +435,8 @@ def evaluate_agentic_metric_skill(
             with observe(langfuse, pt.id if pt else None, dataset_item_id, run_name, run_metadata) as tid:
                 score_safe(langfuse, tid, name="metric_created", value=float(run.metric_created), data_type="BOOLEAN")
                 score_safe(langfuse, tid, name="maql_correct", value=float(run.maql_correct), data_type="BOOLEAN")
+                score_safe(langfuse, tid, name="turns", value=run.total_turns, data_type="NUMERIC")
+                score_safe(langfuse, tid, name="steps", value=run.total_steps, data_type="NUMERIC")
                 log_quality_and_value_scores(
                     langfuse,
                     tid,
