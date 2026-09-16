@@ -3,9 +3,9 @@ from __future__ import annotations
 
 from typing import Union
 
-import gooddata_api_client.models as afm_models
 from gooddata_api_client.model_utils import OpenApiModel
 
+from gooddata_sdk import _models as afm_models
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ExecModelEntity, Filter, ObjId
 
