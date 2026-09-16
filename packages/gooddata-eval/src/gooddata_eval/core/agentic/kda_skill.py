@@ -7,6 +7,14 @@ import logging
 import os
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._gate import (
+    DEFAULT_GATE,
+    EvalGate,
+    gate_failure_note,
+    gate_passed,
+    log_gate_scores,
+    stamp_gate_metadata,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -178,6 +186,8 @@ class KdaRunResult:
     # Wall-clock time of the turn that called create (None if create never happened) --
     # not any earlier disambiguation turn. See run_agentic_kda_skill's _run_once.
     turn_wall_clock_sec: float | None = None
+    total_turns: int = 0
+    total_steps: int = 0
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
@@ -277,6 +287,9 @@ def run_agentic_kda_skill(
         # simply runs out of range() is labelled correctly with no trailing else.
         exit_reason = LoopExit.BUDGET_EXHAUSTED
         turns_used = 0
+        turns = 0
+        steps = 0
+
         for iteration in range(max_iterations):
             turns_used = iteration + 1
             try:
@@ -294,6 +307,8 @@ def run_agentic_kda_skill(
                 turn_completed = False
                 exit_reason = LoopExit.CHAT_ERROR
                 break
+            turns += 1
+            steps += chat_result.reasoning_step_count
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
             _accumulate(chat_result)
@@ -336,6 +351,8 @@ def run_agentic_kda_skill(
             actual_create_args=create_args,
             actual_execute_result=execute_result,
             turn_wall_clock_sec=turn_wall_clock_sec,
+            total_turns=turns,
+            total_steps=steps,
             reasoning_steps=reasoning_steps,
             response_id=response_id,
             tool_call_events=all_tool_call_events,
@@ -399,6 +416,7 @@ def evaluate_agentic_kda_skill(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run KDA-skill evaluation, log to Langfuse, and raise KdaSkillAssertionError on failure.
 
@@ -425,6 +443,7 @@ def evaluate_agentic_kda_skill(
         window_end = utc_now()
 
         def _write_scores(ctx: RunTraceContext) -> None:
+            stamp_gate_metadata(ctx.run_metadata, k=len(summary.run_results), gate=gate)
 
             for run_idx, run in enumerate(summary.run_results):
                 # No custom selector -- same default (max-latency) as every other skill; harmless
@@ -448,6 +467,8 @@ def evaluate_agentic_kda_skill(
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
                     ctx.score(tid, name="kda_disambiguated", value=float(ev.disambiguated), data_type="BOOLEAN")
+                    ctx.score(tid, name="turns", value=run.total_turns, data_type="NUMERIC")
+                    ctx.score(tid, name="steps", value=run.total_steps, data_type="NUMERIC")
                     if turn_wall_clock_sec is not None:
                         # combo_report.py reads this score directly -- no trace re-resolution needed.
                         ctx.score(
@@ -456,6 +477,7 @@ def evaluate_agentic_kda_skill(
                             value=turn_wall_clock_sec,
                             data_type="NUMERIC",
                         )
+                    log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
                     ctx.quality(
                         tid,
                         strict_checks=strict_checks,
@@ -506,9 +528,10 @@ def evaluate_agentic_kda_skill(
         "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
 
-    if not summary.pass_at_k:
+    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
         message = (
-            f"KDA skill assertion failed. strict_pass={ev.strict_pass} "
+            f"KDA skill assertion failed. {gate_note} strict_pass={ev.strict_pass} "
             f"(triggered={ev.triggered}, executed={ev.executed}, "
             f"success={ev.success}, turn_completed={ev.turn_completed}). "
             f"Actual create args: {best.actual_create_args}. "

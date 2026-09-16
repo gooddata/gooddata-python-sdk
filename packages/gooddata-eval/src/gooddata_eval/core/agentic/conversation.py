@@ -349,6 +349,7 @@ class ConversationResult:
     # its whole allowance from one that stopped early. Every other agentic kind reports its
     # limit in detail; without this, conversation is the exception to that contract.
     max_clarification_turns: int = _DEFAULT_MAX_CLARIFICATION_TURNS
+    total_steps: int = 0
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
@@ -378,6 +379,7 @@ def run_agentic_conversation(
     turn_results: list[TurnResult] = []
     turn_outputs: dict[str, dict] = {}
     total_clarification_turns = 0
+    total_steps = 0
     conversation_id: str = ""
     owns_conversation = False
     # Metrics created during this conversation, deleted after it completes so they do
@@ -470,6 +472,7 @@ def run_agentic_conversation(
                     turn_exit = LoopExit.CHAT_ERROR
                     break
                 final_result = chat_result
+                total_steps += chat_result.reasoning_step_count
                 turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
                     chat_result,
                     turn_offset=turn_offset,
@@ -565,6 +568,7 @@ def run_agentic_conversation(
         conversation_success=conversation_success,
         total_clarification_turns=total_clarification_turns,
         max_clarification_turns=max_clarification_turns,
+        total_steps=total_steps,
         reasoning_steps=reasoning_steps,
         response_id=response_id,
         tool_call_events=conversation_tool_call_events,
@@ -654,6 +658,22 @@ def evaluate_agentic_conversation(
                     name="full_skill_coverage",
                     value=float(result.full_skill_coverage),
                     data_type="BOOLEAN",
+                )
+                # One turn per fixture turn, plus every simulated-user round the agent triggered.
+                # The clarification count alone hides how much of the conversation the fixture
+                # asked for, so the comparison needs the total.
+                ctx.score(
+                    tid,
+                    name="turns",
+                    value=len(result.turn_results) + result.total_clarification_turns,
+                    data_type="NUMERIC",
+                )
+                ctx.score(tid, name="steps", value=result.total_steps, data_type="NUMERIC")
+                ctx.score(
+                    tid,
+                    name="clarification_turns",
+                    value=result.total_clarification_turns,
+                    data_type="NUMERIC",
                 )
                 for tr in result.turn_results:
                     ctx.score(

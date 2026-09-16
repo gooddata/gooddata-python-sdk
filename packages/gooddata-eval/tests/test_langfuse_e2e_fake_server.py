@@ -154,9 +154,15 @@ def test_agentic_inline_path_polls_looks_up_exports_and_scores(fake_langfuse: Fa
     on_span = [b for b in bodies if b["traceId"] == span["traceId"]]
     assert len(bodies) == len(on_gen_ai) + len(on_span)
     assert {b["name"] for b in on_gen_ai} == {b["name"] for b in on_span}
-    assert {"general_question_pass", "llm_judge_score", "quality_score", "value_score"} == {
-        b["name"] for b in on_gen_ai
-    }
+    assert {
+        "general_question_pass",
+        "llm_judge_score",
+        "pass_at_k",
+        "pass_power_k",
+        "gate_passed",
+        "quality_score",
+        "value_score",
+    } == {b["name"] for b in on_gen_ai}
     assert all("observationId" not in b for b in on_gen_ai)
     assert all(b["observationId"] == span["spanId"] for b in on_span)
 
@@ -227,6 +233,9 @@ def test_local_dataset_item_keeps_gen_ai_scores_and_warns_once(fake_langfuse: Fa
     assert {b["name"] for b in bodies} == {
         "general_question_pass",
         "llm_judge_score",
+        "pass_at_k",
+        "pass_power_k",
+        "gate_passed",
         "quality_score",
         "value_score",
     }
@@ -341,9 +350,9 @@ def test_a_rate_limited_score_is_retried_and_lands(fake_langfuse: FakeLangfuse) 
         _run_general_question(dataset_item_id="item-1", dataset_name="throttled")
 
     bodies = _score_bodies(fake_langfuse)
-    # Eight writes -- four scores on each of the gen-ai trace and the experiment span --
+    # Fourteen writes -- seven scores on each of the gen-ai trace and the experiment span --
     # plus the one refused attempt the client repeated.
-    assert len(bodies) == 9
+    assert len(bodies) == 15
     posted_twice = [b for b in bodies if bodies.count(b) == 2]
     assert len(posted_twice) == 2, "exactly one score body was posted twice"
 
