@@ -69,7 +69,9 @@ test = [
 ]
 
 [tool.ty.analysis]
-allowed-unresolved-imports = ["gooddata_api_client"]
+# The `.**` glob matches gooddata-sdk: leaf model modules are imported directly rather than
+# through the `gooddata_api_client.models` aggregate, and ty cannot resolve the generated code.
+allowed-unresolved-imports = ["gooddata_api_client.**"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/gooddata_pandas"]

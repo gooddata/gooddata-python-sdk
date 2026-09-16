@@ -1400,7 +1400,7 @@ def test_for_exec_result_id_arrow_types_mapper(tmp_path: Path) -> None:
 
     with (
         patch("gooddata_pandas.dataframe.BareExecutionResponse") as MockBareExec,
-        patch("gooddata_pandas.dataframe.models.AfmExecutionResponse"),
+        patch("gooddata_pandas.dataframe.AfmExecutionResponse"),
     ):
         mock_bare = MagicMock()
         mock_bare.read_result_arrow.return_value = table

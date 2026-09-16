@@ -14,11 +14,20 @@ from gooddata_api_client.exceptions import ApiException
 from rich.console import Console
 from rich.table import Table
 
-from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, run_agentic_items
+from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, UNGATED_AGENTIC_TEST_KINDS, run_agentic_items
 from gooddata_eval.core.chat.sse_client import ChatClient
-from gooddata_eval.core.config import DEFAULT_JUDGE_MODEL, JUDGE_MODEL_ENV_VAR, ReasoningEffort, RunConfig
+from gooddata_eval.core.config import (
+    DEFAULT_GATE,
+    DEFAULT_JUDGE_MODEL,
+    JUDGE_MODEL_ENV_VAR,
+    EvalGate,
+    ReasoningEffort,
+    RunConfig,
+    normalize_gate,
+)
 from gooddata_eval.core.connection import ConnectionError_, resolve_connection
 from gooddata_eval.core.dataset.local import load_local_dataset
+from gooddata_eval.core.evaluators import supported_test_kinds
 from gooddata_eval.core.langfuse.sink import LangfuseSink
 from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.reporting.console import render_comparison, render_console
@@ -91,7 +100,15 @@ def _build_parser() -> argparse.ArgumentParser:
             "Default: workspace's current active model."
         ),
     )
-    run.add_argument("--runs", type=int, default=2, help="Independent runs per item (pass@K). Default 2.")
+    run.add_argument("--runs", type=int, default=2, help="Independent runs per item. Default 2.")
+    run.add_argument(
+        "--gate",
+        choices=get_args(EvalGate),
+        default=DEFAULT_GATE,
+        help="Which verdict decides an item: 'any' = pass@K (a run passing is enough, the "
+        "default and historic behaviour), 'power' = pass^K (every run must pass, so the verdict "
+        "measures stability). Identical at --runs 1. Agentic kinds only.",
+    )
     run.add_argument(
         "--concurrency",
         type=int,
@@ -180,6 +197,37 @@ def _apply_timer_flag(enabled: bool) -> None:
         os.environ[TIMERS_ENV_VAR] = "1"
 
 
+def _reject_power_gate_on_ungated_items(config: RunConfig, items: list) -> None:
+    """Refuse a pass^K request the run cannot honour for every item.
+
+    Two kinds of item are never gated: everything on the non-agentic path, because
+    `run_items` has no gate and always decides on pass@K, and agentic_conversation, which
+    drives its fixture once whatever --runs says and so has no K to gate over. Running a
+    mixed dataset anyway would decide part of it under each rule and label the whole report
+    `power`. test_kind is resolved per item, so a dataset does not have to be homogeneous.
+
+    Kinds no evaluator supports are not counted: those items are skipped rather than
+    decided, so refusing on them would make --gate power fail where --gate any runs.
+    """
+    if normalize_gate(config.gate) != "power":
+        return
+    supported = supported_test_kinds()
+    ungated = [
+        i
+        for i in items
+        if i.test_kind in UNGATED_AGENTIC_TEST_KINDS
+        or (i.test_kind not in AGENTIC_TEST_KINDS and i.test_kind in supported)
+    ]
+    if not ungated:
+        return
+    kinds = sorted({i.test_kind for i in ungated})
+    raise ValueError(
+        f"--gate power applies to kinds that repeat K runs, but this dataset has {len(ungated)} "
+        f"item(s) of kind {kinds}, which are always decided on pass@K. Run them separately, or "
+        f"use --gate any."
+    )
+
+
 def _warn_if_local_dataset_cannot_link(config: RunConfig, agentic_items: list) -> None:
     """Say up front that experiment assembly will fail, rather than after the run.
 
@@ -252,7 +300,7 @@ def _make_progress_callbacks(console: Console):
             tag = "[yellow]SKIP[/yellow]"
         elif report.error:
             tag = "[red]ERR [/red]"
-        elif report.pass_at_k:
+        elif report.passed:
             tag = "[green]PASS[/green]"
         else:
             tag = "[red]FAIL[/red]"
@@ -342,6 +390,7 @@ def _run(config: RunConfig) -> int:
     items = _load_dataset(config)
     agentic_items = [i for i in items if i.test_kind in AGENTIC_TEST_KINDS]
     non_agentic_items = [i for i in items if i.test_kind not in AGENTIC_TEST_KINDS]
+    _reject_power_gate_on_ungated_items(config, items)
     _warn_if_local_dataset_cannot_link(config, agentic_items)
     models = config.models or []
     run_ts = datetime.now(timezone.utc).strftime("%Y-%m-%d-%H-%M")
@@ -416,6 +465,7 @@ def _run(config: RunConfig) -> int:
                     token=config.token,
                     workspace_id=config.workspace_id,
                     k=config.runs,
+                    gate=config.gate,
                     model_version=resolved.model_id,
                     reasoning_effort=config.reasoning_effort,
                     use_langfuse=config.log_to_langfuse,
@@ -465,6 +515,7 @@ def _run(config: RunConfig) -> int:
                 provider_name=resolved.provider_name or resolved.provider_id,
                 provider_type=resolved.provider_type,
                 workspace_id=config.workspace_id,
+                gate=config.gate,
             )
             if agentic_report is not None:
                 report.items.extend(agentic_report.items)
@@ -529,6 +580,7 @@ def main(argv: list[str] | None = None) -> int:
             kind=args.kind,
             preserve_failed=args.preserve_failed,
             reasoning_effort=args.reasoning_effort,
+            gate=normalize_gate(args.gate),
             agent_id=args.agent_id or os.environ.get("GD_EVAL_AGENT_ID"),
         )
         return _run(config)

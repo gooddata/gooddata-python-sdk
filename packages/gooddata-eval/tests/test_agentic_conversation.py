@@ -1093,3 +1093,107 @@ def test_a_non_chat_exception_still_propagates():
             workspace_id="ws1",
             fixture=_two_metric_turn_fixture(),
         )
+
+
+def test_run_agentic_conversation_sums_the_reasoning_steps_of_every_turn():
+    """QA-29110: the effort comparison reads `steps`. A clarification round is part of the
+    work the effort setting changes, so its steps count with the rest."""
+    proposal_turn = ChatResult.model_validate(
+        {
+            "text_response": None,
+            "alertProposals": [{"cta": "Should I create this alert?", "recipients": [{"email": "a@b.com"}]}],
+            "reasoningStepCount": 2,
+            "toolCallEvents": [
+                {"functionName": "set_skills", "functionArguments": '{"skills": ["alert"]}', "result": None},
+                {"functionName": "prepare_metric_alert_proposal", "functionArguments": "{}", "result": None},
+            ],
+        }
+    )
+    created_turn = ChatResult.model_validate(
+        {
+            "text_response": "Alert created.",
+            "reasoningStepCount": 3,
+            "toolCallEvents": [
+                {"functionName": "create_metric_alert", "functionArguments": "{}", "result": '{"id": "alert-1"}'}
+            ],
+        }
+    )
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [proposal_turn, created_turn]
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+        patch(
+            "gooddata_eval.core.agentic.conversation._get_sim_user_response",
+            return_value="Yes, please create it.",
+        ),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_alert_turn_fixture(),
+        )
+
+    assert result.total_steps == 5
+    assert result.total_clarification_turns == 1
+
+
+def test_conversation_writes_the_turn_step_and_clarification_counts_to_langfuse():
+    """`turns` is not the clarification count: it is one per fixture turn plus every
+    simulated-user round, so a test has to pin the sum rather than either half."""
+    proposal_turn = ChatResult.model_validate(
+        {
+            "text_response": None,
+            "alertProposals": [{"cta": "Should I create this alert?", "recipients": [{"email": "a@b.com"}]}],
+            "reasoningStepCount": 2,
+            "toolCallEvents": [
+                {"functionName": "set_skills", "functionArguments": '{"skills": ["alert"]}', "result": None},
+                {"functionName": "prepare_metric_alert_proposal", "functionArguments": "{}", "result": None},
+            ],
+        }
+    )
+    created_turn = ChatResult.model_validate(
+        {
+            "text_response": "Alert created.",
+            "reasoningStepCount": 3,
+            "toolCallEvents": [
+                {"functionName": "create_metric_alert", "functionArguments": "{}", "result": '{"id": "alert-1"}'}
+            ],
+        }
+    )
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [proposal_turn, created_turn]
+    captured = {}
+
+    def _capture(_submit, _identity, **kwargs):
+        captured["write_scores"] = kwargs["write_scores"]
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+        patch("gooddata_eval.core.agentic.conversation.submit_trace_scoring", _capture),
+        patch(
+            "gooddata_eval.core.agentic.conversation._get_sim_user_response",
+            return_value="Yes, please create it.",
+        ),
+    ):
+        evaluate_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_alert_turn_fixture(),
+            langfuse=MagicMock(),
+            dataset_item_id="item-1",
+        )
+
+    ctx = MagicMock()
+    captured["write_scores"](ctx)
+    scores = {c.kwargs["name"]: c.kwargs["value"] for c in ctx.score.call_args_list}
+
+    assert scores["clarification_turns"] == 1
+    assert scores["turns"] == 2  # 1 fixture turn + 1 clarification round
+    assert scores["steps"] == 5

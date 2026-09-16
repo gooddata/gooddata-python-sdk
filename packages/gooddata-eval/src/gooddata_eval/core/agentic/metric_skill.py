@@ -11,6 +11,14 @@ from typing import Any
 
 from gooddata_sdk import GoodDataSdk
 
+from gooddata_eval.core.agentic._gate import (
+    DEFAULT_GATE,
+    EvalGate,
+    gate_failure_note,
+    gate_passed,
+    log_gate_scores,
+    stamp_gate_metadata,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -155,7 +163,8 @@ class MetricRunResult:
     metric_created: bool
     actual_maql: str
     maql_correct: bool
-    total_turns: float
+    total_turns: int
+    total_steps: int = 0
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
@@ -251,6 +260,7 @@ def _execute_single_metric_run(
     metric_result: dict | None = None
     created_metric_ids: list[str] = []
     turns = 0
+    steps = 0
     current_question = question
     reasoning_steps: list[str] = []
     response_id: str | None = None
@@ -290,6 +300,7 @@ def _execute_single_metric_run(
             )
             all_tool_call_events.extend(chat_result.tool_call_events or [])
             all_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
+            steps += chat_result.reasoning_step_count
             for metric_id in _extract_created_metric_ids(chat_result.tool_call_events or []):
                 if metric_id not in created_metric_ids:
                     created_metric_ids.append(metric_id)
@@ -345,7 +356,8 @@ def _execute_single_metric_run(
             metric_created=metric_created,
             actual_maql=actual_maql,
             maql_correct=maql_correct,
-            total_turns=float(turns),
+            total_turns=turns,
+            total_steps=steps,
             reasoning_steps=reasoning_steps,
             response_id=response_id,
             tool_call_events=all_tool_call_events,
@@ -441,6 +453,7 @@ def evaluate_agentic_metric_skill(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run metric-skill evaluation, log to Langfuse, and raise MetricSkillAssertionError on failure.
 
@@ -470,6 +483,7 @@ def evaluate_agentic_metric_skill(
         window_end = utc_now()
 
         def _write_scores(ctx: RunTraceContext) -> None:
+            stamp_gate_metadata(ctx.run_metadata, k=len(summary.run_results), gate=gate)
 
             for run_idx, run in enumerate(summary.run_results):
                 pt = ctx.trace(run.conversation_id)
@@ -481,6 +495,9 @@ def evaluate_agentic_metric_skill(
                 ) as tid:
                     ctx.score(tid, name="metric_created", value=float(run.metric_created), data_type="BOOLEAN")
                     ctx.score(tid, name="maql_correct", value=float(run.maql_correct), data_type="BOOLEAN")
+                    ctx.score(tid, name="turns", value=run.total_turns, data_type="NUMERIC")
+                    ctx.score(tid, name="steps", value=run.total_steps, data_type="NUMERIC")
+                    log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
                     ctx.quality(
                         tid,
                         strict_checks={"metric_created": run.metric_created, "maql_correct": run.maql_correct},
@@ -531,10 +548,11 @@ def evaluate_agentic_metric_skill(
         "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
 
-    if not summary.pass_at_k:
+    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
         candidates_str = "; ".join(repr(c.get("maql", "")) for c in expected_outputs_list)
         exc = MetricSkillAssertionError(
-            f"Metric skill assertion failed. "
+            f"Metric skill assertion failed. {gate_note} "
             f"metric_created={best.metric_created}, maql_correct={best.maql_correct}. "
             f"Expected MAQL (candidates): {candidates_str}. "
             f"Actual MAQL: {best.actual_maql}."

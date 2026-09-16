@@ -10,6 +10,14 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._gate import (
+    DEFAULT_GATE,
+    EvalGate,
+    gate_failure_note,
+    gate_passed,
+    log_gate_scores,
+    stamp_gate_metadata,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -53,8 +61,8 @@ class RunResult:
     actual_output: CreatedVisualization | None
     eval_result: EvaluationResult
     best_expected: CreatedVisualization
-    total_turns: float
-    total_steps: float
+    total_turns: int
+    total_steps: int
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
@@ -183,8 +191,8 @@ def _execute_single_run(
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
 ) -> RunResult:
     """Drive one full multi-turn conversation and evaluate the result."""
-    total_turns = 0.0
-    total_steps = 0.0
+    total_turns = 0
+    total_steps = 0
     all_tool_call_events: list[ToolCallEvent] = []
     all_reasoning_step_events: list[ReasoningStepEvent] = []
     reasoning_steps: list[str] = []
@@ -211,12 +219,12 @@ def _execute_single_run(
     # with max_iterations=0 the loop body never runs and total_turns would report 0 turns
     # for a conversation the agent did receive. The loop's own increment is skipped on its
     # first pass to compensate, keeping total_turns == number of send_message calls.
-    total_turns += 1.0
+    total_turns += 1
 
     for iteration in range(max_iterations if exit_reason is not LoopExit.CHAT_ERROR else 0):
         if iteration:
-            total_turns += 1.0
-        total_steps += float(current_result.reasoning_step_count)
+            total_turns += 1
+        total_steps += current_result.reasoning_step_count
         turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
             current_result,
             turn_offset=turn_offset,
@@ -370,6 +378,7 @@ def evaluate_agentic_visualization(
     record_output_path: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run visualization evaluation, log to Langfuse, and raise VisualizationAssertionError on failure.
 
@@ -398,6 +407,7 @@ def evaluate_agentic_visualization(
         window_end = utc_now()
 
         def _write_scores(ctx: RunTraceContext) -> None:
+            stamp_gate_metadata(ctx.run_metadata, k=len(summary.run_results), gate=gate)
 
             K = len(summary.run_results)
             for run_idx, run in enumerate(summary.run_results):
@@ -417,10 +427,13 @@ def evaluate_agentic_visualization(
                     ctx.score(tid, name="assertion-vis-filters", value=ev.filters_correct, data_type="BOOLEAN")
                     ctx.score(tid, name="assertion-vis-type", value=ev.viz_type_hard, data_type="BOOLEAN")
                     ctx.score(tid, name="skill_selection", value=ev.skill_activated, data_type="BOOLEAN")
+                    # Superseded by log_gate_scores' K-stable names, kept until the readers
+                    # migrate: gdc-nas combo_report.py matches on the literal "pass_at_2".
                     ctx.score(tid, name=f"pass_at_{K}", value=summary.pass_at_k, data_type="BOOLEAN")
                     ctx.score(tid, name=f"pass_power_{K}", value=summary.pass_power_k, data_type="BOOLEAN")
                     ctx.score(tid, name="turns", value=run.total_turns, data_type="NUMERIC")
                     ctx.score(tid, name="steps", value=run.total_steps, data_type="NUMERIC")
+                    log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
                     ctx.quality(
                         tid,
                         strict_checks=strict_checks,
@@ -476,7 +489,8 @@ def evaluate_agentic_visualization(
         "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
 
-    if not summary.pass_at_k:
+    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
         n = len(expected_outputs)
         candidate_note = f" (closest of {n} candidates)" if n > 1 else ""
         cross_ref_detail = (" → " + "; ".join(ev.cross_ref_errors)) if ev.cross_ref_errors else ""
@@ -485,6 +499,7 @@ def evaluate_agentic_visualization(
         exc = VisualizationAssertionError(
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             "Agentic Visualization Assertion Failed! (Critical Mode)\n"
+            f"{gate_note}\n"
             "------------------------------------------\n"
             f"Question:\n{question}\n"
             "------------------------------------------\n"

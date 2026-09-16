@@ -5990,6 +5990,7 @@
               "WRITE_KNOWLEDGE_DOCUMENTS",
               "READ_KNOWLEDGE_DOCUMENTS",
               "CREATE_FILTER_VIEW",
+              "CREATE_METRIC",
               "VIEW"
             ],
             "type": "string"
@@ -6889,6 +6890,7 @@
               "WRITE_KNOWLEDGE_DOCUMENTS",
               "READ_KNOWLEDGE_DOCUMENTS",
               "CREATE_FILTER_VIEW",
+              "CREATE_METRIC",
               "VIEW"
             ],
             "type": "string"
@@ -26792,6 +26794,7 @@
                     "WRITE_KNOWLEDGE_DOCUMENTS",
                     "READ_KNOWLEDGE_DOCUMENTS",
                     "CREATE_FILTER_VIEW",
+                    "CREATE_METRIC",
                     "VIEW"
                   ],
                   "type": "string"
@@ -30832,6 +30835,7 @@
                 "WRITE_KNOWLEDGE_DOCUMENTS",
                 "READ_KNOWLEDGE_DOCUMENTS",
                 "CREATE_FILTER_VIEW",
+                "CREATE_METRIC",
                 "VIEW"
               ],
               "type": "string"
@@ -30858,6 +30862,7 @@
                 "WRITE_KNOWLEDGE_DOCUMENTS",
                 "READ_KNOWLEDGE_DOCUMENTS",
                 "CREATE_FILTER_VIEW",
+                "CREATE_METRIC",
                 "VIEW"
               ],
               "type": "string"
@@ -31201,6 +31206,7 @@
                 "WRITE_KNOWLEDGE_DOCUMENTS",
                 "READ_KNOWLEDGE_DOCUMENTS",
                 "CREATE_FILTER_VIEW",
+                "CREATE_METRIC",
                 "VIEW"
               ],
               "type": "string"
@@ -31220,6 +31226,7 @@
                 "WRITE_KNOWLEDGE_DOCUMENTS",
                 "READ_KNOWLEDGE_DOCUMENTS",
                 "CREATE_FILTER_VIEW",
+                "CREATE_METRIC",
                 "VIEW"
               ],
               "type": "string"
@@ -50948,9 +50955,9 @@
           "metric-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
+          "description": "Contains minimal permission level required to create Metrics",
           "permissions": [
-            "MANAGE"
+            "CREATE_METRIC"
           ]
         }
       }
