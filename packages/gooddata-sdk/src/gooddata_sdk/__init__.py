@@ -5,350 +5,929 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 """
 
 import logging
+import pkgutil
+from importlib import import_module
+from typing import TYPE_CHECKING, Any
 
+from gooddata_sdk._lazy import submodule_getattr
 from gooddata_sdk._version import __version__
-from gooddata_sdk.catalog.ai_lake.service import (
-    CatalogAILakeOperation,
-    CatalogAILakeOperationError,
-    CatalogAILakeService,
-)
-from gooddata_sdk.catalog.appearance.entity_model.color_palette import (
-    CatalogColorPalette,
-    CatalogColorPaletteAttributes,
-)
-from gooddata_sdk.catalog.appearance.entity_model.theme import (
-    CatalogTheme,
-    CatalogThemeAttributes,
-)
-from gooddata_sdk.catalog.appearance.service import CatalogAppearanceService
-from gooddata_sdk.catalog.data_source.action_model.requests.ldm_request import (
-    CatalogGenerateLdmRequest,
-    CatalogPdmLdmRequest,
-    CatalogPdmSql,
-)
-from gooddata_sdk.catalog.data_source.action_model.requests.scan_model_request import CatalogScanModelRequest
-from gooddata_sdk.catalog.data_source.action_model.requests.scan_sql_request import ScanSqlRequest
-from gooddata_sdk.catalog.data_source.action_model.responses.scan_sql_response import ScanSqlResponse
-from gooddata_sdk.catalog.data_source.action_model.sql_column import SqlColumn
-from gooddata_sdk.catalog.data_source.declarative_model.data_source import (
-    CatalogDeclarativeDataSource,
-    CatalogDeclarativeDataSources,
-)
-from gooddata_sdk.catalog.data_source.declarative_model.physical_model.pdm import CatalogDeclarativeTables
-from gooddata_sdk.catalog.data_source.declarative_model.physical_model.table import (
-    CatalogDeclarativeColumn,
-    CatalogDeclarativeTable,
-)
-from gooddata_sdk.catalog.data_source.entity_model.data_source import (
-    CatalogDataSource,
-    CatalogDataSourceBigQuery,
-    CatalogDataSourceDatabricks,
-    CatalogDataSourceGdStorage,
-    CatalogDataSourceMariaDb,
-    CatalogDataSourceMotherDuck,
-    CatalogDataSourceMsSql,
-    CatalogDataSourceMySql,
-    CatalogDataSourcePostgres,
-    CatalogDataSourceRedshift,
-    CatalogDataSourceSnowflake,
-    CatalogDataSourceVertica,
-    DatabricksAttributes,
-    MariaDbAttributes,
-    MotherDuckAttributes,
-    MsSqlAttributes,
-    MySqlAttributes,
-    PostgresAttributes,
-    RedshiftAttributes,
-    SnowflakeAttributes,
-    VerticaAttributes,
-)
-from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
-from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
-from gooddata_sdk.catalog.depends_on import CatalogDependsOn, CatalogDependsOnDateFilter
-from gooddata_sdk.catalog.entity import (
-    AttrCatalogEntity,
-    BasicCredentials,
-    ClientSecretCredentials,
-    KeyPairCredentials,
-    TokenCredentialsFromEnvVar,
-    TokenCredentialsFromFile,
-)
-from gooddata_sdk.catalog.export.request import (
-    ExportCustomLabel,
-    ExportCustomMetric,
-    ExportCustomOverride,
-    ExportRequest,
-    ExportSettings,
-    GrandTotalsPosition,
-    SlidesExportRequest,
-    VisualExportRequest,
-)
-from gooddata_sdk.catalog.filter_by import CatalogFilterBy
-from gooddata_sdk.catalog.identifier import (
-    CatalogAssigneeIdentifier,
-    CatalogDatasetWorkspaceDataFilterIdentifier,
-    CatalogDeclarativeAnalyticalDashboardIdentifier,
-    CatalogExportDefinitionIdentifier,
-    CatalogNotificationChannelIdentifier,
-    CatalogUserIdentifier,
-    CatalogWorkspaceIdentifier,
-)
-from gooddata_sdk.catalog.organization.common.dashboard_slides_template import CatalogDashboardSlidesTemplate
-from gooddata_sdk.catalog.organization.common.running_section import CatalogRunningSection
-from gooddata_sdk.catalog.organization.common.slide_template import (
-    CatalogContentSlideTemplate,
-    CatalogCoverSlideTemplate,
-    CatalogIntroSlideTemplate,
-    CatalogSectionSlideTemplate,
-)
-from gooddata_sdk.catalog.organization.common.widget_slides_template import CatalogWidgetSlidesTemplate
-from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
-from gooddata_sdk.catalog.organization.entity_model.export_template import (
-    CatalogExportTemplate,
-    CatalogExportTemplateAttributes,
-)
-from gooddata_sdk.catalog.organization.entity_model.ip_allowlist_policy import (
-    CatalogIpAllowlistPolicy,
-    CatalogIpAllowlistPolicyTargets,
-)
-from gooddata_sdk.catalog.organization.entity_model.jwk import (
-    CatalogJwk,
-    CatalogJwkAttributes,
-    CatalogJwkDocument,
-    CatalogRsaSpecification,
-)
-from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
-    CatalogAwsBedrockProviderConfig,
-    CatalogAzureFoundryApiKeyAuth,
-    CatalogAzureFoundryProviderConfig,
-    CatalogBedrockAccessKeyAuth,
-    CatalogLlmProvider,
-    CatalogLlmProviderDocument,
-    CatalogLlmProviderModel,
-    CatalogLlmProviderModelsResult,
-    CatalogLlmProviderPatch,
-    CatalogLlmProviderPatchDocument,
-    CatalogLlmProviderTestResult,
-    CatalogModelTestResult,
-    CatalogOpenAiApiKeyAuth,
-    CatalogOpenAiProviderConfig,
-)
-from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
-from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
-from gooddata_sdk.catalog.organization.layout.export_template import (
-    CatalogDeclarativeExportTemplate,
-)
-from gooddata_sdk.catalog.organization.layout.notification_channel import (
-    CatalogDeclarativeNotificationChannel,
-    CatalogDefaultSmtp,
-    CatalogInPlatform,
-    CatalogNotificationChannelDestination,
-    CatalogSmtp,
-    CatalogWebhook,
-)
-from gooddata_sdk.catalog.organization.service import (
-    HLL_TYPE_SETTING_ID,
-    HLL_TYPE_SETTING_TYPE,
-    CatalogOrganizationService,
-    HLLType,
-)
-from gooddata_sdk.catalog.permission.declarative_model.dashboard_assignees import (
-    CatalogAvailableAssignees,
-    CatalogUserAssignee,
-    CatalogUserGroupAssignee,
-)
-from gooddata_sdk.catalog.permission.declarative_model.dashboard_permissions import (
-    CatalogDashboardPermissions,
-    CatalogGrantedPermission,
-    CatalogUserGroupPermission,
-    CatalogUserPermission,
-)
-from gooddata_sdk.catalog.permission.declarative_model.manage_dashboard_permissions import (
-    CatalogDashboardAssigneeIdentifier,
-    CatalogPermissionsForAssigneeIdentifier,
-    CatalogPermissionsForAssigneeRule,
-)
-from gooddata_sdk.catalog.permission.declarative_model.permission import (
-    CatalogDeclarativeDashboardPermissionsForAssignee,
-    CatalogDeclarativeDashboardPermissionsForAssigneeRule,
-    CatalogDeclarativeDataSourcePermission,
-    CatalogDeclarativeOrganizationPermission,
-    CatalogDeclarativeSingleWorkspacePermission,
-    CatalogDeclarativeWorkspaceHierarchyPermission,
-    CatalogDeclarativeWorkspacePermissions,
-    CatalogOrganizationPermissionAssignment,
-)
-from gooddata_sdk.catalog.rule import CatalogAssigneeRule
-from gooddata_sdk.catalog.types import UpsertOutcome
-from gooddata_sdk.catalog.user.declarative_model.user import (
-    CatalogDeclarativeUser,
-    CatalogDeclarativeUserPermission,
-    CatalogDeclarativeUsers,
-)
-from gooddata_sdk.catalog.user.declarative_model.user_and_user_groups import CatalogDeclarativeUsersUserGroups
-from gooddata_sdk.catalog.user.declarative_model.user_group import (
-    CatalogDeclarativeUserGroup,
-    CatalogDeclarativeUserGroupPermission,
-    CatalogDeclarativeUserGroups,
-)
-from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
-from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup
-from gooddata_sdk.catalog.user.management_model.management import (
-    CatalogDataSourcePermissionAssignment,
-    CatalogPermissionAssignments,
-    CatalogPermissionsAssignment,
-    CatalogWorkspacePermissionAssignment,
-)
-from gooddata_sdk.catalog.validate_by_item import CatalogValidateByItem
-from gooddata_sdk.catalog.workspace.aac import (
-    aac_attribute_hierarchy_to_declarative,
-    aac_dashboard_to_declarative,
-    aac_dataset_to_declarative,
-    aac_date_dataset_to_declarative,
-    aac_metric_to_declarative,
-    aac_plugin_to_declarative,
-    aac_visualization_to_declarative,
-    declarative_attribute_hierarchy_to_aac,
-    declarative_dashboard_to_aac,
-    declarative_dataset_to_aac,
-    declarative_date_instance_to_aac,
-    declarative_metric_to_aac,
-    declarative_plugin_to_aac,
-    declarative_visualization_to_aac,
-    detect_yaml_format,
-    load_aac_workspace_from_disk,
-    store_aac_workspace_to_disk,
-)
-from gooddata_sdk.catalog.workspace.content_service import CatalogWorkspaceContent, CatalogWorkspaceContentService
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
-    CatalogDeclarativeAnalytics,
-    CatalogDeclarativeMemoryItem,
-    CatalogDeclarativeMetric,
-    CatalogDeclarativeParameter,
-)
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.export_definition import (
-    CatalogDeclarativeExportDefinition,
-    CatalogDeclarativeExportDefinitionRequestPayload,
-)
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.automation import (
-    CatalogAutomationSchedule,
-    CatalogDeclarativeAutomation,
-)
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.data_filter_references import (
-    CatalogDeclarativeWorkspaceDataFilterReferences,
-)
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset import (
-    CatalogDataSourceTableIdentifier,
-    CatalogDeclarativeAggregatedFact,
-    CatalogDeclarativeAttribute,
-    CatalogDeclarativeDataset,
-    CatalogDeclarativeDatasetSql,
-    CatalogDeclarativeFact,
-    CatalogDeclarativeLabel,
-    CatalogDeclarativeReference,
-    CatalogDeclarativeWorkspaceDataFilterColumn,
-)
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset_extensions.dataset_extension import (  # noqa: E501
-    CatalogDeclarativeDatasetExtension,
-)
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.date_dataset.date_dataset import (
-    CatalogDeclarativeDateDataset,
-    CatalogGranularitiesFormatting,
-)
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import (
-    CatalogDeclarativeLdm,
-    CatalogDeclarativeModel,
-)
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
-    CatalogDeclarativeFilterView,
-    CatalogDeclarativeUserDataFilter,
-    CatalogDeclarativeUserDataFilters,
-    CatalogDeclarativeWorkspace,
-    CatalogDeclarativeWorkspaceDataFilter,
-    CatalogDeclarativeWorkspaceDataFilters,
-    CatalogDeclarativeWorkspaceDataFilterSetting,
-    CatalogDeclarativeWorkspaceModel,
-    CatalogDeclarativeWorkspaces,
-)
-from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
-    CatalogAttribute,
-    CatalogDataset,
-    CatalogFact,
-    CatalogLabel,
-)
-from gooddata_sdk.catalog.workspace.entity_model.content_objects.metric import CatalogMetric
-from gooddata_sdk.catalog.workspace.entity_model.content_objects.workspace_setting import CatalogWorkspaceSetting
-from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
-    CatalogDependentEntitiesGraph,
-    CatalogDependentEntitiesNode,
-    CatalogDependentEntitiesRequest,
-    CatalogDependentEntitiesResponse,
-    CatalogEntityIdentifier,
-)
-from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
-    CatalogUserDataFilter,
-    CatalogUserDataFilterAttributes,
-    CatalogUserDataFilterRelationships,
-)
-from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
-from gooddata_sdk.client import GoodDataApiClient, GoodDataApiClientRetryConfig
-from gooddata_sdk.compute.compute_to_sdk_converter import ComputeToSdkConverter
-from gooddata_sdk.compute.model.attribute import Attribute
-from gooddata_sdk.compute.model.base import ExecModelEntity, ObjId
-from gooddata_sdk.compute.model.execution import (
-    BareExecutionResponse,
-    Execution,
-    ExecutionDefinition,
-    ExecutionResponse,
-    ExecutionResult,
-    ResultCacheMetadata,
-    ResultSizeBytesLimitExceeded,
-    ResultSizeDimensions,
-    ResultSizeDimensionsLimitsExceeded,
-    TableDimension,
-    TotalDefinition,
-    TotalDimension,
-)
-from gooddata_sdk.compute.model.filter import (
-    AbsoluteDateFilter,
-    AllMetricValueFilter,
-    AllTimeDateFilter,
-    AttributeFilter,
-    BoundedFilter,
-    CompoundMetricValueFilter,
-    Filter,
-    InlineFilter,
-    MatchAttributeFilter,
-    MetricValueComparisonCondition,
-    MetricValueFilter,
-    MetricValueRangeCondition,
-    NegativeAttributeFilter,
-    PositiveAttributeFilter,
-    RankingFilter,
-    RelativeDateFilter,
-)
-from gooddata_sdk.compute.model.metric import (
-    ArithmeticMetric,
-    InlineMetric,
-    Metric,
-    PopDate,
-    PopDateDataset,
-    PopDateMetric,
-    PopDatesetMetric,
-    SimpleMetric,
-)
-from gooddata_sdk.compute.service import ComputeService
-from gooddata_sdk.sdk import GoodDataSdk
-from gooddata_sdk.table import ExecutionTable, TableService
-from gooddata_sdk.utils import SideLoads
-from gooddata_sdk.visualization import (
-    Visualization,
-    VisualizationAttribute,
-    VisualizationBucket,
-    VisualizationFilter,
-    VisualizationMetric,
-    VisualizationService,
-)
+
+if TYPE_CHECKING:
+    # Re-stated eagerly so that type checkers and IDEs resolve the lazy re-exports below.
+    from gooddata_sdk.catalog.ai_lake.service import (
+        CatalogAILakeOperation,
+        CatalogAILakeOperationError,
+        CatalogAILakeService,
+    )
+    from gooddata_sdk.catalog.appearance.entity_model.color_palette import (
+        CatalogColorPalette,
+        CatalogColorPaletteAttributes,
+    )
+    from gooddata_sdk.catalog.appearance.entity_model.theme import (
+        CatalogTheme,
+        CatalogThemeAttributes,
+    )
+    from gooddata_sdk.catalog.appearance.service import CatalogAppearanceService
+    from gooddata_sdk.catalog.data_source.action_model.requests.ldm_request import (
+        CatalogGenerateLdmRequest,
+        CatalogPdmLdmRequest,
+        CatalogPdmSql,
+    )
+    from gooddata_sdk.catalog.data_source.action_model.requests.scan_model_request import CatalogScanModelRequest
+    from gooddata_sdk.catalog.data_source.action_model.requests.scan_sql_request import ScanSqlRequest
+    from gooddata_sdk.catalog.data_source.action_model.responses.scan_sql_response import ScanSqlResponse
+    from gooddata_sdk.catalog.data_source.action_model.sql_column import SqlColumn
+    from gooddata_sdk.catalog.data_source.declarative_model.data_source import (
+        CatalogDeclarativeDataSource,
+        CatalogDeclarativeDataSources,
+    )
+    from gooddata_sdk.catalog.data_source.declarative_model.physical_model.pdm import CatalogDeclarativeTables
+    from gooddata_sdk.catalog.data_source.declarative_model.physical_model.table import (
+        CatalogDeclarativeColumn,
+        CatalogDeclarativeTable,
+    )
+    from gooddata_sdk.catalog.data_source.entity_model.data_source import (
+        CatalogDataSource,
+        CatalogDataSourceBigQuery,
+        CatalogDataSourceDatabricks,
+        CatalogDataSourceGdStorage,
+        CatalogDataSourceMariaDb,
+        CatalogDataSourceMotherDuck,
+        CatalogDataSourceMsSql,
+        CatalogDataSourceMySql,
+        CatalogDataSourcePostgres,
+        CatalogDataSourceRedshift,
+        CatalogDataSourceSnowflake,
+        CatalogDataSourceVertica,
+        DatabricksAttributes,
+        MariaDbAttributes,
+        MotherDuckAttributes,
+        MsSqlAttributes,
+        MySqlAttributes,
+        PostgresAttributes,
+        RedshiftAttributes,
+        SnowflakeAttributes,
+        VerticaAttributes,
+    )
+    from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
+    from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
+    from gooddata_sdk.catalog.depends_on import (
+        CatalogDependsOn,
+        CatalogDependsOnDateFilter,
+    )
+    from gooddata_sdk.catalog.entity import (
+        AttrCatalogEntity,
+        BasicCredentials,
+        ClientSecretCredentials,
+        KeyPairCredentials,
+        TokenCredentialsFromEnvVar,
+        TokenCredentialsFromFile,
+    )
+    from gooddata_sdk.catalog.export.request import (
+        ExportCustomLabel,
+        ExportCustomMetric,
+        ExportCustomOverride,
+        ExportRequest,
+        ExportSettings,
+        GrandTotalsPosition,
+        SlidesExportRequest,
+        VisualExportRequest,
+    )
+    from gooddata_sdk.catalog.filter_by import CatalogFilterBy
+    from gooddata_sdk.catalog.identifier import (
+        CatalogAssigneeIdentifier,
+        CatalogDatasetWorkspaceDataFilterIdentifier,
+        CatalogDeclarativeAnalyticalDashboardIdentifier,
+        CatalogExportDefinitionIdentifier,
+        CatalogNotificationChannelIdentifier,
+        CatalogUserIdentifier,
+        CatalogWorkspaceIdentifier,
+    )
+    from gooddata_sdk.catalog.organization.common.dashboard_slides_template import CatalogDashboardSlidesTemplate
+    from gooddata_sdk.catalog.organization.common.running_section import CatalogRunningSection
+    from gooddata_sdk.catalog.organization.common.slide_template import (
+        CatalogContentSlideTemplate,
+        CatalogCoverSlideTemplate,
+        CatalogIntroSlideTemplate,
+        CatalogSectionSlideTemplate,
+    )
+    from gooddata_sdk.catalog.organization.common.widget_slides_template import CatalogWidgetSlidesTemplate
+    from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
+    from gooddata_sdk.catalog.organization.entity_model.export_template import (
+        CatalogExportTemplate,
+        CatalogExportTemplateAttributes,
+    )
+    from gooddata_sdk.catalog.organization.entity_model.ip_allowlist_policy import (
+        CatalogIpAllowlistPolicy,
+        CatalogIpAllowlistPolicyTargets,
+    )
+    from gooddata_sdk.catalog.organization.entity_model.jwk import (
+        CatalogJwk,
+        CatalogJwkAttributes,
+        CatalogJwkDocument,
+        CatalogRsaSpecification,
+    )
+    from gooddata_sdk.catalog.organization.entity_model.llm_provider import (
+        CatalogAwsBedrockProviderConfig,
+        CatalogAzureFoundryApiKeyAuth,
+        CatalogAzureFoundryProviderConfig,
+        CatalogBedrockAccessKeyAuth,
+        CatalogLlmProvider,
+        CatalogLlmProviderDocument,
+        CatalogLlmProviderModel,
+        CatalogLlmProviderModelsResult,
+        CatalogLlmProviderPatch,
+        CatalogLlmProviderPatchDocument,
+        CatalogLlmProviderTestResult,
+        CatalogModelTestResult,
+        CatalogOpenAiApiKeyAuth,
+        CatalogOpenAiProviderConfig,
+    )
+    from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
+    from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
+    from gooddata_sdk.catalog.organization.layout.export_template import CatalogDeclarativeExportTemplate
+    from gooddata_sdk.catalog.organization.layout.notification_channel import (
+        CatalogDeclarativeNotificationChannel,
+        CatalogDefaultSmtp,
+        CatalogInPlatform,
+        CatalogNotificationChannelDestination,
+        CatalogSmtp,
+        CatalogWebhook,
+    )
+    from gooddata_sdk.catalog.organization.service import (
+        HLL_TYPE_SETTING_ID,
+        HLL_TYPE_SETTING_TYPE,
+        CatalogOrganizationService,
+        HLLType,
+    )
+    from gooddata_sdk.catalog.permission.declarative_model.dashboard_assignees import (
+        CatalogAvailableAssignees,
+        CatalogUserAssignee,
+        CatalogUserGroupAssignee,
+    )
+    from gooddata_sdk.catalog.permission.declarative_model.dashboard_permissions import (
+        CatalogDashboardPermissions,
+        CatalogGrantedPermission,
+        CatalogUserGroupPermission,
+        CatalogUserPermission,
+    )
+    from gooddata_sdk.catalog.permission.declarative_model.manage_dashboard_permissions import (
+        CatalogDashboardAssigneeIdentifier,
+        CatalogPermissionsForAssigneeIdentifier,
+        CatalogPermissionsForAssigneeRule,
+    )
+    from gooddata_sdk.catalog.permission.declarative_model.permission import (
+        CatalogDeclarativeDashboardPermissionsForAssignee,
+        CatalogDeclarativeDashboardPermissionsForAssigneeRule,
+        CatalogDeclarativeDataSourcePermission,
+        CatalogDeclarativeOrganizationPermission,
+        CatalogDeclarativeSingleWorkspacePermission,
+        CatalogDeclarativeWorkspaceHierarchyPermission,
+        CatalogDeclarativeWorkspacePermissions,
+        CatalogOrganizationPermissionAssignment,
+    )
+    from gooddata_sdk.catalog.rule import CatalogAssigneeRule
+    from gooddata_sdk.catalog.types import UpsertOutcome
+    from gooddata_sdk.catalog.user.declarative_model.user import (
+        CatalogDeclarativeUser,
+        CatalogDeclarativeUserPermission,
+        CatalogDeclarativeUsers,
+    )
+    from gooddata_sdk.catalog.user.declarative_model.user_and_user_groups import CatalogDeclarativeUsersUserGroups
+    from gooddata_sdk.catalog.user.declarative_model.user_group import (
+        CatalogDeclarativeUserGroup,
+        CatalogDeclarativeUserGroupPermission,
+        CatalogDeclarativeUserGroups,
+    )
+    from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
+    from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup
+    from gooddata_sdk.catalog.user.management_model.management import (
+        CatalogDataSourcePermissionAssignment,
+        CatalogPermissionAssignments,
+        CatalogPermissionsAssignment,
+        CatalogWorkspacePermissionAssignment,
+    )
+    from gooddata_sdk.catalog.validate_by_item import CatalogValidateByItem
+    from gooddata_sdk.catalog.workspace.aac import (
+        aac_attribute_hierarchy_to_declarative,
+        aac_dashboard_to_declarative,
+        aac_dataset_to_declarative,
+        aac_date_dataset_to_declarative,
+        aac_metric_to_declarative,
+        aac_plugin_to_declarative,
+        aac_visualization_to_declarative,
+        declarative_attribute_hierarchy_to_aac,
+        declarative_dashboard_to_aac,
+        declarative_dataset_to_aac,
+        declarative_date_instance_to_aac,
+        declarative_metric_to_aac,
+        declarative_plugin_to_aac,
+        declarative_visualization_to_aac,
+        detect_yaml_format,
+        load_aac_workspace_from_disk,
+        store_aac_workspace_to_disk,
+    )
+    from gooddata_sdk.catalog.workspace.content_service import (
+        CatalogWorkspaceContent,
+        CatalogWorkspaceContentService,
+    )
+    from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
+        CatalogDeclarativeAnalytics,
+        CatalogDeclarativeMemoryItem,
+        CatalogDeclarativeMetric,
+        CatalogDeclarativeParameter,
+    )
+    from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.export_definition import (
+        CatalogDeclarativeExportDefinition,
+        CatalogDeclarativeExportDefinitionRequestPayload,
+    )
+    from gooddata_sdk.catalog.workspace.declarative_model.workspace.automation import (
+        CatalogAutomationSchedule,
+        CatalogDeclarativeAutomation,
+    )
+    from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.data_filter_references import (
+        CatalogDeclarativeWorkspaceDataFilterReferences,
+    )
+    from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset import (
+        CatalogDataSourceTableIdentifier,
+        CatalogDeclarativeAggregatedFact,
+        CatalogDeclarativeAttribute,
+        CatalogDeclarativeDataset,
+        CatalogDeclarativeDatasetSql,
+        CatalogDeclarativeFact,
+        CatalogDeclarativeLabel,
+        CatalogDeclarativeReference,
+        CatalogDeclarativeWorkspaceDataFilterColumn,
+    )
+    from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset_extensions.dataset_extension import (
+        CatalogDeclarativeDatasetExtension,
+    )
+    from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.date_dataset.date_dataset import (
+        CatalogDeclarativeDateDataset,
+        CatalogGranularitiesFormatting,
+    )
+    from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import (
+        CatalogDeclarativeLdm,
+        CatalogDeclarativeModel,
+    )
+    from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+        CatalogDeclarativeFilterView,
+        CatalogDeclarativeUserDataFilter,
+        CatalogDeclarativeUserDataFilters,
+        CatalogDeclarativeWorkspace,
+        CatalogDeclarativeWorkspaceDataFilter,
+        CatalogDeclarativeWorkspaceDataFilters,
+        CatalogDeclarativeWorkspaceDataFilterSetting,
+        CatalogDeclarativeWorkspaceModel,
+        CatalogDeclarativeWorkspaces,
+    )
+    from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
+        CatalogAttribute,
+        CatalogDataset,
+        CatalogFact,
+        CatalogLabel,
+    )
+    from gooddata_sdk.catalog.workspace.entity_model.content_objects.metric import CatalogMetric
+    from gooddata_sdk.catalog.workspace.entity_model.content_objects.workspace_setting import CatalogWorkspaceSetting
+    from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
+        CatalogDependentEntitiesGraph,
+        CatalogDependentEntitiesNode,
+        CatalogDependentEntitiesRequest,
+        CatalogDependentEntitiesResponse,
+        CatalogEntityIdentifier,
+    )
+    from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
+        CatalogUserDataFilter,
+        CatalogUserDataFilterAttributes,
+        CatalogUserDataFilterRelationships,
+    )
+    from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
+    from gooddata_sdk.client import (
+        GoodDataApiClient,
+        GoodDataApiClientRetryConfig,
+    )
+    from gooddata_sdk.compute.compute_to_sdk_converter import ComputeToSdkConverter
+    from gooddata_sdk.compute.model.attribute import Attribute
+    from gooddata_sdk.compute.model.base import (
+        ExecModelEntity,
+        ObjId,
+    )
+    from gooddata_sdk.compute.model.execution import (
+        BareExecutionResponse,
+        Execution,
+        ExecutionDefinition,
+        ExecutionResponse,
+        ExecutionResult,
+        ResultCacheMetadata,
+        ResultSizeBytesLimitExceeded,
+        ResultSizeDimensions,
+        ResultSizeDimensionsLimitsExceeded,
+        TableDimension,
+        TotalDefinition,
+        TotalDimension,
+    )
+    from gooddata_sdk.compute.model.filter import (
+        AbsoluteDateFilter,
+        AllMetricValueFilter,
+        AllTimeDateFilter,
+        AttributeFilter,
+        BoundedFilter,
+        CompoundMetricValueFilter,
+        Filter,
+        InlineFilter,
+        MatchAttributeFilter,
+        MetricValueComparisonCondition,
+        MetricValueFilter,
+        MetricValueRangeCondition,
+        NegativeAttributeFilter,
+        PositiveAttributeFilter,
+        RankingFilter,
+        RelativeDateFilter,
+    )
+    from gooddata_sdk.compute.model.metric import (
+        ArithmeticMetric,
+        InlineMetric,
+        Metric,
+        PopDate,
+        PopDateDataset,
+        PopDateMetric,
+        PopDatesetMetric,
+        SimpleMetric,
+    )
+    from gooddata_sdk.compute.service import ComputeService
+    from gooddata_sdk.sdk import GoodDataSdk
+    from gooddata_sdk.table import (
+        ExecutionTable,
+        TableService,
+    )
+    from gooddata_sdk.utils import SideLoads
+    from gooddata_sdk.visualization import (
+        Visualization,
+        VisualizationAttribute,
+        VisualizationBucket,
+        VisualizationFilter,
+        VisualizationMetric,
+        VisualizationService,
+    )
+
+# --- begin generated by scripts/sync_lazy_imports.py ---
+# Public name -> module that defines it, generated from the ``TYPE_CHECKING`` block above.
+# Importing all of these at module level pulls in the whole SDK (every catalog service,
+# declarative model and generated API model) even when the caller wants a single class, so they
+# are resolved on first access instead (PEP 562). Do not edit by hand -- see the script.
+_LAZY_IMPORTS: dict[str, str] = {
+    "AbsoluteDateFilter": "gooddata_sdk.compute.model.filter",
+    "AllMetricValueFilter": "gooddata_sdk.compute.model.filter",
+    "AllTimeDateFilter": "gooddata_sdk.compute.model.filter",
+    "ArithmeticMetric": "gooddata_sdk.compute.model.metric",
+    "AttrCatalogEntity": "gooddata_sdk.catalog.entity",
+    "Attribute": "gooddata_sdk.compute.model.attribute",
+    "AttributeFilter": "gooddata_sdk.compute.model.filter",
+    "BareExecutionResponse": "gooddata_sdk.compute.model.execution",
+    "BasicCredentials": "gooddata_sdk.catalog.entity",
+    "BoundedFilter": "gooddata_sdk.compute.model.filter",
+    "CatalogAILakeOperation": "gooddata_sdk.catalog.ai_lake.service",
+    "CatalogAILakeOperationError": "gooddata_sdk.catalog.ai_lake.service",
+    "CatalogAILakeService": "gooddata_sdk.catalog.ai_lake.service",
+    "CatalogAppearanceService": "gooddata_sdk.catalog.appearance.service",
+    "CatalogAssigneeIdentifier": "gooddata_sdk.catalog.identifier",
+    "CatalogAssigneeRule": "gooddata_sdk.catalog.rule",
+    "CatalogAttribute": "gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset",
+    "CatalogAutomationSchedule": "gooddata_sdk.catalog.workspace.declarative_model.workspace.automation",
+    "CatalogAvailableAssignees": "gooddata_sdk.catalog.permission.declarative_model.dashboard_assignees",
+    "CatalogAwsBedrockProviderConfig": "gooddata_sdk.catalog.organization.entity_model.llm_provider",
+    "CatalogAzureFoundryApiKeyAuth": "gooddata_sdk.catalog.organization.entity_model.llm_provider",
+    "CatalogAzureFoundryProviderConfig": "gooddata_sdk.catalog.organization.entity_model.llm_provider",
+    "CatalogBedrockAccessKeyAuth": "gooddata_sdk.catalog.organization.entity_model.llm_provider",
+    "CatalogColorPalette": "gooddata_sdk.catalog.appearance.entity_model.color_palette",
+    "CatalogColorPaletteAttributes": "gooddata_sdk.catalog.appearance.entity_model.color_palette",
+    "CatalogContentSlideTemplate": "gooddata_sdk.catalog.organization.common.slide_template",
+    "CatalogCoverSlideTemplate": "gooddata_sdk.catalog.organization.common.slide_template",
+    "CatalogCspDirective": "gooddata_sdk.catalog.organization.entity_model.directive",
+    "CatalogDashboardAssigneeIdentifier": "gooddata_sdk.catalog.permission.declarative_model.manage_dashboard_permissions",
+    "CatalogDashboardPermissions": "gooddata_sdk.catalog.permission.declarative_model.dashboard_permissions",
+    "CatalogDashboardSlidesTemplate": "gooddata_sdk.catalog.organization.common.dashboard_slides_template",
+    "CatalogDataSource": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "CatalogDataSourceBigQuery": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "CatalogDataSourceDatabricks": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "CatalogDataSourceGdStorage": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "CatalogDataSourceMariaDb": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "CatalogDataSourceMotherDuck": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "CatalogDataSourceMsSql": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "CatalogDataSourceMySql": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "CatalogDataSourcePermissionAssignment": "gooddata_sdk.catalog.user.management_model.management",
+    "CatalogDataSourcePostgres": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "CatalogDataSourceRedshift": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "CatalogDataSourceService": "gooddata_sdk.catalog.data_source.service",
+    "CatalogDataSourceSnowflake": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "CatalogDataSourceTableIdentifier": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset",
+    "CatalogDataSourceVertica": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "CatalogDataset": "gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset",
+    "CatalogDatasetWorkspaceDataFilterIdentifier": "gooddata_sdk.catalog.identifier",
+    "CatalogDeclarativeAggregatedFact": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset",
+    "CatalogDeclarativeAnalyticalDashboardIdentifier": "gooddata_sdk.catalog.identifier",
+    "CatalogDeclarativeAnalytics": "gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model",
+    "CatalogDeclarativeAttribute": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset",
+    "CatalogDeclarativeAutomation": "gooddata_sdk.catalog.workspace.declarative_model.workspace.automation",
+    "CatalogDeclarativeColumn": "gooddata_sdk.catalog.data_source.declarative_model.physical_model.table",
+    "CatalogDeclarativeDashboardPermissionsForAssignee": "gooddata_sdk.catalog.permission.declarative_model.permission",
+    "CatalogDeclarativeDashboardPermissionsForAssigneeRule": "gooddata_sdk.catalog.permission.declarative_model.permission",
+    "CatalogDeclarativeDataSource": "gooddata_sdk.catalog.data_source.declarative_model.data_source",
+    "CatalogDeclarativeDataSourcePermission": "gooddata_sdk.catalog.permission.declarative_model.permission",
+    "CatalogDeclarativeDataSources": "gooddata_sdk.catalog.data_source.declarative_model.data_source",
+    "CatalogDeclarativeDataset": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset",
+    "CatalogDeclarativeDatasetExtension": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset_extensions.dataset_extension",
+    "CatalogDeclarativeDatasetSql": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset",
+    "CatalogDeclarativeDateDataset": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.date_dataset.date_dataset",
+    "CatalogDeclarativeExportDefinition": "gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.export_definition",
+    "CatalogDeclarativeExportDefinitionRequestPayload": "gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.export_definition",
+    "CatalogDeclarativeExportTemplate": "gooddata_sdk.catalog.organization.layout.export_template",
+    "CatalogDeclarativeFact": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset",
+    "CatalogDeclarativeFilterView": "gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace",
+    "CatalogDeclarativeLabel": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset",
+    "CatalogDeclarativeLdm": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm",
+    "CatalogDeclarativeMemoryItem": "gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model",
+    "CatalogDeclarativeMetric": "gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model",
+    "CatalogDeclarativeModel": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm",
+    "CatalogDeclarativeNotificationChannel": "gooddata_sdk.catalog.organization.layout.notification_channel",
+    "CatalogDeclarativeOrganizationPermission": "gooddata_sdk.catalog.permission.declarative_model.permission",
+    "CatalogDeclarativeParameter": "gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model",
+    "CatalogDeclarativeReference": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset",
+    "CatalogDeclarativeSingleWorkspacePermission": "gooddata_sdk.catalog.permission.declarative_model.permission",
+    "CatalogDeclarativeTable": "gooddata_sdk.catalog.data_source.declarative_model.physical_model.table",
+    "CatalogDeclarativeTables": "gooddata_sdk.catalog.data_source.declarative_model.physical_model.pdm",
+    "CatalogDeclarativeUser": "gooddata_sdk.catalog.user.declarative_model.user",
+    "CatalogDeclarativeUserDataFilter": "gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace",
+    "CatalogDeclarativeUserDataFilters": "gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace",
+    "CatalogDeclarativeUserGroup": "gooddata_sdk.catalog.user.declarative_model.user_group",
+    "CatalogDeclarativeUserGroupPermission": "gooddata_sdk.catalog.user.declarative_model.user_group",
+    "CatalogDeclarativeUserGroups": "gooddata_sdk.catalog.user.declarative_model.user_group",
+    "CatalogDeclarativeUserPermission": "gooddata_sdk.catalog.user.declarative_model.user",
+    "CatalogDeclarativeUsers": "gooddata_sdk.catalog.user.declarative_model.user",
+    "CatalogDeclarativeUsersUserGroups": "gooddata_sdk.catalog.user.declarative_model.user_and_user_groups",
+    "CatalogDeclarativeWorkspace": "gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace",
+    "CatalogDeclarativeWorkspaceDataFilter": "gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace",
+    "CatalogDeclarativeWorkspaceDataFilterColumn": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset",
+    "CatalogDeclarativeWorkspaceDataFilterReferences": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.data_filter_references",
+    "CatalogDeclarativeWorkspaceDataFilterSetting": "gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace",
+    "CatalogDeclarativeWorkspaceDataFilters": "gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace",
+    "CatalogDeclarativeWorkspaceHierarchyPermission": "gooddata_sdk.catalog.permission.declarative_model.permission",
+    "CatalogDeclarativeWorkspaceModel": "gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace",
+    "CatalogDeclarativeWorkspacePermissions": "gooddata_sdk.catalog.permission.declarative_model.permission",
+    "CatalogDeclarativeWorkspaces": "gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace",
+    "CatalogDefaultSmtp": "gooddata_sdk.catalog.organization.layout.notification_channel",
+    "CatalogDependentEntitiesGraph": "gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph",
+    "CatalogDependentEntitiesNode": "gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph",
+    "CatalogDependentEntitiesRequest": "gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph",
+    "CatalogDependentEntitiesResponse": "gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph",
+    "CatalogDependsOn": "gooddata_sdk.catalog.depends_on",
+    "CatalogDependsOnDateFilter": "gooddata_sdk.catalog.depends_on",
+    "CatalogEntityIdentifier": "gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph",
+    "CatalogExportDefinitionIdentifier": "gooddata_sdk.catalog.identifier",
+    "CatalogExportTemplate": "gooddata_sdk.catalog.organization.entity_model.export_template",
+    "CatalogExportTemplateAttributes": "gooddata_sdk.catalog.organization.entity_model.export_template",
+    "CatalogFact": "gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset",
+    "CatalogFilterBy": "gooddata_sdk.catalog.filter_by",
+    "CatalogGenerateLdmRequest": "gooddata_sdk.catalog.data_source.action_model.requests.ldm_request",
+    "CatalogGrantedPermission": "gooddata_sdk.catalog.permission.declarative_model.dashboard_permissions",
+    "CatalogGranularitiesFormatting": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.date_dataset.date_dataset",
+    "CatalogInPlatform": "gooddata_sdk.catalog.organization.layout.notification_channel",
+    "CatalogIntroSlideTemplate": "gooddata_sdk.catalog.organization.common.slide_template",
+    "CatalogIpAllowlistPolicy": "gooddata_sdk.catalog.organization.entity_model.ip_allowlist_policy",
+    "CatalogIpAllowlistPolicyTargets": "gooddata_sdk.catalog.organization.entity_model.ip_allowlist_policy",
+    "CatalogJwk": "gooddata_sdk.catalog.organization.entity_model.jwk",
+    "CatalogJwkAttributes": "gooddata_sdk.catalog.organization.entity_model.jwk",
+    "CatalogJwkDocument": "gooddata_sdk.catalog.organization.entity_model.jwk",
+    "CatalogLabel": "gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset",
+    "CatalogLlmProvider": "gooddata_sdk.catalog.organization.entity_model.llm_provider",
+    "CatalogLlmProviderDocument": "gooddata_sdk.catalog.organization.entity_model.llm_provider",
+    "CatalogLlmProviderModel": "gooddata_sdk.catalog.organization.entity_model.llm_provider",
+    "CatalogLlmProviderModelsResult": "gooddata_sdk.catalog.organization.entity_model.llm_provider",
+    "CatalogLlmProviderPatch": "gooddata_sdk.catalog.organization.entity_model.llm_provider",
+    "CatalogLlmProviderPatchDocument": "gooddata_sdk.catalog.organization.entity_model.llm_provider",
+    "CatalogLlmProviderTestResult": "gooddata_sdk.catalog.organization.entity_model.llm_provider",
+    "CatalogMetric": "gooddata_sdk.catalog.workspace.entity_model.content_objects.metric",
+    "CatalogModelTestResult": "gooddata_sdk.catalog.organization.entity_model.llm_provider",
+    "CatalogNotificationChannelDestination": "gooddata_sdk.catalog.organization.layout.notification_channel",
+    "CatalogNotificationChannelIdentifier": "gooddata_sdk.catalog.identifier",
+    "CatalogOpenAiApiKeyAuth": "gooddata_sdk.catalog.organization.entity_model.llm_provider",
+    "CatalogOpenAiProviderConfig": "gooddata_sdk.catalog.organization.entity_model.llm_provider",
+    "CatalogOrganization": "gooddata_sdk.catalog.organization.entity_model.organization",
+    "CatalogOrganizationPermissionAssignment": "gooddata_sdk.catalog.permission.declarative_model.permission",
+    "CatalogOrganizationService": "gooddata_sdk.catalog.organization.service",
+    "CatalogOrganizationSetting": "gooddata_sdk.catalog.organization.entity_model.setting",
+    "CatalogPdmLdmRequest": "gooddata_sdk.catalog.data_source.action_model.requests.ldm_request",
+    "CatalogPdmSql": "gooddata_sdk.catalog.data_source.action_model.requests.ldm_request",
+    "CatalogPermissionAssignments": "gooddata_sdk.catalog.user.management_model.management",
+    "CatalogPermissionsAssignment": "gooddata_sdk.catalog.user.management_model.management",
+    "CatalogPermissionsForAssigneeIdentifier": "gooddata_sdk.catalog.permission.declarative_model.manage_dashboard_permissions",
+    "CatalogPermissionsForAssigneeRule": "gooddata_sdk.catalog.permission.declarative_model.manage_dashboard_permissions",
+    "CatalogRsaSpecification": "gooddata_sdk.catalog.organization.entity_model.jwk",
+    "CatalogRunningSection": "gooddata_sdk.catalog.organization.common.running_section",
+    "CatalogScanModelRequest": "gooddata_sdk.catalog.data_source.action_model.requests.scan_model_request",
+    "CatalogSectionSlideTemplate": "gooddata_sdk.catalog.organization.common.slide_template",
+    "CatalogSmtp": "gooddata_sdk.catalog.organization.layout.notification_channel",
+    "CatalogTheme": "gooddata_sdk.catalog.appearance.entity_model.theme",
+    "CatalogThemeAttributes": "gooddata_sdk.catalog.appearance.entity_model.theme",
+    "CatalogUser": "gooddata_sdk.catalog.user.entity_model.user",
+    "CatalogUserAssignee": "gooddata_sdk.catalog.permission.declarative_model.dashboard_assignees",
+    "CatalogUserDataFilter": "gooddata_sdk.catalog.workspace.entity_model.user_data_filter",
+    "CatalogUserDataFilterAttributes": "gooddata_sdk.catalog.workspace.entity_model.user_data_filter",
+    "CatalogUserDataFilterRelationships": "gooddata_sdk.catalog.workspace.entity_model.user_data_filter",
+    "CatalogUserGroup": "gooddata_sdk.catalog.user.entity_model.user_group",
+    "CatalogUserGroupAssignee": "gooddata_sdk.catalog.permission.declarative_model.dashboard_assignees",
+    "CatalogUserGroupPermission": "gooddata_sdk.catalog.permission.declarative_model.dashboard_permissions",
+    "CatalogUserIdentifier": "gooddata_sdk.catalog.identifier",
+    "CatalogUserPermission": "gooddata_sdk.catalog.permission.declarative_model.dashboard_permissions",
+    "CatalogValidateByItem": "gooddata_sdk.catalog.validate_by_item",
+    "CatalogWebhook": "gooddata_sdk.catalog.organization.layout.notification_channel",
+    "CatalogWidgetSlidesTemplate": "gooddata_sdk.catalog.organization.common.widget_slides_template",
+    "CatalogWorkspace": "gooddata_sdk.catalog.workspace.entity_model.workspace",
+    "CatalogWorkspaceContent": "gooddata_sdk.catalog.workspace.content_service",
+    "CatalogWorkspaceContentService": "gooddata_sdk.catalog.workspace.content_service",
+    "CatalogWorkspaceIdentifier": "gooddata_sdk.catalog.identifier",
+    "CatalogWorkspacePermissionAssignment": "gooddata_sdk.catalog.user.management_model.management",
+    "CatalogWorkspaceSetting": "gooddata_sdk.catalog.workspace.entity_model.content_objects.workspace_setting",
+    "ClientSecretCredentials": "gooddata_sdk.catalog.entity",
+    "CompoundMetricValueFilter": "gooddata_sdk.compute.model.filter",
+    "ComputeService": "gooddata_sdk.compute.service",
+    "ComputeToSdkConverter": "gooddata_sdk.compute.compute_to_sdk_converter",
+    "DataSourceValidator": "gooddata_sdk.catalog.data_source.validation.data_source",
+    "DatabricksAttributes": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "ExecModelEntity": "gooddata_sdk.compute.model.base",
+    "Execution": "gooddata_sdk.compute.model.execution",
+    "ExecutionDefinition": "gooddata_sdk.compute.model.execution",
+    "ExecutionResponse": "gooddata_sdk.compute.model.execution",
+    "ExecutionResult": "gooddata_sdk.compute.model.execution",
+    "ExecutionTable": "gooddata_sdk.table",
+    "ExportCustomLabel": "gooddata_sdk.catalog.export.request",
+    "ExportCustomMetric": "gooddata_sdk.catalog.export.request",
+    "ExportCustomOverride": "gooddata_sdk.catalog.export.request",
+    "ExportRequest": "gooddata_sdk.catalog.export.request",
+    "ExportSettings": "gooddata_sdk.catalog.export.request",
+    "Filter": "gooddata_sdk.compute.model.filter",
+    "GoodDataApiClient": "gooddata_sdk.client",
+    "GoodDataApiClientRetryConfig": "gooddata_sdk.client",
+    "GoodDataSdk": "gooddata_sdk.sdk",
+    "GrandTotalsPosition": "gooddata_sdk.catalog.export.request",
+    "HLLType": "gooddata_sdk.catalog.organization.service",
+    "HLL_TYPE_SETTING_ID": "gooddata_sdk.catalog.organization.service",
+    "HLL_TYPE_SETTING_TYPE": "gooddata_sdk.catalog.organization.service",
+    "InlineFilter": "gooddata_sdk.compute.model.filter",
+    "InlineMetric": "gooddata_sdk.compute.model.metric",
+    "KeyPairCredentials": "gooddata_sdk.catalog.entity",
+    "MariaDbAttributes": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "MatchAttributeFilter": "gooddata_sdk.compute.model.filter",
+    "Metric": "gooddata_sdk.compute.model.metric",
+    "MetricValueComparisonCondition": "gooddata_sdk.compute.model.filter",
+    "MetricValueFilter": "gooddata_sdk.compute.model.filter",
+    "MetricValueRangeCondition": "gooddata_sdk.compute.model.filter",
+    "MotherDuckAttributes": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "MsSqlAttributes": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "MySqlAttributes": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "NegativeAttributeFilter": "gooddata_sdk.compute.model.filter",
+    "ObjId": "gooddata_sdk.compute.model.base",
+    "PopDate": "gooddata_sdk.compute.model.metric",
+    "PopDateDataset": "gooddata_sdk.compute.model.metric",
+    "PopDateMetric": "gooddata_sdk.compute.model.metric",
+    "PopDatesetMetric": "gooddata_sdk.compute.model.metric",
+    "PositiveAttributeFilter": "gooddata_sdk.compute.model.filter",
+    "PostgresAttributes": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "RankingFilter": "gooddata_sdk.compute.model.filter",
+    "RedshiftAttributes": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "RelativeDateFilter": "gooddata_sdk.compute.model.filter",
+    "ResultCacheMetadata": "gooddata_sdk.compute.model.execution",
+    "ResultSizeBytesLimitExceeded": "gooddata_sdk.compute.model.execution",
+    "ResultSizeDimensions": "gooddata_sdk.compute.model.execution",
+    "ResultSizeDimensionsLimitsExceeded": "gooddata_sdk.compute.model.execution",
+    "ScanSqlRequest": "gooddata_sdk.catalog.data_source.action_model.requests.scan_sql_request",
+    "ScanSqlResponse": "gooddata_sdk.catalog.data_source.action_model.responses.scan_sql_response",
+    "SideLoads": "gooddata_sdk.utils",
+    "SimpleMetric": "gooddata_sdk.compute.model.metric",
+    "SlidesExportRequest": "gooddata_sdk.catalog.export.request",
+    "SnowflakeAttributes": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "SqlColumn": "gooddata_sdk.catalog.data_source.action_model.sql_column",
+    "TableDimension": "gooddata_sdk.compute.model.execution",
+    "TableService": "gooddata_sdk.table",
+    "TokenCredentialsFromEnvVar": "gooddata_sdk.catalog.entity",
+    "TokenCredentialsFromFile": "gooddata_sdk.catalog.entity",
+    "TotalDefinition": "gooddata_sdk.compute.model.execution",
+    "TotalDimension": "gooddata_sdk.compute.model.execution",
+    "UpsertOutcome": "gooddata_sdk.catalog.types",
+    "VerticaAttributes": "gooddata_sdk.catalog.data_source.entity_model.data_source",
+    "VisualExportRequest": "gooddata_sdk.catalog.export.request",
+    "Visualization": "gooddata_sdk.visualization",
+    "VisualizationAttribute": "gooddata_sdk.visualization",
+    "VisualizationBucket": "gooddata_sdk.visualization",
+    "VisualizationFilter": "gooddata_sdk.visualization",
+    "VisualizationMetric": "gooddata_sdk.visualization",
+    "VisualizationService": "gooddata_sdk.visualization",
+    "aac_attribute_hierarchy_to_declarative": "gooddata_sdk.catalog.workspace.aac",
+    "aac_dashboard_to_declarative": "gooddata_sdk.catalog.workspace.aac",
+    "aac_dataset_to_declarative": "gooddata_sdk.catalog.workspace.aac",
+    "aac_date_dataset_to_declarative": "gooddata_sdk.catalog.workspace.aac",
+    "aac_metric_to_declarative": "gooddata_sdk.catalog.workspace.aac",
+    "aac_plugin_to_declarative": "gooddata_sdk.catalog.workspace.aac",
+    "aac_visualization_to_declarative": "gooddata_sdk.catalog.workspace.aac",
+    "declarative_attribute_hierarchy_to_aac": "gooddata_sdk.catalog.workspace.aac",
+    "declarative_dashboard_to_aac": "gooddata_sdk.catalog.workspace.aac",
+    "declarative_dataset_to_aac": "gooddata_sdk.catalog.workspace.aac",
+    "declarative_date_instance_to_aac": "gooddata_sdk.catalog.workspace.aac",
+    "declarative_metric_to_aac": "gooddata_sdk.catalog.workspace.aac",
+    "declarative_plugin_to_aac": "gooddata_sdk.catalog.workspace.aac",
+    "declarative_visualization_to_aac": "gooddata_sdk.catalog.workspace.aac",
+    "detect_yaml_format": "gooddata_sdk.catalog.workspace.aac",
+    "load_aac_workspace_from_disk": "gooddata_sdk.catalog.workspace.aac",
+    "store_aac_workspace_to_disk": "gooddata_sdk.catalog.workspace.aac",
+}
+
+__all__ = [
+    "__version__",
+    "AbsoluteDateFilter",
+    "AllMetricValueFilter",
+    "AllTimeDateFilter",
+    "ArithmeticMetric",
+    "AttrCatalogEntity",
+    "Attribute",
+    "AttributeFilter",
+    "BareExecutionResponse",
+    "BasicCredentials",
+    "BoundedFilter",
+    "CatalogAILakeOperation",
+    "CatalogAILakeOperationError",
+    "CatalogAILakeService",
+    "CatalogAppearanceService",
+    "CatalogAssigneeIdentifier",
+    "CatalogAssigneeRule",
+    "CatalogAttribute",
+    "CatalogAutomationSchedule",
+    "CatalogAvailableAssignees",
+    "CatalogAwsBedrockProviderConfig",
+    "CatalogAzureFoundryApiKeyAuth",
+    "CatalogAzureFoundryProviderConfig",
+    "CatalogBedrockAccessKeyAuth",
+    "CatalogColorPalette",
+    "CatalogColorPaletteAttributes",
+    "CatalogContentSlideTemplate",
+    "CatalogCoverSlideTemplate",
+    "CatalogCspDirective",
+    "CatalogDashboardAssigneeIdentifier",
+    "CatalogDashboardPermissions",
+    "CatalogDashboardSlidesTemplate",
+    "CatalogDataSource",
+    "CatalogDataSourceBigQuery",
+    "CatalogDataSourceDatabricks",
+    "CatalogDataSourceGdStorage",
+    "CatalogDataSourceMariaDb",
+    "CatalogDataSourceMotherDuck",
+    "CatalogDataSourceMsSql",
+    "CatalogDataSourceMySql",
+    "CatalogDataSourcePermissionAssignment",
+    "CatalogDataSourcePostgres",
+    "CatalogDataSourceRedshift",
+    "CatalogDataSourceService",
+    "CatalogDataSourceSnowflake",
+    "CatalogDataSourceTableIdentifier",
+    "CatalogDataSourceVertica",
+    "CatalogDataset",
+    "CatalogDatasetWorkspaceDataFilterIdentifier",
+    "CatalogDeclarativeAggregatedFact",
+    "CatalogDeclarativeAnalyticalDashboardIdentifier",
+    "CatalogDeclarativeAnalytics",
+    "CatalogDeclarativeAttribute",
+    "CatalogDeclarativeAutomation",
+    "CatalogDeclarativeColumn",
+    "CatalogDeclarativeDashboardPermissionsForAssignee",
+    "CatalogDeclarativeDashboardPermissionsForAssigneeRule",
+    "CatalogDeclarativeDataSource",
+    "CatalogDeclarativeDataSourcePermission",
+    "CatalogDeclarativeDataSources",
+    "CatalogDeclarativeDataset",
+    "CatalogDeclarativeDatasetExtension",
+    "CatalogDeclarativeDatasetSql",
+    "CatalogDeclarativeDateDataset",
+    "CatalogDeclarativeExportDefinition",
+    "CatalogDeclarativeExportDefinitionRequestPayload",
+    "CatalogDeclarativeExportTemplate",
+    "CatalogDeclarativeFact",
+    "CatalogDeclarativeFilterView",
+    "CatalogDeclarativeLabel",
+    "CatalogDeclarativeLdm",
+    "CatalogDeclarativeMemoryItem",
+    "CatalogDeclarativeMetric",
+    "CatalogDeclarativeModel",
+    "CatalogDeclarativeNotificationChannel",
+    "CatalogDeclarativeOrganizationPermission",
+    "CatalogDeclarativeParameter",
+    "CatalogDeclarativeReference",
+    "CatalogDeclarativeSingleWorkspacePermission",
+    "CatalogDeclarativeTable",
+    "CatalogDeclarativeTables",
+    "CatalogDeclarativeUser",
+    "CatalogDeclarativeUserDataFilter",
+    "CatalogDeclarativeUserDataFilters",
+    "CatalogDeclarativeUserGroup",
+    "CatalogDeclarativeUserGroupPermission",
+    "CatalogDeclarativeUserGroups",
+    "CatalogDeclarativeUserPermission",
+    "CatalogDeclarativeUsers",
+    "CatalogDeclarativeUsersUserGroups",
+    "CatalogDeclarativeWorkspace",
+    "CatalogDeclarativeWorkspaceDataFilter",
+    "CatalogDeclarativeWorkspaceDataFilterColumn",
+    "CatalogDeclarativeWorkspaceDataFilterReferences",
+    "CatalogDeclarativeWorkspaceDataFilterSetting",
+    "CatalogDeclarativeWorkspaceDataFilters",
+    "CatalogDeclarativeWorkspaceHierarchyPermission",
+    "CatalogDeclarativeWorkspaceModel",
+    "CatalogDeclarativeWorkspacePermissions",
+    "CatalogDeclarativeWorkspaces",
+    "CatalogDefaultSmtp",
+    "CatalogDependentEntitiesGraph",
+    "CatalogDependentEntitiesNode",
+    "CatalogDependentEntitiesRequest",
+    "CatalogDependentEntitiesResponse",
+    "CatalogDependsOn",
+    "CatalogDependsOnDateFilter",
+    "CatalogEntityIdentifier",
+    "CatalogExportDefinitionIdentifier",
+    "CatalogExportTemplate",
+    "CatalogExportTemplateAttributes",
+    "CatalogFact",
+    "CatalogFilterBy",
+    "CatalogGenerateLdmRequest",
+    "CatalogGrantedPermission",
+    "CatalogGranularitiesFormatting",
+    "CatalogInPlatform",
+    "CatalogIntroSlideTemplate",
+    "CatalogIpAllowlistPolicy",
+    "CatalogIpAllowlistPolicyTargets",
+    "CatalogJwk",
+    "CatalogJwkAttributes",
+    "CatalogJwkDocument",
+    "CatalogLabel",
+    "CatalogLlmProvider",
+    "CatalogLlmProviderDocument",
+    "CatalogLlmProviderModel",
+    "CatalogLlmProviderModelsResult",
+    "CatalogLlmProviderPatch",
+    "CatalogLlmProviderPatchDocument",
+    "CatalogLlmProviderTestResult",
+    "CatalogMetric",
+    "CatalogModelTestResult",
+    "CatalogNotificationChannelDestination",
+    "CatalogNotificationChannelIdentifier",
+    "CatalogOpenAiApiKeyAuth",
+    "CatalogOpenAiProviderConfig",
+    "CatalogOrganization",
+    "CatalogOrganizationPermissionAssignment",
+    "CatalogOrganizationService",
+    "CatalogOrganizationSetting",
+    "CatalogPdmLdmRequest",
+    "CatalogPdmSql",
+    "CatalogPermissionAssignments",
+    "CatalogPermissionsAssignment",
+    "CatalogPermissionsForAssigneeIdentifier",
+    "CatalogPermissionsForAssigneeRule",
+    "CatalogRsaSpecification",
+    "CatalogRunningSection",
+    "CatalogScanModelRequest",
+    "CatalogSectionSlideTemplate",
+    "CatalogSmtp",
+    "CatalogTheme",
+    "CatalogThemeAttributes",
+    "CatalogUser",
+    "CatalogUserAssignee",
+    "CatalogUserDataFilter",
+    "CatalogUserDataFilterAttributes",
+    "CatalogUserDataFilterRelationships",
+    "CatalogUserGroup",
+    "CatalogUserGroupAssignee",
+    "CatalogUserGroupPermission",
+    "CatalogUserIdentifier",
+    "CatalogUserPermission",
+    "CatalogValidateByItem",
+    "CatalogWebhook",
+    "CatalogWidgetSlidesTemplate",
+    "CatalogWorkspace",
+    "CatalogWorkspaceContent",
+    "CatalogWorkspaceContentService",
+    "CatalogWorkspaceIdentifier",
+    "CatalogWorkspacePermissionAssignment",
+    "CatalogWorkspaceSetting",
+    "ClientSecretCredentials",
+    "CompoundMetricValueFilter",
+    "ComputeService",
+    "ComputeToSdkConverter",
+    "DataSourceValidator",
+    "DatabricksAttributes",
+    "ExecModelEntity",
+    "Execution",
+    "ExecutionDefinition",
+    "ExecutionResponse",
+    "ExecutionResult",
+    "ExecutionTable",
+    "ExportCustomLabel",
+    "ExportCustomMetric",
+    "ExportCustomOverride",
+    "ExportRequest",
+    "ExportSettings",
+    "Filter",
+    "GoodDataApiClient",
+    "GoodDataApiClientRetryConfig",
+    "GoodDataSdk",
+    "GrandTotalsPosition",
+    "HLLType",
+    "HLL_TYPE_SETTING_ID",
+    "HLL_TYPE_SETTING_TYPE",
+    "InlineFilter",
+    "InlineMetric",
+    "KeyPairCredentials",
+    "MariaDbAttributes",
+    "MatchAttributeFilter",
+    "Metric",
+    "MetricValueComparisonCondition",
+    "MetricValueFilter",
+    "MetricValueRangeCondition",
+    "MotherDuckAttributes",
+    "MsSqlAttributes",
+    "MySqlAttributes",
+    "NegativeAttributeFilter",
+    "ObjId",
+    "PopDate",
+    "PopDateDataset",
+    "PopDateMetric",
+    "PopDatesetMetric",
+    "PositiveAttributeFilter",
+    "PostgresAttributes",
+    "RankingFilter",
+    "RedshiftAttributes",
+    "RelativeDateFilter",
+    "ResultCacheMetadata",
+    "ResultSizeBytesLimitExceeded",
+    "ResultSizeDimensions",
+    "ResultSizeDimensionsLimitsExceeded",
+    "ScanSqlRequest",
+    "ScanSqlResponse",
+    "SideLoads",
+    "SimpleMetric",
+    "SlidesExportRequest",
+    "SnowflakeAttributes",
+    "SqlColumn",
+    "TableDimension",
+    "TableService",
+    "TokenCredentialsFromEnvVar",
+    "TokenCredentialsFromFile",
+    "TotalDefinition",
+    "TotalDimension",
+    "UpsertOutcome",
+    "VerticaAttributes",
+    "VisualExportRequest",
+    "Visualization",
+    "VisualizationAttribute",
+    "VisualizationBucket",
+    "VisualizationFilter",
+    "VisualizationMetric",
+    "VisualizationService",
+    "aac_attribute_hierarchy_to_declarative",
+    "aac_dashboard_to_declarative",
+    "aac_dataset_to_declarative",
+    "aac_date_dataset_to_declarative",
+    "aac_metric_to_declarative",
+    "aac_plugin_to_declarative",
+    "aac_visualization_to_declarative",
+    "declarative_attribute_hierarchy_to_aac",
+    "declarative_dashboard_to_aac",
+    "declarative_dataset_to_aac",
+    "declarative_date_instance_to_aac",
+    "declarative_metric_to_aac",
+    "declarative_plugin_to_aac",
+    "declarative_visualization_to_aac",
+    "detect_yaml_format",
+    "load_aac_workspace_from_disk",
+    "store_aac_workspace_to_disk",
+]
+# --- end generated by scripts/sync_lazy_imports.py ---
+
+
+_submodule_getattr = submodule_getattr(__name__)
+
+
+def __getattr__(name: str) -> Any:
+    """Resolve a public re-export (or a submodule) on first access."""
+    module_name = _LAZY_IMPORTS.get(name)
+    if module_name is None:
+        return _submodule_getattr(name)
+    value = getattr(import_module(module_name), name)
+    globals()[name] = value
+    return value
+
+
+def __dir__() -> list[str]:
+    """List the public API plus the submodules, so REPL completion still finds both."""
+    submodules = (info.name for info in pkgutil.iter_modules(__path__) if not info.name.startswith("_"))
+    return sorted(set(__all__) | set(submodules))
+
 
 # by default don't log anything
 logging.getLogger(__name__).addHandler(logging.NullHandler())
