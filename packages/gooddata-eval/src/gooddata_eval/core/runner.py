@@ -187,9 +187,7 @@ class EvalReport:
 RunCallback = Callable[[int, int, bool, float], None]
 
 
-def _failed_run_record(
-    run_index: int, evaluation: ItemEvaluation, chat_result: ChatResult, latency: float
-) -> dict:
+def _failed_run_record(run_index: int, evaluation: ItemEvaluation, chat_result: ChatResult, latency: float) -> dict:
     """Everything needed to diagnose ONE failing run, without re-running it.
 
     `detail` is the evaluator's own verdict for this attempt, opaque here -- the runner
