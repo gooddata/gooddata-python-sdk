@@ -1003,7 +1003,7 @@ requires-dist = [
 
 [[package]]
 name = "gooddata-code-convertors"
-version = "11.55.0"
+version = "11.57.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pydantic" },
@@ -1011,7 +1011,7 @@ dependencies = [
     { name = "wasmtime" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c7/da/080e77867ad44f2b84e940bc09f02039e265acb6e6195ea9f2d4a4cd5f6c/gooddata_code_convertors-11.55.0-py3-none-any.whl", hash = "sha256:410a29ee89e8022bd260cc50e495f6c2f66b72e2080394b1bf8de40470c3252d", size = 1219281, upload-time = "2026-09-03T07:08:12.592Z" },
+    { url = "https://files.pythonhosted.org/packages/88/a8/4ca369e2de1be3f9c0d23dc5696c895cfdb5e529b69ded9862e5b250557d/gooddata_code_convertors-11.57.0-py3-none-any.whl", hash = "sha256:efc56ba78eec9d7fb7e93e00d1b321583d0ac1ae38240a373a287478ae49c70b", size = 1220956, upload-time = "2026-09-17T06:54:58.286Z" },
 ]
 
 [[package]]
@@ -1462,7 +1462,7 @@ requires-dist = [
     { name = "brotli", specifier = "==1.2.0" },
     { name = "cattrs", specifier = ">=22.1.0,<=26.1.0" },
     { name = "gooddata-api-client", editable = "gooddata-api-client" },
-    { name = "gooddata-code-convertors", specifier = ">=11.35.0a2" },
+    { name = "gooddata-code-convertors", specifier = ">=11.57.0" },
     { name = "pyarrow", marker = "extra == 'arrow'", specifier = ">=23.0.1" },
     { name = "python-dateutil", specifier = ">=2.5.3" },
     { name = "python-dotenv", specifier = ">=1.0.0,<2.0.0" },
