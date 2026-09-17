@@ -309,6 +309,7 @@ def test_evaluate_agentic_visualization_returns_reasoning_steps_on_pass():
         "metrics_correct": True,
         "dimensions_correct": True,
         "filters_correct": True,
+        "sorts_correct": True,
         "filter_date_score": True,
         "filter_ranking_score": True,
         "filter_attribute_score": True,
@@ -320,7 +321,10 @@ def test_evaluate_agentic_visualization_returns_reasoning_steps_on_pass():
         "actual_dim_uris": ["label/date.quarter"],
         "expected_filters": {"date": [], "ranking": [], "attribute": []},
         "actual_filters": {"date": [], "ranking": [], "attribute": []},
+        "expected_sorts": [],
+        "actual_sorts": [],
         "latency_breakdown": [],
+        "tool_calls": [],
     }
 
 
@@ -360,6 +364,7 @@ def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on
         "metrics_correct": False,
         "dimensions_correct": False,
         "filters_correct": False,
+        "sorts_correct": False,
         "filter_date_score": False,
         "filter_ranking_score": False,
         "filter_attribute_score": False,
@@ -371,5 +376,8 @@ def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on
         "actual_dim_uris": [],
         "expected_filters": {"date": [], "ranking": [], "attribute": []},
         "actual_filters": {"date": [], "ranking": [], "attribute": []},
+        "expected_sorts": [],
+        "actual_sorts": [],
         "latency_breakdown": [],
+        "tool_calls": [],
     }

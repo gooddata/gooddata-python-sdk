@@ -2,8 +2,10 @@
 """Visualization scoring — ported from gdc-nas tavern-e2e app/vis_assertions/metrics.py."""
 
 import json
+from collections.abc import Mapping
 from dataclasses import dataclass
 
+from gooddata_eval.core.granularity import canonical_date_uri
 from gooddata_eval.core.models import AacBucketRef, AacQueryField, CreatedVisualization
 
 # Maps dataset chart-type names (and agent enum values) to a canonical token.
@@ -28,13 +30,20 @@ class FilterScores:
         return self.date_ok and self.ranking_ok and self.attribute_ok
 
 
-def _resolve_alias_to_uri(alias: str, fields: dict[str, AacQueryField | str]) -> str:
-    """Resolve a field alias to its `using` URI; return the alias unchanged if absent."""
+def resolve_alias_to_uri(alias: str, fields: Mapping[str, AacQueryField | str | dict]) -> str:
+    """Resolve a field alias to its `using` URI; return the alias unchanged if absent.
+
+    A field may be an `AacQueryField`, a bare uri string, or the raw `{"using": uri}`
+    dict the AAC schema also allows -- generated specs carry the dict form before they
+    are ever validated into a model.
+    """
     field = fields.get(alias)
     if field is None:
         return alias
     if isinstance(field, str):
         return field
+    if isinstance(field, dict):
+        return field["using"]
     # Duck-type: works even when field is from a different module's AacQueryField class
     return field.using
 
@@ -43,7 +52,7 @@ def _resolve_bucket_to_uri_set(bucket: list[AacBucketRef | str], fields: dict[st
     uris: set[str] = set()
     for ref in bucket:
         alias = ref.field if isinstance(ref, AacBucketRef) else ref
-        uris.add(_resolve_alias_to_uri(alias, fields))
+        uris.add(canonical_date_uri(resolve_alias_to_uri(alias, fields)))
     return uris
 
 
@@ -81,7 +90,7 @@ def validate_cross_references(viz: CreatedVisualization) -> tuple[bool, list[str
         if not isinstance(using_val, str) or not using_val:
             errors.append(f"ranking filter '{filter_key}': using={using_val!r} — a metric/ or fact/ URI is required")
         else:
-            using_uri = _resolve_alias_to_uri(using_val, fields)
+            using_uri = resolve_alias_to_uri(using_val, fields)
             field_def = fields.get(using_val)
             is_adhoc_agg = isinstance(field_def, AacQueryField) and bool(field_def.aggregation)
             if not using_uri.startswith(("metric/", "fact/")) and not is_adhoc_agg:
@@ -97,13 +106,68 @@ def validate_cross_references(viz: CreatedVisualization) -> tuple[bool, list[str
                 f"ranking filter '{filter_key}': attribute={attr_val!r} — expected a label/ or attribute/ URI"
             )
             continue
-        attr_uri = _resolve_alias_to_uri(attr_val, fields)
+        attr_uri = resolve_alias_to_uri(attr_val, fields)
         if not attr_uri.startswith(("label/", "attribute/")):
             errors.append(
                 f"ranking filter '{filter_key}': attribute='{attr_val}' "
                 f"resolves to '{attr_uri}' — expected a label/ or attribute/ URI"
             )
     return len(errors) == 0, errors
+
+
+def _normalize_sort(sort: dict, fields: Mapping[str, AacQueryField | str | dict]) -> str:
+    """One sort entry as a comparable string, aliases resolved to uris.
+
+    The entry's own `type` decides which key names the fields: a `metric_sort` lists
+    them under `metrics`, an `attribute_sort` names one under `by`. One agent build
+    emits both keys on a metric sort, so reading `by` first would compare the wrong
+    thing on a chart that is otherwise right.
+    """
+    if sort.get("type") == "attribute_sort":
+        refs = [sort.get("by")]
+    else:
+        refs = list(sort.get("metrics") or [])
+        if not refs and sort.get("by") is not None:
+            refs = [sort["by"]]
+    uris = [canonical_date_uri(resolve_alias_to_uri(ref, fields)) for ref in refs if isinstance(ref, str)]
+    return json.dumps(
+        {
+            "type": sort.get("type") or "",
+            "direction": (sort.get("direction") or "").upper(),
+            "fields": uris,
+        },
+        sort_keys=True,
+    )
+
+
+def normalized_sorts(viz: CreatedVisualization) -> list[str]:
+    """`query.sort_by` in the canonical form equality is tested on.
+
+    Order is preserved: a chart sorted by region then by revenue is not the chart
+    sorted by revenue then by region.
+    """
+    return [_normalize_sort(sort, viz.query.fields) for sort in viz.query.sort_by]
+
+
+def check_sorts(expected: CreatedVisualization, actual: CreatedVisualization) -> bool:
+    """Whether `actual` sorts the way `expected` does, when `expected` sorts at all.
+
+    Deliberately not symmetric with the filter checks. An empty `sort_by` says the
+    fixture records no sort, not that the chart must be unsorted -- a generated item
+    inherits that emptiness from an insight whose author sorted in Analytical Designer
+    and saved without the sort sticking. A spurious filter changes which rows a reader
+    sees and is always wrong; a volunteered sort changes only their order, and on a time
+    axis ascending is the order any renderer would pick unprompted.
+
+    So a required sort is enforced and a volunteered one is free. The same holds when
+    the fixture does sort: the recorded sorts must come first and in order, and a
+    tiebreak the agent appends after them ("state descending, then city") is free too.
+    The cost is that a genuinely wrong sort over an unsorted fixture goes ungraded, which
+    is the lesser error while `sort_by: []` cannot distinguish "unsorted" from
+    "unrecorded".
+    """
+    expected_sorts = normalized_sorts(expected)
+    return normalized_sorts(actual)[: len(expected_sorts)] == expected_sorts
 
 
 def _normalize_date_filter(filter_dict: dict, _fields: dict) -> dict:
@@ -147,11 +211,11 @@ def _normalize_ranking_filter(
     if not isinstance(attr_val, str) or not attr_val:
         dim_uri = sole_dim_uri or ""
     else:
-        dim_uri = _resolve_alias_to_uri(attr_val, fields)
+        dim_uri = resolve_alias_to_uri(attr_val, fields)
     using_val = filter_dict.get("using")
     entry: dict = {
         "type": "ranking_filter",
-        "metric_uri": _resolve_alias_to_uri(using_val, fields) if isinstance(using_val, str) else "",
+        "metric_uri": resolve_alias_to_uri(using_val, fields) if isinstance(using_val, str) else "",
         "dim_uri": dim_uri,
     }
     if "top" in filter_dict:
