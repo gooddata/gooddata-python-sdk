@@ -19,6 +19,7 @@ from gooddata_eval.cli.agentic_runner import (
     runs_in_parallel,
 )
 from gooddata_eval.core.agentic.alert_skill import AlertSkillAssertionError
+from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.models import AgenticEvalOutcome, DatasetItem
 from gooddata_eval.core.timing import PhaseTimings
 
@@ -876,7 +877,31 @@ def test_every_multi_run_kind_s_evaluator_builds_failed_runs(kind, expected_outp
         pytest.skip(f"{kind} runs its fixture once; no K to fail within")
     assert "build_failed_runs(" in source, f"{module.__name__} never builds per-run failure records"
     assert "failed_runs=failed_runs" in source, f"{module.__name__} never returns them on the success path"
-    # The exception variable is `exc` in most evaluators and `error` in dashboard_summary.
-    assert re.search(r"\b\w+\.failed_runs = failed_runs", source), (
-        f"{module.__name__} never attaches them to its failure"
-    )
+    # Set directly on the raised error -- `exc` in most evaluators, `error` in
+    # dashboard_summary -- or via the kind's own _attach_diagnostics helper, which the
+    # judge-based kinds use because they raise from two places with one payload.
+    attaches = re.search(r"\b\w+\.failed_runs = failed_runs", source) or "_attach_diagnostics(" in source
+    assert attaches, f"{module.__name__} never attaches them to its failure"
+
+
+def test_an_all_ungraded_item_is_errored_but_still_carries_its_failed_runs():
+    """JudgeResponseError is a RuntimeError, so it used to land in the generic branch:
+    errored, runs=0, no records. It is still an error -- no run has a verdict -- but the
+    per-run diagnostics are precisely what makes a broken judge investigable."""
+    err = JudgeResponseError("judge returned no readable verdict for any of the 3 run(s)")
+    err.failed_runs = [_A_FAILED_RUN]
+    err.conversation_id = "conv-2"
+    err.detail = {"actual_output": "something the agent said"}
+    err.runs_passed = 0
+    err.runs_effective = 3
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=err):
+        report = run_agentic_items(
+            [_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01", k=3
+        )
+    item = report.items[0]
+    assert item.error is not None
+    assert item.failed_runs == [_A_FAILED_RUN]
+    assert item.conversation_id == "conv-2"
+    assert item.best_detail == {"actual_output": "something the agent said"}
+    # The runs it really drove, not 0, and every one of them ungraded.
+    assert (item.runs, item.runs_ungraded) == (3, 3)

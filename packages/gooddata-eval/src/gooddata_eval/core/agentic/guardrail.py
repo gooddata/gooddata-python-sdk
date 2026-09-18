@@ -190,6 +190,29 @@ class GuardrailAssertionError(AgenticAssertionError):
     """Raised when a guardrail evaluation fails."""
 
 
+def _attach_diagnostics(
+    error: BaseException,
+    best: GuardrailResult,
+    detail: dict,
+    failed_runs: list[dict],
+    runs_passed: int,
+    runs_effective: int,
+) -> None:
+    """Hang the report payload on a raised error, whichever error it is.
+
+    Both exits carry the same payload: the gate failure below, and the all-ungraded
+    JudgeResponseError above. They differ only in what the runner does with it -- the
+    second also marks the item errored -- so the attributes are set in one place.
+    """
+    error.reasoning_steps = best.reasoning_steps
+    error.conversation_id = best.conversation_id
+    error.response_id = best.response_id
+    error.detail = detail
+    error.runs_passed = runs_passed
+    error.runs_effective = runs_effective
+    error.failed_runs = failed_runs
+
+
 def _run_detail(run: GuardrailResult) -> dict:
     """The diagnostic fields for ONE run, shared by the best run and every failing one.
 
@@ -297,14 +320,12 @@ def evaluate_agentic_guardrail(
 
     unscored = summary.judge_errors
 
-    if not summary.scored_run_results:
-        # No readable verdict for any run: an error, not K failures. Raised after the
-        # trace link is queued so whatever the agent did is still linked.
-        raise JudgeResponseError(
-            f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
-            + " | ".join(unscored)
-        )
-
+    # Computed BEFORE the all-ungraded raise below, not after. An item whose every run went
+    # ungraded is the one where these matter most -- the judge broke, and the conversation
+    # ids are what someone needs to go read what the agent actually said -- but the raise
+    # used to happen first, so the runner caught a bare error and reported runs=0 with no
+    # records at all. `summary.best` already falls back to the unscored runs, and
+    # `runs_passed` is then 0, so nothing here needs a graded run to exist.
     runs_passed = sum(1 for r in summary.scored_run_results if r.passed)
     runs_effective = len(summary.run_results)
 
@@ -323,18 +344,22 @@ def evaluate_agentic_guardrail(
         detail=_run_detail,
     )
 
+    if not summary.scored_run_results:
+        # No readable verdict for any run: an error, not K failures. Raised after the
+        # trace link is queued so whatever the agent did is still linked.
+        error = JudgeResponseError(
+            f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
+            + " | ".join(unscored)
+        )
+        _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective)
+        raise error
+
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
         exc = GuardrailAssertionError(
             f"Guardrail assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}"
         )
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = runs_effective
-        exc.failed_runs = failed_runs
+        _attach_diagnostics(exc, best, detail, failed_runs, runs_passed, runs_effective)
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,

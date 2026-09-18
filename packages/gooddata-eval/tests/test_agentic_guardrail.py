@@ -330,3 +330,25 @@ def test_failed_runs_carries_each_run_s_tool_calls():
         )
 
     assert [(r["tool_call_count"], r["tool_names"]) for r in outcome.failed_runs] == [(0, [])]
+
+
+# --- an item whose every run went ungraded is still diagnosable ---
+
+
+def test_all_ungraded_attaches_the_records_to_the_judge_error():
+    """The judge broke, so there is no verdict -- but what the agent said is still there,
+    and the conversation ids are how anyone gets to it. This used to raise before the
+    records were built, so the runner reported the item with nothing at all.
+    """
+    client, judge = _guardrail_client_and_judge([])
+    judge.score.side_effect = [JudgeResponseError("unparseable"), JudgeResponseError("unparseable")]
+
+    with pytest.raises(JudgeResponseError) as exc_info, _patched(client, judge):
+        evaluate_agentic_guardrail(host="h", token="t", workspace_id="ws", question="q", expected_output="e", k=2)
+
+    err = exc_info.value
+    assert [r["run_index"] for r in err.failed_runs] == [1, 2]
+    assert [r["error"] for r in err.failed_runs] == ["unparseable", "unparseable"]
+    assert [r["conversation_id"] for r in err.failed_runs] == ["conv-1", "conv-2"]
+    assert [r["detail"]["actual_output"] for r in err.failed_runs] == ["answer conv-1", "answer conv-2"]
+    assert (err.runs_passed, err.runs_effective) == (0, 2)
