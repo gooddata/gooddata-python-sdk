@@ -5,6 +5,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -187,6 +188,21 @@ class GuardrailAssertionError(AgenticAssertionError):
     """Raised when a guardrail evaluation fails."""
 
 
+def _run_detail(run: GuardrailResult) -> dict:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Extracted so a failing run is described by exactly the same keys as the winning run --
+    the two were worth comparing side by side, which they are not if only one of them
+    carries the judge's reasoning.
+    """
+    return {
+        "judge_passed": run.passed,
+        "judge_reasoning": run.reasoning,
+        "actual_output": run.actual_output,
+        "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
+    }
+
+
 def evaluate_agentic_guardrail(
     host: str,
     token: str,
@@ -292,14 +308,18 @@ def evaluate_agentic_guardrail(
 
     best = summary.best
     detail = {
-        "judge_passed": best.passed,
-        "judge_reasoning": best.reasoning,
-        "actual_output": best.actual_output,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+        **_run_detail(best),
         # Only present when it happened, so the usual JSON shape is unchanged. A
         # pass@K over fewer runs than --runs asked for is a weaker result.
         **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),
     }
+    # An ungraded run has no verdict, so `r.passed` is not a claim about it -- treat it as
+    # non-passing here so it is recorded with its judge_error rather than silently dropped.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.judge_error is None and r.passed,
+        detail=_run_detail,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
@@ -312,6 +332,7 @@ def evaluate_agentic_guardrail(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
+        exc.failed_runs = failed_runs
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -320,4 +341,7 @@ def evaluate_agentic_guardrail(
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        # Also on the success path: pass@K clears the gate with one passing run, so a
+        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        failed_runs=failed_runs,
     )
