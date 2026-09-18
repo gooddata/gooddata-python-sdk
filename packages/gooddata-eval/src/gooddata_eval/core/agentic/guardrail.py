@@ -191,7 +191,7 @@ class GuardrailAssertionError(AgenticAssertionError):
 
 
 def _attach_diagnostics(
-    error: BaseException,
+    error: AgenticAssertionError | JudgeResponseError,
     best: GuardrailResult,
     detail: dict,
     failed_runs: list[dict],
