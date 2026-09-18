@@ -1,6 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any, Union
 
@@ -23,6 +24,8 @@ from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeDashboardPermissionsForAssignee,
     CatalogDeclarativeDashboardPermissionsForAssigneeRule,
 )
+from gooddata_sdk.catalog.validation.model import ValidationReport
+from gooddata_sdk.catalog.validation.visualization import validate_content, validate_content_length
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.base import (
     CatalogAnalyticsBase,
     CatalogAnalyticsBaseMeta,
@@ -70,6 +73,33 @@ class CatalogDeclarativeAnalytics(Base):
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeAnalytics:
         analytics = CatalogDeclarativeAnalyticsLayer.load_from_disk(workspace_folder)
         return cls(analytics=analytics)
+
+    def validate(
+        self,
+        *,
+        known_visualization_urls: frozenset[str] | None = None,
+        known_bucket_names: frozenset[str] | None = None,
+    ) -> ValidationReport:
+        """Validate every visualization in this model, collecting all findings into one report.
+
+        Only visualizations are checked: they are the objects whose content the platform
+        stores unvalidated and whose structure a renderer depends on.
+
+        Note that a declarative model holds a workspace's *own* objects. In a parent/child
+        hierarchy a child's model does not contain what it inherits, so a clean report here
+        says nothing about objects the child gets from its parent.
+        """
+        report = ValidationReport()
+        if self.analytics is None:
+            return report
+        for visualization in self.analytics.visualization_objects:
+            report.extend(
+                visualization.validate(
+                    known_visualization_urls=known_visualization_urls,
+                    known_bucket_names=known_bucket_names,
+                ).findings
+            )
+        return report
 
 
 @define(kw_only=True)
@@ -341,6 +371,35 @@ class CatalogDeclarativeVisualizationObject(CatalogAnalyticsBase):
     @staticmethod
     def client_class() -> type[DeclarativeVisualizationObject]:
         return DeclarativeVisualizationObject
+
+    def validate(
+        self,
+        *,
+        known_visualization_urls: frozenset[str] | None = None,
+        known_bucket_names: frozenset[str] | None = None,
+    ) -> ValidationReport:
+        """Check this visualization's content for problems, without contacting the server.
+
+        Opt-in and side-effect free: it reports, and the caller decides. Nothing in the SDK
+        calls it on your behalf, so adding it changes no existing behaviour.
+
+        Args:
+            known_visualization_urls: recognised ``visualizationUrl`` values; None (the
+                default) leaves the chart type unchecked rather than reporting every object.
+            known_bucket_names: recognised bucket local identifiers, same convention.
+
+        Returns:
+            ValidationReport: empty when nothing was found. A clean report means nothing is
+            provably broken -- it is not a promise that the visualization renders.
+        """
+        findings = validate_content(
+            self.content,
+            object_id=self.id,
+            known_visualization_urls=known_visualization_urls,
+            known_bucket_names=known_bucket_names,
+        )
+        findings += validate_content_length(json.dumps(self.content), object_id=self.id)
+        return ValidationReport(findings=findings)
 
 
 @define(kw_only=True)

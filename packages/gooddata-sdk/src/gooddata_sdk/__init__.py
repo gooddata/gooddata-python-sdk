@@ -208,6 +208,12 @@ if TYPE_CHECKING:
         CatalogWorkspacePermissionAssignment,
     )
     from gooddata_sdk.catalog.validate_by_item import CatalogValidateByItem
+    from gooddata_sdk.catalog.validation.model import (
+        Finding,
+        Severity,
+        ValidationError,
+        ValidationReport,
+    )
     from gooddata_sdk.catalog.workspace.aac import (
         aac_attribute_hierarchy_to_declarative,
         aac_dashboard_to_declarative,
@@ -236,6 +242,7 @@ if TYPE_CHECKING:
         CatalogDeclarativeMemoryItem,
         CatalogDeclarativeMetric,
         CatalogDeclarativeParameter,
+        CatalogDeclarativeVisualizationObject,
     )
     from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.export_definition import (
         CatalogDeclarativeExportDefinition,
@@ -465,6 +472,7 @@ _LAZY_IMPORTS: dict[str, str] = {
     "CatalogDeclarativeUserPermission": "gooddata_sdk.catalog.user.declarative_model.user",
     "CatalogDeclarativeUsers": "gooddata_sdk.catalog.user.declarative_model.user",
     "CatalogDeclarativeUsersUserGroups": "gooddata_sdk.catalog.user.declarative_model.user_and_user_groups",
+    "CatalogDeclarativeVisualizationObject": "gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model",
     "CatalogDeclarativeWorkspace": "gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace",
     "CatalogDeclarativeWorkspaceDataFilter": "gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace",
     "CatalogDeclarativeWorkspaceDataFilterColumn": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset",
@@ -566,6 +574,7 @@ _LAZY_IMPORTS: dict[str, str] = {
     "ExportRequest": "gooddata_sdk.catalog.export.request",
     "ExportSettings": "gooddata_sdk.catalog.export.request",
     "Filter": "gooddata_sdk.compute.model.filter",
+    "Finding": "gooddata_sdk.catalog.validation.model",
     "GoodDataApiClient": "gooddata_sdk.client",
     "GoodDataApiClientRetryConfig": "gooddata_sdk.client",
     "GoodDataSdk": "gooddata_sdk.sdk",
@@ -602,6 +611,7 @@ _LAZY_IMPORTS: dict[str, str] = {
     "ResultSizeDimensionsLimitsExceeded": "gooddata_sdk.compute.model.execution",
     "ScanSqlRequest": "gooddata_sdk.catalog.data_source.action_model.requests.scan_sql_request",
     "ScanSqlResponse": "gooddata_sdk.catalog.data_source.action_model.responses.scan_sql_response",
+    "Severity": "gooddata_sdk.catalog.validation.model",
     "SideLoads": "gooddata_sdk.utils",
     "SimpleMetric": "gooddata_sdk.compute.model.metric",
     "SlidesExportRequest": "gooddata_sdk.catalog.export.request",
@@ -614,6 +624,8 @@ _LAZY_IMPORTS: dict[str, str] = {
     "TotalDefinition": "gooddata_sdk.compute.model.execution",
     "TotalDimension": "gooddata_sdk.compute.model.execution",
     "UpsertOutcome": "gooddata_sdk.catalog.types",
+    "ValidationError": "gooddata_sdk.catalog.validation.model",
+    "ValidationReport": "gooddata_sdk.catalog.validation.model",
     "VerticaAttributes": "gooddata_sdk.catalog.data_source.entity_model.data_source",
     "VisualExportRequest": "gooddata_sdk.catalog.export.request",
     "Visualization": "gooddata_sdk.visualization",
@@ -732,6 +744,7 @@ __all__ = [
     "CatalogDeclarativeUserPermission",
     "CatalogDeclarativeUsers",
     "CatalogDeclarativeUsersUserGroups",
+    "CatalogDeclarativeVisualizationObject",
     "CatalogDeclarativeWorkspace",
     "CatalogDeclarativeWorkspaceDataFilter",
     "CatalogDeclarativeWorkspaceDataFilterColumn",
@@ -833,6 +846,7 @@ __all__ = [
     "ExportRequest",
     "ExportSettings",
     "Filter",
+    "Finding",
     "GoodDataApiClient",
     "GoodDataApiClientRetryConfig",
     "GoodDataSdk",
@@ -869,6 +883,7 @@ __all__ = [
     "ResultSizeDimensionsLimitsExceeded",
     "ScanSqlRequest",
     "ScanSqlResponse",
+    "Severity",
     "SideLoads",
     "SimpleMetric",
     "SlidesExportRequest",
@@ -881,6 +896,8 @@ __all__ = [
     "TotalDefinition",
     "TotalDimension",
     "UpsertOutcome",
+    "ValidationError",
+    "ValidationReport",
     "VerticaAttributes",
     "VisualExportRequest",
     "Visualization",
