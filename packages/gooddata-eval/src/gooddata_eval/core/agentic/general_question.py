@@ -6,6 +6,7 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -214,6 +215,44 @@ class GeneralQuestionAssertionError(AgenticAssertionError):
     """Raised when a general-question evaluation fails."""
 
 
+def _attach_diagnostics(
+    error: AgenticAssertionError | JudgeResponseError,
+    best: GeneralQuestionResult,
+    detail: dict,
+    failed_runs: list[dict],
+    runs_passed: int,
+    runs_effective: int,
+) -> None:
+    """Hang the report payload on a raised error, whichever error it is.
+
+    Both exits carry the same payload: the gate failure below, and the all-ungraded
+    JudgeResponseError above. They differ only in what the runner does with it -- the
+    second also marks the item errored -- so the attributes are set in one place.
+    """
+    error.reasoning_steps = best.reasoning_steps
+    error.conversation_id = best.conversation_id
+    error.response_id = best.response_id
+    error.detail = detail
+    error.runs_passed = runs_passed
+    error.runs_effective = runs_effective
+    error.failed_runs = failed_runs
+
+
+def _run_detail(run: GeneralQuestionResult) -> dict:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Extracted so a failing run is described by exactly the same keys as the winning run --
+    the two were worth comparing side by side, which they are not if only one of them
+    carries the judge's reasoning.
+    """
+    return {
+        "judge_passed": run.passed,
+        "judge_reasoning": run.reasoning,
+        "actual_output": run.actual_output,
+        "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
+    }
+
+
 def evaluate_agentic_general_question(
     host: str,
     token: str,
@@ -308,45 +347,51 @@ def evaluate_agentic_general_question(
     item_timings = sum_timings([r.timings for r in summary.run_results])
     unscored = summary.judge_errors
 
-    if not summary.scored_run_results:
-        # Not one run produced a readable verdict, so this item has no result -- an error,
-        # not K failures. Raised after the trace link is queued so whatever the agent did
-        # is still linked, and carrying the timings so the runner can report what the item
-        # cost before it became unevaluable.
-        exc = JudgeResponseError(
-            f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
-            + " | ".join(unscored)
-        )
-        exc.timings = item_timings
-        raise exc
-
+    # Computed BEFORE the all-ungraded raise below, not after. An item whose every run went
+    # ungraded is the one where these matter most -- the judge broke, and the conversation
+    # ids are what someone needs to go read what the agent actually said -- but the raise
+    # used to happen first, so the runner caught a bare error and reported runs=0 with no
+    # records at all. `summary.best` already falls back to the unscored runs, and
+    # `runs_passed` is then 0, so nothing here needs a graded run to exist.
     runs_passed = sum(1 for r in summary.scored_run_results if r.passed)
     runs_effective = len(summary.run_results)
 
     best = summary.best
     detail = {
-        "judge_passed": best.passed,
-        "judge_reasoning": best.reasoning,
-        "actual_output": best.actual_output,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+        **_run_detail(best),
         # Only present when it happened, so the usual JSON shape is unchanged. A
         # pass@K computed over fewer runs than --runs asked for is a weaker result and
         # the report has to say so.
         **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),
     }
+    # An ungraded run has no verdict, so `r.passed` is not a claim about it -- treat it as
+    # non-passing here so it is recorded with its judge_error rather than silently dropped.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.judge_error is None and r.passed,
+        detail=_run_detail,
+    )
+
+    if not summary.scored_run_results:
+        # Not one run produced a readable verdict, so this item has no result -- an error,
+        # not K failures. Raised after the trace link is queued so whatever the agent did
+        # is still linked, and carrying the timings so the runner can report what the item
+        # cost before it became unevaluable.
+        error = JudgeResponseError(
+            f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
+            + " | ".join(unscored)
+        )
+        _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective)
+        error.timings = item_timings
+        raise error
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
         exc = GeneralQuestionAssertionError(
             f"General question assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}"
         )
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
+        _attach_diagnostics(exc, best, detail, failed_runs, runs_passed, runs_effective)
         exc.timings = item_timings
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = runs_effective
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -356,4 +401,7 @@ def evaluate_agentic_general_question(
         response_id=best.response_id,
         detail=detail,
         timings=item_timings,
+        # Also on the success path: pass@K clears the gate with one passing run, so a
+        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        failed_runs=failed_runs,
     )

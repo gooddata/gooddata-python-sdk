@@ -12,6 +12,7 @@ from typing import Any
 from gooddata_sdk import GoodDataSdk
 
 from gooddata_eval.core.agentic._catalog import AnomalyDetectionGranularity, CatalogMetricAlert
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -792,6 +793,28 @@ class AlertSkillAssertionError(AgenticAssertionError):
     """Raised when an alert-skill evaluation fails."""
 
 
+def _run_detail(run: AlertRunResult) -> dict:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Extracted so a failing run is described by exactly the same keys as the winning run --
+    for this kind that means the full per-field check breakdown and the arguments the run sent.
+    """
+    ev = run.eval
+    return {
+        "alert_created": ev.alert_created,
+        "operator_correct": ev.operator_correct,
+        "threshold_correct": ev.threshold_correct,
+        "trigger_correct": ev.trigger_correct,
+        "filters_correct": ev.filters_correct,
+        "metric_correct": ev.metric_correct,
+        "recipients_correct": ev.recipients_correct,
+        "attributes_correct": ev.attributes_correct,
+        "granularity_correct": ev.granularity_correct,
+        "actual_alert_arguments": run.actual_alert_arguments,
+        "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
+    }
+
+
 def evaluate_agentic_alert_skill(
     host: str,
     token: str,
@@ -897,19 +920,14 @@ def evaluate_agentic_alert_skill(
 
     best = summary.best
     ev = best.eval
-    detail = {
-        "alert_created": ev.alert_created,
-        "operator_correct": ev.operator_correct,
-        "threshold_correct": ev.threshold_correct,
-        "trigger_correct": ev.trigger_correct,
-        "filters_correct": ev.filters_correct,
-        "metric_correct": ev.metric_correct,
-        "recipients_correct": ev.recipients_correct,
-        "attributes_correct": ev.attributes_correct,
-        "granularity_correct": ev.granularity_correct,
-        "actual_alert_arguments": best.actual_alert_arguments,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-    }
+    detail = _run_detail(best)
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.eval.strict_pass,
+        detail=_run_detail,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
@@ -929,6 +947,7 @@ def evaluate_agentic_alert_skill(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
+        exc.failed_runs = failed_runs
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -937,4 +956,7 @@ def evaluate_agentic_alert_skill(
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        # Also on the success path: pass@K clears the gate with one passing run, so a
+        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        failed_runs=failed_runs,
     )
