@@ -13,6 +13,26 @@ and why the distinction matters when the format gains a chart type the SDK has n
 of yet.
 """
 
-from gooddata_sdk.catalog.validation.model import Finding, Severity, ValidationReport
+from gooddata_sdk.catalog.validation.model import Finding, Severity, ValidationError, ValidationReport
+from gooddata_sdk.catalog.validation.references import (
+    CatalogReference,
+    ReferenceResolution,
+    catalog_object_ids,
+    extract_catalog_references,
+    resolve_references,
+)
+from gooddata_sdk.catalog.validation.service import ValidationService, WorkspaceValidationReport
 
-__all__ = ["Finding", "Severity", "ValidationReport"]
+__all__ = [
+    "CatalogReference",
+    "Finding",
+    "ReferenceResolution",
+    "Severity",
+    "ValidationError",
+    "ValidationReport",
+    "ValidationService",
+    "WorkspaceValidationReport",
+    "catalog_object_ids",
+    "extract_catalog_references",
+    "resolve_references",
+]
