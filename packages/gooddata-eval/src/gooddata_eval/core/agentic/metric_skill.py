@@ -286,6 +286,17 @@ def _execute_single_metric_run(
                 # GoodData-side fault, so recorded like the simulated-user one below.
                 timings.agent_s += time.monotonic() - agent_started
                 print(f"[CHAT] send_message failed for conversation {conversation_id}: {exc}")
+                # The stream can break AFTER create_metric already succeeded server-side.
+                # Those ids only ever reached created_metric_ids from the normal path below,
+                # so breaking here left the metric in the workspace for the `finally` cleanup
+                # to miss -- a real object leaking out of a failed run, not a reporting gap.
+                partial = exc.partial_result
+                if partial is not None:
+                    reasoning_steps.extend(partial.reasoning_steps or [])
+                    response_id = partial.response_id or response_id
+                    for metric_id in _extract_created_metric_ids(partial.tool_call_events or []):
+                        if metric_id not in created_metric_ids:
+                            created_metric_ids.append(metric_id)
                 exit_reason = LoopExit.CHAT_ERROR
                 break
             agent_elapsed = time.monotonic() - agent_started

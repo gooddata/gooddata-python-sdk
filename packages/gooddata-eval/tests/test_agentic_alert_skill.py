@@ -1269,3 +1269,44 @@ def test_alert_skill_writes_the_turn_and_step_counts_to_langfuse():
 
     assert scores["turns"] == 1
     assert scores["steps"] == 1
+
+
+def test_an_alert_created_before_the_stream_broke_is_still_cleaned_up():
+    """The stream can break AFTER create_metric_alert already succeeded server-side.
+
+    The id reached alert_id_to_delete only from the normal path, so the ChatError branch
+    used to leave a real alert behind in the workspace -- an object leaking out of a
+    failed run, which then fires for real.
+    """
+    partial = ChatResult.model_validate(
+        {
+            "text_response": "",
+            "tool_call_events": [
+                {
+                    "functionName": "create_metric_alert",
+                    "functionArguments": '{"operator": "GREATER_THAN", "threshold": 500}',
+                    "result": '{"id": "alert-1"}',
+                }
+            ],
+        }
+    )
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = ChatError("stream died after create", partial_result=partial)
+
+    with (
+        patch("gooddata_eval.core.agentic.alert_skill.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.alert_skill._delete_alert") as mock_delete,
+    ):
+        run_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Notify me whenever the number of orders goes above 500",
+            expected_output={"operator": "GREATER_THAN", "threshold": 500},
+            k=1,
+            max_iterations=1,
+        )
+
+    assert mock_delete.call_count == 1
+    assert mock_delete.call_args.args[-1] == "alert-1"
