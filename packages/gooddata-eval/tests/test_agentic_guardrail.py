@@ -11,6 +11,7 @@ from gooddata_eval.core.agentic.guardrail import (
     evaluate_agentic_guardrail,
     run_agentic_guardrail,
 )
+from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.models import ChatResult
 
 
@@ -234,3 +235,98 @@ def test_a_non_unanimous_pass_reaches_the_outcome():
         )
 
     assert (outcome.runs_passed, outcome.runs_effective) == (2, 3)
+
+
+# --- every failing run's detail has to survive, not just the winning one's ---
+
+
+def _client_and_judge_with_tools(verdicts, tool_names_per_run):
+    """Like ``_guardrail_client_and_judge`` but each run reports its own tool calls.
+
+    Tool calls are what separate an agent that consulted the workspace from one that
+    answered out of the model's own knowledge, so ``failed_runs`` has to carry them per run.
+    """
+    client = MagicMock()
+    client.create_conversation.side_effect = (f"conv-{i}" for i in itertools.count(1))
+    tools = iter(tool_names_per_run)
+    client.send_message.side_effect = lambda c, q, **k: ChatResult.model_validate(
+        {
+            "textResponse": f"answer {c}",
+            "toolCallEvents": [{"functionName": name, "functionArguments": "{}"} for name in next(tools)],
+            "reasoningSteps": [],
+            "responseId": "r",
+        }
+    )
+    it = iter(verdicts)
+    judge = MagicMock()
+    judge.model = "gpt-4o"
+    judge.score.side_effect = lambda **kw: next(it)
+    return client, judge
+
+
+def test_failed_runs_records_only_the_runs_that_did_not_pass():
+    """A 1/3 item and a 0/3 item used to carry identical diagnostics: the winner's detail."""
+    client, judge = _guardrail_client_and_judge([(True, "ok"), (False, "answered it"), (False, "answered again")])
+
+    with _patched(client, judge):
+        outcome = evaluate_agentic_guardrail(
+            host="h", token="t", workspace_id="ws", question="q", expected_output="e", k=3
+        )
+
+    assert [r["run_index"] for r in outcome.failed_runs] == [2, 3]
+    assert all(r["passed"] is False for r in outcome.failed_runs)
+    # Each failing run's OWN verdict, not the best run's -- the point of keeping them.
+    assert [r["detail"]["judge_reasoning"] for r in outcome.failed_runs] == ["answered it", "answered again"]
+    assert [r["detail"]["actual_output"] for r in outcome.failed_runs] == ["answer conv-2", "answer conv-3"]
+    # Distinct conversation ids: the latent pairing bug was reporting one id for the item.
+    assert [r["conversation_id"] for r in outcome.failed_runs] == ["conv-2", "conv-3"]
+
+
+def test_failed_runs_is_empty_when_every_run_passed():
+    client, judge = _guardrail_client_and_judge([(True, "ok")] * 3)
+
+    with _patched(client, judge):
+        outcome = evaluate_agentic_guardrail(
+            host="h", token="t", workspace_id="ws", question="q", expected_output="e", k=3
+        )
+
+    assert outcome.failed_runs == []
+
+
+def test_failed_runs_reaches_the_exception_when_no_run_passed():
+    client, judge = _guardrail_client_and_judge([(False, "answered it")] * 2)
+
+    with _patched(client, judge), pytest.raises(GuardrailAssertionError) as exc_info:
+        evaluate_agentic_guardrail(host="h", token="t", workspace_id="ws", question="q", expected_output="e", k=2)
+
+    assert [r["run_index"] for r in exc_info.value.failed_runs] == [1, 2]
+
+
+def test_failed_runs_records_an_ungraded_run_with_its_judge_error():
+    """An ungraded run has no verdict, so it is not a pass -- and dropping it would hide
+    the one run whose failure was the judge's, not the agent's.
+    """
+    client, judge = _guardrail_client_and_judge([(True, "ok")] * 2)
+    judge.score.side_effect = [(True, "ok"), JudgeResponseError("unparseable")]
+
+    with _patched(client, judge):
+        outcome = evaluate_agentic_guardrail(
+            host="h", token="t", workspace_id="ws", question="q", expected_output="e", k=2
+        )
+
+    assert [(r["run_index"], r["error"]) for r in outcome.failed_runs] == [(2, "unparseable")]
+
+
+def test_failed_runs_carries_each_run_s_tool_calls():
+    """No tool call at all means the answer came from the model, not the workspace."""
+    client, judge = _client_and_judge_with_tools(
+        [(True, "ok"), (False, "answered it")],
+        [["search_catalog"], []],
+    )
+
+    with _patched(client, judge):
+        outcome = evaluate_agentic_guardrail(
+            host="h", token="t", workspace_id="ws", question="q", expected_output="e", k=2
+        )
+
+    assert [(r["tool_call_count"], r["tool_names"]) for r in outcome.failed_runs] == [(0, [])]

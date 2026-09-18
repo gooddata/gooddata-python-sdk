@@ -1205,6 +1205,8 @@ def test_a_chat_error_on_a_later_run_does_not_discard_the_earlier_ones():
     assert summary.run_results[0].exit_reason is LoopExit.SUCCESS
     assert summary.run_results[1].exit_reason is LoopExit.CHAT_ERROR
     assert summary.pass_at_k is True  # run 0 still counts
+
+
 def test_run_agentic_alert_skill_counts_the_turns_and_reasoning_steps_it_used():
     """QA-29110: the effort comparison reads these. A refusal still took a turn, and the turn
     count is what separates a wrong answer from a run max_iterations cut short."""

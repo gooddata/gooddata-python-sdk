@@ -344,6 +344,20 @@ def _apply_run_counts(item_report: ItemReport, source: Any) -> None:
         item_report.runs_ungraded = unscored
 
 
+def _apply_failed_runs(item_report: ItemReport, source: Any) -> None:
+    """Copy the per-run failure records off an outcome or a failure, if the kind built any.
+
+    Read the same way from both, like the run counts above: a partially passing item raises,
+    so an item's failing runs reach the report through the exception at least as often as
+    through the outcome. A kind that builds none keeps the empty default, which reads as
+    "not instrumented" rather than "nothing failed" -- ``runs_passed``/``runs`` already say
+    how many failed.
+    """
+    failed_runs = getattr(source, "failed_runs", None)
+    if failed_runs:
+        item_report.failed_runs = list(failed_runs)
+
+
 def _apply_timings(item_report: ItemReport, timings: Any) -> None:
     """Copy an outcome's phase breakdown onto the item report, if the kind recorded one.
 
@@ -443,6 +457,7 @@ def run_agentic_items(
             item_report.best_detail = detail or {}
             _apply_timings(item_report, getattr(outcome, "timings", None))
             _apply_run_counts(item_report, outcome)
+            _apply_failed_runs(item_report, outcome)
         except AssertionError as exc:
             item_report.gate_passed = False if gated else None
             item_report.runs = k
@@ -452,6 +467,7 @@ def run_agentic_items(
             item_report.best_detail = getattr(exc, "detail", None) or {}
             _apply_timings(item_report, getattr(exc, "timings", None))
             _apply_run_counts(item_report, exc)
+            _apply_failed_runs(item_report, exc)
             # Read off the counts, not off the gate: pass^K fails items where runs did pass,
             # and reporting those as pass_at_k False would contradict the Langfuse score of
             # the same name. Kinds that report no count read as 0, i.e. a clean failure.

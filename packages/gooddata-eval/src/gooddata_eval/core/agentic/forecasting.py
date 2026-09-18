@@ -22,6 +22,7 @@ import os
 from dataclasses import dataclass, field
 from typing import Any
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -565,6 +566,10 @@ def evaluate_agentic_forecasting(
     best = summary.best
     ev = best.evaluation
     detail = _detail(best)
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed. `_detail` already describes ONE run, so
+    # every failing run gets the same keys as the winner rather than a reduced version.
+    failed_runs = build_failed_runs(summary.run_results, passed=lambda r: r.evaluation.strict_pass, detail=_detail)
     runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
 
     if not summary.pass_at_k:
@@ -582,6 +587,7 @@ def evaluate_agentic_forecasting(
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
         exc.detail = detail
+        exc.failed_runs = failed_runs
         exc.runs_passed = runs_passed
         exc.runs_effective = len(summary.run_results)
         raise exc
@@ -593,4 +599,7 @@ def evaluate_agentic_forecasting(
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        # Also on the success path: pass@K clears the gate with one passing run, so a
+        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        failed_runs=failed_runs,
     )
