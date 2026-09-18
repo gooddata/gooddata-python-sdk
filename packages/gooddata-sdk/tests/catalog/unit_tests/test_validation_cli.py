@@ -75,6 +75,33 @@ class TestOfflineMode:
         assert "Pass --workspace" in capsys.readouterr().out
 
 
+class TestPathGuards:
+    """``load_from_disk`` creates the layout's folders as it walks, so an unguarded run on
+    the wrong path writes directories, finds nothing in them and reports success -- the one
+    failure mode a validator must not have, because it is indistinguishable from passing."""
+
+    def test_a_path_that_does_not_exist_is_a_usage_error(self, tmp_path, capsys):
+        assert validate(tmp_path / "nope", _args()) == 2
+        assert "does not exist" in capsys.readouterr().out
+
+    def test_a_directory_that_is_not_a_layout_is_a_usage_error(self, tmp_path, capsys):
+        assert validate(tmp_path, _args()) == 2
+        assert "not a layout directory" in capsys.readouterr().out
+
+    def test_nothing_is_written_when_the_path_is_rejected(self, tmp_path):
+        validate(tmp_path, _args())
+        assert list(tmp_path.iterdir()) == []
+
+    def test_a_layout_with_no_visualizations_says_so_instead_of_reporting_success(self, tmp_path, capsys):
+        (tmp_path / "analytics_model").mkdir()
+        assert validate(tmp_path, _args()) == 0
+        assert "Nothing to validate" in capsys.readouterr().out
+
+    def test_the_object_count_is_reported(self, tmp_path, capsys):
+        validate(_layout(tmp_path, _content(), _content()), _args())
+        assert "2 object(s) checked." in capsys.readouterr().out
+
+
 class TestSingleFile:
     def test_one_visualization_file_can_be_validated_on_its_own(self, tmp_path):
         layout = _layout(tmp_path, _content())

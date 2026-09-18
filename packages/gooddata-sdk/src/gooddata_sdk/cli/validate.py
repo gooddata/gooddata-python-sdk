@@ -16,6 +16,7 @@ from pathlib import Path
 from gooddata_sdk import GoodDataSdk
 from gooddata_sdk.catalog.validation.service import ValidationService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
+    LAYOUT_ANALYTICS_MODEL_DIR,
     LAYOUT_VISUALIZATION_OBJECTS_DIR,
     CatalogDeclarativeAnalytics,
     CatalogDeclarativeVisualizationObject,
@@ -50,8 +51,24 @@ def _load_single_file(path: Path) -> CatalogDeclarativeAnalytics:
 
 
 def _load(path: Path) -> CatalogDeclarativeAnalytics:
+    """Load a layout directory or a single object file, refusing anything that is neither.
+
+    The guards matter more than they look. ``load_from_disk`` creates the layout's
+    directories as it walks, so pointing it at a path that is not a layout silently *makes*
+    one, finds nothing in it, and reports a clean bill of health -- a validator's worst
+    failure mode, since it looks exactly like success. A read-only command has no business
+    writing anything, so the shape of the path is checked before it is read.
+    """
+    if not path.exists():
+        raise ValueError(f"{path} does not exist.")
     if path.is_file():
         return _load_single_file(path)
+    if not (path / LAYOUT_ANALYTICS_MODEL_DIR).is_dir():
+        raise ValueError(
+            f"{path} is not a layout directory: expected a '{LAYOUT_ANALYTICS_MODEL_DIR}/' "
+            f"folder inside it. Point --path at the workspace folder a layout was stored "
+            f"into, or at a single visualization YAML."
+        )
     return CatalogDeclarativeAnalytics.load_from_disk(path)
 
 
@@ -103,9 +120,16 @@ def validate(path: Path, args: argparse.Namespace) -> int:
         print(f"{Bcolors.FAIL}{exc}{Bcolors.ENDC}")
         return 2
 
+    checked = len(model.analytics.visualization_objects) if model.analytics is not None else 0
+    if checked == 0:
+        # Distinguished from success on purpose: "nothing was wrong" and "nothing was looked
+        # at" print the same way otherwise, and the second is usually a wrong --path.
+        print(f"{Bcolors.WARNING}No visualization objects found under {path}. Nothing to validate.{Bcolors.ENDC}")
+        return 0
+
     if args.workspace is None:
         report = model.validate()
-        _print(report.format(), report.ok)
+        _print(f"{checked} object(s) checked.\n{report.format()}", report.ok)
         if report.ok:
             print(
                 f"{Bcolors.WARNING}Structure only. Pass --workspace to also check that the "
