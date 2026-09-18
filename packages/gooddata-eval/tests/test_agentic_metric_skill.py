@@ -946,3 +946,34 @@ def test_metric_skill_writes_the_turn_and_step_counts_to_langfuse():
     # they are counts, and a float reads as though a fraction of a turn were possible.
     assert isinstance(scores["turns"], int)
     assert isinstance(scores["steps"], int)
+
+
+def test_a_metric_created_before_the_stream_broke_is_still_cleaned_up():
+    """The stream can break AFTER create_metric already succeeded server-side.
+
+    The id reached created_metric_ids only from the normal path, so the ChatError branch
+    used to leave a real metric behind in the workspace -- an object leaking out of a
+    failed run, which the next run then sees.
+    """
+    mock_client = _client()
+    partial = ChatResult.model_validate(
+        {
+            "textResponse": "",
+            "toolCallEvents": [_create_metric_call('{"data": {"metric_id": "m1", "maql": "SELECT {metric/foo}"}}')],
+        }
+    )
+    mock_client.send_message.side_effect = ChatError("stream died after create", partial_result=partial)
+
+    with _patched(mock_client, sdk=True) as (_, mock_sdk_cls):
+        run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=1,
+        )
+
+    sdk = mock_sdk_cls.create.return_value
+    sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "m1")

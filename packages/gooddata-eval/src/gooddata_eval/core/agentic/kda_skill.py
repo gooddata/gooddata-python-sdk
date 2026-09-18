@@ -7,6 +7,8 @@ import logging
 import os
 from dataclasses import dataclass, field
 
+import httpx
+
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
@@ -26,7 +28,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     utc_now,
 )
 from gooddata_eval.core.chat.render import render_answer_text
-from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import (
     AgenticAssertionError,
@@ -295,7 +297,13 @@ def run_agentic_kda_skill(
             turns_used = iteration + 1
             try:
                 chat_result = client.send_message(conv_id, current_question)
-            except Exception as exc:  # noqa: BLE001 -- end this run, not the whole assertion
+            except (ChatError, httpx.HTTPError) as exc:
+                # Narrow on purpose. A bare `except Exception` here also swallowed bugs in
+                # this package -- a TypeError in the accumulator came back as a tidy failed
+                # run with exit_reason=CHAT_ERROR, indistinguishable from a real GoodData
+                # fault. ChatError covers what ChatClient raises deliberately; httpx.HTTPError
+                # covers the transport faults it re-raises untouched mid-stream
+                # (RemoteProtocolError, ReadError). Anything else is ours and should surface.
                 _log.warning("KDA send_message failed for conversation %s: %s", conv_id, exc)
                 partial = getattr(exc, "partial_result", None)
                 if partial is not None:
