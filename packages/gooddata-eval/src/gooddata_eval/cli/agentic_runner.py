@@ -20,6 +20,7 @@ from gooddata_eval.core.agentic.metric_skill import evaluate_agentic_metric_skil
 from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
 from gooddata_eval.core.config import ReasoningEffort
+from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
 
@@ -411,6 +412,26 @@ def run_agentic_items(
             # the same name. Kinds that report no count read as 0, i.e. a clean failure.
             item_report.pass_at_k = item_report.runs_passed > 0
             print(f"[agentic] {item.id} FAIL: {exc}", flush=True)
+        except JudgeResponseError as exc:
+            # Errored, like the branch below -- there is no verdict for any run, so this is
+            # not K failures -- but NOT diagnostically empty. This is the one failure mode
+            # where the per-run records are most worth having: the judge broke, so what the
+            # agent actually said is still there to read, and the conversation ids are how
+            # anyone gets to it. Reported with the runs it really drove rather than 0.
+            item_report.error = f"{type(exc).__name__}: {exc}"
+            item_report.runs = getattr(exc, "runs_effective", None) or k
+            item_report.reasoning_steps = getattr(exc, "reasoning_steps", None) or []
+            item_report.conversation_id = getattr(exc, "conversation_id", None)
+            item_report.response_id = getattr(exc, "response_id", None)
+            item_report.best_detail = getattr(exc, "detail", None) or {}
+            _apply_timings(item_report, getattr(exc, "timings", None))
+            _apply_run_counts(item_report, exc)
+            _apply_failed_runs(item_report, exc)
+            # Every run ungraded, by definition of this error -- said explicitly rather than
+            # left to _apply_run_counts, whose source is detail["unscored_runs"] and which a
+            # kind that attaches no diagnostics would leave at 0.
+            item_report.runs_ungraded = item_report.runs
+            print(f"[agentic] {item.id} UNGRADED: {exc}", flush=True)
         except Exception as exc:
             item_report.error = f"{type(exc).__name__}: {exc}"
             item_report.runs = 0
