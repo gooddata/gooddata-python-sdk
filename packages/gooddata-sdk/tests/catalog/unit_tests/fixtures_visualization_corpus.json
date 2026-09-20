@@ -1,0 +1,1750 @@
+[
+ {
+  "content": {
+   "buckets": [
+    {
+     "items": [
+      {
+       "measure": {
+        "alias": "obj_eed4733f19",
+        "definition": {
+         "measureDefinition": {
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_baaaad5f8f",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_4ec63b743a",
+        "title": "obj_a09756a0ec"
+       }
+      }
+     ],
+     "localIdentifier": "measures"
+    },
+    {
+     "items": [
+      {
+       "attribute": {
+        "displayForm": {
+         "identifier": {
+          "id": "obj_f1a5555dff",
+          "type": "label"
+         }
+        },
+        "localIdentifier": "obj_57c95016cc"
+       }
+      }
+     ],
+     "localIdentifier": "view"
+    }
+   ],
+   "filters": [
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_f1a5555dff",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_53dc83048a",
+      "notIn": {
+       "values": [
+        null
+       ]
+      }
+     }
+    },
+    {
+     "relativeDateFilter": {
+      "dataSet": {
+       "identifier": {
+        "id": "obj_bfcfb4f8f5",
+        "type": "dataset"
+       }
+      },
+      "from": -11,
+      "granularity": "obj_f50d16e94a",
+      "to": 0
+     }
+    },
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_df69e272c3",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_c862ab311c",
+      "notIn": {
+       "values": [
+        "obj_35a70ca4d4"
+       ]
+      }
+     }
+    },
+    {
+     "rankingFilter": {
+      "measure": {
+       "localIdentifier": "obj_4ec63b743a"
+      },
+      "operator": "TOP",
+      "strictLimitOfRows": true,
+      "value": 10
+     }
+    }
+   ],
+   "properties": {
+    "controls": {
+     "legend": {
+      "position": "obj_db9f96f45d"
+     },
+     "xaxis": {
+      "name": {
+       "visible": false
+      },
+      "visible": true
+     },
+     "yaxis": {
+      "format": "obj_5ba7c8f608",
+      "name": {
+       "visible": true
+      },
+      "visible": true
+     }
+    }
+   },
+   "sorts": [
+    {
+     "measureSortItem": {
+      "direction": "desc",
+      "locators": [
+       {
+        "measureLocatorItem": {
+         "measureIdentifier": "obj_4ec63b743a"
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "version": "2",
+   "visualizationUrl": "local:column"
+  },
+  "id": "obj_234b94a159"
+ },
+ {
+  "content": {
+   "buckets": [
+    {
+     "items": [
+      {
+       "measure": {
+        "alias": "obj_eed4733f19",
+        "definition": {
+         "measureDefinition": {
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_10e9962e97",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_f154e57867",
+        "title": "obj_6118842e11"
+       }
+      }
+     ],
+     "localIdentifier": "measures"
+    },
+    {
+     "items": [
+      {
+       "attribute": {
+        "displayForm": {
+         "identifier": {
+          "id": "obj_f1a5555dff",
+          "type": "label"
+         }
+        },
+        "localIdentifier": "obj_57c95016cc"
+       }
+      }
+     ],
+     "localIdentifier": "view"
+    }
+   ],
+   "filters": [
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_f1a5555dff",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_53dc83048a",
+      "notIn": {
+       "values": [
+        null
+       ]
+      }
+     }
+    },
+    {
+     "relativeDateFilter": {
+      "dataSet": {
+       "identifier": {
+        "id": "obj_bfcfb4f8f5",
+        "type": "dataset"
+       }
+      },
+      "from": -11,
+      "granularity": "obj_f50d16e94a",
+      "to": 0
+     }
+    },
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_df69e272c3",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_6224e2dfff",
+      "notIn": {
+       "values": [
+        "obj_35a70ca4d4"
+       ]
+      }
+     }
+    },
+    {
+     "rankingFilter": {
+      "measure": {
+       "localIdentifier": "obj_f154e57867"
+      },
+      "operator": "TOP",
+      "strictLimitOfRows": true,
+      "value": 10
+     }
+    }
+   ],
+   "properties": {
+    "controls": {
+     "legend": {
+      "position": "obj_db9f96f45d"
+     },
+     "xaxis": {
+      "name": {
+       "visible": false
+      },
+      "visible": true
+     },
+     "yaxis": {
+      "name": {
+       "visible": true
+      },
+      "visible": true
+     }
+    }
+   },
+   "sorts": [
+    {
+     "measureSortItem": {
+      "direction": "desc",
+      "locators": [
+       {
+        "measureLocatorItem": {
+         "measureIdentifier": "obj_f154e57867"
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "version": "2",
+   "visualizationUrl": "local:column"
+  },
+  "id": "obj_49566a95b0"
+ },
+ {
+  "content": {
+   "buckets": [
+    {
+     "items": [
+      {
+       "measure": {
+        "alias": "obj_b0c655f3ec",
+        "definition": {
+         "measureDefinition": {
+          "computeRatio": false,
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_2e9c1a9c21",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_7e1b94591b",
+        "title": "obj_77013de578"
+       }
+      }
+     ],
+     "localIdentifier": "measures"
+    },
+    {
+     "items": [
+      {
+       "measure": {
+        "alias": "obj_488ee76fb8",
+        "definition": {
+         "measureDefinition": {
+          "computeRatio": false,
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_2ea51c1eb4",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_ac5683f16d",
+        "title": "obj_6bd185e3be"
+       }
+      }
+     ],
+     "localIdentifier": "secondary_measures"
+    },
+    {
+     "items": [
+      {
+       "attribute": {
+        "alias": "obj_57319e935c",
+        "displayForm": {
+         "identifier": {
+          "id": "obj_79a19475bc",
+          "type": "label"
+         }
+        },
+        "localIdentifier": "obj_e28cf7c24f"
+       }
+      }
+     ],
+     "localIdentifier": "view"
+    }
+   ],
+   "filters": [
+    {
+     "relativeDateFilter": {
+      "dataSet": {
+       "identifier": {
+        "id": "obj_bfcfb4f8f5",
+        "type": "dataset"
+       }
+      },
+      "from": -1,
+      "granularity": "obj_f50d16e94a",
+      "to": -1
+     }
+    }
+   ],
+   "properties": {
+    "controls": {
+     "continuousLine": {
+      "enabled": false
+     },
+     "dataLabels": {
+      "visible": "obj_5ba7c8f608"
+     },
+     "dataPoints": {
+      "visible": true
+     },
+     "dualAxis": true,
+     "grid": {
+      "enabled": true
+     },
+     "legend": {
+      "enabled": true,
+      "position": "obj_1c95e5d036"
+     },
+     "primaryChartType": "obj_61723cb616",
+     "secondaryChartType": "obj_57edd0d677",
+     "secondary_yaxis": {
+      "measures": [
+       "obj_a5ab9ecb43"
+      ],
+      "visible": false
+     },
+     "xaxis": {
+      "rotation": "obj_a6cba1bf74",
+      "visible": true
+     },
+     "yaxis": {
+      "visible": false
+     }
+    }
+   },
+   "sorts": [
+    {
+     "attributeSortItem": {
+      "attributeIdentifier": "obj_e28cf7c24f",
+      "direction": "asc"
+     }
+    }
+   ],
+   "version": "2",
+   "visualizationUrl": "local:combo2"
+  },
+  "id": "obj_99b2e8c724"
+ },
+ {
+  "content": {
+   "buckets": [
+    {
+     "items": [
+      {
+       "measure": {
+        "definition": {
+         "measureDefinition": {
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_2e9c1a9c21",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_ee8e51780b",
+        "title": "obj_77013de578"
+       }
+      }
+     ],
+     "localIdentifier": "measures"
+    },
+    {
+     "items": [
+      {
+       "measure": {
+        "alias": "obj_7502c96568",
+        "definition": {
+         "measureDefinition": {
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_6e0042ac07",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_7610cb8963",
+        "title": "obj_f856e9449b"
+       }
+      }
+     ],
+     "localIdentifier": "secondary_measures"
+    }
+   ],
+   "filters": [
+    {
+     "relativeDateFilter": {
+      "dataSet": {
+       "identifier": {
+        "id": "obj_bfcfb4f8f5",
+        "type": "dataset"
+       }
+      },
+      "from": -1,
+      "granularity": "obj_f50d16e94a",
+      "to": -1
+     }
+    },
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_758d85e82a",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_414ae923af",
+      "notIn": {
+       "uris": []
+      }
+     }
+    },
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_3ad5356934",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_a4daaa5b15",
+      "notIn": {
+       "uris": []
+      }
+     }
+    },
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_e2dc8ffeb7",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_5dbb3fe6c2",
+      "notIn": {
+       "uris": []
+      }
+     }
+    },
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_1e90f6c3d7",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_7bec419208",
+      "notIn": {
+       "uris": []
+      }
+     }
+    },
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_2a6a6d3b1f",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_5b19793aa9",
+      "notIn": {
+       "uris": []
+      }
+     }
+    },
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_af135db2de",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_fc7db62703",
+      "notIn": {
+       "uris": []
+      }
+     }
+    },
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_a39836857a",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_c1a1c18e84",
+      "notIn": {
+       "uris": []
+      }
+     }
+    },
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_43f9eba532",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_ba735bded7",
+      "notIn": {
+       "uris": []
+      }
+     }
+    },
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_d768935ded",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_b5514ea46c",
+      "notIn": {
+       "uris": []
+      }
+     }
+    },
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_79a19475bc",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_c2209d909f",
+      "notIn": {
+       "uris": []
+      }
+     }
+    }
+   ],
+   "properties": {
+    "controls": {
+     "comparison": {
+      "enabled": false
+     }
+    }
+   },
+   "sorts": [],
+   "version": "2",
+   "visualizationUrl": "local:headline"
+  },
+  "id": "obj_b85f82bdc8"
+ },
+ {
+  "content": {
+   "attributeFilterConfigs": {
+    "obj_1c37f0873e": {
+     "displayAsLabel": {
+      "identifier": {
+       "id": "obj_6b2d96bd2e",
+       "type": "label"
+      }
+     }
+    },
+    "obj_2c7b5275f5": {
+     "displayAsLabel": {
+      "identifier": {
+       "id": "obj_6b2d96bd2e",
+       "type": "label"
+      }
+     }
+    },
+    "obj_30495626bf": {
+     "displayAsLabel": {
+      "identifier": {
+       "id": "obj_023ea7b635",
+       "type": "label"
+      }
+     }
+    },
+    "obj_d6393e2d6c": {
+     "displayAsLabel": {
+      "identifier": {
+       "id": "obj_023ea7b635",
+       "type": "label"
+      }
+     }
+    }
+   },
+   "buckets": [
+    {
+     "items": [
+      {
+       "measure": {
+        "definition": {
+         "measureDefinition": {
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_ce187b26e2",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_4b7b9d83c7",
+        "title": "obj_3ae5d63f2c"
+       }
+      }
+     ],
+     "localIdentifier": "measures"
+    },
+    {
+     "items": [
+      {
+       "measure": {
+        "alias": "obj_931516217e",
+        "definition": {
+         "measureDefinition": {
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_968ada1e05",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_89557da723",
+        "title": "obj_98274f5286"
+       }
+      },
+      {
+       "measure": {
+        "alias": "obj_d8d499c528",
+        "definition": {
+         "measureDefinition": {
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_b0fc70734d",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_696f37d938",
+        "title": "obj_f72e918b8e"
+       }
+      }
+     ],
+     "localIdentifier": "secondary_measures"
+    }
+   ],
+   "filters": [
+    {
+     "positiveAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_a3846f45ec",
+        "type": "label"
+       }
+      },
+      "in": {
+       "values": [
+        "obj_6d9373a190"
+       ]
+      },
+      "localIdentifier": "obj_18fb349bf9"
+     }
+    },
+    {
+     "positiveAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_df2a02706c",
+        "type": "label"
+       }
+      },
+      "in": {
+       "values": [
+        "obj_fabc8e8a04"
+       ]
+      },
+      "localIdentifier": "obj_8ecd846514"
+     }
+    }
+   ],
+   "properties": {
+    "controls": {
+     "comparison": {
+      "enabled": true
+     }
+    }
+   },
+   "sorts": [],
+   "version": "2",
+   "visualizationUrl": "local:headline"
+  },
+  "id": "obj_a11f904bb7"
+ },
+ {
+  "content": {
+   "buckets": [
+    {
+     "items": [
+      {
+       "measure": {
+        "alias": "obj_d639b71a15",
+        "definition": {
+         "measureDefinition": {
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_8274018c5e",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_d5c249b652",
+        "title": "obj_4896a043d2"
+       }
+      },
+      {
+       "measure": {
+        "alias": "obj_d8d499c528",
+        "definition": {
+         "measureDefinition": {
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_52bceaac32",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_1dbe84aa63",
+        "title": "obj_c18a2b54ba"
+       }
+      }
+     ],
+     "localIdentifier": "measures"
+    },
+    {
+     "items": [
+      {
+       "attribute": {
+        "alias": "obj_9c1c2679ed",
+        "displayForm": {
+         "identifier": {
+          "id": "obj_10a4d2ceec",
+          "type": "label"
+         }
+        },
+        "localIdentifier": "obj_745a2cafb7"
+       }
+      }
+     ],
+     "localIdentifier": "trend"
+    }
+   ],
+   "filters": [
+    {
+     "positiveAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_a3846f45ec",
+        "type": "label"
+       }
+      },
+      "in": {
+       "values": [
+        "obj_6d9373a190"
+       ]
+      },
+      "localIdentifier": "obj_4c6a7bbbd5"
+     }
+    },
+    {
+     "positiveAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_8b1308b329",
+        "type": "label"
+       }
+      },
+      "in": {
+       "values": [
+        "obj_c991b729c7"
+       ]
+      },
+      "localIdentifier": "obj_4d9b50ed50"
+     }
+    }
+   ],
+   "properties": {
+    "controls": {
+     "colorMapping": [
+      {
+       "color": {
+        "type": "guid",
+        "value": "obj_3b94c7f211"
+       },
+       "id": "obj_d5c249b652"
+      }
+     ],
+     "dataLabels": {
+      "visible": "obj_5ba7c8f608"
+     },
+     "legend": {
+      "position": "obj_db9f96f45d"
+     },
+     "xaxis": {
+      "name": {
+       "visible": false
+      }
+     }
+    }
+   },
+   "sorts": [],
+   "version": "2",
+   "visualizationUrl": "local:line"
+  },
+  "id": "obj_905ba08c43"
+ },
+ {
+  "content": {
+   "buckets": [
+    {
+     "items": [
+      {
+       "measure": {
+        "alias": "obj_1d7f038ebd",
+        "definition": {
+         "measureDefinition": {
+          "computeRatio": false,
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_ce187b26e2",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_ad968ef300",
+        "title": "obj_3ae5d63f2c"
+       }
+      }
+     ],
+     "localIdentifier": "measures"
+    },
+    {
+     "items": [
+      {
+       "attribute": {
+        "alias": "obj_9c1c2679ed",
+        "displayForm": {
+         "identifier": {
+          "id": "obj_10a4d2ceec",
+          "type": "label"
+         }
+        },
+        "localIdentifier": "obj_20730e0e04"
+       }
+      }
+     ],
+     "localIdentifier": "trend"
+    }
+   ],
+   "filters": [
+    {
+     "positiveAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_a3846f45ec",
+        "type": "label"
+       }
+      },
+      "in": {
+       "values": [
+        "obj_6d9373a190"
+       ]
+      },
+      "localIdentifier": "obj_39b9dfef15"
+     }
+    },
+    {
+     "positiveAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_df2a02706c",
+        "type": "label"
+       }
+      },
+      "in": {
+       "values": [
+        "obj_fabc8e8a04"
+       ]
+      },
+      "localIdentifier": "obj_c592229afa"
+     }
+    }
+   ],
+   "properties": {
+    "controls": {
+     "colorMapping": [
+      {
+       "color": {
+        "type": "guid",
+        "value": "obj_a6ad28298c"
+       },
+       "id": "obj_ad968ef300"
+      }
+     ],
+     "xaxis": {
+      "name": {
+       "visible": false
+      }
+     }
+    }
+   },
+   "sorts": [],
+   "version": "2",
+   "visualizationUrl": "local:line"
+  },
+  "id": "obj_88e45700a0"
+ },
+ {
+  "content": {
+   "buckets": [
+    {
+     "items": [
+      {
+       "measure": {
+        "definition": {
+         "measureDefinition": {
+          "computeRatio": false,
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_916554f762",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_e9827be086",
+        "title": "obj_75c8884456"
+       }
+      }
+     ],
+     "localIdentifier": "measures"
+    },
+    {
+     "items": [
+      {
+       "attribute": {
+        "displayForm": {
+         "identifier": {
+          "id": "obj_df2a02706c",
+          "type": "label"
+         }
+        },
+        "localIdentifier": "obj_389945b970"
+       }
+      }
+     ],
+     "localIdentifier": "view"
+    }
+   ],
+   "filters": [
+    {
+     "positiveAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_a3846f45ec",
+        "type": "label"
+       }
+      },
+      "in": {
+       "values": [
+        "obj_6d9373a190"
+       ]
+      },
+      "localIdentifier": "obj_0d89ec21f7"
+     }
+    }
+   ],
+   "properties": {
+    "controls": {
+     "colorMapping": [
+      {
+       "color": {
+        "type": "guid",
+        "value": "obj_a6ad28298c"
+       },
+       "id": "obj_aaffbab01e"
+      },
+      {
+       "color": {
+        "type": "guid",
+        "value": "obj_afafe11522"
+       },
+       "id": "obj_9c7c0fe0b6"
+      },
+      {
+       "color": {
+        "type": "guid",
+        "value": "obj_3299707900"
+       },
+       "id": "obj_fbc1c5de76"
+      }
+     ],
+     "dataLabels": {
+      "visible": "obj_5ba7c8f608"
+     },
+     "legend": {
+      "position": "obj_db9f96f45d"
+     }
+    }
+   },
+   "sorts": [],
+   "version": "2",
+   "visualizationUrl": "local:pie"
+  },
+  "id": "obj_133bad74ec"
+ },
+ {
+  "content": {
+   "buckets": [
+    {
+     "items": [
+      {
+       "measure": {
+        "definition": {
+         "measureDefinition": {
+          "computeRatio": false,
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_916554f762",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_e9827be086",
+        "title": "obj_75c8884456"
+       }
+      }
+     ],
+     "localIdentifier": "measures"
+    },
+    {
+     "items": [
+      {
+       "attribute": {
+        "displayForm": {
+         "identifier": {
+          "id": "obj_df2a02706c",
+          "type": "label"
+         }
+        },
+        "localIdentifier": "obj_389945b970"
+       }
+      }
+     ],
+     "localIdentifier": "view"
+    }
+   ],
+   "filters": [
+    {
+     "positiveAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_a3846f45ec",
+        "type": "label"
+       }
+      },
+      "in": {
+       "values": [
+        "obj_6d9373a190"
+       ]
+      },
+      "localIdentifier": "obj_0d89ec21f7"
+     }
+    }
+   ],
+   "properties": {
+    "controls": {
+     "colorMapping": [
+      {
+       "color": {
+        "type": "guid",
+        "value": "obj_a6ad28298c"
+       },
+       "id": "obj_aaffbab01e"
+      },
+      {
+       "color": {
+        "type": "guid",
+        "value": "obj_afafe11522"
+       },
+       "id": "obj_9c7c0fe0b6"
+      },
+      {
+       "color": {
+        "type": "guid",
+        "value": "obj_3299707900"
+       },
+       "id": "obj_fbc1c5de76"
+      }
+     ],
+     "dataLabels": {
+      "visible": "obj_5ba7c8f608"
+     },
+     "legend": {
+      "position": "obj_db9f96f45d"
+     }
+    }
+   },
+   "sorts": [],
+   "version": "2",
+   "visualizationUrl": "local:pie"
+  },
+  "id": "obj_962e19d5d9"
+ },
+ {
+  "content": {
+   "buckets": [
+    {
+     "items": [
+      {
+       "attribute": {
+        "alias": "obj_77f5ea5ff3",
+        "displayForm": {
+         "identifier": {
+          "id": "obj_7d5ef9ed69",
+          "type": "label"
+         }
+        },
+        "localIdentifier": "obj_ed5102a4da"
+       }
+      }
+     ],
+     "localIdentifier": "location"
+    },
+    {
+     "items": [
+      {
+       "measure": {
+        "alias": "obj_c5429a19aa",
+        "definition": {
+         "measureDefinition": {
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_7054f2077e",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_a07d264388",
+        "title": "obj_c20eaeef1c"
+       }
+      }
+     ],
+     "localIdentifier": "size"
+    }
+   ],
+   "filters": [],
+   "properties": {
+    "controls": {
+     "latitude": "obj_7d5ef9ed69",
+     "legend": {
+      "position": "obj_db9f96f45d"
+     },
+     "longitude": "obj_dc0d86936d",
+     "points": {
+      "groupNearbyPoints": false
+     },
+     "tooltipText": "obj_2e55e83be4"
+    }
+   },
+   "sorts": [],
+   "version": "2",
+   "visualizationUrl": "local:pushpin"
+  },
+  "id": "obj_65ecc5dfd9"
+ },
+ {
+  "content": {
+   "buckets": [
+    {
+     "items": [
+      {
+       "measure": {
+        "alias": "obj_d639b71a15",
+        "definition": {
+         "measureDefinition": {
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_cc51592b86",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_c89bc2a24a",
+        "title": "obj_2a57c4168e"
+       }
+      },
+      {
+       "measure": {
+        "alias": "obj_d8d499c528",
+        "definition": {
+         "measureDefinition": {
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_be735d6c77",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_a6696a5ca8",
+        "title": "obj_f9e6044bb3"
+       }
+      }
+     ],
+     "localIdentifier": "measures"
+    },
+    {
+     "items": [
+      {
+       "attribute": {
+        "alias": "obj_4dd8cc8a48",
+        "displayForm": {
+         "identifier": {
+          "id": "obj_0e8d6832f6",
+          "type": "label"
+         }
+        },
+        "localIdentifier": "obj_852bf3f286"
+       }
+      }
+     ],
+     "localIdentifier": "attribute",
+     "totals": [
+      {
+       "attributeIdentifier": "obj_852bf3f286",
+       "measureIdentifier": "obj_c89bc2a24a",
+       "type": "avg"
+      },
+      {
+       "attributeIdentifier": "obj_852bf3f286",
+       "measureIdentifier": "obj_a6696a5ca8",
+       "type": "avg"
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "attribute": {
+        "alias": "obj_bc2f8cc0ef",
+        "displayForm": {
+         "identifier": {
+          "id": "obj_f32614c46d",
+          "type": "label"
+         }
+        },
+        "localIdentifier": "obj_cac2b09859"
+       }
+      }
+     ],
+     "localIdentifier": "columns"
+    }
+   ],
+   "filters": [
+    {
+     "relativeDateFilter": {
+      "dataSet": {
+       "identifier": {
+        "id": "obj_8d9ef631ee",
+        "type": "dataset"
+       }
+      },
+      "from": -11,
+      "granularity": "obj_f50d16e94a",
+      "to": 0
+     }
+    },
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_67755bbadc",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_413f6dbb61",
+      "notIn": {
+       "uris": []
+      }
+     }
+    },
+    {
+     "positiveAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_f32614c46d",
+        "type": "label"
+       }
+      },
+      "in": {
+       "values": [
+        "obj_98a552b127",
+        "obj_6e692629ef",
+        "obj_be9028b7d9",
+        "obj_ee85d8164b",
+        "obj_bad53dfdbb",
+        "obj_a802ca73ab",
+        "obj_c27615a24a",
+        "obj_cd3feba2a6",
+        "obj_f62afa46e3",
+        "obj_29f318a58b",
+        "obj_7468e84aab",
+        "obj_68d591d814"
+       ]
+      },
+      "localIdentifier": "obj_aa508c5896"
+     }
+    }
+   ],
+   "properties": {
+    "controls": {}
+   },
+   "sorts": [
+    {
+     "attributeSortItem": {
+      "attributeIdentifier": "obj_852bf3f286",
+      "direction": "asc"
+     }
+    }
+   ],
+   "version": "2",
+   "visualizationUrl": "local:table"
+  },
+  "id": "obj_c4738070dd"
+ },
+ {
+  "content": {
+   "buckets": [
+    {
+     "items": [
+      {
+       "measure": {
+        "alias": "obj_d639b71a15",
+        "definition": {
+         "measureDefinition": {
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_8166cc9172",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_ed1a269761",
+        "title": "obj_d07adc67a0"
+       }
+      },
+      {
+       "measure": {
+        "alias": "obj_d8d499c528",
+        "definition": {
+         "measureDefinition": {
+          "filters": [],
+          "item": {
+           "identifier": {
+            "id": "obj_c243f2fee6",
+            "type": "metric"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_44084301e6",
+        "title": "obj_ff7fe7d11e"
+       }
+      }
+     ],
+     "localIdentifier": "measures"
+    },
+    {
+     "items": [
+      {
+       "attribute": {
+        "alias": "obj_4dd8cc8a48",
+        "displayForm": {
+         "identifier": {
+          "id": "obj_0e8d6832f6",
+          "type": "label"
+         }
+        },
+        "localIdentifier": "obj_3ca4ebe38f"
+       }
+      }
+     ],
+     "localIdentifier": "attribute",
+     "totals": [
+      {
+       "attributeIdentifier": "obj_3ca4ebe38f",
+       "measureIdentifier": "obj_ed1a269761",
+       "type": "avg"
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "attribute": {
+        "alias": "obj_bc2f8cc0ef",
+        "displayForm": {
+         "identifier": {
+          "id": "obj_f32614c46d",
+          "type": "label"
+         }
+        },
+        "localIdentifier": "obj_a963716947"
+       }
+      }
+     ],
+     "localIdentifier": "columns"
+    }
+   ],
+   "filters": [
+    {
+     "relativeDateFilter": {
+      "dataSet": {
+       "identifier": {
+        "id": "obj_8d9ef631ee",
+        "type": "dataset"
+       }
+      },
+      "from": -11,
+      "granularity": "obj_f50d16e94a",
+      "to": 0
+     }
+    },
+    {
+     "negativeAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_67755bbadc",
+        "type": "label"
+       }
+      },
+      "localIdentifier": "obj_e03c757916",
+      "notIn": {
+       "uris": []
+      }
+     }
+    },
+    {
+     "positiveAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_f32614c46d",
+        "type": "label"
+       }
+      },
+      "in": {
+       "values": [
+        "obj_6e692629ef",
+        "obj_be9028b7d9",
+        "obj_ee85d8164b",
+        "obj_bad53dfdbb",
+        "obj_a802ca73ab",
+        "obj_cd3feba2a6",
+        "obj_c27615a24a",
+        "obj_f62afa46e3",
+        "obj_29f318a58b",
+        "obj_7468e84aab",
+        "obj_68d591d814"
+       ]
+      },
+      "localIdentifier": "obj_cd3ab6fcb8"
+     }
+    }
+   ],
+   "properties": {
+    "controls": {}
+   },
+   "sorts": [
+    {
+     "attributeSortItem": {
+      "attributeIdentifier": "obj_3ca4ebe38f",
+      "direction": "asc"
+     }
+    }
+   ],
+   "version": "2",
+   "visualizationUrl": "local:table"
+  },
+  "id": "obj_450eb96e54"
+ },
+ {
+  "content": {
+   "buckets": [
+    {
+     "items": [
+      {
+       "measure": {
+        "definition": {
+         "inlineDefinition": {
+          "maql": "obj_8e98c6c047"
+         }
+        },
+        "localIdentifier": "obj_d76e85ea4d"
+       }
+      },
+      {
+       "measure": {
+        "definition": {
+         "popMeasureDefinition": {
+          "measureIdentifier": "obj_d76e85ea4d",
+          "popAttribute": {
+           "identifier": {
+            "id": "obj_5063425f45",
+            "type": "attribute"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_48795ef1ee"
+       }
+      }
+     ],
+     "localIdentifier": "measures"
+    },
+    {
+     "items": [],
+     "localIdentifier": "attribute"
+    },
+    {
+     "items": [],
+     "localIdentifier": "columns"
+    }
+   ],
+   "filters": [
+    {
+     "relativeDateFilter": {
+      "dataSet": {
+       "identifier": {
+        "id": "obj_bfcfb4f8f5",
+        "type": "dataset"
+       }
+      },
+      "from": -1,
+      "granularity": "obj_f50d16e94a",
+      "to": -1
+     }
+    },
+    {
+     "positiveAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_7c81f73ce7",
+        "type": "label"
+       }
+      },
+      "in": {
+       "values": [
+        "obj_57814cfbae"
+       ]
+      }
+     }
+    }
+   ],
+   "properties": {},
+   "sorts": [],
+   "version": "2",
+   "visualizationUrl": "table"
+  },
+  "id": "obj_e6920e72bd"
+ },
+ {
+  "content": {
+   "buckets": [
+    {
+     "items": [
+      {
+       "measure": {
+        "definition": {
+         "inlineDefinition": {
+          "maql": "obj_8e98c6c047"
+         }
+        },
+        "localIdentifier": "obj_d76e85ea4d"
+       }
+      },
+      {
+       "measure": {
+        "definition": {
+         "popMeasureDefinition": {
+          "measureIdentifier": "obj_d76e85ea4d",
+          "popAttribute": {
+           "identifier": {
+            "id": "obj_5063425f45",
+            "type": "attribute"
+           }
+          }
+         }
+        },
+        "localIdentifier": "obj_48795ef1ee"
+       }
+      }
+     ],
+     "localIdentifier": "measures"
+    },
+    {
+     "items": [],
+     "localIdentifier": "attribute"
+    },
+    {
+     "items": [],
+     "localIdentifier": "columns"
+    }
+   ],
+   "filters": [
+    {
+     "relativeDateFilter": {
+      "dataSet": {
+       "identifier": {
+        "id": "obj_bfcfb4f8f5",
+        "type": "dataset"
+       }
+      },
+      "from": -1,
+      "granularity": "obj_f50d16e94a",
+      "to": -1
+     }
+    },
+    {
+     "positiveAttributeFilter": {
+      "displayForm": {
+       "identifier": {
+        "id": "obj_7c81f73ce7",
+        "type": "label"
+       }
+      },
+      "in": {
+       "values": [
+        "obj_57814cfbae"
+       ]
+      }
+     }
+    }
+   ],
+   "properties": {},
+   "sorts": [],
+   "version": "2",
+   "visualizationUrl": "table"
+  },
+  "id": "obj_92f2f6e9c7"
+ }
+]
