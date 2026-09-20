@@ -30,6 +30,7 @@ from typing import Any
 import httpx
 from gooddata_sdk import GoodDataSdk
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -406,18 +407,28 @@ def run_agentic_dashboard_summary(
     )
 
 
-def _detail(summary: AgenticDashboardSummarySummary) -> dict:
-    best = summary.best
-    detail = dict(best.evaluation.detail)
+def _run_detail(run: DashboardSummaryRunResult) -> dict:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Takes a run rather than the summary so that a failing run can be described with exactly
+    the keys the winning one is -- for this kind that means the rubric breakdown and the
+    widget coverage, which is what separates a summary the agent got wrong from one graded
+    against widgets that never executed.
+    """
+    detail = dict(run.evaluation.detail)
     # How much of the dashboard the summary actually covered. A summary graded against a
     # rubric that mentions a widget which never executed fails for a reason that has
     # nothing to do with the agent, so the ratio has to be visible in the report.
-    detail["widgets_total"] = best.widgets_total
-    detail["widgets_executed"] = best.widgets_executed
-    if best.chat_error is not None:
-        detail["chat_error"] = best.chat_error
-    detail["latency_breakdown"] = build_latency_breakdown(best.tool_call_events, best.reasoning_step_events)
+    detail["widgets_total"] = run.widgets_total
+    detail["widgets_executed"] = run.widgets_executed
+    if run.chat_error is not None:
+        detail["chat_error"] = run.chat_error
+    detail["latency_breakdown"] = build_latency_breakdown(run.tool_call_events, run.reasoning_step_events)
     return detail
+
+
+def _detail(summary: AgenticDashboardSummarySummary) -> dict:
+    return _run_detail(summary.best)
 
 
 class DashboardSummaryAssertionError(AgenticAssertionError):
@@ -513,6 +524,13 @@ def evaluate_agentic_dashboard_summary(
 
     best = summary.best
     detail = _detail(summary)
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.passed,
+        detail=_run_detail,
+    )
     timings = PhaseTimings()
     for run in summary.run_results:
         timings = timings + run.timings
@@ -531,6 +549,7 @@ def evaluate_agentic_dashboard_summary(
         error.timings = timings
         error.runs_passed = runs_passed
         error.runs_effective = len(summary.run_results)
+        error.failed_runs = failed_runs
         raise error
 
     return AgenticEvalOutcome(
@@ -541,4 +560,5 @@ def evaluate_agentic_dashboard_summary(
         timings=timings,
         runs_passed=runs_passed,
         runs_effective=len(summary.run_results),
+        failed_runs=failed_runs,
     )

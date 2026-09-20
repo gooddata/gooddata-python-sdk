@@ -849,6 +849,11 @@ def _run_detail(run: AlertRunResult) -> dict:
     """
     ev = run.eval
     return {
+        # Why this run's loop stopped -- see LoopExit. Per-run rather than per-item: a run
+        # that stopped because it ran out of budget and one that stopped on a wrong answer
+        # are different failures, and only the losing runs can say which.
+        "exit_reason": run.exit_reason.value,
+        "turns_used": run.turns_used,
         "alert_created": ev.alert_created,
         "operator_correct": ev.operator_correct,
         "threshold_correct": ev.threshold_correct,
@@ -968,25 +973,7 @@ def evaluate_agentic_alert_skill(
 
     best = summary.best
     ev = best.eval
-    detail = {
-        "alert_created": ev.alert_created,
-        "operator_correct": ev.operator_correct,
-        "threshold_correct": ev.threshold_correct,
-        "trigger_correct": ev.trigger_correct,
-        "filters_correct": ev.filters_correct,
-        "metric_correct": ev.metric_correct,
-        "recipients_correct": ev.recipients_correct,
-        "attributes_correct": ev.attributes_correct,
-        "granularity_correct": ev.granularity_correct,
-        "actual_alert_arguments": best.actual_alert_arguments,
-        # Why the loop stopped. alert_created=False alone cannot tell a refusal from a run
-        # that hit max_iterations while still on track -- see LoopExit.
-        "exit_reason": best.exit_reason.value,
-        "turns_used": best.turns_used,
-        "max_iterations": max_iterations,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-    }
-    detail = _run_detail(best)
+    detail = {**_run_detail(best), "max_iterations": max_iterations}
     # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
     # cannot disagree about which runs failed.
     failed_runs = build_failed_runs(

@@ -357,6 +357,12 @@ def _run_detail(run: RunResult) -> dict:
     """
     return {
         **evaluation_result_detail(run.eval_result),
+        # Why this run's loop stopped -- see LoopExit. total_turns is already the turn
+        # count for the run, so it doubles as turns_used. Per-run rather than per-item:
+        # a run that failed because it ran out of budget and one that failed on a wrong
+        # answer are different failures, and only the losing runs can say which.
+        "exit_reason": run.exit_reason.value,
+        "turns_used": int(run.total_turns),
         "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
     }
 
@@ -493,16 +499,7 @@ def evaluate_agentic_visualization(
 
     best = summary.best
     ev = best.eval_result
-    detail = {
-        **evaluation_result_detail(ev),
-        # Why the loop stopped -- see LoopExit. total_turns is already the turn count for
-        # this run, so it doubles as turns_used.
-        "exit_reason": best.exit_reason.value,
-        "turns_used": int(best.total_turns),
-        "max_iterations": max_iterations,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-    }
-    detail = _run_detail(best)
+    detail = {**_run_detail(best), "max_iterations": max_iterations}
     # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
     # cannot disagree about which runs failed. Every failing run keeps its own
     # expected/actual check breakdown -- for this kind that is the whole diagnosis, and

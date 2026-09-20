@@ -844,7 +844,17 @@ def test_failed_runs_reaches_the_report_for_every_kind(kind, expected_output, ta
     field empty on every item (confirmed live: 135 agentic_guardrail results, all with
     `failed_runs: []`, including 16 items that passed 1 of 3 runs). A kind whose evaluator
     stops attaching them fails here rather than quietly reporting nothing."""
-    item = DatasetItem(id="q1", dataset_name="ds", test_kind=kind, question="q", expected_output=expected_output)
+    item = DatasetItem(
+        id="q1",
+        dataset_name="ds",
+        test_kind=kind,
+        question="q",
+        expected_output=expected_output,
+        # Same exception the dispatch test makes: without it agentic_dashboard_summary is
+        # rejected before the patched evaluator is ever called, and this test would pass
+        # or fail for a reason that has nothing to do with failed_runs.
+        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
+    )
     canned = AgenticEvalOutcome(reasoning_steps=["x"], detail={"k": "v"}, failed_runs=[_A_FAILED_RUN])
     with patch(f"gooddata_eval.cli.agentic_runner.{target}", return_value=canned):
         report = run_agentic_items([item], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")

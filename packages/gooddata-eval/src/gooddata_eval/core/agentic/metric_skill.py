@@ -547,18 +547,6 @@ def evaluate_agentic_metric_skill(
 
     best = summary.best
     expected_outputs_list: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
-    detail = {
-        "metric_created": best.metric_created,
-        "maql_correct": best.maql_correct,
-        "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
-        "actual_maql": best.actual_maql,
-        # Why the loop stopped. metric_created=False alone cannot tell a refusal from a run
-        # that hit max_iterations while still on track -- see LoopExit.
-        "exit_reason": best.exit_reason.value,
-        "turns_used": best.turns_used,
-        "max_iterations": max_iterations,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-    }
 
     def _run_detail(run: MetricRunResult) -> dict:
         """The diagnostic fields for ONE run, shared by the best run and every failing one.
@@ -571,10 +559,17 @@ def evaluate_agentic_metric_skill(
             "maql_correct": run.maql_correct,
             "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
             "actual_maql": run.actual_maql,
+            # Why this run's loop stopped. metric_created=False alone cannot tell a refusal
+            # from a run that hit max_iterations while still on track -- see LoopExit. Per
+            # run, because that is the difference between the losing runs.
+            "exit_reason": run.exit_reason.value,
+            "turns_used": run.turns_used,
             "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
         }
 
-    detail = _run_detail(best)
+    # max_iterations belongs to the item rather than the run, so it is added around the
+    # shared per-run builder instead of inside it.
+    detail = {**_run_detail(best), "max_iterations": max_iterations}
     # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
     # cannot disagree about which runs failed.
     failed_runs = build_failed_runs(

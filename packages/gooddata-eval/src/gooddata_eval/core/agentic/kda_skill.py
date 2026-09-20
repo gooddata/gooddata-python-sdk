@@ -422,6 +422,11 @@ def _run_detail(run: KdaRunResult) -> dict:
         "disambiguated": ev.disambiguated,
         "actual_create_args": run.actual_create_args,
         "actual_execute_result": run.actual_execute_result,
+        # Why this run's loop stopped -- see LoopExit. Per-run rather than per-item: a run
+        # that stopped because it ran out of budget and one that stopped on a wrong answer
+        # are different failures, and only the losing runs can say which.
+        "exit_reason": run.exit_reason.value,
+        "turns_used": run.turns_used,
         "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
     }
 
@@ -541,21 +546,9 @@ def evaluate_agentic_kda_skill(
 
     best = summary.best
     ev = best.evaluation
-    detail = {
-        "triggered": ev.triggered,
-        "executed": ev.executed,
-        "success": ev.success,
-        "turn_completed": ev.turn_completed,
-        "disambiguated": ev.disambiguated,
-        "actual_create_args": best.actual_create_args,
-        "actual_execute_result": best.actual_execute_result,
-        # Why the loop stopped -- see LoopExit.
-        "exit_reason": best.exit_reason.value,
-        "turns_used": best.turns_used,
-        "max_iterations": max_iterations,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-    }
-    detail = _run_detail(best)
+    # max_iterations is the only field here that belongs to the item rather than the run,
+    # so it is added around the shared per-run builder instead of inside it.
+    detail = {**_run_detail(best), "max_iterations": max_iterations}
     # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
     # cannot disagree about which runs failed.
     failed_runs = build_failed_runs(
