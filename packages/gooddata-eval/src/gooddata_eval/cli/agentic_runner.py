@@ -12,6 +12,7 @@ from gooddata_eval.core.agentic._gate import DEFAULT_GATE, EvalGate, normalize_g
 from gooddata_eval.core.agentic._langfuse import make_langfuse_client
 from gooddata_eval.core.agentic._trace_linker import BackgroundTraceLinker, SubmitTraceLink, run_trace_link_inline
 from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
+from gooddata_eval.core.agentic.anomaly_detection import evaluate_agentic_anomaly_detection
 from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluate_agentic_conversation
 from gooddata_eval.core.agentic.dashboard_summary import evaluate_agentic_dashboard_summary
 from gooddata_eval.core.agentic.forecasting import evaluate_agentic_forecasting
@@ -51,6 +52,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_dashboard_summary",
         "agentic_forecasting",
         "agentic_what_if",
+        "agentic_anomaly_detection",
     }
 )
 
@@ -287,6 +289,17 @@ def _dispatch_agentic(
         )
     elif kind == "agentic_what_if":
         return evaluate_agentic_what_if(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo if isinstance(eo, dict) else {},
+            k=k,
+            agent_id=agent_id,
+            **lf_kw,
+        )
+    elif kind == "agentic_anomaly_detection":
+        return evaluate_agentic_anomaly_detection(
             host=host,
             token=token,
             workspace_id=workspace_id,
