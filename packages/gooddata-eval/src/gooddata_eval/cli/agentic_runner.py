@@ -24,6 +24,7 @@ from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
 from gooddata_eval.core.agentic.what_if import evaluate_agentic_what_if
 from gooddata_eval.core.config import ReasoningEffort
+from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
 
@@ -344,6 +345,20 @@ def _apply_run_counts(item_report: ItemReport, source: Any) -> None:
         item_report.runs_ungraded = unscored
 
 
+def _apply_failed_runs(item_report: ItemReport, source: Any) -> None:
+    """Copy the per-run failure records off an outcome or a failure, if the kind built any.
+
+    Read the same way from both, like the run counts above: a partially passing item raises,
+    so an item's failing runs reach the report through the exception at least as often as
+    through the outcome. A kind that builds none keeps the empty default, which reads as
+    "not instrumented" rather than "nothing failed" -- ``runs_passed``/``runs`` already say
+    how many failed.
+    """
+    failed_runs = getattr(source, "failed_runs", None)
+    if failed_runs:
+        item_report.failed_runs = list(failed_runs)
+
+
 def _apply_timings(item_report: ItemReport, timings: Any) -> None:
     """Copy an outcome's phase breakdown onto the item report, if the kind recorded one.
 
@@ -443,6 +458,7 @@ def run_agentic_items(
             item_report.best_detail = detail or {}
             _apply_timings(item_report, getattr(outcome, "timings", None))
             _apply_run_counts(item_report, outcome)
+            _apply_failed_runs(item_report, outcome)
         except AssertionError as exc:
             item_report.gate_passed = False if gated else None
             item_report.runs = k
@@ -452,11 +468,32 @@ def run_agentic_items(
             item_report.best_detail = getattr(exc, "detail", None) or {}
             _apply_timings(item_report, getattr(exc, "timings", None))
             _apply_run_counts(item_report, exc)
+            _apply_failed_runs(item_report, exc)
             # Read off the counts, not off the gate: pass^K fails items where runs did pass,
             # and reporting those as pass_at_k False would contradict the Langfuse score of
             # the same name. Kinds that report no count read as 0, i.e. a clean failure.
             item_report.pass_at_k = item_report.runs_passed > 0
             print(f"[agentic] {item.id} FAIL: {exc}", flush=True)
+        except JudgeResponseError as exc:
+            # Errored, like the branch below -- there is no verdict for any run, so this is
+            # not K failures -- but NOT diagnostically empty. This is the one failure mode
+            # where the per-run records are most worth having: the judge broke, so what the
+            # agent actually said is still there to read, and the conversation ids are how
+            # anyone gets to it. Reported with the runs it really drove rather than 0.
+            item_report.error = f"{type(exc).__name__}: {exc}"
+            item_report.runs = getattr(exc, "runs_effective", None) or k
+            item_report.reasoning_steps = getattr(exc, "reasoning_steps", None) or []
+            item_report.conversation_id = getattr(exc, "conversation_id", None)
+            item_report.response_id = getattr(exc, "response_id", None)
+            item_report.best_detail = getattr(exc, "detail", None) or {}
+            _apply_timings(item_report, getattr(exc, "timings", None))
+            _apply_run_counts(item_report, exc)
+            _apply_failed_runs(item_report, exc)
+            # Every run ungraded, by definition of this error -- said explicitly rather than
+            # left to _apply_run_counts, whose source is detail["unscored_runs"] and which a
+            # kind that attaches no diagnostics would leave at 0.
+            item_report.runs_ungraded = item_report.runs
+            print(f"[agentic] {item.id} UNGRADED: {exc}", flush=True)
         except Exception as exc:
             item_report.error = f"{type(exc).__name__}: {exc}"
             item_report.runs = 0

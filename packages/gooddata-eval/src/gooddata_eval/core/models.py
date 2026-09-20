@@ -329,6 +329,7 @@ class AgenticAssertionError(AssertionError):
     timings: PhaseTimings
     runs_passed: int
     runs_effective: int
+    failed_runs: list[dict]
 
 
 class AgenticEvalOutcome(BaseModel):
@@ -354,6 +355,12 @@ class AgenticEvalOutcome(BaseModel):
     # ran -- agentic_conversation drives its fixture once whatever --runs says.
     runs_passed: int = 0
     runs_effective: int = 0
+    # One record per run that did not pass. ``detail`` above describes only the winning run,
+    # so without this a 1/K item and a 0/K item carry identical diagnostics and neither says
+    # anything about the K-1 attempts that failed. Built by
+    # ``core.agentic._failed_runs.build_failed_runs``; mirrors the single-shot path's
+    # ``ItemReport.failed_runs``, which ``core/runner.py`` fills for the non-agentic kinds.
+    failed_runs: list[dict] = Field(default_factory=list)
 
 
 class SummaryInput(BaseModel):
