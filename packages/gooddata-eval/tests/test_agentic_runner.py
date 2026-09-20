@@ -91,6 +91,7 @@ _ALL_AGENTIC_KIND_CASES = [
         "evaluate_agentic_dashboard_summary",
     ),
     ("agentic_forecasting", {"forecast_period": 3}, "evaluate_agentic_forecasting"),
+    ("agentic_what_if", {"metric_id": "spend"}, "evaluate_agentic_what_if"),
 ]
 
 # The one kind whose dispatch needs more than question/expected_output: the dashboard to
