@@ -14,6 +14,7 @@ from gooddata_eval.core.agentic._trace_linker import BackgroundTraceLinker, Subm
 from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
 from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluate_agentic_conversation
 from gooddata_eval.core.agentic.dashboard_summary import evaluate_agentic_dashboard_summary
+from gooddata_eval.core.agentic.forecasting import evaluate_agentic_forecasting
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.kda_skill import evaluate_agentic_kda_skill
@@ -47,6 +48,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_conversation",
         "agentic_kda_skill",
         "agentic_dashboard_summary",
+        "agentic_forecasting",
     }
 )
 
@@ -266,6 +268,17 @@ def _dispatch_agentic(
             # can name them instead of paying for the whole dashboard. Same field and meaning
             # the headless /summary endpoint gives it; None summarizes everything.
             only_visualizations=summary_input.visualizations,
+            k=k,
+            agent_id=agent_id,
+            **lf_kw,
+        )
+    elif kind == "agentic_forecasting":
+        return evaluate_agentic_forecasting(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo if isinstance(eo, dict) else {},
             k=k,
             agent_id=agent_id,
             **lf_kw,

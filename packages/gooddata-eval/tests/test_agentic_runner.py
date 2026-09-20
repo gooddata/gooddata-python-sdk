@@ -90,6 +90,7 @@ _ALL_AGENTIC_KIND_CASES = [
         {"must_include": ["States the overall trend."]},
         "evaluate_agentic_dashboard_summary",
     ),
+    ("agentic_forecasting", {"forecast_period": 3}, "evaluate_agentic_forecasting"),
 ]
 
 # The one kind whose dispatch needs more than question/expected_output: the dashboard to
