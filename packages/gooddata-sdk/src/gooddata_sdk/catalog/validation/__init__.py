@@ -21,6 +21,12 @@ from gooddata_sdk.catalog.validation.buckets import (
     check_buckets_for_visualization_type,
 )
 from gooddata_sdk.catalog.validation.catalog_from_layout import catalog_ids_from_layout, catalog_ids_from_ldm
+from gooddata_sdk.catalog.validation.elements import (
+    ElementResolution,
+    FilterValues,
+    check_filter_element_values,
+    collect_filter_values,
+)
 from gooddata_sdk.catalog.validation.files import check_layout_files
 from gooddata_sdk.catalog.validation.layout import validate_layout
 from gooddata_sdk.catalog.validation.ldm import validate_ldm
@@ -43,6 +49,8 @@ __all__ = [
     "BUCKET_NAMES",
     "CatalogReference",
     "DeployPlan",
+    "ElementResolution",
+    "FilterValues",
     "Finding",
     "ReferenceResolution",
     "Severity",
@@ -58,6 +66,8 @@ __all__ = [
     "catalog_ids_from_layout",
     "catalog_ids_from_ldm",
     "catalog_object_ids",
+    "collect_filter_values",
+    "check_filter_element_values",
     "check_layout_files",
     "check_properties",
     "extract_catalog_references",

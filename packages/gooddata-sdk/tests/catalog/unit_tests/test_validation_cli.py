@@ -65,6 +65,7 @@ def _args(**kwargs: Any) -> argparse.Namespace:
     kwargs.setdefault("workspace", None)
     kwargs.setdefault("json", False)
     kwargs.setdefault("plan", False)
+    kwargs.setdefault("check_filter_values", False)
     return argparse.Namespace(**kwargs)
 
 
@@ -266,3 +267,20 @@ class TestWorkspaceMode:
 class _StubService:
     def validate_analytics_model(self, workspace_id: str, model: Any, **kwargs: Any) -> WorkspaceValidationReport:
         return WorkspaceValidationReport(objects_checked=1)
+
+
+class TestFilterValueCheckIsOptIn:
+    """It queries the data source rather than the metadata, so it has to be asked for and
+    it has to have somewhere to ask."""
+
+    def test_asking_for_it_without_a_workspace_is_a_usage_error(self, tmp_path):
+        """Not silently ignored: that would report a clean run for a check that never ran."""
+        layout = _layout(tmp_path)
+        assert validate(layout, _args(check_filter_values=True)) == 2
+
+    def test_the_refusal_says_what_to_do_about_it(self, tmp_path, capsys):
+        validate(_layout(tmp_path), _args(check_filter_values=True))
+        assert "--check-filter-values needs --workspace" in capsys.readouterr().out
+
+    def test_a_plain_offline_run_is_unaffected(self, tmp_path):
+        assert validate(_layout(tmp_path), _args()) == 0

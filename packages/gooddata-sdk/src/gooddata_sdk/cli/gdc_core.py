@@ -86,6 +86,16 @@ def main() -> None:
             "which needs no credentials."
         ),
     )
+    parser.add_argument(
+        "--check-filter-values",
+        action="store_true",
+        help=(
+            "validate: also check that the values attribute filters pin still exist in "
+            "--workspace's data. A filter naming a value the data no longer holds is valid "
+            "content that quietly matches nothing. Off by default because this is the only "
+            "check that queries the data itself, one query per label."
+        ),
+    )
 
     args = parser.parse_args()
 

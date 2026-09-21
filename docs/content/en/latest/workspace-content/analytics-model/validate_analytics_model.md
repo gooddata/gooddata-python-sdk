@@ -180,6 +180,38 @@ both report warnings, and both can be switched off:
 validate_content(content, known_visualization_urls=None)  # on a platform newer than this SDK
 ```
 
+## Filter values, and why they are opt-in
+
+Every other check here asks whether the layout is *well formed*. This one asks whether it
+is still *true*. A filter pinned to `in: {values: ["EMEA"]}` is perfectly valid content, and
+the day that region is renamed the chart filtered by it quietly returns nothing — no error,
+just an empty dashboard, which is the failure people notice last and diagnose slowest.
+
+It is the only check that reads **data** rather than metadata, so it costs a
+`SELECT DISTINCT` against the data source per label. It is therefore asked for by name and
+refuses to run without a workspace:
+
+```bash
+gdc validate --path <layout> --workspace <ws> --check-filter-values
+```
+
+Asking for it without `--workspace` is a usage error rather than a no-op — silently
+dropping it would report a clean run for a check that never happened.
+
+Three things keep it affordable and quiet:
+
+- **One query per label, not per value or per object.** The server is asked which of a
+  given list exist, so a filter naming forty values costs the same single call as one
+  naming a single value, and twenty charts pinned to the same label share one query. On a
+  real corpus that turned 28 attribute filters into 6 queries.
+- **Findings are warnings.** An overnight load can make a finding here disappear without
+  anything being edited, so it must not fail a build the way a structural fault does.
+- **Only value-based filters are checked.** Elements given by reference (`uris`) name
+  primary-label values rather than resolvable titles, a `null` entry means the NULL element
+  rather than a value to look up, and an empty list is a no-op. All three are skipped rather
+  than guessed at. A label that cannot be queried at all reports nothing here — that is the
+  reference check's finding, and saying it twice in different words helps nobody.
+
 ## Totals
 
 A bucket's `totals` are the one place a bucket refers to something rather than declaring

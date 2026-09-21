@@ -17,6 +17,7 @@ from typing import Any
 
 from gooddata_sdk import GoodDataSdk
 from gooddata_sdk.catalog.validation.catalog_from_layout import catalog_ids_from_layout
+from gooddata_sdk.catalog.validation.elements import check_filter_element_values
 from gooddata_sdk.catalog.validation.files import check_layout_files
 from gooddata_sdk.catalog.validation.layout import LAYOUT_REFERENCE_TYPES, object_references
 from gooddata_sdk.catalog.validation.ldm import validate_ldm
@@ -158,6 +159,16 @@ def validate(path: Path, args: argparse.Namespace) -> int:
     where the objects are going, resolving what they reference against everything that
     workspace can see, inherited objects included.
     """
+    # Refused rather than ignored: filter values live in a workspace's data, so there is
+    # nothing to resolve them against without one. Silently dropping the flag would report
+    # a clean run for a check that never happened.
+    if getattr(args, "check_filter_values", False) and args.workspace is None:
+        print(
+            f"{Bcolors.FAIL}--check-filter-values needs --workspace: filter values are "
+            f"resolved against a workspace's data, not against the layout.{Bcolors.ENDC}"
+        )
+        return 2
+
     try:
         model = _load(path)
     except ValueError as exc:
@@ -258,6 +269,13 @@ def validate(path: Path, args: argparse.Namespace) -> int:
     result = ValidationService(sdk).validate_analytics_model(args.workspace, model)
     result.report.extend(file_findings).extend(ldm_findings)
 
+    # Asked for by name, never implied by --workspace: this is the only check that queries
+    # the data source rather than the metadata, so it costs a SELECT DISTINCT per label.
+    element_resolution = None
+    if getattr(args, "check_filter_values", False):
+        element_findings, element_resolution = check_filter_element_values(sdk, args.workspace, model)
+        result.report.extend(element_findings)
+
     if as_json:
         _emit_json(
             result.report,
@@ -269,6 +287,15 @@ def validate(path: Path, args: argparse.Namespace) -> int:
         return 0 if result.ok else 1
 
     _print(result.format(), result.ok)
+
+    if element_resolution is not None:
+        # Zero findings here has two meanings -- every value resolved, or nothing was asked
+        # -- and only the counts separate them.
+        print(
+            f"{Bcolors.OKGREEN if not element_resolution.missing else Bcolors.WARNING}"
+            f"{element_resolution.values_checked} filter value(s) checked against the data "
+            f"across {element_resolution.labels_queried} label(s).{Bcolors.ENDC}"
+        )
 
     if getattr(args, "plan", False):
         print()
