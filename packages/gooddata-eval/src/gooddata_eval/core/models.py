@@ -19,6 +19,11 @@ class AacQueryField(BaseModel):
     using: str
     title: str | None = None
     aggregation: str | None = None
+    # Set by the convertor on a derived measure (`previous_period`, `same_period_previous_year`)
+    # and by a measure-level filter. Declared rather than left to `extra` so callers can read
+    # them by attribute; nothing scores on either.
+    type: str | None = None
+    filter_by: dict | None = None
 
 
 class AacBucketRef(BaseModel):

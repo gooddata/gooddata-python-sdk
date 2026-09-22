@@ -9,6 +9,7 @@ from gooddata_eval.core.dataset.from_insights import (
     Unsupported,
     _rules_for,
     _validation_errors,
+    aliases,
     ambiguous_fields,
     ambiguous_titles,
     build,
@@ -26,7 +27,6 @@ from gooddata_eval.core.dataset.from_insights import (
     resolve_type,
 )
 from gooddata_eval.core.dataset.local import load_local_dataset
-from gooddata_eval.core.models import CreatedVisualization
 from gooddata_eval.core.scoring import (
     check_filters,
     get_metric_uri_set,
@@ -39,7 +39,7 @@ DATE_IDS = {"process_date"}
 
 def uris(spec, *buckets):
     """Resolved URIs of the given buckets; aliases are the platform's local ids and carry no meaning."""
-    return sorted(resolve_alias_to_uri(a, spec["query"]["fields"]) for b in buckets for a in spec[b])
+    return sorted(resolve_alias_to_uri(a, spec.query.fields) for b in buckets for a in aliases(getattr(spec, b)))
 
 
 def viz(url, buckets, filters=(), sorts=(), **kw):
@@ -83,7 +83,7 @@ def test_relative_date_granularity_is_normalized():
             ],
         ),
     )
-    assert spec["query"]["filter_by"]["f0"] == {
+    assert spec.query.filter_by["f0"] == {
         "type": "date_filter",
         "using": "dataset/process_date",
         "granularity": "QUARTER",
@@ -114,7 +114,7 @@ def test_cyclical_and_aliased_granularities_map_to_the_platform_enum(raw, expect
             ],
         ),
     )
-    assert spec["query"]["filter_by"]["f0"]["granularity"] == expected
+    assert spec.query.filter_by["f0"]["granularity"] == expected
 
 
 def test_an_unknown_granularity_is_skipped_not_guessed():
@@ -144,7 +144,8 @@ def test_fact_measure_carries_its_aggregation():
             [{"localIdentifier": "measures", "items": [measure("m", "amount", "fact", aggregation="sum")]}],
         ),
     )
-    assert spec["query"]["fields"]["m"] == {"using": "fact/amount", "aggregation": "SUM"}
+    field = spec.query.fields["m"]
+    assert (field.using, field.aggregation) == ("fact/amount", "SUM")
 
 
 @pytest.mark.parametrize(
@@ -157,7 +158,7 @@ def test_fact_measure_carries_its_aggregation():
                     "definition": {"arithmeticMeasure": {"operator": "SUM", "measureIdentifiers": ["x", "y"]}},
                 }
             },
-            "derived",
+            "cannot compare",
         ),
         (
             {
@@ -294,12 +295,12 @@ def test_a_count_over_an_attribute_is_a_metric_the_scorer_can_compare():
         ),
     )
     assert uris(spec, "metrics") == ["attribute/visit_id"]
-    assert spec["query"]["fields"]["m"]["aggregation"] == "COUNT"
+    assert spec.query.fields["m"].aggregation == "COUNT"
 
 
 def test_treemap_is_mapped_not_dropped():
     spec = convert(viz("local:treemap", [{"localIdentifier": "measures", "items": [measure("m", "spend")]}]))
-    assert spec["type"] == "treemap_chart"
+    assert spec.type == "treemap_chart"
 
 
 def test_unmapped_viz_url_fails_loudly():
@@ -628,7 +629,7 @@ def test_dropped_noop_filter_does_not_leave_a_gap_in_filter_keys():
             ]
         ),
     )
-    assert list(spec["query"]["filter_by"]) == ["f0"]
+    assert list(spec.query.filter_by) == ["f0"]
 
 
 def test_uri_form_attribute_filter_is_still_skipped():
@@ -681,7 +682,7 @@ def test_a_ranking_within_an_attribute_still_asks_for_the_breakdown():
     # `ranked within <attribute>` ranks inside each group, so the breakdown is real and
     # the question has to name it.
     spec = convert(spend_by_merchant())
-    spec["query"]["filter_by"]["f0"] = {
+    spec.query.filter_by["f0"] = {
         "type": "ranking_filter",
         "using": "m_spend",
         "attribute": "d_merchant_name",
@@ -1107,11 +1108,9 @@ def test_generate_uses_the_phrasing_step_when_it_is_not_disabled(tmp_path):
 
 def test_headline_converts_to_scorable_single_metric_spec():
     spec = convert(viz("local:headline", [{"localIdentifier": "measures", "items": [measure("m", "gross_revenue")]}]))
-    assert spec["type"] == "headline_chart"
+    assert spec.type == "headline_chart"
     # The alias is arbitrary; what must survive is the URI gd-eval scores on.
-    parsed = CreatedVisualization(**spec)
-
-    assert get_metric_uri_set(parsed) == {"metric/gross_revenue"}
+    assert get_metric_uri_set(spec) == {"metric/gross_revenue"}
 
 
 def test_filters_round_trip_into_scorable_filter_by():
@@ -1147,11 +1146,9 @@ def test_filters_round_trip_into_scorable_filter_by():
             ],
         ),
     )
-    parsed = CreatedVisualization(**spec)
-
     # Ranking-filter aliases must resolve to metric/ and label/ URIs or gd-eval rejects them.
-    assert validate_cross_references(parsed) == (True, [])
-    assert check_filters(parsed, parsed).all_ok
+    assert validate_cross_references(spec) == (True, [])
+    assert check_filters(spec, spec).all_ok
 
 
 def test_a_real_sort_or_ranking_legitimises_a_ranking_title():
@@ -1161,7 +1158,7 @@ def test_a_real_sort_or_ranking_legitimises_a_ranking_title():
             sorts=[{"attributeSortItem": {"attributeIdentifier": "a", "direction": "asc"}}],
         ),
     )
-    assert sorted_spec["query"]["sort_by"] == [{"type": "attribute_sort", "by": "a", "direction": "ASC"}]
+    assert sorted_spec.query.sort_by == [{"type": "attribute_sort", "by": "a", "direction": "ASC"}]
 
 
 @pytest.mark.parametrize(
@@ -1194,4 +1191,4 @@ def test_all_selection_filters_are_dropped_not_fatal(noop):
     insight, which is otherwise perfectly expressible.
     """
     spec = convert(spend_by_merchant(filters=[noop]))
-    assert spec["query"]["filter_by"] == {}
+    assert spec.query.filter_by == {}

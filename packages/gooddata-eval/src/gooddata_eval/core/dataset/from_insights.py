@@ -22,9 +22,9 @@ import sys
 import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
 
 from gooddata_sdk.catalog.workspace.aac import declarative_visualization_to_aac
+from pydantic import ValidationError
 
 from gooddata_eval.core.granularity import (
     GRANULARITIES,
@@ -33,7 +33,7 @@ from gooddata_eval.core.granularity import (
     canonical_date_uri,
     granularity_of,
 )
-from gooddata_eval.core.models import CreatedVisualization, DatasetItem
+from gooddata_eval.core.models import AacBucketRef, CreatedVisualization, DatasetItem
 from gooddata_eval.core.scoring import resolve_alias_to_uri, uri_to_display_name
 
 # `GDC.time.week_us` converts to `WEEK_US`, which is not a platform granularity -- the
@@ -146,45 +146,72 @@ def list_ids(directory: Path) -> set[str]:
     return ids
 
 
-def _reject_unscorable(spec: dict) -> None:
+def aliases(bucket: list[AacBucketRef | str]) -> list[str]:
+    """A bucket's field aliases.
+
+    A bucket item is an alias, or an `AacBucketRef` carrying `format`, `axis`, `totals`
+    or `display_as` -- presentation, which nothing here or in the scorer reads.
+    """
+    return [item if isinstance(item, str) else item.field for item in bucket]
+
+
+def _reject_unscorable(spec: CreatedVisualization) -> None:
     """Skip an insight whose AAC form this evaluator cannot compare.
 
     Not a judgement on the insight -- the platform emitted it and it renders. These
-    convert fine and then score wrong: a derived measure (previous period, arithmetic)
-    is a field `using` another alias rather than an object, a measure-level filter lands
-    on the field where `check_filters` never looks, and a repeater lists labels among its
+    convert fine and then score wrong: a derived measure (previous period) is a field
+    `using` another alias rather than an object, a measure-level filter lands on the
+    field where `check_filters` never looks, and a repeater lists labels among its
     metrics. Teach the comparator about one and its line here can go.
     """
-    fields = spec["query"]["fields"]
-    for alias in spec["metrics"]:
-        field = fields[alias]
-        aggregated = False
-        if isinstance(field, dict):
-            if field.get("type"):
-                raise Unsupported(f"derived measure ({field['type']})")
-            if field.get("filter_by"):
+    for alias in aliases(spec.metrics):
+        field = spec.query.fields[alias]
+        if isinstance(field, str):
+            using, aggregated = field, False
+        else:
+            if field.type:
+                raise Unsupported(f"derived measure ({field.type})")
+            if field.filter_by:
                 raise Unsupported("measure-level filters")
-            aggregated = bool(field.get("aggregation"))
-            field = field.get("using")
-        if not isinstance(field, str):
-            raise Unsupported("derived measure (arithmetic)")
+            using, aggregated = field.using, bool(field.aggregation)
         # `COUNT(attribute/x)` is a metric the agent builds and the scorer resolves; a bare
         # label with no aggregation is a repeater column, not something to compare.
-        if not field.startswith(("metric/", "fact/")) and not aggregated:
-            raise Unsupported(f"a label among the metrics ({field})")
+        if not using.startswith(("metric/", "fact/")) and not aggregated:
+            raise Unsupported(f"a label among the metrics ({using})")
 
 
-def _to_aac(viz: dict) -> dict:
-    """Declarative visualization -> AAC spec, via the SDK's convertor."""
+def _to_aac(viz: dict) -> CreatedVisualization:
+    """Declarative visualization -> AAC spec, via the SDK's convertor.
+
+    The convertor's own `gooddata_code_convertors.pydantic_models.Visualisation` is not
+    used here: it is a 23-way union whose members disagree on which buckets exist
+    (`columns` and `rows` only on the table variant), so every read would need a variant
+    check. `CreatedVisualization` is the one shape the rest of the pipeline scores and
+    serializes, and validating into it here is what makes the spec typed end to end.
+    """
     try:
         converted = declarative_visualization_to_aac(viz)
     except Exception as exc:  # ConversionError, and whatever else the WASM layer raises
         raise Unsupported(f"convertor rejected the definition: {exc}") from exc
-    spec = converted.get("json")
-    if spec is None:
+    raw = converted.get("json")
+    if raw is None:
         url = (viz.get("content") or {}).get("visualizationUrl")
         raise Unsupported(f"convertor produced no spec for visualizationUrl '{url}'")
-    return spec
+    # A measure-less chart has no `query` at all, and `no measures` below is a better
+    # report of that than a validation error about a missing required key.
+    raw.setdefault("query", {"fields": {}})
+    try:
+        return CreatedVisualization.model_validate(raw)
+    except ValidationError as exc:
+        # An arithmetic measure is what normally lands here: its `using` is the list of
+        # aliases it combines rather than a uri, and no field of this model can hold that.
+        # The reason is printed per skipped insight, so it names the field rather than
+        # reproducing pydantic's multi-line report.
+        bad = sorted(
+            {str(e["loc"][2]) for e in exc.errors() if e["loc"][:2] == ("query", "fields") and len(e["loc"]) > 2}
+        )
+        where = f" (field {', '.join(bad)})" if bad else ""
+        raise Unsupported(f"a field shape the evaluator cannot compare{where}: {exc.errors()[0]['msg']}") from exc
 
 
 def _normalize_filters(raw: dict) -> dict:
@@ -215,7 +242,7 @@ def _normalize_filters(raw: dict) -> dict:
     return out
 
 
-def convert(viz: dict) -> dict:
+def convert(viz: dict) -> CreatedVisualization:
     """Declarative visualization object -> AAC `visualization` spec. Raises `Unsupported`."""
     if any(b.get("localIdentifier") == "location" for b in (viz.get("content") or {}).get("buckets") or []):
         # The one thing read off the declarative object. A map's location is a rendering
@@ -223,36 +250,24 @@ def convert(viz: dict) -> dict:
         # dimension, and a question built from it reads "broken down by City pushpin
         # latitude". The bucket name is the only exact marker.
         raise Unsupported("unknown bucket 'location'")
-    aac = _to_aac(viz)
-    query = aac.get("query") or {}
-    spec: dict[str, Any] = {
-        "id": re.sub(r"[^a-z0-9_]+", "_", (viz.get("id") or "viz").lower())[:30],
-        "type": aac["type"],
-        "title": viz.get("title") or viz.get("id"),
-        "query": {
-            "fields": query.get("fields") or {},
-            "filter_by": _normalize_filters(query.get("filter_by") or {}),
-            "sort_by": query.get("sort_by") or [],
-        },
-        "metrics": aac.get("metrics") or [],
-        "view_by": aac.get("view_by") or [],
-        "segment_by": aac.get("segment_by") or [],
-        "columns": aac.get("columns") or [],
-        "rows": aac.get("rows") or [],
-    }
-    for bucket in ("metrics", "view_by", "segment_by", "rows", "columns"):
-        # A bucket item is an alias, or `{"field": alias, ...}` carrying `format`, `axis`,
-        # `totals` or `display_as` -- presentation, which nothing here or in the scorer reads.
-        spec[bucket] = [item["field"] if isinstance(item, dict) else item for item in spec[bucket]]
-    if not spec["metrics"]:
+    spec = _to_aac(viz)
+    spec.id = re.sub(r"[^a-z0-9_]+", "_", (viz.get("id") or "viz").lower())[:30]
+    spec.title = viz.get("title") or viz.get("id")
+    # Colours, legend position and axis labels. The question never asks for them and the
+    # scorer never reads them, so they do not belong in an expected output.
+    spec.config = None
+    spec.query.filter_by = _normalize_filters(spec.query.filter_by)
+    for bucket in ("metrics", "view_by", "segment_by", "columns", "rows"):
+        setattr(spec, bucket, aliases(getattr(spec, bucket)))
+    if not spec.metrics:
         raise Unsupported("no measures")
     _reject_unscorable(spec)
     return spec
 
 
-def sorts_of(spec: dict) -> list:
+def sorts_of(spec: CreatedVisualization) -> list:
     """The spec's sort entries."""
-    return spec["query"].get("sort_by") or []
+    return spec.query.sort_by
 
 
 def _sort_field(sort: dict) -> str:
@@ -260,12 +275,12 @@ def _sort_field(sort: dict) -> str:
     return sort["by"] if sort.get("type") == "attribute_sort" else sort["metrics"][0]
 
 
-def ranks(spec: dict) -> bool:
-    return bool(sorts_of(spec)) or any(f.get("type") == "ranking_filter" for f in spec["query"]["filter_by"].values())
+def ranks(spec: CreatedVisualization) -> bool:
+    return bool(sorts_of(spec)) or any(f.get("type") == "ranking_filter" for f in spec.query.filter_by.values())
 
 
-def filters(spec: dict) -> bool:
-    return any(f.get("type") in ("date_filter", "attribute_filter") for f in spec["query"]["filter_by"].values())
+def filters(spec: CreatedVisualization) -> bool:
+    return any(f.get("type") in ("date_filter", "attribute_filter") for f in spec.query.filter_by.values())
 
 
 def fetch_snapshot(sdk, workspace_id: str) -> dict:
@@ -378,7 +393,7 @@ def _filter_phrase(f: dict, fields: dict, display_names: dict) -> str:
     return json.dumps(f)
 
 
-def describe(spec: dict, display_names: dict | None = None) -> str:
+def describe(spec: CreatedVisualization, display_names: dict | None = None) -> str:
     """The writer's brief: buckets, sorts and filters as display names.
 
     Deliberately excludes the insight title and the chart type. Titles describe intent
@@ -387,19 +402,19 @@ def describe(spec: dict, display_names: dict | None = None) -> str:
     the question isn't meant to constrain.
     """
     display_names = display_names or {}
-    fields = spec["query"]["fields"]
+    fields = spec.query.fields
 
     def name(alias: str) -> str:
         return display_name(resolve_alias_to_uri(alias, fields), display_names)
 
-    def dim(aliases: list) -> list:
-        return _dim_briefs(spec, display_names, aliases)
+    def dim(bucket: list[str]) -> list:
+        return _dim_briefs(spec, display_names, bucket)
 
-    lines = [f"metric: {name(a)}" for a in spec["metrics"]]
-    lines += [f"broken down by: {d}" for d in dim(spec["view_by"] + spec["columns"] + spec["rows"])]
-    lines += [f"split by: {d}" for d in dim(spec["segment_by"])]
+    lines = [f"metric: {name(a)}" for a in aliases(spec.metrics)]
+    lines += [f"broken down by: {d}" for d in dim(aliases(spec.view_by + spec.columns + spec.rows))]
+    lines += [f"split by: {d}" for d in dim(aliases(spec.segment_by))]
     lines += [f"sorted by: {name(_sort_field(s))}, {s['direction'].lower()}ending" for s in sorts_of(spec)]
-    lines += [f"filter: {_filter_phrase(f, fields, display_names)}" for f in spec["query"]["filter_by"].values()]
+    lines += [f"filter: {_filter_phrase(f, fields, display_names)}" for f in spec.query.filter_by.values()]
     return "\n".join(lines)
 
 
@@ -423,7 +438,7 @@ def ambiguous_titles(display_names: dict) -> set:
     return dupes
 
 
-def ambiguous_fields(spec: dict, display_names: dict, dupes: set | None = None) -> list:
+def ambiguous_fields(spec: CreatedVisualization, display_names: dict, dupes: set | None = None) -> list:
     """The display names in `spec` that do not identify one object in the model."""
     dupes = ambiguous_titles(display_names) if dupes is None else dupes
     names = _metric_names(spec, display_names) + _dim_names(spec, display_names)
@@ -444,25 +459,27 @@ def granularity_phrase(uri: str, display_names: dict) -> str | None:
     return f"{display_name(f'dataset/{dataset}', display_names)}, {GRANULARITIES[enum][1]}"
 
 
-def _dim_briefs(spec: dict, display_names: dict, aliases: list) -> list:
+def _dim_briefs(spec: CreatedVisualization, display_names: dict, bucket: list[str]) -> list:
     """Dimension names for the writer: date dimensions as phrases, labels verbatim."""
-    fields = spec["query"]["fields"]
     out = []
-    for alias in aliases:
-        uri = resolve_alias_to_uri(alias, fields)
+    for alias in bucket:
+        uri = resolve_alias_to_uri(alias, spec.query.fields)
         out.append(granularity_phrase(uri, display_names) or display_name(uri, display_names))
     return out
 
 
-def _dim_names(spec: dict, display_names: dict) -> list:
-    fields = spec["query"]["fields"]
-    aliases = spec["view_by"] + spec["segment_by"] + spec["columns"] + spec["rows"]
-    return [display_name(resolve_alias_to_uri(a, fields), display_names) for a in aliases]
+def _dims(spec: CreatedVisualization) -> list[str]:
+    """Every alias the chart breaks down by, in the order the brief reads them."""
+    return aliases(spec.view_by + spec.segment_by + spec.columns + spec.rows)
 
 
-def _metric_names(spec: dict, display_names: dict) -> list:
-    fields = spec["query"]["fields"]
-    return [display_name(resolve_alias_to_uri(a, fields), display_names) for a in spec["metrics"]]
+def _dim_names(spec: CreatedVisualization, display_names: dict) -> list:
+    return [display_name(resolve_alias_to_uri(a, spec.query.fields), display_names) for a in _dims(spec)]
+
+
+def _metric_names(spec: CreatedVisualization, display_names: dict) -> list:
+    fields = spec.query.fields
+    return [display_name(resolve_alias_to_uri(a, fields), display_names) for a in aliases(spec.metrics)]
 
 
 def _normalize(text: str) -> str:
@@ -476,16 +493,16 @@ def _mentions(name: str, question: str) -> bool:
     return any(t in lowered for t in tokens) if tokens else _normalize(name) in lowered
 
 
-def _without_field_names(question: str, spec: dict, display_names: dict) -> str:
+def _without_field_names(question: str, spec: CreatedVisualization, display_names: dict) -> str:
     """`question` with the spec's own field names blanked out.
 
     A field may be called "Most Recent Label Created At" or "Top Tier Customers". A
     question naming it verbatim -- which the rules require -- is not thereby claiming a
     ranking, so the claim checks have to read around the names.
     """
-    fields = spec["query"]["fields"]
+    fields = spec.query.fields
     names = [display_name(resolve_alias_to_uri(a, fields), display_names) for a in fields]
-    names += [display_name(f.get("using", ""), display_names) for f in spec["query"]["filter_by"].values()]
+    names += [display_name(f.get("using", ""), display_names) for f in spec.query.filter_by.values()]
     # A date label reads "Most Recent Label Created At - Month" but the question names
     # the dataset and the granularity separately ("by month for Most Recent Label
     # Created At"), so each side of the separator has to be maskable on its own.
@@ -496,7 +513,7 @@ def _without_field_names(question: str, spec: dict, display_names: dict) -> str:
     return question
 
 
-def contradictions(question: str, spec: dict, display_names: dict | None = None) -> list:
+def contradictions(question: str, spec: CreatedVisualization, display_names: dict | None = None) -> list:
     """Ways `question` and `spec` disagree. Any hit is a hard error, never a warning."""
     display_names = display_names or {}
     problems = []
@@ -531,22 +548,21 @@ def contradictions(question: str, spec: dict, display_names: dict | None = None)
     return problems
 
 
-def _rules_for(spec: dict, display_names: dict) -> str:
+def _rules_for(spec: CreatedVisualization, display_names: dict) -> str:
     dims = _dim_names(spec, display_names)
-    all_dims = spec["view_by"] + spec["segment_by"] + spec["columns"] + spec["rows"]
     dated = [
         phrase
-        for alias in all_dims
-        if (phrase := granularity_phrase(resolve_alias_to_uri(alias, spec["query"]["fields"]), display_names))
+        for alias in _dims(spec)
+        if (phrase := granularity_phrase(resolve_alias_to_uri(alias, spec.query.fields), display_names))
     ]
     segments = [
-        display_name(resolve_alias_to_uri(a, spec["query"]["fields"]), display_names) for a in spec["segment_by"]
+        display_name(resolve_alias_to_uri(a, spec.query.fields), display_names) for a in aliases(spec.segment_by)
     ]
     lines = [
         "Write the question an analyst would ask to get exactly this chart. Rules:",
         "- Name every metric listed above explicitly, using its name verbatim.",
     ]
-    ranking = next((f for f in spec["query"]["filter_by"].values() if f.get("type") == "ranking_filter"), None)
+    ranking = next((f for f in spec.query.filter_by.values() if f.get("type") == "ranking_filter"), None)
     # A ranking filter with no `attribute` ranks over the full dimension tuple, so the
     # "top N <dimension>" shorthand is only true when there is exactly one dimension.
     # With two, naming one tells the writer a scope the filter does not have -- "top 5
@@ -608,7 +624,7 @@ def _rules_for(spec: dict, display_names: dict) -> str:
     return "\n".join(lines)
 
 
-def phrase(specs: list, model: str, display_names: dict) -> list:
+def phrase(specs: list[CreatedVisualization], model: str, display_names: dict) -> list:
     """Question per insight, or None where the writer kept contradicting the spec.
 
     One retry with the specific contradiction quoted back; a second failure drops the
@@ -651,20 +667,20 @@ def phrase(specs: list, model: str, display_names: dict) -> list:
                 },
             ]
         if question is None:
-            print(f"  DROP {spec['title']}: {'; '.join(problems)}", file=sys.stderr)
+            print(f"  DROP {spec.title}: {'; '.join(problems)}", file=sys.stderr)
         questions.append(question)
         print(f"  phrased {i}/{len(specs)}", file=sys.stderr)
     return questions
 
 
-def resolve_type(spec: dict, question: str) -> str:
+def resolve_type(spec: CreatedVisualization, question: str) -> str:
     """The insight's chart type, but only when the question actually names that form."""
     lowered = question.lower()
-    return spec["type"] if any(w in lowered for w in TYPE_WORDS.get(spec["type"], ())) else ""
+    return spec.type if any(w in lowered for w in TYPE_WORDS.get(spec.type, ())) else ""
 
 
-def build(spec: dict, question: str, dataset_name: str, existing_ids: set) -> dict:
-    spec = {**spec, "type": resolve_type(spec, question)}
+def build(spec: CreatedVisualization, question: str, dataset_name: str, existing_ids: set) -> dict:
+    spec = spec.model_copy(update={"type": resolve_type(spec, question)})
     question_id = mint_id(question, existing_ids)
     existing_ids.add(question_id)
     return {
@@ -672,7 +688,9 @@ def build(spec: dict, question: str, dataset_name: str, existing_ids: set) -> di
         "dataset_name": dataset_name,
         "test_kind": TEST_KIND,
         "question": question,
-        "expected_output": {"visualization": spec},
+        # `exclude_none` keeps the envelope to the keys the convertor actually produced:
+        # an unset optional is absent from the JSON, not present as null.
+        "expected_output": {"visualization": spec.model_dump(mode="json", exclude_none=True)},
     }
 
 
@@ -760,7 +778,7 @@ def generate(args, sdk_factory=None) -> int:
             f"more than one object in the model, so the question cannot say which is meant"
         )
         for spec, names in ambiguous[:5]:
-            print(f"    {spec['title'][:40]:<40} {', '.join(names)}")
+            print(f"    {(spec.title or '')[:40]:<40} {', '.join(names)}")
         if len(ambiguous) > 5:
             print(f"    ... and {len(ambiguous) - 5} more")
         if not args.skip_ambiguous:
@@ -789,15 +807,15 @@ def generate(args, sdk_factory=None) -> int:
 
     if args.dry_run:
         for spec in specs:
-            print(f"\n{spec['title']}\n{describe(spec, display_names)}")
+            print(f"\n{spec.title}\n{describe(spec, display_names)}")
         return 1 if failures else 0
 
     if args.no_phrase:
-        questions = [f"Show {s['title']}" for s in specs]
+        questions = [f"Show {s.title}" for s in specs]
     else:
         questions = phrase(specs, args.phrase_model, display_names)
 
-    dropped = [spec["title"] for spec, q in zip(specs, questions) if q is None]
+    dropped = [spec.title for spec, q in zip(specs, questions) if q is None]
     specs, questions = zip(*[(s, q) for s, q in zip(specs, questions) if q]) if any(questions) else ([], [])
     if dropped:
         failures.append(f"{len(dropped)} question(s) dropped as self-contradictory: {', '.join(dropped[:5])}")
