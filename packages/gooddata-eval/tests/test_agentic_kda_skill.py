@@ -1238,7 +1238,10 @@ def test_run_agentic_kda_skill_reports_no_turns_when_the_first_send_fails():
     """A run that never got a reply must not report a turn it did not take."""
     mock_client = MagicMock()
     mock_client.create_conversation.return_value = "conv-1"
-    mock_client.send_message.side_effect = RuntimeError("stream died")
+    # A transport fault, not a bare RuntimeError: the handler narrowed to what
+    # send_message actually raises, so a bare RuntimeError now (correctly) propagates as
+    # the bug in this package that it would be.
+    mock_client.send_message.side_effect = httpx.ReadError("stream died")
 
     with patch("gooddata_eval.core.agentic.kda_skill.ChatClient", return_value=mock_client):
         summary = run_agentic_kda_skill(

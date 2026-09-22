@@ -700,6 +700,18 @@ def run_agentic_alert_skill(
                     # Without this the exception escapes run_agentic_alert_skill entirely,
                     # discarding every K-run already completed along with any exit_reason.
                     print(f"[CHAT] send_message failed for conversation {conv_id}: {exc}")
+                    # The stream can break AFTER create_metric_alert already succeeded
+                    # server-side. That id only ever reached alert_id_to_delete from the
+                    # normal path below, so breaking here left the alert in the workspace for
+                    # the `finally` cleanup to miss -- a real object leaking out of a failed
+                    # run, not a reporting gap.
+                    partial = exc.partial_result
+                    if partial is not None:
+                        reasoning_steps.extend(partial.reasoning_steps or [])
+                        response_id = partial.response_id or response_id
+                        partial_alert_id, _, partial_tool_called = _extract_alert_call(partial.tool_call_events or [])
+                        if partial_tool_called:
+                            alert_id_to_delete = partial_alert_id
                     exit_reason = LoopExit.CHAT_ERROR
                     break
                 # `turns_used` counts attempts (set above, so a failed send still shows the
