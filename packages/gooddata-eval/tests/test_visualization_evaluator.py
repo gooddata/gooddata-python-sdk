@@ -1,6 +1,10 @@
 # (C) 2026 GoodData Corporation
+import re
+from datetime import date
+
 from gooddata_eval.core.evaluators import get_evaluator
-from gooddata_eval.core.models import ChatResult, DatasetItem
+from gooddata_eval.core.evaluators.visualization import _evaluate_visualization
+from gooddata_eval.core.models import ChatResult, CreatedVisualization, DatasetItem
 
 
 def _item(expected_viz) -> DatasetItem:
@@ -158,8 +162,11 @@ def test_detail_reports_the_filters_that_were_compared():
 
     assert result.detail["filter_date_score"] is False
     expected, actual = result.detail["expected_filters"], result.detail["actual_filters"]
-    assert '"from": -11' in expected["date"][0]
-    assert '"from": -12' in actual["date"][0]
+    # Relative offsets are reported as the absolute span they resolve to, so the two
+    # periods are legible side by side and visibly different -- which is the point.
+    assert re.search(r'"from": "\d{4}-\d{2}-\d{2}"', expected["date"][0])
+    assert re.search(r'"from": "\d{4}-\d{2}-\d{2}"', actual["date"][0])
+    assert expected["date"] != actual["date"]
     assert expected["ranking"] == actual["ranking"] == []
     assert expected["attribute"] == actual["attribute"] == []
 
@@ -170,3 +177,35 @@ def test_detail_filters_are_empty_when_no_visualization_was_created():
     result = ev.evaluate(_item(_dated("MONTH", -11, 0)), empty)
     assert result.detail["actual_filters"] == {"date": [], "ranking": [], "attribute": []}
     assert len(result.detail["expected_filters"]["date"]) == 1
+
+
+def _date_filtered_viz():
+    return {
+        "id": "x",
+        "type": "table",
+        "query": {
+            "fields": {"m_rev": {"using": "metric/revenue"}},
+            "filter_by": {
+                "f": {"type": "date_filter", "using": "dataset/dt", "from": -1, "to": -1, "granularity": "MONTH"}
+            },
+        },
+        "metrics": ["m_rev"],
+    }
+
+
+def test_reported_filters_use_the_same_date_anchor_as_the_score():
+    """The filters reported in detail must be resolved against the anchor the score used.
+
+    check_filters shares one anchor across its two sides, but the reported filters were
+    resolved by separate normalized_filters calls, each taking its own date.today(). A run
+    straddling midnight could therefore report periods the verdict was never computed from.
+    Pinning an explicit anchor here fails unless it reaches every one of those calls.
+    """
+    viz = CreatedVisualization.model_validate(_date_filtered_viz())
+    result = _evaluate_visualization(viz, viz, today=date(2026, 3, 15))
+
+    # -1 MONTH from 2026-03-15 is February 2026, not whatever month the suite runs in.
+    assert result.filter_date_score is True
+    assert '"from": "2026-02-01"' in result.expected_filters["date"][0]
+    assert '"to": "2026-02-28"' in result.expected_filters["date"][0]
+    assert result.expected_filters["date"] == result.actual_filters["date"]
