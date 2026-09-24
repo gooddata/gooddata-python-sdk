@@ -81,6 +81,7 @@ packages/gooddata-eval/tests/test_obfuscation_check.py
 packages/gooddata-eval/tests/test_models.py
   s_8a0420fc190c00::t_a3397861545151 168-169,176-177,185-194
   s_8a0420fc190c00::t_a2e20ab262f2b5 178-184
+  s_8a0420fc190c00::t_f9291acecdc52b 174-175
 packages/gooddata-eval/tests/test_trace_linker.py
   s_8a0420fc190c00::t_4fcc10dc88ae94 122
 packages/gooddata-eval/tests/test_agentic_obfuscation.py
