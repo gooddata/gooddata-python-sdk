@@ -382,7 +382,7 @@ def test_built_envelope_is_loadable_as_a_dataset_item(tmp_path):
             ],
         ),
     )
-    envelope = build(spec, "How did spend trend by month?", "micai_diagnose_master", set())
+    envelope = build(spec, "How did spend trend by month?", "demo_workspace", set())
     assert "_shape" not in envelope["expected_output"]["visualization"]
     assert _validation_errors(envelope) is None
 
@@ -390,7 +390,7 @@ def test_built_envelope_is_loadable_as_a_dataset_item(tmp_path):
     items = load_local_dataset(tmp_path)
     assert [i.id for i in items] == [envelope["id"]]
     assert items[0].test_kind == "visualization"
-    assert items[0].dataset_name == "micai_diagnose_master"
+    assert items[0].dataset_name == "demo_workspace"
 
 
 def test_mint_id_is_stable_and_collision_safe():
