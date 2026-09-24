@@ -1,0 +1,63 @@
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_8a0420fc190c00::t_0f4c37b028805d 21,51,91-93,272-284
+packages/gooddata-eval/tests/test_sse_client.py
+  s_8a0420fc190c00::t_daf792f7c36dea 1003-1011
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_obfuscation_sinks.py
+  s_8a0420fc190c00::t_74fa314a9f1097 1-156
+packages/gooddata-eval/tests/test_models.py
+  s_8a0420fc190c00::t_aebfd569b6f6ac 174-194
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_trace_linker.py
+  s_8a0420fc190c00::t_66b47b9de0ba13 177,179-180
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_obfuscation_check.py
+  s_8a0420fc190c00::t_9147099add143a 1-56,58-60,64-81,84-223
+  s_8a0420fc190c00::t_d3797ea7f75ffb 57,61-63,82-83
+packages/gooddata-eval/tests/test_trace_linker.py
+  s_8a0420fc190c00::t_9dd20c4dba3c0a 122
+packages/gooddata-eval/README.md
+  s_8a0420fc190c00::t_4343bab9d779da 139,538-539,578-604,610-624,677-679
+  s_8a0420fc190c00::t_4167efe9353994 636
+  s_8a0420fc190c00::t_52eeefed6b47ff 605-609
+packages/gooddata-eval/tests/test_langfuse_source.py
+  s_8a0420fc190c00::t_05a58aed2812b8 217-249
+packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
+  s_8a0420fc190c00::t_9b0bc9a0a3cd59 33-43,45-47,49-52,116-118,127,132-133
+packages/gooddata-eval/tests/test_agentic_runner.py
+  s_8a0420fc190c00::t_130228fc23eaa6 93
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_8a0420fc190c00::t_a98d34272bdb05 11,430-442
+packages/gooddata-eval/src/gooddata_eval/core/agentic/obfuscation.py
+  s_8a0420fc190c00::t_3d59d322279935 467
+  s_8a0420fc190c00::t_cfc05f70e6dd4d 1-17,21-42,44-104,108-110,112-114,116-245,247-253,255-460,462,464-466,468-474,477-497,500-536,539-546,548-564
+  s_8a0420fc190c00::t_0b8f4b84190cee 18-20,43,105-107,111,115,246,254,461,463,475-476,498-499,537-538,547
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_8a0420fc190c00::t_9c392d6094c6a1 75,81-83,389-390,393,395-397
+packages/gooddata-eval/tests/test_agentic_obfuscation.py
+  s_8a0420fc190c00::t_3d59d322279935 282-349,517-528
+  s_8a0420fc190c00::t_f3150257ac1eca 1-281,350-516,529-536
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_obfuscation_observe.py
+  s_8a0420fc190c00::t_c7faa5f14e8d46 1-25,28-37,50-140
+  s_8a0420fc190c00::t_d3797ea7f75ffb 26-27,38-49
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/client.py
+  s_8a0420fc190c00::t_2330eb2b9a48fc 28-31,205-226
+packages/gooddata-eval/tests/test_obfuscation_check.py
+  s_8a0420fc190c00::t_50560f270f0761 1-136,145-197
+  s_8a0420fc190c00::t_3d59d322279935 137-144
+packages/gooddata-eval/tests/test_langfuse_client.py
+  s_8a0420fc190c00::t_aa759048ff6a69 380-418
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "6ba0a4ace780b9f56222f0ad6023f89002347024",
+  "prompts": {},
+  "sessions": {
+    "s_8a0420fc190c00": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f8e4742c-11b1-4e4c-a749-1f9761445232",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    }
+  }
+}
