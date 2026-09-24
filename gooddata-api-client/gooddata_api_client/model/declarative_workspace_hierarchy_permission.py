@@ -71,6 +71,7 @@ class DeclarativeWorkspaceHierarchyPermission(ModelNormal):
             'WRITE_KNOWLEDGE_DOCUMENTS': "WRITE_KNOWLEDGE_DOCUMENTS",
             'READ_KNOWLEDGE_DOCUMENTS': "READ_KNOWLEDGE_DOCUMENTS",
             'CREATE_FILTER_VIEW': "CREATE_FILTER_VIEW",
+            'CREATE_METRIC': "CREATE_METRIC",
             'VIEW': "VIEW",
         },
     }
