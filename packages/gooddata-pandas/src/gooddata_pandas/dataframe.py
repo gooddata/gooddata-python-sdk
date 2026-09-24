@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     import pyarrow as pa
 
 import pandas
-from gooddata_api_client import models
+from gooddata_api_client.model.afm_execution_response import AfmExecutionResponse
 from gooddata_sdk import (
     Attribute,
     BareExecutionResponse,
@@ -691,9 +691,7 @@ class DataFrameFactory:
             exec_response = BareExecutionResponse(
                 api_client=self._sdk.client,
                 workspace_id=self._workspace_id,
-                execution_response=models.AfmExecutionResponse(
-                    result_cache_metadata.execution_response, _check_type=False
-                ),
+                execution_response=AfmExecutionResponse(result_cache_metadata.execution_response, _check_type=False),
             )
             table = exec_response.read_result_arrow(max_bytes=self._arrow_config.max_bytes)
             return self._table_to_df_and_metadata(table, exec_response, label_overrides, grand_totals_position)
@@ -702,9 +700,7 @@ class DataFrameFactory:
             execution_response=BareExecutionResponse(
                 api_client=self._sdk.client,
                 workspace_id=self._workspace_id,
-                execution_response=models.AfmExecutionResponse(
-                    result_cache_metadata.execution_response, _check_type=False
-                ),
+                execution_response=AfmExecutionResponse(result_cache_metadata.execution_response, _check_type=False),
             ),
             result_cache_metadata=result_cache_metadata,
             label_overrides=label_overrides,

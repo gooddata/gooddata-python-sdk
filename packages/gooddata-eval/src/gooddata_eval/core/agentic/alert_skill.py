@@ -12,6 +12,14 @@ from typing import Any
 from gooddata_sdk import GoodDataSdk
 
 from gooddata_eval.core.agentic._catalog import AnomalyDetectionGranularity, CatalogMetricAlert
+from gooddata_eval.core.agentic._gate import (
+    DEFAULT_GATE,
+    EvalGate,
+    gate_failure_note,
+    gate_passed,
+    log_gate_scores,
+    stamp_gate_metadata,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -29,8 +37,8 @@ from gooddata_eval.core.models import (
     AgenticEvalOutcome,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
     shift_and_index_events,
+    timeline_detail,
 )
 
 try:
@@ -469,6 +477,8 @@ class AlertRunResult:
     alert_id: str | None
     eval: AlertEvaluation
     actual_alert_arguments: dict
+    total_turns: int = 0
+    total_steps: int = 0
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
@@ -668,9 +678,13 @@ def run_agentic_alert_skill(
             # Roles follow GPT-4o's perspective: "assistant"=agent text, "user"=sim-user reply.
             conversation_history: list = []
             current_question = question
+            turns = 0
+            steps = 0
 
             for _iteration in range(max_iterations):
                 chat_result = client.send_message(conv_id, current_question)
+                turns += 1
+                steps += chat_result.reasoning_step_count
                 reasoning_steps.extend(chat_result.reasoning_steps or [])
                 response_id = chat_result.response_id or response_id
                 turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
@@ -720,6 +734,8 @@ def run_agentic_alert_skill(
                 alert_id=alert_id,
                 eval=ev,
                 actual_alert_arguments=actual_args,
+                total_turns=turns,
+                total_steps=steps,
                 reasoning_steps=reasoning_steps,
                 response_id=response_id,
                 tool_call_events=all_tool_call_events,
@@ -794,6 +810,7 @@ def evaluate_agentic_alert_skill(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run alert-skill evaluation, log to Langfuse, and raise AlertSkillAssertionError on failure.
 
@@ -823,6 +840,7 @@ def evaluate_agentic_alert_skill(
         window_end = utc_now()
 
         def _write_scores(ctx: RunTraceContext) -> None:
+            stamp_gate_metadata(ctx.run_metadata, k=len(summary.run_results), gate=gate)
 
             for run_idx, run in enumerate(summary.run_results):
                 pt = ctx.trace(run.conversation_id)
@@ -841,6 +859,9 @@ def evaluate_agentic_alert_skill(
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
+                    ctx.score(tid, name="turns", value=run.total_turns, data_type="NUMERIC")
+                    ctx.score(tid, name="steps", value=run.total_steps, data_type="NUMERIC")
+                    log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
                     ctx.quality(
                         tid,
                         strict_checks=strict_checks,
@@ -887,12 +908,13 @@ def evaluate_agentic_alert_skill(
         "attributes_correct": ev.attributes_correct,
         "granularity_correct": ev.granularity_correct,
         "actual_alert_arguments": best.actual_alert_arguments,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
     }
 
-    if not summary.pass_at_k:
+    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
         exc = AlertSkillAssertionError(
-            f"Alert skill assertion failed. strict_pass={ev.strict_pass}. "
+            f"Alert skill assertion failed. {gate_note} strict_pass={ev.strict_pass}. "
             f"alert_created={ev.alert_created}, operator_correct={ev.operator_correct}, "
             f"threshold_correct={ev.threshold_correct}, trigger_correct={ev.trigger_correct}, "
             f"filters_correct={ev.filters_correct}, metric_correct={ev.metric_correct}, "

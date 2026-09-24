@@ -11,23 +11,37 @@ from gooddata_api_client.model.inline_filter_definition_inline import InlineFilt
 if find_spec("icu") is not None:
     from icu import Locale, SimpleDateFormat  # type: ignore
 
-import gooddata_api_client.models as afm_models
-from gooddata_api_client.model_utils import OpenApiModel
-from gooddata_api_client.models import AbsoluteDateFilterAbsoluteDateFilter as AbsoluteDateFilterBody
-from gooddata_api_client.models import AllTimeDateFilterAllTimeDateFilter as AllTimeDateFilterBody
-from gooddata_api_client.models import (
+from gooddata_api_client.model.absolute_date_filter_absolute_date_filter import (
+    AbsoluteDateFilterAbsoluteDateFilter as AbsoluteDateFilterBody,
+)
+from gooddata_api_client.model.all_time_date_filter_all_time_date_filter import (
+    AllTimeDateFilterAllTimeDateFilter as AllTimeDateFilterBody,
+)
+from gooddata_api_client.model.comparison_measure_value_filter_comparison_measure_value_filter import (
     ComparisonMeasureValueFilterComparisonMeasureValueFilter as ComparisonMeasureValueFilterBody,
 )
-from gooddata_api_client.models import (
+from gooddata_api_client.model.compound_measure_value_filter_compound_measure_value_filter import (
     CompoundMeasureValueFilterCompoundMeasureValueFilter as CompoundMeasureValueFilterBody,
 )
-from gooddata_api_client.models import MatchAttributeFilterMatchAttributeFilter as MatchAttributeFilterBody
-from gooddata_api_client.models import NegativeAttributeFilterNegativeAttributeFilter as NegativeAttributeFilterBody
-from gooddata_api_client.models import PositiveAttributeFilterPositiveAttributeFilter as PositiveAttributeFilterBody
-from gooddata_api_client.models import RangeMeasureValueFilterRangeMeasureValueFilter as RangeMeasureValueFilterBody
-from gooddata_api_client.models import RankingFilterRankingFilter as RankingFilterBody
-from gooddata_api_client.models import RelativeDateFilterRelativeDateFilter as RelativeDateFilterBody
+from gooddata_api_client.model.match_attribute_filter_match_attribute_filter import (
+    MatchAttributeFilterMatchAttributeFilter as MatchAttributeFilterBody,
+)
+from gooddata_api_client.model.negative_attribute_filter_negative_attribute_filter import (
+    NegativeAttributeFilterNegativeAttributeFilter as NegativeAttributeFilterBody,
+)
+from gooddata_api_client.model.positive_attribute_filter_positive_attribute_filter import (
+    PositiveAttributeFilterPositiveAttributeFilter as PositiveAttributeFilterBody,
+)
+from gooddata_api_client.model.range_measure_value_filter_range_measure_value_filter import (
+    RangeMeasureValueFilterRangeMeasureValueFilter as RangeMeasureValueFilterBody,
+)
+from gooddata_api_client.model.ranking_filter_ranking_filter import RankingFilterRankingFilter as RankingFilterBody
+from gooddata_api_client.model.relative_date_filter_relative_date_filter import (
+    RelativeDateFilterRelativeDateFilter as RelativeDateFilterBody,
+)
+from gooddata_api_client.model_utils import OpenApiModel
 
+from gooddata_sdk import _models as afm_models
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import Filter, ObjId
 from gooddata_sdk.compute.model.metric import Metric

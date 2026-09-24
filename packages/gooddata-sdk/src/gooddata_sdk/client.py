@@ -10,12 +10,12 @@ from pathlib import Path
 
 import gooddata_api_client as api_client
 import requests
-from gooddata_api_client import apis
 from requests.adapters import HTTPAdapter
 from urllib3.exceptions import MaxRetryError
 from urllib3.util.retry import Retry
 
 from gooddata_sdk import __version__
+from gooddata_sdk import _apis as apis
 from gooddata_sdk.utils import HttpMethod
 
 logger = logging.getLogger(__name__)

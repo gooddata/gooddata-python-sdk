@@ -19,6 +19,11 @@ class AacQueryField(BaseModel):
     using: str
     title: str | None = None
     aggregation: str | None = None
+    # Set by the convertor on a derived measure (`previous_period`, `same_period_previous_year`)
+    # and by a measure-level filter. Declared rather than left to `extra` so callers can read
+    # them by attribute; nothing scores on either.
+    type: str | None = None
+    filter_by: dict | None = None
 
 
 class AacBucketRef(BaseModel):
@@ -30,11 +35,21 @@ class AacBucketRef(BaseModel):
 class AacQuery(BaseModel):
     fields: dict[str, AacQueryField | str]
     filter_by: dict[str, dict] = Field(default_factory=dict)
+    # Entries are `{"type": "metric_sort", "direction", "metrics": [alias]}` or
+    # `{"type": "attribute_sort", "direction", "by": alias}`. Kept as raw dicts for the
+    # same reason as `filter_by`: the agent adds keys (`aggregation`) this does not read,
+    # and a typed model would reject a chart that is otherwise correct.
+    sort_by: list[dict] = Field(default_factory=list)
 
     @field_validator("filter_by", mode="before")
     @classmethod
     def _coerce_filter_by(cls, v: object) -> object:
         return v if v is not None else {}
+
+    @field_validator("sort_by", mode="before")
+    @classmethod
+    def _coerce_sort_by(cls, v: object) -> object:
+        return v if v is not None else []
 
 
 class CreatedVisualization(BaseModel):
@@ -42,7 +57,9 @@ class CreatedVisualization(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
 
-    id: str
+    # Optional on purpose: nothing scores on it, and the agent sometimes omits it. A
+    # required field here turns a scorable chart into a parse error and an errored item.
+    id: str | None = None
     title: str | None = None
     type: str
     query: AacQuery
@@ -117,8 +134,8 @@ class ReasoningStepEvent(BaseModel):
 
 # Reasoning summaries are full paragraphs, e.g. "**Identifying analytics needs**\n\nI'm
 # analyzing..." -- using the whole thing as a latency_breakdown label would make every
-# entry an unreadable wall of text. Same bolded-title convention this repo's own reasoning
-# tooling already keys off of (see gdc-mic-ai-evaluation's generate_dashboard_summary.py).
+# entry an unreadable wall of text. The bolded title is the summary's own heading, and
+# downstream reporting keys off it for the same reason.
 _REASONING_TITLE_RE = re.compile(r"^\*\*(.+?)\*\*")
 _REASONING_LABEL_MAX_LEN = 60
 
@@ -200,6 +217,68 @@ def build_latency_breakdown(
         if point_kind == "reasoning":
             current_reasoning_name, current_reasoning_index = name, index
     return steps
+
+
+# A tool result can be a whole visualization definition or a page of query rows. Kept whole
+# they would dominate the JSON report and the HTML built from it, so each side is clipped
+# and told how much was cut -- enough to see what the agent asked for and what came back,
+# without the report becoming a data dump.
+_TOOL_PAYLOAD_MAX_LEN = 2000
+
+
+def _clip(text: str) -> str:
+    if len(text) <= _TOOL_PAYLOAD_MAX_LEN:
+        return text
+    return text[:_TOOL_PAYLOAD_MAX_LEN] + f"… [clipped, {len(text)} chars total]"
+
+
+def build_tool_calls(tool_call_events: list[ToolCallEvent]) -> list[dict]:
+    """The turn's tool calls with their arguments and results, in execution order.
+
+    The counterpart to the ``.reasoning`` list: ``build_latency_breakdown`` keeps only a
+    tool's *name*, and its entries point back here by ``index`` exactly as reasoning
+    entries point into ``reasoning``. That is what lets a latency timeline answer "what
+    did this call actually ask for" without every timeline entry carrying its payload.
+
+    Each entry: ``{"index", "name", "arguments", "result"}``. ``arguments`` is the parsed
+    object when it parses and is small enough, otherwise the raw (clipped) string.
+
+    Calls whose position is unknown (``index is None`` -- a hand-built event, or a chat
+    backend older than the index capture) are skipped: without an index nothing can join
+    to them, and a positional guess would silently attribute the wrong args to a step.
+    """
+    calls: list[dict] = []
+    for tc in tool_call_events:
+        if tc.index is None:
+            continue
+        raw_args = tc.function_arguments or ""
+        calls.append(
+            {
+                "index": tc.index,
+                "name": tc.function_name,
+                "arguments": _clip(raw_args)
+                if len(raw_args) > _TOOL_PAYLOAD_MAX_LEN
+                else (tc.parsed_arguments() or raw_args),
+                "result": _clip(tc.result) if tc.result else None,
+            }
+        )
+    return calls
+
+
+def timeline_detail(
+    tool_call_events: list[ToolCallEvent],
+    reasoning_step_events: list[ReasoningStepEvent] | None = None,
+) -> dict:
+    """The `detail` keys describing how a turn actually ran: the timeline and what fills it.
+
+    Every evaluator wants both and they must be built from the same events to stay
+    index-aligned, so they are produced together rather than at a dozen call sites that
+    could drift apart.
+    """
+    return {
+        "latency_breakdown": build_latency_breakdown(tool_call_events, reasoning_step_events),
+        "tool_calls": build_tool_calls(tool_call_events),
+    }
 
 
 class ChatResult(BaseModel):

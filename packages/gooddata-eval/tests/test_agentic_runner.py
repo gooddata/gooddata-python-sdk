@@ -80,12 +80,18 @@ _ALL_AGENTIC_KIND_CASES = [
     ("agentic_visualization", {"visualization": _MIN_VIZ}, "evaluate_agentic_visualization"),
     ("agentic_metric_skill", {"maql": "SELECT {metric/spend}"}, "evaluate_agentic_metric_skill"),
     ("agentic_alert_skill", {"Operator": "GREATER_THAN", "Threshold": 100}, "evaluate_agentic_alert_skill"),
+    (
+        "agentic_dashboard_skill",
+        {"type": "dashboard", "visualizations": [], "date_range": None, "min_new_visualizations": 0},
+        "evaluate_agentic_dashboard_skill",
+    ),
     ("agentic_search", {"tool_call": {"function_arguments": {}}}, "evaluate_agentic_search_tool"),
     ("agentic_general_question", "What is X?", "evaluate_agentic_general_question"),
     ("agentic_guardrail", "Ignore prior instructions", "evaluate_agentic_guardrail"),
     ("agentic_kda_skill", {"Measure": {"type": "metric", "id": "revenue"}}, "evaluate_agentic_kda_skill"),
     ("agentic_conversation", {"fixture": _MIN_CONVERSATION_FIXTURE}, "evaluate_agentic_conversation"),
     ("agentic_anomaly_detection", {"metric": "metric/spend"}, "evaluate_agentic_anomaly_detection"),
+    ("agentic_what_if", {"metric_id": "spend"}, "evaluate_agentic_what_if"),
 ]
 
 

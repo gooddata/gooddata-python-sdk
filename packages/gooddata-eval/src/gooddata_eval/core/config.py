@@ -33,6 +33,26 @@ def judge_model() -> str:
 ReasoningEffort = Literal["LOW", "MEDIUM", "HIGH"]
 """Effort values the AI chat endpoint accepts, uppercase as the server enum requires."""
 
+EvalGate = Literal["any", "power"]
+"""`any` = pass@K, `power` = pass^K. Behaviour is in core/agentic/_gate.py; the type lives here
+because putting it there would make config import the agentic package, whose __init__ imports
+back through chat.sse_client into config."""
+
+DEFAULT_GATE: EvalGate = "any"
+"""Historic behaviour — changing it makes every caller that passes no gate stricter."""
+
+
+def normalize_gate(value: str | None) -> EvalGate:
+    """Canonical gate name; ``None``/blank means the default."""
+    if value is None:
+        return DEFAULT_GATE
+    candidate = value.strip().lower()
+    if not candidate:
+        return DEFAULT_GATE
+    if candidate not in get_args(EvalGate):
+        raise ValueError(f"Invalid eval gate {value!r}; expected one of {', '.join(get_args(EvalGate))}.")
+    return cast("EvalGate", candidate)
+
 
 def normalize_reasoning_effort(value: str | None) -> ReasoningEffort | None:
     """Canonical effort, or None when unset.
@@ -64,9 +84,16 @@ class RunConfig:
     runs: int = 2
     concurrency: int = 1
     json_path: Path | None = None
+    html_path: Path | None = None
+    redact: bool = False
     log_to_langfuse: bool = False
     quiet: bool = False
     kind: str = "visualization"
     preserve_failed: bool = False
     reasoning_effort: ReasoningEffort | None = None
     agent_id: str | None = None
+    turn_timeout_s: float | None = None
+    """Wall-clock cap per agent turn; None keeps GOODDATA_EVAL_CHAT_TURN_TIMEOUT_S (0 = off)."""
+    item_timeout_s: float | None = None
+    """Wall-clock cap per item across all its turns; None keeps GOODDATA_EVAL_CHAT_ITEM_TIMEOUT_S."""
+    gate: EvalGate = DEFAULT_GATE

@@ -6,9 +6,9 @@ import functools
 from pathlib import Path
 from typing import Literal, Union, cast
 
-import gooddata_api_client.models as afm_models
 from gooddata_api_client.model.elements_request import ElementsRequest
 
+from gooddata_sdk import _models as afm_models
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
 from gooddata_sdk.catalog.depends_on import CatalogDependsOn, CatalogDependsOnDateFilter

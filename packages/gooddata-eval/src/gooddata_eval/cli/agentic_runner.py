@@ -8,17 +8,20 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, TypedDict
 
+from gooddata_eval.core.agentic._gate import DEFAULT_GATE, EvalGate, normalize_gate
 from gooddata_eval.core.agentic._langfuse import make_langfuse_client
 from gooddata_eval.core.agentic._trace_linker import BackgroundTraceLinker, SubmitTraceLink, run_trace_link_inline
 from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
 from gooddata_eval.core.agentic.anomaly_detection import evaluate_agentic_anomaly_detection
 from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluate_agentic_conversation
+from gooddata_eval.core.agentic.dashboard_skill import evaluate_agentic_dashboard_skill
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.kda_skill import evaluate_agentic_kda_skill
 from gooddata_eval.core.agentic.metric_skill import evaluate_agentic_metric_skill
 from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
+from gooddata_eval.core.agentic.what_if import evaluate_agentic_what_if
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
@@ -40,14 +43,23 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_visualization",  # experimental: expected_output.expected_outputs (multi-candidate)
         "agentic_metric_skill",
         "agentic_alert_skill",
+        "agentic_dashboard_skill",
         "agentic_search",
         "agentic_general_question",
         "agentic_guardrail",
         "agentic_conversation",
         "agentic_kda_skill",
         "agentic_anomaly_detection",
+        "agentic_what_if",
     }
 )
+
+
+# Agentic kinds that no gate applies to: they drive their fixture exactly once, so there is
+# no K to take pass@K or pass^K over. Named here rather than inline in _dispatch_agentic so
+# the CLI can refuse --gate power for a dataset containing one instead of labelling the whole
+# report `power` when part of it was never gated.
+UNGATED_AGENTIC_TEST_KINDS = frozenset({"agentic_conversation"})
 
 
 # Kinds cleared to run several at a time. An EXPLICIT allowlist, not a subtraction: nothing
@@ -79,6 +91,10 @@ PARALLEL_SAFE_TEST_KINDS = frozenset(
 # create_key_driver_analysis with no cleanup, and while the evaluator only ever reads that
 # call's ARGUMENTS -- never a created object id -- whether the platform persists anything is
 # unverified. Move it to the allowlist once someone confirms it does not.
+#
+# agentic_dashboard_skill is absent by default rather than by evidence: gen-ai holds the draft and
+# any chart it authors in conversation state and writes neither until a user saves from the UI, so
+# it is a candidate for the allowlist once the dataset has runs behind it.
 WORKSPACE_MUTATING_TEST_KINDS = frozenset(AGENTIC_TEST_KINDS) - PARALLEL_SAFE_TEST_KINDS
 
 
@@ -130,8 +146,12 @@ def _dispatch_agentic(
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Call the appropriate evaluate_agentic_* function for the item's test_kind.
+
+    `gate` reaches every kind except those in UNGATED_AGENTIC_TEST_KINDS, which have no K
+    to gate over; the CLI refuses --gate power for a dataset containing one.
 
     Every evaluate_agentic_* function returns an AgenticEvalOutcome (reasoning_steps,
     conversation_id, response_id, detail) on success and attaches the same four attributes
@@ -157,6 +177,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_outputs=_parse_visualization_expected(eo),
             k=k,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )
@@ -168,6 +189,19 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, (dict, list)) else {},
             k=k,
+            gate=gate,
+            agent_id=agent_id,
+            **lf_kw,
+        )
+    elif kind == "agentic_dashboard_skill":
+        return evaluate_agentic_dashboard_skill(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo if isinstance(eo, dict) else {},
+            k=k,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )
@@ -179,6 +213,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, dict) else {},
             k=k,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )
@@ -193,6 +228,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_tool_call=expected_args,
             k=k,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )
@@ -204,6 +240,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, str) else str(eo),
             k=k,
+            gate=gate,
             agent_id=agent_id,
             user_context=item.user_context,
             **lf_kw,
@@ -216,11 +253,24 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, str) else str(eo),
             k=k,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )
     elif kind == "agentic_kda_skill":
         return evaluate_agentic_kda_skill(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo if isinstance(eo, dict) else {},
+            k=k,
+            gate=gate,
+            agent_id=agent_id,
+            **lf_kw,
+        )
+    elif kind == "agentic_what_if":
+        return evaluate_agentic_what_if(
             host=host,
             token=token,
             workspace_id=workspace_id,
@@ -304,6 +354,7 @@ def run_agentic_items(
     on_item_done: Any = None,
     agent_id: str | None = None,
     concurrency: int = 1,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> EvalReport:
     """Run agentic items through evaluate_agentic_* and return an EvalReport.
 
@@ -316,7 +367,7 @@ def run_agentic_items(
     """
     langfuse = make_langfuse_client() if use_langfuse else None
 
-    report = EvalReport(model=model_version)
+    report = EvalReport(model=model_version, gate=normalize_gate(gate))
     total = len(items)
     # Trace linking runs here rather than inside each evaluate_agentic_*, so an item's
     # Langfuse poll overlaps the NEXT item's agent call instead of extending its own
@@ -338,6 +389,9 @@ def run_agentic_items(
             test_kind=item.test_kind,
             question=item.question,
         )
+        # None, not False, for the kinds _dispatch_agentic passes no gate to: ItemReport.passed
+        # then falls back to pass_at_k and gate_passed keeps meaning "a gate ran".
+        gated = item.test_kind not in UNGATED_AGENTIC_TEST_KINDS
         t0 = time.perf_counter()
         try:
             outcome = _dispatch_agentic(
@@ -352,6 +406,7 @@ def run_agentic_items(
                 reasoning_effort,
                 agent_id,
                 submit_trace_link=linker.submit,
+                gate=gate,
             )
             if isinstance(outcome, AgenticEvalOutcome):
                 reasoning_steps = outcome.reasoning_steps
@@ -360,6 +415,8 @@ def run_agentic_items(
                 detail = outcome.detail
             else:
                 reasoning_steps, conversation_id, response_id, detail = outcome, None, None, {}
+            item_report.gate_passed = True if gated else None
+            # Whichever gate decided the item, clearing it means at least one run passed.
             item_report.pass_at_k = True
             item_report.runs = k
             item_report.reasoning_steps = reasoning_steps or []
@@ -369,7 +426,7 @@ def run_agentic_items(
             _apply_timings(item_report, getattr(outcome, "timings", None))
             _apply_run_counts(item_report, outcome)
         except AssertionError as exc:
-            item_report.pass_at_k = False
+            item_report.gate_passed = False if gated else None
             item_report.runs = k
             item_report.reasoning_steps = getattr(exc, "reasoning_steps", None) or []
             item_report.conversation_id = getattr(exc, "conversation_id", None)
@@ -377,6 +434,10 @@ def run_agentic_items(
             item_report.best_detail = getattr(exc, "detail", None) or {}
             _apply_timings(item_report, getattr(exc, "timings", None))
             _apply_run_counts(item_report, exc)
+            # Read off the counts, not off the gate: pass^K fails items where runs did pass,
+            # and reporting those as pass_at_k False would contradict the Langfuse score of
+            # the same name. Kinds that report no count read as 0, i.e. a clean failure.
+            item_report.pass_at_k = item_report.runs_passed > 0
             print(f"[agentic] {item.id} FAIL: {exc}", flush=True)
         except Exception as exc:
             item_report.error = f"{type(exc).__name__}: {exc}"
