@@ -18,6 +18,7 @@ from gooddata_eval.core.agentic.general_question import evaluate_agentic_general
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.kda_skill import evaluate_agentic_kda_skill
 from gooddata_eval.core.agentic.metric_skill import evaluate_agentic_metric_skill
+from gooddata_eval.core.agentic.obfuscation import evaluate_agentic_obfuscation
 from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
 from gooddata_eval.core.agentic.what_if import evaluate_agentic_what_if
@@ -49,6 +50,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_conversation",
         "agentic_kda_skill",
         "agentic_what_if",
+        "agentic_obfuscation",
     }
 )
 
@@ -88,7 +90,9 @@ PARALLEL_SAFE_TEST_KINDS = frozenset(
 # metric skill. agentic_kda_skill is here on suspicion rather than proof: it triggers
 # create_key_driver_analysis with no cleanup, and while the evaluator only ever reads that
 # call's ARGUMENTS -- never a created object id -- whether the platform persists anything is
-# unverified. Move it to the allowlist once someone confirms it does not.
+# unverified. Move it to the allowlist once someone confirms it does not. agentic_obfuscation
+# items may ask for an alert, a scheduled export or a metric; it deletes what it recognises,
+# but that is cleanup, not read-only.
 #
 # agentic_dashboard_skill is absent by default rather than by evidence: gen-ai holds the draft and
 # any chart it authors in conversation state and writes neither until a user saves from the UI, so
@@ -275,6 +279,19 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, dict) else {},
             k=k,
+            agent_id=agent_id,
+            **lf_kw,
+        )
+    elif kind == "agentic_obfuscation":
+        return evaluate_agentic_obfuscation(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo if isinstance(eo, dict) else {},
+            k=k,
+            turns=item.turns,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )

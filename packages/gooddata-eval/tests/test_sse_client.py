@@ -1000,3 +1000,12 @@ def test_ask_puts_the_item_attachment_on_the_wire():
     )
     client.ask(item)
     assert captured["body"]["userContext"] == _ATTACHMENT
+
+
+def test_parse_sse_lines_error_keeps_the_reason_gen_ai_sends_without_a_detail():
+    lines = ['data: {"statusCode": 422, "reason": "DATA_OBFUSCATION_CONTENT_REJECTED"}']
+    with pytest.raises(ChatError) as raised:
+        parse_sse_lines(lines)
+    assert raised.value.status_code == 422
+    assert raised.value.reason == "DATA_OBFUSCATION_CONTENT_REJECTED"
+    assert "DATA_OBFUSCATION_CONTENT_REJECTED" in str(raised.value)

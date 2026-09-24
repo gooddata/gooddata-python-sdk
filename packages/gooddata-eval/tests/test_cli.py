@@ -28,6 +28,12 @@ def test_build_run_config_requires_a_source():
         cli_main.parse_args(["run", "--host", "h", "--workspace", "w"])
 
 
+@pytest.mark.parametrize("runs", ["0", "-1", "two"])
+def test_parse_args_rejects_a_run_count_below_one(runs):
+    with pytest.raises(SystemExit):
+        cli_main.parse_args(["run", "--host", "h", "--workspace", "w", "--dataset", "d", "--runs", runs])
+
+
 def test_parse_args_agent_id_flag():
     args = cli_main.parse_args(["run", "--host", "h", "--workspace", "w", "--dataset", "d", "--agent-id", "agent-1"])
     assert args.agent_id == "agent-1"

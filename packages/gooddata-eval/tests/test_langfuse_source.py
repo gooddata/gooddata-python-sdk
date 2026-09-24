@@ -214,3 +214,36 @@ def test_a_blank_declaration_does_not_hide_a_real_one_behind_it():
     assert _infer_test_kind({"test_kind": "agentic_search"}, "visualization", {"test_kind": "agentic_guardrail"}) == (
         "agentic_search"
     )
+
+
+def test_item_from_raw_list_input_is_a_scripted_conversation():
+    raw = {
+        "id": "lf-3",
+        "datasetName": "agent_obfuscation",
+        "input": ["My email is a@b.invalid, show revenue", "Now by quarter"],
+        "expectedOutput": {"canaries": [{"nonce": "n", "value": "a@b.invalid"}]},
+    }
+    item = _item_from_raw(raw, dataset_name="agent_obfuscation", test_kind="visualization")
+    assert item.question == "My email is a@b.invalid, show revenue"
+    assert item.turns == ["My email is a@b.invalid, show revenue", "Now by quarter"]
+    assert item.test_kind == "agentic_obfuscation"
+
+
+def test_item_from_raw_query_input_keeps_a_json_question_verbatim():
+    # Langfuse parses a string input that is valid JSON into an object, so such a question
+    # travels wrapped in {"query": ...} and must come back as the exact string.
+    question = '{"api_key": "ak_x", "password": 90210731}'
+    raw = {"id": "lf-4", "input": {"query": question}, "expectedOutput": {"canaries": []}}
+    item = _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+    assert item.question == question
+    assert item.turns is None
+
+
+def test_item_from_raw_rejects_an_input_that_lost_its_question():
+    raw = {"id": "lf-5", "input": {"api_key": "ak_x"}, "expectedOutput": {"canaries": []}}
+    with pytest.raises(ValueError, match="Unsupported Langfuse item input shape"):
+        _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+
+
+def test_infer_test_kind_recognises_obfuscation_canaries():
+    assert _infer_test_kind({"canaries": []}, "visualization") == "agentic_obfuscation"

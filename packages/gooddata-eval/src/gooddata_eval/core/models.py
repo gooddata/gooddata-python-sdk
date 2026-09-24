@@ -8,7 +8,7 @@ import json
 import re
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from gooddata_eval.core.timing import PhaseTimings
 
@@ -427,3 +427,16 @@ class DatasetItem(BaseModel):
     # that schema (a discriminated union of view/widget descriptors), so re-modelling it here
     # would only create a second copy to keep in sync.
     user_context: dict[str, Any] | None = None
+    # A scripted multi-turn conversation, sent turn by turn; ``question`` is its first turn.
+    # Only used by the `agentic_obfuscation` test kind; ignored by all others.
+    turns: list[str] | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _split_turns(cls, data: Any) -> Any:
+        """Accept a list of turns as ``question``, the shape a multi-turn fixture file carries."""
+        if isinstance(data, dict):
+            question = data.get("question")
+            if isinstance(question, list) and question and all(isinstance(turn, str) for turn in question):
+                return {**data, "question": question[0], "turns": data.get("turns") or list(question)}
+        return data

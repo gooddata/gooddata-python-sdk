@@ -72,11 +72,15 @@ class ChatError(RuntimeError):
         status_code: int | None = None,
         detail: str | None = None,
         partial_result: ChatResult | None = None,
+        reason: str | None = None,
     ) -> None:
         super().__init__(message)
         self.status_code = status_code
         self.detail = detail
         self.partial_result = partial_result
+        # gen-ai's machine-readable cause, e.g. DATA_OBFUSCATION_CONTENT_REJECTED; its data
+        # obfuscation errors carry this and no ``detail``.
+        self.reason = reason
 
 
 class TransientChatError(ChatError):
@@ -382,12 +386,15 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
         if "statusCode" in event_data:
             code = event_data.get("statusCode")
             detail = event_data.get("detail")
-            message = f"SSE error {code}: {detail}"
+            reason = event_data.get("reason")
+            message = f"SSE error {code}: {detail if detail is not None else reason}"
             if code in _RETRYABLE_STATUS_CODES:
                 raise TransientChatError(
-                    message, status_code=code, detail=detail, partial_result=_build_chat_result(acc)
+                    message, status_code=code, detail=detail, partial_result=_build_chat_result(acc), reason=reason
                 )
-            raise ChatError(message, status_code=code, detail=detail, partial_result=_build_chat_result(acc))
+            raise ChatError(
+                message, status_code=code, detail=detail, partial_result=_build_chat_result(acc), reason=reason
+            )
         if event_data.get("responseId") and not acc.response_id:
             acc.response_id = event_data["responseId"]
         item = event_data.get("item")

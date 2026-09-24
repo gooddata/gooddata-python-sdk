@@ -171,3 +171,24 @@ def test_a_visualization_without_an_id_still_parses():
     """The agent sometimes omits `id`; nothing scores on it, so it must not error the item."""
     viz = CreatedVisualization.model_validate({"type": "bar_chart", "query": {"fields": {"m": "metric/x"}}})
     assert viz.id is None
+
+
+def test_dataset_item_accepts_a_list_of_turns_as_question():
+    item = DatasetItem.model_validate(
+        {
+            "id": "1",
+            "dataset_name": "d",
+            "test_kind": "agentic_obfuscation",
+            "question": ["a", "b"],
+            "expected_output": {},
+        }
+    )
+    assert item.question == "a"
+    assert item.turns == ["a", "b"]
+
+
+def test_dataset_item_single_question_has_no_turns():
+    item = DatasetItem.model_validate(
+        {"id": "1", "dataset_name": "d", "test_kind": "agentic_guardrail", "question": "q", "expected_output": "x"}
+    )
+    assert item.turns is None

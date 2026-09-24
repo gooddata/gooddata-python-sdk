@@ -136,7 +136,7 @@ gd-eval run \
 | `--reasoning-effort LEVEL` | server default | `LOW`, `MEDIUM` or `HIGH`, sent as `options.reasoningEffort` on every chat message. Requires the `enableGenAiReasoningEffort` feature flag on the target organization — without it the server ignores the value. Applies to chat items only; `dashboard_summary` items go through the summary endpoint, which has no such option. |
 
 **Concurrency and workspace safety.** Agentic kinds that create workspace objects
-(`agentic_metric_skill`, `agentic_alert_skill`, `agentic_conversation`, `agentic_kda_skill`) always run one at a
+(`agentic_metric_skill`, `agentic_alert_skill`, `agentic_conversation`, `agentic_kda_skill`, `agentic_obfuscation`) always run one at a
 time whatever `--concurrency` says — a metric or alert created and dropped mid-run would otherwise be visible to
 another item reading the same catalog. **That protection is for the agentic kinds only:** the single-turn
 `metric_skill` and `alert_skill` kinds are still fanned out and the agent performs the same server-side writes on
@@ -535,7 +535,8 @@ A dataset is a folder of `.json` files, one per question:
 ```
 
 Supported `test_kind` values: `visualization`, `metric_skill`, `alert_skill`,
-`search_tool`, `general_question`, `guardrail`, `dashboard_summary`.
+`search_tool`, `general_question`, `guardrail`, `dashboard_summary`, and the agentic kinds
+(`agentic_obfuscation` is described below).
 
 ### `dashboard_summary` items
 
@@ -574,6 +575,53 @@ The `expected_output` rubric:
 Each criterion is scored independently by the LLM judge, so `quality_score`
 is the fraction of satisfied criteria.
 
+### `agentic_obfuscation` items
+
+gen-ai masks sensitive values out of the conversation it stores and the trace it exports to
+Langfuse, while the model and the user's stream keep what was typed. So these items are not
+graded on the answer: they plant synthetic *canaries* in one or more user turns, then read back
+the stored conversation (`GET …/chat/conversations/{id}/items`) and every Langfuse trace of the
+session, and decide by exact substring. No LLM decides whether a value leaked.
+
+```json
+{
+  "id": "obfuscation-001",
+  "dataset_name": "agent_obfuscation",
+  "test_kind": "agentic_obfuscation",
+  "question": ["My email is qa.canary5a1e@example.invalid. Show Total Sales by month.", "Now by quarter instead."],
+  "expected_output": {
+    "status": "enforced",
+    "canaries": [
+      {"nonce": "canary5a1e", "value": "qa.canary5a1e@example.invalid", "class": "EMAIL",
+       "absent_from": ["conversation_db", "langfuse_trace"], "mask_marker_present": "[EMAIL]"}
+    ]
+  }
+}
+```
+
+- `question` is a string, or a list of turns sent in order to one conversation (from Langfuse, an
+  input list). A question that is itself a JSON document must be stored in Langfuse as
+  `{"query": "<the JSON>"}`: Langfuse parses a JSON-looking string input into an object.
+- A canary lists the sinks it must be `absent_from` and the sinks it must stay `present_in`. With
+  `status: known_limitation` a `present_in` value is a known gap: the item fails once it closes, so
+  the fixture is flipped deliberately. With `status: enforced` it guards a value that is not
+  sensitive: masking it fails the item as `OVER-MASKED`. `record_only_paths` names sink paths
+  reported but not gated.
+- `expected_turn_rejected: {"status_code": 422, "reason": "DATA_OBFUSCATION_CONTENT_REJECTED"}`
+  expects the first turn to be refused.
+- `observe` (`automation_match`, `metric_title`, `stream_markers`) reports what the chat created
+  or streamed, never gates it, and deletes the alert, export or metric it recognises.
+- Every turn needs a non-sensitive fragment of 12+ word characters, the *anchor*: a sink read back
+  without every anchor is reported as blind, never as clean. `anchors` overrides the derived ones.
+- Langfuse is polled for the session's traces for 60 s (`GD_EVAL_OBFUSCATION_LANGFUSE_TIMEOUT_SEC`).
+  When none arrives the run fails with `TRACE_NOT_FOUND`, the report's `trace_found` is false and
+  `obfuscation_trace_found` is 0 -- a missing trace points at the export, never counts as a pass.
+
+A leak in any run fails the item whatever `--gate` says. Before the first item of a workspace a
+preflight probe checks that both legs mask and both read-backs work, and stops every item of that
+workspace when they do not. The kind needs the `LANGFUSE_*` credentials of the Langfuse project
+the environment exports to: the traces are read, not only scored.
+
 ## Supported test kinds
 
 | test_kind | What the agent must produce | Extra required |
@@ -585,6 +633,7 @@ is the fraction of satisfied criteria.
 | `general_question` | Text answer judged by LLM | `[llm-judge]` |
 | `guardrail` | Refusal/redirect (visualization response auto-fails) | `[llm-judge]` |
 | `dashboard_summary` | Dashboard summary (via `/summary` endpoint) scored against a rubric by LLM | `[llm-judge]` |
+| `agentic_obfuscation` | Canaries masked in the stored conversation and the Langfuse trace (exact match) | `LANGFUSE_*` |
 
 ## Optional extras
 
@@ -625,6 +674,9 @@ the item's own root span. On the agentic path each score is mirrored onto the ag
 | `quality_score` | Fraction of strict check flags that are `True` (0.0–1.0). Shown in CLI as a percentage. |
 | `value_score` | Weighted blend: 0.6 × quality + 0.2 × speed (speed = max(0, 1 − latency/60s)). |
 | `latency_s` | Average per-run latency in seconds. |
+| `obfuscation_pass` / `obfuscation_no_leak` | `agentic_obfuscation`: the run's verdict, and whether no canary leaked. The comment names what failed, with canary values replaced by their class. |
+| `obfuscation_trace_found` | `agentic_obfuscation`: 0 when Langfuse held no trace for the conversation within the wait (`TRACE_NOT_FOUND`). |
+| `obfuscation_record_only_hit` | `agentic_obfuscation`: 1 when a record-only path held a canary; the comment carries every record-only observation. |
 | `provider_type` | Model vendor + gateway label (e.g. `ANTHROPIC`, `BEDROCK/ANTHROPIC`, `AZURE/OPENAI`). Stored in Langfuse trace metadata and tags. |
 
 Score names carry no K; K and the gate are on the dataset-run metadata as `eval_k` and `eval_gate`.

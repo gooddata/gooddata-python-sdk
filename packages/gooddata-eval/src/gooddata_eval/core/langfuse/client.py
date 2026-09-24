@@ -9,7 +9,7 @@ from __future__ import annotations
 import threading
 import time
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import httpx
@@ -25,6 +25,19 @@ from gooddata_eval.core.langfuse.observations import TraceSummary
 
 _SCORES_PATH = "/api/public/scores"
 _OTLP_PATH = "/api/public/otel/v1/traces"
+# Trace reads get their own timeout: a session-filtered listing and a full observation
+# payload both run well past the default, which is sized for score writes.
+_TRACE_READ_TIMEOUT = 60.0
+# Pages of observation rows read at most per trace read; a conversation holds a handful of
+# traces of a few dozen observations each.
+_OBSERVATION_PAGE_CAP = 20
+_OBSERVATION_PAGE_SIZE = 1000
+# The v2 observations endpoint cuts every metadata value at this length unless its key is
+# named in ``expandMetadata``.
+_METADATA_CUT = 200
+# How far back a trace read looks. The v2 endpoint wants a bounded window, and the
+# conversations read back are minutes old.
+_TRACE_READ_WINDOW = timedelta(days=1)
 
 _MAX_SCORE_ATTEMPTS = 3
 _DEFAULT_RETRY_DELAY = 0.5
@@ -197,6 +210,69 @@ class HttpxLangfuseClient:
         return observations.list_traces_in_window(
             self._http, from_time=from_time, to_time=to_time, limit=limit, session_id=session_id
         )
+
+    def _get_json(self, path: str, params: dict[str, Any] | None = None, *, timeout: float | None = None) -> Any:
+        """GET with the score path's retry on throttling and server errors. Raises on any other failure."""
+        kwargs: dict[str, Any] = {"params": params} if timeout is None else {"params": params, "timeout": timeout}
+        resp = self._http.get(path, **kwargs)
+        for _retry in range(_MAX_SCORE_ATTEMPTS - 1):
+            if not _is_retryable(resp):
+                break
+            time.sleep(_retry_delay(resp))
+            resp = self._http.get(path, **kwargs)
+        resp.raise_for_status()
+        return resp.json()
+
+    def _observation_rows(self, params: dict[str, Any]) -> list[dict[str, Any]]:
+        """Every observation row matching ``params`` over a bounded window, all cursor pages."""
+        now = datetime.now(timezone.utc)
+        base = {
+            "fromStartTime": (now - _TRACE_READ_WINDOW).isoformat(),
+            "toStartTime": (now + timedelta(minutes=5)).isoformat(),
+            "limit": _OBSERVATION_PAGE_SIZE,
+            **params,
+        }
+        rows: list[dict[str, Any]] = []
+        cursor: str | None = None
+        for _page in range(_OBSERVATION_PAGE_CAP):
+            query = base if cursor is None else {**base, "cursor": cursor}
+            body = self._get_json(observations.OBSERVATIONS_PATH, query, timeout=_TRACE_READ_TIMEOUT)
+            rows.extend(body.get("data") or [])
+            cursor = (body.get("meta") or {}).get("cursor")
+            if not cursor:
+                return rows
+        raise LookupError(f"more than {_OBSERVATION_PAGE_CAP} pages of observations for {params}")
+
+    def session_trace_ids(self, session_id: str) -> list[str]:
+        """Ids of every trace in one session, oldest first. gen-ai sets sessionId = conversationId."""
+        first_seen: dict[str, str] = {}
+        for row in self._observation_rows({"sessionId": session_id, "fields": "core"}):
+            trace_id = row.get("traceId")
+            if trace_id:
+                start = row.get("startTime") or ""
+                first_seen[trace_id] = min(first_seen.get(trace_id, start), start)
+        return sorted(first_seen, key=lambda trace_id: first_seen[trace_id])
+
+    def get_trace(self, trace_id: str) -> dict[str, Any]:
+        """One trace as ``{"id", "observations"}``, every observation with its input, output and metadata.
+
+        A metadata value the endpoint cut is read again in full: a canary past the cut would
+        otherwise pass unseen.
+        """
+        params = {"traceId": trace_id, "fields": "core,basic,io,metadata"}
+        rows = self._observation_rows(params)
+        cut = sorted(
+            {
+                key
+                for row in rows
+                for key, value in (row.get("metadata") or {}).items()
+                if isinstance(value, str) and len(value) >= _METADATA_CUT
+            }
+        )
+        if cut:
+            rows = self._observation_rows({**params, "expandMetadata": ",".join(cut)})
+        rows.sort(key=lambda row: row.get("startTime") or "")
+        return {"id": trace_id, "observations": rows}
 
     def flush(self) -> None:
         pass  # no client-side batching

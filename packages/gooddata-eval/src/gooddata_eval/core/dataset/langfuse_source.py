@@ -30,12 +30,26 @@ def _make_client() -> httpx.Client:
 
 
 def _question_from_input(raw_input: Any) -> str:
+    return _question_and_turns(raw_input)[0]
+
+
+def _question_and_turns(raw_input: Any) -> tuple[str, list[str] | None]:
+    """The item's question, plus its turns when the input is a scripted conversation.
+
+    A list of strings is a multi-turn conversation whose first turn is the question. A
+    ``{"query": ...}`` object is accepted beside ``{"question": ...}``: Langfuse parses a
+    string input that happens to be valid JSON into an object, so a question that IS a JSON
+    document -- a pasted config -- can only survive the round trip wrapped.
+    """
     if isinstance(raw_input, str):
-        return raw_input
+        return raw_input, None
+    if isinstance(raw_input, list) and raw_input and all(isinstance(turn, str) for turn in raw_input):
+        return raw_input[0], list(raw_input)
     if isinstance(raw_input, dict):
-        question = raw_input.get("question")
-        if isinstance(question, str):
-            return question
+        for key in ("question", "query"):
+            question = raw_input.get(key)
+            if isinstance(question, str):
+                return question, None
     raise ValueError(f"Unsupported Langfuse item input shape: {raw_input!r}")
 
 
@@ -99,6 +113,9 @@ def _infer_test_kind(expected_output: object, default: str, metadata: object = N
     # {"expected_outputs": [...]} → experimental multi-candidate agentic vis
     if isinstance(eo.get("expected_outputs"), list):
         return "agentic_visualization"
+    # {"canaries": [...]} → data-obfuscation leak checks
+    if isinstance(eo.get("canaries"), list):
+        return "agentic_obfuscation"
     return default
 
 
@@ -107,11 +124,13 @@ def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetIt
     # REST API returns camelCase: expectedOutput, not expected_output
     expected_output = raw.get("expectedOutput") or raw.get("expected_output")
     resolved_kind = _infer_test_kind(expected_output, test_kind, raw.get("metadata"))
+    question, turns = _question_and_turns(raw.get("input"))
     return DatasetItem(
         id=str(raw["id"]),
         dataset_name=raw.get("datasetName") or dataset_name,
         test_kind=resolved_kind,
-        question=_question_from_input(raw.get("input")),
+        question=question,
+        turns=turns,
         expected_output=expected_output,
         summary_input=_summary_input_from_raw(raw, expected_output),
         user_context=_user_context_from_raw(raw),

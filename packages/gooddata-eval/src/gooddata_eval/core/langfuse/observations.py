@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     import httpx
 
-_OBSERVATIONS_PATH = "/api/public/v2/observations"
+OBSERVATIONS_PATH = "/api/public/v2/observations"
 # Everything a TraceSummary needs: core (ids, times, parent), basic (sessionId), usage
 # (totalCost), metrics (latency), metadata.
 _FIELDS = "core,basic,usage,metrics,metadata"
@@ -113,7 +113,7 @@ def list_traces_in_window(
     summaries: list[TraceSummary] = []
     cursor: str | None = None
     for _page in range(max_pages):
-        resp = http.get(_OBSERVATIONS_PATH, params=params if cursor is None else {**params, "cursor": cursor})
+        resp = http.get(OBSERVATIONS_PATH, params=params if cursor is None else {**params, "cursor": cursor})
         resp.raise_for_status()
         body = resp.json()
         rows.extend(body.get("data") or [])

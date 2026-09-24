@@ -66,6 +66,17 @@ class _RoutingBackend:
                 backend.close()
 
 
+def _positive_int(value: str) -> int:
+    """An argparse type for counts that must be at least 1."""
+    try:
+        number = int(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(f"not an integer: {value!r}") from exc
+    if number < 1:
+        raise argparse.ArgumentTypeError(f"must be at least 1, got {number}")
+    return number
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="gd-eval", description="Evaluate the GoodData AI agent.")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -102,7 +113,7 @@ def _build_parser() -> argparse.ArgumentParser:
             "Default: workspace's current active model."
         ),
     )
-    run.add_argument("--runs", type=int, default=2, help="Independent runs per item. Default 2.")
+    run.add_argument("--runs", type=_positive_int, default=2, help="Independent runs per item. Default 2.")
     run.add_argument(
         "--gate",
         choices=get_args(EvalGate),

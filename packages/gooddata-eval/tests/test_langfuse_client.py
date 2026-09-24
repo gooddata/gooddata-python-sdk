@@ -377,3 +377,96 @@ def test_a_dataset_run_item_for_an_unknown_item_raises(make_client):
     client = make_client(lambda request: httpx.Response(404, json={}))
     with pytest.raises(LookupError):
         client.api.dataset_run_items.create(run_name="run", dataset_item_id="local", trace_id="t-1")
+
+
+def test_session_trace_ids_come_from_v2_observations_by_session_oldest_first(make_client):
+    seen: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        rows = [
+            {"id": "o3", "traceId": "t2", "startTime": "2026-09-23T10:00:02Z"},
+            {"id": "o1", "traceId": "t1", "startTime": "2026-09-23T10:00:01Z"},
+            {"id": "o2", "traceId": "t1", "startTime": "2026-09-23T10:00:03Z"},
+        ]
+        return httpx.Response(200, json={"data": rows, "meta": {"cursor": None}})
+
+    assert make_client(handler).session_trace_ids("conv-1") == ["t1", "t2"]
+    params = seen[0].url.params
+    assert seen[0].url.path == "/api/public/v2/observations"
+    assert params["sessionId"] == "conv-1"
+    assert params["fromStartTime"] and params["toStartTime"], "the v2 endpoint is read over a bounded window"
+
+
+def test_observation_reads_follow_the_cursor(make_client):
+    pages = {
+        "": ([{"id": "o1", "traceId": "t1", "startTime": "1"}], "c2"),
+        "c2": ([{"id": "o2", "traceId": "t2", "startTime": "2"}], None),
+    }
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        rows, cursor = pages[request.url.params.get("cursor", "")]
+        return httpx.Response(200, json={"data": rows, "meta": {"cursor": cursor}})
+
+    assert make_client(handler).session_trace_ids("conv-1") == ["t1", "t2"]
+
+
+def test_get_trace_returns_the_trace_observations_with_their_io(make_client):
+    seen: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        rows = [
+            {"id": "o2", "traceId": "t1", "startTime": "2", "input": "[EMAIL]", "metadata": {}},
+            {"id": "o1", "traceId": "t1", "startTime": "1", "input": "Can you check", "metadata": {}},
+        ]
+        return httpx.Response(200, json={"data": rows, "meta": {}})
+
+    trace = make_client(handler).get_trace("t1")
+    assert trace["id"] == "t1"
+    assert [o["id"] for o in trace["observations"]] == ["o1", "o2"]
+    assert seen[0].url.params["traceId"] == "t1"
+    assert "io" in seen[0].url.params["fields"].split(",")
+
+
+def test_get_trace_reads_a_cut_metadata_value_again_in_full(make_client):
+    seen: list[httpx.Request] = []
+    cut = "x" * client_module._METADATA_CUT
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        full = "expandMetadata" in request.url.params
+        rows = [{"id": "o1", "traceId": "t1", "metadata": {"tool": cut + ("canary" if full else ""), "short": "s"}}]
+        return httpx.Response(200, json={"data": rows, "meta": {}})
+
+    trace = make_client(handler).get_trace("t1")
+    assert seen[-1].url.params["expandMetadata"] == "tool"
+    assert trace["observations"][0]["metadata"]["tool"].endswith("canary")
+
+
+def test_get_trace_retries_a_throttled_read(make_client, monkeypatch):
+    monkeypatch.setattr(client_module.time, "sleep", lambda _s: None)
+    answers = iter(
+        [httpx.Response(429), httpx.Response(200, json={"data": [{"id": "o1", "traceId": "t1"}], "meta": {}})]
+    )
+
+    trace = make_client(lambda request: next(answers)).get_trace("t1")
+    assert [o["id"] for o in trace["observations"]] == ["o1"]
+
+
+def test_get_trace_raises_on_a_client_error(make_client):
+    with pytest.raises(httpx.HTTPStatusError):
+        make_client(lambda request: httpx.Response(404)).get_trace("missing")
+
+
+def test_trace_reads_wait_longer_than_the_client_default(make_client):
+    seen: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        return httpx.Response(200, json={"data": [], "meta": {}})
+
+    client = make_client(handler)
+    client.get_trace("t1")
+    client.session_trace_ids("conv-1")
+    assert [r.extensions["timeout"]["read"] for r in seen] == [client_module._TRACE_READ_TIMEOUT] * 2

@@ -91,6 +91,7 @@ _ALL_AGENTIC_KIND_CASES = [
     ("agentic_kda_skill", {"Measure": {"type": "metric", "id": "revenue"}}, "evaluate_agentic_kda_skill"),
     ("agentic_conversation", {"fixture": _MIN_CONVERSATION_FIXTURE}, "evaluate_agentic_conversation"),
     ("agentic_what_if", {"metric_id": "spend"}, "evaluate_agentic_what_if"),
+    ("agentic_obfuscation", {"canaries": [{"nonce": "n1", "value": "a@b.invalid"}]}, "evaluate_agentic_obfuscation"),
 ]
 
 
