@@ -44,3 +44,6 @@ packages/gooddata-sdk/tests/export/exports/default/
 /packages/gooddata-eval/datasets/
 # MCP tool logs, written to a relative path by whatever is started from the repo root
 /logs/
+
+# editor swap files
+*.swp
