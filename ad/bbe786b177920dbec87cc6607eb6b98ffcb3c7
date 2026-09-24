@@ -1,0 +1,318 @@
+gooddata-api-client/docs/JsonApiComputedAttributeIn.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-10
+  s_52c458a94e699b::t_e6100c94e094ac 11-15
+gooddata-api-client/docs/JsonApiComputedAttributeInDocument.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-7
+  s_52c458a94e699b::t_d4d538ff8fd89e 8-12
+gooddata-api-client/gooddata_api_client/model/dependent_entities_node.py
+  s_52c458a94e699b::t_013ad2e2ea5828 68
+gooddata-api-client/docs/ActionsApi.md
+  s_52c458a94e699b::t_6873f874fd76a7 1989
+gooddata-api-client/gooddata_api_client/model/afm_object_identifier_label_identifier.py
+  s_52c458a94e699b::t_d2d5e50c7579ef 61,115,120,206,211
+schemas/gooddata-metadata-client.json
+  s_52c458a94e699b::t_f082c8e08f0bd1 304,374-375,432-433,3303-3309,3806-3970,7135,7258,7908,11815-11816,11820-11859,11862-11899,11903-11905,11917,11919,11924,11930,11933,11941-11942,11949,11960-11961,11965-11982,11984-11985,11988-12019,12021-12059,12064-12081,12085,12095,12097-12110,12112-12116,12121-12833,18579,18631,18753,18809,19019,19071,19185,19237,20757-20767,20872,20899,23588-23598,23722-23724,25160-25170,25275,25302,30633-30634,42034-42526,42529,42533,42541-42558,42562,42571-42574,42591,42596,42603,42605,42607-42614,42616-42618,42621-42627,42631-42650,42657,42662,42669,42673,42678,42685,42687,42689,42691-42696,42698-42700,42707,42715-42717,42719-42720,42722-42732,42739,42744,42755,42760,42767,42769,42771-42778,42781,42783,42785-42807,42810,42819,42827-42832,42850-42858,42861,42870,42888,42893,42900,42902,42904,42912-42914,42916-42995,42997-43021,43024,43032-43037,43046-43054,43057,43066,43079,43083,43088,43095,43097,43099,43102,43104,43107-43109,43111,43114-43134,43138,43147,43155-43166,43175-43192,43195,43205-43207,43224,43229,43236,43238,43240,43249-43250,43253-43255,43262,43270-43281,43289-43312,43319,43324,43331,43335,43340,43347,43349,43351,43356,43359-43363,43366-43371,43375-43376,43378-43384,43389-43390,43393-43395,43402,43406,43414,43419,43426,43428,43430,43433,43435,43440-43478,43480,43491-43493,43500,43509,43517-43522,43524-43528,43548,43557,43559,43576,43581,43588,43590,43592,43600-43602,43613-43622,43624,43630-43634,43637-43657,43664-43669,43680,43685,43692,43694,43696,43699,43701,43704-43706,43726,43735,43743-43748,43750-43754,43764-43778,43784,43789,43796,43798,43800,43803,43805,43810,43812,43848,43857,43888,43915,43920,43927,43929,43931,43941,43953,43962,43975,44000,44005,44016,44021,44028,44030,44032,44042,44044,44095,44100,44109,44111,44121,44123,44147,44149,44151,44161,44190,44199,44221,44247,44252,44259,44261,44263,44273,44302,44311,44327,44332,44343,44348,44355,44357,44359,44369,44398,44407,44423-44433,44439,44444,44451,44458,44460,44463-44467,44477-44500,44503,44511-44515,44524-44541,44544,44554,44567,44571,44576,44583,44585,44587,44590,44592,44597,44599,44650,44655,44664,44666,44676,44678,44698,44707,44715-44719,44765,44770,44777,44779,44781,44791,44811,44820,44828-44832,44846,44851,44862,44867,44874,44876,44878,44883,44886-44890,44902-44903,44905-44911,44916-44917,44920-44922,44929,44933,44941,44946,44953,44955,44957,44960,44962,44967,44969,44996,45005,45013-45023,45079,45084,45091,45093,45095,45103-45210,45213,45215,45266,45271,45280,45282,45292-45330,45332,45352,45361,45369-45379,45425,45430,45437,45439,45441,45451,45471,45480,45488-45498,45512,45517,45528,45533,45540,45542,45544,45549,45552-45554,45565-45574,45576,45582-45586,45589-45608,45615-45620,45631,45636,45643,45647,45650,45652,45657,45659,45686,45695,45704-45710,45713,45769,45774,45781,45783,45785,45795,45807,45816-45822,45825,45861,45866,45877,45882,45889,45891,45893,45898,45903,45905,45956,45961,45970,45972,45982,45984,46008,46010,46012,46017,46022,46042,46051,46060-46066,46069,46115,46120,46127,46129,46131,46141,46161,46170,46179-46185,46188,46202,46207,46218,46223,46230,46232,46234,46239,46244,46264,46273,46282-46288,46291,46305,46310,46321,46326,46333,46335,46337,46342
+gooddata-api-client/docs/DeclarativeComputedAttribute.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-30
+gooddata-api-client/gooddata_api_client/model/json_api_visualization_object_out.py
+  s_52c458a94e699b::t_e6a45d189f4111 35,38,107,170,266
+gooddata-api-client/gooddata_api_client/model/declarative_analytics_layer.py
+  s_52c458a94e699b::t_6f1b2cc03ba09e 37,48,114,133,187,283
+gooddata-api-client/docs/MetricsApi.md
+  s_52c458a94e699b::t_e25fef4cb940c6 47,402,606
+gooddata-api-client/gooddata_api_client/model/json_api_metric_in_attributes.py
+  s_52c458a94e699b::t_a0e7b988284eae 34-35,97,132,227
+gooddata-api-client/docs/JsonApiComputedAttributePatch.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-10
+  s_52c458a94e699b::t_a9cd056aa672a1 11-15
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_patch.py
+  s_52c458a94e699b::t_ee166557cb3e02 34-287
+  s_52c458a94e699b::t_b340e5f4e9bf22 1-33,288-298
+gooddata-api-client/gooddata_api_client/model/json_api_user_data_filter_out_relationships.py
+  s_52c458a94e699b::t_3ccfafc25d440a 39-40,48-49,108,110,125,177,179,271,273
+gooddata-api-client/gooddata_api_client/model/json_api_visualization_object_out_with_links.py
+  s_52c458a94e699b::t_f3255c8269c121 35,41,113,174,284
+gooddata-api-client/gooddata_api_client/api/computed_attribute_controller_api.py
+  s_52c458a94e699b::t_8a7903319ad3f3 1-1309
+gooddata-api-client/gooddata_api_client/model/json_api_metric_out_list.py
+  s_52c458a94e699b::t_231236e8a509a4 35,39,102,163,255
+gooddata-api-client/docs/JsonApiComputedAttributePatchDocument.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-7
+  s_52c458a94e699b::t_bc327bd309ff88 8-12
+gooddata-api-client/docs/ComputationApi.md
+  s_52c458a94e699b::t_6873f874fd76a7 415
+gooddata-api-client/docs/JsonApiVisualizationObjectOutDocument.md
+  s_52c458a94e699b::t_741136fffad0c7 8
+gooddata-api-client/docs/JsonApiComputedAttributeOutRelationshipsFacts.md
+  s_52c458a94e699b::t_6873f874fd76a7 1
+gooddata-api-client/docs/JsonApiVisualizationObjectOutList.md
+  s_52c458a94e699b::t_90fb31ce2869b8 9
+gooddata-api-client/docs/JsonApiComputedAttributeInAttributes.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-22
+gooddata-api-client/docs/JsonApiComputedAttributeOutWithLinks.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-11
+  s_52c458a94e699b::t_0bc20aa59b6a67 12-17
+gooddata-api-client/docs/ComputedAttributesApi.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-690
+gooddata-api-client/docs/JsonApiMetricOutAttributes.md
+  s_52c458a94e699b::t_6873f874fd76a7 7
+schemas/gooddata-api-client.json
+  s_52c458a94e699b::t_b01f1dafd49821 506,576-577,634-635,729-730,5831-5837,6334-6498,9716,10219,11776,15852-15853,15857-15896,15899-15936,15940-15942,15954,15956,15961,15967,15970,15978-15979,15986,15997-15998,16002-16019,16021-16022,16025-16056,16058-16096,16101-16118,16122,16132,16134-16147,16149-16153,16158-16869,22780,22832,22954,23010,23220,23272,23386,23438,25098-25108,25213,25240,27959-27969,28093-28095,29531-29541,29646,29673,37134-37135,39266-39267,55831-56323,56326,56330,56338-56355,56359,56368-56371,56388,56393,56400,56402,56404-56411,56413-56415,56418-56424,56428-56447,56454,56459,56466,56470,56475,56482,56484,56486,56488-56493,56495-56497,56504,56512-56514,56516-56517,56519-56529,56536,56541,56552,56557,56564,56566,56568-56575,56578,56580,56582-56604,56607,56616,56624-56629,56647-56655,56658,56667,56685,56690,56697,56699,56701,56709-56711,56713-56792,56794-56818,56821,56829-56834,56843-56851,56854,56863,56876,56880,56885,56892,56894,56896,56899,56901,56904-56906,56908,56911-56931,56935,56944,56952-56963,56972-56989,56992,57002-57004,57021,57026,57033,57035,57037,57046-57047,57050-57052,57059,57067-57078,57086-57109,57116,57121,57128,57132,57137,57144,57146,57148,57153,57156-57160,57163-57168,57172-57173,57175-57181,57186-57187,57190-57192,57199,57203,57211,57216,57223,57225,57227,57230,57232,57237-57275,57277,57288-57290,57297,57306,57314-57319,57321-57325,57345,57354,57356,57373,57378,57385,57387,57389,57397-57399,57410-57419,57421,57427-57431,57434-57454,57461-57466,57477,57482,57489,57491,57493,57496,57498,57501-57503,57523,57532,57540-57545,57547-57551,57561-57575,57581,57586,57593,57595,57597,57600,57602,57607,57609,57645,57654,57685,57712,57717,57724,57726,57728,57738,57750,57759,57772,57797,57802,57813,57818,57825,57827,57829,57839,57841,57892,57897,57906,57908,57918,57920,57944,57946,57948,57958,57987,57996,58018,58044,58049,58056,58058,58060,58070,58099,58108,58124,58129,58140,58145,58152,58154,58156,58166,58195,58204,58220-58230,58236,58241,58248,58255,58257,58260-58264,58274-58297,58300,58308-58312,58321-58338,58341,58351,58364,58368,58373,58380,58382,58384,58387,58389,58394,58396,58447,58452,58461,58463,58473,58475,58495,58504,58512-58516,58562,58567,58574,58576,58578,58588,58608,58617,58625-58629,58643,58648,58659,58664,58671,58673,58675,58680,58683-58687,58699-58700,58702-58708,58713-58714,58717-58719,58726,58730,58738,58743,58750,58752,58754,58757,58759,58764,58766,58793,58802,58810-58820,58876,58881,58888,58890,58892,58900-59007,59010,59012,59063,59068,59077,59079,59089-59127,59129,59149,59158,59166-59176,59222,59227,59234,59236,59238,59248,59268,59277,59285-59295,59309,59314,59325,59330,59337,59339,59341,59346,59349-59351,59362-59371,59373,59379-59383,59386-59405,59412-59417,59428,59433,59440,59444,59447,59449,59454,59456,59483,59492,59501-59507,59510,59566,59571,59578,59580,59582,59592,59604,59613-59619,59622,59658,59663,59674,59679,59686,59688,59690,59695,59700,59702,59753,59758,59767,59769,59779,59781,59805,59807,59809,59814,59819,59839,59848,59857-59863,59866,59912,59917,59924,59926,59928,59938,59958,59967,59976-59982,59985,59999,60004,60015,60020,60027,60029,60031,60036,60041,60061,60070,60079-60085,60088,60102,60107,60118,60123,60130,60132,60134,60139
+gooddata-api-client/docs/JsonApiMetricOut.md
+  s_52c458a94e699b::t_6873f874fd76a7 12
+gooddata-api-client/docs/DeclarativeAnalyticsLayer.md
+  s_52c458a94e699b::t_6873f874fd76a7 10
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_out_attributes.py
+  s_52c458a94e699b::t_9dca7fb4e9e960 33-370
+  s_52c458a94e699b::t_1b50042f5dccc3 1-32,371-381
+gooddata-api-client/docs/JsonApiMetricOutWithLinks.md
+  s_52c458a94e699b::t_6873f874fd76a7 11
+gooddata-api-client/gooddata_api_client/model/afm_object_identifier_identifier.py
+  s_52c458a94e699b::t_24d294f3c18f5b 62
+gooddata-api-client/gooddata_api_client/models/__init__.py
+  s_52c458a94e699b::t_2204026cd77708 244-245,571-590
+gooddata-api-client/docs/JsonApiComputedAttributeOutIncludes.md
+  s_52c458a94e699b::t_6873f874fd76a7 1
+gooddata-api-client/gooddata_api_client/api/computed_attributes_api.py
+  s_52c458a94e699b::t_efc80fb0a80f8b 1-1309
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_out_document.py
+  s_52c458a94e699b::t_af676d6a6a3009 34-249
+  s_52c458a94e699b::t_fef2b90ec14b0a 1-33,250-290
+packages/gooddata-sdk/tests/catalog/test_catalog_workspace.py
+  s_52c458a94e699b::t_aff30f12f4b973 901-909
+  s_52c458a94e699b::t_35d9c577c28af2 12,866-881,886,888-897,900,910-919,921-937,940-943,951
+  s_52c458a94e699b::t_6fe34648533c89 882-885,887,898-899,920,938-939,944-950,952-954
+  s_52c458a94e699b::t_c2f82c1b9b7632 955-956
+gooddata-api-client/docs/JsonApiMetricOutList.md
+  s_52c458a94e699b::t_6873f874fd76a7 9
+gooddata-api-client/docs/ValidateByItem.md
+  s_52c458a94e699b::t_e5a6d029edf10c 8
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_out_with_links.py
+  s_52c458a94e699b::t_ca3353d514957e 35-357
+  s_52c458a94e699b::t_f999f87d918334 1-34,358-361
+gooddata-api-client/gooddata_api_client/model/json_api_analytical_dashboard_out_includes.py
+  s_52c458a94e699b::t_b1437b5b653f4e 36,49,124,185,294
+gooddata-api-client/gooddata_api_client/model/validate_by_item.py
+  s_52c458a94e699b::t_402a7d7d1dd3cc 64,116,207
+gooddata-api-client/docs/JsonApiMetricPatchAttributes.md
+  s_52c458a94e699b::t_6873f874fd76a7 8
+gooddata-api-client/gooddata_api_client/model/json_api_dataset_out_relationships.py
+  s_52c458a94e699b::t_5824a4cfd60387 36,41,101,162,252
+gooddata-api-client/gooddata_api_client/model/entity_identifier.py
+  s_52c458a94e699b::t_b15a6e015b84ab 68
+gooddata-api-client/docs/JsonApiComputedAttributeOutRelationships.md
+  s_52c458a94e699b::t_6873f874fd76a7 1,9,12
+gooddata-api-client/docs/JsonApiComputedAttributeOut.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-12
+  s_52c458a94e699b::t_d6f3a289c667d9 13-17
+gooddata-api-client/docs/JsonApiAnalyticalDashboardOutIncludes.md
+  s_52c458a94e699b::t_6873f874fd76a7 8
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_out_list.py
+  s_52c458a94e699b::t_33906fb472f8d7 34-257
+  s_52c458a94e699b::t_652b4f307b1aed 1-33,258-298
+gooddata-api-client/gooddata_api_client/model/json_api_metric_out_document.py
+  s_52c458a94e699b::t_dc0a94cb7affcf 34,37,98,157,248
+packages/gooddata-sdk/src/gooddata_sdk/__init__.py
+  s_52c458a94e699b::t_8ba093492d832e 225-226
+  s_52c458a94e699b::t_313d6a68c6b358 275-279,281
+  s_52c458a94e699b::t_b98b632317c8dc 280
+gooddata-api-client/docs/JsonApiComputedAttributeLinkage.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-9
+  s_52c458a94e699b::t_4a47fc840f4f1b 10-14
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_in_document.py
+  s_52c458a94e699b::t_0ebffb20eb4544 34-203
+  s_52c458a94e699b::t_bfb4ea8fdce7d4 1-33,204-276
+gooddata-api-client/gooddata_api_client/apis/__init__.py
+  s_52c458a94e699b::t_317a52e0af6dca 35,113
+gooddata-api-client/gooddata_api_client/model/identifier_ref_identifier.py
+  s_52c458a94e699b::t_fbee118fa3ace4 69
+gooddata-api-client/docs/JsonApiMetricOutDocument.md
+  s_52c458a94e699b::t_6873f874fd76a7 8
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_out_relationships.py
+  s_52c458a94e699b::t_169f27149246c7 40-41,48-49,52,107,110,125,143,178,181,238,273,276
+gooddata-api-client/docs/JsonApiComputedAttributeOutAttributes.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-27
+packages/gooddata-sdk/tests/catalog/unit_tests/test_declarative_computed_attributes.py
+  s_52c458a94e699b::t_1ae6589c90c577 115
+  s_52c458a94e699b::t_f35b8532687d68 14-20,64-67,70-72,74-91,93-103
+  s_52c458a94e699b::t_747d924f5f70c4 1-13,21-63,68-69,73,92,104-114
+gooddata-api-client/docs/JsonApiComputedAttributeToManyLinkage.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-12
+gooddata-api-client/docs/AfmObjectIdentifierLabelIdentifier.md
+  s_52c458a94e699b::t_6873f874fd76a7 8
+gooddata-api-client/gooddata_api_client/model/json_api_metric_out.py
+  s_52c458a94e699b::t_38a5fa9a62a269 35,38,107,170,266
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/entity_model/content_objects/computed_attribute.py
+  s_52c458a94e699b::t_280484d6e84567 11-16,34-52,54-55,66,96-97,99-102
+  s_52c458a94e699b::t_9437e26fcbcbc5 1-10,17-33,53,56-65,67-95,98,103-132
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_out_relationships_computed_attributes.py
+  s_52c458a94e699b::t_243321f1441868 34-203
+  s_52c458a94e699b::t_06ca7a3b465e97 1-33,204-276
+packages/gooddata-sdk/tests/catalog/fixtures/workspaces/computed_attribute_generated_id.yaml
+  s_52c458a94e699b::t_1572faa2e013cc 68-73,75-80,84,100-124,126,128-165,167-189
+  s_52c458a94e699b::t_2a7d6dd09b4465 74,81,125,127,166
+  s_52c458a94e699b::t_91a3ff827ed1bc 2-3,45-67,82-83,86-99,190
+  s_52c458a94e699b::t_def26acb691596 4-44,85
+  s_52c458a94e699b::t_3745250e6c4fdb 1
+packages/gooddata-sdk/tests/catalog/fixtures/workspaces/computed_attribute_life_cycle.yaml
+  s_52c458a94e699b::t_1572faa2e013cc 19-22,25,42-43,47-48,55,86-1896,1898-1951,1953-2091
+  s_52c458a94e699b::t_91a3ff827ed1bc 2-18,23-24,26-41,44-46,49-54,56-85,2092
+  s_52c458a94e699b::t_65d3d896fe1dd9 1897,1952
+  s_52c458a94e699b::t_78b82b09b4d54d 1
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model.py
+  s_52c458a94e699b::t_6cf6e1a53ff3de 14-15,54,377-405
+  s_52c458a94e699b::t_866081d4eb5ece 83-86,147-152,181,207-209,229,241,271-274,287
+gooddata-api-client/docs/JsonApiExportDefinitionOutIncludes.md
+  s_52c458a94e699b::t_6873f874fd76a7 8
+gooddata-api-client/docs/ComputedAttributeControllerApi.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-690
+gooddata-api-client/docs/JsonApiComputedAttributePostOptionalIdDocument.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-7
+  s_52c458a94e699b::t_8b37948b8da499 8-12
+gooddata-api-client/gooddata_api_client/api/entities_api.py
+  s_52c458a94e699b::t_c8eecf58e2a899 56-60,752-848,3674-3726,6593-6720,11817-11921,16070-16160,19412-19485,21213-21303,24658-24744,24773-24777,28277-28362,32096-32185,36754-36846,41370-41461,45228-45315,47346-47437
+packages/tests-support/src/tests_support/vcrpy_utils.py
+  s_52c458a94e699b::t_f6b50a93c6bf71 64-73,75,287
+gooddata-api-client/gooddata_api_client/model/declarative_computed_attribute.py
+  s_52c458a94e699b::t_c8dab3581d2c87 34-398
+  s_52c458a94e699b::t_dbcb1d593b67c1 1-33,399-409
+gooddata-api-client/gooddata_api_client/model/json_api_user_data_filter_out_includes.py
+  s_52c458a94e699b::t_e16f679089bed8 36,49,371
+gooddata-api-client/docs/JsonApiVisualizationObjectOutWithLinks.md
+  s_52c458a94e699b::t_57e899a8330069 11
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_post_optional_id_document.py
+  s_52c458a94e699b::t_a3c2e61057a011 34-203
+  s_52c458a94e699b::t_a0d814cdb73087 1-33,204-276
+gooddata-api-client/docs/JsonApiMetricInAttributes.md
+  s_52c458a94e699b::t_6873f874fd76a7 7
+schemas/gooddata-export-client.json
+  s_52c458a94e699b::t_b9ef274a8ec7bb 259,329-330,387-388,1608
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/content_service.py
+  s_52c458a94e699b::t_3f62da3f35b4ec 556-561,573,589,591
+  s_52c458a94e699b::t_2aecb3e012b41b 574-575,590
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_to_many_linkage.py
+  s_52c458a94e699b::t_ffbbf0eb9916e7 34-292
+  s_52c458a94e699b::t_c6cbb123c12e71 1-33
+gooddata-api-client/gooddata_api_client/model/json_api_knowledge_recommendation_out_includes.py
+  s_52c458a94e699b::t_4eed49d92621a2 36,42,110,171,280
+gooddata-api-client/docs/JsonApiVisualizationObjectOut.md
+  s_52c458a94e699b::t_f5128c64aec45f 12
+gooddata-api-client/gooddata_api_client/model/declarative_computed_attribute_content.py
+  s_52c458a94e699b::t_8adcb840fc50f8 34,119,210
+gooddata-api-client/docs/JsonApiDatasetOutRelationships.md
+  s_52c458a94e699b::t_6873f874fd76a7 9
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_post_optional_id.py
+  s_52c458a94e699b::t_30d065261f72bc 34-285
+  s_52c458a94e699b::t_3dde78785b0fd4 1-33,286-296
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_in_attributes.py
+  s_52c458a94e699b::t_aca68eeb5355c0 33-332
+  s_52c458a94e699b::t_8fa20d9995288c 1-32,333-343
+gooddata-api-client/docs/AnalyticsModelApi.md
+  s_52c458a94e699b::t_6873f874fd76a7 178-213
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_out_relationships_facts.py
+  s_52c458a94e699b::t_0b66e75a5ba106 38,111,200
+gooddata-api-client/docs/JsonApiComputedAttributePostOptionalId.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-10
+  s_52c458a94e699b::t_503bb27024d2b0 11-15
+gooddata-api-client/gooddata_api_client/model/set_certification_request.py
+  s_52c458a94e699b::t_bda6ee213a3fdf 63
+gooddata-api-client/gooddata_api_client/model/afm_valid_objects_query.py
+  s_52c458a94e699b::t_79642b644657fa 67
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_patch_attributes.py
+  s_52c458a94e699b::t_267776e624c51a 33-297
+  s_52c458a94e699b::t_48cc737a0780a6 1-32,298-337
+schemas/gooddata-automation-client.json
+  s_52c458a94e699b::t_0fa4eccb2706bf 363,433-434,491-492,2292
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_in_attributes_content.py
+  s_52c458a94e699b::t_a86ab6be73aefe 34-210
+  s_52c458a94e699b::t_0231bd6af22eb4 1-33,211-288
+gooddata-api-client/README.md
+  s_52c458a94e699b::t_6873f874fd76a7 293-299,862-868,922,964,1009,1063,1116,1159,1183,1702-1703,2029-2048
+gooddata-api-client/docs/JsonApiComputedAttributeInAttributesContent.md
+  s_52c458a94e699b::t_6873f874fd76a7 1
+gooddata-api-client/docs/JsonApiKnowledgeRecommendationOutIncludes.md
+  s_52c458a94e699b::t_6873f874fd76a7 8
+gooddata-api-client/docs/WorkspacesDeclarativeAPIsApi.md
+  s_52c458a94e699b::t_0beff9936badbc 250-285,1230-1265
+gooddata-api-client/docs/JsonApiComputedAttributeOutList.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-16
+gooddata-api-client/docs/DeclarativeComputedAttributeContent.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-3
+  s_52c458a94e699b::t_b70d26c8e67e35 4-15
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_out_includes.py
+  s_52c458a94e699b::t_db159deddc1eaf 36,48,60,149,258,369
+gooddata-api-client/docs/OrganizationDeclarativeAPIsApi.md
+  s_52c458a94e699b::t_5f7566b5e95220 1270-1305
+gooddata-api-client/docs/EntitiesApi.md
+  s_52c458a94e699b::t_6873f874fd76a7 14,56,101,155,208,251,275,1229-1337,2939,5112-5176,8240-8335,12893-12894,12896,12905,12918-12927,12931-12932,12935,12940-12941,12944,12952-12953,12955-12957,12961,12981-13057,17636-17744,19621,22012-22110,24663-24771,26559
+gooddata-api-client/gooddata_api_client/model/json_api_metric_out_with_links.py
+  s_52c458a94e699b::t_f88c65cfdf9cec 35,41,113,174,284
+packages/gooddata-sdk/src/gooddata_sdk/compute/model/base.py
+  s_52c458a94e699b::t_1f79c190994405 29-30,32
+gooddata-api-client/docs/JsonApiComputedAttributePatchAttributes.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-22
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_in.py
+  s_52c458a94e699b::t_bac46d81e9ec4a 34-287
+  s_52c458a94e699b::t_d990bd20d3f9df 1-33,288-298
+gooddata-api-client/docs/JsonApiComputedAttributeOutDocument.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-9
+  s_52c458a94e699b::t_fa80132462ad51 10-14
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/service.py
+  s_52c458a94e699b::t_1d4dc568f7d988 1561,1575
+  s_52c458a94e699b::t_d3067b8d3dade0 33-35,37,1515-1547,1552,1556-1557,1562-1563,1577-1611
+  s_52c458a94e699b::t_b98b632317c8dc 36,1548-1551,1553-1555,1558-1560,1564-1574,1576
+  s_52c458a94e699b::t_81fc94ed310eec 1612
+  s_52c458a94e699b::t_663f071b9f92f6 1613
+gooddata-api-client/gooddata_api_client/model/json_api_export_definition_out_includes.py
+  s_52c458a94e699b::t_18b10ff09d54ad 37,45,114,175,284
+gooddata-api-client/docs/LayoutApi.md
+  s_52c458a94e699b::t_5f0dc40802dafe 2359-2394,2956-2991,5263-5298,6785-6820
+schemas/gooddata-afm-client.json
+  s_52c458a94e699b::t_e0a5f62fb0f981 357,427-428,485-486,580-581,7292-7293
+gooddata-api-client/gooddata_api_client/model/afm_object_identifier_core_identifier.py
+  s_52c458a94e699b::t_02dda8145bb418 64
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_patch_document.py
+  s_52c458a94e699b::t_c42aafdb24ddfd 34-203
+  s_52c458a94e699b::t_dc6ae1e472126c 1-33,204-276
+gooddata-api-client/docs/MetricControllerApi.md
+  s_52c458a94e699b::t_d44286945f1a97 47,402,606
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_linkage.py
+  s_52c458a94e699b::t_390010c64ac77c 34-270
+  s_52c458a94e699b::t_bd30dd25fbc339 1-33,271-281
+gooddata-api-client/.openapi-generator/FILES
+  s_52c458a94e699b::t_6873f874fd76a7 180-181,289-290,641-660,1597-1598,1948-1949,2275-2294
+packages/gooddata-sdk/tests/catalog/test_upsert_outcome.py
+  s_52c458a94e699b::t_267b719a8c3977 16,24-27,54-59,106-147,170-173
+gooddata-api-client/docs/JsonApiUserDataFilterOutRelationships.md
+  s_52c458a94e699b::t_234a039493ff47 8,10
+gooddata-api-client/gooddata_api_client/model/json_api_computed_attribute_out.py
+  s_52c458a94e699b::t_fa3c873dc26b58 34-299
+  s_52c458a94e699b::t_911255b58c9115 1-33,300-310
+gooddata-api-client/gooddata_api_client/model/json_api_visualization_object_out_document.py
+  s_52c458a94e699b::t_1137d043eccac4 34,37,98,157,248
+gooddata-api-client/docs/JsonApiComputedAttributeOutRelationshipsComputedAttributes.md
+  s_52c458a94e699b::t_6873f874fd76a7 1-7
+  s_52c458a94e699b::t_0918b8258013ce 8-12
+gooddata-api-client/gooddata_api_client/model/json_api_metric_out_attributes.py
+  s_52c458a94e699b::t_169fb790e0b400 34-35,115,160,260
+gooddata-api-client/gooddata_api_client/model/json_api_visualization_object_out_list.py
+  s_52c458a94e699b::t_e35a55606f4cbc 35,39,102,163,255
+gooddata-api-client/gooddata_api_client/model/json_api_metric_patch_attributes.py
+  s_52c458a94e699b::t_ea835bfa18bdd2 34-35,98,163,255
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "adbbe786b177920dbec87cc6607eb6b98ffcb3c7",
+  "prompts": {},
+  "sessions": {
+    "s_52c458a94e699b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e9bc573e-0941-432e-9069-319b64679ec8",
+        "model": "claude-opus-5"
+      },
+      "human_author": null
+    }
+  }
+}

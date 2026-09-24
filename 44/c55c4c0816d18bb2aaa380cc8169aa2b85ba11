@@ -1,0 +1,24 @@
+packages/gooddata-eval/AGENTS.md
+  s_152f0704157226::t_d76ccce50d0337 7-8,15,32
+packages/gooddata-eval/tests/test_langfuse_sink.py
+  s_152f0704157226::t_752573f3646b42 209,212
+packages/gooddata-eval/README.md
+  s_152f0704157226::t_f06ed8d81f7095 405-408
+  s_152f0704157226::t_bf4be55b9909a9 116,155,157,159-185
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "44c55c4c0816d18bb2aaa380cc8169aa2b85ba11",
+  "prompts": {},
+  "sessions": {
+    "s_152f0704157226": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81049499-0417-40a7-9a8a-3bc2f0738f69",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": null
+    }
+  }
+}

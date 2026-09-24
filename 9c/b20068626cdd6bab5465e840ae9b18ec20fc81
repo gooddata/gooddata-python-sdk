@@ -1,0 +1,96 @@
+packages/gooddata-eval/tests/test_agentic_alert_skill.py
+  s_79aee309cead37::t_ba44b28b7368bc 949-980
+  s_79aee309cead37::t_5e5c6112759ee1 917
+  s_79aee309cead37::t_7b08803080e464 12
+  s_79aee309cead37::t_8f3ce9934babf8 690,730
+  s_79aee309cead37::t_9513ad5c260d59 911-912
+  s_79aee309cead37::t_c9504af59dba63 913-916,918-948
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_79aee309cead37::t_357e0848bb05aa 350-353,358,363-375
+  s_79aee309cead37::t_cbc7704933d86a 376
+  s_79aee309cead37::t_5e5c6112759ee1 400
+  s_79aee309cead37::t_64f3e0001244a2 880
+  s_79aee309cead37::t_d22f9b82018ec4 24
+  s_79aee309cead37::t_ee92789018d58a 684-685
+  s_79aee309cead37::t_2eb4543bf7df94 573-574,585
+  s_79aee309cead37::t_359a20b219cce6 203-218,440,454,709,756,832,892-893
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/_text_utils.py
+  s_79aee309cead37::t_c0526594218ede 10
+  s_79aee309cead37::t_abd521e98e452c 9
+  s_79aee309cead37::t_d22f9b82018ec4 4
+packages/gooddata-eval/src/gooddata_eval/core/agentic/general_question.py
+  s_79aee309cead37::t_2ea36a5382de60 116
+  s_79aee309cead37::t_d22f9b82018ec4 18
+packages/gooddata-eval/src/gooddata_eval/core/chat/render.py
+  s_79aee309cead37::t_abd521e98e452c 2,12,40-42
+  s_79aee309cead37::t_fbebc4c58e3863 28,46
+  s_79aee309cead37::t_b1461001974f5a 1,3-11,13-27,29-39,43-45,47
+packages/gooddata-eval/src/gooddata_eval/core/agentic/guardrail.py
+  s_79aee309cead37::t_2ea36a5382de60 111
+  s_79aee309cead37::t_d22f9b82018ec4 17
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_79aee309cead37::t_2f9b46d949d913 216-217
+packages/gooddata-eval/tests/test_maql_normalize.py
+  s_79aee309cead37::t_97a9a5ee188d19 1-2,4-7,9-33,42-91
+  s_79aee309cead37::t_ba44b28b7368bc 34-38,40-41
+  s_79aee309cead37::t_0d13fe4babd2a2 3,8
+  s_79aee309cead37::t_7b08803080e464 39
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/metric_skill.py
+  s_79aee309cead37::t_2beca75596e613 51-52
+  s_79aee309cead37::t_e7ba96c89095c3 4
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_79aee309cead37::t_e42fb20789c81f 218,260
+  s_79aee309cead37::t_ee92789018d58a 455-456
+  s_79aee309cead37::t_d22f9b82018ec4 25
+packages/gooddata-eval/tests/test_chat_render.py
+  s_79aee309cead37::t_0d13fe4babd2a2 3
+  s_79aee309cead37::t_8a3687a194ac63 68
+  s_79aee309cead37::t_d22f9b82018ec4 8
+  s_79aee309cead37::t_78d66efaf16041 1-2,4-7,9-67,69-78,80-118
+  s_79aee309cead37::t_5e5c6112759ee1 79
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_79aee309cead37::t_9897a477bf0edb 170-172
+  s_79aee309cead37::t_b5e5606f11b081 38-51
+  s_79aee309cead37::t_2a293add2383a2 224-225,227-230,234-235
+  s_79aee309cead37::t_5e5c6112759ee1 226
+  s_79aee309cead37::t_029fbb8f24d00e 141-142
+  s_79aee309cead37::t_7f5dc6b8190f80 178-183
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_79aee309cead37::t_d22f9b82018ec4 22
+  s_79aee309cead37::t_0bc00ff82f1b45 211-212,217
+packages/gooddata-eval/src/gooddata_eval/core/agentic/kda_skill.py
+  s_79aee309cead37::t_d22f9b82018ec4 19
+  s_79aee309cead37::t_0bc00ff82f1b45 290
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_79aee309cead37::t_ee92789018d58a 287-288
+  s_79aee309cead37::t_d22f9b82018ec4 23
+  s_79aee309cead37::t_16be97a08a222e 26,51,54
+  s_79aee309cead37::t_978e26a68bbf61 67-69
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  s_79aee309cead37::t_2879321390ad4a 181-183
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/_maql.py
+  s_79aee309cead37::t_000d0fccbcefd6 1,3-10,14,20-38,41-51,53-73,77-78
+  s_79aee309cead37::t_1d645594924d1c 11-13
+  s_79aee309cead37::t_508103dd45b205 74-76
+  s_79aee309cead37::t_a1c52e6399281e 2,15-19,39-40,52
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_catalog.py
+  s_79aee309cead37::t_2afe88d7799b4c 34
+  s_79aee309cead37::t_855283e2ea0098 54
+  s_79aee309cead37::t_bde50510a384b7 33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "9cb20068626cdd6bab5465e840ae9b18ec20fc81",
+  "prompts": {},
+  "sessions": {
+    "s_79aee309cead37": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "cc11f31c-8eda-4b2b-86a7-71484b4a4de1",
+        "model": "claude-opus-5"
+      },
+      "human_author": null
+    }
+  }
+}
