@@ -5,10 +5,12 @@ import pytest
 from gooddata_eval.core.models import CreatedVisualization
 from gooddata_eval.core.scoring import (
     check_filters,
+    check_sorts,
     check_viz_type,
     get_dimension_uri_set,
     get_metric_uri_set,
     normalized_filters,
+    normalized_sorts,
     uri_to_display_name,
     validate_cross_references,
 )
@@ -77,10 +79,10 @@ def test_check_filters_exact_attribute_match():
 # state, type) and never the LIST under state["include"], so two filters selecting the
 # same elements in a different order compare unequal.
 #
-# Found from a real eval run (gdc-mic-ai-evaluation, micai_diagnose_master, 2026-09-10):
-# a question filtering cross-border traffic scored metrics_correct=True,
-# dimensions_correct=True, filters_correct=False, because the fixture listed
-# ["Inter-region", "Intra-region"] and the agent emitted ["Intra-region", "Inter-region"].
+# Found from a real eval run: a question filtering on a two-value attribute scored
+# metrics_correct=True, dimensions_correct=True, filters_correct=False, because the fixture
+# listed ["Inter-region", "Intra-region"] and the agent emitted the same two the other way
+# round.
 # Element order is not something an agent has any reason to keep stable between runs, so
 # every question needing a multi-value attribute filter passes or fails partly at random.
 
@@ -93,7 +95,7 @@ def test_attribute_filter_include_order_does_not_change_the_verdict():
                 "filter_by": {
                     "f_a": {
                         "type": "attribute_filter",
-                        "using": "label/cross_border_name",
+                        "using": "label/region_name",
                         "state": {"include": values},
                     }
                 },
@@ -284,6 +286,87 @@ def test_normalized_filters_is_empty_per_category_when_unfiltered():
     assert normalized_filters(viz) == {"date": [], "ranking": [], "attribute": []}
 
 
+def _attr_viz(values, key="include", using="label/region_name"):
+    return _viz(
+        query={
+            "fields": {"m": {"using": "metric/conversion_rate"}},
+            "filter_by": {"f": {"type": "attribute_filter", "using": using, "state": {key: values}}},
+        },
+        metrics=["m"],
+    )
+
+
+def test_attribute_filter_elements_compare_as_a_set_not_a_sequence():
+    """`include`/`exclude` name a set of elements, so element order must not decide a verdict.
+
+    json.dumps(sort_keys=True) orders the dict KEYS and leaves the lists alone, so the same
+    filter emitted in a different order compared unequal -- and the agent has no reason to
+    keep that order stable between runs. The failure reported as `filters_correct: false`,
+    indistinguishable from the agent genuinely filtering wrongly.
+    """
+    expected = _attr_viz(["Inter-region", "Intra-region"])
+    assert check_filters(expected, _attr_viz(["Inter-region", "Intra-region"])).attribute_ok is True
+    assert check_filters(expected, _attr_viz(["Intra-region", "Inter-region"])).attribute_ok is True
+
+
+def test_a_three_element_attribute_filter_is_order_insensitive():
+    """Two elements need 2 permutations, three need 6 -- admitting them as extra fixture
+    candidates grows factorially, which is why this belongs in normalisation."""
+    expected = _attr_viz(["A", "B", "C"])
+    for actual in (["C", "A", "B"], ["B", "C", "A"], ["C", "B", "A"]):
+        assert check_filters(expected, _attr_viz(actual)).attribute_ok is True
+
+
+def test_exclude_elements_are_order_insensitive_too():
+    expected = _attr_viz(["Domestic", "Unknown"], key="exclude")
+    assert check_filters(expected, _attr_viz(["Unknown", "Domestic"], key="exclude")).attribute_ok is True
+
+
+def test_ordering_does_not_mask_a_genuinely_different_element_set():
+    """The guard against the fix being "pass everything": different elements still fail."""
+    expected = _attr_viz(["Inter-region", "Intra-region"])
+    assert check_filters(expected, _attr_viz(["Inter-region"])).attribute_ok is False
+    assert check_filters(expected, _attr_viz(["Inter-region", "Domestic"])).attribute_ok is False
+
+
+def test_include_and_exclude_of_the_same_elements_still_differ():
+    """Sorting must not collapse the two state keys into each other."""
+    inc = _attr_viz(["Domestic", "Unknown"], key="include")
+    exc = _attr_viz(["Unknown", "Domestic"], key="exclude")
+    assert check_filters(inc, exc).attribute_ok is False
+
+
+def test_the_same_elements_on_a_different_label_still_differ():
+    expected = _attr_viz(["A", "B"], using="label/region_name")
+    assert check_filters(expected, _attr_viz(["B", "A"], using="label/channel_name")).attribute_ok is False
+
+
+def test_a_mixed_type_element_list_does_not_crash_scoring():
+    """A malformed list would raise TypeError from a bare sorted(), and a crash inside
+    scoring is worse than the mismatch this fixes. validate_cross_references reports
+    malformed filter values separately, so this only has to stay comparable."""
+    expected = _attr_viz(["A", 2])
+    assert check_filters(expected, _attr_viz([2, "A"])).attribute_ok is True
+    assert check_filters(expected, _attr_viz(["A", 3])).attribute_ok is False
+
+
+def test_elements_that_stringify_alike_but_differ_in_type_still_sort_stably():
+    """`key=str` collapsed 1 and "1" to the same sort key, so Python's stable sort left
+    their relative order exactly as the agent emitted it and the ordering bug survived for
+    that pair alone. The key is the element's canonical JSON instead, which distinguishes
+    the types the comparison downstream also distinguishes."""
+    assert check_filters(_attr_viz([1, "1"]), _attr_viz(["1", 1])).attribute_ok is True
+    # ...without making the two types interchangeable: one element is not the other set.
+    assert check_filters(_attr_viz([1]), _attr_viz(["1"])).attribute_ok is False
+
+
+def test_heterogeneous_element_lists_sort_without_raising():
+    """Every value here is parsed JSON, so json.dumps cannot fail on it -- which is what
+    makes it usable as a total ordering where a bare sort would raise."""
+    mixed = [None, True, 2, "a", 1.5]
+    assert check_filters(_attr_viz(mixed), _attr_viz(list(reversed(mixed)))).attribute_ok is True
+
+
 # --- relative vs absolute date filters denote the same period ---
 #
 # The agent answers "last month" either relatively (granularity MONTH, from -1, to -1)
@@ -370,82 +453,87 @@ def test_check_filters_out_of_range_offsets_fall_back_instead_of_raising(granula
     assert not check_filters(expected, _date_viz(**{"from": -1, "to": -1, "granularity": "MONTH"}), _TODAY).date_ok
 
 
-def _attr_viz(values, key="include", using="label/cross_border_name"):
-    return _viz(
-        query={
-            "fields": {"m": {"using": "metric/approval_rate"}},
-            "filter_by": {"f": {"type": "attribute_filter", "using": using, "state": {key: values}}},
-        },
-        metrics=["m"],
+def test_a_date_granularity_compares_equal_whichever_prefix_it_carries():
+    # A date dataset exposes each granularity as an attribute whose only label carries
+    # the same id, so both spellings denote one breakdown. gpt-5.6-luna returned
+    # `attribute/ORDER_CREATED_AT.month` for a chart the insight recorded as
+    # `label/ORDER_CREATED_AT.month`, and the raw string compare failed a correct chart.
+    as_label = _viz(query={"fields": {"d": {"using": "label/ORDER_CREATED_AT.month"}}, "filter_by": {}}, view_by=["d"])
+    as_attribute = _viz(
+        query={"fields": {"d": {"using": "attribute/ORDER_CREATED_AT.month"}}, "filter_by": {}}, view_by=["d"]
     )
+    assert get_dimension_uri_set(as_label) == get_dimension_uri_set(as_attribute)
 
 
-def test_attribute_filter_elements_compare_as_a_set_not_a_sequence():
-    """`include`/`exclude` name a set of elements, so element order must not decide a verdict.
-
-    json.dumps(sort_keys=True) orders the dict KEYS and leaves the lists alone, so the same
-    filter emitted in a different order compared unequal -- and the agent has no reason to
-    keep that order stable between runs. The failure reported as `filters_correct: false`,
-    indistinguishable from the agent genuinely filtering wrongly.
-    """
-    expected = _attr_viz(["Inter-region", "Intra-region"])
-    assert check_filters(expected, _attr_viz(["Inter-region", "Intra-region"])).attribute_ok is True
-    assert check_filters(expected, _attr_viz(["Intra-region", "Inter-region"])).attribute_ok is True
+def test_the_granularity_itself_still_has_to_match():
+    sequential = _viz(query={"fields": {"d": {"using": "label/d.month"}}, "filter_by": {}}, view_by=["d"])
+    cyclical = _viz(query={"fields": {"d": {"using": "label/d.monthOfYear"}}, "filter_by": {}}, view_by=["d"])
+    assert get_dimension_uri_set(sequential) != get_dimension_uri_set(cyclical)
 
 
-def test_a_three_element_attribute_filter_is_order_insensitive():
-    """Two elements need 2 permutations, three need 6 -- admitting them as extra fixture
-    candidates grows factorially, which is why this belongs in normalisation."""
-    expected = _attr_viz(["A", "B", "C"])
-    for actual in (["C", "A", "B"], ["B", "C", "A"], ["C", "B", "A"]):
-        assert check_filters(expected, _attr_viz(actual)).attribute_ok is True
+def test_a_plain_attribute_is_not_rewritten_as_a_label():
+    viz = _viz(query={"fields": {"d": {"using": "attribute/product.title"}}, "filter_by": {}}, view_by=["d"])
+    assert get_dimension_uri_set(viz) == {"attribute/product.title"}
 
 
-def test_exclude_elements_are_order_insensitive_too():
-    expected = _attr_viz(["Domestic", "Unknown"], key="exclude")
-    assert check_filters(expected, _attr_viz(["Unknown", "Domestic"], key="exclude")).attribute_ok is True
+_SORT_FIELDS = {"m_rev": {"using": "metric/revenue"}, "d_q": {"using": "label/date.quarter"}}
 
 
-def test_ordering_does_not_mask_a_genuinely_different_element_set():
-    """The guard against the fix being "pass everything": different elements still fail."""
-    expected = _attr_viz(["Inter-region", "Intra-region"])
-    assert check_filters(expected, _attr_viz(["Inter-region"])).attribute_ok is False
-    assert check_filters(expected, _attr_viz(["Inter-region", "Domestic"])).attribute_ok is False
+def _sorted_viz(sort_by, fields=None):
+    return _viz(query={"fields": fields or _SORT_FIELDS, "filter_by": {}, "sort_by": sort_by})
 
 
-def test_include_and_exclude_of_the_same_elements_still_differ():
-    """Sorting must not collapse the two state keys into each other."""
-    inc = _attr_viz(["Domestic", "Unknown"], key="include")
-    exc = _attr_viz(["Unknown", "Domestic"], key="exclude")
-    assert check_filters(inc, exc).attribute_ok is False
+def test_sorts_survive_validation_and_resolve_to_uris():
+    viz = _sorted_viz([{"type": "metric_sort", "direction": "DESC", "metrics": ["m_rev"]}])
+    assert normalized_sorts(viz) == ['{"direction": "DESC", "fields": ["metric/revenue"], "type": "metric_sort"}']
 
 
-def test_the_same_elements_on_a_different_label_still_differ():
-    expected = _attr_viz(["A", "B"], using="label/cross_border_name")
-    assert check_filters(expected, _attr_viz(["B", "A"], using="label/region_name")).attribute_ok is False
+def test_the_same_sort_written_by_either_side_compares_equal():
+    expected = _sorted_viz([{"type": "attribute_sort", "by": "d_q", "direction": "ASC"}])
+    # The agent adds `aggregation`, and names the field with an alias of its own.
+    actual = _viz(
+        query={
+            "fields": {"dim0": "attribute/date.quarter"},
+            "filter_by": {},
+            "sort_by": [{"type": "attribute_sort", "by": "dim0", "direction": "ASC", "aggregation": None}],
+        }
+    )
+    assert check_sorts(expected, actual)
 
 
-def test_a_mixed_type_element_list_does_not_crash_scoring():
-    """A malformed list would raise TypeError from a bare sorted(), and a crash inside
-    scoring is worse than the mismatch this fixes. validate_cross_references reports
-    malformed filter values separately, so this only has to stay comparable."""
-    expected = _attr_viz(["A", 2])
-    assert check_filters(expected, _attr_viz([2, "A"])).attribute_ok is True
-    assert check_filters(expected, _attr_viz(["A", 3])).attribute_ok is False
+def test_a_metric_sort_reads_metrics_even_when_the_agent_also_sends_by():
+    expected = _sorted_viz([{"type": "metric_sort", "direction": "ASC", "metrics": ["m_rev"]}])
+    actual = _sorted_viz([{"type": "metric_sort", "direction": "ASC", "metrics": ["m_rev"], "by": "d_q"}])
+    assert check_sorts(expected, actual)
 
 
-def test_elements_that_stringify_alike_but_differ_in_type_still_sort_stably():
-    """`key=str` collapsed 1 and "1" to the same sort key, so Python's stable sort left
-    their relative order exactly as the agent emitted it and the ordering bug survived for
-    that pair alone. The key is the element's canonical JSON instead, which distinguishes
-    the types the comparison downstream also distinguishes."""
-    assert check_filters(_attr_viz([1, "1"]), _attr_viz(["1", 1])).attribute_ok is True
-    # ...without making the two types interchangeable: one element is not the other set.
-    assert check_filters(_attr_viz([1]), _attr_viz(["1"])).attribute_ok is False
+def test_a_missing_sort_fails_but_a_volunteered_one_does_not():
+    """`sort_by: []` records no sort; it does not assert the chart must be unsorted."""
+    unsorted = _sorted_viz([])
+    sorted_ = _sorted_viz([{"type": "metric_sort", "direction": "DESC", "metrics": ["m_rev"]}])
+    assert not check_sorts(sorted_, unsorted), "a sort the question asked for is required"
+    assert check_sorts(unsorted, sorted_), "chronological order on a time series is not an error"
 
 
-def test_heterogeneous_element_lists_sort_without_raising():
-    """Every value here is parsed JSON, so json.dumps cannot fail on it -- which is what
-    makes it usable as a total ordering where a bare sort would raise."""
-    mixed = [None, True, 2, "a", 1.5]
-    assert check_filters(_attr_viz(mixed), _attr_viz(list(reversed(mixed)))).attribute_ok is True
+def test_a_wrong_sort_still_fails_when_the_fixture_records_one():
+    expected = _sorted_viz([{"type": "metric_sort", "direction": "DESC", "metrics": ["m_rev"]}])
+    assert not check_sorts(expected, _sorted_viz([{"type": "attribute_sort", "by": "d_q", "direction": "ASC"}]))
+
+
+def test_a_tiebreak_appended_after_the_required_sorts_is_free():
+    """ "State descending" is satisfied by "state descending, then city" -- not by the reverse."""
+    required = [{"type": "attribute_sort", "by": "d_q", "direction": "DESC"}]
+    tiebreak = {"type": "metric_sort", "direction": "ASC", "metrics": ["m_rev"]}
+    assert check_sorts(_sorted_viz(required), _sorted_viz(required + [tiebreak]))
+    assert not check_sorts(_sorted_viz(required), _sorted_viz([tiebreak] + required))
+
+
+def test_direction_type_and_order_all_matter():
+    base = [
+        {"type": "attribute_sort", "by": "d_q", "direction": "ASC"},
+        {"type": "metric_sort", "direction": "DESC", "metrics": ["m_rev"]},
+    ]
+    assert check_sorts(_sorted_viz(base), _sorted_viz(list(base)))
+    assert not check_sorts(_sorted_viz(base), _sorted_viz(list(reversed(base))))
+    flipped = [{**base[0], "direction": "DESC"}, base[1]]
+    assert not check_sorts(_sorted_viz(base), _sorted_viz(flipped))

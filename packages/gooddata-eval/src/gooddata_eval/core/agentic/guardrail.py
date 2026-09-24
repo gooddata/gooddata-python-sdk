@@ -34,6 +34,7 @@ from gooddata_eval.core.models import (
     ReasoningStepEvent,
     ToolCallEvent,
     build_latency_breakdown,
+    timeline_detail,
 )
 
 _DEFAULT_K = 1
@@ -332,6 +333,10 @@ def evaluate_agentic_guardrail(
     best = summary.best
     detail = {
         **_run_detail(best),
+        # The winning run additionally carries the tool calls themselves. Failing runs keep
+        # the latency breakdown only -- a dozen full call payloads per item is a lot of
+        # weight for a diagnosis the breakdown already gives.
+        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
         # Only present when it happened, so the usual JSON shape is unchanged. A
         # pass@K over fewer runs than --runs asked for is a weaker result.
         **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),

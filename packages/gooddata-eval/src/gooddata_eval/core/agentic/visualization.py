@@ -47,6 +47,7 @@ from gooddata_eval.core.models import (
     ToolCallEvent,
     build_latency_breakdown,
     shift_and_index_events,
+    timeline_detail,
 )
 from gooddata_eval.core.scoring import get_dimension_uri_set, get_metric_uri_set, uri_to_display_name
 
@@ -499,7 +500,13 @@ def evaluate_agentic_visualization(
 
     best = summary.best
     ev = best.eval_result
-    detail = {**_run_detail(best), "max_iterations": max_iterations}
+    detail = {
+        **_run_detail(best),
+        # The winning run additionally carries the tool calls themselves; failing runs keep
+        # the latency breakdown only.
+        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
+        "max_iterations": max_iterations,
+    }
     # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
     # cannot disagree about which runs failed. Every failing run keeps its own
     # expected/actual check breakdown -- for this kind that is the whole diagnosis, and

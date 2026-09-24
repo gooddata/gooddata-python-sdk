@@ -41,6 +41,7 @@ from gooddata_eval.core.models import (
     ToolCallEvent,
     build_latency_breakdown,
     shift_and_index_events,
+    timeline_detail,
 )
 
 try:
@@ -973,7 +974,13 @@ def evaluate_agentic_alert_skill(
 
     best = summary.best
     ev = best.eval
-    detail = {**_run_detail(best), "max_iterations": max_iterations}
+    detail = {
+        **_run_detail(best),
+        # The winning run additionally carries the tool calls themselves; failing runs keep
+        # the latency breakdown only.
+        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
+        "max_iterations": max_iterations,
+    }
     # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
     # cannot disagree about which runs failed.
     failed_runs = build_failed_runs(
