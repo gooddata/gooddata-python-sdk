@@ -6,6 +6,14 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._gate import (
+    DEFAULT_GATE,
+    EvalGate,
+    gate_failure_note,
+    gate_passed,
+    log_gate_scores,
+    stamp_gate_metadata,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -224,6 +232,7 @@ def evaluate_agentic_general_question(
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
     user_context: dict | None = None,
+    gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run general-question evaluation, log to Langfuse, and raise GeneralQuestionAssertionError on failure.
 
@@ -250,6 +259,7 @@ def evaluate_agentic_general_question(
         window_end = utc_now()
 
         def _write_scores(ctx: RunTraceContext) -> None:
+            stamp_gate_metadata(ctx.run_metadata, k=len(summary.run_results), gate=gate)
 
             for run_idx, run in enumerate(summary.run_results):
                 if run.judge_error is not None:
@@ -262,6 +272,7 @@ def evaluate_agentic_general_question(
                 ) as tid:
                     ctx.score(tid, name="general_question_pass", value=float(run.passed), data_type="BOOLEAN")
                     ctx.score(tid, name="llm_judge_score", value=run.llm_judge_score, data_type="NUMERIC")
+                    log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
                     ctx.quality(
                         tid,
                         strict_checks={"general_question_pass": run.passed},
@@ -324,9 +335,10 @@ def evaluate_agentic_general_question(
         **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),
     }
 
-    if not summary.pass_at_k:
+    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
         exc = GeneralQuestionAssertionError(
-            f"General question assertion failed. passed={best.passed}. Reasoning: {best.reasoning}"
+            f"General question assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}"
         )
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id

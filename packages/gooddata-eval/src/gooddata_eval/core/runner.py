@@ -8,6 +8,7 @@ from dataclasses import dataclass, field
 from functools import partial
 from typing import Callable, Protocol
 
+from gooddata_eval.core.config import DEFAULT_GATE, EvalGate
 from gooddata_eval.core.evaluators import get_evaluator, supported_test_kinds
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import ChatResult, DatasetItem
@@ -26,6 +27,11 @@ class ItemReport:
     test_kind: str
     question: str
     pass_at_k: bool = False
+    # An explicit gate verdict, where a gate ran: pass^K under --gate power. None means no
+    # gate ran -- run_items has none -- and `passed` falls back to pass_at_k. Kept apart
+    # from pass_at_k so that field stays literal and the JSON report never contradicts the
+    # Langfuse score of the same name.
+    gate_passed: bool | None = None
     skipped: bool = False
     error: str | None = None
     runs: int = 0
@@ -63,6 +69,15 @@ class ItemReport:
     runs_effective: int | None = None
 
     @property
+    def passed(self) -> bool:
+        """Whether the item counts as a pass: the gate's verdict where one ran, else pass@K.
+
+        pass_at_k stays literal beside it -- under --gate power an item that passed 2 of 3
+        runs has pass_at_k True and this False.
+        """
+        return self.pass_at_k if self.gate_passed is None else self.gate_passed
+
+    @property
     def runs_total(self) -> int:
         """What the item actually ran: the kind's own count when it has one, else K."""
         return self.runs_effective or self.runs
@@ -90,13 +105,13 @@ class ItemReport:
     def quality_score(self) -> float:
         """Fraction of bool-valued strict checks in best_detail that are True.
 
-        Falls back to 1.0 if pass_at_k else 0.0 when no bool checks exist
+        Falls back to 1.0 if the gate passed else 0.0 when no bool checks exist
         (e.g. text evaluators where best_detail has no bool flags).
         """
         checks = {k: v for k, v in self.best_detail.items() if isinstance(v, bool)}
         if checks:
             return sum(1 for v in checks.values() if v) / len(checks)
-        return 1.0 if self.pass_at_k else 0.0
+        return 1.0 if self.passed else 0.0
 
 
 @dataclass
@@ -105,6 +120,7 @@ class EvalReport:
     provider_name: str = ""
     provider_type: str = ""
     workspace_id: str = ""
+    gate: EvalGate = DEFAULT_GATE
     items: list[ItemReport] = field(default_factory=list)
     wall_clock_s: float = 0.0  # actual elapsed time; differs from latency_s under concurrency
 
@@ -114,7 +130,8 @@ class EvalReport:
 
     @property
     def passed(self) -> int:
-        return sum(1 for i in self.items if i.pass_at_k)
+        """Items that counted as a pass -- pass@K, or pass^K under --gate power."""
+        return sum(1 for i in self.items if i.passed)
 
     @property
     def skipped(self) -> int:
