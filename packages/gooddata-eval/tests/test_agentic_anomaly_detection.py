@@ -410,6 +410,8 @@ class _FakeCtx:
         self.scores: dict[str, float] = {}
         # Not named `quality`: the method below would overwrite itself on first call.
         self.quality_call: dict = {}
+        # stamp_gate_metadata writes the gate and K here, the way every other kind does.
+        self.run_metadata: dict = {}
 
     def trace(self, _conversation_id):
         return None
@@ -479,3 +481,50 @@ def test_cost_is_reported_even_when_the_tool_was_never_reached():
     ev.triggered hid that and understated what the item cost."""
     ctx = _scored(_EXPECTED, calls=[])
     assert "cost_usd" in ctx.quality_call
+
+
+# ── the gate decides the verdict, not pass@K alone ──────────────────────────
+#
+# run_agentic_anomaly_detection computed pass^K and the evaluator never read it, so
+# `--gate power` on a flaky item passed on the strength of one good run out of K -- the
+# precise case the gate exists to catch.
+
+
+def _two_runs(gate=None):
+    """One passing run then one failing one, which pass@K clears and pass^K must not."""
+    client = MagicMock()
+    client.create_conversation.side_effect = ["conv-1", "conv-2"]
+    client.send_message.side_effect = [_chat(_pair()), *[_chat([])] * 8]
+    kwargs = {"gate": gate} if gate is not None else {}
+    with (
+        patch(f"{_MODULE}.ChatClient", return_value=client),
+        patch(f"{_MODULE}.generate_simulated_anomaly_response", return_value="use spend, monthly"),
+    ):
+        return evaluate_agentic_anomaly_detection(
+            host="http://h",
+            token="tok",
+            workspace_id="ws1",
+            question="Any anomalies in monthly spend?",
+            expected_output=_EXPECTED,
+            k=2,
+            **kwargs,
+        )
+
+
+def test_power_gate_fails_an_item_where_only_some_runs_passed():
+    with pytest.raises(AnomalyDetectionAssertionError) as excinfo:
+        _two_runs(gate="power")
+    assert "pass^2" in str(excinfo.value)
+    assert excinfo.value.runs_passed == 1
+    assert excinfo.value.runs_effective == 2
+
+
+def test_any_gate_still_passes_the_same_item():
+    """The default is unchanged: one passing run out of K clears pass@K."""
+    outcome = _two_runs(gate="any")
+    assert outcome.runs_passed == 1
+    assert outcome.runs_effective == 2
+
+
+def test_the_default_gate_is_pass_at_k():
+    assert _two_runs().runs_passed == 1

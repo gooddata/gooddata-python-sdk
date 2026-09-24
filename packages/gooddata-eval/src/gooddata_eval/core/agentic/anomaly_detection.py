@@ -31,6 +31,14 @@ import re
 from dataclasses import dataclass, field
 from typing import Any
 
+from gooddata_eval.core.agentic._gate import (
+    DEFAULT_GATE,
+    EvalGate,
+    gate_failure_note,
+    gate_passed,
+    log_gate_scores,
+    stamp_gate_metadata,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -502,6 +510,7 @@ def evaluate_agentic_anomaly_detection(
     k: int = _DEFAULT_K,
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     initial_conversation_id: str | None = None,
+    gate: EvalGate = DEFAULT_GATE,
     agent_id: str | None = None,
     langfuse: object | None = None,
     dataset_item_id: str = "",
@@ -532,6 +541,8 @@ def evaluate_agentic_anomaly_detection(
         window_end = utc_now()
 
         def _write_scores(ctx: RunTraceContext) -> None:
+            stamp_gate_metadata(ctx.run_metadata, k=len(summary.run_results), gate=gate)
+
             for run_idx, run in enumerate(summary.run_results):
                 pt = ctx.trace(run.conversation_id)
                 ev = run.evaluation
@@ -557,6 +568,7 @@ def evaluate_agentic_anomaly_detection(
                 with ctx.observe(pt, run_idx) as tid:
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
+                    log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
                     ctx.quality(
                         tid,
                         strict_checks=strict_checks,
@@ -601,9 +613,10 @@ def evaluate_agentic_anomaly_detection(
     detail = _detail(best)
     runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
 
-    if not summary.pass_at_k:
+    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_failure_note(gate, runs_passed, len(summary.run_results))
         message = (
-            f"Anomaly detection assertion failed. strict_pass={ev.strict_pass} "
+            f"Anomaly detection assertion failed. {gate_note} strict_pass={ev.strict_pass} "
             f"(triggered={ev.triggered}, executed={ev.executed}, success={ev.success}, "
             f"turn_completed={ev.turn_completed}, metric_correct={ev.metric_correct}, "
             f"granularity_correct={ev.granularity_correct}). "

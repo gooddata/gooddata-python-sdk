@@ -288,6 +288,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, dict) else {},
             k=k,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )
