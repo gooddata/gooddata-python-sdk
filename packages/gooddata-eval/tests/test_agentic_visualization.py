@@ -310,6 +310,7 @@ def test_evaluate_agentic_visualization_returns_reasoning_steps_on_pass():
         "metrics_correct": True,
         "dimensions_correct": True,
         "filters_correct": True,
+        "sorts_correct": True,
         "filter_date_score": True,
         "filter_ranking_score": True,
         "filter_attribute_score": True,
@@ -324,7 +325,10 @@ def test_evaluate_agentic_visualization_returns_reasoning_steps_on_pass():
         "exit_reason": "success",
         "turns_used": 1,
         "max_iterations": 4,
+        "expected_sorts": [],
+        "actual_sorts": [],
         "latency_breakdown": [],
+        "tool_calls": [],
     }
 
 
@@ -364,6 +368,7 @@ def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on
         "metrics_correct": False,
         "dimensions_correct": False,
         "filters_correct": False,
+        "sorts_correct": False,
         "filter_date_score": False,
         "filter_ranking_score": False,
         "filter_attribute_score": False,
@@ -380,7 +385,10 @@ def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on
         "exit_reason": "budget_exhausted",
         "turns_used": 1,
         "max_iterations": 1,
+        "expected_sorts": [],
+        "actual_sorts": [],
         "latency_breakdown": [],
+        "tool_calls": [],
     }
 
 

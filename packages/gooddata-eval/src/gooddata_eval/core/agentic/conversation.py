@@ -32,8 +32,8 @@ from gooddata_eval.core.models import (
     LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
     shift_and_index_events,
+    timeline_detail,
 )
 from gooddata_eval.core.scoring import (
     check_filters,
@@ -582,7 +582,7 @@ def _conversation_detail(result: ConversationResult) -> dict:
         "total_clarification_turns": result.total_clarification_turns,
         "max_clarification_turns": result.max_clarification_turns,
         "turns": [tr.detail() for tr in result.turn_results],
-        "latency_breakdown": build_latency_breakdown(result.tool_call_events, result.reasoning_step_events),
+        **timeline_detail(result.tool_call_events, result.reasoning_step_events),
     }
 
 

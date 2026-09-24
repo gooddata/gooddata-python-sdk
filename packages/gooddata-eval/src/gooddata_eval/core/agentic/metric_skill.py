@@ -38,8 +38,8 @@ from gooddata_eval.core.models import (
     LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
     shift_and_index_events,
+    timeline_detail,
 )
 from gooddata_eval.core.timing import PhaseTimings, log_timer, sum_timings
 
@@ -556,7 +556,7 @@ def evaluate_agentic_metric_skill(
         "exit_reason": best.exit_reason.value,
         "turns_used": best.turns_used,
         "max_iterations": max_iterations,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
     }
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
