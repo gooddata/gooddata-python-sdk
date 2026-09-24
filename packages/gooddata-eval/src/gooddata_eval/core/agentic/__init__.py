@@ -16,6 +16,14 @@ from gooddata_eval.core.agentic.conversation import (
     evaluate_agentic_conversation,
     run_agentic_conversation,
 )
+from gooddata_eval.core.agentic.dashboard_skill import (
+    AgenticDashboardSummary,
+    DashboardEvaluation,
+    DashboardRunResult,
+    DashboardSkillAssertionError,
+    evaluate_agentic_dashboard_skill,
+    run_agentic_dashboard_skill,
+)
 from gooddata_eval.core.agentic.general_question import (
     AgenticGeneralQuestionSummary,
     GeneralQuestionAssertionError,
@@ -62,6 +70,7 @@ from gooddata_eval.core.agentic.visualization import (
 
 __all__ = [
     "AgenticAlertSummary",
+    "AgenticDashboardSummary",
     "AgenticGeneralQuestionSummary",
     "AgenticGuardrailSummary",
     "AgenticKdaSummary",
@@ -74,6 +83,9 @@ __all__ = [
     "ConversationAssertionError",
     "ConversationFixture",
     "ConversationResult",
+    "DashboardEvaluation",
+    "DashboardRunResult",
+    "DashboardSkillAssertionError",
     "GeneralQuestionAssertionError",
     "GeneralQuestionResult",
     "GuardrailAssertionError",
@@ -91,6 +103,7 @@ __all__ = [
     "VisualizationAssertionError",
     "evaluate_agentic_alert_skill",
     "evaluate_agentic_conversation",
+    "evaluate_agentic_dashboard_skill",
     "evaluate_agentic_general_question",
     "evaluate_agentic_guardrail",
     "evaluate_agentic_kda_skill",
@@ -99,6 +112,7 @@ __all__ = [
     "evaluate_agentic_visualization",
     "run_agentic_alert_skill",
     "run_agentic_conversation",
+    "run_agentic_dashboard_skill",
     "run_agentic_general_question",
     "run_agentic_guardrail",
     "run_agentic_kda_skill",
