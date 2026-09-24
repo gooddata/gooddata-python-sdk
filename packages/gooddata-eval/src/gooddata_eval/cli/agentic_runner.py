@@ -13,6 +13,7 @@ from gooddata_eval.core.agentic._langfuse import make_langfuse_client
 from gooddata_eval.core.agentic._trace_linker import BackgroundTraceLinker, SubmitTraceLink, run_trace_link_inline
 from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
 from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluate_agentic_conversation
+from gooddata_eval.core.agentic.dashboard_skill import evaluate_agentic_dashboard_skill
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.kda_skill import evaluate_agentic_kda_skill
@@ -41,6 +42,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_visualization",  # experimental: expected_output.expected_outputs (multi-candidate)
         "agentic_metric_skill",
         "agentic_alert_skill",
+        "agentic_dashboard_skill",
         "agentic_search",
         "agentic_general_question",
         "agentic_guardrail",
@@ -86,6 +88,10 @@ PARALLEL_SAFE_TEST_KINDS = frozenset(
 # create_key_driver_analysis with no cleanup, and while the evaluator only ever reads that
 # call's ARGUMENTS -- never a created object id -- whether the platform persists anything is
 # unverified. Move it to the allowlist once someone confirms it does not.
+#
+# agentic_dashboard_skill is absent by default rather than by evidence: gen-ai holds the draft and
+# any chart it authors in conversation state and writes neither until a user saves from the UI, so
+# it is a candidate for the allowlist once the dataset has runs behind it.
 WORKSPACE_MUTATING_TEST_KINDS = frozenset(AGENTIC_TEST_KINDS) - PARALLEL_SAFE_TEST_KINDS
 
 
@@ -179,6 +185,18 @@ def _dispatch_agentic(
             workspace_id=workspace_id,
             question=item.question,
             expected_output=eo if isinstance(eo, (dict, list)) else {},
+            k=k,
+            gate=gate,
+            agent_id=agent_id,
+            **lf_kw,
+        )
+    elif kind == "agentic_dashboard_skill":
+        return evaluate_agentic_dashboard_skill(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo if isinstance(eo, dict) else {},
             k=k,
             gate=gate,
             agent_id=agent_id,

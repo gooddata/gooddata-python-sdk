@@ -10,10 +10,11 @@ if TYPE_CHECKING:
 
 from attrs import define, field
 from attrs.setters import frozen as frozen_attr
-from gooddata_api_client import models
 from gooddata_api_client.model.afm import AFM
 from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
 from gooddata_api_client.model.result_spec import ResultSpec
+
+from gooddata_sdk import _models as models
 
 try:
     import pyarrow as _pyarrow

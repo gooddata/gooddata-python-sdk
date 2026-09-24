@@ -43,8 +43,8 @@ from gooddata_eval.core.models import (
     CreatedVisualization,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
     shift_and_index_events,
+    timeline_detail,
 )
 from gooddata_eval.core.scoring import get_dimension_uri_set, get_metric_uri_set, uri_to_display_name
 
@@ -313,7 +313,7 @@ def _run_detail(run: RunResult) -> dict:
     """
     return {
         **evaluation_result_detail(run.eval_result),
-        "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
+        **timeline_detail(run.tool_call_events, run.reasoning_step_events),
     }
 
 
