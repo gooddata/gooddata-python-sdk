@@ -1,0 +1,19 @@
+.gitignore
+  s_6fa61352be039b::t_df2d59c0387913 45-51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "57f0d076d694e5b7f2eb5cf5a8a814dd752345bf",
+  "prompts": {},
+  "sessions": {
+    "s_6fa61352be039b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f1497534-b53e-4d4d-b9b5-ceef8a2fe720",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}

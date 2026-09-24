@@ -1,0 +1,40 @@
+packages/gooddata-eval/tests/test_llm_judge.py
+  s_3b0266ed62e026::t_ecc352f9743aeb 399-576
+  s_3b0266ed62e026::t_caa0a81eb5c590 13
+  s_3b0266ed62e026::t_d42423ad6ab93e 577-624
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/summary.py
+  s_3b0266ed62e026::t_f52363b86a1be5 24,75-93,95-96,99-103,106-107,110-117
+packages/gooddata-eval/src/gooddata_eval/core/agentic/guardrail.py
+  s_3b0266ed62e026::t_aa0430610b9624 11,58-60,72-110,141,159-160,162,258-260,266-269,287-296,308-310,323
+  s_3b0266ed62e026::t_058d64efcb8883 147-158,161
+  s_3b0266ed62e026::t_c463c9e4c38804 133
+packages/gooddata-eval/tests/test_summary_evaluator.py
+  s_3b0266ed62e026::t_7fa7541c88db74 4-5,10-17,98-153
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/_llm_judge.py
+  s_3b0266ed62e026::t_fcd03252201620 253-264,268-274,276-277
+  s_3b0266ed62e026::t_c463c9e4c38804 305
+  s_3b0266ed62e026::t_79c4ec15179254 275
+  s_3b0266ed62e026::t_f3b7ea296ba485 11,47-96,104-107,168-172,196,221,278-304,306-312
+packages/gooddata-eval/tests/test_agentic_general_question.py
+  s_3b0266ed62e026::t_e482135942b702 17,598-634,636-661,663-709,711-777
+  s_3b0266ed62e026::t_c463c9e4c38804 635,662,710
+packages/gooddata-eval/src/gooddata_eval/core/agentic/general_question.py
+  s_3b0266ed62e026::t_b5d0972713ad17 12,62-65,77-86,106,116-118,122-123,125,176-177,179,275-277,283-287,308-320,335-338,350
+  s_3b0266ed62e026::t_058d64efcb8883 164-175,178
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "bdeaea8b86ce86703100d75d9caff049b790bcbc",
+  "prompts": {},
+  "sessions": {
+    "s_3b0266ed62e026": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1e330095-adac-4a1b-adfe-036195dd8bdb",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}

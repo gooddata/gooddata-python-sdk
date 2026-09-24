@@ -1,0 +1,110 @@
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/_maql.py
+  s_79aee309cead37::t_a1c52e6399281e 2,15-19,68-69,81
+  s_79aee309cead37::t_000d0fccbcefd6 1,3-6,8-10,14,20-22,52-67,70-80,82-93,96-99,101
+  s_79aee309cead37::t_b66f32889c0024 7,23-51,94-95,100,102-103
+  s_79aee309cead37::t_1d645594924d1c 11-13
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_catalog.py
+  s_ee5cc41b994920::t_1a8660f3afca45 6-7
+  s_79aee309cead37::t_9076b67b25ab1e 23
+  s_79aee309cead37::t_2afe88d7799b4c 69
+  s_79aee309cead37::t_e315dbdbdaa0be 5,8-22,24-39,68,89
+packages/gooddata-eval/src/gooddata_eval/core/agentic/general_question.py
+  s_79aee309cead37::t_2ea36a5382de60 116
+  s_79aee309cead37::t_d22f9b82018ec4 18
+packages/gooddata-eval/src/gooddata_eval/core/agentic/guardrail.py
+  s_79aee309cead37::t_2ea36a5382de60 111
+  s_79aee309cead37::t_d22f9b82018ec4 17
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_79aee309cead37::t_ee92789018d58a 455-456
+  s_79aee309cead37::t_d22f9b82018ec4 25
+  s_79aee309cead37::t_e42fb20789c81f 218,260
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_79aee309cead37::t_978e26a68bbf61 67-69
+  s_79aee309cead37::t_16be97a08a222e 26,51,54
+  s_79aee309cead37::t_ee92789018d58a 287-288
+  s_79aee309cead37::t_d22f9b82018ec4 23
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_79aee309cead37::t_0bc00ff82f1b45 211-212,217
+  s_79aee309cead37::t_d22f9b82018ec4 22
+packages/gooddata-eval/src/gooddata_eval/core/chat/render.py
+  s_79aee309cead37::t_abd521e98e452c 2,12,40-42
+  s_79aee309cead37::t_b1461001974f5a 1,3-11,13-27,29-39,43-45,47
+  s_79aee309cead37::t_fbebc4c58e3863 28,46
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_79aee309cead37::t_db33e5f395f2c0 14,206-209,216,364,573-575,587
+  s_79aee309cead37::t_cbc7704933d86a 376
+  s_79aee309cead37::t_359a20b219cce6 203-205,210-215,217-218,440,454,711,758,834,894-895
+  s_79aee309cead37::t_ee92789018d58a 686-687
+  s_79aee309cead37::t_64f3e0001244a2 882
+  s_79aee309cead37::t_2eb4543bf7df94 576
+  s_79aee309cead37::t_5e5c6112759ee1 400
+  s_79aee309cead37::t_d22f9b82018ec4 24
+  s_79aee309cead37::t_357e0848bb05aa 350-353,358,363,365-375
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_79aee309cead37::t_2a293add2383a2 224-225,227-230,234-235
+  s_79aee309cead37::t_5e5c6112759ee1 226
+  s_79aee309cead37::t_9897a477bf0edb 170-172
+  s_79aee309cead37::t_7f5dc6b8190f80 178-183
+  s_79aee309cead37::t_029fbb8f24d00e 141-142
+  s_79aee309cead37::t_b5e5606f11b081 38-51
+packages/gooddata-eval/tests/test_maql_normalize.py
+  s_79aee309cead37::t_97a9a5ee188d19 1-2,4-7,9-33,42-106
+  s_79aee309cead37::t_0d13fe4babd2a2 3
+  s_79aee309cead37::t_7b08803080e464 39
+  s_79aee309cead37::t_39c36d01ed59f4 8
+  s_79aee309cead37::t_ba44b28b7368bc 34-38,40-41
+packages/gooddata-eval/tests/test_chat_render.py
+  s_79aee309cead37::t_5e5c6112759ee1 79
+  s_79aee309cead37::t_d22f9b82018ec4 8
+  s_79aee309cead37::t_8a3687a194ac63 68
+  s_79aee309cead37::t_39c36d01ed59f4 3
+  s_79aee309cead37::t_78d66efaf16041 1-2,4-7,9-67,69-78,80-118
+packages/gooddata-eval/tests/test_agentic_alert_skill.py
+  s_79aee309cead37::t_c9504af59dba63 915-917,919-935,937-949
+  s_79aee309cead37::t_8f3ce9934babf8 691,731
+  s_79aee309cead37::t_39c36d01ed59f4 914
+  s_79aee309cead37::t_9802607580286b 936,982-998
+  s_79aee309cead37::t_7b08803080e464 13
+  s_79aee309cead37::t_9513ad5c260d59 912-913
+  s_79aee309cead37::t_5e5c6112759ee1 918
+  s_79aee309cead37::t_ba44b28b7368bc 950-981
+  s_79aee309cead37::t_25a24dcead645e 7
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  s_79aee309cead37::t_2879321390ad4a 181-183
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/metric_skill.py
+  s_79aee309cead37::t_e7ba96c89095c3 4
+  s_79aee309cead37::t_2beca75596e613 51-52
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_79aee309cead37::t_2f9b46d949d913 216-217
+packages/gooddata-eval/src/gooddata_eval/core/agentic/kda_skill.py
+  s_79aee309cead37::t_0bc00ff82f1b45 290
+  s_79aee309cead37::t_d22f9b82018ec4 19
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/_text_utils.py
+  s_79aee309cead37::t_d22f9b82018ec4 4
+  s_79aee309cead37::t_abd521e98e452c 9
+  s_79aee309cead37::t_c0526594218ede 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "08c10dc7e98f86362536b884f591064f04b461e3",
+  "prompts": {},
+  "sessions": {
+    "s_79aee309cead37": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "cc11f31c-8eda-4b2b-86a7-71484b4a4de1",
+        "model": "claude-opus-5"
+      },
+      "human_author": null
+    },
+    "s_ee5cc41b994920": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a4aa36d-5864-4014-bd73-a9160c2f8d78",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}
