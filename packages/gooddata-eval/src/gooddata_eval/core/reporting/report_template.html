@@ -1,0 +1,452 @@
+<!-- (C) 2026 GoodData Corporation -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gd-eval report</title>
+<style>
+  :root {
+    --bg: #fbfbfa; --panel: #fff; --ink: #1c1c1a; --dim: #6b6b66; --line: #e3e2de;
+    --pass: #1a7f4b; --fail: #c0392b; --skip: #8a6d1f; --accent: #2c5fd6;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  header { padding: 18px 22px 12px; border-bottom: 1px solid var(--line); background: var(--panel); }
+  h1 { margin: 0 0 2px; font-size: 17px; font-weight: 600; }
+  .sub { color: var(--dim); font-size: 12px; }
+  .badge {
+    display: inline-block; margin-left: 8px; padding: 1px 7px; border-radius: 3px;
+    background: #fdf3d5; color: #7a5c00; font-size: 11px; font-weight: 600;
+  }
+  main { display: flex; align-items: flex-start; gap: 0; }
+  #left { flex: 1 1 auto; min-width: 0; padding: 16px 22px 60px; }
+  #drawer {
+    flex: 0 0 44%; max-width: 44%; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    border-left: 1px solid var(--line); background: var(--panel); padding: 16px 20px 60px; display: none;
+  }
+  #drawer.open { display: block; }
+  section { margin-bottom: 18px; }
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); margin: 0 0 8px; }
+  /* Many run columns make the item table wider than the pane; it scrolls inside its own
+     box so the page itself never scrolls sideways (which would push the drawer off). */
+  .tablewrap { overflow: auto; max-height: 78vh; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 5px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--dim); }
+  #items thead th { position: sticky; top: 0; background: var(--panel); cursor: pointer; user-select: none; z-index: 1; box-shadow: inset 0 -1px 0 var(--line); }
+  #items tbody tr { cursor: pointer; }
+  #items tbody tr:hover { background: #f2f4f9; }
+  #items tbody tr.sel { background: #e8eefc; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .id { font-family: var(--mono); font-size: 11.5px; color: var(--dim); white-space: nowrap; }
+  .q { max-width: 46ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .st { font-weight: 600; font-size: 11px; letter-spacing: .03em; white-space: nowrap; }
+  .st.pass { color: var(--pass); } .st.fail { color: var(--fail); }
+  .st.skip, .st.err { color: var(--skip); } .st.none { color: #c8c8c4; }
+  .bar { height: 5px; background: var(--line); border-radius: 3px; overflow: hidden; margin-top: 3px; }
+  .bar > i { display: block; height: 100%; background: var(--pass); }
+  .cards { display: flex; flex-wrap: wrap; gap: 10px; }
+  .card { flex: 1 1 170px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
+  .card b { display: block; font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .card .big { font-size: 22px; font-variant-numeric: tabular-nums; margin: 2px 0; }
+  .card .sub2 { font-size: 11px; color: var(--dim); }
+  #filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+  input, select, button {
+    font: inherit; padding: 4px 8px; border: 1px solid var(--line); border-radius: 4px;
+    background: var(--panel); color: inherit;
+  }
+  #q { flex: 1 1 200px; min-width: 140px; }
+  #expr { flex: 2 1 320px; min-width: 200px; font-family: var(--mono); font-size: 12px; }
+  #expr.bad { border-color: var(--fail); background: #fdf1f0; }
+  .hint { font-size: 11px; color: var(--dim); font-family: var(--mono); }
+  .count { font-size: 12px; color: var(--dim); margin-left: auto; }
+  .kv { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 0 12px; font-size: 12.5px; }
+  .kv > div { padding: 3px 0; border-bottom: 1px solid var(--line); min-width: 0; }
+  .kv .k { grid-column: 1 / -1; font-weight: 600; border: 0; padding-top: 8px; }
+  pre {
+    margin: 4px 0; padding: 8px 10px; background: #f5f5f3; border-radius: 4px; font-family: var(--mono);
+    font-size: 11.5px; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 260px; overflow: auto;
+  }
+  .tl { font-size: 12px; }
+  .tl .row { display: grid; grid-template-columns: 15ch 1fr 7ch; gap: 8px; align-items: center; padding: 1px 0; cursor: pointer; }
+  .tl .row:hover { background: #f2f4f9; }
+  .tl .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tl .track { background: var(--line); border-radius: 3px; height: 12px; }
+  .tl .track > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
+  .tl .row.reasoning .track > i { background: #9aa5bb; }
+  .tl .d { text-align: right; font-variant-numeric: tabular-nums; color: var(--dim); }
+  .turn { margin: 0 0 8px; padding: 6px 10px; border-left: 3px solid var(--line); background: #f7f7f5; border-radius: 0 4px 4px 0; }
+  .turn.assistant { border-left-color: var(--accent); background: #f2f5fd; }
+  .turn.simulated_user { border-left-color: #b07d2b; background: #fdf7ec; }
+  .turn.note { border-left-color: var(--skip); background: #fdf3d5; font-style: italic; }
+  .turn .who { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--dim); font-weight: 600; }
+  .turn .said { font-size: 12.5px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .chip { display: inline-block; padding: 0 6px; border-radius: 3px; font-size: 11px; background: #eceae5; margin-right: 4px; }
+  .chip.y { background: #e2f3e9; color: var(--pass); } .chip.n { background: #fbe9e7; color: var(--fail); }
+  .close { float: right; cursor: pointer; color: var(--dim); background: none; border: 0; font-size: 18px; line-height: 1; }
+  .empty { color: var(--dim); padding: 20px 0; }
+</style>
+</head>
+<body>
+<script id="data" type="application/json">__GD_EVAL_DATA__</script>
+
+<header>
+  <h1 id="title"></h1>
+  <div class="sub" id="meta"></div>
+</header>
+
+<main>
+  <div id="left">
+    <section id="summary"></section>
+    <section id="comparison"></section>
+    <section>
+      <h2>Items</h2>
+      <div id="filters">
+        <input id="q" placeholder="Search id or question…">
+        <select id="kind"></select>
+        <select id="status">
+          <option value="all">any status</option>
+          <option value="fail">failed</option>
+          <option value="pass">passed</option>
+          <option value="err">errored</option>
+          <option value="skip">skipped</option>
+        </select>
+        <select id="focus" title="Run the drawer and the expression filter read"></select>
+        <input id="expr" placeholder="expression, e.g. d.filter_ranking_score === false">
+        <span class="count" id="count"></span>
+      </div>
+      <div class="hint">
+        expression vars: <b>d</b> detail of focused run · <b>it</b> focused run's item · <b>i</b> row (i.per[label]) · <b>q</b> question · <b>kind</b>
+      </div>
+      <div class="tablewrap"><table id="items"><thead></thead><tbody></tbody></table></div>
+      <div class="empty" id="noitems" hidden>Nothing matches these filters.</div>
+    </section>
+  </div>
+  <div id="drawer"></div>
+</main>
+
+<script>
+const DATA = JSON.parse(document.getElementById('data').textContent);
+const LABELS = Object.keys(DATA.runs);
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const num = (v, d = 2) => (typeof v === 'number' ? v.toFixed(d) : '–');
+const pct = (v) => (typeof v === 'number' ? (v * 100).toFixed(1) + '%' : '–');
+
+// ---------- rows: one per item id, holding that id's result in every run ----------
+const rows = [];
+const byId = new Map();
+for (const label of LABELS) {
+  for (const [id, item] of Object.entries(DATA.runs[label].items || {})) {
+    let r = byId.get(id);
+    if (!r) {
+      r = { id, kind: item.test_kind || '', dataset: item.dataset_name || '', question: item.question || '', per: {} };
+      byId.set(id, r);
+      rows.push(r);
+    }
+    r.per[label] = item;
+    if (!r.question) r.question = item.question || '';
+    if (!r.kind) r.kind = item.test_kind || '';
+  }
+}
+const statusOf = (item) => !item ? 'none' : item.skipped ? 'skip' : item.error ? 'err' : item.pass_at_k ? 'pass' : 'fail';
+const LBL = { pass: 'PASS', fail: 'FAIL', err: 'ERR', skip: 'SKIP', none: '–' };
+
+// ---------- header ----------
+$('#title').textContent = DATA.title || 'gd-eval report';
+$('#meta').innerHTML = `${rows.length} item(s) · ${LABELS.length} run(s) · generated ${esc(DATA.generated_at)}` +
+  (DATA.redacted ? '<span class="badge">REDACTED</span>' : '');
+
+// ---------- summary cards ----------
+$('#summary').innerHTML = '<h2>Runs</h2><div class="cards">' + LABELS.map((label) => {
+  const s = DATA.runs[label].summary || {};
+  const rate = s.total ? s.passed / s.total : 0;
+  return `<div class="card"><b title="${esc(label)}">${esc(label)}</b>
+    <div class="big">${pct(rate)}</div>
+    <div class="sub2">${s.passed ?? 0}/${s.total ?? 0} passed · ${s.errored ?? 0} err · ${s.skipped ?? 0} skip</div>
+    <div class="sub2">${num(s.avg_latency_s)}s avg latency</div>
+    <div class="bar"><i style="width:${(rate * 100).toFixed(1)}%"></i></div></div>`;
+}).join('') + '</div>';
+
+// ---------- comparison ----------
+if (LABELS.length > 1) {
+  const cols = [
+    ['Run', (l) => esc(l), ''],
+    ['Pass rate', (l) => pct(cmp(l).pass_rate), 'num'],
+    ['Passed', (l) => `${cmp(l).passed ?? 0}/${cmp(l).total ?? 0}`, 'num'],
+    ['Avg quality', (l) => pct(cmp(l).avg_quality_score), 'num'],
+    ['Avg latency', (l) => num(cmp(l).avg_latency_s) + 's', 'num'],
+    ['Total latency', (l) => num(cmp(l).total_latency_s, 1) + 's', 'num'],
+  ];
+  $('#comparison').innerHTML = '<h2>Comparison</h2><table><thead><tr>' +
+    cols.map(([h, , c]) => `<th class="${c}">${h}</th>`).join('') + '</tr></thead><tbody>' +
+    LABELS.map((l) => '<tr>' + cols.map(([, f, c]) => `<td class="${c}">${f(l)}</td>`).join('') + '</tr>').join('') +
+    '</tbody></table>';
+}
+function cmp(label) {
+  const c = DATA.comparison[label];
+  if (c) return c;
+  const s = DATA.runs[label].summary || {};
+  return { passed: s.passed, total: s.total, pass_rate: s.total ? s.passed / s.total : 0, avg_latency_s: s.avg_latency_s, total_latency_s: s.latency_s };
+}
+
+// ---------- filters ----------
+const kinds = [...new Set(rows.map((r) => r.kind))].filter(Boolean).sort();
+$('#kind').innerHTML = '<option value="">any kind</option>' + kinds.map((k) => `<option>${esc(k)}</option>`).join('');
+$('#focus').innerHTML = LABELS.map((l) => `<option value="${esc(l)}">${esc(l)}</option>`).join('');
+let focus = LABELS[0];
+let sortKey = 'id', sortDir = 1, selected = null;
+
+function exprFn() {
+  const src = $('#expr').value.trim();
+  if (!src) { $('#expr').classList.remove('bad'); return null; }
+  try {
+    // Local file, own data, no untrusted input -- a real expression beats a fixed set of
+    // facet checkboxes over a `detail` shape that differs per test_kind.
+    const f = new Function('d', 'it', 'i', 'q', 'kind', 'return (' + src + ');');
+    $('#expr').classList.remove('bad');
+    return f;
+  } catch (e) {
+    $('#expr').classList.add('bad');
+    return null;
+  }
+}
+
+function visible() {
+  const text = $('#q').value.trim().toLowerCase();
+  const kind = $('#kind').value, status = $('#status').value, fn = exprFn();
+  let bad = false;
+  const out = rows.filter((r) => {
+    const it = r.per[focus];
+    if (kind && r.kind !== kind) return false;
+    if (status !== 'all' && statusOf(it) !== status) return false;
+    if (text && !(r.id + ' ' + r.question).toLowerCase().includes(text)) return false;
+    if (fn) {
+      try { if (!fn(it && it.detail || {}, it || {}, r, r.question, r.kind)) return false; }
+      catch (e) { bad = true; return false; }
+    }
+    return true;
+  });
+  if (bad) $('#expr').classList.add('bad');
+  const key = sortKey;
+  out.sort((a, b) => {
+    const va = sortVal(a, key), vb = sortVal(b, key);
+    return (va < vb ? -1 : va > vb ? 1 : 0) * sortDir;
+  });
+  return out;
+}
+function sortVal(r, key) {
+  if (key === 'id' || key === 'kind' || key === 'question') return r[key] || '';
+  if (key === 'latency') return (r.per[focus] || {}).avg_latency_s ?? -1;
+  return LBL[statusOf(r.per[key])] || '';  // a run column
+}
+
+function render() {
+  const list = visible();
+  $('#count').textContent = `${list.length} of ${rows.length}`;
+  const heads = [['id', 'Item'], ['kind', 'Kind'], ['question', 'Question']]
+    .concat(LABELS.map((l) => [l, l]))
+    .concat([['latency', 'Latency']]);
+  $('#items thead').innerHTML = '<tr>' + heads.map(([k, h]) =>
+    `<th data-k="${esc(k)}" class="${k === 'latency' ? 'num' : ''}">${esc(h)}${sortKey === k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('') + '</tr>';
+  $('#items tbody').innerHTML = list.map((r) => {
+    const it = r.per[focus] || {};
+    return `<tr data-id="${esc(r.id)}" class="${selected === r.id ? 'sel' : ''}">
+      <td class="id">${esc(r.id)}</td>
+      <td class="id">${esc(r.kind)}</td>
+      <td class="q" title="${esc(r.question)}">${esc(r.question)}</td>` +
+      LABELS.map((l) => { const s = statusOf(r.per[l]); return `<td class="st ${s}">${LBL[s]}</td>`; }).join('') +
+      `<td class="num">${num(it.avg_latency_s)}s</td></tr>`;
+  }).join('');
+  $('#noitems').hidden = list.length > 0;
+}
+
+$('#items thead').addEventListener('click', (e) => {
+  const k = e.target.closest('th')?.dataset.k;
+  if (!k) return;
+  sortDir = sortKey === k ? -sortDir : 1;
+  sortKey = k;
+  render();
+});
+$('#items tbody').addEventListener('click', (e) => {
+  const id = e.target.closest('tr')?.dataset.id;
+  if (id) { selected = id; render(); openDrawer(byId.get(id)); }
+});
+for (const id of ['#q', '#expr', '#kind', '#status']) $(id).addEventListener('input', render);
+$('#focus').addEventListener('change', () => {
+  focus = $('#focus').value;
+  render();
+  if (selected) openDrawer(byId.get(selected));
+});
+
+// ---------- drawer ----------
+function openDrawer(r) {
+  if (!r) return;
+  const it = r.per[focus];
+  const d = $('#drawer');
+  d.classList.add('open');
+  if (!it) { d.innerHTML = `<button class="close">×</button><h2>${esc(r.id)}</h2><p class="empty">Not present in ${esc(focus)}.</p>`; return; }
+  const st = statusOf(it);
+  d.innerHTML = `<button class="close">×</button>
+    <h2>${esc(focus)}</h2>
+    <div style="font-family:var(--mono);font-size:12px">${esc(r.id)}</div>
+    <p style="margin:6px 0 10px">${esc(r.question)}</p>
+    <div><span class="st ${st}">${LBL[st]}</span>
+      <span class="chip">${esc(r.kind)}</span>
+      <span class="chip">${it.runs ?? 0} run(s)</span>
+      <span class="chip">${num(it.best_run_latency_s ?? it.avg_latency_s)}s</span>
+      ${it.classification ? `<span class="chip">${esc(it.classification)}</span>` : ''}
+    </div>
+    ${it.error ? `<section><h2>Error</h2><pre>${esc(it.error)}</pre></section>` : ''}
+    ${transcriptHtml(it)}
+    ${detailHtml(it.detail || {})}
+    ${timelineHtml(it)}
+    ${reasoningHtml(it)}
+    ${idsHtml(it)}`;
+  d.querySelector('.close').onclick = () => { d.classList.remove('open'); selected = null; render(); };
+  d.querySelectorAll('.tl .row').forEach((el) => {
+    el.onclick = () => {
+      const box = $('#tl-detail');
+      box.innerHTML = el.dataset.text
+        ? `<pre>${esc(el.dataset.text)}</pre>`
+        : `<div class="sub">${esc(el.dataset.note || 'No expanded record for this step.')}</div>`;
+    };
+  });
+}
+
+// The agentic path drives a real multi-turn exchange: an answer without a visualization
+// gets a simulated-user follow-up. Reading who said what is how you tell "the agent got
+// there" apart from "the simulated user handed it the answer" -- so the turns are laid
+// out as a conversation, with the simulated user visibly marked as not a real person.
+function transcriptHtml(it) {
+  const turns = (it.detail || {}).transcript || [];
+  if (!turns.length) return '';
+  const n = (it.detail || {}).turns;
+  return `<section><h2>Conversation${n ? ` (${n} turn${n > 1 ? 's' : ''})` : ''}</h2>` +
+    turns.map((t) => `<div class="turn ${esc(t.role)}">
+      <div class="who">${esc(ROLE[t.role] || t.role)}${t.turn ? ` · turn ${esc(t.turn)}` : ''}</div>
+      <div class="said">${esc(t.text || '')}</div>
+      ${t.visualization ? `<pre>${esc(fmt(t.visualization))}</pre>` : ''}
+    </div>`).join('') + '</section>';
+}
+const ROLE = { user: 'question', assistant: 'agent', simulated_user: 'simulated user', note: 'note' };
+
+function detailHtml(detail) {
+  // transcript/turns get their own section above; latency_breakdown and tool_calls drive
+  // the timeline, where a tool step expands to the args and result it joins to.
+  const skip = new Set(['latency_breakdown', 'tool_calls', 'transcript', 'turns']);
+  const keys = Object.keys(detail).filter((k) => !skip.has(k));
+  if (!keys.length) return '';
+  const done = new Set(), parts = [];
+  for (const k of keys) {
+    if (!k.startsWith('expected_')) continue;
+    const actual = 'actual_' + k.slice(9);
+    if (!(actual in detail)) continue;
+    done.add(k); done.add(actual);
+    parts.push(`<div class="k">${esc(k.slice(9))}</div>
+      <div><div class="sub">expected</div><pre>${esc(fmt(detail[k]))}</pre></div>
+      <div><div class="sub">actual</div><pre>${esc(fmt(detail[actual]))}</pre></div>`);
+  }
+  const flags = keys.filter((k) => !done.has(k) && typeof detail[k] === 'boolean');
+  const rest = keys.filter((k) => !done.has(k) && typeof detail[k] !== 'boolean');
+  return '<section><h2>Checks</h2>' +
+    (flags.length ? '<div style="margin-bottom:8px">' + flags.map((k) =>
+      `<span class="chip ${detail[k] ? 'y' : 'n'}">${detail[k] ? '✓' : '✗'} ${esc(k)}</span>`).join(' ') + '</div>' : '') +
+    (parts.length ? `<div class="kv">${parts.join('')}</div>` : '') +
+    rest.map((k) => `<div class="sub" style="margin-top:6px">${esc(k)}</div><pre>${esc(fmt(detail[k]))}</pre>`).join('') +
+    '</section>';
+}
+// Some values are already JSON *text* by design, not by accident: normalized_filters
+// stores each filter as the canonical string equality is tested on, and tool arguments
+// arrive as a serialized blob. Stringifying those again gives a wall of \" escapes, so
+// they are reparsed for DISPLAY only -- `d` in the expression filter still sees the raw
+// string, because that string is what the score was actually computed from.
+function unwrapJson(v) {
+  if (typeof v === 'string') {
+    const t = v.trim();
+    if (t.startsWith('{') || t.startsWith('[')) {
+      try { return unwrapJson(JSON.parse(t)); } catch (e) { return v; }
+    }
+    return v;
+  }
+  if (Array.isArray(v)) return v.map(unwrapJson);
+  if (v && typeof v === 'object') {
+    const out = {};
+    for (const k of Object.keys(v)) out[k] = unwrapJson(v[k]);
+    return out;
+  }
+  return v;
+}
+function fmt(v) {
+  const u = unwrapJson(v);
+  return typeof u === 'string' ? u : JSON.stringify(u, null, 1);
+}
+
+function timelineHtml(it) {
+  const tl = (it.detail || {}).latency_breakdown || [];
+  if (!tl.length) return '';
+  const max = Math.max(...tl.map((s) => s.duration_s || 0)) || 1;
+  const sum = tl.reduce((a, s) => a + (s.duration_s || 0), 0);
+  const total = it.best_run_latency_s;
+  const gap = typeof total === 'number' ? total - sum : null;
+  // `index` joins a step back to its full record -- into `reasoning` for a reasoning step,
+  // into `detail.tool_calls` for a tool call. The breakdown itself only carries the name,
+  // so this lookup is what turns "create_visualization took 18s" into what it was asked
+  // for and what it returned.
+  const calls = (it.detail || {}).tool_calls || [];
+  const byIndex = {};
+  for (const c of calls) byIndex[c.index] = c;
+  // A step with nothing to show has three quite different causes, and "no record" alone
+  // sends you looking for a bug in the report instead of at the run that produced it.
+  const noToolCalls = calls.length === 0;
+  const rows = tl.map((s) => {
+    let text = '', note = '';
+    if (s.kind === 'reasoning') {
+      text = (s.index != null && (it.reasoning || [])[s.index]) || '';
+      if (!text) {
+        note = s.index == null
+          ? 'Time before the first reasoning step — nothing had been emitted yet.'
+          : 'No reasoning paragraph was recorded for this step.';
+      }
+    } else if (byIndex[s.index]) {
+      const c = byIndex[s.index];
+      text = `${c.name}\n\nARGUMENTS\n${fmt(c.arguments)}\n\nRESULT\n${c.result == null ? '(none)' : c.result}`;
+    } else {
+      note = noToolCalls
+        ? 'This run predates tool-call capture: it recorded the timeline but not what each ' +
+          'call was given. Re-run the eval to get arguments and results — re-rendering an ' +
+          'existing JSON report cannot add them.'
+        : 'This call arrived without an index, so nothing can be joined to it.';
+    }
+    return `<div class="row ${esc(s.kind)}" data-text="${esc(text)}" data-note="${esc(note)}">
+      <div class="nm" title="${esc(s.name)}">${esc(s.name)}</div>
+      <div class="track"><i style="width:${((s.duration_s || 0) / max * 100).toFixed(1)}%"></i></div>
+      <div class="d">${num(s.duration_s)}s</div></div>`;
+  }).join('');
+  return `<section><h2>Latency timeline</h2><div class="tl">${rows}</div>
+    <div class="sub" style="margin-top:6px">${tl.length} step(s), ${num(sum)}s accounted` +
+    (gap != null ? ` of ${num(total)}s (${num(gap)}s setup/teardown)` : '') +
+    `</div><div id="tl-detail"></div></section>`;
+}
+
+function reasoningHtml(it) {
+  const rs = it.reasoning || [];
+  if (!rs.length) return '';
+  return '<section><h2>Reasoning</h2>' + rs.map((t, n) =>
+    `<div class="sub">#${n}</div><pre>${esc(t)}</pre>`).join('') + '</section>';
+}
+
+function idsHtml(it) {
+  if (!it.conversation_id && !it.response_id) return '';
+  return `<section><h2>Ids</h2><div class="id">conversation ${esc(it.conversation_id || '–')}<br>response ${esc(it.response_id || '–')}</div></section>`;
+}
+
+render();
+</script>
+</body>
+</html>

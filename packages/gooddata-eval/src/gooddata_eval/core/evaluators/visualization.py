@@ -10,14 +10,16 @@ from gooddata_eval.core.models import (
     CreatedVisualization,
     DatasetItem,
     ToolCallEvent,
-    build_latency_breakdown,
+    timeline_detail,
 )
 from gooddata_eval.core.scoring import (
     check_filters,
+    check_sorts,
     check_viz_type,
     get_dimension_uri_set,
     get_metric_uri_set,
     normalized_filters,
+    normalized_sorts,
     validate_cross_references,
 )
 
@@ -31,6 +33,7 @@ class EvaluationResult:
     metrics_correct: bool
     dimensions_correct: bool
     filters_correct: bool
+    sorts_correct: bool
     viz_type_hard: bool
     filter_date_score: bool
     filter_ranking_score: bool
@@ -46,6 +49,8 @@ class EvaluationResult:
     # is otherwise undiagnosable from a finished run.
     expected_filters: dict[str, list[str]]
     actual_filters: dict[str, list[str]]
+    expected_sorts: list[str]
+    actual_sorts: list[str]
 
     @property
     def strict_pass(self) -> bool:
@@ -55,6 +60,7 @@ class EvaluationResult:
             and self.metrics_correct
             and self.dimensions_correct
             and self.filters_correct
+            and self.sorts_correct
             and self.viz_type_hard
         )
 
@@ -66,6 +72,7 @@ class EvaluationResult:
                 self.metrics_correct,
                 self.dimensions_correct,
                 self.filters_correct,
+                self.sorts_correct,
                 self.viz_type_hard,
             ]
         )
@@ -102,6 +109,7 @@ def _evaluate_visualization(
             metrics_correct=False,
             dimensions_correct=False,
             filters_correct=False,
+            sorts_correct=False,
             viz_type_hard=False,
             filter_date_score=False,
             filter_ranking_score=False,
@@ -114,6 +122,8 @@ def _evaluate_visualization(
             actual_dim_uris=set(),
             expected_filters=normalized_filters(expected, today),
             actual_filters={category: values.copy() for category, values in _NO_FILTERS.items()},
+            expected_sorts=normalized_sorts(expected),
+            actual_sorts=[],
         )
     cross_ref_valid, cross_ref_errors = validate_cross_references(actual)
     act_metric_uris = get_metric_uri_set(actual)
@@ -125,6 +135,7 @@ def _evaluate_visualization(
         metrics_correct=act_metric_uris == exp_metric_uris,
         dimensions_correct=act_dim_uris == exp_dim_uris,
         filters_correct=filter_scores.all_ok,
+        sorts_correct=check_sorts(expected, actual),
         viz_type_hard=check_viz_type(expected, actual),
         filter_date_score=filter_scores.date_ok,
         filter_ranking_score=filter_scores.ranking_ok,
@@ -135,6 +146,8 @@ def _evaluate_visualization(
         actual_metric_uris=act_metric_uris,
         expected_dim_uris=exp_dim_uris,
         actual_dim_uris=act_dim_uris,
+        expected_sorts=normalized_sorts(expected),
+        actual_sorts=normalized_sorts(actual),
         expected_filters=normalized_filters(expected, today),
         actual_filters=normalized_filters(actual, today),
     )
@@ -189,6 +202,7 @@ def evaluation_result_detail(ev: EvaluationResult) -> dict:
         "metrics_correct": ev.metrics_correct,
         "dimensions_correct": ev.dimensions_correct,
         "filters_correct": ev.filters_correct,
+        "sorts_correct": ev.sorts_correct,
         "filter_date_score": ev.filter_date_score,
         "filter_ranking_score": ev.filter_ranking_score,
         "filter_attribute_score": ev.filter_attribute_score,
@@ -200,6 +214,8 @@ def evaluation_result_detail(ev: EvaluationResult) -> dict:
         "actual_dim_uris": sorted(ev.actual_dim_uris),
         "expected_filters": ev.expected_filters,
         "actual_filters": ev.actual_filters,
+        "expected_sorts": ev.expected_sorts,
+        "actual_sorts": ev.actual_sorts,
     }
 
 
@@ -216,8 +232,6 @@ class VisualizationEvaluator:
             rank_key=(ev.strict_pass, ev.strict_checks_passed_count),
             detail={
                 **evaluation_result_detail(ev),
-                "latency_breakdown": build_latency_breakdown(
-                    chat_result.tool_call_events, chat_result.reasoning_step_events
-                ),
+                **timeline_detail(chat_result.tool_call_events, chat_result.reasoning_step_events),
             },
         )

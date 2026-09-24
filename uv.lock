@@ -1070,6 +1070,7 @@ llm-judge = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "gooddata-eval", extra = ["llm-judge"] },
     { name = "pytest" },
 ]
 test = [
@@ -1091,7 +1092,10 @@ requires-dist = [
 provides-extras = ["llm-judge"]
 
 [package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=8.3.5" }]
+dev = [
+    { name = "gooddata-eval", extras = ["llm-judge"], editable = "packages/gooddata-eval" },
+    { name = "pytest", specifier = ">=8.3.5" },
+]
 test = [
     { name = "pytest", specifier = "~=9.1.1" },
     { name = "pytest-cov", specifier = "~=7.1.0" },
