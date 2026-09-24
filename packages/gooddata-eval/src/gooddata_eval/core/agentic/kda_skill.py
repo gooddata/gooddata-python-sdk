@@ -7,6 +7,7 @@ import logging
 import os
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -382,6 +383,25 @@ class KdaSkillAssertionError(AgenticAssertionError):
     """Raised when a KDA-skill evaluation fails."""
 
 
+def _run_detail(run: KdaRunResult) -> dict:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Extracted so a failing run is described by exactly the same keys as the winning run --
+    for this kind that means which phase the run reached before it stopped.
+    """
+    ev = run.evaluation
+    return {
+        "triggered": ev.triggered,
+        "executed": ev.executed,
+        "success": ev.success,
+        "turn_completed": ev.turn_completed,
+        "disambiguated": ev.disambiguated,
+        "actual_create_args": run.actual_create_args,
+        "actual_execute_result": run.actual_execute_result,
+        "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
+    }
+
+
 def evaluate_agentic_kda_skill(
     host: str,
     token: str,
@@ -497,16 +517,14 @@ def evaluate_agentic_kda_skill(
 
     best = summary.best
     ev = best.evaluation
-    detail = {
-        "triggered": ev.triggered,
-        "executed": ev.executed,
-        "success": ev.success,
-        "turn_completed": ev.turn_completed,
-        "disambiguated": ev.disambiguated,
-        "actual_create_args": best.actual_create_args,
-        "actual_execute_result": best.actual_execute_result,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-    }
+    detail = _run_detail(best)
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.evaluation.strict_pass,
+        detail=_run_detail,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
@@ -524,6 +542,7 @@ def evaluate_agentic_kda_skill(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
+        exc.failed_runs = failed_runs
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -532,4 +551,7 @@ def evaluate_agentic_kda_skill(
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        # Also on the success path: pass@K clears the gate with one passing run, so a
+        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        failed_runs=failed_runs,
     )
