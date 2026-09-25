@@ -1,28 +1,30 @@
 packages/gooddata-eval/src/gooddata_eval/core/agentic/dashboard_skill.py
-  s_4dadedfa8c0fd3::t_09402a48b1f414 362-372,385-392,606,608
-  s_4dadedfa8c0fd3::t_97a1722277e0be 151-165,167,170-174,176,179-191
-  s_4dadedfa8c0fd3::t_d78b5e49b50aba 488,492,494-498,500,503-506,514-516,520,530,532,534-537,545-546,548,553-586,588-604,607,617-618,621
-  s_4dadedfa8c0fd3::t_22352ea4fd6c41 77-78,84,96-97,112,117-129
-  s_4dadedfa8c0fd3::t_6a191f16b72c2f 194-197,201-210,212-213,220-221,226-228,232-251
-  s_4dadedfa8c0fd3::t_3662701a281674 419-420,435-437,453
   s_4dadedfa8c0fd3::t_ca7246108f70d7 638-640,642,673,679-686,698-703,709,712-713,715
   s_4dadedfa8c0fd3::t_e2be3ffc86fa98 400-410
-  s_4dadedfa8c0fd3::t_fd5f45721181ec 6,11-12,61,64-69
   s_4dadedfa8c0fd3::t_6b4f8ce44959e3 130-131,192-193
+  s_4dadedfa8c0fd3::t_6a191f16b72c2f 194-197,201-210,212-213,220-221,226-228,232-251
+  s_4dadedfa8c0fd3::t_3662701a281674 419-420,435-437,453
+  s_4dadedfa8c0fd3::t_fd5f45721181ec 6,11-12,61,64-69
+  s_4dadedfa8c0fd3::t_22352ea4fd6c41 77-78,84,96-97,112,117-129
+  s_4dadedfa8c0fd3::t_97a1722277e0be 151-165,167,170-174,176,179-191
+  s_4dadedfa8c0fd3::t_09402a48b1f414 362-372,385-392,606,608
+  s_4dadedfa8c0fd3::t_d78b5e49b50aba 488,492,494-498,500,503-506,514-516,520,530,532,534-537,545-546,548,553-586,588-604,607,617-618,621
+packages/gooddata-eval/tests/test_agentic_dashboard_skill.py
+  s_4dadedfa8c0fd3::t_7283fa7c13e790 10-11,106,117
+  s_4dadedfa8c0fd3::t_8383a5943be16b 511-643
+  s_4dadedfa8c0fd3::t_46da1ee47528e6 33-34,187
+  s_4dadedfa8c0fd3::t_d9fc62ba09ca1f 12,202,211,215,224,228,232
+  s_4dadedfa8c0fd3::t_7b028e2644fbce 127-186,188-198,506-510
+  s_4dadedfa8c0fd3::t_cc1e9be99f0c52 218,338,458,464,783-789,805-809
 packages/gooddata-eval/pyproject.toml
   s_4dadedfa8c0fd3::t_2d1ee33e05ec8f 16
-packages/gooddata-eval/tests/test_agentic_dashboard_skill.py
-  s_4dadedfa8c0fd3::t_7b028e2644fbce 127-186,188-198,506-510
-  s_4dadedfa8c0fd3::t_8383a5943be16b 511-643
-  s_4dadedfa8c0fd3::t_d9fc62ba09ca1f 12,202,211,215,224,228,232
-  s_4dadedfa8c0fd3::t_7283fa7c13e790 10-11,106,117
-  s_4dadedfa8c0fd3::t_cc1e9be99f0c52 218,338,458,464,783-789,805-809
-  s_4dadedfa8c0fd3::t_46da1ee47528e6 33-34,187
+uv.lock
+  s_4dadedfa8c0fd3::t_f70827e78a707e 1061,1088,1732-1752
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.4",
-  "base_commit_sha": "d8b7653a354536f85b60b5c32ace24fa5eed8c1e",
+  "base_commit_sha": "17d066b4e89ea3dff2b081865887a543c14b4443",
   "prompts": {},
   "sessions": {
     "s_4dadedfa8c0fd3": {
