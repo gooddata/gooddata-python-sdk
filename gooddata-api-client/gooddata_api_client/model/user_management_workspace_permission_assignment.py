@@ -68,6 +68,8 @@ class UserManagementWorkspacePermissionAssignment(ModelNormal):
             'READ_KNOWLEDGE_DOCUMENTS': "READ_KNOWLEDGE_DOCUMENTS",
             'CREATE_FILTER_VIEW': "CREATE_FILTER_VIEW",
             'CREATE_METRIC': "CREATE_METRIC",
+            'CREATE_VISUALIZATION': "CREATE_VISUALIZATION",
+            'CREATE_COMPUTED_ATTRIBUTE': "CREATE_COMPUTED_ATTRIBUTE",
             'VIEW': "VIEW",
         },
         ('permissions',): {
@@ -82,6 +84,8 @@ class UserManagementWorkspacePermissionAssignment(ModelNormal):
             'READ_KNOWLEDGE_DOCUMENTS': "READ_KNOWLEDGE_DOCUMENTS",
             'CREATE_FILTER_VIEW': "CREATE_FILTER_VIEW",
             'CREATE_METRIC': "CREATE_METRIC",
+            'CREATE_VISUALIZATION': "CREATE_VISUALIZATION",
+            'CREATE_COMPUTED_ATTRIBUTE': "CREATE_COMPUTED_ATTRIBUTE",
             'VIEW': "VIEW",
         },
         ('access_source',): {
