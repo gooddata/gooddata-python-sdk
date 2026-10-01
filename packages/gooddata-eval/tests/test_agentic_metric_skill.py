@@ -1,5 +1,6 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
+import json
 import sys
 import types
 from contextlib import ExitStack, contextmanager
@@ -12,6 +13,7 @@ from gooddata_eval.core.agentic.metric_skill import (
     MetricSkillAssertionError,
     SimulatedResponseError,
     _delete_metric,
+    _extract_created_metric_ids,
     _extract_metric_result,
     _no_where_clause_hint,
     evaluate_agentic_metric_skill,
@@ -853,3 +855,18 @@ def test_metric_skill_writes_the_turn_and_step_counts_to_langfuse():
     # they are counts, and a float reads as though a fraction of a turn were possible.
     assert isinstance(scores["turns"], int)
     assert isinstance(scores["steps"], int)
+
+
+def test_extract_created_metric_ids_skips_a_metric_updated_in_place():
+    """create_metric is an upsert; deleting an updated metric would delete one that existed before."""
+
+    def call(mid, created_new):
+        return ToolCallEvent.model_validate(
+            {
+                "functionName": "create_metric",
+                "functionArguments": "{}",
+                "result": json.dumps({"data": {"metric_id": mid, "created_new": created_new}}),
+            }
+        )
+
+    assert _extract_created_metric_ids([call("new", True), call("old", False)]) == ["new"]
