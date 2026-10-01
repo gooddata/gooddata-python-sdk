@@ -857,10 +857,10 @@ def test_metric_skill_writes_the_turn_and_step_counts_to_langfuse():
     assert isinstance(scores["steps"], int)
 
 
-def test_extract_created_metric_ids_skips_a_metric_updated_in_place():
+def test_extract_created_metric_ids_skips_a_metric_updated_in_place() -> None:
     """create_metric is an upsert; deleting an updated metric would delete one that existed before."""
 
-    def call(mid, created_new):
+    def call(mid: str, created_new: bool) -> ToolCallEvent:
         return ToolCallEvent.model_validate(
             {
                 "functionName": "create_metric",

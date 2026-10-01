@@ -498,7 +498,7 @@ def test_parse_sse_lines_metadata_sync_marker_in_malformed_json_is_transient():
 
 
 @pytest.mark.parametrize("reason", ["max_iterations", "max_tokens", "content_filter"])
-def test_parse_sse_lines_turn_incomplete_is_not_transient(reason):
+def test_parse_sse_lines_turn_incomplete_is_not_transient(reason: str) -> None:
     """gen-ai's "no final answer" error is a 502 with a reason; retrying it would resend the question."""
     lines = [
         'data: {"item": {"role": "assistant", "content": {"type": "text", "text": "Let me check."}}}',
@@ -513,7 +513,7 @@ def test_parse_sse_lines_turn_incomplete_is_not_transient(reason):
 
 
 @pytest.mark.parametrize("reason", [None, "unknown"])
-def test_parse_sse_lines_502_without_a_definite_reason_stays_transient(reason):
+def test_parse_sse_lines_502_without_a_definite_reason_stays_transient(reason: str | None) -> None:
     payload = {"statusCode": 502, "detail": "LLM provider is not responding"}
     if reason:
         payload["reason"] = reason

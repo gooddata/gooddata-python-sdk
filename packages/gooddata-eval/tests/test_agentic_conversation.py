@@ -1,6 +1,8 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 import json as _json
+import sys
+import types
 from datetime import date
 from unittest.mock import MagicMock, patch
 
@@ -21,6 +23,7 @@ from gooddata_eval.core.agentic._conversation_context import (
 from gooddata_eval.core.agentic.conversation import (
     ConversationAssertionError,
     ConversationFixture,
+    ConversationResult,
     TurnDefinition,
     TurnResult,
     _canonical_maql,
@@ -1199,8 +1202,13 @@ def test_conversation_writes_the_turn_step_and_clarification_counts_to_langfuse(
     assert scores["steps"] == 5
 
 
-def _viz(metric="metric/gross_margin_percent", dim="label/dim_store.store_format", filters=None, sort=None):
-    query = {"fields": {"m": {"using": metric}, "d": {"using": dim}}, "filter_by": filters or {}}
+def _viz(
+    metric: str = "metric/gross_margin_percent",
+    dim: str = "label/dim_store.store_format",
+    filters: dict | None = None,
+    sort: list[dict] | None = None,
+) -> dict:
+    query: dict = {"fields": {"m": {"using": metric}, "d": {"using": dim}}, "filter_by": filters or {}}
     if sort:
         query["sort_by"] = sort
     return {"type": "bar_chart", "query": query, "metrics": ["m"], "view_by": ["d"]}
@@ -1211,7 +1219,7 @@ _EXPRESS = {
 }
 
 
-def _tool(name, args=None, result=None):
+def _tool(name: str, args: dict | None = None, result: object = None) -> dict:
     return {
         "functionName": name,
         "functionArguments": _json.dumps(args or {}),
@@ -1219,15 +1227,17 @@ def _tool(name, args=None, result=None):
     }
 
 
-def _result(text="Done", viz=None, tools=None, **extra):
-    payload = {"textResponse": text, "toolCallEvents": tools or []}
+def _result(
+    text: str | None = "Done", viz: dict | None = None, tools: list[dict] | None = None, **extra: object
+) -> ChatResult:
+    payload: dict = {"textResponse": text, "toolCallEvents": tools or []}
     if viz is not None:
         payload["createdVisualizations"] = {"objects": [viz]}
     payload.update(extra)
     return ChatResult.model_validate(payload)
 
 
-def _viz_turn(turn_id="t1", expected=None, **kw):
+def _viz_turn(turn_id: str = "t1", expected: dict | None = None, **kw: object) -> TurnDefinition:
     return TurnDefinition(
         turn_id=turn_id,
         message=kw.pop("message", "chart it"),
@@ -1237,35 +1247,35 @@ def _viz_turn(turn_id="t1", expected=None, **kw):
     )
 
 
-def test_output_correct_reads_the_wrapped_visualization_and_passes_an_identical_chart():
+def test_output_correct_reads_the_wrapped_visualization_and_passes_an_identical_chart() -> None:
     ok, diff = _check_output_correct(_viz_turn(expected=_viz(filters=_EXPRESS)), _result(viz=_viz(filters=_EXPRESS)))
     assert (ok, diff) == (True, [])
 
 
-def test_output_correct_fails_a_chart_that_dropped_an_established_filter():
+def test_output_correct_fails_a_chart_that_dropped_an_established_filter() -> None:
     ok, diff = _check_output_correct(_viz_turn(expected=_viz(filters=_EXPRESS)), _result(viz=_viz()))
     assert ok is False
     assert any(d.startswith("attribute filters") for d in diff)
 
 
-def test_output_correct_fails_a_filter_nobody_asked_for():
+def test_output_correct_fails_a_filter_nobody_asked_for() -> None:
     ok, diff = _check_output_correct(_viz_turn(expected=_viz()), _result(viz=_viz(filters=_EXPRESS)))
     assert ok is False
     assert any(d.startswith("attribute filters") for d in diff)
 
 
-def test_output_correct_fails_a_different_metric():
+def test_output_correct_fails_a_different_metric() -> None:
     ok, diff = _check_output_correct(_viz_turn(expected=_viz()), _result(viz=_viz(metric="metric/units_sold")))
     assert ok is False
     assert diff[0].startswith("metrics")
 
 
-def test_output_correct_accepts_any_listed_alternative():
+def test_output_correct_accepts_any_listed_alternative() -> None:
     turn = _viz_turn(expected=_viz(filters=_EXPRESS), expected_output_alternatives=[{"visualization": _viz()}])
     assert _check_output_correct(turn, _result(viz=_viz()))[0] is True
 
 
-def test_output_correct_checks_sort_only_when_expected_states_it():
+def test_output_correct_checks_sort_only_when_expected_states_it() -> None:
     sort = [{"type": "metric_sort", "direction": "DESC", "metrics": ["m"]}]
     assert _check_output_correct(_viz_turn(expected=_viz()), _result(viz=_viz(sort=sort)))[0] is True
     ok, diff = _check_output_correct(_viz_turn(expected=_viz(sort=sort)), _result(viz=_viz()))
@@ -1273,7 +1283,7 @@ def test_output_correct_checks_sort_only_when_expected_states_it():
     assert diff[0].startswith("sort")
 
 
-def test_output_correct_sort_without_a_direction_matches_either_direction():
+def test_output_correct_sort_without_a_direction_matches_either_direction() -> None:
     by_units = [{"type": "metric_sort", "metrics": ["m"]}]
     asc = [{"type": "metric_sort", "direction": "ASC", "metrics": ["m"]}]
     assert _check_output_correct(_viz_turn(expected=_viz(sort=by_units)), _result(viz=_viz(sort=asc)))[0] is True
@@ -1281,11 +1291,11 @@ def test_output_correct_sort_without_a_direction_matches_either_direction():
     assert _check_output_correct(_viz_turn(expected=_viz(sort=desc)), _result(viz=_viz(sort=asc)))[0] is False
 
 
-def test_output_correct_is_unknown_when_nothing_is_expected():
+def test_output_correct_is_unknown_when_nothing_is_expected() -> None:
     assert _check_output_correct(_viz_turn(), _result(viz=_viz())) == (None, [])
 
 
-def test_output_correct_compares_tool_arguments_across_the_turn():
+def test_output_correct_compares_tool_arguments_across_the_turn() -> None:
     turn = TurnDefinition(
         turn_id="a",
         message="alert me",
@@ -1300,7 +1310,7 @@ def test_output_correct_compares_tool_arguments_across_the_turn():
     assert _check_output_correct(turn, _result(), [wrong])[0] is False
 
 
-def test_output_correct_compares_maql_for_a_metric_turn():
+def test_output_correct_compares_maql_for_a_metric_turn() -> None:
     turn = TurnDefinition(
         turn_id="m",
         message="make it",
@@ -1331,11 +1341,11 @@ def test_output_correct_compares_maql_for_a_metric_turn():
         (_result(text="Pick one", unhandledParts=[{"type": "clarifyingQuestions"}]), "question"),
     ],
 )
-def test_classify_reply(result, kind):
+def test_classify_reply(result: ChatResult, kind: str) -> None:
     assert classify_reply(result, result.text_response or render_answer_text(result)) == kind
 
 
-def test_resolve_conversation_mode(monkeypatch):
+def test_resolve_conversation_mode(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("GD_EVAL_CONVERSATION_MODE", raising=False)
     assert resolve_conversation_mode() == "legacy"
     monkeypatch.setenv("GD_EVAL_CONVERSATION_MODE", "context")
@@ -1350,11 +1360,11 @@ class _FakeJudge:
 
     model_name = "fake-judge"
 
-    def __init__(self, lost_context):
+    def __init__(self, lost_context: bool | None) -> None:
         self.lost_context = lost_context
-        self.calls = []
+        self.calls: list[tuple[str, str, str]] = []
 
-    def judge(self, history, latest, question):
+    def judge(self, history: str, latest: str, question: str) -> ClarificationVerdict:
         self.calls.append((history, latest, question))
         return ClarificationVerdict(lost_context=self.lost_context, reasoning="because")
 
@@ -1362,7 +1372,9 @@ class _FakeJudge:
 _SKILLS = _tool("set_skills", {"skill_names": ["visualization"]})
 
 
-def _run(replies, turns, mode="context", judge=None, **kw):
+def _run(
+    replies: list, turns: list[TurnDefinition], mode: str = "context", judge: _FakeJudge | None = None, **kw: object
+) -> tuple[ConversationResult, MagicMock]:
     client = MagicMock()
     client.create_conversation.return_value = "conv-1"
     client.send_message.side_effect = replies
@@ -1377,7 +1389,7 @@ def _run(replies, turns, mode="context", judge=None, **kw):
     return result, client
 
 
-def test_context_mode_fails_a_turn_that_asks_for_what_the_conversation_established():
+def test_context_mode_fails_a_turn_that_asks_for_what_the_conversation_established() -> None:
     turns = [
         _viz_turn("t1", expected=_viz()),
         _viz_turn("t2", expected=_viz(filters=_EXPRESS), message="its margin?", depends_on=["t1"]),
@@ -1414,7 +1426,7 @@ def test_context_mode_fails_a_turn_that_asks_for_what_the_conversation_establish
     assert question == "Which store format do you mean?"
 
 
-def test_context_mode_sends_the_set_answer_to_a_legitimate_question():
+def test_context_mode_sends_the_set_answer_to_a_legitimate_question() -> None:
     turns = [_viz_turn("t1", expected=_viz(), message="revenue by format", set_answers=["Gross Margin Percent."])]
     result, client = _run(
         [_result(text="Which metric do you mean?"), _result(viz=_viz(), tools=[_SKILLS])],
@@ -1426,7 +1438,7 @@ def test_context_mode_sends_the_set_answer_to_a_legitimate_question():
     assert result.turn_results[0].clarifications[0].reply == "Gross Margin Percent."
 
 
-def test_context_mode_answers_a_confirmation_with_yes_and_does_not_count_it_against_the_turn():
+def test_context_mode_answers_a_confirmation_with_yes_and_does_not_count_it_against_the_turn() -> None:
     turns = [_viz_turn("t1", expected=_viz())]
     judge = _FakeJudge(lost_context=True)
     result, client = _run(
@@ -1437,7 +1449,7 @@ def test_context_mode_answers_a_confirmation_with_yes_and_does_not_count_it_agai
     assert result.turn_results[0].context_success is True
 
 
-def test_context_mode_records_an_iteration_limit_as_a_stall_and_nudges():
+def test_context_mode_records_an_iteration_limit_as_a_stall_and_nudges() -> None:
     turns = [_viz_turn("t1", expected=_viz())]
     incomplete = TurnIncompleteError("SSE error 502", status_code=502, reason="max_iterations")
     result, client = _run([incomplete, _result(viz=_viz(), tools=[_SKILLS])], turns, judge=_FakeJudge(False))
@@ -1449,14 +1461,14 @@ def test_context_mode_records_an_iteration_limit_as_a_stall_and_nudges():
     assert result.stalled_turns == 1
 
 
-def test_context_mode_never_primes_the_simulated_user_with_the_expected_output():
+def test_context_mode_never_primes_the_simulated_user_with_the_expected_output() -> None:
     turns = [_viz_turn("t1", expected=_viz())]
     with patch("gooddata_eval.core.agentic.conversation._get_sim_user_response") as legacy_sim:
         _run([_result(text="Which metric?"), _result(viz=_viz(), tools=[_SKILLS])], turns, judge=_FakeJudge(False))
     legacy_sim.assert_not_called()
 
 
-def test_legacy_mode_keeps_the_primed_simulated_user_and_the_legacy_verdict():
+def test_legacy_mode_keeps_the_primed_simulated_user_and_the_legacy_verdict() -> None:
     turns = [_viz_turn("t1", expected=_viz(filters=_EXPRESS))]
     with patch("gooddata_eval.core.agentic.conversation._get_sim_user_response", return_value="Express") as sim:
         result, _ = _run(
@@ -1471,7 +1483,7 @@ def test_legacy_mode_keeps_the_primed_simulated_user_and_the_legacy_verdict():
     assert result.turn_results[0].output_correct is False
 
 
-def test_context_kept_rate_is_over_labelled_turns_only():
+def test_context_kept_rate_is_over_labelled_turns_only() -> None:
     turns = [
         _viz_turn("t1", expected=_viz()),
         _viz_turn("t2", expected=_viz(), depends_on=["t1"]),
@@ -1485,7 +1497,7 @@ def test_context_kept_rate_is_over_labelled_turns_only():
     assert result.context_success is False
 
 
-def test_fresh_conversation_per_turn_gives_every_turn_an_empty_history():
+def test_fresh_conversation_per_turn_gives_every_turn_an_empty_history() -> None:
     turns = [_viz_turn("t1", expected=_viz()), _viz_turn("t2", expected=_viz())]
     good = _result(viz=_viz(), tools=[_SKILLS])
     _, client = _run([good, good], turns, judge=_FakeJudge(False), fresh_conversation_per_turn=True)
@@ -1493,7 +1505,7 @@ def test_fresh_conversation_per_turn_gives_every_turn_an_empty_history():
     assert client.delete_conversation.call_count == 2
 
 
-def test_cleanup_deletes_created_metrics_and_alerts_but_keeps_a_metric_updated_in_place():
+def test_cleanup_deletes_created_metrics_and_alerts_but_keeps_a_metric_updated_in_place() -> None:
     turns = [_viz_turn("t1", expected=_viz())]
     tools = [
         _SKILLS,
@@ -1510,7 +1522,7 @@ def test_cleanup_deletes_created_metrics_and_alerts_but_keeps_a_metric_updated_i
     assert [c.args[2] for c in del_alert.call_args_list] == ["alert-1"]
 
 
-def test_cleanup_still_runs_for_a_metric_created_before_the_stream_died():
+def test_cleanup_still_runs_for_a_metric_created_before_the_stream_died() -> None:
     turns = [_viz_turn("t1", expected=_viz())]
     partial = _result(tools=[_tool("create_metric", result={"data": {"metric_id": "orphan", "maql": "SELECT 1"}})])
     with (
@@ -1521,7 +1533,7 @@ def test_cleanup_still_runs_for_a_metric_created_before_the_stream_died():
     assert [c.args[2] for c in del_metric.call_args_list] == ["orphan"]
 
 
-def test_context_mode_pushes_a_stalled_turn_once_then_ends_it():
+def test_context_mode_pushes_a_stalled_turn_once_then_ends_it() -> None:
     turns = [_viz_turn("t1", expected=_viz())]
     stall = _result(text="Let me look into that.")
     result, client = _run([stall, stall, stall], turns, judge=_FakeJudge(False))
@@ -1531,7 +1543,7 @@ def test_context_mode_pushes_a_stalled_turn_once_then_ends_it():
 
 
 @pytest.mark.parametrize(("mode", "gate"), [("legacy", True), ("context", False)])
-def test_scores_carry_both_verdicts_and_gate_on_the_mode(mode, gate):
+def test_scores_carry_both_verdicts_and_gate_on_the_mode(mode: str, gate: bool) -> None:
     """A turn that shows the chart but drops an established filter: legacy passes it, context does not."""
     client = MagicMock()
     client.create_conversation.return_value = "conv-1"
@@ -1539,9 +1551,9 @@ def test_scores_carry_both_verdicts_and_gate_on_the_mode(mode, gate):
     fixture = ConversationFixture(
         id="c", expected_skills=["visualization"], turns=[_viz_turn("t1", expected=_viz(filters=_EXPRESS))]
     )
-    captured = {}
+    captured: dict = {}
 
-    def _capture(_submit, _identity, **kwargs):
+    def _capture(_submit: object, _identity: object, **kwargs: object) -> None:
         captured["write_scores"] = kwargs["write_scores"]
 
     with (
@@ -1574,7 +1586,7 @@ def test_scores_carry_both_verdicts_and_gate_on_the_mode(mode, gate):
     assert scores["turns_before_first_break"] == 0
 
 
-def test_output_correct_treats_an_end_date_after_today_as_today():
+def test_output_correct_treats_an_end_date_after_today_as_today() -> None:
     """ "2025 and 2026 so far": the year end and today select the same data."""
     so_far = {
         "f": {"type": "date_filter", "using": "dataset/transaction_date", "from": "2025-01-01", "to": "2026-12-31"}
@@ -1593,7 +1605,7 @@ def test_output_correct_treats_an_end_date_after_today_as_today():
         ]
 
 
-def _llm_returning(body):
+def _llm_returning(body: str) -> _ClarificationLLM:
     llm = _ClarificationLLM.__new__(_ClarificationLLM)
     llm.model = "fake"
     llm._system_prompt = ""
@@ -1603,7 +1615,7 @@ def _llm_returning(body):
     return llm
 
 
-def test_clarification_llm_reads_the_named_boolean():
+def test_clarification_llm_reads_the_named_boolean() -> None:
     assert _llm_returning('{"already_in_conversation": true, "reasoning": "t2 said so"}').already_in_conversation(
         "p"
     ) == (True, "t2 said so")
@@ -1613,16 +1625,16 @@ def test_clarification_llm_reads_the_named_boolean():
 
 
 @pytest.mark.parametrize("body", ['{"score": 0}', '{"already_in_conversation": "yes"}', "not json", ""])
-def test_clarification_llm_refuses_anything_but_a_boolean_verdict(body):
+def test_clarification_llm_refuses_anything_but_a_boolean_verdict(body: str) -> None:
     with pytest.raises(JudgeResponseError):
         _llm_returning(body).already_in_conversation("p")
 
 
-def test_judge_prompt_marks_an_empty_history():
+def test_judge_prompt_marks_an_empty_history() -> None:
     assert "CONVERSATION BEFORE:\n(empty)" in judge_prompt("", "Sort it", "By what?")
 
 
-def test_context_mode_restates_at_most_once_per_turn():
+def test_context_mode_restates_at_most_once_per_turn() -> None:
     turns = [_viz_turn("t1", expected=_viz(), set_answers=["Gross Margin Percent."])]
     with patch(
         "gooddata_eval.core.agentic.conversation.reply_restating", return_value="As I said earlier, X."
@@ -1636,7 +1648,7 @@ def test_context_mode_restates_at_most_once_per_turn():
     assert client.send_message.call_args_list[2].args[1] == "Gross Margin Percent."
 
 
-def test_output_correct_treats_a_single_value_in_as_equals():
+def test_output_correct_treats_a_single_value_in_as_equals() -> None:
     turn = TurnDefinition(
         turn_id="m",
         message="make it",
@@ -1660,7 +1672,7 @@ def test_output_correct_treats_a_single_value_in_as_equals():
     assert _check_output_correct(turn, _result(), [two])[0] is False
 
 
-def test_an_iteration_limit_after_the_chart_was_made_keeps_the_chart():
+def test_an_iteration_limit_after_the_chart_was_made_keeps_the_chart() -> None:
     turns = [_viz_turn("t1", expected=_viz())]
     partial = _result(viz=_viz(), tools=[_SKILLS])
     incomplete = TurnIncompleteError("SSE error 502", status_code=502, reason="max_iterations", partial_result=partial)
@@ -1671,7 +1683,7 @@ def test_an_iteration_limit_after_the_chart_was_made_keeps_the_chart():
     assert turn.stalled is True
 
 
-def test_a_fresh_conversation_starts_with_no_active_skills():
+def test_a_fresh_conversation_starts_with_no_active_skills() -> None:
     turns = [_viz_turn("t1", expected=_viz()), _viz_turn("t2", expected=_viz())]
     result, _ = _run(
         [_result(viz=_viz(), tools=[_SKILLS]), _result(viz=_viz())],
@@ -1682,7 +1694,7 @@ def test_a_fresh_conversation_starts_with_no_active_skills():
     assert result.turn_results[1].skill_routing is False
 
 
-def test_a_question_on_the_last_allowed_round_is_still_judged():
+def test_a_question_on_the_last_allowed_round_is_still_judged() -> None:
     turns = [_viz_turn("t1", expected=_viz())]
     judge = _FakeJudge(lost_context=True)
     result, _ = _run([_result(text="Which chart?")], turns, judge=judge, max_clarification_turns=0)
@@ -1690,14 +1702,14 @@ def test_a_question_on_the_last_allowed_round_is_still_judged():
     assert result.lost_context_clarifications == 1
 
 
-def test_not_in_is_not_rewritten_as_equals():
+def test_not_in_is_not_rewritten_as_equals() -> None:
     assert "not in" in _canonical_maql('SELECT {metric/a} WHERE {label/b} NOT IN ("x")')
     assert _canonical_maql('SELECT {metric/a} WHERE {label/b} IN ("x")') == _canonical_maql(
         'SELECT {metric/a} WHERE {label/b} = "x"'
     )
 
 
-def test_the_flat_expected_shape_is_still_checked():
+def test_the_flat_expected_shape_is_still_checked() -> None:
     turn = TurnDefinition(
         turn_id="t",
         message="m",
@@ -1711,13 +1723,13 @@ def test_the_flat_expected_shape_is_still_checked():
 # --- clarification judge -------------------------------------------------------------
 
 
-def _judge_with(llm):
+def _judge_with(llm: MagicMock) -> ClarificationJudge:
     judge = ClarificationJudge(model="fake")
     judge._llm = llm
     return judge
 
 
-def test_judge_reads_the_verdict_and_caches_it_per_prompt():
+def test_judge_reads_the_verdict_and_caches_it_per_prompt() -> None:
     llm = MagicMock()
     llm.already_in_conversation.return_value = (True, "t1 named it")
     judge = _judge_with(llm)
@@ -1729,7 +1741,7 @@ def test_judge_reads_the_verdict_and_caches_it_per_prompt():
     assert llm.already_in_conversation.call_count == 2
 
 
-def test_an_unreadable_verdict_leaves_the_clarification_unjudged():
+def test_an_unreadable_verdict_leaves_the_clarification_unjudged() -> None:
     llm = MagicMock()
     llm.already_in_conversation.side_effect = JudgeResponseError("no boolean")
     verdict = _judge_with(llm).judge("", "x", "y")
@@ -1737,7 +1749,9 @@ def test_an_unreadable_verdict_leaves_the_clarification_unjudged():
     assert "no boolean" in verdict.error
 
 
-def test_a_provider_fault_leaves_clarifications_unjudged_and_is_announced_once(capsys):
+def test_a_provider_fault_leaves_clarifications_unjudged_and_is_announced_once(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
     llm = MagicMock()
     llm.already_in_conversation.side_effect = RuntimeError("401 bad key")
     judge = _judge_with(llm)
@@ -1746,23 +1760,24 @@ def test_a_provider_fault_leaves_clarifications_unjudged_and_is_announced_once(c
     assert capsys.readouterr().out.count("left unjudged") == 1
 
 
-def test_the_judge_needs_no_api_key_until_it_is_asked(monkeypatch):
+def test_the_judge_needs_no_api_key_until_it_is_asked(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     judge = ClarificationJudge()
     assert judge.model_name
     assert judge.judge("", "a", "q").error is not None
 
 
-def test_the_clarification_llm_uses_its_own_prompt(monkeypatch):
+def test_the_clarification_llm_uses_its_own_prompt(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+    _fake_openai(monkeypatch, MagicMock())
     llm = _ClarificationLLM(model="gpt-4o")
     assert "already_in_conversation" in llm._system_prompt
     assert llm.model == "gpt-4o"
 
 
-def test_the_clarification_llm_retries_an_empty_body_once():
+def test_the_clarification_llm_retries_an_empty_body_once() -> None:
     llm = _llm_returning("")
-    calls = []
+    calls: list[int] = []
     choice = MagicMock()
     choice.message.content = '{"already_in_conversation": false, "reasoning": "r"}'
     bodies = iter([MagicMock(choices=[]), MagicMock(choices=[choice])])
@@ -1774,7 +1789,13 @@ def test_the_clarification_llm_retries_an_empty_body_once():
 # --- simulated user (context mode) -------------------------------------------------------
 
 
-def _openai_returning(content):
+def _fake_openai(monkeypatch: pytest.MonkeyPatch, openai_cls: MagicMock) -> MagicMock:
+    """Stand in for the optional openai package, whether or not it is installed."""
+    monkeypatch.setitem(sys.modules, "openai", types.SimpleNamespace(OpenAI=openai_cls))
+    return openai_cls
+
+
+def _openai_returning(content: str | None) -> MagicMock:
     response = MagicMock()
     response.choices = [MagicMock()]
     response.choices[0].message.content = content
@@ -1783,24 +1804,24 @@ def _openai_returning(content):
     return MagicMock(return_value=client)
 
 
-def test_reply_from_facts_without_facts_needs_no_llm():
-    with patch("openai.OpenAI") as openai_cls:
-        assert reply_from_facts("USER: x", "Which?", []) == NO_ANSWER_REPLY
+def test_reply_from_facts_without_facts_needs_no_llm(monkeypatch: pytest.MonkeyPatch) -> None:
+    openai_cls = _fake_openai(monkeypatch, MagicMock())
+    assert reply_from_facts("USER: x", "Which?", []) == NO_ANSWER_REPLY
     openai_cls.assert_not_called()
 
 
-def test_reply_from_facts_answers_from_the_facts(monkeypatch):
+def test_reply_from_facts_answers_from_the_facts(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
-    with patch("openai.OpenAI", _openai_returning("  Sales Order Revenue.  ")) as openai_cls:
-        assert reply_from_facts("USER: revenue by month", "Which revenue?", ["Sales Order Revenue."]) == (
-            "Sales Order Revenue."
-        )
+    openai_cls = _fake_openai(monkeypatch, _openai_returning("  Sales Order Revenue.  "))
+    assert reply_from_facts("USER: revenue by month", "Which revenue?", ["Sales Order Revenue."]) == (
+        "Sales Order Revenue."
+    )
     prompt = openai_cls.return_value.chat.completions.create.call_args.kwargs["messages"][1]["content"]
     assert "Sales Order Revenue." in prompt and "Which revenue?" in prompt
 
 
 @pytest.mark.parametrize("failure", ["no_key", "provider_error", "empty_body"])
-def test_simulated_user_falls_back_when_the_llm_gives_nothing(monkeypatch, failure):
+def test_simulated_user_falls_back_when_the_llm_gives_nothing(monkeypatch: pytest.MonkeyPatch, failure: str) -> None:
     if failure == "no_key":
         monkeypatch.delenv("OPENAI_API_KEY", raising=False)
         openai_cls = _openai_returning("unused")
@@ -1809,39 +1830,39 @@ def test_simulated_user_falls_back_when_the_llm_gives_nothing(monkeypatch, failu
         openai_cls = _openai_returning(None)
         if failure == "provider_error":
             openai_cls.return_value.chat.completions.create.side_effect = RuntimeError("503")
-    with patch("openai.OpenAI", openai_cls):
-        assert reply_from_facts("h", "q", ["fact"]) == NO_ANSWER_REPLY
-        assert reply_restating("h", "q").startswith("As I said earlier")
+    _fake_openai(monkeypatch, openai_cls)
+    assert reply_from_facts("h", "q", ["fact"]) == NO_ANSWER_REPLY
+    assert reply_restating("h", "q").startswith("As I said earlier")
 
 
-def test_reply_restating_returns_the_llm_restatement(monkeypatch):
+def test_reply_restating_returns_the_llm_restatement(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
-    with patch("openai.OpenAI", _openai_returning("As I said earlier, Express.")):
-        assert reply_restating("USER: weakest? ASSISTANT: Express", "Which format?") == "As I said earlier, Express."
+    _fake_openai(monkeypatch, _openai_returning("As I said earlier, Express."))
+    assert reply_restating("USER: weakest? ASSISTANT: Express", "Which format?") == "As I said earlier, Express."
 
 
-def test_simulated_user_reports_a_missing_openai_package(monkeypatch):
-    monkeypatch.setitem(__import__("sys").modules, "openai", None)
+def test_simulated_user_reports_a_missing_openai_package(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setitem(sys.modules, "openai", None)
     assert ctx_mod._chat("s", "u") is None
 
 
 # --- turn verdict and content-check edges -------------------------------------------------
 
 
-def test_failure_reasons_name_an_unrun_turn_and_an_inactive_skill():
+def test_failure_reasons_name_an_unrun_turn_and_an_inactive_skill() -> None:
     unrun = _turn_result().model_copy(update={"no_error": False})
     assert unrun.failure_reasons()[0] == "turn could not run"
     wrong_skill = _turn_result().model_copy(update={"skill_routing": False})
     assert wrong_skill.failure_reasons() == ["skill 'visualization' not active"]
 
 
-def test_expected_viz_is_none_for_a_shape_it_cannot_read():
+def test_expected_viz_is_none_for_a_shape_it_cannot_read() -> None:
     assert _expected_viz({"visualization": "not a chart"}) is None
     assert _expected_viz({"visualization": {"query": {"fields": {"m": 1}}}}) is None
     assert _expected_viz({"visualization": {"query": {}}}) is None
 
 
-def test_mismatches_name_the_dimension_and_the_type():
+def test_mismatches_name_the_dimension_and_the_type() -> None:
     expected = {**_viz(), "type": "line_chart"}
     ok, diff = _check_output_correct(_viz_turn(expected=expected), _result(viz=_viz(dim="label/dim_brand.brand_name")))
     assert ok is False
@@ -1849,7 +1870,7 @@ def test_mismatches_name_the_dimension_and_the_type():
     assert any(d.startswith("type") for d in diff)
 
 
-def test_output_correct_without_anything_to_compare_against():
+def test_output_correct_without_anything_to_compare_against() -> None:
     assert _check_output_correct(_viz_turn(expected=_viz()), _result()) == (False, ["no visualization to compare"])
     metric_turn = TurnDefinition(
         turn_id="m",
@@ -1863,7 +1884,7 @@ def test_output_correct_without_anything_to_compare_against():
     assert _check_output_correct(no_maql, _result(), []) == (None, [])
 
 
-def test_cleanup_ignores_tool_results_it_cannot_read():
+def test_cleanup_ignores_tool_results_it_cannot_read() -> None:
     unreadable = [
         ToolCallEvent.model_validate(_tool("create_metric", result=["not", "a", "dict"])),
         ToolCallEvent.model_validate(_tool("create_metric", result={"data": {"isError": True}})),
@@ -1874,7 +1895,7 @@ def test_cleanup_ignores_tool_results_it_cannot_read():
     assert _created_alert_ids(unreadable) == ["a-nested"]
 
 
-def test_fresh_conversation_per_turn_refuses_a_conversation_it_did_not_create():
+def test_fresh_conversation_per_turn_refuses_a_conversation_it_did_not_create() -> None:
     fixture = ConversationFixture(id="c", expected_skills=["visualization"], turns=[_viz_turn("t1")])
     with (
         patch("gooddata_eval.core.agentic.conversation.ChatClient"),
@@ -1891,7 +1912,7 @@ def test_fresh_conversation_per_turn_refuses_a_conversation_it_did_not_create():
         )
 
 
-def test_context_kept_rate_is_scored_when_there_are_dependent_turns():
+def test_context_kept_rate_is_scored_when_there_are_dependent_turns() -> None:
     client = MagicMock()
     client.create_conversation.return_value = "conv-1"
     client.send_message.side_effect = [_result(viz=_viz(), tools=[_SKILLS]), _result(viz=_viz())]
@@ -1900,7 +1921,7 @@ def test_context_kept_rate_is_scored_when_there_are_dependent_turns():
         expected_skills=["visualization"],
         turns=[_viz_turn("t1", expected=_viz()), _viz_turn("t2", expected=_viz(), depends_on=["t1"])],
     )
-    captured = {}
+    captured: dict = {}
     with (
         patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=client),
         patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
