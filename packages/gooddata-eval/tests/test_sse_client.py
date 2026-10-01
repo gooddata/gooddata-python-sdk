@@ -4,7 +4,13 @@ import json
 import httpx
 import pytest
 from gooddata_eval.core.chat import sse_client as sse_mod
-from gooddata_eval.core.chat.sse_client import ChatClient, ChatError, TransientChatError, parse_sse_lines
+from gooddata_eval.core.chat.sse_client import (
+    ChatClient,
+    ChatError,
+    TransientChatError,
+    TurnIncompleteError,
+    parse_sse_lines,
+)
 from gooddata_eval.core.models import DatasetItem, ReasoningStepEvent, ToolCallEvent, build_latency_breakdown
 
 
@@ -489,6 +495,30 @@ def test_parse_sse_lines_metadata_sync_marker_in_malformed_json_is_transient():
     # marker present but the data payload is not valid JSON -> still transient, not swallowed
     with pytest.raises(TransientChatError):
         parse_sse_lines(["data: {bad json METADATA_SYNC_IN_PROGRESS"])
+
+
+@pytest.mark.parametrize("reason", ["max_iterations", "max_tokens", "content_filter"])
+def test_parse_sse_lines_turn_incomplete_is_not_transient(reason):
+    """gen-ai's "no final answer" error is a 502 with a reason; retrying it would resend the question."""
+    lines = [
+        'data: {"item": {"role": "assistant", "content": {"type": "text", "text": "Let me check."}}}',
+        f'data: {{"statusCode": 502, "detail": "iteration limit", "reason": "{reason}"}}',
+    ]
+    with pytest.raises(TurnIncompleteError) as ei:
+        parse_sse_lines(lines)
+    assert not isinstance(ei.value, TransientChatError)
+    assert ei.value.reason == reason
+    assert ei.value.partial_result is not None
+    assert ei.value.partial_result.text_response == "Let me check."
+
+
+@pytest.mark.parametrize("reason", [None, "unknown"])
+def test_parse_sse_lines_502_without_a_definite_reason_stays_transient(reason):
+    payload = {"statusCode": 502, "detail": "LLM provider is not responding"}
+    if reason:
+        payload["reason"] = reason
+    with pytest.raises(TransientChatError):
+        parse_sse_lines([f"data: {json.dumps(payload)}"])
 
 
 def test_parse_sse_lines_non_retryable_status_is_chat_error_not_transient():
