@@ -5,6 +5,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -168,6 +169,21 @@ class SearchToolAssertionError(AgenticAssertionError):
     """Raised when a search-tool evaluation fails."""
 
 
+def _run_detail(run: SearchResult) -> dict:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Extracted so a failing run is described by exactly the same keys as the winning run --
+    for this kind that means the tools it actually called, which is the whole question when
+    the run failed because it selected the wrong one.
+    """
+    return {
+        "tool_selected": run.tool_selected,
+        "tool_correct": run.tool_correct,
+        "tool_call_names": run.tool_call_names,
+        "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
+    }
+
+
 def evaluate_agentic_search_tool(
     host: str,
     token: str,
@@ -255,12 +271,14 @@ def evaluate_agentic_search_tool(
     runs_effective = len(summary.run_results)
 
     best = summary.best
-    detail = {
-        "tool_selected": best.tool_selected,
-        "tool_correct": best.tool_correct,
-        "tool_call_names": best.tool_call_names,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-    }
+    detail = _run_detail(best)
+    # Same predicate pass@K and runs_passed are taken over, so an item's failed_runs and its
+    # counts cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.tool_selected,
+        detail=_run_detail,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
@@ -275,6 +293,7 @@ def evaluate_agentic_search_tool(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
+        exc.failed_runs = failed_runs
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -283,4 +302,7 @@ def evaluate_agentic_search_tool(
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        # Also on the success path: pass@K clears the gate with one passing run, so a
+        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        failed_runs=failed_runs,
     )
