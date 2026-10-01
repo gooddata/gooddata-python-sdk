@@ -134,8 +134,8 @@ class ReasoningStepEvent(BaseModel):
 
 # Reasoning summaries are full paragraphs, e.g. "**Identifying analytics needs**\n\nI'm
 # analyzing..." -- using the whole thing as a latency_breakdown label would make every
-# entry an unreadable wall of text. Same bolded-title convention this repo's own reasoning
-# tooling already keys off of (see gdc-mic-ai-evaluation's generate_dashboard_summary.py).
+# entry an unreadable wall of text. The bolded title is the summary's own heading, and
+# downstream reporting keys off it for the same reason.
 _REASONING_TITLE_RE = re.compile(r"^\*\*(.+?)\*\*")
 _REASONING_LABEL_MAX_LEN = 60
 

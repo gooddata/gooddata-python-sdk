@@ -38,6 +38,8 @@ _RESPONSE_ENDED_EVENT = "response_ended"
 # server bugs. A genuinely deterministic 500 still terminates, just after the bounded backoff.
 _RETRYABLE_STATUS_CODES: frozenset[int] = frozenset({429, 500, 502, 503, 504})
 _METADATA_SYNC_MARKER = "METADATA_SYNC_IN_PROGRESS"
+# `reason` values gen-ai puts on the error event of a turn that finished without an answer.
+_TURN_INCOMPLETE_REASONS: frozenset[str] = frozenset({"max_iterations", "max_tokens", "content_filter"})
 # Stands in for the `id` a persisted visualization would carry, on the fallback path
 # where the agent's create_adhoc_visualization call failed and only its arguments survive.
 _ADHOC_VIZ_ID = "adhoc-visualization-not-persisted"
@@ -72,15 +74,27 @@ class ChatError(RuntimeError):
         status_code: int | None = None,
         detail: str | None = None,
         partial_result: ChatResult | None = None,
+        reason: str | None = None,
     ) -> None:
         super().__init__(message)
         self.status_code = status_code
         self.detail = detail
         self.partial_result = partial_result
+        self.reason = reason
 
 
 class TransientChatError(ChatError):
     """Retryable transient error: gen-ai temporarily unavailable or still syncing metadata."""
+
+
+class TurnIncompleteError(ChatError):
+    """The agent ended its turn without a final answer, e.g. at its iteration limit.
+
+    gen-ai reports this as a 502 carrying a ``reason``, which the status code alone would
+    route to the transient retry. It is not transient: resending the question repeats the
+    same work, and on a conversation it also puts the question into the history twice.
+    Callers see it as the agent's own failure to answer.
+    """
 
 
 class TurnTimeoutError(ChatError):
@@ -383,6 +397,11 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
             code = event_data.get("statusCode")
             detail = event_data.get("detail")
             message = f"SSE error {code}: {detail}"
+            reason = event_data.get("reason")
+            if reason in _TURN_INCOMPLETE_REASONS:
+                raise TurnIncompleteError(
+                    message, status_code=code, detail=detail, partial_result=_build_chat_result(acc), reason=reason
+                )
             if code in _RETRYABLE_STATUS_CODES:
                 raise TransientChatError(
                     message, status_code=code, detail=detail, partial_result=_build_chat_result(acc)
