@@ -79,10 +79,10 @@ def test_check_filters_exact_attribute_match():
 # state, type) and never the LIST under state["include"], so two filters selecting the
 # same elements in a different order compare unequal.
 #
-# Found from a real eval run (gdc-mic-ai-evaluation, micai_diagnose_master, 2026-09-10):
-# a question filtering cross-border traffic scored metrics_correct=True,
-# dimensions_correct=True, filters_correct=False, because the fixture listed
-# ["Inter-region", "Intra-region"] and the agent emitted ["Intra-region", "Inter-region"].
+# Found from a real eval run: a question filtering on a two-value attribute scored
+# metrics_correct=True, dimensions_correct=True, filters_correct=False, because the fixture
+# listed ["Inter-region", "Intra-region"] and the agent emitted the same two the other way
+# round.
 # Element order is not something an agent has any reason to keep stable between runs, so
 # every question needing a multi-value attribute filter passes or fails partly at random.
 
@@ -95,7 +95,7 @@ def test_attribute_filter_include_order_does_not_change_the_verdict():
                 "filter_by": {
                     "f_a": {
                         "type": "attribute_filter",
-                        "using": "label/cross_border_name",
+                        "using": "label/region_name",
                         "state": {"include": values},
                     }
                 },
@@ -286,10 +286,10 @@ def test_normalized_filters_is_empty_per_category_when_unfiltered():
     assert normalized_filters(viz) == {"date": [], "ranking": [], "attribute": []}
 
 
-def _attr_viz(values, key="include", using="label/cross_border_name"):
+def _attr_viz(values, key="include", using="label/region_name"):
     return _viz(
         query={
-            "fields": {"m": {"using": "metric/approval_rate"}},
+            "fields": {"m": {"using": "metric/conversion_rate"}},
             "filter_by": {"f": {"type": "attribute_filter", "using": using, "state": {key: values}}},
         },
         metrics=["m"],
@@ -337,8 +337,8 @@ def test_include_and_exclude_of_the_same_elements_still_differ():
 
 
 def test_the_same_elements_on_a_different_label_still_differ():
-    expected = _attr_viz(["A", "B"], using="label/cross_border_name")
-    assert check_filters(expected, _attr_viz(["B", "A"], using="label/region_name")).attribute_ok is False
+    expected = _attr_viz(["A", "B"], using="label/region_name")
+    assert check_filters(expected, _attr_viz(["B", "A"], using="label/channel_name")).attribute_ok is False
 
 
 def test_a_mixed_type_element_list_does_not_crash_scoring():

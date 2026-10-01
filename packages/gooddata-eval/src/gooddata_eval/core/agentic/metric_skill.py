@@ -211,7 +211,8 @@ def _extract_created_metric_ids(tool_call_events: list[ToolCallEvent]) -> list[s
     """Ids of every metric created by ``create_metric`` calls (a turn may create more than one).
 
     Used for cleanup so no created metric leaks — unlike ``_extract_metric_result``, which
-    returns only the first result for MAQL evaluation. Shared with conversation evaluation.
+    returns only the first result for MAQL evaluation. ``create_metric`` is an upsert: a result
+    with ``created_new: false`` replaced a metric that existed before, so it is not listed.
     """
     metric_ids: list[str] = []
     for tc in tool_call_events:
@@ -221,7 +222,9 @@ def _extract_created_metric_ids(tool_call_events: list[ToolCallEvent]) -> list[s
         if not result_data:
             continue
         data = result_data.get("data", result_data)
-        metric_id = data.get("metric_id") if isinstance(data, dict) else None
+        if not isinstance(data, dict) or data.get("created_new") is False:
+            continue
+        metric_id = data.get("metric_id")
         if metric_id and metric_id not in metric_ids:
             metric_ids.append(metric_id)
     return metric_ids

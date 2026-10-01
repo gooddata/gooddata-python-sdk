@@ -39,7 +39,9 @@ import os
 
 from dotenv import load_dotenv
 
-load_dotenv("/Users/petertomko/gdc-mic-ai-evaluation/.env")
+# Whatever .env the caller points at, defaulting to the working directory. It used to be an
+# absolute path, which made the script runnable on exactly one machine.
+load_dotenv(os.environ.get("GD_EVAL_ENV_FILE", ".env"))
 
 from gooddata_eval.core.agentic.guardrail import _GUARDRAIL_EVALUATION_STEPS  # noqa: E402
 from gooddata_eval.core.evaluators._guardrail_criteria import (  # noqa: E402
