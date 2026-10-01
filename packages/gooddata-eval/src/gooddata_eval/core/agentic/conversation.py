@@ -361,8 +361,6 @@ def _sort_signature(viz: CreatedVisualization) -> set[tuple[str, str, str]]:
     """(sort type, sorted-by URI, direction) for each sort entry."""
     out: set[tuple[str, str, str]] = set()
     for entry in viz.query.sort_by:
-        if not isinstance(entry, dict):
-            continue
         stype = str(entry.get("type") or "")
         direction = str(entry.get("direction") or "").upper()
         aliases = entry.get("metrics") if stype == "metric_sort" else [entry.get("by")]

@@ -5,13 +5,18 @@ from datetime import date
 from unittest.mock import MagicMock, patch
 
 import pytest
+from gooddata_eval.core.agentic import _conversation_context as ctx_mod
 from gooddata_eval.core.agentic._conversation_context import (
     CONFIRMATION_REPLY,
+    NO_ANSWER_REPLY,
     NUDGE_MESSAGE,
+    ClarificationJudge,
     ClarificationVerdict,
     _ClarificationLLM,
     classify_reply,
     judge_prompt,
+    reply_from_facts,
+    reply_restating,
 )
 from gooddata_eval.core.agentic.conversation import (
     ConversationAssertionError,
@@ -20,7 +25,10 @@ from gooddata_eval.core.agentic.conversation import (
     TurnResult,
     _canonical_maql,
     _check_output_correct,
+    _created_alert_ids,
+    _expected_viz,
     _get_sim_user_response,
+    _metric_creations,
     _resolve_refs,
     evaluate_agentic_conversation,
     resolve_conversation_mode,
@@ -1698,3 +1706,221 @@ def test_the_flat_expected_shape_is_still_checked():
     )
     assert _check_output_correct(turn, _result(viz=_viz()))[0] is True
     assert _check_output_correct(turn, _result(viz=_viz(metric="metric/units_sold")))[0] is False
+
+
+# --- clarification judge -------------------------------------------------------------
+
+
+def _judge_with(llm):
+    judge = ClarificationJudge(model="fake")
+    judge._llm = llm
+    return judge
+
+
+def test_judge_reads_the_verdict_and_caches_it_per_prompt():
+    llm = MagicMock()
+    llm.already_in_conversation.return_value = (True, "t1 named it")
+    judge = _judge_with(llm)
+    first = judge.judge("USER: chart it", "Add Units Sold", "Which chart?")
+    second = judge.judge("USER: chart it", "Add Units Sold", "Which chart?")
+    assert first == second == ClarificationVerdict(lost_context=True, reasoning="t1 named it")
+    llm.already_in_conversation.assert_called_once()
+    judge.judge("", "Add Units Sold", "Which chart?")
+    assert llm.already_in_conversation.call_count == 2
+
+
+def test_an_unreadable_verdict_leaves_the_clarification_unjudged():
+    llm = MagicMock()
+    llm.already_in_conversation.side_effect = JudgeResponseError("no boolean")
+    verdict = _judge_with(llm).judge("", "x", "y")
+    assert verdict.lost_context is None
+    assert "no boolean" in verdict.error
+
+
+def test_a_provider_fault_leaves_clarifications_unjudged_and_is_announced_once(capsys):
+    llm = MagicMock()
+    llm.already_in_conversation.side_effect = RuntimeError("401 bad key")
+    judge = _judge_with(llm)
+    assert judge.judge("", "a", "q1").lost_context is None
+    assert judge.judge("", "b", "q2").error == "401 bad key"
+    assert capsys.readouterr().out.count("left unjudged") == 1
+
+
+def test_the_judge_needs_no_api_key_until_it_is_asked(monkeypatch):
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    judge = ClarificationJudge()
+    assert judge.model_name
+    assert judge.judge("", "a", "q").error is not None
+
+
+def test_the_clarification_llm_uses_its_own_prompt(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+    llm = _ClarificationLLM(model="gpt-4o")
+    assert "already_in_conversation" in llm._system_prompt
+    assert llm.model == "gpt-4o"
+
+
+def test_the_clarification_llm_retries_an_empty_body_once():
+    llm = _llm_returning("")
+    calls = []
+    choice = MagicMock()
+    choice.message.content = '{"already_in_conversation": false, "reasoning": "r"}'
+    bodies = iter([MagicMock(choices=[]), MagicMock(choices=[choice])])
+    llm._create_completion = lambda messages: calls.append(1) or next(bodies)
+    assert llm.already_in_conversation("p") == (False, "r")
+    assert len(calls) == 2
+
+
+# --- simulated user (context mode) -------------------------------------------------------
+
+
+def _openai_returning(content):
+    response = MagicMock()
+    response.choices = [MagicMock()]
+    response.choices[0].message.content = content
+    client = MagicMock()
+    client.chat.completions.create.return_value = response
+    return MagicMock(return_value=client)
+
+
+def test_reply_from_facts_without_facts_needs_no_llm():
+    with patch("openai.OpenAI") as openai_cls:
+        assert reply_from_facts("USER: x", "Which?", []) == NO_ANSWER_REPLY
+    openai_cls.assert_not_called()
+
+
+def test_reply_from_facts_answers_from_the_facts(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+    with patch("openai.OpenAI", _openai_returning("  Sales Order Revenue.  ")) as openai_cls:
+        assert reply_from_facts("USER: revenue by month", "Which revenue?", ["Sales Order Revenue."]) == (
+            "Sales Order Revenue."
+        )
+    prompt = openai_cls.return_value.chat.completions.create.call_args.kwargs["messages"][1]["content"]
+    assert "Sales Order Revenue." in prompt and "Which revenue?" in prompt
+
+
+@pytest.mark.parametrize("failure", ["no_key", "provider_error", "empty_body"])
+def test_simulated_user_falls_back_when_the_llm_gives_nothing(monkeypatch, failure):
+    if failure == "no_key":
+        monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+        openai_cls = _openai_returning("unused")
+    else:
+        monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+        openai_cls = _openai_returning(None)
+        if failure == "provider_error":
+            openai_cls.return_value.chat.completions.create.side_effect = RuntimeError("503")
+    with patch("openai.OpenAI", openai_cls):
+        assert reply_from_facts("h", "q", ["fact"]) == NO_ANSWER_REPLY
+        assert reply_restating("h", "q").startswith("As I said earlier")
+
+
+def test_reply_restating_returns_the_llm_restatement(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+    with patch("openai.OpenAI", _openai_returning("As I said earlier, Express.")):
+        assert reply_restating("USER: weakest? ASSISTANT: Express", "Which format?") == "As I said earlier, Express."
+
+
+def test_simulated_user_reports_a_missing_openai_package(monkeypatch):
+    monkeypatch.setitem(__import__("sys").modules, "openai", None)
+    assert ctx_mod._chat("s", "u") is None
+
+
+# --- turn verdict and content-check edges -------------------------------------------------
+
+
+def test_failure_reasons_name_an_unrun_turn_and_an_inactive_skill():
+    unrun = _turn_result().model_copy(update={"no_error": False})
+    assert unrun.failure_reasons()[0] == "turn could not run"
+    wrong_skill = _turn_result().model_copy(update={"skill_routing": False})
+    assert wrong_skill.failure_reasons() == ["skill 'visualization' not active"]
+
+
+def test_expected_viz_is_none_for_a_shape_it_cannot_read():
+    assert _expected_viz({"visualization": "not a chart"}) is None
+    assert _expected_viz({"visualization": {"query": {"fields": {"m": 1}}}}) is None
+    assert _expected_viz({"visualization": {"query": {}}}) is None
+
+
+def test_mismatches_name_the_dimension_and_the_type():
+    expected = {**_viz(), "type": "line_chart"}
+    ok, diff = _check_output_correct(_viz_turn(expected=expected), _result(viz=_viz(dim="label/dim_brand.brand_name")))
+    assert ok is False
+    assert any(d.startswith("dimensions") for d in diff)
+    assert any(d.startswith("type") for d in diff)
+
+
+def test_output_correct_without_anything_to_compare_against():
+    assert _check_output_correct(_viz_turn(expected=_viz()), _result()) == (False, ["no visualization to compare"])
+    metric_turn = TurnDefinition(
+        turn_id="m",
+        message="make it",
+        expected_skill="metric",
+        expected_output_type="metric",
+        expected_output={"maql": "SELECT 1"},
+    )
+    assert _check_output_correct(metric_turn, _result(), []) == (False, ["no created metric to compare"])
+    no_maql = metric_turn.model_copy(update={"expected_output": {"title": "x"}})
+    assert _check_output_correct(no_maql, _result(), []) == (None, [])
+
+
+def test_cleanup_ignores_tool_results_it_cannot_read():
+    unreadable = [
+        ToolCallEvent.model_validate(_tool("create_metric", result=["not", "a", "dict"])),
+        ToolCallEvent.model_validate(_tool("create_metric", result={"data": {"isError": True}})),
+        ToolCallEvent.model_validate(_tool("create_metric_alert", result=["nope"])),
+        ToolCallEvent.model_validate(_tool("create_metric_alert", result={"data": {"id": "a-nested"}})),
+    ]
+    assert _metric_creations(unreadable) == []
+    assert _created_alert_ids(unreadable) == ["a-nested"]
+
+
+def test_fresh_conversation_per_turn_refuses_a_conversation_it_did_not_create():
+    fixture = ConversationFixture(id="c", expected_skills=["visualization"], turns=[_viz_turn("t1")])
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient"),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+        pytest.raises(ValueError, match="creates itself"),
+    ):
+        run_agentic_conversation(
+            host="h",
+            token="t",
+            workspace_id="ws",
+            fixture=fixture,
+            initial_conversation_id="given",
+            fresh_conversation_per_turn=True,
+        )
+
+
+def test_context_kept_rate_is_scored_when_there_are_dependent_turns():
+    client = MagicMock()
+    client.create_conversation.return_value = "conv-1"
+    client.send_message.side_effect = [_result(viz=_viz(), tools=[_SKILLS]), _result(viz=_viz())]
+    fixture = ConversationFixture(
+        id="c",
+        expected_skills=["visualization"],
+        turns=[_viz_turn("t1", expected=_viz()), _viz_turn("t2", expected=_viz(), depends_on=["t1"])],
+    )
+    captured = {}
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+        patch(
+            "gooddata_eval.core.agentic.conversation.submit_trace_scoring",
+            lambda _s, _i, **kw: captured.update(write=kw["write_scores"]),
+        ),
+    ):
+        evaluate_agentic_conversation(
+            host="h",
+            token="t",
+            workspace_id="ws",
+            fixture=fixture,
+            langfuse=MagicMock(),
+            dataset_item_id="i",
+            mode="context",
+            clarification_judge=_FakeJudge(False),
+        )
+    ctx = MagicMock()
+    captured["write"](ctx)
+    scores = {c.kwargs["name"]: c.kwargs["value"] for c in ctx.score.call_args_list}
+    assert scores["context_kept_rate"] == 1.0
+    assert scores["turns_before_first_break"] == 2
