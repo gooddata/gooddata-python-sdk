@@ -77,6 +77,17 @@ def _build_clarification_prompt(agent_message: str, expected_output: dict) -> st
     granularity = expected_output.get("granularity")
     if granularity:
         hints.append(f"the time granularity is {granularity}")
+    # Both are scored when the fixture pins them, so withholding them here would let the
+    # harness fail a run on a value it refused to supply: the agent asks which confidence
+    # level to use, the simulated user guesses, and `confidence_correct` reports the guess
+    # as the agent's error. `is not None` rather than a truth test -- a pinned
+    # `forecast_seasonal: false` is an answer, and `0.0` would be a confidence level.
+    confidence = expected_output.get("forecast_confidence")
+    if confidence is not None:
+        hints.append(f"the confidence level is {confidence}")
+    seasonal = expected_output.get("forecast_seasonal")
+    if seasonal is not None:
+        hints.append(f"seasonality {'should' if seasonal else 'should not'} be modelled")
     reference = "; ".join(hints)
     return (
         f"You are simulating a user in a conversation with a BI assistant that forecasts metric "

@@ -6,6 +6,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 from gooddata_eval.core.agentic.forecasting import (
     ForecastingAssertionError,
+    _build_clarification_prompt,
     _evaluate_run,
     _extract_forecast_calls,
     _metric_uris,
@@ -76,7 +77,7 @@ def test_extract_pairs_the_execute_with_the_visualization_it_followed():
     would pair a fresh visualization with a stale result."""
     calls = [
         _tc("create_adhoc_visualization", _viz_args(period=1)),
-        _tc("execute_forecast", {"visualization_ref": "viz_1"}, _OK_FORECAST),
+        _tc("execute_forecast", {}, _OK_FORECAST),
         _tc("create_adhoc_visualization", _viz_args(period=3)),
     ]
     viz, result = _extract_forecast_calls(calls)
@@ -487,3 +488,41 @@ def test_any_gate_still_passes_the_same_item():
 def test_the_default_gate_is_pass_at_k():
     outcome = _two_runs()
     assert outcome.runs_passed == 1
+
+
+# ── the simulated user's reply ──────────────────────────────────────────────
+
+
+def test_the_reply_carries_every_hint_the_fixture_pins():
+    """Anything the fixture pins is also scored, so withholding it would let the harness fail
+    a run on a value it refused to supply: the agent asks which confidence level to use, the
+    simulated user guesses, and `confidence_correct` reports the guess as the agent's error."""
+    prompt = _build_clarification_prompt(
+        "Which confidence level, and should I model seasonality?",
+        {
+            "metric": "metric/spend",
+            "forecast_period": 3,
+            "granularity": "MONTH",
+            "forecast_confidence": 0.8,
+            "forecast_seasonal": True,
+        },
+    )
+    assert "metric/spend" in prompt
+    assert "3 periods ahead" in prompt
+    assert "MONTH" in prompt
+    assert "confidence level is 0.8" in prompt
+    assert "seasonality should be modelled" in prompt
+
+
+def test_a_pinned_false_seasonal_is_an_answer_not_an_absence():
+    """`is not None`, not a truth test. `forecast_seasonal: false` is scored -- the tool
+    defaults it to false -- so the simulated user has to be able to say so."""
+    prompt = _build_clarification_prompt("Seasonal?", {**_EXPECTED, "forecast_seasonal": False})
+    assert "seasonality should not be modelled" in prompt
+
+
+def test_an_unpinned_hint_is_dropped_rather_than_asserted_as_none():
+    prompt = _build_clarification_prompt("Which measure?", {"metric": "metric/spend"})
+    assert "confidence" not in prompt
+    assert "seasonality" not in prompt
+    assert "None" not in prompt
