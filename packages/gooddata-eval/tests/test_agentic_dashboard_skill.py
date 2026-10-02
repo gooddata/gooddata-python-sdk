@@ -1485,6 +1485,46 @@ class TestRefusalCases:
         assert not ev.answer_matched
         assert not ev.strict_pass
 
+    def test_a_rejected_draft_attempt_is_not_a_refusal(self):
+        """The gap the first two checks leave: `_extract_tool_result` takes only SUCCESSFUL
+        calls, so an agent whose draft the tool rejected leaves no result and no part and
+        would read as a clean refusal. It is not one -- it tried to build and a guardrail
+        stopped it, and scoring that as correct credits the model for the guardrail."""
+        ev = evaluate_dashboard_response(
+            None,
+            None,
+            self._NO_DATA,
+            skill_activated=True,
+            answer_text="There is no fraud data here.",
+            producing_tool_called=True,
+        )
+        assert not ev.strict_checks["dashboard_not_drafted"]
+        assert not ev.strict_pass
+        assert any("did not succeed" in f for f in ev.failures)
+
+    def test_a_failed_draft_attempt_is_read_off_the_turn_not_the_result(self):
+        """End to end, because the flag is computed in the run loop rather than passed in by
+        a fixture: the tool call is present on the turn, its result is an error, so nothing
+        reaches the scorer except the fact that the call happened."""
+        client = MagicMock()
+        client.send_message.return_value = _chat_result(
+            tool_calls=[_tool_call("draft_dashboard", {"status": "error", "message": "no such metric"})],
+            text="There is no fraud data in this workspace, so I cannot build that.",
+        )
+        summary = _run_with(client, self._NO_DATA)
+        assert summary.best.evaluation.producing_tool_called
+        assert not summary.best.evaluation.strict_pass
+
+    def test_an_answer_alone_still_passes_when_nothing_was_called(self):
+        """The control for the two above: the flag must not fail a genuine refusal."""
+        client = MagicMock()
+        client.send_message.return_value = _chat_result(
+            text="There is no fraud data in this workspace, so I cannot build that."
+        )
+        summary = _run_with(client, self._NO_DATA)
+        assert not summary.best.evaluation.producing_tool_called
+        assert summary.best.evaluation.strict_pass
+
     def test_a_refusal_case_without_an_answer_assertion_is_rejected_up_front(self):
         client = MagicMock()
         expected = {"type": "dashboard", "expects_dashboard": False, "visualizations": []}

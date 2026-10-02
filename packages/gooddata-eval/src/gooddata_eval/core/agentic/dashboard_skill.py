@@ -769,6 +769,10 @@ class DashboardEvaluation:
     titles_matched: bool = True
     forbidden_absent: bool = True
     answer_matched: bool = True
+    # Whether the producing tool was called AT ALL, successful or not. Only a refusal case
+    # reads it: everywhere else a failed call is a retry the agent recovered from, which is
+    # why `_extract_tool_result` skips it.
+    producing_tool_called: bool = False
     failures: list[str] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
 
@@ -781,10 +785,17 @@ class DashboardEvaluation:
         if self.applies.refusal:
             # Named for what has to be true, not negated at read time: `dashboard_not_drafted`
             # false means a dashboard came back from a case that asked for none, which is the
-            # failure. Both halves are required -- a successful tool call with no part, or a
-            # part with no successful call, are each a dashboard the user would be shown.
+            # failure. A successful tool call with no part, or a part with no successful call,
+            # are each a dashboard the user would be shown.
+            #
+            # The third term is the one that is easy to miss: an agent that CALLED the tool and
+            # had the call rejected leaves no result and no part, so the first two would read it
+            # as a clean refusal. It is not one -- the agent tried to build and the tool stopped
+            # it, and scoring that as correct credits the model for a guardrail.
             checks = {
-                "dashboard_not_drafted": not self.drafted and not self.part_present,
+                "dashboard_not_drafted": (
+                    not self.drafted and not self.part_present and not self.producing_tool_called
+                ),
                 "dashboard_skill_activated": self.skill_activated,
             }
             if self.applies.answer:
@@ -870,6 +881,7 @@ def evaluate_dashboard_response(
     skill_activated: bool,
     patch_part: dict | None = None,
     answer_text: str = "",
+    producing_tool_called: bool = False,
 ) -> DashboardEvaluation:
     """Score one dashboard response against its expectation.
 
@@ -909,6 +921,7 @@ def evaluate_dashboard_response(
             new_visualizations_met=True,
             applies=applies,
             skill_activated=skill_activated,
+            producing_tool_called=producing_tool_called,
             answer_matched=not answer_failures,
             failures=[
                 *(
@@ -919,6 +932,11 @@ def evaluate_dashboard_response(
                 *(
                     ["the case expects no dashboard, but the response carries a 'dashboard' part"]
                     if dashboard_part is not None
+                    else []
+                ),
+                *(
+                    [f"the case expects no dashboard, but the agent called {tool} (the call did not succeed)"]
+                    if producing_tool_called and not drafted
                     else []
                 ),
                 *answer_failures,
@@ -1198,6 +1216,8 @@ def _execute_single_dashboard_run(
             _skill_activated(all_tool_call_events, _required_skill(expected_output)),
             patch_part=patch_part,
             answer_text=answer_text,
+            # Any call, not just a successful one -- see DashboardEvaluation.
+            producing_tool_called=any(tc.function_name == tool for tc in all_tool_call_events),
         ),
         tool_result=tool_result,
         dashboard_part=dashboard_part,
