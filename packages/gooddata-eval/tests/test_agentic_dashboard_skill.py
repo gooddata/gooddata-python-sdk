@@ -1515,6 +1515,20 @@ class TestRefusalCases:
         assert summary.best.evaluation.producing_tool_called
         assert not summary.best.evaluation.strict_pass
 
+    def test_a_rejected_patch_call_counts_too(self):
+        """A refusal is a creation shape, so the case's selected tool is `draft_dashboard`.
+        An agent that routed to the editor instead and had its `patch_dashboard` call
+        rejected leaves the same empty result, so matching only the selected tool would let
+        it pass."""
+        client = MagicMock()
+        client.send_message.return_value = _chat_result(
+            tool_calls=[_tool_call("patch_dashboard", {"status": "error", "message": "no such dashboard"})],
+            text="There is no fraud data in this workspace, so I cannot build that.",
+        )
+        summary = _run_with(client, self._NO_DATA)
+        assert summary.best.evaluation.producing_tool_called
+        assert not summary.best.evaluation.strict_pass
+
     def test_an_answer_alone_still_passes_when_nothing_was_called(self):
         """The control for the two above: the flag must not fail a genuine refusal."""
         client = MagicMock()

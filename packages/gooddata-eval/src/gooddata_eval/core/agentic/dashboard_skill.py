@@ -769,9 +769,9 @@ class DashboardEvaluation:
     titles_matched: bool = True
     forbidden_absent: bool = True
     answer_matched: bool = True
-    # Whether the producing tool was called AT ALL, successful or not. Only a refusal case
-    # reads it: everywhere else a failed call is a retry the agent recovered from, which is
-    # why `_extract_tool_result` skips it.
+    # Whether EITHER dashboard-producing tool was called at all, successful or not. Only a
+    # refusal case reads it: everywhere else a failed call is a retry the agent recovered
+    # from, which is why `_extract_tool_result` skips it.
     producing_tool_called: bool = False
     failures: list[str] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
@@ -935,7 +935,10 @@ def evaluate_dashboard_response(
                     else []
                 ),
                 *(
-                    [f"the case expects no dashboard, but the agent called {tool} (the call did not succeed)"]
+                    [
+                        "the case expects no dashboard, but the agent called a dashboard-producing "
+                        "tool (the call did not succeed)"
+                    ]
                     if producing_tool_called and not drafted
                     else []
                 ),
@@ -1216,8 +1219,11 @@ def _execute_single_dashboard_run(
             _skill_activated(all_tool_call_events, _required_skill(expected_output)),
             patch_part=patch_part,
             answer_text=answer_text,
-            # Any call, not just a successful one -- see DashboardEvaluation.
-            producing_tool_called=any(tc.function_name == tool for tc in all_tool_call_events),
+            # Any call, not just a successful one -- see DashboardEvaluation. BOTH tools,
+            # not the one this case selected: a refusal is a creation shape, so `tool` is
+            # `draft_dashboard`, and an agent that routed to the editor and had a
+            # `patch_dashboard` call rejected would otherwise leave this false and pass.
+            producing_tool_called=any(tc.function_name in (_DRAFT_TOOL, _PATCH_TOOL) for tc in all_tool_call_events),
         ),
         tool_result=tool_result,
         dashboard_part=dashboard_part,
