@@ -1192,3 +1192,325 @@ def _evaluate_with(client, expected_output):
             expected_output=expected_output,
             initial_conversation_id="conv-1",
         )
+
+
+# ── negative and answer-text assertions ─────────────────────────────────────
+# The four capabilities a curated-catalog engagement needs and the document checks above
+# cannot express: a ceiling on authored charts, charts that must not appear, a case whose
+# right outcome is no dashboard at all, and the text the user actually reads.
+
+_SUBSTITUTE = "269d4650-2c1f-4bbf-8e30-5f2bba7f74b3"
+
+
+class TestMaxNewVisualizations:
+    """`min` alone cannot say "use what is already there"."""
+
+    def test_the_ceiling_is_unbounded_when_absent(self):
+        """Every fixture written before the ceiling existed carries no key, and must keep
+        passing when the agent authors charts it was not asked for."""
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        ev = evaluate_dashboard_response(
+            _draft_result(new_visualization_count=5), part, _DC05_EXPECTED, skill_activated=True
+        )
+        assert ev.new_visualizations_met
+        assert ev.strict_pass
+
+    def test_authoring_beyond_the_ceiling_fails(self):
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "max_new_visualizations": 0}
+        ev = evaluate_dashboard_response(_draft_result(new_visualization_count=1), part, expected, skill_activated=True)
+        assert not ev.new_visualizations_met
+        assert any("at most 0" in f for f in ev.failures)
+
+    def test_a_zero_ceiling_is_a_bound_not_an_absence(self):
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "max_new_visualizations": 0}
+        assert evaluate_dashboard_response(
+            _draft_result(new_visualization_count=0), part, expected, skill_activated=True
+        ).strict_pass
+
+    def test_too_few_and_too_many_are_reported_as_different_diagnoses(self):
+        """One range message would make whoever reads the failure work out which end was
+        missed, and the two have opposite fixes."""
+        part = _dashboard_part([_widget("Activity by Hour", _ACTIVITY_BY_HOUR)], date_filter=_ALL_TIME_FILTER)
+        under = evaluate_dashboard_response(
+            _draft_result(new_visualization_count=0),
+            part,
+            {**_DC03_EXPECTED, "max_new_visualizations": 2},
+            skill_activated=True,
+        )
+        assert any("at least 1" in f for f in under.failures)
+        assert not any("at most" in f for f in under.failures)
+
+    def test_a_ceiling_below_the_floor_is_rejected_up_front(self):
+        client = MagicMock()
+        expected = {**_DC05_EXPECTED, "min_new_visualizations": 2, "max_new_visualizations": 1}
+        with pytest.raises(ValueError, match="below min_new_visualizations"):
+            _run_with(client, expected)
+        client.send_message.assert_not_called()
+
+    def test_an_unparseable_ceiling_is_rejected_up_front(self):
+        client = MagicMock()
+        with pytest.raises(ValueError, match="max_new_visualizations is not a number"):
+            _run_with(client, {**_DC05_EXPECTED, "max_new_visualizations": "none"})
+        client.send_message.assert_not_called()
+
+
+class TestMustNotContain:
+    def test_a_forbidden_chart_id_on_the_dashboard_fails(self):
+        part = _dashboard_part(
+            [
+                _widget("Total Customers", _TOTAL_CUSTOMERS),
+                _widget("Active Customers", _ACTIVE_CUSTOMERS),
+                _widget("Approval Rate", _SUBSTITUTE),
+            ],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "must_not_contain": [{"id": _SUBSTITUTE, "title": "Approval Rate"}]}
+        ev = evaluate_dashboard_response(_draft_result(), part, expected, skill_activated=True)
+        assert not ev.forbidden_absent
+        assert not ev.strict_pass
+        assert any(_SUBSTITUTE in f for f in ev.failures)
+
+    def test_the_check_is_published_only_when_the_case_carries_it(self):
+        """A check that could not fail is not evidence, and publishing it as passed lifts
+        `quality_score` above what the run earned."""
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        plain = evaluate_dashboard_response(_draft_result(), part, _DC05_EXPECTED, skill_activated=True)
+        assert "forbidden_charts_absent" not in plain.strict_checks
+        expected = {**_DC05_EXPECTED, "must_not_contain": [{"id": _SUBSTITUTE}]}
+        guarded = evaluate_dashboard_response(_draft_result(), part, expected, skill_activated=True)
+        assert guarded.strict_checks["forbidden_charts_absent"] is True
+
+    def test_an_id_entry_does_not_also_forbid_its_title(self):
+        """Titles are not unique in a real workspace -- the catalog this was written against
+        holds 102 visualizations whose title contains "approval rate" -- so widening an id
+        entry to match its title too would fail the case on a different chart."""
+        part = _dashboard_part(
+            [
+                _widget("Total Customers", _TOTAL_CUSTOMERS),
+                _widget("Active Customers", _ACTIVE_CUSTOMERS),
+                _widget("Approval Rate", _RETURN_CUSTOMERS),
+            ],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "must_not_contain": [{"id": _SUBSTITUTE, "title": "Approval Rate"}]}
+        assert evaluate_dashboard_response(_draft_result(), part, expected, skill_activated=True).forbidden_absent
+
+    def test_a_title_only_entry_catches_a_substitute_whose_id_is_not_known_up_front(self):
+        part = _dashboard_part(
+            [
+                _widget("Total Customers", _TOTAL_CUSTOMERS),
+                _widget("Active Customers", _ACTIVE_CUSTOMERS),
+                _widget("approval   RATE", _SUBSTITUTE),
+            ],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "must_not_contain": [{"title": "Approval Rate"}]}
+        ev = evaluate_dashboard_response(_draft_result(), part, expected, skill_activated=True)
+        assert not ev.forbidden_absent
+        assert any(_SUBSTITUTE in f for f in ev.failures)
+
+    def test_an_entry_naming_neither_id_nor_title_is_rejected_up_front(self):
+        client = MagicMock()
+        with pytest.raises(ValueError, match="needs an id or a title"):
+            _run_with(client, {**_DC05_EXPECTED, "must_not_contain": [{"columns": 6}]})
+        client.send_message.assert_not_called()
+
+
+class TestAnswerAssertions:
+    def test_a_missing_phrase_fails_the_case(self):
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "answer_must_include": ["could not be covered"]}
+        ev = evaluate_dashboard_response(
+            _draft_result(), part, expected, skill_activated=True, answer_text="Here is your dashboard."
+        )
+        assert not ev.answer_matched
+        assert not ev.strict_pass
+
+    def test_the_phrase_match_ignores_case_and_whitespace(self):
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "answer_must_include": ["Could Not Be Covered"]}
+        ev = evaluate_dashboard_response(
+            _draft_result(),
+            part,
+            expected,
+            skill_activated=True,
+            answer_text="One widget\ncould   not\nbe covered by the catalog.",
+        )
+        assert ev.answer_matched
+
+    def test_a_forbidden_pattern_in_the_answer_fails(self):
+        """The raw `{visualization/<uuid>}` token the renderer was meant to resolve. A run
+        that leaks it builds the right dashboard and still shows the user markup."""
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "answer_must_not_match": [r"\{visualization/[0-9a-f-]+\}"]}
+        ev = evaluate_dashboard_response(
+            _draft_result(),
+            part,
+            expected,
+            skill_activated=True,
+            answer_text=f"I can use {{visualization/{_SUBSTITUTE}}} for approvals.",
+        )
+        assert not ev.answer_matched
+        assert any("visualization/" in f for f in ev.failures)
+
+    def test_a_clean_answer_passes_both_kinds_of_assertion(self):
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {
+            **_DC05_EXPECTED,
+            "answer_must_include": ["Total Customers"],
+            "answer_must_not_match": [r"\{visualization/"],
+        }
+        ev = evaluate_dashboard_response(
+            _draft_result(),
+            part,
+            expected,
+            skill_activated=True,
+            answer_text="I put Total Customers and Active Customers on the draft.",
+        )
+        assert ev.answer_matched
+        assert ev.strict_pass
+
+    def test_the_check_is_published_only_when_the_case_carries_it(self):
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        ev = evaluate_dashboard_response(_draft_result(), part, _DC05_EXPECTED, skill_activated=True)
+        assert "answer_matched" not in ev.strict_checks
+
+    def test_an_invalid_regular_expression_is_rejected_up_front(self):
+        client = MagicMock()
+        with pytest.raises(ValueError, match="invalid regular expression"):
+            _run_with(client, {**_DC05_EXPECTED, "answer_must_not_match": ["([unclosed"]})
+        client.send_message.assert_not_called()
+
+    def test_an_empty_phrase_is_rejected_up_front(self):
+        """`""` is a substring of everything, so it would read as an assertion and be none."""
+        client = MagicMock()
+        with pytest.raises(ValueError, match="asserts nothing"):
+            _run_with(client, {**_DC05_EXPECTED, "answer_must_include": ["  "]})
+        client.send_message.assert_not_called()
+
+    def test_the_text_of_the_turn_that_drafted_is_what_gets_scored(self):
+        """The draft arrives with the sentence describing it, and that sentence is what the
+        assertions are about -- so the loop must read every turn, not only the ones that
+        answer without drafting."""
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        client = MagicMock()
+        client.send_message.return_value = _chat_result(
+            tool_calls=[_tool_call("draft_dashboard", _draft_result())],
+            parts=[part],
+            text="I left one widget out because the catalog has no fraud data.",
+        )
+        expected = {**_DC05_EXPECTED, "answer_must_include": ["no fraud data"]}
+        summary = _run_with(client, expected)
+        assert summary.best.evaluation.answer_matched
+        assert summary.best.evaluation.strict_pass
+
+
+class TestRefusalCases:
+    """`expects_dashboard: false` -- the agent was asked for something it cannot build."""
+
+    _NO_DATA = {
+        "type": "dashboard",
+        "saved_dashboard_id": None,
+        "expects_dashboard": False,
+        "visualizations": [],
+        "answer_must_include": ["no fraud data"],
+    }
+
+    def test_an_answer_with_no_draft_passes(self):
+        ev = evaluate_dashboard_response(
+            None,
+            None,
+            self._NO_DATA,
+            skill_activated=True,
+            answer_text="The workspace has no fraud data, so I cannot build that dashboard.",
+        )
+        assert ev.strict_pass
+        assert ev.failures == []
+
+    def test_the_document_checks_are_not_published_for_a_refusal(self):
+        """Reporting six passes for a document that was never produced would make a refusal
+        read as the best-scoring case in the suite."""
+        ev = evaluate_dashboard_response(
+            None, None, self._NO_DATA, skill_activated=True, answer_text="There is no fraud data here."
+        )
+        assert set(ev.strict_checks) == {"dashboard_not_drafted", "dashboard_skill_activated", "answer_matched"}
+
+    def test_building_anyway_fails(self):
+        """The defect this shape exists to catch: an agent that proxies the request with
+        whatever it could find rather than saying it cannot be met."""
+        part = _dashboard_part([_widget("Total Customers", _TOTAL_CUSTOMERS)], date_filter=_ALL_TIME_FILTER)
+        ev = evaluate_dashboard_response(
+            _draft_result(), part, self._NO_DATA, skill_activated=True, answer_text="There is no fraud data here."
+        )
+        assert not ev.strict_checks["dashboard_not_drafted"]
+        assert not ev.strict_pass
+
+    def test_falling_over_silently_is_not_a_refusal(self):
+        """Absence of a draft alone is satisfied by an agent that crashed, which is why the
+        answer assertion is mandatory for this shape."""
+        ev = evaluate_dashboard_response(None, None, self._NO_DATA, skill_activated=True, answer_text="")
+        assert ev.strict_checks["dashboard_not_drafted"]
+        assert not ev.answer_matched
+        assert not ev.strict_pass
+
+    def test_a_refusal_case_without_an_answer_assertion_is_rejected_up_front(self):
+        client = MagicMock()
+        expected = {"type": "dashboard", "expects_dashboard": False, "visualizations": []}
+        with pytest.raises(ValueError, match="needs an answer assertion"):
+            _run_with(client, expected)
+        client.send_message.assert_not_called()
+
+    def test_a_refusal_case_listing_charts_is_rejected_up_front(self):
+        client = MagicMock()
+        expected = {**self._NO_DATA, "visualizations": [{"id": _TOTAL_CUSTOMERS, "title": "Total Customers"}]}
+        with pytest.raises(ValueError, match="must not list visualizations"):
+            _run_with(client, expected)
+        client.send_message.assert_not_called()
+
+    def test_an_edit_cannot_be_a_refusal_case(self):
+        client = MagicMock()
+        expected = {**self._NO_DATA, "type": "dashboardPatch", "saved_dashboard_id": _OVERVIEW_DASHBOARD}
+        with pytest.raises(ValueError, match="creation shape"):
+            _run_with(client, expected)
+        client.send_message.assert_not_called()
+
+    def test_the_simulated_user_never_argues_a_refusal_into_building(self):
+        """The reply this loop sends restates the charts and asks again, which is pressure to
+        build the very thing the case says must not be built."""
+        client = MagicMock()
+        client.send_message.return_value = _chat_result(text="The workspace has no fraud data.")
+        summary = _run_with(client, self._NO_DATA)
+        assert client.send_message.call_count == 1
+        assert summary.best.evaluation.strict_pass
