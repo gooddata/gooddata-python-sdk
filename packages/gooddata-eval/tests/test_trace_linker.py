@@ -119,6 +119,7 @@ _EVALUATE_FUNCS = [
     ("visualization", "evaluate_agentic_visualization"),
     ("kda_skill", "evaluate_agentic_kda_skill"),
     ("conversation", "evaluate_agentic_conversation"),
+    ("forecasting", "evaluate_agentic_forecasting"),
     ("what_if", "evaluate_agentic_what_if"),
 ]
 
