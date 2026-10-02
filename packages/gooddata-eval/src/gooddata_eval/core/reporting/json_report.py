@@ -70,6 +70,12 @@ def _build_run_dict(report: EvalReport) -> dict:
                 "conversation_id": item.conversation_id,
                 "response_id": item.response_id,
                 "reasoning": item.reasoning_steps,
+                # Beside `detail`, never merged into it: `detail` keeps its exact meaning
+                # (the winning run), so every existing consumer of this report is
+                # unaffected. This is what a partial pass costs you today -- a 1-of-3 shows
+                # only the attempt that worked -- and each entry carries the ids of its own
+                # run, which the top-level pair above cannot.
+                "failed_runs": item.failed_runs,
             }
             for item in report.items
         },

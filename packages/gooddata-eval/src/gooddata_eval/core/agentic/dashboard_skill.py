@@ -9,6 +9,7 @@ from typing import Any
 
 import jsonpatch
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -944,6 +945,22 @@ def _execute_single_dashboard_run(
     )
 
 
+def _run_detail(run: DashboardRunResult) -> dict[str, Any]:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Extracted so a failing run is described by exactly the same keys as the winning run --
+    for this kind that means the per-check breakdown and the failures it reported, which is
+    the whole diagnosis.
+    """
+    return {
+        **run.evaluation.strict_checks,
+        **run.evaluation.diagnostics,
+        "failures": run.evaluation.failures,
+        "notes": run.evaluation.notes,
+        "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
+    }
+
+
 def run_agentic_dashboard_skill(
     host: str,
     token: str,
@@ -1100,13 +1117,14 @@ def evaluate_agentic_dashboard_skill(
     runs_effective = len(summary.run_results)
 
     best = summary.best
-    detail: dict[str, Any] = {
-        **best.evaluation.strict_checks,
-        **best.evaluation.diagnostics,
-        "failures": best.evaluation.failures,
-        "notes": best.evaluation.notes,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-    }
+    detail: dict[str, Any] = _run_detail(best)
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.evaluation.strict_pass,
+        detail=_run_detail,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
@@ -1140,6 +1158,7 @@ def evaluate_agentic_dashboard_skill(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
+        exc.failed_runs = failed_runs
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -1149,4 +1168,5 @@ def evaluate_agentic_dashboard_skill(
         response_id=best.response_id,
         detail=detail,
         timings=item_timings,
+        failed_runs=failed_runs,
     )
