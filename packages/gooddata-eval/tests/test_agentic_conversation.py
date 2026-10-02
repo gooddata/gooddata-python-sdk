@@ -1141,6 +1141,55 @@ def test_a_chat_error_ends_only_its_own_turn_and_is_recorded():
     assert result.turn_results[1].skill_success is False
 
 
+def test_a_partial_result_joins_the_shared_timeline_like_any_other_turn():
+    """What the stream delivered before it died is still the turn's work.
+
+    Each turn's SSE stream times from ~0 and indexes from 0, so a late turn's events have to
+    be rebased before they can be merged. The success path does that; the ChatError branch
+    used to extend the conversation lists with the raw partial, which put a second-turn tool
+    call at call_ts 0.5 alongside the first turn's -- `timeline_detail` then reported two
+    turns overlapping, with duplicate indexes. Its reasoning steps were dropped from
+    total_steps for the same reason.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+
+    first = _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m1")])
+    first.turn_wall_clock_sec = 12.0
+    first.reasoning_step_count = 2
+
+    partial = ChatResult.model_validate(
+        {
+            "textResponse": "",
+            "toolCallEvents": [
+                {"functionName": "create_metric", "functionArguments": "{}", "call_ts": 0.5, "index": 0}
+            ],
+            "reasoningStepCount": 3,
+            "streamEnded": False,
+        }
+    )
+    mock_client.send_message.side_effect = [first, ChatError("stream died", partial_result=partial)]
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_two_metric_turn_fixture(),
+        )
+
+    assert result.turn_results[1].exit_reason is LoopExit.CHAT_ERROR
+    # Shifted by the first turn's wall clock, and indexed past the first turn's two calls.
+    shifted = [tc for tc in result.tool_call_events if tc.call_ts is not None]
+    assert [tc.call_ts for tc in shifted] == [12.5]
+    assert [tc.index for tc in shifted] == [2]
+    # The steps were taken, so they count.
+    assert result.total_steps == 5
+
+
 def test_a_non_chat_exception_still_propagates():
     """Only chat faults are absorbed. A programming error must not be relabelled CHAT_ERROR."""
     mock_client = MagicMock()

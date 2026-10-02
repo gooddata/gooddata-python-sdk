@@ -824,6 +824,19 @@ def run_agentic_conversation(
                     print(f"[CHAT] send_message failed for conversation {conversation_id}: {exc}")
                     partial = exc.partial_result
                     if partial is not None:
+                        # Shifted and indexed exactly as a completed turn is, before anything
+                        # reads the events. What the stream managed to deliver before it died
+                        # is still this turn's work: left raw, its `call_ts` would restart near
+                        # zero and its indexes at zero, so `timeline_detail` would report a
+                        # late turn as overlapping the first one. The steps count for the same
+                        # reason -- they were taken.
+                        total_steps += partial.reasoning_step_count
+                        turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
+                            partial,
+                            turn_offset=turn_offset,
+                            tool_index_offset=tool_index_offset,
+                            reasoning_index_offset=reasoning_index_offset,
+                        )
                         # The stream can die after create_metric ran server-side; keep what
                         # the accumulator saw so the cleanup still knows what to delete.
                         created.record(partial.tool_call_events or [])
@@ -1077,7 +1090,6 @@ def evaluate_agentic_conversation(
         failed_turns = {tr.turn_id: tr.failure_reasons() for tr in result.turn_results if not tr.context_success}
 
         def _write_scores(ctx: RunTraceContext) -> None:
-
             pt = ctx.trace(result.conversation_id)
             with ctx.observe(
                 pt,
