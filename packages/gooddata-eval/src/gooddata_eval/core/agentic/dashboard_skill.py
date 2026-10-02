@@ -951,7 +951,7 @@ def evaluate_dashboard_response(
         # The ceiling is reported as its own sentence: "too few" and "too many" are opposite
         # diagnoses and a single range message would make whoever reads the failure work out
         # which end was missed.
-        new_failures = []
+        new_failures: list[str] = []
         if actual_new < min_new:
             new_failures.append(f"expected at least {min_new} authored chart(s), tool reported {actual_new}")
         if over:
