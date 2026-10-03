@@ -42,27 +42,72 @@ def _redact_item(item: dict) -> dict:
     return out
 
 
+def _alias_name(n: int) -> str:
+    """``Model A`` .. ``Model Z``, then ``Model AA``, ``Model AB``, ...
+
+    Spelled out rather than ``chr(65 + n)``, which walks straight off the end of the
+    alphabet: the 27th run came out as ``Model [``, then ``Model \\``, ``Model ]``.
+    Reachable by merging enough dates -- three models over nine days is 27 columns.
+    """
+    letters = ""
+    n += 1
+    while n:
+        n, remainder = divmod(n - 1, 26)
+        letters = chr(65 + remainder) + letters
+    return f"Model {letters}"
+
+
 def _redact(doc: dict) -> dict:
     """Strip internal ids and replace model names with stable aliases.
 
     Per-item latency and pass/fail survive -- those are facts about the run a customer is
     entitled to. What goes is anything that identifies our infrastructure or discloses
     which model was under test.
+
+    Aliases are assigned per *model*, not per run. A merged multi-date report keys its
+    runs ``"<source> · <model>"`` (see ``merge_docs``), so numbering the run keys gave the
+    same model a different alias on every date -- three models over two dates produced
+    Model A..F, and nothing told the reader that Model D was Model A a week later. That
+    silently destroys the only thing a multi-date report is for. The model name is
+    substituted inside the key instead, so ``2026-09-22 · gpt-5.2`` becomes
+    ``2026-09-22 · Model A`` and the date, which discloses nothing, survives.
     """
-    alias = {label: f"Model {chr(65 + n)}" for n, label in enumerate(doc.get("runs", {}))}
+    runs_in = doc.get("runs") or {}
+
+    alias_for_model: dict[str, str] = {}
+    for label, run in runs_in.items():
+        model = (run or {}).get("model") or label
+        if model not in alias_for_model:
+            alias_for_model[model] = _alias_name(len(alias_for_model))
+
+    def _key(label: str, run: dict) -> str:
+        model = (run or {}).get("model") or label
+        alias = alias_for_model[model]
+        # Keep whatever else the key carries (a date, a source file) and replace only the
+        # model. Falls back to the bare alias when the key does not embed the model name.
+        return label.replace(model, alias) if model in label else alias
+
+    keys, taken = {}, set()
+    for label, run in runs_in.items():
+        key, n = _key(label, run), 2
+        while key in taken:
+            key, n = f"{_key(label, run)} ({n})", n + 1
+        taken.add(key)
+        keys[label] = key
+
     runs = {
-        alias[label]: {
+        keys[label]: {
             **run,
-            "model": alias[label],
+            "model": alias_for_model[(run or {}).get("model") or label],
             "workspace_id": "",
             "items": {item_id: _redact_item(item) for item_id, item in (run.get("items") or {}).items()},
         }
-        for label, run in doc.get("runs", {}).items()
+        for label, run in runs_in.items()
     }
     comparison = {
-        alias[label]: {**entry, "provider_name": ""}
+        keys[label]: {**entry, "provider_name": ""}
         for label, entry in (doc.get("comparison") or {}).items()
-        if label in alias
+        if label in keys
     }
     return {"runs": runs, "comparison": comparison}
 
