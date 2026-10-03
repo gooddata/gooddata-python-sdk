@@ -19,7 +19,14 @@ pygmentsUseClasses = false
 pygmentsUseClassic = false
 #pygmentsOptions = "linenos=table"
 # See https://help.farbox.com/pygments.html
-pygmentsStyle = "tango"
+pygmentsStyle = "monokai"
+
+# The theme's head.html reads the lowercase "hugo_env" variable as the
+# search-engine indexing switch (HUGO_ENV itself must stay "production" in CI
+# because it selects the config environment). Hugo's default getenv policy
+# only allows ^HUGO_ and ^CI$, so allow it explicitly.
+[security.funcs]
+  getenv = ['^HUGO_', '^CI$', '^hugo_env$']
 
 [module]
   proxy = "direct"
@@ -51,7 +58,7 @@ anchor = "smart"
       unsafe = true
   [markup.highlight]
       # See a complete list of available styles at https://xyproto.github.io/splash/docs/all.html
-      style = "tango"
+      style = "monokai"
       # Uncomment if you want your chosen highlight style used for code blocks without a specified language
       # guessSyntax = "true"
 
