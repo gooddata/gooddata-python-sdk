@@ -80,12 +80,22 @@ def _redact(doc: dict) -> dict:
         if model not in alias_for_model:
             alias_for_model[model] = _alias_name(len(alias_for_model))
 
+    # Longest first, so a model whose name contains another ("gpt-5.2" vs "gpt-5") is
+    # substituted before the shorter one can match inside it and corrupt the result.
+    by_length = sorted(alias_for_model, key=len, reverse=True)
+
     def _key(label: str, run: dict) -> str:
-        model = (run or {}).get("model") or label
-        alias = alias_for_model[model]
-        # Keep whatever else the key carries (a date, a source file) and replace only the
-        # model. Falls back to the bare alias when the key does not embed the model name.
-        return label.replace(model, alias) if model in label else alias
+        # EVERY known model name is replaced, not just this run's. `merge_docs` prefixes
+        # the source -- a filename -- onto the label, and a filename can name a different
+        # model: "gpt-5.5-baseline.json · gpt-5.2" would otherwise keep "gpt-5.5" in a
+        # redacted report, which is the one thing redaction exists to prevent.
+        out = label
+        for model in by_length:
+            out = out.replace(model, alias_for_model[model])
+        if out != label:
+            return out
+        # The label embeds no model name at all; fall back to the bare alias.
+        return alias_for_model[(run or {}).get("model") or label]
 
     keys, taken = {}, set()
     for label, run in runs_in.items():
