@@ -9,6 +9,7 @@ deterministic and worth verifying without a live stack.
 
 from __future__ import annotations
 
+import json
 from types import SimpleNamespace
 from unittest.mock import MagicMock, call, patch
 
@@ -23,7 +24,11 @@ from gooddata_sdk.catalog.ai_lake.service import (
 def _make_service() -> tuple[CatalogAILakeService, MagicMock]:
     """Build a service whose api-client side is fully mocked."""
     fake_ai_lake_api = MagicMock(name="AILakeApi")
-    fake_client = SimpleNamespace(_api_client=MagicMock(name="ApiClient"))
+    fake_client = SimpleNamespace(
+        _api_client=MagicMock(name="ApiClient"),
+        _hostname="http://localhost:3000",
+        _token="test-token",
+    )
 
     with patch("gooddata_sdk.catalog.ai_lake.service.AILakeApi", return_value=fake_ai_lake_api):
         service = CatalogAILakeService(fake_client)  # type: ignore[arg-type]
@@ -144,3 +149,64 @@ class TestWaitForOperation:
         ):
             service.wait_for_operation("op", timeout_s=10.0, poll_s=0.1)
         assert "did not finish within 10.0s" in str(exc_info.value)
+
+
+class TestRefreshPartition:
+    """Unit tests for refresh_partition, which uses raw requests.post.
+
+    The interesting logic here is UUID seeding, URL construction, and correct
+    forwarding of the operation-id header — worth verifying without a live stack.
+    """
+
+    @patch("gooddata_sdk.catalog.ai_lake.service.requests.post")
+    def test_seeds_caller_supplied_operation_id(self, mock_post: MagicMock) -> None:
+        mock_response = MagicMock()
+        mock_response.raise_for_status.return_value = None
+        mock_post.return_value = mock_response
+
+        service, _ = _make_service()
+        op_id = service.refresh_partition(
+            instance_id="demo-db",
+            table_name="fact_orders",
+            partition_spec={"year": "2024"},
+            operation_id="11111111-2222-3333-4444-555555555555",
+        )
+        assert op_id == "11111111-2222-3333-4444-555555555555"
+        call_kwargs = mock_post.call_args
+        assert call_kwargs.kwargs["headers"]["operation-id"] == "11111111-2222-3333-4444-555555555555"
+
+    @patch("gooddata_sdk.catalog.ai_lake.service.requests.post")
+    def test_generates_uuid_when_not_supplied(self, mock_post: MagicMock) -> None:
+        mock_response = MagicMock()
+        mock_response.raise_for_status.return_value = None
+        mock_post.return_value = mock_response
+
+        service, _ = _make_service()
+        op_id = service.refresh_partition(
+            instance_id="demo-db",
+            table_name="fact_orders",
+            partition_spec={"year": "2024"},
+        )
+        assert len(op_id) == 36 and op_id.count("-") == 4
+        call_kwargs = mock_post.call_args
+        assert call_kwargs.kwargs["headers"]["operation-id"] == op_id
+
+    @patch("gooddata_sdk.catalog.ai_lake.service.requests.post")
+    def test_constructs_correct_url_and_body(self, mock_post: MagicMock) -> None:
+        mock_response = MagicMock()
+        mock_response.raise_for_status.return_value = None
+        mock_post.return_value = mock_response
+
+        service, _ = _make_service()
+        service.refresh_partition(
+            instance_id="demo-db",
+            table_name="sales",
+            partition_spec={"region": "eu", "month": "2024-01"},
+        )
+        call_kwargs = mock_post.call_args
+        url = call_kwargs.kwargs["url"]
+        assert "demo-db" in url
+        assert "sales" in url
+        assert url.endswith("/refresh")
+        body = json.loads(call_kwargs.kwargs["data"])
+        assert body == {"partitionSpec": {"region": "eu", "month": "2024-01"}}
