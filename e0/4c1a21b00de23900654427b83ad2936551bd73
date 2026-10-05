@@ -1,5 +1,8 @@
 packages/gooddata-eval/tests/test_chat_render.py
   s_d304dfb111b63b::t_921f069e3b9380 65-83,85
+  s_d304dfb111b63b::t_8759711ab37df1 56-64,84,86-94,113,156
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_d304dfb111b63b::t_5b0876037f5924 53
 ---
 {
   "schema_version": "authorship/3.0.0",
