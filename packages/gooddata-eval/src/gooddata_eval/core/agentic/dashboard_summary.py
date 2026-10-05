@@ -30,6 +30,7 @@ from typing import Any
 import httpx
 from gooddata_sdk import GoodDataSdk
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -406,8 +407,14 @@ def run_agentic_dashboard_summary(
     )
 
 
-def _detail(summary: AgenticDashboardSummarySummary) -> dict:
-    best = summary.best
+def _run_detail(run: DashboardSummaryRunResult) -> dict:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Extracted so a failing run is described by exactly the same keys as the winning run --
+    for this kind that means the criteria breakdown and how much of the dashboard the run
+    managed to execute, which is what tells a bad summary apart from a half-loaded one.
+    """
+    best = run
     detail = dict(best.evaluation.detail)
     # How much of the dashboard the summary actually covered. A summary graded against a
     # rubric that mentions a widget which never executed fails for a reason that has
@@ -418,6 +425,10 @@ def _detail(summary: AgenticDashboardSummarySummary) -> dict:
         detail["chat_error"] = best.chat_error
     detail["latency_breakdown"] = build_latency_breakdown(best.tool_call_events, best.reasoning_step_events)
     return detail
+
+
+def _detail(summary: AgenticDashboardSummarySummary) -> dict:
+    return _run_detail(summary.best)
 
 
 class DashboardSummaryAssertionError(AgenticAssertionError):
@@ -517,6 +528,9 @@ def evaluate_agentic_dashboard_summary(
     for run in summary.run_results:
         timings = timings + run.timings
     runs_passed = sum(1 for r in summary.run_results if r.passed)
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(summary.run_results, passed=lambda r: r.passed, detail=_run_detail)
 
     if not summary.pass_at_k:
         error = DashboardSummaryAssertionError(
@@ -531,6 +545,7 @@ def evaluate_agentic_dashboard_summary(
         error.timings = timings
         error.runs_passed = runs_passed
         error.runs_effective = len(summary.run_results)
+        error.failed_runs = failed_runs
         raise error
 
     return AgenticEvalOutcome(
@@ -541,4 +556,5 @@ def evaluate_agentic_dashboard_summary(
         timings=timings,
         runs_passed=runs_passed,
         runs_effective=len(summary.run_results),
+        failed_runs=failed_runs,
     )

@@ -22,6 +22,7 @@ import os
 from dataclasses import dataclass, field
 from typing import Any
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -588,6 +589,13 @@ def evaluate_agentic_forecasting(
     best = summary.best
     ev = best.evaluation
     detail = _detail(best)
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.evaluation.strict_pass,
+        detail=_detail,
+    )
     runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
@@ -608,6 +616,7 @@ def evaluate_agentic_forecasting(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = len(summary.run_results)
+        exc.failed_runs = failed_runs
         raise exc
 
     return AgenticEvalOutcome(
@@ -617,4 +626,5 @@ def evaluate_agentic_forecasting(
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        failed_runs=failed_runs,
     )
