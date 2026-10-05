@@ -257,6 +257,7 @@ def test_evaluate_agentic_general_question_returns_reasoning_steps_on_pass():
         "judge_reasoning": "Correct answer",
         "actual_output": "42",
         "latency_breakdown": [],
+        "tool_calls": [],
     }
     # One wall-clock sample per run, passing runs included -- the latency distribution is over
     # these, and a kind that forgot to report them would silently drop out of it.
@@ -288,6 +289,7 @@ def test_evaluate_agentic_general_question_attaches_reasoning_steps_to_exception
         "judge_reasoning": "Wrong answer",
         "actual_output": "I don't know",
         "latency_breakdown": [],
+        "tool_calls": [],
     }
     assert len(exc_info.value.run_latencies_s) == exc_info.value.runs_effective == 1
 

@@ -19,6 +19,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -565,9 +566,21 @@ def evaluate_agentic_kda_skill(
 
     best = summary.best
     ev = best.evaluation
-    # max_iterations is the same for every run, so it stays at the item level rather than
-    # being repeated into each failing run's detail.
-    detail = {**_run_detail(best), "max_iterations": max_iterations}
+    detail = agentic_detail(
+        best.tool_call_events,
+        best.reasoning_step_events,
+        triggered=ev.triggered,
+        executed=ev.executed,
+        success=ev.success,
+        turn_completed=ev.turn_completed,
+        disambiguated=ev.disambiguated,
+        actual_create_args=best.actual_create_args,
+        actual_execute_result=best.actual_execute_result,
+        # Why the loop stopped -- see LoopExit.
+        exit_reason=best.exit_reason.value,
+        turns_used=best.turns_used,
+        max_iterations=max_iterations,
+    )
     # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
     # cannot disagree about which runs failed.
     failed_runs = build_failed_runs(
@@ -585,26 +598,26 @@ def evaluate_agentic_kda_skill(
             f"Actual create args: {best.actual_create_args}. "
             f"Actual execute result: {best.actual_execute_result}."
         )
-        exc = KdaSkillAssertionError(message)
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = runs_effective
-        exc.failed_runs = failed_runs
-        exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
-        exc.best_run_latency_s = best.run_latency_s
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+        raise_agentic_failure(
+            KdaSkillAssertionError,
+            message,
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            failed_runs=failed_runs,
+            run_latencies_s=[r.run_latency_s for r in summary.run_results],
+            best_run_latency_s=best.run_latency_s,
+        )
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
-        # Also on the success path: pass@K clears the gate with one passing run, so a
-        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
         failed_runs=failed_runs,
         run_latencies_s=[r.run_latency_s for r in summary.run_results],
         best_run_latency_s=best.run_latency_s,

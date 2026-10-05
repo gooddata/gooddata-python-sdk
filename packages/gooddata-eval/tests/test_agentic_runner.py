@@ -1039,9 +1039,15 @@ def test_every_multi_run_kind_s_evaluator_builds_failed_runs(kind, expected_outp
         pytest.skip(f"{kind} runs its fixture once; no K to fail within")
     assert "build_failed_runs(" in source, f"{module.__name__} never builds per-run failure records"
     assert "failed_runs=failed_runs" in source, f"{module.__name__} never returns them on the success path"
-    # Either set directly on the raised error, or via the kind's own _attach_diagnostics
-    # helper -- the judge-based kinds raise from two places and set the payload in one.
-    attaches = "failed_runs = failed_runs" in source or "_attach_diagnostics(" in source
+    # Either set directly on the raised error, via the kind's own _attach_diagnostics
+    # helper (the judge-based kinds raise from two places and set the payload in one), or
+    # passed to raise_agentic_failure -- the shared tail every other kind's failure raise
+    # goes through, alongside its agentic_success mirror, so the keyword appears twice.
+    attaches = (
+        "failed_runs = failed_runs" in source
+        or "_attach_diagnostics(" in source
+        or ("raise_agentic_failure(" in source and source.count("failed_runs=failed_runs") >= 2)
+    )
     assert attaches, f"{module.__name__} never attaches them to its failure"
 
 
@@ -1183,7 +1189,13 @@ def test_every_evaluator_hands_out_its_run_latencies(kind, expected_output, targ
     module = importlib.import_module(getattr(agentic_runner, target).__module__)
     source = inspect.getsource(module)
     assert "run_latencies_s=" in source, f"{module.__name__} never returns its run latencies on the success path"
-    assert ".run_latencies_s = " in source, f"{module.__name__} never attaches them to its failure"
+    # Either set directly on the raised error (the two judge-based kinds' all-ungraded
+    # path), or passed to raise_agentic_failure alongside its agentic_success mirror, so
+    # the keyword appears at least twice.
+    attaches = ".run_latencies_s = " in source or (
+        "raise_agentic_failure(" in source and source.count("run_latencies_s=") >= 2
+    )
+    assert attaches, f"{module.__name__} never attaches them to its failure"
 
 
 @pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
