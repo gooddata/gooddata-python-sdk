@@ -8518,6 +8518,8 @@
               "READ_KNOWLEDGE_DOCUMENTS",
               "CREATE_FILTER_VIEW",
               "CREATE_METRIC",
+              "CREATE_VISUALIZATION",
+              "CREATE_COMPUTED_ATTRIBUTE",
               "VIEW"
             ],
             "type": "string"
@@ -9434,6 +9436,8 @@
               "READ_KNOWLEDGE_DOCUMENTS",
               "CREATE_FILTER_VIEW",
               "CREATE_METRIC",
+              "CREATE_VISUALIZATION",
+              "CREATE_COMPUTED_ATTRIBUTE",
               "VIEW"
             ],
             "type": "string"
@@ -31165,6 +31169,8 @@
                     "READ_KNOWLEDGE_DOCUMENTS",
                     "CREATE_FILTER_VIEW",
                     "CREATE_METRIC",
+                    "CREATE_VISUALIZATION",
+                    "CREATE_COMPUTED_ATTRIBUTE",
                     "VIEW"
                   ],
                   "type": "string"
@@ -38398,6 +38404,8 @@
                 "READ_KNOWLEDGE_DOCUMENTS",
                 "CREATE_FILTER_VIEW",
                 "CREATE_METRIC",
+                "CREATE_VISUALIZATION",
+                "CREATE_COMPUTED_ATTRIBUTE",
                 "VIEW"
               ],
               "type": "string"
@@ -38425,6 +38433,8 @@
                 "READ_KNOWLEDGE_DOCUMENTS",
                 "CREATE_FILTER_VIEW",
                 "CREATE_METRIC",
+                "CREATE_VISUALIZATION",
+                "CREATE_COMPUTED_ATTRIBUTE",
                 "VIEW"
               ],
               "type": "string"
@@ -39303,6 +39313,8 @@
                 "READ_KNOWLEDGE_DOCUMENTS",
                 "CREATE_FILTER_VIEW",
                 "CREATE_METRIC",
+                "CREATE_VISUALIZATION",
+                "CREATE_COMPUTED_ATTRIBUTE",
                 "VIEW"
               ],
               "type": "string"
@@ -39323,6 +39335,8 @@
                 "READ_KNOWLEDGE_DOCUMENTS",
                 "CREATE_FILTER_VIEW",
                 "CREATE_METRIC",
+                "CREATE_VISUALIZATION",
+                "CREATE_COMPUTED_ATTRIBUTE",
                 "VIEW"
               ],
               "type": "string"
@@ -66771,9 +66785,9 @@
           "visualization-object-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
+          "description": "Contains minimal permission level required to create Visualizations",
           "permissions": [
-            "ANALYZE"
+            "CREATE_VISUALIZATION"
           ]
         }
       }
