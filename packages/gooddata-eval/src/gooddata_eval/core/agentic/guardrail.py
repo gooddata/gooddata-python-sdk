@@ -290,10 +290,12 @@ def evaluate_agentic_guardrail(
     if not summary.scored_run_results:
         # No readable verdict for any run: an error, not K failures. Raised after the
         # trace link is queued so whatever the agent did is still linked.
-        raise JudgeResponseError(
+        exc = JudgeResponseError(
             f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
             + " | ".join(unscored)
         )
+        exc.best_run_latency_s = summary.best.run_latency_s
+        raise exc
 
     runs_passed = sum(1 for r in summary.scored_run_results if r.passed)
     runs_effective = len(summary.run_results)
