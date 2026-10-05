@@ -253,14 +253,12 @@ def test_a_cancelled_drain_reaches_no_langfuse_http(rec):
 
 
 def test_a_plain_trace_id_still_writes_exactly_one_score(rec):
-
     score_safe(rec.client, "trace-abc", name="quality_score", value=0.5, data_type="NUMERIC")
 
     assert [body["traceId"] for body in rec.score_bodies()] == ["trace-abc"]
 
 
 def test_nothing_to_score_against_writes_no_score(rec):
-
     score_safe(rec.client, None, name="quality_score", value=0.5, data_type="NUMERIC")
 
     assert rec.score_bodies() == []
