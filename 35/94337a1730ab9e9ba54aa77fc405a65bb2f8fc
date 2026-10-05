@@ -1,24 +1,26 @@
-packages/gooddata-eval/tests/test_agentic_report_skill.py
-  s_d304dfb111b63b::t_2c351c35888ba7 1-249,253-255,259-423
-  s_d304dfb111b63b::t_3ee5fb8767b579 250-252,256-258
 packages/gooddata-eval/tests/test_agentic_runner.py
   s_d304dfb111b63b::t_890ca6c61567f8 88
 packages/gooddata-eval/src/gooddata_eval/core/agentic/report_skill.py
-  s_d304dfb111b63b::t_5d14619f015bfa 1-191,194,196-197,202,207-234,237-244,246-608,612-635
-  s_d304dfb111b63b::t_f5ed8596736f5a 192-193,195,203-206,235-236,245,609-611
-  s_d304dfb111b63b::t_3ee5fb8767b579 198-201
+  s_d304dfb111b63b::t_5d14619f015bfa 1-9,11-192,195,197-198,203,208-235,238-245,247-251,253-376,378-408,411-429,431-612,616-639
+  s_d304dfb111b63b::t_f5ed8596736f5a 193-194,196,204-207,236-237,246,613-615
+  s_d304dfb111b63b::t_871f1b48bf225f 10,252,377,409-410,430
+  s_d304dfb111b63b::t_3ee5fb8767b579 199-202
+packages/gooddata-eval/tests/test_agentic_report_skill.py
+  s_d304dfb111b63b::t_2c351c35888ba7 1-249,253-255,259-423
+  s_d304dfb111b63b::t_3ee5fb8767b579 250-252,256-258
+  s_d304dfb111b63b::t_7e0fbb55e8aac7 424-458
 packages/gooddata-eval/tests/test_trace_linker.py
   s_d304dfb111b63b::t_890ca6c61567f8 118
 packages/gooddata-eval/src/gooddata_eval/core/agentic/__init__.py
   s_d304dfb111b63b::t_bd46b3577bbbfb 56-63,86,107-109,123,133
 packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
-  s_d304dfb111b63b::t_3ee5fb8767b579 21,47,97-98,209-210
   s_d304dfb111b63b::t_bfba52db937946 211-220
+  s_d304dfb111b63b::t_3ee5fb8767b579 21,47,97-98,209-210
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "c6639799ca3ccbe941336f2135f11c4ffdb772c7",
+  "base_commit_sha": "3594337a1730ab9e9ba54aa77fc405a65bb2f8fc",
   "prompts": {},
   "sessions": {
     "s_d304dfb111b63b": {
@@ -27,7 +29,7 @@ packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
         "id": "75fa5c98-2591-42be-9aa0-fa2875502c12",
         "model": "claude-opus-5-5"
       },
-      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+      "human_author": null
     }
   }
 }
