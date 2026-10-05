@@ -87,7 +87,8 @@ class GuardrailResult:
     # Set when the judge returned something unreadable for THIS run. Excluded from pass@K
     # and from Langfuse scoring rather than counted as a failure -- see score_run.
     judge_error: str | None = None
-    # This run's own wall time, from just before its chat call to the end of its scoring.
+    # This run's own wall time (agent call + its grading) -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item).
     run_latency_s: float = 0.0
 
 
@@ -211,6 +212,7 @@ def _attach_diagnostics(
     runs_passed: int,
     runs_effective: int,
     run_latencies_s: list[float],
+    best_run_latency_s: float | None,
 ) -> None:
     """Hang the report payload on a raised error, whichever error it is.
 
@@ -226,6 +228,7 @@ def _attach_diagnostics(
     error.runs_effective = runs_effective
     error.failed_runs = failed_runs
     error.run_latencies_s = run_latencies_s
+    error.best_run_latency_s = best_run_latency_s
 
 
 def _run_detail(run: GuardrailResult) -> dict:
@@ -375,7 +378,9 @@ def evaluate_agentic_guardrail(
             f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
             + " | ".join(unscored)
         )
-        _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s)
+        _attach_diagnostics(
+            error, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s, best.run_latency_s
+        )
         raise error
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
@@ -383,7 +388,9 @@ def evaluate_agentic_guardrail(
         exc = GuardrailAssertionError(
             f"Guardrail assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}"
         )
-        _attach_diagnostics(exc, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s)
+        _attach_diagnostics(
+            exc, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s, best.run_latency_s
+        )
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -396,4 +403,5 @@ def evaluate_agentic_guardrail(
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
         run_latencies_s=run_latencies_s,
+        best_run_latency_s=best.run_latency_s,
     )

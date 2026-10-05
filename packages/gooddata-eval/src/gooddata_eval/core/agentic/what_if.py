@@ -212,7 +212,9 @@ class WhatIfRunResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
-    # This run's own wall time, from just before its chat call to the end of its scoring.
+    # This run's own wall time, across all its turns -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item). Distinct from
+    # turn_wall_clock_sec above, which is only the scenario-execution turn.
     run_latency_s: float = 0.0
 
 
@@ -328,6 +330,7 @@ def run_agentic_what_if(
     )
 
     def _run_once(conv_id: str) -> WhatIfRunResult:
+        run_started = time.monotonic()
         create_args: dict | None = None
         execute_result: dict | None = None
         turn_wall_clock_sec: float | None = None
@@ -622,6 +625,7 @@ def evaluate_agentic_what_if(
         exc.runs_effective = len(summary.run_results)
         exc.failed_runs = failed_runs
         exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
+        exc.best_run_latency_s = best.run_latency_s
         raise exc
 
     return AgenticEvalOutcome(
@@ -633,4 +637,5 @@ def evaluate_agentic_what_if(
         detail=detail,
         failed_runs=failed_runs,
         run_latencies_s=[r.run_latency_s for r in summary.run_results],
+        best_run_latency_s=best.run_latency_s,
     )

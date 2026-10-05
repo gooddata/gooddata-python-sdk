@@ -729,8 +729,10 @@ class ConversationResult:
     stalled_turns: int = 0
     mode: ConversationMode = "legacy"
     judge_model: str | None = None
-    # The whole conversation's wall time, from just before its first message to the end of its
-    # last turn's scoring; conversation create/delete is not part of it.
+    # This conversation's own wall time, across every turn -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item). There is no
+    # K-of-N selection for this kind (see run_agentic_conversation's docstring), so
+    # this is simply the one conversation's own time, not a "best of" pick.
     run_latency_s: float = 0.0
 
 
@@ -857,6 +859,7 @@ def run_agentic_conversation(
     A fixture with ``expects_clarification`` needs ``context`` mode: legacy mode neither sends
     ``clarifying_answers`` nor lets the clarification checks fail the item, so it raises ``ValueError``.
     """
+    run_started = time.monotonic()
     resolved_mode = resolve_conversation_mode(mode)
     graded = [t.turn_id for t in fixture.turns if t.expects_clarification is not None]
     if resolved_mode == "legacy" and graded:
@@ -1518,6 +1521,7 @@ def evaluate_agentic_conversation(
         exc.runs_passed = 0
         exc.runs_effective = 1
         exc.run_latencies_s = [result.run_latency_s]
+        exc.best_run_latency_s = result.run_latency_s
         raise exc
     return AgenticEvalOutcome(
         reasoning_steps=result.reasoning_steps,
@@ -1527,4 +1531,5 @@ def evaluate_agentic_conversation(
         runs_passed=1,
         runs_effective=1,
         run_latencies_s=[result.run_latency_s],
+        best_run_latency_s=result.run_latency_s,
     )

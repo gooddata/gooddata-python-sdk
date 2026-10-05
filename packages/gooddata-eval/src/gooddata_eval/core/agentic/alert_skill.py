@@ -700,7 +700,8 @@ class AlertRunResult:
     # also report operator/threshold/metric/recipients as False.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
     turns_used: int = 0
-    # This run's own wall time, from just before its chat call to the end of its scoring.
+    # This run's own wall time, across all its turns -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item).
     run_latency_s: float = 0.0
 
 
@@ -975,6 +976,7 @@ def run_agentic_alert_skill(
 
     def _run_once(conv_id: str) -> AlertRunResult:
         alert_id_to_delete: str | None = None
+        run_started = time.monotonic()
         try:
             alert_id: str | None = None
             actual_args: dict = {}
@@ -1286,6 +1288,7 @@ def evaluate_agentic_alert_skill(
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
         exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
+        exc.best_run_latency_s = best.run_latency_s
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -1298,4 +1301,5 @@ def evaluate_agentic_alert_skill(
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
         run_latencies_s=[r.run_latency_s for r in summary.run_results],
+        best_run_latency_s=best.run_latency_s,
     )

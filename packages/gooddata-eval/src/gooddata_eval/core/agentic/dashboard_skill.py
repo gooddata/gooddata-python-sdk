@@ -41,7 +41,7 @@ from gooddata_eval.core.models import (
     shift_and_index_events,
 )
 from gooddata_eval.core.scoring import AAC_VISUALIZATION_TYPES, same_viz_type
-from gooddata_eval.core.timing import PhaseTimings, log_timer, sum_timings
+from gooddata_eval.core.timing import PhaseTimings, log_timer, run_latency_s, sum_timings
 
 _DEFAULT_K = 1
 # Matches kda_skill and visualization. The reply this loop sends is built from the expectation
@@ -2041,6 +2041,7 @@ def evaluate_agentic_dashboard_skill(
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
         exc.timings = item_timings
+        exc.best_run_latency_s = run_latency_s(best.timings)
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
@@ -2057,4 +2058,5 @@ def evaluate_agentic_dashboard_skill(
         timings=item_timings,
         failed_runs=failed_runs,
         run_latencies_s=[r.run_latency_s for r in summary.run_results],
+        best_run_latency_s=run_latency_s(best.timings),
     )

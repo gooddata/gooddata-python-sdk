@@ -78,7 +78,8 @@ class SearchResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
-    # This run's own wall time, from just before its chat call to the end of its scoring.
+    # This run's own wall time -- mirrors the single-shot path's best_run_latency_s
+    # (see core/runner.py's _run_one_item).
     run_latency_s: float = 0.0
 
 
@@ -314,6 +315,7 @@ def evaluate_agentic_search_tool(
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
         exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
+        exc.best_run_latency_s = best.run_latency_s
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -326,4 +328,5 @@ def evaluate_agentic_search_tool(
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
         run_latencies_s=[r.run_latency_s for r in summary.run_results],
+        best_run_latency_s=best.run_latency_s,
     )

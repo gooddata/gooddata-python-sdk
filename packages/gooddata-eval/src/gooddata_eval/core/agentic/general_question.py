@@ -37,7 +37,7 @@ from gooddata_eval.core.models import (
     ToolCallEvent,
     build_latency_breakdown,
 )
-from gooddata_eval.core.timing import PhaseTimings, log_timer, sum_timings
+from gooddata_eval.core.timing import PhaseTimings, log_timer, run_latency_s, sum_timings
 
 _DEFAULT_K = 1
 
@@ -230,6 +230,7 @@ def _attach_diagnostics(
     runs_passed: int,
     runs_effective: int,
     run_latencies_s: list[float],
+    best_run_latency_s: float | None,
 ) -> None:
     """Hang the report payload on a raised error, whichever error it is.
 
@@ -245,6 +246,7 @@ def _attach_diagnostics(
     error.runs_effective = runs_effective
     error.failed_runs = failed_runs
     error.run_latencies_s = run_latencies_s
+    error.best_run_latency_s = best_run_latency_s
 
 
 def _run_detail(run: GeneralQuestionResult) -> dict:
@@ -397,7 +399,9 @@ def evaluate_agentic_general_question(
             f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
             + " | ".join(unscored)
         )
-        _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s)
+        _attach_diagnostics(
+            error, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s, run_latency_s(best.timings)
+        )
         error.timings = item_timings
         raise error
 
@@ -406,7 +410,9 @@ def evaluate_agentic_general_question(
         exc = GeneralQuestionAssertionError(
             f"General question assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}"
         )
-        _attach_diagnostics(exc, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s)
+        _attach_diagnostics(
+            exc, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s, run_latency_s(best.timings)
+        )
         exc.timings = item_timings
         raise exc
     return AgenticEvalOutcome(
@@ -421,4 +427,5 @@ def evaluate_agentic_general_question(
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
         run_latencies_s=run_latencies_s,
+        best_run_latency_s=run_latency_s(best.timings),
     )

@@ -201,7 +201,9 @@ class KdaRunResult:
     # separate a refusal from a run that hit max_iterations while still on track.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
     turns_used: int = 0
-    # This run's own wall time, from just before its chat call to the end of its scoring.
+    # This run's own wall time, across all its turns -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item). Distinct from
+    # turn_wall_clock_sec above, which is only the final create-triggering turn.
     run_latency_s: float = 0.0
 
 
@@ -271,6 +273,7 @@ def run_agentic_kda_skill(
     )
 
     def _run_once(conv_id: str) -> KdaRunResult:
+        run_started = time.monotonic()
         create_args: dict | None = None
         execute_result: dict | None = None
         turn_wall_clock_sec: float | None = None
@@ -591,6 +594,7 @@ def evaluate_agentic_kda_skill(
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
         exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
+        exc.best_run_latency_s = best.run_latency_s
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -603,4 +607,5 @@ def evaluate_agentic_kda_skill(
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
         run_latencies_s=[r.run_latency_s for r in summary.run_results],
+        best_run_latency_s=best.run_latency_s,
     )

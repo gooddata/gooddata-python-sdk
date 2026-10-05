@@ -77,7 +77,8 @@ class RunResult:
     # Why the simulated-user loop stopped. visualization_created=False alone cannot separate
     # a refusal from a run that hit max_iterations while still on track -- see LoopExit.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
-    # This run's own wall time, from just before its first chat call to the end of its scoring.
+    # This run's own wall time, across all its turns -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item).
     run_latency_s: float = 0.0
     # Everything the final turn said, which the answer patterns are matched against.
     answer_text: str = ""
@@ -208,6 +209,7 @@ def _execute_single_run(
     one_turn = not options.expects_visualization or options.visualization_optional
     if one_turn:
         max_iterations = min(max_iterations, 1)
+    run_started = time.monotonic()
     total_turns = 0
     total_steps = 0
     all_tool_call_events: list[ToolCallEvent] = []
@@ -709,6 +711,7 @@ def evaluate_agentic_visualization(
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
         exc.run_latencies_s = run_latencies_s
+        exc.best_run_latency_s = best.run_latency_s
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -721,4 +724,5 @@ def evaluate_agentic_visualization(
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
         run_latencies_s=run_latencies_s,
+        best_run_latency_s=best.run_latency_s,
     )
