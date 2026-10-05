@@ -19,6 +19,7 @@ from gooddata_eval.core.agentic.report_skill import (
     evaluate_report_response,
     run_agentic_report_skill,
 )
+from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.models import ChatResult, DatasetItem
 
 # Shapes follow what gen-ai writes for a drafted report (composed_report.aac.json): a cover
@@ -558,12 +559,14 @@ class _FakeCtx:
         self.scores: dict[str, float] = {}
         self.score_types: dict[str, str] = {}
         self.quality_checks: dict[str, bool] = {}
+        self.observed: list[str] = []
 
     def trace(self, _conversation_id: str) -> None:
         return None
 
     @contextmanager
     def observe(self, _trace: None, _run_idx: int, *, conversation_id: str, output: dict) -> Iterator[str]:
+        self.observed.append(conversation_id)
         yield "trace-id"
 
     def score(self, _tid: str, *, name: str, value: float, data_type: str) -> None:
@@ -616,3 +619,225 @@ def test_a_check_the_fixture_does_not_state_is_not_published(monkeypatch: pytest
     ctx = _scored(monkeypatch, {}, [_drafting_turn()])
     for absent in ("report_period_correct", "report_charts_matched", "report_asked_first"):
         assert absent not in ctx.scores
+
+
+# ── narrative ───────────────────────────────────────────────────────────────
+
+_NARRATIVE = "Summaries explain how revenue moved in H1 2026."
+
+
+def _summary_page(page_id: str, text: str | None, *visualizations: str) -> dict:
+    page = _content_page(page_id, *visualizations)
+    column = page["layout"]["column"]
+    if text is not None:
+        column.append({"id": "summary", "weight": 1, "paragraph": {"prompt": "Focus on growth.", "text": text}})
+    column.append({"id": "footerPageNumber", "weight": 1, "paragraph": "{currentPageNumber} / {totalPages}"})
+    return page
+
+
+class _FakeJudge:
+    """Stands in for LLMJudge: returns a fixed verdict and records what it was asked."""
+
+    model = "fake-judge"
+
+    def __init__(self, passed: bool = True, *, error: Exception | None = None) -> None:
+        self._passed = passed
+        self._error = error
+        self.calls: list[dict[str, str]] = []
+
+    def score(self, input: str, expected_output: str, actual_output: str) -> tuple[bool, str]:
+        self.calls.append({"input": input, "expected_output": expected_output, "actual_output": actual_output})
+        if self._error is not None:
+            raise self._error
+        return self._passed, "fine" if self._passed else "the summaries ignore returns"
+
+
+def _narrative_turn(*pages: dict) -> ChatResult:
+    return _chat_result(
+        tool_calls=[_tool_call("draft_report", _draft_result(page_count=len(pages)))],
+        parts=[_report_part(list(pages))],
+        text="I've put together a report.",
+    )
+
+
+def test_every_summary_slot_needs_written_text() -> None:
+    pages = [_cover_page(), _summary_page("page2", "Revenue grew 12%.", _REVENUE_TREND), _summary_page("page3", "")]
+    evaluation = _evaluate(_report_part(pages), expected={"narrative": _NARRATIVE}, tool=_draft_result(page_count=3))
+    assert evaluation.strict_checks["report_summaries_present"] is False
+    assert evaluation.failures == ["page 'page3' has a summary slot with no written text"]
+
+
+def test_a_content_page_laid_out_without_a_summary_slot_is_fine() -> None:
+    pages = [_cover_page(), _summary_page("page2", "Revenue grew 12%.", _REVENUE_TREND), _summary_page("page3", None)]
+    evaluation = _evaluate(_report_part(pages), expected={"narrative": _NARRATIVE}, tool=_draft_result(page_count=3))
+    assert evaluation.strict_checks["report_summaries_present"] is True
+
+
+def test_a_static_text_slot_is_not_a_summary() -> None:
+    page = _summary_page("page2", None, _REVENUE_TREND)
+    page["layout"]["column"].append({"id": "text1", "weight": 1, "paragraph": "Left text."})
+    evaluation = _evaluate(_report_part([_cover_page(), page]), expected={"narrative": _NARRATIVE})
+    assert evaluation.strict_checks["report_summaries_present"] is False
+    assert evaluation.failures == ["the report has no summary slot"]
+
+
+def test_a_summary_made_only_of_placeholders_is_not_written() -> None:
+    pages = [_cover_page(), _summary_page("page2", "{periodStart} – {periodEnd}", _REVENUE_TREND)]
+    evaluation = _evaluate(_report_part(pages), expected={"narrative": _NARRATIVE})
+    assert evaluation.strict_checks["report_summaries_present"] is False
+
+
+def test_summaries_are_not_checked_unless_the_fixture_asks_for_the_narrative() -> None:
+    evaluation = _evaluate(_report_part([_cover_page(), _summary_page("page2", None, _REVENUE_TREND)]))
+    assert "report_summaries_present" not in evaluation.strict_checks
+    assert "report_narrative_judged" not in evaluation.strict_checks
+
+
+def test_the_judge_reads_the_report_as_text() -> None:
+    judge = _FakeJudge()
+    turn = _narrative_turn(_cover_page(), _summary_page("page2", "Revenue grew 12%.", _REVENUE_TREND))
+    run = _execute_single_report_run(
+        _ScriptedChatClient([turn]), "c", "Report on revenue", {"narrative": _NARRATIVE}, 4, judge=judge
+    )
+    assert run.evaluation.strict_checks["report_narrative_judged"] is True
+    assert run.evaluation.strict_pass
+    [call] = judge.calls
+    assert call["input"] == "Report on revenue"
+    assert call["expected_output"] == _NARRATIVE
+    assert call["actual_output"] == (
+        "Report: Sales overview\n"
+        "Period: 2026-01-01 to 2026-06-30\n"
+        "\n"
+        "Page 2: Revenue\n"
+        "Charts: revenue_trend\n"
+        "Summary: Revenue grew 12%."
+    )
+
+
+def test_a_failing_verdict_fails_the_run_with_the_judges_reason() -> None:
+    turn = _narrative_turn(_cover_page(), _summary_page("page2", "Revenue grew 12%.", _REVENUE_TREND))
+    run = _execute_single_report_run(
+        _ScriptedChatClient([turn]), "c", "q", {"narrative": _NARRATIVE}, 4, judge=_FakeJudge(passed=False)
+    )
+    assert run.evaluation.strict_checks["report_narrative_judged"] is False
+    assert "the judge failed the narrative: the summaries ignore returns" in run.evaluation.failures
+
+
+def test_no_report_means_no_judge_call_and_a_failed_narrative() -> None:
+    judge = _FakeJudge()
+    run = _execute_single_report_run(
+        _ScriptedChatClient([_chat_result(text="Sorry.")]), "c", "q", {"narrative": _NARRATIVE}, 1, judge=judge
+    )
+    assert judge.calls == []
+    assert run.evaluation.strict_checks["report_narrative_judged"] is False
+
+
+def test_an_unreadable_verdict_leaves_the_run_unscored_not_passed() -> None:
+    judge = _FakeJudge(error=JudgeResponseError("returned no 'score' key"))
+    turn = _narrative_turn(_cover_page(), _summary_page("page2", "Revenue grew 12%.", _REVENUE_TREND))
+    run = _execute_single_report_run(_ScriptedChatClient([turn]), "c", "q", {"narrative": _NARRATIVE}, 4, judge=judge)
+    assert run.judge_error == "returned no 'score' key"
+    assert "report_narrative_judged" not in run.evaluation.strict_checks
+    assert not run.evaluation.strict_pass
+
+
+def test_an_item_the_judge_could_never_grade_raises(monkeypatch: pytest.MonkeyPatch) -> None:
+    turn = _narrative_turn(_cover_page(), _summary_page("page2", "Revenue grew 12%.", _REVENUE_TREND))
+    _install_client(monkeypatch, _ScriptedChatClient([turn]))
+    judge = _FakeJudge(error=JudgeResponseError("empty body"))
+    with pytest.raises(JudgeResponseError, match="no readable verdict"):
+        evaluate_agentic_report_skill("https://h", "tok", "ws", "q", {"narrative": _NARRATIVE}, judge=judge)
+
+
+def test_a_narrative_item_passes_with_its_verdict_in_the_detail(monkeypatch: pytest.MonkeyPatch) -> None:
+    turn = _narrative_turn(_cover_page(), _summary_page("page2", "Revenue grew 12%.", _REVENUE_TREND))
+    _install_client(monkeypatch, _ScriptedChatClient([turn]))
+    outcome = evaluate_agentic_report_skill(
+        "https://h", "tok", "ws", "q", {"narrative": _NARRATIVE}, judge=_FakeJudge()
+    )
+    assert outcome.detail["report_narrative_judged"] is True
+    assert outcome.detail["report_summaries_present"] is True
+    assert outcome.detail["judge_reasoning"] == "fine"
+
+
+def test_a_fixture_without_a_narrative_never_builds_a_judge(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    _install_client(monkeypatch, _ScriptedChatClient([_drafting_turn()]))
+    outcome = evaluate_agentic_report_skill("https://h", "tok", "ws", "q", {})
+    assert outcome.runs_passed == 1
+
+
+def test_an_empty_narrative_is_rejected() -> None:
+    with pytest.raises(ValueError, match="narrative must be a non-empty description"):
+        _validate_expectation({"narrative": "  "})
+
+
+def test_a_report_without_content_pages_has_no_summaries_to_present() -> None:
+    closing = {**_cover_page(), "id": "page2", "kind": "closing"}
+    evaluation = _evaluate(_report_part([_cover_page(), closing]), expected={"narrative": _NARRATIVE})
+    assert evaluation.strict_checks["report_summaries_present"] is False
+    assert evaluation.failures == ["the report has no content page", "the report has no summary slot"]
+
+
+class _SequenceJudge(_FakeJudge):
+    """Fails to grade the first call, then passes every later one."""
+
+    def score(self, input: str, expected_output: str, actual_output: str) -> tuple[bool, str]:
+        self.calls.append({"input": input, "expected_output": expected_output, "actual_output": actual_output})
+        if len(self.calls) == 1:
+            raise JudgeResponseError("empty body")
+        return True, "fine"
+
+
+def _narrative_turns() -> list[ChatResult]:
+    page = _summary_page("page2", "Revenue grew 12%.", _REVENUE_TREND)
+    return [_narrative_turn(_cover_page(), page), _narrative_turn(_cover_page(), page)]
+
+
+def test_an_ungraded_run_keeps_pass_at_k_but_not_pass_power_k(monkeypatch: pytest.MonkeyPatch) -> None:
+    _install_client(monkeypatch, _ScriptedChatClient(_narrative_turns()))
+    summary = run_agentic_report_skill(
+        "https://h", "tok", "ws", "q", {"narrative": _NARRATIVE}, k=2, judge=_SequenceJudge()
+    )
+    assert [r.judge_error for r in summary.run_results] == ["empty body", None]
+    assert summary.pass_at_k
+    assert not summary.pass_power_k, "pass^K cannot hold over a run nobody graded"
+    assert summary.best.judge_error is None
+
+
+def test_an_ungraded_run_writes_no_scores(monkeypatch: pytest.MonkeyPatch) -> None:
+    ctx = _scored(monkeypatch, {"narrative": _NARRATIVE}, _narrative_turns(), k=2, judge=_SequenceJudge())
+    assert ctx.observed == ["conv-2"]
+    assert ctx.scores["report_narrative_judged"] == 1.0
+    assert ctx.scores["report_summaries_present"] == 1.0
+
+
+def _failing_narrative_turn() -> ChatResult:
+    return _narrative_turn(_cover_page(), _summary_page("page2", "Revenue grew 12%.", _REVENUE_TREND))
+
+
+def test_a_run_that_failed_a_fixed_check_is_a_failure_even_when_the_judge_errors(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    expected = {"narrative": _NARRATIVE, "visualizations": [{"id": _RETURNS_BY_CATEGORY, "title": "Returns"}]}
+    _install_client(monkeypatch, _ScriptedChatClient([_failing_narrative_turn()]))
+    judge = _FakeJudge(error=JudgeResponseError("empty body"))
+    with pytest.raises(ReportSkillAssertionError, match="does not show chart 'returns_by_category'"):
+        evaluate_agentic_report_skill("https://h", "tok", "ws", "q", expected, judge=judge)
+
+
+def test_a_failed_run_with_a_judge_error_is_published(monkeypatch: pytest.MonkeyPatch) -> None:
+    expected = {"narrative": _NARRATIVE, "visualizations": [{"id": _RETURNS_BY_CATEGORY, "title": "Returns"}]}
+    ctx = _scored(monkeypatch, expected, [_failing_narrative_turn()], judge=_FakeJudge(error=JudgeResponseError("x")))
+    assert ctx.observed == ["conv-1"]
+    assert ctx.scores["report_charts_matched"] == 0.0
+    assert "report_narrative_judged" not in ctx.scores
+
+
+def test_only_content_pages_count_for_summaries() -> None:
+    cover = _cover_page()
+    cover["layout"]["column"].append({"id": "summary", "weight": 1, "paragraph": {"text": "Revenue grew 12%."}})
+    pages = [cover, _summary_page("page2", None, _REVENUE_TREND)]
+    evaluation = _evaluate(_report_part(pages), expected={"narrative": _NARRATIVE})
+    assert evaluation.strict_checks["report_summaries_present"] is False
+    assert evaluation.failures == ["the report has no summary slot"]

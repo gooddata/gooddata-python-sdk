@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 import time
 from collections.abc import Iterator
 from dataclasses import dataclass, field
@@ -30,6 +31,7 @@ from gooddata_eval.core.agentic.dashboard_skill import _extract_tool_result, _sk
 from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
+from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError, LLMJudge, score_run
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
@@ -52,7 +54,19 @@ _PART_TYPE = "report"
 # The copilot's own rule: a report opens with a cover and has at least one content page.
 _COVER_PAGE = "cover"
 _CONTENT_PAGE = "content"
-_EXPECTATION_KEYS = frozenset({"period", "visualizations", "expects_clarification"})
+_EXPECTATION_KEYS = frozenset({"period", "visualizations", "narrative", "expects_clarification"})
+# Template tokens the report renders at export time ({reportName}, {periodStart}, ...).
+_PLACEHOLDER_RE = re.compile(r"\{\w+\}")
+_SUMMARY_SLOT = "summary"
+
+_NARRATIVE_EVALUATION_STEPS = [
+    "The actual output is a report rendered as text: its title, period, and per page the heading, "
+    "the chart ids it shows and the written summaries.",
+    "Check that the summaries address what the INPUT asked the report to cover, as the EXPECTED OUTPUT describes.",
+    "Check that each page's summary fits that page's heading and charts.",
+    "Check that the summaries speak to the report's period and do not contradict each other.",
+    "Fail the output if any summary is placeholder, unfinished or boilerplate text.",
+]
 
 
 def _extract_report_part(chat_result: ChatResult) -> dict | None:
@@ -91,6 +105,61 @@ def _visualizations_of(report: dict) -> set[str]:
         for node in _nodes(page.get("layout"))
         if isinstance(node.get("visualization"), str)
     }
+
+
+def _written(text: Any) -> str | None:
+    """``text`` when it says something once template placeholders are removed, else ``None``."""
+    if not isinstance(text, str):
+        return None
+    if not re.sub(r"[\W_]+", "", _PLACEHOLDER_RE.sub("", text)):
+        return None
+    return text.strip()
+
+
+def _summary_slot(page: dict) -> dict | None:
+    """The page's ``summary`` slot, as gen-ai reads it, or ``None`` when the layout has none."""
+    for node in _nodes(page.get("layout")):
+        if node.get("id") == _SUMMARY_SLOT and "paragraph" in node:
+            return node
+    return None
+
+
+def _summary_text(slot: dict) -> str | None:
+    """The slot's written text: the model's on an AI summary, the typed string on a static one."""
+    paragraph = slot.get("paragraph")
+    return _written(paragraph.get("text") if isinstance(paragraph, dict) else paragraph)
+
+
+def _content_pages(report: dict) -> list[tuple[int, dict]]:
+    """``(page number, page)`` for every content page."""
+    return [
+        (number, page)
+        for number, page in enumerate(report.get("pages") or [], start=1)
+        if isinstance(page, dict) and _page_kind(page) == _CONTENT_PAGE
+    ]
+
+
+def render_report_text(report: dict) -> str:
+    """The report as the judge reads it: title, period, and per content page its heading, charts and summaries."""
+    period = report.get("period") or {}
+    lines = [f"Report: {report.get('title')}", f"Period: {period.get('start')} to {period.get('end')}"]
+    for number, page in _content_pages(report):
+        nodes = list(_nodes(page.get("layout")))
+        headings = [h for h in (_written(n.get("heading")) for n in nodes) if h is not None]
+        charts = [n["visualization"] for n in nodes if isinstance(n.get("visualization"), str)]
+        lines.append("")
+        lines.append(f"Page {number}: {', '.join(headings) or '(no heading)'}")
+        if charts:
+            lines.append(f"Charts: {', '.join(charts)}")
+        slot = _summary_slot(page)
+        text = _summary_text(slot) if slot is not None else None
+        if text is not None:
+            lines.append(f"Summary: {text}")
+    return "\n".join(lines)
+
+
+def _has_narrative(expected_output: dict) -> bool:
+    return "narrative" in expected_output
 
 
 def _has_period(expected_output: dict) -> bool:
@@ -132,6 +201,12 @@ def _validate_expectation(expected_output: Any) -> None:
         for entry in visualizations:
             if not isinstance(entry, dict) or not entry.get("id"):
                 raise ValueError(f"every visualization needs an 'id', got {entry!r}")
+    if _has_narrative(expected_output):
+        narrative = expected_output.get("narrative")
+        if not isinstance(narrative, str) or not narrative.strip():
+            raise ValueError(
+                f"narrative must be a non-empty description of what the summaries cover, got {narrative!r}"
+            )
     if _expects_clarification(expected_output) and not isinstance(expected_output["expects_clarification"], bool):
         raise ValueError(
             f"expects_clarification must be true or false, got {expected_output['expects_clarification']!r}"
@@ -166,6 +241,7 @@ class _Applies:
 
     period: bool
     charts: bool
+    narrative: bool = False
 
 
 @dataclass
@@ -181,11 +257,26 @@ class ReportEvaluation:
     applies: _Applies
     period_correct: bool = False
     charts_matched: bool = False
+    summaries_present: bool = False
+    narrative_judged: bool = False
+    judge_reasoning: str = ""
+    # Set when the judge returned something unreadable. The run then has no narrative verdict:
+    # it is neither published as a 0 nor allowed to pass on the remaining checks.
+    judge_error: str | None = None
     failures: list[str] = field(default_factory=list)
 
     @property
     def strict_pass(self) -> bool:
-        return all(self.strict_checks.values())
+        return self.judge_error is None and all(self.strict_checks.values())
+
+    @property
+    def ungraded(self) -> bool:
+        """The judge returned nothing readable and the narrative was the only check still open.
+
+        A run that already failed another check is a failure whatever the judge would have said,
+        so a judge error there leaves it failed rather than ungraded.
+        """
+        return self.judge_error is not None and all(self.strict_checks.values())
 
     @property
     def strict_checks(self) -> dict[str, bool]:
@@ -203,6 +294,10 @@ class ReportEvaluation:
             checks["report_period_correct"] = self.period_correct
         if self.applies.charts:
             checks["report_charts_matched"] = self.charts_matched
+        if self.applies.narrative:
+            checks["report_summaries_present"] = self.summaries_present
+            if self.judge_error is None:
+                checks["report_narrative_judged"] = self.narrative_judged
         return checks
 
 
@@ -235,7 +330,11 @@ def evaluate_report_response(
     Pure: no network and no conversation state, so the whole assertion surface is unit-testable
     without an agent.
     """
-    applies = _Applies(period=_has_period(expected_output), charts=_has_visualizations(expected_output))
+    applies = _Applies(
+        period=_has_period(expected_output),
+        charts=_has_visualizations(expected_output),
+        narrative=_has_narrative(expected_output),
+    )
 
     if tool_result is None:
         return ReportEvaluation(
@@ -309,6 +408,15 @@ def evaluate_report_response(
         failures.extend(f"the report does not show chart {v.get('id')!r} ({v.get('title')!r})" for v in missing)
         charts_matched = not missing
 
+    summaries_present = False
+    if applies.narrative:
+        slots = [(page, slot) for _number, page in _content_pages(report) if (slot := _summary_slot(page)) is not None]
+        unwritten = [page for page, slot in slots if _summary_text(slot) is None]
+        if not slots:
+            failures.append("the report has no summary slot")
+        failures.extend(f"page {page.get('id')!r} has a summary slot with no written text" for page in unwritten)
+        summaries_present = bool(slots) and not unwritten
+
     return ReportEvaluation(
         drafted=True,
         part_present=True,
@@ -319,8 +427,33 @@ def evaluate_report_response(
         applies=applies,
         period_correct=period_correct,
         charts_matched=charts_matched,
+        summaries_present=summaries_present,
         failures=failures,
     )
+
+
+def _judge_narrative(
+    evaluation: ReportEvaluation, judge: LLMJudge, report_part: dict | None, question: str, narrative: str
+) -> float:
+    """Grade the drafted report's narrative into ``evaluation``; return the seconds the judge took.
+
+    No report document means nothing to grade, which is a failed narrative rather than a judge call.
+    """
+    report = (report_part or {}).get("report") if evaluation.part_present else None
+    if not isinstance(report, dict):
+        return 0.0
+    started = time.monotonic()
+    verdict = score_run(judge, input=question, expected_output=narrative, actual_output=render_report_text(report))
+    elapsed = time.monotonic() - started
+    log_timer(f"[timer] report_skill {judge.model} judge complete after {elapsed:.2f}s")
+    if verdict.error is not None:
+        evaluation.judge_error = verdict.error
+        return elapsed
+    evaluation.narrative_judged = verdict.passed
+    evaluation.judge_reasoning = verdict.reasoning
+    if not verdict.passed:
+        evaluation.failures.append(f"the judge failed the narrative: {verdict.reasoning}")
+    return elapsed
 
 
 @dataclass
@@ -352,6 +485,14 @@ class ReportRunResult:
         return {"report_asked_first": self.asked_first} if self.expects_clarification else {}
 
     @property
+    def judge_error(self) -> str | None:
+        return self.evaluation.judge_error
+
+    @property
+    def ungraded(self) -> bool:
+        return self.evaluation.ungraded
+
+    @property
     def summaries_from_data(self) -> int | None:
         value = (self.tool_result or {}).get("summaries_from_data")
         return value if isinstance(value, int) else None
@@ -366,6 +507,15 @@ class AgenticReportSummary:
     pass_power_k: bool
     best: ReportRunResult
 
+    @property
+    def scored_run_results(self) -> list[ReportRunResult]:
+        """Every run except the ungraded ones: those the narrative verdict alone would have decided."""
+        return [r for r in self.run_results if not r.ungraded]
+
+    @property
+    def judge_errors(self) -> list[str]:
+        return [r.judge_error for r in self.run_results if r.ungraded and r.judge_error is not None]
+
 
 def _execute_single_report_run(
     client: ChatClient,
@@ -373,6 +523,7 @@ def _execute_single_report_run(
     question: str,
     expected_output: dict,
     max_iterations: int,
+    judge: LLMJudge | None = None,
 ) -> ReportRunResult:
     """Drive one conversation until the copilot drafts a report, then evaluate it.
 
@@ -436,14 +587,18 @@ def _execute_single_report_run(
         )
         current_question = build_simulated_reply(expected_output)
 
+    evaluation = evaluate_report_response(
+        tool_result,
+        report_part,
+        expected_output,
+        skill_activated=_skill_activated(all_tool_call_events, _BUILDER_SKILL),
+    )
+    if judge is not None and _has_narrative(expected_output):
+        timings.judge_s += _judge_narrative(evaluation, judge, report_part, question, expected_output["narrative"])
+
     return ReportRunResult(
         conversation_id=conversation_id,
-        evaluation=evaluate_report_response(
-            tool_result,
-            report_part,
-            expected_output,
-            skill_activated=_skill_activated(all_tool_call_events, _BUILDER_SKILL),
-        ),
+        evaluation=evaluation,
         expects_clarification=_expects_clarification(expected_output),
         asked_first=first_turn_asked,
         tool_result=tool_result,
@@ -469,13 +624,19 @@ def run_agentic_report_skill(
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
+    judge: LLMJudge | None = None,
 ) -> AgenticReportSummary:
     """Run the report-skill agentic evaluation K times and return a summary.
+
+    The narrative judge is built only for a fixture that states a ``narrative``, so an item
+    without one needs neither the llm-judge extra nor ``OPENAI_API_KEY``.
 
     Raises:
         ValueError: the fixture is unusable — see ``_validate_expectation``.
     """
     _validate_expectation(expected_output)
+    if judge is None and _has_narrative(expected_output):
+        judge = LLMJudge(_NARRATIVE_EVALUATION_STEPS)
     run_results: list[ReportRunResult] = []
     client = ChatClient(
         host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
@@ -484,7 +645,9 @@ def run_agentic_report_skill(
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
-            run_results.append(_execute_single_report_run(client, conv_id_0, question, expected_output, max_iterations))
+            run_results.append(
+                _execute_single_report_run(client, conv_id_0, question, expected_output, max_iterations, judge)
+            )
         finally:
             if initial_conversation_id is None:  # only delete conversations we created
                 client.delete_conversation(conv_id_0)
@@ -493,18 +656,21 @@ def run_agentic_report_skill(
             conv_id = client.create_conversation()
             try:
                 run_results.append(
-                    _execute_single_report_run(client, conv_id, question, expected_output, max_iterations)
+                    _execute_single_report_run(client, conv_id, question, expected_output, max_iterations, judge)
                 )
             finally:
                 client.delete_conversation(conv_id)
     finally:
         client.close()
 
+    # An ungraded run is a fault of that judge request, not of the report: it is left out of
+    # pass@K, and it keeps pass^K from holding, since "every run passed" was never verified.
+    scored = [r for r in run_results if not r.ungraded]
     return AgenticReportSummary(
         run_results=run_results,
-        pass_at_k=any(r.evaluation.strict_pass for r in run_results),
-        pass_power_k=all(r.evaluation.strict_pass for r in run_results),
-        best=max(run_results, key=lambda r: sum(r.evaluation.strict_checks.values())),
+        pass_at_k=any(r.evaluation.strict_pass for r in scored),
+        pass_power_k=len(scored) == len(run_results) and bool(scored) and all(r.evaluation.strict_pass for r in scored),
+        best=max(scored or run_results, key=lambda r: sum(r.evaluation.strict_checks.values())),
     )
 
 
@@ -531,6 +697,7 @@ def evaluate_agentic_report_skill(
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
     gate: EvalGate = DEFAULT_GATE,
+    judge: LLMJudge | None = None,
 ) -> AgenticEvalOutcome:
     """Run report-skill evaluation, log to Langfuse, and raise on failure.
 
@@ -541,6 +708,8 @@ def evaluate_agentic_report_skill(
         ReportSkillAssertionError: the gate did not pass.
         ValueError: the fixture is unusable — see ``_validate_expectation``. Raised before any
             request, so it means a fixture to fix rather than a result to read.
+        JudgeResponseError: the fixture states a narrative and the judge returned no readable
+            verdict for any run -- an item without a result, not K failures.
     """
     langfuse, window_start = open_trace_window(langfuse)
     summary = run_agentic_report_skill(
@@ -554,6 +723,7 @@ def evaluate_agentic_report_skill(
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
+        judge=judge,
     )
 
     if langfuse is not None and dataset_item_id:
@@ -564,6 +734,10 @@ def evaluate_agentic_report_skill(
             stamp_gate_metadata(ctx.run_metadata, k=len(summary.run_results), gate=gate)
 
             for run_idx, run in enumerate(summary.run_results):
+                if run.ungraded:
+                    # No verdict decided this run: its other scores would publish a pass the gate
+                    # never counted.
+                    continue
                 pt = ctx.trace(run.conversation_id)
                 strict_checks = run.evaluation.strict_checks
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
@@ -600,7 +774,7 @@ def evaluate_agentic_report_skill(
             ),
             langfuse=langfuse,
             dataset_item_id=dataset_item_id,
-            conversation_ids=[r.conversation_id for r in summary.run_results],
+            conversation_ids=[r.conversation_id for r in summary.scored_run_results],
             window_start=window_start,
             window_end=window_end,
             suffix_runs=len(summary.run_results) > 1,
@@ -609,6 +783,15 @@ def evaluate_agentic_report_skill(
         )
 
     item_timings = sum_timings([r.timings for r in summary.run_results])
+    unscored = summary.judge_errors
+    if not summary.scored_run_results:
+        exc_judge = JudgeResponseError(
+            f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
+            + " | ".join(unscored)
+        )
+        exc_judge.timings = item_timings
+        raise exc_judge
+
     runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
     runs_effective = len(summary.run_results)
 
@@ -618,12 +801,14 @@ def evaluate_agentic_report_skill(
         **best.diagnostics,
         "summaries_from_data": best.summaries_from_data,
         "turns": best.total_turns,
+        **({"judge_reasoning": best.evaluation.judge_reasoning} if best.evaluation.applies.narrative else {}),
+        **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),
         "failures": best.evaluation.failures,
         "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
+        gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
         skill_note = (
             ""
             if best.evaluation.skill_activated
