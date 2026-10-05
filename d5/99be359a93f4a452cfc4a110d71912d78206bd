@@ -1,0 +1,41 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/search_tool.py
+  s_96ee128288a9f7::t_a4a7e11f4bebdc 146,183
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_96ee128288a9f7::t_8fbef87df62c02 441,479
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_96ee128288a9f7::t_9301620b68430a 387,423
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_langfuse.py
+  s_96ee128288a9f7::t_f12527232e4ce0 386,388-389,402
+  s_96ee128288a9f7::t_af4a45917aac57 308
+  s_96ee128288a9f7::t_2d90a87c1c4055 410
+  s_96ee128288a9f7::t_948afafbdd8f6b 390,398-401,408-409
+  s_96ee128288a9f7::t_4f14f89a24898c 391-397
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_96ee128288a9f7::t_7f7b6d7f39e4ec 247,285
+packages/gooddata-eval/src/gooddata_eval/core/agentic/guardrail.py
+  s_96ee128288a9f7::t_0bb250aa072619 152,189
+packages/gooddata-eval/src/gooddata_eval/core/agentic/general_question.py
+  s_96ee128288a9f7::t_25d164b075fcb2 155,192
+packages/gooddata-eval/tests/test_agentic_run_context.py
+  s_96ee128288a9f7::t_9f8ed7bca7b641 1-14,19,21-24,31
+  s_96ee128288a9f7::t_5f9675a4157686 15-18,20,25-27,30,32
+  s_96ee128288a9f7::t_58ba632fe32b8b 28-29
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_96ee128288a9f7::t_5e7fe4e013869d 266,306
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "d599be359a93f4a452cfc4a110d71912d78206bd",
+  "prompts": {},
+  "sessions": {
+    "s_96ee128288a9f7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ce332428-29dd-431e-97a9-a120cdceef73",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": null
+    }
+  }
+}

@@ -1,0 +1,22 @@
+packages/gooddata-eval/tests/test_langfuse_sink.py
+  s_152f0704157226::t_6796965711af4d 2-6,13-14,60-64,86-98,101-129,131-134,136-142,144-151,153-155,158-160,162,164-165,168-188,191-192,195-227
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/sink.py
+  s_152f0704157226::t_5e75dad5b8cb04 2,7,10-11,18-19,21,51,60-61,68-117,119-142,145,154-155,157-161,170-176,179
+  s_152f0704157226::t_4cc8c504b925e8 178
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "da7d8d0bce8655a2863c04850486429d074f1eab",
+  "prompts": {},
+  "sessions": {
+    "s_152f0704157226": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81049499-0417-40a7-9a8a-3bc2f0738f69",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}

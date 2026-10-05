@@ -1,0 +1,21 @@
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/visualization.py
+  s_ee5cc41b994920::t_3a6ebf962da9c9 7,28,59-73,87,108,118-120,122,155-156,171
+packages/gooddata-eval/tests/test_visualization_evaluator.py
+  s_ee5cc41b994920::t_2648591d0f048a 58-91
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "8f6dabe42ed9363a5b1f006dda51d84d5dce9276",
+  "prompts": {},
+  "sessions": {
+    "s_ee5cc41b994920": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a4aa36d-5864-4014-bd73-a9160c2f8d78",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_2bdc7200f34cd9::t_f08b02f1dbc312 98
+packages/gooddata-eval/src/gooddata_eval/core/agentic/kda_skill.py
+  s_2bdc7200f34cd9::t_c1002abf62a26c 74
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_2bdc7200f34cd9::t_cd6691c2188c66 255
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_2bdc7200f34cd9::t_bb431b20cb990d 253
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_2bdc7200f34cd9::t_be8a1224d41288 144
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "a97cba150959244ad526389b3367e56144d657fe",
+  "prompts": {},
+  "sessions": {
+    "s_2bdc7200f34cd9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6cb149b2-0118-4268-9ed7-ecae5a8bac0e",
+        "model": "claude-opus-5"
+      },
+      "human_author": null
+    }
+  }
+}

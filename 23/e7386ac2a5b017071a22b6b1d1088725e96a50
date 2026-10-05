@@ -1,0 +1,23 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/__init__.py
+  s_ee5cc41b994920::t_f5be38824347a2 1
+packages/gooddata-eval/tests/test_agentic_visualization.py
+  s_ee5cc41b994920::t_fff9c7cb0d9aee 1-235
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_ee5cc41b994920::t_9ca73075afd381 1-242
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "23e7386ac2a5b017071a22b6b1d1088725e96a50",
+  "prompts": {},
+  "sessions": {
+    "s_ee5cc41b994920": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a4aa36d-5864-4014-bd73-a9160c2f8d78",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

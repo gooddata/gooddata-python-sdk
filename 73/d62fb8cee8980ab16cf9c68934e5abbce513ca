@@ -1,0 +1,22 @@
+packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
+  s_ee5cc41b994920::t_6fa51b37016fcd 57,59-60
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_ee5cc41b994920::t_15a8a038a56847 19-20
+  s_ee5cc41b994920::t_475ba44d01a4b9 206
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "73d62fb8cee8980ab16cf9c68934e5abbce513ca",
+  "prompts": {},
+  "sessions": {
+    "s_ee5cc41b994920": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a4aa36d-5864-4014-bd73-a9160c2f8d78",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+packages/gooddata-eval/tests/test_langfuse_source.py
+  s_967138971ee7bb::t_c19f623a259f93 22-23
+packages/gooddata-eval/tests/test_agentic_visualization.py
+  s_967138971ee7bb::t_372248072f875d 152-153
+  s_967138971ee7bb::t_586edf715ca303 175-176
+  s_967138971ee7bb::t_31017ebd466571 233
+packages/gooddata-eval/tox.ini
+  s_967138971ee7bb::t_29f0e2e3ee771f 1-16
+packages/gooddata-eval/pyproject.toml
+  s_967138971ee7bb::t_35d44fdf4e81cc 48
+packages/gooddata-eval/tests/test_cli.py
+  s_967138971ee7bb::t_7a6e19ddf7aaab 92-93
+  s_967138971ee7bb::t_a7a6ba0e8144e0 412-413,415
+  s_967138971ee7bb::t_777d79217fa8dc 2-4
+  s_967138971ee7bb::t_b242ab6c2f8913 558-560
+uv.lock
+  s_967138971ee7bb::t_96851b25135964 861,881
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.5",
+  "base_commit_sha": "44c9184eb5ef18825f529fbecbc584a0fa46b7a6",
+  "prompts": {},
+  "sessions": {
+    "s_967138971ee7bb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7c0ba5bc-a1e7-47b0-ba91-7031e39e7afc",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/entity_model/content_objects/alert.py
+  s_ee5cc41b994920::t_13221d076f4aab 1-49
+packages/gooddata-eval/pyproject.toml
+  s_ee5cc41b994920::t_6d59901594eece 42-44
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_langfuse.py
+  s_ee5cc41b994920::t_440f84cf22c930 189-194
+packages/gooddata-sdk/src/gooddata_sdk/__init__.py
+  s_ee5cc41b994920::t_96e5b2da41a1c7 275
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  s_ee5cc41b994920::t_284bb9c262284a 73
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_ee5cc41b994920::t_4d41e72469fb24 12-13,58-61,65,70-71,79-80,89-90,94,97-98,107,112,130-135,221-231,233-254,291,320,329-334
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "ccbb77d308466f31d9e5697662160c1ad96c7563",
+  "prompts": {},
+  "sessions": {
+    "s_ee5cc41b994920": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a4aa36d-5864-4014-bd73-a9160c2f8d78",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

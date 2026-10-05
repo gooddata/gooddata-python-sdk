@@ -1,0 +1,27 @@
+.github/workflows/build-release.yaml
+  s_21215b218089d0::t_2adee553105465 66-72,93
+.github/workflows/bump-version.yaml
+  s_21215b218089d0::t_5f33bdace00fac 32-50,72,76-94
+.github/workflows/netlify-deploy.yaml
+  s_21215b218089d0::t_d71bd8096d5706 9-26,28-29
+MAINTENANCE.md
+  s_21215b218089d0::t_74b75b19c60a9a 4-24
+scripts/is_latest_tag.sh
+  s_21215b218089d0::t_d56097d9514a76 1-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.9",
+  "base_commit_sha": "11e1a024b49db08d4bc8cc0107617a63533a2e28",
+  "prompts": {},
+  "sessions": {
+    "s_21215b218089d0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2db60762-f98d-442b-8201-11178f58ec0c",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}
