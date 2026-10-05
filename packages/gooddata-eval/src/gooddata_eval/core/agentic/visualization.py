@@ -8,6 +8,7 @@ Langfuse logging and VisAssertionError remain in the Tavern shim.
 from __future__ import annotations
 
 import os
+import time
 from dataclasses import dataclass, field
 
 from gooddata_eval.core.agentic._gate import (
@@ -70,6 +71,9 @@ class RunResult:
     # Why the simulated-user loop stopped. visualization_created=False alone cannot separate
     # a refusal from a run that hit max_iterations while still on track -- see LoopExit.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
+    # This run's own wall time, across all its turns -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item).
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -191,6 +195,7 @@ def _execute_single_run(
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
 ) -> RunResult:
     """Drive one full multi-turn conversation and evaluate the result."""
+    run_started = time.monotonic()
     total_turns = 0
     total_steps = 0
     all_tool_call_events: list[ToolCallEvent] = []
@@ -287,6 +292,7 @@ def _execute_single_run(
         tool_call_events=all_tool_call_events,
         reasoning_step_events=all_reasoning_step_events,
         exit_reason=exit_reason,
+        run_latency_s=time.monotonic() - run_started,
     )
 
 
@@ -532,6 +538,7 @@ def evaluate_agentic_visualization(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
+        exc.best_run_latency_s = best.run_latency_s
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -540,4 +547,5 @@ def evaluate_agentic_visualization(
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        best_run_latency_s=best.run_latency_s,
     )

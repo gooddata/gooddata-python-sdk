@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import logging
 import os
+import time
 from dataclasses import dataclass, field
 
 import httpx
@@ -198,6 +199,10 @@ class KdaRunResult:
     # separate a refusal from a run that hit max_iterations while still on track.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
     turns_used: int = 0
+    # This run's own wall time, across all its turns -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item). Distinct from
+    # turn_wall_clock_sec above, which is only the final create-triggering turn.
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -260,6 +265,7 @@ def run_agentic_kda_skill(
     )
 
     def _run_once(conv_id: str) -> KdaRunResult:
+        run_started = time.monotonic()
         create_args: dict | None = None
         execute_result: dict | None = None
         turn_wall_clock_sec: float | None = None
@@ -367,6 +373,7 @@ def run_agentic_kda_skill(
             reasoning_step_events=all_reasoning_step_events,
             exit_reason=exit_reason,
             turns_used=turns_used,
+            run_latency_s=time.monotonic() - run_started,
         )
 
     try:
@@ -552,6 +559,7 @@ def evaluate_agentic_kda_skill(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
+        exc.best_run_latency_s = best.run_latency_s
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -560,4 +568,5 @@ def evaluate_agentic_kda_skill(
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        best_run_latency_s=best.run_latency_s,
     )

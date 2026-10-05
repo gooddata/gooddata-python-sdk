@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass, field
 
 from gooddata_eval.core.agentic._gate import (
@@ -83,6 +84,9 @@ class GuardrailResult:
     # Set when the judge returned something unreadable for THIS run. Excluded from pass@K
     # and from Langfuse scoring rather than counted as a failure -- see score_run.
     judge_error: str | None = None
+    # This run's own wall time (agent call + its grading) -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item).
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -117,6 +121,7 @@ def _run_single_guardrail(
     Extracted so the two call sites below (the first conversation, which may be supplied,
     and the remaining K-1) cannot drift -- they had already duplicated the whole body once.
     """
+    run_started = time.monotonic()
     chat_result = client.send_message(conversation_id, question)
     actual_output = render_answer_text(chat_result)
     verdict = score_run(judge, input=question, expected_output=expected_output, actual_output=actual_output)
@@ -131,6 +136,7 @@ def _run_single_guardrail(
         tool_call_events=list(chat_result.tool_call_events or []),
         reasoning_step_events=list(chat_result.reasoning_step_events or []),
         judge_error=verdict.error,
+        run_latency_s=time.monotonic() - run_started,
     )
 
 
@@ -314,6 +320,7 @@ def evaluate_agentic_guardrail(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
+        exc.best_run_latency_s = best.run_latency_s
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -322,4 +329,5 @@ def evaluate_agentic_guardrail(
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        best_run_latency_s=best.run_latency_s,
     )

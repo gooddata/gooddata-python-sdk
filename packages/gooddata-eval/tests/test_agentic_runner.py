@@ -341,6 +341,54 @@ def test_run_agentic_items_records_phase_timings_when_the_item_fails():
     assert report.items[0].judge_latency_s == 2.0
 
 
+def test_run_agentic_items_records_best_run_latency_on_success():
+    # best_run_latency_s was never populated on the agentic path -- the K-run loop and
+    # best-of-K selection happen inside the evaluator, not in a loop the runner itself
+    # times (unlike _run_one_item on the single-shot path).
+    outcome = AgenticEvalOutcome(
+        conversation_id="c1",
+        detail={"alert_created": True},
+        best_run_latency_s=4.25,
+    )
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", return_value=outcome):
+        report = run_agentic_items(
+            [_timed_item()],
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            run_ts="2026-01-01",
+        )
+
+    assert report.items[0].best_run_latency_s == 4.25
+
+
+def test_run_agentic_items_records_best_run_latency_when_the_item_fails():
+    exc = AlertSkillAssertionError("nope")
+    exc.detail = {"alert_created": False}
+    exc.best_run_latency_s = 9.5
+
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=exc):
+        report = run_agentic_items(
+            [_timed_item()],
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            run_ts="2026-01-01",
+        )
+
+    assert report.items[0].pass_at_k is False
+    assert report.items[0].best_run_latency_s == 9.5
+
+
+def test_an_errored_item_without_best_run_latency_keeps_the_none_default():
+    # Kinds not yet wired to measure it (or any exception with no such attribute) must
+    # not report an invented number -- None stays None, not 0.0.
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=RuntimeError("boom")):
+        report = run_agentic_items([_timed_item()], host="h", token="t", workspace_id="ws1", run_ts="2026-01-01")
+
+    assert report.items[0].best_run_latency_s is None
+
+
 def test_a_pending_trace_link_does_not_block_the_next_item():
     """The overlap claim, proved by construction rather than by a stopwatch.
 

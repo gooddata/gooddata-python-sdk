@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from datetime import date
 from typing import ClassVar, Literal
@@ -593,6 +594,11 @@ class ConversationResult:
     stalled_turns: int = 0
     mode: ConversationMode = "legacy"
     judge_model: str | None = None
+    # This conversation's own wall time, across every turn -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item). There is no
+    # K-of-N selection for this kind (see run_agentic_conversation's docstring), so
+    # this is simply the one conversation's own time, not a "best of" pick.
+    run_latency_s: float = 0.0
 
 
 def _metric_creations(tool_call_events: list[ToolCallEvent]) -> list[tuple[str, bool]]:
@@ -707,6 +713,7 @@ def run_agentic_conversation(
     agent sees no history. It is the no-memory baseline a context score is calibrated
     against: context-dependent turns are expected to fail there.
     """
+    run_started = time.monotonic()
     resolved_mode = resolve_conversation_mode(mode)
     if fresh_conversation_per_turn and initial_conversation_id is not None:
         raise ValueError("fresh_conversation_per_turn needs conversations this run creates itself")
@@ -1011,6 +1018,7 @@ def run_agentic_conversation(
         stalled_turns=stalled,
         mode=resolved_mode,
         judge_model=judge.model_name if judged else None,
+        run_latency_s=time.monotonic() - run_started,
     )
 
 
@@ -1216,6 +1224,7 @@ def evaluate_agentic_conversation(
         # for. Saying so explicitly stops the report claiming K runs that never happened.
         exc.runs_passed = 0
         exc.runs_effective = 1
+        exc.best_run_latency_s = result.run_latency_s
         raise exc
     return AgenticEvalOutcome(
         reasoning_steps=result.reasoning_steps,
@@ -1224,4 +1233,5 @@ def evaluate_agentic_conversation(
         detail=detail,
         runs_passed=1,
         runs_effective=1,
+        best_run_latency_s=result.run_latency_s,
     )

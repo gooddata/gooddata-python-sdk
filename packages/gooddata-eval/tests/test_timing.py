@@ -9,6 +9,7 @@ from gooddata_eval.core.timing import (
     TIMERS_ENV_VAR,
     PhaseTimings,
     log_timer,
+    run_latency_s,
     sum_timings,
     timers_enabled,
 )
@@ -91,3 +92,10 @@ def test_as_dict_rounds_every_phase():
 
 def test_sum_timings_of_nothing_is_all_zeroes():
     assert sum_timings([]) == PhaseTimings()
+
+
+def test_run_latency_s_excludes_langfuse():
+    # langfuse_s is deliberately off the critical path (see PhaseTimings docstring), so a
+    # trace-link slowdown must not inflate the run latency a worst-case table sorts on.
+    timings = PhaseTimings(agent_s=2.0, judge_s=1.0, simulated_user_s=0.5, langfuse_s=100.0)
+    assert run_latency_s(timings) == 3.5

@@ -754,6 +754,7 @@ def test_evaluate_metric_skill_surfaces_timings_on_the_outcome():
 
     assert outcome.timings.agent_s == 3.0
     assert outcome.timings.simulated_user_s == 0.0
+    assert outcome.best_run_latency_s == 3.0
 
 
 def test_no_timer_output_by_default(monkeypatch, capsys):

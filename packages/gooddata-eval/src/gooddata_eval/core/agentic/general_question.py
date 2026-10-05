@@ -34,7 +34,7 @@ from gooddata_eval.core.models import (
     ToolCallEvent,
     build_latency_breakdown,
 )
-from gooddata_eval.core.timing import PhaseTimings, log_timer, sum_timings
+from gooddata_eval.core.timing import PhaseTimings, log_timer, run_latency_s, sum_timings
 
 _DEFAULT_K = 1
 
@@ -318,6 +318,7 @@ def evaluate_agentic_general_question(
             + " | ".join(unscored)
         )
         exc.timings = item_timings
+        exc.best_run_latency_s = run_latency_s(summary.best.timings)
         raise exc
 
     runs_passed = sum(1 for r in summary.scored_run_results if r.passed)
@@ -344,6 +345,7 @@ def evaluate_agentic_general_question(
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
         exc.timings = item_timings
+        exc.best_run_latency_s = run_latency_s(best.timings)
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
@@ -356,4 +358,5 @@ def evaluate_agentic_general_question(
         response_id=best.response_id,
         detail=detail,
         timings=item_timings,
+        best_run_latency_s=run_latency_s(best.timings),
     )

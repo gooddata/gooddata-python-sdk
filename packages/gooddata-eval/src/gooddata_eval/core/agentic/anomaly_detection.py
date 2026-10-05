@@ -28,6 +28,7 @@ from __future__ import annotations
 import logging
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -282,6 +283,10 @@ class AnomalyRunResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
+    # This run's own wall time, across all its turns -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item). Distinct from
+    # turn_wall_clock_sec above, which is only the final triggering turn.
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -360,6 +365,7 @@ def run_agentic_anomaly_detection(
     )
 
     def _run_once(conv_id: str) -> AnomalyRunResult:
+        run_started = time.monotonic()
         viz_args: dict | None = None
         execute_result: dict | None = None
         turn_wall_clock_sec: float | None = None
@@ -432,6 +438,7 @@ def run_agentic_anomaly_detection(
             response_id=response_id,
             tool_call_events=all_tool_call_events,
             reasoning_step_events=all_reasoning_step_events,
+            run_latency_s=time.monotonic() - run_started,
         )
 
     try:
@@ -630,6 +637,7 @@ def evaluate_agentic_anomaly_detection(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = len(summary.run_results)
+        exc.best_run_latency_s = best.run_latency_s
         raise exc
 
     return AgenticEvalOutcome(
@@ -639,4 +647,5 @@ def evaluate_agentic_anomaly_detection(
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        best_run_latency_s=best.run_latency_s,
     )

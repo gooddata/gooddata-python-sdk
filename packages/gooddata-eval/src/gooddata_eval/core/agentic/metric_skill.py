@@ -41,7 +41,7 @@ from gooddata_eval.core.models import (
     shift_and_index_events,
     timeline_detail,
 )
-from gooddata_eval.core.timing import PhaseTimings, log_timer, sum_timings
+from gooddata_eval.core.timing import PhaseTimings, log_timer, run_latency_s, sum_timings
 
 try:
     from openai import OpenAI as _OpenAI
@@ -575,6 +575,7 @@ def evaluate_agentic_metric_skill(
         exc.conversation_id = best.conversation_id
         exc.response_id = best.response_id
         exc.timings = item_timings
+        exc.best_run_latency_s = run_latency_s(best.timings)
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
@@ -587,4 +588,5 @@ def evaluate_agentic_metric_skill(
         response_id=best.response_id,
         detail=detail,
         timings=item_timings,
+        best_run_latency_s=run_latency_s(best.timings),
     )
