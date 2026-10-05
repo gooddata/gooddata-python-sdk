@@ -292,6 +292,9 @@ def _dispatch_agentic(
             # the headless /summary endpoint gives it; None summarizes everything.
             only_visualizations=summary_input.visualizations,
             k=k,
+            agent_id=agent_id,
+            **lf_kw,
+        )
     elif kind == "agentic_forecasting":
         return evaluate_agentic_forecasting(
             host=host,
@@ -312,6 +315,7 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, dict) else {},
             k=k,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )
