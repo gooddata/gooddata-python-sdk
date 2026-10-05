@@ -120,6 +120,7 @@ _EVALUATE_FUNCS = [
     ("kda_skill", "evaluate_agentic_kda_skill"),
     ("conversation", "evaluate_agentic_conversation"),
     ("anomaly_detection", "evaluate_agentic_anomaly_detection"),
+    ("dashboard_summary", "evaluate_agentic_dashboard_summary"),
     ("what_if", "evaluate_agentic_what_if"),
 ]
 
