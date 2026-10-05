@@ -18,6 +18,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -37,7 +38,6 @@ from gooddata_eval.core.models import (
     LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
     shift_and_index_events,
 )
 
@@ -528,20 +528,21 @@ def evaluate_agentic_kda_skill(
 
     best = summary.best
     ev = best.evaluation
-    detail = {
-        "triggered": ev.triggered,
-        "executed": ev.executed,
-        "success": ev.success,
-        "turn_completed": ev.turn_completed,
-        "disambiguated": ev.disambiguated,
-        "actual_create_args": best.actual_create_args,
-        "actual_execute_result": best.actual_execute_result,
+    detail = agentic_detail(
+        best.tool_call_events,
+        best.reasoning_step_events,
+        triggered=ev.triggered,
+        executed=ev.executed,
+        success=ev.success,
+        turn_completed=ev.turn_completed,
+        disambiguated=ev.disambiguated,
+        actual_create_args=best.actual_create_args,
+        actual_execute_result=best.actual_execute_result,
         # Why the loop stopped -- see LoopExit.
-        "exit_reason": best.exit_reason.value,
-        "turns_used": best.turns_used,
-        "max_iterations": max_iterations,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-    }
+        exit_reason=best.exit_reason.value,
+        turns_used=best.turns_used,
+        max_iterations=max_iterations,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
@@ -552,21 +553,23 @@ def evaluate_agentic_kda_skill(
             f"Actual create args: {best.actual_create_args}. "
             f"Actual execute result: {best.actual_execute_result}."
         )
-        exc = KdaSkillAssertionError(message)
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = runs_effective
-        exc.best_run_latency_s = best.run_latency_s
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+        raise_agentic_failure(
+            KdaSkillAssertionError,
+            message,
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            best_run_latency_s=best.run_latency_s,
+        )
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
         best_run_latency_s=best.run_latency_s,
     )

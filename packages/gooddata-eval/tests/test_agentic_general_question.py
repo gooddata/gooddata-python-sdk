@@ -257,6 +257,7 @@ def test_evaluate_agentic_general_question_returns_reasoning_steps_on_pass():
         "judge_reasoning": "Correct answer",
         "actual_output": "42",
         "latency_breakdown": [],
+        "tool_calls": [],
     }
 
 
@@ -284,6 +285,7 @@ def test_evaluate_agentic_general_question_attaches_reasoning_steps_to_exception
         "judge_reasoning": "Wrong answer",
         "actual_output": "I don't know",
         "latency_breakdown": [],
+        "tool_calls": [],
     }
 
 

@@ -15,7 +15,7 @@ from gooddata_eval.core.agentic.dashboard_skill import (
     evaluate_dashboard_response,
     run_agentic_dashboard_skill,
 )
-from gooddata_eval.core.models import ChatResult, ToolCallEvent
+from gooddata_eval.core.models import ChatResult, LoopExit, ToolCallEvent
 
 # Ids and titles are the ones the eval layout seeds; shapes are trimmed from real runs of
 # `agent_dashboard_skill` against ecommerce_demo.
@@ -1086,6 +1086,8 @@ class TestRunLoop:
         assert client.send_message.call_count == 2
         assert not summary.pass_at_k
         assert not summary.best.evaluation.drafted
+        # drafted=False alone cannot tell this apart from a refusal -- exit_reason can.
+        assert summary.best.exit_reason is LoopExit.BUDGET_EXHAUSTED
 
     def test_an_empty_turn_stops_the_loop(self):
         client = MagicMock()
@@ -1093,6 +1095,7 @@ class TestRunLoop:
         summary = _run_with(client, _DC05_EXPECTED, max_iterations=5)
         assert client.send_message.call_count == 1
         assert not summary.pass_at_k
+        assert summary.best.exit_reason is LoopExit.AGENT_SILENT
 
     def test_a_caller_supplied_conversation_is_not_deleted(self):
         client = MagicMock()
@@ -1161,6 +1164,8 @@ class TestEvaluateEntryPoint:
         assert outcome.runs_passed == 1
         assert outcome.runs_effective == 1
         assert outcome.detail["charts_matched"] is True
+        assert outcome.detail["exit_reason"] == "success"
+        assert "tool_calls" in outcome.detail
 
 
 def _as_events(raw: list[dict]) -> list[ToolCallEvent]:
