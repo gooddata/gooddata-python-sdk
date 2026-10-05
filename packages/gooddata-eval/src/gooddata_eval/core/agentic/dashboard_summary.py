@@ -30,6 +30,14 @@ from typing import Any
 import httpx
 from gooddata_sdk import GoodDataSdk
 
+from gooddata_eval.core.agentic._gate import (
+    DEFAULT_GATE,
+    EvalGate,
+    gate_failure_note,
+    gate_passed,
+    log_gate_scores,
+    stamp_gate_metadata,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -433,6 +441,7 @@ def evaluate_agentic_dashboard_summary(
     question: str = _DEFAULT_PROMPT,
     k: int = _DEFAULT_K,
     initial_conversation_id: str | None = None,
+    gate: EvalGate = DEFAULT_GATE,
     agent_id: str | None = None,
     langfuse: object | None = None,
     dataset_item_id: str = "",
@@ -468,6 +477,8 @@ def evaluate_agentic_dashboard_summary(
         window_end = utc_now()
 
         def _write_scores(ctx: RunTraceContext) -> None:
+            stamp_gate_metadata(ctx.run_metadata, k=len(summary.run_results), gate=gate)
+
             for run_idx, run in enumerate(summary.run_results):
                 if run.chat_error is not None:
                     # The chat never produced a summary, so there is no verdict: writing
@@ -484,6 +495,7 @@ def evaluate_agentic_dashboard_summary(
                         latency_sec=pt.latency if pt else None,
                         cost_usd=pt.total_cost if pt else None,
                     )
+                    log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
 
         submit_trace_scoring(
             submit_trace_link,
@@ -518,9 +530,14 @@ def evaluate_agentic_dashboard_summary(
         timings = timings + run.timings
     runs_passed = sum(1 for r in summary.run_results if r.passed)
 
-    if not summary.pass_at_k:
+    # The gate decides the item, not pass@K alone. `pass_power_k` was computed and never
+    # read, so `--gate power` passed any item with one good run -- the same defect fixed in
+    # forecasting, anomaly detection and what-if, and this was the last evaluator still
+    # carrying it.
+    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_failure_note(gate, runs_passed, len(summary.run_results))
         error = DashboardSummaryAssertionError(
-            f"Dashboard summary failed for '{dashboard_id}' "
+            f"Dashboard summary failed for '{dashboard_id}'. {gate_note} "
             f"({best.widgets_executed}/{best.widgets_total} widgets executed): "
             f"{best.evaluation.error or 'criteria not satisfied'}"
         )
