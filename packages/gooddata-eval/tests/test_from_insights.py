@@ -506,6 +506,7 @@ def test_type_is_kept_only_when_the_question_names_the_chart_form():
 
 
 def test_build_blanks_type_for_a_question_that_names_no_chart_form():
+
     spec = convert(spend_by_merchant())
     envelope = build(spec, "How does spend break down across merchants?", "p", set())
     assert envelope["expected_output"]["visualization"]["type"] == ""
