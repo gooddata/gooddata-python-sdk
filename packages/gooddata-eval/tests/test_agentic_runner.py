@@ -12,6 +12,7 @@ from gooddata_eval.cli import agentic_runner
 from gooddata_eval.cli.agentic_runner import (
     AGENTIC_TEST_KINDS,
     PARALLEL_SAFE_TEST_KINDS,
+    UNGATED_AGENTIC_TEST_KINDS,
     WORKSPACE_MUTATING_TEST_KINDS,
     _dispatch_agentic,
     run_agentic_items,
@@ -914,3 +915,27 @@ def test_an_all_ungraded_item_is_errored_but_still_carries_its_failed_runs():
     assert item.best_detail == {"actual_output": "something the agent said"}
     # The runs it really drove, not 0, and every one of them ungraded.
     assert (item.runs, item.runs_ungraded) == (3, 3)
+
+
+@pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
+def test_every_gated_kind_s_evaluator_decides_on_the_gate_not_pass_at_k(kind, expected_output, target):
+    """`--gate power` has to reach the verdict, not just the report.
+
+    Each evaluator computes `pass_power_k` itself and then decides whether to raise. One that
+    asks `if not summary.pass_at_k` computes the stricter verdict and throws it away, so a
+    flaky item passes on the strength of one good run while `run_agentic_items` still records
+    gate_passed=True and the report labels the whole run `power`. Nothing looks broken -- a
+    flaky item has quietly been promoted to a passing one.
+
+    Found four separate times (forecasting, anomaly detection, what-if, dashboard summary),
+    every time by a reviewer reading the diff rather than by a test, because nothing asserted
+    the shape. This asserts it.
+    """
+    if kind in UNGATED_AGENTIC_TEST_KINDS:
+        pytest.skip(f"{kind} drives its fixture once; there is no K to gate over")
+    module = importlib.import_module(getattr(agentic_runner, target).__module__)
+    source = inspect.getsource(module)
+    assert "gate_passed(" in source, f"{module.__name__} never consults the gate"
+    assert "if not summary.pass_at_k" not in source, (
+        f"{module.__name__} decides on pass@K directly, which ignores --gate power"
+    )
