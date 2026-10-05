@@ -62,9 +62,27 @@ def test_a_report_part_is_kept_verbatim_without_an_unknown_type_warning(caplog: 
             "type": "report",
             "title": "Sales overview",
             "period": {"start": "2026-01-01", "end": "2026-06-30"},
-            "pages": [{"id": "page_1", "kind": "cover", "format": "16:9", "layout": {"slots": []}}],
+            "pages": [
+                {
+                    "id": "page1",
+                    "kind": "cover",
+                    "format": "widescreen",
+                    "layout": {"column": [{"id": "coverTitle", "weight": 2, "heading": "{reportName}", "style": "h1"}]},
+                },
+                {
+                    "id": "page2",
+                    "kind": "content",
+                    "format": "widescreen",
+                    "layout": {
+                        "column": [
+                            {"id": "pageTitle", "weight": 2, "heading": "Revenue", "style": "h1"},
+                            {"id": "widget1", "weight": 9, "visualization": "revenue_trend", "date": "date"},
+                        ]
+                    },
+                },
+            ],
         },
-        "page_count": 1,
+        "page_count": 2,
         "base_report_id": None,
         "saved_report_id": None,
     }
