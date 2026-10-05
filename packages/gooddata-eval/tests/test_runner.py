@@ -427,3 +427,86 @@ def test_best_detail_describes_a_graded_run_when_there_is_one():
     report, _ = _run_scripted([_ungraded(), _graded(False)], runs=2)
 
     assert report.items[0].best_detail == {"judge_passed": False}
+
+
+def _chat_with_ids(conversation_id: str, response_id: str, *, stream_ended: bool = True) -> ChatResult:
+    return ChatResult.model_validate(
+        {
+            "textResponse": "which metric?",
+            "conversationId": conversation_id,
+            "responseId": response_id,
+            "streamEnded": stream_ended,
+            "reasoningSteps": [f"thinking in {conversation_id}"],
+            "reasoningStepCount": 1,
+        }
+    )
+
+
+def test_a_partial_pass_keeps_the_detail_of_the_run_that_failed():
+    """The gap this closes: best_detail describes the winning run, so a 1-of-2 item used to
+    expose only the attempt that worked and the failure left no trace to diagnose."""
+    report, _ = _run_scripted([_graded(False), _graded(True)], runs=2)
+
+    item = report.items[0]
+    assert item.pass_at_k is True and item.runs_passed == 1
+    assert item.best_detail == {"judge_passed": True}, "unchanged: still the winning run"
+    assert [r["detail"] for r in item.failed_runs] == [{"judge_passed": False}]
+    assert item.failed_runs[0]["run_index"] == 1
+
+
+def test_a_fully_passing_item_records_no_failed_runs():
+    """Failing runs only -- the cost tracks how broken the corpus is, not how large it is."""
+    report, _ = _run_scripted([_graded(True), _graded(True)], runs=2)
+
+    assert report.items[0].pass_power_k is True
+    assert report.items[0].failed_runs == []
+
+
+def test_every_failing_run_is_recorded_in_run_order():
+    report, _ = _run_scripted([_graded(False), _graded(True), _graded(False)], runs=3)
+
+    assert [r["run_index"] for r in report.items[0].failed_runs] == [1, 3]
+
+
+def test_a_failed_run_carries_the_ids_of_its_own_conversation():
+    """The report's top-level pair is overwritten every run and ends up describing the LAST
+    one, which need not be the run best_detail is about. Pulling the trace for a specific
+    failure needs that failure's own ids."""
+    backend = _FakeBackend([_chat_with_ids("conv-1", "resp-1"), _chat_with_ids("conv-2", "resp-2")])
+    with patch(
+        "gooddata_eval.core.runner.get_evaluator",
+        return_value=_ScriptedEvaluator([_graded(False), _graded(True)]),
+    ):
+        report = run_items([_item()], backend, runs=2)
+
+    item = report.items[0]
+    assert item.conversation_id == "conv-2", "top-level still describes the last run"
+    assert item.failed_runs[0]["conversation_id"] == "conv-1"
+    assert item.failed_runs[0]["response_id"] == "resp-1"
+    assert item.failed_runs[0]["reasoning_steps"] == ["thinking in conv-1"]
+
+
+def test_a_failed_run_records_whether_the_turn_actually_finished():
+    """A stall leaves the evaluator's gated checks False even though none of them ran, which
+    reads as a content failure downstream. stream_ended records the difference at source."""
+    backend = _FakeBackend([_chat_with_ids("conv-1", "resp-1", stream_ended=False)])
+    with patch(
+        "gooddata_eval.core.runner.get_evaluator",
+        return_value=_ScriptedEvaluator([_graded(False)]),
+    ):
+        report = run_items([_item()], backend, runs=1)
+
+    failed = report.items[0].failed_runs[0]
+    assert failed["stream_ended"] is False
+    assert failed["reasoning_step_count"] == 1
+    assert failed["latency_s"] >= 0
+
+
+def test_an_ungraded_run_is_recorded_as_a_failure_with_its_judge_error():
+    """Never a pass, so it belongs here -- and its judge error is the only thing that
+    explains why pass_power_k is False on an item whose graded runs all passed."""
+    report, _ = _run_scripted([_graded(True), _ungraded()], runs=2)
+
+    item = report.items[0]
+    assert item.pass_at_k is True and item.pass_power_k is False
+    assert [r["error"] for r in item.failed_runs] == ["empty body"]
