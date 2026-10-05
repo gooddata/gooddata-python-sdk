@@ -296,6 +296,7 @@ def _dispatch_agentic(
             # the headless /summary endpoint gives it; None summarizes everything.
             only_visualizations=summary_input.visualizations,
             k=k,
+            gate=gate,
             agent_id=agent_id,
             **lf_kw,
         )
