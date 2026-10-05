@@ -38,10 +38,10 @@ from gooddata_eval.core.agentic.conversation import (
     run_agentic_conversation,
 )
 from gooddata_eval.core.chat.render import render_answer_text
+from gooddata_eval.core.chat.sse_client import ChatError, TurnIncompleteError
 from gooddata_eval.core.chat.sse_client import ChatError as ChatError_
-from gooddata_eval.core.chat.sse_client import TurnIncompleteError
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
-from gooddata_eval.core.models import ChatResult, ToolCallEvent
+from gooddata_eval.core.models import ChatResult, LoopExit, ToolCallEvent
 
 
 def _skills_tc(*skills):
@@ -983,6 +983,7 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
         "lost_context_clarifications": 0,
         "stalled_turns": 0,
         "total_clarification_turns": 0,
+        "max_clarification_turns": 7,
         "judge_model": None,
         "turns": [
             {
@@ -993,6 +994,7 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
                 "output_correct": None,
                 "activated_skills": ["visualization"],
                 "active_skills": ["visualization"],
+                "exit_reason": "success",
                 "clarification_turns_used": 0,
                 "mismatches": [],
                 "clarifications": [],
@@ -1062,6 +1064,7 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
         "lost_context_clarifications": 0,
         "stalled_turns": 1,
         "total_clarification_turns": 0,
+        "max_clarification_turns": 0,
         "judge_model": None,
         "turns": [
             {
@@ -1072,6 +1075,9 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
                 "output_correct": None,
                 "activated_skills": ["other_skill"],
                 "active_skills": ["other_skill"],
+                # Output never appeared and the clarification budget ran out -- the turn is
+                # not a refusal, which skill_routing/output_present alone cannot show.
+                "exit_reason": "budget_exhausted",
                 "clarification_turns_used": 0,
                 "mismatches": [],
                 "clarifications": [
@@ -1096,6 +1102,114 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
         "latency_breakdown": [],
         "tool_calls": [],
     }
+
+
+def test_a_chat_error_ends_only_its_own_turn_and_is_recorded():
+    """A chat fault used to escape the whole conversation, discarding the turns already done.
+
+    t1 completes; t2's chat call fails. t1's result must survive, and t2 must be reported as
+    an infrastructure fault -- both exit_reason and no_error say so, so it is not counted as
+    the agent failing to produce output.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m1")]),
+        ChatError("stream died"),
+    ]
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_two_metric_turn_fixture(),
+        )
+
+    assert len(result.turn_results) == 2
+    assert result.turn_results[0].exit_reason is LoopExit.SUCCESS
+    assert result.turn_results[0].output_present is True
+
+    assert result.turn_results[1].exit_reason is LoopExit.CHAT_ERROR
+    assert result.turn_results[1].output_present is False
+    # no_error used to be hardcoded True on the reasoning that a chat fault would have
+    # escaped before reaching here. Now that it is caught, it has to read the exit back.
+    assert result.turn_results[1].no_error is False
+    assert result.turn_results[1].skill_success is False
+
+
+def test_a_partial_result_joins_the_shared_timeline_like_any_other_turn():
+    """What the stream delivered before it died is still the turn's work.
+
+    Each turn's SSE stream times from ~0 and indexes from 0, so a late turn's events have to
+    be rebased before they can be merged. The success path does that; the ChatError branch
+    used to extend the conversation lists with the raw partial, which put a second-turn tool
+    call at call_ts 0.5 alongside the first turn's -- `timeline_detail` then reported two
+    turns overlapping, with duplicate indexes. Its reasoning steps were dropped from
+    total_steps for the same reason.
+    """
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+
+    first = _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m1")])
+    first.turn_wall_clock_sec = 12.0
+    first.reasoning_step_count = 2
+
+    partial = ChatResult.model_validate(
+        {
+            "textResponse": "",
+            "toolCallEvents": [
+                {"functionName": "create_metric", "functionArguments": "{}", "call_ts": 0.5, "index": 0}
+            ],
+            "reasoningStepCount": 3,
+            "streamEnded": False,
+        }
+    )
+    mock_client.send_message.side_effect = [first, ChatError("stream died", partial_result=partial)]
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_two_metric_turn_fixture(),
+        )
+
+    assert result.turn_results[1].exit_reason is LoopExit.CHAT_ERROR
+    # Shifted by the first turn's wall clock, and indexed past the first turn's two calls.
+    shifted = [tc for tc in result.tool_call_events if tc.call_ts is not None]
+    assert [tc.call_ts for tc in shifted] == [12.5]
+    assert [tc.index for tc in shifted] == [2]
+    # The steps were taken, so they count.
+    assert result.total_steps == 5
+
+
+def test_a_non_chat_exception_still_propagates():
+    """Only chat faults are absorbed. A programming error must not be relabelled CHAT_ERROR."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m1")]),
+        TypeError("a real bug"),
+    ]
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+        pytest.raises(TypeError),
+    ):
+        run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_two_metric_turn_fixture(),
+        )
 
 
 def test_run_agentic_conversation_sums_the_reasoning_steps_of_every_turn():
@@ -1525,10 +1639,11 @@ def test_cleanup_deletes_created_metrics_and_alerts_but_keeps_a_metric_updated_i
 def test_cleanup_still_runs_for_a_metric_created_before_the_stream_died() -> None:
     turns = [_viz_turn("t1", expected=_viz())]
     partial = _result(tools=[_tool("create_metric", result={"data": {"metric_id": "orphan", "maql": "SELECT 1"}})])
-    with (
-        patch("gooddata_eval.core.agentic.conversation._delete_metric") as del_metric,
-        pytest.raises(ChatError_),
-    ):
+    # No pytest.raises: a chat fault now ends its own turn and is recorded as
+    # LoopExit.CHAT_ERROR rather than discarding the turns that already completed. What this
+    # test is actually about -- the metric created before the stream died still gets deleted
+    # -- is unchanged, and is what the assertion below pins.
+    with patch("gooddata_eval.core.agentic.conversation._delete_metric") as del_metric:
         _run([ChatError_("stream died", partial_result=partial)], turns, judge=_FakeJudge(False))
     assert [c.args[2] for c in del_metric.call_args_list] == ["orphan"]
 
