@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass, field
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
@@ -14,6 +15,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -84,6 +86,9 @@ class GuardrailResult:
     # Set when the judge returned something unreadable for THIS run. Excluded from pass@K
     # and from Langfuse scoring rather than counted as a failure -- see score_run.
     judge_error: str | None = None
+    # This run's own wall time (agent call + its grading) -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item).
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -118,6 +123,7 @@ def _run_single_guardrail(
     Extracted so the two call sites below (the first conversation, which may be supplied,
     and the remaining K-1) cannot drift -- they had already duplicated the whole body once.
     """
+    run_started = time.monotonic()
     chat_result = client.send_message(conversation_id, question)
     actual_output = render_answer_text(chat_result)
     verdict = score_run(judge, input=question, expected_output=expected_output, actual_output=actual_output)
@@ -132,6 +138,7 @@ def _run_single_guardrail(
         tool_call_events=list(chat_result.tool_call_events or []),
         reasoning_step_events=list(chat_result.reasoning_step_events or []),
         judge_error=verdict.error,
+        run_latency_s=time.monotonic() - run_started,
     )
 
 
@@ -320,55 +327,59 @@ def evaluate_agentic_guardrail(
 
     unscored = summary.judge_errors
 
-    # Computed BEFORE the all-ungraded raise below, not after. An item whose every run went
-    # ungraded is the one where these matter most -- the judge broke, and the conversation
-    # ids are what someone needs to go read what the agent actually said -- but the raise
-    # used to happen first, so the runner caught a bare error and reported runs=0 with no
-    # records at all. `summary.best` already falls back to the unscored runs, and
-    # `runs_passed` is then 0, so nothing here needs a graded run to exist.
     runs_passed = sum(1 for r in summary.scored_run_results if r.passed)
     runs_effective = len(summary.run_results)
 
     best = summary.best
-    detail = {
-        **_run_detail(best),
+    detail = agentic_detail(
+        best.tool_call_events,
+        best.reasoning_step_events,
+        judge_passed=best.passed,
+        judge_reasoning=best.reasoning,
+        actual_output=best.actual_output,
         # Only present when it happened, so the usual JSON shape is unchanged. A
         # pass@K over fewer runs than --runs asked for is a weaker result.
         **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),
-    }
-    # An ungraded run has no verdict, so `r.passed` is not a claim about it -- treat it as
-    # non-passing here so it is recorded with its judge_error rather than silently dropped.
+    )
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed.
     failed_runs = build_failed_runs(
-        summary.run_results,
-        passed=lambda r: r.judge_error is None and r.passed,
-        detail=_run_detail,
+        summary.run_results, passed=lambda r: r.judge_error is None and r.passed, detail=_run_detail
     )
 
     if not summary.scored_run_results:
-        # No readable verdict for any run: an error, not K failures. Raised after the
-        # trace link is queued so whatever the agent did is still linked.
-        error = JudgeResponseError(
+        # No readable verdict for any run: an error, not K failures. Raised after the trace
+        # link is queued so whatever the agent did is still linked, and after the per-run
+        # records exist -- a broken judge is precisely when they are worth having.
+        exc = JudgeResponseError(
             f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
             + " | ".join(unscored)
         )
-        _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective)
-        raise error
+        exc.best_run_latency_s = summary.best.run_latency_s
+        _attach_diagnostics(exc, best, detail, failed_runs, runs_passed, runs_effective)
+        raise exc
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
-        exc = GuardrailAssertionError(
-            f"Guardrail assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}"
+        raise_agentic_failure(
+            GuardrailAssertionError,
+            f"Guardrail assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}",
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            best_run_latency_s=best.run_latency_s,
+            failed_runs=failed_runs,
         )
-        _attach_diagnostics(exc, best, detail, failed_runs, runs_passed, runs_effective)
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
-        # Also on the success path: pass@K clears the gate with one passing run, so a
-        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
+        best_run_latency_s=best.run_latency_s,
         failed_runs=failed_runs,
     )

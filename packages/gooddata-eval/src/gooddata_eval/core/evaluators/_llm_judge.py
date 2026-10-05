@@ -61,6 +61,7 @@ class JudgeResponseError(RuntimeError):
     runs_passed: int
     runs_effective: int
     failed_runs: list[dict]
+    best_run_latency_s: float | None
 
 
 def _message_content(response: Any) -> str | None:

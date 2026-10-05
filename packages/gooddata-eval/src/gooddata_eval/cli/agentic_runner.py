@@ -398,6 +398,18 @@ def _apply_timings(item_report: ItemReport, timings: Any) -> None:
     item_report.simulated_user_latency_s = timings.simulated_user_s
 
 
+def _apply_best_run_latency(item_report: ItemReport, source: Any) -> None:
+    """Copy the rank-selected run's own wall time, mirroring the single-shot path's
+    ``ItemReport.best_run_latency_s`` (see ``core/runner.py``'s ``_run_one_item``).
+
+    Kinds not yet wired to measure it pass None and keep the field at its own None
+    default rather than reporting an invented number.
+    """
+    best_run_latency_s = getattr(source, "best_run_latency_s", None)
+    if best_run_latency_s is not None:
+        item_report.best_run_latency_s = best_run_latency_s
+
+
 def run_agentic_items(
     items: list[DatasetItem],
     host: str,
@@ -483,6 +495,7 @@ def run_agentic_items(
             item_report.response_id = response_id
             item_report.best_detail = detail or {}
             _apply_timings(item_report, getattr(outcome, "timings", None))
+            _apply_best_run_latency(item_report, outcome)
             _apply_run_counts(item_report, outcome)
             _apply_failed_runs(item_report, outcome)
         except AssertionError as exc:
@@ -493,6 +506,7 @@ def run_agentic_items(
             item_report.response_id = getattr(exc, "response_id", None)
             item_report.best_detail = getattr(exc, "detail", None) or {}
             _apply_timings(item_report, getattr(exc, "timings", None))
+            _apply_best_run_latency(item_report, exc)
             _apply_run_counts(item_report, exc)
             _apply_failed_runs(item_report, exc)
             # Read off the counts, not off the gate: pass^K fails items where runs did pass,
@@ -528,6 +542,7 @@ def run_agentic_items(
             # judge broke should not also report the agent as costing 0s. Kinds that
             # attach no timings to the exception keep their 0.0 defaults.
             _apply_timings(item_report, getattr(exc, "timings", None))
+            _apply_best_run_latency(item_report, exc)
         finally:
             item_report.latency_s = time.perf_counter() - t0
 

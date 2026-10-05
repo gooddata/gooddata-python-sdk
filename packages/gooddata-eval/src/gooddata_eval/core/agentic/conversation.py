@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from datetime import date
 from typing import ClassVar, Literal
@@ -40,6 +41,7 @@ from gooddata_eval.core.agentic._conversation_context import (
     summarize_visualizations,
 )
 from gooddata_eval.core.agentic._gate import log_gate_scores
+from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -65,7 +67,6 @@ from gooddata_eval.core.models import (
     ReasoningStepEvent,
     ToolCallEvent,
     shift_and_index_events,
-    timeline_detail,
 )
 from gooddata_eval.core.scoring import (
     check_filters,
@@ -593,6 +594,11 @@ class ConversationResult:
     stalled_turns: int = 0
     mode: ConversationMode = "legacy"
     judge_model: str | None = None
+    # This conversation's own wall time, across every turn -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item). There is no
+    # K-of-N selection for this kind (see run_agentic_conversation's docstring), so
+    # this is simply the one conversation's own time, not a "best of" pick.
+    run_latency_s: float = 0.0
 
 
 def _metric_creations(tool_call_events: list[ToolCallEvent]) -> list[tuple[str, bool]]:
@@ -707,6 +713,7 @@ def run_agentic_conversation(
     agent sees no history. It is the no-memory baseline a context score is calibrated
     against: context-dependent turns are expected to fail there.
     """
+    run_started = time.monotonic()
     resolved_mode = resolve_conversation_mode(mode)
     if fresh_conversation_per_turn and initial_conversation_id is not None:
         raise ValueError("fresh_conversation_per_turn needs conversations this run creates itself")
@@ -1011,25 +1018,27 @@ def run_agentic_conversation(
         stalled_turns=stalled,
         mode=resolved_mode,
         judge_model=judge.model_name if judged else None,
+        run_latency_s=time.monotonic() - run_started,
     )
 
 
 def _conversation_detail(result: ConversationResult) -> dict:
-    return {
-        "mode": result.mode,
-        "full_skill_coverage": result.full_skill_coverage,
-        "conversation_success": result.conversation_success,
-        "context_success": result.context_success,
-        "context_kept_rate": result.context_kept_rate,
-        "turns_before_first_break": result.turns_before_first_break,
-        "lost_context_clarifications": result.lost_context_clarifications,
-        "stalled_turns": result.stalled_turns,
-        "total_clarification_turns": result.total_clarification_turns,
-        "max_clarification_turns": result.max_clarification_turns,
-        "judge_model": result.judge_model,
-        "turns": [tr.detail() for tr in result.turn_results],
-        **timeline_detail(result.tool_call_events, result.reasoning_step_events),
-    }
+    return agentic_detail(
+        result.tool_call_events,
+        result.reasoning_step_events,
+        mode=result.mode,
+        full_skill_coverage=result.full_skill_coverage,
+        conversation_success=result.conversation_success,
+        context_success=result.context_success,
+        context_kept_rate=result.context_kept_rate,
+        turns_before_first_break=result.turns_before_first_break,
+        lost_context_clarifications=result.lost_context_clarifications,
+        stalled_turns=result.stalled_turns,
+        total_clarification_turns=result.total_clarification_turns,
+        max_clarification_turns=result.max_clarification_turns,
+        judge_model=result.judge_model,
+        turns=[tr.detail() for tr in result.turn_results],
+    )
 
 
 class ConversationAssertionError(AgenticAssertionError):
@@ -1207,21 +1216,25 @@ def evaluate_agentic_conversation(
                 f"full_skill_coverage={result.full_skill_coverage}. "
                 f"Failed turns: {legacy_failed}"
             )
-        exc = ConversationAssertionError(message)
-        exc.reasoning_steps = result.reasoning_steps
-        exc.conversation_id = result.conversation_id
-        exc.response_id = result.response_id
-        exc.detail = detail
         # This kind takes no k and drives its fixture exactly once, whatever --runs asks
         # for. Saying so explicitly stops the report claiming K runs that never happened.
-        exc.runs_passed = 0
-        exc.runs_effective = 1
-        raise exc
-    return AgenticEvalOutcome(
+        raise_agentic_failure(
+            ConversationAssertionError,
+            message,
+            reasoning_steps=result.reasoning_steps,
+            conversation_id=result.conversation_id,
+            response_id=result.response_id,
+            detail=detail,
+            runs_passed=0,
+            runs_effective=1,
+            best_run_latency_s=result.run_latency_s,
+        )
+    return agentic_success(
         reasoning_steps=result.reasoning_steps,
         conversation_id=result.conversation_id,
         response_id=result.response_id,
         detail=detail,
         runs_passed=1,
         runs_effective=1,
+        best_run_latency_s=result.run_latency_s,
     )

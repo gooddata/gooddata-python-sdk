@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import logging
 import os
+import time
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -34,6 +35,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -51,9 +53,9 @@ from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
     ChatResult,
+    LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
     shift_and_index_events,
 )
 
@@ -210,6 +212,14 @@ class WhatIfRunResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
+    # This run's own wall time, across all its turns -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item). Distinct from
+    # turn_wall_clock_sec above, which is only the scenario-execution turn.
+    run_latency_s: float = 0.0
+    # Why the simulated-user loop stopped -- see LoopExit. `triggered=False` alone cannot
+    # separate a refusal from a run that hit max_iterations while still on track (matches
+    # kda_skill.py/alert_skill.py).
+    exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
 
 
 @dataclass
@@ -318,6 +328,7 @@ def run_agentic_what_if(
     )
 
     def _run_once(conv_id: str) -> WhatIfRunResult:
+        run_started = time.monotonic()
         create_args: dict | None = None
         execute_result: dict | None = None
         turn_wall_clock_sec: float | None = None
@@ -343,6 +354,10 @@ def run_agentic_what_if(
             all_tool_call_events.extend(result.tool_call_events or [])
             all_reasoning_step_events.extend(result.reasoning_step_events or [])
 
+        # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop that
+        # simply runs out of range() is labelled correctly with no trailing else.
+        exit_reason = LoopExit.BUDGET_EXHAUSTED
+
         for iteration in range(max_iterations):
             try:
                 chat_result = client.send_message(conv_id, current_question)
@@ -355,6 +370,7 @@ def run_agentic_what_if(
                     _accumulate(partial)
                     create_args, execute_result = _extract_what_if_calls(all_tool_call_events)
                 turn_completed = False
+                exit_reason = LoopExit.CHAT_ERROR
                 break
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
@@ -368,8 +384,10 @@ def run_agentic_what_if(
             if execute_result is not None:
                 # The turn that ran the scenario, not an earlier disambiguation turn.
                 turn_wall_clock_sec = chat_result.turn_wall_clock_sec
+                exit_reason = LoopExit.SUCCESS
                 break
             if not response_text:
+                exit_reason = LoopExit.AGENT_SILENT
                 break
             if iteration >= max_iterations - 1:
                 break
@@ -378,6 +396,7 @@ def run_agentic_what_if(
                 disambiguated = True
             except Exception as exc:  # noqa: BLE001 -- harness-side fault; end only this run
                 _log.warning("Simulated what-if user reply failed for conversation %s: %s", conv_id, exc)
+                exit_reason = LoopExit.SIMULATED_USER_FAILED
                 break
 
         return WhatIfRunResult(
@@ -385,11 +404,13 @@ def run_agentic_what_if(
             evaluation=_evaluate_run(create_args, execute_result, expected_output, turn_completed, disambiguated),
             actual_create_args=create_args,
             actual_execute_result=execute_result,
+            exit_reason=exit_reason,
             turn_wall_clock_sec=turn_wall_clock_sec,
             reasoning_steps=reasoning_steps,
             response_id=response_id,
             tool_call_events=all_tool_call_events,
             reasoning_step_events=all_reasoning_step_events,
+            run_latency_s=time.monotonic() - run_started,
         )
 
     try:
@@ -441,26 +462,30 @@ class WhatIfAssertionError(AgenticAssertionError):
 def _detail(best: WhatIfRunResult) -> dict[str, Any]:
     ev = best.evaluation
     adjustments = _adjustments(best.actual_create_args)
-    return {
-        "triggered": ev.triggered,
-        "executed": ev.executed,
-        "success": ev.success,
-        "turn_completed": ev.turn_completed,
-        "metric_correct": ev.metric_correct,
-        "maql_correct": ev.maql_correct,
-        "scenario_count_correct": ev.scenario_count_correct,
-        "baseline_correct": ev.baseline_correct,
+    return agentic_detail(
+        best.tool_call_events,
+        best.reasoning_step_events,
+        triggered=ev.triggered,
+        executed=ev.executed,
+        success=ev.success,
+        turn_completed=ev.turn_completed,
+        metric_correct=ev.metric_correct,
+        maql_correct=ev.maql_correct,
+        scenario_count_correct=ev.scenario_count_correct,
+        baseline_correct=ev.baseline_correct,
         # Which content checks the fixture pinned -- without it a run that verified nothing
         # reads the same as one where everything matched.
-        "asserted": ev.asserted,
-        "disambiguated": ev.disambiguated,
-        "actual_adjustments": adjustments,
-        "actual_scenario_labels": [
+        asserted=ev.asserted,
+        disambiguated=ev.disambiguated,
+        actual_adjustments=adjustments,
+        actual_scenario_labels=[
             s.get("label") for s in ((best.actual_create_args or {}).get("scenarios") or []) if isinstance(s, dict)
         ],
-        "actual_execute_result": best.actual_execute_result,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-    }
+        actual_execute_result=best.actual_execute_result,
+        # Why the loop stopped. triggered=False alone cannot tell a refusal from a run
+        # that hit max_iterations while still on track -- see LoopExit.
+        exit_reason=best.exit_reason.value,
+    )
 
 
 def evaluate_agentic_what_if(
@@ -596,22 +621,26 @@ def evaluate_agentic_what_if(
             f"Actual adjustments: {detail['actual_adjustments']}. "
             f"Actual execute result: {best.actual_execute_result}."
         )
-        exc = WhatIfAssertionError(message)
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = len(summary.run_results)
-        exc.failed_runs = failed_runs
-        raise exc
+        raise_agentic_failure(
+            WhatIfAssertionError,
+            message,
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=len(summary.run_results),
+            best_run_latency_s=best.run_latency_s,
+            failed_runs=failed_runs,
+        )
 
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=len(summary.run_results),
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        runs_passed=runs_passed,
+        runs_effective=len(summary.run_results),
+        best_run_latency_s=best.run_latency_s,
         failed_runs=failed_runs,
     )

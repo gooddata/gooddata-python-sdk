@@ -208,6 +208,7 @@ def test_evaluate_agentic_search_tool_returns_reasoning_steps_on_pass():
         "tool_correct": True,
         "tool_call_names": ["search_objects"],
         "latency_breakdown": [],
+        "tool_calls": [],
     }
 
 
@@ -244,4 +245,5 @@ def test_evaluate_agentic_search_tool_attaches_reasoning_steps_to_exception_on_f
         "tool_correct": False,
         "tool_call_names": [],
         "latency_breakdown": [],
+        "tool_calls": [],
     }
