@@ -30,7 +30,7 @@ packages/gooddata-eval/tests/test_trace_linker.py
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "ff8864640bfdabee1b3c7fdf14a8fb62cc2796e5",
+  "base_commit_sha": "523f26a2a6e3721fd0515b13d82e38d441ede63c",
   "prompts": {},
   "humans": {
     "h_123280b1c5e53d": {
