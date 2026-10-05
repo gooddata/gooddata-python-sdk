@@ -95,6 +95,7 @@ _ALL_AGENTIC_KIND_CASES = [
         {"must_include": ["States the overall trend."]},
         "evaluate_agentic_dashboard_summary",
     ),
+    ("agentic_anomaly_detection", {"metric": "metric/spend"}, "evaluate_agentic_anomaly_detection"),
     ("agentic_what_if", {"metric_id": "spend"}, "evaluate_agentic_what_if"),
 ]
 
