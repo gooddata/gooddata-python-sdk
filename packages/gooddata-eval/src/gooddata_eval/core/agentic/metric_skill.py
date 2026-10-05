@@ -19,6 +19,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -39,7 +40,6 @@ from gooddata_eval.core.models import (
     ReasoningStepEvent,
     ToolCallEvent,
     shift_and_index_events,
-    timeline_detail,
 )
 from gooddata_eval.core.timing import PhaseTimings, log_timer, run_latency_s, sum_timings
 
@@ -549,44 +549,45 @@ def evaluate_agentic_metric_skill(
 
     best = summary.best
     expected_outputs_list: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
-    detail = {
-        "metric_created": best.metric_created,
-        "maql_correct": best.maql_correct,
-        "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
-        "actual_maql": best.actual_maql,
+    detail = agentic_detail(
+        best.tool_call_events,
+        best.reasoning_step_events,
+        metric_created=best.metric_created,
+        maql_correct=best.maql_correct,
+        expected_maql_candidates=[c.get("maql", "") for c in expected_outputs_list],
+        actual_maql=best.actual_maql,
         # Why the loop stopped. metric_created=False alone cannot tell a refusal from a run
         # that hit max_iterations while still on track -- see LoopExit.
-        "exit_reason": best.exit_reason.value,
-        "turns_used": best.turns_used,
-        "max_iterations": max_iterations,
-        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
-    }
+        exit_reason=best.exit_reason.value,
+        turns_used=best.turns_used,
+        max_iterations=max_iterations,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
         candidates_str = "; ".join(repr(c.get("maql", "")) for c in expected_outputs_list)
-        exc = MetricSkillAssertionError(
+        raise_agentic_failure(
+            MetricSkillAssertionError,
             f"Metric skill assertion failed. {gate_note} "
             f"metric_created={best.metric_created}, maql_correct={best.maql_correct}. "
             f"Expected MAQL (candidates): {candidates_str}. "
-            f"Actual MAQL: {best.actual_maql}."
+            f"Actual MAQL: {best.actual_maql}.",
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            best_run_latency_s=run_latency_s(best.timings),
+            timings=item_timings,
         )
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.timings = item_timings
-        exc.best_run_latency_s = run_latency_s(best.timings)
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = runs_effective
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
-        timings=item_timings,
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
         best_run_latency_s=run_latency_s(best.timings),
+        timings=item_timings,
     )

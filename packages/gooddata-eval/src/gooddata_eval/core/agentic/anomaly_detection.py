@@ -40,6 +40,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -56,9 +57,9 @@ from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
     ChatResult,
+    LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
     shift_and_index_events,
 )
 
@@ -287,6 +288,10 @@ class AnomalyRunResult:
     # path's best_run_latency_s (see core/runner.py's _run_one_item). Distinct from
     # turn_wall_clock_sec above, which is only the final triggering turn.
     run_latency_s: float = 0.0
+    # Why the simulated-user loop stopped -- see LoopExit. `triggered=False` alone cannot
+    # separate a refusal from a run that hit max_iterations while still on track (matches
+    # kda_skill.py/alert_skill.py).
+    exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
 
 
 @dataclass
@@ -391,6 +396,10 @@ def run_agentic_anomaly_detection(
             all_tool_call_events.extend(result.tool_call_events or [])
             all_reasoning_step_events.extend(result.reasoning_step_events or [])
 
+        # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop that
+        # simply runs out of range() is labelled correctly with no trailing else.
+        exit_reason = LoopExit.BUDGET_EXHAUSTED
+
         for iteration in range(max_iterations):
             try:
                 chat_result = client.send_message(conv_id, current_question)
@@ -403,6 +412,7 @@ def run_agentic_anomaly_detection(
                     _accumulate(partial)
                     viz_args, execute_result = _extract_anomaly_calls(all_tool_call_events)
                 turn_completed = False
+                exit_reason = LoopExit.CHAT_ERROR
                 break
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
@@ -416,8 +426,10 @@ def run_agentic_anomaly_detection(
             if execute_result is not None:
                 # The turn that ran the detection, not an earlier disambiguation turn.
                 turn_wall_clock_sec = chat_result.turn_wall_clock_sec
+                exit_reason = LoopExit.SUCCESS
                 break
             if not response_text:
+                exit_reason = LoopExit.AGENT_SILENT
                 break
             if iteration >= max_iterations - 1:
                 break
@@ -426,6 +438,7 @@ def run_agentic_anomaly_detection(
                 disambiguated = True
             except Exception as exc:  # noqa: BLE001 -- harness-side fault; end only this run
                 _log.warning("Simulated anomaly user reply failed for conversation %s: %s", conv_id, exc)
+                exit_reason = LoopExit.SIMULATED_USER_FAILED
                 break
 
         return AnomalyRunResult(
@@ -434,6 +447,7 @@ def run_agentic_anomaly_detection(
             actual_visualization=viz_args,
             actual_execute_result=execute_result,
             turn_wall_clock_sec=turn_wall_clock_sec,
+            exit_reason=exit_reason,
             reasoning_steps=reasoning_steps,
             response_id=response_id,
             tool_call_events=all_tool_call_events,
@@ -487,25 +501,29 @@ class AnomalyDetectionAssertionError(AgenticAssertionError):
 
 def _detail(best: AnomalyRunResult) -> dict[str, Any]:
     ev = best.evaluation
-    return {
-        "triggered": ev.triggered,
-        "executed": ev.executed,
-        "success": ev.success,
-        "turn_completed": ev.turn_completed,
-        "metric_correct": ev.metric_correct,
-        "granularity_correct": ev.granularity_correct,
+    return agentic_detail(
+        best.tool_call_events,
+        best.reasoning_step_events,
+        triggered=ev.triggered,
+        executed=ev.executed,
+        success=ev.success,
+        turn_completed=ev.turn_completed,
+        metric_correct=ev.metric_correct,
+        granularity_correct=ev.granularity_correct,
         # Which content checks the fixture pinned -- without it a run that verified nothing
         # reads the same as one where everything matched.
-        "asserted": ev.asserted,
-        "disambiguated": ev.disambiguated,
-        "actual_metrics": sorted(_metric_uris(best.actual_visualization)),
-        "actual_granularity": _inferred_granularity(best.actual_visualization),
+        asserted=ev.asserted,
+        disambiguated=ev.disambiguated,
+        actual_metrics=sorted(_metric_uris(best.actual_visualization)),
+        actual_granularity=_inferred_granularity(best.actual_visualization),
         # Reported, never asserted: whether a real series contains anomalies is a property
         # of the data, so a fixture demanding some would fail on the next warehouse refresh.
-        "anomaly_point_count": _point_count(best.actual_execute_result),
-        "actual_execute_result": best.actual_execute_result,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-    }
+        anomaly_point_count=_point_count(best.actual_execute_result),
+        actual_execute_result=best.actual_execute_result,
+        # Why the loop stopped. triggered=False alone cannot tell a refusal from a run
+        # that hit max_iterations while still on track -- see LoopExit.
+        exit_reason=best.exit_reason.value,
+    )
 
 
 def evaluate_agentic_anomaly_detection(
@@ -630,22 +648,24 @@ def evaluate_agentic_anomaly_detection(
             f"Analysed {detail['actual_metrics']} at {detail['actual_granularity']}. "
             f"Actual execute result: {best.actual_execute_result}."
         )
-        exc = AnomalyDetectionAssertionError(message)
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = len(summary.run_results)
-        exc.best_run_latency_s = best.run_latency_s
-        raise exc
+        raise_agentic_failure(
+            AnomalyDetectionAssertionError,
+            message,
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=len(summary.run_results),
+            best_run_latency_s=best.run_latency_s,
+        )
 
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=len(summary.run_results),
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        runs_passed=runs_passed,
+        runs_effective=len(summary.run_results),
         best_run_latency_s=best.run_latency_s,
     )

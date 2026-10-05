@@ -14,6 +14,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -32,7 +33,6 @@ from gooddata_eval.core.models import (
     AgenticEvalOutcome,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
 )
 from gooddata_eval.core.timing import PhaseTimings, log_timer, run_latency_s, sum_timings
 
@@ -325,38 +325,39 @@ def evaluate_agentic_general_question(
     runs_effective = len(summary.run_results)
 
     best = summary.best
-    detail = {
-        "judge_passed": best.passed,
-        "judge_reasoning": best.reasoning,
-        "actual_output": best.actual_output,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
+    detail = agentic_detail(
+        best.tool_call_events,
+        best.reasoning_step_events,
+        judge_passed=best.passed,
+        judge_reasoning=best.reasoning,
+        actual_output=best.actual_output,
         # Only present when it happened, so the usual JSON shape is unchanged. A
         # pass@K computed over fewer runs than --runs asked for is a weaker result and
         # the report has to say so.
         **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),
-    }
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
-        exc = GeneralQuestionAssertionError(
-            f"General question assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}"
+        raise_agentic_failure(
+            GeneralQuestionAssertionError,
+            f"General question assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}",
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            best_run_latency_s=run_latency_s(best.timings),
+            timings=item_timings,
         )
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.timings = item_timings
-        exc.best_run_latency_s = run_latency_s(best.timings)
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = runs_effective
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
-        timings=item_timings,
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
         best_run_latency_s=run_latency_s(best.timings),
+        timings=item_timings,
     )

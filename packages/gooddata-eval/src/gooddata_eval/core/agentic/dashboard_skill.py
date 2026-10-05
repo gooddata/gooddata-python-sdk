@@ -17,6 +17,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -33,9 +34,9 @@ from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
     ChatResult,
+    LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
     shift_and_index_events,
 )
 from gooddata_eval.core.timing import PhaseTimings, log_timer, run_latency_s, sum_timings
@@ -664,6 +665,11 @@ class DashboardRunResult:
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
     timings: PhaseTimings = field(default_factory=PhaseTimings)
+    # Why the loop stopped -- see LoopExit. A dashboard not produced alone cannot tell a
+    # refusal from a run that hit max_iterations while still on track (matches
+    # kda_skill.py/alert_skill.py). No CHAT_ERROR/SIMULATED_USER_FAILED member here: this
+    # loop has neither a send_message try/except nor a simulated-user call to fail.
+    exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
 
 
 @dataclass
@@ -864,6 +870,11 @@ def _execute_single_dashboard_run(
     turn_offset = 0.0
     tool_index_offset = 0
     reasoning_index_offset = 0
+    # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop that
+    # simply runs out of range() (or the is_edit "no reply of its own" branch below, which
+    # is the same shape of outcome -- the agent answered, just not with the dashboard tool)
+    # is labelled correctly with no trailing else.
+    exit_reason = LoopExit.BUDGET_EXHAUSTED
 
     for iteration in range(max_iterations):
         turns += 1
@@ -903,10 +914,12 @@ def _execute_single_dashboard_run(
             dashboard_part = _extract_dashboard_part(chat_result, "dashboard")
             if is_edit:
                 patch_part = _extract_dashboard_part(chat_result, _PATCH_TYPE)
+            exit_reason = LoopExit.SUCCESS
             break
 
         response_text = (chat_result.text_response or "").strip() or render_answer_text(chat_result)
         if not response_text and not chat_result.tool_call_events:
+            exit_reason = LoopExit.AGENT_SILENT
             break
         if iteration >= max_iterations - 1:
             break
@@ -941,6 +954,7 @@ def _execute_single_dashboard_run(
         tool_call_events=all_tool_call_events,
         reasoning_step_events=all_reasoning_step_events,
         timings=timings,
+        exit_reason=exit_reason,
     )
 
 
@@ -1100,13 +1114,17 @@ def evaluate_agentic_dashboard_skill(
     runs_effective = len(summary.run_results)
 
     best = summary.best
-    detail: dict[str, Any] = {
+    detail: dict[str, Any] = agentic_detail(
+        best.tool_call_events,
+        best.reasoning_step_events,
         **best.evaluation.strict_checks,
         **best.evaluation.diagnostics,
-        "failures": best.evaluation.failures,
-        "notes": best.evaluation.notes,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-    }
+        failures=best.evaluation.failures,
+        notes=best.evaluation.notes,
+        # Why the loop stopped. A dashboard not produced alone cannot tell a refusal from
+        # a run that hit max_iterations while still on track -- see LoopExit.
+        exit_reason=best.exit_reason.value,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
@@ -1127,28 +1145,28 @@ def evaluate_agentic_dashboard_skill(
                 " one feature flag registers both, so check that before the model."
             )
         notes = "; ".join(best.evaluation.notes)
-        exc = DashboardSkillAssertionError(
+        raise_agentic_failure(
+            DashboardSkillAssertionError,
             f"Dashboard skill assertion failed. {gate_note}{skill_note} "
             f"Checks: {best.evaluation.strict_checks}. "
             f"Failures: {'; '.join(best.evaluation.failures) or 'none reported'}."
-            + (f" Notes (not scored): {notes}." if notes else "")
+            + (f" Notes (not scored): {notes}." if notes else ""),
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            best_run_latency_s=run_latency_s(best.timings),
+            timings=item_timings,
         )
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.timings = item_timings
-        exc.best_run_latency_s = run_latency_s(best.timings)
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = runs_effective
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
-        timings=item_timings,
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
         best_run_latency_s=run_latency_s(best.timings),
+        timings=item_timings,
     )
