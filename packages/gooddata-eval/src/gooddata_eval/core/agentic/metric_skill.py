@@ -30,12 +30,13 @@ from gooddata_eval.core.agentic._trace_linker import (
     utc_now,
 )
 from gooddata_eval.core.chat.render import render_answer_text
-from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._maql import normalize_maql
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
+    LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
     shift_and_index_events,
@@ -169,6 +170,11 @@ class MetricRunResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
+    # Why the simulated-user loop stopped. metric_created=False alone cannot separate a run
+    # that ran out of turns, one where the agent went silent, and one where the harness's
+    # own simulated user failed -- see LoopExit.
+    exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
+    turns_used: int = 0
     timings: PhaseTimings = field(default_factory=PhaseTimings)
 
 
@@ -270,10 +276,33 @@ def _execute_single_metric_run(
     reasoning_index_offset = 0
 
     try:
+        # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop that
+        # simply runs out of range() is labelled correctly with no trailing else.
+        exit_reason = LoopExit.BUDGET_EXHAUSTED
         for _iteration in range(max_iterations):
             turns += 1
             agent_started = time.monotonic()
-            chat_result = client.send_message(conversation_id, current_question)
+            try:
+                chat_result = client.send_message(conversation_id, current_question)
+            except ChatError as exc:
+                # Without this the exception escapes run_agentic_metric_skill entirely,
+                # discarding every K-run already completed along with any exit_reason. A
+                # GoodData-side fault, so recorded like the simulated-user one below.
+                timings.agent_s += time.monotonic() - agent_started
+                print(f"[CHAT] send_message failed for conversation {conversation_id}: {exc}")
+                # The stream can break AFTER create_metric already succeeded server-side.
+                # Those ids only ever reached created_metric_ids from the normal path below,
+                # so breaking here left the metric in the workspace for the `finally` cleanup
+                # to miss -- a real object leaking out of a failed run, not a reporting gap.
+                partial = exc.partial_result
+                if partial is not None:
+                    reasoning_steps.extend(partial.reasoning_steps or [])
+                    response_id = partial.response_id or response_id
+                    for metric_id in _extract_created_metric_ids(partial.tool_call_events or []):
+                        if metric_id not in created_metric_ids:
+                            created_metric_ids.append(metric_id)
+                exit_reason = LoopExit.CHAT_ERROR
+                break
             agent_elapsed = time.monotonic() - agent_started
             timings.agent_s += agent_elapsed
             reasoning_steps.extend(chat_result.reasoning_steps or [])
@@ -297,11 +326,13 @@ def _execute_single_metric_run(
                     f"{agent_elapsed:.2f}s; metric result received"
                 )
                 metric_result = candidate
+                exit_reason = LoopExit.SUCCESS
                 break
             response_text = (chat_result.text_response or "").strip()
             if not response_text:
                 response_text = render_answer_text(chat_result)
             if not response_text and not chat_result.tool_call_events:
+                exit_reason = LoopExit.AGENT_SILENT
                 break
             if _iteration >= max_iterations - 1:
                 break
@@ -320,6 +351,9 @@ def _execute_single_metric_run(
                     f"[timer] metric_skill {conversation_id} gpt-4o-mini simulated user failed after "
                     f"{simulated_elapsed:.2f}s"
                 )
+                # A harness-side fault, not an agent one. Recorded so reporting can treat it
+                # as an error instead of scoring the agent down for it.
+                exit_reason = LoopExit.SIMULATED_USER_FAILED
                 break
             simulated_elapsed = time.monotonic() - simulated_started
             timings.simulated_user_s += simulated_elapsed
@@ -344,6 +378,8 @@ def _execute_single_metric_run(
             tool_call_events=all_tool_call_events,
             reasoning_step_events=all_reasoning_step_events,
             timings=timings,
+            exit_reason=exit_reason,
+            turns_used=turns,
         )
     finally:
         for metric_id in created_metric_ids:
@@ -526,10 +562,16 @@ def evaluate_agentic_metric_skill(
             "maql_correct": run.maql_correct,
             "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
             "actual_maql": run.actual_maql,
+            # Why the loop stopped. metric_created=False alone cannot tell a refusal from a
+            # run that hit max_iterations while still on track -- see LoopExit.
+            "exit_reason": run.exit_reason.value,
+            "turns_used": run.turns_used,
             **timeline_detail(run.tool_call_events, run.reasoning_step_events),
         }
 
-    detail = _run_detail(best)
+    # max_iterations is the same for every run, so it stays at the item level rather than
+    # being repeated into each failing run's detail.
+    detail = {**_run_detail(best), "max_iterations": max_iterations}
     # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
     # cannot disagree about which runs failed.
     failed_runs = build_failed_runs(
