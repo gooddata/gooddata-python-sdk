@@ -124,6 +124,8 @@ _EVALUATE_FUNCS = [
     ("forecasting", "evaluate_agentic_forecasting"),
     ("dashboard_summary", "evaluate_agentic_dashboard_summary"),
     ("anomaly_detection", "evaluate_agentic_anomaly_detection"),
+    ("forecasting", "evaluate_agentic_forecasting"),
+    ("anomaly_detection", "evaluate_agentic_anomaly_detection"),
     ("what_if", "evaluate_agentic_what_if"),
 ]
 

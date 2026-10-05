@@ -57,6 +57,8 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_forecasting",
         "agentic_dashboard_summary",
         "agentic_anomaly_detection",
+        "agentic_forecasting",
+        "agentic_anomaly_detection",
         "agentic_what_if",
     }
 )
