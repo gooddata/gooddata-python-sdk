@@ -24,6 +24,9 @@ package = false
 # So a bare `uv sync` can run every make target (ruff, ty, pytest, tox). Not "all":
 # `release` would then be installed by every CI `uv sync --group ...` too.
 default-groups = ["dev", "lint", "type", "test", "tox"]
+# deepdiff (sdk test group) caps cachebox <6, but only cachebox 6+ ships
+# CPython 3.15 wheels. Drop once deepdiff allows cachebox 6.
+override-dependencies = ["cachebox>=6"]
 
 [tool.uv.sources]
 gooddata-sdk = { workspace = true }
