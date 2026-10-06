@@ -316,6 +316,7 @@ def run_agentic_forecasting(
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
+    user_context: dict | None = None,
 ) -> AgenticForecastSummary:
     """Run the forecasting agentic evaluation K times and return a summary.
 
@@ -328,7 +329,12 @@ def run_agentic_forecasting(
         raise ValueError(f"k must be >= 1, got {k}")
     run_results: list[ForecastRunResult] = []
     client = ChatClient(
-        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+        host=host,
+        token=token,
+        workspace_id=workspace_id,
+        reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
+        user_context=user_context,
     )
 
     def _run_once(conv_id: str) -> ForecastRunResult:
@@ -495,6 +501,7 @@ def evaluate_agentic_forecasting(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    user_context: dict | None = None,
 ) -> AgenticEvalOutcome:
     """Run forecasting evaluation, log to Langfuse, and raise ForecastingAssertionError on failure."""
     langfuse, window_start = open_trace_window(langfuse)
@@ -509,6 +516,7 @@ def evaluate_agentic_forecasting(
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
+        user_context=user_context,
     )
 
     if langfuse is not None and dataset_item_id:

@@ -355,6 +355,7 @@ def run_agentic_anomaly_detection(
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
+    user_context: dict | None = None,
 ) -> AgenticAnomalySummary:
     """Run the anomaly-detection agentic evaluation K times and return a summary.
 
@@ -367,7 +368,12 @@ def run_agentic_anomaly_detection(
         raise ValueError(f"k must be >= 1, got {k}")
     run_results: list[AnomalyRunResult] = []
     client = ChatClient(
-        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+        host=host,
+        token=token,
+        workspace_id=workspace_id,
+        reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
+        user_context=user_context,
     )
 
     def _run_once(conv_id: str) -> AnomalyRunResult:
@@ -546,6 +552,7 @@ def evaluate_agentic_anomaly_detection(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    user_context: dict | None = None,
 ) -> AgenticEvalOutcome:
     """Run anomaly-detection evaluation, log to Langfuse, and raise on failure."""
     langfuse, window_start = open_trace_window(langfuse)
@@ -560,6 +567,7 @@ def evaluate_agentic_anomaly_detection(
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
+        user_context=user_context,
     )
 
     if langfuse is not None and dataset_item_id:

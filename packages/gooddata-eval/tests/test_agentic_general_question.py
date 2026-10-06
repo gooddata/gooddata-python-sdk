@@ -724,21 +724,3 @@ def test_an_item_with_no_gradeable_run_raises_instead_of_reporting_failures():
     assert [r["run_index"] for r in err.value.failed_runs] == [1, 2]
     assert [r["error"] for r in err.value.failed_runs] == ["empty body twice", "no 'score' key"]
     assert (err.value.runs_passed, err.value.runs_effective) == (0, 2)
-
-
-def test_run_agentic_general_question_forwards_the_user_context_to_the_chat_client():
-    attachment = {"referencedObjects": [{"objects": [{"type": "WIDGET", "id": "campaign_spend"}]}]}
-    client, judge = _pass_client_and_judge(text_response="It shows campaign spend by channel.")
-
-    with _patched(client, judge):
-        run_agentic_general_question(
-            host="https://h",
-            token="tok",
-            workspace_id="ws1",
-            question="What does the visualization I attached show?",
-            expected_output="Describes the attached chart.",
-            k=1,
-            user_context=attachment,
-        )
-
-    assert client.send_message.call_args.kwargs["user_context"] == attachment

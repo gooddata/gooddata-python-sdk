@@ -188,6 +188,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_metric_skill":
@@ -200,6 +201,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_dashboard_skill":
@@ -212,6 +214,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_alert_skill":
@@ -224,6 +227,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_search":
@@ -239,6 +243,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_general_question":
@@ -264,6 +269,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_kda_skill":
@@ -276,6 +282,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_dashboard_summary":
@@ -311,6 +318,7 @@ def _dispatch_agentic(
             gate=gate,
             agent_id=agent_id,
             **lf_kw,
+            user_context=item.user_context,
         )
     elif kind == "agentic_what_if":
         return evaluate_agentic_what_if(
@@ -322,6 +330,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_anomaly_detection":
@@ -334,6 +343,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_conversation":
@@ -344,6 +354,7 @@ def _dispatch_agentic(
             workspace_id=workspace_id,
             fixture=ConversationFixture.model_validate(fixture_data),
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     else:

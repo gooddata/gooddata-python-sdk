@@ -312,6 +312,7 @@ def run_agentic_what_if(
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
+    user_context: dict | None = None,
 ) -> AgenticWhatIfSummary:
     """Run the what-if agentic evaluation K times and return a summary.
 
@@ -324,7 +325,12 @@ def run_agentic_what_if(
         raise ValueError(f"k must be >= 1, got {k}")
     run_results: list[WhatIfRunResult] = []
     client = ChatClient(
-        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+        host=host,
+        token=token,
+        workspace_id=workspace_id,
+        reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
+        user_context=user_context,
     )
 
     def _run_once(conv_id: str) -> WhatIfRunResult:
@@ -507,6 +513,7 @@ def evaluate_agentic_what_if(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    user_context: dict | None = None,
 ) -> AgenticEvalOutcome:
     """Run what-if evaluation, log to Langfuse, and raise WhatIfAssertionError on failure."""
     langfuse, window_start = open_trace_window(langfuse)
@@ -521,6 +528,7 @@ def evaluate_agentic_what_if(
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
+        user_context=user_context,
     )
 
     if langfuse is not None and dataset_item_id:

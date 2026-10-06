@@ -5,6 +5,7 @@ import inspect
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
+from typing import Any
 from unittest.mock import patch
 
 import pytest
@@ -102,15 +103,8 @@ _ALL_AGENTIC_KIND_CASES = [
         "evaluate_agentic_dashboard_summary",
     ),
     ("agentic_forecasting", {"forecast_period": 3}, "evaluate_agentic_forecasting"),
-    ("agentic_anomaly_detection", {"metric": "metric/spend"}, "evaluate_agentic_anomaly_detection"),
-    ("agentic_forecasting", {"forecast_period": 3}, "evaluate_agentic_forecasting"),
-    ("agentic_anomaly_detection", {"metric": "metric/spend"}, "evaluate_agentic_anomaly_detection"),
     ("agentic_what_if", {"metric_id": "spend"}, "evaluate_agentic_what_if"),
 ]
-
-# The one kind whose dispatch needs more than question/expected_output: the dashboard to
-# summarize is named in summary_input, exactly as for the single-shot dashboard_summary.
-_SUMMARY_INPUT_KINDS = {"agentic_dashboard_summary"}
 
 
 def test_all_agentic_kind_cases_covers_every_registered_kind():
@@ -119,6 +113,11 @@ def test_all_agentic_kind_cases_covers_every_registered_kind():
     not fail loudly."""
     covered = {kind for kind, _, _ in _ALL_AGENTIC_KIND_CASES}
     assert covered == set(AGENTIC_TEST_KINDS)
+
+
+# The one kind whose dispatch needs more than question/expected_output: the dashboard to
+# summarize is named in summary_input, exactly as for the single-shot dashboard_summary.
+_SUMMARY_INPUT_KINDS = {"agentic_dashboard_summary"}
 
 
 @pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
@@ -235,6 +234,9 @@ def test_dispatch_agentic_returns_a_real_outcome_for_every_kind(kind, expected_o
         test_kind=kind,
         question="q",
         expected_output=expected_output,
+        # Dispatch refuses a dashboard-summary item without it, before the evaluator is
+        # reached -- the item would fail for a missing fixture field, not for the thing
+        # under test.
         summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
     )
     canned = AgenticEvalOutcome(reasoning_steps=["x"], conversation_id="c1", response_id="r1", detail={"k": "v"})
@@ -359,54 +361,6 @@ def test_run_agentic_items_records_phase_timings_when_the_item_fails():
     assert report.items[0].pass_at_k is False
     assert report.items[0].agent_latency_s == 7.0
     assert report.items[0].judge_latency_s == 2.0
-
-
-def test_run_agentic_items_records_best_run_latency_on_success():
-    # best_run_latency_s was never populated on the agentic path -- the K-run loop and
-    # best-of-K selection happen inside the evaluator, not in a loop the runner itself
-    # times (unlike _run_one_item on the single-shot path).
-    outcome = AgenticEvalOutcome(
-        conversation_id="c1",
-        detail={"alert_created": True},
-        best_run_latency_s=4.25,
-    )
-    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", return_value=outcome):
-        report = run_agentic_items(
-            [_timed_item()],
-            host="http://host",
-            token="tok",
-            workspace_id="ws1",
-            run_ts="2026-01-01",
-        )
-
-    assert report.items[0].best_run_latency_s == 4.25
-
-
-def test_run_agentic_items_records_best_run_latency_when_the_item_fails():
-    exc = AlertSkillAssertionError("nope")
-    exc.detail = {"alert_created": False}
-    exc.best_run_latency_s = 9.5
-
-    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=exc):
-        report = run_agentic_items(
-            [_timed_item()],
-            host="http://host",
-            token="tok",
-            workspace_id="ws1",
-            run_ts="2026-01-01",
-        )
-
-    assert report.items[0].pass_at_k is False
-    assert report.items[0].best_run_latency_s == 9.5
-
-
-def test_an_errored_item_without_best_run_latency_keeps_the_none_default():
-    # Kinds not yet wired to measure it (or any exception with no such attribute) must
-    # not report an invented number -- None stays None, not 0.0.
-    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=RuntimeError("boom")):
-        report = run_agentic_items([_timed_item()], host="h", token="t", workspace_id="ws1", run_ts="2026-01-01")
-
-    assert report.items[0].best_run_latency_s is None
 
 
 def test_a_pending_trace_link_does_not_block_the_next_item():
@@ -819,17 +773,53 @@ def test_an_errored_item_without_timings_keeps_its_zero_defaults():
     assert report.items[0].agent_latency_s == 0.0
 
 
-def test_dispatch_agentic_passes_user_context_through_to_general_question():
-    attachment = {"referencedObjects": [{"objects": [{"type": "WIDGET", "id": "campaign_spend"}]}]}
+_ATTACHMENT = {"referencedObjects": [{"objects": [{"type": "WIDGET", "id": "campaign_spend"}]}]}
+
+# Every agentic kind, with the evaluator it dispatches to and an expected_output it parses.
+_KIND_EVALUATORS = [
+    ("vis_agentic", "evaluate_agentic_visualization", {"expected_outputs": []}),
+    ("agentic_visualization", "evaluate_agentic_visualization", {"expected_outputs": []}),
+    ("agentic_metric_skill", "evaluate_agentic_metric_skill", {}),
+    ("agentic_dashboard_skill", "evaluate_agentic_dashboard_skill", {}),
+    ("agentic_alert_skill", "evaluate_agentic_alert_skill", {}),
+    ("agentic_search", "evaluate_agentic_search_tool", {}),
+    ("agentic_general_question", "evaluate_agentic_general_question", "Describes the attached chart."),
+    ("agentic_guardrail", "evaluate_agentic_guardrail", "Refuses."),
+    ("agentic_kda_skill", "evaluate_agentic_kda_skill", {}),
+    ("agentic_what_if", "evaluate_agentic_what_if", {}),
+    ("agentic_anomaly_detection", "evaluate_agentic_anomaly_detection", {}),
+    ("agentic_forecasting", "evaluate_agentic_forecasting", {"forecast_period": 3}),
+    ("agentic_conversation", "evaluate_agentic_conversation", {"id": "c1", "expected_skills": [], "turns": []}),
+]
+
+
+# dashboard_summary is the one chat kind the relay does not apply to: it builds its own
+# context from the dashboard it summarises and takes its scope from summary_input, so an
+# item-level user_context would have nothing to attach to.
+_KINDS_WITHOUT_USER_CONTEXT = {"agentic_dashboard_summary"}
+
+
+def test_the_user_context_dispatch_check_covers_every_agentic_kind() -> None:
+    covered = {kind for kind, _, _ in _KIND_EVALUATORS}
+    assert covered == AGENTIC_TEST_KINDS - _KINDS_WITHOUT_USER_CONTEXT
+
+
+@pytest.mark.parametrize(("kind", "evaluator", "expected_output"), _KIND_EVALUATORS)
+@pytest.mark.parametrize("user_context", [_ATTACHMENT, None])
+def test_dispatch_agentic_passes_user_context_through_to_every_kind(
+    kind: str, evaluator: str, expected_output: Any, user_context: dict[str, Any] | None
+) -> None:
+    """A dropped attachment does not fail loudly: the item is asked bare and then fails for
+    an unrelated reason, so every branch is checked rather than trusted."""
     item = DatasetItem(
-        id="gdai-2179-001",
-        dataset_name="GDAI-2179",
-        test_kind="agentic_general_question",
+        id="i1",
+        dataset_name="d",
+        test_kind=kind,
         question="What does the visualization I attached show?",
-        expected_output="Describes the attached chart.",
-        user_context=attachment,
+        expected_output=expected_output,
+        user_context=user_context,
     )
-    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_general_question") as mock_eval:
+    with patch(f"gooddata_eval.cli.agentic_runner.{evaluator}") as mock_eval:
         _dispatch_agentic(
             item,
             host="https://h",
@@ -840,10 +830,57 @@ def test_dispatch_agentic_passes_user_context_through_to_general_question():
             run_ts="2026-01-01",
             model_version_override=None,
         )
-    assert mock_eval.call_args.kwargs["user_context"] == attachment
+    assert mock_eval.call_args.kwargs["user_context"] == user_context
 
 
-# --- failed_runs has to reach the report, from the outcome AND from the failure ---
+class _Stop(Exception):
+    """Raised by a patched collaborator to end a run once the call under test is captured."""
+
+
+# Kinds whose run_* hands the item's context to its ChatClient, which sends it on every turn.
+# conversation passes it per turn instead, covered in its own test file.
+_CLIENT_CONTEXT_KINDS = [
+    ("visualization", "run_agentic_visualization", "evaluate_agentic_visualization", []),
+    ("metric_skill", "run_agentic_metric_skill", "evaluate_agentic_metric_skill", {}),
+    (
+        "dashboard_skill",
+        "run_agentic_dashboard_skill",
+        "evaluate_agentic_dashboard_skill",
+        # It validates the expectation before building its client.
+        {"visualizations": [{"id": "v1", "type": "headline_chart", "title": "v1"}]},
+    ),
+    ("alert_skill", "run_agentic_alert_skill", "evaluate_agentic_alert_skill", {}),
+    ("search_tool", "run_agentic_search_tool", "evaluate_agentic_search_tool", {}),
+    ("guardrail", "run_agentic_guardrail", "evaluate_agentic_guardrail", "Refuses."),
+    ("general_question", "run_agentic_general_question", "evaluate_agentic_general_question", "Describes it."),
+    ("kda_skill", "run_agentic_kda_skill", "evaluate_agentic_kda_skill", {}),
+    ("what_if", "run_agentic_what_if", "evaluate_agentic_what_if", {}),
+    ("anomaly_detection", "run_agentic_anomaly_detection", "evaluate_agentic_anomaly_detection", {}),
+]
+
+
+@pytest.mark.parametrize(("module_name", "run_fn", "evaluate_fn", "expected"), _CLIENT_CONTEXT_KINDS)
+def test_evaluate_agentic_passes_the_user_context_to_its_runner(
+    module_name: str, run_fn: str, evaluate_fn: str, expected: Any
+) -> None:
+    module = importlib.import_module(f"gooddata_eval.core.agentic.{module_name}")
+    with patch.object(module, run_fn, side_effect=_Stop) as mock_run, pytest.raises(_Stop):
+        getattr(module, evaluate_fn)("https://h", "tok", "ws1", "q", expected, user_context=_ATTACHMENT)
+    assert mock_run.call_args.kwargs["user_context"] == _ATTACHMENT
+
+
+@pytest.mark.parametrize(("module_name", "run_fn", "evaluate_fn", "expected"), _CLIENT_CONTEXT_KINDS)
+@pytest.mark.parametrize("user_context", [_ATTACHMENT, None])
+def test_run_agentic_binds_the_user_context_to_its_chat_client(
+    module_name: str, run_fn: str, evaluate_fn: str, expected: Any, user_context: dict[str, Any] | None
+) -> None:
+    """Bound to the client rather than passed per message, so the follow-up and
+    clarification turns carry it too -- gen-ai treats a message without one as cleared."""
+    module = importlib.import_module(f"gooddata_eval.core.agentic.{module_name}")
+    with patch.object(module, "ChatClient", side_effect=_Stop) as mock_client, pytest.raises(_Stop):
+        getattr(module, run_fn)("https://h", "tok", "ws1", "q", expected, user_context=user_context)
+    assert mock_client.call_args.kwargs["user_context"] == user_context
+
 
 _A_FAILED_RUN = {
     "run_index": 2,
@@ -859,28 +896,10 @@ _A_FAILED_RUN = {
 }
 
 
-def test_run_agentic_items_surfaces_failed_runs_on_a_partial_pass():
-    """pass@K clears the gate on one passing run, so this item succeeds -- and its failing
-    runs reach the report only through this field."""
-    with patch(
-        "gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill",
-        return_value=AgenticEvalOutcome(
-            reasoning_steps=[], detail={"alert_created": True}, runs_passed=1, failed_runs=[_A_FAILED_RUN]
-        ),
-    ):
-        report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
-    assert report.items[0].pass_at_k is True
-    assert report.items[0].failed_runs == [_A_FAILED_RUN]
-
-
-def test_run_agentic_items_surfaces_failed_runs_from_the_exception_on_fail():
-    exc = AlertSkillAssertionError("nope")
-    exc.reasoning_steps = []
-    exc.detail = {"alert_created": False}
-    exc.failed_runs = [_A_FAILED_RUN]
-    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=exc):
-        report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
-    assert report.items[0].failed_runs == [_A_FAILED_RUN]
+# Kinds that legitimately build no per-run failure records. agentic_conversation drives its
+# fixture exactly once whatever --runs says (it is the sole member of
+# UNGATED_AGENTIC_TEST_KINDS), so it has no K to have failing runs within.
+_KINDS_WITHOUT_FAILED_RUNS = {"agentic_conversation"}
 
 
 def test_a_kind_that_records_no_failed_runs_keeps_the_empty_default():
@@ -892,6 +911,85 @@ def test_a_kind_that_records_no_failed_runs_keeps_the_empty_default():
     ):
         report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
     assert report.items[0].failed_runs == []
+
+
+def test_an_all_ungraded_item_is_errored_but_still_carries_its_failed_runs():
+    """JudgeResponseError is a RuntimeError, so it used to land in the generic branch:
+    errored, runs=0, no records. It is still an error -- no run has a verdict -- but the
+    per-run diagnostics are precisely what makes a broken judge investigable."""
+    err = JudgeResponseError("judge returned no readable verdict for any of the 3 run(s)")
+    err.failed_runs = [_A_FAILED_RUN]
+    err.conversation_id = "conv-2"
+    err.detail = {"actual_output": "something the agent said"}
+    err.runs_passed = 0
+    err.runs_effective = 3
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=err):
+        report = run_agentic_items(
+            [_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01", k=3
+        )
+    item = report.items[0]
+    assert item.error is not None
+    assert item.failed_runs == [_A_FAILED_RUN]
+    assert item.conversation_id == "conv-2"
+    assert item.best_detail == {"actual_output": "something the agent said"}
+    # The runs it really drove, not 0, and every one of them ungraded.
+    assert (item.runs, item.runs_ungraded) == (3, 3)
+
+
+def test_an_errored_item_without_best_run_latency_keeps_the_none_default():
+    # Kinds not yet wired to measure it (or any exception with no such attribute) must
+    # not report an invented number -- None stays None, not 0.0.
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=RuntimeError("boom")):
+        report = run_agentic_items([_timed_item()], host="h", token="t", workspace_id="ws1", run_ts="2026-01-01")
+
+    assert report.items[0].best_run_latency_s is None
+
+
+@pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
+def test_every_gated_kind_s_evaluator_decides_on_the_gate_not_pass_at_k(kind, expected_output, target):
+    """`--gate power` has to reach the verdict, not just the report.
+
+    Each evaluator computes `pass_power_k` itself and then decides whether to raise. One that
+    asks `if not summary.pass_at_k` computes the stricter verdict and throws it away, so a
+    flaky item passes on the strength of one good run while `run_agentic_items` still records
+    gate_passed=True and the report labels the whole run `power`. Nothing looks broken -- a
+    flaky item has quietly been promoted to a passing one.
+
+    Found four separate times (forecasting, anomaly detection, what-if, dashboard summary),
+    every time by a reviewer reading the diff rather than by a test, because nothing asserted
+    the shape. This asserts it.
+    """
+    if kind in UNGATED_AGENTIC_TEST_KINDS:
+        pytest.skip(f"{kind} drives its fixture once; there is no K to gate over")
+    module = importlib.import_module(getattr(agentic_runner, target).__module__)
+    source = inspect.getsource(module)
+    assert "gate_passed(" in source, f"{module.__name__} never consults the gate"
+    assert "if not summary.pass_at_k" not in source, (
+        f"{module.__name__} decides on pass@K directly, which ignores --gate power"
+    )
+
+
+@pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
+def test_every_multi_run_kind_s_evaluator_builds_failed_runs(kind, expected_output, target):
+    """Structural, because the test above cans the outcome and so cannot see whether the
+    evaluator filled it. Each K-running evaluator has to actually call build_failed_runs;
+    without this, a new kind reaches production writing `failed_runs: []` on every item and
+    nothing fails -- which is exactly how the gap this closes survived a full release."""
+    module = importlib.import_module(getattr(agentic_runner, target).__module__)
+    source = inspect.getsource(module)
+    if kind in _KINDS_WITHOUT_FAILED_RUNS:
+        pytest.skip(f"{kind} runs its fixture once; no K to fail within")
+    assert "build_failed_runs(" in source, f"{module.__name__} never builds per-run failure records"
+    assert "failed_runs=failed_runs" in source, f"{module.__name__} never returns them on the success path"
+    # Three ways a kind can attach them to its failure, all equivalent: set directly on the
+    # raised error, via the kind's own _attach_diagnostics helper (the judge-based kinds raise
+    # from two places and set the payload in one), or by handing them to the shared
+    # raise_agentic_failure tail, which sets the field itself. The third is the one that
+    # exists so a new field cannot be forgotten by one kind out of eleven again.
+    attaches = (
+        "failed_runs = failed_runs" in source or "_attach_diagnostics(" in source or "raise_agentic_failure(" in source
+    )
+    assert attaches, f"{module.__name__} never attaches them to its failure"
 
 
 @pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
@@ -918,77 +1016,64 @@ def test_failed_runs_reaches_the_report_for_every_kind(kind, expected_output, ta
     assert report.items[0].failed_runs == [_A_FAILED_RUN]
 
 
-# Kinds that legitimately build no per-run failure records. agentic_conversation drives its
-# fixture exactly once whatever --runs says (it is the sole member of
-# UNGATED_AGENTIC_TEST_KINDS), so it has no K to have failing runs within.
-_KINDS_WITHOUT_FAILED_RUNS = {"agentic_conversation"}
-
-
-@pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
-def test_every_multi_run_kind_s_evaluator_builds_failed_runs(kind, expected_output, target):
-    """Structural, because the test above cans the outcome and so cannot see whether the
-    evaluator filled it. Each K-running evaluator has to actually call build_failed_runs;
-    without this, a new kind reaches production writing `failed_runs: []` on every item and
-    nothing fails -- which is exactly how the gap this closes survived a full release."""
-    module = importlib.import_module(getattr(agentic_runner, target).__module__)
-    source = inspect.getsource(module)
-    if kind in _KINDS_WITHOUT_FAILED_RUNS:
-        pytest.skip(f"{kind} runs its fixture once; no K to fail within")
-    assert "build_failed_runs(" in source, f"{module.__name__} never builds per-run failure records"
-    assert "failed_runs=failed_runs" in source, f"{module.__name__} never returns them on the success path"
-    # Three ways a kind can attach them to its failure, all equivalent: set directly on the
-    # raised error, via the kind's own _attach_diagnostics helper (the judge-based kinds raise
-    # from two places and set the payload in one), or by handing them to the shared
-    # raise_agentic_failure tail, which sets the field itself. The third is the one that
-    # exists so a new field cannot be forgotten by one kind out of eleven again.
-    attaches = (
-        "failed_runs = failed_runs" in source or "_attach_diagnostics(" in source or "raise_agentic_failure(" in source
+def test_run_agentic_items_records_best_run_latency_on_success():
+    # best_run_latency_s was never populated on the agentic path -- the K-run loop and
+    # best-of-K selection happen inside the evaluator, not in a loop the runner itself
+    # times (unlike _run_one_item on the single-shot path).
+    outcome = AgenticEvalOutcome(
+        conversation_id="c1",
+        detail={"alert_created": True},
+        best_run_latency_s=4.25,
     )
-    assert attaches, f"{module.__name__} never attaches them to its failure"
-
-
-def test_an_all_ungraded_item_is_errored_but_still_carries_its_failed_runs():
-    """JudgeResponseError is a RuntimeError, so it used to land in the generic branch:
-    errored, runs=0, no records. It is still an error -- no run has a verdict -- but the
-    per-run diagnostics are precisely what makes a broken judge investigable."""
-    err = JudgeResponseError("judge returned no readable verdict for any of the 3 run(s)")
-    err.failed_runs = [_A_FAILED_RUN]
-    err.conversation_id = "conv-2"
-    err.detail = {"actual_output": "something the agent said"}
-    err.runs_passed = 0
-    err.runs_effective = 3
-    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=err):
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", return_value=outcome):
         report = run_agentic_items(
-            [_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01", k=3
+            [_timed_item()],
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            run_ts="2026-01-01",
         )
-    item = report.items[0]
-    assert item.error is not None
-    assert item.failed_runs == [_A_FAILED_RUN]
-    assert item.conversation_id == "conv-2"
-    assert item.best_detail == {"actual_output": "something the agent said"}
-    # The runs it really drove, not 0, and every one of them ungraded.
-    assert (item.runs, item.runs_ungraded) == (3, 3)
+
+    assert report.items[0].best_run_latency_s == 4.25
 
 
-@pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
-def test_every_gated_kind_s_evaluator_decides_on_the_gate_not_pass_at_k(kind, expected_output, target):
-    """`--gate power` has to reach the verdict, not just the report.
+def test_run_agentic_items_records_best_run_latency_when_the_item_fails():
+    exc = AlertSkillAssertionError("nope")
+    exc.detail = {"alert_created": False}
+    exc.best_run_latency_s = 9.5
 
-    Each evaluator computes `pass_power_k` itself and then decides whether to raise. One that
-    asks `if not summary.pass_at_k` computes the stricter verdict and throws it away, so a
-    flaky item passes on the strength of one good run while `run_agentic_items` still records
-    gate_passed=True and the report labels the whole run `power`. Nothing looks broken -- a
-    flaky item has quietly been promoted to a passing one.
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=exc):
+        report = run_agentic_items(
+            [_timed_item()],
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            run_ts="2026-01-01",
+        )
 
-    Found four separate times (forecasting, anomaly detection, what-if, dashboard summary),
-    every time by a reviewer reading the diff rather than by a test, because nothing asserted
-    the shape. This asserts it.
-    """
-    if kind in UNGATED_AGENTIC_TEST_KINDS:
-        pytest.skip(f"{kind} drives its fixture once; there is no K to gate over")
-    module = importlib.import_module(getattr(agentic_runner, target).__module__)
-    source = inspect.getsource(module)
-    assert "gate_passed(" in source, f"{module.__name__} never consults the gate"
-    assert "if not summary.pass_at_k" not in source, (
-        f"{module.__name__} decides on pass@K directly, which ignores --gate power"
-    )
+    assert report.items[0].pass_at_k is False
+    assert report.items[0].best_run_latency_s == 9.5
+
+
+def test_run_agentic_items_surfaces_failed_runs_from_the_exception_on_fail():
+    exc = AlertSkillAssertionError("nope")
+    exc.reasoning_steps = []
+    exc.detail = {"alert_created": False}
+    exc.failed_runs = [_A_FAILED_RUN]
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=exc):
+        report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
+    assert report.items[0].failed_runs == [_A_FAILED_RUN]
+
+
+def test_run_agentic_items_surfaces_failed_runs_on_a_partial_pass():
+    """pass@K clears the gate on one passing run, so this item succeeds -- and its failing
+    runs reach the report only through this field."""
+    with patch(
+        "gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill",
+        return_value=AgenticEvalOutcome(
+            reasoning_steps=[], detail={"alert_created": True}, runs_passed=1, failed_runs=[_A_FAILED_RUN]
+        ),
+    ):
+        report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
+    assert report.items[0].pass_at_k is True
+    assert report.items[0].failed_runs == [_A_FAILED_RUN]

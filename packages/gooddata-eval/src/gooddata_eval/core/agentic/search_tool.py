@@ -103,12 +103,18 @@ def run_agentic_search_tool(
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
+    user_context: dict | None = None,
 ) -> AgenticSearchSummary:
     """Run the search-tool agentic evaluation K times (single-turn each)."""
     run_results: list[SearchResult] = []
 
     client = ChatClient(
-        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+        host=host,
+        token=token,
+        workspace_id=workspace_id,
+        reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
+        user_context=user_context,
     )
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
@@ -210,6 +216,7 @@ def evaluate_agentic_search_tool(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    user_context: dict | None = None,
     gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run search-tool evaluation, log to Langfuse, and raise SearchToolAssertionError on failure.
@@ -229,6 +236,7 @@ def evaluate_agentic_search_tool(
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
+        user_context=user_context,
     )
 
     if langfuse is not None and dataset_item_id:

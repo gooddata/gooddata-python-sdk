@@ -665,12 +665,18 @@ def run_agentic_alert_skill(
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
+    user_context: dict | None = None,
 ) -> AgenticAlertSummary:
     """Run the alert-skill agentic evaluation K times and return a summary."""
     expected = _normalize_expected_output(expected_output)
     run_results: list[AlertRunResult] = []
     client = ChatClient(
-        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+        host=host,
+        token=token,
+        workspace_id=workspace_id,
+        reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
+        user_context=user_context,
     )
     sdk = GoodDataSdk.create(host, token)
 
@@ -893,6 +899,7 @@ def evaluate_agentic_alert_skill(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    user_context: dict | None = None,
     gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run alert-skill evaluation, log to Langfuse, and raise AlertSkillAssertionError on failure.
@@ -916,6 +923,7 @@ def evaluate_agentic_alert_skill(
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
+        user_context=user_context,
     )
 
     if langfuse is not None and dataset_item_id:
