@@ -446,6 +446,7 @@ class ChatClient:
         preserve_failed: bool = False,
         reasoning_effort: ReasoningEffort | None = None,
         agent_id: str | None = None,
+        user_context: dict[str, Any] | None = None,
     ):
         """Create a chat client bound to one workspace.
 
@@ -454,6 +455,14 @@ class ChatClient:
         entirely and the server keeps its own default. The server honours it only
         while the ``enableGenAiReasoningEffort`` feature flag is on for the
         organization, so setting it is a request rather than a guarantee.
+
+        ``user_context`` is sent as ``userContext`` on every message unless a call passes
+        its own. gen-ai scopes each message by the context it carries and treats a message
+        without one as cleared, so an agentic run's follow-up and clarification turns need
+        it as much as the first question does. A call cannot clear it, since ``None`` falls
+        back to it: a caller that changes or clears the context per message builds the
+        client without one. The server grounds answers in it only while
+        the ``enableAiContextSetup`` feature flag is on for the organization.
         """
         self._base = f"{host.rstrip('/')}/api/v1/ai/workspaces/{workspace_id}/chat/conversations"
         self._auth = {"Authorization": f"Bearer {token}"}
@@ -473,6 +482,7 @@ class ChatClient:
         self._preserve_failed = preserve_failed
         self._reasoning_effort = normalize_reasoning_effort(reasoning_effort)
         self._agent_id = agent_id
+        self._user_context = user_context
 
     def create_conversation(self) -> str:
         def _do() -> str:
@@ -506,10 +516,12 @@ class ChatClient:
         body: dict[str, Any] = {"item": {"role": "user", "content": {"type": "text", "text": question}}}
         if self._reasoning_effort is not None:
             body["options"] = {"reasoningEffort": self._reasoning_effort}
-        # Only when there is one: gen-ai accepts an explicit null, so assigning
-        # unconditionally would quietly change every request that has no attachment.
-        if user_context is not None:
-            body["userContext"] = user_context
+        # A per-call context overrides the client's. Only sent when there is one: gen-ai
+        # accepts an explicit null, so assigning unconditionally would quietly change every
+        # request that has no attachment.
+        context = user_context if user_context is not None else self._user_context
+        if context is not None:
+            body["userContext"] = context
 
         def _do() -> ChatResult:
             # Set fresh on every retry attempt (before opening this attempt's stream, so its

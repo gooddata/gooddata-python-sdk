@@ -163,6 +163,19 @@ def test_item_from_raw_user_context_absent_is_none():
     assert item.user_context is None
 
 
+@pytest.mark.parametrize("value", ["dashboard_000", ["dashboard_000"], 42])
+def test_item_from_raw_rejects_a_user_context_that_is_not_an_object(value: object) -> None:
+    """Skipped, it would ask the item without its context and fail for an unrelated reason."""
+    raw = {**_raw_item("lf-ctx-4", "What does this show?", "PASS if described."), "metadata": {"user_context": value}}
+    with pytest.raises(ValueError, match="lf-ctx-4.*must be a JSON object"):
+        _item_from_raw(raw, dataset_name="ds", test_kind="agentic_general_question")
+
+
+def test_item_from_raw_user_context_null_is_none() -> None:
+    raw = {**_raw_item("lf-ctx-5", "Anything?", "PASS if answered."), "metadata": {"user_context": None}}
+    assert _item_from_raw(raw, dataset_name="ds", test_kind="agentic_general_question").user_context is None
+
+
 def test_item_from_raw_test_kind_from_metadata_beats_default():
     """A string expectedOutput gives _infer_test_kind nothing to work with, so a
     judge-rubric dataset has to carry its kind in metadata or rely on --kind."""

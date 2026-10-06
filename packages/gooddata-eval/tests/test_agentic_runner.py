@@ -1,8 +1,10 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
+import importlib
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
+from typing import Any
 from unittest.mock import patch
 
 import pytest
@@ -751,17 +753,45 @@ def test_an_errored_item_without_timings_keeps_its_zero_defaults():
     assert report.items[0].agent_latency_s == 0.0
 
 
-def test_dispatch_agentic_passes_user_context_through_to_general_question():
-    attachment = {"referencedObjects": [{"objects": [{"type": "WIDGET", "id": "campaign_spend"}]}]}
+_ATTACHMENT = {"referencedObjects": [{"objects": [{"type": "WIDGET", "id": "campaign_spend"}]}]}
+
+# Every agentic kind, with the evaluator it dispatches to and an expected_output it parses.
+_KIND_EVALUATORS = [
+    ("vis_agentic", "evaluate_agentic_visualization", {"expected_outputs": []}),
+    ("agentic_visualization", "evaluate_agentic_visualization", {"expected_outputs": []}),
+    ("agentic_metric_skill", "evaluate_agentic_metric_skill", {}),
+    ("agentic_dashboard_skill", "evaluate_agentic_dashboard_skill", {}),
+    ("agentic_alert_skill", "evaluate_agentic_alert_skill", {}),
+    ("agentic_search", "evaluate_agentic_search_tool", {}),
+    ("agentic_general_question", "evaluate_agentic_general_question", "Describes the attached chart."),
+    ("agentic_guardrail", "evaluate_agentic_guardrail", "Refuses."),
+    ("agentic_kda_skill", "evaluate_agentic_kda_skill", {}),
+    ("agentic_what_if", "evaluate_agentic_what_if", {}),
+    ("agentic_anomaly_detection", "evaluate_agentic_anomaly_detection", {}),
+    ("agentic_conversation", "evaluate_agentic_conversation", {"id": "c1", "expected_skills": [], "turns": []}),
+]
+
+
+def test_the_user_context_dispatch_check_covers_every_agentic_kind() -> None:
+    assert {kind for kind, _, _ in _KIND_EVALUATORS} == AGENTIC_TEST_KINDS
+
+
+@pytest.mark.parametrize(("kind", "evaluator", "expected_output"), _KIND_EVALUATORS)
+@pytest.mark.parametrize("user_context", [_ATTACHMENT, None])
+def test_dispatch_agentic_passes_user_context_through_to_every_kind(
+    kind: str, evaluator: str, expected_output: Any, user_context: dict[str, Any] | None
+) -> None:
+    """A dropped attachment does not fail loudly: the item is asked bare and then fails for
+    an unrelated reason, so every branch is checked rather than trusted."""
     item = DatasetItem(
-        id="gdai-2179-001",
-        dataset_name="GDAI-2179",
-        test_kind="agentic_general_question",
+        id="i1",
+        dataset_name="d",
+        test_kind=kind,
         question="What does the visualization I attached show?",
-        expected_output="Describes the attached chart.",
-        user_context=attachment,
+        expected_output=expected_output,
+        user_context=user_context,
     )
-    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_general_question") as mock_eval:
+    with patch(f"gooddata_eval.cli.agentic_runner.{evaluator}") as mock_eval:
         _dispatch_agentic(
             item,
             host="https://h",
@@ -772,4 +802,53 @@ def test_dispatch_agentic_passes_user_context_through_to_general_question():
             run_ts="2026-01-01",
             model_version_override=None,
         )
-    assert mock_eval.call_args.kwargs["user_context"] == attachment
+    assert mock_eval.call_args.kwargs["user_context"] == user_context
+
+
+class _Stop(Exception):
+    """Raised by a patched collaborator to end a run once the call under test is captured."""
+
+
+# Kinds whose run_* hands the item's context to its ChatClient, which sends it on every turn.
+# conversation passes it per turn instead, covered in its own test file.
+_CLIENT_CONTEXT_KINDS = [
+    ("visualization", "run_agentic_visualization", "evaluate_agentic_visualization", []),
+    ("metric_skill", "run_agentic_metric_skill", "evaluate_agentic_metric_skill", {}),
+    (
+        "dashboard_skill",
+        "run_agentic_dashboard_skill",
+        "evaluate_agentic_dashboard_skill",
+        # It validates the expectation before building its client.
+        {"visualizations": [{"id": "v1", "type": "headline_chart", "title": "v1"}]},
+    ),
+    ("alert_skill", "run_agentic_alert_skill", "evaluate_agentic_alert_skill", {}),
+    ("search_tool", "run_agentic_search_tool", "evaluate_agentic_search_tool", {}),
+    ("guardrail", "run_agentic_guardrail", "evaluate_agentic_guardrail", "Refuses."),
+    ("general_question", "run_agentic_general_question", "evaluate_agentic_general_question", "Describes it."),
+    ("kda_skill", "run_agentic_kda_skill", "evaluate_agentic_kda_skill", {}),
+    ("what_if", "run_agentic_what_if", "evaluate_agentic_what_if", {}),
+    ("anomaly_detection", "run_agentic_anomaly_detection", "evaluate_agentic_anomaly_detection", {}),
+]
+
+
+@pytest.mark.parametrize(("module_name", "run_fn", "evaluate_fn", "expected"), _CLIENT_CONTEXT_KINDS)
+def test_evaluate_agentic_passes_the_user_context_to_its_runner(
+    module_name: str, run_fn: str, evaluate_fn: str, expected: Any
+) -> None:
+    module = importlib.import_module(f"gooddata_eval.core.agentic.{module_name}")
+    with patch.object(module, run_fn, side_effect=_Stop) as mock_run, pytest.raises(_Stop):
+        getattr(module, evaluate_fn)("https://h", "tok", "ws1", "q", expected, user_context=_ATTACHMENT)
+    assert mock_run.call_args.kwargs["user_context"] == _ATTACHMENT
+
+
+@pytest.mark.parametrize(("module_name", "run_fn", "evaluate_fn", "expected"), _CLIENT_CONTEXT_KINDS)
+@pytest.mark.parametrize("user_context", [_ATTACHMENT, None])
+def test_run_agentic_binds_the_user_context_to_its_chat_client(
+    module_name: str, run_fn: str, evaluate_fn: str, expected: Any, user_context: dict[str, Any] | None
+) -> None:
+    """Bound to the client rather than passed per message, so the follow-up and
+    clarification turns carry it too -- gen-ai treats a message without one as cleared."""
+    module = importlib.import_module(f"gooddata_eval.core.agentic.{module_name}")
+    with patch.object(module, "ChatClient", side_effect=_Stop) as mock_client, pytest.raises(_Stop):
+        getattr(module, run_fn)("https://h", "tok", "ws1", "q", expected, user_context=user_context)
+    assert mock_client.call_args.kwargs["user_context"] == user_context
