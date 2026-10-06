@@ -7,6 +7,8 @@ from contextlib import ExitStack, contextmanager
 from unittest.mock import MagicMock, patch
 
 import pytest
+from gooddata_api_client.exceptions import NotFoundException
+from gooddata_eval.core.agentic import metric_skill as metric_skill_mod
 from gooddata_eval.core.agentic.metric_skill import (
     AgenticMetricSummary,
     MetricRunResult,
@@ -438,6 +440,61 @@ def test_delete_metric_uses_sdk_entities_api():
     sdk = MagicMock()
     _delete_metric(sdk, "ws1", "foo_metric")
     sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "foo_metric")
+
+
+def test_delete_metric_deletes_again_when_a_concurrent_write_restores_it(monkeypatch):
+    monkeypatch.setattr(metric_skill_mod, "_DELETE_RECHECK_DELAYS_S", (0.0, 0.0, 0.0))
+    sdk = MagicMock()
+    # Present after the first delete, gone after the second.
+    sdk._client.entities_api.get_entity_metrics.side_effect = [object(), NotFoundException(status=404)]
+    _delete_metric(sdk, "ws1", "foo_metric")
+    assert sdk._client.entities_api.delete_entity_metrics.call_count == 2
+    assert sdk._client.entities_api.get_entity_metrics.call_count == 2
+
+
+def test_delete_metric_checks_once_when_the_delete_holds(monkeypatch):
+    monkeypatch.setattr(metric_skill_mod, "_DELETE_RECHECK_DELAYS_S", (0.0, 0.0, 0.0))
+    sdk = MagicMock()
+    sdk._client.entities_api.get_entity_metrics.side_effect = NotFoundException(status=404)
+    _delete_metric(sdk, "ws1", "foo_metric")
+    sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "foo_metric")
+    sdk._client.entities_api.get_entity_metrics.assert_called_once_with("ws1", "foo_metric")
+
+
+def test_delete_metric_gives_up_after_the_last_recheck(monkeypatch, capsys):
+    monkeypatch.setattr(metric_skill_mod, "_DELETE_RECHECK_DELAYS_S", (0.0, 0.0))
+    sdk = MagicMock()  # get_entity_metrics always succeeds: the metric keeps coming back
+    _delete_metric(sdk, "ws1", "foo_metric")
+    assert sdk._client.entities_api.delete_entity_metrics.call_count == 3
+    assert "back or unchecked at all 2 checks" in capsys.readouterr().out
+    # No check after the last delete: a check right after it would always pass.
+    assert sdk._client.entities_api.get_entity_metrics.call_count == 2
+
+
+def test_a_failed_lookup_is_not_read_as_a_deleted_metric(monkeypatch):
+    monkeypatch.setattr(metric_skill_mod, "_DELETE_RECHECK_DELAYS_S", (0.0, 0.0))
+    sdk = MagicMock()
+    # A transient lookup failure, then a confirmed 404.
+    sdk._client.entities_api.get_entity_metrics.side_effect = [RuntimeError("503"), NotFoundException(status=404)]
+    _delete_metric(sdk, "ws1", "foo_metric")
+    assert sdk._client.entities_api.delete_entity_metrics.call_count == 2
+
+
+def test_a_404_on_delete_counts_as_deleted(monkeypatch):
+    monkeypatch.setattr(metric_skill_mod, "_DELETE_RECHECK_DELAYS_S", (0.0,))
+    sdk = MagicMock()
+    sdk._client.entities_api.delete_entity_metrics.side_effect = NotFoundException(status=404)
+    sdk._client.entities_api.get_entity_metrics.side_effect = NotFoundException(status=404)
+    _delete_metric(sdk, "ws1", "foo_metric")
+    sdk._client.entities_api.get_entity_metrics.assert_called_once_with("ws1", "foo_metric")
+
+
+def test_delete_metric_does_not_recheck_a_failed_delete(monkeypatch):
+    monkeypatch.setattr(metric_skill_mod, "_DELETE_RECHECK_DELAYS_S", (0.0,))
+    sdk = MagicMock()
+    sdk._client.entities_api.delete_entity_metrics.side_effect = RuntimeError("500")
+    _delete_metric(sdk, "ws1", "foo_metric")
+    sdk._client.entities_api.get_entity_metrics.assert_not_called()
 
 
 def test_delete_metric_swallows_failures():
