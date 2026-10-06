@@ -1,6 +1,6 @@
 # (C) 2025 GoodData Corporation
 
-from enum import Enum
+from enum import StrEnum
 from typing import TypeAlias
 
 import attrs
@@ -46,12 +46,12 @@ ValidationModel: TypeAlias = (
 Provisioner: TypeAlias = PermissionProvisioner | UserProvisioner | UserGroupProvisioner | WorkspaceProvisioner
 
 
-class LoadType(str, Enum):
+class LoadType(StrEnum):
     FULL = "full"
     INCREMENTAL = "incremental"
 
 
-class WorkflowType(str, Enum):
+class WorkflowType(StrEnum):
     WORKSPACE_FULL_LOAD = "workspace_full_load"
     WORKSPACE_INCREMENTAL_LOAD = "workspace_incremental_load"
     USER_FULL_LOAD = "user_full_load"

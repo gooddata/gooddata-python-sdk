@@ -140,8 +140,6 @@ lint.ignore = [
     "SIM105",
     # ignore the rule (import from `collections.abc` instead: `Callable`)
     "UP035",
-    # (str, Enum) -> StrEnum changes str()/format() output of public enums
-    "UP042",
 ]
 target-version = "py311"
 
