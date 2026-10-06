@@ -24,6 +24,7 @@ from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
 from gooddata_eval.core.agentic.what_if import evaluate_agentic_what_if
 from gooddata_eval.core.config import ReasoningEffort
+from gooddata_eval.core.evaluators.visualization import requires_execution_of
 from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
 
@@ -179,6 +180,7 @@ def _dispatch_agentic(
             workspace_id=workspace_id,
             question=item.question,
             expected_outputs=_parse_visualization_expected(eo),
+            requires_execution=requires_execution_of(eo),
             k=k,
             gate=gate,
             agent_id=agent_id,
