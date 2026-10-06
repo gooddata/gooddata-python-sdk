@@ -7,7 +7,7 @@ import importlib
 import inspect
 import threading
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -474,7 +474,7 @@ def test_a_cancelled_poll_stops_instead_of_finishing_its_retry_ladder():
         patch("gooddata_eval.core.agentic._langfuse.link_cancel_event", return_value=cancelled),
         patch("gooddata_eval.core.agentic._langfuse.warn_from_worker"),
     ):
-        result = _langfuse.find_traces_per_conversation(MagicMock(), ["c1", "c2"], datetime.now(timezone.utc))
+        result = _langfuse.find_traces_per_conversation(MagicMock(), ["c1", "c2"], datetime.now(UTC))
 
     assert sum(slept) == 0.0, f"a cancelled poll kept sleeping: {slept}"
     # Every conversation still reports, so callers see None rather than a missing key.
@@ -509,7 +509,7 @@ def test_cancelling_mid_backoff_stops_the_poll_without_finishing_the_sleep():
         patch("gooddata_eval.core.agentic._langfuse.link_cancel_event", return_value=cancelled),
         patch("gooddata_eval.core.agentic._langfuse.warn_from_worker"),
     ):
-        _langfuse.find_traces_per_conversation(MagicMock(), ["c1"], datetime.now(timezone.utc))
+        _langfuse.find_traces_per_conversation(MagicMock(), ["c1"], datetime.now(UTC))
 
     # One slice, then it noticed. Without slicing it would sleep the whole backoff ladder up
     # to _LINK_BUDGET_SEC before looking at the flag again.

@@ -5,7 +5,7 @@ import argparse
 import os
 import sys
 import threading
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import get_args
 
@@ -498,7 +498,7 @@ def _run(config: RunConfig) -> int:
     _reject_power_gate_on_ungated_items(config, items)
     _warn_if_local_dataset_cannot_link(config, agentic_items)
     models = config.models or []
-    run_ts = datetime.now(timezone.utc).strftime("%Y-%m-%d-%H-%M")
+    run_ts = datetime.now(UTC).strftime("%Y-%m-%d-%H-%M")
     n_models = len(models) if models else 1
 
     controller = WorkspaceModelController(config.host, config.token, config.workspace_id)

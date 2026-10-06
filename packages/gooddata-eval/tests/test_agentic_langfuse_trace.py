@@ -1,7 +1,7 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 import time
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from unittest.mock import MagicMock, patch
 
 import httpx
@@ -51,7 +51,7 @@ def test_find_traces_per_conversation_is_none_for_a_conversation_with_no_trace()
         patch("gooddata_eval.core.agentic._langfuse._fetch_traces_for_session", side_effect=_fetch),
         patch("gooddata_eval.core.agentic._langfuse.time.sleep"),
     ):
-        result = find_traces_per_conversation(MagicMock(), ["conv-found", "conv-missing"], datetime.now(timezone.utc))
+        result = find_traces_per_conversation(MagicMock(), ["conv-found", "conv-missing"], datetime.now(UTC))
 
     assert result["conv-found"] is found_trace
     assert result["conv-missing"] is None
@@ -69,7 +69,7 @@ def test_find_traces_per_conversation_tries_before_sleeping():
         patch("gooddata_eval.core.agentic._langfuse._fetch_traces_for_session", return_value=[found_trace]),
         patch("gooddata_eval.core.agentic._langfuse.time.sleep", side_effect=sleeps.append),
     ):
-        result = find_traces_per_conversation(MagicMock(), ["conv-1"], datetime.now(timezone.utc))
+        result = find_traces_per_conversation(MagicMock(), ["conv-1"], datetime.now(UTC))
 
     assert result["conv-1"] is found_trace
     assert sleeps == []
@@ -87,13 +87,13 @@ def test_find_traces_per_conversation_accepts_an_explicit_window_end():
         captured["end"] = window_end
         return [MagicMock(latency=1.0)]
 
-    pinned = datetime(2026, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
+    pinned = datetime(2026, 1, 1, 12, 0, 0, tzinfo=UTC)
 
     with (
         patch("gooddata_eval.core.agentic._langfuse._fetch_traces_for_session", side_effect=_fetch),
         patch("gooddata_eval.core.agentic._langfuse.time.sleep"),
     ):
-        find_traces_per_conversation(MagicMock(), ["c1"], datetime.now(timezone.utc), window_end=pinned)
+        find_traces_per_conversation(MagicMock(), ["c1"], datetime.now(UTC), window_end=pinned)
 
     assert captured["end"] == pinned
 
@@ -129,7 +129,7 @@ def test_find_traces_per_conversation_keeps_retrying_within_its_budget():
         patch("gooddata_eval.core.agentic._langfuse._fetch_traces_for_session", return_value=[]),
         patch("gooddata_eval.core.agentic._langfuse.time", clock),
     ):
-        result = find_traces_per_conversation(MagicMock(), ["conv-missing"], datetime.now(timezone.utc))
+        result = find_traces_per_conversation(MagicMock(), ["conv-missing"], datetime.now(UTC))
 
     assert result["conv-missing"] is None
     assert max(clock.sleeps) <= _MAX_DELAY
@@ -152,9 +152,7 @@ def test_find_traces_per_conversation_always_makes_one_attempt_even_past_the_bud
         patch("gooddata_eval.core.agentic._langfuse._fetch_traces_for_session", side_effect=_fetch),
         patch("gooddata_eval.core.agentic._langfuse.time.sleep"),
     ):
-        result = find_traces_per_conversation(
-            MagicMock(), ["c1"], datetime.now(timezone.utc), deadline=time.monotonic() - 1.0
-        )
+        result = find_traces_per_conversation(MagicMock(), ["c1"], datetime.now(UTC), deadline=time.monotonic() - 1.0)
 
     assert attempts == ["c1"]
     assert result["c1"] is not None
@@ -170,7 +168,7 @@ def test_the_retry_budget_is_shared_across_one_items_conversations():
         patch("gooddata_eval.core.agentic._langfuse._fetch_traces_for_session", return_value=[]),
         patch("gooddata_eval.core.agentic._langfuse.time", clock),
     ):
-        result = find_traces_per_conversation(MagicMock(), ["c1", "c2", "c3"], datetime.now(timezone.utc))
+        result = find_traces_per_conversation(MagicMock(), ["c1", "c2", "c3"], datetime.now(UTC))
 
     assert all(v is None for v in result.values())
     assert sum(clock.sleeps) <= _LINK_BUDGET_SEC
@@ -191,7 +189,7 @@ def test_every_conversation_is_still_looked_up_once_after_the_budget_is_spent():
         patch("gooddata_eval.core.agentic._langfuse._fetch_traces_for_session", side_effect=_fetch),
         patch("gooddata_eval.core.agentic._langfuse.time", clock),
     ):
-        find_traces_per_conversation(MagicMock(), ["c1", "c2", "c3"], datetime.now(timezone.utc))
+        find_traces_per_conversation(MagicMock(), ["c1", "c2", "c3"], datetime.now(UTC))
 
     assert set(looked_up) == {"c1", "c2", "c3"}
 
@@ -206,7 +204,7 @@ def test_the_skip_switch_announces_itself(monkeypatch):
         patch("gooddata_eval.core.agentic._langfuse._fetch_traces_for_session") as mock_fetch,
         patch("gooddata_eval.core.agentic._langfuse.warn_from_worker") as mock_warn,
     ):
-        result = find_traces_per_conversation(MagicMock(), ["c1", "c2"], datetime.now(timezone.utc))
+        result = find_traces_per_conversation(MagicMock(), ["c1", "c2"], datetime.now(UTC))
 
     assert result == {"c1": None, "c2": None}
     mock_fetch.assert_not_called()
@@ -220,7 +218,7 @@ def test_no_skip_announcement_when_the_switch_is_off():
         patch("gooddata_eval.core.agentic._langfuse._fetch_traces_for_session", return_value=[MagicMock(latency=1.0)]),
         patch("gooddata_eval.core.agentic._langfuse.warn_from_worker") as mock_warn,
     ):
-        find_traces_per_conversation(MagicMock(), ["c1"], datetime.now(timezone.utc))
+        find_traces_per_conversation(MagicMock(), ["c1"], datetime.now(UTC))
 
     mock_warn.assert_not_called()
 
@@ -251,7 +249,7 @@ def test_skip_switch_treats_explicit_off_values_as_off(monkeypatch, value, shoul
         ) as mock_fetch,
         patch("gooddata_eval.core.agentic._langfuse.warn_from_worker"),
     ):
-        result = find_traces_per_conversation(MagicMock(), ["c1"], datetime.now(timezone.utc))
+        result = find_traces_per_conversation(MagicMock(), ["c1"], datetime.now(UTC))
 
     if should_skip:
         mock_fetch.assert_not_called()
@@ -305,9 +303,7 @@ def test_the_trace_lookup_filters_by_session_server_side(monkeypatch):
     captured: list[httpx.Request] = []
     client = _stub_langfuse_http(monkeypatch, captured)
 
-    _fetch_traces_for_session(
-        client, "conv-abc", datetime.now(timezone.utc), datetime.now(timezone.utc), timedelta(seconds=2)
-    )
+    _fetch_traces_for_session(client, "conv-abc", datetime.now(UTC), datetime.now(UTC), timedelta(seconds=2))
 
     assert len(captured) == 1
     assert captured[0].url.path == "/api/public/v2/observations"
@@ -328,7 +324,7 @@ def test_a_server_that_ignores_the_session_filter_cannot_hand_over_a_foreign_tra
         "meta": {},
     }
     client = _stub_langfuse_http(monkeypatch, captured, page)
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
 
     found = _fetch_traces_for_session(client, "conv-abc", now, now, timedelta(seconds=2))
 
@@ -343,9 +339,7 @@ def test_a_client_without_the_session_parameter_is_filtered_locally_too():
     legacy = MagicMock()
     legacy.api.trace.list = lambda from_timestamp, to_timestamp, limit: MagicMock(data=[other, wanted])
 
-    found = _fetch_traces_for_session(
-        legacy, "conv-abc", datetime.now(timezone.utc), datetime.now(timezone.utc), timedelta(seconds=2)
-    )
+    found = _fetch_traces_for_session(legacy, "conv-abc", datetime.now(UTC), datetime.now(UTC), timedelta(seconds=2))
 
     assert found == [wanted]
 
@@ -462,7 +456,7 @@ def _sleep_spent(conversation_ids, *, linker) -> float:
         patch("gooddata_eval.core.agentic._langfuse._fetch_traces_for_session", side_effect=_fetch),
         patch("gooddata_eval.core.agentic._langfuse.time", clock),
     ):
-        linker(lambda: find_traces_per_conversation(MagicMock(), conversation_ids, datetime.now(timezone.utc)))
+        linker(lambda: find_traces_per_conversation(MagicMock(), conversation_ids, datetime.now(UTC)))
     return sum(clock.sleeps)
 
 
@@ -533,7 +527,7 @@ def test_an_empty_conversation_id_still_sends_the_server_side_filter(monkeypatch
     captured: list[httpx.Request] = []
     client = _stub_langfuse_http(monkeypatch, captured)
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     _fetch_traces_for_session(client, "", now - timedelta(minutes=5), now, timedelta(seconds=2))
 
     assert captured, "no request was made"

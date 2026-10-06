@@ -1,7 +1,7 @@
 # (C) 2026 GoodData Corporation
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import httpx
 import pytest
@@ -72,8 +72,8 @@ def test_a_trace_whose_root_is_not_on_the_page_is_dropped():
 
 def test_the_root_start_and_end_times_are_timezone_aware():
     (summary,) = summarize_traces([_row("t-1", "o-root", latency=3.0)])
-    assert summary.start_time == datetime(2026, 9, 9, 10, 0, 0, tzinfo=timezone.utc)
-    assert summary.end_time == datetime(2026, 9, 9, 10, 0, 12, tzinfo=timezone.utc)
+    assert summary.start_time == datetime(2026, 9, 9, 10, 0, 0, tzinfo=UTC)
+    assert summary.end_time == datetime(2026, 9, 9, 10, 0, 12, tzinfo=UTC)
 
 
 def test_a_legacy_trace_dict_is_still_accepted():
@@ -107,8 +107,8 @@ def test_the_window_query_carries_every_required_parameter():
     with _client(handler) as http:
         found = list_traces_in_window(
             http,
-            from_time=datetime(2026, 9, 9, 10, 0, tzinfo=timezone.utc),
-            to_time=datetime(2026, 9, 9, 10, 5, tzinfo=timezone.utc),
+            from_time=datetime(2026, 9, 9, 10, 0, tzinfo=UTC),
+            to_time=datetime(2026, 9, 9, 10, 5, tzinfo=UTC),
             limit=100,
             session_id="conv-1",
             page_size=250,
@@ -133,7 +133,7 @@ def test_an_empty_session_id_is_still_sent():
         seen.append(dict(request.url.params))
         return httpx.Response(200, json={"data": [], "meta": {}})
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     with _client(handler) as http:
         list_traces_in_window(http, from_time=now, to_time=now, limit=10, session_id="")
 
@@ -147,7 +147,7 @@ def test_no_session_filter_is_sent_when_none_is_asked_for():
         seen.append(dict(request.url.params))
         return httpx.Response(200, json={"data": [], "meta": {}})
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     with _client(handler) as http:
         list_traces_in_window(http, from_time=now, to_time=now, limit=10, session_id=None)
 
@@ -163,7 +163,7 @@ def test_an_unfiltered_window_is_read_at_the_api_page_maximum():
         seen.append(dict(request.url.params))
         return httpx.Response(200, json={"data": [], "meta": {}})
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     with _client(handler) as http:
         list_traces_in_window(http, from_time=now, to_time=now, limit=10, session_id=None)
 
@@ -177,7 +177,7 @@ def test_a_session_filtered_window_stays_on_the_smaller_page():
         seen.append(dict(request.url.params))
         return httpx.Response(200, json={"data": [], "meta": {}})
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     with _client(handler) as http:
         list_traces_in_window(http, from_time=now, to_time=now, limit=10, session_id="conv-1")
 
@@ -195,7 +195,7 @@ def test_the_cursor_is_followed_until_the_server_stops_handing_one_out():
         cursors.append(request.url.params.get("cursor"))
         return httpx.Response(200, json=pages[len(cursors) - 1])
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     with _client(handler) as http:
         found = list_traces_in_window(http, from_time=now, to_time=now, limit=10, session_id=None)
 
@@ -212,7 +212,7 @@ def test_paging_stops_at_max_pages():
         calls += 1
         return httpx.Response(200, json={"data": [], "meta": {"cursor": "always-more"}})
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     with _client(handler) as http:
         list_traces_in_window(http, from_time=now, to_time=now, limit=10, session_id=None, max_pages=3)
 
@@ -233,7 +233,7 @@ def test_paging_stops_once_enough_traces_are_collected():
             },
         )
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     with _client(handler) as http:
         found = list_traces_in_window(http, from_time=now, to_time=now, limit=2, session_id=None)
 
@@ -248,7 +248,7 @@ def test_more_traces_than_asked_for_are_truncated():
             json={"data": [_row(f"t-{i}", f"o-{i}", latency=1.0) for i in range(5)], "meta": {}},
         )
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     with _client(handler) as http:
         found = list_traces_in_window(http, from_time=now, to_time=now, limit=3, session_id=None)
 
@@ -259,6 +259,6 @@ def test_a_failed_page_raises():
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(500, text="boom")
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     with _client(handler) as http, pytest.raises(httpx.HTTPStatusError):
         list_traces_in_window(http, from_time=now, to_time=now, limit=3, session_id=None)

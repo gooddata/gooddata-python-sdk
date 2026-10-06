@@ -3,7 +3,7 @@
 name = "gooddata-python-sdk-workspace"
 version = "1.76.0"
 description = "GoodData Python SDK Workspace"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "gooddata-sdk",
     "gooddata-pandas",
@@ -140,8 +140,10 @@ lint.ignore = [
     "SIM105",
     # ignore the rule (import from `collections.abc` instead: `Callable`)
     "UP035",
+    # (str, Enum) -> StrEnum changes str()/format() output of public enums
+    "UP042",
 ]
-target-version = "py310"
+target-version = "py311"
 
 [tool.ruff.lint.per-file-ignores]
 "packages/gooddata-pandas/src/gooddata_pandas/__init__.py" = ["F401"]

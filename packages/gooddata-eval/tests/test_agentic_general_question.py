@@ -3,7 +3,7 @@
 import contextlib
 import io
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -450,7 +450,7 @@ def test_trace_link_window_is_pinned_at_submit_time_not_when_the_task_runs():
             dataset_item_id="ds-item-1",
             submit_trace_link=lambda task, item_id="": submitted.append(task),
         )
-        returned_at = datetime.now(timezone.utc)
+        returned_at = datetime.now(UTC)
         time.sleep(0.05)  # the task sits in the queue behind other items
         submitted[0]()
 

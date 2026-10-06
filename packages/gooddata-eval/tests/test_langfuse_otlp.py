@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import httpx
 import pytest
@@ -38,18 +38,18 @@ def test_new_span_id_is_unique():
 
 
 def test_unix_nano_exact_value_for_known_utc_datetime():
-    dt = datetime(2025, 9, 8, 10, 0, 0, tzinfo=timezone.utc)
+    dt = datetime(2025, 9, 8, 10, 0, 0, tzinfo=UTC)
     assert unix_nano(dt) == "1757325600000000000"
 
 
 def test_unix_nano_naive_datetime_treated_as_utc():
     naive = datetime(2025, 9, 8, 10, 0, 0)
-    aware = datetime(2025, 9, 8, 10, 0, 0, tzinfo=timezone.utc)
+    aware = datetime(2025, 9, 8, 10, 0, 0, tzinfo=UTC)
     assert unix_nano(naive) == unix_nano(aware)
 
 
 def test_unix_nano_includes_microsecond_precision():
-    dt = datetime(2025, 9, 8, 10, 0, 0, 400000, tzinfo=timezone.utc)
+    dt = datetime(2025, 9, 8, 10, 0, 0, 400000, tzinfo=UTC)
     assert unix_nano(dt) == "1757325600400000000"
 
 
@@ -117,8 +117,8 @@ def test_encode_export_request_shape():
         trace_id="3f2a9c1e8b7d4e6f9a0b1c2d3e4f5a6b",
         span_id="9a0b1c2d3e4f5a6b",
         name="gd-eval: Show revenue by month",
-        start=datetime(2025, 9, 8, 10, 0, 0, tzinfo=timezone.utc),
-        end=datetime(2025, 9, 8, 10, 0, 18, 400000, tzinfo=timezone.utc),
+        start=datetime(2025, 9, 8, 10, 0, 0, tzinfo=UTC),
+        end=datetime(2025, 9, 8, 10, 0, 18, 400000, tzinfo=UTC),
         attributes=[{"key": "langfuse.observation.type", "value": {"stringValue": "span"}}],
     )
     request = encode_export_request([span])
@@ -149,8 +149,8 @@ def test_encode_export_request_custom_scope():
         trace_id="a" * 32,
         span_id="b" * 16,
         name="s",
-        start=datetime(2025, 1, 1, tzinfo=timezone.utc),
-        end=datetime(2025, 1, 1, tzinfo=timezone.utc),
+        start=datetime(2025, 1, 1, tzinfo=UTC),
+        end=datetime(2025, 1, 1, tzinfo=UTC),
         attributes=[],
     )
     request = encode_export_request([span], scope_name="custom-scope", scope_version="9.9.9")

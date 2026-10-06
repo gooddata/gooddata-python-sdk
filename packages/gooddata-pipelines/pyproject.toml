@@ -6,7 +6,7 @@ description = "GoodData Cloud lifecycle automation pipelines"
 authors = [{ name = "GoodData", email = "support@gooddata.com" }]
 license = "MIT"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "pydantic (>=2.9.2,<3.0.0)",
     "requests (>=2.32.3,<3.0.0)",

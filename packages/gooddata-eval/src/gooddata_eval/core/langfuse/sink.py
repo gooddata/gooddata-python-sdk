@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import os
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import TYPE_CHECKING, Any
 
 from gooddata_eval.core.langfuse.client import HttpxLangfuseClient
@@ -108,7 +108,7 @@ class LangfuseSink:
         )
 
     def _build_span(self, report: ItemReport, dataset_item_id: str, run: ExperimentRun | None) -> Span:
-        end = datetime.now(timezone.utc)
+        end = datetime.now(UTC)
         start = end - timedelta(seconds=report.avg_latency_s)
         # "gd-eval" leads, exactly as on the agentic path, so one tag filter in Langfuse
         # finds both single-shot and agentic traces this package wrote.
