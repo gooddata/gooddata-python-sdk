@@ -1006,6 +1006,29 @@ def test_send_message_omits_user_context_entirely_when_there_is_no_attachment():
     assert "userContext" not in captured["body"]
 
 
+def test_a_client_user_context_goes_on_every_message() -> None:
+    """An agentic run's follow-up and clarification turns are sent by the same client, and
+    gen-ai treats a message without a context as cleared."""
+    bodies: list[dict] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        bodies.append(json.loads(request.read()))
+        return httpx.Response(200, content=_OK_SSE)
+
+    client = _client_with_handler(handler, user_context=_ATTACHMENT)
+    client.send_message("conv", "q1")
+    client.send_message("conv", "q2")
+    assert [b["userContext"] for b in bodies] == [_ATTACHMENT, _ATTACHMENT]
+
+
+def test_a_per_call_user_context_overrides_the_clients() -> None:
+    other = {"view": {"dashboard": {"id": "dashboard_000"}}}
+    captured = {}
+    client = _client_with_handler(_capture_body(captured), user_context=_ATTACHMENT)
+    client.send_message("conv", "q", user_context=other)
+    assert captured["body"]["userContext"] == other
+
+
 def test_ask_puts_the_item_attachment_on_the_wire():
     """The single-turn path goes through ask(), so an item's user_context has to be
     forwarded there too, or every non-agentic item with an attachment is asked bare."""

@@ -625,6 +625,7 @@ def run_agentic_report_skill(
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
     judge: LLMJudge | None = None,
+    user_context: dict | None = None,
 ) -> AgenticReportSummary:
     """Run the report-skill agentic evaluation K times and return a summary.
 
@@ -639,7 +640,12 @@ def run_agentic_report_skill(
         judge = LLMJudge(_NARRATIVE_EVALUATION_STEPS)
     run_results: list[ReportRunResult] = []
     client = ChatClient(
-        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+        host=host,
+        token=token,
+        workspace_id=workspace_id,
+        reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
+        user_context=user_context,
     )
 
     try:
@@ -698,6 +704,7 @@ def evaluate_agentic_report_skill(
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
     gate: EvalGate = DEFAULT_GATE,
     judge: LLMJudge | None = None,
+    user_context: dict | None = None,
 ) -> AgenticEvalOutcome:
     """Run report-skill evaluation, log to Langfuse, and raise on failure.
 
@@ -724,6 +731,7 @@ def evaluate_agentic_report_skill(
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
         judge=judge,
+        user_context=user_context,
     )
 
     if langfuse is not None and dataset_item_id:

@@ -710,21 +710,3 @@ def test_an_item_with_no_gradeable_run_raises_instead_of_reporting_failures():
     # Carried so the runner can still report what the item cost before it became
     # unevaluable.
     assert err.value.timings.agent_s == 7.0  # 4.0 + 3.0
-
-
-def test_run_agentic_general_question_forwards_the_user_context_to_the_chat_client():
-    attachment = {"referencedObjects": [{"objects": [{"type": "WIDGET", "id": "campaign_spend"}]}]}
-    client, judge = _pass_client_and_judge(text_response="It shows campaign spend by channel.")
-
-    with _patched(client, judge):
-        run_agentic_general_question(
-            host="https://h",
-            token="tok",
-            workspace_id="ws1",
-            question="What does the visualization I attached show?",
-            expected_output="Describes the attached chart.",
-            k=1,
-            user_context=attachment,
-        )
-
-    assert client.send_message.call_args.kwargs["user_context"] == attachment

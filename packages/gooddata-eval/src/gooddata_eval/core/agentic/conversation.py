@@ -24,7 +24,7 @@ from datetime import date
 from typing import ClassVar, Literal
 
 from gooddata_sdk import GoodDataSdk
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, model_validator
 
 from gooddata_eval.core.agentic._conversation_context import (
     CONFIRMATION_REPLY,
@@ -100,6 +100,12 @@ class TurnDefinition(BaseModel):
     over. ``set_answers`` are what the user replies, in order, when the assistant asks a
     legitimate question on this turn -- the only knowledge the context-mode simulated user
     has beyond the conversation itself.
+
+    ``user_context`` is the ``userContext`` (dashboard/widget scope) the user has attached
+    from this turn on, as in the UI: it sticks to later turns until another turn sets it,
+    and setting it to null clears it. A turn that leaves it out keeps the current one. Its
+    clarification replies carry it too, since gen-ai treats a message without a context as
+    cleared.
     """
 
     turn_id: str
@@ -112,6 +118,7 @@ class TurnDefinition(BaseModel):
     expected_tool_args: dict | None = None
     depends_on: list[str] = Field(default_factory=list)
     set_answers: list[str] = Field(default_factory=list)
+    user_context: dict | None = None
 
 
 class ConversationFixture(BaseModel):
@@ -121,6 +128,17 @@ class ConversationFixture(BaseModel):
     dataset_name: str = "conversation"
     expected_skills: list[str]
     turns: list[TurnDefinition]
+
+    @model_validator(mode="before")
+    @classmethod
+    def _reject_fixture_level_user_context(cls, data: object) -> object:
+        # Unknown keys are ignored, so a context placed here would be dropped without a trace.
+        if isinstance(data, dict) and "user_context" in data:
+            raise ValueError(
+                "user_context is not read from the conversation fixture; put it in the item "
+                "metadata or input (the context of the first turn), or on a turn"
+            )
+        return data
 
 
 ReplyRecordKind = Literal["confirmation", "question", "no_action", "turn_incomplete"]
@@ -696,6 +714,7 @@ def run_agentic_conversation(
     mode: ConversationMode | None = None,
     clarification_judge: ClarificationJudge | None = None,
     fresh_conversation_per_turn: bool = False,
+    user_context: dict | None = None,
 ) -> ConversationResult:
     """Run a multi-turn, multi-skill conversation evaluation (no K-runs).
 
@@ -706,6 +725,9 @@ def run_agentic_conversation(
     ``fresh_conversation_per_turn`` sends every turn into a new conversation instead, so the
     agent sees no history. It is the no-memory baseline a context score is calibrated
     against: context-dependent turns are expected to fail there.
+
+    ``user_context`` is the context attached when the conversation starts; a turn's own
+    ``user_context`` replaces it from that turn on.
     """
     resolved_mode = resolve_conversation_mode(mode)
     if fresh_conversation_per_turn and initial_conversation_id is not None:
@@ -747,6 +769,7 @@ def run_agentic_conversation(
     turn_offset = 0.0
     tool_index_offset = 0
     reasoning_index_offset = 0
+    current_context = user_context
 
     try:
         if initial_conversation_id is not None:
@@ -761,6 +784,10 @@ def run_agentic_conversation(
                 conversation_id = client.create_conversation()
                 transcript = []
                 active_skills = set()
+            # Before the skip below: a turn whose expectation cannot resolve still changed what
+            # the user has attached. Only a turn that names the field changes it; null clears it.
+            if "user_context" in turn.model_fields_set:
+                current_context = turn.user_context
             try:
                 resolved_expected = _resolve_refs(turn.expected_output, turn_outputs)
                 resolved_alternatives = [
@@ -813,7 +840,7 @@ def run_agentic_conversation(
                 transcript.append(TranscriptEntry("user", current_message))
                 incomplete = False
                 try:
-                    chat_result = client.send_message(conversation_id, current_message)
+                    chat_result = client.send_message(conversation_id, current_message, user_context=current_context)
                 except TurnIncompleteError as exc:
                     chat_result = exc.partial_result or ChatResult()
                     incomplete = True
@@ -1054,6 +1081,7 @@ def evaluate_agentic_conversation(
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
     mode: ConversationMode | None = None,
     clarification_judge: ClarificationJudge | None = None,
+    user_context: dict | None = None,
 ) -> AgenticEvalOutcome:
     """Run conversation evaluation, log to Langfuse, and raise on failure.
 
@@ -1078,6 +1106,7 @@ def evaluate_agentic_conversation(
         agent_id=agent_id,
         mode=resolved_mode,
         clarification_judge=clarification_judge,
+        user_context=user_context,
     )
     passed = result.context_success if resolved_mode == "context" else result.conversation_success
 

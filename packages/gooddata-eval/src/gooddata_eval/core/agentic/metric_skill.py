@@ -396,6 +396,7 @@ def run_agentic_metric_skill(
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
+    user_context: dict | None = None,
 ) -> AgenticMetricSummary:
     """Run the metric-skill agentic evaluation K times and return a summary.
 
@@ -405,7 +406,12 @@ def run_agentic_metric_skill(
     expected_outputs: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
     run_results: list[MetricRunResult] = []
     client = ChatClient(
-        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+        host=host,
+        token=token,
+        workspace_id=workspace_id,
+        reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
+        user_context=user_context,
     )
     sdk = GoodDataSdk.create(host, token)
 
@@ -467,6 +473,7 @@ def evaluate_agentic_metric_skill(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    user_context: dict | None = None,
     gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run metric-skill evaluation, log to Langfuse, and raise MetricSkillAssertionError on failure.
@@ -490,6 +497,7 @@ def evaluate_agentic_metric_skill(
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
+        user_context=user_context,
     )
 
     if langfuse is not None and dataset_item_id:
