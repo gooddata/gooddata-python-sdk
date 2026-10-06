@@ -19,7 +19,7 @@ See [DOCUMENTATION](https://www.gooddata.ai/docs/python-sdk/1.76.0) for more det
 ## Requirements
 
 -  GoodData Cloud or GoodData.CN installation
--  Python 3.10 or newer
+-  Python 3.11 or newer
 
 ## Installation
 

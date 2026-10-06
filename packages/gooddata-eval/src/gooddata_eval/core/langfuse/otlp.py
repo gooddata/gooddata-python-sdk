@@ -7,7 +7,7 @@ import json
 import secrets
 import uuid
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
 from gooddata_eval._version import __version__
@@ -43,7 +43,7 @@ ATTR_EXPERIMENT_ITEM_EXPECTED_OUTPUT = "langfuse.experiment.item.expected_output
 ATTR_EXPERIMENT_ITEM_METADATA_PREFIX = "langfuse.experiment.item.metadata"
 
 _SERVICE_NAME = "gooddata-eval"
-_EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
+_EPOCH = datetime(1970, 1, 1, tzinfo=UTC)
 
 
 def new_trace_id() -> str:
@@ -57,7 +57,7 @@ def new_span_id() -> str:
 def unix_nano(dt: datetime) -> str:
     """Nanoseconds since the epoch as a decimal string. Naive datetimes are treated as UTC."""
     if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
+        dt = dt.replace(tzinfo=UTC)
     delta = dt - _EPOCH
     nanos = (delta.days * 86400 + delta.seconds) * 1_000_000_000 + delta.microseconds * 1000
     return str(nanos)

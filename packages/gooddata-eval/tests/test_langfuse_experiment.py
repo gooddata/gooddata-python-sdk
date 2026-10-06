@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from gooddata_eval.core.langfuse.experiment import (
     ExperimentItem,
@@ -34,8 +34,8 @@ def test_build_experiment_root_span_root_observation_id_equals_span_id():
     span = build_experiment_root_span(
         run,
         item,
-        start=datetime(2025, 1, 1, tzinfo=timezone.utc),
-        end=datetime(2025, 1, 1, tzinfo=timezone.utc),
+        start=datetime(2025, 1, 1, tzinfo=UTC),
+        end=datetime(2025, 1, 1, tzinfo=UTC),
         trace_name="gd-eval: q",
     )
     attr = _attr(span, "langfuse.experiment.item.root_observation_id")
@@ -47,8 +47,8 @@ def test_build_experiment_root_span_dataset_id_only_when_run_given():
     span_without_run = build_experiment_root_span(
         None,
         item,
-        start=datetime(2025, 1, 1, tzinfo=timezone.utc),
-        end=datetime(2025, 1, 1, tzinfo=timezone.utc),
+        start=datetime(2025, 1, 1, tzinfo=UTC),
+        end=datetime(2025, 1, 1, tzinfo=UTC),
         trace_name="gd-eval: q",
     )
     assert _attr(span_without_run, "langfuse.experiment.dataset.id") is None
@@ -57,8 +57,8 @@ def test_build_experiment_root_span_dataset_id_only_when_run_given():
     span_with_run = build_experiment_root_span(
         run,
         item,
-        start=datetime(2025, 1, 1, tzinfo=timezone.utc),
-        end=datetime(2025, 1, 1, tzinfo=timezone.utc),
+        start=datetime(2025, 1, 1, tzinfo=UTC),
+        end=datetime(2025, 1, 1, tzinfo=UTC),
         trace_name="gd-eval: q",
     )
     assert _attr(span_with_run, "langfuse.experiment.dataset.id")["value"]["stringValue"] == "ds-1"
@@ -69,8 +69,8 @@ def test_build_experiment_root_span_no_experiment_attrs_when_run_none():
     span = build_experiment_root_span(
         None,
         item,
-        start=datetime(2025, 1, 1, tzinfo=timezone.utc),
-        end=datetime(2025, 1, 1, tzinfo=timezone.utc),
+        start=datetime(2025, 1, 1, tzinfo=UTC),
+        end=datetime(2025, 1, 1, tzinfo=UTC),
         trace_name="gd-eval: q",
     )
     assert not any(a["key"].startswith("langfuse.experiment.") for a in span.attributes)
@@ -85,8 +85,8 @@ def test_build_experiment_root_span_io_json_strings():
     span = build_experiment_root_span(
         run,
         item,
-        start=datetime(2025, 1, 1, tzinfo=timezone.utc),
-        end=datetime(2025, 1, 1, tzinfo=timezone.utc),
+        start=datetime(2025, 1, 1, tzinfo=UTC),
+        end=datetime(2025, 1, 1, tzinfo=UTC),
         trace_name="gd-eval: q",
     )
     input_attr = _attr(span, "langfuse.observation.input")
@@ -101,8 +101,8 @@ def test_build_experiment_root_span_tags_array_value():
     span = build_experiment_root_span(
         run,
         item,
-        start=datetime(2025, 1, 1, tzinfo=timezone.utc),
-        end=datetime(2025, 1, 1, tzinfo=timezone.utc),
+        start=datetime(2025, 1, 1, tzinfo=UTC),
+        end=datetime(2025, 1, 1, tzinfo=UTC),
         trace_name="gd-eval: q",
         tags=("gd-eval",),
     )
@@ -116,16 +116,16 @@ def test_build_experiment_root_span_omits_tags_when_empty():
     span = build_experiment_root_span(
         run,
         item,
-        start=datetime(2025, 1, 1, tzinfo=timezone.utc),
-        end=datetime(2025, 1, 1, tzinfo=timezone.utc),
+        start=datetime(2025, 1, 1, tzinfo=UTC),
+        end=datetime(2025, 1, 1, tzinfo=UTC),
         trace_name="gd-eval: q",
     )
     assert _attr(span, "langfuse.trace.tags") is None
 
 
 def test_build_experiment_root_span_clamps_end_before_start():
-    start = datetime(2025, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
-    end = datetime(2025, 1, 1, 10, 0, 0, tzinfo=timezone.utc)
+    start = datetime(2025, 1, 1, 12, 0, 0, tzinfo=UTC)
+    end = datetime(2025, 1, 1, 10, 0, 0, tzinfo=UTC)
     run = ExperimentRun(name="run0", dataset_id="ds-1")
     item = ExperimentItem(item_id="item-1")
     span = build_experiment_root_span(run, item, start=start, end=end, trace_name="gd-eval: q")
@@ -138,8 +138,8 @@ def test_build_experiment_root_span_omits_none_optional_attrs():
     span = build_experiment_root_span(
         run,
         item,
-        start=datetime(2025, 1, 1, tzinfo=timezone.utc),
-        end=datetime(2025, 1, 1, tzinfo=timezone.utc),
+        start=datetime(2025, 1, 1, tzinfo=UTC),
+        end=datetime(2025, 1, 1, tzinfo=UTC),
         trace_name="gd-eval: q",
     )
     assert _attr(span, "langfuse.session.id") is None
@@ -159,8 +159,8 @@ def test_build_experiment_root_span_full_wire_key_contract():
     span = build_experiment_root_span(
         run,
         item,
-        start=datetime(2025, 1, 1, tzinfo=timezone.utc),
-        end=datetime(2025, 1, 1, tzinfo=timezone.utc),
+        start=datetime(2025, 1, 1, tzinfo=UTC),
+        end=datetime(2025, 1, 1, tzinfo=UTC),
         trace_name="gd-eval: q",
         session_id="c1",
         version="gpt-5.2",

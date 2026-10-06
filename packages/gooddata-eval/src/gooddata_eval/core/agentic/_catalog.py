@@ -2,14 +2,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 
 
-class AnomalyDetectionGranularity(str, Enum):
+class AnomalyDetectionGranularity(StrEnum):
     """Detection intervals an anomaly alert accepts.
 
-    Mirrors gen-ai's enum of the same name; `StrEnum` is unavailable on the 3.10 floor, so
-    the `str` mixin carries the comparison against the raw tool argument.
+    Mirrors gen-ai's enum of the same name; being a `StrEnum`, members compare equal to the
+    raw tool argument.
     """
 
     HOUR = "HOUR"

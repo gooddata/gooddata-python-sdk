@@ -9,7 +9,7 @@ from __future__ import annotations
 import threading
 import time
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 import httpx
@@ -102,7 +102,7 @@ class _DatasetRunItemsAPI:
         dataset_id = self._owner.dataset_id_for_item(dataset_item_id)
         if dataset_id is None:
             raise LookupError(f"dataset item {dataset_item_id!r} not found in Langfuse")
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         span = build_experiment_root_span(
             ExperimentRun(run_name, dataset_id, metadata, run_description or None),
             ExperimentItem(dataset_item_id, input={"dataset_item_id": dataset_item_id}),

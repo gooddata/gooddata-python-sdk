@@ -6,7 +6,7 @@ Ported from gdc-nas tavern-e2e app/llm_as_judge/schemas/chat.py.
 
 import json
 import re
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -14,7 +14,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 from gooddata_eval.core.timing import PhaseTimings
 
 
-class LoopExit(str, Enum):
+class LoopExit(StrEnum):
     """Why an agentic evaluator's simulated-user loop stopped.
 
     Every agentic kind drives the agent through a loop of simulated-user turns that can end

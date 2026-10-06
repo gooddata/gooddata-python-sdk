@@ -17,7 +17,7 @@ import time
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any, Protocol
 
 from gooddata_eval.core._output import emit_line
@@ -93,7 +93,7 @@ def link_cancel_event() -> threading.Event | None:
 
 def utc_now() -> datetime:
     """Now, in UTC. One spelling, so a pinned trace window cannot drift by timezone."""
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def open_trace_window(langfuse: Any) -> tuple[Any, datetime]:

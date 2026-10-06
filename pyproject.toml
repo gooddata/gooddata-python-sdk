@@ -3,7 +3,7 @@
 name = "gooddata-python-sdk-workspace"
 version = "1.76.0"
 description = "GoodData Python SDK Workspace"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "gooddata-sdk",
     "gooddata-pandas",
@@ -24,6 +24,9 @@ package = false
 # So a bare `uv sync` can run every make target (ruff, ty, pytest, tox). Not "all":
 # `release` would then be installed by every CI `uv sync --group ...` too.
 default-groups = ["dev", "lint", "type", "test", "tox"]
+# deepdiff (sdk test group) caps cachebox <6, but only cachebox 6+ ships
+# CPython 3.15 wheels. Drop once deepdiff allows cachebox 6.
+override-dependencies = ["cachebox>=6"]
 
 [tool.uv.sources]
 gooddata-sdk = { workspace = true }
@@ -138,7 +141,7 @@ lint.ignore = [
     # ignore the rule (import from `collections.abc` instead: `Callable`)
     "UP035",
 ]
-target-version = "py310"
+target-version = "py311"
 
 [tool.ruff.lint.per-file-ignores]
 "packages/gooddata-pandas/src/gooddata_pandas/__init__.py" = ["F401"]

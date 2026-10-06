@@ -13,7 +13,7 @@ you already have on disk.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import orjson
@@ -107,7 +107,7 @@ def build_html(doc: dict, redact: bool = False, title: str = "gd-eval report") -
     """Render a merged report document into a standalone HTML page."""
     payload = {
         "title": title,
-        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+        "generated_at": datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC"),
         "redacted": redact,
         **(_redact(doc) if redact else {"runs": doc.get("runs") or {}, "comparison": doc.get("comparison") or {}}),
     }

@@ -2,7 +2,7 @@
 [project]
 name = "tests-support"
 description = "Tests support for GoodData Python SDK"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 version = "1.0.0"
 dependencies = [
     "orjson",

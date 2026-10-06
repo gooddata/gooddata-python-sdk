@@ -9,7 +9,7 @@ import threading
 import time
 from collections.abc import Iterator
 from contextlib import contextmanager
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from gooddata_eval.core.agentic._trace_linker import link_cancel_event, linking_is_inline, warn_from_worker
@@ -230,7 +230,7 @@ def find_traces_per_conversation(
         return dict.fromkeys(conversation_ids)
 
     by_conv: dict[str, Any] = dict.fromkeys(conversation_ids)
-    window_end = window_end or datetime.now(timezone.utc)
+    window_end = window_end or datetime.now(UTC)
     pad = timedelta(seconds=_WINDOW_PADDING_SEC)
 
     # One budget for the whole item. Per conversation it would multiply by --runs, and the
@@ -282,7 +282,7 @@ def _span_window(trace: Any, window: tuple[datetime, datetime] | None) -> tuple[
         return start, end
     if window is not None:
         return window
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     return now, now
 
 

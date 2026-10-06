@@ -10,6 +10,7 @@ import pandas
 from gooddata_sdk.type_converter import AttributeConverterStore, DateConverter, DatetimeConverter
 
 from gooddata_pandas.arrow_types import TypesMapper
+from gooddata_pandas.utils import to_datetime_ns
 
 try:
     import pyarrow as pa
@@ -115,7 +116,7 @@ def convert_label_values(label_id: str, values: list, model_labels: dict) -> lis
 
         # 2) convert the whole column to Timestamps in one vectorized call (this
         #    single call replaces N per-value ones; None becomes NaT here).
-        converted = pandas.to_datetime(typed)
+        converted = to_datetime_ns(typed)
 
         # 3) rebuild the list, restoring None wherever the input was None so that NaT
         #    does not leak into the output.

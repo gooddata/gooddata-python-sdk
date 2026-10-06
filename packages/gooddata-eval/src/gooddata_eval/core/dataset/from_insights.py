@@ -20,7 +20,7 @@ import os
 import re
 import sys
 import unicodedata
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from gooddata_sdk.catalog.workspace.aac import declarative_visualization_to_aac
@@ -291,7 +291,7 @@ def fetch_snapshot(sdk, workspace_id: str) -> dict:
     ldm = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id).ldm.to_dict(camel_case=True)
     return {
         "workspace_id": workspace_id,
-        "fetched_at": datetime.now(timezone.utc).isoformat(),
+        "fetched_at": datetime.now(UTC).isoformat(),
         "analytics": analytics,
         "display_names": build_display_names(analytics, ldm),
     }

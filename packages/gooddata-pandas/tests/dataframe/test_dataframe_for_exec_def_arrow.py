@@ -106,8 +106,12 @@ def test_arrow_converter_arrow_strings(case_name: str) -> None:
     idx = actual_df.index
     if isinstance(idx, pandas.MultiIndex):
         for level in idx.levels:
-            if level.dtype == object:
-                # object dtype means a numeric or non-string level — skip
+            if level.dtype == object or (
+                isinstance(level.dtype, pandas.StringDtype) and level.dtype.na_value is not pandas.NA
+            ):
+                # Non-string levels (object) and levels built from field metadata
+                # (transposed results) are not Arrow-mapped; the latter get the
+                # default "str" dtype (NaN-backed StringDtype) — skip
                 continue
             assert isinstance(level.dtype, pandas.StringDtype) and level.dtype.na_value is pandas.NA, (
                 f"Expected Arrow-backed StringDtype on index level, got {level.dtype}"

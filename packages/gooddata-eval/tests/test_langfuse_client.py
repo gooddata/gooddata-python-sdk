@@ -4,7 +4,7 @@ from __future__ import annotations
 import base64
 import json
 import re
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import httpx
 import pytest
@@ -44,7 +44,7 @@ def _ok(request: httpx.Request) -> httpx.Response:
 
 
 def _span() -> Span:
-    start = datetime(2026, 9, 9, 10, 0, tzinfo=timezone.utc)
+    start = datetime(2026, 9, 9, 10, 0, tzinfo=UTC)
     return Span(
         trace_id="0" * 32,
         span_id="1" * 16,
@@ -277,7 +277,7 @@ def test_the_compat_trace_api_returns_trace_summaries(make_client):
         seen.append(request)
         return httpx.Response(200, json={"data": [root, child], "meta": {}})
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     result = make_client(handler).api.trace.list(from_timestamp=now, to_timestamp=now, limit=100, session_id="conv-1")
 
     assert seen[0].url.path == "/api/public/v2/observations"
