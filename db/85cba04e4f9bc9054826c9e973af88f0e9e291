@@ -1,0 +1,16 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  h_2f994e9e4910b7 258-264
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  h_2f994e9e4910b7 468-470
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "db85cba04e4f9bc9054826c9e973af88f0e9e291",
+  "prompts": {},
+  "humans": {
+    "h_2f994e9e4910b7": {
+      "author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}
