@@ -231,6 +231,7 @@ def _dispatch_agentic(
             gate=gate,
             agent_id=agent_id,
             **lf_kw,
+            user_context=item.user_context,
         )
     elif kind == "agentic_alert_skill":
         return evaluate_agentic_alert_skill(

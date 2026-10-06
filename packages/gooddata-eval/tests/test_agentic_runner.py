@@ -790,6 +790,7 @@ _KIND_EVALUATORS = [
     ("agentic_what_if", "evaluate_agentic_what_if", {}),
     ("agentic_anomaly_detection", "evaluate_agentic_anomaly_detection", {}),
     ("agentic_forecasting", "evaluate_agentic_forecasting", {"forecast_period": 3}),
+    ("agentic_report_skill", "evaluate_agentic_report_skill", {"narrative": "Explains the trend."}),
     ("agentic_conversation", "evaluate_agentic_conversation", {"id": "c1", "expected_skills": [], "turns": []}),
 ]
 
