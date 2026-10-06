@@ -308,11 +308,15 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
         # create_adhoc_visualization but the call failed (e.g. data source not
         # accessible). The last attempt is the agent's best answer.
         #
-        # These are raw tool-call arguments, so they carry no `id` -- nothing was
-        # ever persisted. CreatedVisualization requires one, so synthesize a
-        # sentinel rather than letting the whole ChatResult fail to validate:
-        # dropping the turn entirely would score a stalled data source as a
-        # content failure, which is exactly what this fallback exists to prevent.
+        # These are raw tool-call arguments, so they carry no `id` -- the server
+        # mints it. The sentinel marks the chart as never persisted. Logged because
+        # a turn that called the tool and answered without a chart is otherwise
+        # invisible: the user saw no chart either.
+        _log.warning(
+            "create_adhoc_visualization was called %d time(s) but the answer has no visualization part; "
+            "scoring the last call's arguments",
+            len(acc.adhoc_viz_args),
+        )
         payload["createdVisualizations"] = {
             "objects": [{"id": _ADHOC_VIZ_ID, **acc.adhoc_viz_args[-1]}],
             "reasoning": "\n".join(acc.viz_reasoning_parts),
