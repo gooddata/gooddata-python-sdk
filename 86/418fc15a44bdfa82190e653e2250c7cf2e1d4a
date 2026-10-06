@@ -1,0 +1,49 @@
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/visualization.py
+  s_9581792d57de34::t_386d224138544a 4-5,7,56-63,75,99-105,108,110-114,116-118,121-130,135,137-138,141-142,144-146,148-164,168-171,173-176,182-209,367-369
+  s_9581792d57de34::t_0e85b4c5a388d3 348-355
+  s_9581792d57de34::t_719de358ba4ef6 165-167,177-181
+  s_9581792d57de34::t_a878aaabcfa044 115
+  s_9581792d57de34::t_e46d8fc1e2d9e6 92-98,106-107,109,119-120,131-134,136,139-140,143,147,172
+packages/gooddata-eval/tests/test_agentic_visualization.py
+  s_9581792d57de34::t_0e85b4c5a388d3 341,402
+  s_9581792d57de34::t_e6d88b40760d59 81-91
+  s_9581792d57de34::t_bf253336e7e771 472-504
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_9581792d57de34::t_1da713a13201e7 183
+  s_9581792d57de34::t_a7f6bd348cdab5 27
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_9581792d57de34::t_1da713a13201e7 38,193,282,310,318-319,394,417,438-439,447-449,548-549
+  s_9581792d57de34::t_a7f6bd348cdab5 329-331,339-341,450
+  s_9581792d57de34::t_e46d8fc1e2d9e6 270-272
+packages/gooddata-eval/tests/test_visualization_evaluator.py
+  s_9581792d57de34::t_d5e9d0e34a650a 213-294,296-313
+  s_9581792d57de34::t_0e85b4c5a388d3 295,314-316
+  s_9581792d57de34::t_e6d88b40760d59 5,7-8
+  s_9581792d57de34::t_0bb7d37caee954 317-322
+  s_9581792d57de34::t_bf253336e7e771 323-350
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  h_2f994e9e4910b7 258-264
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  h_2f994e9e4910b7 468-470
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "86418fc15a44bdfa82190e653e2250c7cf2e1d4a",
+  "prompts": {},
+  "humans": {
+    "h_2f994e9e4910b7": {
+      "author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  },
+  "sessions": {
+    "s_9581792d57de34": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4fa57ff-9ade-42a8-a203-efd5eb66e000",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}
