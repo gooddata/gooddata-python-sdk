@@ -1,0 +1,19 @@
+docs/superpowers/specs/2026-08-20-release-automation-design.md
+  s_fce9de74d9bf0c::t_060aec56537562 1-171
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "ca239ddaf81519888c8ba105d14e8075baa02ac5",
+  "prompts": {},
+  "sessions": {
+    "s_fce9de74d9bf0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "511a5e37-6989-489e-9989-c08961cc0446",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

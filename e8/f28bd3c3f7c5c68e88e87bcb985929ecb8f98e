@@ -1,0 +1,19 @@
+scripts/next_dev.sh
+  s_4dadedfa8c0fd3::t_2e41bc91812a9d 6-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e8f28bd3c3f7c5c68e88e87bcb985929ecb8f98e",
+  "prompts": {},
+  "sessions": {
+    "s_4dadedfa8c0fd3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ca11b1b3-dc4f-4f1b-b3a1-0fa412959c1f",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Frank Huynh <duy.huynh@gooddata.com>"
+    }
+  }
+}

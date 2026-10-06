@@ -1,0 +1,111 @@
+gooddata-api-client/.openapi-generator/FILES
+  s_329b36e8c48491::t_1fd577efae4dbc 102-107,417-420,1205-1208,1225-1226,1785-1790,2057-2060,2823-2826,2840-2841
+gooddata-api-client/README.md
+  s_329b36e8c48491::t_3a886795ab5fe1 1530-1535,1802-1805,2568-2571,2585-2586
+gooddata-api-client/docs/ActionsApi.md
+  s_329b36e8c48491::t_579c2918802a0a 1026,1037,1072,3788,3799,3834,6003,6014,6049,6648,6659,6674-6676,6681,6693,6718,6729,6744-6746,6751,6763
+gooddata-api-client/docs/AttributePermissions.md
+  s_329b36e8c48491::t_687fdba3c3949a 1
+gooddata-api-client/docs/AttributePermissionsAssignment.md
+  s_329b36e8c48491::t_ede0dc602c59f9 1,3
+gooddata-api-client/docs/AttributePermissionsForAssignee.md
+  s_329b36e8c48491::t_c3df6b47a95c25 1,3
+gooddata-api-client/docs/AttributePermissionsForAssigneeAllOf.md
+  s_329b36e8c48491::t_f2d6db1cf73c05 1
+gooddata-api-client/docs/AttributePermissionsForAssigneeRule.md
+  s_329b36e8c48491::t_a8d43b0ddf3dae 1,3
+gooddata-api-client/docs/AttributePermissionsForAssigneeRuleAllOf.md
+  s_329b36e8c48491::t_ccfd7858fcba42 1
+gooddata-api-client/docs/FactPermissions.md
+  s_329b36e8c48491::t_d1394a2c16deb7 1-14
+gooddata-api-client/docs/FactPermissionsAssignment.md
+  s_329b36e8c48491::t_ccccdd3014593b 1-13
+gooddata-api-client/docs/FactPermissionsForAssignee.md
+  s_329b36e8c48491::t_284bf0dadb947d 1-14
+gooddata-api-client/docs/FactPermissionsForAssigneeRule.md
+  s_329b36e8c48491::t_7bf2e52f0d3c5a 1-14
+gooddata-api-client/docs/LabelPermissions.md
+  s_329b36e8c48491::t_7e0788bbbd5b6e 1-14
+gooddata-api-client/docs/LabelPermissionsAssignment.md
+  s_329b36e8c48491::t_55dd126bfb7c13 1-13
+gooddata-api-client/docs/LabelPermissionsForAssignee.md
+  s_329b36e8c48491::t_0553677b894fc8 1-14
+gooddata-api-client/docs/LabelPermissionsForAssigneeRule.md
+  s_329b36e8c48491::t_1205013640c359 1-14
+gooddata-api-client/docs/ManageFactPermissionsRequestInner.md
+  s_329b36e8c48491::t_5c19c52db7e514 1-14
+gooddata-api-client/docs/ManageLabelPermissionsRequestInner.md
+  s_329b36e8c48491::t_ddb6e48259614f 1-14
+gooddata-api-client/docs/PermissionsApi.md
+  s_329b36e8c48491::t_dc4fdeba2253d2 32,43,78,233,244,279,564,575,610,849,860,875-877,882,894,919,930,945-947,952,964
+gooddata-api-client/gooddata_api_client/api/actions_api.py
+  s_329b36e8c48491::t_78140150a2fda2 39,69,91,97-98,768,2645,4366,4882,4887,4906-4907,4916,4942,4947,4966-4967,4976,8951,11638,14140,14865,14873,14879,14947-14948,14955,14963,14969,15037-15038
+gooddata-api-client/gooddata_api_client/api/permissions_api.py
+  s_329b36e8c48491::t_211fe9a612cf80 25,33-34,37-38,58,223,467,707,712,731-732,741,767,772,791-792,801,1293,1551,1964,2270,2278,2284,2352-2353,2360,2368,2374,2442-2443
+gooddata-api-client/gooddata_api_client/model/attribute_permissions.py
+  s_329b36e8c48491::t_30a72098ff0379 42,119,212
+gooddata-api-client/gooddata_api_client/model/attribute_permissions_assignment.py
+  s_329b36e8c48491::t_e4949846242a3e 34,110,199
+gooddata-api-client/gooddata_api_client/model/attribute_permissions_for_assignee.py
+  s_329b36e8c48491::t_725fdabc543eb5 35-36,38-39,42,120,225,329-330
+gooddata-api-client/gooddata_api_client/model/attribute_permissions_for_assignee_all_of.py
+  s_329b36e8c48491::t_e7494a5763180b 38,111,197
+gooddata-api-client/gooddata_api_client/model/attribute_permissions_for_assignee_rule.py
+  s_329b36e8c48491::t_ad2d825cca25b6 35-36,38-39,42,120,225,329-330
+gooddata-api-client/gooddata_api_client/model/attribute_permissions_for_assignee_rule_all_of.py
+  s_329b36e8c48491::t_21d72351919df3 38,111,197
+gooddata-api-client/gooddata_api_client/model/declarative_analytical_dashboard_permission_for_assignee_rule.py
+  s_329b36e8c48491::t_1c402ff1de0c2d 35,38,329
+gooddata-api-client/gooddata_api_client/model/fact_permissions.py
+  s_329b36e8c48491::t_01e26c9ee61191 1-292
+gooddata-api-client/gooddata_api_client/model/fact_permissions_assignment.py
+  s_329b36e8c48491::t_5b59bbd19ede26 1-275
+gooddata-api-client/gooddata_api_client/model/fact_permissions_for_assignee.py
+  s_329b36e8c48491::t_149c3228f89244 1-334
+gooddata-api-client/gooddata_api_client/model/fact_permissions_for_assignee_rule.py
+  s_329b36e8c48491::t_98c8ccb759fa5e 1-334
+gooddata-api-client/gooddata_api_client/model/label_permissions.py
+  s_329b36e8c48491::t_4dfabd3b7c76d5 1-292
+gooddata-api-client/gooddata_api_client/model/label_permissions_assignment.py
+  s_329b36e8c48491::t_cf88b6a813f1a0 1-275
+gooddata-api-client/gooddata_api_client/model/label_permissions_for_assignee.py
+  s_329b36e8c48491::t_57a75257725674 1-334
+gooddata-api-client/gooddata_api_client/model/label_permissions_for_assignee_rule.py
+  s_329b36e8c48491::t_30ff454a884d57 1-334
+gooddata-api-client/gooddata_api_client/model/manage_attribute_permissions_request_inner.py
+  s_329b36e8c48491::t_0c9a29682b0d5b 36-37,40-41,337-338
+gooddata-api-client/gooddata_api_client/model/manage_fact_permissions_request_inner.py
+  s_329b36e8c48491::t_ef4f271327b12f 1-340
+gooddata-api-client/gooddata_api_client/model/manage_label_permissions_request_inner.py
+  s_329b36e8c48491::t_dd02bf22c4ebee 1-340
+gooddata-api-client/gooddata_api_client/model/metric_permissions_for_assignee.py
+  s_329b36e8c48491::t_03c9dd5e2e008c 35,38,329
+gooddata-api-client/gooddata_api_client/model/metric_permissions_for_assignee_rule.py
+  s_329b36e8c48491::t_99c650e030f634 35,38,329
+gooddata-api-client/gooddata_api_client/model/permissions_for_assignee.py
+  s_329b36e8c48491::t_b56092b9c01c75 35,38,329
+gooddata-api-client/gooddata_api_client/model/permissions_for_assignee_rule.py
+  s_329b36e8c48491::t_03c37af5ebf33f 35,38,329
+gooddata-api-client/gooddata_api_client/models/__init__.py
+  s_329b36e8c48491::t_68f1b3c409739b 93-98,365-368,1131-1134,1148-1149
+schemas/gooddata-api-client.json
+  s_329b36e8c48491::t_4ccaf3381465f6 1964-2056,10622-10714,32291,32322-32323,32342,32345,32356,32363,32366,32377,42917,42920,42969,45791,45794,45843,45970,45973,46022
+schemas/gooddata-metadata-client.json
+  s_329b36e8c48491::t_754205ae87aa4c 1123-1215,7319-7411,27759,27790-27791,27810,27813,27824,27831,27834,27845,32747,32750,32799,33186,33189,33238,33365,33368,33417
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "55e22cdb2612c3ba91833de2edc26fe59796069f",
+  "prompts": {},
+  "sessions": {
+    "s_329b36e8c48491": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0420b965-7c2b-4e1a-b40d-8f4df277a4ce",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Petr Ješke <petr.jeske@gooddata.com>"
+    }
+  }
+}
