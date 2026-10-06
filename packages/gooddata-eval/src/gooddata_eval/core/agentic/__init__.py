@@ -53,6 +53,14 @@ from gooddata_eval.core.agentic.metric_skill import (
     evaluate_agentic_metric_skill,
     run_agentic_metric_skill,
 )
+from gooddata_eval.core.agentic.report_skill import (
+    AgenticReportSummary,
+    ReportEvaluation,
+    ReportRunResult,
+    ReportSkillAssertionError,
+    evaluate_agentic_report_skill,
+    run_agentic_report_skill,
+)
 from gooddata_eval.core.agentic.search_tool import (
     AgenticSearchSummary,
     SearchResult,
@@ -75,6 +83,7 @@ __all__ = [
     "AgenticGuardrailSummary",
     "AgenticKdaSummary",
     "AgenticMetricSummary",
+    "AgenticReportSummary",
     "AgenticSearchSummary",
     "AgenticRunSummary",
     "AlertEvaluation",
@@ -95,6 +104,9 @@ __all__ = [
     "KdaSkillAssertionError",
     "MetricRunResult",
     "MetricSkillAssertionError",
+    "ReportEvaluation",
+    "ReportRunResult",
+    "ReportSkillAssertionError",
     "RunResult",
     "SearchResult",
     "SearchToolAssertionError",
@@ -108,6 +120,7 @@ __all__ = [
     "evaluate_agentic_guardrail",
     "evaluate_agentic_kda_skill",
     "evaluate_agentic_metric_skill",
+    "evaluate_agentic_report_skill",
     "evaluate_agentic_search_tool",
     "evaluate_agentic_visualization",
     "run_agentic_alert_skill",
@@ -117,6 +130,7 @@ __all__ = [
     "run_agentic_guardrail",
     "run_agentic_kda_skill",
     "run_agentic_metric_skill",
+    "run_agentic_report_skill",
     "run_agentic_search_tool",
     "run_agentic_visualization",
 ]
