@@ -1,0 +1,25 @@
+packages/gooddata-eval/tests/test_langfuse_env.py
+  s_152f0704157226::t_cc458a027373bb 67
+packages/gooddata-eval/tests/test_langfuse_otlp.py
+  s_152f0704157226::t_921f55ec051d9d 177-183
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/otlp.py
+  s_152f0704157226::t_4fc21becab0c73 156,159-166
+packages/gooddata-eval/tests/test_langfuse_source.py
+  s_152f0704157226::t_ba14be6b48d6a0 113
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "c4a4b73a7a07d1add175fd5a54f7bbac9411190c",
+  "prompts": {},
+  "sessions": {
+    "s_152f0704157226": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81049499-0417-40a7-9a8a-3bc2f0738f69",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
