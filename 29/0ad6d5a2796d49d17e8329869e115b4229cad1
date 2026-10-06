@@ -1,0 +1,25 @@
+packages/gooddata-eval/tests/test_agentic_runner.py
+  s_b4892b383f0a00::t_c1c7ffb6b4134f 775,781-783,835-837,847-848
+packages/gooddata-eval/tests/test_sse_client.py
+  s_b4892b383f0a00::t_c1c7ffb6b4134f 1009,1012,1014,1024
+packages/gooddata-eval/README.md
+  s_b4892b383f0a00::t_c1c7ffb6b4134f 611-612
+packages/gooddata-eval/tests/test_langfuse_source.py
+  s_b4892b383f0a00::t_c1c7ffb6b4134f 167,174
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "290ad6d5a2796d49d17e8329869e115b4229cad1",
+  "prompts": {},
+  "sessions": {
+    "s_b4892b383f0a00": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "65d32045-c8b6-499c-9b97-bf32d1f56066",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}
