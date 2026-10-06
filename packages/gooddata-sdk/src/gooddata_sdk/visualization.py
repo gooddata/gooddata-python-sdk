@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import functools
 from collections import defaultdict
-from enum import Enum
+from enum import Enum, StrEnum
 from typing import Any, Union, cast
 
 from gooddata_sdk.client import GoodDataApiClient
@@ -142,7 +142,7 @@ _SORT_KEY_TO_SORT_TYPE = defaultdict(
 """Mapping of SortItem key values to their respective Enum types."""
 
 
-class SortDirection(str, Enum):
+class SortDirection(StrEnum):
     """
     Enum used for differentiating between ascending and descending order direction.
     """
@@ -151,7 +151,7 @@ class SortDirection(str, Enum):
     DESC = "desc"
 
 
-class LocatorItemType(str, Enum):
+class LocatorItemType(StrEnum):
     """
     Enum used for differentiating between dataColumnLocators API objects.
     """

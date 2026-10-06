@@ -1,6 +1,6 @@
 # (C) 2025 GoodData Corporation
 
-from enum import Enum
+from enum import StrEnum
 from typing import Iterator, TypeAlias
 
 import attrs
@@ -16,8 +16,7 @@ from gooddata_pipelines.provisioning.utils.exceptions import BaseUserException
 TargetsPermissionDict: TypeAlias = dict[str, dict[str, bool]]
 
 
-class EntityType(str, Enum):
-    # NOTE: Start using StrEnum with Python 3.11
+class EntityType(StrEnum):
     user = "user"
     user_group = "userGroup"
 

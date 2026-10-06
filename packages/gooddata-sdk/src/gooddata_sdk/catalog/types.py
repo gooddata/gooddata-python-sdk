@@ -1,13 +1,13 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 # Use typing collection types to support python < py3.9
 ValidObjects = dict[str, set[str]]
 
 
-class UpsertOutcome(str, Enum):
+class UpsertOutcome(StrEnum):
     """Which branch a ``create_or_update*`` method took.
 
     The outcome is best-effort: it reports the branch the SDK chose after its
@@ -18,7 +18,3 @@ class UpsertOutcome(str, Enum):
 
     CREATED = "created"
     UPDATED = "updated"
-
-    # Match StrEnum's str() (the value, not "UpsertOutcome.CREATED") so moving
-    # to StrEnum once py3.10 support is dropped is a no-op for callers.
-    __str__ = str.__str__
