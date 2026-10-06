@@ -1,0 +1,41 @@
+packages/gooddata-eval/tests/test_sse_client.py
+  s_dec9fb8b463e72::t_49be94c8dcc0d6 5,1059-1060,1062,1064-1069,1072-1079,1081-1083,1085-1098,1100,1102-1104,1123,1125-1128,1130-1132
+  s_9cc2d8298beddc::t_2009383b663ba0 1120
+  s_9cc2d8298beddc::t_70aa96136c7d43 3
+  s_dec9fb8b463e72::t_4baf3ab5cb77a1 4,1061,1063,1070-1071,1080,1084,1099,1101,1124,1129
+  s_9cc2d8298beddc::t_573eb477cca600 1107-1119,1121-1122
+  s_9cc2d8298beddc::t_3dc21d0d373f64 1105-1106
+packages/gooddata-eval/AGENTS.md
+  s_9cc2d8298beddc::t_59c8d047e582a6 159
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_9cc2d8298beddc::t_a9868faf9ceaec 16,20,146-147,149,152-153,155-157,168-174
+  s_dec9fb8b463e72::t_e878145a96b987 141-144,148,150-151,158-167,175-179
+  s_dec9fb8b463e72::t_82e2280cacfa1b 145
+  s_dec9fb8b463e72::t_44fb013b337a01 24
+  s_9cc2d8298beddc::t_37cfbbd4c4242d 154
+  s_dec9fb8b463e72::t_886b8cec51757d 511
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4bdffcd20d474e708ce3ba236ecf6a48fc2259ac",
+  "prompts": {},
+  "sessions": {
+    "s_9cc2d8298beddc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a50f139-6f0b-4e43-912e-5b73fb007261",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    },
+    "s_dec9fb8b463e72": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6a4b7073-1378-46a2-aa4e-3e606eeeec90",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    }
+  }
+}
