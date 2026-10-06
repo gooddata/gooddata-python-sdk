@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-1. Ensure you have at minimum Python 3.14 installed; Python 3.13, 3.12, 3.11 and 3.10 are optional for multi-environment tests
+1. Ensure you have at minimum Python 3.14 installed; Python 3.15, 3.13, 3.12 and 3.11 are optional for multi-environment tests
 
    This repo uses [tox](https://tox.readthedocs.io/en/latest/) and by default will try to run tests against all
    supported versions. If you have only subset of supported python interpreters installed, see
@@ -172,7 +172,7 @@ Here are the options how to run the tests:
     - or execute `tox` command with arguments of your choice
   ```bash
   cd packages/gooddata-sdk
-  tox -e py310
+  tox -e py311
   ```
 - run tests for all non-client projects using `make test` in project root directory
 
@@ -185,7 +185,7 @@ Tests triggered by `make` can be controlled via these environment variables:
 - `TEST_ENVS` - define tox test environments (targets) as comma-separated list, by default all tox default targets are
   executed
   ```bash
-  TEST_ENVS=py311,py310 make test
+  TEST_ENVS=py312,py311 make test
   ```
 - `ADD_ARGS` - send additional arguments to pytest tool, useful for pin-pointing just part of tests
   ```bash
@@ -384,9 +384,9 @@ venv automatically. So when docker tox tests are executed after localhost tests 
   cd packages/gooddata-sdk
   make test-ci
   ```
-- run all tests containing `http_headers` in name for py311 and py310 for all projects
+- run all tests containing `http_headers` in name for py312 and py311 for all projects
   ```bash
-  TEST_ENVS=py311,py310 ADD_ARGS="-k http_headers" make test-ci
+  TEST_ENVS=py312,py311 ADD_ARGS="-k http_headers" make test-ci
   ```
 - run tests on localhost against microservices started with docker-compose
   ```bash
