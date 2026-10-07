@@ -13,6 +13,7 @@ module is the single place to swap — the runner only depends on the ChatBacken
 protocol, not on this class.
 """
 
+import contextlib
 import functools
 import json
 import logging
@@ -20,7 +21,7 @@ import os
 import re
 import time
 from dataclasses import dataclass, field
-from typing import Any, Callable, Iterable, TypeVar
+from typing import Any, Callable, Iterable, Iterator, TypeVar
 from urllib.parse import quote
 
 import httpx
@@ -119,6 +120,16 @@ def _float_env(name: str, default: float) -> float:
     return float(raw) if raw else default
 
 
+def _bool_env(name: str, default: bool) -> bool:
+    """Read a flag from the environment, falling back to ``default`` when unset or blank.
+
+    ``0``/``false``/``no``/``off`` are false, anything else present is true -- so the usual
+    ``VAR=0`` turns a flag off rather than reading as a non-empty, therefore true, string.
+    """
+    raw = os.getenv(name)
+    return raw.strip().lower() not in ("0", "false", "no", "off") if raw and raw.strip() else default
+
+
 # Retry budget defaults, giving a ~2 min worst-case cap per send (5/10/20/40/60s).
 # Each is overridable via env so CI can retune without cutting a new release --
 # read per call rather than at import, so an exported value cannot silently
@@ -147,6 +158,13 @@ _ITEM_TIMEOUT_S = _float_env("GOODDATA_EVAL_CHAT_ITEM_TIMEOUT_S", 0.0)
 # refuses a non-ASCII header and gen-ai's OTel propagator drops or rewrites the rest.
 _TRACE_LABELS_ENV = "GOODDATA_EVAL_TRACE_LABELS"
 _TRACE_LABEL_KEY = re.compile(r"[A-Za-z0-9_-]+")
+
+# When set, no conversation is deleted -- pass or fail, single-turn or agentic. The
+# server-side record is what the Interaction Intelligence endpoints read, so a run meant to
+# be inspected afterwards has to leave it behind. Enforced inside delete_conversation rather
+# than at each call site: thirteen agentic evaluators call it twenty times between them, and
+# a fourteenth kind would have been one more place to remember.
+_KEEP_CONVERSATIONS = _bool_env("GOODDATA_EVAL_KEEP_CONVERSATIONS", False)
 
 
 @functools.cache
@@ -192,6 +210,37 @@ def set_default_item_timeout(seconds: float | None) -> None:
     """Set the per-item budget every ChatClient built afterwards inherits."""
     global _ITEM_TIMEOUT_S
     _ITEM_TIMEOUT_S = seconds or 0.0
+
+
+def set_keep_conversations(keep: bool) -> None:
+    """Keep every conversation this process creates, whatever its outcome.
+
+    Lands here for the same reason the timeout defaults do -- the agentic evaluators build
+    their own clients deep in the call tree -- but takes effect at deletion rather than at
+    construction, so a client already built honours it too.
+
+    Prefer ``keep_conversations`` for a single run: a bare set leaks into whatever the
+    process does next, and the direction of the leak is the costly one -- a later run that
+    asked for nothing would silently leave server-side state behind.
+    """
+    global _KEEP_CONVERSATIONS
+    _KEEP_CONVERSATIONS = keep
+
+
+@contextlib.contextmanager
+def keep_conversations(keep: bool) -> Iterator[None]:
+    """Scope conversation retention to one run, restoring the previous setting on exit.
+
+    ``keep=False`` is not "delete": it leaves the setting alone, so an operator who exported
+    GOODDATA_EVAL_KEEP_CONVERSATIONS still gets it on a run that passes no flag.
+    """
+    previous = _KEEP_CONVERSATIONS
+    if keep:
+        set_keep_conversations(True)
+    try:
+        yield
+    finally:
+        set_keep_conversations(previous)
 
 
 T = TypeVar("T")
@@ -550,6 +599,8 @@ class ChatClient:
         return conversation_id
 
     def delete_conversation(self, conversation_id: str) -> None:
+        if _KEEP_CONVERSATIONS:
+            return
         try:
             self._client.delete(f"{self._base}/{conversation_id}", headers=self._auth)
         except httpx.HTTPError:
