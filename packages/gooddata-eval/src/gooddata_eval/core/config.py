@@ -90,6 +90,9 @@ class RunConfig:
     quiet: bool = False
     kind: str = "visualization"
     preserve_failed: bool = False
+    keep_conversations: bool = False
+    """Keep every conversation, pass or fail. Superset of ``preserve_failed``; applies to the
+    agentic kinds too, which ``preserve_failed`` never reached."""
     reasoning_effort: ReasoningEffort | None = None
     agent_id: str | None = None
     turn_timeout_s: float | None = None
