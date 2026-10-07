@@ -901,10 +901,6 @@ _A_FAILED_RUN = {
 _KINDS_WITHOUT_FAILED_RUNS = {"agentic_conversation"}
 
 
-# dashboard_summary is the one chat kind the relay does not apply to: it builds its own
-# context from the dashboard it summarises and takes its scope from summary_input, so an
-# item-level user_context would have nothing to attach to.
-_KINDS_WITHOUT_USER_CONTEXT = {"agentic_dashboard_summary"}
 
 
 # The one kind whose dispatch needs more than question/expected_output: the dashboard to
