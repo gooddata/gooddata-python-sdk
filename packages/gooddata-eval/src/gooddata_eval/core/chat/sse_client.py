@@ -120,6 +120,16 @@ class TurnTimeoutError(ChatError):
     retrying it spends the budget again."""
 
 
+def _bool_env(name: str, default: bool) -> bool:
+    """Read a flag from the environment, falling back to ``default`` when unset or blank.
+
+    ``0``/``false``/``no``/``off`` are false, anything else present is true -- so the usual
+    ``VAR=0`` turns a flag off rather than reading as a non-empty, therefore true, string.
+    """
+    raw = os.getenv(name)
+    return raw.strip().lower() not in ("0", "false", "no", "off") if raw and raw.strip() else default
+
+
 # Wall-clock cap on a single agent turn, 0 = uncapped. httpx's `timeout` is per-read,
 # so an agent that keeps emitting reasoning events can stream for many minutes without
 # ever tripping it -- this is what bounds a runaway item and lets the run move on.
@@ -139,6 +149,13 @@ _ITEM_TIMEOUT_S = _float_env("GOODDATA_EVAL_CHAT_ITEM_TIMEOUT_S", 0.0)
 # refuses a non-ASCII header and gen-ai's OTel propagator drops or rewrites the rest.
 _TRACE_LABELS_ENV = "GOODDATA_EVAL_TRACE_LABELS"
 _TRACE_LABEL_KEY = re.compile(r"[A-Za-z0-9_-]+")
+
+# When set, no conversation is deleted -- pass or fail, single-turn or agentic. The
+# server-side record is what the Interaction Intelligence endpoints read, so a run meant to
+# be inspected afterwards has to leave it behind. Enforced inside delete_conversation rather
+# than at each call site: thirteen agentic evaluators call it twenty times between them, and
+# a fourteenth kind would have been one more place to remember.
+_KEEP_CONVERSATIONS = _bool_env("GOODDATA_EVAL_KEEP_CONVERSATIONS", False)
 
 
 @functools.cache
@@ -184,6 +201,18 @@ def set_default_item_timeout(seconds: float | None) -> None:
     """Set the per-item budget every ChatClient built afterwards inherits."""
     global _ITEM_TIMEOUT_S
     _ITEM_TIMEOUT_S = seconds or 0.0
+
+
+def set_keep_conversations(keep: bool) -> None:
+    """Keep every conversation this process creates, whatever its outcome.
+
+    Lands here for the same reason the timeout defaults do -- the agentic evaluators build
+    their own clients deep in the call tree -- but takes effect at deletion rather than at
+    construction, so a client already built honours it too.
+    """
+    global _KEEP_CONVERSATIONS
+    _KEEP_CONVERSATIONS = keep
+
 
 
 def _is_retryable_exc(exc: Exception) -> bool:
@@ -539,6 +568,8 @@ class ChatClient:
         return conversation_id
 
     def delete_conversation(self, conversation_id: str) -> None:
+        if _KEEP_CONVERSATIONS:
+            return
         try:
             self._client.delete(f"{self._base}/{conversation_id}", headers=self._auth)
         except httpx.HTTPError:
