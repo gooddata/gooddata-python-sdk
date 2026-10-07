@@ -116,11 +116,6 @@ def test_all_agentic_kind_cases_covers_every_registered_kind():
     assert covered == set(AGENTIC_TEST_KINDS)
 
 
-# The one kind whose dispatch needs more than question/expected_output: the dashboard to
-# summarize is named in summary_input, exactly as for the single-shot dashboard_summary.
-_SUMMARY_INPUT_KINDS = {"agentic_dashboard_summary"}
-
-
 @pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
 def test_dispatch_agentic_passes_agent_id_through_for_every_kind(kind, expected_output, target):
     item = DatasetItem(
@@ -129,6 +124,8 @@ def test_dispatch_agentic_passes_agent_id_through_for_every_kind(kind, expected_
         test_kind=kind,
         question="q",
         expected_output=expected_output,
+        # Dispatch refuses a dashboard-summary item without it, before the evaluator is
+        # reached, so the item would fail for a missing fixture field.
         summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
     )
     with patch(f"gooddata_eval.cli.agentic_runner.{target}") as mock_eval:
@@ -236,8 +233,7 @@ def test_dispatch_agentic_returns_a_real_outcome_for_every_kind(kind, expected_o
         question="q",
         expected_output=expected_output,
         # Dispatch refuses a dashboard-summary item without it, before the evaluator is
-        # reached -- the item would fail for a missing fixture field, not for the thing
-        # under test.
+        # reached, so the item would fail for a missing fixture field.
         summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
     )
     canned = AgenticEvalOutcome(reasoning_steps=["x"], conversation_id="c1", response_id="r1", detail={"k": "v"})
@@ -789,8 +785,8 @@ _KIND_EVALUATORS = [
     ("agentic_kda_skill", "evaluate_agentic_kda_skill", {}),
     ("agentic_what_if", "evaluate_agentic_what_if", {}),
     ("agentic_anomaly_detection", "evaluate_agentic_anomaly_detection", {}),
+    ("agentic_report_skill", "evaluate_agentic_report_skill", {}),
     ("agentic_forecasting", "evaluate_agentic_forecasting", {"forecast_period": 3}),
-    ("agentic_report_skill", "evaluate_agentic_report_skill", {"narrative": "Explains the trend."}),
     ("agentic_conversation", "evaluate_agentic_conversation", {"id": "c1", "expected_skills": [], "turns": []}),
 ]
 
@@ -858,6 +854,7 @@ _CLIENT_CONTEXT_KINDS = [
     ("kda_skill", "run_agentic_kda_skill", "evaluate_agentic_kda_skill", {}),
     ("what_if", "run_agentic_what_if", "evaluate_agentic_what_if", {}),
     ("anomaly_detection", "run_agentic_anomaly_detection", "evaluate_agentic_anomaly_detection", {}),
+    ("report_skill", "run_agentic_report_skill", "evaluate_agentic_report_skill", {}),
 ]
 
 
@@ -902,6 +899,17 @@ _A_FAILED_RUN = {
 # fixture exactly once whatever --runs says (it is the sole member of
 # UNGATED_AGENTIC_TEST_KINDS), so it has no K to have failing runs within.
 _KINDS_WITHOUT_FAILED_RUNS = {"agentic_conversation"}
+
+
+# dashboard_summary is the one chat kind the relay does not apply to: it builds its own
+# context from the dashboard it summarises and takes its scope from summary_input, so an
+# item-level user_context would have nothing to attach to.
+_KINDS_WITHOUT_USER_CONTEXT = {"agentic_dashboard_summary"}
+
+
+# The one kind whose dispatch needs more than question/expected_output: the dashboard to
+# summarize is named in summary_input, exactly as for the single-shot dashboard_summary.
+_SUMMARY_INPUT_KINDS = {"agentic_dashboard_summary"}
 
 
 def test_a_kind_that_records_no_failed_runs_keeps_the_empty_default():

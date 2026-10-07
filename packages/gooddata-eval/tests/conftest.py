@@ -43,3 +43,10 @@ def fake_langfuse(monkeypatch: pytest.MonkeyPatch):
         monkeypatch.setenv("LANGFUSE_SECRET_KEY", "sk-fake")
         monkeypatch.delenv("LANGFUSE_HOST", raising=False)
         yield server
+
+
+@pytest.fixture(autouse=True)
+def _no_metric_delete_recheck(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A MagicMock SDK reports every metric as present, so the recheck would sleep and
+    delete again. Tests of the recheck itself set the delays they need."""
+    monkeypatch.setattr("gooddata_eval.core.agentic.metric_skill._DELETE_RECHECK_DELAYS_S", ())

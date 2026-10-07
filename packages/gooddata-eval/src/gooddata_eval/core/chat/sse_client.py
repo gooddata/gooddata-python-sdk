@@ -13,12 +13,15 @@ module is the single place to swap — the runner only depends on the ChatBacken
 protocol, not on this class.
 """
 
+import functools
 import json
 import logging
 import os
+import re
 import time
 from dataclasses import dataclass, field
 from typing import Any, Callable, Iterable, TypeVar
+from urllib.parse import quote
 
 import httpx
 
@@ -134,6 +137,45 @@ _TURN_TIMEOUT_S = _float_env("GOODDATA_EVAL_CHAT_TURN_TIMEOUT_S", 0.0)
 # for a multi-turn agentic item it bounds every turn together -- a turn cap alone lets a
 # 4-turn conversation run to 4x the budget, which is not what a user would sit through.
 _ITEM_TIMEOUT_S = _float_env("GOODDATA_EVAL_CHAT_ITEM_TIMEOUT_S", 0.0)
+
+# Comma-separated `key=value` labels, e.g. `model_version=gpt-5.2,github_run_id=42`, sent as
+# W3C baggage on every chat request. gen-ai's Langfuse span processor copies `langfuse_*`
+# baggage onto each span it starts, so every observation of the conversation -- the cost-bearing
+# generations, retries and the title trace included -- carries them from creation. Langfuse v4
+# cannot add them to an observation afterwards. A value cannot contain a comma, and a key must be
+# a plain token (letters, digits, `_`, `-`); any other key is skipped with a warning, because httpx
+# refuses a non-ASCII header and gen-ai's OTel propagator drops or rewrites the rest.
+_TRACE_LABELS_ENV = "GOODDATA_EVAL_TRACE_LABELS"
+_TRACE_LABEL_KEY = re.compile(r"[A-Za-z0-9_-]+")
+
+
+@functools.cache
+def _warn_skipped_trace_label(key: str) -> None:
+    """Warn once per key per process: every ChatClient re-reads the labels."""
+    _log.warning("%s: skipping label with key %r, keys must match [A-Za-z0-9_-]+", _TRACE_LABELS_ENV, key)
+
+
+def _trace_baggage() -> dict[str, str]:
+    """The `baggage` header for the labels in ``GOODDATA_EVAL_TRACE_LABELS``, or none.
+
+    Each label becomes trace metadata, and ``model_version`` -- the combo the report groups
+    on -- also becomes the observation ``version``, the dimension Langfuse groups cost by.
+    Values are percent-encoded: a space or comma would otherwise end the baggage entry.
+    """
+    labels: dict[str, str] = {}
+    for pair in os.getenv(_TRACE_LABELS_ENV, "").split(","):
+        key, sep, value = pair.partition("=")
+        key = key.strip()
+        if not sep or not key:
+            continue
+        if _TRACE_LABEL_KEY.fullmatch(key):
+            labels[key] = value.strip()
+        else:
+            _warn_skipped_trace_label(key)
+    entries = [f"langfuse_metadata_{k}={quote(v, safe='')}" for k, v in labels.items()]
+    if labels.get("model_version"):
+        entries.insert(0, f"langfuse_version={quote(labels['model_version'], safe='')}")
+    return {"baggage": ",".join(entries)} if entries else {}
 
 
 def set_default_turn_timeout(seconds: float | None) -> None:
@@ -308,11 +350,15 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
         # create_adhoc_visualization but the call failed (e.g. data source not
         # accessible). The last attempt is the agent's best answer.
         #
-        # These are raw tool-call arguments, so they carry no `id` -- nothing was
-        # ever persisted. CreatedVisualization requires one, so synthesize a
-        # sentinel rather than letting the whole ChatResult fail to validate:
-        # dropping the turn entirely would score a stalled data source as a
-        # content failure, which is exactly what this fallback exists to prevent.
+        # These are raw tool-call arguments, so they carry no `id` -- the server
+        # mints it. The sentinel marks the chart as never persisted. Logged because
+        # a turn that called the tool and answered without a chart is otherwise
+        # invisible: the user saw no chart either.
+        _log.warning(
+            "create_adhoc_visualization was called %d time(s) but the answer has no visualization part; "
+            "scoring the last call's arguments",
+            len(acc.adhoc_viz_args),
+        )
         payload["createdVisualizations"] = {
             "objects": [{"id": _ADHOC_VIZ_ID, **acc.adhoc_viz_args[-1]}],
             "reasoning": "\n".join(acc.viz_reasoning_parts),
@@ -466,7 +512,7 @@ class ChatClient:
         the ``enableAiContextSetup`` feature flag is on for the organization.
         """
         self._base = f"{host.rstrip('/')}/api/v1/ai/workspaces/{workspace_id}/chat/conversations"
-        self._auth = {"Authorization": f"Bearer {token}"}
+        self._auth = {"Authorization": f"Bearer {token}", **_trace_baggage()}
         # 0/None disables the cap. Also lowered onto the read timeout: the wall-clock check
         # fires between events, so a turn that goes silent needs the transport to give up too.
         budget = _TURN_TIMEOUT_S if turn_timeout_s is None else turn_timeout_s

@@ -9,6 +9,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
+from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import GoodDataSdk
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
@@ -51,6 +52,9 @@ except ImportError:
 
 _DEFAULT_K = 1
 _DEFAULT_MAX_ITERATIONS = 7
+# Seconds to wait before each check that a deleted metric stayed deleted, so the checks fall
+# 3, 6 and 12 seconds after the delete; see _delete_metric.
+_DELETE_RECHECK_DELAYS_S: tuple[float, ...] = (3.0, 3.0, 6.0)
 
 
 def _best_maql_match(actual_maql: str, expected_outputs: list[dict]) -> tuple[bool, str]:
@@ -239,11 +243,53 @@ def _delete_metric(sdk: GoodDataSdk, workspace_id: str, metric_id: str) -> None:
     MAQL) and the assertion fails. Deleting the created metric on the way out keeps
     the workspace clean for the next run. Best-effort: failures are logged, not raised.
     Mirrors ``alert_skill._delete_alert``.
+
+    A delete does not stay done on its own. ``create_metric`` reads the whole analytics
+    model and writes it back, so a concurrent test whose read preceded this delete
+    restores the metric when its write lands. The metric is therefore checked again after
+    each of ``_DELETE_RECHECK_DELAYS_S`` and deleted again while it is still there.
     """
+    if not _try_delete_metric(sdk, workspace_id, metric_id):
+        return
+    for delay in _DELETE_RECHECK_DELAYS_S:
+        time.sleep(delay)
+        if not _metric_exists(sdk, workspace_id, metric_id):
+            return
+        print(f"[CLEANUP] Metric {metric_id} is back or could not be checked; deleting again")
+        if not _try_delete_metric(sdk, workspace_id, metric_id):
+            return
+    if _DELETE_RECHECK_DELAYS_S:
+        # Every check found it back, so the last delete is unverified: say so rather than
+        # report a clean workspace. The post-run reset is what removes it for good.
+        print(
+            f"[CLEANUP] Metric {metric_id} was back or unchecked at all {len(_DELETE_RECHECK_DELAYS_S)} checks; "
+            "the last delete is not verified and the metric may remain"
+        )
+
+
+def _try_delete_metric(sdk: GoodDataSdk, workspace_id: str, metric_id: str) -> bool:
+    """Delete the metric; True when it is gone afterwards, a 404 included."""
     try:
         sdk._client.entities_api.delete_entity_metrics(workspace_id, metric_id)
+    except NotFoundException:
+        return True
     except Exception as exc:
         print(f"[CLEANUP] Failed to delete metric {metric_id}: {exc}")
+        return False
+    return True
+
+
+def _metric_exists(sdk: GoodDataSdk, workspace_id: str, metric_id: str) -> bool:
+    """Whether the metric may still be in the workspace. Only a 404 reads as absent; any other
+    lookup failure reads as present, so the caller deletes again rather than leave a restored
+    metric behind. The recheck delays bound how often that happens."""
+    try:
+        sdk._client.entities_api.get_entity_metrics(workspace_id, metric_id)
+    except NotFoundException:
+        return False
+    except Exception as exc:
+        print(f"[CLEANUP] Could not check metric {metric_id}: {exc}")
+    return True
 
 
 def _execute_single_metric_run(
