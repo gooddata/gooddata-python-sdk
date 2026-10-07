@@ -1,4 +1,5 @@
 # (C) 2026 GoodData Corporation
+import contextlib
 import io
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -681,6 +682,74 @@ def test_cli_preserve_failed_flag_parsed(monkeypatch, fixtures_dir):
     )
     assert exit_code == 0
     assert captured_kwargs.get("preserve_failed") is True
+
+
+def _recording_keep(applied: list[bool]):
+    """Stand-in for the keep_conversations context manager that records what it was asked for."""
+
+    @contextlib.contextmanager
+    def _cm(keep: bool):
+        applied.append(keep)
+        yield
+
+    return _cm
+
+
+def test_cli_keep_conversations_flag_applies_process_wide(monkeypatch, fixtures_dir):
+    """--keep-conversations lands on the module-level switch, not on the ChatClient kwargs.
+
+    The agentic evaluators build their own clients deep in the call tree, so a constructor
+    kwarg would reach the single-turn path only -- which is the gap --preserve-failed has.
+    """
+    monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
+    applied: list[bool] = []
+
+    class _FakeController:
+        def __init__(self, *a, **k): ...
+        def get_active(self):
+            return ActiveLlmProvider(provider_id="p", default_model_id="gpt-5.2")
+
+        def resolve_and_activate(self, requested, provider=None):
+            return ResolvedModel(provider_id="p", model_id="gpt-5.2", switched=False, provider_name="P")
+
+        def restore(self, original): ...
+        def close(self): ...
+
+    monkeypatch.setattr(cli_main, "WorkspaceModelController", _FakeController)
+    monkeypatch.setattr(cli_main, "keep_conversations", _recording_keep(applied))
+    monkeypatch.setattr(cli_main, "ChatClient", lambda **kwargs: object())
+
+    def _fake_run(items, backend, *, runs, model, workspace_id, **kw):
+        return EvalReport(
+            model=model,
+            workspace_id=workspace_id,
+            items=[
+                ItemReport(id="i1", dataset_name="d", test_kind="visualization", question="q", pass_at_k=True, runs=1)
+            ],
+        )
+
+    monkeypatch.setattr(cli_main, "run_items", _fake_run)
+
+    argv = [
+        "run",
+        "--host",
+        "https://h",
+        "--token",
+        "tok",
+        "--workspace",
+        "ws1",
+        "--dataset",
+        str(fixtures_dir / "sample_dataset"),
+        "--quiet",
+    ]
+    assert cli_main.main([*argv, "--keep-conversations"]) == 0
+    assert applied == [True]
+
+    # Scoped per run, so a bare `run` afterwards asks for nothing. keep=False leaves an
+    # env-set GOODDATA_EVAL_KEEP_CONVERSATIONS alone rather than forcing it off.
+    applied.clear()
+    assert cli_main.main(argv) == 0
+    assert applied == [False]
 
 
 def test_cli_rejects_negative_concurrency(monkeypatch, fixtures_dir):

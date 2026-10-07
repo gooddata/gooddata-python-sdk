@@ -15,7 +15,12 @@ from rich.console import Console
 from rich.table import Table
 
 from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, UNGATED_AGENTIC_TEST_KINDS, run_agentic_items
-from gooddata_eval.core.chat.sse_client import ChatClient, set_default_item_timeout, set_default_turn_timeout
+from gooddata_eval.core.chat.sse_client import (
+    ChatClient,
+    keep_conversations,
+    set_default_item_timeout,
+    set_default_turn_timeout,
+)
 from gooddata_eval.core.config import (
     DEFAULT_GATE,
     DEFAULT_JUDGE_MODEL,
@@ -169,7 +174,17 @@ def _build_parser() -> argparse.ArgumentParser:
         "--preserve-failed",
         action="store_true",
         dest="preserve_failed",
-        help="Keep failed conversations on the server for post-mortem inspection.",
+        help="Keep failed conversations on the server for post-mortem inspection. Single-turn "
+        "kinds only; use --keep-conversations to cover the agentic ones.",
+    )
+    run.add_argument(
+        "--keep-conversations",
+        action="store_true",
+        dest="keep_conversations",
+        help="Keep every conversation on the server, passed or failed, so the AI Interaction "
+        "Intelligence endpoints can be queried after the run (or set "
+        "GOODDATA_EVAL_KEEP_CONVERSATIONS=1). Covers the agentic kinds, which --preserve-failed "
+        "does not. Leaves state behind: only for a diagnostic run.",
     )
     run.add_argument(
         "--reasoning-effort",
@@ -723,13 +738,17 @@ def main(argv: list[str] | None = None) -> int:
             quiet=args.quiet,
             kind=args.kind,
             preserve_failed=args.preserve_failed,
+            keep_conversations=args.keep_conversations,
             reasoning_effort=args.reasoning_effort,
             gate=normalize_gate(args.gate),
             agent_id=args.agent_id or os.environ.get("GD_EVAL_AGENT_ID"),
             turn_timeout_s=args.turn_timeout,
             item_timeout_s=args.item_timeout,
         )
-        return _run(config)
+        # Scoped to this run: main() is re-entrant under test and as a library call, and a
+        # leaked True would leave the next run's conversations on the server unasked.
+        with keep_conversations(config.keep_conversations):
+            return _run(config)
     except (
         ConnectionError_,
         ModelResolutionError,
