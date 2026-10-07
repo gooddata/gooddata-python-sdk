@@ -15,6 +15,7 @@ from gooddata_eval.core.agentic.dashboard_skill import (
     evaluate_dashboard_response,
     run_agentic_dashboard_skill,
 )
+from gooddata_eval.core.chat.sse_client import ChatError
 from gooddata_eval.core.models import ChatResult, LoopExit, ToolCallEvent
 
 # Ids and titles are the ones the eval layout seeds; shapes are trimmed from real runs of
@@ -1103,6 +1104,54 @@ class TestRunLoop:
         _run_with(client, _DC05_EXPECTED, initial_conversation_id="conv-1")
         client.create_conversation.assert_not_called()
         client.delete_conversation.assert_not_called()
+
+    def test_a_chat_error_is_recorded_rather_than_left_to_escape(self):
+        """It used to escape run_agentic_dashboard_skill, taking every completed K-run with
+        it: no DashboardRunResult, no exit_reason, just a bare error on the item. Recorded
+        the way metric_skill.py and conversation.py record it, so an infrastructure fault
+        stays distinguishable from the agent failing to draft."""
+        client = MagicMock()
+        client.send_message.side_effect = ChatError("gen-ai fell over")
+
+        summary = _run_with(client, _DC05_EXPECTED)
+
+        assert summary.run_results[0].exit_reason is LoopExit.CHAT_ERROR
+        assert summary.run_results[0].evaluation.strict_pass is False
+        assert summary.pass_at_k is False
+
+    def test_a_chat_error_keeps_the_partial_turn_s_work(self):
+        """A bare catch would discard ChatError.partial_result. What the stream delivered
+        before it died is still this turn's work -- the steps were taken and the tools ran."""
+        partial = _chat_result(
+            tool_calls=[{"functionName": "search_objects", "functionArguments": "{}", "callTs": 1, "durationMs": 10}],
+            text="Here is the draft.",
+        )
+        partial.reasoning_steps = ["looked for the charts"]
+        partial.reasoning_step_count = 1
+        client = MagicMock()
+        client.send_message.side_effect = ChatError("stream died mid-answer", partial_result=partial)
+
+        summary = _run_with(client, _DC05_EXPECTED)
+        run = summary.run_results[0]
+
+        assert run.exit_reason is LoopExit.CHAT_ERROR
+        assert run.reasoning_steps == ["looked for the charts"]
+        assert run.total_steps == 1
+        assert [tc.function_name for tc in run.tool_call_events] == ["search_objects"]
+
+    def test_a_chat_error_on_a_later_turn_keeps_the_earlier_ones(self):
+        """The whole point of recording it: turns already completed survive the fault."""
+        client = MagicMock()
+        client.send_message.side_effect = [
+            _chat_result(text="Which charts did you have in mind?"),
+            ChatError("gen-ai fell over"),
+        ]
+
+        summary = _run_with(client, _DC05_EXPECTED)
+        run = summary.run_results[0]
+
+        assert run.exit_reason is LoopExit.CHAT_ERROR
+        assert run.total_turns == 2
 
 
 class TestEvaluateEntryPoint:

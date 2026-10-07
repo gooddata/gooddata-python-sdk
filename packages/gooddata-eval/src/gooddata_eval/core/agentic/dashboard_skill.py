@@ -30,7 +30,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     utc_now,
 )
 from gooddata_eval.core.chat.render import render_answer_text
-from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import (
     AgenticAssertionError,
@@ -867,8 +867,9 @@ class DashboardRunResult:
     timings: PhaseTimings = field(default_factory=PhaseTimings)
     # Why the loop stopped -- see LoopExit. A dashboard not produced alone cannot tell a
     # refusal from a run that hit max_iterations while still on track (matches
-    # kda_skill.py/alert_skill.py). No CHAT_ERROR/SIMULATED_USER_FAILED member here: this
-    # loop has neither a send_message try/except nor a simulated-user call to fail.
+    # kda_skill.py/alert_skill.py). CHAT_ERROR is reachable; SIMULATED_USER_FAILED is not --
+    # this loop's follow-up is built from the expectation by build_simulated_reply, with no
+    # judge call that could fail.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
 
 
@@ -1157,7 +1158,33 @@ def _execute_single_dashboard_run(
     for iteration in range(max_iterations):
         turns += 1
         agent_started = time.monotonic()
-        chat_result = client.send_message(conversation_id, current_question)
+        try:
+            chat_result = client.send_message(conversation_id, current_question)
+        except ChatError as exc:
+            # Recorded rather than left to escape: this runs inside one of K runs, so an
+            # uncaught ChatError discarded every run already completed along with this one's
+            # exit_reason, and the item surfaced as a bare error with no per-run diagnosis.
+            # Matches metric_skill.py and conversation.py, which record it the same way.
+            timings.agent_s += time.monotonic() - agent_started
+            print(f"[CHAT] send_message failed for conversation {conversation_id}: {exc}")
+            partial = exc.partial_result
+            if partial is not None:
+                # Shifted and indexed exactly as a completed turn is, before anything reads
+                # the events: left raw, a late turn's call_ts restarts near zero and
+                # timeline_detail reports it as overlapping the first one.
+                reasoning_steps.extend(partial.reasoning_steps or [])
+                response_id = partial.response_id or response_id
+                turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
+                    partial,
+                    turn_offset=turn_offset,
+                    tool_index_offset=tool_index_offset,
+                    reasoning_index_offset=reasoning_index_offset,
+                )
+                all_tool_call_events.extend(partial.tool_call_events or [])
+                all_reasoning_step_events.extend(partial.reasoning_step_events or [])
+                steps += partial.reasoning_step_count
+            exit_reason = LoopExit.CHAT_ERROR
+            break
         agent_elapsed = time.monotonic() - agent_started
         timings.agent_s += agent_elapsed
         reasoning_steps.extend(chat_result.reasoning_steps or [])
