@@ -1,5 +1,8 @@
 # (C) 2026 GoodData Corporation
 import json
+import logging
+from collections.abc import Callable
+from urllib.parse import unquote
 
 import httpx
 import pytest
@@ -1053,3 +1056,77 @@ def test_ask_puts_the_item_attachment_on_the_wire():
     )
     client.ask(item)
     assert captured["body"]["userContext"] == _ATTACHMENT
+
+
+def _baggage_of(requests: list[httpx.Request]) -> list[dict[str, str] | None]:
+    """Each request's `baggage` header as {key: decoded value}, or None when absent."""
+    out: list[dict[str, str] | None] = []
+    for r in requests:
+        raw = r.headers.get("baggage")
+        out.append(None if raw is None else {k: unquote(v) for k, v in (e.split("=", 1) for e in raw.split(","))})
+    return out
+
+
+def _record_requests(requests: list[httpx.Request]) -> Callable[[httpx.Request], httpx.Response]:
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        if request.url.path.endswith("/conversations"):
+            return httpx.Response(200, json={"conversationId": "c1"})
+        return httpx.Response(200, content=_OK_SSE)
+
+    return handler
+
+
+def test_trace_labels_ride_every_request_as_langfuse_baggage(monkeypatch: pytest.MonkeyPatch) -> None:
+    """gen-ai's Langfuse span processor copies `langfuse_*` baggage onto every span it starts, so
+    the labels reach the root generation and its cost-bearing children at creation."""
+    monkeypatch.setenv("GOODDATA_EVAL_TRACE_LABELS", "model_version=gpt-5.2 openai,github_run_id=42")
+    requests: list[httpx.Request] = []
+    client = _client_with_handler(_record_requests(requests))
+
+    client.send_message(client.create_conversation(), "q")
+
+    expected = {
+        "langfuse_version": "gpt-5.2 openai",
+        "langfuse_metadata_model_version": "gpt-5.2 openai",
+        "langfuse_metadata_github_run_id": "42",
+    }
+    assert _baggage_of(requests) == [expected, expected]
+    # Encoded, not raw: a space or comma in a value would otherwise split or end the entry.
+    assert " " not in requests[0].headers["baggage"]
+
+
+def test_trace_labels_without_a_model_version_set_no_langfuse_version(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("GOODDATA_EVAL_TRACE_LABELS", "github_run_id=42")
+    requests: list[httpx.Request] = []
+    _client_with_handler(_record_requests(requests)).create_conversation()
+
+    assert _baggage_of(requests) == [{"langfuse_metadata_github_run_id": "42"}]
+
+
+@pytest.mark.parametrize("key", ["modèle", "run id", "c++"])
+def test_trace_label_with_a_non_token_key_is_skipped_with_one_warning(
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture, key: str
+) -> None:
+    """httpx refuses a non-ASCII header, gen-ai's OTel propagator drops a key with a space, and
+    it reads `+` as a space; each would otherwise fail the run or mislabel the trace."""
+    monkeypatch.setenv("GOODDATA_EVAL_TRACE_LABELS", f"github_run_id=42,{key}=1")
+    requests: list[httpx.Request] = []
+
+    for _ in range(2):
+        _client_with_handler(_record_requests(requests)).create_conversation()
+
+    assert _baggage_of(requests) == [{"langfuse_metadata_github_run_id": "42"}] * 2
+    assert [r.levelno for r in caplog.records if repr(key) in r.getMessage()] == [logging.WARNING]
+
+
+@pytest.mark.parametrize("raw", [None, "", "no-equals-sign", " , "])
+def test_no_trace_labels_send_no_baggage(monkeypatch: pytest.MonkeyPatch, raw: str | None) -> None:
+    if raw is None:
+        monkeypatch.delenv("GOODDATA_EVAL_TRACE_LABELS", raising=False)
+    else:
+        monkeypatch.setenv("GOODDATA_EVAL_TRACE_LABELS", raw)
+    requests: list[httpx.Request] = []
+    _client_with_handler(_record_requests(requests)).create_conversation()
+
+    assert _baggage_of(requests) == [None]
