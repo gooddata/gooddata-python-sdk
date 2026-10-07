@@ -349,7 +349,6 @@ def test_parse_sse_lines_stream_ended_true_when_response_ended_has_no_data_line(
 def test_parse_sse_lines_falls_back_to_adhoc_viz_when_multipart_viz_is_null():
     """Visualization from create_adhoc_visualization args used when multipart viz is null."""
     viz_def = {
-        "id": "total_sales_by_month",
         "type": "line_chart",
         "query": {"fields": {"m": {"using": "metric/total_sales"}}, "filter_by": {}},
         "metrics": ["m"],
@@ -365,16 +364,15 @@ def test_parse_sse_lines_falls_back_to_adhoc_viz_when_multipart_viz_is_null():
     ]
     result = parse_sse_lines(lines)
     assert result.created_visualizations is not None
-    assert result.created_visualizations.objects[0].id == "total_sales_by_month"
     assert result.created_visualizations.objects[0].type == "line_chart"
+    assert result.created_visualizations.objects[0].metrics == ["m"]
 
 
-def test_parse_sse_lines_adhoc_fallback_synthesizes_id_when_args_have_none():
-    """A create_adhoc_visualization definition carries no `id` -- nothing was persisted.
+def test_parse_sse_lines_adhoc_fallback_synthesizes_id_when_args_have_none(caplog):
+    """A create_adhoc_visualization definition carries no `id` -- the server mints it.
 
-    CreatedVisualization requires one, so without a synthesized stand-in the whole
-    ChatResult fails to validate and the turn is lost. Regression test: real agent
-    tool arguments have no `id`, unlike the hand-written fixtures above.
+    The fallback marks the chart with a stand-in id so a report can tell it was never
+    persisted, and the taking of the fallback is logged.
     """
     viz_def = {
         "type": "line_chart",
@@ -385,9 +383,11 @@ def test_parse_sse_lines_adhoc_fallback_synthesizes_id_when_args_have_none():
         f'data: {{"item": {{"role": "assistant", "content": {{"type": "toolCall", "callId": "c1", "name": "create_adhoc_visualization", "arguments": {{"visualization": {json.dumps(viz_def)}}}}}}}}}',
         'data: {"item": {"role": "assistant", "content": {"type": "multipart", "parts": [{"type": "visualization", "visualization": null}]}}}',
     ]
-    result = parse_sse_lines(lines)
+    with caplog.at_level("WARNING", logger="gooddata_eval.core.chat.sse_client"):
+        result = parse_sse_lines(lines)
     assert result.created_visualizations is not None
     assert result.created_visualizations.objects[0].id == "adhoc-visualization-not-persisted"
+    assert "no visualization part" in caplog.text
     assert result.created_visualizations.objects[0].type == "line_chart"
 
 
@@ -425,7 +425,7 @@ def test_parse_sse_lines_stamps_reasoning_step_receipt_time(monkeypatch):
 def test_parse_sse_lines_prefers_multipart_viz_over_adhoc_fallback():
     """Real multipart visualization takes priority over adhoc tool call stash."""
 
-    adhoc_viz = {"id": "adhoc", "type": "table", "query": {"fields": {}, "filter_by": {}}}
+    adhoc_viz = {"type": "table", "query": {"fields": {}, "filter_by": {}}}
     real_viz = {
         "id": "real",
         "type": "column_chart",
