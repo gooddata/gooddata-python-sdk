@@ -1183,6 +1183,10 @@ def _execute_single_dashboard_run(
                 all_tool_call_events.extend(partial.tool_call_events or [])
                 all_reasoning_step_events.extend(partial.reasoning_step_events or [])
                 steps += partial.reasoning_step_count
+                # Only compiles once #1839 adds answer_text, so it is not on #1845's branch.
+                # The turn that drafts is the turn that describes the draft, so a stream that
+                # died mid-answer can still hold the text the answer assertions read.
+                answer_text = (partial.text_response or "").strip() or render_answer_text(partial) or answer_text
             exit_reason = LoopExit.CHAT_ERROR
             break
         agent_elapsed = time.monotonic() - agent_started
