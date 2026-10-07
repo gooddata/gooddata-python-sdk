@@ -1,4 +1,5 @@
 # (C) 2026 GoodData Corporation
+import contextlib
 import io
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -683,6 +684,17 @@ def test_cli_preserve_failed_flag_parsed(monkeypatch, fixtures_dir):
     assert captured_kwargs.get("preserve_failed") is True
 
 
+def _recording_keep(applied: list[bool]):
+    """Stand-in for the keep_conversations context manager that records what it was asked for."""
+
+    @contextlib.contextmanager
+    def _cm(keep: bool):
+        applied.append(keep)
+        yield
+
+    return _cm
+
+
 def test_cli_keep_conversations_flag_applies_process_wide(monkeypatch, fixtures_dir):
     """--keep-conversations lands on the module-level switch, not on the ChatClient kwargs.
 
@@ -704,7 +716,7 @@ def test_cli_keep_conversations_flag_applies_process_wide(monkeypatch, fixtures_
         def close(self): ...
 
     monkeypatch.setattr(cli_main, "WorkspaceModelController", _FakeController)
-    monkeypatch.setattr(cli_main, "set_keep_conversations", applied.append)
+    monkeypatch.setattr(cli_main, "keep_conversations", _recording_keep(applied))
     monkeypatch.setattr(cli_main, "ChatClient", lambda **kwargs: object())
 
     def _fake_run(items, backend, *, runs, model, workspace_id, **kw):
@@ -733,11 +745,11 @@ def test_cli_keep_conversations_flag_applies_process_wide(monkeypatch, fixtures_
     assert cli_main.main([*argv, "--keep-conversations"]) == 0
     assert applied == [True]
 
-    # Absent, the switch is left alone rather than forced off: GOODDATA_EVAL_KEEP_CONVERSATIONS
-    # is the other way to ask for this, and a bare `run` must not overwrite it.
+    # Scoped per run, so a bare `run` afterwards asks for nothing. keep=False leaves an
+    # env-set GOODDATA_EVAL_KEEP_CONVERSATIONS alone rather than forcing it off.
     applied.clear()
     assert cli_main.main(argv) == 0
-    assert applied == []
+    assert applied == [False]
 
 
 def test_cli_rejects_negative_concurrency(monkeypatch, fixtures_dir):

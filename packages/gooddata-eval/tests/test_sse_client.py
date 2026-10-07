@@ -867,19 +867,42 @@ def test_keep_conversations_blocks_a_direct_delete_conversation_call(keep_conver
     assert calls == []
 
 
-def test_set_keep_conversations_affects_an_already_built_client():
+def test_set_keep_conversations_affects_an_already_built_client(monkeypatch):
     """The agentic clients may already exist when the CLI applies the flag."""
     calls: list[str] = []
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", False)
     client = _client_with_handler(_delete_recording_handler(calls, "conv-late", _OK_SSE))
-    try:
-        sse_mod.set_keep_conversations(True)
-        client.delete_conversation("conv-late")
-        assert calls == []
-    finally:
-        sse_mod.set_keep_conversations(False)
 
+    sse_mod.set_keep_conversations(True)
+    client.delete_conversation("conv-late")
+    assert calls == []
+
+    sse_mod.set_keep_conversations(False)
     client.delete_conversation("conv-late")
     assert calls == ["delete"]
+
+
+def test_keep_conversations_restores_the_previous_setting(monkeypatch):
+    """One run asking to keep must not leave the next run keeping too."""
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", False)
+
+    with sse_mod.keep_conversations(True):
+        assert sse_mod._KEEP_CONVERSATIONS is True
+    assert sse_mod._KEEP_CONVERSATIONS is False
+
+    with pytest.raises(RuntimeError), sse_mod.keep_conversations(True):
+        raise RuntimeError("run blew up")
+    assert sse_mod._KEEP_CONVERSATIONS is False
+
+
+def test_keep_conversations_false_does_not_clear_an_env_set_flag(monkeypatch):
+    """``keep=False`` means "did not ask", not "delete" -- an exported env var survives a
+    run that passes no flag."""
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", True)
+
+    with sse_mod.keep_conversations(False):
+        assert sse_mod._KEEP_CONVERSATIONS is True
+    assert sse_mod._KEEP_CONVERSATIONS is True
 
 
 @pytest.mark.parametrize(
@@ -892,9 +915,12 @@ def test_keep_conversations_env_var(monkeypatch, raw, expected):
     assert sse_mod._bool_env("GOODDATA_EVAL_KEEP_CONVERSATIONS", False) is expected
 
 
-def test_conversations_are_deleted_when_the_flag_is_off():
+def test_conversations_are_deleted_when_the_flag_is_off(monkeypatch):
     """The default is unchanged: a run that does not ask to keep state leaves none behind."""
     calls: list[str] = []
+    # Set explicitly rather than assumed: with GOODDATA_EVAL_KEEP_CONVERSATIONS exported, the
+    # module initialises to True and this test would fail when run on its own.
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", False)
     client = _client_with_handler(_delete_recording_handler(calls, "conv-default", _OK_SSE))
 
     client.delete_conversation("conv-default")

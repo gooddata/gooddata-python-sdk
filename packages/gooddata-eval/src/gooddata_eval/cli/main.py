@@ -17,9 +17,9 @@ from rich.table import Table
 from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, UNGATED_AGENTIC_TEST_KINDS, run_agentic_items
 from gooddata_eval.core.chat.sse_client import (
     ChatClient,
+    keep_conversations,
     set_default_item_timeout,
     set_default_turn_timeout,
-    set_keep_conversations,
 )
 from gooddata_eval.core.config import (
     DEFAULT_GATE,
@@ -500,8 +500,6 @@ def _run(config: RunConfig) -> int:
     # Applies to the agentic evaluators' own clients too, which this function never sees.
     set_default_turn_timeout(config.turn_timeout_s)
     set_default_item_timeout(config.item_timeout_s)
-    if config.keep_conversations:
-        set_keep_conversations(True)
     if config.log_to_langfuse and config.langfuse_dataset is None:
         print(
             "error: --langfuse requires --langfuse-dataset (local datasets have no Langfuse item ids to link to).",
@@ -747,7 +745,10 @@ def main(argv: list[str] | None = None) -> int:
             turn_timeout_s=args.turn_timeout,
             item_timeout_s=args.item_timeout,
         )
-        return _run(config)
+        # Scoped to this run: main() is re-entrant under test and as a library call, and a
+        # leaked True would leave the next run's conversations on the server unasked.
+        with keep_conversations(config.keep_conversations):
+            return _run(config)
     except (
         ConnectionError_,
         ModelResolutionError,

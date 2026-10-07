@@ -13,6 +13,7 @@ module is the single place to swap — the runner only depends on the ChatBacken
 protocol, not on this class.
 """
 
+import contextlib
 import functools
 import json
 import logging
@@ -20,7 +21,7 @@ import os
 import re
 import time
 from dataclasses import dataclass, field
-from typing import Any, Callable, Iterable, TypeVar
+from typing import Any, Callable, Iterable, Iterator, TypeVar
 from urllib.parse import quote
 
 import httpx
@@ -217,9 +218,29 @@ def set_keep_conversations(keep: bool) -> None:
     Lands here for the same reason the timeout defaults do -- the agentic evaluators build
     their own clients deep in the call tree -- but takes effect at deletion rather than at
     construction, so a client already built honours it too.
+
+    Prefer ``keep_conversations`` for a single run: a bare set leaks into whatever the
+    process does next, and the direction of the leak is the costly one -- a later run that
+    asked for nothing would silently leave server-side state behind.
     """
     global _KEEP_CONVERSATIONS
     _KEEP_CONVERSATIONS = keep
+
+
+@contextlib.contextmanager
+def keep_conversations(keep: bool) -> Iterator[None]:
+    """Scope conversation retention to one run, restoring the previous setting on exit.
+
+    ``keep=False`` is not "delete": it leaves the setting alone, so an operator who exported
+    GOODDATA_EVAL_KEEP_CONVERSATIONS still gets it on a run that passes no flag.
+    """
+    previous = _KEEP_CONVERSATIONS
+    if keep:
+        set_keep_conversations(True)
+    try:
+        yield
+    finally:
+        set_keep_conversations(previous)
 
 
 T = TypeVar("T")
