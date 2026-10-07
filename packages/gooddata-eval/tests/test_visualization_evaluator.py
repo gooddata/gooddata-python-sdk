@@ -2,9 +2,10 @@
 import re
 from datetime import date
 
+import pytest
 from gooddata_eval.core.evaluators import get_evaluator
-from gooddata_eval.core.evaluators.visualization import _evaluate_visualization
-from gooddata_eval.core.models import ChatResult, CreatedVisualization, DatasetItem
+from gooddata_eval.core.evaluators.visualization import _evaluate_visualization, execution_signals
+from gooddata_eval.core.models import ChatResult, CreatedVisualization, DatasetItem, ToolCallEvent
 
 
 def _item(expected_viz) -> DatasetItem:
@@ -209,3 +210,160 @@ def test_reported_filters_use_the_same_date_anchor_as_the_score():
     assert '"from": "2026-02-01"' in result.expected_filters["date"][0]
     assert '"to": "2026-02-28"' in result.expected_filters["date"][0]
     assert result.expected_filters["date"] == result.actual_filters["date"]
+
+
+# ── execution signals ───────────────────────────────────────────────────────
+
+_CREATE = ToolCallEvent(
+    functionName="create_adhoc_visualization",
+    functionArguments='{"visualization": {"type": "headline_chart"}}',
+    result='{"status":"success","ref":"viz_1"}',
+)
+# Shapes as recorded on a live sonnet55 run: the raw value and the display string the agent quotes.
+_EXECUTE = ToolCallEvent(
+    functionName="execute_visualization",
+    functionArguments='{"visualization_ref": "viz_1", "max_rows": 10}',
+    result=(
+        '{"success":true,"data":{"output_format":"rows","columns":[],'
+        '"rows":[{"Units Per Transaction":18.303635747929686}],'
+        '"formatted_rows":[{"Units Per Transaction":"18.30"}],"row_count":1,"truncated":false}}'
+    ),
+)
+
+
+def test_a_built_and_run_chart_whose_value_the_reply_quotes():
+    assert execution_signals([_CREATE, _EXECUTE], "The average customer buys **18.30** items per order.") == (
+        True,
+        True,
+    )
+
+
+def test_a_built_chart_that_was_never_run():
+    assert execution_signals([_CREATE], "Here is the visualization of Star Wars sets.") == (False, None)
+
+
+def test_a_figure_stated_without_running_the_chart_does_not_match():
+    assert execution_signals([_CREATE], "There are 15,587 Star Wars sets.") == (False, False)
+
+
+def test_a_figure_that_differs_from_the_executed_value():
+    assert execution_signals([_CREATE, _EXECUTE], "Customers buy 21.5 items per order.") == (True, False)
+
+
+def test_a_failed_execution_or_one_for_another_ref_does_not_count():
+    failed = ToolCallEvent(
+        functionName="execute_visualization",
+        functionArguments='{"visualization_ref": "viz_1"}',
+        result='{"success":false,"error":"boom"}',
+    )
+    foreign = ToolCallEvent(
+        functionName="execute_visualization",
+        functionArguments='{"visualization_ref": "viz_9"}',
+        result='{"success":true,"data":{"rows":[]}}',
+    )
+    assert execution_signals([_CREATE, failed, foreign], None) == (False, None)
+
+
+@pytest.mark.parametrize(
+    ("value", "text"),
+    [(1234567.0, "about 1.2M"), (0.4567, "45.7%"), (15587.0, "$15,587"), (950.0, "950 sets")],
+)
+def test_a_stated_number_matches_a_rounding_of_the_raw_value(value, text):
+    execute = ToolCallEvent(
+        functionName="execute_visualization",
+        functionArguments='{"visualization_ref": "viz_1"}',
+        result=f'{{"success":true,"data":{{"rows":[{{"v":{value}}}]}}}}',
+    )
+    assert execution_signals([_CREATE, execute], text) == (True, True)
+
+
+def _item_requiring_execution(expected_viz) -> DatasetItem:
+    return DatasetItem(
+        id="i1",
+        dataset_name="d",
+        test_kind="visualization",
+        question="What is revenue?",
+        expected_output={"visualization": expected_viz, "requires_execution": True},
+    )
+
+
+def test_a_correct_chart_fails_when_execution_is_required_and_missing():
+    ev = get_evaluator("visualization")
+    result = ev.evaluate(_item_requiring_execution(_expected()), _chat_result_with(dict(_expected())))
+    assert result.passed is False
+    assert result.detail["executed"] is False
+    assert result.detail["execution"]["required"] is True
+
+
+def test_a_correct_chart_passes_when_execution_is_required_and_done():
+    ev = get_evaluator("visualization")
+    chat = ChatResult.model_validate(
+        {
+            "createdVisualizations": {"objects": [dict(_expected())], "reasoning": ""},
+            "toolCallEvents": [_CREATE.model_dump(by_alias=True), _EXECUTE.model_dump(by_alias=True)],
+        }
+    )
+    result = ev.evaluate(_item_requiring_execution(_expected()), chat)
+    assert result.passed is True
+    assert result.detail["executed"] is True
+
+
+def test_an_unrun_chart_still_passes_when_the_item_does_not_require_execution():
+    result = get_evaluator("visualization").evaluate(_item(_expected()), _chat_result_with(dict(_expected())))
+    assert result.passed is True
+    assert result.detail["execution"]["executed"] is False
+    # Not gating, so not a top-level check that quality_score would count.
+    assert "executed" not in result.detail
+
+
+def test_a_tool_result_that_is_not_a_json_object_is_skipped_not_raised():
+    odd_create = ToolCallEvent(functionName="create_adhoc_visualization", functionArguments="{}", result='["viz_1"]')
+    odd_execute = ToolCallEvent(functionName="execute_visualization", functionArguments='"viz_1"', result='"ok"')
+    assert execution_signals([odd_create, _CREATE, odd_execute, _EXECUTE], None) == (True, None)
+
+
+def test_a_sign_after_the_currency_symbol_is_read():
+    execute = ToolCallEvent(
+        functionName="execute_visualization",
+        functionArguments='{"visualization_ref": "viz_1"}',
+        result='{"success":true,"data":{"rows":[{"v":-1234}]}}',
+    )
+    assert execution_signals([_CREATE, execute], "a loss of $-1,234") == (True, True)
+
+
+def test_a_number_without_the_scale_does_not_quote_a_scaled_display_string():
+    execute = ToolCallEvent(
+        functionName="execute_visualization",
+        functionArguments='{"visualization_ref": "viz_1"}',
+        result='{"success":true,"data":{"rows":[{"v":1200000}],"formatted_rows":[{"v":"1.2M"}]}}',
+    )
+    assert execution_signals([_CREATE, execute], "Revenue was 1.2.") == (True, False)
+    assert execution_signals([_CREATE, execute], "Revenue was 1.2M.") == (True, True)
+
+
+def test_malformed_rows_in_a_successful_result_are_skipped_not_raised():
+    execute = ToolCallEvent(
+        functionName="execute_visualization",
+        functionArguments='{"visualization_ref": "viz_1"}',
+        result='{"success":true,"data":{"rows":42,"formatted_rows":"x"}}',
+    )
+    assert execution_signals([_CREATE, execute], "It is 42.") == (True, False)
+
+
+def test_a_percent_is_compared_with_the_fraction_times_100():
+    execute = ToolCallEvent(
+        functionName="execute_visualization",
+        functionArguments='{"visualization_ref": "viz_1"}',
+        result='{"success":true,"data":{"rows":[{"v":0.1}]}}',
+    )
+    assert execution_signals([_CREATE, execute], "a 10% share") == (True, True)
+    assert execution_signals([_CREATE, execute], "a 0.1% share") == (True, False)
+
+
+def test_a_ref_that_is_not_a_string_is_skipped_not_raised():
+    execute = ToolCallEvent(
+        functionName="execute_visualization",
+        functionArguments='{"visualization_ref": ["viz_1"]}',
+        result='{"success":true,"data":{"rows":[]}}',
+    )
+    assert execution_signals([_CREATE, execute], None) == (False, None)

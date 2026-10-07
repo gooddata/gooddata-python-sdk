@@ -115,6 +115,7 @@ _EVALUATE_FUNCS = [
     ("metric_skill", "evaluate_agentic_metric_skill"),
     ("alert_skill", "evaluate_agentic_alert_skill"),
     ("dashboard_skill", "evaluate_agentic_dashboard_skill"),
+    ("report_skill", "evaluate_agentic_report_skill"),
     ("search_tool", "evaluate_agentic_search_tool"),
     ("visualization", "evaluate_agentic_visualization"),
     ("kda_skill", "evaluate_agentic_kda_skill"),
