@@ -66,10 +66,19 @@ def _user_context_from_raw(raw: dict) -> dict[str, Any] | None:
     item input object or the item metadata. An item carrying an attachment (a WIDGET or
     VIEW descriptor) is meaningless without it: it degrades into a bare question the
     agent has no way to answer, and then fails for a reason that has nothing to do with
-    what the item was written to test. So this has to survive the round trip.
+    what the item was written to test. So this has to survive the round trip, and a
+    value that is not an object raises rather than being skipped, for the same reason.
     """
-    found = _first_of(dict, "user_context", raw.get("input"), raw.get("metadata"))
-    return cast("dict[str, Any]", found) if found is not None else None
+    for source in (raw.get("input"), raw.get("metadata")):
+        if not isinstance(source, dict) or source.get("user_context") is None:
+            continue
+        found = source["user_context"]
+        if not isinstance(found, dict):
+            raise ValueError(
+                f"Langfuse item {raw.get('id')!r}: user_context must be a JSON object, got {type(found).__name__}"
+            )
+        return cast("dict[str, Any]", found)
+    return None
 
 
 def _infer_test_kind(expected_output: object, default: str, metadata: object = None) -> str:

@@ -19,10 +19,12 @@ from gooddata_eval.core.agentic.general_question import evaluate_agentic_general
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.kda_skill import evaluate_agentic_kda_skill
 from gooddata_eval.core.agentic.metric_skill import evaluate_agentic_metric_skill
+from gooddata_eval.core.agentic.report_skill import evaluate_agentic_report_skill
 from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
 from gooddata_eval.core.agentic.what_if import evaluate_agentic_what_if
 from gooddata_eval.core.config import ReasoningEffort
+from gooddata_eval.core.evaluators.visualization import requires_execution_of
 from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
 
@@ -44,6 +46,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_metric_skill",
         "agentic_alert_skill",
         "agentic_dashboard_skill",
+        "agentic_report_skill",
         "agentic_search",
         "agentic_general_question",
         "agentic_guardrail",
@@ -94,7 +97,8 @@ PARALLEL_SAFE_TEST_KINDS = frozenset(
 #
 # agentic_dashboard_skill is absent by default rather than by evidence: gen-ai holds the draft and
 # any chart it authors in conversation state and writes neither until a user saves from the UI, so
-# it is a candidate for the allowlist once the dataset has runs behind it.
+# it is a candidate for the allowlist once the dataset has runs behind it. agentic_report_skill is
+# absent for the same reason: the report draft stays in conversation state until a user saves it.
 WORKSPACE_MUTATING_TEST_KINDS = frozenset(AGENTIC_TEST_KINDS) - PARALLEL_SAFE_TEST_KINDS
 
 
@@ -176,9 +180,11 @@ def _dispatch_agentic(
             workspace_id=workspace_id,
             question=item.question,
             expected_outputs=_parse_visualization_expected(eo),
+            requires_execution=requires_execution_of(eo),
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_metric_skill":
@@ -191,6 +197,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_dashboard_skill":
@@ -203,6 +210,20 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
+            **lf_kw,
+        )
+    elif kind == "agentic_report_skill":
+        return evaluate_agentic_report_skill(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo,
+            k=k,
+            gate=gate,
+            agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_alert_skill":
@@ -215,6 +236,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_search":
@@ -230,6 +252,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_general_question":
@@ -255,6 +278,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_kda_skill":
@@ -267,6 +291,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_what_if":
@@ -278,6 +303,7 @@ def _dispatch_agentic(
             expected_output=eo if isinstance(eo, dict) else {},
             k=k,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_anomaly_detection":
@@ -290,6 +316,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_conversation":
@@ -300,6 +327,7 @@ def _dispatch_agentic(
             workspace_id=workspace_id,
             fixture=ConversationFixture.model_validate(fixture_data),
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     else:

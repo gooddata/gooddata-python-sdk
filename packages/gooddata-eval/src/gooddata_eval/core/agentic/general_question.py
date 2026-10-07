@@ -116,11 +116,10 @@ def _run_single_general_question(
     conversation_id: str,
     question: str,
     expected_output: str,
-    user_context: dict | None = None,
 ) -> GeneralQuestionResult:
     item_started = time.monotonic()
     agent_started = time.monotonic()
-    chat_result = client.send_message(conversation_id, question, user_context=user_context)
+    chat_result = client.send_message(conversation_id, question)
     actual_output = render_answer_text(chat_result)
     agent_elapsed = time.monotonic() - agent_started
     log_timer(
@@ -169,16 +168,19 @@ def run_agentic_general_question(
     """Run the general-question agentic evaluation K times and return a summary."""
     run_results: list[GeneralQuestionResult] = []
     client = ChatClient(
-        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+        host=host,
+        token=token,
+        workspace_id=workspace_id,
+        reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
+        user_context=user_context,
     )
     judge = LLMJudge(_GENERAL_QUESTION_EVALUATION_STEPS)
 
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
-            run_results.append(
-                _run_single_general_question(client, judge, conv_id_0, question, expected_output, user_context)
-            )
+            run_results.append(_run_single_general_question(client, judge, conv_id_0, question, expected_output))
         finally:
             if initial_conversation_id is None:
                 client.delete_conversation(conv_id_0)
@@ -186,9 +188,7 @@ def run_agentic_general_question(
         for _ in range(1, k):
             conv_id = client.create_conversation()
             try:
-                run_results.append(
-                    _run_single_general_question(client, judge, conv_id, question, expected_output, user_context)
-                )
+                run_results.append(_run_single_general_question(client, judge, conv_id, question, expected_output))
             finally:
                 client.delete_conversation(conv_id)
     finally:
