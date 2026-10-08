@@ -29,6 +29,9 @@ _OTLP_PATH = "/api/public/otel/v1/traces"
 _MAX_SCORE_ATTEMPTS = 3
 _DEFAULT_RETRY_DELAY = 0.5
 _MAX_RETRY_DELAY = 5.0
+# Langfuse Cloud rate-limits in fixed one-minute windows, and a 429's Retry-After counts down to
+# the window's reset. A shorter wait retries into the same exhausted window and loses the score.
+_MAX_THROTTLE_DELAY = 60.0
 
 
 def _is_retryable(resp: httpx.Response) -> bool:
@@ -38,8 +41,8 @@ def _is_retryable(resp: httpx.Response) -> bool:
 def _retry_delay(resp: httpx.Response) -> float:
     """Seconds to wait before the next attempt, from `Retry-After` when the server names one.
 
-    Unparsable, negative or NaN values fall back to the default; the cap bounds the wait so a
-    throttled score cannot hold a linking worker for long.
+    Unparsable, negative or NaN values fall back to the default. A 429 waits up to one rate-limit
+    window; any other retryable status is capped at a few seconds.
     """
     try:
         asked_for = float(resp.headers.get("Retry-After", ""))
@@ -47,7 +50,7 @@ def _retry_delay(resp: httpx.Response) -> float:
         return _DEFAULT_RETRY_DELAY
     if not asked_for >= 0:
         return _DEFAULT_RETRY_DELAY
-    return min(asked_for, _MAX_RETRY_DELAY)
+    return min(asked_for, _MAX_THROTTLE_DELAY if resp.status_code == 429 else _MAX_RETRY_DELAY)
 
 
 class _TraceListResult:
