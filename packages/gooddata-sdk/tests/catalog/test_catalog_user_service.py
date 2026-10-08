@@ -24,7 +24,6 @@ from __future__ import annotations
 import copy
 from pathlib import Path
 
-import pytest
 from gooddata_sdk import (
     CatalogAssigneeIdentifier,
     CatalogDeclarativeUser,
@@ -581,7 +580,6 @@ def test_user_replace_user_groups(test_config):
     assert user_2.user_groups == user_groups
 
 
-@pytest.mark.dependency(name="test_get_user_permissions")
 @gd_vcr.use_cassette(str(_fixtures_dir / "test_get_user_permissions.yaml"))
 def test_get_user_permissions(test_config):
     """Test retrieving user permissions.
@@ -644,7 +642,6 @@ def test_manage_user_permissions(test_config):
         safe_delete(sdk.catalog_user.manage_user_permissions, user_id, origin_permissions)
 
 
-@pytest.mark.dependency(name="test_get_user_group_permissions")
 @gd_vcr.use_cassette(str(_fixtures_dir / "test_get_user_group_permissions.yaml"))
 def test_get_user_group_permissions(test_config):
     """Test retrieving user group permissions.
