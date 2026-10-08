@@ -442,3 +442,49 @@ def test_a_failed_item_says_when_a_criterion_went_ungraded():
     out = _rendered(report)
 
     assert "did not pass strict checks; 1 criterion(s) ungraded" in out
+
+
+def test_json_report_carries_failed_runs_beside_the_winning_detail():
+    """`detail` keeps its exact meaning -- the winning run -- so every existing consumer of
+    this report is unaffected; the failing attempts arrive alongside it rather than
+    replacing it."""
+    report = EvalReport(model="gpt-5.2")
+    report.items.append(
+        ItemReport(
+            id="i1",
+            dataset_name="d",
+            test_kind="agentic_dashboard_summary",
+            question="q",
+            pass_at_k=True,
+            runs=2,
+            runs_passed=1,
+            best_detail={"rubric_0": True},
+            conversation_id="conv-2",
+            failed_runs=[
+                {
+                    "run_index": 1,
+                    "passed": False,
+                    "error": None,
+                    "detail": {"rubric_0": False},
+                    "conversation_id": "conv-1",
+                    "response_id": "resp-1",
+                    "stream_ended": True,
+                    "reasoning_steps": ["why it went wrong"],
+                }
+            ],
+        )
+    )
+
+    item = build_json_report(report)["items"]["i1"]
+    assert item["detail"] == {"rubric_0": True}
+    assert item["conversation_id"] == "conv-2"
+    assert [r["detail"] for r in item["failed_runs"]] == [{"rubric_0": False}]
+    assert item["failed_runs"][0]["conversation_id"] == "conv-1"
+
+
+def test_json_report_failed_runs_is_empty_for_a_clean_item():
+    report = EvalReport(model="gpt-5.2")
+    report.items.append(
+        ItemReport(id="i1", dataset_name="d", test_kind="visualization", question="q", pass_at_k=True, runs=2)
+    )
+    assert build_json_report(report)["items"]["i1"]["failed_runs"] == []

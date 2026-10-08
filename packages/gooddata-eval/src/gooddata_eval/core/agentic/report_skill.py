@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from gooddata_eval.core.agentic._conversation_context import classify_reply
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -804,16 +805,28 @@ def evaluate_agentic_report_skill(
     runs_effective = len(summary.run_results)
 
     best = summary.best
+
+    def _run_detail(run: ReportRunResult) -> dict[str, Any]:
+        """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+        A closure because the unscored-run summary belongs to the item, not to the run."""
+        return {
+            **run.evaluation.strict_checks,
+            **run.diagnostics,
+            "summaries_from_data": run.summaries_from_data,
+            "turns": run.total_turns,
+            **({"judge_reasoning": run.evaluation.judge_reasoning} if run.evaluation.applies.narrative else {}),
+            "failures": run.evaluation.failures,
+            "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
+        }
+
     detail: dict[str, Any] = {
-        **best.evaluation.strict_checks,
-        **best.diagnostics,
-        "summaries_from_data": best.summaries_from_data,
-        "turns": best.total_turns,
-        **({"judge_reasoning": best.evaluation.judge_reasoning} if best.evaluation.applies.narrative else {}),
+        **_run_detail(best),
         **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),
-        "failures": best.evaluation.failures,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
     }
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(summary.run_results, passed=lambda r: r.evaluation.strict_pass, detail=_run_detail)
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
@@ -838,6 +851,7 @@ def evaluate_agentic_report_skill(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
+        exc.failed_runs = failed_runs
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -847,4 +861,5 @@ def evaluate_agentic_report_skill(
         response_id=best.response_id,
         detail=detail,
         timings=item_timings,
+        failed_runs=failed_runs,
     )
