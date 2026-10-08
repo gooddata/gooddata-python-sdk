@@ -49,6 +49,18 @@ class JudgeResponseError(RuntimeError):
     # rather than attached loosely, because the runner reads it off the exception to report
     # what an unevaluable item still cost.
     timings: PhaseTimings
+    # The rest of that payload, for the same reason. An item whose every run went ungraded
+    # is still worth reading -- the judge breaking says nothing about what the agent did --
+    # so the agentic evaluators attach their per-run records here and cli/agentic_runner
+    # reports them. Mirrors AgenticAssertionError, which declares the identical set; the two
+    # cannot share a base, one being an AssertionError and the other a RuntimeError.
+    reasoning_steps: list[str]
+    conversation_id: str
+    response_id: str | None
+    detail: dict
+    runs_passed: int
+    runs_effective: int
+    failed_runs: list[dict]
 
 
 def _message_content(response: Any) -> str | None:
