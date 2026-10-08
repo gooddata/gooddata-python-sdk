@@ -74,15 +74,20 @@ def build_experiment_root_span(
     observation_metadata: dict[str, Any] | None = None,
     trace_metadata: dict[str, Any] | None = None,
     environment: str | None = None,
+    trace_id: str | None = None,
+    span_id: str | None = None,
 ) -> Span:
     """Build the single root span gd-eval emits per (dataset item, run).
 
     With `run=None` this is a plain observation span carrying no `langfuse.experiment.*`
     attributes at all — used when there is no experiment to attach the item to.
+
+    `trace_id`/`span_id` default to fresh ids; pass them to make the span the root of an
+    existing trace whose other spans already name it as their parent.
     """
     if end < start:
         end = start
-    span_id = new_span_id()
+    span_id = span_id or new_span_id()
 
     attributes: list[dict[str, Any]] = [otlp_attribute(ATTR_OBSERVATION_TYPE, "span")]
     if item.input is not None:
@@ -118,7 +123,14 @@ def build_experiment_root_span(
             )
         attributes.extend(flatten_metadata(ATTR_EXPERIMENT_ITEM_METADATA_PREFIX, item.metadata))
 
-    return Span(trace_id=new_trace_id(), span_id=span_id, name=trace_name, start=start, end=end, attributes=attributes)
+    return Span(
+        trace_id=trace_id or new_trace_id(),
+        span_id=span_id,
+        name=trace_name,
+        start=start,
+        end=end,
+        attributes=attributes,
+    )
 
 
 class ScoreTarget(str):

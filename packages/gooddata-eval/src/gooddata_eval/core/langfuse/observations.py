@@ -50,29 +50,51 @@ class TraceSummary:
         self.end_time: datetime | None = _parse_time(raw.get("endTime"))
 
 
+# gen-ai's span for one chat turn. In a trace of gen-ai's own it is the parentless root; in
+# an eval trace that joined gd-eval's experiment item it sits under gd-eval's root.
+_TURN_SPAN_NAME = "conversation.send_message"
+
+
 def summarize_traces(rows: list[dict]) -> list[TraceSummary]:
     """Fold observation rows into one summary per trace, in order of first appearance.
 
-    The root is the row without a parent observation; it carries the trace's session,
-    metadata and latency. Cost is summed over all of the trace's rows, because on a gen-ai
-    conversation the root has no cost of its own and the model calls under it do. A trace
-    whose root is not on the page is dropped -- a poll that catches a conversation
-    mid-ingestion sees children only, and those describe no complete trace.
+    Session and metadata come from the trace's first gen-ai turn row, else its parentless
+    row. Latency and the start/end times come from the parentless row; a trace without one
+    (gen-ai turns under a gd-eval root not exported yet) spans its rows' earliest start to
+    latest end. Cost is summed over all of the trace's rows, because the model calls carry
+    it, not the turn or the root. A trace with neither a parentless row nor a turn row is
+    dropped -- a poll that catches a conversation mid-ingestion sees model calls only, and
+    those describe no complete trace.
     """
-    order: list[str] = []
-    roots: dict[str, dict] = {}
-    costs: dict[str, float] = {}
+    grouped: dict[str, list[dict]] = {}
     for row in rows:
         trace_id = row.get("traceId")
-        if not trace_id:
-            continue
-        if trace_id not in costs:
-            order.append(trace_id)
-            costs[trace_id] = 0.0
-        costs[trace_id] += float(row.get("totalCost") or 0.0)
-        if not row.get("parentObservationId"):
-            roots.setdefault(trace_id, row)
-    return [TraceSummary(roots[tid], total_cost=costs[tid]) for tid in order if tid in roots]
+        if trace_id:
+            grouped.setdefault(trace_id, []).append(row)
+    return [summary for trace_rows in grouped.values() if (summary := _fold_trace(trace_rows)) is not None]
+
+
+def _fold_trace(rows: list[dict]) -> TraceSummary | None:
+    root = next((row for row in rows if not row.get("parentObservationId")), None)
+    turn = next((row for row in rows if row.get("name") == _TURN_SPAN_NAME), None)
+    head = turn or root
+    if head is None:
+        return None
+    summary = TraceSummary(head, total_cost=sum(float(row.get("totalCost") or 0.0) for row in rows))
+    if root is not None:
+        summary.root_observation_id = root.get("id")
+        summary.latency = float(root.get("latency") or 0.0)
+        summary.start_time = _parse_time(root.get("startTime"))
+        summary.end_time = _parse_time(root.get("endTime"))
+        return summary
+    starts = [t for row in rows if (t := _parse_time(row.get("startTime"))) is not None]
+    ends = [t for row in rows if (t := _parse_time(row.get("endTime"))) is not None]
+    summary.root_observation_id = None
+    summary.start_time = min(starts, default=None)
+    summary.end_time = max(ends, default=None)
+    if summary.start_time is not None and summary.end_time is not None:
+        summary.latency = (summary.end_time - summary.start_time).total_seconds()
+    return summary
 
 
 def list_traces_in_window(
@@ -123,3 +145,21 @@ def list_traces_in_window(
         if not cursor or len(summaries) >= limit:
             break
     return summaries[:limit]
+
+
+def list_observations_for_trace(
+    http: httpx.Client, trace_id: str, *, page_size: int = 1000, max_pages: int = 8
+) -> list[dict]:
+    """Every observation row of one trace, following the cursor up to ``max_pages`` pages."""
+    params: dict[str, Any] = {"traceId": trace_id, "fields": _FIELDS, "limit": page_size}
+    rows: list[dict] = []
+    cursor: str | None = None
+    for _page in range(max_pages):
+        resp = http.get(_OBSERVATIONS_PATH, params=params if cursor is None else {**params, "cursor": cursor})
+        resp.raise_for_status()
+        body = resp.json()
+        rows.extend(body.get("data") or [])
+        cursor = (body.get("meta") or {}).get("cursor")
+        if not cursor:
+            break
+    return rows

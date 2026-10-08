@@ -20,7 +20,7 @@ from gooddata_eval.cli.agentic_runner import (
 )
 from gooddata_eval.core.agentic.alert_skill import AlertSkillAssertionError
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
-from gooddata_eval.core.models import AgenticEvalOutcome, DatasetItem
+from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.timing import PhaseTimings
 
 
@@ -968,3 +968,51 @@ def test_run_agentic_items_surfaces_failed_runs_on_a_partial_pass():
         report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
     assert report.items[0].pass_at_k is True
     assert report.items[0].failed_runs == [_A_FAILED_RUN]
+
+
+class _FirstSend(BaseException):
+    """Ends a run at its first chat turn; BaseException so no kind's error handling keeps it."""
+
+
+class _FirstSendClient:
+    def __init__(self, **_kwargs: Any) -> None:
+        self.sent: list[str] = []
+
+    def create_conversation(self) -> str:
+        return "conv-created"
+
+    def send_message(self, conversation_id: str, *_args: Any, **_kwargs: Any) -> None:
+        self.sent.append(conversation_id)
+        raise _FirstSend
+
+    def delete_conversation(self, _conversation_id: str) -> None:
+        pass
+
+    def close(self) -> None:
+        pass
+
+
+_RUN_ZERO_KINDS = [
+    (m, run_fn, expected or [CreatedVisualization.model_validate(_MIN_VIZ)] if m == "visualization" else expected)
+    for m, run_fn, _, expected in _CLIENT_CONTEXT_KINDS
+] + [("conversation", "run_agentic_conversation", _MIN_CONVERSATION_FIXTURE)]
+
+
+@pytest.mark.parametrize(("module_name", "run_fn", "expected"), _RUN_ZERO_KINDS)
+def test_every_kind_sends_run_zero_first(
+    module_name: str, run_fn: str, expected: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """ChatClient numbers runs by the order their conversations are first sent to, which
+    names each run's experiment; that only matches the scorer's run index if run 0 goes first."""
+    # The guardrail and general-question kinds build their LLM judge before the first send.
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    module = importlib.import_module(f"gooddata_eval.core.agentic.{module_name}")
+    client = _FirstSendClient()
+    if module_name == "conversation":
+        args: tuple = (module.ConversationFixture.model_validate(expected),)
+        kwargs: dict[str, Any] = {}
+    else:
+        args, kwargs = ("q", expected), {"k": 2}
+    with patch.object(module, "ChatClient", return_value=client), pytest.raises(_FirstSend):
+        getattr(module, run_fn)("https://h", "tok", "ws1", *args, initial_conversation_id="conv-run0", **kwargs)
+    assert client.sent == ["conv-run0"]

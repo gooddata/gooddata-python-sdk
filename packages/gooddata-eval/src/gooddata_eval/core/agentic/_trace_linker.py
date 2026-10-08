@@ -21,6 +21,7 @@ from datetime import datetime, timezone
 from typing import Any, Protocol
 
 from gooddata_eval.core._output import emit_line
+from gooddata_eval.core.langfuse.item_scope import ItemTraceScope, join_enabled, release_joined
 
 _log = logging.getLogger(__name__)
 
@@ -106,6 +107,23 @@ def open_trace_window(langfuse: Any) -> tuple[Any, datetime]:
     from gooddata_eval.core.agentic._langfuse import try_make_langfuse_client  # noqa: PLC0415
 
     return (try_make_langfuse_client() if langfuse is None else langfuse), utc_now()
+
+
+def open_item_trace(
+    langfuse: Any, identity: RunIdentity, dataset_item_id: str, *, suffix_runs: bool
+) -> tuple[Any, datetime, ItemTraceScope | None]:
+    """``open_trace_window`` plus the item's experiment scope for its chat turns to carry.
+
+    The scope is None unless ``GOODDATA_EVAL_JOIN_GENAI_TRACE`` is on and the item can be
+    assembled into an experiment; then the run name and dataset are resolved here, before
+    the run, rather than in the deferred task.
+    """
+    langfuse, window_start = open_trace_window(langfuse)
+    if not (join_enabled() and langfuse is not None and dataset_item_id):
+        return langfuse, window_start, None
+    from gooddata_eval.core.agentic._langfuse import resolve_item_scope  # noqa: PLC0415
+
+    return langfuse, window_start, resolve_item_scope(langfuse, identity, dataset_item_id, suffix_runs=suffix_runs)
 
 
 @dataclass(frozen=True)
@@ -197,6 +215,7 @@ def submit_trace_scoring(
     suffix_runs: bool,
     write_scores: Callable[[RunTraceContext], None],
     item_input: Any = None,
+    scope: ItemTraceScope | None = None,
 ) -> None:
     """Defer one item's whole Langfuse block: resolve its run context, then write scores.
 
@@ -204,35 +223,35 @@ def submit_trace_scoring(
     ``find_traces_per_conversation``'s ingestion-lag poll are both round trips publishing an
     already-decided verdict, so neither belongs on the item's clock. Every caller pins
     ``window_end`` before calling: a deferred poll must not widen its own query window.
+    A ``scope`` from ``open_item_trace`` already carries the resolved run context.
     """
 
     def _link_traces() -> None:
         from gooddata_eval.core.agentic import _langfuse  # noqa: PLC0415
 
-        base_name, run_metadata = _langfuse.build_run_context(
-            identity.host,
-            identity.token,
-            identity.workspace_id,
-            identity.dataset_name,
-            identity.run_timestamp,
-            identity.model_version_override,
-            identity.run_metadata_extra,
-            identity.reasoning_effort,
-        )
-        traces = _langfuse.find_traces_per_conversation(langfuse, conversation_ids, window_start, window_end)
-        write_scores(
-            RunTraceContext(
-                run_metadata,
-                _langfuse,
-                langfuse,
-                dataset_item_id,
-                base_name,
-                suffix_runs,
-                traces,
-                (window_start, window_end),
-                item_input,
+        if scope is not None:
+            base_name, run_metadata = scope.base_name, dict(scope.run_metadata)
+        else:
+            base_name, run_metadata = _langfuse.run_context_for(identity)
+        try:
+            traces = _langfuse.find_traces_per_conversation(langfuse, conversation_ids, window_start, window_end)
+            write_scores(
+                RunTraceContext(
+                    run_metadata,
+                    _langfuse,
+                    langfuse,
+                    dataset_item_id,
+                    base_name,
+                    suffix_runs,
+                    traces,
+                    (window_start, window_end),
+                    item_input,
+                )
             )
-        )
+        finally:
+            # Nothing reads a join after this task, including one whose root was never exported.
+            for conversation_id in conversation_ids:
+                release_joined(conversation_id)
 
     submit_trace_link(_link_traces, item_id=dataset_item_id)
 

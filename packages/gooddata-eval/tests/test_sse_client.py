@@ -14,6 +14,8 @@ from gooddata_eval.core.chat.sse_client import (
     TurnIncompleteError,
     parse_sse_lines,
 )
+from gooddata_eval.core.langfuse.experiment import experiment_id_for
+from gooddata_eval.core.langfuse.item_scope import ItemTraceScope, JoinedRun, item_scope, joined_run, trace_ids_for
 from gooddata_eval.core.models import DatasetItem, ReasoningStepEvent, ToolCallEvent, build_latency_breakdown
 
 
@@ -1128,5 +1130,116 @@ def test_no_trace_labels_send_no_baggage(monkeypatch: pytest.MonkeyPatch, raw: s
         monkeypatch.setenv("GOODDATA_EVAL_TRACE_LABELS", raw)
     requests: list[httpx.Request] = []
     _client_with_handler(_record_requests(requests)).create_conversation()
+
+    assert _baggage_of(requests) == [None]
+
+
+def _started_sse(trace_id: str | None) -> bytes:
+    data = {"responseId": "r1", **({"traceId": trace_id} if trace_id else {})}
+    return f"event: response_started\ndata: {json.dumps(data)}\n\n".encode() + _OK_SSE
+
+
+def test_parse_sse_lines_reads_the_trace_id_from_response_started():
+    lines = ["event: response_started", 'data: {"responseId": "r1", "traceId": "' + "a" * 32 + '"}', ""]
+    assert parse_sse_lines(lines).trace_id == "a" * 32
+
+
+def test_parse_sse_lines_ignores_a_trace_id_outside_response_started():
+    assert parse_sse_lines(['data: {"traceId": "abc", "responseId": "r1"}']).trace_id is None
+
+
+_SCOPE = ItemTraceScope(base_name="ds_ts_model", suffix_runs=True, dataset_id="ds-1", item_id="item-1")
+
+
+def _scoped_client(monkeypatch: pytest.MonkeyPatch, requests: list[httpx.Request], *, echo_trace: bool = True):
+    """A client whose fake gen-ai reports, per conversation, the trace id the request asked for."""
+    monkeypatch.setenv("GOODDATA_EVAL_JOIN_GENAI_TRACE", "1")
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        asked = (_baggage_of([request])[0] or {}).get("langfuse_trace_id")
+        return httpx.Response(200, content=_started_sse(asked if echo_trace else "f" * 32))
+
+    return _client_with_handler(handler)
+
+
+def test_each_conversation_is_sent_its_own_trace_and_root(monkeypatch: pytest.MonkeyPatch) -> None:
+    requests: list[httpx.Request] = []
+    client = _scoped_client(monkeypatch, requests)
+    with item_scope(_SCOPE):
+        client.send_message("conv-a-distinct", "q")
+        client.send_message("conv-b-distinct", "q")
+
+    a, b = _baggage_of(requests)
+    assert (a["langfuse_trace_id"], a["langfuse_experiment_item_root_observation_id"]) == trace_ids_for(
+        "conv-a-distinct"
+    )
+    assert a["langfuse_trace_id"] != b["langfuse_trace_id"]
+    assert a["langfuse_experiment_item_root_observation_id"] != b["langfuse_experiment_item_root_observation_id"]
+    assert (a["langfuse_experiment_dataset_id"], a["langfuse_experiment_item_id"]) == ("ds-1", "item-1")
+
+
+def test_run_index_follows_the_order_conversations_are_first_sent(monkeypatch: pytest.MonkeyPatch) -> None:
+    requests: list[httpx.Request] = []
+    client = _scoped_client(monkeypatch, requests)
+    with item_scope(_SCOPE):
+        # run 0 takes two turns before run 1 starts; its second turn keeps run 0's name.
+        for conversation_id in ("conv-run0", "conv-run0", "conv-run1"):
+            client.send_message(conversation_id, "q")
+
+    names = [b["langfuse_experiment_name"] for b in _baggage_of(requests)]
+    assert names == ["ds_ts_model_run0", "ds_ts_model_run0", "ds_ts_model_run1"]
+    ids = [b["langfuse_experiment_id"] for b in _baggage_of(requests)]
+    assert ids == [experiment_id_for(name) for name in names]
+
+
+def test_labels_and_scope_share_one_baggage_header(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("GOODDATA_EVAL_TRACE_LABELS", "github_run_id=42")
+    requests: list[httpx.Request] = []
+    client = _scoped_client(monkeypatch, requests)
+    with item_scope(_SCOPE):
+        client.send_message("conv-labels", "q")
+
+    (baggage,) = _baggage_of(requests)
+    assert baggage["langfuse_metadata_github_run_id"] == "42"
+    assert "langfuse_trace_id" in baggage
+
+
+def test_a_conversation_is_joined_only_when_gen_ai_reports_the_trace_it_was_asked_for(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    client = _scoped_client(monkeypatch, [])
+    with item_scope(_SCOPE):
+        result = client.send_message("conv-joined", "q")
+    assert result.trace_id == trace_ids_for("conv-joined")[0]
+    assert joined_run("conv-joined") == JoinedRun("ds_ts_model_run0", "ds-1")
+
+    other = _scoped_client(monkeypatch, [], echo_trace=False)
+    with item_scope(_SCOPE):
+        other.send_message("conv-not-joined", "q")
+    assert joined_run("conv-not-joined") is None
+
+
+@pytest.mark.parametrize("switch", [None, "", "0", "false"])
+def test_switch_off_sends_no_new_baggage_even_inside_a_scope(monkeypatch: pytest.MonkeyPatch, switch) -> None:
+    if switch is None:
+        monkeypatch.delenv("GOODDATA_EVAL_JOIN_GENAI_TRACE", raising=False)
+    else:
+        monkeypatch.setenv("GOODDATA_EVAL_JOIN_GENAI_TRACE", switch)
+    monkeypatch.delenv("GOODDATA_EVAL_TRACE_LABELS", raising=False)
+    requests: list[httpx.Request] = []
+    client = _client_with_handler(_record_requests(requests))
+    with item_scope(_SCOPE):
+        client.send_message("conv-off", "q")
+
+    assert _baggage_of(requests) == [None]
+    assert joined_run("conv-off") is None
+
+
+def test_switch_on_without_a_scope_sends_no_new_baggage(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("GOODDATA_EVAL_JOIN_GENAI_TRACE", "1")
+    monkeypatch.delenv("GOODDATA_EVAL_TRACE_LABELS", raising=False)
+    requests: list[httpx.Request] = []
+    _client_with_handler(_record_requests(requests)).send_message("conv-unscoped", "q")
 
     assert _baggage_of(requests) == [None]

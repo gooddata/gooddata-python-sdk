@@ -198,6 +198,9 @@ class HttpxLangfuseClient:
             self._http, from_time=from_time, to_time=to_time, limit=limit, session_id=session_id
         )
 
+    def list_observations_for_trace(self, trace_id: str) -> list[dict]:
+        return observations.list_observations_for_trace(self._http, trace_id)
+
     def flush(self) -> None:
         pass  # no client-side batching
 
