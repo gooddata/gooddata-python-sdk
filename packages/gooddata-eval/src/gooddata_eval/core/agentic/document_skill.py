@@ -49,14 +49,22 @@ _DEFAULT_K = 1
 # absorb a turn that answered without drafting.
 _DEFAULT_MAX_ITERATIONS = 4
 
-_DRAFT_TOOL = "draft_report"
-_BUILDER_SKILL = "report_builder"
-_PART_TYPE = "report"
+_DRAFT_TOOL = "draft_document"
+_BUILDER_SKILL = "document_builder"
+_PART_TYPE = "document"
+_SET_SKILLS_TOOL = "set_skills"
+# The Report names gen-ai sent before Publisher's Document names. Any of them on the wire means
+# some part of the chain was not switched over.
+_LEGACY_PART_TYPE = "report"
+_LEGACY_PART_KEYS = ("report", "report_ref", "base_report_id", "saved_report_id")
+_LEGACY_DRAFT_TOOL = "draft_report"
+_LEGACY_TOOLS = frozenset({_LEGACY_DRAFT_TOOL, "list_report_layouts"})
+_LEGACY_SKILL = "report_builder"
 # The copilot's own rule: a document opens with a cover and has at least one content page.
 _COVER_PAGE = "cover"
 _CONTENT_PAGE = "content"
 _EXPECTATION_KEYS = frozenset({"period", "visualizations", "narrative", "expects_clarification"})
-# Template tokens the document renders at export time ({reportName}, {periodStart}, ...).
+# Template tokens the document renders at export time ({documentName}, {periodStart}, ...).
 _PLACEHOLDER_RE = re.compile(r"\{\w+\}")
 _SUMMARY_SLOT = "summary"
 
@@ -80,6 +88,36 @@ def _extract_document_part(chat_result: ChatResult) -> dict | None:
         if isinstance(part, dict) and part.get("type") == _PART_TYPE:
             return part
     return None
+
+
+def legacy_wire_names(parts: list[dict], tool_call_events: list[ToolCallEvent]) -> list[str]:
+    """Every Report name the run saw on the wire, in the order it saw them, each named once."""
+    found: list[str] = []
+    for tc in tool_call_events:
+        if tc.function_name in _LEGACY_TOOLS:
+            found.append(f"tool {tc.function_name!r}")
+        elif tc.function_name == _SET_SKILLS_TOOL:
+            # The arguments too: a refused call naming the old skill still shows the prompt names it.
+            arguments = tc.parsed_arguments()
+            requested = arguments.get("skill_names") if isinstance(arguments, dict) else None
+            result_data = tc.parsed_result()
+            payload = result_data.get("data", result_data) if isinstance(result_data, dict) else None
+            activated = payload.get("skills_to_activate") if isinstance(payload, dict) else None
+            if any(isinstance(skills, list) and _LEGACY_SKILL in skills for skills in (requested, activated)):
+                found.append(f"skill {_LEGACY_SKILL!r}")
+    for part in parts:
+        if not isinstance(part, dict):
+            continue
+        if part.get("type") == _LEGACY_PART_TYPE:
+            found.append(f"part type {_LEGACY_PART_TYPE!r}")
+        if part.get("type") not in (_PART_TYPE, _LEGACY_PART_TYPE):
+            continue
+        found.extend(f"part key {key!r}" for key in _LEGACY_PART_KEYS if key in part)
+        for key in (_PART_TYPE, _LEGACY_PART_TYPE):
+            document = part.get(key)
+            if isinstance(document, dict) and document.get("type") == _LEGACY_PART_TYPE:
+                found.append(f"document type {_LEGACY_PART_TYPE!r}")
+    return list(dict.fromkeys(found))
 
 
 def _nodes(node: Any) -> Iterator[dict]:
@@ -214,6 +252,19 @@ def _validate_expectation(expected_output: Any) -> None:
         )
 
 
+def _validate_user_context(user_context: dict | None) -> None:
+    """Reject a user context that names the open document the Report way, before the first API call.
+
+    gen-ai reads ``view.document``; a fixture still sending ``view.report`` would test the old input.
+
+    Raises:
+        ValueError: the user context carries ``view.report``.
+    """
+    view = (user_context or {}).get("view")
+    if isinstance(view, dict) and _LEGACY_PART_TYPE in view:
+        raise ValueError("user_context.view.report is the Report name; send view.document")
+
+
 def build_simulated_reply(expected_output: dict) -> str:
     """The reply the simulated user sends when the copilot asks back instead of drafting.
 
@@ -256,6 +307,7 @@ class DocumentEvaluation:
     not_saved: bool
     skill_activated: bool
     applies: _Applies
+    wire_names_current: bool = True
     period_correct: bool = False
     charts_matched: bool = False
     summaries_present: bool = False
@@ -290,6 +342,7 @@ class DocumentEvaluation:
             "document_pages_consistent": self.pages_consistent,
             "document_not_saved": self.not_saved,
             "document_skill_activated": self.skill_activated,
+            "document_wire_names": self.wire_names_current,
         }
         if self.applies.period:
             checks["document_period_correct"] = self.period_correct
@@ -306,11 +359,11 @@ def _read_document(document_part: dict | None) -> tuple[dict | None, str | None]
     """The part's document, or why it carries no usable one."""
     if document_part is None:
         return None, f"the response carries no {_PART_TYPE!r} part"
-    document = document_part.get("report")
+    document = document_part.get(_PART_TYPE)
     if not isinstance(document, dict):
         return (
             None,
-            f"the {_PART_TYPE!r} part carries no document (report_ref {document_part.get('report_ref')!r})",
+            f"the {_PART_TYPE!r} part carries no document (document_ref {document_part.get('document_ref')!r})",
         )
     if document.get("type") != _PART_TYPE:
         return None, (
@@ -325,12 +378,31 @@ def evaluate_document_response(
     expected_output: dict,
     *,
     skill_activated: bool,
+    legacy_names: list[str] | None = None,
 ) -> DocumentEvaluation:
     """Score one document response against its expectation.
+
+    ``legacy_names`` are the Report names the run saw on the wire, from ``legacy_wire_names``.
+    Any of them fails ``document_wire_names`` and leads the failures, because a gen-ai still on
+    the Report names also fails every check that looks for the Document ones.
 
     Pure: no network and no conversation state, so the whole assertion surface is unit-testable
     without an agent.
     """
+    evaluation = _score_response(tool_result, document_part, expected_output, skill_activated=skill_activated)
+    if legacy_names:
+        evaluation.wire_names_current = False
+        evaluation.failures.insert(0, f"gen-ai sends the Report names: {', '.join(legacy_names)}")
+    return evaluation
+
+
+def _score_response(
+    tool_result: dict | None,
+    document_part: dict | None,
+    expected_output: dict,
+    *,
+    skill_activated: bool,
+) -> DocumentEvaluation:
     applies = _Applies(
         period=_has_period(expected_output),
         charts=_has_visualizations(expected_output),
@@ -364,7 +436,7 @@ def evaluate_document_response(
 
     failures: list[str] = []
 
-    part_ref, tool_ref = document_part.get("report_ref"), tool_result.get("ref")
+    part_ref, tool_ref = document_part.get("document_ref"), tool_result.get("ref")
     ref_matches = isinstance(part_ref, str) and bool(part_ref) and part_ref == tool_ref
     if not ref_matches:
         failures.append(f"the {_PART_TYPE!r} part shows {part_ref!r}, but {_DRAFT_TOOL} returned {tool_ref!r}")
@@ -385,7 +457,7 @@ def evaluate_document_response(
         pages_consistent = bool(kinds) and kinds[0] == _COVER_PAGE and _CONTENT_PAGE in kinds
 
     not_saved = True
-    for key, wording in (("saved_report_id", "be saved yet"), ("base_report_id", "edit a saved document")):
+    for key, wording in (("saved_document_id", "be saved yet"), ("base_document_id", "edit a saved document")):
         value = document_part.get(key)
         if value is not None:
             failures.append(f"a new draft must not {wording}, but it reports {key} {value!r}")
@@ -442,7 +514,7 @@ def _judge_narrative(
 
     No document means nothing to grade, which is a failed narrative rather than a judge call.
     """
-    document = (document_part or {}).get("report") if evaluation.part_present else None
+    document = (document_part or {}).get(_PART_TYPE) if evaluation.part_present else None
     if not isinstance(document, dict):
         return 0.0
     started = time.monotonic()
@@ -542,6 +614,7 @@ def _execute_single_document_run(
     response_id: str | None = None
     all_tool_call_events: list[ToolCallEvent] = []
     all_reasoning_step_events: list[ReasoningStepEvent] = []
+    all_parts: list[dict] = []
     timings = PhaseTimings()
     turn_offset = 0.0
     tool_index_offset = 0
@@ -564,6 +637,7 @@ def _execute_single_document_run(
         )
         all_tool_call_events.extend(chat_result.tool_call_events or [])
         all_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
+        all_parts.extend(chat_result.unhandled_parts)
         steps += chat_result.reasoning_step_count
 
         candidate = _extract_tool_result(chat_result.tool_call_events or [], _DRAFT_TOOL)
@@ -575,6 +649,9 @@ def _execute_single_document_run(
             tool_result = candidate
             # Read from the same turn as the draft: the part shows the version that call stored.
             document_part = _extract_document_part(chat_result)
+            break
+        if _extract_tool_result(chat_result.tool_call_events or [], _LEGACY_DRAFT_TOOL) is not None:
+            # A gen-ai on the Report names drafted under the old tool; another reply cannot change that.
             break
 
         response_text = (chat_result.text_response or "").strip() or render_answer_text(chat_result)
@@ -595,6 +672,7 @@ def _execute_single_document_run(
         document_part,
         expected_output,
         skill_activated=_skill_activated(all_tool_call_events, _BUILDER_SKILL),
+        legacy_names=legacy_wire_names(all_parts, all_tool_call_events),
     )
     if judge is not None and _has_narrative(expected_output):
         timings.judge_s += _judge_narrative(evaluation, judge, document_part, question, expected_output["narrative"])
@@ -636,9 +714,11 @@ def run_agentic_document_skill(
     without one needs neither the llm-judge extra nor ``OPENAI_API_KEY``.
 
     Raises:
-        ValueError: the fixture is unusable — see ``_validate_expectation``.
+        ValueError: the fixture is unusable — see ``_validate_expectation`` and
+            ``_validate_user_context``.
     """
     _validate_expectation(expected_output)
+    _validate_user_context(user_context)
     if judge is None and _has_narrative(expected_output):
         judge = LLMJudge(_NARRATIVE_EVALUATION_STEPS)
     run_results: list[DocumentRunResult] = []
@@ -716,7 +796,8 @@ def evaluate_agentic_document_skill(
 
     Raises:
         DocumentSkillAssertionError: the gate did not pass.
-        ValueError: the fixture is unusable — see ``_validate_expectation``. Raised before any
+        ValueError: the fixture is unusable — see ``_validate_expectation`` and
+            ``_validate_user_context``. Raised before any
             request, so it means a fixture to fix rather than a result to read.
         JudgeResponseError: the fixture states a narrative and the judge returned no readable
             verdict for any run -- an item without a result, not K failures.
@@ -832,15 +913,15 @@ def evaluate_agentic_document_skill(
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
-        skill_note = (
-            ""
-            if best.evaluation.skill_activated
-            else (
+        skill_note = ""
+        if not best.evaluation.wire_names_current:
+            skill_note = " gen-ai still sends the Report names, so it predates the Document rename."
+        elif not best.evaluation.skill_activated:
+            skill_note = (
                 f" set_skills never activated {_BUILDER_SKILL}: either the copilot routed elsewhere, or the skill"
-                " is not registered. It registers only with enableGenAiReportBuilderSkill and the org's"
+                " is not registered. It registers only with enableGenAiDocumentBuilderSkill and the org's"
                 " enableBusinessBriefingReportsApp both on."
             )
-        )
         exc = DocumentSkillAssertionError(
             f"Document skill assertion failed. {gate_note}{skill_note} "
             f"Checks: {best.evaluation.strict_checks}. "

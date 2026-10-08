@@ -19,6 +19,7 @@ from gooddata_eval.core.agentic.document_skill import (
     build_simulated_reply,
     evaluate_agentic_document_skill,
     evaluate_document_response,
+    legacy_wire_names,
     run_agentic_document_skill,
 )
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
@@ -36,7 +37,7 @@ def _cover_page() -> dict:
         "id": "page1",
         "kind": "cover",
         "format": "widescreen",
-        "layout": {"column": [{"id": "coverTitle", "weight": 2, "heading": "{reportName}", "style": "h1"}]},
+        "layout": {"column": [{"id": "coverTitle", "weight": 2, "heading": "{documentName}", "style": "h1"}]},
     }
 
 
@@ -66,15 +67,15 @@ def _document_part(
     ref: str = "document_1",
     page_count: int | None = None,
     period: dict | None = None,
-    saved_report_id: str | None = None,
-    base_report_id: str | None = None,
+    saved_document_id: str | None = None,
+    base_document_id: str | None = None,
     document: dict | None | str = "default",
 ) -> dict:
     pages = pages if pages is not None else [_cover_page(), _content_page("page2", _REVENUE_TREND)]
     document = (
         {
             "id": "sales_overview",
-            "type": "report",
+            "type": "document",
             "title": "Sales overview",
             "period": period if period is not None else _PERIOD,
             "pages": pages,
@@ -83,13 +84,13 @@ def _document_part(
         else document
     )
     return {
-        "type": "report",
-        "report_ref": ref,
+        "type": "document",
+        "document_ref": ref,
         "format": "aac-v1",
-        "report": document,
+        "document": document,
         "page_count": len(pages) if page_count is None else page_count,
-        "base_report_id": base_report_id,
-        "saved_report_id": saved_report_id,
+        "base_document_id": base_document_id,
+        "saved_document_id": saved_document_id,
     }
 
 
@@ -130,7 +131,7 @@ def _chat_result(
 
 def _drafting_turn(**part_kwargs: Any) -> ChatResult:
     return _chat_result(
-        tool_calls=[_set_skills("report_builder"), _tool_call("draft_report", _draft_result())],
+        tool_calls=[_set_skills("document_builder"), _tool_call("draft_document", _draft_result())],
         parts=[{"type": "text", "text": "I've put together a document with 2 slides."}, _document_part(**part_kwargs)],
         text="I've put together a document with 2 slides.",
     )
@@ -189,6 +190,7 @@ def test_a_drafted_document_returned_in_the_chat_item_passes() -> None:
         "document_pages_consistent": True,
         "document_not_saved": True,
         "document_skill_activated": True,
+        "document_wire_names": True,
     }
     assert evaluation.strict_pass
     assert evaluation.failures == []
@@ -207,38 +209,38 @@ def test_no_successful_draft_fails_every_check_and_says_so() -> None:
     assert evaluation.strict_checks["document_part_present"] is False
     assert evaluation.strict_checks["document_period_correct"] is False
     assert not evaluation.strict_pass
-    assert evaluation.failures == ["the agent never produced a successful draft_report call"]
+    assert evaluation.failures == ["the agent never produced a successful draft_document call"]
 
 
 def test_a_draft_without_a_document_part_fails() -> None:
     evaluation = _evaluate(None)
     assert evaluation.strict_checks["document_drafted"] is True
     assert evaluation.strict_checks["document_part_present"] is False
-    assert evaluation.failures == ["the response carries no 'report' part"]
+    assert evaluation.failures == ["the response carries no 'document' part"]
 
 
 def test_a_document_part_whose_document_did_not_resolve_fails() -> None:
     evaluation = _evaluate(_document_part(document=None))
     assert evaluation.strict_checks["document_part_present"] is False
-    assert evaluation.failures == ["the 'report' part carries no document (report_ref 'document_1')"]
+    assert evaluation.failures == ["the 'document' part carries no document (document_ref 'document_1')"]
 
 
 def test_a_document_that_is_not_a_document_fails() -> None:
     evaluation = _evaluate(_document_part(document={"id": "x", "type": "dashboard", "pages": []}))
     assert evaluation.strict_checks["document_part_present"] is False
-    assert evaluation.failures == ["the 'report' part carries a document of type 'dashboard', expected 'report'"]
+    assert evaluation.failures == ["the 'document' part carries a document of type 'dashboard', expected 'document'"]
 
 
 def test_a_part_pointing_at_another_draft_fails() -> None:
     evaluation = _evaluate(_document_part(ref="document_2"))
     assert evaluation.strict_checks["document_ref_matches"] is False
-    assert evaluation.failures == ["the 'report' part shows 'document_2', but draft_report returned 'document_1'"]
+    assert evaluation.failures == ["the 'document' part shows 'document_2', but draft_document returned 'document_1'"]
 
 
 def test_a_page_count_that_disagrees_with_the_pages_fails() -> None:
     evaluation = _evaluate(_document_part(page_count=3))
     assert evaluation.strict_checks["document_pages_consistent"] is False
-    assert evaluation.failures == ["the document has 2 page(s), but the part says 3 and draft_report said 2"]
+    assert evaluation.failures == ["the document has 2 page(s), but the part says 3 and draft_document said 2"]
 
 
 def test_a_cover_alone_is_not_a_document() -> None:
@@ -248,16 +250,18 @@ def test_a_cover_alone_is_not_a_document() -> None:
 
 
 def test_a_new_draft_must_not_already_be_saved() -> None:
-    evaluation = _evaluate(_document_part(saved_report_id="sales_overview"))
+    evaluation = _evaluate(_document_part(saved_document_id="sales_overview"))
     assert evaluation.strict_checks["document_not_saved"] is False
-    assert evaluation.failures == ["a new draft must not be saved yet, but it reports saved_report_id 'sales_overview'"]
+    assert evaluation.failures == [
+        "a new draft must not be saved yet, but it reports saved_document_id 'sales_overview'"
+    ]
 
 
 def test_a_new_draft_must_not_edit_a_saved_document() -> None:
-    evaluation = _evaluate(_document_part(base_report_id="q3_review"))
+    evaluation = _evaluate(_document_part(base_document_id="q3_review"))
     assert evaluation.strict_checks["document_not_saved"] is False
     assert evaluation.failures == [
-        "a new draft must not edit a saved document, but it reports base_report_id 'q3_review'"
+        "a new draft must not edit a saved document, but it reports base_document_id 'q3_review'"
     ]
 
 
@@ -287,6 +291,126 @@ def test_a_routing_miss_fails_the_skill_check_alone() -> None:
 def test_visualizations_are_found_however_deep_the_layout_nests_them() -> None:
     page = _content_page("page2", _REVENUE_TREND, _RETURNS_BY_CATEGORY)
     assert _visualizations_of({"pages": [_cover_page(), page]}) == {_REVENUE_TREND, _RETURNS_BY_CATEGORY}
+
+
+def _legacy_part() -> dict:
+    """The answer part as gen-ai sent it before the Document names."""
+    part = _document_part()
+    document = {**part["document"], "type": "report"}
+    return {
+        "type": "report",
+        "report_ref": part["document_ref"],
+        "format": "aac-v1",
+        "report": document,
+        "page_count": part["page_count"],
+        "base_report_id": None,
+        "saved_report_id": None,
+    }
+
+
+def test_a_part_with_the_report_names_fails_the_wire_check_and_names_each_one() -> None:
+    names = legacy_wire_names([_legacy_part()], [])
+    assert names == [
+        "part type 'report'",
+        "part key 'report'",
+        "part key 'report_ref'",
+        "part key 'base_report_id'",
+        "part key 'saved_report_id'",
+        "document type 'report'",
+    ]
+
+
+def test_the_report_tool_and_skill_ids_are_named_too() -> None:
+    turn = _chat_result(
+        tool_calls=[
+            _set_skills("report_builder"),
+            _tool_call("list_report_layouts", {"status": "success"}),
+            _tool_call("draft_report", _draft_result()),
+        ]
+    )
+    assert legacy_wire_names([], turn.tool_call_events) == [
+        "skill 'report_builder'",
+        "tool 'list_report_layouts'",
+        "tool 'draft_report'",
+    ]
+
+
+def test_a_set_skills_call_asking_for_the_report_skill_is_named_even_when_it_was_refused() -> None:
+    call = {
+        "functionName": "set_skills",
+        "functionArguments": json.dumps({"skill_names": ["report_builder"]}),
+        "result": json.dumps({"status": "error", "message": "unknown skill"}),
+    }
+    turn = _chat_result(tool_calls=[call])
+    assert legacy_wire_names([], turn.tool_call_events) == ["skill 'report_builder'"]
+
+
+def test_a_set_skills_call_whose_arguments_are_not_an_object_is_ignored() -> None:
+    call = {"functionName": "set_skills", "functionArguments": json.dumps(["report_builder"]), "result": None}
+    assert legacy_wire_names([], _chat_result(tool_calls=[call]).tool_call_events) == []
+
+
+def test_the_document_names_leave_the_wire_check_passing() -> None:
+    turn = _drafting_turn()
+    assert legacy_wire_names(turn.unhandled_parts, turn.tool_call_events) == []
+
+
+def test_a_run_against_a_gen_ai_with_the_report_names_fails_on_the_wire_check() -> None:
+    turn = _chat_result(
+        tool_calls=[_set_skills("report_builder"), _tool_call("draft_report", _draft_result())],
+        parts=[_legacy_part()],
+    )
+    run = _execute_single_document_run(_ScriptedChatClient([turn]), "conv-1", "Create a document", {}, 1)
+
+    assert run.evaluation.strict_checks["document_wire_names"] is False
+    assert run.evaluation.failures[0] == (
+        "gen-ai sends the Report names: skill 'report_builder', tool 'draft_report', part type 'report', "
+        "part key 'report', part key 'report_ref', part key 'base_report_id', part key 'saved_report_id', "
+        "document type 'report'"
+    )
+
+
+def test_the_wire_check_reads_every_turn_not_only_the_drafting_one() -> None:
+    asking = _chat_result(parts=[{"type": "report", "report_ref": "report_0"}], text="Which period?")
+    run = _execute_single_document_run(
+        _ScriptedChatClient([asking, _drafting_turn()]), "conv-1", "Create a document", {}, 2
+    )
+
+    assert run.evaluation.strict_checks["document_wire_names"] is False
+
+
+def test_a_gen_ai_on_the_report_names_stops_at_its_draft_instead_of_replying_again() -> None:
+    turn = _chat_result(
+        tool_calls=[_set_skills("report_builder"), _tool_call("draft_report", _draft_result())],
+        parts=[_legacy_part()],
+    )
+    client = _ScriptedChatClient([turn, _drafting_turn()])
+    run = _execute_single_document_run(client, "conv-1", "Create a document", {}, 4)
+
+    assert client.sent == ["Create a document"]
+    assert run.evaluation.strict_checks["document_wire_names"] is False
+
+
+def test_a_failing_item_on_the_report_names_points_at_the_rename_not_the_flags(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    turn = _chat_result(tool_calls=[_set_skills("report_builder"), _tool_call("draft_report", _draft_result())])
+    _install_client(monkeypatch, _ScriptedChatClient([turn]))
+    with pytest.raises(DocumentSkillAssertionError) as raised:
+        evaluate_agentic_document_skill("https://h", "tok", "ws", "Create a document", {}, max_iterations=1)
+
+    assert "gen-ai still sends the Report names" in str(raised.value)
+    assert "enableGenAiDocumentBuilderSkill" not in str(raised.value)
+
+
+def test_a_user_context_with_view_report_fails_before_any_request(monkeypatch: pytest.MonkeyPatch) -> None:
+    client = _ScriptedChatClient([_drafting_turn()])
+    _install_client(monkeypatch, client)
+    with pytest.raises(ValueError, match="user_context.view.report is the Report name; send view.document"):
+        run_agentic_document_skill(
+            "https://h", "tok", "ws", "Refine it", {}, user_context={"view": {"report": {"id": "q3"}}}
+        )
+    assert client.sent == []
 
 
 # ── fixture validation ──────────────────────────────────────────────────────
@@ -412,17 +536,17 @@ def test_a_failing_item_raises_with_the_failures(monkeypatch: pytest.MonkeyPatch
     _install_client(monkeypatch, _ScriptedChatClient([_chat_result(text="I can't do that.")]))
     with pytest.raises(DocumentSkillAssertionError) as raised:
         evaluate_agentic_document_skill("https://h", "tok", "ws", "Create a document", {}, max_iterations=1)
-    assert "the agent never produced a successful draft_report call" in str(raised.value)
+    assert "the agent never produced a successful draft_document call" in str(raised.value)
     assert raised.value.runs_passed == 0
     assert raised.value.conversation_id == "conv-1"
 
 
-def test_a_failing_item_without_report_builder_points_at_the_flags(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_failing_item_without_document_builder_points_at_the_flags(monkeypatch: pytest.MonkeyPatch) -> None:
     turn = _chat_result(tool_calls=[_set_skills("visualization")], text="Here is a chart.")
     _install_client(monkeypatch, _ScriptedChatClient([turn]))
     with pytest.raises(
         DocumentSkillAssertionError,
-        match="enableGenAiReportBuilderSkill and the org.s enableBusinessBriefingReportsApp",
+        match="enableGenAiDocumentBuilderSkill and the org.s enableBusinessBriefingReportsApp",
     ):
         evaluate_agentic_document_skill("https://h", "tok", "ws", "Create a document", {}, max_iterations=1)
 
@@ -443,9 +567,9 @@ def test_a_ref_missing_on_both_sides_does_not_match() -> None:
 def test_the_last_successful_draft_of_a_turn_is_the_one_scored() -> None:
     turn = _chat_result(
         tool_calls=[
-            _tool_call("draft_report", _draft_result(ref="document_1")),
-            _tool_call("draft_report", {"status": "error", "message": "no layout fits 7 charts"}),
-            _tool_call("draft_report", _draft_result(ref="document_2")),
+            _tool_call("draft_document", _draft_result(ref="document_1")),
+            _tool_call("draft_document", {"status": "error", "message": "no layout fits 7 charts"}),
+            _tool_call("draft_document", _draft_result(ref="document_2")),
         ],
         parts=[_document_part(ref="document_2")],
         text="I've put together a document with 2 slides.",
@@ -541,13 +665,13 @@ def test_asking_first_is_recorded_whenever_the_fixture_states_the_key() -> None:
 def test_the_last_document_part_of_a_turn_is_the_one_scored() -> None:
     turn = _chat_result(
         tool_calls=[
-            _tool_call("draft_report", _draft_result(ref="document_1")),
-            _tool_call("draft_report", _draft_result(ref="document_2")),
+            _tool_call("draft_document", _draft_result(ref="document_1")),
+            _tool_call("draft_document", _draft_result(ref="document_2")),
         ],
         parts=[_document_part(ref="document_1"), _document_part(ref="document_2")],
     )
     run = _execute_single_document_run(_ScriptedChatClient([turn]), "c", "q", {}, max_iterations=4)
-    assert run.document_part is not None and run.document_part["report_ref"] == "document_2"
+    assert run.document_part is not None and run.document_part["document_ref"] == "document_2"
     assert run.evaluation.strict_pass
 
 
@@ -607,6 +731,7 @@ def test_every_scored_check_reaches_langfuse_with_the_draft_facts(monkeypatch: p
         "document_pages_consistent",
         "document_not_saved",
         "document_skill_activated",
+        "document_wire_names",
         "document_period_correct",
         "document_asked_first",
         "pass_at_k",
@@ -657,7 +782,7 @@ class _FakeJudge:
 
 def _narrative_turn(*pages: dict) -> ChatResult:
     return _chat_result(
-        tool_calls=[_tool_call("draft_report", _draft_result(page_count=len(pages)))],
+        tool_calls=[_tool_call("draft_document", _draft_result(page_count=len(pages)))],
         parts=[_document_part(list(pages))],
         text="I've put together a document.",
     )
