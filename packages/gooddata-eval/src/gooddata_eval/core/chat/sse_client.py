@@ -26,6 +26,7 @@ from urllib.parse import quote
 import httpx
 
 from gooddata_eval.core.config import ReasoningEffort, normalize_reasoning_effort
+from gooddata_eval.core.langfuse.item_scope import JoinedRun, baggage_entries, current_scope, mark_joined, trace_ids_for
 from gooddata_eval.core.models import ChatResult, DatasetItem
 
 _log = logging.getLogger(__name__)
@@ -34,6 +35,8 @@ SSE_DATA_PREFIX = "data: "
 SSE_EVENT_PREFIX = "event: "
 # gen-ai's last event, only if at least one item was already emitted (conversations_controller.py).
 _RESPONSE_ENDED_EVENT = "response_ended"
+# gen-ai's first event of a turn; its data carries the turn's responseId and traceId.
+_RESPONSE_STARTED_EVENT = "response_started"
 
 # 500 is here on evidence, not on principle: in one visualization eval batch it hard-failed
 # 10 of 56 runs with zero retry attempts, and every affected question scored normally when the
@@ -247,6 +250,7 @@ class _SseAccumulator:
     reasoning_steps: list[dict[str, Any]] = field(default_factory=list)
     adhoc_viz_args: list[dict[str, Any]] = field(default_factory=list)
     response_id: str | None = None
+    trace_id: str | None = None
     stream_ended: bool = False
     # Reference point for call_ts/result_ts below -- client-observed receipt time, not a
     # server timestamp, so only meaningful as an offset within this one turn. Wrapped in a
@@ -365,6 +369,7 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
         }
     result = ChatResult.model_validate(payload)
     result.response_id = acc.response_id
+    result.trace_id = acc.trace_id
     result.stream_ended = acc.stream_ended
     return result
 
@@ -456,6 +461,8 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
             raise ChatError(message, status_code=code, detail=detail, partial_result=_build_chat_result(acc))
         if event_data.get("responseId") and not acc.response_id:
             acc.response_id = event_data["responseId"]
+        if current_event == _RESPONSE_STARTED_EVENT and event_data.get("traceId") and not acc.trace_id:
+            acc.trace_id = event_data["traceId"]
         item = event_data.get("item")
         if not item:
             continue
@@ -530,6 +537,9 @@ class ChatClient:
         self._reasoning_effort = normalize_reasoning_effort(reasoning_effort)
         self._agent_id = agent_id
         self._user_context = user_context
+        # Run index of each conversation this client has sent to, in first-send order: every
+        # agentic kind sends run 0 first, then runs 1..K-1 each on a conversation of its own.
+        self._run_index: dict[str, int] = {}
 
     def create_conversation(self) -> str:
         def _do() -> str:
@@ -559,7 +569,8 @@ class ChatClient:
         self, conversation_id: str, question: str, *, user_context: dict[str, Any] | None = None
     ) -> ChatResult:
         url = f"{self._base}/{conversation_id}/messages"
-        headers = {**self._auth, "Accept": "text/event-stream", "Content-Type": "application/json"}
+        join_headers, joined = self._join_item_trace(conversation_id)
+        headers = {**self._auth, "Accept": "text/event-stream", "Content-Type": "application/json", **join_headers}
         body: dict[str, Any] = {"item": {"role": "user", "content": {"type": "text", "text": question}}}
         if self._reasoning_effort is not None:
             body["options"] = {"reasoningEffort": self._reasoning_effort}
@@ -587,7 +598,35 @@ class ChatClient:
                 result.turn_wall_clock_sec = time.monotonic() - t0
                 return result
 
-        return _retry_transient(_do, is_retryable=_is_retryable_exc)
+        try:
+            result = _retry_transient(_do, is_retryable=_is_retryable_exc)
+        except ChatError as exc:
+            if joined is not None and exc.partial_result is not None:
+                self._record_join(conversation_id, exc.partial_result.trace_id, joined)
+            raise
+        if joined is not None:
+            self._record_join(conversation_id, result.trace_id, joined)
+        return result
+
+    def _join_item_trace(self, conversation_id: str) -> tuple[dict[str, str], JoinedRun | None]:
+        """The baggage header carrying the current item's experiment scope, and the run it names.
+
+        Empty and None when no item scope is set, so the request goes out unchanged.
+        """
+        scope = current_scope()
+        if scope is None:
+            return {}, None
+        run_idx = self._run_index.setdefault(conversation_id, len(self._run_index))
+        run_name = scope.run_name(run_idx)
+        labels = [self._auth["baggage"]] if self._auth.get("baggage") else []
+        baggage = ",".join([*labels, *baggage_entries(scope, run_name, conversation_id)])
+        return {"baggage": baggage}, JoinedRun(run_name, scope.dataset_id)
+
+    @staticmethod
+    def _record_join(conversation_id: str, reported_trace_id: str | None, run: JoinedRun) -> None:
+        """Remember the conversation as joined once gen-ai reports the trace it was asked for."""
+        if reported_trace_id == trace_ids_for(conversation_id)[0]:
+            mark_joined(conversation_id, run)
 
     def _deadline(self, t0: float) -> tuple[float | None, float, str]:
         """The earlier of the turn and item caps, as (deadline, budget, scope).

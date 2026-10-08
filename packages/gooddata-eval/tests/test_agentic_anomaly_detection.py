@@ -417,7 +417,7 @@ class _FakeCtx:
         return None
 
     @contextmanager
-    def observe(self, _trace, _run_idx):
+    def observe(self, _trace, _run_idx, *, conversation_id=None):
         yield "trace-id"
 
     def score(self, _tid, *, name, value, data_type):
