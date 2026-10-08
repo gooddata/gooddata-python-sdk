@@ -151,14 +151,22 @@ def test_a_retry_after_that_cannot_be_slept_falls_back_to_the_default(header):
     assert client_module._retry_delay(httpx.Response(429, headers={"Retry-After": header})) == 0.5
 
 
-def test_a_retry_after_beyond_the_cap_is_clamped():
-    assert client_module._retry_delay(httpx.Response(429, headers={"Retry-After": "60"})) == 5.0
+def test_a_throttled_score_waits_out_the_whole_rate_limit_window():
+    # Langfuse limits in fixed one-minute windows and names the wait until the window resets.
+    assert client_module._retry_delay(httpx.Response(429, headers={"Retry-After": "56"})) == 56.0
+
+
+def test_a_retry_after_beyond_one_window_is_clamped_to_one_window():
+    assert client_module._retry_delay(httpx.Response(429, headers={"Retry-After": "600"})) == 60.0
+
+
+def test_a_server_error_retry_after_stays_short():
+    assert client_module._retry_delay(httpx.Response(503, headers={"Retry-After": "60"})) == 5.0
 
 
 def test_a_retry_after_given_as_a_date_falls_back_to_the_default():
-    # Retry-After is allowed to be an HTTP-date; this client reads seconds only. Langfuse
-    # documents the header as a number of seconds, and the cap already bounds the wait, so
-    # parsing a date could only turn the 0.5s fallback into the same 5s ceiling.
+    # Retry-After is allowed to be an HTTP-date; this client reads seconds only, which is the
+    # form Langfuse documents and sends.
     response = httpx.Response(429, headers={"Retry-After": "Wed, 21 Oct 2026 07:28:00 GMT"})
     assert client_module._retry_delay(response) == 0.5
 
