@@ -590,7 +590,7 @@ class ChatClient:
             with self._client.stream("POST", url, json=body, headers=headers) as resp:
                 resp.raise_for_status()
                 try:
-                    result = parse_sse_lines(_until_deadline(resp.iter_lines(), deadline, budget, scope))
+                    result = parse_sse_lines(self._tap(_until_deadline(resp.iter_lines(), deadline, budget, scope)))
                 except ChatError as exc:
                     if exc.partial_result is not None:
                         exc.partial_result.turn_wall_clock_sec = time.monotonic() - t0
@@ -607,6 +607,10 @@ class ChatClient:
         if joined is not None:
             self._record_join(conversation_id, result.trace_id, joined)
         return result
+
+    def _tap(self, lines: Iterable[str]) -> Iterable[str]:
+        """Hook over one attempt's SSE lines, before they are parsed. Identity here."""
+        return lines
 
     def _join_item_trace(self, conversation_id: str) -> tuple[dict[str, str], JoinedRun | None]:
         """The baggage header carrying the current item's experiment scope, and the run it names.
