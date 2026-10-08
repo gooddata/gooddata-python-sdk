@@ -5,7 +5,7 @@ import re
 import orjson
 import pytest
 from gooddata_eval.cli.main import main
-from gooddata_eval.core.reporting.html_report import build_html, load_report_files
+from gooddata_eval.core.reporting.html_report import _redact, build_html, load_report_files
 
 
 def _doc(model: str, passed: bool) -> dict:
@@ -131,3 +131,106 @@ def test_cli_report_command_needs_no_credentials(tmp_path, monkeypatch, redact):
     argv = ["report", str(src), "-o", str(out)] + (["--redact"] if redact else [])
     assert main(argv) == 0
     assert out.exists()
+
+
+def _multi_date_doc():
+    """What `merge_docs` produces for three models evaluated on two dates."""
+    return {
+        "runs": {
+            f"{date} · {model}": {"model": model, "workspace_id": "ws", "items": {}}
+            for date in ("2026-09-22", "2026-10-01")
+            for model in ("gpt-5.2", "gpt-5.5", "gpt-5.6-luna")
+        },
+        "comparison": {
+            f"{date} · {model}": {"provider_name": "openai", "passed": 1, "total": 2}
+            for date in ("2026-09-22", "2026-10-01")
+            for model in ("gpt-5.2", "gpt-5.5", "gpt-5.6-luna")
+        },
+    }
+
+
+def test_redact_gives_one_model_one_alias_across_dates():
+    """Three models over two dates is three aliases, not six.
+
+    Numbering the run keys made the same model a different alias on each date, so
+    nothing told the reader that Model D was Model A a week later -- which is the
+    only question a multi-date report exists to answer.
+    """
+    redacted = _redact(_multi_date_doc())
+
+    assert set(redacted["runs"]) == {
+        "2026-09-22 · Model A",
+        "2026-09-22 · Model B",
+        "2026-09-22 · Model C",
+        "2026-10-01 · Model A",
+        "2026-10-01 · Model B",
+        "2026-10-01 · Model C",
+    }
+    # The same alias on both dates must denote the same model.
+    assert redacted["runs"]["2026-09-22 · Model A"]["model"] == "Model A"
+    assert redacted["runs"]["2026-10-01 · Model A"]["model"] == "Model A"
+    assert set(redacted["comparison"]) == set(redacted["runs"])
+    assert all(e["provider_name"] == "" for e in redacted["comparison"].values())
+
+
+def test_redact_still_hides_every_real_model_name():
+    blob = json.dumps(_redact(_multi_date_doc()))
+    for model in ("gpt-5.2", "gpt-5.5", "gpt-5.6-luna", "openai"):
+        assert model not in blob
+
+
+def test_redact_alias_survives_past_twenty_six_models():
+    """chr(65 + n) walked off the alphabet: the 27th run was `Model [`."""
+    doc = {
+        "runs": {f"m{i}": {"model": f"model-{i}", "items": {}} for i in range(30)},
+        "comparison": {},
+    }
+    aliases = [a.removeprefix("Model ") for a in _redact(doc)["runs"]]
+
+    assert len(set(aliases)) == 30
+    assert all(a.isalpha() for a in aliases), [a for a in aliases if not a.isalpha()]
+    assert aliases[25:28] == ["Z", "AA", "AB"]
+
+
+def test_redact_without_a_date_prefix_is_just_the_alias():
+    """A single-source report keys runs by the bare model name."""
+    doc = {"runs": {"gpt-5.2": {"model": "gpt-5.2", "items": {}}}, "comparison": {}}
+    assert list(_redact(doc)["runs"]) == ["Model A"]
+
+
+def test_redact_leaves_no_model_name_anywhere_in_a_run_key():
+    """`merge_docs` prefixes the source filename onto the label, and a filename can
+    name a *different* model than the run it labels. Substituting only the run's own
+    model left the other one in plain sight in a redacted report."""
+    doc = {
+        "runs": {
+            "gpt-5.5-baseline.json · gpt-5.2": {"model": "gpt-5.2", "items": {}},
+            "gpt-5.5-baseline.json · gpt-5.5": {"model": "gpt-5.5", "items": {}},
+        },
+        "comparison": {},
+    }
+    redacted = _redact(doc)
+
+    blob = json.dumps(redacted)
+    for model in ("gpt-5.2", "gpt-5.5"):
+        assert model not in blob, f"{model} survived redaction: {list(redacted['runs'])}"
+    # Both rows agree on the redacted filename, so the two columns stay comparable.
+    assert set(redacted["runs"]) == {
+        "Model B-baseline.json · Model A",
+        "Model B-baseline.json · Model B",
+    }
+
+
+def test_redact_does_not_let_a_short_model_name_corrupt_a_longer_one():
+    """ "gpt-5" is a prefix of "gpt-5.2"; replacing it first would leave "Model A.2"."""
+    doc = {
+        "runs": {
+            "2026-10-01 · gpt-5": {"model": "gpt-5", "items": {}},
+            "2026-10-01 · gpt-5.2": {"model": "gpt-5.2", "items": {}},
+        },
+        "comparison": {},
+    }
+    redacted = _redact(doc)
+
+    assert set(redacted["runs"]) == {"2026-10-01 · Model A", "2026-10-01 · Model B"}
+    assert "gpt-5" not in json.dumps(redacted)
