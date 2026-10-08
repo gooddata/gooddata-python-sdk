@@ -298,9 +298,8 @@ def _resolve_refs(
 def _set_skills_declarations(tool_call_events: list[ToolCallEvent]) -> list[list[str]]:
     """Every set_skills declaration in these events, in call order.
 
-    `skill_names` is the key the tool declares; `skills` is a legacy spelling kept as a
-    fallback. A call carrying neither is treated as declaring an empty list, which is what
-    the platform would do with one.
+    `skill_names` is the key the tool declares. A call carrying no skill_names is treated as
+    declaring an empty list, which is what the platform would do with one.
     """
     declarations: list[list[str]] = []
     for tc in tool_call_events:
@@ -308,8 +307,6 @@ def _set_skills_declarations(tool_call_events: list[ToolCallEvent]) -> list[list
             continue
         args = tc.parsed_arguments() or {}
         names = args.get("skill_names")
-        if names is None:
-            names = args.get("skills")
         declarations.append(list(names or []))
     return declarations
 
