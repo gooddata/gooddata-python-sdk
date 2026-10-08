@@ -826,9 +826,7 @@ def evaluate_agentic_report_skill(
     }
     # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
     # cannot disagree about which runs failed.
-    failed_runs = build_failed_runs(
-        summary.run_results, passed=lambda r: r.evaluation.strict_pass, detail=_run_detail
-    )
+    failed_runs = build_failed_runs(summary.run_results, passed=lambda r: r.evaluation.strict_pass, detail=_run_detail)
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
