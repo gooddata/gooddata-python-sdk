@@ -72,3 +72,13 @@ class PhaseTimings:
 def sum_timings(timings: list[PhaseTimings]) -> PhaseTimings:
     """Total across a list of per-run timings (empty list -> all zeroes)."""
     return sum(timings, PhaseTimings())
+
+
+def run_latency_s(timings: PhaseTimings) -> float:
+    """One run's own wall time, for a single run's ``PhaseTimings``.
+
+    Excludes ``langfuse_s`` (deliberately off the critical path -- see
+    ``PhaseTimings.langfuse_s``) so this stays comparable to the single-shot path's
+    ``best_run_latency_s``, which times only the agent call and its grading.
+    """
+    return timings.agent_s + timings.judge_s + timings.simulated_user_s

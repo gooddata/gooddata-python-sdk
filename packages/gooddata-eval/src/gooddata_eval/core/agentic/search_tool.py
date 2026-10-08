@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass, field
 
 from gooddata_eval.core.agentic._gate import (
@@ -13,6 +14,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -29,7 +31,6 @@ from gooddata_eval.core.models import (
     AgenticEvalOutcome,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
 )
 
 _DEFAULT_K = 1
@@ -75,6 +76,9 @@ class SearchResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
+    # This run's own wall time -- mirrors the single-shot path's best_run_latency_s
+    # (see core/runner.py's _run_one_item).
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -113,6 +117,7 @@ def run_agentic_search_tool(
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
+            run_started = time.monotonic()
             chat_result = client.send_message(conv_id_0, question)
             tcs = chat_result.tool_call_events or []
             selected = _tool_selection(tcs)
@@ -127,6 +132,7 @@ def run_agentic_search_tool(
                     response_id=chat_result.response_id,
                     tool_call_events=list(chat_result.tool_call_events or []),
                     reasoning_step_events=list(chat_result.reasoning_step_events or []),
+                    run_latency_s=time.monotonic() - run_started,
                 )
             )
         finally:
@@ -136,6 +142,7 @@ def run_agentic_search_tool(
         for _ in range(1, k):
             conv_id = client.create_conversation()
             try:
+                run_started = time.monotonic()
                 chat_result = client.send_message(conv_id, question)
                 tcs = chat_result.tool_call_events or []
                 selected = _tool_selection(tcs)
@@ -150,6 +157,7 @@ def run_agentic_search_tool(
                         response_id=chat_result.response_id,
                         tool_call_events=list(chat_result.tool_call_events or []),
                         reasoning_step_events=list(chat_result.reasoning_step_events or []),
+                        run_latency_s=time.monotonic() - run_started,
                     )
                 )
             finally:
@@ -263,32 +271,35 @@ def evaluate_agentic_search_tool(
     runs_effective = len(summary.run_results)
 
     best = summary.best
-    detail = {
-        "tool_selected": best.tool_selected,
-        "tool_correct": best.tool_correct,
-        "tool_call_names": best.tool_call_names,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-    }
+    detail = agentic_detail(
+        best.tool_call_events,
+        best.reasoning_step_events,
+        tool_selected=best.tool_selected,
+        tool_correct=best.tool_correct,
+        tool_call_names=best.tool_call_names,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
-        exc = SearchToolAssertionError(
+        raise_agentic_failure(
+            SearchToolAssertionError,
             f"Search tool assertion failed. {gate_note} "
             f"tool_selected={best.tool_selected}, tool_correct={best.tool_correct}. "
-            f"Tool calls made: {best.tool_call_names}"
+            f"Tool calls made: {best.tool_call_names}",
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            best_run_latency_s=best.run_latency_s,
         )
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = runs_effective
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
+        best_run_latency_s=best.run_latency_s,
     )

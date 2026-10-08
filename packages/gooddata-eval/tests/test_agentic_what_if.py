@@ -13,7 +13,7 @@ from gooddata_eval.core.agentic.what_if import (
     evaluate_agentic_what_if,
     run_agentic_what_if,
 )
-from gooddata_eval.core.models import ChatResult
+from gooddata_eval.core.models import ChatResult, LoopExit
 
 _MODULE = "gooddata_eval.core.agentic.what_if"
 
@@ -215,6 +215,7 @@ def test_a_single_turn_scenario_passes():
     summary = _run([_chat(_pair())])
     assert summary.pass_at_k is True
     assert summary.best.evaluation.disambiguated is False
+    assert summary.best.exit_reason is LoopExit.SUCCESS
 
 
 def test_a_clarifying_question_is_answered_and_the_run_continues():
@@ -222,12 +223,15 @@ def test_a_clarifying_question_is_answered_and_the_run_continues():
     summary = _run([_chat([], text="Which Spend metric did you mean?"), _chat(_pair())])
     assert summary.pass_at_k is True
     assert summary.best.evaluation.disambiguated is True
+    assert summary.best.exit_reason is LoopExit.SUCCESS
 
 
 def test_the_loop_stops_at_max_iterations_without_a_scenario():
+    # triggered=False alone cannot tell this apart from a refusal -- exit_reason can.
     summary = _run([_chat([], text="Still thinking")] * 4, max_iterations=4)
     assert summary.pass_at_k is False
     assert summary.best.evaluation.triggered is False
+    assert summary.best.exit_reason is LoopExit.BUDGET_EXHAUSTED
 
 
 def test_an_empty_response_ends_the_run_immediately():
@@ -238,15 +242,19 @@ def test_an_empty_response_ends_the_run_immediately():
         patch(f"{_MODULE}.ChatClient", return_value=client),
         patch(f"{_MODULE}.generate_simulated_what_if_response") as sim,
     ):
-        run_agentic_what_if(host="http://h", token="tok", workspace_id="ws1", question="q", expected_output=_EXPECTED)
+        summary = run_agentic_what_if(
+            host="http://h", token="tok", workspace_id="ws1", question="q", expected_output=_EXPECTED
+        )
     assert client.send_message.call_count == 1
     sim.assert_not_called()
+    assert summary.best.exit_reason is LoopExit.AGENT_SILENT
 
 
 def test_a_chat_error_on_a_later_run_does_not_discard_the_earlier_one():
     summary = _run([_chat(_pair()), RuntimeError("boom")], k=2)
     assert len(summary.run_results) == 2
     assert summary.pass_at_k is True
+    assert summary.run_results[1].exit_reason is LoopExit.CHAT_ERROR
 
 
 def test_k_must_be_at_least_one():
@@ -277,6 +285,8 @@ def test_detail_reports_the_adjustments_the_agent_asked_for():
     assert outcome.detail["actual_scenario_labels"] == ["Scenario A"]
     assert outcome.detail["asserted"] == ["metric_id", "scenario_maql"]
     assert "latency_breakdown" in outcome.detail
+    assert "tool_calls" in outcome.detail
+    assert outcome.detail["exit_reason"] == "success"
     assert outcome.runs_passed == 1
 
 

@@ -49,6 +49,7 @@ class JudgeResponseError(RuntimeError):
     # rather than attached loosely, because the runner reads it off the exception to report
     # what an unevaluable item still cost.
     timings: PhaseTimings
+    best_run_latency_s: float | None
 
 
 def _message_content(response: Any) -> str | None:

@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -20,6 +21,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -39,7 +41,6 @@ from gooddata_eval.core.models import (
     ReasoningStepEvent,
     ToolCallEvent,
     shift_and_index_events,
-    timeline_detail,
 )
 
 try:
@@ -490,6 +491,9 @@ class AlertRunResult:
     # also report operator/threshold/metric/recipients as False.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
     turns_used: int = 0
+    # This run's own wall time, across all its turns -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item).
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -676,6 +680,7 @@ def run_agentic_alert_skill(
 
     def _run_once(conv_id: str) -> AlertRunResult:
         alert_id_to_delete: str | None = None
+        run_started = time.monotonic()
         try:
             alert_id: str | None = None
             actual_args: dict = {}
@@ -794,6 +799,7 @@ def run_agentic_alert_skill(
                 reasoning_step_events=all_reasoning_step_events,
                 exit_reason=exit_reason,
                 turns_used=turns_used,
+                run_latency_s=time.monotonic() - run_started,
             )
         finally:
             if alert_id_to_delete:
@@ -953,28 +959,30 @@ def evaluate_agentic_alert_skill(
 
     best = summary.best
     ev = best.eval
-    detail = {
-        "alert_created": ev.alert_created,
-        "operator_correct": ev.operator_correct,
-        "threshold_correct": ev.threshold_correct,
-        "trigger_correct": ev.trigger_correct,
-        "filters_correct": ev.filters_correct,
-        "metric_correct": ev.metric_correct,
-        "recipients_correct": ev.recipients_correct,
-        "attributes_correct": ev.attributes_correct,
-        "granularity_correct": ev.granularity_correct,
-        "actual_alert_arguments": best.actual_alert_arguments,
+    detail = agentic_detail(
+        best.tool_call_events,
+        best.reasoning_step_events,
+        alert_created=ev.alert_created,
+        operator_correct=ev.operator_correct,
+        threshold_correct=ev.threshold_correct,
+        trigger_correct=ev.trigger_correct,
+        filters_correct=ev.filters_correct,
+        metric_correct=ev.metric_correct,
+        recipients_correct=ev.recipients_correct,
+        attributes_correct=ev.attributes_correct,
+        granularity_correct=ev.granularity_correct,
+        actual_alert_arguments=best.actual_alert_arguments,
         # Why the loop stopped. alert_created=False alone cannot tell a refusal from a run
         # that hit max_iterations while still on track -- see LoopExit.
-        "exit_reason": best.exit_reason.value,
-        "turns_used": best.turns_used,
-        "max_iterations": max_iterations,
-        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
-    }
+        exit_reason=best.exit_reason.value,
+        turns_used=best.turns_used,
+        max_iterations=max_iterations,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
-        exc = AlertSkillAssertionError(
+        raise_agentic_failure(
+            AlertSkillAssertionError,
             f"Alert skill assertion failed. {gate_note} strict_pass={ev.strict_pass}. "
             f"alert_created={ev.alert_created}, operator_correct={ev.operator_correct}, "
             f"threshold_correct={ev.threshold_correct}, trigger_correct={ev.trigger_correct}, "
@@ -982,20 +990,21 @@ def evaluate_agentic_alert_skill(
             f"recipients_correct={ev.recipients_correct}, "
             f"attributes_correct={ev.attributes_correct}, "
             f"granularity_correct={ev.granularity_correct}. "
-            f"Actual args: {best.actual_alert_arguments}"
+            f"Actual args: {best.actual_alert_arguments}",
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            best_run_latency_s=best.run_latency_s,
         )
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = runs_effective
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
+        best_run_latency_s=best.run_latency_s,
     )

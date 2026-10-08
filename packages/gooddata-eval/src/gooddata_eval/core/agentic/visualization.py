@@ -8,6 +8,7 @@ Langfuse logging and VisAssertionError remain in the Tavern shim.
 from __future__ import annotations
 
 import os
+import time
 from dataclasses import dataclass, field
 
 from gooddata_eval.core.agentic._gate import (
@@ -18,6 +19,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -46,7 +48,6 @@ from gooddata_eval.core.models import (
     ReasoningStepEvent,
     ToolCallEvent,
     shift_and_index_events,
-    timeline_detail,
 )
 from gooddata_eval.core.scoring import get_dimension_uri_set, get_metric_uri_set, uri_to_display_name
 
@@ -71,6 +72,9 @@ class RunResult:
     # Why the simulated-user loop stopped. visualization_created=False alone cannot separate
     # a refusal from a run that hit max_iterations while still on track -- see LoopExit.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
+    # This run's own wall time, across all its turns -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item).
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -193,6 +197,7 @@ def _execute_single_run(
     requires_execution: bool = False,
 ) -> RunResult:
     """Drive one full multi-turn conversation and evaluate the result."""
+    run_started = time.monotonic()
     total_turns = 0
     total_steps = 0
     all_tool_call_events: list[ToolCallEvent] = []
@@ -296,6 +301,7 @@ def _execute_single_run(
         tool_call_events=all_tool_call_events,
         reasoning_step_events=all_reasoning_step_events,
         exit_reason=exit_reason,
+        run_latency_s=time.monotonic() - run_started,
     )
 
 
@@ -511,15 +517,16 @@ def evaluate_agentic_visualization(
 
     best = summary.best
     ev = best.eval_result
-    detail = {
+    detail = agentic_detail(
+        best.tool_call_events,
+        best.reasoning_step_events,
         **evaluation_result_detail(ev),
         # Why the loop stopped -- see LoopExit. total_turns is already the turn count for
         # this run, so it doubles as turns_used.
-        "exit_reason": best.exit_reason.value,
-        "turns_used": int(best.total_turns),
-        "max_iterations": max_iterations,
-        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
-    }
+        exit_reason=best.exit_reason.value,
+        turns_used=int(best.total_turns),
+        max_iterations=max_iterations,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
@@ -528,7 +535,8 @@ def evaluate_agentic_visualization(
         cross_ref_detail = (" → " + "; ".join(ev.cross_ref_errors)) if ev.cross_ref_errors else ""
         expected_dump = best.best_expected.model_dump(exclude_none=True)
         actual_dump = best.actual_output.model_dump(exclude_none=True) if best.actual_output else None
-        exc = VisualizationAssertionError(
+        raise_agentic_failure(
+            VisualizationAssertionError,
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             "Agentic Visualization Assertion Failed! (Critical Mode)\n"
             f"{gate_note}\n"
@@ -558,20 +566,21 @@ def evaluate_agentic_visualization(
             f"  Viz Type Hard         : {ev.viz_type_hard}\n"
             f"  Executed              : {ev.executed}{' (required)' if ev.requires_execution else ''}\n"
             f"  Stated Value Matches  : {ev.stated_value_matches} (reported only)\n"
-            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n",
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            best_run_latency_s=best.run_latency_s,
         )
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = runs_effective
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
+        best_run_latency_s=best.run_latency_s,
     )
