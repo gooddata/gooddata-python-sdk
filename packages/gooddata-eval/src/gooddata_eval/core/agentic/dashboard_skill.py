@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -270,6 +271,65 @@ def _check_visualizations(widgets: list[dict], new_ids: set[str], expected: list
     return failures, title_mismatches
 
 
+def _check_forbidden(widgets: list[dict], forbidden: list[dict]) -> list[str]:
+    """Report charts the expectation says must NOT be on the dashboard.
+
+    The counterpart to ``_check_visualizations``, which allows extras. Extras are the right
+    default -- a user asking for three charts is not wronged by a fourth -- but it leaves the
+    cases that are about what the agent must *refrain* from unassertable: a chart the agent was
+    told it could not use, and a substitute authored in place of one it could not resolve.
+
+    An entry with an ``id`` is matched on that id alone; a ``title`` beside it is documentation
+    for whoever reads the fixture, not a second matcher. Titles are not unique in a real
+    workspace -- the catalog this was written against has 102 visualizations whose title
+    contains "approval rate" -- so widening an id entry to also match its title would fail the
+    case on a chart that merely shares a name with the forbidden one.
+
+    An entry with only a ``title`` matches on the title, which is what catches a substitution
+    whose id is not known in advance.
+    """
+    failures: list[str] = []
+    for entry in forbidden:
+        exp_id = entry.get("id")
+        exp_title = str(entry.get("title") or "")
+        if exp_id is not None:
+            if any(w.get("visualization") == exp_id for w in widgets):
+                failures.append(f"chart id={exp_id!r} title={exp_title!r} is on the dashboard and must not be")
+        else:
+            hits = [w for w in widgets if _norm(str(w.get("title") or "")) == _norm(exp_title)]
+            if hits:
+                ids = ", ".join(repr(w.get("visualization")) for w in hits)
+                failures.append(f"a chart titled {exp_title!r} is on the dashboard ({ids}) and must not be")
+    return failures
+
+
+def _check_answer(answer: str, must_include: list[str], must_not_match: list[str]) -> list[str]:
+    """Score the text the user actually reads.
+
+    Nothing else in this evaluator looks at the answer: every other check reads the drafted
+    document, so a run that builds the right dashboard and describes it wrongly scores as a
+    clean pass. The two cases that need this are the ones where the text *is* the deliverable
+    -- an agent that cannot build what was asked has to say so, and one that can has to say it
+    without leaking the raw ``{visualization/<uuid>}`` tokens the renderer was meant to resolve.
+
+    ``must_include`` is substring, case- and whitespace-insensitive, because it asserts that a
+    point was made rather than that a sentence was phrased a particular way. ``must_not_match``
+    is a regular expression, because what it rules out is usually a shape -- a token, an id, a
+    claim pattern -- and not a fixed string.
+    """
+    normalized = _norm(answer)
+    failures: list[str] = [
+        f"the answer does not mention {phrase!r}" for phrase in must_include if _norm(str(phrase)) not in normalized
+    ]
+    for pattern in must_not_match:
+        # Compiled at validation time too, so a bad pattern fails the fixture rather than the
+        # run; compiling again here keeps this function usable on its own.
+        found = re.search(str(pattern), answer, re.IGNORECASE)
+        if found:
+            failures.append(f"the answer matches {pattern!r}, which it must not (matched {found.group(0)!r})")
+    return failures
+
+
 def _check_references(widgets: list[dict], known_ids: set[str]) -> list[str]:
     """Report widgets whose id the response's references never carried.
 
@@ -491,6 +551,76 @@ def _min_new_visualizations(expected_output: dict) -> int:
     return value
 
 
+def _max_new_visualizations(expected_output: dict) -> int | None:
+    """Upper bound on the number of charts the agent may author, or ``None`` for no bound.
+
+    The bound that was missing. ``min_new_visualizations`` alone cannot express "use what is
+    already there", which is the central requirement wherever a curated catalog exists: with
+    only a floor, ``0`` is satisfied by any number of authored charts, so a case meant to
+    assert that the agent reused existing work passes however much it invented. Pairing it
+    with ``max_new_visualizations: 0`` is what turns that into an assertion.
+
+    Absent means unbounded, which is the behaviour every fixture written before this had.
+    ``0`` is a real bound and must not be read as absence.
+
+    Raises:
+        ValueError: the bound is not a number, is negative, or is below the floor — a ceiling
+            under the floor cannot be satisfied by any run, so the fixture is unscoreable
+            rather than strict.
+    """
+    raw = expected_output.get("max_new_visualizations")
+    if raw is None:
+        return None
+    try:
+        value = int(raw)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"max_new_visualizations is not a number: {raw!r}") from exc
+    if value < 0:
+        raise ValueError(f"max_new_visualizations must not be negative, got {value}")
+    minimum = _min_new_visualizations(expected_output)
+    if value < minimum:
+        raise ValueError(f"max_new_visualizations ({value}) is below min_new_visualizations ({minimum})")
+    return value
+
+
+def _forbidden_visualizations(expected_output: dict) -> list[dict]:
+    """The ``must_not_contain`` entries, as a list."""
+    return expected_output.get("must_not_contain") or []
+
+
+def _answer_assertions(expected_output: dict) -> tuple[list[str], list[str]]:
+    """The answer-text assertions, as ``(must_include, must_not_match)``."""
+    return (
+        list(expected_output.get("answer_must_include") or []),
+        list(expected_output.get("answer_must_not_match") or []),
+    )
+
+
+def _compile_pattern(pattern: object) -> re.Pattern[str]:
+    """Compile one ``answer_must_not_match`` entry, naming the fixture key on failure.
+
+    Raises:
+        ValueError: the pattern does not compile.
+    """
+    try:
+        return re.compile(str(pattern))
+    except re.error as exc:
+        raise ValueError(f"answer_must_not_match carries an invalid regular expression {pattern!r}: {exc}") from exc
+
+
+def _expects_dashboard(expected_output: dict) -> bool:
+    """Whether the case expects a dashboard at all.
+
+    ``false`` is the refusal shape: the agent was asked for something it cannot build, and the
+    right outcome is that it says so and drafts nothing. Those cases could not be authored
+    before, because an expectation with no ``visualizations`` is rejected as vacuous -- and
+    correctly so, since every chart check would pass against nothing. What makes a refusal
+    scoreable is not relaxing that rule but replacing the assertion: the answer carries the
+    whole of what the run is judged on, so a refusal fixture has to state it.
+    """
+    return expected_output.get("expects_dashboard", True) is not False
+
+
 def _has_filters(expected_output: dict) -> bool:
     """Whether the expectation says anything about the attribute filters.
 
@@ -521,7 +651,39 @@ def _validate_expectation(expected_output: dict) -> None:
     Raises:
         ValueError: the expectation is unusable.
     """
-    if not expected_output.get("visualizations"):
+    must_include, must_not_match = _answer_assertions(expected_output)
+    for key, value in (("answer_must_include", must_include), ("answer_must_not_match", must_not_match)):
+        if not isinstance(expected_output.get(key, []), list):
+            raise ValueError(f"{key} must be a list of strings, got {expected_output.get(key)!r}")
+        if any(not str(entry).strip() for entry in value):
+            raise ValueError(f"{key} carries an empty entry, which asserts nothing: {value!r}")
+    # Compiled here so an unparseable pattern fails the fixture before the first API call,
+    # rather than raising mid-scoring with a run already spent.
+    for pattern in must_not_match:
+        _compile_pattern(pattern)
+
+    forbidden = _forbidden_visualizations(expected_output)
+    if not isinstance(forbidden, list):
+        raise ValueError(f"must_not_contain must be a list of chart expectations, got {forbidden!r}")
+    for entry in forbidden:
+        if not isinstance(entry, dict):
+            raise ValueError(f"a must_not_contain entry must be an object, got {entry!r}")
+        if entry.get("id") is None and not str(entry.get("title") or "").strip():
+            raise ValueError(f"a must_not_contain entry needs an id or a title, got {entry!r}")
+
+    if not _expects_dashboard(expected_output):
+        # The refusal shape. Each of these would otherwise produce a fixture that looks strict
+        # and asserts nothing, which is the failure mode the vacuity check below exists to stop.
+        if expected_output.get("visualizations"):
+            raise ValueError("expects_dashboard is false, so the case must not list visualizations to find")
+        if _is_edit(expected_output):
+            raise ValueError("expects_dashboard is false is a creation shape; an edit always produces a patch")
+        if not must_include and not must_not_match:
+            raise ValueError(
+                "expects_dashboard is false needs an answer assertion; without one the case scores nothing "
+                "beyond the absence of a draft, which an agent that fell over satisfies too"
+            )
+    elif not expected_output.get("visualizations"):
         raise ValueError("expected_output lists no visualizations; every chart check would pass vacuously")
     if _has_date_range(expected_output):
         date_range = expected_output.get("date_range")
@@ -552,6 +714,7 @@ def _validate_expectation(expected_output: dict) -> None:
     elif saved_id is not None:
         raise ValueError(f"a creation expectation must not name a saved_dashboard_id, got {saved_id!r}")
     _min_new_visualizations(expected_output)
+    _max_new_visualizations(expected_output)
 
 
 @dataclass(frozen=True)
@@ -567,6 +730,12 @@ class _Applies:
     patch: bool
     date: bool
     filters: bool
+    forbidden: bool = False
+    answer: bool = False
+    # Not a check of its own but a switch over the whole set: a refusal case is scored on the
+    # absence of a draft and on what the answer said, so publishing the document checks beside
+    # it would report six passes for a document that was never produced.
+    refusal: bool = False
 
 
 @dataclass
@@ -598,6 +767,12 @@ class DashboardEvaluation:
     patch_applies: bool = True
     references_carried: bool = True
     titles_matched: bool = True
+    forbidden_absent: bool = True
+    answer_matched: bool = True
+    # Whether EITHER dashboard-producing tool was called at all, successful or not. Only a
+    # refusal case reads it: everywhere else a failed call is a retry the agent recovered
+    # from, which is why `_extract_tool_result` skips it.
+    producing_tool_called: bool = False
     failures: list[str] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
 
@@ -607,6 +782,25 @@ class DashboardEvaluation:
 
     @property
     def strict_checks(self) -> dict[str, bool]:
+        if self.applies.refusal:
+            # Named for what has to be true, not negated at read time: `dashboard_not_drafted`
+            # false means a dashboard came back from a case that asked for none, which is the
+            # failure. A successful tool call with no part, or a part with no successful call,
+            # are each a dashboard the user would be shown.
+            #
+            # The third term is the one that is easy to miss: an agent that CALLED the tool and
+            # had the call rejected leaves no result and no part, so the first two would read it
+            # as a clean refusal. It is not one -- the agent tried to build and the tool stopped
+            # it, and scoring that as correct credits the model for a guardrail.
+            checks = {
+                "dashboard_not_drafted": (
+                    not self.drafted and not self.part_present and not self.producing_tool_called
+                ),
+                "dashboard_skill_activated": self.skill_activated,
+            }
+            if self.applies.answer:
+                checks["answer_matched"] = self.answer_matched
+            return checks
         checks = {
             # Kept as-is through the editing work: every Langfuse view, saved filter and
             # combo-report field list already refers to it, and a rename would break them for
@@ -626,6 +820,10 @@ class DashboardEvaluation:
             # Prefixed: alert_skill already publishes a `filters_correct` score, and the combo
             # report resolves a trace's skill by which score names it carries.
             checks["dashboard_filters_correct"] = self.filters_correct
+        if self.applies.forbidden:
+            checks["forbidden_charts_absent"] = self.forbidden_absent
+        if self.applies.answer:
+            checks["answer_matched"] = self.answer_matched
         return checks
 
     @property
@@ -682,6 +880,8 @@ def evaluate_dashboard_response(
     expected_output: dict,
     skill_activated: bool,
     patch_part: dict | None = None,
+    answer_text: str = "",
+    producing_tool_called: bool = False,
 ) -> DashboardEvaluation:
     """Score one dashboard response against its expectation.
 
@@ -693,8 +893,58 @@ def evaluate_dashboard_response(
     without an agent.
     """
     is_edit = _is_edit(expected_output)
-    applies = _Applies(patch=is_edit, date=_has_date_range(expected_output), filters=_has_filters(expected_output))
+    forbidden = _forbidden_visualizations(expected_output)
+    must_include, must_not_match = _answer_assertions(expected_output)
+    expects_dashboard = _expects_dashboard(expected_output)
+    applies = _Applies(
+        patch=is_edit,
+        date=_has_date_range(expected_output),
+        filters=_has_filters(expected_output),
+        forbidden=bool(forbidden),
+        answer=bool(must_include or must_not_match),
+        refusal=not expects_dashboard,
+    )
     tool = _producing_tool(expected_output)
+    answer_failures = _check_answer(answer_text, must_include, must_not_match)
+
+    if not expects_dashboard:
+        # The whole of a refusal case: nothing was drafted, and the answer said the right
+        # thing. Scored before the branches below so the absence of a tool result reads as the
+        # outcome asked for rather than as "the agent never produced a successful draft".
+        drafted = tool_result is not None
+        return DashboardEvaluation(
+            drafted=drafted,
+            part_present=dashboard_part is not None,
+            charts_matched=True,
+            date_range_correct=True,
+            filters_correct=True,
+            new_visualizations_met=True,
+            applies=applies,
+            skill_activated=skill_activated,
+            producing_tool_called=producing_tool_called,
+            answer_matched=not answer_failures,
+            failures=[
+                *(
+                    [f"the case expects no dashboard, but the agent produced a successful {tool} call"]
+                    if drafted
+                    else []
+                ),
+                *(
+                    ["the case expects no dashboard, but the response carries a 'dashboard' part"]
+                    if dashboard_part is not None
+                    else []
+                ),
+                *(
+                    [
+                        "the case expects no dashboard, but the agent called a dashboard-producing "
+                        "tool (the call did not succeed)"
+                    ]
+                    if producing_tool_called and not drafted
+                    else []
+                ),
+                *answer_failures,
+            ],
+        )
 
     if tool_result is None:
         return DashboardEvaluation(
@@ -708,15 +958,25 @@ def evaluate_dashboard_response(
             skill_activated=skill_activated,
             saved_dashboard_id_correct=False,
             patch_applies=False,
-            failures=[f"the agent never produced a successful {tool} call"],
+            answer_matched=not answer_failures,
+            failures=[f"the agent never produced a successful {tool} call", *answer_failures],
         )
 
     min_new = _min_new_visualizations(expected_output)
+    max_new = _max_new_visualizations(expected_output)
     actual_new = tool_result.get("new_visualization_count")
     if isinstance(actual_new, int):
-        new_met = actual_new >= min_new
+        over = max_new is not None and actual_new > max_new
+        new_met = actual_new >= min_new and not over
         # Naming the shortfall, never "expected at least 0" -- see the envelope branch below.
-        new_failures = [] if new_met else [f"expected at least {min_new} authored chart(s), tool reported {actual_new}"]
+        # The ceiling is reported as its own sentence: "too few" and "too many" are opposite
+        # diagnoses and a single range message would make whoever reads the failure work out
+        # which end was missed.
+        new_failures: list[str] = []
+        if actual_new < min_new:
+            new_failures.append(f"expected at least {min_new} authored chart(s), tool reported {actual_new}")
+        if over:
+            new_failures.append(f"expected at most {max_new} authored chart(s), tool reported {actual_new}")
     else:
         # Not a shortfall: the tool result no longer carries the key. Said plainly, because
         # "expected at least 0 authored chart(s), tool reported None" reads as a broken test
@@ -741,9 +1001,11 @@ def evaluate_dashboard_response(
             skill_activated=skill_activated,
             saved_dashboard_id_correct=False,
             patch_applies=False,
+            answer_matched=not answer_failures,
             failures=[
                 f"the response carries no {' and no '.join(repr(p) for p in missing_parts)} part",
                 *new_failures,
+                *answer_failures,
             ],
         )
 
@@ -794,7 +1056,8 @@ def evaluate_dashboard_response(
             skill_activated=skill_activated,
             saved_dashboard_id_correct=not saved_failures,
             patch_applies=False,
-            failures=[*patch_failures, *saved_failures, *new_failures],
+            answer_matched=not answer_failures,
+            failures=[*patch_failures, *saved_failures, *new_failures, *answer_failures],
         )
 
     widgets = _widgets_of(document)
@@ -810,6 +1073,7 @@ def evaluate_dashboard_response(
         title_notes: list[str] = []
     else:
         title_notes = title_mismatches
+    forbidden_failures = _check_forbidden(widgets, forbidden)
     reference_notes = _check_references(widgets, known_ids)
     date_failures = (
         _check_date_range(document, expected_output.get("date_range")) if _has_date_range(expected_output) else []
@@ -831,7 +1095,17 @@ def evaluate_dashboard_response(
         patch_applies=True,
         references_carried=not reference_notes,
         titles_matched=not title_mismatches,
-        failures=[*chart_failures, *saved_failures, *date_failures, *filter_failures, *new_failures],
+        forbidden_absent=not forbidden_failures,
+        answer_matched=not answer_failures,
+        failures=[
+            *chart_failures,
+            *forbidden_failures,
+            *saved_failures,
+            *date_failures,
+            *filter_failures,
+            *new_failures,
+            *answer_failures,
+        ],
         notes=[*title_notes, *reference_notes],
     )
 
@@ -850,6 +1124,8 @@ def _execute_single_dashboard_run(
     """
     tool = _producing_tool(expected_output)
     is_edit = _is_edit(expected_output)
+    expects_dashboard = _expects_dashboard(expected_output)
+    answer_text = ""
     tool_result: dict | None = None
     dashboard_part: dict | None = None
     patch_part: dict | None = None
@@ -883,6 +1159,13 @@ def _execute_single_dashboard_run(
         all_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
         steps += chat_result.reasoning_step_count
 
+        # Read every turn, not only the ones that answer without drafting: the turn that
+        # produces the draft carries the text describing it, and that text is exactly what the
+        # answer assertions are about. Kept as the last turn that said anything, so a silent
+        # turn after a spoken one does not erase what the user was shown.
+        response_text = (chat_result.text_response or "").strip() or render_answer_text(chat_result)
+        answer_text = response_text or answer_text
+
         candidate = _extract_tool_result(chat_result.tool_call_events or [], tool)
         if candidate is not None:
             log_timer(
@@ -905,8 +1188,13 @@ def _execute_single_dashboard_run(
                 patch_part = _extract_dashboard_part(chat_result, _PATCH_TYPE)
             break
 
-        response_text = (chat_result.text_response or "").strip() or render_answer_text(chat_result)
         if not response_text and not chat_result.tool_call_events:
+            break
+        if not expects_dashboard:
+            # A refusal case is answered in one turn. The reply this loop would otherwise send
+            # restates the charts and the date range and asks again for the dashboard, which is
+            # pressure to build the very thing the case says must not be built -- so a correct
+            # agent would be talked out of the right answer by the harness.
             break
         if iteration >= max_iterations - 1:
             break
@@ -930,6 +1218,12 @@ def _execute_single_dashboard_run(
             expected_output,
             _skill_activated(all_tool_call_events, _required_skill(expected_output)),
             patch_part=patch_part,
+            answer_text=answer_text,
+            # Any call, not just a successful one -- see DashboardEvaluation. BOTH tools,
+            # not the one this case selected: a refusal is a creation shape, so `tool` is
+            # `draft_dashboard`, and an agent that routed to the editor and had a
+            # `patch_dashboard` call rejected would otherwise leave this false and pass.
+            producing_tool_called=any(tc.function_name in (_DRAFT_TOOL, _PATCH_TOOL) for tc in all_tool_call_events),
         ),
         tool_result=tool_result,
         dashboard_part=dashboard_part,
