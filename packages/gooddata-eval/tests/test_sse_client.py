@@ -533,6 +533,16 @@ def test_parse_sse_lines_non_retryable_status_is_chat_error_not_transient():
     assert ei.value.status_code == 400
 
 
+@pytest.mark.parametrize(
+    ("code", "error_type"), [(400, ChatError), (503, TransientChatError)], ids=["non-retryable", "transient"]
+)
+def test_parse_sse_lines_keeps_the_error_reason(code: int, error_type: type[ChatError]) -> None:
+    payload = {"statusCode": code, "detail": "user-facing text", "reason": "DATA_OBFUSCATION_CONTENT_REJECTED"}
+    with pytest.raises(error_type) as ei:
+        parse_sse_lines([f"data: {json.dumps(payload)}"])
+    assert ei.value.reason == "DATA_OBFUSCATION_CONTENT_REJECTED"
+
+
 def _client_with_handler(handler, **kwargs):
     client = ChatClient(host="https://example.invalid", token="t", workspace_id="w", **kwargs)
     client._client = httpx.Client(transport=httpx.MockTransport(handler))

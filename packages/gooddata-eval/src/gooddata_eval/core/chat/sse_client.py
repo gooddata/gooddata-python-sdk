@@ -72,6 +72,7 @@ class ChatError(RuntimeError):
     ``partial_result`` carries whatever the accumulator captured before the error fired
     (tool calls included). Callers must not assume it's complete -- fields like
     ``stream_ended`` reflect the state at the moment of the error, not a finished turn.
+    ``reason`` is the error event's machine-readable code, when gen-ai sent one.
     """
 
     def __init__(
@@ -456,9 +457,11 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
                 )
             if code in _RETRYABLE_STATUS_CODES:
                 raise TransientChatError(
-                    message, status_code=code, detail=detail, partial_result=_build_chat_result(acc)
+                    message, status_code=code, detail=detail, partial_result=_build_chat_result(acc), reason=reason
                 )
-            raise ChatError(message, status_code=code, detail=detail, partial_result=_build_chat_result(acc))
+            raise ChatError(
+                message, status_code=code, detail=detail, partial_result=_build_chat_result(acc), reason=reason
+            )
         if event_data.get("responseId") and not acc.response_id:
             acc.response_id = event_data["responseId"]
         if current_event == _RESPONSE_STARTED_EVENT and event_data.get("traceId") and not acc.trace_id:
