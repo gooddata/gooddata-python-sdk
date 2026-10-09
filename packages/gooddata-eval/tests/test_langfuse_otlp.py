@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 
 import httpx
 import pytest
+from gooddata_eval.core.langfuse._env import resource_attributes
 from gooddata_eval.core.langfuse.otlp import (
     Span,
     encode_export_request,
@@ -126,7 +127,7 @@ def test_encode_export_request_shape():
     resource_spans = request["resourceSpans"]
     assert len(resource_spans) == 1
     resource = resource_spans[0]["resource"]
-    assert resource["attributes"] == [{"key": "service.name", "value": {"stringValue": "gooddata-eval"}}]
+    assert {a["key"]: a["value"]["stringValue"] for a in resource["attributes"]} == resource_attributes()
 
     scope_spans = resource_spans[0]["scopeSpans"]
     assert len(scope_spans) == 1
