@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Any
 
 from gooddata_eval._version import __version__
+from gooddata_eval.core.langfuse import _env
 
 if TYPE_CHECKING:
     import httpx
@@ -42,7 +43,6 @@ ATTR_EXPERIMENT_ITEM_ROOT_OBSERVATION_ID = "langfuse.experiment.item.root_observ
 ATTR_EXPERIMENT_ITEM_EXPECTED_OUTPUT = "langfuse.experiment.item.expected_output"
 ATTR_EXPERIMENT_ITEM_METADATA_PREFIX = "langfuse.experiment.item.metadata"
 
-_SERVICE_NAME = "gooddata-eval"
 _EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
 
 
@@ -112,7 +112,7 @@ class Span:
 
 
 def encode_export_request(
-    spans: list[Span], *, scope_name: str = _SERVICE_NAME, scope_version: str = __version__
+    spans: list[Span], *, scope_name: str = _env.SERVICE_NAME, scope_version: str = __version__
 ) -> dict[str, Any]:
     """Build the OTLP/JSON export request body for `POST /api/public/otel/v1/traces`."""
     otlp_spans = [
@@ -131,7 +131,7 @@ def encode_export_request(
     return {
         "resourceSpans": [
             {
-                "resource": {"attributes": [{"key": "service.name", "value": {"stringValue": _SERVICE_NAME}}]},
+                "resource": {"attributes": [otlp_attribute(k, v) for k, v in _env.resource_attributes().items()]},
                 "scopeSpans": [{"scope": {"name": scope_name, "version": scope_version}, "spans": otlp_spans}],
             }
         ]
