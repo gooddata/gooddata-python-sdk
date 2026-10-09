@@ -5,6 +5,7 @@ root exported into that trace, scored once."""
 from __future__ import annotations
 
 import json
+import threading
 from contextlib import nullcontext
 from datetime import datetime, timezone
 from typing import Any
@@ -13,8 +14,14 @@ from unittest.mock import patch
 import httpx
 import pytest
 from gooddata_eval.core.agentic import _langfuse
-from gooddata_eval.core.agentic._langfuse import SKIP_ENV_VAR, find_traces_per_conversation, observe, score_safe
-from gooddata_eval.core.agentic._trace_linker import RunIdentity, open_item_trace, submit_trace_scoring
+from gooddata_eval.core.agentic._langfuse import (
+    SKIP_ENV_VAR,
+    collect_scores,
+    find_traces_per_conversation,
+    observe,
+    score_safe,
+)
+from gooddata_eval.core.agentic._trace_linker import _CANCEL, RunIdentity, open_item_trace, submit_trace_scoring
 from gooddata_eval.core.langfuse.client import HttpxLangfuseClient
 from gooddata_eval.core.langfuse.experiment import ScoreTarget, experiment_id_for
 from gooddata_eval.core.langfuse.item_scope import ItemTraceScope, JoinedRun, joined_run, mark_joined, trace_ids_for
@@ -269,3 +276,89 @@ def test_the_deferred_task_releases_joins_its_scoring_never_exported(write_score
         )
 
     assert joined_run(cid) is None
+
+
+def _score_bodies(rec: _Recorder) -> list[list[dict]]:
+    return [json.loads(r.content) for r in rec.requests if r.url.path == "/api/public/scores"]
+
+
+def test_scores_collected_for_an_item_go_out_in_one_request():
+    rec = _Recorder()
+    target = ScoreTarget("genai-trace", "eval-trace", "eval-root")
+
+    with collect_scores(rec.client):
+        score_safe(rec.client, target, name="gate_passed", value=1.0, data_type="BOOLEAN")
+        score_safe(rec.client, target, name="quality_score", value=0.5, data_type="NUMERIC")
+        assert _score_bodies(rec) == []
+
+    (bodies,) = _score_bodies(rec)
+    assert sorted((b["traceId"], b["name"], b.get("observationId")) for b in bodies) == [
+        ("eval-trace", "gate_passed", "eval-root"),
+        ("eval-trace", "quality_score", "eval-root"),
+        ("genai-trace", "gate_passed", None),
+        ("genai-trace", "quality_score", None),
+    ]
+
+
+def test_scores_collected_before_a_drain_is_cancelled_are_still_sent_once():
+    rec = _Recorder()
+    cancel = threading.Event()
+    token = _CANCEL.set(cancel)
+    try:
+        with collect_scores(rec.client):
+            score_safe(rec.client, "t-1", name="gate_passed", value=1.0, data_type="BOOLEAN")
+            cancel.set()
+            score_safe(rec.client, "t-1", name="quality_score", value=0.5, data_type="NUMERIC")
+    finally:
+        _CANCEL.reset(token)
+
+    assert [[b["name"] for b in bodies] for bodies in _score_bodies(rec)] == [["gate_passed"]]
+
+
+def test_a_throttled_flush_in_a_cancelled_drain_gives_up_without_waiting(monkeypatch):
+    slept: list[float] = []
+    monkeypatch.setattr(_langfuse.time, "sleep", slept.append)
+    calls: list[httpx.Request] = []
+
+    def throttled(request: httpx.Request) -> httpx.Response:
+        calls.append(request)
+        return httpx.Response(429, headers={"Retry-After": "60"}, json={})
+
+    client = HttpxLangfuseClient(transport=httpx.MockTransport(throttled))
+    cancel = threading.Event()
+    token = _CANCEL.set(cancel)
+    try:
+        with collect_scores(client):
+            score_safe(client, "t-1", name="gate_passed", value=1.0, data_type="BOOLEAN")
+            cancel.set()
+    finally:
+        _CANCEL.reset(token)
+
+    assert len(calls) == 1
+    assert slept == []
+
+
+def test_the_deferred_task_sends_every_run_s_scores_in_one_request():
+    rec = _Recorder()
+
+    def write_scores(ctx: Any) -> None:
+        for run in range(2):
+            ctx.score(f"trace-{run}", name="gate_passed", value=1.0, data_type="BOOLEAN")
+            ctx.score(f"trace-{run}", name="pass_at_k", value=1.0, data_type="BOOLEAN")
+
+    with patch.object(_langfuse, "find_traces_per_conversation", return_value={}):
+        submit_trace_scoring(
+            lambda task, item_id="": task(),
+            _IDENTITY,
+            langfuse=rec.client,
+            dataset_item_id="item-1",
+            conversation_ids=["c0", "c1"],
+            window_start=_WINDOW[0],
+            window_end=_WINDOW[1],
+            suffix_runs=True,
+            write_scores=write_scores,
+            scope=ItemTraceScope("ds", True, "ds-1", "item-1"),
+        )
+
+    (bodies,) = _score_bodies(rec)
+    assert len(bodies) == 4

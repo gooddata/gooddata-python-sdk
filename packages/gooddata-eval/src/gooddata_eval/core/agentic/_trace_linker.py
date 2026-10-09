@@ -235,19 +235,20 @@ def submit_trace_scoring(
             base_name, run_metadata = _langfuse.run_context_for(identity)
         try:
             traces = _langfuse.find_traces_per_conversation(langfuse, conversation_ids, window_start, window_end)
-            write_scores(
-                RunTraceContext(
-                    run_metadata,
-                    _langfuse,
-                    langfuse,
-                    dataset_item_id,
-                    base_name,
-                    suffix_runs,
-                    traces,
-                    (window_start, window_end),
-                    item_input,
+            with _langfuse.collect_scores(langfuse):
+                write_scores(
+                    RunTraceContext(
+                        run_metadata,
+                        _langfuse,
+                        langfuse,
+                        dataset_item_id,
+                        base_name,
+                        suffix_runs,
+                        traces,
+                        (window_start, window_end),
+                        item_input,
+                    )
                 )
-            )
         finally:
             # Nothing reads a join after this task, including one whose root was never exported.
             for conversation_id in conversation_ids:

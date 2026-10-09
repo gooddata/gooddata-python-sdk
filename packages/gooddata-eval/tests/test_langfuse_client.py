@@ -385,3 +385,104 @@ def test_a_dataset_run_item_for_an_unknown_item_raises(make_client):
     client = make_client(lambda request: httpx.Response(404, json={}))
     with pytest.raises(LookupError):
         client.api.dataset_run_items.create(run_name="run", dataset_item_id="local", trace_id="t-1")
+
+
+def _score(name: str, value: float = 1.0, observation_id: str | None = None) -> dict:
+    return {"trace_id": "t-1", "name": name, "value": value, "data_type": "NUMERIC", "observation_id": observation_id}
+
+
+def test_scores_are_posted_together_as_one_array(make_client):
+    seen: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        return httpx.Response(202, json={"message": "Accepted"})
+
+    make_client(handler).create_scores([_score("quality_score", 0.5, "o-root"), _score("gate_passed")])
+
+    (request,) = seen
+    assert request.url.path == "/api/public/scores"
+    bodies = json.loads(request.content)
+    assert [(b["name"], b["value"], b.get("observationId")) for b in bodies] == [
+        ("quality_score", 0.5, "o-root"),
+        ("gate_passed", 1.0, None),
+    ]
+    assert len({b["id"] for b in bodies}) == 2
+
+
+def test_an_unsendable_score_is_skipped_and_the_rest_of_the_batch_still_goes_out(make_client, caplog):
+    seen: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        return httpx.Response(202, json={})
+
+    unknown_field = {**_score("bogus"), "unexpected": 1}
+    make_client(handler).create_scores([_score("a"), unknown_field, _score("nan", float("nan")), _score("b")])
+
+    (request,) = seen
+    assert [b["name"] for b in json.loads(request.content)] == ["a", "b"]
+    assert "bogus" in caplog.text
+    assert "nan" in caplog.text
+
+
+def test_a_score_batch_larger_than_one_request_is_split(make_client, monkeypatch):
+    monkeypatch.setattr(client_module, "_SCORE_BATCH_SIZE", 2)
+    sizes: list[int] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        sizes.append(len(json.loads(request.content)))
+        return httpx.Response(202, json={})
+
+    make_client(handler).create_scores([_score(f"s{i}") for i in range(5)])
+
+    assert sizes == [2, 2, 1]
+
+
+def test_a_throttled_batch_is_retried_whole_with_the_same_ids(make_client, monkeypatch):
+    slept: list[float] = []
+    monkeypatch.setattr(client_module.time, "sleep", slept.append)
+    bodies: list[list[dict]] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        bodies.append(json.loads(request.content))
+        if len(bodies) == 1:
+            return httpx.Response(429, headers={"Retry-After": "30"}, json={})
+        return httpx.Response(202, json={})
+
+    make_client(handler).create_scores([_score("a"), _score("b")])
+
+    assert slept == [30.0]
+    assert [b["id"] for b in bodies[0]] == [b["id"] for b in bodies[1]]
+
+
+def test_a_throttled_batch_is_not_retried_once_the_wait_is_refused(make_client):
+    waits: list[float] = []
+    calls: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(request)
+        return httpx.Response(429, headers={"Retry-After": "60"}, json={})
+
+    def refuse(delay: float) -> bool:
+        waits.append(delay)
+        return False
+
+    with pytest.raises(httpx.HTTPStatusError):
+        make_client(handler).create_scores([_score("a")], wait=refuse)
+
+    assert waits == [60.0]
+    assert len(calls) == 1
+
+
+def test_a_partly_rejected_batch_is_logged_and_not_retried(make_client, caplog):
+    calls: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(request)
+        return httpx.Response(207, json={"accepted": 1, "rejected": 1, "errors": [{"index": 1, "message": "bad"}]})
+
+    make_client(handler).create_scores([_score("a"), _score("b")])
+
+    assert len(calls) == 1
+    assert "1 of 2 scores rejected" in caplog.text
