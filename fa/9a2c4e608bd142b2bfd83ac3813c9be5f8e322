@@ -7,6 +7,8 @@ packages/gooddata-eval/tests/test_langfuse_otlp.py
   s_160cda2303f459::t_2c27289b2f1682 10,130
 packages/gooddata-eval/tests/test_langfuse_env.py
   s_160cda2303f459::t_2c27289b2f1682 6,8-37,101-144
+packages/gooddata-eval/tests/test_agentic_runner.py
+  s_160cda2303f459::t_a4f2a51f6e95ab 1002-1004,1007-1008
 ---
 {
   "schema_version": "authorship/3.0.0",
