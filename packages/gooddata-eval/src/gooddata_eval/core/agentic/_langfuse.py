@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import contextvars
 import functools
 import logging
 import os
@@ -546,6 +547,32 @@ def _export_joined_root(
     return ScoreTarget(experiment_trace_id=trace_id, experiment_span_id=span_id)
 
 
+# Scores held by an open ``collect_scores`` block on this thread, sent together when it ends.
+_PENDING_SCORES: contextvars.ContextVar[list[dict[str, Any]] | None] = contextvars.ContextVar(
+    "gd_eval_pending_scores", default=None
+)
+
+
+@contextmanager
+def collect_scores(langfuse: HttpxLangfuseClient) -> Iterator[None]:
+    """Hold every ``score_safe`` write made in the block and send them as one batch at its end.
+
+    The batch is sent even when the drain was cancelled meanwhile, without retrying, so the
+    scores made before the interrupt are kept.
+    """
+    pending: list[dict[str, Any]] = []
+    token = _PENDING_SCORES.set(pending)
+    try:
+        yield
+    finally:
+        _PENDING_SCORES.reset(token)
+        if pending:
+            try:
+                langfuse.create_scores(pending, wait=_wait_between_attempts)
+            except Exception as exc:
+                _log.warning("Failed to log %d scores: %s", len(pending), exc)
+
+
 def score_safe(langfuse: Any, trace_id: Any, **kwargs: Any) -> None:
     """Create one Langfuse score per destination the target names, ignoring errors.
 
@@ -559,7 +586,11 @@ def score_safe(langfuse: Any, trace_id: Any, **kwargs: Any) -> None:
     if _drain_is_cancelled():
         return
     targets = trace_id.destinations() if isinstance(trace_id, ScoreTarget) else [(str(trace_id), None)]
+    pending = _PENDING_SCORES.get()
     for target_id, observation_id in targets:
+        if pending is not None:
+            pending.append({"trace_id": target_id, "observation_id": observation_id, **kwargs})
+            continue
         extra = {"observation_id": observation_id} if observation_id else {}
         try:
             langfuse.create_score(trace_id=target_id, **kwargs, **extra)

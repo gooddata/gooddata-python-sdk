@@ -119,7 +119,12 @@ def _attrs(span: dict) -> dict[str, Any]:
 
 
 def _score_bodies(server: FakeLangfuse) -> list[dict]:
-    return [call["json"] for call in server.calls("POST", _SCORES)]
+    """Every score posted, whether it went alone or inside an array."""
+    bodies: list[dict] = []
+    for call in server.calls("POST", _SCORES):
+        body = call["json"]
+        bodies.extend(body if isinstance(body, list) else [body])
+    return bodies
 
 
 def test_agentic_inline_path_polls_looks_up_exports_and_scores(fake_langfuse: FakeLangfuse, capsys) -> None:
@@ -349,12 +354,11 @@ def test_a_rate_limited_score_is_retried_and_lands(fake_langfuse: FakeLangfuse) 
     with _agent_stubbed(["conv-1"]):
         _run_general_question(dataset_item_id="item-1", dataset_name="throttled")
 
-    bodies = _score_bodies(fake_langfuse)
-    # Fourteen writes -- seven scores on each of the gen-ai trace and the experiment span --
-    # plus the one refused attempt the client repeated.
-    assert len(bodies) == 15
-    posted_twice = [b for b in bodies if bodies.count(b) == 2]
-    assert len(posted_twice) == 2, "exactly one score body was posted twice"
+    # Fourteen scores -- seven on each of the gen-ai trace and the experiment span -- go out as
+    # one array; the refused request is repeated whole, with the same score ids.
+    (refused, landed) = [call["json"] for call in fake_langfuse.calls("POST", _SCORES)]
+    assert len(landed) == 14
+    assert refused == landed
 
 
 def test_the_dataset_run_item_shim_exports_one_experiment_span(fake_langfuse: FakeLangfuse) -> None:
