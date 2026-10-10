@@ -295,22 +295,49 @@ def _resolve_refs(
     return json.loads(resolved_raw)
 
 
+def _extract_active_skills(tc: ToolCallEvent) -> list[str]:
+    """Derive the active skills from a set_skills ToolCallEvent.
+
+    Prefers the authoritative post-replacement active skills echoed back in the tool
+    result (e.g. `skills_to_activate`), falling back to requested arguments (`skill_names`)
+    when the result is absent, unparseable, or errored.
+    """
+    if getattr(tc, "result", None) or hasattr(tc, "parsed_result"):
+        try:
+            result_data = tc.parsed_result()
+        except Exception:
+            result_data = None
+        if isinstance(result_data, dict):
+            payload = result_data.get("data", result_data)
+            if isinstance(payload, dict) and payload.get("status") not in ("error", "failure"):
+                for key in ("skills_to_activate", "skill_names", "skills"):
+                    val = payload.get(key)
+                    if isinstance(val, list):
+                        return [str(s) for s in val]
+        elif isinstance(result_data, list):
+            return [str(s) for s in result_data]
+
+    args = tc.parsed_arguments() if hasattr(tc, "parsed_arguments") else {}
+    args = args or {}
+    names = args.get("skill_names")
+    if names is None:
+        names = args.get("skills")
+    if isinstance(names, list):
+        return [str(s) for s in names]
+    return list(names or [])
+
+
 def _set_skills_declarations(tool_call_events: list[ToolCallEvent]) -> list[list[str]]:
     """Every set_skills declaration in these events, in call order.
 
-    `skill_names` is the key the tool declares; `skills` is a legacy spelling kept as a
-    fallback. A call carrying neither is treated as declaring an empty list, which is what
-    the platform would do with one.
+    Prefers the authoritative post-replacement set echoed back in each call's result,
+    falling back to requested skill arguments when the result is absent or unparseable.
     """
     declarations: list[list[str]] = []
     for tc in tool_call_events:
         if tc.function_name != "set_skills":
             continue
-        args = tc.parsed_arguments() or {}
-        names = args.get("skill_names")
-        if names is None:
-            names = args.get("skills")
-        declarations.append(list(names or []))
+        declarations.append(_extract_active_skills(tc))
     return declarations
 
 
