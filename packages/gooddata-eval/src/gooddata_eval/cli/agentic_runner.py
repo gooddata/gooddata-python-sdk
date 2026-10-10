@@ -15,11 +15,11 @@ from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
 from gooddata_eval.core.agentic.anomaly_detection import evaluate_agentic_anomaly_detection
 from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluate_agentic_conversation
 from gooddata_eval.core.agentic.dashboard_skill import evaluate_agentic_dashboard_skill
+from gooddata_eval.core.agentic.document_skill import evaluate_agentic_document_skill
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.kda_skill import evaluate_agentic_kda_skill
 from gooddata_eval.core.agentic.metric_skill import evaluate_agentic_metric_skill
-from gooddata_eval.core.agentic.report_skill import evaluate_agentic_report_skill
 from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
 from gooddata_eval.core.agentic.what_if import evaluate_agentic_what_if
@@ -47,7 +47,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_metric_skill",
         "agentic_alert_skill",
         "agentic_dashboard_skill",
-        "agentic_report_skill",
+        "agentic_document_skill",
         "agentic_search",
         "agentic_general_question",
         "agentic_guardrail",
@@ -98,8 +98,8 @@ PARALLEL_SAFE_TEST_KINDS = frozenset(
 #
 # agentic_dashboard_skill is absent by default rather than by evidence: gen-ai holds the draft and
 # any chart it authors in conversation state and writes neither until a user saves from the UI, so
-# it is a candidate for the allowlist once the dataset has runs behind it. agentic_report_skill is
-# absent for the same reason: the report draft stays in conversation state until a user saves it.
+# it is a candidate for the allowlist once the dataset has runs behind it. agentic_document_skill is
+# absent for the same reason: the document draft stays in conversation state until a user saves it.
 WORKSPACE_MUTATING_TEST_KINDS = frozenset(AGENTIC_TEST_KINDS) - PARALLEL_SAFE_TEST_KINDS
 
 
@@ -214,8 +214,8 @@ def _dispatch_agentic(
             user_context=item.user_context,
             **lf_kw,
         )
-    elif kind == "agentic_report_skill":
-        return evaluate_agentic_report_skill(
+    elif kind == "agentic_document_skill":
+        return evaluate_agentic_document_skill(
             host=host,
             token=token,
             workspace_id=workspace_id,
