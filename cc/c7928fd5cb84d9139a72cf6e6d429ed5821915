@@ -6,7 +6,7 @@ packages/gooddata-eval/tests/test_agentic_document_skill.py
   s_b4ef09eebe7513::t_bcac986c0e59d8 377-400,382-405
   s_b4ef09eebe7513::t_66fab942e2249f 338-347
   s_b4ef09eebe7513::t_c904f3bbc5beae 548
-  s_b4ef09eebe7513::t_ab457666e5dedb 3,11,28,972-983,987-991
+  s_b4ef09eebe7513::t_ab457666e5dedb 3,11,28,972-983,972-988,987-991
   s_b4ef09eebe7513::t_62b9a0db7803cc 1-2,4-10,12-21,23-27,29-39,41-69,72-77,79-86,89,91,94-133,135-188,190-192,194-211,213-218,220-224,226-230,232-235,238-242,244-252,254,258-260,262-263,265-295,416-538,540-543,545-547,550-563,565-569,573-667,670-673,675-729,731-733,735-784,786-971
   s_b4ef09eebe7513::t_ac0bc7fd984478 189,236,564,730
   s_b4ef09eebe7513::t_823c410062b7b1 348-352,984-986
@@ -26,21 +26,22 @@ packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
 packages/gooddata-eval/tests/test_chat_render.py
   s_b4ef09eebe7513::t_5fc4ffc035f83c 55,57-58,60,62,70-72,88-89,92,115
 packages/gooddata-eval/tests/test_agentic_runner.py
-  s_b4ef09eebe7513::t_65ce86905824a6 93-94
-  s_b4ef09eebe7513::t_52716024285104 794-795,856
+  s_b4ef09eebe7513::t_65ce86905824a6 93-94,93
+  s_b4ef09eebe7513::t_52716024285104 775,794-795,836,856
   s_b4ef09eebe7513::t_24f9b83f09ad7b 137-154
 packages/gooddata-eval/tests/test_trace_linker.py
   s_b4ef09eebe7513::t_65ce86905824a6 118
 packages/gooddata-eval/src/gooddata_eval/core/agentic/report_skill.py
-  s_b4ef09eebe7513::t_f7600dc671af0d 2,4,6-7,9-10,12-17,21-23,30-31,34-38,40-44,46,49
+  s_b4ef09eebe7513::t_f7600dc671af0d 2,4,6-7,9-10,12-17,12-22,21-23,25-29,30-31,31-37,34-38,40-44,46,49
   s_b4ef09eebe7513::t_823c410062b7b1 45,47-48
   s_b4ef09eebe7513::t_ccb26a1caf582a 18-20,24-29
 packages/gooddata-eval/src/gooddata_eval/core/agentic/__init__.py
   s_b4ef09eebe7513::t_0c3d356a16fb73 27-34,79-86,94,107-109,131,142
 packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
   s_b4ef09eebe7513::t_caba7d5bfe6090 6,44
-  s_b4ef09eebe7513::t_a7ee628d62768f 19,46-47,55-56,107-108,223-226
+  s_b4ef09eebe7513::t_a7ee628d62768f 18,19,46-47,50,55-56,101-102,107-108,218,223-226
   s_b4ef09eebe7513::t_7dac892a50718a 45
+  s_b4ef09eebe7513::t_a61b145e8b0d7e 217
 ---
 {
   "schema_version": "authorship/3.0.0",
