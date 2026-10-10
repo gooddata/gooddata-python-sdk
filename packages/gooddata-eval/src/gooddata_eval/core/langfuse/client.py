@@ -6,9 +6,12 @@ No Langfuse SDK, so it works on every Python version the package supports.
 
 from __future__ import annotations
 
+import json
+import logging
 import threading
 import time
 import uuid
+from collections.abc import Callable
 from datetime import datetime, timezone
 from typing import Any
 
@@ -26,9 +29,16 @@ from gooddata_eval.core.langfuse.observations import TraceSummary
 _SCORES_PATH = "/api/public/scores"
 _OTLP_PATH = "/api/public/otel/v1/traces"
 
+_log = logging.getLogger(__name__)
+
 _MAX_SCORE_ATTEMPTS = 3
+# Scores per POST /api/public/scores array; the rate limit counts a request, not its scores.
+_SCORE_BATCH_SIZE = 100
 _DEFAULT_RETRY_DELAY = 0.5
 _MAX_RETRY_DELAY = 5.0
+# Langfuse Cloud rate-limits in fixed one-minute windows, and a 429's Retry-After counts down to
+# the window's reset. A shorter wait retries into the same exhausted window and loses the score.
+_MAX_THROTTLE_DELAY = 60.0
 
 
 def _is_retryable(resp: httpx.Response) -> bool:
@@ -38,8 +48,8 @@ def _is_retryable(resp: httpx.Response) -> bool:
 def _retry_delay(resp: httpx.Response) -> float:
     """Seconds to wait before the next attempt, from `Retry-After` when the server names one.
 
-    Unparsable, negative or NaN values fall back to the default; the cap bounds the wait so a
-    throttled score cannot hold a linking worker for long.
+    Unparsable, negative or NaN values fall back to the default. A 429 waits up to one rate-limit
+    window; any other retryable status is capped at a few seconds.
     """
     try:
         asked_for = float(resp.headers.get("Retry-After", ""))
@@ -47,7 +57,36 @@ def _retry_delay(resp: httpx.Response) -> float:
         return _DEFAULT_RETRY_DELAY
     if not asked_for >= 0:
         return _DEFAULT_RETRY_DELAY
-    return min(asked_for, _MAX_RETRY_DELAY)
+    return min(asked_for, _MAX_THROTTLE_DELAY if resp.status_code == 429 else _MAX_RETRY_DELAY)
+
+
+def _sleep(delay: float) -> bool:
+    time.sleep(delay)
+    return True
+
+
+def _score_body(
+    trace_id: str,
+    name: str,
+    value: float,
+    data_type: str,
+    comment: str | None = None,
+    observation_id: str | None = None,
+) -> dict[str, Any]:
+    body: dict[str, Any] = {
+        "id": str(uuid.uuid4()),
+        "traceId": trace_id,
+        "name": name,
+        # A BOOLEAN score goes over the wire as 1.0/0.0 whatever its Python type: the
+        # sink's compute_scores yields int 1/0 and the agentic path float 1.0/0.0.
+        "value": (1.0 if value else 0.0) if data_type == "BOOLEAN" else value,
+        "dataType": data_type,
+    }
+    if comment:
+        body["comment"] = comment
+    if observation_id:
+        body["observationId"] = observation_id
+    return body
 
 
 class _TraceListResult:
@@ -142,26 +181,51 @@ class HttpxLangfuseClient:
         observation_id: str | None = None,
     ) -> None:
         """Attach one score to a trace, or to a single observation inside it."""
-        body: dict[str, Any] = {
-            "id": str(uuid.uuid4()),
-            "traceId": trace_id,
-            "name": name,
-            # A BOOLEAN score goes over the wire as 1.0/0.0 whatever its Python type: the
-            # sink's compute_scores yields int 1/0 and the agentic path float 1.0/0.0.
-            "value": (1.0 if value else 0.0) if data_type == "BOOLEAN" else value,
-            "dataType": data_type,
-        }
-        if comment:
-            body["comment"] = comment
-        if observation_id:
-            body["observationId"] = observation_id
+        self._post_scores(_score_body(trace_id, name, value, data_type, comment, observation_id))
+
+    def create_scores(self, scores: list[dict[str, Any]], *, wait: Callable[[float], bool] = _sleep) -> None:
+        """Send many scores as ``POST /api/public/scores`` arrays of up to ``_SCORE_BATCH_SIZE``.
+
+        Each entry takes ``create_score``'s keyword arguments. An entry that cannot be sent (an
+        unknown argument, a non-finite value) is logged and skipped, so it does not take the
+        rest of its batch down with it. A batch Langfuse accepts only in part (207) is logged
+        and not retried: resending it would duplicate the accepted scores. ``wait`` serves each
+        retry delay; returning False gives up on the retry.
+        """
+        bodies: list[dict[str, Any]] = []
+        for score in scores:
+            try:
+                body = _score_body(**score)
+                # httpx serialises with allow_nan=False; checked here so one entry fails alone.
+                json.dumps(body, allow_nan=False)
+            except (TypeError, ValueError) as exc:
+                _log.warning("Langfuse: skipping score %s: %s", score.get("name"), exc)
+                continue
+            bodies.append(body)
+        for start in range(0, len(bodies), _SCORE_BATCH_SIZE):
+            batch = bodies[start : start + _SCORE_BATCH_SIZE]
+            resp = self._post_scores(batch, wait)
+            if resp.status_code == 207:
+                result = resp.json()
+                _log.warning(
+                    "Langfuse: %s of %d scores rejected: %s",
+                    result.get("rejected"),
+                    len(batch),
+                    result.get("errors"),
+                )
+
+    def _post_scores(
+        self, body: dict[str, Any] | list[dict[str, Any]], wait: Callable[[float], bool] = _sleep
+    ) -> httpx.Response:
+        # The score ids are fixed before the first attempt, so a retried request cannot
+        # write a score twice.
         resp = self._http.post(_SCORES_PATH, json=body)
         for _retry in range(_MAX_SCORE_ATTEMPTS - 1):
-            if not _is_retryable(resp):
+            if not _is_retryable(resp) or not wait(_retry_delay(resp)):
                 break
-            time.sleep(_retry_delay(resp))
             resp = self._http.post(_SCORES_PATH, json=body)
         resp.raise_for_status()
+        return resp
 
     def export_spans(self, spans: list[otlp.Span]) -> None:
         """Export spans to Langfuse over OTLP/HTTP JSON. Raises on a refused or rejected export."""
@@ -197,6 +261,9 @@ class HttpxLangfuseClient:
         return observations.list_traces_in_window(
             self._http, from_time=from_time, to_time=to_time, limit=limit, session_id=session_id
         )
+
+    def list_observations_for_trace(self, trace_id: str) -> list[dict]:
+        return observations.list_observations_for_trace(self._http, trace_id)
 
     def flush(self) -> None:
         pass  # no client-side batching

@@ -5,7 +5,12 @@ from datetime import datetime, timezone
 
 import httpx
 import pytest
-from gooddata_eval.core.langfuse.observations import TraceSummary, list_traces_in_window, summarize_traces
+from gooddata_eval.core.langfuse.observations import (
+    TraceSummary,
+    list_observations_for_trace,
+    list_traces_in_window,
+    summarize_traces,
+)
 
 
 def _row(
@@ -17,17 +22,21 @@ def _row(
     total_cost: float | None = None,
     session_id: str | None = None,
     metadata: dict | None = None,
+    name: str | None = None,
+    start: str = "2026-09-09T10:00:00.000Z",
+    end: str = "2026-09-09T10:00:12.000Z",
 ) -> dict:
     return {
         "traceId": trace_id,
         "id": obs_id,
+        "name": name,
         "parentObservationId": parent,
         "latency": latency,
         "totalCost": total_cost,
         "sessionId": session_id,
         "metadata": metadata,
-        "startTime": "2026-09-09T10:00:00.000Z",
-        "endTime": "2026-09-09T10:00:12.000Z",
+        "startTime": start,
+        "endTime": end,
     }
 
 
@@ -68,6 +77,37 @@ def test_a_trace_whose_root_is_not_on_the_page_is_dropped():
     # no latency and no session of its own, so it must not be offered to the caller.
     rows = [_row("t-partial", "o-child", parent="o-missing", total_cost=0.01)]
     assert summarize_traces(rows) == []
+
+
+def _turn(obs_id: str, start: str, end: str, **kwargs) -> dict:
+    return _row("t-1", obs_id, parent="s-root", name="conversation.send_message", start=start, end=end, **kwargs)
+
+
+def test_a_trace_with_gen_ai_turns_but_no_parentless_row_spans_its_turns():
+    # A joined trace before gd-eval has exported its root: every gen-ai row has a parent.
+    rows = [
+        _turn("o-t2", "2026-09-09T10:00:20.000Z", "2026-09-09T10:00:30.000Z", session_id="conv-1"),
+        _turn("o-t1", "2026-09-09T10:00:00.000Z", "2026-09-09T10:00:08.000Z", metadata={"k": "v"}),
+        _row("t-1", "o-gen", parent="o-t1", total_cost=0.01, end="2026-09-09T10:00:05.000Z"),
+    ]
+    (summary,) = summarize_traces(rows)
+    assert summary.start_time == datetime(2026, 9, 9, 10, 0, 0, tzinfo=timezone.utc)
+    assert summary.end_time == datetime(2026, 9, 9, 10, 0, 30, tzinfo=timezone.utc)
+    assert summary.latency == 30.0
+    assert summary.total_cost == pytest.approx(0.01)
+    assert summary.session_id == "conv-1"
+    assert summary.root_observation_id is None
+
+
+def test_session_and_metadata_come_from_the_gen_ai_turn_not_from_a_gd_eval_root():
+    rows = [
+        _row("t-1", "s-root", latency=40.0, session_id=None, metadata={"run_name": "r"}, name="gd-eval: q"),
+        _turn("o-t1", "2026-09-09T10:00:00.000Z", "2026-09-09T10:00:08.000Z", session_id="conv-1", metadata={"k": "v"}),
+    ]
+    (summary,) = summarize_traces(rows)
+    assert (summary.session_id, summary.metadata) == ("conv-1", {"k": "v"})
+    assert summary.latency == 40.0
+    assert summary.root_observation_id == "s-root"
 
 
 def test_the_root_start_and_end_times_are_timezone_aware():
@@ -262,3 +302,22 @@ def test_a_failed_page_raises():
     now = datetime.now(timezone.utc)
     with _client(handler) as http, pytest.raises(httpx.HTTPStatusError):
         list_traces_in_window(http, from_time=now, to_time=now, limit=3, session_id=None)
+
+
+def test_a_trace_read_asks_for_that_trace_and_follows_the_cursor():
+    seen: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        if "cursor" not in request.url.params:
+            return httpx.Response(200, json={"data": [_row("t-1", "o-1")], "meta": {"cursor": "next"}})
+        return httpx.Response(200, json={"data": [_row("t-1", "o-2", parent="o-1")], "meta": {}})
+
+    with _client(handler) as http:
+        rows = list_observations_for_trace(http, "t-1")
+
+    assert [row["id"] for row in rows] == ["o-1", "o-2"]
+    assert {r.url.path for r in seen} == {"/api/public/v2/observations"}
+    params = dict(seen[0].url.params)
+    assert params == {"traceId": "t-1", "fields": "core,basic,usage,metrics,metadata", "limit": "1000"}
+    assert seen[1].url.params["cursor"] == "next"
