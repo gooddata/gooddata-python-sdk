@@ -386,12 +386,15 @@ The report is a *view* over the JSON. Unfiltered, every figure on it is read fro
 disagree with the console or the JSON. Narrow the selection with a filter and the figures are recomputed in the
 page from the selected items' own records, by the same rules gd-eval uses. It gives you:
 
-- **Filters at the top, for the whole page** — search, kind (several at once), mode, status and an expression
-  sit in a bar above everything and stay in view. They select a set of items, and the run cards, the comparison,
-  the latency tables and the item table all cover exactly that set, so the runs stay comparable. Status and the
-  expression are read from the run chosen in the run selector (shown when there is more than one run), and the
-  page says so. A filtered view states how many items it covers, and Reset clears it.
-
+- **Filters in two tiers** — the bar at the top (kind, mode, status and run) decides what the whole page covers:
+  the run cards, the comparison, the latency tables and the item table all follow it, so the runs stay
+  comparable. The Items section repeats kind, mode, status and run and adds the search box and the expression;
+  those narrow the table only, inside whatever the top bar allows, and only offer what the top bar leaves (a
+  kind the top filters removed disappears from the table's menu and its selection). Kind, status and run are
+  multi-selects; nothing ticked means all. The run filter chooses which runs are shown; a status matches an item
+  when any of the runs in play has it (so "failed or errored" over previous and current finds every item that
+  broke in either), and the expression is evaluated once per run in play with the same any-run rule. A filtered
+  page states how many items it covers, and each tier has its own Reset.
 - **Run cards and a comparison table** — pass rate and quality per run, with the pass counts split by
   single-shot and multi-turn and the single-shot per-trace median and tail on each card.
 - **Latency sections** — **Single-shot · latency per trace** first, as the main figure, then **Multi-turn**, which
@@ -406,10 +409,10 @@ page from the selected items' own records, by the same rules gd-eval uses. It gi
   the simulated user). Hover a value to see every sample behind it; the drawer labels its two latency chips
   the same way. A report written before per-trace timing has no trace figure and shows `avg_latency_s` as the
   run figure.
-- **An expression filter** (in the bar above) for cross-cutting questions the fixed filters can't
+- **An expression filter** (in the Items section) for cross-cutting questions the fixed filters can't
   anticipate, e.g. `d.filter_ranking_score === false` or
   `d.expected_metric_uris.length > 1 && !d.metrics_correct`. Available variables:
-  `d` (the focused run's `detail`), `it` (its item), `i` (the row, `i.per[label]` for any
+  `d` (the run's `detail`), `it` (its item), `i` (the row, `i.per[label]` for any
   run), `q` (question), `kind`.
 - **The conversation**, when the item ran the agentic multi-turn path — every turn in
   order, with the simulated user marked apart from a real question, so you can see

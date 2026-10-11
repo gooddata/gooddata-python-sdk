@@ -101,8 +101,11 @@
     position: sticky; top: 0; z-index: 10; margin: -18px -22px 12px; padding: 10px 22px;
     background: var(--bg); border-bottom: 1px solid var(--line);
   }
-  #filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-  #reset { cursor: pointer; color: var(--primary-ink); }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+  #filterbar .filters { margin-bottom: 0; }
+  .controls { display: contents; }
+  .fl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); }
+  #top-reset, #items-reset { cursor: pointer; color: var(--primary-ink); }
   .scope {
     margin: 0 0 14px; padding: 6px 10px; font-size: 12px; background: var(--primary-tint);
     border-left: 3px solid var(--primary); border-radius: 0 3px 3px 0;
@@ -131,11 +134,13 @@
   }
   .multi .menu label { display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 3px; cursor: pointer; }
   .multi .menu label:hover { background: var(--hover); }
-  .multi .menu label span { flex: 1 1 auto; font-family: var(--mono); font-size: 12px; }
+  .multi .menu label span { flex: 1 1 auto; font-size: 12.5px; }
   .multi .menu label i { font-style: normal; font-size: 11px; color: var(--dim); font-variant-numeric: tabular-nums; }
   .multi .menu input { margin: 0; padding: 0; }
-  .multi .menu #kindclear { width: 100%; margin-bottom: 4px; text-align: left; border: 0; background: none; color: var(--primary-ink); cursor: pointer; padding: 4px 8px; font-size: 12px; }
-  .multi .menu #kindclear:hover { background: var(--hover); }
+  .multi .menu label.zero { color: var(--dim); }
+  .multi .menu .clear { width: 100%; margin-bottom: 4px; text-align: left; border: 0; background: none; color: var(--primary-ink); cursor: pointer; padding: 4px 8px; font-size: 12px; }
+  .multi .menu .clear:hover { background: var(--hover); }
+  .runlbl { display: block; max-width: 18ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--dim); }
   #q { flex: 1 1 200px; min-width: 140px; }
   #expr { flex: 2 1 320px; min-width: 200px; font-family: var(--mono); font-size: 12px; }
   #expr.bad { border-color: var(--fail); background: var(--fail-bg); }
@@ -182,39 +187,30 @@
 <main>
   <div id="left">
     <div id="filterbar">
-      <div id="filters">
-        <input id="q" placeholder="Search id or question…" aria-label="Search id or question">
-        <details id="kind" class="multi">
-          <summary title="Filter by kind; choose as many as you like">any kind</summary>
-          <div class="menu" id="kindmenu"></div>
-        </details>
-        <select id="mode" aria-label="Filter by mode">
-          <option value="">any mode</option>
-          <option value="single_shot">single-shot</option>
-          <option value="multi_turn">multi-turn</option>
-        </select>
-        <select id="status" aria-label="Filter by status">
-          <option value="all">any status</option>
-          <option value="fail">failed</option>
-          <option value="pass">passed</option>
-          <option value="err">errored</option>
-          <option value="skip">skipped</option>
-        </select>
-        <select id="focus" title="The run the status and expression filters read, and the drawer shows" aria-label="Focused run"></select>
-        <input id="expr" placeholder="expression, e.g. d.filter_ranking_score === false" aria-label="Filter expression">
-        <button type="button" id="reset" hidden>Reset</button>
-        <span class="count" id="count"></span>
+      <div class="filters" role="group" aria-label="Page filters">
+        <span class="fl" title="These filters decide what every section on this page covers">Filters</span>
+        <span class="controls" id="top-controls"></span>
+        <button type="button" id="top-reset" hidden>Reset</button>
+        <span class="count" id="top-count"></span>
       </div>
-    </div>
-    <div class="hint">
-      expression vars: <b>d</b> detail of focused run · <b>it</b> focused run's item · <b>i</b> row (i.per[label]) · <b>q</b> question · <b>kind</b>
     </div>
     <div class="scope" id="scope" hidden></div>
     <section id="summary"></section>
     <section id="comparison"></section>
     <section id="latency"></section>
-    <section>
+    <section id="items-section">
       <h2>Items</h2>
+      <p class="blurb">These filters narrow the table only, inside whatever the filters at the top allow.</p>
+      <div class="filters" role="group" aria-label="Item filters">
+        <input id="q" placeholder="Search id or question…" aria-label="Search id or question">
+        <span class="controls" id="items-controls"></span>
+        <input id="expr" placeholder="expression, e.g. d.filter_ranking_score === false" aria-label="Filter expression">
+        <button type="button" id="items-reset" hidden>Reset</button>
+        <span class="count" id="items-count"></span>
+      </div>
+      <div class="hint">
+        expression vars: <b>d</b> detail of the run being read · <b>it</b> that run's item · <b>i</b> row (i.per[label]) · <b>q</b> question · <b>kind</b> — evaluated once per selected run; an item matches when any run does
+      </div>
       <div class="tablewrap"><table id="items"><thead></thead><tbody></tbody></table></div>
       <div class="empty" id="noitems" hidden>Nothing matches these filters.</div>
     </section>
@@ -274,6 +270,7 @@ $('#meta').innerHTML = `${rows.length} item(s) · ${LABELS.length} run(s) · gen
 const MODES = [['single_shot', 'Single-shot'], ['multi_turn', 'Multi-turn']];
 const MODE_NAME = { single_shot: 'single-shot', multi_turn: 'multi-turn' };
 const figures = {};
+let runsShown = LABELS;  // the runs the dashboard covers; narrowed by the Runs filter at the top
 
 function reported(label) {
   const c = DATA.comparison[label] || {}, s = DATA.runs[label].summary || {};
@@ -331,7 +328,7 @@ const hasModes = LABELS.some((l) => reported(l).by_mode);
 
 // ---------- summary cards ----------
 function renderSummary() {
-  $('#summary').innerHTML = '<h2>Runs</h2><div class="cards">' + LABELS.map((label) => {
+  $('#summary').innerHTML = '<h2>Runs</h2><div class="cards">' + runsShown.map((label) => {
     const f = figures[label];
     const rate = f.total ? f.passed / f.total : 0;
     const split = MODES.map(([m]) => [m, modeOf(label, m)]).filter(([, x]) => x && x.total)
@@ -348,7 +345,7 @@ function renderSummary() {
 
 // ---------- comparison ----------
 function renderComparison() {
-  if (LABELS.length < 2) { $('#comparison').innerHTML = ''; return; }
+  if (runsShown.length < 2) { $('#comparison').innerHTML = ''; return; }
   // A selection with no items has no rate, quality or latency, rather than a 0% one.
   const some = (l, text) => (figures[l].total ? text : '–');
   const cols = [
@@ -363,7 +360,7 @@ function renderComparison() {
   // must scroll inside its own box rather than clip.
   $('#comparison').innerHTML = '<h2>Comparison</h2><div class="tablewrap"><table><thead><tr>' +
     cols.map(([h, , c]) => `<th class="${c}">${h}</th>`).join('') + '</tr></thead><tbody>' +
-    LABELS.map((l) => '<tr>' + cols.map(([, f, c]) => `<td class="${c}">${f(l)}</td>`).join('') + '</tr>').join('') +
+    runsShown.map((l) => '<tr>' + cols.map(([, f, c]) => `<td class="${c}">${f(l)}</td>`).join('') + '</tr>').join('') +
     '</tbody></table></div>';
 }
 
@@ -385,7 +382,7 @@ function latencyTable({ mode, field, sample, counts }) {
   const heads = ['Run'].concat(counts ? ['Items', 'Passed'] : [])
     .concat([sample, 'Avg', 'P50 (median)', 'P70', 'P90', 'P99', 'Max', 'Range']);
   const dash = '<td class="num">–</td>';
-  const rows = LABELS.map((l) => {
+  const rows = runsShown.map((l) => {
     const m = modeOf(l, mode);
     const st = m ? m[field] : null;
     const lead = counts
@@ -397,14 +394,14 @@ function latencyTable({ mode, field, sample, counts }) {
       : dash.repeat(7) + '<td></td>';
     return `<tr><td>${esc(l)}</td>${lead}${stats}</tr>`;
   }).join('');
-  const small = LABELS.some((l) => { const m = modeOf(l, mode); return m && m[field] && m[field].n < 100; });
+  const small = runsShown.some((l) => { const m = modeOf(l, mode); return m && m[field] && m[field].n < 100; });
   const unit = sample.toLowerCase();
   return `<div class="tablewrap flat"><table class="lat-table"><thead><tr>` +
     heads.map((h, i) => `<th class="${i > 0 && h !== 'Range' ? 'num' : ''}">${h}</th>`).join('') + `</tr></thead><tbody>${rows}</tbody></table></div>` +
     (small ? `<div class="note">With fewer than 100 ${unit}, P99 is effectively the slowest one.</div>` : '');
 }
 function modeSection(mode, title, blurb, tables) {
-  if (!LABELS.some((l) => (modeOf(l, mode) || {}).total)) return '';
+  if (!runsShown.some((l) => (modeOf(l, mode) || {}).total)) return '';
   return `<h2>${title}</h2><p class="blurb">${blurb}</p>` +
     tables.map(([caption, spec]) => (caption ? `<h3 class="cap">${caption}</h3>` : '') + latencyTable({ mode, ...spec })).join('');
 }
@@ -443,39 +440,100 @@ const RUN_HELP = 'Mean wall-clock of a whole run: the chat turns plus the judge,
 const latencyCell = (v, title) => `<td class="num"${title ? ` title="${esc(title)}"` : ''}>${secs(v)}</td>`;
 
 // ---------- filters ----------
-const kinds = [...new Set(rows.map((r) => r.kind))].filter(Boolean).sort();
-// Kind is a multi-select: a <details> holding one checkbox per kind (with how many items it has), so it needs no
-// widget library and stays keyboard-operable. Nothing ticked means every kind.
-const kindCount = {};
-for (const r of rows) kindCount[r.kind] = (kindCount[r.kind] || 0) + 1;
-$('#kindmenu').innerHTML = '<button type="button" id="kindclear">Clear selection</button>' + kinds.map((k) =>
-  `<label><input type="checkbox" value="${esc(k)}"><span>${esc(k)}</span><i>${kindCount[k]}</i></label>`).join('');
-const chosenKinds = () => [...document.querySelectorAll('#kindmenu input:checked')].map((i) => i.value);
-function kindSummary() {
-  const c = chosenKinds();
-  $('#kind > summary').textContent = c.length === 0 ? 'any kind' : c.length === 1 ? c[0] : `${c.length} kinds`;
+// Two tiers. The bar at the top decides what the whole page covers; the filters in the Items section narrow the
+// table further and touch nothing else, always inside the top selection. Kind, status and run are multi-selects:
+// a <details> holding one checkbox per option, so they need no widget library and stay keyboard-operable. Nothing
+// ticked means everything.
+const STATUS_OPTIONS = [
+  { value: 'pass', text: 'passed' }, { value: 'fail', text: 'failed' },
+  { value: 'err', text: 'errored' }, { value: 'skip', text: 'skipped' },
+];
+function controlsHtml(p, runsTitle) {
+  const multi = (id, title) =>
+    `<details id="${p}-${id}" class="multi"><summary title="${title}"></summary><div class="menu"></div></details>`;
+  const modes = [['', 'any mode'], ['single_shot', 'single-shot'], ['multi_turn', 'multi-turn']];
+  return multi('kind', 'Kind; choose as many as you like') +
+    `<select id="${p}-mode" aria-label="Mode">${modes.map(([v, t]) => `<option value="${v}">${t}</option>`).join('')}</select>` +
+    multi('status', 'Status; choose as many as you like. With several runs an item matches when it has that status in any of them') +
+    multi('runs', runsTitle);
 }
-$('#kind').addEventListener('input', kindSummary);
-$('#kindclear').addEventListener('click', () => {
-  document.querySelectorAll('#kindmenu input').forEach((i) => { i.checked = false; });
-  kindSummary();
-  render();
+$('#top-controls').innerHTML = controlsHtml('top', 'Runs; choose which ones the page shows');
+$('#items-controls').innerHTML = controlsHtml('items',
+  'Runs; choose which ones the table shows and reads status and the expression from');
+
+function makeMulti(el, noun, anyText, onChange) {
+  const summary = el.querySelector('summary'), menu = el.querySelector('.menu');
+  const m = { el, sel: new Set(), opts: [], sig: null };
+  const refresh = () => {
+    const picked = m.opts.filter((o) => m.sel.has(o.value));
+    summary.textContent = picked.length === 0 ? anyText : picked.length === 1 ? picked[0].text : `${picked.length} ${noun}`;
+  };
+  // Options can change under a selection (the table's kinds follow the top filters): a ticked value that is no
+  // longer offered is dropped, so what the summary says is what is applied. The menu is only rebuilt when the
+  // offered values change, so a checkbox keeps focus while it is being used.
+  m.set = (opts) => {
+    m.opts = opts;
+    for (const v of [...m.sel]) if (!opts.some((o) => o.value === v)) m.sel.delete(v);
+    const sig = opts.map((o) => o.value).join('\n');
+    if (sig !== m.sig) {
+      m.sig = sig;
+      menu.innerHTML = '<button type="button" class="clear">Clear selection</button>' + opts.map((o) =>
+        `<label><input type="checkbox" value="${esc(o.value)}"${m.sel.has(o.value) ? ' checked' : ''}><span>${esc(o.text)}</span><i></i></label>`).join('');
+    }
+    menu.querySelectorAll('label').forEach((label, n) => {
+      const c = opts[n].count;
+      label.querySelector('i').textContent = c == null ? '' : c;
+      label.classList.toggle('zero', c === 0);
+    });
+    refresh();
+  };
+  m.clear = () => {
+    m.sel.clear();
+    menu.querySelectorAll('input').forEach((i) => { i.checked = false; });
+    refresh();
+  };
+  menu.addEventListener('input', (e) => {
+    if (!e.target.matches('input')) return;
+    if (e.target.checked) m.sel.add(e.target.value); else m.sel.delete(e.target.value);
+    refresh();
+    onChange();
+  });
+  menu.addEventListener('click', (e) => { if (e.target.matches('.clear')) { m.clear(); onChange(); } });
+  el.addEventListener('toggle', () => {
+    if (el.open) document.querySelectorAll('.multi[open]').forEach((o) => { if (o !== el) o.open = false; });
+  });
+  return m;
+}
+document.addEventListener('click', (e) => {
+  document.querySelectorAll('.multi[open]').forEach((d) => { if (!d.contains(e.target)) d.open = false; });
 });
-document.addEventListener('click', (e) => { if (!$('#kind').contains(e.target)) $('#kind').open = false; });
-$('#kind').addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && $('#kind').open) { $('#kind').open = false; $('#kind > summary').focus(); }
+document.addEventListener('keydown', (e) => {
+  const d = e.key === 'Escape' && document.querySelector('.multi[open]');
+  if (d) { d.open = false; d.querySelector('summary').focus(); }
 });
-$('#reset').addEventListener('click', () => {
-  $('#q').value = ''; $('#expr').value = ''; $('#mode').value = ''; $('#status').value = 'all';
-  document.querySelectorAll('#kindmenu input').forEach((i) => { i.checked = false; });
-  kindSummary();
-  render();
-});
-$('#focus').innerHTML = LABELS.map((l) => `<option value="${esc(l)}">${esc(l)}</option>`).join('');
+
+const T = {  // the filters at the top: they decide what the whole page covers
+  kind: makeMulti($('#top-kind'), 'kinds', 'any kind', render),
+  mode: $('#top-mode'),
+  status: makeMulti($('#top-status'), 'statuses', 'any status', render),
+  runs: makeMulti($('#top-runs'), 'runs', 'all runs', render),
+};
+const I = {  // the filters in the Items section: the table only
+  kind: makeMulti($('#items-kind'), 'kinds', 'any kind', renderItems),
+  mode: $('#items-mode'),
+  status: makeMulti($('#items-status'), 'statuses', 'any status', renderItems),
+  runs: makeMulti($('#items-runs'), 'runs', 'all runs', renderItems),
+};
 // With one run there is nothing to choose between.
-$('#focus').hidden = LABELS.length < 2;
-let focus = LABELS[0];
-let sortKey = 'id', sortDir = 1, selected = null;
+$('#top-runs').hidden = $('#items-runs').hidden = LABELS.length < 2;
+const kinds = [...new Set(rows.map((r) => r.kind))].filter(Boolean).sort();
+const countBy = (list) => { const c = {}; for (const r of list) c[r.kind] = (c[r.kind] || 0) + 1; return c; };
+T.kind.set(kinds.map((k) => ({ value: k, text: k, count: countBy(rows)[k] })));
+T.status.set(STATUS_OPTIONS);
+T.runs.set(LABELS.map((l) => ({ value: l, text: l })));
+I.status.set(STATUS_OPTIONS);
+
+let sortKey = 'id', sortDir = 1, selected = null, drawerRun = null, drawerSig = '';
 
 function exprFn() {
   const src = $('#expr').value.trim();
@@ -492,61 +550,95 @@ function exprFn() {
   }
 }
 
-// The rows every table on the page covers. Kind, mode and search are properties of the item; status and the
-// expression are read from the focused run. One selection for all runs keeps their columns comparable.
-function matching() {
-  const text = $('#q').value.trim().toLowerCase();
-  const picked = new Set(chosenKinds()), mode = $('#mode').value, status = $('#status').value, fn = exprFn();
-  let bad = false;
-  const out = rows.filter((r) => {
-    const it = r.per[focus];
-    if (picked.size && !picked.has(r.kind)) return false;
+// Kind, mode and status for one tier. Kind and mode are properties of the item; status is read from the runs in
+// play and matches when the item has a chosen status in any of them. A row must exist in at least one of those runs.
+function rowMatcher({ kinds: ks, mode, statuses }, runList) {
+  return (r) => {
+    if (!runList.some((l) => r.per[l])) return false;
+    if (ks.size && !ks.has(r.kind)) return false;
     if (mode && r.mode !== mode) return false;
-    if (status !== 'all' && statusOf(it) !== status) return false;
+    if (statuses.size && !runList.some((l) => statuses.has(statusOf(r.per[l])))) return false;
+    return true;
+  };
+}
+let dashRows = rows;  // the rows the whole page covers: everything that passes the filters at the top
+const itemRuns = () => (I.runs.sel.size ? runsShown.filter((l) => I.runs.sel.has(l)) : runsShown);
+// The rows in the table: the top selection, narrowed by the table's own filters.
+function itemRows(runList) {
+  const text = $('#q').value.trim().toLowerCase(), fn = exprFn();
+  const base = rowMatcher({ kinds: I.kind.sel, mode: I.mode.value, statuses: I.status.sel }, runList);
+  let bad = false;
+  const out = dashRows.filter((r) => {
+    if (!base(r)) return false;
     if (text && !(r.id + ' ' + r.question).toLowerCase().includes(text)) return false;
     if (fn) {
-      try { if (!fn(it && it.detail || {}, it || {}, r, r.question, r.kind)) return false; }
-      catch (e) { bad = true; return false; }
+      const hit = runList.filter((l) => r.per[l]).some((l) => {
+        const it = r.per[l];
+        try { return fn(it.detail || {}, it, r, r.question, r.kind); } catch (e) { bad = true; return false; }
+      });
+      if (!hit) return false;
     }
     return true;
   });
   if (bad) $('#expr').classList.add('bad');
   return out;
 }
-function sortRows(list) {
-  const key = sortKey;
+function activeSortKey(runList) {
+  const c = sortKey.indexOf(':');
+  return c < 0 || runList.includes(sortKey.slice(c + 1)) ? sortKey : 'id';
+}
+function sortRows(list, key) {
   return [...list].sort((a, b) => {
     const va = sortVal(a, key), vb = sortVal(b, key);
     return (va < vb ? -1 : va > vb ? 1 : 0) * sortDir;
   });
 }
 function sortVal(r, key) {
-  if (key === 'id' || key === 'kind' || key === 'mode' || key === 'question') return r[key] || '';
-  if (key === 'latency_trace') return traceLatency(r.per[focus]) ?? -1;
-  if (key === 'latency_run') return runLatency(r.per[focus]) ?? -1;
-  return LBL[statusOf(r.per[key])] || '';  // a run column
+  const c = key.indexOf(':');
+  if (c < 0) return r[key] || '';  // id, kind, mode, question
+  const tag = key.slice(0, c), it = r.per[key.slice(c + 1)];
+  if (tag === 'lt') return traceLatency(it) ?? -1;
+  if (tag === 'lr') return runLatency(it) ?? -1;
+  return LBL[statusOf(it)] || '';  // a run's status column
 }
 
-let shown = [];
-const filtersActive = () => !!($('#q').value.trim() || $('#expr').value.trim() || chosenKinds().length ||
-  $('#mode').value || $('#status').value !== 'all');
+const topActive = () => !!(T.kind.sel.size || T.mode.value || T.status.sel.size || T.runs.sel.size);
+const itemsActive = () => !!($('#q').value.trim() || $('#expr').value.trim() || I.kind.sel.size || I.mode.value ||
+  I.status.sel.size || I.runs.sel.size);
 function renderScope() {
-  const active = filtersActive();
-  $('#count').textContent = `${shown.length} of ${rows.length} items`;
-  $('#reset').hidden = !active;
-  const readsFocus = LABELS.length > 1 && ($('#status').value !== 'all' || $('#expr').value.trim());
-  $('#scope').hidden = !active;
-  $('#scope').innerHTML = active
-    ? `Filtered: every table on this page covers these ${shown.length} of ${rows.length} items.` +
-      (readsFocus ? ` Status and expression are read from <b>${esc(focus)}</b>.` : '')
+  $('#top-count').textContent = `${dashRows.length} of ${rows.length} items`;
+  $('#top-reset').hidden = !topActive();
+  const parts = [];
+  if (dashRows.length !== rows.length) parts.push(`the Runs, Comparison, Latency and Items sections cover these ${dashRows.length} of ${rows.length} items`);
+  if (runsShown.length !== LABELS.length) parts.push(`showing ${runsShown.length} of ${LABELS.length} runs`);
+  const several = runsShown.length > 1 && T.status.sel.size;
+  // Ticking every run is the same as ticking none: say nothing unless the selection really is narrower.
+  $('#scope').hidden = parts.length === 0;
+  $('#scope').innerHTML = parts.length
+    ? `Filtered: ${parts.join('; ')}.` + (several ? ' With several runs, an item matches a status when any of the runs shown has it.' : '')
     : '';
 }
-// Everything on the page follows the filters. Sorting and selecting a row only touch the item table.
+// The table's own options follow the top selection: only kinds that survive it are offered (with how many items
+// each has there), only the runs on show, and only the modes still present.
+function syncItemControls() {
+  const byKind = countBy(dashRows);
+  I.kind.set(Object.keys(byKind).filter(Boolean).sort().map((k) => ({ value: k, text: k, count: byKind[k] })));
+  I.runs.set(runsShown.map((l) => ({ value: l, text: l })));
+  const present = new Set(dashRows.map((r) => r.mode));
+  const keep = I.mode.value;
+  I.mode.innerHTML = '<option value="">any mode</option>' + MODES.filter(([m]) => present.has(m))
+    .map(([m]) => `<option value="${m}">${MODE_NAME[m]}</option>`).join('');
+  I.mode.value = present.has(keep) ? keep : '';
+}
+// Everything on the page follows the top filters. Sorting, the table's filters and selecting a row only touch the
+// item table (renderItems).
 function render() {
-  shown = matching();
-  const filtered = shown.length !== rows.length;
-  const ids = shown.map((r) => r.id);
-  for (const l of LABELS) figures[l] = filtered ? recompute(l, ids) : reported(l);
+  runsShown = T.runs.sel.size ? LABELS.filter((l) => T.runs.sel.has(l)) : LABELS;
+  dashRows = rows.filter(rowMatcher({ kinds: T.kind.sel, mode: T.mode.value, statuses: T.status.sel }, runsShown));
+  const filtered = dashRows.length !== rows.length;
+  const ids = dashRows.map((r) => r.id);
+  for (const l of runsShown) figures[l] = filtered ? recompute(l, ids) : reported(l);
+  syncItemControls();
   renderScope();
   renderSummary();
   renderComparison();
@@ -554,24 +646,37 @@ function render() {
   renderItems();
 }
 function renderItems() {
-  const list = sortRows(shown);
-  const heads = [['id', 'Item'], ['kind', 'Kind'], ['mode', 'Mode'], ['question', 'Question']]
-    .concat(LABELS.map((l) => [l, l]))
-    .concat([['latency_trace', 'Latency / trace', TRACE_HELP], ['latency_run', 'Latency / run', RUN_HELP]]);
-  $('#items thead').innerHTML = '<tr>' + heads.map(([k, h, help]) =>
-    `<th data-k="${esc(k)}" tabindex="0" class="${help ? 'num' : ''}"${help ? ` title="${esc(help)}"` : ''}>${esc(h)}${sortKey === k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('') + '</tr>';
-  $('#items tbody').innerHTML = list.map((r) => {
-    const it = r.per[focus] || {};
-    return `<tr data-id="${esc(r.id)}" tabindex="0" class="${selected === r.id ? 'sel' : ''}">
+  const runList = itemRuns();
+  const list = sortRows(itemRows(runList), activeSortKey(runList));
+  const key = activeSortKey(runList), multi = runList.length > 1;
+  $('#items-count').textContent = `${list.length} of ${dashRows.length} items`;
+  $('#items-reset').hidden = !itemsActive();
+  const runHdr = (l) => (multi ? `<span class="runlbl" title="${esc(l)}">${esc(l)}</span>` : '');
+  const heads = [
+    { k: 'id', html: 'Item' }, { k: 'kind', html: 'Kind' }, { k: 'mode', html: 'Mode' }, { k: 'question', html: 'Question' },
+    ...runList.map((l) => ({ k: 's:' + l, html: esc(l) })),
+    ...runList.map((l) => ({ k: 'lt:' + l, html: 'Latency / trace' + runHdr(l), help: TRACE_HELP, num: true })),
+    ...runList.map((l) => ({ k: 'lr:' + l, html: 'Latency / run' + runHdr(l), help: RUN_HELP, num: true })),
+  ];
+  $('#items thead').innerHTML = '<tr>' + heads.map((h) =>
+    `<th data-k="${esc(h.k)}" tabindex="0" class="${h.num ? 'num' : ''}"${h.help ? ` title="${esc(h.help)}"` : ''}>${h.html}${key === h.k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('') + '</tr>';
+  $('#items tbody').innerHTML = list.map((r) =>
+    `<tr data-id="${esc(r.id)}" tabindex="0" class="${selected === r.id ? 'sel' : ''}">
       <td class="id">${esc(r.id)}</td>
       <td class="id">${esc(r.kind)}</td>
       <td>${r.mode ? `<span class="chip">${esc(MODE_NAME[r.mode] || r.mode)}</span>` : ''}</td>
       <td class="q" title="${esc(r.question)}">${esc(r.question)}</td>` +
-      LABELS.map((l) => `<td>${chipHtml(statusOf(r.per[l]))}</td>`).join('') +
-      latencyCell(traceLatency(it), samplesTitle(it.trace_latencies_s, 'trace')) +
-      latencyCell(runLatency(it), samplesTitle(it.run_latencies_s, 'run')) + '</tr>';
-  }).join('');
+      runList.map((l) => `<td>${chipHtml(statusOf(r.per[l]))}</td>`).join('') +
+      runList.map((l) => latencyCell(traceLatency(r.per[l]), samplesTitle((r.per[l] || {}).trace_latencies_s, 'trace'))).join('') +
+      runList.map((l) => latencyCell(runLatency(r.per[l]), samplesTitle((r.per[l] || {}).run_latencies_s, 'run'))).join('') +
+      '</tr>').join('');
   $('#noitems').hidden = list.length > 0;
+  // The drawer follows the table's runs: if the run it shows was filtered out, move it to one that is still there.
+  const row = selected && byId.get(selected);
+  if (row && $('#drawer').classList.contains('open') && (pickDrawerRun(row) !== drawerRun || drawerSig !== runList.join('\n'))) {
+    drawerRun = pickDrawerRun(row);
+    openDrawer(row);
+  }
 }
 
 function sortBy(k) {
@@ -579,8 +684,15 @@ function sortBy(k) {
   sortKey = k;
   renderItems();
 }
+// The run the drawer shows: the one it already shows if the table still includes it and the item ran there.
+function pickDrawerRun(r) {
+  const runList = itemRuns();
+  if (drawerRun && runList.includes(drawerRun) && r.per[drawerRun]) return drawerRun;
+  return runList.find((l) => r.per[l]) || runList[0];
+}
 function openRow(id) {
-  selected = id; renderItems(); openDrawer(byId.get(id));
+  const r = byId.get(id);
+  selected = id; drawerRun = pickDrawerRun(r); renderItems(); openDrawer(r);
 }
 $('#items thead').addEventListener('click', (e) => {
   const k = e.target.closest('th')?.dataset.k;
@@ -598,11 +710,16 @@ $('#items tbody').addEventListener('keydown', (e) => {
   const id = e.target.closest('tr')?.dataset.id;
   if (id && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openRow(id); }
 });
-for (const id of ['#q', '#expr', '#kind', '#mode', '#status']) $(id).addEventListener('input', render);
-$('#focus').addEventListener('change', () => {
-  focus = $('#focus').value;
+$('#top-mode').addEventListener('input', render);
+for (const id of ['#items-mode', '#q', '#expr']) $(id).addEventListener('input', renderItems);
+$('#top-reset').addEventListener('click', () => {
+  T.kind.clear(); T.status.clear(); T.runs.clear(); T.mode.value = '';
   render();
-  if (selected) openDrawer(byId.get(selected));
+});
+$('#items-reset').addEventListener('click', () => {
+  I.kind.clear(); I.status.clear(); I.runs.clear(); I.mode.value = '';
+  $('#q').value = ''; $('#expr').value = '';
+  renderItems();
 });
 
 // ---------- drawer ----------
@@ -627,13 +744,29 @@ function drawerLatencyChips(it) {
 }
 function openDrawer(r) {
   if (!r) return;
-  const it = r.per[focus];
+  const run = drawerRun, runList = itemRuns();
+  const it = r.per[run];
   const d = $('#drawer');
   d.classList.add('open');
-  if (!it) { d.innerHTML = `<button class="close" aria-label="Close">×</button><h2>${esc(r.id)}</h2><p class="empty">Not present in ${esc(focus)}.</p>`; return; }
+  drawerSig = runList.join('\n');
+  // With several runs in the table the drawer says which one it shows and lets you switch.
+  const heading = runList.length > 1
+    ? `<select id="drawerrun" aria-label="Run shown in the drawer">${runList.map((l) =>
+        `<option value="${esc(l)}"${l === run ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>`
+    : `<h2>${esc(run)}</h2>`;
+  const wire = () => {
+    d.querySelector('.close').onclick = () => { d.classList.remove('open'); selected = null; renderItems(); };
+    const pick = d.querySelector('#drawerrun');
+    if (pick) pick.onchange = () => { drawerRun = pick.value; openDrawer(r); };
+  };
+  if (!it) {
+    d.innerHTML = `<button class="close" aria-label="Close">×</button>${heading}<div style="font-family:var(--mono);font-size:12px">${esc(r.id)}</div><p class="empty">Not present in ${esc(run)}.</p>`;
+    wire();
+    return;
+  }
   const st = statusOf(it);
   d.innerHTML = `<button class="close" aria-label="Close">×</button>
-    <h2>${esc(focus)}</h2>
+    ${heading}
     <div style="font-family:var(--mono);font-size:12px">${esc(r.id)}</div>
     <p style="margin:6px 0 10px">${esc(r.question)}</p>
     <div>${chipHtml(st)}
@@ -648,7 +781,7 @@ function openDrawer(r) {
     ${timelineHtml(it)}
     ${reasoningHtml(it)}
     ${idsHtml(it)}`;
-  d.querySelector('.close').onclick = () => { d.classList.remove('open'); selected = null; renderItems(); };
+  wire();
   d.querySelectorAll('.tl .row').forEach((el) => {
     el.onclick = () => {
       const box = $('#tl-detail');
