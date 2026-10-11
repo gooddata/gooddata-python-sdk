@@ -345,7 +345,8 @@ The console prints the percentiles beneath each run's summary line — `Latency 
 
 Turns JSON report(s) into one HTML file you can actually navigate. No server, no
 credentials, no external assets — it opens over `file://`, attaches to a Jira issue and
-survives a Slack thread.
+survives a Slack thread. It follows GoodData's product look (colours, type, status chips), using a system
+font stack rather than an embedded web font so the file stays self-contained.
 
 ```bash
 # one run
@@ -366,7 +367,10 @@ gd-eval report results.json -o customer.html --redact
 
 The report is a *view* over the JSON — it computes no numbers of its own. It gives you:
 
-- **Run cards and a comparison table** — pass rate, quality, latency per run.
+- **Run cards and a comparison table** — pass rate, quality and latency per run. Each run card has a
+  **Latency per run** panel: P50 (the median), P70, P90 and P99, with the average, the maximum and the number
+  of runs they are over, and a strip marking where the percentiles fall between the fastest and slowest run.
+  The comparison table carries the same figures side by side. They are read from `latency_stats_s`.
 - **An item table** with a pass/fail column per run, so a model or run-over-run
   regression is one glance rather than a hand-assembled spreadsheet.
 - **An expression filter** for cross-cutting questions the fixed filters can't

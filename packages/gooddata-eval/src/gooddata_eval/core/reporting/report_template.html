@@ -6,96 +6,145 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>gd-eval report</title>
 <style>
+  /* Tokens follow GoodData's product UI (sdk-ui-kit default theme) with the brand lime as the
+     accent. Status colours come in two steps: the base for fills and bars, and a darker
+     "-ink" step for text, because the base green, orange and cyan fail contrast on white.
+     --dim is one step darker than the product's secondary grey (#6d7680) and the -ink steps
+     are tuned so every text/background pair here clears 4.5:1, including on the tinted chip,
+     hover and conversation backgrounds, where the product values fall just short. */
   :root {
-    --bg: #fbfbfa; --panel: #fff; --ink: #1c1c1a; --dim: #6b6b66; --line: #e3e2de;
-    --pass: #1a7f4b; --fail: #c0392b; --skip: #8a6d1f; --accent: #2c5fd6;
-    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+    --lime: #dafe85; --on-lime: #09090c;
+    --bg: #f5f8fa; --panel: #fff; --ink: #464e56; --ink-strong: #000; --dim: #5f6872;
+    --line: #dde4eb; --thead: #f7f8fa; --hover: rgba(109, 118, 128, .1); --track: #ebeff4;
+    --primary: #14b2e2; --primary-ink: #0c6884; --primary-tint: #e8f7fc;
+    --pass: #00c18d; --pass-ink: #00704f; --pass-bg: rgba(0, 193, 141, .15);
+    --warn: #f18600; --warn-ink: #7d5a2e; --warn-bg: rgba(241, 134, 0, .15);
+    --fail: #e54d42; --fail-ink: #aa2117; --fail-bg: rgba(229, 77, 66, .15);
+    --shadow: rgba(20, 56, 93, .15);
+    --font: "Avenir Next", Avenir, "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   }
   * { box-sizing: border-box; }
-  body {
-    margin: 0; background: var(--bg); color: var(--ink);
-    font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 var(--font); }
+  :focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
+
+  header {
+    display: flex; align-items: center; gap: 14px; height: 47px; padding: 0 20px;
+    background: #000; color: #fff; border-bottom: 3px solid var(--lime);
   }
-  header { padding: 18px 22px 12px; border-bottom: 1px solid var(--line); background: var(--panel); }
-  h1 { margin: 0 0 2px; font-size: 17px; font-weight: 600; }
+  .brand { font-weight: 700; font-size: 17px; letter-spacing: .01em; }
+  header .divider { width: 1px; height: 20px; background: rgba(255, 255, 255, .3); }
+  h1 { margin: 0; font-size: 14px; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .sub { color: var(--dim); font-size: 12px; }
+  header .sub { margin-left: auto; color: rgba(255, 255, 255, .72); white-space: nowrap; }
   .badge {
     display: inline-block; margin-left: 8px; padding: 1px 7px; border-radius: 3px;
-    background: #fdf3d5; color: #7a5c00; font-size: 11px; font-weight: 600;
+    background: var(--lime); color: var(--on-lime); font-size: 11px; font-weight: 700;
   }
   main { display: flex; align-items: flex-start; gap: 0; }
-  #left { flex: 1 1 auto; min-width: 0; padding: 16px 22px 60px; }
+  #left { flex: 1 1 auto; min-width: 0; padding: 18px 22px 60px; }
   #drawer {
     flex: 0 0 44%; max-width: 44%; position: sticky; top: 0; height: 100vh; overflow-y: auto;
     border-left: 1px solid var(--line); background: var(--panel); padding: 16px 20px 60px; display: none;
+    box-shadow: -2px 0 8px var(--shadow);
   }
   #drawer.open { display: block; }
-  section { margin-bottom: 18px; }
-  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); margin: 0 0 8px; }
+  section { margin-bottom: 20px; }
+  h2 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); margin: 0 0 8px; }
+  h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); margin: 0 0 6px; }
   /* Many run columns make the item table wider than the pane; it scrolls inside its own
      box so the page itself never scrolls sideways (which would push the drawer off). */
-  .tablewrap { overflow: auto; max-height: 78vh; }
-  table { border-collapse: collapse; width: 100%; font-size: 13px; }
-  th, td { text-align: left; padding: 5px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--dim); }
-  #items thead th { position: sticky; top: 0; background: var(--panel); cursor: pointer; user-select: none; z-index: 1; box-shadow: inset 0 -1px 0 var(--line); }
+  .tablewrap { overflow: auto; max-height: 78vh; background: var(--panel); border: 1px solid var(--line); border-radius: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  th { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); background: var(--thead); }
+  #items thead th { position: sticky; top: 0; cursor: pointer; user-select: none; z-index: 1; box-shadow: inset 0 -1px 0 var(--line); }
   #items tbody tr { cursor: pointer; }
-  #items tbody tr:hover { background: #f2f4f9; }
-  #items tbody tr.sel { background: #e8eefc; }
+  #items tbody tr:hover { background: var(--hover); }
+  #items tbody tr.sel { background: var(--primary-tint); }
+  #items tbody tr:last-child td { border-bottom: 0; }
   .num { text-align: right; font-variant-numeric: tabular-nums; }
-  .id { font-family: var(--mono); font-size: 11.5px; color: var(--dim); white-space: nowrap; }
+  .id { font-family: var(--mono); font-size: 12px; color: var(--dim); white-space: nowrap; }
   .q { max-width: 46ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .st { font-weight: 600; font-size: 11px; letter-spacing: .03em; white-space: nowrap; }
-  .st.pass { color: var(--pass); } .st.fail { color: var(--fail); }
-  .st.skip, .st.err { color: var(--skip); } .st.none { color: #c8c8c4; }
-  .bar { height: 5px; background: var(--line); border-radius: 3px; overflow: hidden; margin-top: 3px; }
+  /* Status chip: text in the readable "-ink" step on the base colour at 15% alpha. The word
+     itself carries the meaning, so colour is never the only signal. */
+  .st {
+    display: inline-block; padding: 1px 7px; border-radius: 3px; font-weight: 700; font-size: 11px;
+    letter-spacing: .03em; white-space: nowrap;
+  }
+  .st.pass { background: var(--pass-bg); color: var(--pass-ink); }
+  .st.fail { background: var(--fail-bg); color: var(--fail-ink); }
+  .st.skip, .st.err { background: var(--warn-bg); color: var(--warn-ink); }
+  .st.none { padding: 0; color: var(--dim); font-weight: 400; }
+  .bar { height: 6px; background: var(--track); border-radius: 3px; overflow: hidden; margin-top: 8px; }
   .bar > i { display: block; height: 100%; background: var(--pass); }
-  .cards { display: flex; flex-wrap: wrap; gap: 10px; }
-  .card { flex: 1 1 170px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
-  .card b { display: block; font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .card .big { font-size: 22px; font-variant-numeric: tabular-nums; margin: 2px 0; }
-  .card .sub2 { font-size: 11px; color: var(--dim); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 12px 14px; min-width: 0; }
+  .card > b { display: block; font-size: 13px; font-weight: 700; color: var(--ink-strong); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .card .big { font-size: 26px; font-weight: 700; color: var(--ink-strong); font-variant-numeric: tabular-nums; margin: 2px 0; }
+  .card .sub2, .sub2 { font-size: 12px; color: var(--dim); }
+  .lat { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+  /* The four percentiles, with a lime rule: they are what the card is read for. */
+  .pcts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 3px solid var(--lime); background: var(--bg); border-radius: 0 0 3px 3px; }
+  .pct { padding: 6px 8px 7px; min-width: 0; }
+  .pct + .pct { border-left: 1px solid var(--line); }
+  .pct .k { display: block; font-size: 11px; font-weight: 700; color: var(--dim); letter-spacing: .04em; }
+  .pct .v { display: block; font-size: 16px; font-weight: 700; color: var(--ink-strong); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pct .s { display: block; font-size: 10px; color: var(--dim); min-height: 13px; }
+  .lat .sub2 { margin-top: 6px; }
+  /* min..max track; the band is P50..P90 and the ticks sit at P50/P70/P90/P99. Positions are
+     taken from the figures in the report, nothing is computed here beyond the scale. */
+  .strip { position: relative; height: 18px; margin-top: 8px; }
+  .strip::before { content: ""; position: absolute; left: 0; right: 0; top: 7px; height: 4px; background: var(--track); border-radius: 2px; }
+  .strip .band { position: absolute; top: 7px; height: 4px; background: var(--primary); opacity: .45; border-radius: 2px; }
+  .strip .tick { position: absolute; top: 3px; width: 2px; height: 12px; margin-left: -1px; background: var(--dim); border-radius: 1px; }
+  .strip .tick.t50 { top: 0; height: 18px; background: var(--primary-ink); }
+  .strip-lbl { display: flex; justify-content: space-between; font-size: 11px; color: var(--dim); font-variant-numeric: tabular-nums; }
+  .note { font-size: 12px; color: var(--dim); margin-top: 8px; }
   #filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
   input, select, button {
-    font: inherit; padding: 4px 8px; border: 1px solid var(--line); border-radius: 4px;
+    font: inherit; padding: 5px 9px; border: 1px solid var(--line); border-radius: 3px;
     background: var(--panel); color: inherit;
   }
   #q { flex: 1 1 200px; min-width: 140px; }
   #expr { flex: 2 1 320px; min-width: 200px; font-family: var(--mono); font-size: 12px; }
-  #expr.bad { border-color: var(--fail); background: #fdf1f0; }
-  .hint { font-size: 11px; color: var(--dim); font-family: var(--mono); }
+  #expr.bad { border-color: var(--fail); background: var(--fail-bg); }
+  .hint { font-size: 11px; color: var(--dim); font-family: var(--mono); margin-bottom: 8px; }
   .count { font-size: 12px; color: var(--dim); margin-left: auto; }
   .kv { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 0 12px; font-size: 12.5px; }
   .kv > div { padding: 3px 0; border-bottom: 1px solid var(--line); min-width: 0; }
-  .kv .k { grid-column: 1 / -1; font-weight: 600; border: 0; padding-top: 8px; }
+  .kv .k { grid-column: 1 / -1; font-weight: 700; border: 0; padding-top: 8px; }
   pre {
-    margin: 4px 0; padding: 8px 10px; background: #f5f5f3; border-radius: 4px; font-family: var(--mono);
-    font-size: 11.5px; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 260px; overflow: auto;
+    margin: 4px 0; padding: 8px 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 3px;
+    font-family: var(--mono); font-size: 11.5px; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 260px; overflow: auto;
   }
   .tl { font-size: 12px; }
-  .tl .row { display: grid; grid-template-columns: 15ch 1fr 7ch; gap: 8px; align-items: center; padding: 1px 0; cursor: pointer; }
-  .tl .row:hover { background: #f2f4f9; }
+  .tl .row { display: grid; grid-template-columns: 15ch 1fr 7ch; gap: 8px; align-items: center; padding: 2px 0; cursor: pointer; }
+  .tl .row:hover { background: var(--hover); }
   .tl .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .tl .track { background: var(--line); border-radius: 3px; height: 12px; }
-  .tl .track > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
-  .tl .row.reasoning .track > i { background: #9aa5bb; }
+  .tl .track { background: var(--track); border-radius: 3px; height: 12px; }
+  .tl .track > i { display: block; height: 100%; border-radius: 3px; background: var(--primary); }
+  .tl .row.reasoning .track > i { background: var(--dim); opacity: .55; }
   .tl .d { text-align: right; font-variant-numeric: tabular-nums; color: var(--dim); }
-  .turn { margin: 0 0 8px; padding: 6px 10px; border-left: 3px solid var(--line); background: #f7f7f5; border-radius: 0 4px 4px 0; }
-  .turn.assistant { border-left-color: var(--accent); background: #f2f5fd; }
-  .turn.simulated_user { border-left-color: #b07d2b; background: #fdf7ec; }
-  .turn.note { border-left-color: var(--skip); background: #fdf3d5; font-style: italic; }
-  .turn .who { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--dim); font-weight: 600; }
+  .turn { margin: 0 0 8px; padding: 6px 10px; border-left: 3px solid var(--line); background: var(--bg); border-radius: 0 3px 3px 0; }
+  .turn.assistant { border-left-color: var(--primary); background: var(--primary-tint); }
+  .turn.simulated_user { border-left-color: var(--warn); background: var(--warn-bg); }
+  .turn.note { border-left-color: var(--warn); background: var(--warn-bg); font-style: italic; }
+  .turn .who { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--dim); font-weight: 700; }
   .turn .said { font-size: 12.5px; white-space: pre-wrap; overflow-wrap: anywhere; }
-  .chip { display: inline-block; padding: 0 6px; border-radius: 3px; font-size: 11px; background: #eceae5; margin-right: 4px; }
-  .chip.y { background: #e2f3e9; color: var(--pass); } .chip.n { background: #fbe9e7; color: var(--fail); }
+  .chip { display: inline-block; padding: 0 6px; border-radius: 3px; font-size: 11px; background: var(--track); color: var(--ink); margin-right: 4px; }
+  .chip.y { background: var(--pass-bg); color: var(--pass-ink); } .chip.n { background: var(--fail-bg); color: var(--fail-ink); }
   .close { float: right; cursor: pointer; color: var(--dim); background: none; border: 0; font-size: 18px; line-height: 1; }
   .empty { color: var(--dim); padding: 20px 0; }
+  #drawer section { margin-top: 16px; }
 </style>
 </head>
 <body>
 <script id="data" type="application/json">__GD_EVAL_DATA__</script>
 
 <header>
+  <span class="brand">gd-eval</span>
+  <span class="divider"></span>
   <h1 id="title"></h1>
   <div class="sub" id="meta"></div>
 </header>
@@ -107,17 +156,17 @@
     <section>
       <h2>Items</h2>
       <div id="filters">
-        <input id="q" placeholder="Search id or question…">
-        <select id="kind"></select>
-        <select id="status">
+        <input id="q" placeholder="Search id or question…" aria-label="Search id or question">
+        <select id="kind" aria-label="Filter by kind"></select>
+        <select id="status" aria-label="Filter by status">
           <option value="all">any status</option>
           <option value="fail">failed</option>
           <option value="pass">passed</option>
           <option value="err">errored</option>
           <option value="skip">skipped</option>
         </select>
-        <select id="focus" title="Run the drawer and the expression filter read"></select>
-        <input id="expr" placeholder="expression, e.g. d.filter_ranking_score === false">
+        <select id="focus" title="Run the drawer and the expression filter read" aria-label="Focused run"></select>
+        <input id="expr" placeholder="expression, e.g. d.filter_ranking_score === false" aria-label="Filter expression">
         <span class="count" id="count"></span>
       </div>
       <div class="hint">
@@ -137,6 +186,8 @@ const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const num = (v, d = 2) => (typeof v === 'number' ? v.toFixed(d) : '–');
 const pct = (v) => (typeof v === 'number' ? (v * 100).toFixed(1) + '%' : '–');
+// Seconds, two decimals under 10s and one above, so a 117.8s tail and a 0.84s median both read.
+const secs = (v) => (typeof v === 'number' ? v.toFixed(v < 10 ? 2 : 1) + 's' : '–');
 
 // ---------- rows: one per item id, holding that id's result in every run ----------
 const rows = [];
@@ -156,11 +207,44 @@ for (const label of LABELS) {
 }
 const statusOf = (item) => !item ? 'none' : item.skipped ? 'skip' : item.error ? 'err' : item.pass_at_k ? 'pass' : 'fail';
 const LBL = { pass: 'PASS', fail: 'FAIL', err: 'ERR', skip: 'SKIP', none: '–' };
+const chipHtml = (s) => `<span class="st ${s}">${LBL[s]}</span>`;
 
 // ---------- header ----------
-$('#title').textContent = DATA.title || 'gd-eval report';
+// The wordmark already says gd-eval, so the default title would only repeat it.
+$('#title').textContent = !DATA.title || DATA.title === 'gd-eval report' ? 'Evaluation report' : DATA.title;
 $('#meta').innerHTML = `${rows.length} item(s) · ${LABELS.length} run(s) · generated ${esc(DATA.generated_at)}` +
   (DATA.redacted ? '<span class="badge">REDACTED</span>' : '');
+
+// ---------- latency: read from the report, never recomputed here ----------
+// The percentiles are produced by gd-eval when the JSON is written, so this page cannot
+// disagree with the console or the JSON. A report from an older gd-eval has none and shows a dash.
+function latStats(label) {
+  const c = DATA.comparison[label] || {};
+  const s = (DATA.runs[label].summary || {});
+  return c.latency_stats_s || s.latency_stats_s || null;
+}
+function stripHtml(st) {
+  const span = st.max - st.min;
+  const at = (v) => (span > 0 ? ((v - st.min) / span) * 100 : 50);
+  const ticks = [['50', st.p50], ['70', st.p70], ['90', st.p90], ['99', st.p99]];
+  return `<div class="strip" role="img" aria-label="Per-run latency from ${secs(st.min)} to ${secs(st.max)}: ` +
+    ticks.map(([k, v]) => `P${k} ${secs(v)}`).join(', ') + `">
+      <i class="band" style="left:${at(st.p50).toFixed(1)}%;width:${(at(st.p90) - at(st.p50)).toFixed(1)}%"></i>` +
+    ticks.map(([k, v]) => `<i class="tick t${k}" style="left:${at(v).toFixed(1)}%" title="P${k} ${secs(v)}"></i>`).join('') +
+    `</div><div class="strip-lbl"><span>min ${secs(st.min)}</span><span>band P50–P90</span><span>max ${secs(st.max)}</span></div>`;
+}
+function latencyHtml(label) {
+  const st = latStats(label), s = DATA.runs[label].summary || {};
+  if (!st) {
+    return `<div class="lat"><h3>Latency per run</h3>
+      <div class="sub2" title="Re-run with a current gd-eval to get percentiles">no per-run latencies in this report · ${num(s.avg_latency_s)}s avg</div></div>`;
+  }
+  const tile = (k, v, sub) => `<div class="pct"><span class="k">P${k}</span><span class="v">${secs(v)}</span><span class="s">${sub}</span></div>`;
+  return `<div class="lat"><h3>Latency per run</h3>
+    <div class="pcts">${tile(50, st.p50, 'median')}${tile(70, st.p70, '')}${tile(90, st.p90, '')}${tile(99, st.p99, '')}</div>
+    <div class="sub2">avg ${secs(st.mean)} · max ${secs(st.max)} · n = ${st.n} run${st.n === 1 ? '' : 's'}</div>
+    ${stripHtml(st)}</div>`;
+}
 
 // ---------- summary cards ----------
 $('#summary').innerHTML = '<h2>Runs</h2><div class="cards">' + LABELS.map((label) => {
@@ -169,24 +253,41 @@ $('#summary').innerHTML = '<h2>Runs</h2><div class="cards">' + LABELS.map((label
   return `<div class="card"><b title="${esc(label)}">${esc(label)}</b>
     <div class="big">${pct(rate)}</div>
     <div class="sub2">${s.passed ?? 0}/${s.total ?? 0} passed · ${s.errored ?? 0} err · ${s.skipped ?? 0} skip</div>
-    <div class="sub2">${num(s.avg_latency_s)}s avg latency</div>
-    <div class="bar"><i style="width:${(rate * 100).toFixed(1)}%"></i></div></div>`;
+    <div class="bar"><i style="width:${(rate * 100).toFixed(1)}%"></i></div>
+    ${latencyHtml(label)}</div>`;
 }).join('') + '</div>';
+{
+  const stats = LABELS.map(latStats);
+  const notes = [];
+  // Percentiles are only as sharp as the sample: below 100 runs there is no P99 beyond the slowest run.
+  if (stats.some((st) => st && st.n < 100)) notes.push('With fewer than 100 runs, P99 is effectively the slowest run.');
+  if (stats.some((st) => !st)) notes.push('Runs without percentiles come from a report written before gd-eval recorded per-run latency.');
+  if (notes.length) $('#summary').insertAdjacentHTML('beforeend', `<div class="note">${notes.map(esc).join(' ')}</div>`);
+}
 
 // ---------- comparison ----------
 if (LABELS.length > 1) {
+  const st = (l) => latStats(l);
+  // Percentile cells repeat the run's sample size in a tooltip: P99 over 12 runs is not P99 over 400.
+  const pc = (k) => (l) => (st(l) ? `<span title="n = ${st(l).n} runs">${secs(st(l)['p' + k])}</span>` : '–');
   const cols = [
     ['Run', (l) => esc(l), ''],
     ['Pass rate', (l) => pct(cmp(l).pass_rate), 'num'],
     ['Passed', (l) => `${cmp(l).passed ?? 0}/${cmp(l).total ?? 0}`, 'num'],
     ['Avg quality', (l) => pct(cmp(l).avg_quality_score), 'num'],
-    ['Avg latency', (l) => num(cmp(l).avg_latency_s) + 's', 'num'],
+    ['Avg latency', (l) => (st(l) ? secs(st(l).mean) : num(cmp(l).avg_latency_s) + 's'), 'num'],
+    ['P50 (median)', pc(50), 'num'],
+    ['P70', pc(70), 'num'],
+    ['P90', pc(90), 'num'],
+    ['P99', pc(99), 'num'],
     ['Total latency', (l) => num(cmp(l).total_latency_s, 1) + 's', 'num'],
   ];
-  $('#comparison').innerHTML = '<h2>Comparison</h2><table><thead><tr>' +
+  // Wrapped like the item table: with several runs it is wider than a narrow window, and it
+  // must scroll inside its own box rather than clip.
+  $('#comparison').innerHTML = '<h2>Comparison</h2><div class="tablewrap"><table><thead><tr>' +
     cols.map(([h, , c]) => `<th class="${c}">${h}</th>`).join('') + '</tr></thead><tbody>' +
     LABELS.map((l) => '<tr>' + cols.map(([, f, c]) => `<td class="${c}">${f(l)}</td>`).join('') + '</tr>').join('') +
-    '</tbody></table>';
+    '</tbody></table></div>';
 }
 function cmp(label) {
   const c = DATA.comparison[label];
@@ -253,29 +354,42 @@ function render() {
     .concat(LABELS.map((l) => [l, l]))
     .concat([['latency', 'Latency']]);
   $('#items thead').innerHTML = '<tr>' + heads.map(([k, h]) =>
-    `<th data-k="${esc(k)}" class="${k === 'latency' ? 'num' : ''}">${esc(h)}${sortKey === k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('') + '</tr>';
+    `<th data-k="${esc(k)}" tabindex="0" class="${k === 'latency' ? 'num' : ''}">${esc(h)}${sortKey === k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('') + '</tr>';
   $('#items tbody').innerHTML = list.map((r) => {
     const it = r.per[focus] || {};
-    return `<tr data-id="${esc(r.id)}" class="${selected === r.id ? 'sel' : ''}">
+    return `<tr data-id="${esc(r.id)}" tabindex="0" class="${selected === r.id ? 'sel' : ''}">
       <td class="id">${esc(r.id)}</td>
       <td class="id">${esc(r.kind)}</td>
       <td class="q" title="${esc(r.question)}">${esc(r.question)}</td>` +
-      LABELS.map((l) => { const s = statusOf(r.per[l]); return `<td class="st ${s}">${LBL[s]}</td>`; }).join('') +
+      LABELS.map((l) => `<td>${chipHtml(statusOf(r.per[l]))}</td>`).join('') +
       `<td class="num">${num(it.avg_latency_s)}s</td></tr>`;
   }).join('');
   $('#noitems').hidden = list.length > 0;
 }
 
-$('#items thead').addEventListener('click', (e) => {
-  const k = e.target.closest('th')?.dataset.k;
-  if (!k) return;
+function sortBy(k) {
   sortDir = sortKey === k ? -sortDir : 1;
   sortKey = k;
   render();
+}
+function openRow(id) {
+  selected = id; render(); openDrawer(byId.get(id));
+}
+$('#items thead').addEventListener('click', (e) => {
+  const k = e.target.closest('th')?.dataset.k;
+  if (k) sortBy(k);
+});
+$('#items thead').addEventListener('keydown', (e) => {
+  const k = e.target.closest('th')?.dataset.k;
+  if (k && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); sortBy(k); }
 });
 $('#items tbody').addEventListener('click', (e) => {
   const id = e.target.closest('tr')?.dataset.id;
-  if (id) { selected = id; render(); openDrawer(byId.get(id)); }
+  if (id) openRow(id);
+});
+$('#items tbody').addEventListener('keydown', (e) => {
+  const id = e.target.closest('tr')?.dataset.id;
+  if (id && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openRow(id); }
 });
 for (const id of ['#q', '#expr', '#kind', '#status']) $(id).addEventListener('input', render);
 $('#focus').addEventListener('change', () => {
@@ -290,13 +404,13 @@ function openDrawer(r) {
   const it = r.per[focus];
   const d = $('#drawer');
   d.classList.add('open');
-  if (!it) { d.innerHTML = `<button class="close">×</button><h2>${esc(r.id)}</h2><p class="empty">Not present in ${esc(focus)}.</p>`; return; }
+  if (!it) { d.innerHTML = `<button class="close" aria-label="Close">×</button><h2>${esc(r.id)}</h2><p class="empty">Not present in ${esc(focus)}.</p>`; return; }
   const st = statusOf(it);
-  d.innerHTML = `<button class="close">×</button>
+  d.innerHTML = `<button class="close" aria-label="Close">×</button>
     <h2>${esc(focus)}</h2>
     <div style="font-family:var(--mono);font-size:12px">${esc(r.id)}</div>
     <p style="margin:6px 0 10px">${esc(r.question)}</p>
-    <div><span class="st ${st}">${LBL[st]}</span>
+    <div>${chipHtml(st)}
       <span class="chip">${esc(r.kind)}</span>
       <span class="chip">${it.runs ?? 0} run(s)</span>
       <span class="chip">${num(it.best_run_latency_s ?? it.avg_latency_s)}s</span>
