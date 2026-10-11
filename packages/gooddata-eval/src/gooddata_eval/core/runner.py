@@ -13,6 +13,7 @@ from gooddata_eval.core.config import DEFAULT_GATE, EvalGate
 from gooddata_eval.core.evaluators import get_evaluator, supported_test_kinds
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import ChatResult, DatasetItem
+from gooddata_eval.core.timing import latency_stats
 
 
 class ChatBackend(Protocol):
@@ -58,6 +59,11 @@ class ItemReport:
     # ends up describing the LAST one, which is not necessarily the run best_detail is
     # about, so those ids cannot be used to pull the trace for a specific failure.
     failed_runs: list[dict] = field(default_factory=list)
+    # The wall-clock seconds of every run that completed, in run order -- passing runs too,
+    # which `failed_runs` deliberately leaves out. `latency_s` is only their sum, so the
+    # distribution (P50, P90, P99) cannot be recovered from it. A run that raised was never
+    # timed and has no entry, exactly as it adds nothing to `runs`.
+    run_latencies_s: list[float] = field(default_factory=list)
     # Per-phase breakdown of what the item's time was spent on. Additive to latency_s,
     # which remains the item's own critical path. langfuse_latency_s is
     # deliberately NOT part of that path -- trace linking runs off it (see
@@ -186,6 +192,20 @@ class EvalReport:
         evaluated = [i.quality_score for i in self.items if not i.skipped and i.error is None]
         return sum(evaluated) / len(evaluated) if evaluated else 0.0
 
+    @property
+    def run_latencies_s(self) -> list[float]:
+        """Every timed run across the dataset -- the sample the latency percentiles are over.
+
+        Runs, not items: an item run K times contributes K samples. That is the same unit
+        `avg_latency_s` divides by, so the two describe one population.
+        """
+        return [latency for item in self.items for latency in item.run_latencies_s]
+
+    @property
+    def latency_stats(self) -> dict[str, float] | None:
+        """n, mean, min, P50/P70/P90/P99 and max of `run_latencies_s`; None with no timed run."""
+        return latency_stats(self.run_latencies_s)
+
 
 # A per-run progress callback: (run_index, runs_total, passed, latency_s) -> None
 RunCallback = Callable[[int, int, bool, float], None]
@@ -244,6 +264,7 @@ def _run_one_item(
             latency = time.perf_counter() - t0
             report.runs += 1
             report.latency_s += latency
+            report.run_latencies_s.append(latency)
             if evaluation.error is not None:
                 report.runs_ungraded += 1
                 judge_errors.append(evaluation.error)

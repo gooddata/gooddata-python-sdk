@@ -4,6 +4,7 @@ import time
 from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
+import pytest
 from gooddata_eval.core.evaluators import supported_test_kinds
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import ChatResult, DatasetItem
@@ -525,3 +526,58 @@ def test_run_items_records_when_the_run_started_and_finished():
     assert report.started_at.utcoffset() == timedelta(0)
     assert report.finished_at.utcoffset() == timedelta(0)
     assert before <= report.started_at <= report.finished_at <= after
+
+
+# --- every completed run is timed, passing or not: the latency percentiles are over these ---
+
+
+def test_every_run_is_timed_whether_it_passed_or_not():
+    report, _ = _run_scripted([_graded(True), _graded(False), _ungraded()], runs=3)
+
+    item = report.items[0]
+    assert len(item.run_latencies_s) == item.runs == 3
+    assert all(latency >= 0 for latency in item.run_latencies_s)
+    # latency_s is the sum of the same measurements, so the list cannot disagree with it.
+    assert sum(item.run_latencies_s) == pytest.approx(item.latency_s)
+
+
+def test_a_run_that_raised_is_not_timed_and_is_not_counted():
+    class _SecondRunBoomsBackend:
+        def __init__(self):
+            self.calls = 0
+
+        def ask(self, item: DatasetItem) -> ChatResult:
+            self.calls += 1
+            if self.calls == 2:
+                raise RuntimeError("network down")
+            return _empty_chat()
+
+    report = run_items([_item()], _SecondRunBoomsBackend(), runs=2)
+
+    item = report.items[0]
+    assert item.error is not None
+    # `runs` and the sample agree about what completed: a run with no verdict has no latency.
+    assert len(item.run_latencies_s) == item.runs == 1
+
+
+def test_the_report_sample_is_every_run_of_every_item_and_skips_skipped_items():
+    skipped = DatasetItem(id="s1", dataset_name="d", test_kind="unknown_kind", question="q", expected_output={})
+    backend = _FakeBackend([_chat_with(_viz_obj())])
+
+    report = run_items([_item(), skipped], backend, runs=3)
+
+    assert len(report.run_latencies_s) == 3
+    assert report.items[1].run_latencies_s == []
+    stats = report.latency_stats
+    assert stats is not None
+    assert stats["n"] == 3
+    assert stats["min"] <= stats["p50"] <= stats["p99"] <= stats["max"]
+
+
+def test_a_report_with_no_timed_run_has_no_latency_stats():
+    skipped = DatasetItem(id="s1", dataset_name="d", test_kind="unknown_kind", question="q", expected_output={})
+
+    report = run_items([skipped], _FakeBackend([_empty_chat()]), runs=2)
+
+    assert report.run_latencies_s == []
+    assert report.latency_stats is None

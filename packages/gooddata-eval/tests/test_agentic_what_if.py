@@ -278,6 +278,8 @@ def test_detail_reports_the_adjustments_the_agent_asked_for():
     assert outcome.detail["asserted"] == ["metric_id", "scenario_maql"]
     assert "latency_breakdown" in outcome.detail
     assert outcome.runs_passed == 1
+    assert len(outcome.run_latencies_s) == outcome.runs_effective == 1
+    assert all(latency >= 0 for latency in outcome.run_latencies_s)
 
 
 def test_a_wrong_adjustment_raises_naming_what_the_agent_actually_did():
@@ -289,6 +291,7 @@ def test_a_wrong_adjustment_raises_naming_what_the_agent_actually_did():
     assert "* 3 *" in str(error)
     assert error.runs_passed == 0
     assert error.conversation_id == "conv-1"
+    assert len(error.run_latencies_s) == error.runs_effective == 1
 
 
 def test_a_spec_built_on_an_earlier_turn_is_still_the_one_scored():

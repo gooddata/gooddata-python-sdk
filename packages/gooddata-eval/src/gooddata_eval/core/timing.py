@@ -8,6 +8,8 @@ which of the four got slower.
 
 from __future__ import annotations
 
+import math
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 
 from gooddata_eval.core._output import emit_line
@@ -72,3 +74,43 @@ class PhaseTimings:
 def sum_timings(timings: list[PhaseTimings]) -> PhaseTimings:
     """Total across a list of per-run timings (empty list -> all zeroes)."""
     return sum(timings, PhaseTimings())
+
+
+# The percentiles every report states. P50 is the median, so it is the only "median" the
+# report carries -- a second field would only repeat it.
+LATENCY_PERCENTILES = (50, 70, 90, 99)
+
+
+def percentile(sorted_samples: Sequence[float], p: float) -> float:
+    """The ``p``-th percentile of an ascending sample, by linear interpolation.
+
+    Linear interpolation between closest ranks (``statistics.quantiles(method="inclusive")``,
+    NumPy's default), so ``percentile(xs, 50)`` equals ``statistics.median(xs)`` for any
+    sample. Unlike ``statistics.quantiles`` it is defined for a single sample. On a small
+    sample the high percentiles sit at or near the maximum -- they cannot report a latency
+    nobody observed beyond the slowest run.
+    """
+    if not sorted_samples:
+        raise ValueError("percentile of an empty sample")
+    rank = (len(sorted_samples) - 1) * p / 100
+    lower = math.floor(rank)
+    upper = min(lower + 1, len(sorted_samples) - 1)
+    return sorted_samples[lower] + (sorted_samples[upper] - sorted_samples[lower]) * (rank - lower)
+
+
+def latency_stats(samples: Iterable[float]) -> dict[str, float] | None:
+    """Distribution of per-run latencies in seconds, or ``None`` when there are none.
+
+    ``n`` is the number of runs the figures are over: the percentiles are only as sharp as
+    that sample, and a reader needs it to judge how far to trust P99.
+    """
+    ordered = sorted(samples)
+    if not ordered:
+        return None
+    return {
+        "n": len(ordered),
+        "mean": round(sum(ordered) / len(ordered), 3),
+        "min": round(ordered[0], 3),
+        **{f"p{p}": round(percentile(ordered, p), 3) for p in LATENCY_PERCENTILES},
+        "max": round(ordered[-1], 3),
+    }
