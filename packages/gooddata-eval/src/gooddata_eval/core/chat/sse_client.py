@@ -28,6 +28,7 @@ import httpx
 from gooddata_eval.core.config import ReasoningEffort, normalize_reasoning_effort
 from gooddata_eval.core.langfuse.item_scope import JoinedRun, baggage_entries, current_scope, mark_joined, trace_ids_for
 from gooddata_eval.core.models import ChatResult, DatasetItem
+from gooddata_eval.core.timing import note_trace_latency
 
 _log = logging.getLogger(__name__)
 
@@ -607,6 +608,10 @@ class ChatClient:
             if joined is not None and exc.partial_result is not None:
                 self._record_join(conversation_id, exc.partial_result.trace_id, joined)
             raise
+        # One completed turn is one gen-ai trace. Recorded here, from the figure the turn already
+        # carries, so every caller is covered and no extra clock is read. A turn that raised is
+        # not recorded: it has no completed response to time.
+        note_trace_latency(result.turn_wall_clock_sec)
         if joined is not None:
             self._record_join(conversation_id, result.trace_id, joined)
         return result

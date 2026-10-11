@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Iterable, Sequence
+from contextvars import ContextVar, Token
 from dataclasses import dataclass
 
 from gooddata_eval.core._output import emit_line
@@ -114,3 +115,41 @@ def latency_stats(samples: Iterable[float]) -> dict[str, float] | None:
         **{f"p{p}": round(percentile(ordered, p), 3) for p in LATENCY_PERCENTILES},
         "max": round(ordered[-1], 3),
     }
+
+
+# The response time of every chat turn the current item completed, in order. gen-ai opens one
+# trace per chat message, so these are per-trace latencies: the time from sending the message
+# to the end of its stream, with none of the judge, simulated-user or conversation set-up time
+# that a whole-run figure carries. `ChatClient.send_message` is the only writer; recording it
+# there means no evaluator has to remember to, and a new one is covered without an edit.
+_trace_latencies: ContextVar[list[float] | None] = ContextVar("gd_eval_trace_latencies", default=None)
+
+
+class TraceRecorder:
+    """Collects the per-trace latencies of whatever runs between ``__init__`` and ``stop``.
+
+    Scoped to the calling thread's context, so items evaluated concurrently each get their own
+    list. Create it where the item starts and call ``stop`` in a ``finally``.
+    """
+
+    def __init__(self) -> None:
+        self.latencies: list[float] = []
+        self._token: Token[list[float] | None] | None = _trace_latencies.set(self.latencies)
+
+    def stop(self) -> list[float]:
+        """Detach from the context and return what was recorded. Safe to call twice."""
+        if self._token is not None:
+            _trace_latencies.reset(self._token)
+            self._token = None
+        return self.latencies
+
+
+def note_trace_latency(seconds: float | None) -> None:
+    """Record one completed chat turn on the active recorder, if there is one.
+
+    A no-op without a recorder (a library caller, or a test) and for a turn that carries no
+    timing, so the caller never has to check either.
+    """
+    sink = _trace_latencies.get()
+    if sink is not None and seconds is not None:
+        sink.append(seconds)

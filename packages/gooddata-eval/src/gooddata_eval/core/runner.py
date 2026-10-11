@@ -11,6 +11,7 @@ from typing import Callable, Protocol
 from gooddata_eval.core.config import DEFAULT_GATE, EvalGate
 from gooddata_eval.core.evaluators import get_evaluator, supported_test_kinds
 from gooddata_eval.core.evaluators.base import ItemEvaluation
+from gooddata_eval.core.interaction import INTERACTION_MODES, MULTI_TURN, InteractionMode, interaction_mode
 from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.timing import latency_stats
 
@@ -63,6 +64,12 @@ class ItemReport:
     # distribution (P50, P90, P99) cannot be recovered from it. A run that raised was never
     # timed and has no entry, exactly as it adds nothing to `runs`.
     run_latencies_s: list[float] = field(default_factory=list)
+    # The response time of every chat turn the item completed, in order -- one gen-ai trace
+    # each, timed from sending the message to the end of its stream. For a single-shot item that
+    # is one value per run; a multi-turn run contributes one per turn. Unlike `run_latencies_s`
+    # it holds none of the judge, simulated-user or conversation set-up time. A turn that raised
+    # has no entry, but a turn whose scoring raised afterwards does: it completed.
+    trace_latencies_s: list[float] = field(default_factory=list)
     # Per-phase breakdown of what the item's time was spent on. Additive to latency_s,
     # which remains the item's own critical path. langfuse_latency_s is
     # deliberately NOT part of that path -- trace linking runs off it (see
@@ -85,6 +92,11 @@ class ItemReport:
     # agentic_conversation drives its fixture exactly once whatever --runs says, so
     # trusting K there reports four runs that never happened.
     runs_effective: int | None = None
+
+    @property
+    def interaction_mode(self) -> InteractionMode:
+        """Single-shot or multi-turn, by the item's kind: which latency section it belongs to."""
+        return interaction_mode(self.test_kind)
 
     @property
     def passed(self) -> bool:
@@ -189,18 +201,28 @@ class EvalReport:
         return sum(evaluated) / len(evaluated) if evaluated else 0.0
 
     @property
-    def run_latencies_s(self) -> list[float]:
-        """Every timed run across the dataset -- the sample the latency percentiles are over.
+    def by_mode(self) -> dict[str, dict]:
+        """How the run did on its single-shot and on its multi-turn items, with latency for each.
 
-        Runs, not items: an item run K times contributes K samples. That is the same unit
-        `avg_latency_s` divides by, so the two describe one population.
+        ``total`` and ``passed`` count the evaluated items of that mode (skipped ones belong to
+        neither). ``traces_s`` is the distribution of per-trace chat-turn response times; a
+        single-shot run is one trace, so for that mode it is also the per-run latency. A
+        multi-turn conversation spans several traces, so that mode also carries ``runs_s``: the
+        whole-conversation wall clock per run, judge and simulated user included. Each is None
+        when nothing was timed.
         """
-        return [latency for item in self.items for latency in item.run_latencies_s]
-
-    @property
-    def latency_stats(self) -> dict[str, float] | None:
-        """n, mean, min, P50/P70/P90/P99 and max of `run_latencies_s`; None with no timed run."""
-        return latency_stats(self.run_latencies_s)
+        out: dict[str, dict] = {}
+        for mode in INTERACTION_MODES:
+            items = [i for i in self.items if i.interaction_mode == mode and not i.skipped]
+            entry: dict = {
+                "total": len(items),
+                "passed": sum(1 for i in items if i.passed),
+                "traces_s": latency_stats(t for i in items for t in i.trace_latencies_s),
+            }
+            if mode == MULTI_TURN:
+                entry["runs_s"] = latency_stats(t for i in items for t in i.run_latencies_s)
+            out[mode] = entry
+        return out
 
 
 # A per-run progress callback: (run_index, runs_total, passed, latency_s) -> None
@@ -254,6 +276,9 @@ def _run_one_item(
         for run_index in range(1, runs + 1):
             t0 = time.perf_counter()
             chat_result = backend.ask(item)
+            trace_latency = getattr(chat_result, "turn_wall_clock_sec", None)
+            if isinstance(trace_latency, (int, float)):
+                report.trace_latencies_s.append(trace_latency)
             report.conversation_id = getattr(chat_result, "conversation_id", None) or report.conversation_id
             report.response_id = getattr(chat_result, "response_id", None) or report.response_id
             evaluation = evaluator.evaluate(item, chat_result)

@@ -5,11 +5,13 @@ from rich.console import Console
 from rich.table import Table
 
 from gooddata_eval.core.agentic._gate import gate_label
+from gooddata_eval.core.interaction import MULTI_TURN, SINGLE_SHOT
 from gooddata_eval.core.runner import EvalReport, ItemReport
 from gooddata_eval.core.timing import LATENCY_PERCENTILES
 
-# The side-by-side table compares the median and the tail; each model's own Latency line
-# and the HTML report carry the full P50/P70/P90/P99 set.
+# The side-by-side table compares the median and the tail of the main figure, single-shot
+# per-trace latency; each model's own Latency lines and the HTML report carry the full
+# P50/P70/P90/P99 set for every population.
 COMPARISON_PERCENTILES = (50, 90, 99)
 
 
@@ -22,15 +24,42 @@ def _ungraded_note(item: ItemReport) -> str:
     return f"{criteria} criterion(s) ungraded" if criteria else ""
 
 
-def _latency_line(stats: dict[str, float]) -> str:
-    """One line of per-run latency percentiles, with the sample size they are taken over.
+_MODE_LABEL = {SINGLE_SHOT: "single-shot", MULTI_TURN: "multi-turn"}
+
+
+def _latency_line(label: str, stats: dict[str, float]) -> str:
+    """One line of latency percentiles, naming the population and the sample size they are over.
 
     Percentiles only, no mean: the Summary line above already carries ``avg .../run``, and a
-    second average over a slightly different sample would put two near-identical numbers
-    side by side.
+    second average over a different sample would put two near-identical numbers side by side.
     """
     percentiles = " · ".join(f"P{p} {stats[f'p{p}']:.2f}s" for p in LATENCY_PERCENTILES)
-    return f"Latency per run (n={stats['n']:.0f}): {percentiles}"
+    return f"Latency, {label} (n={stats['n']:.0f}): {percentiles}"
+
+
+def _mode_lines(report: EvalReport) -> list[str]:
+    """Pass counts per mode, then each mode's latency distributions.
+
+    A mode with no evaluated items is left out, and so is a distribution nothing was timed
+    for. Per trace is the main figure: a single-shot run is exactly one trace, so its
+    percentiles are the response time of one chat turn, while a multi-turn run spans several
+    traces and also gets a whole-conversation figure.
+    """
+    by_mode = report.by_mode
+    present = [mode for mode in (SINGLE_SHOT, MULTI_TURN) if by_mode[mode]["total"]]
+    if not present:
+        return []
+    lines = [
+        "By mode: "
+        + " · ".join(f"{_MODE_LABEL[m]} {by_mode[m]['passed']}/{by_mode[m]['total']} passed" for m in present)
+    ]
+    for mode in present:
+        entry = by_mode[mode]
+        if entry["traces_s"]:
+            lines.append(_latency_line(f"{_MODE_LABEL[mode]} per trace", entry["traces_s"]))
+        if entry.get("runs_s"):
+            lines.append(_latency_line(f"{_MODE_LABEL[mode]} per full run", entry["runs_s"]))
+    return lines
 
 
 def render_console(report: EvalReport, *, console: Console | None = None) -> str:
@@ -105,8 +134,8 @@ def render_console(report: EvalReport, *, console: Console | None = None) -> str
         f"({report.skipped} skipped, {report.errored} errored) "
         f"avg quality {report.avg_quality_score:.0%} in {timing}"
     )
-    if (stats := report.latency_stats) is not None:
-        out.print(_latency_line(stats))
+    for line in _mode_lines(report):
+        out.print(line)
     return out.export_text() if out.record else ""
 
 
@@ -128,14 +157,14 @@ def render_comparison(reports: list[EvalReport], *, console: Console | None = No
     table.add_column("Quality")
     table.add_column("Avg/run")
     for p in COMPARISON_PERCENTILES:
-        table.add_column(f"P{p}")
+        table.add_column(f"Trace P{p}")
     table.add_column("Total time")
 
     for r in reports:
         evaluated = r.total - r.skipped
         pass_pct = f"{r.passed / evaluated:.0%}" if evaluated else "—"
         model_label = f"{r.provider_name}/{r.model}" if r.provider_name else r.model or "?"
-        stats = r.latency_stats
+        stats = r.by_mode[SINGLE_SHOT]["traces_s"]
         table.add_row(
             model_label,
             f"{r.passed}/{r.total} ({pass_pct})",
@@ -146,6 +175,7 @@ def render_comparison(reports: list[EvalReport], *, console: Console | None = No
         )
 
     out.print(table)
+    out.print("Trace P50/P90/P99: single-shot chat-turn response time, one trace per run.")
 
     evaluated_reports = [r for r in reports if r.total > 0]
     if evaluated_reports:
