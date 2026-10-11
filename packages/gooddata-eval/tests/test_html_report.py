@@ -252,6 +252,33 @@ def test_the_page_has_single_shot_and_multi_turn_sections_read_from_the_report()
     assert "sort(" not in section
 
 
+def test_the_item_table_names_what_each_latency_column_measures():
+    """One unlabelled "Latency" column mixed a whole-run average with the per-trace figures above it. The
+    table now carries both populations under their own names, read from the item's recorded samples."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    for text in (
+        "Latency / trace",
+        "Latency / run",
+        "trace_latencies_s",
+        "run_latencies_s",
+        "latency_trace",
+        "latency_run",
+    ):
+        assert text in html
+    assert "['latency', 'Latency']" not in html
+
+
+def test_the_kind_filter_is_a_multi_select():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert '<details id="kind"' in html
+    assert '<select id="kind"' not in html
+    assert 'type="checkbox"' in html
+    # The filter reads every ticked kind; the old single-value read is gone.
+    assert "$('#kind').value" not in html
+
+
 def test_html_uses_the_goodata_tokens_and_loads_no_web_font():
     html = build_html(_doc("gpt-5", True))
 
