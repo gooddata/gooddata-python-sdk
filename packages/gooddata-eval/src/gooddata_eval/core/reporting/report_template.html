@@ -96,7 +96,18 @@
   h3.cap { margin: 14px 0 6px; }
   #latency h2:not(:first-child) { margin-top: 26px; }
   .note { font-size: 12px; color: var(--dim); margin-top: 8px; }
-  #filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+  /* The filters sit above the whole dashboard and stay in view: every table below follows them. */
+  #filterbar {
+    position: sticky; top: 0; z-index: 10; margin: -18px -22px 12px; padding: 10px 22px;
+    background: var(--bg); border-bottom: 1px solid var(--line);
+  }
+  #filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  #reset { cursor: pointer; color: var(--primary-ink); }
+  .scope {
+    margin: 0 0 14px; padding: 6px 10px; font-size: 12px; background: var(--primary-tint);
+    border-left: 3px solid var(--primary); border-radius: 0 3px 3px 0;
+  }
+  @media (max-width: 900px) { #filterbar { position: static; } }
   input, select, button {
     font: inherit; padding: 5px 9px; border: 1px solid var(--line); border-radius: 3px;
     background: var(--panel); color: inherit;
@@ -151,7 +162,7 @@
   .turn.note { border-left-color: var(--warn); background: var(--warn-bg); font-style: italic; }
   .turn .who { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--dim); font-weight: 700; }
   .turn .said { font-size: 12.5px; white-space: pre-wrap; overflow-wrap: anywhere; }
-  .chip { display: inline-block; padding: 0 6px; border-radius: 3px; font-size: 11px; background: var(--track); color: var(--ink); margin-right: 4px; }
+  .chip { display: inline-block; white-space: nowrap; padding: 0 6px; border-radius: 3px; font-size: 11px; background: var(--track); color: var(--ink); margin-right: 4px; }
   .chip.y { background: var(--pass-bg); color: var(--pass-ink); } .chip.n { background: var(--fail-bg); color: var(--fail-ink); }
   .close { float: right; cursor: pointer; color: var(--dim); background: none; border: 0; font-size: 18px; line-height: 1; }
   .empty { color: var(--dim); padding: 20px 0; }
@@ -170,11 +181,7 @@
 
 <main>
   <div id="left">
-    <section id="summary"></section>
-    <section id="comparison"></section>
-    <section id="latency"></section>
-    <section>
-      <h2>Items</h2>
+    <div id="filterbar">
       <div id="filters">
         <input id="q" placeholder="Search id or question…" aria-label="Search id or question">
         <details id="kind" class="multi">
@@ -193,13 +200,21 @@
           <option value="err">errored</option>
           <option value="skip">skipped</option>
         </select>
-        <select id="focus" title="Run the drawer and the expression filter read" aria-label="Focused run"></select>
+        <select id="focus" title="The run the status and expression filters read, and the drawer shows" aria-label="Focused run"></select>
         <input id="expr" placeholder="expression, e.g. d.filter_ranking_score === false" aria-label="Filter expression">
+        <button type="button" id="reset" hidden>Reset</button>
         <span class="count" id="count"></span>
       </div>
-      <div class="hint">
-        expression vars: <b>d</b> detail of focused run · <b>it</b> focused run's item · <b>i</b> row (i.per[label]) · <b>q</b> question · <b>kind</b>
-      </div>
+    </div>
+    <div class="hint">
+      expression vars: <b>d</b> detail of focused run · <b>it</b> focused run's item · <b>i</b> row (i.per[label]) · <b>q</b> question · <b>kind</b>
+    </div>
+    <div class="scope" id="scope" hidden></div>
+    <section id="summary"></section>
+    <section id="comparison"></section>
+    <section id="latency"></section>
+    <section>
+      <h2>Items</h2>
       <div class="tablewrap"><table id="items"><thead></thead><tbody></tbody></table></div>
       <div class="empty" id="noitems" hidden>Nothing matches these filters.</div>
     </section>
@@ -239,7 +254,9 @@ for (const label of LABELS) {
     if (!r.mode) r.mode = item.mode || '';
   }
 }
-const statusOf = (item) => !item ? 'none' : item.skipped ? 'skip' : item.error ? 'err' : item.pass_at_k ? 'pass' : 'fail';
+// The verdict an item was decided on: gate_passed (pass^K under --gate power), else pass_at_k for older reports.
+const passedOf = (item) => !!(item.gate_passed ?? item.pass_at_k);
+const statusOf = (item) => !item ? 'none' : item.skipped ? 'skip' : item.error ? 'err' : passedOf(item) ? 'pass' : 'fail';
 const LBL = { pass: 'PASS', fail: 'FAIL', err: 'ERR', skip: 'SKIP', none: '–' };
 const chipHtml = (s) => `<span class="st ${s}">${LBL[s]}</span>`;
 
@@ -249,42 +266,98 @@ $('#title').textContent = !DATA.title || DATA.title === 'gd-eval report' ? 'Eval
 $('#meta').innerHTML = `${rows.length} item(s) · ${LABELS.length} run(s) · generated ${esc(DATA.generated_at)}` +
   (DATA.redacted ? '<span class="badge">REDACTED</span>' : '');
 
-// ---------- mode split: read from the report, never recomputed here ----------
-// gd-eval writes the pass counts and latency distributions per mode when it writes the JSON, so this page
-// cannot disagree with the console or the JSON. A report from an older gd-eval has none and says so.
+// ---------- the figures behind the dashboard ----------
+// Unfiltered, every figure is read from the report (summary, comparison and by_mode), so this page cannot
+// disagree with the console or the JSON. Once a filter narrows the selection those figures no longer describe it,
+// so they are recomputed from the selected items' own records by the rules EvalReport uses (core/runner.py).
+// A report from an older gd-eval has no by_mode and says so.
 const MODES = [['single_shot', 'Single-shot'], ['multi_turn', 'Multi-turn']];
 const MODE_NAME = { single_shot: 'single-shot', multi_turn: 'multi-turn' };
-function modeOf(label, mode) {
-  const c = DATA.comparison[label] || {};
-  const s = DATA.runs[label].summary || {};
-  return ((c.by_mode || s.by_mode || {})[mode]) || null;
+const figures = {};
+
+function reported(label) {
+  const c = DATA.comparison[label] || {}, s = DATA.runs[label].summary || {};
+  const total = c.total ?? s.total ?? 0, passed = c.passed ?? s.passed ?? 0;
+  return {
+    total, passed, errored: s.errored ?? 0, skipped: s.skipped ?? 0,
+    pass_rate: c.pass_rate ?? (total ? passed / total : 0),
+    avg_quality_score: c.avg_quality_score,
+    avg_latency_s: c.avg_latency_s ?? s.avg_latency_s,
+    total_latency_s: c.total_latency_s ?? s.latency_s,
+    by_mode: c.by_mode || s.by_mode || null,
+  };
 }
-const hasModes = LABELS.some((l) => (DATA.comparison[l] || {}).by_mode || (DATA.runs[l].summary || {}).by_mode);
+const r3 = (v) => Math.round(v * 1000) / 1000;
+// Linear interpolation between closest ranks, as gd-eval computes it, so P50 is the median.
+function percentile(sorted, p) {
+  const rank = (sorted.length - 1) * p / 100, lower = Math.floor(rank), upper = Math.min(lower + 1, sorted.length - 1);
+  return sorted[lower] + (sorted[upper] - sorted[lower]) * (rank - lower);
+}
+function latencyStats(samples) {
+  const s = [...samples].sort((a, b) => a - b);
+  if (!s.length) return null;
+  return { n: s.length, mean: r3(mean(s)), min: r3(s[0]), p50: r3(percentile(s, 50)), p70: r3(percentile(s, 70)),
+    p90: r3(percentile(s, 90)), p99: r3(percentile(s, 99)), max: r3(s[s.length - 1]) };
+}
+// Fraction of the best run's boolean checks that held; with none, 1 or 0 by the verdict.
+function qualityOf(it) {
+  const checks = Object.values(it.detail || {}).filter((v) => typeof v === 'boolean');
+  return checks.length ? checks.filter(Boolean).length / checks.length : (passedOf(it) ? 1 : 0);
+}
+function recompute(label, ids) {
+  const items = ids.map((id) => DATA.runs[label].items[id]).filter(Boolean);
+  const evaluated = items.filter((it) => !it.skipped && it.error == null);
+  const passed = items.filter(passedOf).length;
+  const latency = items.reduce((a, it) => a + (it.latency_s || 0), 0);
+  const runs = items.reduce((a, it) => a + (it.runs || 0), 0);
+  const by_mode = {};
+  for (const [m] of MODES) {
+    const inMode = items.filter((it) => it.mode === m && !it.skipped);
+    by_mode[m] = {
+      total: inMode.length, passed: inMode.filter(passedOf).length,
+      traces_s: latencyStats(inMode.flatMap((it) => it.trace_latencies_s || [])),
+    };
+    if (m === 'multi_turn') by_mode[m].runs_s = latencyStats(inMode.flatMap((it) => it.run_latencies_s || []));
+  }
+  return {
+    total: items.length, passed, errored: items.filter((it) => it.error != null).length,
+    skipped: items.filter((it) => it.skipped).length, pass_rate: items.length ? passed / items.length : 0,
+    avg_quality_score: evaluated.length ? mean(evaluated.map(qualityOf)) : 0,
+    avg_latency_s: runs ? latency / runs : 0, total_latency_s: latency, by_mode,
+  };
+}
+function modeOf(label, mode) { return ((figures[label] || {}).by_mode || {})[mode] || null; }
+const hasModes = LABELS.some((l) => reported(l).by_mode);
 
 // ---------- summary cards ----------
-$('#summary').innerHTML = '<h2>Runs</h2><div class="cards">' + LABELS.map((label) => {
-  const s = DATA.runs[label].summary || {};
-  const rate = s.total ? s.passed / s.total : 0;
-  const split = MODES.map(([m]) => [m, modeOf(label, m)]).filter(([, x]) => x && x.total)
-    .map(([m, x]) => `${MODE_NAME[m]} ${x.passed}/${x.total}`);
-  const trace = (modeOf(label, 'single_shot') || {}).traces_s;
-  return `<div class="card"><b title="${esc(label)}">${esc(label)}</b>
-    <div class="big">${pct(rate)}</div>
-    <div class="sub2">${s.passed ?? 0}/${s.total ?? 0} passed · ${s.errored ?? 0} err · ${s.skipped ?? 0} skip</div>
-    ${split.length ? `<div class="sub2">${split.join(' · ')} passed</div>` : ''}
-    <div class="bar"><i style="width:${(rate * 100).toFixed(1)}%"></i></div>
-    ${trace ? `<div class="sub2" style="margin-top:8px">single-shot per trace · P50 ${secs(trace.p50)} · P90 ${secs(trace.p90)} · P99 ${secs(trace.p99)}</div>` : ''}</div>`;
-}).join('') + '</div>';
+function renderSummary() {
+  $('#summary').innerHTML = '<h2>Runs</h2><div class="cards">' + LABELS.map((label) => {
+    const f = figures[label];
+    const rate = f.total ? f.passed / f.total : 0;
+    const split = MODES.map(([m]) => [m, modeOf(label, m)]).filter(([, x]) => x && x.total)
+      .map(([m, x]) => `${MODE_NAME[m]} ${x.passed}/${x.total}`);
+    const trace = (modeOf(label, 'single_shot') || {}).traces_s;
+    return `<div class="card"><b title="${esc(label)}">${esc(label)}</b>
+      <div class="big">${f.total ? pct(rate) : '–'}</div>
+      <div class="sub2">${f.passed}/${f.total} passed · ${f.errored} err · ${f.skipped} skip</div>
+      ${split.length ? `<div class="sub2">${split.join(' · ')} passed</div>` : ''}
+      <div class="bar"><i style="width:${(rate * 100).toFixed(1)}%"></i></div>
+      ${trace ? `<div class="sub2" style="margin-top:8px">single-shot per trace · P50 ${secs(trace.p50)} · P90 ${secs(trace.p90)} · P99 ${secs(trace.p99)}</div>` : ''}</div>`;
+  }).join('') + '</div>';
+}
 
 // ---------- comparison ----------
-if (LABELS.length > 1) {
+function renderComparison() {
+  if (LABELS.length < 2) { $('#comparison').innerHTML = ''; return; }
+  // A selection with no items has no rate, quality or latency, rather than a 0% one.
+  const some = (l, text) => (figures[l].total ? text : '–');
   const cols = [
     ['Run', (l) => esc(l), ''],
-    ['Pass rate', (l) => pct(cmp(l).pass_rate), 'num'],
-    ['Passed', (l) => `${cmp(l).passed ?? 0}/${cmp(l).total ?? 0}`, 'num'],
-    ['Avg quality', (l) => pct(cmp(l).avg_quality_score), 'num'],
-    ['Avg latency / run', (l) => num(cmp(l).avg_latency_s) + 's', 'num'],
-    ['Total latency', (l) => num(cmp(l).total_latency_s, 1) + 's', 'num'],
+    ['Pass rate', (l) => some(l, pct(figures[l].pass_rate)), 'num'],
+    ['Passed', (l) => `${figures[l].passed}/${figures[l].total}`, 'num'],
+    ['Avg quality', (l) => some(l, pct(figures[l].avg_quality_score)), 'num'],
+    ['Avg latency / run', (l) => some(l, num(figures[l].avg_latency_s) + 's'), 'num'],
+    ['Total latency', (l) => some(l, num(figures[l].total_latency_s, 1) + 's'), 'num'],
   ];
   // Wrapped like the item table: with several runs it is wider than a narrow window, and it
   // must scroll inside its own box rather than clip.
@@ -335,20 +408,16 @@ function modeSection(mode, title, blurb, tables) {
   return `<h2>${title}</h2><p class="blurb">${blurb}</p>` +
     tables.map(([caption, spec]) => (caption ? `<h3 class="cap">${caption}</h3>` : '') + latencyTable({ mode, ...spec })).join('');
 }
-$('#latency').innerHTML = !hasModes
-  ? '<h2>Latency</h2><p class="blurb">This report was written before gd-eval split latency into single-shot and multi-turn. Re-run to get per-trace percentiles.</p>'
-  : modeSection('single_shot', 'Single-shot · latency per trace',
-      'One chat turn per run, so each run is exactly one trace. Latency is that trace\'s response time, from sending the message to the end of its stream; the judge, the simulated user and conversation set-up are not in it.',
-      [['', { field: 'traces_s', sample: 'Traces', counts: true }]]) +
-    modeSection('multi_turn', 'Multi-turn · conversations',
-      'A conversation spans several traces, so it is shown both ways: per trace (each chat turn, comparable with single-shot) and per full run (the whole conversation, with simulated-user replies and the judge).',
-      [['Per trace · each chat turn', { field: 'traces_s', sample: 'Traces', counts: true }],
-       ['Per full run · whole conversation', { field: 'runs_s', sample: 'Runs', counts: false }]]);
-function cmp(label) {
-  const c = DATA.comparison[label];
-  if (c) return c;
-  const s = DATA.runs[label].summary || {};
-  return { passed: s.passed, total: s.total, pass_rate: s.total ? s.passed / s.total : 0, avg_latency_s: s.avg_latency_s, total_latency_s: s.latency_s };
+function renderLatency() {
+  $('#latency').innerHTML = !hasModes
+    ? '<h2>Latency</h2><p class="blurb">This report was written before gd-eval split latency into single-shot and multi-turn. Re-run to get per-trace percentiles.</p>'
+    : modeSection('single_shot', 'Single-shot · latency per trace',
+        'One chat turn per run, so each run is exactly one trace. Latency is that trace\'s response time, from sending the message to the end of its stream; the judge, the simulated user and conversation set-up are not in it.',
+        [['', { field: 'traces_s', sample: 'Traces', counts: true }]]) +
+      modeSection('multi_turn', 'Multi-turn · conversations',
+        'A conversation spans several traces, so it is shown both ways: per trace (each chat turn, comparable with single-shot) and per full run (the whole conversation, with simulated-user replies and the judge).',
+        [['Per trace · each chat turn', { field: 'traces_s', sample: 'Traces', counts: true }],
+         ['Per full run · whole conversation', { field: 'runs_s', sample: 'Runs', counts: false }]]);
 }
 
 // ---------- per-item latency ----------
@@ -396,7 +465,15 @@ document.addEventListener('click', (e) => { if (!$('#kind').contains(e.target)) 
 $('#kind').addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && $('#kind').open) { $('#kind').open = false; $('#kind > summary').focus(); }
 });
+$('#reset').addEventListener('click', () => {
+  $('#q').value = ''; $('#expr').value = ''; $('#mode').value = ''; $('#status').value = 'all';
+  document.querySelectorAll('#kindmenu input').forEach((i) => { i.checked = false; });
+  kindSummary();
+  render();
+});
 $('#focus').innerHTML = LABELS.map((l) => `<option value="${esc(l)}">${esc(l)}</option>`).join('');
+// With one run there is nothing to choose between.
+$('#focus').hidden = LABELS.length < 2;
 let focus = LABELS[0];
 let sortKey = 'id', sortDir = 1, selected = null;
 
@@ -415,7 +492,9 @@ function exprFn() {
   }
 }
 
-function visible() {
+// The rows every table on the page covers. Kind, mode and search are properties of the item; status and the
+// expression are read from the focused run. One selection for all runs keeps their columns comparable.
+function matching() {
   const text = $('#q').value.trim().toLowerCase();
   const picked = new Set(chosenKinds()), mode = $('#mode').value, status = $('#status').value, fn = exprFn();
   let bad = false;
@@ -432,12 +511,14 @@ function visible() {
     return true;
   });
   if (bad) $('#expr').classList.add('bad');
+  return out;
+}
+function sortRows(list) {
   const key = sortKey;
-  out.sort((a, b) => {
+  return [...list].sort((a, b) => {
     const va = sortVal(a, key), vb = sortVal(b, key);
     return (va < vb ? -1 : va > vb ? 1 : 0) * sortDir;
   });
-  return out;
 }
 function sortVal(r, key) {
   if (key === 'id' || key === 'kind' || key === 'mode' || key === 'question') return r[key] || '';
@@ -446,9 +527,34 @@ function sortVal(r, key) {
   return LBL[statusOf(r.per[key])] || '';  // a run column
 }
 
+let shown = [];
+const filtersActive = () => !!($('#q').value.trim() || $('#expr').value.trim() || chosenKinds().length ||
+  $('#mode').value || $('#status').value !== 'all');
+function renderScope() {
+  const active = filtersActive();
+  $('#count').textContent = `${shown.length} of ${rows.length} items`;
+  $('#reset').hidden = !active;
+  const readsFocus = LABELS.length > 1 && ($('#status').value !== 'all' || $('#expr').value.trim());
+  $('#scope').hidden = !active;
+  $('#scope').innerHTML = active
+    ? `Filtered: every table on this page covers these ${shown.length} of ${rows.length} items.` +
+      (readsFocus ? ` Status and expression are read from <b>${esc(focus)}</b>.` : '')
+    : '';
+}
+// Everything on the page follows the filters. Sorting and selecting a row only touch the item table.
 function render() {
-  const list = visible();
-  $('#count').textContent = `${list.length} of ${rows.length}`;
+  shown = matching();
+  const filtered = shown.length !== rows.length;
+  const ids = shown.map((r) => r.id);
+  for (const l of LABELS) figures[l] = filtered ? recompute(l, ids) : reported(l);
+  renderScope();
+  renderSummary();
+  renderComparison();
+  renderLatency();
+  renderItems();
+}
+function renderItems() {
+  const list = sortRows(shown);
   const heads = [['id', 'Item'], ['kind', 'Kind'], ['mode', 'Mode'], ['question', 'Question']]
     .concat(LABELS.map((l) => [l, l]))
     .concat([['latency_trace', 'Latency / trace', TRACE_HELP], ['latency_run', 'Latency / run', RUN_HELP]]);
@@ -471,10 +577,10 @@ function render() {
 function sortBy(k) {
   sortDir = sortKey === k ? -sortDir : 1;
   sortKey = k;
-  render();
+  renderItems();
 }
 function openRow(id) {
-  selected = id; render(); openDrawer(byId.get(id));
+  selected = id; renderItems(); openDrawer(byId.get(id));
 }
 $('#items thead').addEventListener('click', (e) => {
   const k = e.target.closest('th')?.dataset.k;
@@ -542,7 +648,7 @@ function openDrawer(r) {
     ${timelineHtml(it)}
     ${reasoningHtml(it)}
     ${idsHtml(it)}`;
-  d.querySelector('.close').onclick = () => { d.classList.remove('open'); selected = null; render(); };
+  d.querySelector('.close').onclick = () => { d.classList.remove('open'); selected = null; renderItems(); };
   d.querySelectorAll('.tl .row').forEach((el) => {
     el.onclick = () => {
       const box = $('#tl-detail');
