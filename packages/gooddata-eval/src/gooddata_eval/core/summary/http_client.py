@@ -13,9 +13,12 @@ Endpoint (gen-ai service):
 If the route is ever renamed (e.g. to ``/summarize``), change ``_PATH`` only.
 """
 
+import time
+
 import httpx
 
 from gooddata_eval.core.models import ChatResult, DatasetItem
+from gooddata_eval.core.timing import note_trace_latency
 
 _PATH = "/api/v1/ai/workspaces/{workspace_id}/summary"
 
@@ -44,11 +47,18 @@ class SummaryClient:
         if si.format_hint is not None:
             body["formatHint"] = si.format_hint
 
+        started = time.monotonic()
         resp = self._client.post(self._url, json=body, headers={**self._auth, "Content-Type": "application/json"})
         resp.raise_for_status()
         data = resp.json()
+        elapsed = time.monotonic() - started
         summary = data.get("summary") or ""
-        return ChatResult.model_validate({"textResponse": summary})
+        result = ChatResult.model_validate({"textResponse": summary})
+        # The request is this item's one trace, timed like a chat turn so the single-shot latency
+        # covers dashboard_summary on the same footing.
+        result.turn_wall_clock_sec = elapsed
+        note_trace_latency(elapsed)
+        return result
 
     def close(self) -> None:
         self._client.close()
