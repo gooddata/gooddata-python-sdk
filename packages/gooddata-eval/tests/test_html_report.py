@@ -338,6 +338,19 @@ def test_the_tables_filters_combine_with_the_top_ones_without_widening_them():
     assert "rows.filter(" not in items
 
 
+def test_the_latency_tables_show_a_trimmed_average_beside_the_average_and_median():
+    """The trimmed average is a different figure from the median (P50): it still averages, without the
+    fastest and slowest tenth. The page reads it from the report and recomputes it only for a filtered view."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert "Trimmed avg" in html
+    assert "P50 (median)" in html
+    assert "st.trimmed_mean" in html
+    # A filtered view recomputes it by the same rule gd-eval uses, and says when a sample is too small.
+    assert "trimmed_mean:" in html.split("function latencyStats(samples)")[1].split("function qualityOf")[0]
+    assert "Trimmed avg needs at least 10 samples." in html
+
+
 def test_html_uses_the_goodata_tokens_and_loads_no_web_font():
     html = build_html(_doc("gpt-5", True))
 
