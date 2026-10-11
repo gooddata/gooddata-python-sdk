@@ -532,6 +532,7 @@ def test_json_report_splits_pass_counts_and_latency_by_mode():
     assert single["traces_s"] == {
         "n": 2,
         "mean": 2.0,
+        "trimmed_mean": None,
         "min": 1.0,
         "p50": 2.0,
         "p70": 2.4,

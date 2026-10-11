@@ -324,10 +324,10 @@ their eval kind, and states latency for each:
 "summary": {
   "by_mode": {
     "single_shot": {"total": 12, "passed": 10,
-                    "traces_s": {"n": 24, "mean": 5.39, "min": 3.88, "p50": 5.33, "p70": 6.23, "p90": 6.82, "p99": 7.18, "max": 7.22}},
+                    "traces_s": {"n": 24, "mean": 5.39, "trimmed_mean": 5.36, "min": 3.88, "p50": 5.33, "p70": 6.23, "p90": 6.82, "p99": 7.18, "max": 7.22}},
     "multi_turn":  {"total": 6, "passed": 4,
-                    "traces_s": {"n": 45, "mean": 6.91, "min": 2.78, "p50": 6.52, "p70": 8.03, "p90": 10.79, "p99": 13.57, "max": 14.25},
-                    "runs_s":   {"n": 15, "mean": 23.55, "min": 12.64, "p50": 21.23, "p70": 28.52, "p90": 33.02, "p99": 36.94, "max": 37.51}}
+                    "traces_s": {"n": 45, "mean": 6.91, "trimmed_mean": 6.84, "min": 2.78, "p50": 6.52, "p70": 8.03, "p90": 10.79, "p99": 13.57, "max": 14.25},
+                    "runs_s":   {"n": 15, "mean": 23.55, "trimmed_mean": 23.31, "min": 12.64, "p50": 21.23, "p70": 28.52, "p90": 33.02, "p99": 36.94, "max": 37.51}}
   }
 }
 ```
@@ -350,6 +350,10 @@ Each item also states its `mode`, its `trace_latencies_s` and its `run_latencies
 - **Percentiles** use linear interpolation between closest ranks (NumPy's default), so `p50` is the median and
   the report carries no separate median field. On a small sample the high percentiles sit at or near the
   maximum: P99 over fewer than 100 samples is effectively the slowest one, which is why `n` always travels with it.
+- **Trimmed mean** (`trimmed_mean`) is the average of the middle 80%: the fastest 10% and the slowest 10% of the
+  samples are dropped from each end (`n * 10 // 100` of them, so 25 samples drop two each) before averaging. It is
+  not the median, which is one middle value (`p50`). It is `null` below 10 samples, where there is nothing to
+  trim and the figure would only repeat `mean`.
 - **Older reports** have no `by_mode`. The HTML report says so and nothing is backfilled.
 
 `avg_latency_s` and the other existing fields are unchanged. The console prints each run's pass counts per
@@ -399,8 +403,8 @@ page from the selected items' own records, by the same rules gd-eval uses. It gi
   single-shot and multi-turn and the single-shot per-trace median and tail on each card.
 - **Latency sections** — **Single-shot · latency per trace** first, as the main figure, then **Multi-turn**, which
   shows both per trace and per full run. Each is a table with one row per run: P50 (the median), P70, P90, P99,
-  the average, the maximum, the number of samples and a strip marking where the percentiles fall between the
-  fastest and slowest sample. They are read from `by_mode`, never recomputed in the page.
+  the average, a trimmed average (the middle 80%), the maximum, the number of samples and a strip marking where
+  the percentiles fall between the fastest and slowest sample. Unfiltered they are read from `by_mode`; a filtered view recomputes them in the page by the same rules.
 - **An item table** with a pass/fail column per run, so a model or run-over-run
   regression is one glance rather than a hand-assembled spreadsheet. A mode column separates
   single-shot from multi-turn items. Two latency columns
