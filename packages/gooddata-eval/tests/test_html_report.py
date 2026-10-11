@@ -232,6 +232,30 @@ def test_redact_keeps_the_latency_figures():
     assert data["comparison"]["Model A"]["latency_stats_s"] == _STATS
 
 
+def test_the_page_reads_every_reported_percentile_rather_than_computing_its_own():
+    """The report is a view over the JSON. The page names the four percentiles and reads
+    them from `latency_stats_s`; it holds no percentile arithmetic that could disagree with
+    the console or the JSON."""
+    html = build_html(_doc_with_latency("gpt-5"))
+
+    assert "latency_stats_s" in html
+    for label in ("P50", "P70", "P90", "P99"):
+        assert label in html
+    assert "sort(" not in html.split("// ---------- latency")[1].split("// ---------- summary cards")[0]
+
+
+def test_html_uses_the_goodata_tokens_and_loads_no_web_font():
+    html = build_html(_doc("gpt-5", True))
+
+    for token in ("#14b2e2", "#dafe85", "#464e56", "#dde4eb", "#f5f8fa"):
+        assert token in html, f"design token {token} missing"
+    assert '"Avenir Next", Avenir' in html
+    # Self-contained: a web font, import or remote stylesheet would break file:// and offline use.
+    assert "@font-face" not in html
+    assert "@import" not in html
+    assert "url(" not in html
+
+
 def test_building_the_html_does_not_invent_stats_for_an_older_report():
     """Files written before gd-eval recorded per-run latency carry no `latency_stats_s`. The
     page shows a dash for those; nothing here backfills a figure the run never measured."""
