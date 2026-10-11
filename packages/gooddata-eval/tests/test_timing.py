@@ -3,14 +3,17 @@
 
 import statistics
 import threading
+from concurrent.futures import ThreadPoolExecutor
 from unittest.mock import patch
 
 import pytest
 from gooddata_eval.core.timing import (
     TIMERS_ENV_VAR,
     PhaseTimings,
+    TraceRecorder,
     latency_stats,
     log_timer,
+    note_trace_latency,
     percentile,
     sum_timings,
     timers_enabled,
@@ -141,3 +144,52 @@ def test_latency_stats_of_one_run_collapses_to_that_run():
     stats = latency_stats([3.25])
 
     assert stats == {"n": 1, "mean": 3.25, "min": 3.25, "p50": 3.25, "p70": 3.25, "p90": 3.25, "p99": 3.25, "max": 3.25}
+
+
+def test_a_recorder_collects_each_noted_trace_in_order():
+    recorder = TraceRecorder()
+    for seconds in (1.5, 0.5, 2.0):
+        note_trace_latency(seconds)
+
+    assert recorder.stop() == [1.5, 0.5, 2.0]
+
+
+def test_noting_a_trace_with_no_recorder_is_a_no_op():
+    # A library caller or a test has no recorder; the chat client still calls this.
+    note_trace_latency(3.0)
+
+
+def test_a_turn_without_timing_is_not_recorded():
+    recorder = TraceRecorder()
+    note_trace_latency(None)
+
+    assert recorder.stop() == []
+
+
+def test_stopping_detaches_the_recorder_and_is_safe_twice():
+    recorder = TraceRecorder()
+    note_trace_latency(1.0)
+    assert recorder.stop() == [1.0]
+
+    note_trace_latency(9.0)  # after stop: nobody is listening
+
+    assert recorder.stop() == [1.0]
+
+
+def test_concurrent_items_each_record_only_their_own_traces():
+    """Items run in worker threads under --concurrency; one item's turns must never land in
+    another's list."""
+
+    def item(base: float) -> list[float]:
+        recorder = TraceRecorder()
+        try:
+            for step in range(5):
+                note_trace_latency(base + step)
+        finally:
+            recorded = recorder.stop()
+        return recorded
+
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        results = list(pool.map(item, [0.0, 100.0, 200.0, 300.0]))
+
+    assert results == [[b + s for s in range(5)] for b in (0.0, 100.0, 200.0, 300.0)]

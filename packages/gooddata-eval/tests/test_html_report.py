@@ -202,46 +202,54 @@ def test_cli_report_command_needs_no_credentials(tmp_path, monkeypatch, redact):
     assert out.exists()
 
 
-_STATS = {"n": 4, "mean": 2.5, "min": 1.0, "p50": 2.5, "p70": 3.1, "p90": 3.7, "p99": 3.97, "max": 4.0}
+_TRACES = {"n": 4, "mean": 2.5, "min": 1.0, "p50": 2.5, "p70": 3.1, "p90": 3.7, "p99": 3.97, "max": 4.0}
+_RUNS = {"n": 2, "mean": 20.0, "min": 10.0, "p50": 20.0, "p70": 24.0, "p90": 28.0, "p99": 29.8, "max": 30.0}
+_BY_MODE = {
+    "single_shot": {"total": 3, "passed": 2, "traces_s": _TRACES},
+    "multi_turn": {"total": 1, "passed": 1, "traces_s": _TRACES, "runs_s": _RUNS},
+}
 
 
-def _doc_with_latency(model: str) -> dict:
+def _doc_with_modes(model: str) -> dict:
     doc = _doc(model, True)
-    doc["runs"][model]["summary"]["latency_stats_s"] = _STATS
-    doc["runs"][model]["items"]["item-1"]["run_latencies_s"] = [1.0, 2.0]
-    doc["comparison"][model]["latency_stats_s"] = _STATS
+    doc["runs"][model]["summary"]["by_mode"] = _BY_MODE
+    doc["runs"][model]["items"]["item-1"].update({"mode": "single_shot", "trace_latencies_s": [1.0, 2.0]})
+    doc["comparison"][model]["by_mode"] = _BY_MODE
     return doc
 
 
-def test_html_carries_the_latency_distribution_it_was_built_from():
-    data = _embedded(build_html(_doc_with_latency("gpt-5")))
+def test_html_carries_the_mode_split_it_was_built_from():
+    data = _embedded(build_html(_doc_with_modes("gpt-5")))
 
-    assert data["runs"]["gpt-5"]["summary"]["latency_stats_s"] == _STATS
-    assert data["comparison"]["gpt-5"]["latency_stats_s"] == _STATS
-    assert data["runs"]["gpt-5"]["items"]["item-1"]["run_latencies_s"] == [1.0, 2.0]
-
-
-def test_redact_keeps_the_latency_figures():
-    """Latency is a fact about the run, not about our infrastructure -- the same line
-    redaction already draws for per-item latency."""
-    data = _embedded(build_html(_doc_with_latency("gpt-5"), redact=True))
-
-    run = data["runs"]["Model A"]
-    assert run["summary"]["latency_stats_s"] == _STATS
-    assert run["items"]["item-1"]["run_latencies_s"] == [1.0, 2.0]
-    assert data["comparison"]["Model A"]["latency_stats_s"] == _STATS
+    assert data["runs"]["gpt-5"]["summary"]["by_mode"] == _BY_MODE
+    assert data["comparison"]["gpt-5"]["by_mode"] == _BY_MODE
+    item = data["runs"]["gpt-5"]["items"]["item-1"]
+    assert (item["mode"], item["trace_latencies_s"]) == ("single_shot", [1.0, 2.0])
 
 
-def test_the_page_reads_every_reported_percentile_rather_than_computing_its_own():
-    """The report is a view over the JSON. The page names the four percentiles and reads
-    them from `latency_stats_s`; it holds no percentile arithmetic that could disagree with
-    the console or the JSON."""
-    html = build_html(_doc_with_latency("gpt-5"))
+def test_redact_keeps_the_mode_split_and_latency():
+    """Latency and the section an item falls in are facts about the run, not about our
+    infrastructure -- the same line redaction already draws for per-item latency."""
+    data = _embedded(build_html(_doc_with_modes("gpt-5"), redact=True))
 
-    assert "latency_stats_s" in html
+    assert data["runs"]["Model A"]["summary"]["by_mode"] == _BY_MODE
+    assert data["comparison"]["Model A"]["by_mode"] == _BY_MODE
+    assert data["runs"]["Model A"]["items"]["item-1"]["trace_latencies_s"] == [1.0, 2.0]
+
+
+def test_the_page_has_single_shot_and_multi_turn_sections_read_from_the_report():
+    """The report is a view over the JSON: the page names the sections and populations and reads
+    the figures from `by_mode`. It holds no percentile arithmetic that could disagree with the
+    console or the JSON."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert "by_mode" in html
+    for text in ("Single-shot · latency per trace", "Multi-turn · conversations", "Per trace", "Per full run"):
+        assert text in html
     for label in ("P50", "P70", "P90", "P99"):
         assert label in html
-    assert "sort(" not in html.split("// ---------- latency")[1].split("// ---------- summary cards")[0]
+    section = html.split("// ---------- latency by mode")[1].split("function cmp(label)")[0]
+    assert "sort(" not in section
 
 
 def test_html_uses_the_goodata_tokens_and_loads_no_web_font():
@@ -256,10 +264,10 @@ def test_html_uses_the_goodata_tokens_and_loads_no_web_font():
     assert "url(" not in html
 
 
-def test_building_the_html_does_not_invent_stats_for_an_older_report():
-    """Files written before gd-eval recorded per-run latency carry no `latency_stats_s`. The
-    page shows a dash for those; nothing here backfills a figure the run never measured."""
+def test_building_the_html_does_not_invent_a_mode_split_for_an_older_report():
+    """Files written before gd-eval split latency by mode carry no `by_mode`. The page says so;
+    nothing here backfills a figure the run never measured."""
     data = _embedded(build_html(_doc("gpt-5", True)))
 
-    assert "latency_stats_s" not in data["runs"]["gpt-5"]["summary"]
-    assert "latency_stats_s" not in data["comparison"]["gpt-5"]
+    assert "by_mode" not in data["runs"]["gpt-5"]["summary"]
+    assert "by_mode" not in data["comparison"]["gpt-5"]

@@ -29,6 +29,7 @@ from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.evaluators.visualization import requires_execution_of
 from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
+from gooddata_eval.core.timing import TraceRecorder
 
 
 class _LfKw(TypedDict, total=False):
@@ -461,6 +462,10 @@ def run_agentic_items(
         # None, not False, for the kinds _dispatch_agentic passes no gate to: ItemReport.passed
         # then falls back to pass_at_k and gate_passed keeps meaning "a gate ran".
         gated = item.test_kind not in UNGATED_AGENTIC_TEST_KINDS
+        # Started in this worker, where the item runs, so a concurrent item cannot write into it.
+        # Every kind reaches the chat client the same way, which is why the per-trace latencies are
+        # collected here once rather than handed out by each evaluator.
+        traces = TraceRecorder()
         t0 = time.perf_counter()
         try:
             outcome = _dispatch_agentic(
@@ -544,6 +549,7 @@ def run_agentic_items(
             _apply_timings(item_report, getattr(exc, "timings", None))
         finally:
             item_report.latency_s = time.perf_counter() - t0
+            item_report.trace_latencies_s = traces.stop()
 
         if on_item_done is not None:
             try:

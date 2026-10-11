@@ -308,36 +308,53 @@ The other six agentic kinds report `0.0` for the first three. Trace linking itse
 runner rather than by `evaluate_agentic_*`, so a direct library caller sees `langfuse_s: 0.0` even though its
 linking ran. Pass `TAVERN_E2E_SKIP_TRACE_LINK=1` to opt out of linking altogether.
 
-### Latency distribution
+### Latency: single-shot and multi-turn
 
-`avg_latency_s` is one number. To say how slow the tail is, every run that completed is timed and each run
-states the distribution of those times:
+`avg_latency_s` is one number over a mixed population. The report instead keeps two kinds of item apart, by
+their eval kind, and states latency for each:
+
+- **Single-shot** — kinds that send exactly one chat message per run: every non-agentic kind, plus
+  `agentic_general_question`, `agentic_guardrail` and `agentic_search`.
+- **Multi-turn** — kinds that drive a simulated user or fixture turns: `agentic_visualization` (and
+  `vis_agentic`), `agentic_metric_skill`, `agentic_alert_skill`, `agentic_dashboard_skill`,
+  `agentic_document_skill`, `agentic_kda_skill`, `agentic_anomaly_detection`, `agentic_what_if` and
+  `agentic_conversation`.
 
 ```json
 "summary": {
-  "latency_stats_s": {"n": 36, "mean": 18.75, "min": 4.85, "p50": 18.91, "p70": 23.28, "p90": 32.41, "p99": 36.69, "max": 37.51}
+  "by_mode": {
+    "single_shot": {"total": 12, "passed": 10,
+                    "traces_s": {"n": 24, "mean": 5.39, "min": 3.88, "p50": 5.33, "p70": 6.23, "p90": 6.82, "p99": 7.18, "max": 7.22}},
+    "multi_turn":  {"total": 6, "passed": 4,
+                    "traces_s": {"n": 45, "mean": 6.91, "min": 2.78, "p50": 6.52, "p70": 8.03, "p90": 10.79, "p99": 13.57, "max": 14.25},
+                    "runs_s":   {"n": 15, "mean": 23.55, "min": 12.64, "p50": 21.23, "p70": 28.52, "p90": 33.02, "p99": 36.94, "max": 37.51}}
+  }
 }
 ```
 
-`latency_stats_s` is in each run's `summary` and in its `comparison` entry, and is `null` when no run was timed.
-Each item also lists its own `run_latencies_s` — one entry per completed run, in run order, passing runs
-included (`failed_runs` holds only the failures). The figures are taken over those runs, so an item run three
-times contributes three samples; that is the population `avg_latency_s` divides by.
+`by_mode` is in each run's `summary` and in its `comparison` entry. `total` and `passed` count the evaluated
+items of that mode (skipped ones belong to neither). Every distribution is `null` when nothing was timed.
+Each item also states its `mode`, its `trace_latencies_s` and its `run_latencies_s`.
 
-- **What one run's latency is.** The wall-clock time of that run. For the single-shot kinds it is the chat turn
-  plus scoring, so it includes the LLM judge and the conversation create/delete. For the agentic kinds it runs
-  from just before the run's first message to the end of its scoring — every turn, simulated-user reply and
-  judge call, but not conversation create/delete. The two paths are therefore not timed over exactly the same
-  span, and for an agentic kind `mean` is at or slightly below `avg_latency_s` (the item's wall clock divided by its
-  runs), which also covers setup and cleanup. A run that raised was never timed and has no entry;
-  `agentic_conversation` drives its fixture once and contributes one sample.
+- **Per trace is the main figure.** gen-ai starts one trace per chat message, so a trace is one chat turn.
+  Its latency is that turn's response time, from sending the message to the end of its stream
+  (`turn_wall_clock_sec`), recorded where the chat client completes the turn. It holds none of the LLM judge,
+  the simulated user or conversation create/delete. `dashboard_summary` is timed the same way around its one
+  request. A turn that raised was never completed and has no entry.
+- **Single-shot** runs are exactly one trace, so `traces_s` is also the latency of a run.
+- **Multi-turn** runs span several traces, so they get both views: `traces_s` over every turn of every
+  conversation (comparable with single-shot), and `runs_s`, the wall clock of each whole conversation from just
+  before its first message to the end of its scoring — every turn, simulated-user reply and judge call, but not
+  conversation create/delete. `agentic_conversation` drives its fixture once and contributes one run per item.
+  The two single-shot and multi-turn populations are never mixed.
 - **Percentiles** use linear interpolation between closest ranks (NumPy's default), so `p50` is the median and
   the report carries no separate median field. On a small sample the high percentiles sit at or near the
-  maximum: P99 over fewer than 100 runs is effectively the slowest run, which is why `n` always travels with it.
-- **Older reports** have no `latency_stats_s`. The HTML report shows a dash for them and nothing is backfilled.
+  maximum: P99 over fewer than 100 samples is effectively the slowest one, which is why `n` always travels with it.
+- **Older reports** have no `by_mode`. The HTML report says so and nothing is backfilled.
 
-The console prints the percentiles beneath each run's summary line — `Latency per run (n=36): P50 18.91s · P70
-23.28s · P90 32.41s · P99 36.69s` — and P50/P90/P99 columns in the multi-model comparison.
+`avg_latency_s` and the other existing fields are unchanged. The console prints each run's pass counts per
+mode and one `Latency, <population> (n=...)` line per distribution beneath its summary line, and Trace
+P50/P90/P99 columns (single-shot) in the multi-model comparison.
 
 ---
 
@@ -367,12 +384,15 @@ gd-eval report results.json -o customer.html --redact
 
 The report is a *view* over the JSON — it computes no numbers of its own. It gives you:
 
-- **Run cards and a comparison table** — pass rate, quality and latency per run. Each run card has a
-  **Latency per run** panel: P50 (the median), P70, P90 and P99, with the average, the maximum and the number
-  of runs they are over, and a strip marking where the percentiles fall between the fastest and slowest run.
-  The comparison table carries the same figures side by side. They are read from `latency_stats_s`.
+- **Run cards and a comparison table** — pass rate and quality per run, with the pass counts split by
+  single-shot and multi-turn and the single-shot per-trace median and tail on each card.
+- **Latency sections** — **Single-shot · latency per trace** first, as the main figure, then **Multi-turn**, which
+  shows both per trace and per full run. Each is a table with one row per run: P50 (the median), P70, P90, P99,
+  the average, the maximum, the number of samples and a strip marking where the percentiles fall between the
+  fastest and slowest sample. They are read from `by_mode`, never recomputed in the page.
 - **An item table** with a pass/fail column per run, so a model or run-over-run
-  regression is one glance rather than a hand-assembled spreadsheet.
+  regression is one glance rather than a hand-assembled spreadsheet. A mode column and filter separate
+  single-shot from multi-turn items.
 - **An expression filter** for cross-cutting questions the fixed filters can't
   anticipate, e.g. `d.filter_ranking_score === false` or
   `d.expected_metric_uris.length > 1 && !d.metrics_correct`. Available variables:

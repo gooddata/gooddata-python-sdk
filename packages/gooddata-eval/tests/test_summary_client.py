@@ -5,6 +5,7 @@ import httpx
 import pytest
 from gooddata_eval.core.models import DatasetItem, SummaryInput
 from gooddata_eval.core.summary.http_client import SummaryClient
+from gooddata_eval.core.timing import TraceRecorder
 
 
 def _item() -> DatasetItem:
@@ -34,9 +35,14 @@ def test_summary_client_posts_request_and_maps_summary():
     client = SummaryClient(host="https://h", token="tok", workspace_id="ws")
     client._client = httpx.Client(transport=httpx.MockTransport(handler))
 
+    recorder = TraceRecorder()
     result = client.ask(_item())
+    traces = recorder.stop()
 
     assert result.text_response == "Revenue grew QoQ."
+    # The summary request is this item's one trace, timed on the same footing as a chat turn.
+    assert result.turn_wall_clock_sec is not None and result.turn_wall_clock_sec >= 0
+    assert traces == [result.turn_wall_clock_sec]
     assert captured["url"] == "https://h/api/v1/ai/workspaces/ws/summary"
     assert captured["auth"] == "Bearer tok"
     assert captured["body"] == {

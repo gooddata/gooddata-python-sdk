@@ -83,23 +83,18 @@
   .card > b { display: block; font-size: 13px; font-weight: 700; color: var(--ink-strong); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .card .big { font-size: 26px; font-weight: 700; color: var(--ink-strong); font-variant-numeric: tabular-nums; margin: 2px 0; }
   .card .sub2, .sub2 { font-size: 12px; color: var(--dim); }
-  .lat { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
-  /* The four percentiles, with a lime rule: they are what the card is read for. */
-  .pcts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 3px solid var(--lime); background: var(--bg); border-radius: 0 0 3px 3px; }
-  .pct { padding: 6px 8px 7px; min-width: 0; }
-  .pct + .pct { border-left: 1px solid var(--line); }
-  .pct .k { display: block; font-size: 11px; font-weight: 700; color: var(--dim); letter-spacing: .04em; }
-  .pct .v { display: block; font-size: 16px; font-weight: 700; color: var(--ink-strong); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .pct .s { display: block; font-size: 10px; color: var(--dim); min-height: 13px; }
-  .lat .sub2 { margin-top: 6px; }
-  /* min..max track; the band is P50..P90 and the ticks sit at P50/P70/P90/P99. Positions are
-     taken from the figures in the report, nothing is computed here beyond the scale. */
-  .strip { position: relative; height: 18px; margin-top: 8px; }
+  /* Latency tables: one row per run, one table per population. The strip marks where the
+     percentiles fall between the fastest and slowest sample (band = P50..P90); positions come
+     from the figures in the report, nothing is computed here beyond the scale. */
+  .lat-table .strip { position: relative; width: 150px; height: 18px; }
   .strip::before { content: ""; position: absolute; left: 0; right: 0; top: 7px; height: 4px; background: var(--track); border-radius: 2px; }
   .strip .band { position: absolute; top: 7px; height: 4px; background: var(--primary); opacity: .45; border-radius: 2px; }
   .strip .tick { position: absolute; top: 3px; width: 2px; height: 12px; margin-left: -1px; background: var(--dim); border-radius: 1px; }
   .strip .tick.t50 { top: 0; height: 18px; background: var(--primary-ink); }
-  .strip-lbl { display: flex; justify-content: space-between; font-size: 11px; color: var(--dim); font-variant-numeric: tabular-nums; }
+  .blurb { font-size: 12px; color: var(--dim); margin: 0 0 10px; max-width: 100ch; }
+  .tablewrap.flat { max-height: none; margin-bottom: 4px; }
+  h3.cap { margin: 14px 0 6px; }
+  #latency h2:not(:first-child) { margin-top: 26px; }
   .note { font-size: 12px; color: var(--dim); margin-top: 8px; }
   #filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
   input, select, button {
@@ -153,11 +148,17 @@
   <div id="left">
     <section id="summary"></section>
     <section id="comparison"></section>
+    <section id="latency"></section>
     <section>
       <h2>Items</h2>
       <div id="filters">
         <input id="q" placeholder="Search id or question…" aria-label="Search id or question">
         <select id="kind" aria-label="Filter by kind"></select>
+        <select id="mode" aria-label="Filter by mode">
+          <option value="">any mode</option>
+          <option value="single_shot">single-shot</option>
+          <option value="multi_turn">multi-turn</option>
+        </select>
         <select id="status" aria-label="Filter by status">
           <option value="all">any status</option>
           <option value="fail">failed</option>
@@ -196,13 +197,14 @@ for (const label of LABELS) {
   for (const [id, item] of Object.entries(DATA.runs[label].items || {})) {
     let r = byId.get(id);
     if (!r) {
-      r = { id, kind: item.test_kind || '', dataset: item.dataset_name || '', question: item.question || '', per: {} };
+      r = { id, kind: item.test_kind || '', mode: item.mode || '', dataset: item.dataset_name || '', question: item.question || '', per: {} };
       byId.set(id, r);
       rows.push(r);
     }
     r.per[label] = item;
     if (!r.question) r.question = item.question || '';
     if (!r.kind) r.kind = item.test_kind || '';
+    if (!r.mode) r.mode = item.mode || '';
   }
 }
 const statusOf = (item) => !item ? 'none' : item.skipped ? 'skip' : item.error ? 'err' : item.pass_at_k ? 'pass' : 'fail';
@@ -215,71 +217,41 @@ $('#title').textContent = !DATA.title || DATA.title === 'gd-eval report' ? 'Eval
 $('#meta').innerHTML = `${rows.length} item(s) · ${LABELS.length} run(s) · generated ${esc(DATA.generated_at)}` +
   (DATA.redacted ? '<span class="badge">REDACTED</span>' : '');
 
-// ---------- latency: read from the report, never recomputed here ----------
-// The percentiles are produced by gd-eval when the JSON is written, so this page cannot
-// disagree with the console or the JSON. A report from an older gd-eval has none and shows a dash.
-function latStats(label) {
+// ---------- mode split: read from the report, never recomputed here ----------
+// gd-eval writes the pass counts and latency distributions per mode when it writes the JSON, so this page
+// cannot disagree with the console or the JSON. A report from an older gd-eval has none and says so.
+const MODES = [['single_shot', 'Single-shot'], ['multi_turn', 'Multi-turn']];
+const MODE_NAME = { single_shot: 'single-shot', multi_turn: 'multi-turn' };
+function modeOf(label, mode) {
   const c = DATA.comparison[label] || {};
-  const s = (DATA.runs[label].summary || {});
-  return c.latency_stats_s || s.latency_stats_s || null;
+  const s = DATA.runs[label].summary || {};
+  return ((c.by_mode || s.by_mode || {})[mode]) || null;
 }
-function stripHtml(st) {
-  const span = st.max - st.min;
-  const at = (v) => (span > 0 ? ((v - st.min) / span) * 100 : 50);
-  const ticks = [['50', st.p50], ['70', st.p70], ['90', st.p90], ['99', st.p99]];
-  return `<div class="strip" role="img" aria-label="Per-run latency from ${secs(st.min)} to ${secs(st.max)}: ` +
-    ticks.map(([k, v]) => `P${k} ${secs(v)}`).join(', ') + `">
-      <i class="band" style="left:${at(st.p50).toFixed(1)}%;width:${(at(st.p90) - at(st.p50)).toFixed(1)}%"></i>` +
-    ticks.map(([k, v]) => `<i class="tick t${k}" style="left:${at(v).toFixed(1)}%" title="P${k} ${secs(v)}"></i>`).join('') +
-    `</div><div class="strip-lbl"><span>min ${secs(st.min)}</span><span>band P50–P90</span><span>max ${secs(st.max)}</span></div>`;
-}
-function latencyHtml(label) {
-  const st = latStats(label), s = DATA.runs[label].summary || {};
-  if (!st) {
-    return `<div class="lat"><h3>Latency per run</h3>
-      <div class="sub2" title="Re-run with a current gd-eval to get percentiles">no per-run latencies in this report · ${num(s.avg_latency_s)}s avg</div></div>`;
-  }
-  const tile = (k, v, sub) => `<div class="pct"><span class="k">P${k}</span><span class="v">${secs(v)}</span><span class="s">${sub}</span></div>`;
-  return `<div class="lat"><h3>Latency per run</h3>
-    <div class="pcts">${tile(50, st.p50, 'median')}${tile(70, st.p70, '')}${tile(90, st.p90, '')}${tile(99, st.p99, '')}</div>
-    <div class="sub2">avg ${secs(st.mean)} · max ${secs(st.max)} · n = ${st.n} run${st.n === 1 ? '' : 's'}</div>
-    ${stripHtml(st)}</div>`;
-}
+const hasModes = LABELS.some((l) => (DATA.comparison[l] || {}).by_mode || (DATA.runs[l].summary || {}).by_mode);
 
 // ---------- summary cards ----------
 $('#summary').innerHTML = '<h2>Runs</h2><div class="cards">' + LABELS.map((label) => {
   const s = DATA.runs[label].summary || {};
   const rate = s.total ? s.passed / s.total : 0;
+  const split = MODES.map(([m]) => [m, modeOf(label, m)]).filter(([, x]) => x && x.total)
+    .map(([m, x]) => `${MODE_NAME[m]} ${x.passed}/${x.total}`);
+  const trace = (modeOf(label, 'single_shot') || {}).traces_s;
   return `<div class="card"><b title="${esc(label)}">${esc(label)}</b>
     <div class="big">${pct(rate)}</div>
     <div class="sub2">${s.passed ?? 0}/${s.total ?? 0} passed · ${s.errored ?? 0} err · ${s.skipped ?? 0} skip</div>
+    ${split.length ? `<div class="sub2">${split.join(' · ')} passed</div>` : ''}
     <div class="bar"><i style="width:${(rate * 100).toFixed(1)}%"></i></div>
-    ${latencyHtml(label)}</div>`;
+    ${trace ? `<div class="sub2" style="margin-top:8px">single-shot per trace · P50 ${secs(trace.p50)} · P90 ${secs(trace.p90)} · P99 ${secs(trace.p99)}</div>` : ''}</div>`;
 }).join('') + '</div>';
-{
-  const stats = LABELS.map(latStats);
-  const notes = [];
-  // Percentiles are only as sharp as the sample: below 100 runs there is no P99 beyond the slowest run.
-  if (stats.some((st) => st && st.n < 100)) notes.push('With fewer than 100 runs, P99 is effectively the slowest run.');
-  if (stats.some((st) => !st)) notes.push('Runs without percentiles come from a report written before gd-eval recorded per-run latency.');
-  if (notes.length) $('#summary').insertAdjacentHTML('beforeend', `<div class="note">${notes.map(esc).join(' ')}</div>`);
-}
 
 // ---------- comparison ----------
 if (LABELS.length > 1) {
-  const st = (l) => latStats(l);
-  // Percentile cells repeat the run's sample size in a tooltip: P99 over 12 runs is not P99 over 400.
-  const pc = (k) => (l) => (st(l) ? `<span title="n = ${st(l).n} runs">${secs(st(l)['p' + k])}</span>` : '–');
   const cols = [
     ['Run', (l) => esc(l), ''],
     ['Pass rate', (l) => pct(cmp(l).pass_rate), 'num'],
     ['Passed', (l) => `${cmp(l).passed ?? 0}/${cmp(l).total ?? 0}`, 'num'],
     ['Avg quality', (l) => pct(cmp(l).avg_quality_score), 'num'],
-    ['Avg latency', (l) => (st(l) ? secs(st(l).mean) : num(cmp(l).avg_latency_s) + 's'), 'num'],
-    ['P50 (median)', pc(50), 'num'],
-    ['P70', pc(70), 'num'],
-    ['P90', pc(90), 'num'],
-    ['P99', pc(99), 'num'],
+    ['Avg latency / run', (l) => num(cmp(l).avg_latency_s) + 's', 'num'],
     ['Total latency', (l) => num(cmp(l).total_latency_s, 1) + 's', 'num'],
   ];
   // Wrapped like the item table: with several runs it is wider than a narrow window, and it
@@ -289,6 +261,57 @@ if (LABELS.length > 1) {
     LABELS.map((l) => '<tr>' + cols.map(([, f, c]) => `<td class="${c}">${f(l)}</td>`).join('') + '</tr>').join('') +
     '</tbody></table></div>';
 }
+
+// ---------- latency by mode ----------
+// Per trace is the main figure. gen-ai opens one trace per chat message, so a single-shot run is exactly one
+// trace and its latency is that trace's response time. A multi-turn conversation spans several traces, so it
+// is shown both ways: per trace (each turn, comparable with single-shot) and per full run (the whole
+// conversation, simulated-user replies and judge included).
+function stripHtml(st) {
+  const span = st.max - st.min;
+  const at = (v) => (span > 0 ? ((v - st.min) / span) * 100 : 50);
+  const ticks = [['50', st.p50], ['70', st.p70], ['90', st.p90], ['99', st.p99]];
+  return `<div class="strip" role="img" aria-label="Latency from ${secs(st.min)} to ${secs(st.max)}: ` +
+    ticks.map(([k, v]) => `P${k} ${secs(v)}`).join(', ') + `">
+      <i class="band" style="left:${at(st.p50).toFixed(1)}%;width:${(at(st.p90) - at(st.p50)).toFixed(1)}%"></i>` +
+    ticks.map(([k, v]) => `<i class="tick t${k}" style="left:${at(v).toFixed(1)}%" title="P${k} ${secs(v)}"></i>`).join('') + '</div>';
+}
+function latencyTable({ mode, field, sample, counts }) {
+  const heads = ['Run'].concat(counts ? ['Items', 'Passed'] : [])
+    .concat([sample, 'Avg', 'P50 (median)', 'P70', 'P90', 'P99', 'Max', 'Range']);
+  const dash = '<td class="num">–</td>';
+  const rows = LABELS.map((l) => {
+    const m = modeOf(l, mode);
+    const st = m ? m[field] : null;
+    const lead = counts
+      ? (m && m.total ? `<td class="num">${m.total}</td><td class="num">${m.passed}/${m.total} (${pct(m.passed / m.total)})</td>` : `<td class="num">0</td>${dash}`)
+      : '';
+    const stats = st
+      ? [st.n, secs(st.mean), secs(st.p50), secs(st.p70), secs(st.p90), secs(st.p99), secs(st.max)]
+          .map((v) => `<td class="num">${v}</td>`).join('') + `<td>${stripHtml(st)}</td>`
+      : dash.repeat(7) + '<td></td>';
+    return `<tr><td>${esc(l)}</td>${lead}${stats}</tr>`;
+  }).join('');
+  const small = LABELS.some((l) => { const m = modeOf(l, mode); return m && m[field] && m[field].n < 100; });
+  const unit = sample.toLowerCase();
+  return `<div class="tablewrap flat"><table class="lat-table"><thead><tr>` +
+    heads.map((h, i) => `<th class="${i > 0 && h !== 'Range' ? 'num' : ''}">${h}</th>`).join('') + `</tr></thead><tbody>${rows}</tbody></table></div>` +
+    (small ? `<div class="note">With fewer than 100 ${unit}, P99 is effectively the slowest one.</div>` : '');
+}
+function modeSection(mode, title, blurb, tables) {
+  if (!LABELS.some((l) => (modeOf(l, mode) || {}).total)) return '';
+  return `<h2>${title}</h2><p class="blurb">${blurb}</p>` +
+    tables.map(([caption, spec]) => (caption ? `<h3 class="cap">${caption}</h3>` : '') + latencyTable({ mode, ...spec })).join('');
+}
+$('#latency').innerHTML = !hasModes
+  ? '<h2>Latency</h2><p class="blurb">This report was written before gd-eval split latency into single-shot and multi-turn. Re-run to get per-trace percentiles.</p>'
+  : modeSection('single_shot', 'Single-shot · latency per trace',
+      'One chat turn per run, so each run is exactly one trace. Latency is that trace\'s response time, from sending the message to the end of its stream; the judge, the simulated user and conversation set-up are not in it.',
+      [['', { field: 'traces_s', sample: 'Traces', counts: true }]]) +
+    modeSection('multi_turn', 'Multi-turn · conversations',
+      'A conversation spans several traces, so it is shown both ways: per trace (each chat turn, comparable with single-shot) and per full run (the whole conversation, with simulated-user replies and the judge).',
+      [['Per trace · each chat turn', { field: 'traces_s', sample: 'Traces', counts: true }],
+       ['Per full run · whole conversation', { field: 'runs_s', sample: 'Runs', counts: false }]]);
 function cmp(label) {
   const c = DATA.comparison[label];
   if (c) return c;
@@ -320,11 +343,12 @@ function exprFn() {
 
 function visible() {
   const text = $('#q').value.trim().toLowerCase();
-  const kind = $('#kind').value, status = $('#status').value, fn = exprFn();
+  const kind = $('#kind').value, mode = $('#mode').value, status = $('#status').value, fn = exprFn();
   let bad = false;
   const out = rows.filter((r) => {
     const it = r.per[focus];
     if (kind && r.kind !== kind) return false;
+    if (mode && r.mode !== mode) return false;
     if (status !== 'all' && statusOf(it) !== status) return false;
     if (text && !(r.id + ' ' + r.question).toLowerCase().includes(text)) return false;
     if (fn) {
@@ -342,7 +366,7 @@ function visible() {
   return out;
 }
 function sortVal(r, key) {
-  if (key === 'id' || key === 'kind' || key === 'question') return r[key] || '';
+  if (key === 'id' || key === 'kind' || key === 'mode' || key === 'question') return r[key] || '';
   if (key === 'latency') return (r.per[focus] || {}).avg_latency_s ?? -1;
   return LBL[statusOf(r.per[key])] || '';  // a run column
 }
@@ -350,7 +374,7 @@ function sortVal(r, key) {
 function render() {
   const list = visible();
   $('#count').textContent = `${list.length} of ${rows.length}`;
-  const heads = [['id', 'Item'], ['kind', 'Kind'], ['question', 'Question']]
+  const heads = [['id', 'Item'], ['kind', 'Kind'], ['mode', 'Mode'], ['question', 'Question']]
     .concat(LABELS.map((l) => [l, l]))
     .concat([['latency', 'Latency']]);
   $('#items thead').innerHTML = '<tr>' + heads.map(([k, h]) =>
@@ -360,6 +384,7 @@ function render() {
     return `<tr data-id="${esc(r.id)}" tabindex="0" class="${selected === r.id ? 'sel' : ''}">
       <td class="id">${esc(r.id)}</td>
       <td class="id">${esc(r.kind)}</td>
+      <td>${r.mode ? `<span class="chip">${esc(MODE_NAME[r.mode] || r.mode)}</span>` : ''}</td>
       <td class="q" title="${esc(r.question)}">${esc(r.question)}</td>` +
       LABELS.map((l) => `<td>${chipHtml(statusOf(r.per[l]))}</td>`).join('') +
       `<td class="num">${num(it.avg_latency_s)}s</td></tr>`;
@@ -391,7 +416,7 @@ $('#items tbody').addEventListener('keydown', (e) => {
   const id = e.target.closest('tr')?.dataset.id;
   if (id && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openRow(id); }
 });
-for (const id of ['#q', '#expr', '#kind', '#status']) $(id).addEventListener('input', render);
+for (const id of ['#q', '#expr', '#kind', '#mode', '#status']) $(id).addEventListener('input', render);
 $('#focus').addEventListener('change', () => {
   focus = $('#focus').value;
   render();
