@@ -264,8 +264,8 @@ def test_the_item_table_names_what_each_latency_column_measures():
         "Latency / run",
         "trace_latencies_s",
         "run_latencies_s",
-        "latency_trace",
-        "latency_run",
+        "'lt:' + l",
+        "'lr:' + l",
     ):
         assert text in html
     assert "['latency', 'Latency']" not in html
@@ -302,14 +302,40 @@ def test_an_item_is_judged_by_the_gate_verdict_not_pass_at_k_alone():
     assert "item.pass_at_k ? 'pass'" not in html
 
 
-def test_the_kind_filter_is_a_multi_select():
+def test_kind_status_and_run_are_multi_selects_in_both_tiers():
     html = build_html(_doc_with_modes("gpt-5"))
 
-    assert '<details id="kind"' in html
-    assert '<select id="kind"' not in html
+    for facet in ("kind", "status", "runs"):
+        assert f"multi('{facet}'" in html
     assert 'type="checkbox"' in html
-    # The filter reads every ticked kind; the old single-value read is gone.
-    assert "$('#kind').value" not in html
+    # The old single-value selects and the single "focused run" are gone.
+    for old in ('<select id="kind"', '<select id="status"', '<select id="focus"', "$('#kind').value"):
+        assert old not in html
+    # The top bar and the Items section are built from the same controls.
+    assert "controlsHtml('top'" in html
+    assert "controlsHtml('items'" in html
+
+
+def test_search_and_expression_belong_to_the_item_section_only():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    start = html.index('id="items-section"')
+    for control in ('id="q"', 'id="expr"'):
+        assert html.count(control) == 1
+        assert html.index(control) > start, f"{control} must live in the Items section"
+    # The dashboard's render path never reads the table's own filters.
+    render = html.split("function render() {")[1].split("function renderItems")[0]
+    for table_only in ("$('#q')", "$('#expr')", "I.kind", "I.status", "I.runs", "I.mode"):
+        assert table_only not in render
+
+
+def test_the_tables_filters_combine_with_the_top_ones_without_widening_them():
+    """The table starts from the rows the top filters allow (`dashRows`) and only narrows them."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    items = html.split("function itemRows(runList) {")[1].split("function activeSortKey")[0]
+    assert "dashRows.filter(" in items
+    assert "rows.filter(" not in items
 
 
 def test_html_uses_the_goodata_tokens_and_loads_no_web_font():
