@@ -248,8 +248,10 @@ def test_the_page_has_single_shot_and_multi_turn_sections_read_from_the_report()
         assert text in html
     for label in ("P50", "P70", "P90", "P99"):
         assert label in html
-    section = html.split("// ---------- latency by mode")[1].split("function cmp(label)")[0]
-    assert "sort(" not in section
+    # The table renderers only lay out figures they are handed; the one place that computes any is `recompute`.
+    renderers = html.split("// ---------- latency by mode")[1].split("function renderLatency")[0]
+    assert "sort(" not in renderers
+    assert "percentile(" not in renderers
 
 
 def test_the_item_table_names_what_each_latency_column_measures():
@@ -267,6 +269,37 @@ def test_the_item_table_names_what_each_latency_column_measures():
     ):
         assert text in html
     assert "['latency', 'Latency']" not in html
+
+
+def test_the_filters_sit_above_the_dashboard_and_drive_every_table():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    bar = html.index('id="filterbar"')
+    for section in ('id="summary"', 'id="comparison"', 'id="latency"', 'id="items"'):
+        assert bar < html.index(section), f"the filter bar must come before {section}"
+    # One render path feeds the cards, the comparison, the latency tables and the item table.
+    render = html.split("function render() {")[1].split("function renderItems")[0]
+    for call in ("renderSummary()", "renderComparison()", "renderLatency()", "renderItems()"):
+        assert call in render
+
+
+def test_a_filtered_view_recomputes_and_an_unfiltered_one_reads_the_report():
+    """Unfiltered, the page shows the report's own figures so it cannot disagree with the console or the
+    JSON; only a narrowed selection is recomputed, from the selected items' records."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert "filtered ? recompute(l, ids) : reported(l)" in html
+    assert "function recompute(label, ids)" in html
+    assert "function reported(label)" in html
+
+
+def test_an_item_is_judged_by_the_gate_verdict_not_pass_at_k_alone():
+    """Under --gate power an item that passed some runs has pass_at_k True and gate_passed False; the
+    report's counts follow the gate, so the page's status chips and recomputed counts must too."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert "item.gate_passed ?? item.pass_at_k" in html
+    assert "item.pass_at_k ? 'pass'" not in html
 
 
 def test_the_kind_filter_is_a_multi_select():

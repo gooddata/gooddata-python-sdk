@@ -382,8 +382,15 @@ gd-eval report results.json -o customer.html --redact
 | `--title TEXT` | Title shown in the report header. |
 | `--redact` | Drop conversation/response ids and raw reasoning, and rename models to `Model A`, `Model B`, … Pass rate, per-item results, questions and latency survive. |
 
-The report is a *view* over the JSON — it computes no population statistics of its own (the only arithmetic is
-an item's median and mean over its own recorded samples). It gives you:
+The report is a *view* over the JSON. Unfiltered, every figure on it is read from the report, so it cannot
+disagree with the console or the JSON. Narrow the selection with a filter and the figures are recomputed in the
+page from the selected items' own records, by the same rules gd-eval uses. It gives you:
+
+- **Filters at the top, for the whole page** — search, kind (several at once), mode, status and an expression
+  sit in a bar above everything and stay in view. They select a set of items, and the run cards, the comparison,
+  the latency tables and the item table all cover exactly that set, so the runs stay comparable. Status and the
+  expression are read from the run chosen in the run selector (shown when there is more than one run), and the
+  page says so. A filtered view states how many items it covers, and Reset clears it.
 
 - **Run cards and a comparison table** — pass rate and quality per run, with the pass counts split by
   single-shot and multi-turn and the single-shot per-trace median and tail on each card.
@@ -392,14 +399,14 @@ an item's median and mean over its own recorded samples). It gives you:
   the average, the maximum, the number of samples and a strip marking where the percentiles fall between the
   fastest and slowest sample. They are read from `by_mode`, never recomputed in the page.
 - **An item table** with a pass/fail column per run, so a model or run-over-run
-  regression is one glance rather than a hand-assembled spreadsheet. A mode column and filter separate
-  single-shot from multi-turn items, and the kind filter takes several kinds at once. Two latency columns
+  regression is one glance rather than a hand-assembled spreadsheet. A mode column separates
+  single-shot from multi-turn items. Two latency columns
   keep the populations apart: **Latency / trace** is the median response time of the item's chat turns, and
   **Latency / run** is the mean wall-clock of a whole run (the chat turns plus the judge and, for multi-turn,
   the simulated user). Hover a value to see every sample behind it; the drawer labels its two latency chips
   the same way. A report written before per-trace timing has no trace figure and shows `avg_latency_s` as the
   run figure.
-- **An expression filter** for cross-cutting questions the fixed filters can't
+- **An expression filter** (in the bar above) for cross-cutting questions the fixed filters can't
   anticipate, e.g. `d.filter_ranking_score === false` or
   `d.expected_metric_uris.length > 1 && !d.metrics_correct`. Available variables:
   `d` (the focused run's `detail`), `it` (its item), `i` (the row, `i.per[label]` for any
