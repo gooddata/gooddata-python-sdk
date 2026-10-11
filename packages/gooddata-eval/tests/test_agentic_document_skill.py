@@ -653,6 +653,8 @@ def test_a_passing_item_returns_its_checks_and_draft_facts(monkeypatch: pytest.M
     assert outcome.detail["document_period_correct"] is True
     assert outcome.detail["summaries_from_data"] == 1
     assert outcome.detail["failures"] == []
+    assert len(outcome.run_latencies_s) == outcome.runs_effective == 1
+    assert all(latency >= 0 for latency in outcome.run_latencies_s)
 
 
 def test_a_failing_item_raises_with_the_failures(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -662,6 +664,7 @@ def test_a_failing_item_raises_with_the_failures(monkeypatch: pytest.MonkeyPatch
     assert "the agent never produced a successful draft_document call" in str(raised.value)
     assert raised.value.runs_passed == 0
     assert raised.value.conversation_id == "conv-1"
+    assert len(raised.value.run_latencies_s) == raised.value.runs_effective == 1
 
 
 def test_a_failing_item_without_document_builder_points_at_the_flags(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -1008,8 +1011,9 @@ def test_an_item_the_judge_could_never_grade_raises(monkeypatch: pytest.MonkeyPa
     turn = _narrative_turn(_cover_page(), _summary_page("page2", "Revenue grew 12%.", _REVENUE_TREND))
     _install_client(monkeypatch, _ScriptedChatClient([turn]))
     judge = _FakeJudge(error=JudgeResponseError("empty body"))
-    with pytest.raises(JudgeResponseError, match="no readable verdict"):
+    with pytest.raises(JudgeResponseError, match="no readable verdict") as raised:
         evaluate_agentic_document_skill("https://h", "tok", "ws", "q", {"narrative": _NARRATIVE}, judge=judge)
+    assert len(raised.value.run_latencies_s) == 1
 
 
 def test_a_narrative_item_passes_with_its_verdict_in_the_detail(monkeypatch: pytest.MonkeyPatch) -> None:

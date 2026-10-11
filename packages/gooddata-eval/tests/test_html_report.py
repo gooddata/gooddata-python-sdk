@@ -200,3 +200,42 @@ def test_cli_report_command_needs_no_credentials(tmp_path, monkeypatch, redact):
     argv = ["report", str(src), "-o", str(out)] + (["--redact"] if redact else [])
     assert main(argv) == 0
     assert out.exists()
+
+
+_STATS = {"n": 4, "mean": 2.5, "min": 1.0, "p50": 2.5, "p70": 3.1, "p90": 3.7, "p99": 3.97, "max": 4.0}
+
+
+def _doc_with_latency(model: str) -> dict:
+    doc = _doc(model, True)
+    doc["runs"][model]["summary"]["latency_stats_s"] = _STATS
+    doc["runs"][model]["items"]["item-1"]["run_latencies_s"] = [1.0, 2.0]
+    doc["comparison"][model]["latency_stats_s"] = _STATS
+    return doc
+
+
+def test_html_carries_the_latency_distribution_it_was_built_from():
+    data = _embedded(build_html(_doc_with_latency("gpt-5")))
+
+    assert data["runs"]["gpt-5"]["summary"]["latency_stats_s"] == _STATS
+    assert data["comparison"]["gpt-5"]["latency_stats_s"] == _STATS
+    assert data["runs"]["gpt-5"]["items"]["item-1"]["run_latencies_s"] == [1.0, 2.0]
+
+
+def test_redact_keeps_the_latency_figures():
+    """Latency is a fact about the run, not about our infrastructure -- the same line
+    redaction already draws for per-item latency."""
+    data = _embedded(build_html(_doc_with_latency("gpt-5"), redact=True))
+
+    run = data["runs"]["Model A"]
+    assert run["summary"]["latency_stats_s"] == _STATS
+    assert run["items"]["item-1"]["run_latencies_s"] == [1.0, 2.0]
+    assert data["comparison"]["Model A"]["latency_stats_s"] == _STATS
+
+
+def test_building_the_html_does_not_invent_stats_for_an_older_report():
+    """Files written before gd-eval recorded per-run latency carry no `latency_stats_s`. The
+    page shows a dash for those; nothing here backfills a figure the run never measured."""
+    data = _embedded(build_html(_doc("gpt-5", True)))
+
+    assert "latency_stats_s" not in data["runs"]["gpt-5"]["summary"]
+    assert "latency_stats_s" not in data["comparison"]["gpt-5"]

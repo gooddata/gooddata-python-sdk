@@ -488,3 +488,76 @@ def test_json_report_failed_runs_is_empty_for_a_clean_item():
         ItemReport(id="i1", dataset_name="d", test_kind="visualization", question="q", pass_at_k=True, runs=2)
     )
     assert build_json_report(report)["items"]["i1"]["failed_runs"] == []
+
+
+def _sampled_report(model: str, per_item: list[list[float]]) -> EvalReport:
+    return EvalReport(
+        model=model,
+        workspace_id="ws1",
+        items=[
+            ItemReport(
+                id=f"i{n}",
+                dataset_name="d",
+                test_kind="visualization",
+                question=f"q{n}",
+                pass_at_k=True,
+                runs=len(latencies),
+                latency_s=sum(latencies),
+                run_latencies_s=latencies,
+            )
+            for n, latencies in enumerate(per_item, start=1)
+        ],
+    )
+
+
+def test_json_report_carries_every_run_latency_and_their_distribution():
+    # Two items of two runs each: the sample is the four runs, not the two item averages.
+    data = build_multi_model_report([_sampled_report("gpt-5.2", [[1.0, 2.0], [3.0, 4.0]])])
+
+    assert data["runs"]["gpt-5.2"]["items"]["i1"]["run_latencies_s"] == [1.0, 2.0]
+    expected = {"n": 4, "mean": 2.5, "min": 1.0, "p50": 2.5, "p70": 3.1, "p90": 3.7, "p99": 3.97, "max": 4.0}
+    assert data["runs"]["gpt-5.2"]["summary"]["latency_stats_s"] == expected
+    # The comparison entry repeats it: the HTML reads that table and falls back to the summary.
+    assert data["comparison"]["gpt-5.2"]["latency_stats_s"] == expected
+
+
+def test_json_report_states_no_latency_distribution_when_no_run_was_timed():
+    # null, not zeroes: a P99 of 0s would claim a measurement that never happened.
+    data = build_multi_model_report([_report()])
+
+    assert data["runs"]["gpt-5.2"]["summary"]["latency_stats_s"] is None
+    assert data["comparison"]["gpt-5.2"]["latency_stats_s"] is None
+    assert data["runs"]["gpt-5.2"]["items"]["i1"]["run_latencies_s"] == []
+
+
+def test_json_report_leaves_the_existing_latency_figures_alone():
+    summary = build_json_report(_sampled_report("gpt-5.2", [[1.0, 2.0], [3.0, 4.0]]))["summary"]
+
+    assert summary["latency_s"] == 10.0
+    assert summary["avg_latency_s"] == 2.5
+
+
+def test_console_prints_the_latency_percentiles_beneath_the_summary():
+    text = render_console(_sampled_report("gpt-5.2", [[1.0, 2.0], [3.0, 4.0]]))
+
+    assert "Latency per run (n=4): P50 2.50s · P70 3.10s · P90 3.70s · P99 3.97s" in text
+    assert text.index("Summary:") < text.index("Latency per run")
+
+
+def test_console_omits_the_latency_line_when_no_run_was_timed():
+    assert "Latency per run" not in render_console(_report())
+
+
+def test_comparison_table_sets_the_models_median_and_tail_side_by_side():
+    reports = [
+        _sampled_report("gpt-5.2", [[10.0], [20.0]]),
+        _sampled_report("gpt-4o", [[8.0], [12.0]]),
+    ]
+
+    text = render_comparison(reports, console=Console(record=True, width=200))
+
+    for column in ("P50", "P90", "P99"):
+        assert column in text
+    assert "15.00s" in text  # gpt-5.2 median of 10 and 20
+    assert "19.00s" in text  # gpt-5.2 P90
+    assert "10.00s" in text  # gpt-4o median of 8 and 12

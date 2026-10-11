@@ -1,6 +1,7 @@
 # (C) 2026 GoodData Corporation
 """Tests for PhaseTimings and the [timer] diagnostic gate."""
 
+import statistics
 import threading
 from unittest.mock import patch
 
@@ -8,7 +9,9 @@ import pytest
 from gooddata_eval.core.timing import (
     TIMERS_ENV_VAR,
     PhaseTimings,
+    latency_stats,
     log_timer,
+    percentile,
     sum_timings,
     timers_enabled,
 )
@@ -91,3 +94,50 @@ def test_as_dict_rounds_every_phase():
 
 def test_sum_timings_of_nothing_is_all_zeroes():
     assert sum_timings([]) == PhaseTimings()
+
+
+def test_percentile_interpolates_between_closest_ranks():
+    # rank = 0.9 * 3 = 2.7 -> 3.0 + 0.7 * (4.0 - 3.0)
+    assert percentile([1.0, 2.0, 3.0, 4.0], 90) == pytest.approx(3.7)
+
+
+@pytest.mark.parametrize("n", [1, 2, 3, 4, 7, 10, 99])
+def test_p50_is_the_median_for_any_sample_size(n):
+    # The report prints P50 as the median and carries no separate median field, so the
+    # two must never disagree -- nearest-rank would differ on every even-sized sample.
+    samples = [float(i * i) for i in range(1, n + 1)]
+
+    assert percentile(samples, 50) == pytest.approx(statistics.median(samples))
+
+
+def test_percentile_of_a_single_sample_is_that_sample():
+    assert percentile([2.5], 99) == 2.5
+
+
+def test_percentile_of_an_empty_sample_raises():
+    with pytest.raises(ValueError, match="empty"):
+        percentile([], 50)
+
+
+def test_latency_stats_of_nothing_is_none():
+    # None rather than zeroes: a run with no timed runs has no latency, not a 0s one.
+    assert latency_stats([]) is None
+
+
+def test_latency_stats_orders_an_unsorted_sample_and_reports_every_figure():
+    stats = latency_stats([4.0, 1.0, 3.0, 2.0])
+
+    assert stats == {"n": 4, "mean": 2.5, "min": 1.0, "p50": 2.5, "p70": 3.1, "p90": 3.7, "p99": 3.97, "max": 4.0}
+
+
+def test_latency_stats_never_decreases_from_p50_to_max():
+    stats = latency_stats([0.4, 12.0, 3.3, 3.3, 7.9, 0.9, 21.5])
+
+    ladder = [stats[k] for k in ("min", "p50", "p70", "p90", "p99", "max")]
+    assert ladder == sorted(ladder)
+
+
+def test_latency_stats_of_one_run_collapses_to_that_run():
+    stats = latency_stats([3.25])
+
+    assert stats == {"n": 1, "mean": 3.25, "min": 3.25, "p50": 3.25, "p70": 3.25, "p90": 3.25, "p99": 3.25, "max": 3.25}

@@ -411,6 +411,7 @@ class AgenticAssertionError(AssertionError):
     runs_passed: int
     runs_effective: int
     failed_runs: list[dict]
+    run_latencies_s: list[float]
 
 
 class AgenticEvalOutcome(BaseModel):
@@ -442,6 +443,11 @@ class AgenticEvalOutcome(BaseModel):
     # ``core.agentic._failed_runs.build_failed_runs``; mirrors the single-shot path's
     # ``ItemReport.failed_runs``, which ``core/runner.py`` fills for the non-agentic kinds.
     failed_runs: list[dict] = Field(default_factory=list)
+    # The wall-clock seconds of every run, passing or not, in run order. ``timings`` and
+    # ``best_run_latency_s`` each describe one number per item; the latency distribution
+    # needs one per run. Empty means the kind recorded none, which the report reads as "no
+    # sample", not as zero-second runs.
+    run_latencies_s: list[float] = Field(default_factory=list)
 
 
 class SummaryInput(BaseModel):
