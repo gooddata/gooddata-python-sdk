@@ -101,6 +101,30 @@
     font: inherit; padding: 5px 9px; border: 1px solid var(--line); border-radius: 3px;
     background: var(--panel); color: inherit;
   }
+  /* Kind multi-select: a <details> styled like the neighbouring selects, its menu floated over the table. */
+  .multi { position: relative; }
+  .multi > summary {
+    list-style: none; cursor: pointer; padding: 5px 26px 5px 9px; border: 1px solid var(--line); border-radius: 3px;
+    background: var(--panel); max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; position: relative;
+  }
+  .multi > summary::-webkit-details-marker { display: none; }
+  .multi > summary::after {
+    content: ""; position: absolute; right: 10px; top: 50%; width: 5px; height: 5px; margin-top: -4px;
+    border: solid var(--dim); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg);
+  }
+  .multi[open] > summary { border-color: var(--primary); }
+  .multi .menu {
+    position: absolute; z-index: 5; top: calc(100% + 4px); left: 0; min-width: 100%; width: max-content; max-width: 340px;
+    max-height: 50vh; overflow-y: auto; padding: 4px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 4px; box-shadow: 0 2px 8px var(--shadow);
+  }
+  .multi .menu label { display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 3px; cursor: pointer; }
+  .multi .menu label:hover { background: var(--hover); }
+  .multi .menu label span { flex: 1 1 auto; font-family: var(--mono); font-size: 12px; }
+  .multi .menu label i { font-style: normal; font-size: 11px; color: var(--dim); font-variant-numeric: tabular-nums; }
+  .multi .menu input { margin: 0; padding: 0; }
+  .multi .menu #kindclear { width: 100%; margin-bottom: 4px; text-align: left; border: 0; background: none; color: var(--primary-ink); cursor: pointer; padding: 4px 8px; font-size: 12px; }
+  .multi .menu #kindclear:hover { background: var(--hover); }
   #q { flex: 1 1 200px; min-width: 140px; }
   #expr { flex: 2 1 320px; min-width: 200px; font-family: var(--mono); font-size: 12px; }
   #expr.bad { border-color: var(--fail); background: var(--fail-bg); }
@@ -153,7 +177,10 @@
       <h2>Items</h2>
       <div id="filters">
         <input id="q" placeholder="Search id or question…" aria-label="Search id or question">
-        <select id="kind" aria-label="Filter by kind"></select>
+        <details id="kind" class="multi">
+          <summary title="Filter by kind; choose as many as you like">any kind</summary>
+          <div class="menu" id="kindmenu"></div>
+        </details>
         <select id="mode" aria-label="Filter by mode">
           <option value="">any mode</option>
           <option value="single_shot">single-shot</option>
@@ -189,6 +216,11 @@ const num = (v, d = 2) => (typeof v === 'number' ? v.toFixed(d) : '–');
 const pct = (v) => (typeof v === 'number' ? (v * 100).toFixed(1) + '%' : '–');
 // Seconds, two decimals under 10s and one above, so a 117.8s tail and a 0.84s median both read.
 const secs = (v) => (typeof v === 'number' ? v.toFixed(v < 10 ? 2 : 1) + 's' : '–');
+const mean = (xs) => xs.reduce((a, b) => a + b, 0) / xs.length;
+function median(xs) {
+  const s = [...xs].sort((a, b) => a - b), m = s.length >> 1;
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+}
 
 // ---------- rows: one per item id, holding that id's result in every run ----------
 const rows = [];
@@ -319,9 +351,51 @@ function cmp(label) {
   return { passed: s.passed, total: s.total, pass_rate: s.total ? s.passed / s.total : 0, avg_latency_s: s.avg_latency_s, total_latency_s: s.latency_s };
 }
 
+// ---------- per-item latency ----------
+// The same two populations as the latency section above, one figure each per item: its chat turns (traces, the
+// main figure) and its whole runs. Items from a report written before gd-eval recorded either list have no trace
+// figure, and their run figure falls back to the per-run average those reports always carried.
+const traceLatency = (it) => (it && (it.trace_latencies_s || []).length ? median(it.trace_latencies_s) : null);
+function runLatency(it) {
+  if (!it) return null;
+  if ((it.run_latencies_s || []).length) return mean(it.run_latencies_s);
+  return it.runs ? (it.avg_latency_s ?? null) : null;
+}
+// Every sample behind a figure, for the cell's tooltip: a median of three hides a 30s outlier.
+function samplesTitle(xs, noun) {
+  if (!(xs || []).length) return '';
+  const shown = xs.slice(0, 12).map(secs).join(', ');
+  return `${xs.length} ${noun}${xs.length === 1 ? '' : 's'}: ${shown}${xs.length > 12 ? ', …' : ''}`;
+}
+const TRACE_HELP = 'Median response time of this item\'s chat turns, one gen-ai trace each. Excludes the judge, the ' +
+  'simulated user and conversation set-up. Hover a value to see every trace.';
+const RUN_HELP = 'Mean wall-clock of a whole run: the chat turns plus the judge, the simulated user\'s replies and ' +
+  'any conversation set-up. Hover a value to see every run.';
+const latencyCell = (v, title) => `<td class="num"${title ? ` title="${esc(title)}"` : ''}>${secs(v)}</td>`;
+
 // ---------- filters ----------
 const kinds = [...new Set(rows.map((r) => r.kind))].filter(Boolean).sort();
-$('#kind').innerHTML = '<option value="">any kind</option>' + kinds.map((k) => `<option>${esc(k)}</option>`).join('');
+// Kind is a multi-select: a <details> holding one checkbox per kind (with how many items it has), so it needs no
+// widget library and stays keyboard-operable. Nothing ticked means every kind.
+const kindCount = {};
+for (const r of rows) kindCount[r.kind] = (kindCount[r.kind] || 0) + 1;
+$('#kindmenu').innerHTML = '<button type="button" id="kindclear">Clear selection</button>' + kinds.map((k) =>
+  `<label><input type="checkbox" value="${esc(k)}"><span>${esc(k)}</span><i>${kindCount[k]}</i></label>`).join('');
+const chosenKinds = () => [...document.querySelectorAll('#kindmenu input:checked')].map((i) => i.value);
+function kindSummary() {
+  const c = chosenKinds();
+  $('#kind > summary').textContent = c.length === 0 ? 'any kind' : c.length === 1 ? c[0] : `${c.length} kinds`;
+}
+$('#kind').addEventListener('input', kindSummary);
+$('#kindclear').addEventListener('click', () => {
+  document.querySelectorAll('#kindmenu input').forEach((i) => { i.checked = false; });
+  kindSummary();
+  render();
+});
+document.addEventListener('click', (e) => { if (!$('#kind').contains(e.target)) $('#kind').open = false; });
+$('#kind').addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && $('#kind').open) { $('#kind').open = false; $('#kind > summary').focus(); }
+});
 $('#focus').innerHTML = LABELS.map((l) => `<option value="${esc(l)}">${esc(l)}</option>`).join('');
 let focus = LABELS[0];
 let sortKey = 'id', sortDir = 1, selected = null;
@@ -343,11 +417,11 @@ function exprFn() {
 
 function visible() {
   const text = $('#q').value.trim().toLowerCase();
-  const kind = $('#kind').value, mode = $('#mode').value, status = $('#status').value, fn = exprFn();
+  const picked = new Set(chosenKinds()), mode = $('#mode').value, status = $('#status').value, fn = exprFn();
   let bad = false;
   const out = rows.filter((r) => {
     const it = r.per[focus];
-    if (kind && r.kind !== kind) return false;
+    if (picked.size && !picked.has(r.kind)) return false;
     if (mode && r.mode !== mode) return false;
     if (status !== 'all' && statusOf(it) !== status) return false;
     if (text && !(r.id + ' ' + r.question).toLowerCase().includes(text)) return false;
@@ -367,7 +441,8 @@ function visible() {
 }
 function sortVal(r, key) {
   if (key === 'id' || key === 'kind' || key === 'mode' || key === 'question') return r[key] || '';
-  if (key === 'latency') return (r.per[focus] || {}).avg_latency_s ?? -1;
+  if (key === 'latency_trace') return traceLatency(r.per[focus]) ?? -1;
+  if (key === 'latency_run') return runLatency(r.per[focus]) ?? -1;
   return LBL[statusOf(r.per[key])] || '';  // a run column
 }
 
@@ -376,9 +451,9 @@ function render() {
   $('#count').textContent = `${list.length} of ${rows.length}`;
   const heads = [['id', 'Item'], ['kind', 'Kind'], ['mode', 'Mode'], ['question', 'Question']]
     .concat(LABELS.map((l) => [l, l]))
-    .concat([['latency', 'Latency']]);
-  $('#items thead').innerHTML = '<tr>' + heads.map(([k, h]) =>
-    `<th data-k="${esc(k)}" tabindex="0" class="${k === 'latency' ? 'num' : ''}">${esc(h)}${sortKey === k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('') + '</tr>';
+    .concat([['latency_trace', 'Latency / trace', TRACE_HELP], ['latency_run', 'Latency / run', RUN_HELP]]);
+  $('#items thead').innerHTML = '<tr>' + heads.map(([k, h, help]) =>
+    `<th data-k="${esc(k)}" tabindex="0" class="${help ? 'num' : ''}"${help ? ` title="${esc(help)}"` : ''}>${esc(h)}${sortKey === k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('') + '</tr>';
   $('#items tbody').innerHTML = list.map((r) => {
     const it = r.per[focus] || {};
     return `<tr data-id="${esc(r.id)}" tabindex="0" class="${selected === r.id ? 'sel' : ''}">
@@ -387,7 +462,8 @@ function render() {
       <td>${r.mode ? `<span class="chip">${esc(MODE_NAME[r.mode] || r.mode)}</span>` : ''}</td>
       <td class="q" title="${esc(r.question)}">${esc(r.question)}</td>` +
       LABELS.map((l) => `<td>${chipHtml(statusOf(r.per[l]))}</td>`).join('') +
-      `<td class="num">${num(it.avg_latency_s)}s</td></tr>`;
+      latencyCell(traceLatency(it), samplesTitle(it.trace_latencies_s, 'trace')) +
+      latencyCell(runLatency(it), samplesTitle(it.run_latencies_s, 'run')) + '</tr>';
   }).join('');
   $('#noitems').hidden = list.length > 0;
 }
@@ -424,6 +500,25 @@ $('#focus').addEventListener('change', () => {
 });
 
 // ---------- drawer ----------
+// Two different numbers, so each says what it is: the trace chip is the item's chat turns (the same figure as
+// the table's Latency / trace); the run chip is the one run whose detail and timeline the drawer shows, which
+// also contains the judge and, for multi-turn, the simulated user.
+function drawerLatencyChips(it) {
+  const chip = (text, title) => `<span class="chip" title="${esc(title)}">${text}</span>`;
+  const traces = it.trace_latencies_s || [];
+  const out = [];
+  if (traces.length) {
+    out.push(chip(`${traces.length} trace${traces.length === 1 ? '' : 's'} · median ${secs(median(traces))}`,
+      `Response time of each chat turn. ${samplesTitle(traces, 'trace')}`));
+  }
+  if (typeof it.best_run_latency_s === 'number') {
+    out.push(chip(`run ${secs(it.best_run_latency_s)}`,
+      'Wall-clock of the run described below, including the judge and, for multi-turn, the simulated user.'));
+  } else if (it.runs && typeof it.avg_latency_s === 'number') {
+    out.push(chip(`avg run ${secs(it.avg_latency_s)}`, 'Mean wall-clock of this item\'s runs, including the judge.'));
+  }
+  return out.join('');
+}
 function openDrawer(r) {
   if (!r) return;
   const it = r.per[focus];
@@ -438,7 +533,7 @@ function openDrawer(r) {
     <div>${chipHtml(st)}
       <span class="chip">${esc(r.kind)}</span>
       <span class="chip">${it.runs ?? 0} run(s)</span>
-      <span class="chip">${num(it.best_run_latency_s ?? it.avg_latency_s)}s</span>
+      ${drawerLatencyChips(it)}
       ${it.classification ? `<span class="chip">${esc(it.classification)}</span>` : ''}
     </div>
     ${it.error ? `<section><h2>Error</h2><pre>${esc(it.error)}</pre></section>` : ''}
