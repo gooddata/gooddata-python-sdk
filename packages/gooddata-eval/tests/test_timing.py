@@ -17,6 +17,7 @@ from gooddata_eval.core.timing import (
     percentile,
     sum_timings,
     timers_enabled,
+    trimmed_mean,
 )
 
 
@@ -130,7 +131,17 @@ def test_latency_stats_of_nothing_is_none():
 def test_latency_stats_orders_an_unsorted_sample_and_reports_every_figure():
     stats = latency_stats([4.0, 1.0, 3.0, 2.0])
 
-    assert stats == {"n": 4, "mean": 2.5, "min": 1.0, "p50": 2.5, "p70": 3.1, "p90": 3.7, "p99": 3.97, "max": 4.0}
+    assert stats == {
+        "n": 4,
+        "mean": 2.5,
+        "trimmed_mean": None,
+        "min": 1.0,
+        "p50": 2.5,
+        "p70": 3.1,
+        "p90": 3.7,
+        "p99": 3.97,
+        "max": 4.0,
+    }
 
 
 def test_latency_stats_never_decreases_from_p50_to_max():
@@ -143,7 +154,61 @@ def test_latency_stats_never_decreases_from_p50_to_max():
 def test_latency_stats_of_one_run_collapses_to_that_run():
     stats = latency_stats([3.25])
 
-    assert stats == {"n": 1, "mean": 3.25, "min": 3.25, "p50": 3.25, "p70": 3.25, "p90": 3.25, "p99": 3.25, "max": 3.25}
+    assert stats == {
+        "n": 1,
+        "mean": 3.25,
+        "trimmed_mean": None,
+        "min": 3.25,
+        "p50": 3.25,
+        "p70": 3.25,
+        "p90": 3.25,
+        "p99": 3.25,
+        "max": 3.25,
+    }
+
+
+def test_trimmed_mean_drops_the_fastest_and_slowest_tenth_before_averaging():
+    # Ten samples drop one from each end: the 0.1s and the 100s no longer move the average.
+    samples = [0.1, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 100.0]
+
+    assert trimmed_mean(samples) == pytest.approx(2.0)
+    assert sum(samples) / len(samples) == pytest.approx(11.61)  # the plain mean is dragged far above it
+
+
+def test_trimmed_mean_is_not_the_median():
+    # The median is one middle value; the trimmed mean still averages what is left, so the two
+    # differ whenever the middle 80% is not symmetric.
+    samples = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 9.0, 9.0]
+
+    assert statistics.median(samples) == 1.0
+    assert trimmed_mean(samples) == pytest.approx(2.0)
+
+
+@pytest.mark.parametrize(("n", "dropped_each_end"), [(10, 1), (19, 1), (20, 2), (25, 2), (100, 10)])
+def test_trimmed_mean_cut_is_the_floor_of_a_tenth_of_the_sample_per_end(n, dropped_each_end):
+    samples = [float(i) for i in range(n)]
+
+    kept = samples[dropped_each_end : n - dropped_each_end]
+    assert trimmed_mean(samples) == pytest.approx(sum(kept) / len(kept))
+
+
+@pytest.mark.parametrize("n", [1, 2, 5, 9])
+def test_trimmed_mean_is_none_when_nothing_can_be_trimmed(n):
+    # Below ten samples a 10% trim removes nothing, so the figure would just be the plain mean
+    # under a name that promises otherwise.
+    assert trimmed_mean([float(i) for i in range(n)]) is None
+
+
+def test_trimmed_mean_of_an_empty_sample_raises():
+    with pytest.raises(ValueError, match="empty"):
+        trimmed_mean([])
+
+
+def test_latency_stats_carries_the_trimmed_mean_once_there_are_ten_samples():
+    stats = latency_stats([100.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 0.1])
+
+    assert stats["trimmed_mean"] == 2.0
+    assert stats["mean"] == 11.61
 
 
 def test_a_recorder_collects_each_noted_trace_in_order():

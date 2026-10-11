@@ -293,7 +293,10 @@ function percentile(sorted, p) {
 function latencyStats(samples) {
   const s = [...samples].sort((a, b) => a - b);
   if (!s.length) return null;
-  return { n: s.length, mean: r3(mean(s)), min: r3(s[0]), p50: r3(percentile(s, 50)), p70: r3(percentile(s, 70)),
+  // The mean without the fastest and slowest 10%; null while a sample is too small to drop one from each end.
+  const drop = Math.floor(s.length / 10);
+  const trimmed = drop ? mean(s.slice(drop, s.length - drop)) : null;
+  return { n: s.length, mean: r3(mean(s)), trimmed_mean: trimmed === null ? null : r3(trimmed), min: r3(s[0]), p50: r3(percentile(s, 50)), p70: r3(percentile(s, 70)),
     p90: r3(percentile(s, 90)), p99: r3(percentile(s, 99)), max: r3(s[s.length - 1]) };
 }
 // Fraction of the best run's boolean checks that held; with none, 1 or 0 by the verdict.
@@ -378,9 +381,14 @@ function stripHtml(st) {
       <i class="band" style="left:${at(st.p50).toFixed(1)}%;width:${(at(st.p90) - at(st.p50)).toFixed(1)}%"></i>` +
     ticks.map(([k, v]) => `<i class="tick t${k}" style="left:${at(v).toFixed(1)}%" title="P${k} ${secs(v)}"></i>`).join('') + '</div>';
 }
+const HEAD_HELP = {
+  Avg: 'Mean of every sample.',
+  'Trimmed avg': 'Mean of the middle 80%: the fastest 10% and the slowest 10% of samples are dropped first. Needs at least 10 samples.',
+  'P50 (median)': 'The median: half the samples are faster, half slower.',
+};
 function latencyTable({ mode, field, sample, counts }) {
   const heads = ['Run'].concat(counts ? ['Items', 'Passed'] : [])
-    .concat([sample, 'Avg', 'P50 (median)', 'P70', 'P90', 'P99', 'Max', 'Range']);
+    .concat([sample, 'Avg', 'Trimmed avg', 'P50 (median)', 'P70', 'P90', 'P99', 'Max', 'Range']);
   const dash = '<td class="num">–</td>';
   const rows = runsShown.map((l) => {
     const m = modeOf(l, mode);
@@ -389,16 +397,20 @@ function latencyTable({ mode, field, sample, counts }) {
       ? (m && m.total ? `<td class="num">${m.total}</td><td class="num">${m.passed}/${m.total} (${pct(m.passed / m.total)})</td>` : `<td class="num">0</td>${dash}`)
       : '';
     const stats = st
-      ? [st.n, secs(st.mean), secs(st.p50), secs(st.p70), secs(st.p90), secs(st.p99), secs(st.max)]
+      ? [st.n, secs(st.mean), secs(st.trimmed_mean), secs(st.p50), secs(st.p70), secs(st.p90), secs(st.p99), secs(st.max)]
           .map((v) => `<td class="num">${v}</td>`).join('') + `<td>${stripHtml(st)}</td>`
-      : dash.repeat(7) + '<td></td>';
+      : dash.repeat(8) + '<td></td>';
     return `<tr><td>${esc(l)}</td>${lead}${stats}</tr>`;
   }).join('');
   const small = runsShown.some((l) => { const m = modeOf(l, mode); return m && m[field] && m[field].n < 100; });
+  const untrimmed = runsShown.some((l) => { const m = modeOf(l, mode); return m && m[field] && m[field].trimmed_mean == null; });
   const unit = sample.toLowerCase();
+  const notes = [];
+  if (small) notes.push(`With fewer than 100 ${unit}, P99 is effectively the slowest one.`);
+  if (untrimmed) notes.push('Trimmed avg needs at least 10 samples.');
   return `<div class="tablewrap flat"><table class="lat-table"><thead><tr>` +
-    heads.map((h, i) => `<th class="${i > 0 && h !== 'Range' ? 'num' : ''}">${h}</th>`).join('') + `</tr></thead><tbody>${rows}</tbody></table></div>` +
-    (small ? `<div class="note">With fewer than 100 ${unit}, P99 is effectively the slowest one.</div>` : '');
+    heads.map((h, i) => `<th class="${i > 0 && h !== 'Range' ? 'num' : ''}"${HEAD_HELP[h] ? ` title="${esc(HEAD_HELP[h])}"` : ''}>${h}</th>`).join('') + `</tr></thead><tbody>${rows}</tbody></table></div>` +
+    (notes.length ? `<div class="note">${notes.join(' ')}</div>` : '');
 }
 function modeSection(mode, title, blurb, tables) {
   if (!runsShown.some((l) => (modeOf(l, mode) || {}).total)) return '';
