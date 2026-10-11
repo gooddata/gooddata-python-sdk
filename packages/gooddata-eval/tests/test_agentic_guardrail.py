@@ -157,6 +157,10 @@ def test_evaluate_agentic_guardrail_returns_reasoning_steps_on_pass():
         "latency_breakdown": [],
         "tool_calls": [],
     }
+    # One wall-clock sample per run, passing runs included -- the latency distribution is over
+    # these, and a kind that forgot to report them would silently drop out of it.
+    assert len(outcome.run_latencies_s) == outcome.runs_effective == 1
+    assert all(latency >= 0 for latency in outcome.run_latencies_s)
 
 
 def test_evaluate_agentic_guardrail_attaches_reasoning_steps_to_exception_on_fail():
@@ -187,6 +191,7 @@ def test_evaluate_agentic_guardrail_attaches_reasoning_steps_to_exception_on_fai
         "latency_breakdown": [],
         "tool_calls": [],
     }
+    assert len(exc_info.value.run_latencies_s) == exc_info.value.runs_effective == 1
 
 
 # --- the run counts have to reach the report (same predicate pass_at_k uses) ---
@@ -354,3 +359,4 @@ def test_all_ungraded_attaches_the_records_to_the_judge_error():
     assert [r["conversation_id"] for r in err.failed_runs] == ["conv-1", "conv-2"]
     assert [r["detail"]["actual_output"] for r in err.failed_runs] == ["answer conv-1", "answer conv-2"]
     assert (err.runs_passed, err.runs_effective) == (0, 2)
+    assert len(err.run_latencies_s) == err.runs_effective

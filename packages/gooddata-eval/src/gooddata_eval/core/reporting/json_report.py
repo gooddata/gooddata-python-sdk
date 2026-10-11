@@ -33,6 +33,10 @@ def _build_run_dict(report: EvalReport) -> dict:
             # record of when a run ended; wall_clock_s is a duration with no anchor.
             "started_at": report.started_at.isoformat() if report.started_at else None,
             "finished_at": report.finished_at.isoformat() if report.finished_at else None,
+            # The distribution of every timed run -- avg_latency_s above is one number for
+            # the same population and says nothing about its tail. None when no run was
+            # timed, so a report cannot state a 0s P99 for a run that measured nothing.
+            "latency_stats_s": report.latency_stats,
         },
         "items": {
             item.id: {
@@ -51,6 +55,9 @@ def _build_run_dict(report: EvalReport) -> dict:
                 "runs": item.runs_total,
                 "latency_s": round(item.latency_s, 3),
                 "avg_latency_s": round(item.avg_latency_s, 3),
+                # One entry per run that completed, passing or not: the sample the run-level
+                # percentiles are taken over. latency_s is only their sum.
+                "run_latencies_s": [round(latency, 3) for latency in item.run_latencies_s],
                 # Beside `runs`, not folded into it: "4 of 5 passed" is a different fact
                 # from pass_at_k and the only one that separates a reliable item from a
                 # coin-flip. pass_power_k is the unanimity flag beside it, and
@@ -97,6 +104,7 @@ def _build_comparison_entry(report: EvalReport) -> dict:
         "avg_quality_score": round(report.avg_quality_score, 4),
         "avg_latency_s": round(report.avg_latency_s, 3),
         "total_latency_s": round(report.latency_s, 3),
+        "latency_stats_s": report.latency_stats,
     }
 
 

@@ -8,6 +8,7 @@ Langfuse logging and VisAssertionError remain in the Tavern shim.
 from __future__ import annotations
 
 import os
+import time
 from dataclasses import dataclass, field
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
@@ -73,6 +74,8 @@ class RunResult:
     # Why the simulated-user loop stopped. visualization_created=False alone cannot separate
     # a refusal from a run that hit max_iterations while still on track -- see LoopExit.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
+    # This run's own wall time, from just before its first chat call to the end of its scoring.
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -210,6 +213,7 @@ def _execute_single_run(
     # simply runs out of range() is labelled correctly with no trailing else.
     exit_reason = LoopExit.BUDGET_EXHAUSTED
 
+    run_started = time.monotonic()
     try:
         current_result = client.send_message(conversation_id, question)
     except ChatError as exc:
@@ -298,6 +302,7 @@ def _execute_single_run(
         tool_call_events=all_tool_call_events,
         reasoning_step_events=all_reasoning_step_events,
         exit_reason=exit_reason,
+        run_latency_s=time.monotonic() - run_started,
     )
 
 
@@ -530,6 +535,7 @@ def evaluate_agentic_visualization(
 
     runs_passed = sum(1 for r in summary.run_results if r.eval_result.strict_pass)
     runs_effective = len(summary.run_results)
+    run_latencies_s = [r.run_latency_s for r in summary.run_results]
 
     best = summary.best
     ev = best.eval_result
@@ -592,6 +598,7 @@ def evaluate_agentic_visualization(
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
+        exc.run_latencies_s = run_latencies_s
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -603,4 +610,5 @@ def evaluate_agentic_visualization(
         # Also on the success path: pass@K clears the gate with one passing run, so a
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
+        run_latencies_s=run_latencies_s,
     )

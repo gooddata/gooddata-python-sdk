@@ -308,6 +308,37 @@ The other six agentic kinds report `0.0` for the first three. Trace linking itse
 runner rather than by `evaluate_agentic_*`, so a direct library caller sees `langfuse_s: 0.0` even though its
 linking ran. Pass `TAVERN_E2E_SKIP_TRACE_LINK=1` to opt out of linking altogether.
 
+### Latency distribution
+
+`avg_latency_s` is one number. To say how slow the tail is, every run that completed is timed and each run
+states the distribution of those times:
+
+```json
+"summary": {
+  "latency_stats_s": {"n": 36, "mean": 18.75, "min": 4.85, "p50": 18.91, "p70": 23.28, "p90": 32.41, "p99": 36.69, "max": 37.51}
+}
+```
+
+`latency_stats_s` is in each run's `summary` and in its `comparison` entry, and is `null` when no run was timed.
+Each item also lists its own `run_latencies_s` — one entry per completed run, in run order, passing runs
+included (`failed_runs` holds only the failures). The figures are taken over those runs, so an item run three
+times contributes three samples; that is the population `avg_latency_s` divides by.
+
+- **What one run's latency is.** The wall-clock time of that run. For the single-shot kinds it is the chat turn
+  plus scoring, so it includes the LLM judge and the conversation create/delete. For the agentic kinds it runs
+  from just before the run's first message to the end of its scoring — every turn, simulated-user reply and
+  judge call, but not conversation create/delete. The two paths are therefore not timed over exactly the same
+  span, and for an agentic kind `mean` is at or slightly below `avg_latency_s` (the item's wall clock divided by its
+  runs), which also covers setup and cleanup. A run that raised was never timed and has no entry;
+  `agentic_conversation` drives its fixture once and contributes one sample.
+- **Percentiles** use linear interpolation between closest ranks (NumPy's default), so `p50` is the median and
+  the report carries no separate median field. On a small sample the high percentiles sit at or near the
+  maximum: P99 over fewer than 100 runs is effectively the slowest run, which is why `n` always travels with it.
+- **Older reports** have no `latency_stats_s`. The HTML report shows a dash for them and nothing is backfilled.
+
+The console prints the percentiles beneath each run's summary line — `Latency per run (n=36): P50 18.91s · P70
+23.28s · P90 32.41s · P99 36.69s` — and P50/P90/P99 columns in the multi-model comparison.
+
 ---
 
 ## `gd-eval report`

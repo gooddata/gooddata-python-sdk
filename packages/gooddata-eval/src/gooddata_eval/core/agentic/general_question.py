@@ -91,6 +91,8 @@ class GeneralQuestionResult:
     judge_error: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
+    # This run's own wall time, from just before its chat call to the end of its scoring.
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -153,6 +155,9 @@ def _run_single_general_question(
         judge_error=verdict.error,
         tool_call_events=list(chat_result.tool_call_events or []),
         reasoning_step_events=list(chat_result.reasoning_step_events or []),
+        # item_started is taken just before the chat call and total_elapsed right after
+        # scoring, so this is the whole run without a second clock read.
+        run_latency_s=total_elapsed,
     )
 
 
@@ -224,6 +229,7 @@ def _attach_diagnostics(
     failed_runs: list[dict],
     runs_passed: int,
     runs_effective: int,
+    run_latencies_s: list[float],
 ) -> None:
     """Hang the report payload on a raised error, whichever error it is.
 
@@ -238,6 +244,7 @@ def _attach_diagnostics(
     error.runs_passed = runs_passed
     error.runs_effective = runs_effective
     error.failed_runs = failed_runs
+    error.run_latencies_s = run_latencies_s
 
 
 def _run_detail(run: GeneralQuestionResult) -> dict:
@@ -363,6 +370,7 @@ def evaluate_agentic_general_question(
     # `runs_passed` is then 0, so nothing here needs a graded run to exist.
     runs_passed = sum(1 for r in summary.scored_run_results if r.passed)
     runs_effective = len(summary.run_results)
+    run_latencies_s = [r.run_latency_s for r in summary.run_results]
 
     best = summary.best
     detail = {
@@ -389,7 +397,7 @@ def evaluate_agentic_general_question(
             f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
             + " | ".join(unscored)
         )
-        _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective)
+        _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s)
         error.timings = item_timings
         raise error
 
@@ -398,7 +406,7 @@ def evaluate_agentic_general_question(
         exc = GeneralQuestionAssertionError(
             f"General question assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}"
         )
-        _attach_diagnostics(exc, best, detail, failed_runs, runs_passed, runs_effective)
+        _attach_diagnostics(exc, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s)
         exc.timings = item_timings
         raise exc
     return AgenticEvalOutcome(
@@ -412,4 +420,5 @@ def evaluate_agentic_general_question(
         # Also on the success path: pass@K clears the gate with one passing run, so a
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
+        run_latencies_s=run_latencies_s,
     )

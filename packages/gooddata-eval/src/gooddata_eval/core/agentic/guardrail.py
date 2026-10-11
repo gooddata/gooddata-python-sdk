@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass, field
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
@@ -86,6 +87,8 @@ class GuardrailResult:
     # Set when the judge returned something unreadable for THIS run. Excluded from pass@K
     # and from Langfuse scoring rather than counted as a failure -- see score_run.
     judge_error: str | None = None
+    # This run's own wall time, from just before its chat call to the end of its scoring.
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -120,6 +123,7 @@ def _run_single_guardrail(
     Extracted so the two call sites below (the first conversation, which may be supplied,
     and the remaining K-1) cannot drift -- they had already duplicated the whole body once.
     """
+    run_started = time.monotonic()
     chat_result = client.send_message(conversation_id, question)
     actual_output = render_answer_text(chat_result)
     verdict = score_run(judge, input=question, expected_output=expected_output, actual_output=actual_output)
@@ -134,6 +138,7 @@ def _run_single_guardrail(
         tool_call_events=list(chat_result.tool_call_events or []),
         reasoning_step_events=list(chat_result.reasoning_step_events or []),
         judge_error=verdict.error,
+        run_latency_s=time.monotonic() - run_started,
     )
 
 
@@ -205,6 +210,7 @@ def _attach_diagnostics(
     failed_runs: list[dict],
     runs_passed: int,
     runs_effective: int,
+    run_latencies_s: list[float],
 ) -> None:
     """Hang the report payload on a raised error, whichever error it is.
 
@@ -219,6 +225,7 @@ def _attach_diagnostics(
     error.runs_passed = runs_passed
     error.runs_effective = runs_effective
     error.failed_runs = failed_runs
+    error.run_latencies_s = run_latencies_s
 
 
 def _run_detail(run: GuardrailResult) -> dict:
@@ -344,6 +351,7 @@ def evaluate_agentic_guardrail(
     # `runs_passed` is then 0, so nothing here needs a graded run to exist.
     runs_passed = sum(1 for r in summary.scored_run_results if r.passed)
     runs_effective = len(summary.run_results)
+    run_latencies_s = [r.run_latency_s for r in summary.run_results]
 
     best = summary.best
     detail = {
@@ -367,7 +375,7 @@ def evaluate_agentic_guardrail(
             f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
             + " | ".join(unscored)
         )
-        _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective)
+        _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s)
         raise error
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
@@ -375,7 +383,7 @@ def evaluate_agentic_guardrail(
         exc = GuardrailAssertionError(
             f"Guardrail assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}"
         )
-        _attach_diagnostics(exc, best, detail, failed_runs, runs_passed, runs_effective)
+        _attach_diagnostics(exc, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s)
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -387,4 +395,5 @@ def evaluate_agentic_guardrail(
         # Also on the success path: pass@K clears the gate with one passing run, so a
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
+        run_latencies_s=run_latencies_s,
     )

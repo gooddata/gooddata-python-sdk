@@ -1080,3 +1080,61 @@ def test_evaluate_agentic_runs_its_k_runs_inside_the_item_scope(
         getattr(module, evaluate_fn)("https://h", "tok", "ws1", *args)
 
     assert seen == [scope]
+
+
+@pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
+def test_every_evaluator_hands_out_its_run_latencies(kind, expected_output, target):
+    """Structural, for the reason the failed_runs check above is: the report test below cans
+    the outcome and cannot see whether an evaluator filled it. A kind that stops handing out
+    its per-run times does not fail anything -- it just drops out of the latency percentiles,
+    quietly, because an empty list reads as "not timed"."""
+    module = importlib.import_module(getattr(agentic_runner, target).__module__)
+    source = inspect.getsource(module)
+    assert "run_latencies_s=" in source, f"{module.__name__} never returns its run latencies on the success path"
+    assert ".run_latencies_s = " in source, f"{module.__name__} never attaches them to its failure"
+
+
+@pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
+def test_run_latencies_reach_the_report_for_every_kind(kind, expected_output, target):
+    item = DatasetItem(id="q1", dataset_name="ds", test_kind=kind, question="q", expected_output=expected_output)
+    canned = AgenticEvalOutcome(reasoning_steps=["x"], detail={"k": "v"}, run_latencies_s=[4.5, 6.0])
+    with patch(f"gooddata_eval.cli.agentic_runner.{target}", return_value=canned):
+        report = run_agentic_items([item], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
+    assert report.items[0].run_latencies_s == [4.5, 6.0]
+
+
+def test_a_kind_that_records_no_run_latencies_adds_no_sample():
+    """Absent, not zero: an empty list means "not timed", so the item cannot pull the
+    percentiles toward 0s."""
+    with patch(
+        "gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill",
+        return_value=AgenticEvalOutcome(reasoning_steps=[], detail={}),
+    ):
+        report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
+    assert report.items[0].run_latencies_s == []
+    assert report.latency_stats is None
+
+
+def test_run_latencies_are_surfaced_from_the_exception_on_a_failed_item():
+    exc = AlertSkillAssertionError("nope")
+    exc.reasoning_steps = []
+    exc.detail = {"alert_created": False}
+    exc.run_latencies_s = [3.0, 5.0]
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=exc):
+        report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
+    assert report.items[0].run_latencies_s == [3.0, 5.0]
+
+
+def test_an_all_ungraded_item_still_reports_what_its_runs_cost():
+    """The runs happened and took real time even though no verdict came back, so they belong
+    in the latency sample -- a broken judge must not make the agent look faster."""
+    err = JudgeResponseError("judge returned no readable verdict for any of the 2 run(s)")
+    err.runs_effective = 2
+    err.run_latencies_s = [7.0, 9.5]
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=err):
+        report = run_agentic_items(
+            [_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01", k=2
+        )
+    item = report.items[0]
+    assert item.error is not None
+    assert item.run_latencies_s == [7.0, 9.5]

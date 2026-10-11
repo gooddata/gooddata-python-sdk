@@ -638,6 +638,8 @@ class DocumentRunResult:
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
     timings: PhaseTimings = field(default_factory=PhaseTimings)
+    # This run's own wall time, from just before its chat call to the end of its scoring.
+    run_latency_s: float = 0.0
 
     @property
     def diagnostics(self) -> dict[str, bool]:
@@ -711,6 +713,7 @@ def _execute_single_document_run(
     reasoning_index_offset = 0
     first_turn_asked = False
 
+    run_started = time.monotonic()
     for iteration in range(max_iterations):
         turns += 1
         agent_started = time.monotonic()
@@ -781,6 +784,7 @@ def _execute_single_document_run(
         tool_call_events=all_tool_call_events,
         reasoning_step_events=all_reasoning_step_events,
         timings=timings,
+        run_latency_s=time.monotonic() - run_started,
     )
 
 
@@ -980,6 +984,7 @@ def evaluate_agentic_document_skill(
             + " | ".join(unscored)
         )
         exc_judge.timings = item_timings
+        exc_judge.run_latencies_s = [r.run_latency_s for r in summary.run_results]
         raise exc_judge
 
     runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
@@ -1033,6 +1038,7 @@ def evaluate_agentic_document_skill(
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
+        exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -1043,4 +1049,5 @@ def evaluate_agentic_document_skill(
         detail=detail,
         timings=item_timings,
         failed_runs=failed_runs,
+        run_latencies_s=[r.run_latency_s for r in summary.run_results],
     )
