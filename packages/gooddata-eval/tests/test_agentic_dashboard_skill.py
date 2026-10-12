@@ -2250,6 +2250,16 @@ class TestAnswerAssertions:
             _run_with(client, {**_DC05_EXPECTED, "answer_must_include": ["  "]})
         client.send_message.assert_not_called()
 
+    @pytest.mark.parametrize("entry", [False, 123, None])
+    def test_a_non_string_entry_is_rejected_up_front(self, entry: object) -> None:
+        """An unquoted `no` in YAML loads as the bool False. Coerced with str() it would
+        become the assertion "false" -- a fixture that looks strict while checking text the
+        question never mentions, and passes or fails for reasons nobody wrote down."""
+        client = MagicMock()
+        with pytest.raises(ValueError, match="must be a list of strings"):
+            _run_with(client, {**_DC05_EXPECTED, "answer_must_include": [entry]})
+        client.send_message.assert_not_called()
+
     def test_the_text_of_the_turn_that_drafted_is_what_gets_scored(self):
         """The draft arrives with the sentence describing it, and that sentence is what the
         assertions are about -- so the loop must read every turn, not only the ones that
