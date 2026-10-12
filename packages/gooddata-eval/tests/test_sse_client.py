@@ -657,11 +657,34 @@ def test_send_message_records_the_turn_as_a_trace_latency(monkeypatch):
     assert recorder.stop() == [pytest.approx(2.5)]
 
 
-def test_send_message_records_nothing_for_a_turn_that_raised(monkeypatch):
-    # No completed response, so nothing to time: a failed turn must not enter the percentiles.
+def test_send_message_records_a_turn_that_ended_in_a_chat_error(monkeypatch):
+    # Evaluators score the partial result of such a turn as a run, so the response population has to
+    # hold it too, or the two disagree about which turns happened.
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([50.0, 50.0, 51.0]).__next__)
     client = _client_with_handler(lambda request: httpx.Response(200, content=_NONRETRY_SSE))
     recorder = TraceRecorder()
     with pytest.raises(ChatError):
+        client.send_message("conv", "q")
+    assert recorder.stop() == [pytest.approx(1.0)]
+
+
+def test_send_message_records_a_turn_cut_off_by_its_deadline(monkeypatch):
+    """The slowest turns are the ones that hit the budget; leaving them out would make the tail
+    look shorter exactly when the agent is slowest."""
+    # monotonic() calls: t0, the accumulator's own t0, the deadline check on the first line, the wall-clock.
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([0.0, 0.0, 61.0, 61.0]).__next__)
+    client = _client_with_handler(lambda request: httpx.Response(200, content=_OK_SSE), turn_timeout_s=60)
+    recorder = TraceRecorder()
+    with pytest.raises(sse_mod.TurnTimeoutError):
+        client.send_message("conv", "q")
+    assert recorder.stop() == [pytest.approx(61.0)]
+
+
+def test_send_message_records_nothing_for_a_turn_that_failed_without_a_partial_result():
+    # An HTTP error before any stream opens leaves no partial result: no response to time.
+    client = _client_with_handler(lambda request: httpx.Response(400))
+    recorder = TraceRecorder()
+    with pytest.raises(httpx.HTTPStatusError):
         client.send_message("conv", "q")
     assert recorder.stop() == []
 
