@@ -1177,14 +1177,33 @@ def test_turns_completed_before_a_failed_gate_still_count_as_traces():
     assert report.items[0].trace_latencies_s == [3.0, 4.0]
 
 
-def test_turns_completed_before_an_item_errored_still_count_as_traces():
-    """The agent answered those turns however the item ended, so they are real response times."""
+def test_an_item_that_errored_outside_its_evaluator_reports_no_trace_latencies():
+    """Such an item reports no runs, so keeping its turns would put them in the per-response
+    population with nothing beside them in the per-conversation one."""
     with patch(
         "gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill",
-        side_effect=_noting(2.0, then=RuntimeError("simulated user failed")),
+        side_effect=_noting(2.0, 3.0, then=RuntimeError("simulated user failed")),
     ):
         report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
-    assert report.items[0].error is not None
+    item = report.items[0]
+    assert item.error is not None
+    assert item.runs == 0
+    assert item.run_latencies_s == []
+    assert item.trace_latencies_s == []
+    assert report.by_mode["multi_turn"]["traces_s"] is None
+
+
+def test_an_ungraded_item_keeps_the_turns_it_drove():
+    """Unlike the case above, a judge fault leaves every run's time on the exception, so the
+    per-response and per-conversation populations still cover the same item."""
+    err = JudgeResponseError("judge returned no readable verdict for any of the 2 run(s)")
+    err.runs_effective = 2
+    err.run_latencies_s = [7.0, 9.5]
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=_noting(2.0, then=err)):
+        report = run_agentic_items(
+            [_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01", k=2
+        )
+    assert report.items[0].run_latencies_s == [7.0, 9.5]
     assert report.items[0].trace_latencies_s == [2.0]
 
 

@@ -1,6 +1,8 @@
 # (C) 2026 GoodData Corporation
 import json
 import re
+import shutil
+import subprocess
 
 import orjson
 import pytest
@@ -438,6 +440,82 @@ def test_the_item_table_says_what_changed_since_the_previous_run():
     assert "LABELS.length > 1 ? 'chg' : 's:' + LABELS[0]" in html
     # Newest first: the latest result, then what changed since the previous run, then earlier runs going back.
     assert "runList.slice(0, -1).reverse()" in html
+
+
+def _run_page_js(html: str, definitions: list[str], expression: str):
+    """Evaluate `expression` in Node against functions lifted verbatim out of the page's script, so the
+    rules are exercised as written rather than asserted as text. There is no JS test runner in this package."""
+    parts = []
+    for name in definitions:
+        found = re.search(rf"^(?:const {name} = [^\n]*;|function {name}\(.*?^\}})$", html, re.M | re.S)
+        assert found, f"{name} not found in the page"
+        parts.append(found.group(0))
+    script = "\n".join(parts) + f"\nconsole.log(JSON.stringify({expression}));"
+    done = subprocess.run(["node", "-e", script], capture_output=True, text=True, check=True)
+    return json.loads(done.stdout)
+
+
+_needs_node = pytest.mark.skipif(shutil.which("node") is None, reason="the page's script is run in Node")
+_PAGE_STATUS = ["passedOf", "statusOf"]
+
+
+@_needs_node
+def test_the_pass_rate_card_leaves_skipped_test_cases_out_like_the_console():
+    """The console divides by the evaluated test cases, so the page must or the two disagree: 10 passed of 14 with
+    2 skipped is 83% in the console, not 71%."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    rates = _run_page_js(
+        html,
+        ["passRateOf"],
+        "[passRateOf({total: 14, skipped: 2, passed: 10}), passRateOf({total: 2, skipped: 2, passed: 0}), "
+        "passRateOf({total: 0, skipped: 0, passed: 0})]",
+    )
+
+    assert rates == [pytest.approx(10 / 12), None, None]
+    # Both the reported and the recomputed figures carry `skipped`, which is what the card divides by.
+    assert "get: (l) => passRateOf(figures[l])" in html
+    assert "passed / items.length" not in html
+
+
+_ITEM_RESULT = {"pass": {"gate_passed": True}, "fail": {"gate_passed": False}, "skip": {"skipped": True}}
+
+
+def _changes(html: str, runs: dict[str, str | None]) -> str:
+    """The change label for a test case whose result in each run is pass, fail, skip or None (not in that run)."""
+    row = {"per": {label: _ITEM_RESULT[result] for label, result in runs.items() if result is not None}}
+    return _run_page_js(html, [*_PAGE_STATUS, "changeOf"], f"changeOf({json.dumps(row)}, {json.dumps(list(runs))})")
+
+
+@_needs_node
+@pytest.mark.parametrize(
+    ("runs", "label"),
+    [
+        # Skipped in the latest run: the earlier runs alone would call this Regressed, beside a SKIP cell.
+        ({"a": "pass", "b": "fail", "c": "skip"}, ""),
+        ({"a": "fail", "b": "pass", "c": "skip"}, ""),
+        ({"a": "pass", "b": "pass", "c": "skip"}, ""),
+        # A skip in the middle is looked through: the latest run still decides the label.
+        ({"a": "pass", "b": "skip", "c": "fail"}, "Regressed"),
+        ({"a": "pass", "b": "fail"}, "Regressed"),
+        ({"a": "fail", "b": "pass"}, "Fixed"),
+        ({"a": "pass", "b": "pass"}, "Still passing"),
+        ({"a": "fail", "b": "fail"}, "Still failing"),
+        ({"a": "fail", "b": "pass", "c": "fail", "d": "pass"}, "Flaky"),
+        # Absent from the previous run but present before it: back, not new.
+        ({"a": "fail", "b": None, "c": "pass"}, "Fixed"),
+        ({"a": "pass", "b": None, "c": "fail"}, "Regressed"),
+        ({"a": "pass", "b": None, "c": "pass"}, "Still passing"),
+        ({"a": None, "b": "pass"}, "New"),
+        ({"a": None, "b": None, "c": "fail"}, "New"),
+        ({"a": "pass", "b": None}, "Removed"),
+        ({"a": "pass", "b": "pass", "c": None}, "Removed"),
+        # One run has nothing to compare with.
+        ({"a": "pass"}, ""),
+    ],
+)
+def test_a_change_label_describes_the_latest_run_against_the_whole_history(runs, label):
+    assert _changes(build_html(_doc_with_modes("gpt-5")), runs) == label
 
 
 def test_the_run_setup_tooltip_names_what_is_the_same_and_what_differs():

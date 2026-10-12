@@ -241,6 +241,16 @@ def test_stopping_detaches_the_recorder_and_is_safe_twice():
     assert recorder.stop() == [1.0]
 
 
+def test_discarding_drops_what_was_recorded_and_detaches():
+    recorder = TraceRecorder()
+    note_trace_latency(1.0)
+
+    recorder.discard()
+    note_trace_latency(9.0)  # after discard: nobody is listening
+
+    assert recorder.stop() == []
+
+
 def test_concurrent_items_each_record_only_their_own_traces():
     """Items run in worker threads under --concurrency; one item's turns must never land in
     another's list."""
