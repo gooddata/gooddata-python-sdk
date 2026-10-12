@@ -1003,7 +1003,12 @@ def _validate_expectation(expected_output: dict) -> None:
     for key, value in (("answer_must_include", must_include), ("answer_must_not_match", must_not_match)):
         if not isinstance(expected_output.get(key, []), list):
             raise ValueError(f"{key} must be a list of strings, got {expected_output.get(key)!r}")
-        if any(not str(entry).strip() for entry in value):
+        # isinstance, not str(entry): `- no` in YAML loads as the bool False, which str()
+        # turns into the assertion "false" -- a fixture that looks strict while checking
+        # text the question never mentions. Same for a bare number.
+        if any(not isinstance(entry, str) for entry in value):
+            raise ValueError(f"{key} must be a list of strings, got {value!r}")
+        if any(not entry.strip() for entry in value):
             raise ValueError(f"{key} carries an empty entry, which asserts nothing: {value!r}")
     # Compiled here so an unparseable pattern fails the fixture before the first API call,
     # rather than raising mid-scoring with a run already spent.
