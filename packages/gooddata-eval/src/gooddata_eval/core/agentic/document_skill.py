@@ -42,7 +42,7 @@ from gooddata_eval.core.models import (
     build_latency_breakdown,
     shift_and_index_events,
 )
-from gooddata_eval.core.timing import PhaseTimings, log_timer, sum_timings
+from gooddata_eval.core.timing import PhaseTimings, log_timer, run_latency_s, sum_timings
 
 _DEFAULT_K = 1
 # Same slack as the dashboard skill: the simulated reply is fixed, so the extra rounds only
@@ -935,6 +935,9 @@ def evaluate_agentic_document_skill(
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
+        # This kind measures the best run from its PhaseTimings rather than carrying a
+        # run_latency_s attribute, same as general_question.
+        exc.best_run_latency_s = run_latency_s(best.timings)
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -945,4 +948,5 @@ def evaluate_agentic_document_skill(
         detail=detail,
         timings=item_timings,
         failed_runs=failed_runs,
+        best_run_latency_s=run_latency_s(best.timings),
     )

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import logging
 import os
+import time
 from dataclasses import dataclass, field
 
 import httpx
@@ -18,6 +19,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -37,8 +39,8 @@ from gooddata_eval.core.models import (
     LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
     shift_and_index_events,
+    timeline_detail,
 )
 
 _log = logging.getLogger(__name__)
@@ -199,6 +201,10 @@ class KdaRunResult:
     # separate a refusal from a run that hit max_iterations while still on track.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
     turns_used: int = 0
+    # This run's own wall time, across all its turns -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item). Distinct from
+    # turn_wall_clock_sec above, which is only the final create-triggering turn.
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -267,6 +273,7 @@ def run_agentic_kda_skill(
     )
 
     def _run_once(conv_id: str) -> KdaRunResult:
+        run_started = time.monotonic()
         create_args: dict | None = None
         execute_result: dict | None = None
         turn_wall_clock_sec: float | None = None
@@ -374,6 +381,7 @@ def run_agentic_kda_skill(
             reasoning_step_events=all_reasoning_step_events,
             exit_reason=exit_reason,
             turns_used=turns_used,
+            run_latency_s=time.monotonic() - run_started,
         )
 
     try:
@@ -432,7 +440,9 @@ def _run_detail(run: KdaRunResult) -> dict:
         # run it is the first thing worth reading.
         "exit_reason": run.exit_reason.value,
         "turns_used": run.turns_used,
-        "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
+        # timeline_detail rather than build_latency_breakdown: it carries tool_calls too, and
+        # a per-run record without it cannot say which tools the failing run actually ran.
+        **timeline_detail(run.tool_call_events, run.reasoning_step_events),
     }
 
 
@@ -573,23 +583,25 @@ def evaluate_agentic_kda_skill(
             f"Actual create args: {best.actual_create_args}. "
             f"Actual execute result: {best.actual_execute_result}."
         )
-        exc = KdaSkillAssertionError(message)
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = runs_effective
-        exc.failed_runs = failed_runs
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+        raise_agentic_failure(
+            KdaSkillAssertionError,
+            message,
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            best_run_latency_s=best.run_latency_s,
+            failed_runs=failed_runs,
+        )
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
-        # Also on the success path: pass@K clears the gate with one passing run, so a
-        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
+        best_run_latency_s=best.run_latency_s,
         failed_runs=failed_runs,
     )
