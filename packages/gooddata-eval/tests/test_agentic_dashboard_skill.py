@@ -1884,7 +1884,7 @@ class TestRunLoop:
         client.create_conversation.assert_not_called()
         client.delete_conversation.assert_not_called()
 
-    def test_a_chat_error_is_recorded_rather_than_left_to_escape(self):
+    def test_a_chat_error_is_recorded_rather_than_left_to_escape(self) -> None:
         """It used to escape run_agentic_dashboard_skill, taking every completed K-run with
         it: no DashboardRunResult, no exit_reason, just a bare error on the item. Recorded
         the way metric_skill.py and conversation.py record it, so an infrastructure fault
@@ -1898,7 +1898,7 @@ class TestRunLoop:
         assert summary.run_results[0].evaluation.strict_pass is False
         assert summary.pass_at_k is False
 
-    def test_a_chat_error_keeps_the_partial_turn_s_work(self):
+    def test_a_chat_error_keeps_the_partial_turn_s_work(self) -> None:
         """A bare catch would discard ChatError.partial_result. What the stream delivered
         before it died is still this turn's work -- the steps were taken and the tools ran."""
         partial = _chat_result(
@@ -1918,7 +1918,7 @@ class TestRunLoop:
         assert run.total_steps == 1
         assert [tc.function_name for tc in run.tool_call_events] == ["search_objects"]
 
-    def test_a_chat_error_on_a_later_turn_keeps_the_earlier_ones(self):
+    def test_a_chat_error_on_a_later_turn_keeps_the_earlier_ones(self) -> None:
         """The whole point of recording it: turns already completed survive the fault."""
         client = MagicMock()
         client.send_message.side_effect = [
