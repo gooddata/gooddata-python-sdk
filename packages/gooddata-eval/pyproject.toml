@@ -71,3 +71,6 @@ allowed-unresolved-imports = ["openai.**", "gooddata_api_client.**"]
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.pytest]
+strict = true

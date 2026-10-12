@@ -45,6 +45,18 @@ class ItemReport:
     conversation_id: str | None = None
     response_id: str | None = None
     reasoning_steps: list[str] = field(default_factory=list)
+    # One entry per run that did NOT pass, in run order. best_detail describes the winning
+    # run, so on a 1-of-3 item every visible verdict belongs to the attempt that worked and
+    # the two that failed leave no trace at all -- their `detail` is computed here and then
+    # dropped. That makes a partial pass undiagnosable after the fact: the only recourse is
+    # re-running the question and hoping it fails the same way.
+    #
+    # Failing runs only, deliberately. A fully-passing item adds nothing, so the cost tracks
+    # how broken the corpus is and shrinks as it improves. Each entry also carries its OWN
+    # conversation_id/response_id: the report's top-level pair is overwritten every run and
+    # ends up describing the LAST one, which is not necessarily the run best_detail is
+    # about, so those ids cannot be used to pull the trace for a specific failure.
+    failed_runs: list[dict] = field(default_factory=list)
     # Per-phase breakdown of what the item's time was spent on. Additive to latency_s,
     # which remains the item's own critical path. langfuse_latency_s is
     # deliberately NOT part of that path -- trace linking runs off it (see
@@ -175,6 +187,32 @@ class EvalReport:
 RunCallback = Callable[[int, int, bool, float], None]
 
 
+def _failed_run_record(run_index: int, evaluation: ItemEvaluation, chat_result: ChatResult, latency: float) -> dict:
+    """Everything needed to diagnose ONE failing run, without re-running it.
+
+    `detail` is the evaluator's own verdict for this attempt, opaque here -- the runner
+    never inspects its shape, so this works for every test kind and for kinds added later.
+
+    `stream_ended` separates a stalled turn from a wrong answer. A stall leaves the gated
+    checks False even though none of them ran, which reads as a content failure in every
+    downstream rate; this records the difference at the source instead of leaving consumers
+    to infer it.
+    """
+    return {
+        "run_index": run_index,
+        "passed": False,
+        "error": evaluation.error,
+        "detail": evaluation.detail,
+        "conversation_id": getattr(chat_result, "conversation_id", None),
+        "response_id": getattr(chat_result, "response_id", None),
+        "stream_ended": getattr(chat_result, "stream_ended", None),
+        "turn_wall_clock_sec": getattr(chat_result, "turn_wall_clock_sec", None),
+        "latency_s": round(latency, 3),
+        "reasoning_step_count": getattr(chat_result, "reasoning_step_count", 0),
+        "reasoning_steps": list(getattr(chat_result, "reasoning_steps", None) or []),
+    }
+
+
 def _run_one_item(
     item: DatasetItem, backend: ChatBackend, runs: int, on_run_done: RunCallback | None = None
 ) -> ItemReport:
@@ -212,6 +250,8 @@ def _run_one_item(
             if evaluation.passed:
                 report.pass_at_k = True
                 report.runs_passed += 1
+            else:
+                report.failed_runs.append(_failed_run_record(run_index, evaluation, chat_result, latency))
             if on_run_done is not None:
                 on_run_done(run_index, runs, evaluation.passed, latency)
     except Exception as e:  # agent/network/parse failure for this item

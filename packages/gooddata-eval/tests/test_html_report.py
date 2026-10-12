@@ -36,6 +36,28 @@ def _doc(model: str, passed: bool) -> dict:
                                 {"turn": 2, "role": "simulated_user", "text": "primed with the expected answer"},
                             ],
                         },
+                        "failed_runs": [
+                            {
+                                "run_index": 2,
+                                "passed": False,
+                                "error": None,
+                                "conversation_id": "run-conv-secret",
+                                "response_id": "run-resp-secret",
+                                "reasoning_step_count": 1,
+                                "reasoning_steps": ["**Thinking**\n\nper-run internal thoughts"],
+                                "tool_call_count": 1,
+                                "tool_names": ["search_objects"],
+                                "latency_s": 3.5,
+                                "detail": {
+                                    "metrics_correct": False,
+                                    "turns": 1,
+                                    "transcript": [
+                                        {"turn": 1, "role": "simulated_user", "text": "per-run primed answer"}
+                                    ],
+                                    "tool_calls": [{"name": "search_objects", "result": "row data"}],
+                                },
+                            }
+                        ],
                     }
                 },
             }
@@ -98,6 +120,53 @@ def test_redact_drops_the_transcript_but_keeps_the_turn_count():
     detail = _embedded(html)["runs"]["Model A"]["items"]["item-1"]["detail"]
     assert "transcript" not in detail
     assert detail["turns"] == 2
+
+
+def test_redact_reaches_inside_failed_runs():
+    """Per-run records carry their own ids and their own raw reasoning.
+
+    Redacting only the item's top level left the identical content one level down: the
+    top-level `reasoning` was dropped while the same text survived verbatim in
+    `failed_runs`, in a report labelled customer-safe.
+    """
+    html = build_html(_doc("gpt-5", False), redact=True)
+
+    assert "run-conv-secret" not in html
+    assert "run-resp-secret" not in html
+    assert "per-run internal thoughts" not in html
+
+    run = _embedded(html)["runs"]["Model A"]["items"]["item-1"]["failed_runs"][0]
+    assert "conversation_id" not in run
+    assert "response_id" not in run
+    assert "reasoning_steps" not in run
+    # What the run actually did survives -- the same line the top level draws.
+    assert run["run_index"] == 2
+    assert run["passed"] is False
+    assert run["reasoning_step_count"] == 1
+    assert run["tool_names"] == ["search_objects"]
+    assert run["latency_s"] == 3.5
+
+
+def test_redact_reaches_inside_a_failed_run_s_own_detail():
+    """A per-run `detail` carries the same transcript and tool payloads as the top one."""
+    html = build_html(_doc("gpt-5", False), redact=True)
+
+    assert "per-run primed answer" not in html
+    assert "row data" not in html
+
+    detail = _embedded(html)["runs"]["Model A"]["items"]["item-1"]["failed_runs"][0]["detail"]
+    assert "transcript" not in detail
+    assert "tool_calls" not in detail
+    assert detail["turns"] == 1
+    assert detail["metrics_correct"] is False
+
+
+def test_failed_runs_survive_an_unredacted_report():
+    """The field is diagnostic data; only `--redact` strips it."""
+    run = _embedded(build_html(_doc("gpt-5", False)))["runs"]["gpt-5"]["items"]["item-1"]["failed_runs"][0]
+
+    assert run["conversation_id"] == "run-conv-secret"
+    assert run["reasoning_steps"] == ["**Thinking**\n\nper-run internal thoughts"]
 
 
 def test_closing_script_tag_in_data_cannot_break_out():

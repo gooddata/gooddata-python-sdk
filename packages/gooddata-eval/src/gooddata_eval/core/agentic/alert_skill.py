@@ -12,6 +12,7 @@ from typing import Any
 from gooddata_sdk import GoodDataSdk
 
 from gooddata_eval.core.agentic._catalog import AnomalyDetectionGranularity, CatalogMetricAlert
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -659,12 +660,18 @@ def run_agentic_alert_skill(
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
+    user_context: dict | None = None,
 ) -> AgenticAlertSummary:
     """Run the alert-skill agentic evaluation K times and return a summary."""
     expected = _normalize_expected_output(expected_output)
     run_results: list[AlertRunResult] = []
     client = ChatClient(
-        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+        host=host,
+        token=token,
+        workspace_id=workspace_id,
+        reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
+        user_context=user_context,
     )
     sdk = GoodDataSdk.create(host, token)
 
@@ -840,6 +847,33 @@ class AlertSkillAssertionError(AgenticAssertionError):
     """Raised when an alert-skill evaluation fails."""
 
 
+def _run_detail(run: AlertRunResult) -> dict:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Extracted so a failing run is described by exactly the same keys as the winning run --
+    for this kind that means the full per-field check breakdown and the arguments the run sent.
+    """
+    ev = run.eval
+    return {
+        "alert_created": ev.alert_created,
+        "operator_correct": ev.operator_correct,
+        "threshold_correct": ev.threshold_correct,
+        "trigger_correct": ev.trigger_correct,
+        "filters_correct": ev.filters_correct,
+        "metric_correct": ev.metric_correct,
+        "recipients_correct": ev.recipients_correct,
+        "attributes_correct": ev.attributes_correct,
+        "granularity_correct": ev.granularity_correct,
+        "actual_alert_arguments": run.actual_alert_arguments,
+        # Why the loop stopped. alert_created=False alone cannot tell a refusal from a run
+        # that hit max_iterations while still on track -- see LoopExit. Per-run rather than
+        # best-only: on a failing run it is the first thing worth reading.
+        "exit_reason": run.exit_reason.value,
+        "turns_used": run.turns_used,
+        **timeline_detail(run.tool_call_events, run.reasoning_step_events),
+    }
+
+
 def evaluate_agentic_alert_skill(
     host: str,
     token: str,
@@ -858,6 +892,7 @@ def evaluate_agentic_alert_skill(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    user_context: dict | None = None,
     gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run alert-skill evaluation, log to Langfuse, and raise AlertSkillAssertionError on failure.
@@ -881,6 +916,7 @@ def evaluate_agentic_alert_skill(
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
+        user_context=user_context,
     )
 
     if langfuse is not None and dataset_item_id:
@@ -945,24 +981,16 @@ def evaluate_agentic_alert_skill(
 
     best = summary.best
     ev = best.eval
-    detail = {
-        "alert_created": ev.alert_created,
-        "operator_correct": ev.operator_correct,
-        "threshold_correct": ev.threshold_correct,
-        "trigger_correct": ev.trigger_correct,
-        "filters_correct": ev.filters_correct,
-        "metric_correct": ev.metric_correct,
-        "recipients_correct": ev.recipients_correct,
-        "attributes_correct": ev.attributes_correct,
-        "granularity_correct": ev.granularity_correct,
-        "actual_alert_arguments": best.actual_alert_arguments,
-        # Why the loop stopped. alert_created=False alone cannot tell a refusal from a run
-        # that hit max_iterations while still on track -- see LoopExit.
-        "exit_reason": best.exit_reason.value,
-        "turns_used": best.turns_used,
-        "max_iterations": max_iterations,
-        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
-    }
+    # max_iterations is the same for every run, so it stays at the item level rather than
+    # being repeated into each failing run's detail.
+    detail = {**_run_detail(best), "max_iterations": max_iterations}
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.eval.strict_pass,
+        detail=_run_detail,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
@@ -982,6 +1010,7 @@ def evaluate_agentic_alert_skill(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
+        exc.failed_runs = failed_runs
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -990,4 +1019,7 @@ def evaluate_agentic_alert_skill(
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        # Also on the success path: pass@K clears the gate with one passing run, so a
+        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        failed_runs=failed_runs,
     )

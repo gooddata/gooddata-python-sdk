@@ -9,8 +9,10 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
+from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import GoodDataSdk
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -50,6 +52,9 @@ except ImportError:
 
 _DEFAULT_K = 1
 _DEFAULT_MAX_ITERATIONS = 7
+# Seconds to wait before each check that a deleted metric stayed deleted, so the checks fall
+# 3, 6 and 12 seconds after the delete; see _delete_metric.
+_DELETE_RECHECK_DELAYS_S: tuple[float, ...] = (3.0, 3.0, 6.0)
 
 
 def _best_maql_match(actual_maql: str, expected_outputs: list[dict]) -> tuple[bool, str]:
@@ -238,11 +243,53 @@ def _delete_metric(sdk: GoodDataSdk, workspace_id: str, metric_id: str) -> None:
     MAQL) and the assertion fails. Deleting the created metric on the way out keeps
     the workspace clean for the next run. Best-effort: failures are logged, not raised.
     Mirrors ``alert_skill._delete_alert``.
+
+    A delete does not stay done on its own. ``create_metric`` reads the whole analytics
+    model and writes it back, so a concurrent test whose read preceded this delete
+    restores the metric when its write lands. The metric is therefore checked again after
+    each of ``_DELETE_RECHECK_DELAYS_S`` and deleted again while it is still there.
     """
+    if not _try_delete_metric(sdk, workspace_id, metric_id):
+        return
+    for delay in _DELETE_RECHECK_DELAYS_S:
+        time.sleep(delay)
+        if not _metric_exists(sdk, workspace_id, metric_id):
+            return
+        print(f"[CLEANUP] Metric {metric_id} is back or could not be checked; deleting again")
+        if not _try_delete_metric(sdk, workspace_id, metric_id):
+            return
+    if _DELETE_RECHECK_DELAYS_S:
+        # Every check found it back, so the last delete is unverified: say so rather than
+        # report a clean workspace. The post-run reset is what removes it for good.
+        print(
+            f"[CLEANUP] Metric {metric_id} was back or unchecked at all {len(_DELETE_RECHECK_DELAYS_S)} checks; "
+            "the last delete is not verified and the metric may remain"
+        )
+
+
+def _try_delete_metric(sdk: GoodDataSdk, workspace_id: str, metric_id: str) -> bool:
+    """Delete the metric; True when it is gone afterwards, a 404 included."""
     try:
         sdk._client.entities_api.delete_entity_metrics(workspace_id, metric_id)
+    except NotFoundException:
+        return True
     except Exception as exc:
         print(f"[CLEANUP] Failed to delete metric {metric_id}: {exc}")
+        return False
+    return True
+
+
+def _metric_exists(sdk: GoodDataSdk, workspace_id: str, metric_id: str) -> bool:
+    """Whether the metric may still be in the workspace. Only a 404 reads as absent; any other
+    lookup failure reads as present, so the caller deletes again rather than leave a restored
+    metric behind. The recheck delays bound how often that happens."""
+    try:
+        sdk._client.entities_api.get_entity_metrics(workspace_id, metric_id)
+    except NotFoundException:
+        return False
+    except Exception as exc:
+        print(f"[CLEANUP] Could not check metric {metric_id}: {exc}")
+    return True
 
 
 def _execute_single_metric_run(
@@ -396,6 +443,7 @@ def run_agentic_metric_skill(
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
+    user_context: dict | None = None,
 ) -> AgenticMetricSummary:
     """Run the metric-skill agentic evaluation K times and return a summary.
 
@@ -405,7 +453,12 @@ def run_agentic_metric_skill(
     expected_outputs: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
     run_results: list[MetricRunResult] = []
     client = ChatClient(
-        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+        host=host,
+        token=token,
+        workspace_id=workspace_id,
+        reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
+        user_context=user_context,
     )
     sdk = GoodDataSdk.create(host, token)
 
@@ -467,6 +520,7 @@ def evaluate_agentic_metric_skill(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    user_context: dict | None = None,
     gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run metric-skill evaluation, log to Langfuse, and raise MetricSkillAssertionError on failure.
@@ -490,6 +544,7 @@ def evaluate_agentic_metric_skill(
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
+        user_context=user_context,
     )
 
     if langfuse is not None and dataset_item_id:
@@ -549,18 +604,35 @@ def evaluate_agentic_metric_skill(
 
     best = summary.best
     expected_outputs_list: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
-    detail = {
-        "metric_created": best.metric_created,
-        "maql_correct": best.maql_correct,
-        "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
-        "actual_maql": best.actual_maql,
-        # Why the loop stopped. metric_created=False alone cannot tell a refusal from a run
-        # that hit max_iterations while still on track -- see LoopExit.
-        "exit_reason": best.exit_reason.value,
-        "turns_used": best.turns_used,
-        "max_iterations": max_iterations,
-        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
-    }
+
+    def _run_detail(run: MetricRunResult) -> dict:
+        """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+        Extracted so a failing run is described by exactly the same keys as the winning run --
+        for this kind that means the MAQL the run actually produced, which is the whole diagnosis.
+        """
+        return {
+            "metric_created": run.metric_created,
+            "maql_correct": run.maql_correct,
+            "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
+            "actual_maql": run.actual_maql,
+            # Why the loop stopped. metric_created=False alone cannot tell a refusal from a
+            # run that hit max_iterations while still on track -- see LoopExit.
+            "exit_reason": run.exit_reason.value,
+            "turns_used": run.turns_used,
+            **timeline_detail(run.tool_call_events, run.reasoning_step_events),
+        }
+
+    # max_iterations is the same for every run, so it stays at the item level rather than
+    # being repeated into each failing run's detail.
+    detail = {**_run_detail(best), "max_iterations": max_iterations}
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.metric_created and r.maql_correct,
+        detail=_run_detail,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
@@ -578,6 +650,7 @@ def evaluate_agentic_metric_skill(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
+        exc.failed_runs = failed_runs
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -587,4 +660,7 @@ def evaluate_agentic_metric_skill(
         response_id=best.response_id,
         detail=detail,
         timings=item_timings,
+        # Also on the success path: pass@K clears the gate with one passing run, so a
+        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        failed_runs=failed_runs,
     )

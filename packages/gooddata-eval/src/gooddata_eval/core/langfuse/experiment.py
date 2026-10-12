@@ -44,6 +44,15 @@ def experiment_id_for(run_name: str) -> str:
     return str(uuid.uuid5(_EXPERIMENT_NAMESPACE, run_name))
 
 
+def trace_tags(*tags: str | None) -> tuple[str, ...]:
+    """The non-empty `tags` in first-seen order, each once.
+
+    Callers list the automatic tags before the user's own, so a custom tag that repeats an
+    automatic one keeps the automatic tag's position.
+    """
+    return tuple(dict.fromkeys(tag for tag in tags if tag))
+
+
 @dataclass(frozen=True)
 class ExperimentRun:
     name: str

@@ -10,6 +10,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -35,6 +36,7 @@ from gooddata_eval.core.evaluators.visualization import (
     _check_visualization_skill_activated,
     _evaluate_against_candidates,
     evaluation_result_detail,
+    with_execution,
 )
 from gooddata_eval.core.models import (
     AgenticAssertionError,
@@ -189,6 +191,7 @@ def _execute_single_run(
     question: str,
     expected_outputs: list[CreatedVisualization],
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
+    requires_execution: bool = False,
 ) -> RunResult:
     """Drive one full multi-turn conversation and evaluate the result."""
     total_turns = 0
@@ -214,6 +217,9 @@ def _execute_single_run(
         # K-run already completed along with any exit_reason.
         print(f"[CHAT] send_message failed for conversation {conversation_id}: {exc}")
         current_result = getattr(exc, "partial_result", None) or ChatResult()
+        # The loop that collects events does not run after CHAT_ERROR, so a partial result's
+        # chart executions are added here.
+        all_tool_call_events.extend(current_result.tool_call_events)
         exit_reason = LoopExit.CHAT_ERROR
     # Counted here, not at the top of the loop: this request is sent unconditionally, so
     # with max_iterations=0 the loop body never runs and total_turns would report 0 turns
@@ -265,6 +271,9 @@ def _execute_single_run(
             partial = getattr(exc, "partial_result", None)
             if partial is not None:
                 current_result = partial
+                # The loop adds a turn's events at its next pass, which a break skips. The
+                # partial result is scored, so its chart executions count too.
+                all_tool_call_events.extend(partial.tool_call_events)
             exit_reason = LoopExit.CHAT_ERROR
             break
 
@@ -274,6 +283,7 @@ def _execute_single_run(
         actual_output = current_result.created_visualizations.objects[0]
 
     eval_result, best_expected = _evaluate_against_candidates(expected_outputs, actual_output, skill_activated)
+    eval_result = with_execution(eval_result, all_tool_call_events, current_result.text_response, requires_execution)
 
     return RunResult(
         conversation_id=conversation_id,
@@ -301,6 +311,8 @@ def run_agentic_visualization(
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
+    user_context: dict | None = None,
+    requires_execution: bool = False,
 ) -> AgenticRunSummary:
     """Run K independent conversations and return evaluation results.
 
@@ -308,16 +320,25 @@ def run_agentic_visualization(
     (e.g. one created by a Tavern YAML POST). Subsequent runs always create
     fresh conversations. Caller-supplied conversations are not deleted; all
     conversations created by this function are deleted on completion.
+
+    ``requires_execution`` fails a run whose agent built the chart but never ran it.
     """
     client = ChatClient(
-        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+        host=host,
+        token=token,
+        workspace_id=workspace_id,
+        reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
+        user_context=user_context,
     )
     run_results: list[RunResult] = []
 
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
-            run_results.append(_execute_single_run(client, conv_id_0, question, expected_outputs, max_iterations))
+            run_results.append(
+                _execute_single_run(client, conv_id_0, question, expected_outputs, max_iterations, requires_execution)
+            )
         finally:
             if initial_conversation_id is None:
                 client.delete_conversation(conv_id_0)
@@ -325,7 +346,9 @@ def run_agentic_visualization(
         for _ in range(1, k):
             conv_id = client.create_conversation()
             try:
-                run_results.append(_execute_single_run(client, conv_id, question, expected_outputs, max_iterations))
+                run_results.append(
+                    _execute_single_run(client, conv_id, question, expected_outputs, max_iterations, requires_execution)
+                )
             finally:
                 client.delete_conversation(conv_id)
     finally:
@@ -345,6 +368,23 @@ def run_agentic_visualization(
 
 class VisualizationAssertionError(AgenticAssertionError):
     """Raised when a visualization evaluation fails."""
+
+
+def _run_detail(run: RunResult) -> dict:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Extracted so a failing run is described by exactly the same keys as the winning run --
+    for this kind that means the full per-check breakdown, including the expected/actual
+    filter pairs, which is what tells a wrong filter apart from a wrong metric.
+    """
+    return {
+        **evaluation_result_detail(run.eval_result),
+        # Why the loop stopped -- see LoopExit. total_turns is already the turn count for
+        # this run, so it doubles as turns_used.
+        "exit_reason": run.exit_reason.value,
+        "turns_used": int(run.total_turns),
+        **timeline_detail(run.tool_call_events, run.reasoning_step_events),
+    }
 
 
 def _filter_diff(category: str, ev: EvaluationResult) -> str:
@@ -378,6 +418,8 @@ def evaluate_agentic_visualization(
     record_output_path: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    user_context: dict | None = None,
+    requires_execution: bool = False,
     gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run visualization evaluation, log to Langfuse, and raise VisualizationAssertionError on failure.
@@ -400,6 +442,8 @@ def evaluate_agentic_visualization(
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
+        user_context=user_context,
+        requires_execution=requires_execution,
     )
 
     if langfuse is not None and dataset_item_id:
@@ -420,6 +464,8 @@ def evaluate_agentic_visualization(
                     "assertion-vis-filters": ev.filters_correct,
                     "assertion-vis-type": ev.viz_type_hard,
                 }
+                if ev.requires_execution:
+                    strict_checks["assertion-vis-executed"] = ev.executed
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
                     ctx.score(tid, name="assertion-cross-ref-valid", value=ev.cross_ref_valid, data_type="BOOLEAN")
                     ctx.score(tid, name="assertion-vis-metric", value=ev.metrics_correct, data_type="BOOLEAN")
@@ -427,6 +473,10 @@ def evaluate_agentic_visualization(
                     ctx.score(tid, name="assertion-vis-filters", value=ev.filters_correct, data_type="BOOLEAN")
                     ctx.score(tid, name="assertion-vis-type", value=ev.viz_type_hard, data_type="BOOLEAN")
                     ctx.score(tid, name="skill_selection", value=ev.skill_activated, data_type="BOOLEAN")
+                    # Scored on every item, gating or not, so the run rate is visible per model.
+                    ctx.score(tid, name="assertion-vis-executed", value=ev.executed, data_type="BOOLEAN")
+                    if ev.stated_value_matches is not None:
+                        ctx.score(tid, name="stated-value-matches", value=ev.stated_value_matches, data_type="BOOLEAN")
                     # Superseded by log_gate_scores' K-stable names, kept until the readers
                     # migrate: gdc-nas combo_report.py matches on the literal "pass_at_2".
                     ctx.score(tid, name=f"pass_at_{K}", value=summary.pass_at_k, data_type="BOOLEAN")
@@ -479,15 +529,18 @@ def evaluate_agentic_visualization(
 
     best = summary.best
     ev = best.eval_result
-    detail = {
-        **evaluation_result_detail(ev),
-        # Why the loop stopped -- see LoopExit. total_turns is already the turn count for
-        # this run, so it doubles as turns_used.
-        "exit_reason": best.exit_reason.value,
-        "turns_used": int(best.total_turns),
-        "max_iterations": max_iterations,
-        **timeline_detail(best.tool_call_events, best.reasoning_step_events),
-    }
+    # max_iterations is the same for every run, so it stays at the item level rather than
+    # being repeated into each failing run's detail.
+    detail = {**_run_detail(best), "max_iterations": max_iterations}
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed. Every failing run keeps its own
+    # expected/actual check breakdown -- for this kind that is the whole diagnosis, and
+    # until now only the winning run's survived.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.eval_result.strict_pass,
+        detail=_run_detail,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
@@ -524,6 +577,8 @@ def evaluate_agentic_visualization(
             f"    attribute : {ev.filter_attribute_score}\n"
             f"{_filter_diff('attribute', ev)}"
             f"  Viz Type Hard         : {ev.viz_type_hard}\n"
+            f"  Executed              : {ev.executed}{' (required)' if ev.requires_execution else ''}\n"
+            f"  Stated Value Matches  : {ev.stated_value_matches} (reported only)\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
         )
         exc.reasoning_steps = best.reasoning_steps
@@ -532,6 +587,7 @@ def evaluate_agentic_visualization(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
+        exc.failed_runs = failed_runs
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -540,4 +596,7 @@ def evaluate_agentic_visualization(
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        # Also on the success path: pass@K clears the gate with one passing run, so a
+        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        failed_runs=failed_runs,
     )

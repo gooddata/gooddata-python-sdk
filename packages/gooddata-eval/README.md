@@ -574,6 +574,55 @@ The `expected_output` rubric:
 Each criterion is scored independently by the LLM judge, so `quality_score`
 is the fraction of satisfied criteria.
 
+### Items asked in a dashboard context (`user_context`)
+
+An item can be asked the way a user asks from an open dashboard or an attached widget.
+Its `user_context` is sent verbatim as `userContext` on every chat message of the item,
+follow-up and clarification messages included — the server treats a message without one
+as a cleared context. Requires the `enableAiContextSetup` feature flag on the target
+organization — without it the server ignores the dashboard view. Applies to chat items
+only; `dashboard_summary` items carry their scope in `summary_input` instead. No
+`userContext` key is sent at all when neither the item nor, for `agentic_conversation`,
+the current turn sets one.
+
+```json
+{
+  "id": "ctx-001",
+  "dataset_name": "my_dataset_ctx",
+  "test_kind": "general_question",
+  "question": "Which dashboard am I looking at, and what does it cover?",
+  "user_context": {
+    "view": {
+      "dashboard": {
+        "id": "sales_overview",
+        "title": "Sales Overview",
+        "widgets": [
+          {"widgetType": "insight", "widgetId": "w1", "title": "Revenue by Month", "visualizationId": "revenue_by_month"}
+        ]
+      }
+    }
+  },
+  "expected_output": "Names the Sales Overview dashboard and summarizes its charts."
+}
+```
+
+The schema belongs to the AI chat API (`UserContext`: `view.dashboard`,
+`referencedObjects`, `activeObject`), so it is not validated here beyond being an object.
+In a Langfuse dataset, put it in the item `metadata` (or in the `input` object) under
+`user_context`. An object in `input` wins and `metadata` is then not read; a missing or
+`null` value in `input` falls back to `metadata`. The value used must be an object or `null`;
+anything else fails the dataset load.
+
+`agentic_conversation` items take the item's `user_context` as the context of the first
+turn. A turn in `expected_output.turns` can set its own `user_context`, which applies
+from that turn on until another turn changes it, as the attached context does in the UI:
+
+| Turn | Context sent |
+|---|---|
+| no `user_context` key | the current one, unchanged |
+| `"user_context": {...}` | this one, from this turn on |
+| `"user_context": null` | none, from this turn on |
+
 ## Supported test kinds
 
 | test_kind | What the agent must produce | Extra required |
