@@ -249,3 +249,31 @@ def test_langfuse_sink_skips_scores_when_span_export_fails(monkeypatch, capsys):
     assert not any(r.url.path == "/api/public/scores" for r in calls)
     err = capsys.readouterr().err
     assert "span export failed" in err.lower()
+
+
+def _tags_from(requests: list[httpx.Request]) -> list[str]:
+    attrs = {a["key"]: a["value"] for a in _span_from(requests)["attributes"]}
+    return [v["stringValue"] for v in attrs["langfuse.trace.tags"]["arrayValue"]["values"]]
+
+
+def test_langfuse_sink_tags_without_custom_tags(monkeypatch):
+    requests: list[httpx.Request] = []
+    sink = _make_sink(monkeypatch, _known_item_handler(requests), provider_type="OPENAI", reasoning_effort="LOW")
+
+    sink.log_item(_passing_report(), dataset_item_id="item-1")
+
+    assert _tags_from(requests) == ["gd-eval", "visualization", "OPENAI", "effort-low"]
+
+
+def test_langfuse_sink_appends_custom_tags_after_the_automatic_ones(monkeypatch):
+    requests: list[httpx.Request] = []
+    sink = _make_sink(
+        monkeypatch,
+        _known_item_handler(requests),
+        provider_type="OPENAI",
+        tags=("acme", "gd-eval", "nightly", "acme"),
+    )
+
+    sink.log_item(_passing_report(), dataset_item_id="item-1")
+
+    assert _tags_from(requests) == ["gd-eval", "visualization", "OPENAI", "acme", "nightly"]

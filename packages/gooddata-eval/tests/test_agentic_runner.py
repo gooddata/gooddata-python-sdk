@@ -968,3 +968,15 @@ def test_run_agentic_items_surfaces_failed_runs_on_a_partial_pass():
         report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
     assert report.items[0].pass_at_k is True
     assert report.items[0].failed_runs == [_A_FAILED_RUN]
+
+
+@pytest.mark.parametrize(("tags", "expected_extra"), [((), None), (("acme", "nightly"), {"tags": ["acme", "nightly"]})])
+def test_run_agentic_items_passes_custom_tags_as_run_metadata(tags, expected_extra):
+    with patch(
+        "gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill",
+        return_value=AgenticEvalOutcome(detail={"alert_created": True}),
+    ) as mock_eval:
+        run_agentic_items(
+            [_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01", tags=tags
+        )
+    assert mock_eval.call_args.kwargs["run_metadata_extra"] == expected_extra

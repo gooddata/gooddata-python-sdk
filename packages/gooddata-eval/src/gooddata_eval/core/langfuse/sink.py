@@ -9,7 +9,12 @@ from datetime import datetime, timedelta, timezone
 from typing import TYPE_CHECKING, Any
 
 from gooddata_eval.core.langfuse.client import HttpxLangfuseClient
-from gooddata_eval.core.langfuse.experiment import ExperimentItem, ExperimentRun, build_experiment_root_span
+from gooddata_eval.core.langfuse.experiment import (
+    ExperimentItem,
+    ExperimentRun,
+    build_experiment_root_span,
+    trace_tags,
+)
 
 _MAX_LATENCY_S = 60.0
 _QUALITY_WEIGHT = 0.6
@@ -59,6 +64,7 @@ class LangfuseSink:
         provider_type: str = "",
         reasoning_effort: ReasoningEffort | None = None,
         *,
+        tags: tuple[str, ...] = (),
         transport: httpx.BaseTransport | None = None,
     ):
         self._dataset_name = dataset_name
@@ -66,6 +72,7 @@ class LangfuseSink:
         self._model_id = model_id
         self._provider_type = provider_type
         self._reasoning_effort = reasoning_effort
+        self._tags = tags
         self._client = HttpxLangfuseClient(timeout=10.0, transport=transport)
         self._warned_unlinkable = False
 
@@ -112,15 +119,12 @@ class LangfuseSink:
         start = end - timedelta(seconds=report.avg_latency_s)
         # "gd-eval" leads, exactly as on the agentic path, so one tag filter in Langfuse
         # finds both single-shot and agentic traces this package wrote.
-        tags = tuple(
-            t
-            for t in (
-                "gd-eval",
-                report.test_kind,
-                self._provider_type,
-                f"effort-{self._reasoning_effort.lower()}" if self._reasoning_effort else None,
-            )
-            if t
+        tags = trace_tags(
+            "gd-eval",
+            report.test_kind,
+            self._provider_type,
+            f"effort-{self._reasoning_effort.lower()}" if self._reasoning_effort else None,
+            *self._tags,
         )
         return build_experiment_root_span(
             run,
