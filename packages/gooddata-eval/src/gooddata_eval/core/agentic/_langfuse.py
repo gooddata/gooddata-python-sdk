@@ -227,6 +227,9 @@ def _fetch_joined_trace(langfuse: HttpxLangfuseClient, session_id: str, *_window
 
     Empty until every joined turn's ``conversation.send_message`` row is ingested: a turn row
     lands only when its turn ends, so an early read would cover the first turns alone.
+    ``joined_turns`` counts one per sent turn, but a turn the chat client retried after
+    gen-ai opened it leaves a row per attempt, so the count can be met while a later turn
+    is still in flight; the read then understates cost and latency.
     """
     trace_id = trace_ids_for(session_id)[0]
     rows = langfuse.list_observations_for_trace(trace_id)

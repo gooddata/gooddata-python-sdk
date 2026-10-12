@@ -15,7 +15,14 @@ from gooddata_eval.core.chat.sse_client import (
     parse_sse_lines,
 )
 from gooddata_eval.core.langfuse.experiment import experiment_id_for
-from gooddata_eval.core.langfuse.item_scope import ItemTraceScope, JoinedRun, item_scope, joined_run, trace_ids_for
+from gooddata_eval.core.langfuse.item_scope import (
+    ItemTraceScope,
+    JoinedRun,
+    item_scope,
+    joined_run,
+    joined_turns,
+    trace_ids_for,
+)
 from gooddata_eval.core.models import DatasetItem, ReasoningStepEvent, ToolCallEvent, build_latency_breakdown
 
 
@@ -1250,3 +1257,15 @@ def test_switch_on_without_a_scope_sends_no_new_baggage(monkeypatch: pytest.Monk
     _client_with_handler(_record_requests(requests)).send_message("conv-unscoped", "q")
 
     assert _baggage_of(requests) == [None]
+
+
+def test_a_turn_that_fails_after_response_started_still_counts_as_joined(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("GOODDATA_EVAL_JOIN_GENAI_TRACE", "1")
+    asked = trace_ids_for("conv-failed-turn")[0]
+    started = f"event: response_started\ndata: {json.dumps({'responseId': 'r1', 'traceId': asked})}\n\n".encode()
+    client = _client_with_handler(lambda _request: httpx.Response(200, content=started + _NONRETRY_SSE))
+
+    with item_scope(_SCOPE), pytest.raises(ChatError):
+        client.send_message("conv-failed-turn", "q")
+
+    assert joined_turns("conv-failed-turn") == 1

@@ -456,7 +456,7 @@ def test_a_throttled_batch_is_retried_whole_with_the_same_ids(make_client, monke
     assert [b["id"] for b in bodies[0]] == [b["id"] for b in bodies[1]]
 
 
-def test_a_throttled_batch_is_not_retried_once_the_wait_is_refused(make_client):
+def test_a_throttled_batch_is_not_retried_once_the_wait_is_refused(make_client, caplog):
     waits: list[float] = []
     calls: list[httpx.Request] = []
 
@@ -468,11 +468,11 @@ def test_a_throttled_batch_is_not_retried_once_the_wait_is_refused(make_client):
         waits.append(delay)
         return False
 
-    with pytest.raises(httpx.HTTPStatusError):
-        make_client(handler).create_scores([_score("a")], wait=refuse)
+    make_client(handler).create_scores([_score("a")], wait=refuse)
 
     assert waits == [60.0]
     assert len(calls) == 1
+    assert "failed to send 1 scores" in caplog.text
 
 
 def test_a_partly_rejected_batch_is_logged_and_not_retried(make_client, caplog):
@@ -486,3 +486,20 @@ def test_a_partly_rejected_batch_is_logged_and_not_retried(make_client, caplog):
 
     assert len(calls) == 1
     assert "1 of 2 scores rejected" in caplog.text
+
+
+def test_a_batch_that_keeps_failing_does_not_stop_the_batches_after_it(make_client, monkeypatch, caplog):
+    monkeypatch.setattr(client_module, "_SCORE_BATCH_SIZE", 2)
+    monkeypatch.setattr(client_module.time, "sleep", lambda _delay: None)
+    sent: list[list[str]] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        names = [score["name"] for score in json.loads(request.content)]
+        sent.append(names)
+        return httpx.Response(500, json={}) if "s2" in names else httpx.Response(202, json={})
+
+    make_client(handler).create_scores([_score(f"s{i}") for i in range(5)])
+
+    assert sent[0] == ["s0", "s1"]
+    assert sent[-1] == ["s4"]
+    assert "failed to send 2 scores" in caplog.text

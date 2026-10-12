@@ -5,6 +5,7 @@ import inspect
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timezone
 from typing import Any
 from unittest.mock import patch
 
@@ -20,6 +21,7 @@ from gooddata_eval.cli.agentic_runner import (
 )
 from gooddata_eval.core.agentic.alert_skill import AlertSkillAssertionError
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
+from gooddata_eval.core.langfuse.item_scope import ItemTraceScope, current_scope
 from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.timing import PhaseTimings
 
@@ -1028,3 +1030,35 @@ def test_every_kind_sends_run_zero_first(
     with patch.object(module, "ChatClient", return_value=client), pytest.raises(_FirstSend):
         getattr(module, run_fn)("https://h", "tok", "ws1", *args, initial_conversation_id="conv-run0", **kwargs)
     assert client.sent == ["conv-run0"]
+
+
+_SCOPED_KINDS = [(m, run_fn, evaluate_fn, expected) for m, run_fn, evaluate_fn, expected in _CLIENT_CONTEXT_KINDS] + [
+    ("conversation", "run_agentic_conversation", "evaluate_agentic_conversation", _MIN_CONVERSATION_FIXTURE)
+]
+
+
+@pytest.mark.parametrize(("module_name", "run_fn", "evaluate_fn", "expected"), _SCOPED_KINDS)
+def test_evaluate_agentic_runs_its_k_runs_inside_the_item_scope(
+    module_name: str, run_fn: str, evaluate_fn: str, expected: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("GOODDATA_EVAL_JOIN_GENAI_TRACE", "1")
+    module = importlib.import_module(f"gooddata_eval.core.agentic.{module_name}")
+    scope = ItemTraceScope("ds", True, "ds-1", "item-1")
+    seen: list[ItemTraceScope | None] = []
+
+    def run(*_args: Any, **_kwargs: Any) -> None:
+        seen.append(current_scope())
+        raise _Stop
+
+    if module_name == "conversation":
+        args: tuple = (module.ConversationFixture.model_validate(expected),)
+    else:
+        args = ("q", expected)
+    with (
+        patch.object(module, "open_item_trace", return_value=(None, datetime.now(timezone.utc), scope)),
+        patch.object(module, run_fn, side_effect=run),
+        pytest.raises(_Stop),
+    ):
+        getattr(module, evaluate_fn)("https://h", "tok", "ws1", *args)
+
+    assert seen == [scope]

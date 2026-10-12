@@ -189,8 +189,9 @@ class HttpxLangfuseClient:
         Each entry takes ``create_score``'s keyword arguments. An entry that cannot be sent (an
         unknown argument, a non-finite value) is logged and skipped, so it does not take the
         rest of its batch down with it. A batch Langfuse accepts only in part (207) is logged
-        and not retried: resending it would duplicate the accepted scores. ``wait`` serves each
-        retry delay; returning False gives up on the retry.
+        and not retried: resending it would duplicate the accepted scores. A batch that still
+        fails after its retries is logged and the next batch is sent anyway. ``wait`` serves
+        each retry delay; returning False gives up on the retry.
         """
         bodies: list[dict[str, Any]] = []
         for score in scores:
@@ -204,9 +205,13 @@ class HttpxLangfuseClient:
             bodies.append(body)
         for start in range(0, len(bodies), _SCORE_BATCH_SIZE):
             batch = bodies[start : start + _SCORE_BATCH_SIZE]
-            resp = self._post_scores(batch, wait)
-            if resp.status_code == 207:
-                result = resp.json()
+            try:
+                resp = self._post_scores(batch, wait)
+                result = resp.json() if resp.status_code == 207 else None
+            except (httpx.HTTPError, ValueError) as exc:
+                _log.warning("Langfuse: failed to send %d scores: %s", len(batch), exc)
+                continue
+            if result is not None:
                 _log.warning(
                     "Langfuse: %s of %d scores rejected: %s",
                     result.get("rejected"),
@@ -239,8 +244,9 @@ class HttpxLangfuseClient:
     def dataset_id_for_item(self, item_id: str) -> str | None:
         """The Langfuse dataset an item belongs to, or None when the id is not a Langfuse item.
 
-        Cached because a run resolves the same handful of datasets once per item, from the
-        linking pool's worker threads.
+        Cached because a run resolves the same handful of datasets once per item: from the
+        item's own thread when the gen-ai trace join is on, else from the linking pool's
+        worker threads.
         """
         with self._dataset_ids_lock:
             if item_id in self._dataset_ids:

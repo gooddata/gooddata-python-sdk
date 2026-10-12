@@ -441,3 +441,41 @@ def test_the_deferred_task_sends_every_run_s_scores_in_one_request():
 
     (bodies,) = _score_bodies(rec)
     assert len(bodies) == 4
+
+
+class _ExportRefused(_Recorder):
+    def _handle(self, request: httpx.Request) -> httpx.Response:
+        if request.url.path == _OTLP_PATH:
+            self.requests.append(request)
+            return httpx.Response(500, json={})
+        return super()._handle(request)
+
+
+def test_a_refused_root_export_scores_the_bare_trace_and_releases_the_join() -> None:
+    cid = "conv-join-export-refused"
+    mark_joined(cid, JoinedRun("ds_run0", "ds-1"))
+    rec = _ExportRefused()
+
+    with observe(rec.client, None, "item-1", "ds_run0", {}, window=_WINDOW, conversation_id=cid) as tid:
+        pass
+
+    assert tid.destinations() == [(trace_ids_for(cid)[0], None)]
+    assert joined_run(cid) is None
+
+
+def test_a_joined_trace_is_read_once_its_last_turn_lands(monkeypatch: pytest.MonkeyPatch) -> None:
+    cid = "conv-join-late-turn"
+    for _turn in range(2):
+        mark_joined(cid, JoinedRun("ds_run0", "ds-1"))
+    rec = _Recorder([row for row in _turn_rows(cid) if row["id"] != "t2"])
+
+    def turn_lands(_delay: float) -> bool:
+        rec.rows = _turn_rows(cid)
+        return True
+
+    monkeypatch.setattr(_langfuse, "_wait_between_attempts", turn_lands)
+
+    (trace,) = find_traces_per_conversation(rec.client, [cid], *_WINDOW).values()
+
+    assert len([r for r in rec.requests if r.url.path == _OBSERVATIONS_PATH]) == 2
+    assert trace.latency == 20.0
