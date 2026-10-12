@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 from unittest.mock import MagicMock, patch
 
-import gooddata_sdk
 import gooddata_sdk.table as table_module
 import pytest
+from gooddata_eval.core.agentic import dashboard_summary as dashboard_summary_module
 from gooddata_eval.core.agentic.dashboard_summary import (
     DashboardSummaryAssertionError,
     DashboardWidget,
@@ -346,15 +346,16 @@ def test_a_failed_conversation_creation_does_not_discard_completed_runs():
 
 
 def test_execute_widget_fails_loudly_when_the_sdk_moves_its_private_helpers():
-    """gooddata-sdk is depended on as ~=1.74.0, so a patch release may rename the private
+    """gooddata-sdk is depended on as ~=1.76.0, so a patch release may rename the private
     helpers this borrows. Without the check that surfaces as an AttributeError on the first
     widget of a run rather than as the dependency problem it is."""
     stripped = MagicMock(spec=[])  # a gooddata_sdk.table exposing none of the three helpers
     # Both bindings: `import a.b as c` reads the parent package's attribute, while
     # sys.modules is what keeps a re-import from restoring the real one.
+    # The module-level binding is what _execute_widget reads now that the import is at the
+    # top of the file, so patching sys.modules alone would no longer reach it.
     with (
-        patch.dict("sys.modules", {"gooddata_sdk.table": stripped}),
-        patch.object(gooddata_sdk, "table", stripped),
+        patch.object(dashboard_summary_module, "table_module", stripped),
         pytest.raises(RuntimeError, match="no longer provides"),
     ):
         _execute_widget(MagicMock(), "ws1", "viz-1")

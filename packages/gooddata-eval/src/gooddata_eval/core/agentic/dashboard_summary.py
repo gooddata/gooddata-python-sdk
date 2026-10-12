@@ -27,6 +27,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
+import gooddata_sdk.table as table_module
 import httpx
 from gooddata_sdk import GoodDataSdk
 
@@ -130,11 +131,9 @@ def _execute_widget(sdk: GoodDataSdk, workspace_id: str, visualization_id: str) 
     into an ExecutionTable and returns that instead of the response -- which discards the one
     field wanted here and pays for every row to do it. Two of the three helpers it delegates
     to are private, so they are checked up front: ``gooddata-sdk`` is depended on as
-    ``~=1.74.0`` and a patch release may rename them, which would otherwise surface as an
+    ``~=1.76.0`` and a patch release may rename them, which would otherwise surface as an
     AttributeError on the first widget of a run rather than as a dependency problem.
     """
-    import gooddata_sdk.table as table_module  # noqa: PLC0415 -- private helpers, imported at use site
-
     missing = [
         name
         for name in ("_vis_is_table", "_get_exec_for_pivot", "get_exec_for_non_pivot")
