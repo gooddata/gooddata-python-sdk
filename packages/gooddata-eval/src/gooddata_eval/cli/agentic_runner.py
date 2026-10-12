@@ -38,6 +38,7 @@ class _LfKw(TypedDict, total=False):
     model_version_override: str | None
     reasoning_effort: ReasoningEffort | None
     submit_trace_link: SubmitTraceLink
+    run_metadata_extra: dict[str, Any] | None
 
 
 AGENTIC_TEST_KINDS = frozenset(
@@ -152,11 +153,13 @@ def _dispatch_agentic(
     agent_id: str | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
     gate: EvalGate = DEFAULT_GATE,
+    run_metadata_extra: dict[str, Any] | None = None,
 ) -> AgenticEvalOutcome:
     """Call the appropriate evaluate_agentic_* function for the item's test_kind.
 
     `gate` reaches every kind except those in UNGATED_AGENTIC_TEST_KINDS, which have no K
     to gate over; the CLI refuses --gate power for a dataset containing one.
+    `run_metadata_extra` reaches every kind unchanged.
 
     Every evaluate_agentic_* function returns an AgenticEvalOutcome (reasoning_steps,
     conversation_id, response_id, detail) on success and attaches the same four attributes
@@ -172,6 +175,7 @@ def _dispatch_agentic(
         "model_version_override": model_version_override,
         "reasoning_effort": reasoning_effort,
         "submit_trace_link": submit_trace_link,
+        "run_metadata_extra": run_metadata_extra,
     }
 
     if kind in ("vis_agentic", "agentic_visualization"):
@@ -400,6 +404,7 @@ def run_agentic_items(
     agent_id: str | None = None,
     concurrency: int = 1,
     gate: EvalGate = DEFAULT_GATE,
+    tags: tuple[str, ...] = (),
 ) -> EvalReport:
     """Run agentic items through evaluate_agentic_* and return an EvalReport.
 
@@ -408,9 +413,14 @@ def run_agentic_items(
     from the parallel ones -- a metric being created and dropped mid-run would otherwise be
     visible to a catalog-reading item running alongside it.
 
+    ``tags`` are added to every Langfuse trace gd-eval writes for these items, after the
+    automatic ones. They reach Langfuse whenever trace linking runs, with or without
+    ``use_langfuse``.
+
     Results are collected in dataset order regardless of completion order.
     """
     langfuse = make_langfuse_client() if use_langfuse else None
+    run_metadata_extra: dict[str, Any] | None = {"tags": list(tags)} if tags else None
 
     report = EvalReport(model=model_version, gate=normalize_gate(gate))
     total = len(items)
@@ -452,6 +462,7 @@ def run_agentic_items(
                 agent_id,
                 submit_trace_link=linker.submit,
                 gate=gate,
+                run_metadata_extra=run_metadata_extra,
             )
             if isinstance(outcome, AgenticEvalOutcome):
                 reasoning_steps = outcome.reasoning_steps
