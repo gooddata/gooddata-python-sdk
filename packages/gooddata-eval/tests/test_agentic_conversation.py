@@ -869,7 +869,7 @@ def test_run_agentic_conversation_sends_the_next_turn_after_a_self_corrected_ret
         )
 
     assert mock_client.send_message.call_count == 2
-    mock_client.send_message.assert_any_call("conv-1", "Chart it")
+    mock_client.send_message.assert_any_call("conv-1", "Chart it", user_context=None)
     assert result.turn_results[0].skill_success is True
     assert result.turn_results[1].no_error is True
     assert result.conversation_success is True
@@ -1494,12 +1494,13 @@ def _run(
     client.send_message.side_effect = replies
     fixture = ConversationFixture(id="c", expected_skills=["visualization"], turns=turns)
     with (
-        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=client),
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=client) as client_cls,
         patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
     ):
         result = run_agentic_conversation(
             host="h", token="t", workspace_id="ws", fixture=fixture, mode=mode, clarification_judge=judge, **kw
         )
+    client.constructor_call = client_cls.call_args
     return result, client
 
 
@@ -2060,3 +2061,93 @@ def test_context_kept_rate_is_scored_when_there_are_dependent_turns() -> None:
     scores = {c.kwargs["name"]: c.kwargs["value"] for c in ctx.score.call_args_list}
     assert scores["context_kept_rate"] == 1.0
     assert scores["turns_before_first_break"] == 2
+
+
+_DASHBOARD_A = {"view": {"dashboard": {"id": "dashboard_000", "title": "Sales Performance Overview"}}}
+_DASHBOARD_B = {"view": {"dashboard": {"id": "dashboard_025", "title": "Gross Margin Bridge"}}}
+
+
+def _sent_contexts(client: MagicMock) -> list:
+    return [c.kwargs["user_context"] for c in client.send_message.call_args_list]
+
+
+def test_user_context_sticks_from_the_turn_that_sets_it_until_another_turn_changes_it() -> None:
+    turns = [
+        _viz_turn("t1", expected=_viz()),
+        _viz_turn("t2", expected=_viz(), user_context=_DASHBOARD_B),
+        _viz_turn("t3", expected=_viz()),
+        _viz_turn("t4", expected=_viz(), user_context=None),
+        _viz_turn("t5", expected=_viz()),
+    ]
+    _, client = _run(
+        [_result(viz=_viz(), tools=[_SKILLS]) for _ in turns], turns, mode="legacy", user_context=_DASHBOARD_A
+    )
+    # t1 inherits the conversation's context, t3 keeps t2's, and an explicit null clears it.
+    assert _sent_contexts(client) == [_DASHBOARD_A, _DASHBOARD_B, _DASHBOARD_B, None, None]
+
+
+def test_user_context_rides_on_the_simulated_users_clarification_replies() -> None:
+    """gen-ai treats a message without a context as cleared, so a reply sent bare would answer
+    the clarified question with no scope."""
+    turns = [_viz_turn("t1", expected=_viz(), user_context=_DASHBOARD_B)]
+    with patch("gooddata_eval.core.agentic.conversation._get_sim_user_response", return_value="Go ahead."):
+        _, client = _run(
+            [_result(text="Which store format do you mean?"), _result(viz=_viz(), tools=[_SKILLS])],
+            turns,
+            mode="legacy",
+            max_clarification_turns=1,
+        )
+    assert _sent_contexts(client) == [_DASHBOARD_B, _DASHBOARD_B]
+
+
+def test_a_skipped_turn_still_changes_the_user_context() -> None:
+    turns = [
+        TurnDefinition(
+            turn_id="t1",
+            message="chart it",
+            expected_skill="visualization",
+            expected_output={"metrics": ["metric/$ref:missing.metric_id"]},
+            user_context=_DASHBOARD_B,
+        ),
+        _viz_turn("t2", expected=_viz()),
+    ]
+    result, client = _run([_result(viz=_viz(), tools=[_SKILLS])], turns, mode="legacy")
+    assert result.turn_results[0].mismatches  # t1 never ran
+    assert _sent_contexts(client) == [_DASHBOARD_B]
+
+
+def test_turn_user_context_null_survives_fixture_parsing_as_an_explicit_clear() -> None:
+    """An explicit null clears the context while an absent key keeps it, so parsing a
+    Langfuse fixture must tell the two apart."""
+    fixture = ConversationFixture.model_validate(
+        {
+            "id": "c",
+            "expected_skills": ["visualization"],
+            "turns": [
+                {"turn_id": "t1", "message": "m", "expected_skill": "visualization", "user_context": None},
+                {"turn_id": "t2", "message": "m", "expected_skill": "visualization"},
+            ],
+        }
+    )
+    assert "user_context" in fixture.turns[0].model_fields_set
+    assert "user_context" not in fixture.turns[1].model_fields_set
+
+
+def test_the_chat_client_is_built_without_a_user_context() -> None:
+    """A per-call None falls back to the client's context, so one bound at construction
+    would make a turn's explicit null resend it instead of clearing it."""
+    turns = [_viz_turn("t1", expected=_viz(), user_context=None)]
+    _, client = _run([_result(viz=_viz(), tools=[_SKILLS])], turns, mode="legacy", user_context=_DASHBOARD_A)
+    assert client.constructor_call.kwargs.get("user_context") is None
+
+
+def test_a_fixture_level_user_context_is_rejected() -> None:
+    with pytest.raises(ValueError, match="item metadata or input"):
+        ConversationFixture.model_validate(
+            {
+                "id": "c",
+                "expected_skills": ["visualization"],
+                "user_context": _DASHBOARD_A,
+                "turns": [{"turn_id": "t1", "message": "m", "expected_skill": "visualization"}],
+            }
+        )

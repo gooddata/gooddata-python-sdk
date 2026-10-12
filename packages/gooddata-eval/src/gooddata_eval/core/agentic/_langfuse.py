@@ -21,6 +21,7 @@ from gooddata_eval.core.langfuse.experiment import (
     ExperimentRun,
     ScoreTarget,
     build_experiment_root_span,
+    trace_tags,
 )
 
 # Part of this module's public surface: external callers import both names from here.
@@ -302,7 +303,10 @@ def _experiment_root_span(
     """gd-eval's own root span for one (dataset item, run) -- the whole experiment item."""
     start, end = _span_window(trace, window)
     session_id = conversation_id or getattr(trace, "session_id", None)
-    tags = tuple(tag for tag in ("gd-eval", run_metadata.get("testing_framework")) if tag)
+    custom_tags = run_metadata.get("tags") or ()
+    if isinstance(custom_tags, str):
+        custom_tags = (custom_tags,)
+    tags = trace_tags("gd-eval", run_metadata.get("testing_framework"), *custom_tags)
     # One predicate for both the name and the input, so a falsy question cannot name the span
     # after the item while the input still says "question".
     has_input = item_input is not None
@@ -514,7 +518,8 @@ def build_run_context(
         model_version_override: Explicit model-version tag; when set it wins over the
             workspace lookup.
         run_metadata_extra: Optional extra key/values added to the dataset-run metadata
-            (e.g. a testing-framework tag or a CI run id for scoping). Default None keeps
+            (e.g. a testing-framework tag or a CI run id for scoping). A `tags` list is
+            also added to the trace tags, after the automatic ones. Default None keeps
             behavior unchanged. The SDK-derived model_version is applied last and cannot
             be overwritten by this dict.
         reasoning_effort: Effort the run requested, stamped into both the run name and

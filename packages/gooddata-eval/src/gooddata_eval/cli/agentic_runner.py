@@ -15,6 +15,7 @@ from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
 from gooddata_eval.core.agentic.anomaly_detection import evaluate_agentic_anomaly_detection
 from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluate_agentic_conversation
 from gooddata_eval.core.agentic.dashboard_skill import evaluate_agentic_dashboard_skill
+from gooddata_eval.core.agentic.document_skill import evaluate_agentic_document_skill
 from gooddata_eval.core.agentic.forecasting import evaluate_agentic_forecasting
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
@@ -24,6 +25,8 @@ from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
 from gooddata_eval.core.agentic.what_if import evaluate_agentic_what_if
 from gooddata_eval.core.config import ReasoningEffort
+from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
+from gooddata_eval.core.evaluators.visualization import requires_execution_of
 from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
 
@@ -36,6 +39,7 @@ class _LfKw(TypedDict, total=False):
     model_version_override: str | None
     reasoning_effort: ReasoningEffort | None
     submit_trace_link: SubmitTraceLink
+    run_metadata_extra: dict[str, Any] | None
 
 
 AGENTIC_TEST_KINDS = frozenset(
@@ -45,6 +49,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_metric_skill",
         "agentic_alert_skill",
         "agentic_dashboard_skill",
+        "agentic_document_skill",
         "agentic_search",
         "agentic_general_question",
         "agentic_guardrail",
@@ -96,7 +101,8 @@ PARALLEL_SAFE_TEST_KINDS = frozenset(
 #
 # agentic_dashboard_skill is absent by default rather than by evidence: gen-ai holds the draft and
 # any chart it authors in conversation state and writes neither until a user saves from the UI, so
-# it is a candidate for the allowlist once the dataset has runs behind it.
+# it is a candidate for the allowlist once the dataset has runs behind it. agentic_document_skill is
+# absent for the same reason: the document draft stays in conversation state until a user saves it.
 WORKSPACE_MUTATING_TEST_KINDS = frozenset(AGENTIC_TEST_KINDS) - PARALLEL_SAFE_TEST_KINDS
 
 
@@ -149,11 +155,13 @@ def _dispatch_agentic(
     agent_id: str | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
     gate: EvalGate = DEFAULT_GATE,
+    run_metadata_extra: dict[str, Any] | None = None,
 ) -> AgenticEvalOutcome:
     """Call the appropriate evaluate_agentic_* function for the item's test_kind.
 
     `gate` reaches every kind except those in UNGATED_AGENTIC_TEST_KINDS, which have no K
     to gate over; the CLI refuses --gate power for a dataset containing one.
+    `run_metadata_extra` reaches every kind unchanged.
 
     Every evaluate_agentic_* function returns an AgenticEvalOutcome (reasoning_steps,
     conversation_id, response_id, detail) on success and attaches the same four attributes
@@ -169,6 +177,7 @@ def _dispatch_agentic(
         "model_version_override": model_version_override,
         "reasoning_effort": reasoning_effort,
         "submit_trace_link": submit_trace_link,
+        "run_metadata_extra": run_metadata_extra,
     }
 
     if kind in ("vis_agentic", "agentic_visualization"):
@@ -178,9 +187,11 @@ def _dispatch_agentic(
             workspace_id=workspace_id,
             question=item.question,
             expected_outputs=_parse_visualization_expected(eo),
+            requires_execution=requires_execution_of(eo),
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_metric_skill":
@@ -193,6 +204,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_dashboard_skill":
@@ -205,6 +217,20 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
+            **lf_kw,
+        )
+    elif kind == "agentic_document_skill":
+        return evaluate_agentic_document_skill(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo,
+            k=k,
+            gate=gate,
+            agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_alert_skill":
@@ -217,6 +243,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_search":
@@ -232,6 +259,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_general_question":
@@ -257,6 +285,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_kda_skill":
@@ -269,6 +298,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_forecasting":
@@ -281,6 +311,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_what_if":
@@ -291,7 +322,9 @@ def _dispatch_agentic(
             question=item.question,
             expected_output=eo if isinstance(eo, dict) else {},
             k=k,
+            gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_anomaly_detection":
@@ -304,6 +337,7 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_conversation":
@@ -314,6 +348,7 @@ def _dispatch_agentic(
             workspace_id=workspace_id,
             fixture=ConversationFixture.model_validate(fixture_data),
             agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     else:
@@ -339,6 +374,20 @@ def _apply_run_counts(item_report: ItemReport, source: Any) -> None:
     unscored = (getattr(source, "detail", None) or {}).get("unscored_runs")
     if isinstance(unscored, int):
         item_report.runs_ungraded = unscored
+
+
+def _apply_failed_runs(item_report: ItemReport, source: Any) -> None:
+    """Copy the per-run failure records off an outcome or a failure, if the kind built any.
+
+    Read the same way from both, like the run counts above: a partially passing item raises,
+    so an item's failing runs reach the report through the exception at least as often as
+    through the outcome. A kind that builds none keeps the empty default, which reads as
+    "not instrumented" rather than "nothing failed" -- ``runs_passed``/``runs`` already say
+    how many failed.
+    """
+    failed_runs = getattr(source, "failed_runs", None)
+    if failed_runs:
+        item_report.failed_runs = list(failed_runs)
 
 
 def _apply_timings(item_report: ItemReport, timings: Any) -> None:
@@ -370,6 +419,7 @@ def run_agentic_items(
     agent_id: str | None = None,
     concurrency: int = 1,
     gate: EvalGate = DEFAULT_GATE,
+    tags: tuple[str, ...] = (),
 ) -> EvalReport:
     """Run agentic items through evaluate_agentic_* and return an EvalReport.
 
@@ -378,9 +428,14 @@ def run_agentic_items(
     from the parallel ones -- a metric being created and dropped mid-run would otherwise be
     visible to a catalog-reading item running alongside it.
 
+    ``tags`` are added to every Langfuse trace gd-eval writes for these items, after the
+    automatic ones. They reach Langfuse whenever trace linking runs, with or without
+    ``use_langfuse``.
+
     Results are collected in dataset order regardless of completion order.
     """
     langfuse = make_langfuse_client() if use_langfuse else None
+    run_metadata_extra: dict[str, Any] | None = {"tags": list(tags)} if tags else None
 
     report = EvalReport(model=model_version, gate=normalize_gate(gate))
     total = len(items)
@@ -422,6 +477,7 @@ def run_agentic_items(
                 agent_id,
                 submit_trace_link=linker.submit,
                 gate=gate,
+                run_metadata_extra=run_metadata_extra,
             )
             if isinstance(outcome, AgenticEvalOutcome):
                 reasoning_steps = outcome.reasoning_steps
@@ -440,6 +496,7 @@ def run_agentic_items(
             item_report.best_detail = detail or {}
             _apply_timings(item_report, getattr(outcome, "timings", None))
             _apply_run_counts(item_report, outcome)
+            _apply_failed_runs(item_report, outcome)
         except AssertionError as exc:
             item_report.gate_passed = False if gated else None
             item_report.runs = k
@@ -449,11 +506,32 @@ def run_agentic_items(
             item_report.best_detail = getattr(exc, "detail", None) or {}
             _apply_timings(item_report, getattr(exc, "timings", None))
             _apply_run_counts(item_report, exc)
+            _apply_failed_runs(item_report, exc)
             # Read off the counts, not off the gate: pass^K fails items where runs did pass,
             # and reporting those as pass_at_k False would contradict the Langfuse score of
             # the same name. Kinds that report no count read as 0, i.e. a clean failure.
             item_report.pass_at_k = item_report.runs_passed > 0
             print(f"[agentic] {item.id} FAIL: {exc}", flush=True)
+        except JudgeResponseError as exc:
+            # Errored, like the branch below -- there is no verdict for any run, so this is
+            # not K failures -- but NOT diagnostically empty. This is the one failure mode
+            # where the per-run records are most worth having: the judge broke, so what the
+            # agent actually said is still there to read, and the conversation ids are how
+            # anyone gets to it. Reported with the runs it really drove rather than 0.
+            item_report.error = f"{type(exc).__name__}: {exc}"
+            item_report.runs = getattr(exc, "runs_effective", None) or k
+            item_report.reasoning_steps = getattr(exc, "reasoning_steps", None) or []
+            item_report.conversation_id = getattr(exc, "conversation_id", None)
+            item_report.response_id = getattr(exc, "response_id", None)
+            item_report.best_detail = getattr(exc, "detail", None) or {}
+            _apply_timings(item_report, getattr(exc, "timings", None))
+            _apply_run_counts(item_report, exc)
+            _apply_failed_runs(item_report, exc)
+            # Every run ungraded, by definition of this error -- said explicitly rather than
+            # left to _apply_run_counts, whose source is detail["unscored_runs"] and which a
+            # kind that attaches no diagnostics would leave at 0.
+            item_report.runs_ungraded = item_report.runs
+            print(f"[agentic] {item.id} UNGRADED: {exc}", flush=True)
         except Exception as exc:
             item_report.error = f"{type(exc).__name__}: {exc}"
             item_report.runs = 0

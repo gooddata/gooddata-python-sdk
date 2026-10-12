@@ -156,6 +156,7 @@ Run this before guessing a `--model` string.
 | `GD_EVAL_AGENT_ID` | which agent to drive, same as `--agent-id` |
 | `LANGFUSE_HOST`, `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY` | `--langfuse`, `--langfuse-dataset` |
 | `GOODDATA_EVAL_CHAT_*` | SSE retry, backoff and timeout knobs |
+| `GOODDATA_EVAL_TRACE_LABELS` | `key=value,...` labels stamped on every observation of a chat conversation via W3C baggage; `model_version` also sets the observation `version`, so set it only for a one-model run: every `--model` in one process gets the same labels. Keys must match `[A-Za-z0-9_-]+`; others are skipped with a warning. Dashboard-summary runs are not labelled |
 | `GD_EVAL_TIMERS` | same as `--timers` |
 
 A gitignored `.env` at the repo root is the normal place for these; load it with

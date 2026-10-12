@@ -78,6 +78,17 @@ def test_execute_single_run_viz_on_first_turn():
     client.send_message.assert_called_once_with("conv-1", "Show revenue")
 
 
+def test_execute_single_run_fails_an_unrun_chart_when_execution_is_required():
+    client = MagicMock()
+    client.send_message.return_value = _chat_with_viz()
+
+    result = _execute_single_run(client, "conv-1", "What is revenue?", [_expected()], requires_execution=True)
+
+    assert result.eval_result.visualization_created is True
+    assert result.eval_result.executed is False
+    assert result.eval_result.strict_pass is False
+
+
 def test_execute_single_run_clarification_then_viz(monkeypatch):
     """Agent asks a clarification question, simulated user replies, then viz arrives."""
     client = MagicMock()
@@ -327,6 +338,7 @@ def test_evaluate_agentic_visualization_returns_reasoning_steps_on_pass():
         "max_iterations": 4,
         "expected_sorts": [],
         "actual_sorts": [],
+        "execution": {"executed": False, "required": False, "stated_value_matches": None},
         "latency_breakdown": [],
         "tool_calls": [],
     }
@@ -387,6 +399,7 @@ def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on
         "max_iterations": 1,
         "expected_sorts": [],
         "actual_sorts": [],
+        "execution": {"executed": False, "required": False, "stated_value_matches": None},
         "latency_breakdown": [],
         "tool_calls": [],
     }
@@ -454,6 +467,68 @@ def test_execute_single_run_records_chat_error_on_a_follow_up_request(monkeypatc
 
     assert result.exit_reason is LoopExit.CHAT_ERROR
     assert client.send_message.call_count == 2
+
+
+def test_a_partial_result_that_carries_the_chart_counts_its_execution(monkeypatch):
+    monkeypatch.setattr(
+        "gooddata_eval.core.agentic.visualization.generate_simulated_response", lambda *a, **k: "the revenue one"
+    )
+    partial = ChatResult.model_validate(
+        {
+            "createdVisualizations": {"objects": [_viz()], "reasoning": ""},
+            "toolCallEvents": [
+                {
+                    "functionName": "create_adhoc_visualization",
+                    "functionArguments": "{}",
+                    "result": '{"status":"success","ref":"viz_1"}',
+                },
+                {
+                    "functionName": "execute_visualization",
+                    "functionArguments": '{"visualization_ref": "viz_1"}',
+                    "result": '{"success":true,"data":{"rows":[]}}',
+                },
+            ],
+        }
+    )
+    error = ChatError("stream died")
+    error.partial_result = partial
+    client = MagicMock()
+    client.send_message.side_effect = [_chat_clarification(), error]
+
+    result = _execute_single_run(client, "conv-1", "What is revenue?", [_expected()], requires_execution=True)
+
+    assert result.exit_reason is LoopExit.CHAT_ERROR
+    assert result.eval_result.executed is True
+    assert result.eval_result.strict_pass is True
+
+
+def test_an_opening_partial_result_that_carries_the_chart_counts_its_execution():
+    partial = ChatResult.model_validate(
+        {
+            "createdVisualizations": {"objects": [_viz()], "reasoning": ""},
+            "toolCallEvents": [
+                {
+                    "functionName": "create_adhoc_visualization",
+                    "functionArguments": "{}",
+                    "result": '{"status":"success","ref":"viz_1"}',
+                },
+                {
+                    "functionName": "execute_visualization",
+                    "functionArguments": '{"visualization_ref": "viz_1"}',
+                    "result": '{"success":true,"data":{"rows":[]}}',
+                },
+            ],
+        }
+    )
+    error = ChatError("stream died")
+    error.partial_result = partial
+    client = MagicMock()
+    client.send_message.side_effect = [error]
+
+    result = _execute_single_run(client, "conv-1", "What is revenue?", [_expected()], requires_execution=True)
+
+    assert result.exit_reason is LoopExit.CHAT_ERROR
+    assert result.eval_result.executed is True
 
 
 def test_execute_single_run_records_simulated_user_failure_separately(monkeypatch):
