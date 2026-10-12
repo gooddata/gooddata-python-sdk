@@ -68,6 +68,10 @@ class ElementsRequest(ModelNormal):
             'ASC': "ASC",
             'DESC': "DESC",
         },
+        ('type',): {
+            'LABEL': "label",
+            'COMPUTEDATTRIBUTE': "computedAttribute",
+        },
     }
 
     validations = {
@@ -112,6 +116,7 @@ class ElementsRequest(ModelNormal):
             'pattern_filter': (str,),  # noqa: E501
             'sort_order': (str,),  # noqa: E501
             'timezone': (str,),  # noqa: E501
+            'type': (str,),  # noqa: E501
             'validate_by': ([ValidateByItem],),  # noqa: E501
         }
 
@@ -132,6 +137,7 @@ class ElementsRequest(ModelNormal):
         'pattern_filter': 'patternFilter',  # noqa: E501
         'sort_order': 'sortOrder',  # noqa: E501
         'timezone': 'timezone',  # noqa: E501
+        'type': 'type',  # noqa: E501
         'validate_by': 'validateBy',  # noqa: E501
     }
 
@@ -189,6 +195,7 @@ class ElementsRequest(ModelNormal):
             pattern_filter (str): Return only items, whose ```label``` title case insensitively contains ```filter``` as substring.. [optional]  # noqa: E501
             sort_order (str): Sort order of returned items. Items are sorted by ```label``` title. If no sort order is specified then attribute's ```sortDirection``` is used, which is ASC by default. [optional]  # noqa: E501
             timezone (str): Time zone (IANA id, e.g. \"Europe/Prague\") used to resolve relative date filters in ```dependsOn```. If set it takes precedence over the workspace/user time zone setting; if not set the setting is used.. [optional]  # noqa: E501
+            type (str): Type of the object ```label``` refers to. A set type is taken at its word; an unset one means a label, with a computed attribute of the same id accepted as a fallback.. [optional]  # noqa: E501
             validate_by ([ValidateByItem]): Return only items that are computable on metric.. [optional]  # noqa: E501
         """
 
@@ -289,6 +296,7 @@ class ElementsRequest(ModelNormal):
             pattern_filter (str): Return only items, whose ```label``` title case insensitively contains ```filter``` as substring.. [optional]  # noqa: E501
             sort_order (str): Sort order of returned items. Items are sorted by ```label``` title. If no sort order is specified then attribute's ```sortDirection``` is used, which is ASC by default. [optional]  # noqa: E501
             timezone (str): Time zone (IANA id, e.g. \"Europe/Prague\") used to resolve relative date filters in ```dependsOn```. If set it takes precedence over the workspace/user time zone setting; if not set the setting is used.. [optional]  # noqa: E501
+            type (str): Type of the object ```label``` refers to. A set type is taken at its word; an unset one means a label, with a computed attribute of the same id accepted as a fallback.. [optional]  # noqa: E501
             validate_by ([ValidateByItem]): Return only items that are computable on metric.. [optional]  # noqa: E501
         """
 

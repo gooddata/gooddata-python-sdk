@@ -6,7 +6,7 @@ JSON:API representation of workspaceSetting entity.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** | Object type | defaults to "workspaceSetting"
-**attributes** | [**JsonApiOrganizationSettingInAttributes**](JsonApiOrganizationSettingInAttributes.md) |  | [optional] 
+**attributes** | [**JsonApiUserSettingInAttributes**](JsonApiUserSettingInAttributes.md) |  | [optional] 
 **id** | **str** | API identifier of an object | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

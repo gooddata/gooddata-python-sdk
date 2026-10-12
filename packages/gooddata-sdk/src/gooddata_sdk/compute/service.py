@@ -1,20 +1,12 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-import json
 import logging
 from collections.abc import Iterator
 from typing import Any, Union
 
 from gooddata_api_client import ApiException
 from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
-from gooddata_api_client.model.chat_history_request import ChatHistoryRequest
-from gooddata_api_client.model.chat_history_result import ChatHistoryResult
-from gooddata_api_client.model.chat_request import ChatRequest
-from gooddata_api_client.model.chat_result import ChatResult
-from gooddata_api_client.model.saved_visualization import SavedVisualization
-from gooddata_api_client.model.search_request import SearchRequest
-from gooddata_api_client.model.search_result import SearchResult
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.execution import (
@@ -26,6 +18,10 @@ from gooddata_sdk.compute.model.execution import (
 from gooddata_sdk.compute.visualization_to_sdk_converter import VisualizationToSdkConverter
 
 logger = logging.getLogger(__name__)
+
+_LEGACY_AI_REMOVED = (
+    "The legacy AI chat and search endpoints were removed from the GoodData backend; use the AI Assistant API."
+)
 
 
 class ComputeService:
@@ -100,9 +96,7 @@ class ComputeService:
             )
         return ResultCacheMetadata(result_cache_metadata=result_cache_metadata)
 
-    def build_exec_def_from_chat_result(
-        self, chat_result: ChatResult, is_cancellable: bool = False
-    ) -> ExecutionDefinition:
+    def build_exec_def_from_chat_result(self, chat_result: Any, is_cancellable: bool = False) -> ExecutionDefinition:
         """
         Build execution definition from chat result.
 
@@ -135,7 +129,7 @@ class ComputeService:
             is_cancellable=is_cancellable,
         )
 
-    def ai_chat(self, workspace_id: str, question: str) -> ChatResult:
+    def ai_chat(self, workspace_id: str, question: str) -> Any:
         """
         Chat with AI in GoodData workspace.
 
@@ -144,21 +138,11 @@ class ComputeService:
             question (str): question for the AI
         Returns:
             ChatResult: Chat response
-        """
-        chat_request = ChatRequest(question=question)
-        response = self._actions_api.ai_chat(workspace_id, chat_request, _check_return_type=False)
-        return response
 
-    def _parse_sse_events(self, raw: str) -> Iterator[Any]:
-        """Helper to parse SSE events and yield JSON from data lines."""
-        events = raw.split("\n\n")
-        for event in events:
-            for line in event.split("\n"):
-                if line.startswith("data:"):
-                    try:
-                        yield json.loads(line[5:].strip())
-                    except json.JSONDecodeError:
-                        continue
+        Raises:
+            NotImplementedError: The backend no longer serves this endpoint.
+        """
+        raise NotImplementedError(_LEGACY_AI_REMOVED)
 
     def ai_chat_stream(self, workspace_id: str, question: str) -> Iterator[Any]:
         """
@@ -169,28 +153,18 @@ class ComputeService:
             question (str): question for the AI
         Returns:
             Iterator[Any]: Yields parsed JSON objects from each SSE event's data field
+
+        Raises:
+            NotImplementedError: The backend no longer serves this endpoint.
         """
-        chat_request = ChatRequest(question=question)
-        response = self._actions_api.ai_chat_stream(
-            workspace_id, chat_request, _check_return_type=False, _preload_content=False
-        )
-        buffer = ""
-        try:
-            for chunk in response.stream(decode_content=True):
-                if chunk:
-                    buffer += chunk.decode("utf-8")
-                    *events, buffer = buffer.split("\n\n")
-                    for event in events:
-                        yield from self._parse_sse_events(event)
-        finally:
-            response.release_conn()
+        raise NotImplementedError(_LEGACY_AI_REMOVED)
 
     def get_ai_chat_history(
         self,
         workspace_id: str,
         chat_history_interaction_id: str = "",
         thread_id_suffix: str = "",
-    ) -> ChatHistoryResult:
+    ) -> Any:
         """
         Get chat history with AI in GoodData workspace.
 
@@ -200,12 +174,11 @@ class ComputeService:
             thread_id_suffix (str): suffix to identify a specific chat thread. If provided, chat_history_interaction_id is ignored. Defaults to "".
         Returns:
             ChatHistoryResult: Chat history response containing interactions and other metadata
+
+        Raises:
+            NotImplementedError: The backend no longer serves this endpoint.
         """
-        chat_history_request = ChatHistoryRequest(
-            chat_history_interaction_id=chat_history_interaction_id, reset=False, thread_id_suffix=thread_id_suffix
-        )
-        response = self._actions_api.ai_chat_history(workspace_id, chat_history_request, _check_return_type=False)
-        return response
+        raise NotImplementedError(_LEGACY_AI_REMOVED)
 
     def reset_ai_chat_history(self, workspace_id: str) -> None:
         """
@@ -213,9 +186,11 @@ class ComputeService:
 
         Args:
             workspace_id (str): workspace identifier
+
+        Raises:
+            NotImplementedError: The backend no longer serves this endpoint.
         """
-        chat_history_request = ChatHistoryRequest(reset=True)
-        self._actions_api.ai_chat_history(workspace_id, chat_history_request, _check_return_type=False)
+        raise NotImplementedError(_LEGACY_AI_REMOVED)
 
     def set_ai_chat_history_feedback(
         self,
@@ -232,14 +207,11 @@ class ComputeService:
             user_feedback (str): feedback to provide ("POSITIVE", "NEGATIVE" or "NONE").
             chat_history_interaction_id (str): interaction id to provide feedback for.
             thread_id_suffix (str): suffix to identify a specific chat thread. Defaults to "".
+
+        Raises:
+            NotImplementedError: The backend no longer serves this endpoint.
         """
-        chat_history_request = ChatHistoryRequest(
-            user_feedback=user_feedback,
-            chat_history_interaction_id=chat_history_interaction_id,
-            thread_id_suffix=thread_id_suffix,
-            reset=False,
-        )
-        self._actions_api.ai_chat_history(workspace_id, chat_history_request, _check_return_type=False)
+        raise NotImplementedError(_LEGACY_AI_REMOVED)
 
     def set_ai_chat_history_saved_visualization(
         self,
@@ -258,18 +230,11 @@ class ComputeService:
             saved_visualization_id (str): id of the saved visualization
             chat_history_interaction_id (str): interaction id to set saved visualization for.
             thread_id_suffix (str): suffix to identify a specific chat thread. Defaults to "".
+
+        Raises:
+            NotImplementedError: The backend no longer serves this endpoint.
         """
-        saved_visualization = SavedVisualization(
-            created_visualization_id=created_visualization_id,
-            saved_visualization_id=saved_visualization_id,
-        )
-        chat_history_request = ChatHistoryRequest(
-            saved_visualization=saved_visualization,
-            chat_history_interaction_id=chat_history_interaction_id,
-            thread_id_suffix=thread_id_suffix,
-            reset=False,
-        )
-        self._actions_api.ai_chat_history(workspace_id, chat_history_request, _check_return_type=False)
+        raise NotImplementedError(_LEGACY_AI_REMOVED)
 
     def search_ai(
         self,
@@ -280,7 +245,7 @@ class ComputeService:
         object_types: list[str] | None = None,
         relevant_score_threshold: float | None = None,
         title_to_descriptor_ratio: float | None = None,
-    ) -> SearchResult:
+    ) -> Any:
         """
         Search for metadata objects using similarity search.
 
@@ -299,21 +264,11 @@ class ComputeService:
 
         Note:
             Default values for optional parameters are documented in the AI Search endpoint of the GoodData API.
+
+        Raises:
+            NotImplementedError: The backend no longer serves this endpoint.
         """
-        search_params: dict[str, Any] = {}
-        if deep_search is not None:
-            search_params["deep_search"] = deep_search
-        if limit is not None:
-            search_params["limit"] = limit
-        if object_types is not None:
-            search_params["object_types"] = object_types
-        if relevant_score_threshold is not None:
-            search_params["relevant_score_threshold"] = relevant_score_threshold
-        if title_to_descriptor_ratio is not None:
-            search_params["title_to_descriptor_ratio"] = title_to_descriptor_ratio
-        search_request = SearchRequest(question=question, **search_params)
-        response = self._actions_api.ai_search(workspace_id, search_request, _check_return_type=False)
-        return response
+        raise NotImplementedError(_LEGACY_AI_REMOVED)
 
     def cancel_executions(self, executions: dict[str, dict[str, str]]) -> None:
         """

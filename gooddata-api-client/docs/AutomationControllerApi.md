@@ -78,6 +78,11 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                     ),
                     interval="DAY",
+                    settings=ExecutionSettings(
+                        data_sampling_percentage=0,
+                        timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                        timezone="Europe/Prague",
+                    ),
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
@@ -244,6 +249,27 @@ with gooddata_api_client.ApiClient() as api_client:
                 tabular_exports=[
                     JsonApiAutomationInAttributesTabularExportsInner(
                         request_payload=TabularExportRequest(
+                            conditional_formatting=ConditionalFormatting(
+                                enabled=True,
+                                rules=[
+                                    ConditionalFormattingRule(
+                                        conditions=[
+                                            ConditionalFormattingCondition(
+                                                format=ConditionalFormattingFormat(
+                                                    background_color="#3DB36B",
+                                                    color="#E54D40",
+                                                    scope="cell",
+                                                ),
+                                                id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                                operator="ALL",
+                                                value=ConditionalFormattingValue(),
+                                            ),
+                                        ],
+                                        id="bb955b38-a9e6-45f5-b068-155cb7ce509a",
+                                        target=ConditionalFormattingTarget(),
+                                    ),
+                                ],
+                            ),
                             custom_override=CustomOverride(
                                 labels={
                                     "key": CustomLabel(
@@ -363,7 +389,7 @@ with gooddata_api_client.ApiClient() as api_client:
         ),
     ) # JsonApiAutomationInDocument | 
     include = [
-        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
+        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,visualizationObjects,analyticalDashboards,metrics,attributes,labels,facts,computedAttributes,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     meta_include = [
         "metaInclude=origin,all",
@@ -513,7 +539,7 @@ with gooddata_api_client.ApiClient() as api_client:
     origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
     filter = "title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
+        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,visualizationObjects,analyticalDashboards,metrics,attributes,labels,facts,computedAttributes,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
@@ -609,7 +635,7 @@ with gooddata_api_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     filter = "title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
+        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,visualizationObjects,analyticalDashboards,metrics,attributes,labels,facts,computedAttributes,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
@@ -734,6 +760,11 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                     ),
                     interval="DAY",
+                    settings=ExecutionSettings(
+                        data_sampling_percentage=0,
+                        timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                        timezone="Europe/Prague",
+                    ),
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
@@ -900,6 +931,27 @@ with gooddata_api_client.ApiClient() as api_client:
                 tabular_exports=[
                     JsonApiAutomationInAttributesTabularExportsInner(
                         request_payload=TabularExportRequest(
+                            conditional_formatting=ConditionalFormatting(
+                                enabled=True,
+                                rules=[
+                                    ConditionalFormattingRule(
+                                        conditions=[
+                                            ConditionalFormattingCondition(
+                                                format=ConditionalFormattingFormat(
+                                                    background_color="#3DB36B",
+                                                    color="#E54D40",
+                                                    scope="cell",
+                                                ),
+                                                id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                                operator="ALL",
+                                                value=ConditionalFormattingValue(),
+                                            ),
+                                        ],
+                                        id="bb955b38-a9e6-45f5-b068-155cb7ce509a",
+                                        target=ConditionalFormattingTarget(),
+                                    ),
+                                ],
+                            ),
                             custom_override=CustomOverride(
                                 labels={
                                     "key": CustomLabel(
@@ -1020,7 +1072,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ) # JsonApiAutomationPatchDocument | 
     filter = "title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
+        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,visualizationObjects,analyticalDashboards,metrics,attributes,labels,facts,computedAttributes,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
     # example passing only required values which don't have defaults set
@@ -1239,6 +1291,11 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                     ),
                     interval="DAY",
+                    settings=ExecutionSettings(
+                        data_sampling_percentage=0,
+                        timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                        timezone="Europe/Prague",
+                    ),
                     trigger="ALWAYS",
                 ),
                 are_relations_valid=True,
@@ -1405,6 +1462,27 @@ with gooddata_api_client.ApiClient() as api_client:
                 tabular_exports=[
                     JsonApiAutomationInAttributesTabularExportsInner(
                         request_payload=TabularExportRequest(
+                            conditional_formatting=ConditionalFormatting(
+                                enabled=True,
+                                rules=[
+                                    ConditionalFormattingRule(
+                                        conditions=[
+                                            ConditionalFormattingCondition(
+                                                format=ConditionalFormattingFormat(
+                                                    background_color="#3DB36B",
+                                                    color="#E54D40",
+                                                    scope="cell",
+                                                ),
+                                                id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                                operator="ALL",
+                                                value=ConditionalFormattingValue(),
+                                            ),
+                                        ],
+                                        id="bb955b38-a9e6-45f5-b068-155cb7ce509a",
+                                        target=ConditionalFormattingTarget(),
+                                    ),
+                                ],
+                            ),
                             custom_override=CustomOverride(
                                 labels={
                                     "key": CustomLabel(
@@ -1525,7 +1603,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ) # JsonApiAutomationInDocument | 
     filter = "title==someString;description==someString;notificationChannel.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
-        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,automationResults",
+        "notificationChannel,analyticalDashboard,createdBy,modifiedBy,exportDefinitions,recipients,visualizationObjects,analyticalDashboards,metrics,attributes,labels,facts,computedAttributes,automationResults",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
 
     # example passing only required values which don't have defaults set

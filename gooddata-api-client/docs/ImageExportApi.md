@@ -48,11 +48,21 @@ with gooddata_api_client.ApiClient() as api_client:
             "widget_ids_example",
         ],
     ) # ImageExportRequest | 
+    x_gdc_debug = False # bool |  (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Create image export request
         api_response = api_instance.create_image_export(workspace_id, image_export_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ImageExportApi->create_image_export: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (EXPERIMENTAL) Create image export request
+        api_response = api_instance.create_image_export(workspace_id, image_export_request, x_gdc_debug=x_gdc_debug)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ImageExportApi->create_image_export: %s\n" % e)
@@ -65,6 +75,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **image_export_request** | [**ImageExportRequest**](ImageExportRequest.md)|  |
+ **x_gdc_debug** | **bool**|  | [optional] if omitted the server will use the default value of False
 
 ### Return type
 

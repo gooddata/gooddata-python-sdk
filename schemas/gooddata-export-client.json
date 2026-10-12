@@ -127,7 +127,6 @@
                 "description": "Start of the range (including), in the format matching 'granularity'. If omitted, the range is unbounded at the start.",
                 "example": "2012-05",
                 "nullable": true,
-                "pattern": "^((?:\\d{4})|(?:\\d{4}-[1-4])|(?:\\d{4}-(0[1-9]|1[0-2]))|(?:\\d{4}-(0[1-9]|[1-4]\\d|5[0-3]))|(?:\\d{4}-\\d{2}-\\d{2})|(?:[0-9]|[1-5]\\d)|(?:[0-9]|[1-9]\\d{1,3}|[1-7]\\d{4}|8[0-5]\\d{3}|86[0-3]\\d{2})|(?:[0-9]|[1-5]\\d)|(?:[0-9]|[1-9]\\d{1,2}|1[0-3]\\d{2}|14[0-3]\\d)|(?:[0-9]|1\\d|2[0-3])|(?:[0-6])|(?:[1-9]|[12]\\d|3[01])|(?:[1-9]|[1-8]\\d|9[0-2])|(?:[1-9]|[1-9]\\d|[12]\\d\\d|3[0-5]\\d|36[0-6])|(?:[1-9]|[1-4]\\d|5[0-3])|(?:[1-9]|1[0-2])|(?:[1-4]))$",
                 "type": "string"
               },
               "granularity": {
@@ -184,7 +183,6 @@
                 "description": "End of the range (including), in the format matching 'granularity'. If omitted, the range is unbounded at the end.",
                 "example": "2012-08",
                 "nullable": true,
-                "pattern": "^((?:\\d{4})|(?:\\d{4}-[1-4])|(?:\\d{4}-(0[1-9]|1[0-2]))|(?:\\d{4}-(0[1-9]|[1-4]\\d|5[0-3]))|(?:\\d{4}-\\d{2}-\\d{2})|(?:[0-9]|[1-5]\\d)|(?:[0-9]|[1-9]\\d{1,3}|[1-7]\\d{4}|8[0-5]\\d{3}|86[0-3]\\d{2})|(?:[0-9]|[1-5]\\d)|(?:[0-9]|[1-9]\\d{1,2}|1[0-3]\\d{2}|14[0-3]\\d)|(?:[0-9]|1\\d|2[0-3])|(?:[0-6])|(?:[1-9]|[12]\\d|3[01])|(?:[1-9]|[1-8]\\d|9[0-2])|(?:[1-9]|[1-9]\\d|[12]\\d\\d|3[0-5]\\d|36[0-6])|(?:[1-9]|[1-4]\\d|5[0-3])|(?:[1-9]|1[0-2])|(?:[1-4]))$",
                 "type": "string"
               }
             },
@@ -256,6 +254,7 @@
                 "enum": [
                   "analyticalDashboard",
                   "attribute",
+                  "computedAttribute",
                   "dashboardPlugin",
                   "dataset",
                   "fact",
@@ -325,7 +324,8 @@
                   "attribute",
                   "label",
                   "fact",
-                  "metric"
+                  "metric",
+                  "computedAttribute"
                 ],
                 "type": "string"
               }
@@ -382,7 +382,8 @@
               },
               "type": {
                 "enum": [
-                  "label"
+                  "label",
+                  "computedAttribute"
                 ],
                 "type": "string"
               }
@@ -884,6 +885,413 @@
         },
         "required": [
           "compoundMeasureValueFilter"
+        ],
+        "type": "object"
+      },
+      "ConditionalFormatting": {
+        "description": "Conditional formatting for a table, with one entry per formatted column.",
+        "nullable": true,
+        "properties": {
+          "enabled": {
+            "description": "Whether the rules are applied when rendering.",
+            "type": "boolean"
+          },
+          "rules": {
+            "description": "Rules evaluated in order; within a target, the first matching condition wins.",
+            "items": {
+              "$ref": "#/components/schemas/ConditionalFormattingRule"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "enabled",
+          "rules"
+        ],
+        "type": "object"
+      },
+      "ConditionalFormattingAbsoluteDateValue": {
+        "allOf": [
+          {
+            "properties": {
+              "from": {
+                "description": "`YYYY-MM-DD`, or `YYYY-MM-DD HH:mm` at hour or minute granularity.",
+                "type": "string"
+              },
+              "kind": {
+                "description": "The value kind.",
+                "enum": [
+                  "absoluteDate"
+                ],
+                "type": "string"
+              },
+              "to": {
+                "description": "`YYYY-MM-DD`, or `YYYY-MM-DD HH:mm` at hour or minute granularity. Inclusive.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "A fixed, inclusive date period.",
+        "required": [
+          "from",
+          "kind",
+          "to"
+        ],
+        "type": "object"
+      },
+      "ConditionalFormattingAttributeTarget": {
+        "allOf": [
+          {
+            "properties": {
+              "attributeIdentifier": {
+                "example": "23990482d9d04e62a9c564a29be804f8",
+                "type": "string"
+              },
+              "kind": {
+                "description": "The target kind.",
+                "enum": [
+                  "attribute"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "An attribute column, addressed by its bucket item local identifier.",
+        "required": [
+          "attributeIdentifier",
+          "kind"
+        ],
+        "type": "object"
+      },
+      "ConditionalFormattingCondition": {
+        "description": "A condition and the formatting applied to cells matching it.",
+        "properties": {
+          "format": {
+            "$ref": "#/components/schemas/ConditionalFormattingFormat"
+          },
+          "id": {
+            "description": "Client-assigned identifier, stable across edits.",
+            "example": "d0538854-aac3-4fc6-9603-61f49bab6aa3",
+            "type": "string"
+          },
+          "operator": {
+            "description": "How a condition compares the cell value against its value.",
+            "enum": [
+              "ALL",
+              "GREATER_THAN",
+              "GREATER_THAN_OR_EQUAL_TO",
+              "LESS_THAN",
+              "LESS_THAN_OR_EQUAL_TO",
+              "EQUAL_TO",
+              "NOT_EQUAL_TO",
+              "BETWEEN",
+              "NOT_BETWEEN",
+              "CONTAINS",
+              "NOT_CONTAINS",
+              "STARTS_WITH",
+              "NOT_STARTS_WITH",
+              "ENDS_WITH",
+              "NOT_ENDS_WITH",
+              "IS_EMPTY",
+              "IS_NOT_EMPTY"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "$ref": "#/components/schemas/ConditionalFormattingValue"
+          }
+        },
+        "required": [
+          "format",
+          "operator",
+          "value"
+        ],
+        "type": "object"
+      },
+      "ConditionalFormattingFormat": {
+        "description": "Visual formatting applied to a matching cell.",
+        "properties": {
+          "backgroundColor": {
+            "description": "Background color as a hex triplet.",
+            "example": "#3DB36B",
+            "type": "string"
+          },
+          "color": {
+            "description": "Text color as a hex triplet.",
+            "example": "#E54D40",
+            "type": "string"
+          },
+          "scope": {
+            "description": "Whether the formatting applies to the matching cell only, or to its whole row.",
+            "enum": [
+              "cell",
+              "row"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "scope"
+        ],
+        "type": "object"
+      },
+      "ConditionalFormattingLiteral": {
+        "description": "A string or a number, serialized in whichever form it was authored.",
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          }
+        ],
+        "type": "object"
+      },
+      "ConditionalFormattingLiteralRangeValue": {
+        "allOf": [
+          {
+            "properties": {
+              "from": {
+                "format": "double",
+                "type": "number"
+              },
+              "kind": {
+                "description": "The value kind.",
+                "enum": [
+                  "literalRange"
+                ],
+                "type": "string"
+              },
+              "to": {
+                "format": "double",
+                "type": "number"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "An inclusive numeric range.",
+        "required": [
+          "from",
+          "kind",
+          "to"
+        ],
+        "type": "object"
+      },
+      "ConditionalFormattingLiteralValue": {
+        "allOf": [
+          {
+            "properties": {
+              "kind": {
+                "description": "The value kind.",
+                "enum": [
+                  "literal"
+                ],
+                "type": "string"
+              },
+              "value": {
+                "$ref": "#/components/schemas/ConditionalFormattingLiteral"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "A single value compared against the cell value.",
+        "required": [
+          "kind",
+          "value"
+        ],
+        "type": "object"
+      },
+      "ConditionalFormattingMeasureTarget": {
+        "allOf": [
+          {
+            "properties": {
+              "kind": {
+                "description": "The target kind.",
+                "enum": [
+                  "measure"
+                ],
+                "type": "string"
+              },
+              "measureIdentifier": {
+                "example": "8cd55fe5748b48d7820ae9ee18e58011",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "A measure column, addressed by its bucket item local identifier.",
+        "required": [
+          "kind",
+          "measureIdentifier"
+        ],
+        "type": "object"
+      },
+      "ConditionalFormattingNoneValue": {
+        "allOf": [
+          {
+            "properties": {
+              "kind": {
+                "description": "The value kind.",
+                "enum": [
+                  "none"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "No value; used by operators that take none.",
+        "required": [
+          "kind"
+        ],
+        "type": "object"
+      },
+      "ConditionalFormattingRelativeDateValue": {
+        "allOf": [
+          {
+            "properties": {
+              "from": {
+                "description": "Offset in periods; 0 is the current period, negative is the past.",
+                "example": -29,
+                "format": "int32",
+                "type": "integer"
+              },
+              "granularity": {
+                "description": "Granularity the offsets are counted in.",
+                "enum": [
+                  "SECOND",
+                  "SECOND_OF_MINUTE",
+                  "SECOND_OF_DAY",
+                  "MINUTE",
+                  "MINUTE_OF_HOUR",
+                  "MINUTE_OF_DAY",
+                  "HOUR",
+                  "HOUR_OF_DAY",
+                  "DAY",
+                  "DAY_OF_WEEK",
+                  "DAY_OF_MONTH",
+                  "DAY_OF_QUARTER",
+                  "DAY_OF_YEAR",
+                  "WEEK",
+                  "WEEK_OF_YEAR",
+                  "MONTH",
+                  "MONTH_OF_YEAR",
+                  "QUARTER",
+                  "QUARTER_OF_YEAR",
+                  "YEAR",
+                  "FISCAL_DAY_OF_FISCAL_WEEK",
+                  "FISCAL_DAY_OF_FISCAL_MONTH",
+                  "FISCAL_DAY_OF_FISCAL_QUARTER",
+                  "FISCAL_DAY_OF_FISCAL_SEMESTER",
+                  "FISCAL_DAY_OF_FISCAL_YEAR",
+                  "FISCAL_WEEK",
+                  "FISCAL_WEEK_OF_FISCAL_MONTH",
+                  "FISCAL_WEEK_OF_FISCAL_QUARTER",
+                  "FISCAL_WEEK_OF_FISCAL_SEMESTER",
+                  "FISCAL_WEEK_OF_FISCAL_YEAR",
+                  "FISCAL_MONTH",
+                  "FISCAL_MONTH_OF_FISCAL_QUARTER",
+                  "FISCAL_MONTH_OF_FISCAL_SEMESTER",
+                  "FISCAL_MONTH_OF_FISCAL_YEAR",
+                  "FISCAL_QUARTER",
+                  "FISCAL_QUARTER_OF_FISCAL_SEMESTER",
+                  "FISCAL_QUARTER_OF_FISCAL_YEAR",
+                  "FISCAL_SEMESTER",
+                  "FISCAL_SEMESTER_OF_FISCAL_YEAR",
+                  "FISCAL_YEAR"
+                ],
+                "example": "MONTH",
+                "type": "string"
+              },
+              "kind": {
+                "description": "The value kind.",
+                "enum": [
+                  "relativeDate"
+                ],
+                "type": "string"
+              },
+              "to": {
+                "description": "Offset in periods, not lower than `from`.",
+                "example": 0,
+                "format": "int32",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "A date period relative to the moment of evaluation, resolved at render time.",
+        "required": [
+          "from",
+          "granularity",
+          "kind",
+          "to"
+        ],
+        "type": "object"
+      },
+      "ConditionalFormattingRule": {
+        "description": "Conditions applied to a single column.",
+        "properties": {
+          "conditions": {
+            "description": "Conditions evaluated in order; the first match wins.",
+            "items": {
+              "$ref": "#/components/schemas/ConditionalFormattingCondition"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "Client-assigned identifier, stable across edits.",
+            "example": "bb955b38-a9e6-45f5-b068-155cb7ce509a",
+            "type": "string"
+          },
+          "target": {
+            "$ref": "#/components/schemas/ConditionalFormattingTarget"
+          }
+        },
+        "required": [
+          "conditions",
+          "target"
+        ],
+        "type": "object"
+      },
+      "ConditionalFormattingTarget": {
+        "description": "Column a rule formats. The shape is selected by the `kind` property.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ConditionalFormattingAttributeTarget"
+          },
+          {
+            "$ref": "#/components/schemas/ConditionalFormattingMeasureTarget"
+          }
+        ],
+        "type": "object"
+      },
+      "ConditionalFormattingValue": {
+        "description": "Value a condition compares against. The shape is selected by the `kind` property.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ConditionalFormattingNoneValue"
+          },
+          {
+            "$ref": "#/components/schemas/ConditionalFormattingLiteralValue"
+          },
+          {
+            "$ref": "#/components/schemas/ConditionalFormattingLiteralRangeValue"
+          },
+          {
+            "$ref": "#/components/schemas/ConditionalFormattingAbsoluteDateValue"
+          },
+          {
+            "$ref": "#/components/schemas/ConditionalFormattingRelativeDateValue"
+          }
         ],
         "type": "object"
       },
@@ -1602,6 +2010,7 @@
                   "aggregatedFact",
                   "label",
                   "metric",
+                  "computedAttribute",
                   "userDataFilter",
                   "parameter",
                   "exportDefinition",
@@ -1617,6 +2026,9 @@
                   "workspaceDataFilter",
                   "workspaceDataFilterSetting",
                   "filterView",
+                  "reportPageLayout",
+                  "reportTemplate",
+                  "report",
                   "workspaceExportTemplate",
                   "workspaceTheme",
                   "workspaceColorPalette",
@@ -1959,6 +2371,11 @@
           "value": {
             "description": "Value to use for this parameter when executing the export.",
             "example": "2026",
+            "type": "string"
+          },
+          "valueTitle": {
+            "description": "Human-readable form of `value` (e.g. a constrained string's allowedValues title). Never used to drive execution. Falls back to `value` when absent.",
+            "example": "year 2026",
             "type": "string"
           }
         },
@@ -2564,6 +2981,44 @@
         ],
         "type": "object"
       },
+      "ReportExportRequest": {
+        "description": "Export request object describing the export properties and metadata for report exports.",
+        "properties": {
+          "fileName": {
+            "description": "File name to be used for retrieving the pdf document.",
+            "example": "filename",
+            "type": "string"
+          },
+          "format": {
+            "description": "Requested resulting file type.",
+            "enum": [
+              "PDF"
+            ],
+            "example": "PDF",
+            "type": "string"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "reportId": {
+            "description": "Report identifier",
+            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type": "string"
+          },
+          "timezoneId": {
+            "description": "Time zone the export should be rendered in, as an IANA identifier (e.g. 'Asia/Kolkata') or a GMT offset (e.g. 'GMT+01:00'). When omitted, the workspace time zone setting is used.",
+            "example": "Asia/Kolkata",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "fileName",
+          "format",
+          "reportId"
+        ],
+        "type": "object"
+      },
       "Settings": {
         "description": "Additional settings.",
         "properties": {
@@ -2799,6 +3254,9 @@
       "TabularExportRequest": {
         "description": "Export request object describing the export properties and overrides for tabular exports.",
         "properties": {
+          "conditionalFormatting": {
+            "$ref": "#/components/schemas/ConditionalFormatting"
+          },
           "customOverride": {
             "$ref": "#/components/schemas/CustomOverride"
           },
@@ -2978,6 +3436,15 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Gdc-Debug",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
             }
           }
         ],
@@ -3299,6 +3766,209 @@
           "description": "Minimal permission required to use this endpoint.",
           "permissions": [
             "EXPORT_TABULAR"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/report": {
+      "post": {
+        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. A report export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
+        "operationId": "createReportExport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Gdc-Debug",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportResponse"
+                }
+              }
+            },
+            "description": "Report export request created successfully."
+          }
+        },
+        "summary": "(EXPERIMENTAL) Create report export request",
+        "tags": [
+          "Report export",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to execute report export.",
+          "permissions": [
+            "EXPORT_PDF"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/report/{exportId}": {
+      "get": {
+        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
+        "operationId": "getReportExport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "exportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Binary export result.",
+            "headers": {
+              "Content-Disposition": {
+                "schema": {
+                  "example": "attachment; filename='result.pdf'",
+                  "pattern": "attachment; filename='[^']+'",
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          },
+          "202": {
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "char": {
+                        "type": "string"
+                      },
+                      "direct": {
+                        "type": "boolean"
+                      },
+                      "double": {
+                        "format": "double",
+                        "type": "number"
+                      },
+                      "float": {
+                        "format": "float",
+                        "type": "number"
+                      },
+                      "int": {
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "long": {
+                        "format": "int64",
+                        "type": "integer"
+                      },
+                      "readOnly": {
+                        "type": "boolean"
+                      },
+                      "short": {
+                        "format": "int32",
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Request is accepted, provided exportId exists, but export is not yet ready."
+          }
+        },
+        "summary": "(EXPERIMENTAL) Retrieve exported files",
+        "tags": [
+          "Report export",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "EXPORT_PDF"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/report/{exportId}/metadata": {
+      "get": {
+        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/report endpoint. The metadata structure is not verified.",
+        "operationId": "getReportExportMetadata",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "exportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {}
+            },
+            "description": "Json metadata representation"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Retrieve metadata context",
+        "tags": [
+          "Report export",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "VIEW"
           ]
         }
       }

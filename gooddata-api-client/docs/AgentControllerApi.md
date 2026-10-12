@@ -50,6 +50,14 @@ with gooddata_api_client.ApiClient() as api_client:
                 ],
                 description="description_example",
                 enabled=True,
+                instructions=[
+                    JsonApiAgentInAttributesInstructionsInner(
+                        content="content_example",
+                        is_disabled=True,
+                        strategy="ALWAYS",
+                        title="title_example",
+                    ),
+                ],
                 is_preview=True,
                 name="name_example",
                 personality="personality_example",
@@ -383,6 +391,14 @@ with gooddata_api_client.ApiClient() as api_client:
                 ],
                 description="description_example",
                 enabled=True,
+                instructions=[
+                    JsonApiAgentInAttributesInstructionsInner(
+                        content="content_example",
+                        is_disabled=True,
+                        strategy="ALWAYS",
+                        title="title_example",
+                    ),
+                ],
                 is_preview=True,
                 name="name_example",
                 personality="personality_example",
@@ -494,6 +510,14 @@ with gooddata_api_client.ApiClient() as api_client:
                 ],
                 description="description_example",
                 enabled=True,
+                instructions=[
+                    JsonApiAgentInAttributesInstructionsInner(
+                        content="content_example",
+                        is_disabled=True,
+                        strategy="ALWAYS",
+                        title="title_example",
+                    ),
+                ],
                 is_preview=True,
                 name="name_example",
                 personality="personality_example",

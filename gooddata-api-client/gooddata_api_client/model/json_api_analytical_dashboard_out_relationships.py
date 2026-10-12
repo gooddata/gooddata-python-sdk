@@ -33,6 +33,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.json_api_agent_out_relationships_created_by import JsonApiAgentOutRelationshipsCreatedBy
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_analytical_dashboards import JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_computed_attributes import JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_dashboard_plugins import JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_datasets import JsonApiAnalyticalDashboardOutRelationshipsDatasets
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_filter_contexts import JsonApiAnalyticalDashboardOutRelationshipsFilterContexts
@@ -42,6 +43,7 @@ def lazy_import():
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_visualization_objects import JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects
     globals()['JsonApiAgentOutRelationshipsCreatedBy'] = JsonApiAgentOutRelationshipsCreatedBy
     globals()['JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards'] = JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes'] = JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes
     globals()['JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins'] = JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins
     globals()['JsonApiAnalyticalDashboardOutRelationshipsDatasets'] = JsonApiAnalyticalDashboardOutRelationshipsDatasets
     globals()['JsonApiAnalyticalDashboardOutRelationshipsFilterContexts'] = JsonApiAnalyticalDashboardOutRelationshipsFilterContexts
@@ -106,6 +108,7 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
         return {
             'analytical_dashboards': (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards,),  # noqa: E501
             'certified_by': (JsonApiAgentOutRelationshipsCreatedBy,),  # noqa: E501
+            'computed_attributes': (JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes,),  # noqa: E501
             'created_by': (JsonApiAgentOutRelationshipsCreatedBy,),  # noqa: E501
             'dashboard_plugins': (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins,),  # noqa: E501
             'datasets': (JsonApiAnalyticalDashboardOutRelationshipsDatasets,),  # noqa: E501
@@ -125,6 +128,7 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
     attribute_map = {
         'analytical_dashboards': 'analyticalDashboards',  # noqa: E501
         'certified_by': 'certifiedBy',  # noqa: E501
+        'computed_attributes': 'computedAttributes',  # noqa: E501
         'created_by': 'createdBy',  # noqa: E501
         'dashboard_plugins': 'dashboardPlugins',  # noqa: E501
         'datasets': 'datasets',  # noqa: E501
@@ -179,6 +183,7 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             analytical_dashboards (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards): [optional]  # noqa: E501
             certified_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            computed_attributes (JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes): [optional]  # noqa: E501
             created_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
             dashboard_plugins (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins): [optional]  # noqa: E501
             datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
@@ -275,6 +280,7 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             analytical_dashboards (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards): [optional]  # noqa: E501
             certified_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
+            computed_attributes (JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes): [optional]  # noqa: E501
             created_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
             dashboard_plugins (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins): [optional]  # noqa: E501
             datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501

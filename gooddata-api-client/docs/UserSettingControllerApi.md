@@ -40,7 +40,7 @@ with gooddata_api_client.ApiClient() as api_client:
     user_id = "userId_example" # str | 
     json_api_user_setting_in_document = JsonApiUserSettingInDocument(
         data=JsonApiUserSettingIn(
-            attributes=JsonApiOrganizationSettingInAttributes(
+            attributes=JsonApiUserSettingInAttributes(
                 content={},
                 type="TIMEZONE",
             ),
@@ -349,7 +349,7 @@ with gooddata_api_client.ApiClient() as api_client:
     id = "/6bUUGjjNSwg0_bs" # str | 
     json_api_user_setting_in_document = JsonApiUserSettingInDocument(
         data=JsonApiUserSettingIn(
-            attributes=JsonApiOrganizationSettingInAttributes(
+            attributes=JsonApiUserSettingInAttributes(
                 content={},
                 type="TIMEZONE",
             ),

@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **metadata** | [**JsonNode**](JsonNode.md) |  | [optional] 
 **timezone_id** | **str, none_type** | Time zone the export should be rendered in, as an IANA identifier (e.g. &#39;Asia/Kolkata&#39;) or a GMT offset (e.g. &#39;GMT+01:00&#39;). When omitted, the workspace time zone setting is used. | [optional] 
+**conditional_formatting** | [**ConditionalFormatting**](ConditionalFormatting.md) |  | [optional] 
 **custom_override** | [**CustomOverride**](CustomOverride.md) |  | [optional] 
 **execution_result** | **str** | Execution result identifier. | [optional] 
 **execution_settings** | [**ExecutionSettings**](ExecutionSettings.md) |  | [optional] 

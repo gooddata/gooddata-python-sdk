@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_organization_setting_in_attributes import JsonApiOrganizationSettingInAttributes
-    globals()['JsonApiOrganizationSettingInAttributes'] = JsonApiOrganizationSettingInAttributes
+    from gooddata_api_client.model.json_api_user_setting_in_attributes import JsonApiUserSettingInAttributes
+    globals()['JsonApiUserSettingInAttributes'] = JsonApiUserSettingInAttributes
 
 
 class JsonApiWorkspaceSettingIn(ModelNormal):
@@ -98,7 +98,7 @@ class JsonApiWorkspaceSettingIn(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiOrganizationSettingInAttributes,),  # noqa: E501
+            'attributes': (JsonApiUserSettingInAttributes,),  # noqa: E501
         }
 
     @cached_property
@@ -157,7 +157,7 @@ class JsonApiWorkspaceSettingIn(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiOrganizationSettingInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiUserSettingInAttributes): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "workspaceSetting")
@@ -250,7 +250,7 @@ class JsonApiWorkspaceSettingIn(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiOrganizationSettingInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiUserSettingInAttributes): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "workspaceSetting")

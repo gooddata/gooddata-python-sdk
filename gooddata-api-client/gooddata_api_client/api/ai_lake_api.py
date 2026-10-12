@@ -25,18 +25,14 @@ from gooddata_api_client.model_utils import (  # noqa: F401
 from gooddata_api_client.model.add_database_data_source_request import AddDatabaseDataSourceRequest
 from gooddata_api_client.model.add_database_data_source_response import AddDatabaseDataSourceResponse
 from gooddata_api_client.model.analyze_statistics_request import AnalyzeStatisticsRequest
-from gooddata_api_client.model.create_pipe_table_request import CreatePipeTableRequest
 from gooddata_api_client.model.get_ai_lake_operation200_response import GetAiLakeOperation200Response
 from gooddata_api_client.model.get_service_status_response import GetServiceStatusResponse
 from gooddata_api_client.model.json_api_document_database_instance import JsonApiDocumentDatabaseInstance
-from gooddata_api_client.model.json_api_document_pipe_table import JsonApiDocumentPipeTable
 from gooddata_api_client.model.json_api_list_document_data_source_info import JsonApiListDocumentDataSourceInfo
 from gooddata_api_client.model.json_api_list_document_database_instance import JsonApiListDocumentDatabaseInstance
 from gooddata_api_client.model.json_api_list_document_object_storage_info import JsonApiListDocumentObjectStorageInfo
-from gooddata_api_client.model.json_api_list_document_pipe_table_summary import JsonApiListDocumentPipeTableSummary
 from gooddata_api_client.model.json_api_list_document_service_info import JsonApiListDocumentServiceInfo
 from gooddata_api_client.model.provision_database_instance_request import ProvisionDatabaseInstanceRequest
-from gooddata_api_client.model.refresh_partition_request import RefreshPartitionRequest
 from gooddata_api_client.model.remove_database_data_source_response import RemoveDatabaseDataSourceResponse
 from gooddata_api_client.model.run_service_command_request import RunServiceCommandRequest
 from gooddata_api_client.model.update_database_data_source_request import UpdateDatabaseDataSourceRequest
@@ -169,123 +165,6 @@ class AILakeApi(object):
             },
             api_client=api_client
         )
-        self.create_ai_lake_pipe_table_endpoint = _Endpoint(
-            settings={
-                'response_type': None,
-                'auth': [],
-                'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/pipeTables',
-                'operation_id': 'create_ai_lake_pipe_table',
-                'http_method': 'POST',
-                'servers': None,
-            },
-            params_map={
-                'all': [
-                    'instance_id',
-                    'create_pipe_table_request',
-                    'operation_id',
-                ],
-                'required': [
-                    'instance_id',
-                    'create_pipe_table_request',
-                ],
-                'nullable': [
-                ],
-                'enum': [
-                ],
-                'validation': [
-                ]
-            },
-            root_map={
-                'validations': {
-                },
-                'allowed_values': {
-                },
-                'openapi_types': {
-                    'instance_id':
-                        (str,),
-                    'create_pipe_table_request':
-                        (CreatePipeTableRequest,),
-                    'operation_id':
-                        (str,),
-                },
-                'attribute_map': {
-                    'instance_id': 'instanceId',
-                    'operation_id': 'operation-id',
-                },
-                'location_map': {
-                    'instance_id': 'path',
-                    'create_pipe_table_request': 'body',
-                    'operation_id': 'header',
-                },
-                'collection_format_map': {
-                }
-            },
-            headers_map={
-                'accept': [],
-                'content_type': [
-                    'application/json'
-                ]
-            },
-            api_client=api_client
-        )
-        self.delete_ai_lake_pipe_table_endpoint = _Endpoint(
-            settings={
-                'response_type': None,
-                'auth': [],
-                'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName}',
-                'operation_id': 'delete_ai_lake_pipe_table',
-                'http_method': 'DELETE',
-                'servers': None,
-            },
-            params_map={
-                'all': [
-                    'instance_id',
-                    'table_name',
-                    'operation_id',
-                ],
-                'required': [
-                    'instance_id',
-                    'table_name',
-                ],
-                'nullable': [
-                ],
-                'enum': [
-                ],
-                'validation': [
-                ]
-            },
-            root_map={
-                'validations': {
-                },
-                'allowed_values': {
-                },
-                'openapi_types': {
-                    'instance_id':
-                        (str,),
-                    'table_name':
-                        (str,),
-                    'operation_id':
-                        (str,),
-                },
-                'attribute_map': {
-                    'instance_id': 'instanceId',
-                    'table_name': 'tableName',
-                    'operation_id': 'operation-id',
-                },
-                'location_map': {
-                    'instance_id': 'path',
-                    'table_name': 'path',
-                    'operation_id': 'header',
-                },
-                'collection_format_map': {
-                }
-            },
-            headers_map={
-                'accept': [],
-                'content_type': [],
-            },
-            api_client=api_client
-        )
         self.deprovision_ai_lake_database_instance_endpoint = _Endpoint(
             settings={
                 'response_type': None,
@@ -298,6 +177,7 @@ class AILakeApi(object):
             params_map={
                 'all': [
                     'instance_id',
+                    'cascade',
                     'operation_id',
                 ],
                 'required': [
@@ -318,15 +198,19 @@ class AILakeApi(object):
                 'openapi_types': {
                     'instance_id':
                         (str,),
+                    'cascade':
+                        (bool,),
                     'operation_id':
                         (str,),
                 },
                 'attribute_map': {
                     'instance_id': 'instanceId',
+                    'cascade': 'cascade',
                     'operation_id': 'operation-id',
                 },
                 'location_map': {
                     'instance_id': 'path',
+                    'cascade': 'query',
                     'operation_id': 'header',
                 },
                 'collection_format_map': {
@@ -424,61 +308,6 @@ class AILakeApi(object):
                 },
                 'location_map': {
                     'operation_id': 'path',
-                },
-                'collection_format_map': {
-                }
-            },
-            headers_map={
-                'accept': [
-                    'application/json'
-                ],
-                'content_type': [],
-            },
-            api_client=api_client
-        )
-        self.get_ai_lake_pipe_table_endpoint = _Endpoint(
-            settings={
-                'response_type': (JsonApiDocumentPipeTable,),
-                'auth': [],
-                'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName}',
-                'operation_id': 'get_ai_lake_pipe_table',
-                'http_method': 'GET',
-                'servers': None,
-            },
-            params_map={
-                'all': [
-                    'instance_id',
-                    'table_name',
-                ],
-                'required': [
-                    'instance_id',
-                    'table_name',
-                ],
-                'nullable': [
-                ],
-                'enum': [
-                ],
-                'validation': [
-                ]
-            },
-            root_map={
-                'validations': {
-                },
-                'allowed_values': {
-                },
-                'openapi_types': {
-                    'instance_id':
-                        (str,),
-                    'table_name':
-                        (str,),
-                },
-                'attribute_map': {
-                    'instance_id': 'instanceId',
-                    'table_name': 'tableName',
-                },
-                'location_map': {
-                    'instance_id': 'path',
-                    'table_name': 'path',
                 },
                 'collection_format_map': {
                 }
@@ -766,86 +595,6 @@ class AILakeApi(object):
             },
             api_client=api_client
         )
-        self.list_ai_lake_pipe_tables_endpoint = _Endpoint(
-            settings={
-                'response_type': (JsonApiListDocumentPipeTableSummary,),
-                'auth': [],
-                'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/pipeTables',
-                'operation_id': 'list_ai_lake_pipe_tables',
-                'http_method': 'GET',
-                'servers': None,
-            },
-            params_map={
-                'all': [
-                    'instance_id',
-                    'page',
-                    'size',
-                    'meta_include',
-                ],
-                'required': [
-                    'instance_id',
-                ],
-                'nullable': [
-                ],
-                'enum': [
-                ],
-                'validation': [
-                    'page',
-                    'size',
-                    'meta_include',
-                ]
-            },
-            root_map={
-                'validations': {
-                    ('page',): {
-
-                        'inclusive_minimum': 0,
-                    },
-                    ('size',): {
-
-                        'inclusive_maximum': 500,
-                        'inclusive_minimum': 1,
-                    },
-                    ('meta_include',): {
-
-                    },
-                },
-                'allowed_values': {
-                },
-                'openapi_types': {
-                    'instance_id':
-                        (str,),
-                    'page':
-                        (int,),
-                    'size':
-                        (int,),
-                    'meta_include':
-                        ([str],),
-                },
-                'attribute_map': {
-                    'instance_id': 'instanceId',
-                    'page': 'page',
-                    'size': 'size',
-                    'meta_include': 'metaInclude',
-                },
-                'location_map': {
-                    'instance_id': 'path',
-                    'page': 'query',
-                    'size': 'query',
-                    'meta_include': 'query',
-                },
-                'collection_format_map': {
-                    'meta_include': 'multi',
-                }
-            },
-            headers_map={
-                'accept': [
-                    'application/json'
-                ],
-                'content_type': [],
-            },
-            api_client=api_client
-        )
         self.list_ai_lake_services_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiListDocumentServiceInfo,),
@@ -959,71 +708,6 @@ class AILakeApi(object):
                 },
                 'location_map': {
                     'provision_database_instance_request': 'body',
-                    'operation_id': 'header',
-                },
-                'collection_format_map': {
-                }
-            },
-            headers_map={
-                'accept': [],
-                'content_type': [
-                    'application/json'
-                ]
-            },
-            api_client=api_client
-        )
-        self.refresh_ai_lake_pipe_table_partition_endpoint = _Endpoint(
-            settings={
-                'response_type': None,
-                'auth': [],
-                'endpoint_path': '/api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName}/refresh',
-                'operation_id': 'refresh_ai_lake_pipe_table_partition',
-                'http_method': 'POST',
-                'servers': None,
-            },
-            params_map={
-                'all': [
-                    'instance_id',
-                    'table_name',
-                    'refresh_partition_request',
-                    'operation_id',
-                ],
-                'required': [
-                    'instance_id',
-                    'table_name',
-                    'refresh_partition_request',
-                ],
-                'nullable': [
-                ],
-                'enum': [
-                ],
-                'validation': [
-                ]
-            },
-            root_map={
-                'validations': {
-                },
-                'allowed_values': {
-                },
-                'openapi_types': {
-                    'instance_id':
-                        (str,),
-                    'table_name':
-                        (str,),
-                    'refresh_partition_request':
-                        (RefreshPartitionRequest,),
-                    'operation_id':
-                        (str,),
-                },
-                'attribute_map': {
-                    'instance_id': 'instanceId',
-                    'table_name': 'tableName',
-                    'operation_id': 'operation-id',
-                },
-                'location_map': {
-                    'instance_id': 'path',
-                    'table_name': 'path',
-                    'refresh_partition_request': 'body',
                     'operation_id': 'header',
                 },
                 'collection_format_map': {
@@ -1309,7 +993,7 @@ class AILakeApi(object):
     ):
         """(BETA) Run ANALYZE TABLE for tables in a database instance  # noqa: E501
 
-        (BETA) Collects CBO statistics for tables in a StarRocks database. Works for both internal (native/PIPE) and external (Iceberg) catalogs. If tableNames is empty, all tables are analyzed.  # noqa: E501
+        (BETA) Collects CBO statistics for tables in a StarRocks database. Works for both internal (native) and external (Iceberg) catalogs. If tableNames is empty, all tables are analyzed.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -1389,182 +1073,6 @@ class AILakeApi(object):
             analyze_statistics_request
         return self.analyze_statistics_endpoint.call_with_http_info(**kwargs)
 
-    def create_ai_lake_pipe_table(
-        self,
-        instance_id,
-        create_pipe_table_request,
-        **kwargs
-    ):
-        """(BETA) Create a new AI Lake pipe table  # noqa: E501
-
-        (BETA) Creates a pipe-backed OLAP table in the given AI Lake database instance. Infers schema from parquet files. Returns an operation-id header the client can use to poll for progress.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.create_ai_lake_pipe_table(instance_id, create_pipe_table_request, async_req=True)
-        >>> result = thread.get()
-
-        Args:
-            instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
-            create_pipe_table_request (CreatePipeTableRequest):
-
-        Keyword Args:
-            operation_id (str): [optional]
-            _return_http_data_only (bool): response data without head status
-                code and headers. Default is True.
-            _preload_content (bool): if False, the urllib3.HTTPResponse object
-                will be returned without reading/decoding response data.
-                Default is True.
-            _request_timeout (int/float/tuple): timeout setting for this request. If
-                one number provided, it will be total request timeout. It can also
-                be a pair (tuple) of (connection, read) timeouts.
-                Default is None.
-            _check_input_type (bool): specifies if type checking
-                should be done one the data sent to the server.
-                Default is True.
-            _check_return_type (bool): specifies if type checking
-                should be done one the data received from the server.
-                Default is True.
-            _spec_property_naming (bool): True if the variable names in the input data
-                are serialized names, as specified in the OpenAPI document.
-                False if the variable names in the input data
-                are pythonic names, e.g. snake case (default)
-            _content_type (str/None): force body content-type.
-                Default is None and content-type will be predicted by allowed
-                content-types and body.
-            _host_index (int/None): specifies the index of the server
-                that we want to use.
-                Default is read from the configuration.
-            _request_auths (list): set to override the auth_settings for an a single
-                request; this effectively ignores the authentication
-                in the spec for a single request.
-                Default is None
-            async_req (bool): execute request asynchronously
-
-        Returns:
-            None
-                If the method is called asynchronously, returns the request
-                thread.
-        """
-        kwargs['async_req'] = kwargs.get(
-            'async_req', False
-        )
-        kwargs['_return_http_data_only'] = kwargs.get(
-            '_return_http_data_only', True
-        )
-        kwargs['_preload_content'] = kwargs.get(
-            '_preload_content', True
-        )
-        kwargs['_request_timeout'] = kwargs.get(
-            '_request_timeout', None
-        )
-        kwargs['_check_input_type'] = kwargs.get(
-            '_check_input_type', True
-        )
-        kwargs['_check_return_type'] = kwargs.get(
-            '_check_return_type', True
-        )
-        kwargs['_spec_property_naming'] = kwargs.get(
-            '_spec_property_naming', False
-        )
-        kwargs['_content_type'] = kwargs.get(
-            '_content_type')
-        kwargs['_host_index'] = kwargs.get('_host_index')
-        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
-        kwargs['instance_id'] = \
-            instance_id
-        kwargs['create_pipe_table_request'] = \
-            create_pipe_table_request
-        return self.create_ai_lake_pipe_table_endpoint.call_with_http_info(**kwargs)
-
-    def delete_ai_lake_pipe_table(
-        self,
-        instance_id,
-        table_name,
-        **kwargs
-    ):
-        """(BETA) Delete an AI Lake pipe table  # noqa: E501
-
-        (BETA) Drops the pipe and OLAP table and removes the record. Returns an operation-id header the client can use to poll for progress.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.delete_ai_lake_pipe_table(instance_id, table_name, async_req=True)
-        >>> result = thread.get()
-
-        Args:
-            instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
-            table_name (str): Pipe table name.
-
-        Keyword Args:
-            operation_id (str): [optional]
-            _return_http_data_only (bool): response data without head status
-                code and headers. Default is True.
-            _preload_content (bool): if False, the urllib3.HTTPResponse object
-                will be returned without reading/decoding response data.
-                Default is True.
-            _request_timeout (int/float/tuple): timeout setting for this request. If
-                one number provided, it will be total request timeout. It can also
-                be a pair (tuple) of (connection, read) timeouts.
-                Default is None.
-            _check_input_type (bool): specifies if type checking
-                should be done one the data sent to the server.
-                Default is True.
-            _check_return_type (bool): specifies if type checking
-                should be done one the data received from the server.
-                Default is True.
-            _spec_property_naming (bool): True if the variable names in the input data
-                are serialized names, as specified in the OpenAPI document.
-                False if the variable names in the input data
-                are pythonic names, e.g. snake case (default)
-            _content_type (str/None): force body content-type.
-                Default is None and content-type will be predicted by allowed
-                content-types and body.
-            _host_index (int/None): specifies the index of the server
-                that we want to use.
-                Default is read from the configuration.
-            _request_auths (list): set to override the auth_settings for an a single
-                request; this effectively ignores the authentication
-                in the spec for a single request.
-                Default is None
-            async_req (bool): execute request asynchronously
-
-        Returns:
-            None
-                If the method is called asynchronously, returns the request
-                thread.
-        """
-        kwargs['async_req'] = kwargs.get(
-            'async_req', False
-        )
-        kwargs['_return_http_data_only'] = kwargs.get(
-            '_return_http_data_only', True
-        )
-        kwargs['_preload_content'] = kwargs.get(
-            '_preload_content', True
-        )
-        kwargs['_request_timeout'] = kwargs.get(
-            '_request_timeout', None
-        )
-        kwargs['_check_input_type'] = kwargs.get(
-            '_check_input_type', True
-        )
-        kwargs['_check_return_type'] = kwargs.get(
-            '_check_return_type', True
-        )
-        kwargs['_spec_property_naming'] = kwargs.get(
-            '_spec_property_naming', False
-        )
-        kwargs['_content_type'] = kwargs.get(
-            '_content_type')
-        kwargs['_host_index'] = kwargs.get('_host_index')
-        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
-        kwargs['instance_id'] = \
-            instance_id
-        kwargs['table_name'] = \
-            table_name
-        return self.delete_ai_lake_pipe_table_endpoint.call_with_http_info(**kwargs)
-
     def deprovision_ai_lake_database_instance(
         self,
         instance_id,
@@ -1572,7 +1080,7 @@ class AILakeApi(object):
     ):
         """(BETA) Delete an existing AILake Database instance  # noqa: E501
 
-        (BETA) Deletes an existing database in the organization's AI Lake. Returns an operation-id in the operation-id header the client can use to poll for the progress.  # noqa: E501
+        (BETA) Deletes an existing database in the organization's AI Lake. A database that still contains tables is not deleted, unless cascade is set. With cascade, every table in the database is dropped first, which cannot be undone. Returns an operation-id in the operation-id header the client can use to poll for the progress.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -1583,6 +1091,7 @@ class AILakeApi(object):
             instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
 
         Keyword Args:
+            cascade (bool): Drop every table in the database before the database itself.. [optional]
             operation_id (str): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -1814,93 +1323,6 @@ class AILakeApi(object):
         kwargs['operation_id'] = \
             operation_id
         return self.get_ai_lake_operation_endpoint.call_with_http_info(**kwargs)
-
-    def get_ai_lake_pipe_table(
-        self,
-        instance_id,
-        table_name,
-        **kwargs
-    ):
-        """(BETA) Get an AI Lake pipe table  # noqa: E501
-
-        (BETA) Returns full details of the specified pipe table.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.get_ai_lake_pipe_table(instance_id, table_name, async_req=True)
-        >>> result = thread.get()
-
-        Args:
-            instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
-            table_name (str): Pipe table name.
-
-        Keyword Args:
-            _return_http_data_only (bool): response data without head status
-                code and headers. Default is True.
-            _preload_content (bool): if False, the urllib3.HTTPResponse object
-                will be returned without reading/decoding response data.
-                Default is True.
-            _request_timeout (int/float/tuple): timeout setting for this request. If
-                one number provided, it will be total request timeout. It can also
-                be a pair (tuple) of (connection, read) timeouts.
-                Default is None.
-            _check_input_type (bool): specifies if type checking
-                should be done one the data sent to the server.
-                Default is True.
-            _check_return_type (bool): specifies if type checking
-                should be done one the data received from the server.
-                Default is True.
-            _spec_property_naming (bool): True if the variable names in the input data
-                are serialized names, as specified in the OpenAPI document.
-                False if the variable names in the input data
-                are pythonic names, e.g. snake case (default)
-            _content_type (str/None): force body content-type.
-                Default is None and content-type will be predicted by allowed
-                content-types and body.
-            _host_index (int/None): specifies the index of the server
-                that we want to use.
-                Default is read from the configuration.
-            _request_auths (list): set to override the auth_settings for an a single
-                request; this effectively ignores the authentication
-                in the spec for a single request.
-                Default is None
-            async_req (bool): execute request asynchronously
-
-        Returns:
-            JsonApiDocumentPipeTable
-                If the method is called asynchronously, returns the request
-                thread.
-        """
-        kwargs['async_req'] = kwargs.get(
-            'async_req', False
-        )
-        kwargs['_return_http_data_only'] = kwargs.get(
-            '_return_http_data_only', True
-        )
-        kwargs['_preload_content'] = kwargs.get(
-            '_preload_content', True
-        )
-        kwargs['_request_timeout'] = kwargs.get(
-            '_request_timeout', None
-        )
-        kwargs['_check_input_type'] = kwargs.get(
-            '_check_input_type', True
-        )
-        kwargs['_check_return_type'] = kwargs.get(
-            '_check_return_type', True
-        )
-        kwargs['_spec_property_naming'] = kwargs.get(
-            '_spec_property_naming', False
-        )
-        kwargs['_content_type'] = kwargs.get(
-            '_content_type')
-        kwargs['_host_index'] = kwargs.get('_host_index')
-        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
-        kwargs['instance_id'] = \
-            instance_id
-        kwargs['table_name'] = \
-            table_name
-        return self.get_ai_lake_pipe_table_endpoint.call_with_http_info(**kwargs)
 
     def get_ai_lake_service_status(
         self,
@@ -2158,7 +1580,7 @@ class AILakeApi(object):
     ):
         """(BETA) List registered AI Lake ObjectStorages  # noqa: E501
 
-        (BETA) Lists ObjectStorages registered for the organization. Use the returned `name` as `sourceStorageName` in CreatePipeTable, or pass `storageId` to the ProvisionDatabase `storageIds` list. Provider credentials are stripped — only safe descriptors (id, name, type, bucket, region, endpoint, …) are returned.  # noqa: E501
+        (BETA) Lists ObjectStorages registered for the organization. Pass the returned `storageId` to the ProvisionDatabase `storageIds` list. Provider credentials are stripped — only safe descriptors (id, name, type, bucket, region, endpoint, …) are returned.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -2232,92 +1654,6 @@ class AILakeApi(object):
         kwargs['_host_index'] = kwargs.get('_host_index')
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.list_ai_lake_object_storages_endpoint.call_with_http_info(**kwargs)
-
-    def list_ai_lake_pipe_tables(
-        self,
-        instance_id,
-        **kwargs
-    ):
-        """(BETA) List AI Lake pipe tables  # noqa: E501
-
-        (BETA) Lists active pipe tables in the given AI Lake database instance.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.list_ai_lake_pipe_tables(instance_id, async_req=True)
-        >>> result = thread.get()
-
-        Args:
-            instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
-
-        Keyword Args:
-            page (int): Zero-based page number.. [optional] if omitted the server will use the default value of 0
-            size (int): Number of items per page.. [optional] if omitted the server will use the default value of 50
-            meta_include ([str]): [optional]
-            _return_http_data_only (bool): response data without head status
-                code and headers. Default is True.
-            _preload_content (bool): if False, the urllib3.HTTPResponse object
-                will be returned without reading/decoding response data.
-                Default is True.
-            _request_timeout (int/float/tuple): timeout setting for this request. If
-                one number provided, it will be total request timeout. It can also
-                be a pair (tuple) of (connection, read) timeouts.
-                Default is None.
-            _check_input_type (bool): specifies if type checking
-                should be done one the data sent to the server.
-                Default is True.
-            _check_return_type (bool): specifies if type checking
-                should be done one the data received from the server.
-                Default is True.
-            _spec_property_naming (bool): True if the variable names in the input data
-                are serialized names, as specified in the OpenAPI document.
-                False if the variable names in the input data
-                are pythonic names, e.g. snake case (default)
-            _content_type (str/None): force body content-type.
-                Default is None and content-type will be predicted by allowed
-                content-types and body.
-            _host_index (int/None): specifies the index of the server
-                that we want to use.
-                Default is read from the configuration.
-            _request_auths (list): set to override the auth_settings for an a single
-                request; this effectively ignores the authentication
-                in the spec for a single request.
-                Default is None
-            async_req (bool): execute request asynchronously
-
-        Returns:
-            JsonApiListDocumentPipeTableSummary
-                If the method is called asynchronously, returns the request
-                thread.
-        """
-        kwargs['async_req'] = kwargs.get(
-            'async_req', False
-        )
-        kwargs['_return_http_data_only'] = kwargs.get(
-            '_return_http_data_only', True
-        )
-        kwargs['_preload_content'] = kwargs.get(
-            '_preload_content', True
-        )
-        kwargs['_request_timeout'] = kwargs.get(
-            '_request_timeout', None
-        )
-        kwargs['_check_input_type'] = kwargs.get(
-            '_check_input_type', True
-        )
-        kwargs['_check_return_type'] = kwargs.get(
-            '_check_return_type', True
-        )
-        kwargs['_spec_property_naming'] = kwargs.get(
-            '_spec_property_naming', False
-        )
-        kwargs['_content_type'] = kwargs.get(
-            '_content_type')
-        kwargs['_host_index'] = kwargs.get('_host_index')
-        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
-        kwargs['instance_id'] = \
-            instance_id
-        return self.list_ai_lake_pipe_tables_endpoint.call_with_http_info(**kwargs)
 
     def list_ai_lake_services(
         self,
@@ -2483,98 +1819,6 @@ class AILakeApi(object):
         kwargs['provision_database_instance_request'] = \
             provision_database_instance_request
         return self.provision_ai_lake_database_instance_endpoint.call_with_http_info(**kwargs)
-
-    def refresh_ai_lake_pipe_table_partition(
-        self,
-        instance_id,
-        table_name,
-        refresh_partition_request,
-        **kwargs
-    ):
-        """(BETA) Refresh a pipe table partition  # noqa: E501
-
-        (BETA) Deletes all rows for the specified Hive partition and re-loads them from S3. Use after overwriting a partition file in object storage with corrected data. Returns an operation-id header the client can use to poll for progress.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.refresh_ai_lake_pipe_table_partition(instance_id, table_name, refresh_partition_request, async_req=True)
-        >>> result = thread.get()
-
-        Args:
-            instance_id (str): Database instance identifier. Accepts the database name (preferred) or UUID.
-            table_name (str): Pipe table name.
-            refresh_partition_request (RefreshPartitionRequest):
-
-        Keyword Args:
-            operation_id (str): [optional]
-            _return_http_data_only (bool): response data without head status
-                code and headers. Default is True.
-            _preload_content (bool): if False, the urllib3.HTTPResponse object
-                will be returned without reading/decoding response data.
-                Default is True.
-            _request_timeout (int/float/tuple): timeout setting for this request. If
-                one number provided, it will be total request timeout. It can also
-                be a pair (tuple) of (connection, read) timeouts.
-                Default is None.
-            _check_input_type (bool): specifies if type checking
-                should be done one the data sent to the server.
-                Default is True.
-            _check_return_type (bool): specifies if type checking
-                should be done one the data received from the server.
-                Default is True.
-            _spec_property_naming (bool): True if the variable names in the input data
-                are serialized names, as specified in the OpenAPI document.
-                False if the variable names in the input data
-                are pythonic names, e.g. snake case (default)
-            _content_type (str/None): force body content-type.
-                Default is None and content-type will be predicted by allowed
-                content-types and body.
-            _host_index (int/None): specifies the index of the server
-                that we want to use.
-                Default is read from the configuration.
-            _request_auths (list): set to override the auth_settings for an a single
-                request; this effectively ignores the authentication
-                in the spec for a single request.
-                Default is None
-            async_req (bool): execute request asynchronously
-
-        Returns:
-            None
-                If the method is called asynchronously, returns the request
-                thread.
-        """
-        kwargs['async_req'] = kwargs.get(
-            'async_req', False
-        )
-        kwargs['_return_http_data_only'] = kwargs.get(
-            '_return_http_data_only', True
-        )
-        kwargs['_preload_content'] = kwargs.get(
-            '_preload_content', True
-        )
-        kwargs['_request_timeout'] = kwargs.get(
-            '_request_timeout', None
-        )
-        kwargs['_check_input_type'] = kwargs.get(
-            '_check_input_type', True
-        )
-        kwargs['_check_return_type'] = kwargs.get(
-            '_check_return_type', True
-        )
-        kwargs['_spec_property_naming'] = kwargs.get(
-            '_spec_property_naming', False
-        )
-        kwargs['_content_type'] = kwargs.get(
-            '_content_type')
-        kwargs['_host_index'] = kwargs.get('_host_index')
-        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
-        kwargs['instance_id'] = \
-            instance_id
-        kwargs['table_name'] = \
-            table_name
-        kwargs['refresh_partition_request'] = \
-            refresh_partition_request
-        return self.refresh_ai_lake_pipe_table_partition_endpoint.call_with_http_info(**kwargs)
 
     def remove_ai_lake_database_data_source(
         self,

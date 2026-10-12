@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **certification** | **str** | Certification status of the entity. | [optional]  if omitted the server will use the default value of "CERTIFIED"
 **certification_message** | **str, none_type** | Optional message associated with the certification. | [optional] 
 **certified_at** | **datetime, none_type** | Time when the certification was set. | [optional] 
+**conditional_formatting** | [**JsonApiVisualizationObjectInAttributesConditionalFormatting**](JsonApiVisualizationObjectInAttributesConditionalFormatting.md) |  | [optional] 
 **created_at** | **datetime, none_type** | Time of the entity creation. | [optional] 
 **description** | **str** |  | [optional] 
 **is_hidden** | **bool** |  | [optional] 

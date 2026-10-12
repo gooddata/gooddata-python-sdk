@@ -84,10 +84,8 @@ class ClusteringResult(ModelNormal):
         return {
             'attribute': ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}],),  # noqa: E501
             'clusters': ([int, none_type],),  # noqa: E501
-            'xcoord': ([float],),  # noqa: E501
-            'ycoord': ([float],),  # noqa: E501
-            'x_coord': ([float, none_type],),  # noqa: E501
-            'y_coord': ([float, none_type],),  # noqa: E501
+            'xcoord': ([float, none_type],),  # noqa: E501
+            'ycoord': ([float, none_type],),  # noqa: E501
         }
 
     @cached_property
@@ -100,8 +98,6 @@ class ClusteringResult(ModelNormal):
         'clusters': 'clusters',  # noqa: E501
         'xcoord': 'xcoord',  # noqa: E501
         'ycoord': 'ycoord',  # noqa: E501
-        'x_coord': 'xCoord',  # noqa: E501
-        'y_coord': 'yCoord',  # noqa: E501
     }
 
     read_only_vars = {
@@ -117,8 +113,8 @@ class ClusteringResult(ModelNormal):
         Args:
             attribute ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]):
             clusters ([int, none_type]):
-            xcoord ([float]):
-            ycoord ([float]):
+            xcoord ([float, none_type]):
+            ycoord ([float, none_type]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -151,8 +147,6 @@ class ClusteringResult(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            x_coord ([float, none_type]): [optional]  # noqa: E501
-            y_coord ([float, none_type]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -214,8 +208,8 @@ class ClusteringResult(ModelNormal):
         Args:
             attribute ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]):
             clusters ([int, none_type]):
-            xcoord ([float]):
-            ycoord ([float]):
+            xcoord ([float, none_type]):
+            ycoord ([float, none_type]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -248,8 +242,6 @@ class ClusteringResult(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            x_coord ([float, none_type]): [optional]  # noqa: E501
-            y_coord ([float, none_type]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

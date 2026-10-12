@@ -31,9 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_agent_out_document_meta import JsonApiAgentOutDocumentMeta
     from gooddata_api_client.model.json_api_user_data_filter_out import JsonApiUserDataFilterOut
     from gooddata_api_client.model.json_api_user_data_filter_out_includes import JsonApiUserDataFilterOutIncludes
     from gooddata_api_client.model.object_links import ObjectLinks
+    globals()['JsonApiAgentOutDocumentMeta'] = JsonApiAgentOutDocumentMeta
     globals()['JsonApiUserDataFilterOut'] = JsonApiUserDataFilterOut
     globals()['JsonApiUserDataFilterOutIncludes'] = JsonApiUserDataFilterOutIncludes
     globals()['ObjectLinks'] = ObjectLinks
@@ -97,6 +99,7 @@ class JsonApiUserDataFilterOutDocument(ModelNormal):
             'data': (JsonApiUserDataFilterOut,),  # noqa: E501
             'included': ([JsonApiUserDataFilterOutIncludes],),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
+            'meta': (JsonApiAgentOutDocumentMeta,),  # noqa: E501
         }
 
     @cached_property
@@ -108,6 +111,7 @@ class JsonApiUserDataFilterOutDocument(ModelNormal):
         'data': 'data',  # noqa: E501
         'included': 'included',  # noqa: E501
         'links': 'links',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
     }
 
     read_only_vars = {
@@ -156,6 +160,7 @@ class JsonApiUserDataFilterOutDocument(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             included ([JsonApiUserDataFilterOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
+            meta (JsonApiAgentOutDocumentMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -247,6 +252,7 @@ class JsonApiUserDataFilterOutDocument(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             included ([JsonApiUserDataFilterOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
+            meta (JsonApiAgentOutDocumentMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
