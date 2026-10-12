@@ -366,8 +366,9 @@ P50/P90/P99 columns (single-shot) in the multi-model comparison.
 
 Turns JSON report(s) into one HTML file you can actually navigate. No server, no
 credentials, no external assets — it opens over `file://`, attaches to a Jira issue and
-survives a Slack thread. It follows GoodData's product look (colours, type, status chips), using a system
-font stack rather than an embedded web font so the file stays self-contained.
+survives a Slack thread. It follows GoodData's product look (colours, type, status chips). The faces are Inter, with
+Funnel Display for headings, named but never loaded, so a viewer without them gets the system sans and the file stays
+self-contained.
 
 ```bash
 # one run
@@ -388,45 +389,71 @@ gd-eval report results.json -o customer.html --redact
 
 The report is a *view* over the JSON. Unfiltered, every figure on it is read from the report, so it cannot
 disagree with the console or the JSON. Narrow the selection with a filter and the figures are recomputed in the
-page from the selected items' own records, by the same rules gd-eval uses. It gives you:
+page from the selected items' own records, by the same rules gd-eval uses. The page reads top to bottom as a
+document, in plain words: a *test case* is one prompt given to the assistant, an *attempt* is one go at it, and the
+two formats are *single-question* tests (one answer, no follow-up) and *conversation* tests (a back-and-forth with a
+simulated user), which are `single_shot` and `multi_turn` in the JSON.
 
-- **Filters in two tiers** — the bar at the top (kind, mode, status and run) decides what the whole page covers:
-  the run cards, the comparison, the latency tables and the item table all follow it, so the runs stay
-  comparable. The Items section repeats kind, mode, status and run and adds the search box and the expression;
-  those narrow the table only, inside whatever the top bar allows, and only offer what the top bar leaves (a
-  kind the top filters removed disappears from the table's menu and its selection). Kind, status and run are
-  multi-selects; nothing ticked means all. The run filter chooses which runs are shown; a status matches an item
-  when any of the runs in play has it (so "failed or errored" over previous and current finds every item that
-  broke in either), and the expression is evaluated once per run in play with the same any-run rule. A filtered
-  page states how many items it covers, and each tier has its own Reset.
-- **Run cards and a comparison table** — pass rate and quality per run, with the pass counts split by
-  single-shot and multi-turn and the single-shot per-trace median and tail on each card.
-- **Latency sections** — **Single-shot · latency per trace** first, as the main figure, then **Multi-turn**, which
-  shows both per trace and per full run. Each is a table with one row per run: P50 (the median), P70, P90, P99,
-  the average, a trimmed average (the middle 80%), the maximum, the number of samples and a strip marking where
-  the percentiles fall between the fastest and slowest sample. Unfiltered they are read from `by_mode`; a filtered view recomputes them in the page by the same rules.
-- **An item table** with a pass/fail column per run, so a model or run-over-run
-  regression is one glance rather than a hand-assembled spreadsheet. A mode column separates
-  single-shot from multi-turn items. Two latency columns
-  keep the populations apart: **Latency / trace** is the median response time of the item's chat turns, and
-  **Latency / run** is the mean wall-clock of a whole run (the chat turns plus the judge and, for multi-turn,
-  the simulated user). Hover a value to see every sample behind it; the drawer labels its two latency chips
-  the same way. A report written before per-trace timing has no trace figure and shows `avg_latency_s` as the
-  run figure.
-- **An expression filter** (in the Items section) for cross-cutting questions the fixed filters can't
-  anticipate, e.g. `d.filter_ranking_score === false` or
+- **A masthead** with the report's title (`--title`, or "Run history", "Run comparison" or "Run results" plus the
+  model and workspace), when it was generated in the reader's own time zone, and a **Run setup** tooltip listing what
+  is the same in every run (model, provider, workspace, dataset, test cases, attempts per test case, pass rule) and
+  what differs. Results from different setups are not directly comparable, so a caution icon on a latency row and the
+  *New* / *Removed* marks in the test case table say where two runs stopped being alike.
+- **Filters in two tiers** — the **Filter the report** bar at the top (category, format, result and run) decides what
+  the whole page covers: the Results cards, the latency tables and the test case table all follow it, so the runs stay
+  comparable. The Test cases section repeats those four and adds the search box and the expression; they narrow the
+  table only, inside whatever the top bar allows, and only offer what the top bar leaves. Category, result and run are
+  attribute filters like the product's: a search box, an All row, the values with an **Only** shortcut and a count,
+  then Cancel and Apply. Changes are staged in the popup and take effect on Apply; closing it any other way discards
+  them. Nothing ticked means all. The run filter chooses which runs are shown; a result matches a test case when any of
+  the runs in play has it (so "Failed" over previous and latest finds every test case that broke in either), and the
+  expression is evaluated once per run in play with the same any-run rule. A filtered page states how many test cases
+  it covers, and each tier has its own Reset.
+- **Results** — three headline cards for the latest run: test cases passed, the average quality score and the median
+  time per attempt. With an earlier run each card carries one change line in words, "down from 86% on Sep 28", rather
+  than a signed number. The line is green when that direction is good and red when it is not, with a chevron and
+  screen-reader text (*Better* / *Worse*) so colour is not the only signal. From three runs each card also has a
+  sparkline of every run: hover a point for its value, click it to compare the latest run with that one instead of the
+  previous. A pick that a filter has removed, or that has become the latest run, falls back to the previous run. The
+  pass-rate card links to the test case table to see *which* ones changed; the split by format lives in that table's
+  filters.
+- **Latency sections** — **Single-question tests · response time** first, then **Conversation tests**, which shows
+  both per response (each assistant reply, one gen-ai trace) and per conversation (start to finish, with the
+  simulated user and the judge). Each is a table with one row per run, newest first, giving the fastest, the median
+  (P50), P90 and the slowest. The quickest run in each column is marked green and the slowest red, each with a chevron
+  (down for least time, up for most) so colour is not the only signal, and the latest run is marked in lime. A caution
+  icon flags a run timed on a different number of samples than the one before. Unfiltered they are read from
+  `by_mode`; a filtered view recomputes them in the page by the same rules. P70, P99, the average and the trimmed
+  average stay in the JSON (P99 over a few dozen samples is only the slowest one again). Seconds read with one
+  decimal and no redundant ".0" (`3s`, `4.6s`).
+- **A test case table**, newest first: the latest run's result, a **Since previous run** column, then the earlier runs
+  going back in time (click any result to open the drawer on that run). The change column reads *Regressed* (passed in
+  the previous run, not in the latest), *Fixed*, *Flaky* (flipped between pass and fail more than once), *New* or
+  *Removed*. With several runs the table opens on the regressions. Two time columns
+  keep the populations apart: **Response time** is the median of the test case's assistant responses, and **Time per
+  attempt** is the mean wall-clock of a whole attempt (the responses plus the judge and, for conversations, the
+  simulated user). With more than two runs shown they follow the latest run only. Hover a value to see every sample
+  behind it; the drawer labels its two latency chips the same way. A report written before per-trace timing has no
+  response figure and shows `avg_latency_s` as the attempt figure.
+- **An expression filter**, folded under *Advanced: filter by a check expression* in the Test cases section, for
+  cross-cutting questions the fixed filters can't anticipate, e.g. `d.filter_ranking_score === false` or
   `d.expected_metric_uris.length > 1 && !d.metrics_correct`. Available variables:
-  `d` (the run's `detail`), `it` (its item), `i` (the row, `i.per[label]` for any
-  run), `q` (question), `kind`.
-- **The conversation**, when the item ran the agentic multi-turn path — every turn in
+  `d` (the checks of the run being read, its `detail`), `it` (that run's result), `i` (the row, `i.per[label]` for any
+  run), `q` (question), `kind` (category id).
+- **The conversation**, when the test case ran the agentic multi-turn path — every turn in
   order, with the simulated user marked apart from a real question, so you can see
   whether the agent got there or was handed the answer.
-- **A per-item drawer** — checks as pass/fail chips, expected vs actual side by side,
+- **A per-test-case drawer** — checks as pass/fail chips, expected vs actual side by side,
   full reasoning, conversation/response ids.
 - **A latency timeline** from `detail.latency_breakdown`, in execution order, one bar per
   step. Clicking a step expands its full record, joined by `index`: the paragraph a
   reasoning step was summarised from, or a tool call's arguments and result from
   `detail.tool_calls`.
+- **A print stylesheet** that drops the filters and the drawer, so "Save as PDF" gives a clean page.
+
+A report that merges several files names each run after its file, and a file named for its date (`2026-09-28.json`)
+reads as "Sep 28". The page assumes the runs are one model followed over time; `gd-eval run --html` over several
+models puts different models in one report, which it still lays out as run 1 against run 2.
 
 `--redact` additionally drops `transcript` and `tool_calls`: the exchange shows that the
 simulated user is primed with the expected output, and a tool result carries

@@ -237,16 +237,21 @@ def test_redact_keeps_the_mode_split_and_latency():
     assert data["runs"]["Model A"]["items"]["item-1"]["trace_latencies_s"] == [1.0, 2.0]
 
 
-def test_the_page_has_single_shot_and_multi_turn_sections_read_from_the_report():
+def test_the_page_has_single_question_and_conversation_sections_read_from_the_report():
     """The report is a view over the JSON: the page names the sections and populations and reads
     the figures from `by_mode`. It holds no percentile arithmetic that could disagree with the
     console or the JSON."""
     html = build_html(_doc_with_modes("gpt-5"))
 
     assert "by_mode" in html
-    for text in ("Single-shot · latency per trace", "Multi-turn · conversations", "Per trace", "Per full run"):
+    for text in (
+        "Single-question tests · response time",
+        "Conversation tests · response time",
+        "Per response",
+        "Per conversation",
+    ):
         assert text in html
-    for label in ("P50", "P70", "P90", "P99"):
+    for label in ("Fastest", "Median", "P90", "Slowest"):
         assert label in html
     # The table renderers only lay out figures they are handed; the one place that computes any is `recompute`.
     renderers = html.split("// ---------- latency by mode")[1].split("function renderLatency")[0]
@@ -260,8 +265,8 @@ def test_the_item_table_names_what_each_latency_column_measures():
     html = build_html(_doc_with_modes("gpt-5"))
 
     for text in (
-        "Latency / trace",
-        "Latency / run",
+        "Response time",
+        "Time per attempt",
         "trace_latencies_s",
         "run_latencies_s",
         "'lt:' + l",
@@ -275,11 +280,11 @@ def test_the_filters_sit_above_the_dashboard_and_drive_every_table():
     html = build_html(_doc_with_modes("gpt-5"))
 
     bar = html.index('id="filterbar"')
-    for section in ('id="summary"', 'id="comparison"', 'id="latency"', 'id="items"'):
+    for section in ('id="summary"', 'id="latency"', 'id="items"'):
         assert bar < html.index(section), f"the filter bar must come before {section}"
-    # One render path feeds the cards, the comparison, the latency tables and the item table.
+    # One render path feeds the result cards, the latency tables and the item table.
     render = html.split("function render() {")[1].split("function renderItems")[0]
-    for call in ("renderSummary()", "renderComparison()", "renderLatency()", "renderItems()"):
+    for call in ("renderSummary()", "renderLatency()", "renderItems()"):
         assert call in render
 
 
@@ -338,17 +343,27 @@ def test_the_tables_filters_combine_with_the_top_ones_without_widening_them():
     assert "rows.filter(" not in items
 
 
-def test_the_latency_tables_show_a_trimmed_average_beside_the_average_and_median():
-    """The trimmed average is a different figure from the median (P50): it still averages, without the
-    fastest and slowest tenth. The page reads it from the report and recomputes it only for a filtered view."""
+def test_the_latency_tables_show_plain_figures_and_leave_the_long_tail_to_the_json():
+    """The tables carry the fastest, the median, P90 and the slowest. P99 over a few dozen samples is just the
+    slowest one again, and the average and trimmed average stay in the JSON and the console. A filtered view
+    still recomputes the full distribution, so its `by_mode` has the shape the report's own would."""
     html = build_html(_doc_with_modes("gpt-5"))
 
-    assert "Trimmed avg" in html
-    assert "P50 (median)" in html
-    assert "st.trimmed_mean" in html
-    # A filtered view recomputes it by the same rule gd-eval uses, and says when a sample is too small.
+    table = html.split("function latencyTable(")[1].split("function modeSection")[0]
+    assert "const heads = ['Run', 'Fastest', 'Median', 'P90', 'Slowest']" in table
+    assert "const KEYS = ['min', 'p50', 'p90', 'max']" in table
     assert "trimmed_mean:" in html.split("function latencyStats(samples)")[1].split("function qualityOf")[0]
-    assert "Trimmed avg needs at least 10 samples." in html
+
+
+def test_the_latency_tables_mark_the_quickest_and_slowest_run_by_icon_as_well_as_colour():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    table = html.split("function latencyTable(")[1].split("function modeSection")[0]
+    assert "quickest of the runs shown" in table
+    assert "slowest of the runs shown" in table
+    # A chevron carries the meaning too (down = least time, up = most), so the colour is never the only signal.
+    assert "best: CHEVRON('down'), worst: CHEVRON('up')" in table
+    assert "latestpill" in html
 
 
 def test_html_uses_the_goodata_tokens_and_loads_no_web_font():
@@ -356,11 +371,125 @@ def test_html_uses_the_goodata_tokens_and_loads_no_web_font():
 
     for token in ("#14b2e2", "#dafe85", "#464e56", "#dde4eb", "#f5f8fa"):
         assert token in html, f"design token {token} missing"
-    assert '"Avenir Next", Avenir' in html
+    # The brand faces are named, never loaded: a viewer without them gets the system sans.
+    assert "--font: Inter," in html
+    assert '--font-display: "Funnel Display"' in html
     # Self-contained: a web font, import or remote stylesheet would break file:// and offline use.
     assert "@font-face" not in html
     assert "@import" not in html
     assert "url(" not in html
+
+
+def test_the_masthead_names_the_report_and_an_explicit_title_wins():
+    html = build_html(_doc("gpt-5", True), title="H200 regression check")
+
+    assert "GoodData.AI</span> · Evaluation report" in html
+    # --title wins; without one the page builds "Run history: <model> on <workspace>" from the runs.
+    assert "DATA.title !== 'gd-eval report'" in html
+    for kind in ("Run history", "Run comparison", "Run results"):
+        assert kind in html
+    assert _embedded(html)["title"] == "H200 regression check"
+
+
+def test_results_open_on_three_headline_cards_that_say_where_the_value_came_from():
+    """The report opens on pass rate, quality and time for the latest run. Each carries one change line in words
+    ("down from 86% on Sep 28") rather than a signed number, coloured by whether that direction is good, with a
+    chevron and screen-reader text so the colour is never the only signal."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    cards = html.split("function renderSummary()")[1].split("function sparkHover")[0]
+    for metric in ("Test cases passed", "Average quality score", "Median time per attempt"):
+        assert metric in cards
+    kpi = html.split("function kpiCard(")[1].split("function renderSummary")[0]
+    for text in ("'best' : 'worst'", "'Better: ' : 'Worse: '", "CHEVRON(", "same as ", "from ${fmt(b.v)}"):
+        assert text in kpi
+    # The old results table, its picker and the separate comparison table are gone.
+    for gone in ('id="comparison"', 'id="trend"', "renderComparison", "renderTrend", "cmp-a", 'class="results"'):
+        assert gone not in html
+
+
+def test_a_sparkline_appears_from_three_runs_and_a_click_picks_the_run_to_compare_with():
+    """Two runs need no history chart; from three each card carries a sparkline of every run. Clicking a point
+    compares the latest run with that one. A pick that a filter removed, or that became the latest run, is ignored
+    rather than compared with itself."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    kpi = html.split("function kpiCard(")[1].split("function renderSummary")[0]
+    assert "pts.length >= 3" in kpi
+    assert "function sparkPick(run)" in html
+    base = html.split("function compareBase()")[1].split("// Median wall-clock")[0]
+    assert "cmpPick !== last" in base
+    assert "runsShown.includes(cmpPick)" in base
+
+
+def test_seconds_drop_a_redundant_decimal():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert r"v.toFixed(1).replace(/\.0$/, '')" in html
+
+
+def test_the_item_table_says_what_changed_since_the_previous_run():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert "Since previous run" in html
+    for change in ("Regressed", "Fixed", "Flaky", "New", "Removed", "Still failing", "Still passing"):
+        assert change in html.split("const CHANGE_ORDER")[1].split("function sortVal")[0]
+    # With several runs the table opens on the regressions; one run has nothing to compare, so it opens on status.
+    assert "LABELS.length > 1 ? 'chg' : 's:' + LABELS[0]" in html
+    # Newest first: the latest result, then what changed since the previous run, then earlier runs going back.
+    assert "runList.slice(0, -1).reverse()" in html
+
+
+def test_the_run_setup_tooltip_names_what_is_the_same_and_what_differs():
+    """Results from different setups are not directly comparable, so the page says which setup facts changed
+    between runs instead of leaving the reader to infer it from a number."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    for text in ("Run setup", "Same in every run", "Differs between runs", "Attempts per test case", "Pass rule"):
+        assert text in html
+    # A field the report does not carry (a redacted workspace, say) is not listed as an empty row.
+    assert "x.vals.some((v) => v !== '\\u2013')" in html
+
+
+def test_a_filter_popup_stages_its_changes_until_apply():
+    """The kind, status and run filters follow GoodData's attribute filter: search, All, values with an Only
+    shortcut and a count, then Cancel or Apply. Nothing takes effect until Apply."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    popup = html.split("function makeMulti(")[1].split("const T = {")[0]
+    for part in ('class="search"', 'class="allrow"', 'class="only"', 'class="cancel"', 'class="apply"'):
+        assert part in popup
+    assert "FILTER_TITLE" in popup
+    # The selection moves only in `apply`; the checkboxes edit a draft.
+    assert popup.count("m.sel.add(") == 1
+
+
+def test_the_expression_filter_is_folded_away_and_the_page_has_a_print_stylesheet():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    adv = html.index('<details class="adv">')
+    assert adv < html.index('id="expr"') < html.index("</details>", adv)
+    assert "@media print" in html
+    print_css = html.split("@media print")[1].split("</style>")[0]
+    for hidden in ("#filterbar", "#drawer"):
+        assert hidden in print_css
+
+
+def test_the_template_carries_no_sample_data():
+    """The design was drafted against illustrative data. None of its model names, workspaces or flags may
+    survive into the template, or every report (a redacted one included) would carry them."""
+    html = build_html(_doc("some-model", True))
+
+    for sample in ("gpt-5", "Foundry", "ecommerce", "illustrative", "ILLUSTRATIVE"):
+        assert sample not in html
+
+
+def test_a_redacted_report_leaves_no_empty_setup_rows():
+    html = build_html(_doc("gpt-5", True), redact=True)
+
+    # Workspace and provider are blanked by redaction; the page drops a row it has no value for.
+    assert "x.vals.some((v) => v !== '\\u2013')" in html
+    assert _embedded(html)["runs"]["Model A"]["workspace_id"] == ""
 
 
 def test_building_the_html_does_not_invent_a_mode_split_for_an_older_report():
