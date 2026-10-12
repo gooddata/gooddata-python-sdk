@@ -6,6 +6,7 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -14,7 +15,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -31,6 +32,7 @@ from gooddata_eval.core.models import (
     AgenticEvalOutcome,
     ReasoningStepEvent,
     ToolCallEvent,
+    timeline_detail,
 )
 
 _DEFAULT_K = 1
@@ -182,6 +184,23 @@ class SearchToolAssertionError(AgenticAssertionError):
     """Raised when a search-tool evaluation fails."""
 
 
+def _run_detail(run: SearchResult) -> dict:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Extracted so a failing run is described by exactly the same keys as the winning run --
+    for this kind that means the tools it actually called, which is the whole question when
+    the run failed because it selected the wrong one.
+    """
+    return {
+        "tool_selected": run.tool_selected,
+        "tool_correct": run.tool_correct,
+        "tool_call_names": run.tool_call_names,
+        # timeline_detail rather than build_latency_breakdown: it carries tool_calls too, and
+        # a per-run record without it cannot say which tools the failing run actually ran.
+        **timeline_detail(run.tool_call_events, run.reasoning_step_events),
+    }
+
+
 def evaluate_agentic_search_tool(
     host: str,
     token: str,
@@ -271,12 +290,13 @@ def evaluate_agentic_search_tool(
     runs_effective = len(summary.run_results)
 
     best = summary.best
-    detail = agentic_detail(
-        best.tool_call_events,
-        best.reasoning_step_events,
-        tool_selected=best.tool_selected,
-        tool_correct=best.tool_correct,
-        tool_call_names=best.tool_call_names,
+    detail = _run_detail(best)
+    # Same predicate pass@K and runs_passed are taken over, so an item's failed_runs and its
+    # counts cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.tool_selected,
+        detail=_run_detail,
     )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
@@ -293,6 +313,7 @@ def evaluate_agentic_search_tool(
             runs_passed=runs_passed,
             runs_effective=runs_effective,
             best_run_latency_s=best.run_latency_s,
+            failed_runs=failed_runs,
         )
     return agentic_success(
         reasoning_steps=best.reasoning_steps,
@@ -302,4 +323,5 @@ def evaluate_agentic_search_tool(
         runs_passed=runs_passed,
         runs_effective=runs_effective,
         best_run_latency_s=best.run_latency_s,
+        failed_runs=failed_runs,
     )

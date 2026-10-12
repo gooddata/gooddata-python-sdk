@@ -33,12 +33,38 @@ _REDACTED_ITEM_FIELDS = frozenset({"conversation_id", "response_id", "reasoning"
 # for how long, just not what it was handed or what came back.
 _REDACTED_DETAIL_FIELDS = frozenset({"transcript", "tool_calls"})
 
+# Same again, one level down inside each `failed_runs` entry. The per-run records carry
+# their *own* ids and their own raw reasoning (`reasoning_steps`), so redacting only the
+# item's top level left the identical content exposed one level deeper -- the top-level
+# `reasoning` dropped while the same text survived verbatim in `failed_runs`.
+#
+# Kept on purpose, matching what the top level keeps: `reasoning_step_count` (a count, like
+# `detail.turns`), `tool_call_count`/`tool_names` (which tool ran, never its arguments or
+# its result -- the same line `latency_breakdown` draws), and the run's verdict, error and
+# timings, which are facts about the run rather than about our infrastructure.
+_REDACTED_RUN_FIELDS = frozenset({"conversation_id", "response_id", "reasoning_steps"})
+
+
+def _redact_detail(detail: dict) -> dict:
+    return {k: v for k, v in detail.items() if k not in _REDACTED_DETAIL_FIELDS}
+
+
+def _redact_failed_run(run: dict) -> dict:
+    out = {k: v for k, v in run.items() if k not in _REDACTED_RUN_FIELDS}
+    detail = out.get("detail")
+    if isinstance(detail, dict):
+        out["detail"] = _redact_detail(detail)
+    return out
+
 
 def _redact_item(item: dict) -> dict:
     out = {k: v for k, v in item.items() if k not in _REDACTED_ITEM_FIELDS}
     detail = out.get("detail")
     if isinstance(detail, dict):
-        out["detail"] = {k: v for k, v in detail.items() if k not in _REDACTED_DETAIL_FIELDS}
+        out["detail"] = _redact_detail(detail)
+    failed_runs = out.get("failed_runs")
+    if isinstance(failed_runs, list):
+        out["failed_runs"] = [_redact_failed_run(run) if isinstance(run, dict) else run for run in failed_runs]
     return out
 
 

@@ -409,6 +409,7 @@ class AgenticAssertionError(AssertionError):
     runs_passed: int
     runs_effective: int
     best_run_latency_s: float | None
+    failed_runs: list[dict]
 
 
 class AgenticEvalOutcome(BaseModel):
@@ -440,6 +441,12 @@ class AgenticEvalOutcome(BaseModel):
     # not in a loop the runner itself can time. None for a kind that has not yet been
     # wired to measure it (see AgenticAssertionError.best_run_latency_s, same default).
     best_run_latency_s: float | None = None
+    # One record per run that did not pass. ``detail`` above describes only the winning run,
+    # so without this a 1/K item and a 0/K item carry identical diagnostics and neither says
+    # anything about the K-1 attempts that failed. Built by
+    # ``core.agentic._failed_runs.build_failed_runs``; mirrors the single-shot path's
+    # ``ItemReport.failed_runs``, which ``core/runner.py`` fills for the non-agentic kinds.
+    failed_runs: list[dict] = Field(default_factory=list)
 
 
 class SummaryInput(BaseModel):

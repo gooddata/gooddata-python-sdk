@@ -6,6 +6,7 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -14,7 +15,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -33,6 +34,7 @@ from gooddata_eval.core.models import (
     AgenticEvalOutcome,
     ReasoningStepEvent,
     ToolCallEvent,
+    timeline_detail,
 )
 from gooddata_eval.core.timing import PhaseTimings, log_timer, run_latency_s, sum_timings
 
@@ -214,6 +216,46 @@ class GeneralQuestionAssertionError(AgenticAssertionError):
     """Raised when a general-question evaluation fails."""
 
 
+def _attach_diagnostics(
+    error: AgenticAssertionError | JudgeResponseError,
+    best: GeneralQuestionResult,
+    detail: dict,
+    failed_runs: list[dict],
+    runs_passed: int,
+    runs_effective: int,
+) -> None:
+    """Hang the report payload on a raised error, whichever error it is.
+
+    Both exits carry the same payload: the gate failure below, and the all-ungraded
+    JudgeResponseError above. They differ only in what the runner does with it -- the
+    second also marks the item errored -- so the attributes are set in one place.
+    """
+    error.reasoning_steps = best.reasoning_steps
+    error.conversation_id = best.conversation_id
+    error.response_id = best.response_id
+    error.detail = detail
+    error.runs_passed = runs_passed
+    error.runs_effective = runs_effective
+    error.failed_runs = failed_runs
+
+
+def _run_detail(run: GeneralQuestionResult) -> dict:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Extracted so a failing run is described by exactly the same keys as the winning run --
+    the two were worth comparing side by side, which they are not if only one of them
+    carries the judge's reasoning.
+    """
+    return {
+        "judge_passed": run.passed,
+        "judge_reasoning": run.reasoning,
+        "actual_output": run.actual_output,
+        # timeline_detail rather than build_latency_breakdown: it carries tool_calls too, and
+        # a per-run record without it cannot say which tools the failing run actually ran.
+        **timeline_detail(run.tool_call_events, run.reasoning_step_events),
+    }
+
+
 def evaluate_agentic_general_question(
     host: str,
     token: str,
@@ -308,34 +350,40 @@ def evaluate_agentic_general_question(
     item_timings = sum_timings([r.timings for r in summary.run_results])
     unscored = summary.judge_errors
 
+    runs_passed = sum(1 for r in summary.scored_run_results if r.passed)
+    runs_effective = len(summary.run_results)
+
+    best = summary.best
+    detail = {
+        **_run_detail(best),
+        # Only present when it happened, so the usual JSON shape is unchanged. A
+        # pass@K computed over fewer runs than --runs asked for is a weaker result and
+        # the report has to say so.
+        **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),
+    }
+    # An ungraded run has no verdict, so `r.passed` is not a claim about it -- treat it as
+    # non-passing here so it is recorded with its judge_error rather than silently dropped.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.judge_error is None and r.passed,
+        detail=_run_detail,
+    )
+
     if not summary.scored_run_results:
         # Not one run produced a readable verdict, so this item has no result -- an error,
         # not K failures. Raised after the trace link is queued so whatever the agent did
         # is still linked, and carrying the timings so the runner can report what the item
         # cost before it became unevaluable.
-        exc = JudgeResponseError(
+        error = JudgeResponseError(
             f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
             + " | ".join(unscored)
         )
-        exc.timings = item_timings
-        exc.best_run_latency_s = run_latency_s(summary.best.timings)
-        raise exc
-
-    runs_passed = sum(1 for r in summary.scored_run_results if r.passed)
-    runs_effective = len(summary.run_results)
-
-    best = summary.best
-    detail = agentic_detail(
-        best.tool_call_events,
-        best.reasoning_step_events,
-        judge_passed=best.passed,
-        judge_reasoning=best.reasoning,
-        actual_output=best.actual_output,
-        # Only present when it happened, so the usual JSON shape is unchanged. A
-        # pass@K computed over fewer runs than --runs asked for is a weaker result and
-        # the report has to say so.
-        **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),
-    )
+        _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective)
+        error.timings = item_timings
+        # This kind measures the best run from its PhaseTimings rather than carrying a
+        # run_latency_s attribute, so it cannot reuse the summary.best.run_latency_s form.
+        error.best_run_latency_s = run_latency_s(summary.best.timings)
+        raise error
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
@@ -350,6 +398,7 @@ def evaluate_agentic_general_question(
             runs_effective=runs_effective,
             best_run_latency_s=run_latency_s(best.timings),
             timings=item_timings,
+            failed_runs=failed_runs,
         )
     return agentic_success(
         reasoning_steps=best.reasoning_steps,
@@ -360,4 +409,7 @@ def evaluate_agentic_general_question(
         runs_effective=runs_effective,
         best_run_latency_s=run_latency_s(best.timings),
         timings=item_timings,
+        # Also on the success path: pass@K clears the gate with one passing run, so a
+        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        failed_runs=failed_runs,
     )

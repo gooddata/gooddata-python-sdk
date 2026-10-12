@@ -58,6 +58,7 @@ def raise_agentic_failure(
     runs_effective: int,
     best_run_latency_s: float | None,
     timings: PhaseTimings | None = None,
+    failed_runs: list[dict] | None = None,
 ) -> NoReturn:
     """Build ``exception_cls(message)`` with every common field attached, and raise it.
 
@@ -80,6 +81,10 @@ def raise_agentic_failure(
     exc.best_run_latency_s = best_run_latency_s
     if timings is not None:
         exc.timings = timings
+    # Optional for the same reason timings is: agentic_conversation drives its fixture once,
+    # so it has no K to have failing runs within and passes nothing here.
+    if failed_runs is not None:
+        exc.failed_runs = failed_runs
     raise exc
 
 
@@ -93,6 +98,7 @@ def agentic_success(
     runs_effective: int,
     best_run_latency_s: float | None,
     timings: PhaseTimings | None = None,
+    failed_runs: list[dict] | None = None,
 ) -> AgenticEvalOutcome:
     """The success-path mirror of ``raise_agentic_failure`` -- same fields, same shape."""
     kwargs: dict[str, Any] = {
@@ -106,4 +112,6 @@ def agentic_success(
     }
     if timings is not None:
         kwargs["timings"] = timings
+    if failed_runs is not None:
+        kwargs["failed_runs"] = failed_runs
     return AgenticEvalOutcome(**kwargs)

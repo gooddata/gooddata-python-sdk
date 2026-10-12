@@ -32,6 +32,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -644,6 +645,13 @@ def evaluate_agentic_anomaly_detection(
     best = summary.best
     ev = best.evaluation
     detail = _detail(best)
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.evaluation.strict_pass,
+        detail=_detail,
+    )
     runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
@@ -666,6 +674,7 @@ def evaluate_agentic_anomaly_detection(
             runs_passed=runs_passed,
             runs_effective=len(summary.run_results),
             best_run_latency_s=best.run_latency_s,
+            failed_runs=failed_runs,
         )
 
     return agentic_success(
@@ -676,4 +685,5 @@ def evaluate_agentic_anomaly_detection(
         runs_passed=runs_passed,
         runs_effective=len(summary.run_results),
         best_run_latency_s=best.run_latency_s,
+        failed_runs=failed_runs,
     )

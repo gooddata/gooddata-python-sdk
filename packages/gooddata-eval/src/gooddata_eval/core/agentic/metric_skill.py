@@ -12,6 +12,7 @@ from typing import Any
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import GoodDataSdk
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -20,7 +21,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -41,6 +42,7 @@ from gooddata_eval.core.models import (
     ReasoningStepEvent,
     ToolCallEvent,
     shift_and_index_events,
+    timeline_detail,
 )
 from gooddata_eval.core.timing import PhaseTimings, log_timer, run_latency_s, sum_timings
 
@@ -603,18 +605,34 @@ def evaluate_agentic_metric_skill(
 
     best = summary.best
     expected_outputs_list: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
-    detail = agentic_detail(
-        best.tool_call_events,
-        best.reasoning_step_events,
-        metric_created=best.metric_created,
-        maql_correct=best.maql_correct,
-        expected_maql_candidates=[c.get("maql", "") for c in expected_outputs_list],
-        actual_maql=best.actual_maql,
-        # Why the loop stopped. metric_created=False alone cannot tell a refusal from a run
-        # that hit max_iterations while still on track -- see LoopExit.
-        exit_reason=best.exit_reason.value,
-        turns_used=best.turns_used,
-        max_iterations=max_iterations,
+
+    def _run_detail(run: MetricRunResult) -> dict:
+        """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+        Extracted so a failing run is described by exactly the same keys as the winning run --
+        for this kind that means the MAQL the run actually produced, which is the whole diagnosis.
+        """
+        return {
+            "metric_created": run.metric_created,
+            "maql_correct": run.maql_correct,
+            "expected_maql_candidates": [c.get("maql", "") for c in expected_outputs_list],
+            "actual_maql": run.actual_maql,
+            # Why the loop stopped. metric_created=False alone cannot tell a refusal from a
+            # run that hit max_iterations while still on track -- see LoopExit.
+            "exit_reason": run.exit_reason.value,
+            "turns_used": run.turns_used,
+            **timeline_detail(run.tool_call_events, run.reasoning_step_events),
+        }
+
+    # max_iterations is the same for every run, so it stays at the item level rather than
+    # being repeated into each failing run's detail.
+    detail = {**_run_detail(best), "max_iterations": max_iterations}
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.metric_created and r.maql_correct,
+        detail=_run_detail,
     )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
@@ -634,6 +652,7 @@ def evaluate_agentic_metric_skill(
             runs_effective=runs_effective,
             best_run_latency_s=run_latency_s(best.timings),
             timings=item_timings,
+            failed_runs=failed_runs,
         )
     return agentic_success(
         reasoning_steps=best.reasoning_steps,
@@ -644,4 +663,7 @@ def evaluate_agentic_metric_skill(
         runs_effective=runs_effective,
         best_run_latency_s=run_latency_s(best.timings),
         timings=item_timings,
+        # Also on the success path: pass@K clears the gate with one passing run, so a
+        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        failed_runs=failed_runs,
     )

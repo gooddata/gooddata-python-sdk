@@ -11,6 +11,7 @@ import os
 import time
 from dataclasses import dataclass, field
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -19,7 +20,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -48,6 +49,7 @@ from gooddata_eval.core.models import (
     ReasoningStepEvent,
     ToolCallEvent,
     shift_and_index_events,
+    timeline_detail,
 )
 from gooddata_eval.core.scoring import get_dimension_uri_set, get_metric_uri_set, uri_to_display_name
 
@@ -375,6 +377,23 @@ class VisualizationAssertionError(AgenticAssertionError):
     """Raised when a visualization evaluation fails."""
 
 
+def _run_detail(run: RunResult) -> dict:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Extracted so a failing run is described by exactly the same keys as the winning run --
+    for this kind that means the full per-check breakdown, including the expected/actual
+    filter pairs, which is what tells a wrong filter apart from a wrong metric.
+    """
+    return {
+        **evaluation_result_detail(run.eval_result),
+        # Why the loop stopped -- see LoopExit. total_turns is already the turn count for
+        # this run, so it doubles as turns_used.
+        "exit_reason": run.exit_reason.value,
+        "turns_used": int(run.total_turns),
+        **timeline_detail(run.tool_call_events, run.reasoning_step_events),
+    }
+
+
 def _filter_diff(category: str, ev: EvaluationResult) -> str:
     """Expected-vs-actual lines for one filter category, or "" when they matched.
 
@@ -517,15 +536,17 @@ def evaluate_agentic_visualization(
 
     best = summary.best
     ev = best.eval_result
-    detail = agentic_detail(
-        best.tool_call_events,
-        best.reasoning_step_events,
-        **evaluation_result_detail(ev),
-        # Why the loop stopped -- see LoopExit. total_turns is already the turn count for
-        # this run, so it doubles as turns_used.
-        exit_reason=best.exit_reason.value,
-        turns_used=int(best.total_turns),
-        max_iterations=max_iterations,
+    # max_iterations is the same for every run, so it stays at the item level rather than
+    # being repeated into each failing run's detail.
+    detail = {**_run_detail(best), "max_iterations": max_iterations}
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed. Every failing run keeps its own
+    # expected/actual check breakdown -- for this kind that is the whole diagnosis, and
+    # until now only the winning run's survived.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.eval_result.strict_pass,
+        detail=_run_detail,
     )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
@@ -574,6 +595,7 @@ def evaluate_agentic_visualization(
             runs_passed=runs_passed,
             runs_effective=runs_effective,
             best_run_latency_s=best.run_latency_s,
+            failed_runs=failed_runs,
         )
     return agentic_success(
         reasoning_steps=best.reasoning_steps,
@@ -583,4 +605,5 @@ def evaluate_agentic_visualization(
         runs_passed=runs_passed,
         runs_effective=runs_effective,
         best_run_latency_s=best.run_latency_s,
+        failed_runs=failed_runs,
     )

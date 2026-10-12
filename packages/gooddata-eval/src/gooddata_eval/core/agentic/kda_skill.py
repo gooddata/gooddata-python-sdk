@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 
 import httpx
 
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -18,7 +19,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -39,6 +40,7 @@ from gooddata_eval.core.models import (
     ReasoningStepEvent,
     ToolCallEvent,
     shift_and_index_events,
+    timeline_detail,
 )
 
 _log = logging.getLogger(__name__)
@@ -419,6 +421,31 @@ class KdaSkillAssertionError(AgenticAssertionError):
     """Raised when a KDA-skill evaluation fails."""
 
 
+def _run_detail(run: KdaRunResult) -> dict:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Extracted so a failing run is described by exactly the same keys as the winning run --
+    for this kind that means which phase the run reached before it stopped.
+    """
+    ev = run.evaluation
+    return {
+        "triggered": ev.triggered,
+        "executed": ev.executed,
+        "success": ev.success,
+        "turn_completed": ev.turn_completed,
+        "disambiguated": ev.disambiguated,
+        "actual_create_args": run.actual_create_args,
+        "actual_execute_result": run.actual_execute_result,
+        # Why the loop stopped -- see LoopExit. Per-run rather than best-only: on a failing
+        # run it is the first thing worth reading.
+        "exit_reason": run.exit_reason.value,
+        "turns_used": run.turns_used,
+        # timeline_detail rather than build_latency_breakdown: it carries tool_calls too, and
+        # a per-run record without it cannot say which tools the failing run actually ran.
+        **timeline_detail(run.tool_call_events, run.reasoning_step_events),
+    }
+
+
 def evaluate_agentic_kda_skill(
     host: str,
     token: str,
@@ -536,20 +563,15 @@ def evaluate_agentic_kda_skill(
 
     best = summary.best
     ev = best.evaluation
-    detail = agentic_detail(
-        best.tool_call_events,
-        best.reasoning_step_events,
-        triggered=ev.triggered,
-        executed=ev.executed,
-        success=ev.success,
-        turn_completed=ev.turn_completed,
-        disambiguated=ev.disambiguated,
-        actual_create_args=best.actual_create_args,
-        actual_execute_result=best.actual_execute_result,
-        # Why the loop stopped -- see LoopExit.
-        exit_reason=best.exit_reason.value,
-        turns_used=best.turns_used,
-        max_iterations=max_iterations,
+    # max_iterations is the same for every run, so it stays at the item level rather than
+    # being repeated into each failing run's detail.
+    detail = {**_run_detail(best), "max_iterations": max_iterations}
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.evaluation.strict_pass,
+        detail=_run_detail,
     )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
@@ -571,6 +593,7 @@ def evaluate_agentic_kda_skill(
             runs_passed=runs_passed,
             runs_effective=runs_effective,
             best_run_latency_s=best.run_latency_s,
+            failed_runs=failed_runs,
         )
     return agentic_success(
         reasoning_steps=best.reasoning_steps,
@@ -580,4 +603,5 @@ def evaluate_agentic_kda_skill(
         runs_passed=runs_passed,
         runs_effective=runs_effective,
         best_run_latency_s=best.run_latency_s,
+        failed_runs=failed_runs,
     )
