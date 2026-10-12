@@ -4,7 +4,7 @@ packages/gooddata-eval/tests/test_agentic_runner.py
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "9e4d9a42da52c1ed74e6f5decbd16a6f789d29cf",
+  "base_commit_sha": "2527a87162dcb623fb9a54a14b3f6b84bb216218",
   "prompts": {},
   "sessions": {
     "s_160cda2303f459": {
