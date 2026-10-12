@@ -14,20 +14,20 @@ _fixtures_dir = _current_dir / "fixtures"
 
 index_types = [
     # reference to the columns key
-    "region",
-    dict(reg="region"),
+    pytest.param("region", id="column_key"),
+    pytest.param(dict(reg="region"), id="column_key_dict"),
     # label_id, i.e. obj id without "label/" prefix - index can reference only attributes
-    "region",
-    dict(region="region"),
+    pytest.param("region", id="label_id"),
+    pytest.param(dict(region="region"), id="label_id_dict"),
     # object identifier in string form
-    "label/region",
-    dict(reg="label/region"),
+    pytest.param("label/region", id="obj_id_str"),
+    pytest.param(dict(reg="label/region"), id="obj_id_str_dict"),
     # Attribute instance
-    Attribute(local_id="abcd", label=ObjId(id="region", type="label")),
-    dict(region=Attribute(local_id="abcd", label=ObjId(id="region", type="label"))),
+    pytest.param(Attribute(local_id="abcd", label=ObjId(id="region", type="label")), id="attribute"),
+    pytest.param(dict(region=Attribute(local_id="abcd", label=ObjId(id="region", type="label"))), id="attribute_dict"),
     # ObjId instance
-    ObjId(id="region", type="label"),
-    dict(region=ObjId(id="region", type="label")),
+    pytest.param(ObjId(id="region", type="label"), id="obj_id"),
+    pytest.param(dict(region=ObjId(id="region", type="label")), id="obj_id_dict"),
 ]
 
 

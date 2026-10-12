@@ -54,7 +54,7 @@ _KNOWN_PART_TYPES: frozenset[str] = frozenset(
         "visualization",
         "dashboard",
         "dashboardPatch",
-        "report",
+        "document",
         "kda",
         "whatIf",
         "searchResults",

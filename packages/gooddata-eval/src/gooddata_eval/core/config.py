@@ -100,3 +100,5 @@ class RunConfig:
     item_timeout_s: float | None = None
     """Wall-clock cap per item across all its turns; None keeps GOODDATA_EVAL_CHAT_ITEM_TIMEOUT_S."""
     gate: EvalGate = DEFAULT_GATE
+    tags: tuple[str, ...] = ()
+    """Custom Langfuse trace tags, added after the automatic ones."""

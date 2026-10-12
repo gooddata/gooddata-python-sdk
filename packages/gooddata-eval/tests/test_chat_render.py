@@ -52,14 +52,14 @@ def test_an_unmodelled_part_type_is_kept_not_dropped():
     assert "kda" in render_answer_text(result)
 
 
-def test_a_report_part_is_kept_verbatim_without_an_unknown_type_warning(caplog: pytest.LogCaptureFixture) -> None:
+def test_a_document_part_is_kept_verbatim_without_an_unknown_type_warning(caplog: pytest.LogCaptureFixture) -> None:
     part = {
-        "type": "report",
-        "report_ref": "report_1",
+        "type": "document",
+        "document_ref": "document_1",
         "format": "aac-v1",
-        "report": {
+        "document": {
             "id": "sales_overview",
-            "type": "report",
+            "type": "document",
             "title": "Sales overview",
             "period": {"start": "2026-01-01", "end": "2026-06-30"},
             "pages": [
@@ -67,7 +67,9 @@ def test_a_report_part_is_kept_verbatim_without_an_unknown_type_warning(caplog: 
                     "id": "page1",
                     "kind": "cover",
                     "format": "widescreen",
-                    "layout": {"column": [{"id": "coverTitle", "weight": 2, "heading": "{reportName}", "style": "h1"}]},
+                    "layout": {
+                        "column": [{"id": "coverTitle", "weight": 2, "heading": "{documentName}", "style": "h1"}]
+                    },
                 },
                 {
                     "id": "page2",
@@ -83,11 +85,11 @@ def test_a_report_part_is_kept_verbatim_without_an_unknown_type_warning(caplog: 
             ],
         },
         "page_count": 2,
-        "base_report_id": None,
-        "saved_report_id": None,
+        "base_document_id": None,
+        "saved_document_id": None,
     }
     with caplog.at_level("WARNING", logger="gooddata_eval.core.chat.sse_client"):
-        result = parse_sse_lines(_multipart_lines({"type": "text", "text": "I've put together a report."}, part))
+        result = parse_sse_lines(_multipart_lines({"type": "text", "text": "I've put together a document."}, part))
     assert result.unhandled_parts == [part]
     assert "unknown multipart part type" not in caplog.text
 
@@ -110,7 +112,7 @@ def test_known_part_types_matches_the_documented_gen_ai_union():
         "visualization",
         "dashboard",
         "dashboardPatch",
-        "report",
+        "document",
         "kda",
         "whatIf",
         "searchResults",
