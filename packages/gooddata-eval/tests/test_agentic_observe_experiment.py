@@ -213,6 +213,28 @@ def test_a_score_target_writes_to_both_the_gen_ai_trace_and_the_experiment_span(
     assert [body["value"] for body in bodies] == [1.0, 1.0]
 
 
+@pytest.mark.parametrize(
+    ("run_metadata", "expected_tags"),
+    [
+        ({"model_version": "gpt"}, ["gd-eval"]),
+        ({"tags": ["acme", "nightly"]}, ["gd-eval", "acme", "nightly"]),
+        (
+            {"testing_framework": "tavern-e2e", "tags": ["acme", "gd-eval", "tavern-e2e", "acme"]},
+            ["gd-eval", "tavern-e2e", "acme"],
+        ),
+        # A library caller passing one tag as a bare string gets that tag, not its characters.
+        ({"tags": "acme"}, ["gd-eval", "acme"]),
+    ],
+)
+def test_custom_run_tags_follow_the_automatic_ones(rec, run_metadata, expected_tags):
+    trace = _gen_ai_trace()
+
+    with observe(rec.client, trace.id, "item-1", "run0", run_metadata, trace=trace):
+        pass
+
+    assert _attrs(rec.spans()[0])["langfuse.trace.tags"] == expected_tags
+
+
 def test_a_refused_gen_ai_score_still_reaches_the_experiment_span():
     """One destination rejecting a score must not cost the other one its copy."""
     bodies: list[dict] = []
