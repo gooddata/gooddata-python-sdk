@@ -9,7 +9,7 @@ packages/gooddata-eval/src/gooddata_eval/core/langfuse/client.py
 packages/gooddata-eval/tests/test_agentic_join_trace.py
   s_eb4ec8b714e7de::t_da81d7564ddef0 8,17-24,279-364
 packages/gooddata-eval/src/gooddata_eval/core/agentic/_langfuse.py
-  s_eb4ec8b714e7de::t_da81d7564ddef0 6,539-568,582,584-586
+  s_eb4ec8b714e7de::t_da81d7564ddef0 6,539-568,543-572,582,584-586,586,588-590
 ---
 {
   "schema_version": "authorship/3.0.0",

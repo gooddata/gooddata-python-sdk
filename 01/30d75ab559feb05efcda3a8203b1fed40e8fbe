@@ -1,5 +1,5 @@
 packages/gooddata-eval/tests/test_agentic_runner.py
-  s_160cda2303f459::t_a4f2a51f6e95ab 1002-1004,1007-1008
+  s_160cda2303f459::t_a4f2a51f6e95ab 1002-1004,1007-1008,1014-1016,1019-1020
 ---
 {
   "schema_version": "authorship/3.0.0",
