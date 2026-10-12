@@ -61,6 +61,7 @@ class AfmObjectIdentifierCoreIdentifier(ModelNormal):
             'LABEL': "label",
             'FACT': "fact",
             'METRIC': "metric",
+            'COMPUTEDATTRIBUTE': "computedAttribute",
         },
     }
 

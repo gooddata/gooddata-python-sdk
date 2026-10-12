@@ -5,11 +5,10 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**add_targets**](ActionsApi.md#add_targets) | **POST** /api/v1/actions/ipAllowlistPolicies/{id}/addTargets | Add targets to IP allowlist policy
-[**ai_chat**](ActionsApi.md#ai_chat) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chat | (BETA) Chat with AI
-[**ai_chat_history**](ActionsApi.md#ai_chat_history) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatHistory | (BETA) Get Chat History
-[**ai_chat_stream**](ActionsApi.md#ai_chat_stream) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatStream | (BETA) Chat with AI
-[**ai_chat_usage**](ActionsApi.md#ai_chat_usage) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/chatUsage | Get Chat Usage
-[**ai_search**](ActionsApi.md#ai_search) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/search | (BETA) Semantic Search in Metadata
+[**ai_chat**](ActionsApi.md#ai_chat) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chat | (REMOVED) Chat with AI
+[**ai_chat_history**](ActionsApi.md#ai_chat_history) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatHistory | (REMOVED) Get Chat History
+[**ai_chat_stream**](ActionsApi.md#ai_chat_stream) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/chatStream | (REMOVED) Chat with AI
+[**ai_chat_usage**](ActionsApi.md#ai_chat_usage) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/chatUsage | (REMOVED) Get Chat Usage
 [**all_platform_usage**](ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
 [**analyze_csv**](ActionsApi.md#analyze_csv) | **POST** /api/v1/actions/fileStorage/staging/analyzeCsv | Analyze CSV
 [**anomaly_detection**](ActionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
@@ -17,7 +16,7 @@ Method | HTTP request | Description
 [**attribute_permissions**](ActionsApi.md#attribute_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/permissions | Get Attribute Permissions
 [**available_assignees**](ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 [**cancel_executions**](ActionsApi.md#cancel_executions) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/cancel | Applies all the given cancel tokens.
-[**cancel_workflow**](ActionsApi.md#cancel_workflow) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/cancel | 
+[**cancel_flows**](ActionsApi.md#cancel_flows) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/flow/cancel | (EXPERIMENTAL) Apply the given cancel tokens to flows
 [**change_analysis**](ActionsApi.md#change_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis | Compute change analysis
 [**change_analysis_result**](ActionsApi.md#change_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeChangeAnalysis/result/{resultId} | Get change analysis result
 [**check_entity_overrides**](ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
@@ -31,11 +30,13 @@ Method | HTTP request | Description
 [**compute_report_for_visualization_object**](ActionsApi.md#compute_report_for_visualization_object) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/visualization/{visualizationObjectId}/execute | (BETA) Executes a visualization object and returns link to the result
 [**compute_valid_descendants**](ActionsApi.md#compute_valid_descendants) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants | (BETA) Valid descendants
 [**compute_valid_objects**](ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
+[**computed_attribute_permissions**](ActionsApi.md#computed_attribute_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/computedAttributes/{computedAttributeId}/permissions | (BETA) Get Computed Attribute Permissions
 [**convert_geo_file**](ActionsApi.md#convert_geo_file) | **POST** /api/v1/actions/customGeoCollection/convert | Convert a geo file to GeoParquet format
 [**create_dashboard_export_request**](ActionsApi.md#create_dashboard_export_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/export/tabular | (EXPERIMENTAL) Create dashboard tabular export request
 [**create_image_export**](ActionsApi.md#create_image_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/image | (EXPERIMENTAL) Create image export request
 [**create_pdf_export**](ActionsApi.md#create_pdf_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/visual | Create visual - pdf export request
 [**create_raw_export**](ActionsApi.md#create_raw_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/raw | (EXPERIMENTAL) Create raw export request
+[**create_report_export**](ActionsApi.md#create_report_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/report | (EXPERIMENTAL) Create report export request
 [**create_slides_export**](ActionsApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
 [**create_tabular_export**](ActionsApi.md#create_tabular_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/tabular | Create tabular export request
 [**created_by**](ActionsApi.md#created_by) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy | Get Analytics Catalog CreatedBy Users
@@ -44,11 +45,11 @@ Method | HTTP request | Description
 [**delete_files**](ActionsApi.md#delete_files) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/deleteFiles | Delete datasource files
 [**delete_organization_automations**](ActionsApi.md#delete_organization_automations) | **POST** /api/v1/actions/organization/automations/delete | Delete selected automations across all workspaces
 [**delete_workspace_automations**](ActionsApi.md#delete_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/delete | Delete selected automations in the workspace
+[**execute_flow**](ActionsApi.md#execute_flow) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/flow | (EXPERIMENTAL) Execute a flow
 [**explain_afm**](ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
 [**fact_permissions**](ActionsApi.md#fact_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/facts/{factId}/permissions | Get Fact Permissions
 [**forecast**](ActionsApi.md#forecast) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/{resultId} | Smart functions - Forecast
 [**forecast_result**](ActionsApi.md#forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/forecast/result/{resultId} | Smart functions - Forecast Result
-[**generate_dashboard_summary**](ActionsApi.md#generate_dashboard_summary) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/dashboardSummary | 
 [**generate_description**](ActionsApi.md#generate_description) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateDescription | Generate Description for Analytics Object
 [**generate_logical_model**](ActionsApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
 [**generate_title**](ActionsApi.md#generate_title) | **POST** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/generateTitle | Generate Title for Analytics Object
@@ -63,11 +64,12 @@ Method | HTTP request | Description
 [**get_quality_issues**](ActionsApi.md#get_quality_issues) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues | Get Quality Issues
 [**get_quality_issues_calculation_status**](ActionsApi.md#get_quality_issues_calculation_status) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues/status/{processId} | Get Quality Issues Calculation Status
 [**get_raw_export**](ActionsApi.md#get_raw_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId} | (EXPERIMENTAL) Retrieve exported files
+[**get_report_export**](ActionsApi.md#get_report_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/report/{exportId} | (EXPERIMENTAL) Retrieve exported files
+[**get_report_export_metadata**](ActionsApi.md#get_report_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/report/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 [**get_slides_export**](ActionsApi.md#get_slides_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId} | (EXPERIMENTAL) Retrieve exported files
 [**get_slides_export_metadata**](ActionsApi.md#get_slides_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 [**get_tabular_export**](ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 [**get_translation_tags**](ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
-[**get_workflow_status**](ActionsApi.md#get_workflow_status) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/status | 
 [**import_csv**](ActionsApi.md#import_csv) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/importCsv | Import CSV
 [**import_custom_geo_collection**](ActionsApi.md#import_custom_geo_collection) | **POST** /api/v1/actions/customGeoCollection/{collectionId}/import | Import custom geo collection
 [**inherited_entity_conflicts**](ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
@@ -76,17 +78,20 @@ Method | HTTP request | Description
 [**key_driver_analysis_result**](ActionsApi.md#key_driver_analysis_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId} | (EXPERIMENTAL) Get key driver analysis result
 [**label_permissions**](ActionsApi.md#label_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/permissions | Get Label Permissions
 [**list_files**](ActionsApi.md#list_files) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/listFiles | List datasource files
+[**list_flow_operations**](ActionsApi.md#list_flow_operations) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/flow/operations | (EXPERIMENTAL) List the operations of flows
 [**list_llm_provider_models**](ActionsApi.md#list_llm_provider_models) | **POST** /api/v1/actions/ai/llmProvider/listModels | List LLM Provider Models
 [**list_llm_provider_models_by_id**](ActionsApi.md#list_llm_provider_models_by_id) | **POST** /api/v1/actions/ai/llmProvider/{llmProviderId}/listModels | List LLM Provider Models By Id
 [**list_workspace_user_groups**](ActionsApi.md#list_workspace_user_groups) | **GET** /api/v1/actions/workspaces/{workspaceId}/userGroups | 
 [**list_workspace_users**](ActionsApi.md#list_workspace_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/users | 
 [**manage_attribute_permissions**](ActionsApi.md#manage_attribute_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/managePermissions | Manage Permissions for an Attribute
+[**manage_computed_attribute_permissions**](ActionsApi.md#manage_computed_attribute_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/computedAttributes/{computedAttributeId}/managePermissions | (BETA) Manage Permissions for a Computed Attribute
 [**manage_dashboard_permissions**](ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 [**manage_data_source_permissions**](ActionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 [**manage_fact_permissions**](ActionsApi.md#manage_fact_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/facts/{factId}/managePermissions | Manage Permissions for a Fact
 [**manage_label_permissions**](ActionsApi.md#manage_label_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/managePermissions | Manage Permissions for a Label
 [**manage_metric_permissions**](ActionsApi.md#manage_metric_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/managePermissions | (BETA) Manage Permissions for a Metric
 [**manage_organization_permissions**](ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
+[**manage_visualization_permissions**](ActionsApi.md#manage_visualization_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{visualizationObjectId}/managePermissions | (BETA) Manage Permissions for a Visualization
 [**manage_workspace_permissions**](ActionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
 [**mark_as_read_notification**](ActionsApi.md#mark_as_read_notification) | **POST** /api/v1/actions/notifications/{notificationId}/markAsRead | Mark notification as read.
 [**mark_as_read_notification_all**](ActionsApi.md#mark_as_read_notification_all) | **POST** /api/v1/actions/notifications/markAsRead | Mark all notifications as read.
@@ -98,6 +103,7 @@ Method | HTTP request | Description
 [**particular_platform_usage**](ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
 [**pause_organization_automations**](ActionsApi.md#pause_organization_automations) | **POST** /api/v1/actions/organization/automations/pause | Pause selected automations across all workspaces
 [**pause_workspace_automations**](ActionsApi.md#pause_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/pause | Pause selected automations in the workspace
+[**process_invitation**](ActionsApi.md#process_invitation) | **POST** /api/v1/actions/invite | Invite User
 [**read_csv_file_manifests**](ActionsApi.md#read_csv_file_manifests) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/readCsvFileManifests | Read CSV file manifests
 [**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 [**register_workspace_upload_notification**](ActionsApi.md#register_workspace_upload_notification) | **POST** /api/v1/actions/workspaces/{workspaceId}/uploadNotification | Register an upload notification
@@ -106,20 +112,23 @@ Method | HTTP request | Description
 [**resolve_all_entitlements**](ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 [**resolve_all_settings_without_workspace**](ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
 [**resolve_llm_endpoints**](ActionsApi.md#resolve_llm_endpoints) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmEndpoints | Get Active LLM Endpoints for this workspace (Removed)
-[**resolve_llm_providers**](ActionsApi.md#resolve_llm_providers) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmProviders | Get Active LLM configuration for this workspace
 [**resolve_requested_entitlements**](ActionsApi.md#resolve_requested_entitlements) | **POST** /api/v1/actions/resolveEntitlements | Values for requested public entitlements.
 [**resolve_settings_without_workspace**](ActionsApi.md#resolve_settings_without_workspace) | **POST** /api/v1/actions/resolveSettings | Values for selected settings without workspace.
 [**retrieve_execution_metadata**](ActionsApi.md#retrieve_execution_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata | Get a single execution result&#39;s metadata.
+[**retrieve_flow_result_binary**](ActionsApi.md#retrieve_flow_result_binary) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/flow/result/{resultId}/binary | (EXPERIMENTAL) Get a flow result in Apache Arrow File or Stream format
+[**retrieve_flow_result_metadata**](ActionsApi.md#retrieve_flow_result_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/flow/result/{resultId}/metadata | (EXPERIMENTAL) Get the metadata of a flow result
+[**retrieve_flow_result_table**](ActionsApi.md#retrieve_flow_result_table) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/flow/result/{resultId}/table | (EXPERIMENTAL) Get a page of a flow result
 [**retrieve_result**](ActionsApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 [**retrieve_result_binary**](ActionsApi.md#retrieve_result_binary) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/binary | (BETA) Get a single execution result in Apache Arrow File or Stream format
 [**retrieve_translations**](ActionsApi.md#retrieve_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/retrieve | Retrieve translations for entities.
 [**scan_data_source**](ActionsApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
 [**scan_sql**](ActionsApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
-[**scan_statistics**](ActionsApi.md#scan_statistics) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanStatistics | (BETA) Collect physical table and column statistics from a StarRocks data source
+[**scan_statistics**](ActionsApi.md#scan_statistics) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanStatistics | (BETA) Collect physical table and column statistics from a data source
 [**set_certification**](ActionsApi.md#set_certification) | **POST** /api/v1/actions/workspaces/{workspaceId}/setCertification | Set Certification
 [**set_translations**](ActionsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
 [**staging_upload**](ActionsApi.md#staging_upload) | **POST** /api/v1/actions/fileStorage/staging/upload | Upload a file to the staging area
 [**switch_active_identity_provider**](ActionsApi.md#switch_active_identity_provider) | **POST** /api/v1/actions/organization/switchActiveIdentityProvider | Switch Active Identity Provider
+[**sync_metadata**](ActionsApi.md#sync_metadata) | **POST** /api/v1/actions/organization/syncMetadata | Trigger metadata synchronization
 [**tags**](ActionsApi.md#tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags | Get Analytics Catalog Tags
 [**test_data_source**](ActionsApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
 [**test_data_source_definition**](ActionsApi.md#test_data_source_definition) | **POST** /api/v1/actions/dataSource/test | Test connection by data source definition
@@ -140,6 +149,7 @@ Method | HTTP request | Description
 [**unsubscribe_workspace_automations**](ActionsApi.md#unsubscribe_workspace_automations) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from all automations in the workspace
 [**validate_llm_endpoint**](ActionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint (Removed)
 [**validate_llm_endpoint_by_id**](ActionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id (Removed)
+[**visualization_permissions**](ActionsApi.md#visualization_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{visualizationObjectId}/permissions | (BETA) Get Visualization Permissions
 [**workspace_resolve_all_settings**](ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 [**workspace_resolve_settings**](ActionsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
 
@@ -218,11 +228,11 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **ai_chat**
-> ChatResult ai_chat(workspace_id, chat_request)
+> ai_chat(workspace_id)
 
-(BETA) Chat with AI
+(REMOVED) Chat with AI
 
-(BETA) Combines multiple use cases such as search, create visualizations, ...
+Removed. Use POST /api/v1/ai/workspaces/{workspaceId}/chat (AI Assistant) instead.
 
 ### Example
 
@@ -231,8 +241,6 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.chat_result import ChatResult
-from gooddata_api_client.model.chat_request import ChatRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -246,69 +254,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    chat_request = ChatRequest(
-        allowed_relationship_types=[
-            AllowedRelationshipType(
-                allow_orphans=True,
-                source_type="attribute",
-                target_type="attribute",
-            ),
-        ],
-        include_hidden=False,
-        limit_create=3,
-        limit_create_context=10,
-        limit_search=5,
-        object_types=[
-            "attribute",
-        ],
-        question="question_example",
-        relevant_score_threshold=0.45,
-        search_score_threshold=0.9,
-        thread_id_suffix="thread_id_suffix_example",
-        title_to_descriptor_ratio=0.7,
-        user_context=UserContext(
-            active_object=ActiveObjectIdentification(
-                id="id_example",
-                type="type_example",
-                workspace_id="workspace_id_example",
-            ),
-            referenced_objects=[
-                ObjectReferenceGroup(
-                    context=ObjectReference(
-                        id="id_example",
-                        type="WIDGET",
-                    ),
-                    objects=[
-                        ObjectReference(
-                            id="id_example",
-                            type="WIDGET",
-                        ),
-                    ],
-                ),
-            ],
-            view=UIContext(
-                dashboard=DashboardContext(
-                    id="id_example",
-                    widgets=[
-                        WidgetDescriptor(
-                            filters=[
-                                FilterDefinition(),
-                            ],
-                            title="title_example",
-                            widget_id="widget_id_example",
-                            widget_type="widget_type_example",
-                        ),
-                    ],
-                ),
-            ),
-        ),
-    ) # ChatRequest | 
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Chat with AI
-        api_response = api_instance.ai_chat(workspace_id, chat_request)
-        pprint(api_response)
+        # (REMOVED) Chat with AI
+        api_instance.ai_chat(workspace_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->ai_chat: %s\n" % e)
 ```
@@ -319,11 +269,10 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**| Workspace identifier |
- **chat_request** | [**ChatRequest**](ChatRequest.md)|  |
 
 ### Return type
 
-[**ChatResult**](ChatResult.md)
+void (empty response body)
 
 ### Authorization
 
@@ -331,24 +280,24 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
+**410** | Gone |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **ai_chat_history**
-> ChatHistoryResult ai_chat_history(workspace_id, chat_history_request)
+> ai_chat_history(workspace_id)
 
-(BETA) Get Chat History
+(REMOVED) Get Chat History
 
-(BETA) Post thread ID (and optionally interaction ID) to get full/partial chat history.
+Removed. Chat history is served by the AI Assistant API.
 
 ### Example
 
@@ -357,8 +306,6 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.chat_history_result import ChatHistoryResult
-from gooddata_api_client.model.chat_history_request import ChatHistoryRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -372,24 +319,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    chat_history_request = ChatHistoryRequest(
-        chat_history_interaction_id="chat_history_interaction_id_example",
-        reset=True,
-        response_state="SUCCESSFUL",
-        saved_visualization=SavedVisualization(
-            created_visualization_id="created_visualization_id_example",
-            saved_visualization_id="saved_visualization_id_example",
-        ),
-        thread_id_suffix="thread_id_suffix_example",
-        user_feedback="POSITIVE",
-        user_text_feedback="user_text_feedback_example",
-    ) # ChatHistoryRequest | 
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Get Chat History
-        api_response = api_instance.ai_chat_history(workspace_id, chat_history_request)
-        pprint(api_response)
+        # (REMOVED) Get Chat History
+        api_instance.ai_chat_history(workspace_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->ai_chat_history: %s\n" % e)
 ```
@@ -400,11 +334,10 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**| Workspace identifier |
- **chat_history_request** | [**ChatHistoryRequest**](ChatHistoryRequest.md)|  |
 
 ### Return type
 
-[**ChatHistoryResult**](ChatHistoryResult.md)
+void (empty response body)
 
 ### Authorization
 
@@ -412,24 +345,24 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
+**410** | Gone |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **ai_chat_stream**
-> [dict] ai_chat_stream(workspace_id, chat_request)
+> ai_chat_stream(workspace_id)
 
-(BETA) Chat with AI
+(REMOVED) Chat with AI
 
-(BETA) Combines multiple use cases such as search, create visualizations, ...
+Removed. Use POST /api/v1/ai/workspaces/{workspaceId}/chat (AI Assistant) instead.
 
 ### Example
 
@@ -438,7 +371,6 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.chat_request import ChatRequest
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -452,69 +384,11 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    chat_request = ChatRequest(
-        allowed_relationship_types=[
-            AllowedRelationshipType(
-                allow_orphans=True,
-                source_type="attribute",
-                target_type="attribute",
-            ),
-        ],
-        include_hidden=False,
-        limit_create=3,
-        limit_create_context=10,
-        limit_search=5,
-        object_types=[
-            "attribute",
-        ],
-        question="question_example",
-        relevant_score_threshold=0.45,
-        search_score_threshold=0.9,
-        thread_id_suffix="thread_id_suffix_example",
-        title_to_descriptor_ratio=0.7,
-        user_context=UserContext(
-            active_object=ActiveObjectIdentification(
-                id="id_example",
-                type="type_example",
-                workspace_id="workspace_id_example",
-            ),
-            referenced_objects=[
-                ObjectReferenceGroup(
-                    context=ObjectReference(
-                        id="id_example",
-                        type="WIDGET",
-                    ),
-                    objects=[
-                        ObjectReference(
-                            id="id_example",
-                            type="WIDGET",
-                        ),
-                    ],
-                ),
-            ],
-            view=UIContext(
-                dashboard=DashboardContext(
-                    id="id_example",
-                    widgets=[
-                        WidgetDescriptor(
-                            filters=[
-                                FilterDefinition(),
-                            ],
-                            title="title_example",
-                            widget_id="widget_id_example",
-                            widget_type="widget_type_example",
-                        ),
-                    ],
-                ),
-            ),
-        ),
-    ) # ChatRequest | 
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Chat with AI
-        api_response = api_instance.ai_chat_stream(workspace_id, chat_request)
-        pprint(api_response)
+        # (REMOVED) Chat with AI
+        api_instance.ai_chat_stream(workspace_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->ai_chat_stream: %s\n" % e)
 ```
@@ -525,11 +399,10 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**| Workspace identifier |
- **chat_request** | [**ChatRequest**](ChatRequest.md)|  |
 
 ### Return type
 
-**[dict]**
+void (empty response body)
 
 ### Authorization
 
@@ -537,24 +410,24 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: text/event-stream
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
+**410** | Gone |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **ai_chat_usage**
-> ChatUsageResponse ai_chat_usage(workspace_id)
+> ai_chat_usage(workspace_id)
 
-Get Chat Usage
+(REMOVED) Get Chat Usage
 
-Returns usage statistics of chat for a user in a workspace.
+Removed. Chat usage is served by the AI Assistant API.
 
 ### Example
 
@@ -563,7 +436,6 @@ Returns usage statistics of chat for a user in a workspace.
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.chat_usage_response import ChatUsageResponse
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -580,9 +452,8 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Get Chat Usage
-        api_response = api_instance.ai_chat_usage(workspace_id)
-        pprint(api_response)
+        # (REMOVED) Get Chat Usage
+        api_instance.ai_chat_usage(workspace_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->ai_chat_usage: %s\n" % e)
 ```
@@ -596,7 +467,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**ChatUsageResponse**](ChatUsageResponse.md)
+void (empty response body)
 
 ### Authorization
 
@@ -605,108 +476,14 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **ai_search**
-> SearchResult ai_search(workspace_id, search_request)
-
-(BETA) Semantic Search in Metadata
-
-(BETA) Uses similarity (e.g. cosine distance) search to find top X most similar metadata objects.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.search_result import SearchResult
-from gooddata_api_client.model.search_request import SearchRequest
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    search_request = SearchRequest(
-        allowed_relationship_types=[
-            AllowedRelationshipType(
-                allow_orphans=True,
-                source_type="attribute",
-                target_type="attribute",
-            ),
-        ],
-        deep_search=False,
-        enable_hybrid_search=False,
-        exclude_tags=[
-            "exclude_tags_example",
-        ],
-        include_hidden=False,
-        include_tags=[
-            "include_tags_example",
-        ],
-        limit=10,
-        object_types=[
-            "attribute",
-        ],
-        question="question_example",
-        relevant_score_threshold=0.3,
-        title_to_descriptor_ratio=0.7,
-    ) # SearchRequest | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        # (BETA) Semantic Search in Metadata
-        api_response = api_instance.ai_search(workspace_id, search_request)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->ai_search: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **search_request** | [**SearchRequest**](SearchRequest.md)|  |
-
-### Return type
-
-[**SearchResult**](SearchResult.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | OK |  -  |
+**410** | Gone |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1229,10 +1006,12 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **cancel_workflow**
-> {str: (str,)} cancel_workflow(workspace_id, run_id)
+# **cancel_flows**
+> AfmCancelTokens cancel_flows(workspace_id, afm_cancel_tokens)
 
+(EXPERIMENTAL) Apply the given cancel tokens to flows
 
+Note: This API is experimental and is going to change. Please, use it accordingly. Each result has one cancel token, which the submit of its flow returns. Applying the token cancels the flow that computes the result.
 
 ### Example
 
@@ -1241,6 +1020,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.afm_cancel_tokens import AfmCancelTokens
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1254,14 +1034,19 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    run_id = "runId_example" # str | 
+    afm_cancel_tokens = AfmCancelTokens(
+        result_id_to_cancel_token_pairs={
+            "key": "key_example",
+        },
+    ) # AfmCancelTokens | 
 
     # example passing only required values which don't have defaults set
     try:
-        api_response = api_instance.cancel_workflow(workspace_id, run_id)
+        # (EXPERIMENTAL) Apply the given cancel tokens to flows
+        api_response = api_instance.cancel_flows(workspace_id, afm_cancel_tokens)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->cancel_workflow: %s\n" % e)
+        print("Exception when calling ActionsApi->cancel_flows: %s\n" % e)
 ```
 
 
@@ -1270,11 +1055,11 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**| Workspace identifier |
- **run_id** | **str**|  |
+ **afm_cancel_tokens** | [**AfmCancelTokens**](AfmCancelTokens.md)|  |
 
 ### Return type
 
-**{str: (str,)}**
+[**AfmCancelTokens**](AfmCancelTokens.md)
 
 ### Authorization
 
@@ -1282,7 +1067,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 
@@ -1983,10 +1768,11 @@ with gooddata_api_client.ApiClient() as api_client:
         pattern_filter="pattern_filter_example",
         sort_order="ASC",
         timezone="Europe/Prague",
+        type="label",
         validate_by=[
             ValidateByItem(
                 id="id_example",
-                type="fact",
+                type="label",
             ),
         ],
     ) # ElementsRequest | 
@@ -2497,6 +2283,73 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **computed_attribute_permissions**
+> ComputedAttributePermissions computed_attribute_permissions(workspace_id, computed_attribute_id)
+
+(BETA) Get Computed Attribute Permissions
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.computed_attribute_permissions import ComputedAttributePermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    computed_attribute_id = "computedAttributeId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Get Computed Attribute Permissions
+        api_response = api_instance.computed_attribute_permissions(workspace_id, computed_attribute_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->computed_attribute_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **computed_attribute_id** | **str**|  |
+
+### Return type
+
+[**ComputedAttributePermissions**](ComputedAttributePermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **convert_geo_file**
 > ConvertGeoFileResponse convert_geo_file(convert_geo_file_request)
 
@@ -2712,11 +2565,21 @@ with gooddata_api_client.ApiClient() as api_client:
             "widget_ids_example",
         ],
     ) # ImageExportRequest | 
+    x_gdc_debug = False # bool |  (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
         # (EXPERIMENTAL) Create image export request
         api_response = api_instance.create_image_export(workspace_id, image_export_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->create_image_export: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (EXPERIMENTAL) Create image export request
+        api_response = api_instance.create_image_export(workspace_id, image_export_request, x_gdc_debug=x_gdc_debug)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->create_image_export: %s\n" % e)
@@ -2729,6 +2592,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **image_export_request** | [**ImageExportRequest**](ImageExportRequest.md)|  |
+ **x_gdc_debug** | **bool**|  | [optional] if omitted the server will use the default value of False
 
 ### Return type
 
@@ -2976,6 +2840,93 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **create_report_export**
+> ExportResponse create_report_export(workspace_id, report_export_request)
+
+(EXPERIMENTAL) Create report export request
+
+Note: This API is an experimental and is going to change. Please, use it accordingly. A report export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.export_response import ExportResponse
+from gooddata_api_client.model.report_export_request import ReportExportRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    report_export_request = ReportExportRequest(
+        file_name="filename",
+        format="PDF",
+        metadata=JsonNode(),
+        report_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+        timezone_id="Asia/Kolkata",
+    ) # ReportExportRequest | 
+    x_gdc_debug = False # bool |  (optional) if omitted the server will use the default value of False
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Create report export request
+        api_response = api_instance.create_report_export(workspace_id, report_export_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->create_report_export: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (EXPERIMENTAL) Create report export request
+        api_response = api_instance.create_report_export(workspace_id, report_export_request, x_gdc_debug=x_gdc_debug)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->create_report_export: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **report_export_request** | [**ReportExportRequest**](ReportExportRequest.md)|  |
+ **x_gdc_debug** | **bool**|  | [optional] if omitted the server will use the default value of False
+
+### Return type
+
+[**ExportResponse**](ExportResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Report export request created successfully. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **create_slides_export**
 > ExportResponse create_slides_export(workspace_id, slides_export_request)
 
@@ -3100,6 +3051,27 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     tabular_export_request = TabularExportRequest(
+        conditional_formatting=ConditionalFormatting(
+            enabled=True,
+            rules=[
+                ConditionalFormattingRule(
+                    conditions=[
+                        ConditionalFormattingCondition(
+                            format=ConditionalFormattingFormat(
+                                background_color="#3DB36B",
+                                color="#E54D40",
+                                scope="cell",
+                            ),
+                            id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                            operator="ALL",
+                            value=ConditionalFormattingValue(),
+                        ),
+                    ],
+                    id="bb955b38-a9e6-45f5-b068-155cb7ce509a",
+                    target=ConditionalFormattingTarget(),
+                ),
+            ],
+        ),
         custom_override=CustomOverride(
             labels={
                 "key": CustomLabel(
@@ -3629,6 +3601,90 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **execute_flow**
+> FlowExecutionResponse execute_flow(workspace_id, flow_request)
+
+(EXPERIMENTAL) Execute a flow
+
+Note: This API is experimental and is going to change. Please, use it accordingly. Runs the transformations of a flow over its inputs and stores the result. The response links to the result.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.flow_execution_response import FlowExecutionResponse
+from gooddata_api_client.model.flow_request import FlowRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    flow_request = FlowRequest(
+        inputs={
+            "key": FlowInput(),
+        },
+        transformations=[
+            FlowTransformation(
+                id="id_example",
+                input_refs={
+                    "key": "key_example",
+                },
+                operation="survey_weighting",
+                parameters={},
+            ),
+        ],
+    ) # FlowRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Execute a flow
+        api_response = api_instance.execute_flow(workspace_id, flow_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->execute_flow: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **flow_request** | [**FlowRequest**](FlowRequest.md)|  |
+
+### Return type
+
+[**FlowExecutionResponse**](FlowExecutionResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | The flow was accepted. |  * X-GDC-CANCEL-TOKEN - A token that can be used to cancel this execution <br>  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **explain_afm**
 > explain_afm(workspace_id, afm_execution)
 
@@ -4009,80 +4065,6 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **generate_dashboard_summary**
-> WorkflowDashboardSummaryResponseDto generate_dashboard_summary(workspace_id, workflow_dashboard_summary_request_dto)
-
-
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.workflow_dashboard_summary_request_dto import WorkflowDashboardSummaryRequestDto
-from gooddata_api_client.model.workflow_dashboard_summary_response_dto import WorkflowDashboardSummaryResponseDto
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    workflow_dashboard_summary_request_dto = WorkflowDashboardSummaryRequestDto(
-        custom_user_prompt="custom_user_prompt_example",
-        dashboard_id="dashboard_id_example",
-        key_metric_ids=[
-            "key_metric_ids_example",
-        ],
-        reference_quarter="reference_quarter_example",
-    ) # WorkflowDashboardSummaryRequestDto | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        api_response = api_instance.generate_dashboard_summary(workspace_id, workflow_dashboard_summary_request_dto)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->generate_dashboard_summary: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **workflow_dashboard_summary_request_dto** | [**WorkflowDashboardSummaryRequestDto**](WorkflowDashboardSummaryRequestDto.md)|  |
-
-### Return type
-
-[**WorkflowDashboardSummaryResponseDto**](WorkflowDashboardSummaryResponseDto.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
  - **Accept**: application/json
 
 
@@ -5147,6 +5129,143 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_report_export**
+> file_type get_report_export(workspace_id, export_id)
+
+(EXPERIMENTAL) Retrieve exported files
+
+Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.get_image_export202_response_inner import GetImageExport202ResponseInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    export_id = "exportId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Retrieve exported files
+        api_response = api_instance.get_report_export(workspace_id, export_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_report_export: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **export_id** | **str**|  |
+
+### Return type
+
+**file_type**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/pdf
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Binary export result. |  * Content-Disposition -  <br>  |
+**202** | Request is accepted, provided exportId exists, but export is not yet ready. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_report_export_metadata**
+> get_report_export_metadata(workspace_id, export_id)
+
+(EXPERIMENTAL) Retrieve metadata context
+
+Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/report endpoint. The metadata structure is not verified.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    export_id = "exportId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Retrieve metadata context
+        api_instance.get_report_export_metadata(workspace_id, export_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_report_export_metadata: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **export_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Json metadata representation |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_slides_export**
 > file_type get_slides_export(workspace_id, export_id)
 
@@ -5416,72 +5535,6 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved list of translation tags. |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **get_workflow_status**
-> WorkflowStatusResponseDto get_workflow_status(workspace_id, run_id)
-
-
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.workflow_status_response_dto import WorkflowStatusResponseDto
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    run_id = "runId_example" # str | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        api_response = api_instance.get_workflow_status(workspace_id, run_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->get_workflow_status: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **run_id** | **str**|  |
-
-### Return type
-
-[**WorkflowStatusResponseDto**](WorkflowStatusResponseDto.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -6133,6 +6186,73 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **list_flow_operations**
+> FlowOperations list_flow_operations(workspace_id)
+
+(EXPERIMENTAL) List the operations of flows
+
+Note: This API is experimental and is going to change. Please, use it accordingly. Lists the operations that the transformations of a flow can run, with their inputs and the JSON Schema of their parameters.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.flow_operations import FlowOperations
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) List the operations of flows
+        api_response = api_instance.list_flow_operations(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->list_flow_operations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+
+### Return type
+
+[**FlowOperations**](FlowOperations.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **list_llm_provider_models**
 > ListLlmProviderModelsResponse list_llm_provider_models(list_llm_provider_models_request)
 
@@ -6473,6 +6593,76 @@ Name | Type | Description  | Notes
  **workspace_id** | **str**|  |
  **attribute_id** | **str**|  |
  **manage_attribute_permissions_request_inner** | [**[ManageAttributePermissionsRequestInner]**](ManageAttributePermissionsRequestInner.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **manage_computed_attribute_permissions**
+> manage_computed_attribute_permissions(workspace_id, computed_attribute_id, manage_computed_attribute_permissions_request_inner)
+
+(BETA) Manage Permissions for a Computed Attribute
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.manage_computed_attribute_permissions_request_inner import ManageComputedAttributePermissionsRequestInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    computed_attribute_id = "computedAttributeId_example" # str | 
+    manage_computed_attribute_permissions_request_inner = [
+        ManageComputedAttributePermissionsRequestInner(None),
+    ] # [ManageComputedAttributePermissionsRequestInner] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Manage Permissions for a Computed Attribute
+        api_instance.manage_computed_attribute_permissions(workspace_id, computed_attribute_id, manage_computed_attribute_permissions_request_inner)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->manage_computed_attribute_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **computed_attribute_id** | **str**|  |
+ **manage_computed_attribute_permissions_request_inner** | [**[ManageComputedAttributePermissionsRequestInner]**](ManageComputedAttributePermissionsRequestInner.md)|  |
 
 ### Return type
 
@@ -6907,6 +7097,76 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **organization_permission_assignment** | [**[OrganizationPermissionAssignment]**](OrganizationPermissionAssignment.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **manage_visualization_permissions**
+> manage_visualization_permissions(workspace_id, visualization_object_id, manage_visualization_permissions_request_inner)
+
+(BETA) Manage Permissions for a Visualization
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.manage_visualization_permissions_request_inner import ManageVisualizationPermissionsRequestInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    visualization_object_id = "visualizationObjectId_example" # str | 
+    manage_visualization_permissions_request_inner = [
+        ManageVisualizationPermissionsRequestInner(None),
+    ] # [ManageVisualizationPermissionsRequestInner] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Manage Permissions for a Visualization
+        api_instance.manage_visualization_permissions(workspace_id, visualization_object_id, manage_visualization_permissions_request_inner)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->manage_visualization_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **visualization_object_id** | **str**|  |
+ **manage_visualization_permissions_request_inner** | [**[ManageVisualizationPermissionsRequestInner]**](ManageVisualizationPermissionsRequestInner.md)|  |
 
 ### Return type
 
@@ -7751,6 +8011,78 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **process_invitation**
+> process_invitation(invitation)
+
+Invite User
+
+Puts a new invitation requirement into the invitation generator queue. This is a GoodData Cloud specific endpoint.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.invitation import Invitation
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    invitation = Invitation(
+        email="email_example",
+        first_name="first_name_example",
+        force_send=True,
+        last_name="last_name_example",
+        user_id="user_id_example",
+    ) # Invitation | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Invite User
+        api_instance.process_invitation(invitation)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->process_invitation: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **invitation** | [**Invitation**](Invitation.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **read_csv_file_manifests**
 > [ReadCsvFileManifestsResponse] read_csv_file_manifests(data_source_id, read_csv_file_manifests_request)
 
@@ -8288,73 +8620,6 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **resolve_llm_providers**
-> ResolvedLlms resolve_llm_providers(workspace_id)
-
-Get Active LLM configuration for this workspace
-
-Resolves the active LLM provider configuration for the given workspace.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.resolved_llms import ResolvedLlms
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-
-    # example passing only required values which don't have defaults set
-    try:
-        # Get Active LLM configuration for this workspace
-        api_response = api_instance.resolve_llm_providers(workspace_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->resolve_llm_providers: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
-
-### Return type
-
-[**ResolvedLlms**](ResolvedLlms.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **resolve_requested_entitlements**
 > [ApiEntitlement] resolve_requested_entitlements(entitlements_request)
 
@@ -8574,6 +8839,246 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Execution result&#39;s metadata was found and returned. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **retrieve_flow_result_binary**
+> file_type retrieve_flow_result_binary(workspace_id, result_id)
+
+(EXPERIMENTAL) Get a flow result in Apache Arrow File or Stream format
+
+Note: This API is experimental and is going to change. Please, use it accordingly. Gets a window of rows and columns of a flow result as an Apache Arrow IPC File or Stream.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "a9b28f9dc55f37ea9f4a5fb0c76895923591e781" # str | Result ID
+    row_offset = 1 # int | Index of the first row to return. The default is 0. (optional)
+    row_limit = 1 # int | Maximum number of rows to return. The default is all remaining rows. (optional)
+    column_offset = 1 # int | Index of the first column to return. The default is 0. (optional)
+    column_limit = 1 # int | Maximum number of columns to return. The default is all remaining columns. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Get a flow result in Apache Arrow File or Stream format
+        api_response = api_instance.retrieve_flow_result_binary(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->retrieve_flow_result_binary: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (EXPERIMENTAL) Get a flow result in Apache Arrow File or Stream format
+        api_response = api_instance.retrieve_flow_result_binary(workspace_id, result_id, row_offset=row_offset, row_limit=row_limit, column_offset=column_offset, column_limit=column_limit)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->retrieve_flow_result_binary: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Result ID |
+ **row_offset** | **int**| Index of the first row to return. The default is 0. | [optional]
+ **row_limit** | **int**| Maximum number of rows to return. The default is all remaining rows. | [optional]
+ **column_offset** | **int**| Index of the first column to return. The default is 0. | [optional]
+ **column_limit** | **int**| Maximum number of columns to return. The default is all remaining columns. | [optional]
+
+### Return type
+
+**file_type**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.apache.arrow.file, application/vnd.apache.arrow.stream
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | The result. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **retrieve_flow_result_metadata**
+> FlowResultMetadata retrieve_flow_result_metadata(workspace_id, result_id)
+
+(EXPERIMENTAL) Get the metadata of a flow result
+
+Note: This API is experimental and is going to change. Please, use it accordingly. Gets the columns and the number of rows of a flow result.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.flow_result_metadata import FlowResultMetadata
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "a9b28f9dc55f37ea9f4a5fb0c76895923591e781" # str | Result ID
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Get the metadata of a flow result
+        api_response = api_instance.retrieve_flow_result_metadata(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->retrieve_flow_result_metadata: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Result ID |
+
+### Return type
+
+[**FlowResultMetadata**](FlowResultMetadata.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **retrieve_flow_result_table**
+> FlowTableResult retrieve_flow_result_table(workspace_id, result_id)
+
+(EXPERIMENTAL) Get a page of a flow result
+
+Note: This API is experimental and is going to change. Please, use it accordingly. Gets a window of rows and columns of a flow result.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.flow_table_result import FlowTableResult
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "a9b28f9dc55f37ea9f4a5fb0c76895923591e781" # str | Result ID
+    row_offset = 1 # int | Index of the first row to return. The default is 0. (optional)
+    row_limit = 1 # int | Maximum number of rows to return. The default is all remaining rows. (optional)
+    column_offset = 1 # int | Index of the first column to return. The default is 0. (optional)
+    column_limit = 1 # int | Maximum number of columns to return. The default is all remaining columns. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Get a page of a flow result
+        api_response = api_instance.retrieve_flow_result_table(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->retrieve_flow_result_table: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (EXPERIMENTAL) Get a page of a flow result
+        api_response = api_instance.retrieve_flow_result_table(workspace_id, result_id, row_offset=row_offset, row_limit=row_limit, column_offset=column_offset, column_limit=column_limit)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->retrieve_flow_result_table: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Result ID |
+ **row_offset** | **int**| Index of the first row to return. The default is 0. | [optional]
+ **row_limit** | **int**| Maximum number of rows to return. The default is all remaining rows. | [optional]
+ **column_offset** | **int**| Index of the first column to return. The default is 0. | [optional]
+ **column_limit** | **int**| Maximum number of columns to return. The default is all remaining columns. | [optional]
+
+### Return type
+
+[**FlowTableResult**](FlowTableResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -8972,9 +9477,9 @@ No authorization required
 # **scan_statistics**
 > TableStatisticsResponse scan_statistics(data_source_id, table_statistics_request)
 
-(BETA) Collect physical table and column statistics from a StarRocks data source
+(BETA) Collect physical table and column statistics from a data source
 
-(BETA) Reads pre-computed CBO statistics from StarRocks. Supports both internal catalog (native/PIPE tables) and external catalog (Iceberg tables). Statistics include row counts, data sizes, NDV (number of distinct values), null counts, and min/max values.
+(BETA) Reads the statistics the database already maintains in its own catalog, without scanning any data. Supported for StarRocks (both internal catalog for native/PIPE tables and external catalog for Iceberg tables), BigQuery, PostgreSQL, Redshift, Snowflake, Vertica, SQL Server, Azure SQL, MySQL, MariaDB and SingleStore. Statistics include row counts and data sizes, and, where the database exposes them, NDV (number of distinct values), null counts and min/max values. Returns an empty result for a data source whose database exposes no such catalog. Also returns an empty result for a data source that sets disableStatistics.
 
 ### Example
 
@@ -9009,7 +9514,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Collect physical table and column statistics from a StarRocks data source
+        # (BETA) Collect physical table and column statistics from a data source
         api_response = api_instance.scan_statistics(data_source_id, table_statistics_request)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -9359,6 +9864,67 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **sync_metadata**
+> sync_metadata()
+
+Trigger metadata synchronization
+
+Enqueues an organization-scoped metadata resync, fanning out the organization's current metadata to GenAI, GW Forge, and Automations. Requires organization MANAGE permission. Requests are deduplicated while a resync session is pending for the organization.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Trigger metadata synchronization
+        api_instance.sync_metadata()
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->sync_metadata: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: Not defined
 
 
@@ -10066,6 +10632,11 @@ with gooddata_api_client.ApiClient() as api_client:
                     ],
                 ),
                 interval="DAY",
+                settings=ExecutionSettings(
+                    data_sampling_percentage=0,
+                    timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                    timezone="Europe/Prague",
+                ),
                 trigger="ALWAYS",
             ),
             analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
@@ -10240,6 +10811,27 @@ with gooddata_api_client.ApiClient() as api_client:
             tabular_exports=[
                 AutomationTabularExport(
                     request_payload=TabularExportRequest(
+                        conditional_formatting=ConditionalFormatting(
+                            enabled=True,
+                            rules=[
+                                ConditionalFormattingRule(
+                                    conditions=[
+                                        ConditionalFormattingCondition(
+                                            format=ConditionalFormattingFormat(
+                                                background_color="#3DB36B",
+                                                color="#E54D40",
+                                                scope="cell",
+                                            ),
+                                            id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                            operator="ALL",
+                                            value=ConditionalFormattingValue(),
+                                        ),
+                                    ],
+                                    id="bb955b38-a9e6-45f5-b068-155cb7ce509a",
+                                    target=ConditionalFormattingTarget(),
+                                ),
+                            ],
+                        ),
                         custom_override=CustomOverride(
                             labels={
                                 "key": CustomLabel(
@@ -11098,6 +11690,73 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **410** | Gone |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **visualization_permissions**
+> VisualizationPermissions visualization_permissions(workspace_id, visualization_object_id)
+
+(BETA) Get Visualization Permissions
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.visualization_permissions import VisualizationPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    visualization_object_id = "visualizationObjectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Get Visualization Permissions
+        api_response = api_instance.visualization_permissions(workspace_id, visualization_object_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->visualization_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **visualization_object_id** | **str**|  |
+
+### Return type
+
+[**VisualizationPermissions**](VisualizationPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -33,8 +33,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
     from gooddata_api_client.model.json_node import JsonNode
+    from gooddata_api_client.model.object_conditional_formatting import ObjectConditionalFormatting
     globals()['DeclarativeUserIdentifier'] = DeclarativeUserIdentifier
     globals()['JsonNode'] = JsonNode
+    globals()['ObjectConditionalFormatting'] = ObjectConditionalFormatting
 
 
 class DeclarativeMetric(ModelNormal):
@@ -128,6 +130,7 @@ class DeclarativeMetric(ModelNormal):
             'certification_message': (str, none_type,),  # noqa: E501
             'certified_at': (str, none_type,),  # noqa: E501
             'certified_by': (DeclarativeUserIdentifier,),  # noqa: E501
+            'conditional_formatting': (ObjectConditionalFormatting,),  # noqa: E501
             'created_at': (str, none_type,),  # noqa: E501
             'created_by': (DeclarativeUserIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
@@ -151,6 +154,7 @@ class DeclarativeMetric(ModelNormal):
         'certification_message': 'certificationMessage',  # noqa: E501
         'certified_at': 'certifiedAt',  # noqa: E501
         'certified_by': 'certifiedBy',  # noqa: E501
+        'conditional_formatting': 'conditionalFormatting',  # noqa: E501
         'created_at': 'createdAt',  # noqa: E501
         'created_by': 'createdBy',  # noqa: E501
         'description': 'description',  # noqa: E501
@@ -211,6 +215,7 @@ class DeclarativeMetric(ModelNormal):
             certification_message (str, none_type): Optional message associated with the certification.. [optional]  # noqa: E501
             certified_at (str, none_type): Time when the certification was set.. [optional]  # noqa: E501
             certified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
+            conditional_formatting (ObjectConditionalFormatting): [optional]  # noqa: E501
             created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
             created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             description (str): Metric description.. [optional]  # noqa: E501
@@ -316,6 +321,7 @@ class DeclarativeMetric(ModelNormal):
             certification_message (str, none_type): Optional message associated with the certification.. [optional]  # noqa: E501
             certified_at (str, none_type): Time when the certification was set.. [optional]  # noqa: E501
             certified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
+            conditional_formatting (ObjectConditionalFormatting): [optional]  # noqa: E501
             created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
             created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             description (str): Metric description.. [optional]  # noqa: E501

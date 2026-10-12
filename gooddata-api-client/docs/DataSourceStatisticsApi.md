@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**delete_data_source_statistics**](DataSourceStatisticsApi.md#delete_data_source_statistics) | **DELETE** /api/v1/layout/dataSources/{dataSourceId}/statistics | (BETA) Delete stored physical statistics for a data source
 [**get_data_source_statistics**](DataSourceStatisticsApi.md#get_data_source_statistics) | **GET** /api/v1/layout/dataSources/{dataSourceId}/statistics | (BETA) Retrieve stored physical statistics for a data source
 [**put_data_source_statistics**](DataSourceStatisticsApi.md#put_data_source_statistics) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/statistics | (BETA) Store physical table and column statistics for a data source
-[**scan_statistics**](DataSourceStatisticsApi.md#scan_statistics) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanStatistics | (BETA) Collect physical table and column statistics from a StarRocks data source
+[**scan_statistics**](DataSourceStatisticsApi.md#scan_statistics) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanStatistics | (BETA) Collect physical table and column statistics from a data source
 
 
 # **delete_data_source_statistics**
@@ -245,9 +245,9 @@ No authorization required
 # **scan_statistics**
 > TableStatisticsResponse scan_statistics(data_source_id, table_statistics_request)
 
-(BETA) Collect physical table and column statistics from a StarRocks data source
+(BETA) Collect physical table and column statistics from a data source
 
-(BETA) Reads pre-computed CBO statistics from StarRocks. Supports both internal catalog (native/PIPE tables) and external catalog (Iceberg tables). Statistics include row counts, data sizes, NDV (number of distinct values), null counts, and min/max values.
+(BETA) Reads the statistics the database already maintains in its own catalog, without scanning any data. Supported for StarRocks (both internal catalog for native/PIPE tables and external catalog for Iceberg tables), BigQuery, PostgreSQL, Redshift, Snowflake, Vertica, SQL Server, Azure SQL, MySQL, MariaDB and SingleStore. Statistics include row counts and data sizes, and, where the database exposes them, NDV (number of distinct values), null counts and min/max values. Returns an empty result for a data source whose database exposes no such catalog. Also returns an empty result for a data source that sets disableStatistics.
 
 ### Example
 
@@ -282,7 +282,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Collect physical table and column statistics from a StarRocks data source
+        # (BETA) Collect physical table and column statistics from a data source
         api_response = api_instance.scan_statistics(data_source_id, table_statistics_request)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

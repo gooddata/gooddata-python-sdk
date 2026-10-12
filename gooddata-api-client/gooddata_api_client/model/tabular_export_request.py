@@ -31,12 +31,14 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.conditional_formatting import ConditionalFormatting
     from gooddata_api_client.model.custom_override import CustomOverride
     from gooddata_api_client.model.execution_settings import ExecutionSettings
     from gooddata_api_client.model.json_node import JsonNode
     from gooddata_api_client.model.parameter_value import ParameterValue
     from gooddata_api_client.model.settings import Settings
     from gooddata_api_client.model.tabular_export_execution import TabularExportExecution
+    globals()['ConditionalFormatting'] = ConditionalFormatting
     globals()['CustomOverride'] = CustomOverride
     globals()['ExecutionSettings'] = ExecutionSettings
     globals()['JsonNode'] = JsonNode
@@ -106,6 +108,7 @@ class TabularExportRequest(ModelNormal):
         return {
             'file_name': (str,),  # noqa: E501
             'format': (str,),  # noqa: E501
+            'conditional_formatting': (ConditionalFormatting,),  # noqa: E501
             'custom_override': (CustomOverride,),  # noqa: E501
             'execution_result': (str,),  # noqa: E501
             'execution_settings': (ExecutionSettings,),  # noqa: E501
@@ -126,6 +129,7 @@ class TabularExportRequest(ModelNormal):
     attribute_map = {
         'file_name': 'fileName',  # noqa: E501
         'format': 'format',  # noqa: E501
+        'conditional_formatting': 'conditionalFormatting',  # noqa: E501
         'custom_override': 'customOverride',  # noqa: E501
         'execution_result': 'executionResult',  # noqa: E501
         'execution_settings': 'executionSettings',  # noqa: E501
@@ -183,6 +187,7 @@ class TabularExportRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            conditional_formatting (ConditionalFormatting): [optional]  # noqa: E501
             custom_override (CustomOverride): [optional]  # noqa: E501
             execution_result (str): Execution result identifier.. [optional]  # noqa: E501
             execution_settings (ExecutionSettings): [optional]  # noqa: E501
@@ -284,6 +289,7 @@ class TabularExportRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            conditional_formatting (ConditionalFormatting): [optional]  # noqa: E501
             custom_override (CustomOverride): [optional]  # noqa: E501
             execution_result (str): Execution result identifier.. [optional]  # noqa: E501
             execution_settings (ExecutionSettings): [optional]  # noqa: E501

@@ -32,7 +32,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.granularities_formatting import GranularitiesFormatting
+    from gooddata_api_client.model.object_conditional_formatting import ObjectConditionalFormatting
     globals()['GranularitiesFormatting'] = GranularitiesFormatting
+    globals()['ObjectConditionalFormatting'] = ObjectConditionalFormatting
 
 
 class DeclarativeDateDataset(ModelNormal):
@@ -147,6 +149,7 @@ class DeclarativeDateDataset(ModelNormal):
             'granularities_formatting': (GranularitiesFormatting,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
+            'conditional_formatting': (ObjectConditionalFormatting,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
         }
@@ -161,6 +164,7 @@ class DeclarativeDateDataset(ModelNormal):
         'granularities_formatting': 'granularitiesFormatting',  # noqa: E501
         'id': 'id',  # noqa: E501
         'title': 'title',  # noqa: E501
+        'conditional_formatting': 'conditionalFormatting',  # noqa: E501
         'description': 'description',  # noqa: E501
         'tags': 'tags',  # noqa: E501
     }
@@ -212,6 +216,7 @@ class DeclarativeDateDataset(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            conditional_formatting (ObjectConditionalFormatting): [optional]  # noqa: E501
             description (str): Date dataset description.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
@@ -309,6 +314,7 @@ class DeclarativeDateDataset(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            conditional_formatting (ObjectConditionalFormatting): [optional]  # noqa: E501
             description (str): Date dataset description.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """

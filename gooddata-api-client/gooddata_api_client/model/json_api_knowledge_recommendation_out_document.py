@@ -31,9 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_agent_out_document_meta import JsonApiAgentOutDocumentMeta
     from gooddata_api_client.model.json_api_knowledge_recommendation_out import JsonApiKnowledgeRecommendationOut
     from gooddata_api_client.model.json_api_knowledge_recommendation_out_includes import JsonApiKnowledgeRecommendationOutIncludes
     from gooddata_api_client.model.object_links import ObjectLinks
+    globals()['JsonApiAgentOutDocumentMeta'] = JsonApiAgentOutDocumentMeta
     globals()['JsonApiKnowledgeRecommendationOut'] = JsonApiKnowledgeRecommendationOut
     globals()['JsonApiKnowledgeRecommendationOutIncludes'] = JsonApiKnowledgeRecommendationOutIncludes
     globals()['ObjectLinks'] = ObjectLinks
@@ -97,6 +99,7 @@ class JsonApiKnowledgeRecommendationOutDocument(ModelNormal):
             'data': (JsonApiKnowledgeRecommendationOut,),  # noqa: E501
             'included': ([JsonApiKnowledgeRecommendationOutIncludes],),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
+            'meta': (JsonApiAgentOutDocumentMeta,),  # noqa: E501
         }
 
     @cached_property
@@ -108,6 +111,7 @@ class JsonApiKnowledgeRecommendationOutDocument(ModelNormal):
         'data': 'data',  # noqa: E501
         'included': 'included',  # noqa: E501
         'links': 'links',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
     }
 
     read_only_vars = {
@@ -156,6 +160,7 @@ class JsonApiKnowledgeRecommendationOutDocument(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             included ([JsonApiKnowledgeRecommendationOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
+            meta (JsonApiAgentOutDocumentMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -247,6 +252,7 @@ class JsonApiKnowledgeRecommendationOutDocument(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             included ([JsonApiKnowledgeRecommendationOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
+            meta (JsonApiAgentOutDocumentMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

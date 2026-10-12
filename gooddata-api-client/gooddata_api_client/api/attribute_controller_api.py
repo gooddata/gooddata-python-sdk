@@ -98,6 +98,7 @@ class AttributeControllerApi(object):
                     },
                     ('meta_include',): {
 
+                        "PERMISSIONS": "permissions",
                         "ORIGIN": "origin",
                         "PAGE": "page",
                         "ALL": "all",
@@ -211,6 +212,7 @@ class AttributeControllerApi(object):
                     },
                     ('meta_include',): {
 
+                        "PERMISSIONS": "permissions",
                         "ORIGIN": "origin",
                         "ALL": "all",
                         "ALL": "ALL"

@@ -31,8 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_label_out_attributes_conditional_formatting import JsonApiLabelOutAttributesConditionalFormatting
     from gooddata_api_client.model.json_api_label_out_attributes_geo_area_config import JsonApiLabelOutAttributesGeoAreaConfig
     from gooddata_api_client.model.json_api_label_out_attributes_translations_inner import JsonApiLabelOutAttributesTranslationsInner
+    globals()['JsonApiLabelOutAttributesConditionalFormatting'] = JsonApiLabelOutAttributesConditionalFormatting
     globals()['JsonApiLabelOutAttributesGeoAreaConfig'] = JsonApiLabelOutAttributesGeoAreaConfig
     globals()['JsonApiLabelOutAttributesTranslationsInner'] = JsonApiLabelOutAttributesTranslationsInner
 
@@ -121,6 +123,7 @@ class JsonApiLabelOutAttributes(ModelNormal):
         lazy_import()
         return {
             'are_relations_valid': (bool,),  # noqa: E501
+            'conditional_formatting': (JsonApiLabelOutAttributesConditionalFormatting,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'geo_area_config': (JsonApiLabelOutAttributesGeoAreaConfig,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
@@ -143,6 +146,7 @@ class JsonApiLabelOutAttributes(ModelNormal):
 
     attribute_map = {
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
+        'conditional_formatting': 'conditionalFormatting',  # noqa: E501
         'description': 'description',  # noqa: E501
         'geo_area_config': 'geoAreaConfig',  # noqa: E501
         'is_hidden': 'isHidden',  # noqa: E501
@@ -200,6 +204,7 @@ class JsonApiLabelOutAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
+            conditional_formatting (JsonApiLabelOutAttributesConditionalFormatting): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             geo_area_config (JsonApiLabelOutAttributesGeoAreaConfig): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
@@ -299,6 +304,7 @@ class JsonApiLabelOutAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
+            conditional_formatting (JsonApiLabelOutAttributesConditionalFormatting): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             geo_area_config (JsonApiLabelOutAttributesGeoAreaConfig): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
