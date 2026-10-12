@@ -643,6 +643,15 @@ def test_by_mode_keeps_single_shot_and_multi_turn_apart():
     assert by_mode["multi_turn"]["runs_s"]["max"] == 20.0
 
 
+def test_by_mode_is_computed_once_per_report():
+    """The console, the comparison and both JSON builders all read it; each read used to sort
+    every latency sample again."""
+    report = EvalReport(model="m")
+    report.items = [_item_report("visualization", traces=[1.0, 2.0], runs=[1.5])]
+
+    assert report.by_mode is report.by_mode
+
+
 def test_by_mode_never_mixes_the_populations():
     """Single-shot traces must not be pulled up by a conversation's turns, or the main per-trace
     figure would describe nothing in particular."""

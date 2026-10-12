@@ -5,7 +5,7 @@ import time
 import traceback
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
-from functools import partial
+from functools import cached_property, partial
 from typing import Callable, Protocol
 
 from gooddata_eval.core.config import DEFAULT_GATE, EvalGate
@@ -67,8 +67,10 @@ class ItemReport:
     # The response time of every chat turn the item completed, in order -- one gen-ai trace
     # each, timed from sending the message to the end of its stream. For a single-shot item that
     # is one value per run; a multi-turn run contributes one per turn. Unlike `run_latencies_s`
-    # it holds none of the judge, simulated-user or conversation set-up time. A turn that raised
-    # has no entry, but a turn whose scoring raised afterwards does: it completed.
+    # it holds none of the judge, simulated-user or conversation set-up time. A turn that ended in
+    # a ChatError carrying a partial result has an entry, because evaluators score that result as a
+    # run; so does a turn whose scoring raised afterwards. An item that errored outside the
+    # evaluator's own failure reporting has none: it reports no runs for them to sit beside.
     trace_latencies_s: list[float] = field(default_factory=list)
     # Per-phase breakdown of what the item's time was spent on. Additive to latency_s,
     # which remains the item's own critical path. langfuse_latency_s is
@@ -200,9 +202,13 @@ class EvalReport:
         evaluated = [i.quality_score for i in self.items if not i.skipped and i.error is None]
         return sum(evaluated) / len(evaluated) if evaluated else 0.0
 
-    @property
+    @cached_property
     def by_mode(self) -> dict[str, dict]:
         """How the run did on its single-shot and on its multi-turn items, with latency for each.
+
+        Computed on first read and kept: the console, the comparison and both JSON builders all
+        read it, and each read would otherwise sort every latency sample again. Read it once the
+        report is complete -- items added afterwards are not reflected.
 
         ``total`` and ``passed`` count the evaluated items of that mode (skipped ones belong to
         neither). ``traces_s`` is the distribution of per-trace chat-turn response times; a

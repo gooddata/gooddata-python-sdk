@@ -340,7 +340,9 @@ Each item also states its `mode`, its `trace_latencies_s` and its `run_latencies
   Its latency is that turn's response time, from sending the message to the end of its stream
   (`turn_wall_clock_sec`), recorded where the chat client completes the turn. It holds none of the LLM judge,
   the simulated user or conversation create/delete. `dashboard_summary` is timed the same way around its one
-  request. A turn that raised was never completed and has no entry.
+  request. A turn cut off by its turn or item deadline (or ended by an error event) still counts, with the
+  time it ran for: those are the slowest turns, and the run that scored them is in the per-run figures too. An
+  item that errored outside its evaluator's own failure reporting contributes neither.
 - **Single-shot** runs are exactly one trace, so `traces_s` is also the latency of a run.
 - **Multi-turn** runs span several traces, so they get both views: `traces_s` over every turn of every
   conversation (comparable with single-shot), and `runs_s`, the wall clock of each whole conversation from just
@@ -409,8 +411,8 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
   the runs in play has it (so "Failed" over previous and latest finds every test case that broke in either), and the
   expression is evaluated once per run in play with the same any-run rule. A filtered page states how many test cases
   it covers, and each tier has its own Reset.
-- **Results** — three headline cards for the latest run: test cases passed, the average quality score and the median
-  time per attempt. With an earlier run each card carries one change line in words, "down from 86% on Sep 28", rather
+- **Results** — three headline cards for the latest run: test cases passed (of those evaluated: skipped ones are not
+  counted, as in the console's percentage), the average quality score and the median time per attempt. With an earlier run each card carries one change line in words, "down from 86% on Sep 28", rather
   than a signed number. The line is green when that direction is good and red when it is not, with a chevron and
   screen-reader text (*Better* / *Worse*) so colour is not the only signal. From three runs each card also has a
   sparkline of every run: hover a point for its value, click it to compare the latest run with that one instead of the
@@ -428,8 +430,9 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
   decimal and no redundant ".0" (`3s`, `4.6s`).
 - **A test case table**, newest first: the latest run's result, a **Since previous run** column, then the earlier runs
   going back in time (click any result to open the drawer on that run). The change column reads *Regressed* (passed in
-  the previous run, not in the latest), *Fixed*, *Flaky* (flipped between pass and fail more than once), *New* or
-  *Removed*. With several runs the table opens on the regressions. Two time columns
+  the previous run, not in the latest), *Fixed*, *Flaky* (flipped between pass and fail more than once), *New*
+  (in no earlier run) or *Removed* (in an earlier run, gone from the latest). A test case skipped in the latest run
+  has no label, since the change would describe earlier runs. With several runs the table opens on the regressions. Two time columns
   keep the populations apart: **Response time** is the median of the test case's assistant responses, and **Time per
   attempt** is the mean wall-clock of a whole attempt (the responses plus the judge and, for conversations, the
   simulated user). With more than two runs shown they follow the latest run only. Hover a value to see every sample

@@ -545,6 +545,12 @@ def run_agentic_items(
             # judge broke should not also report the agent as costing 0s. Kinds that
             # attach no timings to the exception keep their 0.0 defaults.
             _apply_timings(item_report, getattr(exc, "timings", None))
+            # Phase timings stay, but the per-turn response times do not: this item reports no
+            # runs (and so no run latencies), and keeping its turns would put them in the
+            # response population with no attempt beside them. An item that completed 2 of 3
+            # runs and then raised would otherwise show up in the per-response table and not in
+            # the per-conversation one.
+            traces.discard()
         finally:
             item_report.latency_s = time.perf_counter() - t0
             item_report.trace_latencies_s = traces.stop()

@@ -607,10 +607,18 @@ class ChatClient:
         except ChatError as exc:
             if joined is not None and exc.partial_result is not None:
                 self._record_join(conversation_id, exc.partial_result.trace_id, joined)
+            # A turn that ended in a ChatError (a turn or item deadline, an error event, an
+            # incomplete turn) is still one gen-ai trace, and several evaluators score its
+            # partial result as a run. Recording it keeps the response population matching the
+            # runs that were scored: left out, the slowest turns -- the ones that hit a deadline --
+            # would vanish and pull the tail down exactly when the agent is slowest.
+            if exc.partial_result is not None:
+                note_trace_latency(exc.partial_result.turn_wall_clock_sec)
             raise
-        # One completed turn is one gen-ai trace. Recorded here, from the figure the turn already
-        # carries, so every caller is covered and no extra clock is read. A turn that raised is
-        # not recorded: it has no completed response to time.
+        # One turn is one gen-ai trace. Recorded here, from the figure the turn already carries,
+        # so every caller is covered and no extra clock is read. A turn that failed without a
+        # ChatError carries no partial result, so there is no response to time and it is not
+        # recorded.
         note_trace_latency(result.turn_wall_clock_sec)
         if joined is not None:
             self._record_join(conversation_id, result.trace_id, joined)

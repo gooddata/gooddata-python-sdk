@@ -415,13 +415,15 @@ function reported(label) {
   const total = c.total ?? s.total ?? 0, passed = c.passed ?? s.passed ?? 0;
   return {
     total, passed, errored: s.errored ?? 0, skipped: s.skipped ?? 0,
-    pass_rate: c.pass_rate ?? (total ? passed / total : 0),
     avg_quality_score: c.avg_quality_score,
     avg_latency_s: c.avg_latency_s ?? s.avg_latency_s,
     total_latency_s: c.total_latency_s ?? s.latency_s,
     by_mode: c.by_mode || s.by_mode || null,
   };
 }
+// Share of the evaluated test cases that passed, for reported and recomputed figures alike. A skipped test case never
+// ran, so it is left out of the divisor, as the console's percentage does; null when nothing was evaluated.
+const passRateOf = (f) => (f.total - f.skipped > 0 ? f.passed / (f.total - f.skipped) : null);
 const r3 = (v) => Math.round(v * 1000) / 1000;
 // Linear interpolation between closest ranks, as gd-eval computes it, so P50 is the median.
 function percentile(sorted, p) {
@@ -459,7 +461,7 @@ function recompute(label, ids) {
   }
   return {
     total: items.length, passed, errored: items.filter((it) => it.error != null).length,
-    skipped: items.filter((it) => it.skipped).length, pass_rate: items.length ? passed / items.length : 0,
+    skipped: items.filter((it) => it.skipped).length,
     avg_quality_score: evaluated.length ? mean(evaluated.map(qualityOf)) : 0,
     avg_latency_s: runs ? latency / runs : 0, total_latency_s: latency, by_mode,
   };
@@ -521,7 +523,7 @@ function kpiCard({ title, get, fmt, higher, isSame, base, after = '' }) {
 function renderSummary() {
   const base = runsShown.length > 1 ? compareBase() : null;
   $('#summary').innerHTML = '<h2>Results</h2><div class="trendgrid">' +
-    kpiCard({ title: 'Test cases passed', get: (l) => (figures[l].total ? figures[l].passed / figures[l].total : null), fmt: pct, higher: true,
+    kpiCard({ title: 'Test cases passed', get: (l) => passRateOf(figures[l]), fmt: pct, higher: true,
       isSame: (d) => Math.round(d * 100) === 0, base, after: ' <a href="#items-section" class="which">which?</a>' }) +
     kpiCard({ title: 'Average quality score', get: (l) => (figures[l].total ? figures[l].avg_quality_score : null), fmt: pct, higher: true,
       isSame: (d) => Math.abs(d) < 0.01, base }) +
@@ -843,14 +845,20 @@ function sortRows(list, key) {
     return (va < vb ? -1 : va > vb ? 1 : 0) * sortDir;
   });
 }
-// How a test case moved between the last two runs shown, and whether it has flipped back and forth across all of them.
+// How a test case moved between the last two runs it was evaluated in, and whether it has flipped back and forth across
+// all of them. Every label describes the latest run, so none is given when that run skipped the test case or lacks it.
 const CHANGE_ORDER = { Regressed: 0, New: 1, Removed: 2, Flaky: 3, 'Still failing': 4, Fixed: 5, 'Still passing': 6, '': 7 };
 function changeOf(r, runList) {
+  const cur = r.per[runList[runList.length - 1]];
+  // New and Removed look at every earlier run, not just the one before: a test case that skipped a run and came back
+  // is not new, and its pass or fail history still says whether it was fixed or is flaky.
+  const earlier = runList.slice(0, -1).some((l) => r.per[l]);
   if (runList.length > 1) {
-    const prevIt = r.per[runList[runList.length - 2]], curIt = r.per[runList[runList.length - 1]];
-    if (curIt && !prevIt) return 'New';
-    if (prevIt && !curIt) return 'Removed';
+    if (cur && !earlier) return 'New';
+    if (!cur && earlier) return 'Removed';
   }
+  // Skipped in the latest run (or missing from it): the earlier runs alone would label a result the row does not show.
+  if (['none', 'skip'].includes(statusOf(cur))) return '';
   const st = runList.map((l) => statusOf(r.per[l])).filter((x) => x !== 'none' && x !== 'skip');
   if (st.length < 2) return '';
   const ok = st.map((x) => x === 'pass');
@@ -926,7 +934,7 @@ function renderItems() {
     { k: 'id', html: 'Test case' }, { k: 'kind', html: 'Category' }, { k: 'mode', html: 'Format' }, { k: 'question', html: 'Question' },
     // Newest first: the latest result, what changed since the previous run, then earlier runs going back in time.
     ...(multi ? [{ k: 's:' + runList[runList.length - 1], html: esc(roleOf(runList[runList.length - 1])) + LATEST_PILL }] : []),
-    ...(multi ? [{ k: 'chg', html: 'Since previous run', help: 'Regressed: passed in the previous run, not in the latest. Fixed: the reverse. Flaky: has flipped between pass and fail more than once across the runs shown. New / Removed: the test case was added to or dropped from the suite.' }] : []),
+    ...(multi ? [{ k: 'chg', html: 'Since previous run', help: 'Regressed: passed in the previous run, not in the latest. Fixed: the reverse. Flaky: has flipped between pass and fail more than once across the runs shown. New / Removed: the test case first appears in the latest run, or was in an earlier run and is gone from the latest. A test case skipped in the latest run has no label.' }] : []),
     ...(multi ? runList.slice(0, -1).reverse() : runList).map((l) => ({ k: 's:' + l, html: esc(roleOf(l)) })),
     ...timeRuns.map((l) => ({ k: 'lt:' + l, html: 'Response time' + runHdr(l), help: TRACE_HELP, num: true })),
     ...timeRuns.map((l) => ({ k: 'lr:' + l, html: 'Time per attempt' + runHdr(l), help: RUN_HELP, num: true })),

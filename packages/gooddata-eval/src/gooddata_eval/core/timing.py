@@ -167,6 +167,11 @@ class TraceRecorder:
             self._token = None
         return self.latencies
 
+    def discard(self) -> None:
+        """Detach and drop what was recorded, for an item whose turns have no scored run to sit beside."""
+        self.stop()
+        self.latencies.clear()
+
 
 def note_trace_latency(seconds: float | None) -> None:
     """Record one completed chat turn on the active recorder, if there is one.
