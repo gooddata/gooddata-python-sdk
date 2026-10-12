@@ -806,6 +806,128 @@ def test_ask_preserve_failed_keeps_conversation_on_error(monkeypatch):
     assert "delete" not in calls  # conversation preserved
 
 
+@pytest.fixture
+def keep_conversations(monkeypatch):
+    """Turn the process-wide keep flag on for one test, and off again afterwards."""
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", True)
+
+
+def _delete_recording_handler(calls, conversation_id, sse_body):
+    def handler(request):
+        if request.method == "POST" and request.url.path.endswith("/conversations"):
+            return httpx.Response(200, json={"conversationId": conversation_id})
+        if request.method == "POST" and "messages" in str(request.url):
+            return httpx.Response(200, content=sse_body)
+        if request.method == "DELETE":
+            calls.append("delete")
+            return httpx.Response(204)
+        return httpx.Response(404)
+
+    return handler
+
+
+def test_keep_conversations_keeps_the_conversation_on_success(keep_conversations):
+    """A passing run is kept too -- that is the whole difference from preserve_failed."""
+    calls: list[str] = []
+    client = _client_with_handler(_delete_recording_handler(calls, "conv-keep-ok", _OK_SSE))
+
+    item = DatasetItem(id="t1", dataset_name="d", test_kind="visualization", question="q", expected_output={})
+    result = client.ask(item)
+
+    assert result.conversation_id == "conv-keep-ok"
+    assert "delete" not in calls
+
+
+def test_keep_conversations_keeps_the_conversation_on_failure(monkeypatch, keep_conversations):
+    """Set on its own, with preserve_failed left off, it still keeps a failed conversation."""
+    calls: list[str] = []
+    monkeypatch.setattr(sse_mod.time, "sleep", lambda s: None)
+    client = _client_with_handler(_delete_recording_handler(calls, "conv-keep-fail", _NONRETRY_SSE))
+
+    item = DatasetItem(id="t1", dataset_name="d", test_kind="visualization", question="q", expected_output={})
+    with pytest.raises(ChatError):
+        client.ask(item)
+
+    assert "delete" not in calls
+
+
+def test_keep_conversations_blocks_a_direct_delete_conversation_call(keep_conversations):
+    """The gate is in delete_conversation itself, which is what the agentic evaluators call.
+
+    Each of them creates its own ChatClient deep in the call tree and deletes by hand in a
+    finally block -- twenty call sites that never pass through ``ask``. If this stops holding,
+    --keep-conversations silently covers the single-turn kinds only, which is the gap
+    --preserve-failed already had.
+    """
+    calls: list[str] = []
+    client = _client_with_handler(_delete_recording_handler(calls, "conv-direct", _OK_SSE))
+
+    client.delete_conversation("conv-direct")
+
+    assert calls == []
+
+
+def test_set_keep_conversations_affects_an_already_built_client(monkeypatch):
+    """The agentic clients may already exist when the CLI applies the flag."""
+    calls: list[str] = []
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", False)
+    client = _client_with_handler(_delete_recording_handler(calls, "conv-late", _OK_SSE))
+
+    sse_mod.set_keep_conversations(True)
+    client.delete_conversation("conv-late")
+    assert calls == []
+
+    sse_mod.set_keep_conversations(False)
+    client.delete_conversation("conv-late")
+    assert calls == ["delete"]
+
+
+def test_keep_conversations_restores_the_previous_setting(monkeypatch):
+    """One run asking to keep must not leave the next run keeping too."""
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", False)
+
+    with sse_mod.keep_conversations(True):
+        assert sse_mod._KEEP_CONVERSATIONS is True
+    assert sse_mod._KEEP_CONVERSATIONS is False
+
+    with pytest.raises(RuntimeError), sse_mod.keep_conversations(True):
+        raise RuntimeError("run blew up")
+    assert sse_mod._KEEP_CONVERSATIONS is False
+
+
+def test_keep_conversations_false_does_not_clear_an_env_set_flag(monkeypatch):
+    """``keep=False`` means "did not ask", not "delete" -- an exported env var survives a
+    run that passes no flag."""
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", True)
+
+    with sse_mod.keep_conversations(False):
+        assert sse_mod._KEEP_CONVERSATIONS is True
+    assert sse_mod._KEEP_CONVERSATIONS is True
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [("1", True), ("true", True), ("yes", True), ("0", False), ("false", False), ("off", False), ("", False)],
+)
+def test_keep_conversations_env_var(monkeypatch, raw, expected):
+    """``GOODDATA_EVAL_KEEP_CONVERSATIONS=0`` turns it off rather than reading as truthy."""
+    monkeypatch.setenv("GOODDATA_EVAL_KEEP_CONVERSATIONS", raw)
+    assert sse_mod._bool_env("GOODDATA_EVAL_KEEP_CONVERSATIONS", False) is expected
+
+
+def test_conversations_are_deleted_when_the_flag_is_off(monkeypatch):
+    """The default is unchanged: a run that does not ask to keep state leaves none behind."""
+    calls: list[str] = []
+    # Set explicitly rather than assumed: with GOODDATA_EVAL_KEEP_CONVERSATIONS exported, the
+    # module initialises to True and this test would fail when run on its own.
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", False)
+    client = _client_with_handler(_delete_recording_handler(calls, "conv-default", _OK_SSE))
+
+    client.delete_conversation("conv-default")
+
+    assert calls == ["delete"]
+
+
 def test_ask_without_preserve_failed_deletes_on_error(monkeypatch):
     """Without preserve_failed, conversations are deleted even on error."""
     calls = []
