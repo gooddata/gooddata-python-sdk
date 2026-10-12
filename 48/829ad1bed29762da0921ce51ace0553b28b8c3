@@ -8,7 +8,7 @@ packages/gooddata-eval/tests/test_langfuse_otlp.py
 packages/gooddata-eval/tests/test_langfuse_env.py
   s_160cda2303f459::t_2c27289b2f1682 6,8-37,101-144
 packages/gooddata-eval/tests/test_agentic_runner.py
-  s_160cda2303f459::t_a4f2a51f6e95ab 1002-1004,1007-1008
+  s_160cda2303f459::t_a4f2a51f6e95ab 1002-1004,1007-1008,1014-1016,1019-1020
 packages/gooddata-eval/tests/test_langfuse_client.py
   s_eb4ec8b714e7de::t_2b2db5d2ab5889 413-428
 packages/gooddata-eval/src/gooddata_eval/core/langfuse/client.py
